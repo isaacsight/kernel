@@ -26,6 +26,13 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</loc>
+            <lastmod>2025-11-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/building-a-custom-site-manager.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
@@ -33,7 +40,28 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</loc>
+            <lastmod>2025-11-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/headless-workflow.html</loc>
+            <lastmod>2025-11-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</loc>
+            <lastmod>2025-11-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>

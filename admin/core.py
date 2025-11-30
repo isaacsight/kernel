@@ -164,7 +164,13 @@ class ServerManager:
     def get_status(self):
         if self.process and self.process.poll() is None:
             return "Running"
-        return "Stopped"
+        
+        # Check if port is in use by another process
+        try:
+            subprocess.check_output(["lsof", "-i", f":{self.port}"])
+            return "Running (External)"
+        except subprocess.CalledProcessError:
+            return "Stopped"
 
     def get_logs(self, lines=20):
         if not os.path.exists(self.log_file):

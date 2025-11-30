@@ -7,6 +7,14 @@
     <language>en-us</language>
     
         <item>
+            <title>Towards Site Autonomy</title>
+            <link>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</guid>
+        </item>
+        
+        <item>
             <title>Building a Custom Site Manager</title>
             <link>https://www.doesthisfeelright.com/posts/building-a-custom-site-manager.html</link>
             <description></description>
@@ -15,11 +23,35 @@
         </item>
         
         <item>
+            <title>&quot;Tracking AI Experiments: Building a Custom Logger&quot;</title>
+            <link>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</link>
+            <description></description>
+            <category>Machine Learning</category>
+            <guid>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</guid>
+        </item>
+        
+        <item>
             <title>&quot;The Ultimate Workflow: Going Headless&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/headless-workflow.html</link>
             <description></description>
             <category>&quot;Engineering&quot;</category>
             <guid>https://www.doesthisfeelright.com/posts/headless-workflow.html</guid>
+        </item>
+        
+        <item>
+            <title>&quot;Refactoring for AI: From Script to Package&quot;</title>
+            <link>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</guid>
+        </item>
+        
+        <item>
+            <title>&quot;Multi-Model AI: Managing Claude and Gemini Providers&quot;</title>
+            <link>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</guid>
         </item>
         
         <item>
