@@ -415,53 +415,56 @@ def build():
     </div>
     '''
     
-    # Split Featured vs Recent
-    featured_post = None
-    recent_posts = []
+    # Split Featured vs Recent vs Experiments
+    starter_set_slugs = [
+        'to-be-witnessed',
+        'the-invisible-architect',
+        'the-rise-of-the-non-musician'
+    ]
     
-    # Find first non-about post for featured
-    for i, post in enumerate(posts):
-        if post['slug'] != 'about':
-            if featured_post is None:
-                featured_post = post
-            else:
-                recent_posts.append(post)
+    starter_set_posts = []
+    experiments_posts = []
+    main_feed_posts = []
     
-    # Generate Featured Post HTML
-    featured_html = ""
-    if featured_post:
-        tags = featured_post.get('tags', '').split(',') if featured_post.get('tags') else [featured_post.get('category', 'General')]
+    for post in posts:
+        if post['slug'] == 'about':
+            continue
+            
+        # Check for Starter Set
+        if post['slug'] in starter_set_slugs:
+            starter_set_posts.append(post)
+            continue
+            
+        # Check for Experiments (AI posts)
+        # Assuming AI posts start with 'ai-' based on file listing
+        if post['slug'].startswith('ai-'):
+            experiments_posts.append(post)
+            continue
+            
+        # Otherwise, Main Feed
+        main_feed_posts.append(post)
+
+    # Sort Starter Set by the order in starter_set_slugs
+    starter_set_posts.sort(key=lambda x: starter_set_slugs.index(x['slug']))
+    
+    # Generate Starter Set HTML
+    starter_set_html = ""
+    for post in starter_set_posts:
+        tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
         tags = [t.strip() for t in tags if t.strip()]
         primary_tag = tags[0] if tags else 'General'
         
-        # Format date
-        date_str = featured_post.get('date', '')
-        if date_str:
-            try:
-                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-                date_display = date_obj.strftime('%b %d, %Y')
-            except:
-                date_display = date_str
-        else:
-            date_display = ""
-            
-        featured_html = f"""
-            <a href="posts/{featured_post['slug']}.html" class="featured-card">
-                <div class="featured-content">
-                    <span class="featured-label">MOST RECENT</span>
-                    <h1 class="featured-title">{featured_post.get('title', 'Untitled')}</h1>
-                    <p class="featured-excerpt">{featured_post.get('excerpt', '')}</p>
-                    <div class="post-meta-row">
-                        <span class="post-tag">{primary_tag}</span>
-                        <span class="post-meta">{date_display} • {featured_post.get('read_time', '5 min read')}</span>
-                    </div>
-                </div>
+        starter_set_html += f"""
+            <a href="posts/{post['slug']}.html" class="starter-card">
+                <span class="starter-tag">{primary_tag}</span>
+                <h3 class="starter-title">{post.get('title', 'Untitled')}</h3>
+                <p class="starter-excerpt">{post.get('excerpt', '')}</p>
             </a>
         """
 
-    # Generate Recent Posts HTML
+    # Generate Main Feed HTML
     posts_html = ""
-    for post in recent_posts:
+    for post in main_feed_posts:
         # Handle tags for display
         tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
         tags = [t.strip() for t in tags if t.strip()]
@@ -487,6 +490,13 @@ def build():
                     <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
                 </div>
             </a>
+        """
+        
+    # Generate Experiments HTML (Simple List)
+    experiments_html = ""
+    for post in experiments_posts:
+         experiments_html += f"""
+            <li><a href="posts/{post['slug']}.html">{post.get('title', 'Untitled')}</a></li>
         """
         
     # Generate Sidebar Collections List
@@ -516,8 +526,9 @@ def build():
             </li>
         """
         
-    index_content = index_template.replace('{{ featured_post }}', featured_html)
+    index_content = index_template.replace('{{ starter_set }}', starter_set_html)
     index_content = index_content.replace('{{ recent_posts }}', posts_html)
+    index_content = index_content.replace('{{ experiments_list }}', experiments_html)
     index_content = index_content.replace('{{ filters }}', filter_html)
     index_content = index_content.replace('{{ collections_list }}', collections_list_html)
     

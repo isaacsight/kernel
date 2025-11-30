@@ -16,18 +16,32 @@
         </div>
     </div>
 
-    <!-- 1. Featured Hero Section -->
-    <section class="featured-hero">
-        {{ featured_post }}
+    <!-- 1. Intro Block -->
+    <section class="intro-block">
+        <h1 class="intro-tagline">No ads. No algorithms. Just thoughts.</h1>
+        <p class="intro-sub">A digital studio for technology, philosophy, and the human condition.</p>
+        <div class="intro-subscribe">
+            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="80"
+                style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+        </div>
     </section>
 
-
+    <!-- 2. Starter Set (Canon) -->
+    <section class="starter-set">
+        <div class="section-header">
+            <h2>Start Here</h2>
+            <p class="section-sub">A few essays to get you oriented.</p>
+        </div>
+        <div class="starter-grid">
+            {{ starter_set }}
+        </div>
+    </section>
 
     <div class="content-wrapper">
-        <!-- 2. Main Feed (Left Column) -->
+        <!-- 3. Main Feed (Left Column) -->
         <main class="main-feed">
             <div class="feed-header">
-                <h2>More Essays</h2>
+                <h2>Latest Essays</h2>
                 {{ filters }}
             </div>
 
@@ -36,15 +50,16 @@
             </div>
         </main>
 
-        <!-- 3. Sidebar (Right Column) -->
+        <!-- 4. Sidebar (Right Column) -->
         <aside class="sidebar">
-            <!-- About Widget -->
-            <div class="sidebar-widget about-widget">
-                <h3>About</h3>
-                <p><strong>Does This Feel Right?</strong> is a collection of essays on technology, philosophy, and the
-                    human condition.</p>
-                <p>No ads, no algorithms, just thoughts.</p>
-                <a href="about.html" class="text-link">Read more →</a>
+
+            <!-- Experiments Widget -->
+            <div class="sidebar-widget experiments-widget">
+                <h3>Experiments</h3>
+                <p class="widget-desc">Technical notes & AI workshops.</p>
+                <ul class="experiments-list">
+                    {{ experiments_list }}
+                </ul>
             </div>
 
             <!-- Collections Widget -->
@@ -56,7 +71,13 @@
                 <a href="collections.html" class="text-link">View all collections →</a>
             </div>
 
-            <!-- Newsletter Widget -->
+            <!-- About Widget -->
+            <div class="sidebar-widget about-widget">
+                <h3>About</h3>
+                <p><strong>Does This Feel Right?</strong> is a collection of essays on technology, philosophy, and the
+                    human condition.</p>
+                <a href="about.html" class="text-link">Read more →</a>
+            </div>
 
         </aside>
     </div>
