@@ -36,8 +36,6 @@ class MLLogger:
             "metrics": {"latency_ms": latency_ms}
         }
         # Append to a .jsonl file
-```
-
 ### The "Dataset" Mindset
 
 By saving these logs to `~/.codelens/logs/interactions.jsonl`, I am effectively building a **proprietary dataset** of code review interactions. 

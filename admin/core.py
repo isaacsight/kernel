@@ -79,9 +79,11 @@ def generate_ai_post(topic, provider="gemini"):
     try:
         if provider == "gemini":
             genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-            model = genai.GenerativeModel('gemini-2.0-flash')
             response = model.generate_content(prompt)
             content = response.text
+            
+            # Clean up markdown wrappers if present
+            content = content.replace("```markdown", "").replace("```", "").strip()
             
         elif provider == "openai":
             openai.api_key = os.environ.get("OPENAI_API_KEY")

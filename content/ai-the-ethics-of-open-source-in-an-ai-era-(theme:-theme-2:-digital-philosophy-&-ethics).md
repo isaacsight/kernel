@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
----
-
-```markdown
-# The Open Source Code of Ethics: Navigating AI's Moral Maze
+---# The Open Source Code of Ethics: Navigating AI's Moral Maze
 
 **Introduction:**
 
@@ -56,4 +53,3 @@ Furthermore, users have a responsibility to use open source AI systems ethically
 **Conclusion:**
 
 Open source offers a powerful framework for developing and deploying AI ethically. However, it's not a magic bullet. True ethical AI requires a proactive and conscious effort to promote transparency, mitigate bias, and define accountability throughout the entire development and deployment lifecycle. By embracing these principles, we can harness the transformative power of AI while safeguarding our values and ensuring a more just and equitable future. The open source community, with its values of collaboration and transparency, is uniquely positioned to lead this charge.
-```

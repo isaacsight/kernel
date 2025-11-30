@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
----
-
-```markdown
-# Complexity: The Chains of the Digital Age
+---# Complexity: The Chains of the Digital Age
 
 ## Introduction
 
@@ -48,4 +45,3 @@ Complexity acts as a barrier to entry, creating a digital aristocracy where thos
 ## Conclusion
 
 Complexity, while often a byproduct of progress, presents a significant threat to our digital freedom. By obscuring algorithmic decision-making, creating vulnerabilities that can be exploited, and placing a cognitive burden on participation, it erodes our autonomy and empowers those who control the intricate systems. To preserve our digital freedom, we must advocate for transparency, prioritize simplicity, and demand accountability in the design and deployment of digital technologies. We need to cultivate a digital literacy that empowers individuals to understand, navigate, and ultimately control their digital destinies. Only then can we truly unlock the potential of the digital age without sacrificing our fundamental freedoms.
-```

@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'The End of "User" Interface: Designing for Agents (Theme: Theme'
   1: The Autonomous Web)'
----
-
-```markdown
-# The End of "User" Interface: Designing for Agents on the Autonomous Web
+---# The End of "User" Interface: Designing for Agents on the Autonomous Web
 
 **Introduction:**
 
@@ -53,4 +50,3 @@ As the autonomous web grows, agents won't just be interacting with humans; they'
 **Conclusion:**
 
 The shift towards the autonomous web and designing for agents presents a radical transformation in the design landscape. By focusing on declarative intent, building trust through transparency, and developing robust agent-to-agent communication protocols, we can unlock the full potential of this exciting new paradigm. The future of interaction is no longer about directing a user's every click, but about empowering autonomous agents to act on their behalf, intelligently and responsibly. This is the era of the agent interface, and it's just beginning.
-```

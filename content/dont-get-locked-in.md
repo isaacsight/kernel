@@ -33,8 +33,6 @@ The setup took maybe 20 minutes:
 pip install aider-chat
 export ANTHROPIC_API_KEY=your-key-here
 aider
-```
-
 That's it. No complex configuration. No vendor lock-in.
 
 ## The Real Lesson

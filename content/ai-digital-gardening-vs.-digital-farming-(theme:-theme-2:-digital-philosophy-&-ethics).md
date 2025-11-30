@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
----
-
-```markdown
-## From Rows to Rhizomes: Exploring the Ethics of Digital Gardening vs. Digital Farming
+---## From Rows to Rhizomes: Exploring the Ethics of Digital Gardening vs. Digital Farming
 
 In the digital age, our relationship with information is constantly evolving. We're no longer passive consumers, but active participants in a global information ecosystem. This shift has sparked a debate about how we should approach the creation, curation, and consumption of knowledge online. Two metaphors, *digital gardening* and *digital farming*, offer contrasting perspectives, each with its own ethical implications. Let's delve into these metaphors and explore their impact on our digital lives.
 
@@ -44,4 +41,3 @@ Digital gardening embraces an ethical framework based on authenticity, collabora
 Ultimately, the choice between digital farming and digital gardening reflects our values and our vision for the future of the internet.  While digital farming may offer short-term gains, its emphasis on control and profit can lead to negative consequences for the information ecosystem.
 
 Digital gardening, with its focus on authenticity, connection, and sustainable growth, offers a more ethical and sustainable approach.  By embracing the principles of digital gardening, we can cultivate a more vibrant, diverse, and enriching online world, one that promotes learning, collaboration, and the free exchange of ideas. As we navigate the complexities of the digital age, it's crucial to remember that the choices we make today will shape the information landscape of tomorrow. Let's choose to cultivate a garden, not just a farm.
-```

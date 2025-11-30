@@ -31,6 +31,4 @@ The backend uses Python's `subprocess` module to manage the server process. It c
 ```python
 def stop_server(self):
     os.killpg(os.getpgid(self.process.pid), 15)
-```
-
 Now, I have a single "Command Center" for my entire blog workflow.

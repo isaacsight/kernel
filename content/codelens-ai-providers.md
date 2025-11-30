@@ -17,8 +17,6 @@ I defined an abstract base class `AIProvider` that enforces a common interface:
 class AIProvider:
     def call(self, system_prompt: str, user_message: str) -> str:
         raise NotImplementedError
-```
-
 Then, I implemented concrete classes for each service:
 
 *   `AnthropicProvider`: Handles the `anthropic` SDK client.
@@ -34,8 +32,6 @@ Now, the application logic is simple:
 # gui.py
 provider = get_provider(self.config)
 response = provider.call(system_prompt, user_msg)
-```
-
 The UI doesn't care if it's talking to Claude or Gemini. It just asks for a completion.
 
 ### Why This Matters

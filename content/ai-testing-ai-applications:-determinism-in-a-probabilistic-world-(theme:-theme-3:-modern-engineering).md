@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Testing AI Applications: Determinism in a Probabilistic World'
   (Theme: Theme 3: Modern Engineering)'
----
-
-```markdown
-# Testing AI Applications: Determinism in a Probabilistic World
+---# Testing AI Applications: Determinism in a Probabilistic World
 
 **Introduction:**
 
@@ -51,4 +48,3 @@ Testing AI applications demands a sophisticated toolkit that goes beyond traditi
 Furthermore, adopting a DevOps culture with CI/CD pipelines is critical. Automated model retraining and deployment, along with robust monitoring and alerting, are essential for maintaining the reliability and performance of AI applications in the long run. This modern engineering approach allows for rapid iteration, continuous learning, and proactive mitigation of potential issues, ensuring that AI systems deliver value reliably and responsibly.
 
 By embracing probabilistic testing strategies, leveraging modern engineering tools, and fostering a culture of continuous improvement, we can build robust and reliable AI applications that deliver real-world value while mitigating the inherent risks associated with these complex systems.
-```

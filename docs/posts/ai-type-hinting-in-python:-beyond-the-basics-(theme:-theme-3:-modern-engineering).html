@@ -114,36 +114,39 @@
 
     
 
-    <pre><code>
-# Python Type Hints: Level Up Your Modern Engineering Game
-
-Python, known for its readability and ease of use, has continuously evolved to meet the demands of modern software engineering. One of the most significant enhancements in recent years is the introduction and refinement of type hints. While many Python developers are familiar with basic type hints, leveraging them fully can unlock significant benefits in code maintainability, robustness, and collaboration, especially in complex engineering projects. This blog post will delve beyond the basics, exploring advanced type hinting techniques that elevate your Python code to a modern engineering standard.
-
-## 1. Generics for Reusable and Type-Safe Code
-
-Generics are a cornerstone of modern programming paradigms, allowing you to write code that works with different data types without sacrificing type safety. Python's `typing` module provides powerful tools for implementing generics.
-
-<strong>Beyond Simple `List[int]`:</strong>
-
-Instead of simply annotating lists or dictionaries with specific types like `List[int]` or `Dict[str, float]`, generics allow you to define your own parameterized types.
-
-<strong>Example: A Generic Cache Class:</strong>
-
-Imagine building a cache class that can store values of any type:
-
-</code></pre>
-<p>from typing import TypeVar, Generic, Dict, Optional</p>
-<p>T = TypeVar('T')  # Define a type variable</p>
-<p>class Cache(Generic[T]): """A simple cache that stores values of type T."""</p>
-<p>def __init__(self): self._data: Dict[str, T] = {}</p>
-<p>def put(self, key: str, value: T) -> None: self._data[key] = value</p>
-<p>def get(self, key: str) -> Optional[T]: return self._data.get(key)</p>
-<h1>Usage</h1>
-<p>string_cache = Cache<a href="">str</a> string_cache.put("name", "Alice") name = string_cache.get("name") print(f"Name from cache: {name}")</p>
-<h1>Notice how mypy will flag this as an error!  Incorrect type assignment</h1>
-<h1>string_cache.put("age", 30) # Error: Expected type 'str', got 'int' instead</h1>
+    <h1>Python Type Hints: Level Up Your Modern Engineering Game</h1>
+<p>Python, known for its readability and ease of use, has continuously evolved to meet the demands of modern software engineering. One of the most significant enhancements in recent years is the introduction and refinement of type hints. While many Python developers are familiar with basic type hints, leveraging them fully can unlock significant benefits in code maintainability, robustness, and collaboration, especially in complex engineering projects. This blog post will delve beyond the basics, exploring advanced type hinting techniques that elevate your Python code to a modern engineering standard.</p>
+<h2>1. Generics for Reusable and Type-Safe Code</h2>
+<p>Generics are a cornerstone of modern programming paradigms, allowing you to write code that works with different data types without sacrificing type safety. Python's `typing` module provides powerful tools for implementing generics.</p>
+<p><strong>Beyond Simple `List[int]`:</strong></p>
+<p>Instead of simply annotating lists or dictionaries with specific types like `List[int]` or `Dict[str, float]`, generics allow you to define your own parameterized types.</p>
+<p><strong>Example: A Generic Cache Class:</strong></p>
+<p>Imagine building a cache class that can store values of any type:</p>
 <pre><code>
+from typing import TypeVar, Generic, Dict, Optional
 
+T = TypeVar('T')  # Define a type variable
+
+class Cache(Generic[T]):
+    """A simple cache that stores values of type T."""
+
+    def __init__(self):
+        self._data: Dict[str, T] = {}
+
+    def put(self, key: str, value: T) -> None:
+        self._data[key] = value
+
+    def get(self, key: str) -> Optional[T]:
+        return self._data.get(key)
+
+# Usage
+string_cache = Cache<a href="">str</a>
+string_cache.put("name", "Alice")
+name = string_cache.get("name")
+print(f"Name from cache: {name}")
+
+# Notice how mypy will flag this as an error!  Incorrect type assignment
+# string_cache.put("age", 30) # Error: Expected type 'str', got 'int' instead
 <strong>Benefits for Modern Engineering:</strong>
 
 * <strong>Reduced Code Duplication:</strong> Write reusable components that adapt to various data types.
@@ -169,36 +172,40 @@ Let's say you want to write a function that can read data from any object that h
 <p>file_reader = MyFileReader() process_data(file_reader)  # Works fine!</p>
 <h1>The following will cause mypy to flag an error, because DataProvider does not have the read method.</h1>
 <h1>data_provider = DataProvider()</h1>
-<h1>process_data(data_provider) # mypy error: Argument 1 to "process_data" has incompatible type "DataProvider"; expected "SupportsRead"</h1>
+<h1>process_data(data_provider) # mypy error: Argument 1 to "process_data" has incompatible type "DataProvider"; expected "SupportsRead</h1>
+<p><strong>Benefits for Modern Engineering:</strong></p>
+<ul>
+<li><strong>Decoupling:</strong> Protocols promote loose coupling between components, making your codebase more modular and easier to maintain.  You can work with <em>any</em> object that implements the required interface, regardless of its specific class hierarchy.</li>
+<li><strong>Flexibility:</strong> Protocols enhance code flexibility and adaptability, enabling you to integrate new types seamlessly as long as they conform to the defined interface.</li>
+<li><strong>Explicit Contract:</strong> Protocols provide a clear contract defining what methods and attributes are expected of a particular type, improving code clarity and maintainability.</li>
+</ul>
+<h2>3.  Advanced Type Aliases and `NewType`</h2>
+<p>Type aliases allow you to give meaningful names to complex type annotations, enhancing readability and maintainability.  `NewType` goes a step further, creating distinct types based on existing types, offering stronger type safety.</p>
+<p><strong>Beyond Simple `UserID = int`:</strong></p>
+<p>While basic type aliases like `UserID = int` can improve readability, `NewType` creates <em>distinct</em> types, preventing accidental misuse.</p>
+<p><strong>Example:  Distinguishing User IDs from Order IDs:</strong></p>
 <pre><code>
+from typing import NewType
 
-<strong>Benefits for Modern Engineering:</strong>
+UserID = NewType('UserID', int)
+OrderID = NewType('OrderID', int)
 
-<em> <strong>Decoupling:</strong> Protocols promote loose coupling between components, making your codebase more modular and easier to maintain.  You can work with </em>any* object that implements the required interface, regardless of its specific class hierarchy.
-* <strong>Flexibility:</strong> Protocols enhance code flexibility and adaptability, enabling you to integrate new types seamlessly as long as they conform to the defined interface.
-* <strong>Explicit Contract:</strong> Protocols provide a clear contract defining what methods and attributes are expected of a particular type, improving code clarity and maintainability.
+def get_user_by_id(user_id: UserID) -> str:
+    # Simulate fetching user data
+    return f"User with ID {user_id}"
 
-## 3.  Advanced Type Aliases and `NewType`
+def get_order_by_id(order_id: OrderID) -> str:
+    # Simulate fetching order data
+    return f"Order with ID {order_id}"
 
-Type aliases allow you to give meaningful names to complex type annotations, enhancing readability and maintainability.  `NewType` goes a step further, creating distinct types based on existing types, offering stronger type safety.
+user_id: UserID = UserID(123)
+order_id: OrderID = OrderID(456)
 
-<strong>Beyond Simple `UserID = int`:</strong>
+print(get_user_by_id(user_id))
+print(get_order_by_id(order_id))
 
-While basic type aliases like `UserID = int` can improve readability, `NewType` creates <em>distinct</em> types, preventing accidental misuse.
-
-<strong>Example:  Distinguishing User IDs from Order IDs:</strong>
-
-</code></pre>
-<p>from typing import NewType</p>
-<p>UserID = NewType('UserID', int) OrderID = NewType('OrderID', int)</p>
-<p>def get_user_by_id(user_id: UserID) -> str: # Simulate fetching user data return f"User with ID {user_id}"</p>
-<p>def get_order_by_id(order_id: OrderID) -> str: # Simulate fetching order data return f"Order with ID {order_id}"</p>
-<p>user_id: UserID = UserID(123) order_id: OrderID = OrderID(456)</p>
-<p>print(get_user_by_id(user_id)) print(get_order_by_id(order_id))</p>
-<h1>The following will cause mypy to flag an error, preventing accidental misuse!</h1>
-<h1>print(get_user_by_id(order_id))  # mypy error: Argument 1 to "get_user_by_id" has incompatible type "OrderID"; expected "UserID"</h1>
-<pre><code>
-
+# The following will cause mypy to flag an error, preventing accidental misuse!
+# print(get_user_by_id(order_id))  # mypy error: Argument 1 to "get_user_by_id" has incompatible type "OrderID"; expected "UserID
 <strong>Benefits for Modern Engineering:</strong>
 
 * <strong>Enhanced Readability:</strong>  Meaningful type aliases make complex type annotations easier to understand.

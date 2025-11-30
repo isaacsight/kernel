@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Building for the Edge: Latency Matters (Theme: Theme 3: Modern'
   Engineering)'
----
-
-```markdown
-## Building for the Edge: Latency Matters in Modern Engineering
+---## Building for the Edge: Latency Matters in Modern Engineering
 
 The modern world demands instant gratification. We expect websites to load instantly, videos to stream without buffering, and applications to respond in real-time. This expectation is driving a shift towards "edge computing," where processing power and data storage are moved closer to the end-user, minimizing latency and delivering a superior experience. But building for the edge is a complex challenge that requires a rethinking of traditional engineering principles. This post explores how latency is a critical consideration in modern engineering, particularly when building applications for the edge, and how we can address these challenges.
 
@@ -51,4 +48,3 @@ Key strategies for monitoring and measuring latency include:
 By implementing robust monitoring and measurement strategies, engineers can proactively identify and address latency issues, ensuring a consistently smooth and responsive user experience in edge environments.
 
 In conclusion, latency is a crucial consideration in modern engineering, particularly when building for the edge. By understanding its impact, engineering for low-latency, and implementing continuous monitoring and measurement, we can unlock the full potential of edge computing and deliver exceptional user experiences in a world that demands instant gratification.
-```

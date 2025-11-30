@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
----
-
-```markdown
-## Owning Your Signal in a Noisy World: A Digital Philosophy
+---## Owning Your Signal in a Noisy World: A Digital Philosophy
 
 **Introduction:**
 
@@ -60,4 +57,3 @@ Owning your signal in the context of a digital legacy requires taking responsibi
 ---
 
 By consciously addressing these ethical considerations, we can navigate the digital landscape with greater awareness and intention. Owning our signal is not just about being heard; it's about using our voice responsibly and authentically to shape a more ethical and meaningful digital world.
-```

@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern'
   Engineering)'
----
-
-```markdown
-# Level Up Your CLI Game: Combining Click and Rich for Modern Engineering
+---# Level Up Your CLI Game: Combining Click and Rich for Modern Engineering
 
 In the world of modern engineering, where automation and efficiency reign supreme, Command Line Interfaces (CLIs) remain a crucial tool. They offer a powerful way to interact with systems, automate tasks, and streamline workflows. But let's be honest, many CLIs are… well, a little dull. This post will explore how to build robust and visually appealing CLIs using the power of Click and Rich, two fantastic Python libraries that can elevate your engineering tools to the next level. By combining these tools, you can create interfaces that are not only functional but also user-friendly, providing a better experience for your team and contributing to overall engineering excellence.
 
@@ -34,8 +31,6 @@ def hello(name):
 
 if __name__ == '__main__':
     hello()
-```
-
 This concise code snippet defines a CLI with a single command `hello` that accepts a `--name` option. Running this script from your terminal will greet the specified name or "World" by default.
 
 ## 2. Rich: Adding Visual Flair and Enhanced Information
@@ -63,8 +58,6 @@ def hello(name):
 
 if __name__ == '__main__':
     hello()
-```
-
 Now, running the same command will produce a beautifully formatted greeting in your terminal, with "Hello" in bold blue and the name in italic green.
 
 ## 3. Combining Click and Rich: A Practical Example
@@ -108,9 +101,6 @@ def list_users():
 
 if __name__ == '__main__':
     list_users()
-```
-
 This script uses Click to define a `list_users` command. Inside the command, it retrieves user data and then uses Rich to create a formatted table that displays the user information. Running this script will output a visually appealing table in your terminal. This illustrates how Click handles the CLI structure, while Rich enhances the presentation, making the tool more informative and engaging.
 
 By embracing Click and Rich, you can build powerful and user-friendly CLIs that reflect modern engineering principles: modularity, maintainability, and a focus on user experience.  Start experimenting and elevate your CLI game today!
-```

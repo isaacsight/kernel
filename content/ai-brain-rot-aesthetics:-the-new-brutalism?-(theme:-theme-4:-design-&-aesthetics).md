@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design'
   & Aesthetics)'
----
-
-```markdown
-## Brain Rot Aesthetics: The New Brutalism?
+---## Brain Rot Aesthetics: The New Brutalism?
 
 **Introduction:**
 
@@ -26,4 +23,3 @@ In a world where our attention spans are constantly being challenged, Brain Rot 
 ### 3. Subversive Commentary: Irony and Detachment
 
 Beneath the surface chaos lies a layer of irony and detachment. Brain Rot Aesthetics often employs a sense of self-awareness, acknowledging its own absurdity and embracing the ridiculous. This can be seen in the use of outdated memes, ironically deployed corporate imagery, and a general disregard for traditional rules of composition and design. This isn't just about being ugly; it's about commenting on the superficiality of the internet and the absurdity of modern life. By appropriating and recontextualizing familiar images and tropes, Brain Rot Aesthetics creates a sense of alienation and critique, forcing viewers to question the messages they are constantly being bombarded with. It's a form of visual satire, using humor and irony to highlight the flaws and contradictions of our digital culture. Just like Brutalism used raw concrete to challenge societal norms, Brain Rot Aesthetics utilizes digital debris to question our relationship with technology and information. Could it be the new Brutalism for the digital age? The jury's still out, but one thing is certain: it's a visual force to be reckoned with.
-```

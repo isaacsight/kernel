@@ -140,11 +140,17 @@ class MLLogger:
             "metrics": {"latency_ms": latency_ms}
         }
         # Append to a .jsonl file
+### The "Dataset" Mindset
+
+By saving these logs to `~/.codelens/logs/interactions.jsonl`, I am effectively building a <strong>proprietary dataset</strong> of code review interactions. 
+
+In the future, I can use this data to:
+1.  <strong>Fine-tune</strong> a smaller model to perform code reviews.
+2.  <strong>Run evaluations</strong> to compare different models against my own past usage.
+3.  <strong>Detect drift</strong> if the model's performance changes over time.
+
+Data is the fuel for AI, and now CodeLens is harvesting its own fuel.
 </code></pre>
-<h3>The "Dataset" Mindset</h3>
-<p>By saving these logs to `~/.codelens/logs/interactions.jsonl`, I am effectively building a <strong>proprietary dataset</strong> of code review interactions.</p>
-<p>In the future, I can use this data to: 1.  <strong>Fine-tune</strong> a smaller model to perform code reviews. 2.  <strong>Run evaluations</strong> to compare different models against my own past usage. 3.  <strong>Detect drift</strong> if the model's performance changes over time.</p>
-<p>Data is the fuel for AI, and now CodeLens is harvesting its own fuel.</p>
 
     <!-- Share Buttons -->
     <div class="share-section">

@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'How to Train Your Website to Write Its Own Changelog (Theme:'
   Theme 1: The Autonomous Web)'
----
-
-```markdown
-# Training Your Website to Write Its Own Changelog: The Autonomous Web in Action
+---# Training Your Website to Write Its Own Changelog: The Autonomous Web in Action
 
 The future is autonomous. From self-driving cars to AI-powered assistants, we're increasingly offloading repetitive tasks to machines. Why should website development be any different? One particularly tedious but vital task is maintaining a changelog – a record of every update, bug fix, and feature addition made to your website.
 
@@ -67,8 +64,6 @@ done
 # Add more sections as needed
 
 echo "Changelog generation complete!"
-```
-
 **Popular Tools for Changelog Generation:**
 
 *   **conventional-changelog:** A powerful and highly customizable tool for generating changelogs based on Conventional Commits.
@@ -89,4 +84,3 @@ By automating changelog generation as part of your CI/CD process, you ensure tha
 **Conclusion:**
 
 Training your website to write its own changelog is a significant step towards achieving the autonomous web. It saves you time and effort, reduces the risk of errors, and ensures that your website documentation is always accurate and readily available. Embrace commit message conventions, automate the generation process, and integrate it seamlessly into your CI/CD pipeline. The future is autonomous, and your website can be too!
-```

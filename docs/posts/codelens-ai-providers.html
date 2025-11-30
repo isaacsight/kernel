@@ -122,21 +122,20 @@
 class AIProvider:
     def call(self, system_prompt: str, user_message: str) -> str:
         raise NotImplementedError
+Then, I implemented concrete classes for each service:
+
+*   `AnthropicProvider`: Handles the `anthropic` SDK client.
+*   `GeminiProvider`: Handles the `google.generativeai` SDK.
+
+### Configuration Management
+
+To make this usable, I needed a way to manage API keys without hardcoding them. I created a `ConfigManager` that loads settings from `~/.codelens/config.json`.
+
+Now, the application logic is simple:
+
 </code></pre>
-<p>Then, I implemented concrete classes for each service:</p>
-<ul>
-<li>`AnthropicProvider`: Handles the `anthropic` SDK client.</li>
-<li>`GeminiProvider`: Handles the `google.generativeai` SDK.</li>
-</ul>
-<h3>Configuration Management</h3>
-<p>To make this usable, I needed a way to manage API keys without hardcoding them. I created a `ConfigManager` that loads settings from `~/.codelens/config.json`.</p>
-<p>Now, the application logic is simple:</p>
-<pre><code>
-# gui.py
-provider = get_provider(self.config)
-response = provider.call(system_prompt, user_msg)
-</code></pre>
-<p>The UI doesn't care if it's talking to Claude or Gemini. It just asks for a completion.</p>
+<h1>gui.py</h1>
+<p>provider = get_provider(self.config) response = provider.call(system_prompt, user_msg) The UI doesn't care if it's talking to Claude or Gemini. It just asks for a completion.</p>
 <h3>Why This Matters</h3>
 <p>This flexibility allows CodeLens to: 1.  <strong>Optimize for Cost</strong>: Use Gemini Flash for simple explanations. 2.  <strong>Optimize for Quality</strong>: Use Claude 3.5 Sonnet for complex refactoring. 3.  <strong>Fallback</strong>: If one API goes down, the user can switch to the other.</p>
 <p>Building for model independence is a key step in creating professional-grade AI tools.</p>

@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Building Self-Healing Websites with Python (Theme: Theme 1:'
   The Autonomous Web)'
----
-
-```markdown
-# The Autonomous Web: Building Self-Healing Websites with Python
+---# The Autonomous Web: Building Self-Healing Websites with Python
 
 The internet, as we know it, is a vast and complex ecosystem, often reliant on human intervention for maintenance and repairs. But what if we could build websites that are more resilient, capable of identifying and correcting issues autonomously? This is the promise of the autonomous web, a vision where websites can monitor their own health, diagnose problems, and implement solutions without direct human oversight. Python, with its versatile libraries and scripting capabilities, offers a powerful toolkit for building these self-healing systems. This blog post explores how we can leverage Python to create websites that are more robust, reliable, and ultimately, autonomous.
 
@@ -63,8 +60,6 @@ if __name__ == "__main__":
 
 
     time.sleep(60)  # Check every 60 seconds
-```
-
 This script periodically checks the website and CPU usage. If an error occurs or the CPU usage exceeds a threshold, it prints a message. The next step is to implement a robust alerting mechanism, such as sending email or SMS notifications using libraries like `smtplib` (for email) or a dedicated SMS API service.
 
 ## 2. Diagnosis: Understanding the Root Cause
@@ -111,8 +106,6 @@ if __name__ == "__main__":
       print(f"- {error}: {count}")
   else:
     print("No errors found in the log file.")
-```
-
 This script searches for common error patterns in a log file and reports the most frequent ones, helping us pinpoint the source of the problem.
 
 ## 3. Remediation: Automated Solutions
@@ -145,9 +138,6 @@ def restart_service(service_name):
 if __name__ == "__main__":
   service_to_restart = "nginx"  # Replace with the name of the service
   restart_service(service_to_restart)
-```
-
 **Important Note:**  Automation should be approached with caution. Thorough testing and validation are crucial before deploying any self-healing mechanism to a production environment. Consider using techniques like canary deployments to minimize the risk of unintended consequences.  Access to sensitive system commands should be carefully controlled using appropriate security measures.
 
 Building self-healing websites with Python requires a combination of monitoring, diagnosis, and remediation techniques. By automating these processes, we can create more resilient and reliable web applications that require less human intervention, paving the way for a more autonomous web.
-```

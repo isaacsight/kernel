@@ -114,54 +114,53 @@
 
     
 
-    <pre><code>
-# Training Your Website to Write Its Own Changelog: The Autonomous Web in Action
-
-The future is autonomous. From self-driving cars to AI-powered assistants, we're increasingly offloading repetitive tasks to machines. Why should website development be any different? One particularly tedious but vital task is maintaining a changelog – a record of every update, bug fix, and feature addition made to your website.
-
-Imagine a world where your website, after each deployment, automatically generates a clear, concise, and informative changelog entry. Sounds like a dream, right? It's more achievable than you think! By leveraging version control, automated testing, and a little bit of clever scripting, you can train your website to document its own evolution. Welcome to the autonomous web, one changelog at a time.
-
-Here's how:
-
-## 1. Embrace Commit Message Conventions: Teach Your Website to Listen
-
-Your website can't write a changelog if it can't understand what happened. This is where commit message conventions come in. Think of it as teaching your website a new language. By adopting a standardized format for your commit messages, you provide the raw data your website needs.
-
-*   <strong>The Power of Prefixes:</strong> Introduce prefixes to categorize your commits. Common prefixes include:
-    *   `feat:` for new features
-    *   `fix:` for bug fixes
-    *   `docs:` for documentation updates
-    *   `chore:` for housekeeping tasks (e.g., dependency updates)
-    *   `refactor:` for code refactoring
-    *   `test:` for testing-related changes
-<em>   <strong>Descriptive Descriptions:</strong> After the prefix, write a concise and informative description of the change. Be specific about </em>what<em> changed and </em>why*.
-*   <strong>Example:</strong> `feat: Add responsive navigation menu for mobile devices`
-*   <strong>Tools & Linters:</strong> Integrate commit message linters into your CI/CD pipeline. These tools automatically check your commit messages against your chosen convention, ensuring consistency and adherence to the standard. Husky and commitlint are popular choices.
-
-By consistently using well-formatted commit messages, you’re essentially providing your website with a structured dataset it can easily parse to understand the changes.
-
-## 2. Automate Changelog Generation: The Script Awakens
-
-With structured commit messages in place, you can now automate the changelog generation process. This involves creating a script that:
-
-*   <strong>Fetches Commit History:</strong> Uses Git commands (e.g., `git log`) to retrieve the commit history of your repository.
-*   <strong>Parses Commit Messages:</strong> Analyzes the commit messages, identifying the prefix and description.
-*   <strong>Filters & Categorizes:</strong> Filters commits based on their prefix and categorizes them into sections like "Features," "Bug Fixes," "Documentation," etc.
-*   <strong>Formats the Changelog:</strong> Generates a Markdown file (or any other desired format) with a clear and organized list of changes, grouped by category.
-
-<strong>Example Script (Bash - simplified):</strong>
-
-</code></pre>
-<h11></h11>
-<h1>Get commits since the last tag</h1>
-<p>commits=$(git log --pretty=format:"%s" $(git describe --abbrev=0 --tags)..HEAD)</p>
-<p>echo "# Changelog" > CHANGELOG.md echo "## $(date +%Y-%m-%d)" >> CHANGELOG.md</p>
-<p>echo "### Features" >> CHANGELOG.md grep "^feat:" <<< "$commits" | sed 's/^feat: //' | while read -r line; do echo "- $line" >> CHANGELOG.md done</p>
-<p>echo "### Bug Fixes" >> CHANGELOG.md grep "^fix:" <<< "$commits" | sed 's/^fix: //' | while read -r line; do echo "- $line" >> CHANGELOG.md done</p>
-<h1>Add more sections as needed</h1>
-<p>echo "Changelog generation complete!"</p>
+    <h1>Training Your Website to Write Its Own Changelog: The Autonomous Web in Action</h1>
+<p>The future is autonomous. From self-driving cars to AI-powered assistants, we're increasingly offloading repetitive tasks to machines. Why should website development be any different? One particularly tedious but vital task is maintaining a changelog – a record of every update, bug fix, and feature addition made to your website.</p>
+<p>Imagine a world where your website, after each deployment, automatically generates a clear, concise, and informative changelog entry. Sounds like a dream, right? It's more achievable than you think! By leveraging version control, automated testing, and a little bit of clever scripting, you can train your website to document its own evolution. Welcome to the autonomous web, one changelog at a time.</p>
+<p>Here's how:</p>
+<h2>1. Embrace Commit Message Conventions: Teach Your Website to Listen</h2>
+<p>Your website can't write a changelog if it can't understand what happened. This is where commit message conventions come in. Think of it as teaching your website a new language. By adopting a standardized format for your commit messages, you provide the raw data your website needs.</p>
+<ul>
+<li><strong>The Power of Prefixes:</strong> Introduce prefixes to categorize your commits. Common prefixes include:</li>
+</ul>
+<p><em>   `feat:` for new features </em>   `fix:` for bug fixes <em>   `docs:` for documentation updates </em>   `chore:` for housekeeping tasks (e.g., dependency updates) <em>   `refactor:` for code refactoring </em>   `test:` for testing-related changes</p>
+<ul>
+<li><strong>Descriptive Descriptions:</strong> After the prefix, write a concise and informative description of the change. Be specific about <em>what</em> changed and <em>why</em>.</li>
+<li><strong>Example:</strong> `feat: Add responsive navigation menu for mobile devices`</li>
+<li><strong>Tools & Linters:</strong> Integrate commit message linters into your CI/CD pipeline. These tools automatically check your commit messages against your chosen convention, ensuring consistency and adherence to the standard. Husky and commitlint are popular choices.</li>
+</ul>
+<p>By consistently using well-formatted commit messages, you’re essentially providing your website with a structured dataset it can easily parse to understand the changes.</p>
+<h2>2. Automate Changelog Generation: The Script Awakens</h2>
+<p>With structured commit messages in place, you can now automate the changelog generation process. This involves creating a script that:</p>
+<ul>
+<li><strong>Fetches Commit History:</strong> Uses Git commands (e.g., `git log`) to retrieve the commit history of your repository.</li>
+<li><strong>Parses Commit Messages:</strong> Analyzes the commit messages, identifying the prefix and description.</li>
+<li><strong>Filters & Categorizes:</strong> Filters commits based on their prefix and categorizes them into sections like "Features," "Bug Fixes," "Documentation," etc.</li>
+<li><strong>Formats the Changelog:</strong> Generates a Markdown file (or any other desired format) with a clear and organized list of changes, grouped by category.</li>
+</ul>
+<p><strong>Example Script (Bash - simplified):</strong></p>
 <pre><code>
+#!/bin/bash
 
+# Get commits since the last tag
+commits=$(git log --pretty=format:"%s" $(git describe --abbrev=0 --tags)..HEAD)
+
+echo "# Changelog" > CHANGELOG.md
+echo "## $(date +%Y-%m-%d)" >> CHANGELOG.md
+
+echo "### Features" >> CHANGELOG.md
+grep "^feat:" <<< "$commits" | sed 's/^feat: //' | while read -r line; do
+  echo "- $line" >> CHANGELOG.md
+done
+
+echo "### Bug Fixes" >> CHANGELOG.md
+grep "^fix:" <<< "$commits" | sed 's/^fix: //' | while read -r line; do
+  echo "- $line" >> CHANGELOG.md
+done
+
+# Add more sections as needed
+
+echo "Changelog generation complete!"
 <strong>Popular Tools for Changelog Generation:</strong>
 
 *   <strong>conventional-changelog:</strong> A powerful and highly customizable tool for generating changelogs based on Conventional Commits.

@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'From Script to Application: Packaging Python (Theme: Theme 3:'
   Modern Engineering)'
----
-
-```markdown
-# From Script to Application: Packaging Python for Modern Engineering
+---# From Script to Application: Packaging Python for Modern Engineering
 
 Python has evolved from a scripting language to a powerful tool for building complex applications. But simply writing Python code isn't enough. To integrate your Python solutions into larger engineering projects or distribute them for wider use, you need to package them properly. This blog post explores modern techniques for packaging Python projects, focusing on maintainability, reproducibility, and integration into modern engineering workflows. We'll delve into best practices that help bridge the gap between initial script and robust, deployable application.
 
@@ -27,20 +24,14 @@ Modern engineering prioritizes predictable and reproducible environments. The da
     * Upgrade dependencies safely using `pip-sync`.
 
    This approach significantly improves reproducibility by ensuring everyone uses the exact same versions of all dependencies. Example:
-
-   ```
    # requirements.in
    requests
    numpy >= 1.20
-   ```
-
    Then:
 
    ```bash
    pip-compile requirements.in
    pip-sync
-   ```
-
 * **Benefits for Engineering:** By adopting virtual environments and rigorous dependency management, you reduce integration headaches, improve collaboration, and ensure your Python application remains stable throughout its lifecycle.
 
 ## 2. Containerization for Reliable Deployment
@@ -73,8 +64,6 @@ Containerization, typically using Docker, is a cornerstone of modern engineering
    COPY . .
 
    CMD ["python", "main.py"]
-   ```
-
 * **Docker Compose for Multi-Container Applications:** If your Python application interacts with other services (databases, message queues), use Docker Compose to define and manage the entire stack. This simplifies deployment and testing of complex systems.
 
 * **Engineering Perspective:**  Containerization allows your Python application to integrate smoothly into existing infrastructure and deployment pipelines, contributing to a more robust and scalable overall system.
@@ -118,10 +107,6 @@ Continuous Integration and Continuous Delivery (CI/CD) pipelines automate the pr
            # Add steps to build your Docker image and push it to a registry like Docker Hub or AWS ECR
            # This would typically involve using `docker build` and `docker push` commands.
            run: echo "Build and push Docker image..." # Replace with actual build and push steps
-
-   ```
-
 * **Engineering Benefits:** CI/CD pipelines promote code quality, reduce deployment risks, and enable faster iteration cycles.  This is crucial for meeting the demands of modern engineering projects, where speed and reliability are paramount. By automating these processes, engineers can focus on building features rather than managing deployments.  It also supports a more agile and iterative development process.
 
 By embracing these modern engineering practices, you can transform your Python scripts into robust, maintainable, and deployable applications that can seamlessly integrate into larger engineering projects. This not only improves the quality and reliability of your software but also streamlines development workflows and facilitates collaboration within your team.
-```

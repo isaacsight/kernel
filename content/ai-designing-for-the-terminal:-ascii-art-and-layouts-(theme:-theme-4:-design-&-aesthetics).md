@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Designing for the Terminal: ASCII Art and Layouts (Theme: Theme'
   4: Design & Aesthetics)'
----
-
-```markdown
-# Designing for the Terminal: ASCII Art and Layouts
+---# Designing for the Terminal: ASCII Art and Layouts
 
 The terminal. A window into the heart of your operating system. Often perceived as stark and utilitarian, it's easy to overlook its potential for creative design and visual flair. But the terminal doesn't have to be a bland, text-only void. By leveraging ASCII art and thoughtful layouts, we can transform the command line into a more engaging and informative experience. This blog post explores how to design effectively for the terminal, breathing life into this often-underappreciated interface.
 
@@ -60,8 +57,6 @@ table.add_row("5678", "Database", "Idle")
 table.add_row("9012", "Task Queue", "Pending")
 
 console.print(table)
-```
-
 ## 3. Considerations for Accessibility and User Experience
 
 Design should always be mindful of accessibility and the overall user experience. When designing for the terminal, this is especially important:
@@ -79,4 +74,3 @@ Design should always be mindful of accessibility and the overall user experience
 *   **Responsive Design (Within the Terminal):** While the terminal isn't a web browser, be aware of different terminal window sizes. Design your layouts to adapt reasonably to various widths and heights. Avoid layouts that break completely when the window is resized.
 
 By embracing ASCII art thoughtfully and prioritizing clear, accessible layouts, we can elevate the terminal experience from a functional tool to a visually appealing and user-friendly environment. The possibilities are more than you think!
-```

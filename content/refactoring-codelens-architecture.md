@@ -31,8 +31,6 @@ codelens/
 ├── gui.py             # UI components
 └── utils/
     └── logger.py      # ML interaction logging
-```
-
 ### Key Benefits
 
 1.  **Separation of Concerns**: The `gui.py` module doesn't know *how* the AI works; it just asks for a provider and sends a prompt.

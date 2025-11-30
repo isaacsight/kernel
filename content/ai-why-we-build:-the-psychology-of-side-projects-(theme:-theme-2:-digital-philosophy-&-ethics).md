@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Why We Build: The Psychology of Side Projects (Theme: Theme'
   2: Digital Philosophy & Ethics)'
----
-
-```markdown
-## Why We Build: The Psychology of Side Projects in the Age of Algorithm
+---## Why We Build: The Psychology of Side Projects in the Age of Algorithm
 
 **Introduction:**
 
@@ -42,4 +39,3 @@ By building projects that address specific needs or solve real-world problems, w
 **Conclusion:**
 
 Side projects are more than just hobbies; they are acts of self-definition and ethical responsibility in the digital age. They offer us a chance to reclaim our agency, explore innovative solutions, and build meaningful connections. As we navigate the complex and ever-evolving landscape of technology, let us embrace the power of side projects to create a more just, equitable, and human-centered digital future. So, what will you build?
-```

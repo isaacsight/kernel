@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern'
   Engineering)'
----
-
-```markdown
-# Design Patterns for AI-Integrated Apps: Modern Engineering for Intelligent Experiences
+---# Design Patterns for AI-Integrated Apps: Modern Engineering for Intelligent Experiences
 
 The rise of Artificial Intelligence (AI) is rapidly transforming the landscape of software development. We're moving beyond simple automation to building truly intelligent applications that learn, adapt, and provide personalized experiences. However, integrating AI effectively requires a shift in mindset and a new toolkit of design patterns. This blog post will explore key design patterns essential for modern engineering practices when building AI-integrated apps. These patterns help us manage complexity, ensure maintainability, and build robust, scalable, and responsible AI systems.
 
@@ -60,4 +57,3 @@ The pattern involves gradually replacing existing functionality with AI-powered 
 **Example:** Imagine a customer service application that relies on manual agents to answer customer inquiries. The Strangler Fig Pattern could be used to introduce an AI-powered chatbot. Initially, the chatbot handles only simple inquiries, while more complex inquiries are still routed to human agents. As the chatbot learns and improves, it can handle more and more complex inquiries, gradually reducing the workload of the human agents. Eventually, the legacy system (the human agents) can be decommissioned altogether.
 
 By adopting these design patterns, engineers can build AI-integrated apps that are robust, scalable, maintainable, and trustworthy. These patterns are essential for navigating the complexities of modern AI engineering and creating intelligent experiences that benefit both users and organizations.
-```

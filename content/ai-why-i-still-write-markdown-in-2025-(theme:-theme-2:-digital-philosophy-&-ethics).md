@@ -6,10 +6,7 @@ tags:
 - generated
 title: 'Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
----
-
-```markdown
-# Why I Still Write Markdown in 2025: A Stand Against the Ephemeral Web
+---# Why I Still Write Markdown in 2025: A Stand Against the Ephemeral Web
 
 In a world awash with AI-powered content creation and shimmering, interactive websites built with frameworks I can barely pronounce, you might wonder why I'm still here, stubbornly pecking away at a plain text file in Markdown. The answer, as always, lies not just in efficiency, but in a deeper philosophical commitment to the long-term health and accessibility of the digital world. I believe Markdown represents a small, but vital, act of digital resistance against the forces that threaten to make our digital history unreadable and our online experiences fleeting.
 
@@ -32,4 +29,3 @@ In a world increasingly dominated by sophisticated design tools and AI-powered w
 You don't need a powerful computer or expensive software to write in Markdown. You don't need to be a coding expert or a design guru. All you need is a text editor and a willingness to learn a few basic commands. This democratization of content creation is essential for ensuring that diverse voices are heard and that the digital landscape reflects the richness and complexity of human experience. By choosing Markdown, I'm not just choosing a writing format; I'm choosing to support a more equitable and accessible digital world.
 
 In conclusion, while the siren song of fancy frameworks and AI-generated content may be tempting, I remain committed to Markdown. It's a small act of resistance, a declaration of digital independence, and a commitment to a more sustainable and accessible digital future. And besides, it just works.
-```

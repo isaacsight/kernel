@@ -129,10 +129,14 @@ codelens/
 ├── gui.py             # UI components
 └── utils/
     └── logger.py      # ML interaction logging
+### Key Benefits
+
+1.  <strong>Separation of Concerns</strong>: The `gui.py` module doesn't know <em>how</em> the AI works; it just asks for a provider and sends a prompt.
+2.  <strong>Swappable Components</strong>: I can now add a new AI provider (like OpenAI or a local Llama model) by simply adding a class to `ai_providers.py`, without touching the UI code.
+3.  <strong>Scalability</strong>: We can now add unit tests for each module independently.
+
+This refactor lays the groundwork for more advanced features like automated evaluation and complex agentic workflows.
 </code></pre>
-<h3>Key Benefits</h3>
-<p>1.  <strong>Separation of Concerns</strong>: The `gui.py` module doesn't know <em>how</em> the AI works; it just asks for a provider and sends a prompt. 2.  <strong>Swappable Components</strong>: I can now add a new AI provider (like OpenAI or a local Llama model) by simply adding a class to `ai_providers.py`, without touching the UI code. 3.  <strong>Scalability</strong>: We can now add unit tests for each module independently.</p>
-<p>This refactor lays the groundwork for more advanced features like automated evaluation and complex agentic workflows.</p>
 
     <!-- Share Buttons -->
     <div class="share-section">

@@ -5,10 +5,7 @@ tags:
 - ai
 - generated
 title: 'Why Dark Mode is Not Enough'
----
-
-```markdown
-# Dark Mode is Just the Beginning: Why We Need More Than a Black Canvas
+---# Dark Mode is Just the Beginning: Why We Need More Than a Black Canvas
 
 Dark mode has become ubiquitous, praised for its supposed eye strain reduction and sleek aesthetics. But is simply inverting colors enough? While a welcome starting point, dark mode alone falls short of addressing the real needs of users who benefit from truly customizable and accessible visual experiences. We need to move beyond a simple toggle and embrace more sophisticated theming options. This post delves into why dark mode isn't the silver bullet it's often touted to be and explores what more we can and should be doing to improve visual accessibility and user experience.
 
@@ -31,4 +28,3 @@ Beyond accessibility and eye comfort, users crave personalization. Dark mode, in
 The future of theming lies in granular control. Imagine being able to customize not just the background color but also the fonts, the accent colors, the spacing, and even the shapes of UI elements. Think about providing pre-built themes inspired by different aesthetics (e.g., minimalist, cyberpunk, retro) that users can then further customize to their liking.
 
 By offering a wide range of customization options, we can empower users to create truly personalized and visually engaging experiences that not only look good but also enhance their productivity and well-being. Dark mode is a great starting point, but it's just the foundation upon which a truly customizable and inclusive visual experience can be built.
-```
