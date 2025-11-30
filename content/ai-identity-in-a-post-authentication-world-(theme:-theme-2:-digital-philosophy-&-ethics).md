@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Identity in a Post-Authentication World (Theme: Theme 2: Digital
+title: 'Identity in a Post-Authentication World (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

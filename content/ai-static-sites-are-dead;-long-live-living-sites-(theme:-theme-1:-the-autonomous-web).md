@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Static Sites are Dead; Long Live Living Sites (Theme: Theme
+title: 'Static Sites are Dead; Long Live Living Sites (Theme: Theme'
   1: The Autonomous Web)'
 ---
 

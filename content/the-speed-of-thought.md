@@ -1,5 +1,5 @@
 ---
-title: The Speed of Thought
+title: 'The Speed of Thought'
 date: 2025-11-27
 category: Technology
 tags: [AI, Workflow, Antigravity]

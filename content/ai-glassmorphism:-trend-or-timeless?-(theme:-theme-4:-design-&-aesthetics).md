@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design &
+title: 'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design &'
   Aesthetics)'
 ---
 

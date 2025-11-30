@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Power of Makefiles in Modern Projects (Theme: Theme 3: Modern
+title: 'The Power of Makefiles in Modern Projects (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

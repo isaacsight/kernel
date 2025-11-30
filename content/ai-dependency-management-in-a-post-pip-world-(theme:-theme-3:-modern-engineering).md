@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Dependency Management in a Post-Pip World (Theme: Theme 3: Modern
+title: 'Dependency Management in a Post-Pip World (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

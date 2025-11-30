@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The ephemeral nature of digital artifacts (Theme: Theme 2: Digital
+title: 'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Python 3.14: What''s New and Why it Matters (Theme: Theme 3:
+title: 'Python 3.14: What''s New and Why it Matters (Theme: Theme 3:'
   Modern Engineering)'
 ---
 

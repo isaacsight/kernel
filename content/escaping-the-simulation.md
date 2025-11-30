@@ -1,5 +1,5 @@
 ---
-title: Escaping the Simulation of Self
+title: 'Escaping the Simulation of Self'
 date: 2025-11-27
 category: Philosophy
 tags: Society, Perception, Digital

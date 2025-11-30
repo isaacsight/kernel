@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Icons: SVG vs. Font vs. Emojis (Theme: Theme 4: Design & Aesthetics)'
+title: 'Icons: SVG vs. Font vs. Emojis'
 ---
 
 ```markdown

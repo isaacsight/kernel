@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Preserving History when History is Rewritten by AI (Theme: Theme
+title: 'Preserving History when History is Rewritten by AI (Theme: Theme'
   2: Digital Philosophy & Ethics)'
 ---
 

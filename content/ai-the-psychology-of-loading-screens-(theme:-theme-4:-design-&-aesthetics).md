@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Psychology of Loading Screens (Theme: Theme 4: Design &
+title: 'The Psychology of Loading Screens (Theme: Theme 4: Design &'
   Aesthetics)'
 ---
 

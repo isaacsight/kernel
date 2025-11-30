@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Whitespace: The Most Important Element (Theme: Theme 4: Design
+title: 'Whitespace: The Most Important Element (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

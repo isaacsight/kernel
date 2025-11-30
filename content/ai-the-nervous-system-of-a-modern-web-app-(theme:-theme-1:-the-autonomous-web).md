@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Nervous System of a Modern Web App (Theme: Theme 1: The
+title: 'The Nervous System of a Modern Web App (Theme: Theme 1: The'
   Autonomous Web)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The "Set It and Forget It" Myth vs. Reality (Theme: Theme 1:
+title: 'The "Set It and Forget It" Myth vs. Reality (Theme: Theme 1:'
   The Autonomous Web)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Type Hinting in Python: Beyond the Basics (Theme: Theme 3: Modern
+title: 'Type Hinting in Python: Beyond the Basics (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

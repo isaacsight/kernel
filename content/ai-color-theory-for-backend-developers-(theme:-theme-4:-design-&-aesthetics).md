@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Color Theory for Backend Developers (Theme: Theme 4: Design
+title: 'Color Theory for Backend Developers (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Accessibility is not an Optional Feature (Theme: Theme 4: Design
+title: 'Accessibility is not an Optional Feature (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

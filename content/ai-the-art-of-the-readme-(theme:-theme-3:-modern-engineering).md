@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Art of the README (Theme: Theme 3: Modern Engineering)'
+title: 'The Art of the README'
 ---
 
 ```markdown

@@ -1,5 +1,5 @@
 ---
-title: To Be Witnessed
+title: 'To Be Witnessed'
 date: 2025-11-27
 category: Culture
 tags: Intimacy, Media, Humanism

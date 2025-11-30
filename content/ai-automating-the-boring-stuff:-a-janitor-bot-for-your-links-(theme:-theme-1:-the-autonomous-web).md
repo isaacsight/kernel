@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Automating the Boring Stuff: A Janitor Bot for Your Links (Theme:
+title: 'Automating the Boring Stuff: A Janitor Bot for Your Links (Theme:'
   Theme 1: The Autonomous Web)'
 ---
 

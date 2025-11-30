@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1:
+title: 'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1:'
   The Autonomous Web)'
 ---
 

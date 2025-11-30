@@ -1,5 +1,5 @@
 ---
-title: Don't Get Locked In
+title: 'Don't Get Locked In'
 date: 2025-11-28
 category: Technology & Strategy
 tags: [ai, tools, workflow, independence]

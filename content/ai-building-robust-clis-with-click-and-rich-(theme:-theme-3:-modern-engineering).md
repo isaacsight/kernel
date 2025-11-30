@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern
+title: 'Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

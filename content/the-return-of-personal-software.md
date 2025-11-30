@@ -1,5 +1,5 @@
 ---
-title: The Return of Personal Software
+title: 'The Return of Personal Software'
 date: 2025-11-28
 category: Technology
 tags: Software, Creativity, Tools

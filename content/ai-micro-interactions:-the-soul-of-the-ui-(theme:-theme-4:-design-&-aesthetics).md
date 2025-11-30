@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design
+title: 'Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

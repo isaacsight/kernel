@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Optimizing Python for Performance (Theme: Theme 3: Modern Engineering)'
+title: 'Optimizing Python for Performance'
 ---
 
 ```markdown

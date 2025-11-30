@@ -1,5 +1,5 @@
 ---
-title: "The Ultimate Workflow: Going Headless"
+title: 'The Ultimate Workflow: Going Headless'
 date: 2025-11-29
 category: "Engineering"
 tags:

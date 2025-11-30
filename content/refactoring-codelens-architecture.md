@@ -1,5 +1,5 @@
 ---
-title: "Refactoring for AI: From Script to Package"
+title: 'Refactoring for AI: From Script to Package'
 date: 2025-11-29
 category: Engineering
 tags: [python, refactoring, architecture, ai]

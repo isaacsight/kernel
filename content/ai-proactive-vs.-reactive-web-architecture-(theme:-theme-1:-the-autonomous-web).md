@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Proactive vs. Reactive Web Architecture (Theme: Theme 1: The
+title: 'Proactive vs. Reactive Web Architecture (Theme: Theme 1: The'
   Autonomous Web)'
 ---
 

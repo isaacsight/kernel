@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern
+title: 'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

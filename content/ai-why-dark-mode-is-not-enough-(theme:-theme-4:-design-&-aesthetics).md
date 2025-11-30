@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why Dark Mode is Not Enough (Theme: Theme 4: Design & Aesthetics)'
+title: 'Why Dark Mode is Not Enough'
 ---
 
 ```markdown

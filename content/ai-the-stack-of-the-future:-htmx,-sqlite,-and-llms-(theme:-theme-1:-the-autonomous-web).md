@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme
+title: 'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme'
   1: The Autonomous Web)'
 ---
 

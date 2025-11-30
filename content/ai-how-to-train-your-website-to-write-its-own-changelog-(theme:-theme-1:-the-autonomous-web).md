@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: How to Train Your Website to Write Its Own Changelog (Theme:
+title: 'How to Train Your Website to Write Its Own Changelog (Theme:'
   Theme 1: The Autonomous Web)'
 ---
 

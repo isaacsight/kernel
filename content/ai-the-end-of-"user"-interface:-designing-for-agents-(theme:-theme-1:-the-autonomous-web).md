@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The End of "User" Interface: Designing for Agents (Theme: Theme
+title: 'The End of "User" Interface: Designing for Agents (Theme: Theme'
   1: The Autonomous Web)'
 ---
 

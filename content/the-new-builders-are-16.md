@@ -1,5 +1,5 @@
 ---
-title: The New Builders Are 16
+title: 'The New Builders Are 16'
 date: 2025-11-26
 category: Technology
 tags: AI, Future, Culture

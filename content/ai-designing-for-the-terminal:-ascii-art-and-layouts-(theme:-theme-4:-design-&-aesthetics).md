@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Designing for the Terminal: ASCII Art and Layouts (Theme: Theme
+title: 'Designing for the Terminal: ASCII Art and Layouts (Theme: Theme'
   4: Design & Aesthetics)'
 ---
 

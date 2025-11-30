@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Logging Strategies for Distributed Systems (Theme: Theme 3:
+title: 'Logging Strategies for Distributed Systems (Theme: Theme 3:'
   Modern Engineering)'
 ---
 

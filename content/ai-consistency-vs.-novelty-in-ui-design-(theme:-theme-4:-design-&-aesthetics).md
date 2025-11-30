@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Consistency vs. Novelty in UI Design (Theme: Theme 4: Design
+title: 'Consistency vs. Novelty in UI Design (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

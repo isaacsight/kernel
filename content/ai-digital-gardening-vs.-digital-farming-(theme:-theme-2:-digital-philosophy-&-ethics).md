@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital
+title: 'Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

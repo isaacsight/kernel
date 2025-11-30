@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Typography as Voice (Theme: Theme 4: Design & Aesthetics)'
+title: 'Typography as Voice'
 ---
 
 ```markdown

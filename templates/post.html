@@ -2,13 +2,17 @@
     <div style="display: flex; justify-content: space-between; align-items: baseline;">
         <a href="{{ root }}index.html" class="back-link">← Back to Home</a>
     </div>
-    <div class="post-tags">
-        {{ tags_html }}
+    <div class="post-header" style="margin-bottom: 3rem;">
+        <div class="post-meta" style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.95rem;">
+            {{ date }}
+        </div>
+        <h1 style="font-size: 3rem; margin-bottom: 1.5rem;">{{ title }}</h1>
+        <div class="post-tags">
+            {{ tags_html }}
+        </div>
     </div>
 
     {{ series_indicator }}
-
-    <h1>{{ title }}</h1>
 
     {{ post_content }}
 

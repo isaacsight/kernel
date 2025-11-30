@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Mobile-First is Dead; Content-First is King (Theme: Theme 4:
+title: 'Mobile-First is Dead; Content-First is King (Theme: Theme 4:'
   Design & Aesthetics)'
 ---
 

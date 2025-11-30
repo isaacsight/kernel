@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern
+title: 'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

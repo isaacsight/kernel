@@ -1,5 +1,5 @@
 ---
-title: The Rise of the Non-Musician
+title: 'The Rise of the Non-Musician'
 date: 2025-11-26
 category: Technology & Culture
 tags: AI, Music, Creativity

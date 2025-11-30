@@ -74,7 +74,7 @@ def generate_ai_post(topic, provider="gemini"):
     prompt = f"Write a blog post about {topic}. Include a title, a brief introduction, and 3 main sections. Format in Markdown."
     
     content = ""
-    title = f"AI Generated: {topic}"
+    title = topic
     
     try:
         if provider == "gemini":
@@ -105,7 +105,7 @@ def generate_ai_post(topic, provider="gemini"):
 
     # Create a new post with the generated content
     filename = f"ai-{topic.lower().replace(' ', '-')}.md"
-    save_post(filename, title, datetime.date.today(), "AI", ["ai", "generated"], content)
+    save_post(filename, title, datetime.date.today(), "Engineering", ["ai"], content)
     return filename
 
 def publish_git():

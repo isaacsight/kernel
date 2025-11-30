@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design
+title: 'Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

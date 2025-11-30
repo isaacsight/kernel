@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital
+title: 'Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

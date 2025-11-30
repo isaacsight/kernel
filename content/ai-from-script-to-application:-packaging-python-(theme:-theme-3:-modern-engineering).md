@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: From Script to Application: Packaging Python (Theme: Theme 3:
+title: 'From Script to Application: Packaging Python (Theme: Theme 3:'
   Modern Engineering)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern
+title: 'Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

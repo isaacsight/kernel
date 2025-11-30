@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Dockerizing Your Life: Containerization Patterns (Theme: Theme
+title: 'Dockerizing Your Life: Containerization Patterns (Theme: Theme'
   3: Modern Engineering)'
 ---
 

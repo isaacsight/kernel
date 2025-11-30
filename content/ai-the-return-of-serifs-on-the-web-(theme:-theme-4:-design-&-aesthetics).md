@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Return of Serifs on the Web (Theme: Theme 4: Design & Aesthetics)'
+title: 'The Return of Serifs on the Web'
 ---
 
 ```markdown

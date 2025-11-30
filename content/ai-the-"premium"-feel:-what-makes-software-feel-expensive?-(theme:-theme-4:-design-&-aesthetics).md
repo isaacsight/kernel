@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The "Premium" Feel: What Makes Software Feel Expensive? (Theme:
+title: 'The "Premium" Feel: What Makes Software Feel Expensive? (Theme:'
   Theme 4: Design & Aesthetics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Future of Truth: Verifiable Credentials (Theme: Theme 2:
+title: 'The Future of Truth: Verifiable Credentials (Theme: Theme 2:'
   Digital Philosophy & Ethics)'
 ---
 

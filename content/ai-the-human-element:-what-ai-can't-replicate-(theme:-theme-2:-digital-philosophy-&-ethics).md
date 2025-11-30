@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Human Element: What AI Can''t Replicate (Theme: Theme 2:
+title: 'The Human Element: What AI Can''t Replicate (Theme: Theme 2:'
   Digital Philosophy & Ethics)'
 ---
 

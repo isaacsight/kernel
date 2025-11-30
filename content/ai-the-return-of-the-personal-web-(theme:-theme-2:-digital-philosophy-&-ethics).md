@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Return of the Personal Web (Theme: Theme 2: Digital Philosophy
+title: 'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy'
   & Ethics)'
 ---
 

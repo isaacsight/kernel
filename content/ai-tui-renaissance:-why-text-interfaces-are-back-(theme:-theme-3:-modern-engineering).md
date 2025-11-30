@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: TUI Renaissance: Why Text Interfaces are Back (Theme: Theme
+title: 'TUI Renaissance: Why Text Interfaces are Back (Theme: Theme'
   3: Modern Engineering)'
 ---
 

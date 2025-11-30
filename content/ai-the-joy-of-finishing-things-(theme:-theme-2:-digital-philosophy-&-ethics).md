@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy
+title: 'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy'
   & Ethics)'
 ---
 

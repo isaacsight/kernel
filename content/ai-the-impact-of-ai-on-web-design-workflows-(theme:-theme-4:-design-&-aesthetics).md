@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Impact of AI on Web Design Workflows (Theme: Theme 4: Design
+title: 'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

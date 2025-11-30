@@ -1,5 +1,5 @@
 ---
-title: Owning the Signal
+title: 'Owning the Signal'
 date: 2025-11-26
 category: Studio
 tags: [Engineering, Process, Future]

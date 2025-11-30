@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Owning Your Signal in a Noisy World (Theme: Theme 2: Digital
+title: 'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

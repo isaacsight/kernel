@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Building for the Edge: Latency Matters (Theme: Theme 3: Modern
+title: 'Building for the Edge: Latency Matters (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

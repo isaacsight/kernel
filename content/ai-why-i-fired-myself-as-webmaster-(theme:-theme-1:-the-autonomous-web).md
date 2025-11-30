@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous
+title: 'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous'
   Web)'
 ---
 

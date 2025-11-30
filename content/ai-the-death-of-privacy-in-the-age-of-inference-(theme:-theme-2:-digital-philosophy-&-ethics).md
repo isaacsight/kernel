@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Death of Privacy in the Age of Inference (Theme: Theme 2:
+title: 'The Death of Privacy in the Age of Inference (Theme: Theme 2:'
   Digital Philosophy & Ethics)'
 ---
 

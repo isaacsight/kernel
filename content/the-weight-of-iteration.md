@@ -1,5 +1,5 @@
 ---
-title: The Weight of Iteration
+title: 'The Weight of Iteration'
 date: 2025-11-25
 category: Studio
 tags: Engineering, Design, Future

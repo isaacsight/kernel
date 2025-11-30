@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital
+title: 'Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

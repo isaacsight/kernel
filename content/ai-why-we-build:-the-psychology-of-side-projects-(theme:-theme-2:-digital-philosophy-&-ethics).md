@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why We Build: The Psychology of Side Projects (Theme: Theme
+title: 'Why We Build: The Psychology of Side Projects (Theme: Theme'
   2: Digital Philosophy & Ethics)'
 ---
 

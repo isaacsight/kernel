@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Understanding the Global Interpreter Lock (GIL) (Theme: Theme
+title: 'Understanding the Global Interpreter Lock (GIL) (Theme: Theme'
   3: Modern Engineering)'
 ---
 

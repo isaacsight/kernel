@@ -1,5 +1,5 @@
 ---
-title: The Engine and The Gallery
+title: 'The Engine and The Gallery'
 date: 2025-11-25
 category: Studio
 tags: Strategy, Building, Substack

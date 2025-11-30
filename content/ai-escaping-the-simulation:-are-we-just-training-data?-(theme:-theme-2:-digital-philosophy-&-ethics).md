@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Escaping the Simulation: Are We Just Training Data? (Theme:
+title: 'Escaping the Simulation: Are We Just Training Data? (Theme:'
   Theme 2: Digital Philosophy & Ethics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design &
+title: 'The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design &'
   Aesthetics)'
 ---
 

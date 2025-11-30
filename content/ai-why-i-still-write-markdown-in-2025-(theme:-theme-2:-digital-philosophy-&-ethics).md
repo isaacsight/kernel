@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital
+title: 'Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital'
   Philosophy & Ethics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Building Self-Healing Websites with Python (Theme: Theme 1:
+title: 'Building Self-Healing Websites with Python (Theme: Theme 1:'
   The Autonomous Web)'
 ---
 

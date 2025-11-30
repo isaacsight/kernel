@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Uncanny Valley of AI UI (Theme: Theme 4: Design & Aesthetics)'
+title: 'The Uncanny Valley of AI UI'
 ---
 
 ```markdown

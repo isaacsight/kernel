@@ -1,5 +1,5 @@
 ---
-title: The Invisible Architect
+title: 'The Invisible Architect'
 date: 2025-11-27
 category: Society
 tags: Psychology, Culture, Technology

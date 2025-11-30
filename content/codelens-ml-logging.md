@@ -1,5 +1,5 @@
 ---
-title: "Tracking AI Experiments: Building a Custom Logger"
+title: 'Tracking AI Experiments: Building a Custom Logger'
 date: 2025-11-29
 category: Machine Learning
 tags: [mlops, logging, data-engineering, ai]

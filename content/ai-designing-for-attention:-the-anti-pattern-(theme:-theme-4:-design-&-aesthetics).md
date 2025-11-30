@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design
+title: 'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

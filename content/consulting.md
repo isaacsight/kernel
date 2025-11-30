@@ -1,5 +1,5 @@
 ---
-title: Consulting
+title: 'Consulting'
 category: Services
 excerpt: Let's fix your problem.
 ---

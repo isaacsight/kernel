@@ -1,5 +1,5 @@
 ---
-title: "Multi-Model AI: Managing Claude and Gemini Providers"
+title: 'Multi-Model AI: Managing Claude and Gemini Providers'
 date: 2025-11-29
 category: Engineering
 tags: [python, design-patterns, anthropic, gemini]

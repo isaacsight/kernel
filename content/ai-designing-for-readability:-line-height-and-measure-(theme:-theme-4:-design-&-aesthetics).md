@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Designing for Readability: Line Height and Measure (Theme: Theme
+title: 'Designing for Readability: Line Height and Measure (Theme: Theme'
   4: Design & Aesthetics)'
 ---
 

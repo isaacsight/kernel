@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern
+title: 'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern'
   Engineering)'
 ---
 

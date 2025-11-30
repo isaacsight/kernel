@@ -6,7 +6,7 @@ tags:
 - automation
 - autonomy
 - python
-title: Towards Site Autonomy
+title: 'Towards Site Autonomy'
 ---
 
 We are witnessing a shift in how we interact with our tools. For the longest time, "automation" meant writing a script that you manually triggered to do a repetitive task. It was a "human-in-the-loop" system where the human was the initiator and the manager.

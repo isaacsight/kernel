@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The "Glitch" Aesthetic in 2025 (Theme: Theme 4: Design & Aesthetics)'
+title: 'The "Glitch" Aesthetic in 2025'
 ---
 
 ```markdown

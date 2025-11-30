@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Context-Aware Publishing: When Your Site Knows What You Mean
+title: 'Context-Aware Publishing: When Your Site Knows What You Mean'
   (Theme: Theme 1: The Autonomous Web)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Webhooks are the Neurons of the Web (Theme: Theme 1: The Autonomous
+title: 'Webhooks are the Neurons of the Web (Theme: Theme 1: The Autonomous'
   Web)'
 ---
 

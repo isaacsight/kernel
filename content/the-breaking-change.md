@@ -1,5 +1,5 @@
 ---
-title: The Breaking Change
+title: 'The Breaking Change'
 date: 2025-11-27
 category: Relationships
 tags: Technology, Psychology, Metaphor

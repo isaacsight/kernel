@@ -1,5 +1,5 @@
 ---
-title: The Extinction of the Modern Man
+title: 'The Extinction of the Modern Man'
 date: 2025-11-25
 category: Culture & Tech
 tags: Psychology, Society, Evolution

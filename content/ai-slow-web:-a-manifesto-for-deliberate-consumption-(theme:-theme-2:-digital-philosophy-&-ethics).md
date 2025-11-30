@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme
+title: 'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'
   2: Digital Philosophy & Ethics)'
 ---
 

@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Managing Dotfiles like a Pro (Theme: Theme 3: Modern Engineering)'
+title: 'Managing Dotfiles like a Pro'
 ---
 
 ```markdown

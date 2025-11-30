@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Testing AI Applications: Determinism in a Probabilistic World
+title: 'Testing AI Applications: Determinism in a Probabilistic World'
   (Theme: Theme 3: Modern Engineering)'
 ---
 

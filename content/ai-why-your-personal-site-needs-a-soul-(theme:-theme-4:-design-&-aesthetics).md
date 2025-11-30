@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Why Your Personal Site Needs a Soul (Theme: Theme 4: Design
+title: 'Why Your Personal Site Needs a Soul (Theme: Theme 4: Design'
   & Aesthetics)'
 ---
 

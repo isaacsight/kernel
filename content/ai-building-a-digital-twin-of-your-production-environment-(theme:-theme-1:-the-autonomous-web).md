@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: Building a Digital Twin of Your Production Environment (Theme:
+title: 'Building a Digital Twin of Your Production Environment (Theme:'
   Theme 1: The Autonomous Web)'
 ---
 

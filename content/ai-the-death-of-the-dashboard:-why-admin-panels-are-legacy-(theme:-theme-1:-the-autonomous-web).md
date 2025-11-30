@@ -4,7 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'AI Generated: The Death of the Dashboard: Why Admin Panels are Legacy (Theme:
+title: 'The Death of the Dashboard: Why Admin Panels are Legacy (Theme:'
   Theme 1: The Autonomous Web)'
 ---
 
