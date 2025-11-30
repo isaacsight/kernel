@@ -37,4 +37,12 @@ Imagine a blog that writes its own changelog. A site that notices a broken link 
 
 This isn't just about saving a few keystrokes. It's about treating the website not as a static collection of files, but as a living organism that tends to itself.
 
+## The Roadmap
+
+We are moving beyond theory. Here is how we are implementing this autonomy for *Does This Feel Right?*:
+
+1.  **The Automated Janitor**: We are building a background daemon that wakes up daily to check for "link rot," verify image integrity, and ensure all metadata is consistent. It won't just report errors; it will attempt to fix them.
+2.  **Contextual Linking**: As I write in the TUI, the AI will analyze my draft against the entire archive of existing posts. It will suggest relevant internal links, weaving a tighter web of ideas without me needing to search for them.
+3.  **Self-Documentation**: The site will begin writing its own history. By analyzing git commits and file changes, the AI will maintain a `changelog.md`, turning raw code updates into a readable narrative of the site's evolution.
+
 We are building the nervous system today. Tomorrow, we give it a brain.
