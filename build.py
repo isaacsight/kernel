@@ -166,6 +166,9 @@ def build():
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
+
+    # 1b. Create CNAME
+    write_file(os.path.join(OUTPUT_DIR, 'CNAME'), 'www.doesthisfeelright.com')
     
     # 2. Copy Static Assets
     shutil.copytree(STATIC_DIR, os.path.join(OUTPUT_DIR, 'static'))
