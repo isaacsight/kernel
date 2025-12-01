@@ -115,10 +115,12 @@ a:hover {
 }
 
 .post-meta {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 400;
     margin-bottom: 0.5rem;
     display: block;
+    letter-spacing: 0.05em;
 }
 
 .post-excerpt {
@@ -388,6 +390,54 @@ th {
     display: block;
     padding: 0.25rem 0;
     border-bottom: 1px solid transparent;
+}
+
+/* Featured Hero */
+.featured-hero {
+    margin-bottom: 4rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.featured-card {
+    display: block;
+    text-decoration: none;
+    color: var(--text-main);
+}
+
+.featured-card:hover .featured-title {
+    text-decoration: underline;
+}
+
+.featured-label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.featured-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+}
+
+.featured-excerpt {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+}
+
+.read-more {
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 /* Layout Adjustments */
