@@ -167,8 +167,9 @@ def build():
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
 
-    # 1b. Create CNAME
+    # 1b. Create CNAME and .nojekyll
     write_file(os.path.join(OUTPUT_DIR, 'CNAME'), 'www.doesthisfeelright.com')
+    write_file(os.path.join(OUTPUT_DIR, '.nojekyll'), '')
     
     # 2. Copy Static Assets
     shutil.copytree(STATIC_DIR, os.path.join(OUTPUT_DIR, 'static'))
