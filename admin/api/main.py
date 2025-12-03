@@ -10,13 +10,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from admin import core
 from admin.api.models import Post, AgentAction
+from admin.api.premium import router as premium_router
 
 app = FastAPI(title="Studio OS API", version="1.0.0")
+
+# Include premium essay endpoints
+app.include_router(premium_router)
 
 # CORS Configuration
 origins = [
     "http://localhost:5173",  # Vite Dev Server
     "http://localhost:3000",
+    "https://doesthisfeelright.com",  # Production
 ]
 
 app.add_middleware(

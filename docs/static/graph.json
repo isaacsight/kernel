@@ -500,6 +500,32 @@
     },
     {
       "type": "post",
+      "title": "\"The Philosophy of Remote Work: Beyond the Office\"",
+      "label": "\"The Philosophy of Remote Work: Beyond the Office\"",
+      "id": "philosophy-remote-work"
+    },
+    {
+      "type": "tag",
+      "label": "[philosophy",
+      "id": "tag:[philosophy"
+    },
+    {
+      "type": "tag",
+      "label": "work",
+      "id": "tag:work"
+    },
+    {
+      "type": "tag",
+      "label": "culture",
+      "id": "tag:culture"
+    },
+    {
+      "type": "tag",
+      "label": "future]",
+      "id": "tag:future]"
+    },
+    {
+      "type": "post",
       "title": "'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)'",
       "label": "'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
@@ -1657,6 +1683,10 @@
       "target": "tag:AI"
     },
     {
+      "source": "cat:Philosophy & Tech",
+      "target": "philosophy-remote-work"
+    },
+    {
       "source": "tag:AI",
       "target": "the-rise-of-the-non-musician"
     },
@@ -1823,6 +1853,22 @@
     {
       "source": "tag:ai]",
       "target": "distributed-ai-architecture-mac-windows-node"
+    },
+    {
+      "source": "philosophy-remote-work",
+      "target": "tag:[philosophy"
+    },
+    {
+      "source": "philosophy-remote-work",
+      "target": "tag:work"
+    },
+    {
+      "source": "philosophy-remote-work",
+      "target": "tag:culture"
+    },
+    {
+      "source": "philosophy-remote-work",
+      "target": "tag:future]"
     },
     {
       "source": "the-weight-of-iteration",

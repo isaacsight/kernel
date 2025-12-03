@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Does This Feel Right?</title>
+    <meta name="description" content="E-books on technology, philosophy, and building systems that matter.">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .books-hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .books-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .books-hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .book-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+        }
+
+        .book-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .book-cover {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #1a1d29 0%, #2d3142 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-cover-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+            padding: 2rem;
+            z-index: 1;
+        }
+
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+        }
+
+        .book-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .book-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .book-description {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .book-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: var(--font-mono);
+        }
+
+        .book-buy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .book-buy-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .book-badge {
+            display: inline-block;
+            background: rgba(96, 165, 250, 0.2);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bundle-card {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(96, 165, 250, 0.02) 100%);
+            border-color: var(--accent);
+            position: relative;
+        }
+
+        .bundle-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-modules">
+                <a href="index.html" class="header-module logo-module">
+                    <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                    <span class="logo-underline"></span>
+                </a>
+
+                <a href="books.html" class="header-module">Books</a>
+                <a href="journey.html" class="header-module">Journey</a>
+                <a href="about.html" class="header-module">About</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="books-hero">
+                <h1>Books</h1>
+                <p>Deep dives into technology, philosophy, and building systems that actually matter.</p>
+            </div>
+
+            <div class="books-grid">
+                <!-- Book 1: Building in Public -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <div class="book-cover-title">Building Studio OS<br />in Public</div>
+                    </div>
+                    <div class="book-meta">
+                        <span>📄 120 pages</span>
+                        <span>⏱️ 3-hour read</span>
+                    </div>
+                    <h2 class="book-title">Building Studio OS in Public</h2>
+                    <p class="book-description">
+                        The complete story of building an AI-powered content operating system in 6 weeks.
+                        Every decision, every failure, every breakthrough—documented in real-time.
+                        Includes architecture diagrams, code samples, and lessons learned.
+                    </p>
+                    <div class="book-footer">
+                        <div class="book-price">$25</div>
+                        <button class="book-buy-btn" data-book-id="building-studio-os" data-price="25">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Book 2: Distributed AI Systems -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <div class="book-cover-title">Distributed AI<br />on a Budget</div>
+                    </div>
+                    <div class="book-meta">
+                        <span>📄 90 pages</span>
+                        <span>⏱️ 2-hour read</span>
+                    </div>
+                    <h2 class="book-title">Distributed AI on a Budget</h2>
+                    <p class="book-description">
+                        How to build multi-node AI systems without AWS bills. Mac + Windows setup,
+                        Ollama configuration, cost analysis, and practical patterns for
+                        distributed inference. Perfect for indie developers.
+                    </p>
+                    <div class="book-footer">
+                        <div class="book-price">$15</div>
+                        <button class="book-buy-btn" data-book-id="distributed-ai" data-price="15">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Book 3: Philosophy of Remote Work -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <div class="book-cover-title">The Philosophy<br />of Remote Work</div>
+                    </div>
+                    <div class="book-meta">
+                        <span>📄 150 pages</span>
+                        <span>⏱️ 4-hour read</span>
+                    </div>
+                    <span class="book-badge">New</span>
+                    <h2 class="book-title">The Philosophy of Remote Work</h2>
+                    <p class="book-description">
+                        Beyond productivity hacks: a philosophical examination of work, presence, and power
+                        in distributed organizations. Challenges the office paradigm and proposes new models
+                        for the future of knowledge work.
+                    </p>
+                    <div class="book-footer">
+                        <div class="book-price">$20</div>
+                        <button class="book-buy-btn" data-book-id="philosophy-remote-work" data-price="20">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bundle -->
+                <div class="book-card bundle-card">
+                    <div class="bundle-badge">Save 40%</div>
+                    <div class="book-cover">
+                        <div class="book-cover-title">Complete<br />Collection</div>
+                    </div>
+                    <div class="book-meta">
+                        <span>📚 3 books</span>
+                        <span>📄 360 pages</span>
+                    </div>
+                    <h2 class="book-title">Complete Collection</h2>
+                    <p class="book-description">
+                        All three books at a significant discount. Building in Public + Distributed AI +
+                        Philosophy of Remote Work. Everything I've learned about building autonomous systems,
+                        distributed computing, and the future of work.
+                    </p>
+                    <div class="book-footer">
+                        <div style="text-align: left;">
+                            <div class="book-price">$35</div>
+                            <div style="text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;">
+                                $60 separately
+                            </div>
+                        </div>
+                        <button class="book-buy-btn" data-book-id="complete-collection" data-price="35">
+                            Buy Bundle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="text-align: center; margin: 4rem 0; padding: 3rem; background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <h3 style="margin-bottom: 1rem; color: var(--text-main);">All books include</h3>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                    ✓ PDF + EPUB formats<br />
+                    ✓ Lifetime updates<br />
+                    ✓ Code samples and resources<br />
+                    ✓ DRM-free<br />
+                    ✓ Instant download
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/books.js"></script>
+</body>
+
+</html>
