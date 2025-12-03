@@ -4,390 +4,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio OS Journey - Live Progress Dashboard</title>
+    <title>Mission Control - Studio OS</title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        .journey-dashboard {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .hero-banner {
-            background: linear-gradient(135deg, #1a1d29 0%, #2d3142 100%);
-            border-radius: 12px;
-            padding: 3rem;
-            margin-bottom: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hero-banner h1 {
-            color: #60a5fa;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-
-        .hero-stats {
+        /* Dashboard specific styles - "The IDE Aesthetic" */
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-9);
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: var(--space-6);
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #60a5fa;
-            font-family: 'JetBrains Mono', monospace;
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-tertiary);
+        }
+
+        .stat-card.active::after {
+            background: var(--accent-primary);
         }
 
         .stat-label {
-            color: #94a3b8;
-            font-size: 0.875rem;
+            font-size: var(--text-xs);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.5rem;
-        }
-
-        .week-timeline {
-            margin: 3rem 0;
-        }
-
-        .week-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .week-card.active {
-            border-color: #60a5fa;
-            background: rgba(96, 165, 250, 0.05);
-        }
-
-        .week-card.completed {
-            opacity: 0.6;
-        }
-
-        .week-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .week-title {
-            font-size: 1.5rem;
-            color: #e2e8f0;
-        }
-
-        .week-status {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-3);
             font-weight: 600;
-            text-transform: uppercase;
         }
 
-        .week-status.in-progress {
-            background: rgba(96, 165, 250, 0.2);
-            color: #60a5fa;
+        .stat-value {
+            font-size: var(--text-4xl);
+            /* Cash App Boldness */
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            letter-spacing: -0.05em;
         }
 
-        .week-status.upcoming {
-            background: rgba(148, 163, 184, 0.2);
-            color: #94a3b8;
+        .stat-delta {
+            font-size: var(--text-sm);
+            color: var(--accent-primary);
+            margin-top: var(--space-2);
+            font-family: var(--font-mono);
         }
 
-        .week-status.completed {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
+        .timeline-section {
+            border-left: 1px solid var(--border);
+            padding-left: var(--space-6);
+            margin-left: var(--space-4);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 1rem;
+        .timeline-item {
+            position: relative;
+            padding-bottom: var(--space-8);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #60a5fa 0%, #34d399 100%);
-            transition: width 0.3s ease;
-        }
-
-        .goals-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .goals-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: #cbd5e1;
-        }
-
-        .goals-list li:last-child {
-            border-bottom: none;
-        }
-
-        .goals-list li.completed {
-            text-decoration: line-through;
-            opacity: 0.5;
-        }
-
-        .goals-list li::before {
-            content: "→";
-            color: #60a5fa;
-            margin-right: 0.75rem;
-            font-weight: bold;
-        }
-
-        .goals-list li.completed::before {
-            content: "✓";
-            color: #22c55e;
-        }
-
-        .node-status {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .node-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .node-card.online {
-            border-color: #22c55e;
-        }
-
-        .node-name {
-            font-size: 1.25rem;
-            color: #e2e8f0;
-            margin-bottom: 1rem;
-        }
-
-        .node-ip {
-            font-family: 'JetBrains Mono', monospace;
-            color: #94a3b8;
-            font-size: 0.875rem;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(var(--space-6) * -1 - 5px);
+            top: 8px;
+            width: 9px;
+            height: 9px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-emphasis);
             border-radius: 50%;
-            margin-right: 0.5rem;
+            z-index: 1;
         }
 
-        .status-indicator.online {
-            background: #22c55e;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        .timeline-item.completed::before {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-subtle);
+        }
+
+        .timeline-date {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-2);
+        }
+
+        .timeline-title {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-3);
+        }
+
+        .timeline-content {
+            color: var(--text-secondary);
+            font-size: var(--text-base);
+            line-height: 1.6;
+        }
+
+        /* Status Indicators */
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: var(--space-2);
+        }
+
+        .status-online {
+            background: var(--accent-primary);
+            box-shadow: 0 0 8px var(--accent-primary);
+        }
+
+        .status-offline {
+            background: #ef4444;
         }
     </style>
 </head>
 
 <body>
-    <div class="journey-dashboard">
-        <div class="hero-banner">
-            <h1>🚀 Studio OS: 6-Week Journey</h1>
-            <p style="color: #cbd5e1; font-size: 1.125rem;">Building and monetizing an AI-powered content operating
-                system in public</p>
+    <!-- Sidebar (DevRev Structure) -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">DTFR?</div>
 
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="current-day">1</div>
-                    <div class="stat-label">Day of 42</div>
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="/" class="nav-link">Home</a>
+            <a href="/journey.html" class="nav-link active">Journey</a>
+            <a href="/books.html" class="nav-link">Books</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <div class="nav-link"><span class="status-dot status-online"></span>Studio Node (Mac)</div>
+            <div class="nav-link"><span class="status-dot status-offline"></span>Studio Node (Win)</div>
+        </div>
+
+        <div class="nav-footer">
+            <div class="journey-widget">
+                <div class="label">Day 1 of 42</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 2.4%;"></div>
+                </div>
+                <div class="stat">$0 MRR</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <section class="hero" style="text-align: left; padding: var(--space-8) 0;">
+                <h1>Mission Control</h1>
+                <p class="hero-subtitle">Real-time telemetry of the Studio OS build.</p>
+            </section>
+
+            <!-- Stats Grid (Cash App Boldness) -->
+            <div class="dashboard-grid">
+                <div class="stat-card active">
+                    <div class="stat-label">Monthly Revenue</div>
+                    <div class="stat-value">$0.00</div>
+                    <div class="stat-delta">--</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="mrr">$0</div>
-                    <div class="stat-label">MRR</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="subscribers">0</div>
                     <div class="stat-label">Subscribers</div>
+                    <div class="stat-value">142</div>
+                    <div class="stat-delta">+12 this week</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="posts">2</div>
-                    <div class="stat-label">Journey Posts</div>
+                    <div class="stat-label">Posts Published</div>
+                    <div class="stat-value">132</div>
+                    <div class="stat-delta">Latest: Today</div>
                 </div>
-            </div>
-        </div>
-
-        <h2 style="color: #e2e8f0; margin-bottom: 2rem;">System Status</h2>
-        <div class="node-status">
-            <div class="node-card online">
-                <div class="node-name">
-                    <span class="status-indicator online"></span>
-                    Mac Mini (Primary)
+                <div class="stat-card">
+                    <div class="stat-label">Days Remaining</div>
+                    <div class="stat-value">41</div>
+                    <div class="stat-delta">Week 1 of 6</div>
                 </div>
-                <div class="node-ip">localhost</div>
-                <p style="color: #94a3b8; margin-top: 1rem;">Blog, Web UI, FastAPI</p>
-            </div>
-            <div class="node-card online">
-                <div class="node-name">
-                    <span class="status-indicator online"></span>
-                    Windows Studio Node
-                </div>
-                <div class="node-ip">192.168.1.56:11434</div>
-                <p style="color: #94a3b8; margin-top: 1rem;">AI Workloads, Ollama</p>
-            </div>
-        </div>
-
-        <h2 style="color: #e2e8f0; margin-bottom: 2rem; margin-top: 3rem;">Timeline</h2>
-        <div class="week-timeline">
-            <!-- Week 1 -->
-            <div class="week-card active">
-                <div class="week-header">
-                    <div class="week-title">Week 1: Foundation & Journey Launch</div>
-                    <div class="week-status in-progress">In Progress</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 15%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Dec 2-8, 2025</p>
-                <ul class="goals-list">
-                    <li class="completed">Launch announcement post</li>
-                    <li class="completed">Technical deep-dive: Distributed AI</li>
-                    <li>Video walkthrough of Studio OS</li>
-                    <li>Set up newsletter</li>
-                    <li>Social media presence</li>
-                    <li>Windows Node showcase page</li>
-                    <li>Live dashboard</li>
-                </ul>
             </div>
 
-            <!-- Week 2 -->
-            <div class="week-card">
-                <div class="week-header">
-                    <div class="week-title">Week 2: Content & Community Building</div>
-                    <div class="week-status upcoming">Upcoming</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Dec 9-15, 2025</p>
-                <ul class="goals-list">
-                    <li>Course outline + pre-orders</li>
-                    <li>Newsletter launch (first issue)</li>
-                    <li>YouTube channel setup</li>
-                    <li>Community engagement</li>
-                    <li>First consulting lead</li>
-                </ul>
-            </div>
+            <!-- Timeline (Scrollytelling Vibe) -->
+            <section>
+                <h2 class="section-title">Flight Log</h2>
+                <div class="timeline-section">
+                    <!-- Week 1 -->
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">WEEK 1 • DEC 2 - DEC 8</div>
+                        <h3 class="timeline-title">Launch & Infrastructure</h3>
+                        <div class="timeline-content">
+                            <p>Objective: Establish the "Studio OS" foundation and launch the build-in-public narrative.
+                            </p>
+                            <ul style="margin-top: var(--space-3); list-style: none; padding: 0;">
+                                <li style="margin-bottom: var(--space-2);">✅ <strong>Launch Announcement:</strong>
+                                    Published "The 6-Week Journey"</li>
+                                <li style="margin-bottom: var(--space-2);">✅ <strong>Infrastructure:</strong> Deployed
+                                    Mac + Windows distributed node architecture</li>
+                                <li style="margin-bottom: var(--space-2);">✅ <strong>Monetization:</strong> Integrated
+                                    Stripe & launched E-Book store</li>
+                                <li style="color: var(--text-tertiary);">⬜ <strong>Outreach:</strong> Begin "100 True
+                                    Fans" campaign</li>
+                            </ul>
+                        </div>
+                    </div>
 
-            <!-- Week 3 -->
-            <div class="week-card">
-                <div class="week-header">
-                    <div class="week-title">Week 3: Product Development</div>
-                    <div class="week-status upcoming">Upcoming</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Dec 16-22, 2025</p>
-                <ul class="goals-list">
-                    <li>Course Module 1 recorded</li>
-                    <li>SaaS foundation complete</li>
-                    <li>Payment integration testing</li>
-                    <li>Documentation site</li>
-                </ul>
-            </div>
+                    <!-- Week 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">WEEK 2 • DEC 9 - DEC 15</div>
+                        <h3 class="timeline-title">The Content Engine</h3>
+                        <div class="timeline-content">
+                            <p>Objective: Scale content production using the "Alchemist" agent and validate the e-book
+                                funnel.</p>
+                        </div>
+                    </div>
 
-            <!-- Week 4 -->
-            <div class="week-card">
-                <div class="week-header">
-                    <div class="week-title">Week 4: Marketing & Education</div>
-                    <div class="week-status upcoming">Upcoming</div>
+                    <!-- Week 3 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">WEEK 3 • DEC 16 - DEC 22</div>
+                        <h3 class="timeline-title">Product Expansion</h3>
+                        <div class="timeline-content">
+                            <p>Objective: Launch "The Philosophy of Remote Work" full e-book and introduce the
+                                "Consulting" tier.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Dec 23-29, 2025</p>
-                <ul class="goals-list">
-                    <li>Course Modules 2-3 recorded</li>
-                    <li>First paying students</li>
-                    <li>Case studies created</li>
-                    <li>Demo videos published</li>
-                </ul>
-            </div>
-
-            <!-- Week 5 -->
-            <div class="week-card">
-                <div class="week-header">
-                    <div class="week-title">Week 5: Testing & Polish</div>
-                    <div class="week-status upcoming">Upcoming</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Dec 30-Jan 5, 2026</p>
-                <ul class="goals-list">
-                    <li>Beta testing with students</li>
-                    <li>Complete all course modules</li>
-                    <li>SaaS beta launch</li>
-                    <li>Testimonials & feedback</li>
-                </ul>
-            </div>
-
-            <!-- Week 6 -->
-            <div class="week-card">
-                <div class="week-header">
-                    <div class="week-title">Week 6: Launch</div>
-                    <div class="week-status upcoming">Upcoming</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">Jan 6-12, 2026</p>
-                <ul class="goals-list">
-                    <li>Product Hunt launch</li>
-                    <li>Course public launch</li>
-                    <li>Newsletter promo campaign</li>
-                    <li>Final results post</li>
-                    <li>Goal: $1,000-5,000 MRR</li>
-                </ul>
-            </div>
-        </div>
-
-        <div
-            style="text-align: center; margin: 4rem 0; padding: 3rem; background: rgba(96, 165, 250, 0.05); border-radius: 12px; border: 1px solid rgba(96, 165, 250, 0.2);">
-            <h3 style="color: #60a5fa; margin-bottom: 1rem;">Follow the Journey</h3>
-            <p style="color: #cbd5e1; margin-bottom: 2rem;">Updates posted weekly. Subscribe to never miss a post.</p>
-            <a href="#newsletter"
-                style="display: inline-block; background: #60a5fa; color: #0f172a; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Subscribe
-                to Newsletter</a>
+            </section>
         </div>
     </div>
-
-    <script>
-        // Calculate current day
-        const startDate = new Date('2025-12-02');
-        const today = new Date();
-        const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
-        document.getElementById('current-day').textContent = Math.min(daysDiff, 42);
-
-        // Update stats dynamically (can be replaced with real data from API)
-        // These will be updated as the journey progresses
-    </script>
 </body>
 
 </html>
