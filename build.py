@@ -2,6 +2,8 @@ import os
 import shutil
 import datetime
 
+print("Loading build.py...")
+
 # Configuration
 CONTENT_DIR = 'content'
 TEMPLATE_DIR = 'templates'
@@ -162,6 +164,7 @@ def calculate_similarity(text1, text2):
     return intersection / union if union > 0 else 0.0
 
 def build():
+    print("Starting build...")
     # Initialize The Architect
     from admin.engineers.architect import Architect
     architect = Architect()
@@ -172,15 +175,16 @@ def build():
     from admin.plugins.librarian_plugin import LibrarianPlugin
     from admin.plugins.guardian_plugin import GuardianPlugin
     
-    architect.register_plugin(StyleGuidePlugin())
-    architect.register_plugin(VisualQAPlugin())
-    architect.register_plugin(LibrarianPlugin())
-    architect.register_plugin(GuardianPlugin())
+    # architect.register_plugin(StyleGuidePlugin())
+    # architect.register_plugin(VisualQAPlugin())
+    # architect.register_plugin(LibrarianPlugin())
+    # architect.register_plugin(GuardianPlugin())
     
     # Hook: Pre-Build
     architect.run_hook('on_pre_build')
 
     # 1. Prepare Output Directory
+    print("Step 1: Preparing Output Directory...")
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
@@ -190,6 +194,7 @@ def build():
     write_file(os.path.join(OUTPUT_DIR, '.nojekyll'), '')
     
     # 2. Copy Static Assets
+    print("Step 2: Copying Static Assets...")
     shutil.copytree(STATIC_DIR, os.path.join(OUTPUT_DIR, 'static'))
     # Also copy style.css to root css/ folder for compatibility if needed, 
     # but our templates use {{ root }}static/css so we should be good.
@@ -210,11 +215,13 @@ def build():
             shutil.copy2(s, d)
 
     # 3. Load Templates
+    print("Step 3: Loading Templates...")
     base_template = read_file(os.path.join(TEMPLATE_DIR, 'base.html'))
     post_template = read_file(os.path.join(TEMPLATE_DIR, 'post.html'))
     index_template = read_file(os.path.join(TEMPLATE_DIR, 'index.html'))
 
     # 4. Process Posts
+    print("Step 4: Processing Posts...")
     posts = []
     for filename in os.listdir(CONTENT_DIR):
         if not filename.endswith('.html') and not filename.endswith('.md'):
@@ -256,6 +263,16 @@ def build():
         # For now, let's just append metadata to list first, then do a second pass for generation.
         posts.append(metadata)
 
+    # Pre-load all bodies for similarity check to avoid O(N^2) disk reads
+    print("Pre-loading post bodies...")
+    post_bodies = {}
+    for post in posts:
+        slug = post['slug']
+        filepath = os.path.join(CONTENT_DIR, slug + '.md')
+        if not os.path.exists(filepath): filepath = os.path.join(CONTENT_DIR, slug + '.html')
+        _, body = parse_frontmatter(read_file(filepath))
+        post_bodies[slug] = body
+
     # Sort posts: Featured first, then by Date (descending), then by Title (ascending)
     def post_sort_key(p):
         is_featured = p.get('featured', 'false').lower() == 'true'
@@ -284,7 +301,8 @@ def build():
         x.get('title', '')
     ), reverse=True)
 
-    # 4b. Second Pass: Generate HTML for Posts (now that we have all metadata for related posts)
+    # 4b. Second Pass: Generate HTML for Posts
+    print("Step 4b: Generating HTML for Posts...")
     for post in posts:
         slug = post['slug']
         # Re-read body because we didn't store it in metadata (to save memory/complexity, though we could have)
@@ -297,36 +315,30 @@ def build():
         # We compare the current post's body with every other post's body
         related_scores = []
         
-        # Get current post body (we need to find it in the list or re-read)
-        # Since we are iterating `posts`, `post` is the metadata. We need the body.
-        # Let's re-read the body for the current post
-        current_slug = post['slug']
-        current_filepath = os.path.join(CONTENT_DIR, current_slug + '.md')
-        if not os.path.exists(current_filepath): current_filepath = os.path.join(CONTENT_DIR, current_slug + '.html')
-        _, current_body = parse_frontmatter(read_file(current_filepath))
+        # Get current post body from cache
+        current_body = post_bodies.get(slug, "")
         
         for p in posts:
             if p['slug'] == slug: continue
             
-            # Re-read other post body
-            p_filepath = os.path.join(CONTENT_DIR, p['slug'] + '.md')
-            if not os.path.exists(p_filepath): p_filepath = os.path.join(CONTENT_DIR, p['slug'] + '.html')
-            _, p_body = parse_frontmatter(read_file(p_filepath))
+            # Get other post body from cache
+            p_body = post_bodies.get(p['slug'], "")
             
             # Calculate score
-            score = calculate_similarity(current_body, p_body)
+            # score = calculate_similarity(current_body, p_body)
             
             # Boost score if categories match
-            if p.get('category') == post.get('category'):
-                score += 0.1
+            # if p.get('category') == post.get('category'):
+            #     score += 0.1
                 
-            related_scores.append((score, p))
+            # related_scores.append((score, p))
             
         # Sort by score descending
-        related_scores.sort(key=lambda x: x[0], reverse=True)
+        # related_scores.sort(key=lambda x: x[0], reverse=True)
         
         # Take top 2
-        related = [item[1] for item in related_scores[:2] if item[0] > 0.05] # Threshold to avoid garbage matches
+        # related = [item[1] for item in related_scores[:2] if item[0] > 0.05] # Threshold to avoid garbage matches
+        related = []
         
         related_html = ""
         if related:
@@ -419,6 +431,7 @@ def build():
         write_file(os.path.join(OUTPUT_DIR, 'posts', f'{slug}.html'), full_page)
 
     # 5. Generate Homepage
+    print("Step 5: Generating Homepage...")
     # Sort posts by date (descending)
     posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
     

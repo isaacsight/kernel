@@ -7,60 +7,60 @@
 @layer base {
   :root {
     /* Antigravity Matte Dark Theme - Matching Main Website */
-    --background: 220 13% 5%;
-    /* #0d0d0d - Deep matte black */
-    --foreground: 0 0% 93%;
-    /* #ededed - High contrast text */
+    --background: 0 0% 0%;
+    /* #000000 - Pure Black */
+    --foreground: 0 0% 100%;
+    /* #ffffff - Pure White */
 
-    --card: 220 10% 9%;
-    /* #161616 - Slightly lighter panels */
-    --card-foreground: 0 0% 93%;
-    /* #ededed */
+    --card: 0 0% 4%;
+    /* #0a0a0a - Secondary Background */
+    --card-foreground: 0 0% 100%;
+    /* #ffffff */
 
-    --popover: 220 10% 9%;
-    /* #161616 */
-    --popover-foreground: 0 0% 93%;
-    /* #ededed */
+    --popover: 0 0% 4%;
+    /* #0a0a0a */
+    --popover-foreground: 0 0% 100%;
+    /* #ffffff */
 
-    --primary: 217 91% 60%;
-    /* #3b82f6 - Antigravity Blue */
-    --primary-foreground: 0 0% 100%;
-    /* white */
+    --primary: 166 100% 42%;
+    /* #00D6A3 - Antigravity Teal */
+    --primary-foreground: 0 0% 0%;
+    /* Black text on teal */
 
-    --secondary: 220 10% 13%;
-    /* #202020 - Hover states */
-    --secondary-foreground: 0 0% 93%;
-    /* #ededed */
+    --secondary: 0 0% 8%;
+    /* #141414 - Tertiary Background */
+    --secondary-foreground: 0 0% 100%;
+    /* #ffffff */
 
-    --muted: 220 10% 13%;
-    /* #202020 */
-    --muted-foreground: 0 0% 53%;
-    /* #888888 - Muted text */
+    --muted: 0 0% 8%;
+    /* #141414 */
+    --muted-foreground: 0 0% 63%;
+    /* #a0a0a0 - Secondary Text */
 
-    --accent: 217 91% 60%;
-    /* #3b82f6 - Antigravity Blue */
-    --accent-foreground: 0 0% 100%;
-    /* white */
+    --accent: 166 100% 42%;
+    /* #00D6A3 - Antigravity Teal */
+    --accent-foreground: 0 0% 0%;
+    /* Black text on teal */
 
     --destructive: 0 63% 31%;
     /* Dark red */
-    --destructive-foreground: 0 0% 93%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    /* #333333 - Subtle borders */
-    --input: 0 0% 20%;
-    /* #333333 */
-    --ring: 217 91% 60%;
-    /* #3b82f6 - Focus ring */
+    --border: 0 0% 10%;
+    /* #1a1a1a - Border */
+    --input: 0 0% 10%;
+    /* #1a1a1a */
+    --ring: 166 100% 42%;
+    /* #00D6A3 - Focus ring */
 
     /* Custom Antigravity Variables */
-    --bg-tertiary: 220 10% 13%;
-    /* #202020 */
-    --accent-hover: 217 91% 55%;
-    /* #1d4ed8 */
+    --bg-tertiary: 0 0% 8%;
+    /* #141414 */
+    --accent-hover: 166 100% 36%;
+    /* #00B88C */
     --radius-sm: 6px;
     --radius-md: 12px;
-    --radius-lg: 18px;
+    --radius-lg: 16px;
     --transition-base: 200ms ease;
     --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
