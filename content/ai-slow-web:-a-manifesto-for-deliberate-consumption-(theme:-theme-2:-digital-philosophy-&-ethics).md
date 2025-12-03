@@ -6,7 +6,9 @@ tags:
 - generated
 title: 'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'
   2: Digital Philosophy & Ethics)'
----## The Slow Web: A Manifesto for Deliberate Consumption in the Digital Age
+---
+
+## The Slow Web: A Manifesto for Deliberate Consumption in the Digital Age
 
 We live in an age of instant gratification. A tap, a swipe, a click – information and entertainment are readily available, served up in a never-ending stream. But at what cost? The relentless pursuit of speed and hyper-connectivity has created a digital landscape that often feels overwhelming, fragmented, and even detrimental to our well-being. This blog post explores the Slow Web, a philosophy advocating for a more deliberate, thoughtful approach to our online lives, and its crucial role in shaping a more ethical and sustainable digital future.
 

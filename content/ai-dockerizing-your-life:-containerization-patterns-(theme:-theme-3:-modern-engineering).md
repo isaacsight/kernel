@@ -6,7 +6,9 @@ tags:
 - generated
 title: 'Dockerizing Your Life: Containerization Patterns (Theme: Theme'
   3: Modern Engineering)'
----## Dockerizing Your Life: Containerization Patterns for Modern Engineering
+---
+
+## Dockerizing Your Life: Containerization Patterns for Modern Engineering
 
 **Introduction:**
 

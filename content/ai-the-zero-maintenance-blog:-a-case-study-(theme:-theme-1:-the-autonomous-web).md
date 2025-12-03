@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Zero-Maintenance Blog: A Case Study (Theme: Theme 1: The'
-  Autonomous Web)'
+title: 'The Zero-Maintenance Blog: A Case Study (Theme: Theme 1: The Autonomous Web)'
 ---# The Zero-Maintenance Blog: A Case Study in Autonomous Web Publishing
 
 **Introduction:**

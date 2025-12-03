@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1:'
-  The Autonomous Web)'
----## Monitoring the Monitors: Who Watches the AI on the Autonomous Web?
+title: 'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)'
+---
+
+## Monitoring the Monitors: Who Watches the AI on the Autonomous Web?
 
 **Introduction:**
 

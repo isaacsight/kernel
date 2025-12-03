@@ -162,6 +162,24 @@ def calculate_similarity(text1, text2):
     return intersection / union if union > 0 else 0.0
 
 def build():
+    # Initialize The Architect
+    from admin.engineers.architect import Architect
+    architect = Architect()
+    
+    # Register Plugins
+    from admin.plugins.style_guide import StyleGuidePlugin
+    from admin.plugins.visual_qa import VisualQAPlugin
+    from admin.plugins.librarian_plugin import LibrarianPlugin
+    from admin.plugins.guardian_plugin import GuardianPlugin
+    
+    architect.register_plugin(StyleGuidePlugin())
+    architect.register_plugin(VisualQAPlugin())
+    architect.register_plugin(LibrarianPlugin())
+    architect.register_plugin(GuardianPlugin())
+    
+    # Hook: Pre-Build
+    architect.run_hook('on_pre_build')
+
     # 1. Prepare Output Directory
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
@@ -214,10 +232,13 @@ def build():
         # Since we are writing raw markdown in the files, we should convert it.
         if filename.endswith('.md') or True: # Always try to convert for now
             body = markdown_to_html(body)
-        
+            
         # Slug is filename without extension
         slug = os.path.splitext(filename)[0]
         metadata['slug'] = slug
+
+        # Hook: Post-Process
+        architect.run_hook('on_post_process', metadata, body)
         
         # Series Indicator
         series = metadata.get('series')
@@ -453,16 +474,20 @@ def build():
     
     # Generate Starter Set HTML
     starter_set_html = ""
-    for post in starter_set_posts:
+    for i, post in enumerate(starter_set_posts):
         tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
         tags = [t.strip() for t in tags if t.strip()]
         primary_tag = tags[0] if tags else 'General'
         
         starter_set_html += f"""
             <a href="posts/{post['slug']}.html" class="starter-card">
-                <span class="starter-tag">{primary_tag}</span>
+                <div class="starter-header">
+                    <span class="starter-number">0{i+1}</span>
+                    <span class="starter-chip">Start Here</span>
+                </div>
                 <h3 class="starter-title">{post.get('title', 'Untitled')}</h3>
                 <p class="starter-excerpt">{post.get('excerpt', '')}</p>
+                <div class="starter-meta">{primary_tag}</div>
             </a>
         """
 
@@ -486,22 +511,65 @@ def build():
             date_display = ""
             
         posts_html += f"""
-            <a href="posts/{post['slug']}.html" class="post-card" data-category="{post.get('category', 'General')}" data-date="{post.get('date', '')}">
-                <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
-                <p class="post-excerpt">{post.get('excerpt', '')}</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">{primary_tag}</span>
-                    <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
+            <a href="posts/{post['slug']}.html" class="post-card category-{post.get('category', 'general').lower().replace(' ', '-')}" data-category="{post.get('category', 'General')}" data-date="{post.get('date', '')}">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
+                        <span class="post-category-chip">{primary_tag}</span>
+                    </div>
+                    <p class="post-excerpt">{post.get('excerpt', '')}</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
+                    </div>
                 </div>
             </a>
         """
         
-    # Generate Experiments HTML (Simple List)
+    # Generate Experiments HTML (Lab Notebook Style)
     experiments_html = ""
-    for post in experiments_posts:
-         experiments_html += f"""
-            <li><a href="posts/{post['slug']}.html">{post.get('title', 'Untitled')}</a></li>
+    # Group by month/year or just list cleanly
+    # Let's do a clean list with date and status indicator
+    
+    # Sort experiments by date descending
+    experiments_posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
+    
+    # Limit to top 8 for sidebar
+    sidebar_experiments = experiments_posts[:8]
+    
+    for post in sidebar_experiments:
+        date_str = post.get('date', '')
+        try:
+            date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            date_display = date_obj.strftime('%b %d')
+        except:
+            date_display = ""
+            
+        title = post.get('title', 'Untitled')
+        # Clean up title
+        title = title.replace('AI: ', '').replace('Experiment: ', '')
+        # Remove Theme suffix if present (e.g. "(Theme: ...)")
+        if '(Theme:' in title:
+            title = title.split('(Theme:')[0].strip()
+            
+        experiments_html += f"""
+            <li class="experiment-item">
+                <a href="posts/{post['slug']}.html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">{date_display}</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">{title}</span>
+                </a>
+            </li>
         """
+        
+    experiments_html += """
+        <li class="experiment-item view-all">
+            <a href="experiments.html" class="experiment-link">
+                <span class="experiment-title" style="color: var(--text-main); font-weight: 600;">View all experiments →</span>
+            </a>
+        </li>
+    """
         
     # Generate Sidebar Collections List
     # We need to calculate counts first (which we do later in step 6, but let's do a quick pass here or reorder)
@@ -620,6 +688,48 @@ def build():
     
     write_file(os.path.join(OUTPUT_DIR, 'collections.html'), full_collections_page)
 
+    # 8. Generate Experiments Page
+    # Reuse collections template or similar
+    experiments_page_html = '<div class="experiments-archive">'
+    experiments_page_html += '<h1 class="experiments-archive-title">Experiments</h1>'
+    experiments_page_html += '<p class="experiments-archive-desc">Technical notes, AI workshops, and raw ideas.</p>'
+    experiments_page_html += '<div class="experiments-grid">'
+    
+    for post in experiments_posts:
+        date_str = post.get('date', '')
+        try:
+            date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            date_display = date_obj.strftime('%b %d, %Y')
+        except:
+            date_display = ""
+            
+        title = post.get('title', 'Untitled')
+        title = title.replace('AI: ', '').replace('Experiment: ', '')
+        if '(Theme:' in title:
+            title = title.split('(Theme:')[0].strip()
+            
+        experiments_page_html += f"""
+            <a href="posts/{post['slug']}.html" class="experiment-card">
+                <div class="experiment-card-header">
+                    <span class="experiment-card-date">{date_display}</span>
+                    <span class="experiment-card-chip">Experiment</span>
+                </div>
+                <h3 class="experiment-card-title">{title}</h3>
+            </a>
+        """
+    experiments_page_html += '</div></div>'
+    
+    full_experiments_page = base_template.replace('{{ title }}', 'Experiments - Does This Feel Right?')
+    full_experiments_page = full_experiments_page.replace('{{ content }}', experiments_page_html)
+    full_experiments_page = full_experiments_page.replace('{{ root }}', '')
+    full_experiments_page = full_experiments_page.replace('{{ description }}', 'Technical notes and experiments.')
+    full_experiments_page = full_experiments_page.replace('{{ url }}', f"{BASE_URL}/experiments.html")
+    full_experiments_page = full_experiments_page.replace('{{ image }}', DEFAULT_IMAGE)
+    full_experiments_page = full_experiments_page.replace('{{ og_type }}', 'website')
+    full_experiments_page = full_experiments_page.replace('{{ json_ld }}', '')
+    
+    write_file(os.path.join(OUTPUT_DIR, 'experiments.html'), full_experiments_page)
+
 
 
     # 9. Generate About Page (Special Case)
@@ -641,8 +751,8 @@ def build():
             <article>
                 <h1>{meta.get('title')}</h1>
                 {body}
-                <div class="newsletter-box" style="text-align: center; padding: 2rem 0;">
-                    <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+                <div class="newsletter-box newsletter-embed">
+                    <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" class="substack-embed" frameborder="0" scrolling="no"></iframe>
                 </div>
             </article>
         """
@@ -717,6 +827,9 @@ def build():
 </rss>"""
     
     write_file(os.path.join(OUTPUT_DIR, 'feed.xml'), rss_feed)
+    
+    # Hook: Post-Build
+    architect.run_hook('on_post_build', OUTPUT_DIR)
 
     # 10b. Generate Search Index
     import json

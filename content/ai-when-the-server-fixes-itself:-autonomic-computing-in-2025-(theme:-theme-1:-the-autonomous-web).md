@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'When the Server Fixes Itself: Autonomic Computing in 2025 (Theme:'
-  Theme 1: The Autonomous Web)'
----## When the Server Fixes Itself: Autonomic Computing in 2025 - The Autonomous Web
+title: 'When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)'
+---
+
+## When the Server Fixes Itself: Autonomic Computing in 2025 - The Autonomous Web
 
 **Introduction:**
 

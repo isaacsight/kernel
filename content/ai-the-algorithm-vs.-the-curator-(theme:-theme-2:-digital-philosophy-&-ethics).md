@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy'
-  & Ethics)'
----## The Algorithm vs. The Curator: Finding Meaning in the Machine Age
+title: 'The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Algorithm vs. The Curator: Finding Meaning in the Machine Age
 
 We live in a world increasingly shaped by algorithms. From the news we see to the products we buy, lines of code are quietly influencing our choices and experiences. But is this dependence on algorithmic curation truly empowering, or are we sacrificing something vital in the process? This blog post explores the tension between the algorithm and the curator, examining the ethical and philosophical implications of relying on machines to guide us through the vast landscape of information and culture.
 

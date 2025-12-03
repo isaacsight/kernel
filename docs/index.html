@@ -49,7 +49,7 @@
                 <a href="index.html" class="header-module logo-module">
                     <div class="logo-container">
                         <span class="logo-text">DOES THIS FEEL RIGHT?</span>
-                        <span class="logo-tagline">No ads. No algorithms. Just thoughts.</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
                     </div>
                     <span class="logo-underline"></span>
                 </a>
@@ -102,7 +102,7 @@
 <div class="magazine-layout">
 
     <!-- Welcome Gate Overlay -->
-    <div id="welcome-gate" class="welcome-overlay" style="display: none;">
+    <div id="welcome-gate" class="welcome-overlay hidden">
         <div class="welcome-content">
             <div class="welcome-header">
                 <h2>Does This Feel Right?</h2>
@@ -110,48 +110,57 @@
             </div>
             <div class="welcome-embed">
                 <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-                    style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+                    class="substack-embed" frameborder="0" scrolling="no"></iframe>
             </div>
             <button id="enter-site-btn" class="enter-btn">Continue to Site →</button>
         </div>
     </div>
 
-    <!-- 1. Intro Block -->
-    <section class="intro-block">
-        <h1 class="intro-tagline">No ads. No algorithms. Just thoughts.</h1>
-        <p class="intro-sub">A digital studio for technology, philosophy, and the human condition.</p>
-        <div class="intro-subscribe">
-            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="80"
-                style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </section>
+    <!-- Bento Grid Section -->
+    <section class="bento-section">
+        <div class="bento-grid">
+            <!-- Hero Item (Featured Essay) -->
+            <a href="posts/owning-the-signal.html" class="bento-item hero-item">
+                <div class="bento-content">
+                    <span class="bento-label">Featured Essay</span>
+                    <h2 class="bento-title">Owning the Signal</h2>
+                    <p class="bento-excerpt">Why relying on third-party platforms is a losing game.</p>
+                    <span class="bento-meta">Engineering • Nov 26, 2025</span>
+                </div>
+            </a>
 
-    <!-- 2. Starter Set (Canon) -->
-    <section class="starter-set">
-        <div class="section-header">
-            <h2>Start Here</h2>
-            <p class="section-sub">A few essays to get you oriented.</p>
-        </div>
-        <div class="starter-grid">
-            
-            <a href="posts/to-be-witnessed.html" class="starter-card">
-                <span class="starter-tag">Intimacy</span>
-                <h3 class="starter-title">'To Be Witnessed'</h3>
-                <p class="starter-excerpt">We are obsessed with being watched, but we are starving to be witnessed. The difference is the difference between a performance and a life.</p>
+            <!-- Starter Item 1 -->
+            <a href="posts/the-weight-of-iteration.html" class="bento-item starter-item">
+                <div class="bento-content">
+                    <span class="bento-label">Studio</span>
+                    <h3 class="bento-title">The Weight of Iteration</h3>
+                </div>
             </a>
-        
-            <a href="posts/the-invisible-architect.html" class="starter-card">
-                <span class="starter-tag">Psychology</span>
-                <h3 class="starter-title">'The Invisible Architect'</h3>
-                <p class="starter-excerpt">We are no longer just citizens; we are subjects in a global behavioral experiment. How the soft science of nudging became the hard infrastructure of our lives.</p>
+
+            <!-- Starter Item 2 -->
+            <a href="posts/modern-man-extinction.html" class="bento-item starter-item">
+                <div class="bento-content">
+                    <span class="bento-label">Culture</span>
+                    <h3 class="bento-title">The Extinction of the Modern Man</h3>
+                </div>
             </a>
-        
-            <a href="posts/the-rise-of-the-non-musician.html" class="starter-card">
-                <span class="starter-tag">AI</span>
-                <h3 class="starter-title">'The Rise of the Non-Musician'</h3>
-                <p class="starter-excerpt">For centuries, music required dexterity. Now, it only requires taste. We are entering the golden age of the non-musician.</p>
-            </a>
-        
+
+            <!-- About/Intro Item -->
+            <div class="bento-item about-item">
+                <div class="bento-content">
+                    <h3 class="bento-title">Start Here</h3>
+                    <p class="bento-text">Essays that define the ethos of this studio.</p>
+                </div>
+            </div>
+
+            <!-- Subscribe Item -->
+            <div class="bento-item subscribe-item">
+                <div class="bento-content">
+                    <h3 class="bento-title">Join the List</h3>
+                    <p class="bento-text">No ads. Just thoughts.</p>
+                    <a href="https://doesthisfeelright.substack.com/" target="_blank" class="bento-link">Subscribe →</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -172,201 +181,289 @@
 
             <div class="posts-container">
                 
-            <a href="posts/towards-site-autonomy.html" class="post-card" data-category="Engineering" data-date="2025-11-30">
-                <h2 class="post-title">'Towards Site Autonomy'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Engineering</span>
-                    <span class="post-meta">Nov 30, 2025 • 5 min read</span>
+            <a href="posts/towards-site-autonomy.html" class="post-card category-engineering" data-category="Engineering" data-date="2025-11-30">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Towards Site Autonomy'</h2>
+                        <span class="post-category-chip">Engineering</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 30, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/codelens-ml-logging.html" class="post-card" data-category="Machine Learning" data-date="2025-11-29">
-                <h2 class="post-title">'Tracking AI Experiments: Building a Custom Logger'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[mlops</span>
-                    <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+            <a href="posts/codelens-ml-logging.html" class="post-card category-machine-learning" data-category="Machine Learning" data-date="2025-11-29">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Tracking AI Experiments: Building a Custom Logger'</h2>
+                        <span class="post-category-chip">[mlops</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/headless-workflow.html" class="post-card" data-category=""Engineering"" data-date="2025-11-29">
-                <h2 class="post-title">'The Ultimate Workflow: Going Headless'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">"Engineering"</span>
-                    <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+            <a href="posts/headless-workflow.html" class="post-card category-"engineering"" data-category=""Engineering"" data-date="2025-11-29">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Ultimate Workflow: Going Headless'</h2>
+                        <span class="post-category-chip">"Engineering"</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/refactoring-codelens-architecture.html" class="post-card" data-category="Engineering" data-date="2025-11-29">
-                <h2 class="post-title">'Refactoring for AI: From Script to Package'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[python</span>
-                    <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+            <a href="posts/refactoring-codelens-architecture.html" class="post-card category-engineering" data-category="Engineering" data-date="2025-11-29">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Refactoring for AI: From Script to Package'</h2>
+                        <span class="post-category-chip">[python</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/codelens-ai-providers.html" class="post-card" data-category="Engineering" data-date="2025-11-29">
-                <h2 class="post-title">'Multi-Model AI: Managing Claude and Gemini Providers'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[python</span>
-                    <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+            <a href="posts/codelens-ai-providers.html" class="post-card category-engineering" data-category="Engineering" data-date="2025-11-29">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Multi-Model AI: Managing Claude and Gemini Providers'</h2>
+                        <span class="post-category-chip">[python</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/building-a-custom-site-manager.html" class="post-card" data-category="Engineering" data-date="2025-11-29">
-                <h2 class="post-title">'Building a Custom Site Manager'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Engineering</span>
-                    <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+            <a href="posts/building-a-custom-site-manager.html" class="post-card category-engineering" data-category="Engineering" data-date="2025-11-29">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Building a Custom Site Manager'</h2>
+                        <span class="post-category-chip">Engineering</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 29, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-return-of-personal-software.html" class="post-card" data-category="Technology" data-date="2025-11-28">
-                <h2 class="post-title">'The Return of Personal Software'</h2>
-                <p class="post-excerpt">For decades, we've been renters in someone else's digital house. But the ability to build desktop apps for personal use is bringing back something we forgot we lost—software sovereignty.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Software</span>
-                    <span class="post-meta">Nov 28, 2025 • 5 min read</span>
+            <a href="posts/the-return-of-personal-software.html" class="post-card category-technology" data-category="Technology" data-date="2025-11-28">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Return of Personal Software'</h2>
+                        <span class="post-category-chip">Software</span>
+                    </div>
+                    <p class="post-excerpt">For decades, we've been renters in someone else's digital house. But the ability to build desktop apps for personal use is bringing back something we forgot we lost—software sovereignty.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 28, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/rss-in-2025.html" class="post-card" data-category="Technology & Culture" data-date="2025-11-28">
-                <h2 class="post-title">The Quiet Return of RSS in 2025</h2>
-                <p class="post-excerpt">In an age of algorithmic noise, the simple XML feed has become a sanctuary for intentional consumption.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Technology & Culture</span>
-                    <span class="post-meta">Nov 28, 2025 • 4 min read</span>
+            <a href="posts/rss-in-2025.html" class="post-card category-technology-&-culture" data-category="Technology & Culture" data-date="2025-11-28">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">The Quiet Return of RSS in 2025</h2>
+                        <span class="post-category-chip">Technology & Culture</span>
+                    </div>
+                    <p class="post-excerpt">In an age of algorithmic noise, the simple XML feed has become a sanctuary for intentional consumption.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 28, 2025 • 4 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/dont-get-locked-in.html" class="post-card" data-category="Technology & Strategy" data-date="2025-11-28">
-                <h2 class="post-title">"Don't Get Locked In"</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[ai</span>
-                    <span class="post-meta">Nov 28, 2025 • 4 min read</span>
+            <a href="posts/dont-get-locked-in.html" class="post-card category-technology-&-strategy" data-category="Technology & Strategy" data-date="2025-11-28">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">"Don't Get Locked In"</h2>
+                        <span class="post-category-chip">[ai</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 28, 2025 • 4 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-speed-of-thought.html" class="post-card" data-category="Technology" data-date="2025-11-27">
-                <h2 class="post-title">'The Speed of Thought'</h2>
-                <p class="post-excerpt">What happens when the barrier between having an idea and building it disappears? A reflection on using Google's Antigravity.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[AI</span>
-                    <span class="post-meta">Nov 27, 2025 • 5 min read</span>
+            <a href="posts/the-speed-of-thought.html" class="post-card category-technology" data-category="Technology" data-date="2025-11-27">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Speed of Thought'</h2>
+                        <span class="post-category-chip">[AI</span>
+                    </div>
+                    <p class="post-excerpt">What happens when the barrier between having an idea and building it disappears? A reflection on using Google's Antigravity.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 27, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-breaking-change.html" class="post-card" data-category="Relationships" data-date="2025-11-27">
-                <h2 class="post-title">'The Breaking Change'</h2>
-                <p class="post-excerpt">We treat people like APIs—expecting stable endpoints and clean documentation. But the value of a human lies in their refusal to be optimized.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Technology</span>
-                    <span class="post-meta">Nov 27, 2025 • 5 min read</span>
+            <a href="posts/the-breaking-change.html" class="post-card category-relationships" data-category="Relationships" data-date="2025-11-27">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Breaking Change'</h2>
+                        <span class="post-category-chip">Technology</span>
+                    </div>
+                    <p class="post-excerpt">We treat people like APIs—expecting stable endpoints and clean documentation. But the value of a human lies in their refusal to be optimized.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 27, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/escaping-the-simulation.html" class="post-card" data-category="Philosophy" data-date="2025-11-27">
-                <h2 class="post-title">'Escaping the Simulation of Self'</h2>
-                <p class="post-excerpt">The algorithm makes you the protagonist of a universe curated for your retention. Other people are the only reality check left.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Society</span>
-                    <span class="post-meta">Nov 27, 2025 • 6 min read</span>
+            <a href="posts/escaping-the-simulation.html" class="post-card category-philosophy" data-category="Philosophy" data-date="2025-11-27">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Escaping the Simulation of Self'</h2>
+                        <span class="post-category-chip">Society</span>
+                    </div>
+                    <p class="post-excerpt">The algorithm makes you the protagonist of a universe curated for your retention. Other people are the only reality check left.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 27, 2025 • 6 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-new-builders-are-16.html" class="post-card" data-category="Technology" data-date="2025-11-26">
-                <h2 class="post-title">'The New Builders Are 16'</h2>
-                <p class="post-excerpt">Teenagers aren't just using Google's Antigravity to cheat on homework. They're building products that feel like magic, and they're doing it for fun.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">AI</span>
-                    <span class="post-meta">Nov 26, 2025 • 5 min read</span>
+            <a href="posts/the-new-builders-are-16.html" class="post-card category-technology" data-category="Technology" data-date="2025-11-26">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The New Builders Are 16'</h2>
+                        <span class="post-category-chip">AI</span>
+                    </div>
+                    <p class="post-excerpt">Teenagers aren't just using Google's Antigravity to cheat on homework. They're building products that feel like magic, and they're doing it for fun.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 26, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/owning-the-signal.html" class="post-card" data-category="Studio" data-date="2025-11-26">
-                <h2 class="post-title">'Owning the Signal'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">[Engineering</span>
-                    <span class="post-meta">Nov 26, 2025 • 5 min read</span>
+            <a href="posts/owning-the-signal.html" class="post-card category-studio" data-category="Studio" data-date="2025-11-26">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'Owning the Signal'</h2>
+                        <span class="post-category-chip">[Engineering</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 26, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-weight-of-iteration.html" class="post-card" data-category="Studio" data-date="2025-11-25">
-                <h2 class="post-title">'The Weight of Iteration'</h2>
-                <p class="post-excerpt">A look behind the curtain at the recent technical overhaul and what this studio project holds for the future.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Engineering</span>
-                    <span class="post-meta">Nov 25, 2025 • 5 min read</span>
+            <a href="posts/the-weight-of-iteration.html" class="post-card category-studio" data-category="Studio" data-date="2025-11-25">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Weight of Iteration'</h2>
+                        <span class="post-category-chip">Engineering</span>
+                    </div>
+                    <p class="post-excerpt">A look behind the curtain at the recent technical overhaul and what this studio project holds for the future.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 25, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/modern-man-extinction.html" class="post-card" data-category="Culture & Tech" data-date="2025-11-25">
-                <h2 class="post-title">'The Extinction of the Modern Man'</h2>
-                <p class="post-excerpt">Behavioral sciences suggest a radical shift in male archetypes is underway. Are we witnessing an end, or a transformation?</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Psychology</span>
-                    <span class="post-meta">Nov 25, 2025 • 6 min read</span>
+            <a href="posts/modern-man-extinction.html" class="post-card category-culture-&-tech" data-category="Culture & Tech" data-date="2025-11-25">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Extinction of the Modern Man'</h2>
+                        <span class="post-category-chip">Psychology</span>
+                    </div>
+                    <p class="post-excerpt">Behavioral sciences suggest a radical shift in male archetypes is underway. Are we witnessing an end, or a transformation?</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 25, 2025 • 6 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/the-engine-and-the-gallery.html" class="post-card" data-category="Studio" data-date="2025-11-25">
-                <h2 class="post-title">'The Engine and The Gallery'</h2>
-                <p class="post-excerpt">Why we are decoupling the signal from the noise, and how Substack powers the studio while the site preserves the art.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Strategy</span>
-                    <span class="post-meta">Nov 25, 2025 • 5 min read</span>
+            <a href="posts/the-engine-and-the-gallery.html" class="post-card category-studio" data-category="Studio" data-date="2025-11-25">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">'The Engine and The Gallery'</h2>
+                        <span class="post-category-chip">Strategy</span>
+                    </div>
+                    <p class="post-excerpt">Why we are decoupling the signal from the noise, and how Substack powers the studio while the site preserves the art.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 25, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/irresponsibility-content.html" class="post-card" data-category="General" data-date="2025-11-24">
-                <h2 class="post-title">Why Most Content Feels Like 'People Are Irresponsible'</h2>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Psychology</span>
-                    <span class="post-meta">Nov 24, 2025 • 5 min read</span>
+            <a href="posts/irresponsibility-content.html" class="post-card category-general" data-category="General" data-date="2025-11-24">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">Why Most Content Feels Like 'People Are Irresponsible'</h2>
+                        <span class="post-category-chip">Psychology</span>
+                    </div>
+                    <p class="post-excerpt"></p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 24, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/social-media-first-contact.html" class="post-card" data-category="Culture & Tech" data-date="2025-11-18">
-                <h2 class="post-title">Social Media is Our "First Contact"</h2>
-                <p class="post-excerpt">What happens when AI meets humanity? We're already living it—on Twitter, TikTok, and Instagram.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Culture</span>
-                    <span class="post-meta">Nov 18, 2025 • 6 min read</span>
+            <a href="posts/social-media-first-contact.html" class="post-card category-culture-&-tech" data-category="Culture & Tech" data-date="2025-11-18">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">Social Media is Our "First Contact"</h2>
+                        <span class="post-category-chip">Culture</span>
+                    </div>
+                    <p class="post-excerpt">What happens when AI meets humanity? We're already living it—on Twitter, TikTok, and Instagram.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 18, 2025 • 6 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/scaling-coffee-shop.html" class="post-card" data-category="Business Strategy" data-date="2025-11-15">
-                <h2 class="post-title">How to Scale a Coffee Shop (The Alex Hormozi Way)</h2>
-                <p class="post-excerpt">Stop selling commodities. Start selling Offers. A guide to applying the Value Equation to your local cafe.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Business</span>
-                    <span class="post-meta">Nov 15, 2025 • 5 min read</span>
+            <a href="posts/scaling-coffee-shop.html" class="post-card category-business-strategy" data-category="Business Strategy" data-date="2025-11-15">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">How to Scale a Coffee Shop (The Alex Hormozi Way)</h2>
+                        <span class="post-category-chip">Business</span>
+                    </div>
+                    <p class="post-excerpt">Stop selling commodities. Start selling Offers. A guide to applying the Value Equation to your local cafe.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 15, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/richest-women-overshadowed.html" class="post-card" data-category="Economics & Society" data-date="2025-11-10">
-                <h2 class="post-title">There Are Richest Women—But They're Often Overshadowed</h2>
-                <p class="post-excerpt">Women make up just 13-15% of billionaires. A data-driven look at why they are less visible in the media.</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Economics</span>
-                    <span class="post-meta">Nov 10, 2025 • 5 min read</span>
+            <a href="posts/richest-women-overshadowed.html" class="post-card category-economics-&-society" data-category="Economics & Society" data-date="2025-11-10">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">There Are Richest Women—But They're Often Overshadowed</h2>
+                        <span class="post-category-chip">Economics</span>
+                    </div>
+                    <p class="post-excerpt">Women make up just 13-15% of billionaires. A data-driven look at why they are less visible in the media.</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 10, 2025 • 5 min read</span>
+                    </div>
                 </div>
             </a>
         
-            <a href="posts/building-with-antigravity.html" class="post-card" data-category="Technology & Process" data-date="2025-11-05">
-                <h2 class="post-title">Building This Blog with Antigravity: A Meta Reflection</h2>
-                <p class="post-excerpt">I built this entire platform in one evening with an AI coding assistant. Here's what I learned about the future</p>
-                <div class="post-meta-row">
-                    <span class="post-tag">Technology</span>
-                    <span class="post-meta">Nov 05, 2025 • 7 min read</span>
+            <a href="posts/building-with-antigravity.html" class="post-card category-technology-&-process" data-category="Technology & Process" data-date="2025-11-05">
+                <div class="post-card-content">
+                    <div class="post-header">
+                        <h2 class="post-title">Building This Blog with Antigravity: A Meta Reflection</h2>
+                        <span class="post-category-chip">Technology</span>
+                    </div>
+                    <p class="post-excerpt">I built this entire platform in one evening with an AI coding assistant. Here's what I learned about the future</p>
+                    <div class="post-meta-row">
+                        <span class="post-meta">Nov 05, 2025 • 7 min read</span>
+                    </div>
                 </div>
             </a>
         
@@ -382,206 +479,92 @@
                 <p class="widget-desc">Technical notes & AI workshops.</p>
                 <ul class="experiments-list">
                     
-            <li><a href="posts/ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics).html">'Why Your Personal Site Needs a Soul (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Why We Build: The Psychology of Side Projects (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering).html">'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web).html">'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics).html">'Why Dark Mode is Not Enough'</a></li>
-        
-            <li><a href="posts/ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics).html">'Whitespace: The Most Important Element (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web).html">'When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-webhooks-are-the-neurons-of-the-web-(theme:-theme-1:-the-autonomous-web).html">'Webhooks are the Neurons of the Web (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics).html">'Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics).html">'User Experience in a Voice-First World (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-understanding-the-global-interpreter-lock-(gil)-(theme:-theme-3:-modern-engineering).html">'Understanding the Global Interpreter Lock (GIL) (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-understanding-asyncio-in-python-(theme:-theme-3:-modern-engineering).html">'Understanding AsyncIO in Python'</a></li>
-        
-            <li><a href="posts/ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics).html">'Typography as Voice'</a></li>
-        
-            <li><a href="posts/ai-type-hinting-in-python:-beyond-the-basics-(theme:-theme-3:-modern-engineering).html">'Type Hinting in Python: Beyond the Basics (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-zero-maintenance-blog:-a-case-study-(theme:-theme-1:-the-autonomous-web).html">'The Zero-Maintenance Blog: A Case Study (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-the-weight-of-digital-hoarding-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Weight of Digital Hoarding (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics).html">'The Uncanny Valley of AI UI'</a></li>
-        
-            <li><a href="posts/ai-the-stack-of-the-future:-htmx,-sqlite,-and-llms-(theme:-theme-1:-the-autonomous-web).html">'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-the-seo-of-ai-generated-content:-quality-over-quantity-(theme:-theme-1:-the-autonomous-web).html">'The SEO of AI-Generated Content: Quality over Quantity (Theme:'</a></li>
-        
-            <li><a href="posts/ai-the-role-of-human-oversight-in-autonomous-systems-(theme:-theme-1:-the-autonomous-web).html">'The Role of Human Oversight in Autonomous Systems (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-the-rise-of-the-headless-agent:-why-your-cms-is-obsolete-(theme:-theme-1:-the-autonomous-web).html">'The Rise of the Headless Agent: Why Your CMS is Obsolete (Theme:'</a></li>
-        
-            <li><a href="posts/ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-return-of-serifs-on-the-web-(theme:-theme-4:-design-&-aesthetics).html">'The Return of Serifs on the Web'</a></li>
-        
-            <li><a href="posts/ai-the-psychology-of-loading-screens-(theme:-theme-4:-design-&-aesthetics).html">'The Psychology of Loading Screens (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-the-power-of-makefiles-in-modern-projects-(theme:-theme-3:-modern-engineering).html">'The Power of Makefiles in Modern Projects (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-the-nervous-system-of-a-modern-web-app-(theme:-theme-1:-the-autonomous-web).html">'The Nervous System of a Modern Web App (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Lost Art of Deep Reading (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-importance-of-documentation-as-code-(theme:-theme-3:-modern-engineering).html">'The Importance of Documentation as Code (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics).html">'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Human Element: What AI Can''t Replicate (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics).html">'The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-the-fallacy-of-"no-code"-for-engineers-(theme:-theme-3:-modern-engineering).html">'The Fallacy of "No-Code" for Engineers (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-the-ethics-of-open-source-in-an-ai-era-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web).html">'The Ethics of Autonomous Content Generation (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-the-end-of-"user"-interface:-designing-for-agents-(theme:-theme-1:-the-autonomous-web).html">'The End of "User" Interface: Designing for Agents (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-the-death-of-the-dashboard:-why-admin-panels-are-legacy-(theme:-theme-1:-the-autonomous-web).html">'The Death of the Dashboard: Why Admin Panels are Legacy (Theme:'</a></li>
-        
-            <li><a href="posts/ai-the-death-of-privacy-in-the-age-of-inference-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Death of Privacy in the Age of Inference (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-art-of-the-readme-(theme:-theme-3:-modern-engineering).html">'The Art of the README'</a></li>
-        
-            <li><a href="posts/ai-the-architecture-of-codelens:-a-deep-dive-(theme:-theme-3:-modern-engineering).html">'The Architecture of CodeLens: A Deep Dive (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-"set-it-and-forget-it"-myth-vs.-reality-(theme:-theme-1:-the-autonomous-web).html">'The "Set It and Forget It" Myth vs. Reality (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-the-"premium"-feel:-what-makes-software-feel-expensive?-(theme:-theme-4:-design-&-aesthetics).html">'The "Premium" Feel: What Makes Software Feel Expensive? (Theme:'</a></li>
-        
-            <li><a href="posts/ai-the-"good-enough"-web-(theme:-theme-2:-digital-philosophy-&-ethics).html">'The "Good Enough" Web (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-the-"glitch"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics).html">'The "Glitch" Aesthetic in 2025'</a></li>
-        
-            <li><a href="posts/ai-testing-ai-applications:-determinism-in-a-probabilistic-world-(theme:-theme-3:-modern-engineering).html">'Testing AI Applications: Determinism in a Probabilistic World'</a></li>
-        
-            <li><a href="posts/ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering).html">'TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-static-sites-are-dead;-long-live-living-sites-(theme:-theme-1:-the-autonomous-web).html">'Static Sites are Dead; Long Live Living Sites (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-slow-web:-a-manifesto-for-deliberate-consumption-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-security-first:-auditing-your-own-code-(theme:-theme-3:-modern-engineering).html">'Security First: Auditing Your Own Code (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-scaling-to-zero:-the-ultimate-efficiency-(theme:-theme-1:-the-autonomous-web).html">'Scaling to Zero: The Ultimate Efficiency (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering).html">'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-python-3.14:-what's-new-and-why-it-matters-(theme:-theme-3:-modern-engineering).html">'Python 3.14: What''s New and Why it Matters (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-proactive-vs.-reactive-web-architecture-(theme:-theme-1:-the-autonomous-web).html">'Proactive vs. Reactive Web Architecture (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-preserving-history-when-history-is-rewritten-by-ai-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Preserving History when History is Rewritten by AI (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-predicting-traffic-spikes-with-local-llms-(theme:-theme-1:-the-autonomous-web).html">'Predicting Traffic Spikes with Local LLMs (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-optimizing-python-for-performance-(theme:-theme-3:-modern-engineering).html">'Optimizing Python for Performance'</a></li>
-        
-            <li><a href="posts/ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web).html">'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics).html">'Mobile-First is Dead; Content-First is King (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics).html">'Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-managing-dotfiles-like-a-pro-(theme:-theme-3:-modern-engineering).html">'Managing Dotfiles like a Pro'</a></li>
-        
-            <li><a href="posts/ai-logging-strategies-for-distributed-systems-(theme:-theme-3:-modern-engineering).html">'Logging Strategies for Distributed Systems (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Identity in a Post-Authentication World (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics).html">'Icons: SVG vs. Font vs. Emojis'</a></li>
-        
-            <li><a href="posts/ai-human-ai-symbiosis:-partners,-not-replacements-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Human-AI Symbiosis: Partners, Not Replacements (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-how-to-train-your-website-to-write-its-own-changelog-(theme:-theme-1:-the-autonomous-web).html">'How to Train Your Website to Write Its Own Changelog (Theme:'</a></li>
-        
-            <li><a href="posts/ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics).html">'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-git-workflows-for-solo-developers-(theme:-theme-3:-modern-engineering).html">'Git Workflows for Solo Developers'</a></li>
-        
-            <li><a href="posts/ai-from-script-to-application:-packaging-python-(theme:-theme-3:-modern-engineering).html">'From Script to Application: Packaging Python (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering).html">'Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-escaping-the-simulation:-are-we-just-training-data?-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Escaping the Simulation: Are We Just Training Data? (Theme:'</a></li>
-        
-            <li><a href="posts/ai-dockerizing-your-life:-containerization-patterns-(theme:-theme-3:-modern-engineering).html">'Dockerizing Your Life: Containerization Patterns (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-digital-minimalism-for-developers-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Digital Minimalism for Developers (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-designing-for-the-terminal:-ascii-art-and-layouts-(theme:-theme-4:-design-&-aesthetics).html">'Designing for the Terminal: ASCII Art and Layouts (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-designing-for-speed:-perceived-vs.-actual-performance-(theme:-theme-4:-design-&-aesthetics).html">'Designing for Speed: Perceived vs. Actual Performance (Theme:'</a></li>
-        
-            <li><a href="posts/ai-designing-for-readability:-line-height-and-measure-(theme:-theme-4:-design-&-aesthetics).html">'Designing for Readability: Line Height and Measure (Theme: Theme'</a></li>
-        
-            <li><a href="posts/ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics).html">'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-design-patterns-for-ai-integrated-apps-(theme:-theme-3:-modern-engineering).html">'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering).html">'Dependency Management in a Post-Pip World (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-context-aware-publishing:-when-your-site-knows-what-you-mean-(theme:-theme-1:-the-autonomous-web).html">'Context-Aware Publishing: When Your Site Knows What You Mean'</a></li>
-        
-            <li><a href="posts/ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics).html">'Consistency vs. Novelty in UI Design (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-color-theory-for-backend-developers-(theme:-theme-4:-design-&-aesthetics).html">'Color Theory for Backend Developers (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics).html">'Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)'</a></li>
-        
-            <li><a href="posts/ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering).html">'Building for the Edge: Latency Matters (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web).html">'Building a Digital Twin of Your Production Environment (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-building-self-healing-websites-with-python-(theme:-theme-1:-the-autonomous-web).html">'Building Self-Healing Websites with Python (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-building-robust-clis-with-click-and-rich-(theme:-theme-3:-modern-engineering).html">'Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern Engineering)'</a></li>
-        
-            <li><a href="posts/ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics).html">'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web).html">'Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)'</a></li>
-        
-            <li><a href="posts/ai-automating-the-boring-stuff:-a-janitor-bot-for-your-links-(theme:-theme-1:-the-autonomous-web).html">'Automating the Boring Stuff: A Janitor Bot for Your Links (Theme:'</a></li>
-        
-            <li><a href="posts/ai-accessibility-is-not-an-optional-feature-(theme:-theme-4:-design-&-aesthetics).html">'Accessibility is not an Optional Feature (Theme: Theme 4: Design & Aesthetics)'</a></li>
-        
-            <li><a href="posts/ai-friendship.html">The Importance of Friendship and Conversation in the AI World</a></li>
-        
+            <li class="experiment-item">
+                <a href="posts/ai-the-future-of-autonomous-blogging.html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Dec 01</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">The Future of Autonomous Blogging</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why Your Personal Site Needs a Soul</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why We Build: The Psychology of Side Projects</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why SQLite is Enough for 99% of Projects</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why I Still Write Markdown in 2025</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why I Fired Myself as Webmaster</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why Dark Mode is Not Enough'</span>
+                </a>
+            </li>
+        
+            <li class="experiment-item">
+                <a href="posts/ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics).html" class="experiment-link">
+                    <div class="experiment-meta">
+                        <span class="experiment-date">Nov 30</span>
+                        <span class="experiment-status"></span>
+                    </div>
+                    <span class="experiment-title">'Why Complexity is the Enemy of Freedom</span>
+                </a>
+            </li>
+        
+        <li class="experiment-item view-all">
+            <a href="experiments.html" class="experiment-link">
+                <span class="experiment-title" style="color: var(--text-main); font-weight: 600;">View all experiments →</span>
+            </a>
+        </li>
+    
                 </ul>
             </div>
 
@@ -612,15 +595,15 @@
             </li>
         
             <li>
-                <a href="tags/culture.html" class="collection-link">
-                    <span class="name">Culture</span>
+                <a href="tags/engineering.html" class="collection-link">
+                    <span class="name">Engineering</span>
                     <span class="count">4</span>
                 </a>
             </li>
         
             <li>
-                <a href="tags/society.html" class="collection-link">
-                    <span class="name">Society</span>
+                <a href="tags/culture.html" class="collection-link">
+                    <span class="name">Culture</span>
                     <span class="count">4</span>
                 </a>
             </li>
@@ -642,8 +625,8 @@
 
     <!-- Bottom Newsletter Widget -->
     <section class="bottom-newsletter">
-        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-            style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" class="substack-embed"
+            frameborder="0" scrolling="no"></iframe>
     </section>
 </div>
         </main>

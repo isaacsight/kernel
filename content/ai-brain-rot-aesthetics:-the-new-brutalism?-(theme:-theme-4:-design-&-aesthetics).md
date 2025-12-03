@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design'
-  & Aesthetics)'
----## Brain Rot Aesthetics: The New Brutalism?
+title: 'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)'
+---
+
+## Brain Rot Aesthetics: The New Brutalism?
 
 **Introduction:**
 

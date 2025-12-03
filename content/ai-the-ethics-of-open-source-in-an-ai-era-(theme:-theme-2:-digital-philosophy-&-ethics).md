@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital'
-  Philosophy & Ethics)'
+title: 'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital Philosophy & Ethics)'
 ---# The Open Source Code of Ethics: Navigating AI's Moral Maze
 
 **Introduction:**

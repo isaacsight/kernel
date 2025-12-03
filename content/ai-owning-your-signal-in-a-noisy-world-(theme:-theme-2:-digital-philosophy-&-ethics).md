@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital'
-  Philosophy & Ethics)'
----## Owning Your Signal in a Noisy World: A Digital Philosophy
+title: 'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## Owning Your Signal in a Noisy World: A Digital Philosophy
 
 **Introduction:**
 

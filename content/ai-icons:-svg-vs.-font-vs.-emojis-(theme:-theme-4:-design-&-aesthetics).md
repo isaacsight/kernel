@@ -5,7 +5,9 @@ tags:
 - ai
 - generated
 title: 'Icons: SVG vs. Font vs. Emojis'
----## Icon Showdown: SVG, Fonts, and Emojis - A Designer's Guide to Aesthetic Choice
+---
+
+## Icon Showdown: SVG, Fonts, and Emojis - A Designer's Guide to Aesthetic Choice
 
 Icons are the unsung heroes of user interfaces. They provide visual cues, enhance navigation, and add a touch of personality to our digital experiences. But choosing the *right* icon format can be tricky.  While the obvious choice might seem to be whatever's quickest, considering aesthetics, performance, and accessibility is key.  This blog post breaks down three popular icon options – SVGs, icon fonts, and emojis – from a design and aesthetics perspective, helping you make the best choice for your project.
 

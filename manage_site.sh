@@ -18,4 +18,5 @@ echo "Starting Site Manager..."
 cleanup
 
 # Launch the TUI
-python3 admin/tui.py
+# Launch the Autonomous Operator
+python3 -m admin.engineers.operator

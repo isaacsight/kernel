@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy'
-  & Ethics)'
----## The Attention Economy is a Bubble: Will it Burst? (Digital Philosophy & Ethics)
+title: 'The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Attention Economy is a Bubble: Will it Burst? (Digital Philosophy & Ethics)
 
 We live in an age where attention is the most coveted commodity. Every app, every website, every notification is vying for a piece of our limited mental bandwidth. This has spawned the "Attention Economy," a system where our focus is packaged, bought, and sold to advertisers. But is this economy sustainable? Or is it a bubble, inflated by manipulative tactics and destined to burst, leaving us emotionally and intellectually bankrupt? This post explores why the Attention Economy is showing signs of unsustainable growth and the ethical implications of its practices.
 

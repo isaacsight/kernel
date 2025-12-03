@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1:'
-  The Autonomous Web)'
----## Beyond Cron Jobs: Embracing True Asynchronous Autonomy on the Autonomous Web
+title: 'Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)'
+---
+
+## Beyond Cron Jobs: Embracing True Asynchronous Autonomy on the Autonomous Web
 
 **Introduction:**
 

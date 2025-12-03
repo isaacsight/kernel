@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Nervous System of a Modern Web App (Theme: Theme 1: The'
-  Autonomous Web)'
+title: 'The Nervous System of a Modern Web App (Theme: Theme 1: The Autonomous Web)'
 ---# The Autonomous Web: Understanding the Nervous System of Modern Web Applications
 
 The modern web application is no longer a static collection of pages. It's a dynamic, interconnected, and increasingly autonomous entity that anticipates user needs, reacts to real-time events, and manages complex processes behind the scenes. To understand this shift toward autonomy, we need to delve into the intricate network of technologies that act as its "nervous system," constantly relaying information and triggering actions. This blog post explores three key components of this system: APIs, Event-Driven Architectures, and Serverless Functions.

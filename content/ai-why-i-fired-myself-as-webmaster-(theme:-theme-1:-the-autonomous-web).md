@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous'
-  Web)'
+title: 'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous Web)'
 ---# Why I Fired Myself as Webmaster: Embracing the Autonomous Web
 
 For years, I was the King (or Queen) of my castle, diligently tending to every pixel and plugin of my website. I tweaked CSS, wrestled with PHP, and generally spent far too many evenings playing tech support for my own online presence. But recently, something shifted. I realized I was clinging to control that was not only unnecessary but actively holding me back. So, I did the unthinkable: I fired myself as Webmaster.

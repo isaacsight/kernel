@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Logging Strategies for Distributed Systems (Theme: Theme 3:'
-  Modern Engineering)'
+title: 'Logging Strategies for Distributed Systems (Theme: Theme 3: Modern Engineering)'
 ---# Logging Strategies for Distributed Systems: Navigating the Modern Engineering Landscape
 
 **Introduction:**

@@ -445,6 +445,8 @@ main {
     margin: 0;
     font-weight: 400;
     line-height: var(--leading-normal);
+    font-family: var(--font-serif);
+    /* Ensure body text is serif */
 }
 
 /* Magazine Layout System */
@@ -489,15 +491,22 @@ main {
     color: var(--text-muted);
     line-height: 1.5;
     max-width: 65ch;
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+    /* 32px - 8px grid */
 }
 
 .read-more {
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
     font-weight: 600;
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+    /* Slightly smaller for utility */
     color: var(--text-main);
     text-decoration: underline;
     text-underline-offset: 4px;
+    text-transform: uppercase;
+    /* Enhance utility feel */
+    letter-spacing: 0.05em;
 }
 
 /* 2. Content Wrapper (Main + Sidebar) */
@@ -511,6 +520,8 @@ main {
 /* Featured Label */
 .featured-label {
     display: inline-block;
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
     font-size: var(--text-xs);
     font-weight: 700;
     color: var(--accent-primary);
@@ -542,7 +553,10 @@ main {
 }
 
 .feed-header h2 {
-    font-size: var(--text-xl);
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
+    font-size: var(--text-lg);
+    /* Adjusted for sans-serif */
     font-weight: 700;
     margin: 0;
     text-transform: uppercase;
@@ -628,7 +642,9 @@ main {
 }
 
 .sidebar-widget h3 {
-    font-size: var(--text-sm);
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
+    font-size: var(--text-xs);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -660,6 +676,8 @@ main {
 }
 
 .text-link {
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
     font-size: var(--text-sm);
     font-weight: 600;
     color: var(--text-main);
@@ -1329,9 +1347,59 @@ article a:hover {
     color: var(--text-muted);
     font-style: italic;
     margin-top: 2px;
-    font-weight: 400;
-    text-transform: none;
 }
+
+/* Post Content Typography */
+.post-content {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.8;
+    /* 32.4px */
+    color: #333;
+}
+
+.post-content p {
+    margin-bottom: 32px;
+    /* 8px grid (4 * 8) */
+}
+
+.post-content h2 {
+    font-family: var(--font-serif);
+    font-size: 32px;
+    /* Approx 31.25px -> 32px for grid */
+    font-weight: 800;
+    line-height: 1.25;
+    /* 40px */
+    margin-top: 64px;
+    /* 8px grid (8 * 8) - Clear separation */
+    margin-bottom: 32px;
+    /* 8px grid (4 * 8) */
+    color: var(--text-main);
+}
+
+.post-content h3 {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 48px;
+    /* 8px grid (6 * 8) */
+    margin-bottom: 24px;
+    /* 8px grid (3 * 8) */
+}
+
+.post-meta {
+    font-family: var(--font-sans);
+    /* Utility: Sans-Serif */
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    /* 8px grid */
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+
 
 .logo-underline {
     position: absolute;

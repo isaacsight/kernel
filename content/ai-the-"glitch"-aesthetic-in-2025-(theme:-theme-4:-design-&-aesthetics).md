@@ -5,7 +5,9 @@ tags:
 - ai
 - generated
 title: 'The "Glitch" Aesthetic in 2025'
----## The Glitch Still Glitches: A 2025 Look at Digital Decay
+---
+
+## The Glitch Still Glitches: A 2025 Look at Digital Decay
 
 The year is 2025, and while sleek interfaces and hyper-realism are still vying for our attention, a familiar friend remains firmly embedded in the visual landscape: the glitch aesthetic. What started as an accidental byproduct of technological malfunction has blossomed into a fully realized art form, a visual language expressing everything from anxieties about our digital dependency to a nostalgic embrace of the early internet's wild west days. But how has the glitch aesthetic evolved in the mid-2020s? Let's dive in.
 

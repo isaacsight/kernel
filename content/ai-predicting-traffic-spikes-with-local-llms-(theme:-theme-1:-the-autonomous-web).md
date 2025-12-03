@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Predicting Traffic Spikes with Local LLMs (Theme: Theme 1: The'
-  Autonomous Web)'
+title: 'Predicting Traffic Spikes with Local LLMs (Theme: Theme 1: The Autonomous Web)'
 ---# The Autonomous Web: Predicting Traffic Spikes with Local LLMs
 
 **Introduction:**

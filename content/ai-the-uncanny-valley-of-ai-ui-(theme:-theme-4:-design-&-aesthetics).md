@@ -5,7 +5,9 @@ tags:
 - ai
 - generated
 title: 'The Uncanny Valley of AI UI'
----## The Uncanny Valley of AI UI: When Helpful Turns Creepy
+---
+
+## The Uncanny Valley of AI UI: When Helpful Turns Creepy
 
 Artificial intelligence (AI) is rapidly changing how we interact with technology. From chatbots offering customer service to virtual assistants managing our schedules, AI is becoming increasingly integrated into our user interfaces (UIs). However, as AI strives to mimic human-like interaction, a strange phenomenon emerges: the Uncanny Valley. Just like with realistic humanoid robots, the more human-like an AI UI becomes, the more unsettling it can feel if it falls short of true human authenticity. This blog post explores the uncanny valley in the context of AI UI, highlighting potential pitfalls and offering design considerations to avoid triggering this feeling of unease.
 

@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital'
-  Philosophy & Ethics)'
----## The Ghost in the Machine: Reflecting on the Ephemeral Nature of Digital Artifacts
+title: 'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Ghost in the Machine: Reflecting on the Ephemeral Nature of Digital Artifacts
 
 We live in an age saturated with digital information. From the photos we snap on our phones to the documents we painstakingly craft, we create and consume digital artifacts at an unprecedented rate. But lurking beneath the veneer of permanence promised by the cloud is a stark reality: these creations are surprisingly fragile, subject to bit rot, format obsolescence, and the whims of platforms that can disappear overnight. This inherent ephemerality raises profound questions about value, preservation, and our relationship with the digital world.
 

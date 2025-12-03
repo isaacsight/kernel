@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design'
-  & Aesthetics)'
----## Designing for Attention: The Anti-Pattern
+title: 'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)'
+---
+
+## Designing for Attention: The Anti-Pattern
 
 We live in an attention economy. Every website, app, and digital experience is clamoring for our limited focus. But what happens when the pursuit of attention becomes the driving force behind design, overshadowing usability, accessibility, and overall user experience? We end up with an anti-pattern: *designing for attention*, where aesthetics and flashy elements are prioritized at the expense of creating a genuinely helpful and enjoyable product. This post will explore why designing solely for attention is detrimental and how we can shift our focus back to user-centered design.
 

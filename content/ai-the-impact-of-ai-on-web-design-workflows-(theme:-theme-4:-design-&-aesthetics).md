@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design'
-  & Aesthetics)'
----## AI: Reshaping the Aesthetics of Web Design - A New Era of Creativity?
+title: 'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)'
+---
+
+## AI: Reshaping the Aesthetics of Web Design - A New Era of Creativity?
 
 Artificial intelligence (AI) is no longer a futuristic concept; it's rapidly transforming industries across the board, and web design is no exception. Beyond just streamlining technical processes, AI is beginning to have a profound impact on the very *aesthetics* of web design. This means how we create visually appealing and engaging user experiences is evolving in exciting, and sometimes challenging, ways. In this post, we'll explore three key areas where AI is reshaping the design and aesthetics of the web.
 

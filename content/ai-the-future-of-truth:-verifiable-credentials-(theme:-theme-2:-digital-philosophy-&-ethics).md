@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Future of Truth: Verifiable Credentials (Theme: Theme 2:'
-  Digital Philosophy & Ethics)'
----## The Future of Truth: Verifiable Credentials and the Shifting Sands of Trust (Digital Philosophy & Ethics)
+title: 'The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Future of Truth: Verifiable Credentials and the Shifting Sands of Trust (Digital Philosophy & Ethics)
 
 **Introduction:**
 

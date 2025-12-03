@@ -5,6 +5,7 @@ refining content, and publishing updates to the Git repository and Substack.
 """
 
 import os
+# Evolution Test Comment
 import datetime
 import frontmatter
 import subprocess
@@ -35,10 +36,52 @@ def get_posts():
     posts = []
     for filename in os.listdir(CONTENT_DIR):
         if filename.endswith('.md'):
-            with open(os.path.join(CONTENT_DIR, filename), 'r') as file:
-                post = frontmatter.load(file)
-                posts.append(post)
+            try:
+                with open(os.path.join(CONTENT_DIR, filename), 'r') as file:
+                    post = frontmatter.load(file)
+                    # Inject slug for Librarian
+                    post['slug'] = filename.replace('.md', '')
+                    posts.append(post)
+            except Exception as e:
+                print(f"Warning: Failed to load post {filename}: {e}")
+                continue
     return posts
+
+def get_latest_post_date():
+    """
+    Returns the date of the most recent blog post.
+    """
+    posts = get_posts()
+    if not posts:
+        return None
+    
+    dates = []
+    for post in posts:
+        date = post.get('date')
+        if isinstance(date, datetime.date):
+            dates.append(date)
+        elif isinstance(date, datetime.datetime):
+            dates.append(date.date())
+        elif isinstance(date, str):
+            try:
+                dates.append(datetime.datetime.strptime(date, "%Y-%m-%d").date())
+            except ValueError:
+                pass
+                
+    if not dates:
+        return None
+        
+    return max(dates)
+
+def auto_generate_idea():
+    """
+    Generates a blog post idea based on existing content gaps or trends.
+    """
+    # Simple logic for now: rotate through categories
+    categories = ["Engineering", "Philosophy", "Culture", "Business"]
+    import random
+    topic = f"The future of {random.choice(categories)} in {datetime.date.today().year}"
+    return topic
 
 
 def save_post(filename, title, date, category, tags, content):
@@ -67,48 +110,168 @@ def save_post(filename, title, date, category, tags, content):
         
     return filename
 
+def get_doctrine():
+    """
+    Reads the Gentle Doctrine from the admin directory.
+    """
+    doctrine_path = os.path.join(os.path.dirname(__file__), 'doctrine.md')
+    try:
+        with open(doctrine_path, 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Philosophy: Be honest, clear, and kind."
+
+
+class OllamaManager:
+    def __init__(self):
+        self.process = None
+        self.log_file = os.path.join(os.path.dirname(__file__), "ollama.log")
+
+    def is_installed(self):
+        """Checks if ollama is installed and returns the path."""
+        # Check common paths
+        paths = ["ollama", "/usr/local/bin/ollama", "/opt/homebrew/bin/ollama"]
+        for path in paths:
+            try:
+                subprocess.check_output([path, "--version"], stderr=subprocess.STDOUT)
+                return path
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                continue
+        return None
+
+    def is_running(self):
+        """Checks if Ollama is already running on port 11434."""
+        try:
+            # Check if port 11434 is in use
+            subprocess.check_output(["lsof", "-i", ":11434"])
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
+    def start(self):
+        """Starts the Ollama server if not running."""
+        if self.is_running():
+            return "Ollama is already running."
+
+        ollama_path = self.is_installed()
+        if not ollama_path:
+            return "Ollama is not installed. Please install it from https://ollama.com/"
+
+        print(f"Starting Ollama server using {ollama_path}...")
+        with open(self.log_file, "w") as f:
+            self.process = subprocess.Popen(
+                [ollama_path, "serve"],
+                stdout=f,
+                stderr=subprocess.STDOUT,
+                preexec_fn=os.setsid
+            )
+        
+        # Wait a bit for it to start
+        import time
+        for _ in range(10):
+            if self.is_running():
+                return "Ollama started successfully."
+            time.sleep(1)
+            
+        return "Failed to start Ollama (timeout)."
+
+    def stop(self):
+        """Stops the Ollama server if we started it."""
+        if self.process:
+            try:
+                os.killpg(os.getpgid(self.process.pid), 15)
+                self.process = None
+                return "Ollama stopped."
+            except Exception as e:
+                return f"Error stopping Ollama: {e}"
+        return "Ollama was not started by this manager (or is already stopped)."
+
 def generate_ai_post(topic, provider="gemini"):
     """
-    Generates a blog post using the specified AI provider.
+    Generates a blog post using The Alchemist (Context-Aware AI) with a self-correcting loop.
     """
-    prompt = f"Write a blog post about {topic}. Include a title, a brief introduction, and 3 main sections. Format in Markdown."
-    
-    content = ""
-    title = topic
-    
     try:
-        if provider == "gemini":
-            genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-            response = model.generate_content(prompt)
-            content = response.text
-            
-            # Clean up markdown wrappers if present
-            content = content.replace("```markdown", "").replace("```", "").strip()
-            
-        elif provider == "openai":
-            openai.api_key = os.environ.get("OPENAI_API_KEY")
-            response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}]
-            )
-            content = response.choices[0].message.content
-            
-        elif provider == "anthropic":
-            client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-            message = client.messages.create(
-                model="claude-3-opus-20240229",
-                max_tokens=1000,
-                messages=[{"role": "user", "content": prompt}]
-            )
-            content = message.content[0].text
-            
-    except Exception as e:
-        raise Exception(f"AI Generation failed: {str(e)}")
+        from .engineers.alchemist import Alchemist
+        from .engineers.guardian import Guardian
+        from .engineers.editor import Editor
+        from .engineers.librarian import Librarian
 
-    # Create a new post with the generated content
-    filename = f"ai-{topic.lower().replace(' ', '-')}.md"
-    save_post(filename, title, datetime.date.today(), "Engineering", ["ai"], content)
-    return filename
+        alchemist = Alchemist()
+        guardian = Guardian()
+        editor = Editor()
+        
+        # Ensure memory is built
+        if not os.path.exists(alchemist.memory_file):
+            alchemist.build_memory()
+            
+        doctrine = get_doctrine()
+        
+        # Generation Loop with Retries
+        max_retries = 3
+        current_try = 0
+        content = ""
+        feedback = ""
+        
+        while current_try < max_retries:
+            print(f"[The Alchemist] Generating draft (Attempt {current_try + 1}/{max_retries})...")
+            if feedback:
+                print(f"[The Alchemist] Incorporating feedback: {feedback}")
+                # Append feedback to topic/prompt effectively
+                adjusted_topic = f"{topic}. IMPORTANT FEEDBACK FROM PREVIOUS DRAFT: {feedback}"
+                content = alchemist.generate(adjusted_topic, doctrine, provider=provider)
+            else:
+                content = alchemist.generate(topic, doctrine, provider=provider)
+            
+            # 2. Guardian: Audit (Safety)
+            print("[The Guardian] Auditing content...")
+            safety_issues = guardian.audit_content(content)
+            critical_issues = [i for i in safety_issues if i['level'] == 'CRITICAL']
+            
+            if critical_issues:
+                print(f"[The Guardian] Blocked content: {critical_issues}")
+                feedback = f"The previous draft violated safety rules: {critical_issues}. Please rewrite to be safe and aligned."
+                current_try += 1
+                continue
+            
+            # 3. Editor: Audit (Style)
+            print("[The Editor] Auditing style...")
+            style_issues = editor.audit(content)
+            
+            # If there are significant style issues, we could also retry, or just log them.
+            # For now, let's retry if there are MANY issues, or just accept it.
+            # Let's try to auto-refine if there are issues.
+            if style_issues and current_try < max_retries - 1:
+                 # Check if we should refine based on style
+                 # For now, let's just print them. Implementing full style-loop might be too expensive/slow for now.
+                 print(f"[The Editor] Style suggestions: {style_issues}")
+                 # Optional: feedback += f" Style feedback: {style_issues}"
+                 # current_try += 1
+                 # continue
+            
+            # If we pass Guardian, we accept the draft (even if imperfect style)
+            break
+        
+        if current_try == max_retries:
+            raise Exception("Failed to generate safe content after multiple attempts.")
+
+        # 4. Save Post
+        title = topic
+        filename = f"ai-{topic.lower().replace(' ', '-')}.md"
+        saved_filename = save_post(filename, title, datetime.date.today(), "Engineering", ["ai", "alchemist"], content)
+        
+        # 5. Librarian: Update Graph
+        print("[The Librarian] Updating Knowledge Graph...")
+        librarian = Librarian()
+        posts = get_posts() # Reload to include new post
+        librarian.build_graph(posts)
+        graph_path = os.path.join(os.path.dirname(__file__), '../docs/static/graph.json')
+        librarian.export_graph(graph_path)
+        
+        return saved_filename
+        
+    except Exception as e:
+        raise Exception(f"Alchemist Generation failed: {str(e)}")
+
 
 def publish_git():
     """

@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy'
-  & Ethics)'
----## Coding as a Spiritual Practice: Beyond the Bytes, Towards Meaning
+title: 'Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## Coding as a Spiritual Practice: Beyond the Bytes, Towards Meaning
 
 We often think of coding as a purely technical skill, a means to an end. We build apps, websites, and software, focused on functionality and efficiency. But what if we could reframe our perception of coding? What if it could be a practice that fosters mindfulness, self-awareness, and a deeper connection to something larger than ourselves? This post explores the possibility of coding as a spiritual practice, examining how the principles inherent in programming can cultivate inner growth and a more ethical approach to technology.
 

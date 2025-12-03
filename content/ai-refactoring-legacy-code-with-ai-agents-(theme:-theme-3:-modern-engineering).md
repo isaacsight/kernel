@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern'
-  Engineering)'
----## Refactoring Legacy Code with AI Agents: A Modern Engineering Approach
+title: 'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)'
+---
+
+## Refactoring Legacy Code with AI Agents: A Modern Engineering Approach
 
 Legacy code. The bane of many a software engineer's existence. We've all been there: staring at a monolithic, undocumented codebase wondering where to even begin. Refactoring feels like disarming a bomb, and the potential for introducing bugs looms large. But what if we could leverage the power of AI agents to help us navigate this minefield? Modern engineering is about embracing new tools and techniques, and AI offers a promising path towards taming even the most unruly legacy systems. This post explores how AI agents can be a valuable ally in refactoring, helping us modernize and improve the quality of our codebase.
 

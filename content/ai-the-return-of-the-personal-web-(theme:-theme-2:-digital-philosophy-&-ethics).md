@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy'
-  & Ethics)'
----## The Return of the Personal Web: Reclaiming Autonomy in a Hyper-Connected World
+title: 'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Return of the Personal Web: Reclaiming Autonomy in a Hyper-Connected World
 
 **Introduction:**
 

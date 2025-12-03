@@ -5,7 +5,9 @@ tags:
 - ai
 - generated
 title: 'Typography as Voice'
----## Typography: When Words Speak Volumes Before You Even Read Them
+---
+
+## Typography: When Words Speak Volumes Before You Even Read Them
 
 Typography. It's more than just choosing a pretty font. It's the silent narrator, the subtle tone of voice, the visual inflection that shapes how your message is perceived. While we often focus on the literal meaning of the words we use, the typography we choose imbues those words with an emotional layer, a personality, and a powerful first impression. In this post, we'll explore how typography acts as a voice, influencing everything from brand perception to overall aesthetic appeal.
 

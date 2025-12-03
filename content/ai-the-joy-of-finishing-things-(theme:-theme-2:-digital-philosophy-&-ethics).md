@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy'
-  & Ethics)'
----## The Algorithm of Accomplishment: Finding Joy (and Ethics) in Finishing What We Start
+title: 'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)'
+---
+
+## The Algorithm of Accomplishment: Finding Joy (and Ethics) in Finishing What We Start
 
 In our digitally-driven world, we're constantly bombarded with information, notifications, and shiny new projects. We start a hundred things, driven by the fear of missing out and the allure of immediate gratification. But what happens when we neglect the crucial skill of finishing what we start?  This blog explores the underappreciated joy of completion and why, ethically, it's more important than ever in our digital age.
 

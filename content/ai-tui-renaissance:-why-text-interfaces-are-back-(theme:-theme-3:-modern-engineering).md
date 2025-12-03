@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'TUI Renaissance: Why Text Interfaces are Back (Theme: Theme'
-  3: Modern Engineering)'
----## TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)
+title: 'TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)'
+---
+
+## TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)
 
 The graphical user interface (GUI) has reigned supreme for decades, promising intuitive interactions and visual appeal. But whispers of a different king are growing louder. The Text User Interface (TUI), once relegated to dusty history books, is experiencing a renaissance. This resurgence isn't driven by nostalgia, but by the practical demands of modern engineering: efficiency, control, and scalability. In this post, we'll explore why TUIs are finding their place in today's development landscape.
 

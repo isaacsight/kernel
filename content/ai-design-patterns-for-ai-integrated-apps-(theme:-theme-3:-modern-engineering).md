@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern'
-  Engineering)'
+title: 'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern Engineering)'
 ---# Design Patterns for AI-Integrated Apps: Modern Engineering for Intelligent Experiences
 
 The rise of Artificial Intelligence (AI) is rapidly transforming the landscape of software development. We're moving beyond simple automation to building truly intelligent applications that learn, adapt, and provide personalized experiences. However, integrating AI effectively requires a shift in mindset and a new toolkit of design patterns. This blog post will explore key design patterns essential for modern engineering practices when building AI-integrated apps. These patterns help us manage complexity, ensure maintainability, and build robust, scalable, and responsible AI systems.

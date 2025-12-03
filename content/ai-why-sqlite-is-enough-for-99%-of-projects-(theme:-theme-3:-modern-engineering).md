@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern'
-  Engineering)'
----## SQLite: The Unsung Hero of Modern Engineering – Enough for 99% of Your Projects
+title: 'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)'
+---
+
+## SQLite: The Unsung Hero of Modern Engineering – Enough for 99% of Your Projects
 
 In the whirlwind of modern software engineering, it's easy to get caught up in the latest trends and technologies. We're often told we *need* massive, distributed databases to handle the scale of modern applications. But what if the best solution is often the simplest? SQLite, the embedded, serverless, zero-configuration, transactional SQL database engine, is frequently overlooked, but it's quietly powering a vast number of applications and offering a compelling alternative for the vast majority of projects. This blog post will explore why SQLite is often "enough," providing a pragmatic perspective on leveraging its strengths in today's engineering landscape.
 

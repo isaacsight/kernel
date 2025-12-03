@@ -2,7 +2,7 @@
 <div class="magazine-layout">
 
     <!-- Welcome Gate Overlay -->
-    <div id="welcome-gate" class="welcome-overlay" style="display: none;">
+    <div id="welcome-gate" class="welcome-overlay hidden">
         <div class="welcome-content">
             <div class="welcome-header">
                 <h2>Does This Feel Right?</h2>
@@ -10,30 +10,57 @@
             </div>
             <div class="welcome-embed">
                 <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-                    style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+                    class="substack-embed" frameborder="0" scrolling="no"></iframe>
             </div>
             <button id="enter-site-btn" class="enter-btn">Continue to Site →</button>
         </div>
     </div>
 
-    <!-- 1. Intro Block -->
-    <section class="intro-block">
-        <h1 class="intro-tagline">No ads. No algorithms. Just thoughts.</h1>
-        <p class="intro-sub">A digital studio for technology, philosophy, and the human condition.</p>
-        <div class="intro-subscribe">
-            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="80"
-                style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </section>
+    <!-- Bento Grid Section -->
+    <section class="bento-section">
+        <div class="bento-grid">
+            <!-- Hero Item (Featured Essay) -->
+            <a href="posts/owning-the-signal.html" class="bento-item hero-item">
+                <div class="bento-content">
+                    <span class="bento-label">Featured Essay</span>
+                    <h2 class="bento-title">Owning the Signal</h2>
+                    <p class="bento-excerpt">Why relying on third-party platforms is a losing game.</p>
+                    <span class="bento-meta">Engineering • Nov 26, 2025</span>
+                </div>
+            </a>
 
-    <!-- 2. Starter Set (Canon) -->
-    <section class="starter-set">
-        <div class="section-header">
-            <h2>Start Here</h2>
-            <p class="section-sub">A few essays to get you oriented.</p>
-        </div>
-        <div class="starter-grid">
-            {{ starter_set }}
+            <!-- Starter Item 1 -->
+            <a href="posts/the-weight-of-iteration.html" class="bento-item starter-item">
+                <div class="bento-content">
+                    <span class="bento-label">Studio</span>
+                    <h3 class="bento-title">The Weight of Iteration</h3>
+                </div>
+            </a>
+
+            <!-- Starter Item 2 -->
+            <a href="posts/modern-man-extinction.html" class="bento-item starter-item">
+                <div class="bento-content">
+                    <span class="bento-label">Culture</span>
+                    <h3 class="bento-title">The Extinction of the Modern Man</h3>
+                </div>
+            </a>
+
+            <!-- About/Intro Item -->
+            <div class="bento-item about-item">
+                <div class="bento-content">
+                    <h3 class="bento-title">Start Here</h3>
+                    <p class="bento-text">Essays that define the ethos of this studio.</p>
+                </div>
+            </div>
+
+            <!-- Subscribe Item -->
+            <div class="bento-item subscribe-item">
+                <div class="bento-content">
+                    <h3 class="bento-title">Join the List</h3>
+                    <p class="bento-text">No ads. Just thoughts.</p>
+                    <a href="https://doesthisfeelright.substack.com/" target="_blank" class="bento-link">Subscribe →</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -84,7 +111,7 @@
 
     <!-- Bottom Newsletter Widget -->
     <section class="bottom-newsletter">
-        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-            style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
+        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" class="substack-embed"
+            frameborder="0" scrolling="no"></iframe>
     </section>
 </div>
