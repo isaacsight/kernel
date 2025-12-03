@@ -1,13 +1,19 @@
 /* Admin Dashboard CSS */
 :root {
-    --bg-color: #fafafa;
-    --text-color: #222;
-    --border-color: #eaeaea;
-    --accent-color: #111;
+    /* Antigravity Dark Theme */
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --border-color: #1a1a1a;
+    --accent-color: #00D6A3;
     --success-color: #28a745;
     --error-color: #dc3545;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-serif: "Merriweather", Georgia, serif;
+
+    /* Additional Dark Mode Vars */
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #141414;
+    --text-secondary: #a0a0a0;
 }
 
 body {
@@ -25,7 +31,7 @@ body {
 
 .sidebar {
     width: 250px;
-    background: #fff;
+    background: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
     padding: 20px;
     display: flex;
@@ -50,7 +56,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: #666;
+    color: var(--text-secondary);
     font-weight: 500;
     display: block;
     padding: 8px 12px;
@@ -60,8 +66,8 @@ body {
 
 .nav-links a:hover,
 .nav-links a.active {
-    background: #f5f5f5;
-    color: #111;
+    background: var(--bg-tertiary);
+    color: var(--accent-color);
 }
 
 .main-content {
@@ -91,22 +97,23 @@ body {
 }
 
 .btn-primary {
-    background: #111;
-    color: #fff;
+    background: var(--accent-color);
+    color: #000;
 }
 
 .btn-primary:hover {
-    background: #333;
+    background: #00B88C;
 }
 
 .btn-secondary {
-    background: #fff;
-    border: 1px solid #ddd;
-    color: #333;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 .btn-secondary:hover {
-    background: #f5f5f5;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 /* Editor Styles */
@@ -120,7 +127,7 @@ body {
     gap: 10px;
     margin-bottom: 20px;
     padding: 15px;
-    background: #fff;
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     position: sticky;
@@ -138,8 +145,9 @@ textarea#content {
     border: none;
     resize: vertical;
     outline: none;
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: var(--bg-secondary);
+    color: var(--text-color);
+    box-shadow: none;
     border-radius: 8px;
 }
 
@@ -179,4 +187,40 @@ textarea#content {
         transform: translateX(0);
         opacity: 1;
     }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    width: 80%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 2rem;
+    border-radius: 8px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.modal-result {
+    white-space: pre-wrap;
+    font-family: var(--font-mono);
+    background: var(--bg-tertiary);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    color: var(--text-secondary);
 }

@@ -42,7 +42,33 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <div class="container">
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                DOES THIS FEEL RIGHT?
+            </div>
+            <nav class="nav-section">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../collections.html" class="nav-link">Collections</a>
+                <a href="../feed.xml" class="nav-link">RSS Feed</a>
+            </nav>
+            <script>
+                // Simple active state logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            </script>
+        </aside>
+
         <header>
             <div class="header-modules">
                 <!-- Module 1: Logo -->
@@ -55,10 +81,7 @@
                 </a>
 
 
-                <!-- Module 4: Support -->
-                <div class="header-module support-module">
-                    <button class="support-trigger" id="bmc-support-btn">SUPPORT</button>
-                </div>
+
 
                 <!-- Module 5: Search -->
                 <div class="header-module search-module">
@@ -70,8 +93,11 @@
                     </button>
                 </div>
 
+
+
                 <!-- Mobile Menu Toggle (Visible only on mobile) -->
-                <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
+                    aria-expanded="false">
                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16"></path>
@@ -80,24 +106,23 @@
             </div>
 
             <!-- Mobile Nav Overlay -->
-            <div class="mobile-nav-overlay">
+            <div class="mobile-nav-overlay" id="mobile-nav">
                 <nav class="mobile-nav">
-                    <div class="mobile-search-container">
-                        <input type="search" id="mobile-search" placeholder="Search essays..."
-                            class="mobile-search-input">
-                    </div>
-                    <a href="../index.html">Home</a>
-                    <a href="../collections.html">Topics</a>
+
+                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
+
+                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="collections.html"
+                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
+
                     <a href="https://hernandezi.substack.com" target="_blank">Newsletter</a>
-                    <a href="../about.html">About</a>
-                    <a href="../consulting.html">Consulting</a>
                     <a href="../feed.xml">RSS Feed</a>
                     <a href="#" id="mobile-support-btn">Support</a>
                 </nav>
             </div>
         </header>
 
-        <main>
+        <main id="main-content">
             <div class="tag-header">
     <h1>#Perception</h1>
     <p>1 essays</p>
@@ -118,6 +143,8 @@
 </div>
         </main>
     </div>
+
+
 
     <!-- Search Overlay -->
     <div id="search-overlay" class="search-overlay">
@@ -149,16 +176,40 @@
     <script src="../js/search.js"></script>
     <script src="../js/support.js"></script>
 
-    <!-- Custom Support Button (Triggers Widget) -->
-    <a href="#" id="custom-support-trigger" class="floating-support-btn" aria-label="Support the blog">
-        <img src="../images/support-icon.png" alt="Support">
-    </a>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Brand -->
+            <div class="footer-col">
+                <h4>Does This Feel Right?</h4>
+                <p class="footer-copy">© 2025 Isaac Hernandez.<br>All rights reserved.</p>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../collections.html">Collections</a></li>
+
+                    <li><a href="../feed.xml">RSS Feed</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Support -->
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 
     <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!"
-        data-message="Thanks for reading! If you enjoyed this, consider supporting the blog." data-color="#000000"
-        data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!" data-message=""
+        data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 
 
 </body>
