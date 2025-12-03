@@ -4,367 +4,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Does This Feel Right?</title>
-    <meta name="description" content="Thoughts on business, technology, and the human condition.">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Does This Feel Right?">
-    <meta property="og:description" content="Thoughts on business, technology, and the human condition.">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://www.doesthisfeelright.com/index.html">
-    <meta property="og:image" content="https://www.doesthisfeelright.com/static/images/og-default.jpg">
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://www.doesthisfeelright.com/index.html">
-    <meta name="twitter:title" content="Does This Feel Right?">
-    <meta name="twitter:description" content="Thoughts on business, technology, and the human condition.">
-    <meta name="twitter:image" content="https://www.doesthisfeelright.com/static/images/og-default.jpg">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.doesthisfeelright.com/index.html">
-
-    <!-- Structured Data (JSON-LD) -->
-
-
-    <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="feed.xml">
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>Does This Feel Right? | Building Studio OS in Public</title>
+    <meta name="description"
+        content="Follow the 6-week journey of building and monetizing an AI-powered content operating system.">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <div class="header-modules">
-                <!-- Module 1: Logo -->
-                <a href="index.html" class="header-module logo-module">
-                    <span class="logo-text">DOES THIS FEEL RIGHT?</span>
-                    <span class="logo-underline"></span>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">DTFR?</div>
+
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/journey.html" class="nav-link">Journey</a>
+            <a href="/books.html" class="nav-link">Books</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Content</div>
+            <a href="/#latest" class="nav-link">Latest</a>
+            <a href="/collections.html" class="nav-link">Collections</a>
+            <a href="/about.html" class="nav-link">About</a>
+        </div>
+
+        <div class="nav-footer">
+            <div class="journey-widget">
+                <div class="label">Day 1 of 42</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 2.4%;"></div>
+                </div>
+                <div class="stat">$0 MRR</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Building Studio OS<br />in Public</h1>
+            <p class="hero-subtitle">6 weeks. Real revenue. Zero bullshit.</p>
+            <div class="hero-cta">
+                <a href="/journey.html" class="btn-primary">Follow the Journey</a>
+                <a href="/books.html" class="btn-secondary">Browse Books</a>
+            </div>
+        </section>
+
+        <!-- Latest Posts -->
+        <section class="container" id="latest">
+            <h2 class="section-title">Latest</h2>
+            <div class="posts-grid">
+                <!-- Journey Post -->
+                <a href="/posts/studio-os-6-week-journey-week-1.html" class="card">
+                    <div class="card-meta">Engineering · Dec 2, 2025 · 8 min read</div>
+                    <h3 class="card-title">Studio OS: The 6-Week Journey Begins</h3>
+                    <p class="card-excerpt">Building and monetizing an AI content system in public. Everything
+                        documented—wins, failures, code, revenue.</p>
+                    <div class="card-footer">
+                        <span class="card-date">Dec 2, 2025</span>
+                        <span class="card-arrow">→</span>
+                    </div>
                 </a>
 
-                <!-- Module 2: Subscribe -->
-                <a href="https://doesthisfeelright.substack.com/" target="_blank" class="header-module rss-module">
-                    Subscribe
+                <!-- Distributed AI Post -->
+                <a href="/posts/distributed-ai-architecture-mac-windows-node.html" class="card">
+                    <div class="card-meta">Technical · Dec 4, 2025 · 10 min read</div>
+                    <h3 class="card-title">Distributed AI Architecture</h3>
+                    <p class="card-excerpt">Mac + Windows Studio Node: How I offload AI workloads, why it matters, and
+                        how to build your own.</p>
+                    <div class="card-footer">
+                        <span class="card-date">Dec 4, 2025</span>
+                        <span class="card-arrow">→</span>
+                    </div>
                 </a>
 
-                <!-- Module: Auth (Removed) -->
-
-                <!-- Module 3: Support -->
-                <div class="header-module support-module">
-                    <button class="support-trigger" id="bmc-support-btn">SUPPORT</button>
-                </div>
-
-                <!-- Module 4: Search -->
-                <div class="header-module search-module">
-                    <div class="header-search-container">
-                        <input type="search" id="header-search" placeholder="Search essays..."
-                            class="inline-search-input">
+                <!-- Philosophy Post -->
+                <a href="/posts/owning-the-signal.html" class="card">
+                    <div class="card-meta">Philosophy · Nov 26, 2025 · 7 min read</div>
+                    <h3 class="card-title">Owning the Signal</h3>
+                    <p class="card-excerpt">Why relying on third-party platforms is a losing game. Build your own
+                        distribution.</p>
+                    <div class="card-footer">
+                        <span class="card-date">Nov 26, 2025</span>
+                        <span class="card-arrow">→</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Mobile Menu Toggle (Visible only on mobile) -->
-                <button class="mobile-menu-btn" aria-label="Toggle Menu">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
+                <!--More Posts -->
+                <a href="/posts/the-weight-of-iteration.html" class="card">
+                    <div class="card-meta">Studio · Nov 25, 2025 · 5 min read</div>
+                    <h3 class="card-title">The Weight of Iteration</h3>
+                    <p class="card-excerpt">A look behind the curtain at the recent technical overhaul.</p>
+                    <div class="card-footer">
+                        <span class="card-date">Nov 25, 2025</span>
+                        <span class="card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="/posts/modern-man-extinction.html" class="card">
+                    <div class="card-meta">Culture · Nov 25, 2025 · 6 min read</div>
+                    <h3 class="card-title">The Extinction of the Modern Man</h3>
+                    <p class="card-excerpt">Are we witnessing an end, or a transformation?</p>
+                    <div class="card-footer">
+                        <span class="card-date">Nov 25, 2025</span>
+                        <span class="card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="/posts/ai-friendship.html" class="card">
+                    <div class="card-meta">Philosophy · Nov 20, 2025 · 5 min read</div>
+                    <h3 class="card-title">Friendship in the AI World</h3>
+                    <p class="card-excerpt">The most radical act is to have a messy, real conversation.</p>
+                    <div class="card-footer">
+                        <span class="card-date">Nov 20, 2025</span>
+                        <span class="card-arrow">→</span>
+                    </div>
+                </a>
             </div>
+        </section>
 
-            <!-- Mobile Nav Overlay -->
-            <div class="mobile-nav-overlay">
-                <nav class="mobile-nav">
-                    <div class="mobile-search-container">
-                        <input type="search" id="mobile-search" placeholder="Search essays..."
-                            class="mobile-search-input">
-                    </div>
-                    <a href="index.html">Home</a>
-                    <a href="journey.html" style="color: #60a5fa;">🚀 Journey</a>
-                    <a href="books.html">📚 Books</a>
-                    <a href="about.html">About</a>
-                    <a href="collections.html">Collections</a>
-                    <a href="#" id="mobile-support-btn">Support</a>
-                    <a href="https://doesthisfeelright.substack.com/" target="_blank">Subscribe</a>
-                </nav>
-            </div>
-        </header>
+        <!-- Newsletter CTA -->
+        <section class="container" style="max-width: 640px; text-align: center; margin-top: 128px;">
+            <h2 style="margin-bottom: 24px;">Stay Updated</h2>
+            <p style="margin-bottom: 32px;">Weekly deep-dives, technical breakdowns, and build-in-public updates.</p>
+            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="150"
+                style="border:1px solid #1a1a1a; background: #0a0a0a; border-radius: 12px;" frameborder="0"
+                scrolling="no"></iframe>
+        </section>
 
-        <main>
-            <!-- Magazine Layout -->
-            <div class="magazine-layout">
-
-                <!-- Welcome Gate Overlay -->
-                <div id="welcome-gate" class="welcome-overlay" style="display: none;">
-                    <div class="welcome-content">
-                        <div class="welcome-header">
-                            <h2>Does This Feel Right?</h2>
-                            <p>Thoughts on business, technology, and the human condition.</p>
-                        </div>
-                        <div class="welcome-embed">
-                            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-                                style="border:1px solid #EEE; background:white;" frameborder="0"
-                                scrolling="no"></iframe>
-                        </div>
-                        <button id="enter-site-btn" class="enter-btn">Continue to Site →</button>
-                    </div>
-                </div>
-
-                <!-- Intro Block -->
-                <div class="intro-block">
-                    <h1 class="intro-tagline">Does This Feel Right?</h1>
-                    <p class="intro-sub">Thoughts on business, technology, and the human condition.</p>
-                    <div class="intro-subscribe">
-                        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="150"
-                            style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
-                    </div>
-                </div>
-
-                <!-- Bento Grid Section -->
-                <section class="bento-section">
-                    <div class="bento-grid">
-                        <!-- Hero Item (Journey Announcement) -->
-                        <a href="posts/studio-os-6-week-journey-week-1.html" class="bento-item hero-item">
-                            <div class="bento-content">
-                                <span class="bento-label">🚀 New Series</span>
-                                <h2 class="bento-title">Studio OS: 6-Week Monetization Journey</h2>
-                                <p class="bento-excerpt">Building and monetizing an AI content system in public. Follow
-                                    along as I document everything—wins, failures, code, revenue.</p>
-                                <span class="bento-meta">Engineering • Dec 2, 2025 • <a href="journey.html"
-                                        style="color: #60a5fa; border: none;">View Journey Dashboard →</a></span>
-                            </div>
-                        </a>
-
-                        <!-- Starter Item 1 -->
-                        <a href="posts/distributed-ai-architecture-mac-windows-node.html"
-                            class="bento-item starter-item">
-                            <div class="bento-content">
-                                <span class="bento-label">Technical Deep-Dive</span>
-                                <h3 class="bento-title">Distributed AI Architecture</h3>
-                            </div>
-                        </a>
-
-                        <!-- Starter Item 2 -->
-                        <a href="posts/owning-the-signal.html" class="bento-item starter-item">
-                            <div class="bento-content">
-                                <span class="bento-label">Philosophy</span>
-                                <h3 class="bento-title">Owning the Signal</h3>
-                            </div>
-                        </a>
-
-                        <!-- Books Item -->
-                        <a href="books.html" class="bento-item subscribe-item"
-                            style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(96, 165, 250, 0.02) 100%);">
-                            <div class="bento-content">
-                                <h3 class="bento-title">📚 Books</h3>
-                                <p class="bento-text">Deep dives on building systems, distributed AI, and the future of
-                                    work.</p>
-                                <span class="bento-link">Browse Books →</span>
-                            </div>
-                        </a>
-
-                        <!-- Subscribe Item -->
-                        <div class="bento-item subscribe-item">
-                            <div class="bento-content">
-                                <h3 class="bento-title">Join the List</h3>
-                                <p class="bento-text">No ads. Just thoughts.</p>
-                                <a href="https://doesthisfeelright.substack.com/" target="_blank"
-                                    class="bento-link">Subscribe →</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="content-wrapper">
-                    <!-- 2. Main Feed (Left Column) -->
-                    <main class="main-feed">
-                        <div class="feed-header">
-                            <h2>Latest Essays</h2>
-                            <div class="filter-bar"><button class="filter-btn active"
-                                    data-filter="all">All</button><button class="filter-btn"
-                                    data-filter="Business Strategy">Business Strategy</button><button class="filter-btn"
-                                    data-filter="Culture & Tech">Culture & Tech</button><button class="filter-btn"
-                                    data-filter="Economics & Society">Economics & Society</button><button
-                                    class="filter-btn" data-filter="General">General</button><button class="filter-btn"
-                                    data-filter="Philosophy & Tech">Philosophy & Tech</button><button class="filter-btn"
-                                    data-filter="Studio">Studio</button><button class="filter-btn"
-                                    data-filter="Technology & Culture">Technology & Culture</button><button
-                                    class="filter-btn" data-filter="Technology & Process">Technology & Process</button>
-                            </div>
-                        </div>
-
-                        <div class="posts-container">
-
-                            <a href="posts/the-weight-of-iteration.html" class="post-card" data-category="Studio"
-                                data-date="2025-11-25">
-                                <span class="post-meta">Engineering • Nov 25, 2025 • 5 min read</span>
-                                <h2>The Weight of Iteration</h2>
-                                <p class="post-excerpt">A look behind the curtain at the recent technical overhaul and
-                                    what this studio project holds for the future.</p>
-                            </a>
-
-                            <a href="posts/modern-man-extinction.html" class="post-card" data-category="Culture & Tech"
-                                data-date="2025-11-25">
-                                <span class="post-meta">Psychology • Nov 25, 2025 • 6 min read</span>
-                                <h2>The Extinction of the Modern Man</h2>
-                                <p class="post-excerpt">Behavioral sciences suggest a radical shift in male archetypes
-                                    is underway. Are we witnessing an end, or a transformation?</p>
-                            </a>
-
-                            <a href="posts/irresponsibility-content.html" class="post-card" data-category="General"
-                                data-date="2025-11-24">
-                                <span class="post-meta">Psychology • Nov 24, 2025 • 5 min read</span>
-                                <h2>Why Most Content Feels Like 'People Are Irresponsible'</h2>
-                                <p class="post-excerpt"></p>
-                            </a>
-
-                            <a href="posts/ai-friendship.html" class="post-card" data-category="Philosophy & Tech"
-                                data-date="2025-11-20">
-                                <span class="post-meta">Philosophy • Nov 20, 2025 • 5 min read</span>
-                                <h2>The Importance of Friendship and Conversation in the AI World</h2>
-                                <p class="post-excerpt">In the era of the "Perfect Companion," the most radical act is
-                                    to have a messy, real conversation.</p>
-                            </a>
-
-                            <a href="posts/social-media-first-contact.html" class="post-card"
-                                data-category="Culture & Tech" data-date="2025-11-18">
-                                <span class="post-meta">Culture • Nov 18, 2025 • 6 min read</span>
-                                <h2>Social Media is Our "First Contact"</h2>
-                                <p class="post-excerpt">What happens when AI meets humanity? We're already living it—on
-                                    Twitter, TikTok, and Instagram.</p>
-                            </a>
-
-                            <a href="posts/scaling-coffee-shop.html" class="post-card" data-category="Business Strategy"
-                                data-date="2025-11-15">
-                                <span class="post-meta">Business • Nov 15, 2025 • 5 min read</span>
-                                <h2>How to Scale a Coffee Shop (The Alex Hormozi Way)</h2>
-                                <p class="post-excerpt">Stop selling commodities. Start selling Offers. A guide to
-                                    applying the Value Equation to your local cafe.</p>
-                            </a>
-
-                            <a href="posts/richest-women-overshadowed.html" class="post-card"
-                                data-category="Economics & Society" data-date="2025-11-10">
-                                <span class="post-meta">Economics • Nov 10, 2025 • 5 min read</span>
-                                <h2>There Are Richest Women—But They're Often Overshadowed</h2>
-                                <p class="post-excerpt">Women make up just 13-15% of billionaires. A data-driven look at
-                                    why they are less visible in the media.</p>
-                            </a>
-
-                            <a href="posts/building-with-antigravity.html" class="post-card"
-                                data-category="Technology & Process" data-date="2025-11-05">
-                                <span class="post-meta">Technology • Nov 05, 2025 • 7 min read</span>
-                                <h2>Building This Blog with Antigravity: A Meta Reflection</h2>
-                                <p class="post-excerpt">I built this entire platform in one evening with an AI coding
-                                    assistant. Here's what I learned about the future</p>
-                            </a>
-
-                            <a href="posts/rss-in-2025.html" class="post-card" data-category="Technology & Culture"
-                                data-date="">
-                                <span class="post-meta">Technology & Culture • • 4 min read</span>
-                                <h2>The Quiet Return of RSS in 2025</h2>
-                                <p class="post-excerpt">In an age of algorithmic noise, the simple XML feed has become a
-                                    sanctuary for intentional consumption.</p>
-                            </a>
-
-                        </div>
-                    </main>
-
-                    <!-- 3. Sidebar (Right Column) -->
-                    <aside class="sidebar">
-                        <!-- About Widget -->
-                        <div class="sidebar-widget about-widget">
-                            <h3>About</h3>
-                            <p><strong>Does This Feel Right?</strong> is a collection of essays on technology,
-                                philosophy, and the
-                                human condition.</p>
-                            <p>No ads, no algorithms, just thoughts.</p>
-                            <a href="about.html" class="text-link">Read more →</a>
-                        </div>
-
-                        <!-- Experiments Widget -->
-                        <div class="sidebar-widget experiments-widget">
-                            <h3>Experiments</h3>
-                            <ul class="experiments-list">
-                                <li><a href="posts/building-with-antigravity.html">Building with Antigravity</a></li>
-                                <li><a href="posts/rss-in-2025.html">The Quiet Return of RSS</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Collections Widget -->
-                        <div class="sidebar-widget collections-widget">
-                            <h3>Collections</h3>
-                            <ul class="collection-list">
-
-                                <li>
-                                    <a href="tags/psychology.html" class="collection-link">
-                                        <span class="name">Psychology</span>
-                                        <span class="count">3</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="tags/society.html" class="collection-link">
-                                        <span class="name">Society</span>
-                                        <span class="count">3</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="tags/technology.html" class="collection-link">
-                                        <span class="name">Technology</span>
-                                        <span class="count">3</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="tags/process.html" class="collection-link">
-                                        <span class="name">Process</span>
-                                        <span class="count">2</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="tags/ai.html" class="collection-link">
-                                        <span class="name">AI</span>
-                                        <span class="count">2</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                            <a href="collections.html" class="text-link">View all collections →</a>
-                        </div>
-
-                        <!-- Newsletter Widget -->
-                        <div class="sidebar-widget newsletter-widget"
-                            style="padding: 0; border: none; background: transparent;">
-                            <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320"
-                                style="border:1px solid #EEE; background:white;" frameborder="0"
-                                scrolling="no"></iframe>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </main>
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 96px 32px 64px; color: #606060; font-size: 14px;">
+            <p>Built with Studio OS · <a href="https://github.com/isaachernandez/blog-design"
+                    style="color: #00D6A3;">View Source</a></p>
+        </footer>
     </div>
-    <!-- Supabase JS Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- App Scripts -->
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
-    <!-- auth.js and bookmarks.js removed -->
-    <script src="js/reading-progress.js"></script>
-    <script src="js/share.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/support.js"></script>
-
-    <!-- Buy Me a Coffee Widget -->
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!"
-        data-message="Thanks for reading! If you enjoyed this, consider supporting the blog." data-color="#FFDD00"
-        data-position="Right" data-x_margin="18" data-y_margin="18"></script>
-
-
+    <!-- Mobile Menu (Hidden by default) -->
+    <div class="mobile-menu" style="display: none;">
+        <!-- Mobile navigation will go here -->
+    </div>
 </body>
 
 </html>
