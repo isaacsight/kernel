@@ -7,6 +7,46 @@
     <language>en-us</language>
     
         <item>
+            <title>&quot;Distributed AI Architecture: Mac + Windows Studio Node&quot;</title>
+            <link>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</link>
+            <description>&quot;Deep dive into Studio OS&#x27;s distributed architecture: how I offload AI workloads to a Windows machine, why it matters, and how you can build your own multi-node AI system.&quot;</description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</guid>
+        </item>
+        
+        <item>
+            <title>The future of Engineering in 2025</title>
+            <link>https://www.doesthisfeelright.com/posts/ai-the-future-of-engineering-in-2025.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/ai-the-future-of-engineering-in-2025.html</guid>
+        </item>
+        
+        <item>
+            <title>The future of Business in 2025</title>
+            <link>https://www.doesthisfeelright.com/posts/ai-the-future-of-business-in-2025.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/ai-the-future-of-business-in-2025.html</guid>
+        </item>
+        
+        <item>
+            <title>The Joy of Distributed Computing</title>
+            <link>https://www.doesthisfeelright.com/posts/ai-the-joy-of-distributed-computing.html</link>
+            <description></description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/ai-the-joy-of-distributed-computing.html</guid>
+        </item>
+        
+        <item>
+            <title>&quot;Building Studio OS in Public: The 6-Week Monetization Journey Begins&quot;</title>
+            <link>https://www.doesthisfeelright.com/posts/studio-os-6-week-journey-week-1.html</link>
+            <description>&quot;I&#x27;m documenting my journey to monetize an AI-powered content operating system in 6 weeks. Follow along as I build in public, share every win and failure, and turn years of experimentation into a sustainable product.&quot;</description>
+            <category>Engineering</category>
+            <guid>https://www.doesthisfeelright.com/posts/studio-os-6-week-journey-week-1.html</guid>
+        </item>
+        
+        <item>
             <title>The Future of Autonomous Blogging</title>
             <link>https://www.doesthisfeelright.com/posts/ai-the-future-of-autonomous-blogging.html</link>
             <description></description>

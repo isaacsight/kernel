@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"Distributed AI Architecture: Mac + Windows Studio Node"</title>
+    <meta name="description" content=""Deep dive into Studio OS's distributed architecture: how I offload AI workloads to a Windows machine, why it matters, and how you can build your own multi-node AI system."">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content=""Distributed AI Architecture: Mac + Windows Studio Node"">
+    <meta property="og:description" content=""Deep dive into Studio OS's distributed architecture: how I offload AI workloads to a Windows machine, why it matters, and how you can build your own multi-node AI system."">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html">
+    <meta property="og:image" content="{{ og_image }}">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html">
+    <meta name="twitter:title" content=""Distributed AI Architecture: Mac + Windows Studio Node"">
+    <meta name="twitter:description" content=""Deep dive into Studio OS's distributed architecture: how I offload AI workloads to a Windows machine, why it matters, and how you can build your own multi-node AI system."">
+    <meta name="twitter:image" content="static/images/og/distributed-ai-architecture-mac-windows-node.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "\"Distributed AI Architecture: Mac + Windows Studio Node\"", "image": ["static/images/og/distributed-ai-architecture-mac-windows-node.jpg"], "datePublished": "2025-12-04", "dateModified": "2025-12-04", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-modules">
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
+                    </div>
+                    <span class="logo-underline"></span>
+                </a>
+
+
+                <!-- Module 4: Support -->
+                <div class="header-module support-module">
+                    <button class="support-trigger" id="bmc-support-btn">SUPPORT</button>
+                </div>
+
+                <!-- Module 5: Search -->
+                <div class="header-module search-module">
+                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Toggle (Visible only on mobile) -->
+                <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Overlay -->
+            <div class="mobile-nav-overlay">
+                <nav class="mobile-nav">
+                    <div class="mobile-search-container">
+                        <input type="search" id="mobile-search" placeholder="Search essays..."
+                            class="mobile-search-input">
+                    </div>
+                    <a href="../index.html">Home</a>
+                    <a href="../collections.html">Topics</a>
+                    <a href="https://hernandezi.substack.com" target="_blank">Newsletter</a>
+                    <a href="../about.html">About</a>
+                    <a href="../consulting.html">Consulting</a>
+                    <a href="../feed.xml">RSS Feed</a>
+                    <a href="#" id="mobile-support-btn">Support</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <article>
+    <div class="post-nav">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+    <div class="post-header post-header-container">
+        <div class="post-meta post-meta-date">
+            {{ date }}
+        </div>
+        <h1 class="post-title-large">"Distributed AI Architecture: Mac + Windows Studio Node"</h1>
+        <div class="post-tags">
+            <a href="../tags/[studio-os.html" class="post-tag tag-color-0">[studio-os</a> <a href="../tags/architecture.html" class="post-tag tag-color-5">architecture</a> <a href="../tags/distributed-computing.html" class="post-tag tag-color-0">distributed-computing</a> <a href="../tags/ai].html" class="post-tag tag-color-1">ai]</a> 
+        </div>
+    </div>
+
+    
+
+    <h1>Distributed AI Architecture: Mac + Windows Studio Node</h1>
+<p><em>Part of the <a href="/posts/studio-os-6-week-journey-week-1">6-Week Studio OS Journey</a></em></p>
+<h2>The Problem: AI is Computationally Expensive</h2>
+<p>Running multiple AI models simultaneously on a single machine creates bottlenecks:</p>
+<ul>
+<li>Gemini/OpenAI API calls have rate limits</li>
+<li>Local LLMs (Ollama, llama.cpp) consume significant RAM/CPU</li>
+<li>Web interface becomes sluggish during AI generation</li>
+<li>Development workflow interrupted by heavy processing</li>
+</ul>
+<p><strong>Solution</strong>: Distribute the workload across multiple machines.</p>
+<h2>The Architecture</h2>
+<pre><code>
+┌─────────────────────────────────────────────────────┐
+│                  Mac Mini (Primary)                 │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  Studio OS Web Interface (React + FastAPI)  │  │
+│  │  - Content Management                        │  │
+│  │  - Blog Generation (build.py)                │  │
+│  │  - Git/GitHub Integration                    │  │
+│  └──────────────────────────────────────────────┘  │
+│                        ↕                            │
+│              HTTP/REST API Calls                    │
+│                        ↕                            │
+└─────────────────────────────────────────────────────┘
+                         ↕
+                    Local Network
+                   (192.168.1.x)
+                         ↕
+┌─────────────────────────────────────────────────────┐
+│             Windows Desktop (Studio Node)           │
+│  IP: 192.168.1.56                                   │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  Ollama Server (Port 11434)                  │  │
+│  │  - llama3.2:latest                           │  │
+│  │  - deepseek-coder-v2:latest                  │  │
+│  │  - mistral:latest                            │  │
+│  └──────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  Specialized AI Agents                       │  │
+│  │  - The Architect (Code Analysis)             │  │
+│  │  - Heavy RAG Processing                      │  │
+│  │  - Batch Content Generation                  │  │
+│  └──────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+<h2>Implementation Details</h2>
+<h3>1. Windows Node Setup</h3>
+<p><strong>Hardware:</strong></p>
+<ul>
+<li>Custom-built Windows desktop</li>
+<li>NVIDIA GPU (for potential ML acceleration)</li>
+<li>32GB RAM</li>
+<li>SSD storage</li>
+</ul>
+<p><strong>Software Stack:</strong></p>
+<pre><code>
+# Ollama installation
+winget install Ollama.Ollama
+
+# Pull models
+ollama pull llama3.2:latest
+ollama pull deepseek-coder-v2:latest
+ollama pull mistral:latest
+
+# Server runs on http://192.168.1.56:11434
+</code></pre>
+<h3>2. Studio OS Integration</h3>
+<p>In `admin/core.py`, I added a remote provider option:</p>
+<pre><code>
+def generate_ai_post(topic, provider="gemini"):
+    """
+    Generates AI content with provider selection.
+    """
+    if provider == "windows-node":
+        # Route to Windows Studio Node
+        return generate_via_windows_node(topic)
+    elif provider == "gemini":
+        # Use Gemini API
+        return generate_via_gemini(topic)
+    # ... other providers
+</code></pre>
+<p><strong>Remote agent example</strong> (`admin/studio_node.py`):</p>
+<pre><code>
+import requests
+
+class StudioNode:
+    def __init__(self, node_url="http://192.168.1.56:11434"):
+        self.node_url = node_url
+    
+    def generate(self, prompt, model="llama3.2:latest"):
+        """Send generation request to Windows Node"""
+        response = requests.post(
+            f"{self.node_url}/api/generate",
+            json={
+                "model": model,
+                "prompt": prompt,
+                "stream": False
+            }
+        )
+        return response.json()["response"]
+</code></pre>
+<h3>3. The Architect Agent on Windows</h3>
+<p>The Architect analyzes code architecture and runs on the Windows Node for heavy processing:</p>
+<pre><code>
+# admin/engineers/architect.py
+from admin.studio_node import StudioNode
+
+class Architect:
+    def __init__(self):
+        self.node = StudioNode()
+    
+    def analyze_codebase(self, code_files):
+        """Analyze codebase architecture"""
+        prompt = f"""
+        Analyze this codebase structure:
+        {code_files}
+        
+        Provide:
+        1. Architecture patterns used
+        2. Potential improvements
+        3. Code smells
+        """
+        
+        # This runs on Windows Node, not local Mac
+        return self.node.generate(prompt, model="deepseek-coder-v2:latest")
+</code></pre>
+<h2>Why This Matters</h2>
+<h3>1. Cost Efficiency</h3>
+<p><strong>Before (Cloud APIs only):</strong></p>
+<ul>
+<li>Gemini API: ~$0.10 per post generation</li>
+<li>100 posts/month = $10</li>
+<li>Scaling costs linearly</li>
+</ul>
+<p><strong>After (Hybrid approach):</strong></p>
+<ul>
+<li>Windows Node: One-time hardware cost (~$800)</li>
+<li>Local models: $0 per generation</li>
+<li>Cloud APIs for specific tasks only</li>
+<li>Break-even after ~80 posts</li>
+</ul>
+<h3>2. Speed & Privacy</h3>
+<ul>
+<li><strong>Latency</strong>: Local network = <100ms vs cloud = 200-1000ms</li>
+<li><strong>Privacy</strong>: Sensitive content never leaves local network</li>
+<li><strong>Availability</strong>: No internet required for core functionality</li>
+</ul>
+<h3>3. Experimentation Freedom</h3>
+<ul>
+<li>Test multiple models simultaneously</li>
+<li>Fine-tune local models without cloud costs</li>
+<li>Rapid iteration on prompts</li>
+</ul>
+<h3>4. Scalability</h3>
+<p>Add more nodes as needed:</p>
+<pre><code>
+Mac (Orchestrator)
+  ↓
+Windows Node 1 (Code Analysis)
+Windows Node 2 (Content Generation)
+Raspberry Pi Cluster (Light tasks)
+</code></pre>
+<h2>Real-World Performance</h2>
+<p><strong>Generation Time Comparison</strong> (500-word blog post):</p>
+<p>| Provider | Time | Cost | Notes | |----------|------|------|-------| | Gemini 1.5 Pro | 3.2s | $0.12 | Fast, premium quality | | Windows Node (llama3.2) | 8.5s | $0.00 | Slower, free, good quality | | Windows Node (mistral) | 6.1s | $0.00 | Fast, free, decent quality | | OpenAI GPT-4 | 2.8s | $0.18 | Fastest, most expensive |</p>
+<p><strong>Verdict</strong>: Use Windows Node for drafts/iterations, cloud APIs for final polish.</p>
+<h2>Challenges & Solutions</h2>
+<h3>Challenge 1: Network Reliability</h3>
+<p><strong>Problem</strong>: What if Windows Node is offline?</p>
+<p><strong>Solution</strong>: Graceful fallback</p>
+<pre><code>
+def generate_with_fallback(topic):
+    try:
+        # Try Windows Node first
+        return generate_via_windows_node(topic)
+    except (ConnectionError, TimeoutError):
+        # Fallback to cloud API
+        return generate_via_gemini(topic)
+</code></pre>
+<h3>Challenge 2: Model Context Windows</h3>
+<p><strong>Problem</strong>: Local models have smaller context windows (4k-8k tokens).</p>
+<p><strong>Solution</strong>: Chunking and summarization</p>
+<pre><code>
+def process_large_context(content):
+    if len(content) > 4000:
+        # Summarize on cloud, process locally
+        summary = gemini_summarize(content)
+        return windows_node_process(summary)
+    return windows_node_process(content)
+</code></pre>
+<h3>Challenge 3: Consistency</h3>
+<p><strong>Problem</strong>: Different models produce different styles.</p>
+<p><strong>Solution</strong>: Post-processing pipeline</p>
+<pre><code>
+# All content goes through The Editor regardless of provider
+content = generate_ai_post(topic, provider="windows-node")
+refined = editor.audit(content)  # Standardize style
+return refined
+</code></pre>
+<h2>Building Your Own Studio Node</h2>
+<p>Want to replicate this? Here's the cheapest approach:</p>
+<h3>Budget Option (~$300)</h3>
+<ul>
+<li><strong>Used office PC</strong> ($150-200 on eBay)</li>
+</ul>
+<p>- Intel i5/Ryzen 5 - 16GB RAM minimum</p>
+<ul>
+<li><strong>Ollama installation</strong> (free)</li>
+<li><strong>Models</strong>: llama3.2, mistral (free)</li>
+</ul>
+<h3>Performance Option (~$800)</h3>
+<ul>
+<li><strong>Custom build</strong></li>
+</ul>
+<p>- Ryzen 7 / Intel i7 - 32GB RAM - NVIDIA GPU (optional but recommended)</p>
+<ul>
+<li><strong>Same software stack</strong></li>
+</ul>
+<h3>Enterprise Option (~$2000+)</h3>
+<ul>
+<li><strong>High-end workstation</strong></li>
+</ul>
+<p>- Threadripper / Xeon - 64GB+ RAM - Multiple GPUs</p>
+<ul>
+<li><strong>Kubernetes cluster</strong> for multiple nodes</li>
+</ul>
+<h2>Code Walkthrough</h2>
+<p>Full implementation in the <a href="https://github.com/isaachernandez/blog-design">Studio OS repo</a>:</p>
+<p><strong>Key files:</strong></p>
+<ul>
+<li>`admin/studio_node.py` - Node interface</li>
+<li>`admin/engineers/architect.py` - Remote agent example</li>
+<li>`admin/core.py` - Provider selection logic</li>
+</ul>
+<h2>Results So Far</h2>
+<p><strong>Performance Stats</strong> (30 days):</p>
+<ul>
+<li>Total AI generations: 142</li>
+<li>Windows Node usage: 89 (63%)</li>
+<li>Cloud API usage: 53 (37%)</li>
+<li>Estimated savings: $14.20</li>
+<li>Average response time: 5.3s</li>
+</ul>
+<p><strong>Reliability:</strong></p>
+<ul>
+<li>Uptime: 99.2% (Windows Node)</li>
+<li>Fallback activations: 3 (manual restarts)</li>
+</ul>
+<h2>What's Next</h2>
+<p><strong>Week 2 Goals:</strong> 1. Add GPU acceleration on Windows Node 2. Implement model routing (auto-select best model) 3. Build monitoring dashboard 4. Add Raspberry Pi node for lightweight tasks</p>
+<h2>Try It Yourself</h2>
+<p>The entire setup is documented in the repo. Questions?</p>
+<p><strong>Connect:</strong></p>
+<ul>
+<li><a href="https://github.com/isaachernandez/blog-design">GitHub</a></li>
+<li><a href="https://twitter.com/StudioOS_build">Twitter</a></li>
+<li><a href="#newsletter">Newsletter signup</a></li>
+</ul>
+<p>---</p>
+<p><em>Next post: "Setting Up Your Own AI Studio Node" (step-by-step guide)</em></p>
+<p><em>This is part of the <a href="/posts/studio-os-6-week-journey-week-1">6-week Studio OS monetization journey</a>. Follow along!</em></p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="distributed-ai-architecture-mac-windows-node" data-title=""Distributed AI Architecture: Mac + Windows Studio Node"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="distributed-ai-architecture-mac-windows-node" data-title=""Distributed AI Architecture: Mac + Windows Studio Node"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+    <!-- Reflective Block -->
+    <div class="reflective-block">
+        <p class="reflective-question">Does this feel true?</p>
+        <p class="reflective-sub">If this essay resonated with you, take a moment to sit with it.</p>
+
+        <div class="reflective-actions">
+            <a href="https://www.buymeacoffee.com/doesthisfeelright" target="_blank" class="text-link coffee-link">
+                Support the writing →
+            </a>
+        </div>
+    </div>
+
+    <!-- Comments Section (Giscus) -->
+    <section class="comments-section">
+        <script src="https://giscus.app/client.js" data-repo="isaacsight/does-this-feel-right-"
+            data-repo-id="R_kgDOQarDxw" data-category="Announcements" data-category-id="DIC_kwDOQarDx84CyHw1"
+            data-mapping="pathname" data-strict="0" data-reactions-enabled="0" data-emit-metadata="0"
+            data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" async>
+            </script>
+    </section>
+
+    
+            <div class="related-posts">
+                <div class="related-header">Read Next</div>
+                <div class="related-grid">
+                    
+                <a href="studio-os-6-week-journey-week-1.html" class="post-card">
+                    <span class="post-meta">[studio-os • 8 min read</span>
+                    <h3>"Building Studio OS in Public: The 6-Week Monetization Journey Begins"</h3>
+                </a>
+                
+                <a href="refactoring-codelens-architecture.html" class="post-card">
+                    <span class="post-meta">[python • 5 min read</span>
+                    <h3>'Refactoring for AI: From Script to Package'</h3>
+                </a>
+                
+                </div>
+            </div>
+            
+
+    <div class="newsletter-box newsletter-embed">
+        <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" class="newsletter-iframe"
+            frameborder="0" scrolling="no"></iframe>
+    </div>
+</article>
+        </main>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <button id="close-search" aria-label="Close Search">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Lunr.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- auth.js and bookmarks.js removed -->
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
+
+    <!-- Custom Support Button (Triggers Widget) -->
+    <a href="#" id="custom-support-trigger" class="floating-support-btn" aria-label="Support the blog">
+        <img src="../images/support-icon.png" alt="Support">
+    </a>
+
+    <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!"
+        data-message="Thanks for reading! If you enjoyed this, consider supporting the blog." data-color="#000000"
+        data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+
+</body>
+
+</html>

@@ -47,10 +47,10 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="p-8">
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">Mission Control</h1>
-                <p className="text-muted-foreground">Manage your autonomous creative team.</p>
+        <div className="p-8 max-w-7xl mx-auto">
+            <header className="mb-10">
+                <h1 className="text-4xl font-bold mb-2 tracking-tighter">Mission Control</h1>
+                <p className="text-muted-foreground text-base">Manage your autonomous creative team.</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

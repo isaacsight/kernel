@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Plus, Calendar, Tag } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
@@ -25,50 +25,28 @@ const PostList = () => {
     if (loading) return <div className="p-8">Loading content...</div>;
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">Content Studio</h1>
-                <Link
-                    to="/content/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
-                >
-                    <Plus size={18} />
-                    New Post
+        <div className="p-8 max-w-7xl mx-auto">
+            <header className="mb-10 flex justify-between items-center">
+                <div>
+                    <h1 className="text-4xl font-bold mb-2 tracking-tighter">Content Studio</h1>
+                    <p className="text-muted-foreground text-base">Manage your blog posts.</p>
+                </div>
+                <Link to="/content/new">
+                    <button className="px-5 py-2.5 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-all duration-200 flex items-center gap-2 font-semibold text-sm shadow-sm hover:scale-[1.02] active:scale-[0.98]">
+                        <PlusCircle size={18} />
+                        New Post
+                    </button>
                 </Link>
-            </div>
+            </header>
 
-            <div className="space-y-4">
-                {posts.map((post) => (
-                    <Link
-                        key={post.slug}
-                        to={`/content/${post.slug}`}
-                        className="block p-6 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-accent transition-all group"
-                    >
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                                    {post.title}
-                                </h3>
-                                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                        <Calendar size={14} />
-                                        {post.date}
-                                    </span>
-                                    {post.category && (
-                                        <span className="px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground text-xs">
-                                            {post.category}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex gap-2">
-                                {post.tags && post.tags.map(tag => (
-                                    <span key={tag} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
+            <div className="grid gap-4">
+                {posts.map(post => (
+                    <Link key={post.slug} to={`/content/${post.slug}`} className="block p-6 rounded-xl border border-border bg-card/50 hover:border-accent/50 transition-all duration-300 group hover:-translate-y-0.5 shadow-sm hover:shadow-lg">
+                        <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors tracking-tight">{post.title}</h2>
+                        <div className="text-sm text-muted-foreground mb-3">
+                            <span className="font-mono">{post.date}</span> • <span className="capitalize">{post.collection}</span>
                         </div>
+                        <p className="text-muted-foreground line-clamp-2 text-sm">{post.excerpt || 'No excerpt available.'}</p>
                     </Link>
                 ))}
             </div>

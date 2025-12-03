@@ -106,27 +106,27 @@ const PostEditor = () => {
         <div className="flex h-[calc(100vh-64px)]">
             <div className="flex-1 p-8 overflow-y-auto">
                 <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-center mb-8">
                         <button
                             onClick={() => navigate('/content')}
-                            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
                         >
-                            <ArrowLeft size={20} />
-                            Back
+                            <ArrowLeft size={18} />
+                            Back to Content
                         </button>
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setAiPanelOpen(!aiPanelOpen)}
-                                className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium"
+                                className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2.5 rounded-lg hover:bg-secondary/80 transition-all duration-200 font-semibold text-sm border border-border"
                             >
-                                {aiPanelOpen ? 'Close AI Assistant' : 'AI Assistant'}
+                                {aiPanelOpen ? 'Close AI' : 'AI Assistant'}
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium"
+                                className="flex items-center gap-2 bg-accent text-accent-foreground px-6 py-2.5 rounded-lg hover:bg-accent/90 transition-all duration-200 font-semibold text-sm shadow-sm hover:scale-[1.02] active:scale-[0.98]"
                             >
                                 <Save size={18} />
-                                Save
+                                Save Post
                             </button>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ const PostEditor = () => {
                                 name="title"
                                 value={post.title}
                                 onChange={handleChange}
-                                className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-lg font-semibold"
+                                className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-accent focus:border-transparent outline-none text-lg font-semibold transition-all duration-200"
                                 placeholder="Enter post title..."
                             />
                         </div>
@@ -152,7 +152,7 @@ const PostEditor = () => {
                                     name="date"
                                     value={post.date}
                                     onChange={handleChange}
-                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none"
+                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent outline-none transition-all duration-200"
                                 />
                             </div>
                             <div>
@@ -162,7 +162,7 @@ const PostEditor = () => {
                                     name="category"
                                     value={post.category}
                                     onChange={handleChange}
-                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none"
+                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent outline-none transition-all duration-200"
                                     placeholder="Engineering"
                                 />
                             </div>
@@ -173,7 +173,7 @@ const PostEditor = () => {
                                     name="tags"
                                     value={post.tags}
                                     onChange={handleChange}
-                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none"
+                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent outline-none transition-all duration-200"
                                     placeholder="ai, design, web"
                                 />
                             </div>
@@ -185,7 +185,7 @@ const PostEditor = () => {
                                 name="content"
                                 value={post.content}
                                 onChange={handleChange}
-                                className="w-full h-[500px] bg-background border border-border rounded-lg px-4 py-4 font-mono text-sm focus:ring-2 focus:ring-primary outline-none resize-none"
+                                className="w-full h-[500px] bg-background border border-border rounded-lg px-4 py-4 font-mono text-sm focus:ring-2 focus:ring-accent outline-none resize-none transition-all duration-200"
                                 placeholder="# Write your masterpiece..."
                             />
                         </div>
@@ -207,7 +207,7 @@ const PostEditor = () => {
                             <button
                                 onClick={() => handleAiAction('critique')}
                                 disabled={aiLoading}
-                                className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+                                className="w-full py-2 px-4 bg-accent text-accent-foreground rounded-lg text-sm font-semibold hover:bg-accent/90 disabled:opacity-50 transition-all duration-200"
                             >
                                 {aiLoading ? 'Analyzing...' : 'Critique Content'}
                             </button>

@@ -1,28 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Antigravity Matte Dark Theme - Matching Main Website */
+    --background: 220 13% 5%;
+    /* #0d0d0d - Deep matte black */
+    --foreground: 0 0% 93%;
+    /* #ededed - High contrast text */
+
+    --card: 220 10% 9%;
+    /* #161616 - Slightly lighter panels */
+    --card-foreground: 0 0% 93%;
+    /* #ededed */
+
+    --popover: 220 10% 9%;
+    /* #161616 */
+    --popover-foreground: 0 0% 93%;
+    /* #ededed */
+
+    --primary: 217 91% 60%;
+    /* #3b82f6 - Antigravity Blue */
+    --primary-foreground: 0 0% 100%;
+    /* white */
+
+    --secondary: 220 10% 13%;
+    /* #202020 - Hover states */
+    --secondary-foreground: 0 0% 93%;
+    /* #ededed */
+
+    --muted: 220 10% 13%;
+    /* #202020 */
+    --muted-foreground: 0 0% 53%;
+    /* #888888 - Muted text */
+
+    --accent: 217 91% 60%;
+    /* #3b82f6 - Antigravity Blue */
+    --accent-foreground: 0 0% 100%;
+    /* white */
+
+    --destructive: 0 63% 31%;
+    /* Dark red */
+    --destructive-foreground: 0 0% 93%;
+
+    --border: 0 0% 20%;
+    /* #333333 - Subtle borders */
+    --input: 0 0% 20%;
+    /* #333333 */
+    --ring: 217 91% 60%;
+    /* #3b82f6 - Focus ring */
+
+    /* Custom Antigravity Variables */
+    --bg-tertiary: 220 10% 13%;
+    /* #202020 */
+    --accent-hover: 217 91% 55%;
+    /* #1d4ed8 */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --transition-base: 200ms ease;
+    --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -33,5 +73,50 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus visible for accessibility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Selection styling */
+  ::selection {
+    background-color: hsl(var(--accent) / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+
+  /* Glassmorphism effect */
+  .glass-panel {
+    background: hsl(var(--card) / 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-base {
+    transition: var(--transition-base);
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-smooth hover:-translate-y-0.5 hover:border-accent/50;
   }
 }

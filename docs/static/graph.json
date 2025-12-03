@@ -5,9 +5,9 @@
   "nodes": [
     {
       "type": "post",
-      "title": "User Experience in a Voice-First World (Theme: Theme 4: Design & Aesthetics)",
-      "label": "User Experience in a Voice-First World (Theme: Theme 4: Design & Aesthetics)",
-      "id": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)"
+      "title": "'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'",
+      "label": "'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'",
+      "id": "ai-slow-web:-a-manifesto-for-deliberate-consumption-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "category",
@@ -15,36 +15,58 @@
       "id": "cat:AI"
     },
     {
-      "type": "tag",
-      "label": "ai",
-      "id": "tag:ai"
-    },
-    {
-      "type": "tag",
-      "label": "generated",
-      "id": "tag:generated"
+      "type": "post",
+      "title": "'User Experience in a Voice-First World (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'User Experience in a Voice-First World (Theme: Theme 4: Design & Aesthetics)'",
+      "id": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "The \"Glitch\" Aesthetic in 2025",
-      "label": "The \"Glitch\" Aesthetic in 2025",
+      "title": "'The \"Glitch\" Aesthetic in 2025'",
+      "label": "'The \"Glitch\" Aesthetic in 2025'",
       "id": "ai-the-\"glitch\"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Why Your Personal Site Needs a Soul (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Why Your Personal Site Needs a Soul (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
+      "type": "post",
+      "title": "Social Media is Our \"First Contact\"",
+      "label": "Social Media is Our \"First Contact\"",
+      "id": "social-media-first-contact"
+    },
+    {
       "type": "category",
-      "label": "General",
-      "id": "cat:General"
+      "label": "Culture & Tech",
+      "id": "cat:Culture & Tech"
+    },
+    {
+      "type": "tag",
+      "label": "Culture",
+      "id": "tag:Culture"
+    },
+    {
+      "type": "tag",
+      "label": "Technology",
+      "id": "tag:Technology"
+    },
+    {
+      "type": "tag",
+      "label": "Social Media",
+      "id": "tag:Social Media"
+    },
+    {
+      "type": "tag",
+      "label": "Psychology",
+      "id": "tag:Psychology"
     },
     {
       "type": "post",
-      "title": "The Speed of Thought",
-      "label": "The Speed of Thought",
+      "title": "'The Speed of Thought'",
+      "label": "'The Speed of Thought'",
       "id": "the-speed-of-thought"
     },
     {
@@ -54,8 +76,8 @@
     },
     {
       "type": "tag",
-      "label": "AI",
-      "id": "tag:AI"
+      "label": "[AI",
+      "id": "tag:[AI"
     },
     {
       "type": "tag",
@@ -64,103 +86,168 @@
     },
     {
       "type": "tag",
-      "label": "Antigravity",
-      "id": "tag:Antigravity"
+      "label": "Antigravity]",
+      "id": "tag:Antigravity]"
     },
     {
       "type": "post",
-      "title": "When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)",
-      "label": "When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)",
+      "title": "'When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'When the Server Fixes Itself: Autonomic Computing in 2025 (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Return of Serifs on the Web'",
+      "label": "'The Return of Serifs on the Web'",
       "id": "ai-the-return-of-serifs-on-the-web-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Preserving History when History is Rewritten by AI (Theme: Theme'",
+      "label": "'Preserving History when History is Rewritten by AI (Theme: Theme'",
       "id": "ai-preserving-history-when-history-is-rewritten-by-ai-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Dockerizing Your Life: Containerization Patterns (Theme: Theme'",
+      "label": "'Dockerizing Your Life: Containerization Patterns (Theme: Theme'",
+      "id": "ai-dockerizing-your-life:-containerization-patterns-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "type": "post",
+      "title": "'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Brain Rot Aesthetics: The New Brutalism? (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The SEO of AI-Generated Content: Quality over Quantity (Theme:'",
+      "label": "'The SEO of AI-Generated Content: Quality over Quantity (Theme:'",
       "id": "ai-the-seo-of-ai-generated-content:-quality-over-quantity-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Type Hinting in Python: Beyond the Basics (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Type Hinting in Python: Beyond the Basics (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-type-hinting-in-python:-beyond-the-basics-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Proactive vs. Reactive Web Architecture (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Proactive vs. Reactive Web Architecture (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-proactive-vs.-reactive-web-architecture-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "The Human Element: What AI Can't Replicate (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Human Element: What AI Can't Replicate (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Human Element: What AI Can''t Replicate (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Human Element: What AI Can''t Replicate (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "The Importance of Friendship and Conversation in the AI World",
+      "label": "The Importance of Friendship and Conversation in the AI World",
+      "id": "ai-friendship"
+    },
+    {
+      "type": "category",
+      "label": "Philosophy & Tech",
+      "id": "cat:Philosophy & Tech"
+    },
+    {
+      "type": "tag",
+      "label": "Philosophy",
+      "id": "tag:Philosophy"
+    },
+    {
+      "type": "tag",
+      "label": "AI",
+      "id": "tag:AI"
+    },
+    {
+      "type": "post",
+      "title": "'The End of \"User\" Interface: Designing for Agents (Theme: Theme'",
+      "label": "'The End of \"User\" Interface: Designing for Agents (Theme: Theme'",
       "id": "ai-the-end-of-\"user\"-interface:-designing-for-agents-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Visual Hierarchy in Text-Heavy Interfaces (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Identity in a Post-Authentication World (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "Identity in a Post-Authentication World (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "Why Most Content Feels Like 'People Are Irresponsible'",
+      "label": "Why Most Content Feels Like 'People Are Irresponsible'",
+      "id": "irresponsibility-content"
+    },
+    {
+      "type": "category",
+      "label": "General",
+      "id": "cat:General"
+    },
+    {
+      "type": "tag",
+      "label": "Media",
+      "id": "tag:Media"
+    },
+    {
+      "type": "tag",
+      "label": "Society",
+      "id": "tag:Society"
+    },
+    {
+      "type": "tag",
+      "label": "Algorithms",
+      "id": "tag:Algorithms"
+    },
+    {
+      "type": "post",
+      "title": "'Identity in a Post-Authentication World (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Identity in a Post-Authentication World (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Designing for Speed: Perceived vs. Actual Performance (Theme:'",
+      "label": "'Designing for Speed: Perceived vs. Actual Performance (Theme:'",
+      "id": "ai-designing-for-speed:-perceived-vs.-actual-performance-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "type": "post",
+      "title": "'Accessibility is not an Optional Feature (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Accessibility is not an Optional Feature (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-accessibility-is-not-an-optional-feature-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Context-Aware Publishing: When Your Site Knows What You Mean'",
+      "label": "'Context-Aware Publishing: When Your Site Knows What You Mean'",
       "id": "ai-context-aware-publishing:-when-your-site-knows-what-you-mean-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)",
-      "label": "Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)",
+      "title": "'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Monitoring the Monitors: Who Watches the AI? (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Building for the Edge: Latency Matters (Theme: Theme 3: Modern Engineering)",
-      "label": "Building for the Edge: Latency Matters (Theme: Theme 3: Modern Engineering)",
+      "title": "'Understanding the Global Interpreter Lock (GIL) (Theme: Theme'",
+      "label": "'Understanding the Global Interpreter Lock (GIL) (Theme: Theme'",
+      "id": "ai-understanding-the-global-interpreter-lock-(gil)-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "type": "post",
+      "title": "'Building for the Edge: Latency Matters (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Building for the Edge: Latency Matters (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "The Rise of the Non-Musician",
-      "label": "The Rise of the Non-Musician",
+      "title": "'The Rise of the Non-Musician'",
+      "label": "'The Rise of the Non-Musician'",
       "id": "the-rise-of-the-non-musician"
     },
     {
@@ -180,30 +267,20 @@
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Predicting Traffic Spikes with Local LLMs (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Predicting Traffic Spikes with Local LLMs (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-predicting-traffic-spikes-with-local-llms-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "The Breaking Change",
-      "label": "The Breaking Change",
+      "title": "'The Breaking Change'",
+      "label": "'The Breaking Change'",
       "id": "the-breaking-change"
     },
     {
       "type": "category",
       "label": "Relationships",
       "id": "cat:Relationships"
-    },
-    {
-      "type": "tag",
-      "label": "Technology",
-      "id": "tag:Technology"
-    },
-    {
-      "type": "tag",
-      "label": "Psychology",
-      "id": "tag:Psychology"
     },
     {
       "type": "tag",
@@ -222,79 +299,75 @@
       "id": "cat:Engineering"
     },
     {
-      "type": "tag",
-      "label": "alchemist",
-      "id": "tag:alchemist"
-    },
-    {
       "type": "post",
-      "title": "Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Screen Time and the Erosion of Empathy (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Algorithm vs. The Curator (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)",
-      "label": "Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)",
+      "title": "'Testing AI Applications: Determinism in a Probabilistic World'",
+      "label": "'Testing AI Applications: Determinism in a Probabilistic World'",
+      "id": "ai-testing-ai-applications:-determinism-in-a-probabilistic-world-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "type": "post",
+      "title": "'Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Beyond Cron Jobs: True Asynchronous Autonomy (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Digital Gardening vs. Digital Farming (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Human-AI Symbiosis: Partners, Not Replacements (Theme: Theme'",
+      "label": "'Human-AI Symbiosis: Partners, Not Replacements (Theme: Theme'",
+      "id": "ai-human-ai-symbiosis:-partners,-not-replacements-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "type": "post",
+      "title": "'The Nervous System of a Modern Web App (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'The Nervous System of a Modern Web App (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-the-nervous-system-of-a-modern-web-app-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Consulting",
-      "label": "Consulting",
-      "id": "consulting"
-    },
-    {
-      "type": "category",
-      "label": "Services",
-      "id": "cat:Services"
-    },
-    {
-      "type": "post",
-      "title": "The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design & Aesthetics)",
-      "label": "The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'The Future of CSS: Beyond Tailwind (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Ethics of Open Source in an AI Era (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-ethics-of-open-source-in-an-ai-era-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Psychology of Loading Screens (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'The Psychology of Loading Screens (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-the-psychology-of-loading-screens-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Coding as a Spiritual Practice (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'From Script to Application: Packaging Python (Theme: Theme 3: Modern Engineering)'",
+      "label": "'From Script to Application: Packaging Python (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-from-script-to-application:-packaging-python-(theme:-theme-3:-modern-engineering)"
     },
     {
@@ -305,32 +378,38 @@
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Zero-Maintenance Blog: A Case Study (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'The Zero-Maintenance Blog: A Case Study (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-the-zero-maintenance-blog:-a-case-study-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Python 3.14: What''s New and Why it Matters (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Python 3.14: What''s New and Why it Matters (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-python-3.14:-what's-new-and-why-it-matters-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Understanding AsyncIO in Python'",
+      "label": "'Understanding AsyncIO in Python'",
       "id": "ai-understanding-asyncio-in-python-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Multi-Model AI: Managing Claude and Gemini Providers",
-      "label": "Multi-Model AI: Managing Claude and Gemini Providers",
+      "title": "'Why We Build: The Psychology of Side Projects (Theme: Theme'",
+      "label": "'Why We Build: The Psychology of Side Projects (Theme: Theme'",
+      "id": "ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "type": "post",
+      "title": "'Multi-Model AI: Managing Claude and Gemini Providers'",
+      "label": "'Multi-Model AI: Managing Claude and Gemini Providers'",
       "id": "codelens-ai-providers"
     },
     {
       "type": "tag",
-      "label": "python",
-      "id": "tag:python"
+      "label": "[python",
+      "id": "tag:[python"
     },
     {
       "type": "tag",
@@ -344,30 +423,25 @@
     },
     {
       "type": "tag",
-      "label": "gemini",
-      "id": "tag:gemini"
+      "label": "gemini]",
+      "id": "tag:gemini]"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Managing Dotfiles like a Pro'",
+      "label": "'Managing Dotfiles like a Pro'",
       "id": "ai-managing-dotfiles-like-a-pro-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Escaping the Simulation of Self",
-      "label": "Escaping the Simulation of Self",
+      "title": "'Escaping the Simulation of Self'",
+      "label": "'Escaping the Simulation of Self'",
       "id": "escaping-the-simulation"
     },
     {
       "type": "category",
       "label": "Philosophy",
       "id": "cat:Philosophy"
-    },
-    {
-      "type": "tag",
-      "label": "Society",
-      "id": "tag:Society"
     },
     {
       "type": "tag",
@@ -381,8 +455,8 @@
     },
     {
       "type": "post",
-      "title": "Refactoring for AI: From Script to Package",
-      "label": "Refactoring for AI: From Script to Package",
+      "title": "'Refactoring for AI: From Script to Package'",
+      "label": "'Refactoring for AI: From Script to Package'",
       "id": "refactoring-codelens-architecture"
     },
     {
@@ -396,39 +470,44 @@
       "id": "tag:architecture"
     },
     {
+      "type": "tag",
+      "label": "ai]",
+      "id": "tag:ai]"
+    },
+    {
       "type": "post",
-      "title": "Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Designing for Attention: The Anti-Pattern (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Building Self-Healing Websites with Python (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Building Self-Healing Websites with Python (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-building-self-healing-websites-with-python-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Optimizing Python for Performance'",
+      "label": "'Optimizing Python for Performance'",
       "id": "ai-optimizing-python-for-performance-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Git Workflows for Solo Developers'",
+      "label": "'Git Workflows for Solo Developers'",
       "id": "ai-git-workflows-for-solo-developers-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Glassmorphism: Trend or Timeless? (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "The Weight of Iteration",
-      "label": "The Weight of Iteration",
+      "title": "'The Weight of Iteration'",
+      "label": "'The Weight of Iteration'",
       "id": "the-weight-of-iteration"
     },
     {
@@ -453,36 +532,52 @@
     },
     {
       "type": "post",
-      "title": "Towards Site Autonomy",
-      "label": "Towards Site Autonomy",
+      "title": "'Towards Site Autonomy'",
+      "label": "'Towards Site Autonomy'",
       "id": "towards-site-autonomy"
     },
     {
-      "type": "tag",
-      "label": "automation",
-      "id": "tag:automation"
+      "type": "post",
+      "title": "There Are Richest Women\u2014But They're Often Overshadowed",
+      "label": "There Are Richest Women\u2014But They're Often Overshadowed",
+      "id": "richest-women-overshadowed"
+    },
+    {
+      "type": "category",
+      "label": "Economics & Society",
+      "id": "cat:Economics & Society"
     },
     {
       "type": "tag",
-      "label": "autonomy",
-      "id": "tag:autonomy"
+      "label": "Economics",
+      "id": "tag:Economics"
+    },
+    {
+      "type": "tag",
+      "label": "Data",
+      "id": "tag:Data"
+    },
+    {
+      "type": "tag",
+      "label": "Inequality",
+      "id": "tag:Inequality"
     },
     {
       "type": "post",
-      "title": "Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Owning Your Signal in a Noisy World (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'How to Train Your Website to Write Its Own Changelog (Theme:'",
+      "label": "'How to Train Your Website to Write Its Own Changelog (Theme:'",
       "id": "ai-how-to-train-your-website-to-write-its-own-changelog-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "The Invisible Architect",
-      "label": "The Invisible Architect",
+      "title": "'The Invisible Architect'",
+      "label": "'The Invisible Architect'",
       "id": "the-invisible-architect"
     },
     {
@@ -491,50 +586,45 @@
       "id": "cat:Society"
     },
     {
-      "type": "tag",
-      "label": "Culture",
-      "id": "tag:Culture"
-    },
-    {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Power of Makefiles in Modern Projects (Theme: Theme 3: Modern Engineering)'",
+      "label": "'The Power of Makefiles in Modern Projects (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-the-power-of-makefiles-in-modern-projects-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "The Uncanny Valley of AI UI",
-      "label": "The Uncanny Valley of AI UI",
+      "title": "'The Uncanny Valley of AI UI'",
+      "label": "'The Uncanny Valley of AI UI'",
       "id": "ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Micro-Interactions: The Soul of the UI (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme'",
+      "label": "'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme'",
       "id": "ai-the-stack-of-the-future:-htmx,-sqlite,-and-llms-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The \"Set It and Forget It\" Myth vs. Reality (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'The \"Set It and Forget It\" Myth vs. Reality (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-the-\"set-it-and-forget-it\"-myth-vs.-reality-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Why Dark Mode is Not Enough'",
+      "label": "'Why Dark Mode is Not Enough'",
       "id": "ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "To Be Witnessed",
-      "label": "To Be Witnessed",
+      "title": "'To Be Witnessed'",
+      "label": "'To Be Witnessed'",
       "id": "to-be-witnessed"
     },
     {
@@ -549,36 +639,41 @@
     },
     {
       "type": "tag",
-      "label": "Media",
-      "id": "tag:Media"
-    },
-    {
-      "type": "tag",
       "label": "Humanism",
       "id": "tag:Humanism"
     },
     {
       "type": "post",
-      "title": "The Ethics of Autonomous Content Generation (Theme: Theme 1: The Autonomous Web)",
-      "label": "The Ethics of Autonomous Content Generation (Theme: Theme 1: The Autonomous Web)",
+      "title": "'The Ethics of Autonomous Content Generation (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'The Ethics of Autonomous Content Generation (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Escaping the Simulation: Are We Just Training Data? (Theme:'",
+      "label": "'Escaping the Simulation: Are We Just Training Data? (Theme:'",
       "id": "ai-escaping-the-simulation:-are-we-just-training-data?-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Owning the Signal",
-      "label": "Owning the Signal",
+      "title": "'Owning the Signal'",
+      "label": "'Owning the Signal'",
       "id": "owning-the-signal"
+    },
+    {
+      "type": "tag",
+      "label": "[Engineering",
+      "id": "tag:[Engineering"
     },
     {
       "type": "tag",
       "label": "Process",
       "id": "tag:Process"
+    },
+    {
+      "type": "tag",
+      "label": "Future]",
+      "id": "tag:Future]"
     },
     {
       "type": "post",
@@ -588,50 +683,72 @@
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "Building This Blog with Antigravity: A Meta Reflection",
+      "label": "Building This Blog with Antigravity: A Meta Reflection",
+      "id": "building-with-antigravity"
+    },
+    {
+      "type": "category",
+      "label": "Technology & Process",
+      "id": "cat:Technology & Process"
+    },
+    {
+      "type": "tag",
+      "label": "Building",
+      "id": "tag:Building"
+    },
+    {
+      "type": "post",
+      "title": "'The Role of Human Oversight in Autonomous Systems (Theme: Theme'",
+      "label": "'The Role of Human Oversight in Autonomous Systems (Theme: Theme'",
       "id": "ai-the-role-of-human-oversight-in-autonomous-systems-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "The Lost Art of Deep Reading (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Lost Art of Deep Reading (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Lost Art of Deep Reading (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Lost Art of Deep Reading (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Future of Truth: Verifiable Credentials (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Consistency vs. Novelty in UI Design (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Consistency vs. Novelty in UI Design (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Consistency vs. Novelty in UI Design (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Consistency vs. Novelty in UI Design (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)",
-      "label": "Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)",
+      "title": "'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Why SQLite is Enough for 99% of Projects (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The \"Premium\" Feel: What Makes Software Feel Expensive? (Theme:'",
+      "label": "'The \"Premium\" Feel: What Makes Software Feel Expensive? (Theme:'",
       "id": "ai-the-\"premium\"-feel:-what-makes-software-feel-expensive?-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "The Quiet Return of RSS in 2025",
+      "label": "The Quiet Return of RSS in 2025",
+      "id": "rss-in-2025"
+    },
+    {
+      "type": "post",
+      "title": "'The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Attention Economy is a Bubble (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "The Return of Personal Software",
-      "label": "The Return of Personal Software",
+      "title": "'The Return of Personal Software'",
+      "label": "'The Return of Personal Software'",
       "id": "the-return-of-personal-software"
     },
     {
@@ -646,44 +763,50 @@
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Designing for the Terminal: ASCII Art and Layouts (Theme: Theme'",
+      "label": "'Designing for the Terminal: ASCII Art and Layouts (Theme: Theme'",
       "id": "ai-designing-for-the-terminal:-ascii-art-and-layouts-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Art of the README'",
+      "label": "'The Art of the README'",
       "id": "ai-the-art-of-the-readme-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Mobile-First is Dead; Content-First is King (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Mobile-First is Dead; Content-First is King (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'Mobile-First is Dead; Content-First is King (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Mobile-First is Dead; Content-First is King (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern Engineering)",
-      "label": "Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern Engineering)",
+      "title": "'Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Fast API vs. Flask: A 2025 Perspective (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Designing for Readability: Line Height and Measure (Theme: Theme'",
+      "label": "'Designing for Readability: Line Height and Measure (Theme: Theme'",
       "id": "ai-designing-for-readability:-line-height-and-measure-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Death of the Dashboard: Why Admin Panels are Legacy (Theme:'",
+      "label": "'The Death of the Dashboard: Why Admin Panels are Legacy (Theme:'",
+      "id": "ai-the-death-of-the-dashboard:-why-admin-panels-are-legacy-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "type": "post",
+      "title": "'Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Why I Still Write Markdown in 2025 (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Tracking AI Experiments: Building a Custom Logger",
-      "label": "Tracking AI Experiments: Building a Custom Logger",
+      "title": "'Tracking AI Experiments: Building a Custom Logger'",
+      "label": "'Tracking AI Experiments: Building a Custom Logger'",
       "id": "codelens-ml-logging"
     },
     {
@@ -693,8 +816,8 @@
     },
     {
       "type": "tag",
-      "label": "mlops",
-      "id": "tag:mlops"
+      "label": "[mlops",
+      "id": "tag:[mlops"
     },
     {
       "type": "tag",
@@ -714,8 +837,8 @@
     },
     {
       "type": "post",
-      "title": "The Engine and The Gallery",
-      "label": "The Engine and The Gallery",
+      "title": "'The Engine and The Gallery'",
+      "label": "'The Engine and The Gallery'",
       "id": "the-engine-and-the-gallery"
     },
     {
@@ -725,42 +848,32 @@
     },
     {
       "type": "tag",
-      "label": "Building",
-      "id": "tag:Building"
-    },
-    {
-      "type": "tag",
       "label": "Substack",
       "id": "tag:Substack"
     },
     {
       "type": "post",
-      "title": "The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)",
-      "label": "The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)",
+      "title": "'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'The Impact of AI on Web Design Workflows (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Webhooks are the Neurons of the Web (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Webhooks are the Neurons of the Web (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-webhooks-are-the-neurons-of-the-web-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Building Robust CLIs with Click and Rich (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-building-robust-clis-with-click-and-rich-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "The Extinction of the Modern Man",
-      "label": "The Extinction of the Modern Man",
+      "title": "'The Extinction of the Modern Man'",
+      "label": "'The Extinction of the Modern Man'",
       "id": "modern-man-extinction"
-    },
-    {
-      "type": "category",
-      "label": "Culture & Tech",
-      "id": "cat:Culture & Tech"
     },
     {
       "type": "tag",
@@ -769,160 +882,182 @@
     },
     {
       "type": "post",
-      "title": "Building a Custom Site Manager",
-      "label": "Building a Custom Site Manager",
+      "title": "'Building a Custom Site Manager'",
+      "label": "'Building a Custom Site Manager'",
       "id": "building-a-custom-site-manager"
     },
     {
-      "type": "tag",
-      "label": "textual",
-      "id": "tag:textual"
-    },
-    {
-      "type": "tag",
-      "label": "tools",
-      "id": "tag:tools"
-    },
-    {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Design Patterns for AI-Integrated Apps (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-design-patterns-for-ai-integrated-apps-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Importance of Documentation as Code (Theme: Theme 3: Modern Engineering)'",
+      "label": "'The Importance of Documentation as Code (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-the-importance-of-documentation-as-code-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Joy of Finishing Things (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Color Theory for Backend Developers (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Color Theory for Backend Developers (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-color-theory-for-backend-developers-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The ephemeral nature of digital artifacts (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Weight of Digital Hoarding (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Weight of Digital Hoarding (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-weight-of-digital-hoarding-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "The New Builders Are 16",
-      "label": "The New Builders Are 16",
+      "title": "'The New Builders Are 16'",
+      "label": "'The New Builders Are 16'",
       "id": "the-new-builders-are-16"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Automating the Boring Stuff: A Janitor Bot for Your Links (Theme:'",
+      "label": "'Automating the Boring Stuff: A Janitor Bot for Your Links (Theme:'",
       "id": "ai-automating-the-boring-stuff:-a-janitor-bot-for-your-links-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Rise of the Headless Agent: Why Your CMS is Obsolete (Theme:'",
+      "label": "'The Rise of the Headless Agent: Why Your CMS is Obsolete (Theme:'",
       "id": "ai-the-rise-of-the-headless-agent:-why-your-cms-is-obsolete-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Scaling to Zero: The Ultimate Efficiency (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Scaling to Zero: The Ultimate Efficiency (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-scaling-to-zero:-the-ultimate-efficiency-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Static Sites are Dead; Long Live Living Sites (Theme: Theme'",
+      "label": "'Static Sites are Dead; Long Live Living Sites (Theme: Theme'",
       "id": "ai-static-sites-are-dead;-long-live-living-sites-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Digital Minimalism for Developers (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Digital Minimalism for Developers (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-digital-minimalism-for-developers-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Fallacy of \"No-Code\" for Engineers (Theme: Theme 3: Modern Engineering)'",
+      "label": "'The Fallacy of \"No-Code\" for Engineers (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-the-fallacy-of-\"no-code\"-for-engineers-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Security First: Auditing Your Own Code (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Security First: Auditing Your Own Code (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-security-first:-auditing-your-own-code-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Dependency Management in a Post-Pip World (Theme: Theme 3: Modern Engineering)",
-      "label": "Dependency Management in a Post-Pip World (Theme: Theme 3: Modern Engineering)",
+      "title": "'Dependency Management in a Post-Pip World (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Dependency Management in a Post-Pip World (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Why I Fired Myself as Webmaster (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "The Ultimate Workflow: Going Headless",
-      "label": "The Ultimate Workflow: Going Headless",
+      "title": "'The Ultimate Workflow: Going Headless'",
+      "label": "'The Ultimate Workflow: Going Headless'",
       "id": "headless-workflow"
     },
     {
-      "type": "tag",
-      "label": "workflow",
-      "id": "tag:workflow"
-    },
-    {
-      "type": "tag",
-      "label": "productivity",
-      "id": "tag:productivity"
+      "type": "category",
+      "label": "\"Engineering\"",
+      "id": "cat:\"Engineering\""
     },
     {
       "type": "post",
-      "title": "Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)",
-      "label": "Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)",
+      "title": "'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Refactoring Legacy Code with AI Agents (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "\"Distributed AI Architecture: Mac + Windows Studio Node\"",
+      "label": "\"Distributed AI Architecture: Mac + Windows Studio Node\"",
+      "id": "distributed-ai-architecture-mac-windows-node"
+    },
+    {
+      "type": "tag",
+      "label": "[studio-os",
+      "id": "tag:[studio-os"
+    },
+    {
+      "type": "tag",
+      "label": "distributed-computing",
+      "id": "tag:distributed-computing"
+    },
+    {
+      "type": "post",
+      "title": "'Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'Why Complexity is the Enemy of Freedom (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Whitespace: The Most Important Element (Theme: Theme 4: Design & Aesthetics)",
-      "label": "Whitespace: The Most Important Element (Theme: Theme 4: Design & Aesthetics)",
+      "title": "How to Scale a Coffee Shop (The Alex Hormozi Way)",
+      "label": "How to Scale a Coffee Shop (The Alex Hormozi Way)",
+      "id": "scaling-coffee-shop"
+    },
+    {
+      "type": "category",
+      "label": "Business Strategy",
+      "id": "cat:Business Strategy"
+    },
+    {
+      "type": "tag",
+      "label": "Business",
+      "id": "tag:Business"
+    },
+    {
+      "type": "tag",
+      "label": "Growth",
+      "id": "tag:Growth"
+    },
+    {
+      "type": "post",
+      "title": "'Whitespace: The Most Important Element (Theme: Theme 4: Design & Aesthetics)'",
+      "label": "'Whitespace: The Most Important Element (Theme: Theme 4: Design & Aesthetics)'",
       "id": "ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Typography as Voice",
-      "label": "Typography as Voice",
+      "title": "'Typography as Voice'",
+      "label": "'Typography as Voice'",
       "id": "ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "Don't Get Locked In",
-      "label": "Don't Get Locked In",
+      "title": "\"Don't Get Locked In\"",
+      "label": "\"Don't Get Locked In\"",
       "id": "dont-get-locked-in"
     },
     {
@@ -932,70 +1067,102 @@
     },
     {
       "type": "tag",
-      "label": "independence",
-      "id": "tag:independence"
+      "label": "[ai",
+      "id": "tag:[ai"
+    },
+    {
+      "type": "tag",
+      "label": "tools",
+      "id": "tag:tools"
+    },
+    {
+      "type": "tag",
+      "label": "workflow",
+      "id": "tag:workflow"
+    },
+    {
+      "type": "tag",
+      "label": "independence]",
+      "id": "tag:independence]"
     },
     {
       "type": "post",
-      "title": "The \"Good Enough\" Web (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The \"Good Enough\" Web (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The \"Good Enough\" Web (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The \"Good Enough\" Web (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-\"good-enough\"-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Icons: SVG vs. Font vs. Emojis",
-      "label": "Icons: SVG vs. Font vs. Emojis",
+      "title": "\"Building Studio OS in Public: The 6-Week Monetization Journey Begins\"",
+      "label": "\"Building Studio OS in Public: The 6-Week Monetization Journey Begins\"",
+      "id": "studio-os-6-week-journey-week-1"
+    },
+    {
+      "type": "tag",
+      "label": "ai",
+      "id": "tag:ai"
+    },
+    {
+      "type": "tag",
+      "label": "build-in-public",
+      "id": "tag:build-in-public"
+    },
+    {
+      "type": "tag",
+      "label": "entrepreneurship]",
+      "id": "tag:entrepreneurship]"
+    },
+    {
+      "type": "post",
+      "title": "'Icons: SVG vs. Font vs. Emojis'",
+      "label": "'Icons: SVG vs. Font vs. Emojis'",
       "id": "ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "type": "post",
-      "title": "TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)",
-      "label": "TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)",
+      "title": "'TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)'",
+      "label": "'TUI Renaissance: Why Text Interfaces are Back (Theme: Modern Engineering)'",
       "id": "ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'Logging Strategies for Distributed Systems (Theme: Theme 3: Modern Engineering)'",
+      "label": "'Logging Strategies for Distributed Systems (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-logging-strategies-for-distributed-systems-(theme:-theme-3:-modern-engineering)"
     },
     {
       "type": "post",
-      "title": "The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)",
-      "label": "The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)",
+      "title": "'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Return of the Personal Web (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Death of Privacy in the Age of Inference (Theme: Theme 2: Digital Philosophy & Ethics)'",
+      "label": "'The Death of Privacy in the Age of Inference (Theme: Theme 2: Digital Philosophy & Ethics)'",
       "id": "ai-the-death-of-privacy-in-the-age-of-inference-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
       "type": "post",
-      "title": "Building a Digital Twin of Your Production Environment (Theme: Theme 1: The Autonomous Web)",
-      "label": "Building a Digital Twin of Your Production Environment (Theme: Theme 1: The Autonomous Web)",
+      "title": "'Building a Digital Twin of Your Production Environment (Theme: Theme 1: The Autonomous Web)'",
+      "label": "'Building a Digital Twin of Your Production Environment (Theme: Theme 1: The Autonomous Web)'",
       "id": "ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "type": "post",
-      "title": "Untitled",
-      "label": "Untitled",
+      "title": "'The Architecture of CodeLens: A Deep Dive (Theme: Theme 3: Modern Engineering)'",
+      "label": "'The Architecture of CodeLens: A Deep Dive (Theme: Theme 3: Modern Engineering)'",
       "id": "ai-the-architecture-of-codelens:-a-deep-dive-(theme:-theme-3:-modern-engineering)"
     }
   ],
   "links": [
     {
-      "source": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)",
+      "source": "ai-slow-web:-a-manifesto-for-deliberate-consumption-(theme:-theme-2:-digital-philosophy-&-ethics)",
       "target": "cat:AI"
     },
     {
-      "source": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)",
-      "target": "tag:ai"
-    },
-    {
-      "source": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)",
-      "target": "tag:generated"
+      "source": "cat:AI",
+      "target": "ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
       "source": "cat:AI",
@@ -1003,707 +1170,455 @@
     },
     {
       "source": "cat:AI",
+      "target": "ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web)"
     },
     {
       "source": "cat:AI",
-      "target": "ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-\"good-enough\"-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "cat:AI",
-      "target": "ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-\"glitch\"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-future-of-engineering-in-2025"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-joy-of-distributed-computing"
-    },
-    {
-      "source": "tag:ai",
-      "target": "refactoring-codelens-architecture"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "towards-site-autonomy"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-future-of-autonomous-blogging"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "codelens-ml-logging"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-future-of-business-in-2025"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "headless-workflow"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "dont-get-locked-in"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-\"good-enough\"-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:ai",
-      "target": "ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-\"glitch\"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-\"good-enough\"-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
-    },
-    {
-      "source": "tag:generated",
-      "target": "ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web)"
-    },
-    {
-      "source": "ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics)",
-      "target": "cat:General"
-    },
-    {
-      "source": "cat:General",
       "target": "ai-the-return-of-serifs-on-the-web-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-preserving-history-when-history-is-rewritten-by-ai-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-dockerizing-your-life:-containerization-patterns-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-seo-of-ai-generated-content:-quality-over-quantity-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-type-hinting-in-python:-beyond-the-basics-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-proactive-vs.-reactive-web-architecture-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-end-of-\"user\"-interface:-designing-for-agents-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-designing-for-speed:-perceived-vs.-actual-performance-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-accessibility-is-not-an-optional-feature-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-context-aware-publishing:-when-your-site-knows-what-you-mean-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-understanding-the-global-interpreter-lock-(gil)-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-predicting-traffic-spikes-with-local-llms-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-testing-ai-applications:-determinism-in-a-probabilistic-world-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-human-ai-symbiosis:-partners,-not-replacements-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-nervous-system-of-a-modern-web-app-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-ethics-of-open-source-in-an-ai-era-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-psychology-of-loading-screens-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-from-script-to-application:-packaging-python-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-zero-maintenance-blog:-a-case-study-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-python-3.14:-what's-new-and-why-it-matters-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-understanding-asyncio-in-python-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-managing-dotfiles-like-a-pro-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-building-self-healing-websites-with-python-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-optimizing-python-for-performance-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-git-workflows-for-solo-developers-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-how-to-train-your-website-to-write-its-own-changelog-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-power-of-makefiles-in-modern-projects-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-stack-of-the-future:-htmx,-sqlite,-and-llms-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-\"set-it-and-forget-it\"-myth-vs.-reality-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-escaping-the-simulation:-are-we-just-training-data?-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-role-of-human-oversight-in-autonomous-systems-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-\"premium\"-feel:-what-makes-software-feel-expensive?-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-designing-for-the-terminal:-ascii-art-and-layouts-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-art-of-the-readme-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-designing-for-readability:-line-height-and-measure-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-death-of-the-dashboard:-why-admin-panels-are-legacy-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-webhooks-are-the-neurons-of-the-web-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-building-robust-clis-with-click-and-rich-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-design-patterns-for-ai-integrated-apps-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-importance-of-documentation-as-code-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-color-theory-for-backend-developers-(theme:-theme-4:-design-&-aesthetics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-weight-of-digital-hoarding-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-automating-the-boring-stuff:-a-janitor-bot-for-your-links-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-rise-of-the-headless-agent:-why-your-cms-is-obsolete-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-scaling-to-zero:-the-ultimate-efficiency-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-static-sites-are-dead;-long-live-living-sites-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-digital-minimalism-for-developers-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-the-fallacy-of-\"no-code\"-for-engineers-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
       "target": "ai-security-first:-auditing-your-own-code-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-the-\"good-enough\"-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics)"
+    },
+    {
+      "source": "cat:AI",
+      "target": "ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-logging-strategies-for-distributed-systems-(theme:-theme-3:-modern-engineering)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-death-of-privacy-in-the-age-of-inference-(theme:-theme-2:-digital-philosophy-&-ethics)"
     },
     {
-      "source": "cat:General",
+      "source": "cat:AI",
+      "target": "ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web)"
+    },
+    {
+      "source": "cat:AI",
       "target": "ai-the-architecture-of-codelens:-a-deep-dive-(theme:-theme-3:-modern-engineering)"
+    },
+    {
+      "source": "social-media-first-contact",
+      "target": "cat:Culture & Tech"
+    },
+    {
+      "source": "social-media-first-contact",
+      "target": "tag:Culture"
+    },
+    {
+      "source": "social-media-first-contact",
+      "target": "tag:Technology"
+    },
+    {
+      "source": "social-media-first-contact",
+      "target": "tag:Social Media"
+    },
+    {
+      "source": "social-media-first-contact",
+      "target": "tag:Psychology"
+    },
+    {
+      "source": "cat:Culture & Tech",
+      "target": "modern-man-extinction"
+    },
+    {
+      "source": "tag:Culture",
+      "target": "ai-friendship"
+    },
+    {
+      "source": "tag:Culture",
+      "target": "the-invisible-architect"
+    },
+    {
+      "source": "tag:Culture",
+      "target": "the-new-builders-are-16"
+    },
+    {
+      "source": "tag:Technology",
+      "target": "ai-friendship"
+    },
+    {
+      "source": "tag:Technology",
+      "target": "the-breaking-change"
+    },
+    {
+      "source": "tag:Technology",
+      "target": "the-invisible-architect"
+    },
+    {
+      "source": "tag:Technology",
+      "target": "building-with-antigravity"
+    },
+    {
+      "source": "tag:Psychology",
+      "target": "irresponsibility-content"
+    },
+    {
+      "source": "tag:Psychology",
+      "target": "the-breaking-change"
+    },
+    {
+      "source": "tag:Psychology",
+      "target": "the-invisible-architect"
+    },
+    {
+      "source": "tag:Psychology",
+      "target": "modern-man-extinction"
     },
     {
       "source": "the-speed-of-thought",
@@ -1711,7 +1626,7 @@
     },
     {
       "source": "the-speed-of-thought",
-      "target": "tag:AI"
+      "target": "tag:[AI"
     },
     {
       "source": "the-speed-of-thought",
@@ -1719,7 +1634,7 @@
     },
     {
       "source": "the-speed-of-thought",
-      "target": "tag:Antigravity"
+      "target": "tag:Antigravity]"
     },
     {
       "source": "cat:Technology",
@@ -1730,12 +1645,60 @@
       "target": "the-new-builders-are-16"
     },
     {
+      "source": "ai-friendship",
+      "target": "cat:Philosophy & Tech"
+    },
+    {
+      "source": "ai-friendship",
+      "target": "tag:Philosophy"
+    },
+    {
+      "source": "ai-friendship",
+      "target": "tag:AI"
+    },
+    {
       "source": "tag:AI",
       "target": "the-rise-of-the-non-musician"
     },
     {
       "source": "tag:AI",
+      "target": "building-with-antigravity"
+    },
+    {
+      "source": "tag:AI",
       "target": "the-new-builders-are-16"
+    },
+    {
+      "source": "irresponsibility-content",
+      "target": "cat:General"
+    },
+    {
+      "source": "irresponsibility-content",
+      "target": "tag:Media"
+    },
+    {
+      "source": "irresponsibility-content",
+      "target": "tag:Society"
+    },
+    {
+      "source": "irresponsibility-content",
+      "target": "tag:Algorithms"
+    },
+    {
+      "source": "tag:Media",
+      "target": "to-be-witnessed"
+    },
+    {
+      "source": "tag:Society",
+      "target": "escaping-the-simulation"
+    },
+    {
+      "source": "tag:Society",
+      "target": "richest-women-overshadowed"
+    },
+    {
+      "source": "tag:Society",
+      "target": "modern-man-extinction"
     },
     {
       "source": "the-rise-of-the-non-musician",
@@ -1750,6 +1713,10 @@
       "target": "tag:Creativity"
     },
     {
+      "source": "cat:Technology & Culture",
+      "target": "rss-in-2025"
+    },
+    {
       "source": "tag:Creativity",
       "target": "the-return-of-personal-software"
     },
@@ -1759,35 +1726,11 @@
     },
     {
       "source": "the-breaking-change",
-      "target": "tag:Technology"
-    },
-    {
-      "source": "the-breaking-change",
-      "target": "tag:Psychology"
-    },
-    {
-      "source": "the-breaking-change",
       "target": "tag:Metaphor"
-    },
-    {
-      "source": "tag:Technology",
-      "target": "the-invisible-architect"
-    },
-    {
-      "source": "tag:Psychology",
-      "target": "the-invisible-architect"
-    },
-    {
-      "source": "tag:Psychology",
-      "target": "modern-man-extinction"
     },
     {
       "source": "ai-the-future-of-engineering-in-2025",
       "target": "cat:Engineering"
-    },
-    {
-      "source": "ai-the-future-of-engineering-in-2025",
-      "target": "tag:alchemist"
     },
     {
       "source": "cat:Engineering",
@@ -1819,27 +1762,15 @@
     },
     {
       "source": "cat:Engineering",
-      "target": "headless-workflow"
+      "target": "distributed-ai-architecture-mac-windows-node"
     },
     {
-      "source": "tag:alchemist",
-      "target": "ai-the-joy-of-distributed-computing"
-    },
-    {
-      "source": "tag:alchemist",
-      "target": "ai-the-future-of-autonomous-blogging"
-    },
-    {
-      "source": "tag:alchemist",
-      "target": "ai-the-future-of-business-in-2025"
-    },
-    {
-      "source": "consulting",
-      "target": "cat:Services"
+      "source": "cat:Engineering",
+      "target": "studio-os-6-week-journey-week-1"
     },
     {
       "source": "codelens-ai-providers",
-      "target": "tag:python"
+      "target": "tag:[python"
     },
     {
       "source": "codelens-ai-providers",
@@ -1851,27 +1782,15 @@
     },
     {
       "source": "codelens-ai-providers",
-      "target": "tag:gemini"
+      "target": "tag:gemini]"
     },
     {
-      "source": "tag:python",
+      "source": "tag:[python",
       "target": "refactoring-codelens-architecture"
-    },
-    {
-      "source": "tag:python",
-      "target": "towards-site-autonomy"
-    },
-    {
-      "source": "tag:python",
-      "target": "building-a-custom-site-manager"
     },
     {
       "source": "escaping-the-simulation",
       "target": "cat:Philosophy"
-    },
-    {
-      "source": "escaping-the-simulation",
-      "target": "tag:Society"
     },
     {
       "source": "escaping-the-simulation",
@@ -1882,16 +1801,28 @@
       "target": "tag:Digital"
     },
     {
-      "source": "tag:Society",
-      "target": "modern-man-extinction"
-    },
-    {
       "source": "refactoring-codelens-architecture",
       "target": "tag:refactoring"
     },
     {
       "source": "refactoring-codelens-architecture",
       "target": "tag:architecture"
+    },
+    {
+      "source": "refactoring-codelens-architecture",
+      "target": "tag:ai]"
+    },
+    {
+      "source": "tag:architecture",
+      "target": "distributed-ai-architecture-mac-windows-node"
+    },
+    {
+      "source": "tag:ai]",
+      "target": "codelens-ml-logging"
+    },
+    {
+      "source": "tag:ai]",
+      "target": "distributed-ai-architecture-mac-windows-node"
     },
     {
       "source": "the-weight-of-iteration",
@@ -1918,44 +1849,32 @@
       "target": "the-engine-and-the-gallery"
     },
     {
-      "source": "tag:Engineering",
-      "target": "owning-the-signal"
-    },
-    {
-      "source": "tag:Future",
-      "target": "owning-the-signal"
-    },
-    {
       "source": "tag:Future",
       "target": "the-new-builders-are-16"
     },
     {
-      "source": "towards-site-autonomy",
-      "target": "tag:automation"
+      "source": "richest-women-overshadowed",
+      "target": "cat:Economics & Society"
     },
     {
-      "source": "towards-site-autonomy",
-      "target": "tag:autonomy"
+      "source": "richest-women-overshadowed",
+      "target": "tag:Economics"
     },
     {
-      "source": "tag:automation",
-      "target": "building-a-custom-site-manager"
+      "source": "richest-women-overshadowed",
+      "target": "tag:Data"
     },
     {
-      "source": "tag:automation",
-      "target": "headless-workflow"
+      "source": "richest-women-overshadowed",
+      "target": "tag:Inequality"
+    },
+    {
+      "source": "tag:Economics",
+      "target": "scaling-coffee-shop"
     },
     {
       "source": "the-invisible-architect",
       "target": "cat:Society"
-    },
-    {
-      "source": "the-invisible-architect",
-      "target": "tag:Culture"
-    },
-    {
-      "source": "tag:Culture",
-      "target": "the-new-builders-are-16"
     },
     {
       "source": "to-be-witnessed",
@@ -1967,15 +1886,35 @@
     },
     {
       "source": "to-be-witnessed",
-      "target": "tag:Media"
-    },
-    {
-      "source": "to-be-witnessed",
       "target": "tag:Humanism"
     },
     {
       "source": "owning-the-signal",
+      "target": "tag:[Engineering"
+    },
+    {
+      "source": "owning-the-signal",
       "target": "tag:Process"
+    },
+    {
+      "source": "owning-the-signal",
+      "target": "tag:Future]"
+    },
+    {
+      "source": "tag:Process",
+      "target": "building-with-antigravity"
+    },
+    {
+      "source": "building-with-antigravity",
+      "target": "cat:Technology & Process"
+    },
+    {
+      "source": "building-with-antigravity",
+      "target": "tag:Building"
+    },
+    {
+      "source": "tag:Building",
+      "target": "the-engine-and-the-gallery"
     },
     {
       "source": "the-return-of-personal-software",
@@ -1991,7 +1930,7 @@
     },
     {
       "source": "codelens-ml-logging",
-      "target": "tag:mlops"
+      "target": "tag:[mlops"
     },
     {
       "source": "codelens-ml-logging",
@@ -2007,43 +1946,43 @@
     },
     {
       "source": "the-engine-and-the-gallery",
-      "target": "tag:Building"
-    },
-    {
-      "source": "the-engine-and-the-gallery",
       "target": "tag:Substack"
     },
     {
-      "source": "modern-man-extinction",
-      "target": "cat:Culture & Tech"
+      "source": "tag:Strategy",
+      "target": "scaling-coffee-shop"
     },
     {
       "source": "modern-man-extinction",
       "target": "tag:Evolution"
     },
     {
-      "source": "building-a-custom-site-manager",
-      "target": "tag:textual"
-    },
-    {
-      "source": "building-a-custom-site-manager",
-      "target": "tag:tools"
-    },
-    {
-      "source": "tag:tools",
-      "target": "dont-get-locked-in"
-    },
-    {
       "source": "headless-workflow",
-      "target": "tag:workflow"
+      "target": "cat:\"Engineering\""
     },
     {
-      "source": "headless-workflow",
-      "target": "tag:productivity"
+      "source": "distributed-ai-architecture-mac-windows-node",
+      "target": "tag:[studio-os"
     },
     {
-      "source": "tag:workflow",
-      "target": "dont-get-locked-in"
+      "source": "distributed-ai-architecture-mac-windows-node",
+      "target": "tag:distributed-computing"
+    },
+    {
+      "source": "tag:[studio-os",
+      "target": "studio-os-6-week-journey-week-1"
+    },
+    {
+      "source": "scaling-coffee-shop",
+      "target": "cat:Business Strategy"
+    },
+    {
+      "source": "scaling-coffee-shop",
+      "target": "tag:Business"
+    },
+    {
+      "source": "scaling-coffee-shop",
+      "target": "tag:Growth"
     },
     {
       "source": "dont-get-locked-in",
@@ -2051,7 +1990,31 @@
     },
     {
       "source": "dont-get-locked-in",
-      "target": "tag:independence"
+      "target": "tag:[ai"
+    },
+    {
+      "source": "dont-get-locked-in",
+      "target": "tag:tools"
+    },
+    {
+      "source": "dont-get-locked-in",
+      "target": "tag:workflow"
+    },
+    {
+      "source": "dont-get-locked-in",
+      "target": "tag:independence]"
+    },
+    {
+      "source": "studio-os-6-week-journey-week-1",
+      "target": "tag:ai"
+    },
+    {
+      "source": "studio-os-6-week-journey-week-1",
+      "target": "tag:build-in-public"
+    },
+    {
+      "source": "studio-os-6-week-journey-week-1",
+      "target": "tag:entrepreneurship]"
     }
   ]
 }
