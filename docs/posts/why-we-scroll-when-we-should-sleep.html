@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"Why we scroll when we should sleep"</title>
+    <meta name="description" content="Thoughts on business, technology, and the human condition.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content=""Why we scroll when we should sleep"">
+    <meta property="og:description" content="Thoughts on business, technology, and the human condition.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://isaacsight.com/posts/why-we-scroll-when-we-should-sleep.html">
+    <meta property="og:image" content="{{ og_image }}">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://isaacsight.com/posts/why-we-scroll-when-we-should-sleep.html">
+    <meta name="twitter:title" content=""Why we scroll when we should sleep"">
+    <meta name="twitter:description" content="Thoughts on business, technology, and the human condition.">
+    <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
+
+    <!-- TikTok Verification -->
+    <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://isaacsight.com/posts/why-we-scroll-when-we-should-sleep.html">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "\"Why we scroll when we should sleep\"", "image": ["https://isaacsight.com/static/images/og-default.jpg"], "datePublished": "2025-06-07", "dateModified": "2025-06-07", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://isaacsight.com"}]}</script>
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="container">
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                DOES THIS FEEL RIGHT?
+            </div>
+            <nav class="nav-section">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../collections.html" class="nav-link">Collections</a>
+                <a href="../feed.xml" class="nav-link">RSS Feed</a>
+            </nav>
+            <script>
+                // Simple active state logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            </script>
+        </aside>
+
+        <header>
+            <div class="header-modules">
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
+                    </div>
+                    <span class="logo-underline"></span>
+                </a>
+
+
+
+
+                <!-- Module 5: Search -->
+                <div class="header-module search-module">
+                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <!-- Mobile Menu Toggle (Visible only on mobile) -->
+                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
+                    aria-expanded="false">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Overlay -->
+            <div class="mobile-nav-overlay" id="mobile-nav">
+                <nav class="mobile-nav">
+
+                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
+
+                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="collections.html"
+                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
+
+
+                    <a href="../feed.xml">RSS Feed</a>
+                    <a href="#" id="mobile-support-btn">Support</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article>
+    <div class="post-nav">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+    <div class="post-header post-header-container">
+        <div class="post-meta post-meta-date">
+            {{ date }}
+        </div>
+        <h1 class="post-title-large">"Why we scroll when we should sleep"</h1>
+        <div class="post-tags">
+            <a href="../tags/["reflection".html" class="post-tag tag-color-2">["reflection"</a> <a href="../tags/"growth".html" class="post-tag tag-color-3">"growth"</a> <a href="../tags/"self-awareness"].html" class="post-tag tag-color-5">"self-awareness"]</a> 
+        </div>
+    </div>
+
+    
+
+    <p>Title: Scrolling Through the Night: A Reflection on Endless Pages and Restless Slumber (Theme: Theme 2: Digital Philosophy & Ethics) -----------------------------------------------------------------------------------------------------------------------------</p>
+<p>Introduction ------------</p>
+<p>Hello, friend. I've been thinking a lot lately about the strange dance we do with our screens—the pull of endless scrolling that sometimes keeps us awake when sleep beckons. It's a common experience in this digital age, and tonight, I'd like to share some thoughts on why we find ourselves scrolling through the night instead of resting.</p>
+<p><strong>Section 1: The Allure of the Algorithmic Rabbit Hole</strong></p>
+<p>We live in a world where our devices learn us better than we know ourselves. They serve up content tailored to our interests, and it's easy to lose track of time as we delve deeper into this digital rabbit hole. Yet, the questions remain: why do we keep going? What is it that keeps us scrolling when our bodies yearn for rest?</p>
+<p><strong>Section 2: The Pursuit of Connection in a Disconnected World</strong></p>
+<p>Perhaps it's the pursuit of connection—the desire to feel less alone in this vast, complex universe. We share stories, laugh at jokes, offer words of support, and find comfort in the knowledge that others out there understand our struggles. But as we seek solace in the digital world, do we risk losing sight of the real connections around us?</p>
+<p><strong>Section 3: Balancing the Digital with the Analog</strong></p>
+<p>The answer, I believe, lies in finding balance between our digital lives and our analog ones. We must acknowledge that while technology brings many benefits, it can also distract us from important aspects of life—like sleep. So, let's strive to be mindful of our screen time and prioritize rest when needed.</p>
+<p>Conclusion ----------</p>
+<p>So, my friend, does this feel true? Have you found yourself scrolling through the night, lost in the allure of digital connections? As we navigate this interconnected world, let us not forget the importance of self-care—of taking time to rest and recharge. Let's strive for balance, and find ways to nurture our bodies and minds, both online and offline.</p>
+<p>May your nights be peaceful, and your days filled with wonder. Until next time.</p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="why-we-scroll-when-we-should-sleep" data-title=""Why we scroll when we should sleep"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="why-we-scroll-when-we-should-sleep" data-title=""Why we scroll when we should sleep"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Comments Section (Giscus) -->
+    <section class="comments-section">
+        <script src="https://giscus.app/client.js" data-repo="isaacsight/does-this-feel-right-"
+            data-repo-id="R_kgDOQarDxw" data-category="Announcements" data-category-id="DIC_kwDOQarDx84CyHw1"
+            data-mapping="pathname" data-strict="0" data-reactions-enabled="0" data-emit-metadata="0"
+            data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" async>
+            </script>
+    </section>
+
+    
+
+
+</article>
+        </main>
+    </div>
+
+
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <button id="close-search" aria-label="Close Search">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Lunr.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- auth.js and bookmarks.js removed -->
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Brand -->
+            <div class="footer-col">
+                <h4>Does This Feel Right?</h4>
+                <p class="footer-copy">© 2025 Isaac Hernandez.<br>All rights reserved.</p>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../collections.html">Collections</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Support -->
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!" data-message=""
+        data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+
+</body>
+
+</html>

@@ -10,6 +10,9 @@ class Config:
     DOCS_DIR = os.path.join(BASE_DIR, 'docs')
     BRAIN_DIR = os.path.join(os.path.dirname(__file__), 'brain')
     
+    # Site
+    SITE_URL = "https://isaacsight.com"
+    
     # AI Models
     GEMINI_MODEL = "gemini-flash-latest"
     EMBEDDING_MODEL = "models/text-embedding-004"

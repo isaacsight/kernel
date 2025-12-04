@@ -1,0 +1,1056 @@
+{
+  "shared_insights": [
+    {
+      "from_agent": "Analyst",
+      "type": "content_trend",
+      "insight": {
+        "trend": "AI ethics gaining attention"
+      },
+      "confidence": 0.8,
+      "shared_at": "2025-12-03T23:12:26.940962"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The moment before clarity arrives",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:15:16.978145"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we resist what we need most",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:16:01.627670"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to trust your own judgment",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:16:47.813410"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The difference between patience and avoidance",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:17:37.407372"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "What your recurring thoughts are trying to tell you",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:18:18.848744"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of sitting with discomfort",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:18:58.816405"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When self-improvement becomes self-rejection",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:19:39.449069"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The courage to be mediocre at something new",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:20:34.194007"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we fear our own potential",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:21:12.296797"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The weight of unspoken words",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:22:02.460226"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Loving someone without losing yourself",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:22:51.673011"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The conversations we avoid having",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:23:32.690055"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When distance brings clarity",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:24:10.678236"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The difference between being heard and being understood",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:24:58.056999"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why vulnerability feels like weakness but isn't",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:25:38.438721"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to hold space without fixing",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:26:28.615480"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The friends we outgrow",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:27:06.410729"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When silence speaks louder than words",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:27:44.470374"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of apologizing without explaining",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:28:23.941698"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we attract what we're not ready for",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:29:03.382160"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The cost of constant availability",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:29:55.689427"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When your online self feels more real",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:30:33.867544"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Finding presence in a distracted world",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:31:18.406820"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The exhaustion of endless optimization",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:32:00.700165"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we scroll when we should sleep",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:32:38.080863"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The illusion of productivity",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:33:21.085631"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When connection breeds loneliness",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:34:09.829751"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of being unreachable",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:34:51.540562"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we document instead of experience",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:35:36.754334"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The weight of unopened notifications",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:36:19.159135"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The pressure to have a passion",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:36:59.916914"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When meaning finds you instead",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:37:35.550612"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The beauty of purposeless pursuits",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:38:20.100432"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we chase goals that don't matter",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:39:05.565776"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The difference between busy and fulfilled",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:39:48.775678"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to want what you have",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:40:33.833354"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When ambition becomes escape",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:41:16.642379"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The freedom of lowered expectations",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:41:56.879599"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we fear empty time",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:42:32.926520"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of doing nothing well",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:43:07.748733"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The anger underneath the sadness",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:43:44.843834"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When happiness feels suspicious",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:44:20.346156"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to grieve small losses",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:45:02.484385"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The emotion that has no name",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:45:47.227490"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we cry at unexpected moments",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:46:28.530646"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The comfort of melancholy",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:47:06.709005"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When numbness is the loudest feeling",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:47:49.428058"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The fear behind the frustration",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:48:30.062282"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we push away what we need",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:49:17.492303"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of feeling without fixing",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:49:59.565660"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The versions of yourself you've left behind",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:50:32.598884"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When nostalgia lies to us",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:51:10.015924"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to let chapters end",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:51:58.963897"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The unbearable weight of potential",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:52:35.316618"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we romanticize the past",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:53:13.198366"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of starting again",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:53:55.801981"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When change happens without permission",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:54:38.401002"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The future we're afraid to want",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:55:23.620840"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we mourn who we used to be",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:56:01.337037"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The time between who you were and who you're becoming",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:56:38.645220"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The exhaustion of performing yourself",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:57:25.203431"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When honesty requires courage",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:58:08.829367"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to disappoint people gracefully",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:58:47.126696"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The masks we forgot we're wearing",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-03T23:59:26.433818"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we fear being truly known",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:00:11.403541"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of saying no without guilt",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:00:51.109958"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When authenticity meets rejection",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:01:39.267143"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The version of you others need you to be",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:02:16.539354"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we edit our true feelings",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:02:58.152589"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The freedom of being disliked",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:03:40.505713"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The lessons that take years to land",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:04:16.507063"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When advice you gave comes back for you",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:05:03.890463"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to hold contradictions",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:05:46.562616"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The humility of not knowing",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:06:36.472341"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why the same lesson keeps returning",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:07:14.412769"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of being wrong gracefully",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:07:50.871213"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When understanding arrives too late",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:08:27.223287"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The questions that have no answers",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:09:13.136700"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why wisdom often feels like loss",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:09:56.823783"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The peace on the other side of acceptance",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:10:41.875638"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The moment before clarity arrives",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:11:21.711862"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we resist what we need most",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:12:06.056415"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to trust your own judgment",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:12:51.842421"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The difference between patience and avoidance",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:13:29.117426"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "What your recurring thoughts are trying to tell you",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:14:11.211561"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of sitting with discomfort",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:14:50.636085"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When self-improvement becomes self-rejection",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:15:27.090674"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The courage to be mediocre at something new",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:16:03.749461"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we fear our own potential",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:16:41.426318"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The weight of unspoken words",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:17:27.308110"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Loving someone without losing yourself",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:18:10.376016"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The conversations we avoid having",
+        "category": "Connection"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:18:55.672814"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When distance brings clarity",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:19:30.956434"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The difference between being heard and being understood",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:20:23.946298"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why vulnerability feels like weakness but isn't",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:21:05.620534"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Learning to hold space without fixing",
+        "category": "Modern Life"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:21:43.820579"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The friends we outgrow",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:22:14.512123"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "When silence speaks louder than words",
+        "category": "Inner Work"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:22:48.293780"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "The art of apologizing without explaining",
+        "category": "Reflections"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:23:24.679779"
+    },
+    {
+      "from_agent": "Alchemist",
+      "type": "content_generated",
+      "insight": {
+        "topic": "Why we attract what we're not ready for",
+        "category": "Growth"
+      },
+      "confidence": 0.7,
+      "shared_at": "2025-12-04T00:24:12.296125"
+    }
+  ],
+  "agent_expertise": {
+    "Alchemist": {
+      "skills": [
+        "content generation",
+        "RAG"
+      ],
+      "registered_at": "2025-12-03T23:12:26.940630"
+    },
+    "Designer": {
+      "skills": [
+        "visual design",
+        "branding"
+      ],
+      "registered_at": "2025-12-03T23:12:26.940789"
+    },
+    "CreativeDirector": {
+      "skills": [
+        "creative direction",
+        "brand strategy"
+      ],
+      "registered_at": "2025-12-03T23:12:26.940879"
+    },
+    "The Creative Director": {
+      "skills": [
+        "creative direction",
+        "brand strategy",
+        "content review",
+        "campaign planning"
+      ],
+      "registered_at": "2025-12-03T23:12:27.704949"
+    }
+  },
+  "lessons_learned": [
+    {
+      "from_agent": "Editor",
+      "lesson": "Shorter paragraphs perform better",
+      "context": "blog post review",
+      "outcome": "increased engagement",
+      "learned_at": "2025-12-03T23:12:26.941667"
+    }
+  ],
+  "team_decisions": [],
+  "active_goals": []
+}

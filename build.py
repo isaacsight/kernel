@@ -9,8 +9,8 @@ CONTENT_DIR = 'content'
 TEMPLATE_DIR = 'templates'
 OUTPUT_DIR = 'docs'
 STATIC_DIR = 'static'
-BASE_URL = 'https://www.doesthisfeelright.com'
-DEFAULT_IMAGE = 'https://www.doesthisfeelright.com/static/images/og-default.jpg' # Placeholder
+BASE_URL = 'https://isaacsight.com'
+DEFAULT_IMAGE = 'https://isaacsight.com/static/images/og-default.jpg' # Placeholder
 
 def read_file(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -818,6 +818,30 @@ def build():
         excerpt = html.escape(post.get('excerpt', ''))
         category = html.escape(post.get('category', 'General'))
         
+        # Format Date for RSS (RFC 822)
+        pub_date = ""
+        date_val = post.get('date')
+        if date_val:
+            try:
+                import datetime
+                import email.utils
+                
+                if isinstance(date_val, str):
+                    date_obj = datetime.datetime.strptime(date_val, '%Y-%m-%d')
+                elif isinstance(date_val, datetime.date):
+                    # Convert date to datetime (midnight)
+                    date_obj = datetime.datetime.combine(date_val, datetime.time.min)
+                elif isinstance(date_val, datetime.datetime):
+                    date_obj = date_val
+                else:
+                    date_obj = None
+                
+                if date_obj:
+                    pub_date = email.utils.formatdate(date_obj.timestamp(), usegmt=True)
+            except Exception as e:
+                print(f"Error parsing date for RSS: {e}")
+                pass
+
         rss_items += f"""
         <item>
             <title>{title}</title>
@@ -825,6 +849,7 @@ def build():
             <description>{excerpt}</description>
             <category>{category}</category>
             <guid>{BASE_URL}/posts/{post['slug']}.html</guid>
+            <pubDate>{pub_date}</pubDate>
         </item>
         """
     

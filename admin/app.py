@@ -10,7 +10,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-import core
+from . import core
 
 # Configuration
 # Paths are now handled in core.py, but we might need them for static/templates if not in core
@@ -100,6 +100,94 @@ def refine_content_route():
         
         return jsonify({'status': 'success', 'refined_content': refined_text})
         
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# --- Video Studio Routes ---
+
+@app.route('/video-studio')
+def video_studio():
+    return render_template('video_studio.html')
+
+@app.route('/api/videos')
+def get_videos():
+    try:
+        posts = core.get_posts()
+        videos = []
+        for post in posts:
+            slug = post.get('slug') or os.path.splitext(os.path.basename(post.get('path', '')))[0]
+            # Assuming video filename convention: title-slug.mp4 or just slug.mp4?
+            # Broadcaster uses title.lower().replace(' ', '-')
+            title_slug = post.get('title', '').lower().replace(' ', '-')
+            video_filename = f"{title_slug}.mp4"
+            video_path = os.path.join(STATIC_DIR, 'videos', video_filename)
+            
+            videos.append({
+                'title': post.get('title'),
+                'date': post.get('date'),
+                'slug': slug,
+                'video_exists': os.path.exists(video_path),
+                'video_url': url_for('static', filename=f'videos/{video_filename}') if os.path.exists(video_path) else None
+            })
+        return jsonify({'videos': videos})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/videos/regenerate', methods=['POST'])
+def regenerate_video():
+    try:
+        data = request.json
+        slug = data.get('slug')
+        vibe = data.get('vibe', 'chill')
+        
+        # Find post by slug
+        posts = core.get_posts()
+        post = next((p for p in posts if (p.get('slug') == slug or os.path.splitext(os.path.basename(p.get('path', '')))[0] == slug)), None)
+        
+        if not post:
+            return jsonify({'status': 'error', 'message': 'Post not found'})
+
+        # Trigger Broadcaster
+        from .engineers.broadcaster import Broadcaster
+        broadcaster = Broadcaster()
+        video_path = broadcaster.generate_video(post, vibe=vibe)
+        
+        if video_path:
+            return jsonify({'status': 'success', 'video_path': video_path})
+        else:
+            return jsonify({'status': 'error', 'message': 'Failed to generate video'})
+            
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/videos/upload', methods=['POST'])
+def upload_video_route():
+    try:
+        data = request.json
+        slug = data.get('slug')
+        
+        # Find post and video
+        posts = core.get_posts()
+        post = next((p for p in posts if (p.get('slug') == slug or os.path.splitext(os.path.basename(p.get('path', '')))[0] == slug)), None)
+        
+        if not post:
+            return jsonify({'status': 'error', 'message': 'Post not found'})
+            
+        title_slug = post.get('title', '').lower().replace(' ', '-')
+        video_filename = f"{title_slug}.mp4"
+        video_path = os.path.join(STATIC_DIR, 'videos', video_filename)
+        
+        if not os.path.exists(video_path):
+            return jsonify({'status': 'error', 'message': 'Video does not exist. Regenerate first.'})
+
+        # Trigger Broadcaster Upload
+        from .engineers.broadcaster import Broadcaster
+        broadcaster = Broadcaster()
+        description = f"New post: {post.get('title')} #blog #ai #tech"
+        broadcaster.upload_to_tiktok(video_path, description)
+        
+        return jsonify({'status': 'success', 'message': 'Upload started'})
+            
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 

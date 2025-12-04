@@ -9,3 +9,7 @@ supabase
 python-dotenv
 rich
 huggingface_hub
+tiktok-uploader
+moviepy
+gTTS
+edge-tts

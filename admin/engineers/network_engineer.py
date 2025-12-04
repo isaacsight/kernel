@@ -1,6 +1,6 @@
-import requests
 import logging
 from config import config
+from admin.infrastructure.data_center import DataCenter
 
 logger = logging.getLogger("NetworkEngineer")
 
@@ -8,33 +8,34 @@ class NetworkEngineer:
     """
     The Network Engineer (Infrastructure Specialist)
     
-    Mission: Ensure connectivity and health of remote nodes.
+    Mission: Ensure connectivity and health of the Data Center.
     """
     def __init__(self):
         self.name = "The Network Engineer"
-        self.node_url = config.STUDIO_NODE_URL
+        self.data_center = DataCenter(config)
         
+    def manage_infrastructure(self):
+        """
+        Checks the health of the entire Data Center and reports status.
+        """
+        logger.info("Inspecting Data Center infrastructure...")
+        report = self.data_center.get_status_report()
+        
+        # Summarize findings
+        summary = []
+        for node, status in report.items():
+            icon = "🟢" if status['status'] == 'online' else "🔴" if status['status'] == 'offline' else "🟡"
+            summary.append(f"{icon} {node.upper()}: {status['message']}")
+            
+        return "\n".join(summary)
+
     def check_node_status(self):
         """
-        Checks if the Studio Node is reachable and responding.
+        Legacy method for backward compatibility.
+        Checks specifically the Studio Node.
         """
-        if not self.node_url:
-            return {"status": "error", "message": "STUDIO_NODE_URL not configured."}
-            
-        try:
-            # Try a lightweight endpoint
-            response = requests.get(f"{self.node_url}/", timeout=2)
-            if response.status_code == 200:
-                return {"status": "online", "message": "Node is reachable."}
-            else:
-                return {"status": "warning", "message": f"Node responded with {response.status_code}."}
-        except requests.exceptions.ConnectTimeout:
-            return {"status": "offline", "message": "Connection timed out. Check if the Windows machine is on and the server is running."}
-        except requests.exceptions.ConnectionError:
-            return {"status": "offline", "message": "Connection refused. Check network settings."}
-        except Exception as e:
-            return {"status": "error", "message": f"Unexpected error: {str(e)}"}
+        return self.data_center.check_node_health("studio_node")
 
 if __name__ == "__main__":
     eng = NetworkEngineer()
-    print(eng.check_node_status())
+    print(eng.manage_infrastructure())

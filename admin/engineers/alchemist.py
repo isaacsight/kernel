@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import frontmatter
 import numpy as np
 import google.generativeai as genai
@@ -7,8 +8,15 @@ from huggingface_hub import InferenceClient
 from typing import List, Dict, Optional
 import sys
 import os
+import logging
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import config
+from admin.infrastructure.data_center import DataCenter
+from admin.brain.memory_store import get_memory_store
+from admin.brain.metrics_collector import get_metrics_collector
+
+logger = logging.getLogger("Alchemist")
 
 class Alchemist:
     """
@@ -39,6 +47,28 @@ class Alchemist:
         self.model = genai.GenerativeModel(config.GEMINI_MODEL)
         self.embedding_model = config.EMBEDDING_MODEL
         self.chat_session = None
+        self.data_center = DataCenter(config)
+        
+        # Initialize memory and metrics systems
+        self.memory_store = get_memory_store()
+        self.metrics = get_metrics_collector()
+        self.session_id = f"session-{int(time.time())}"
+        logger.info(f"[{self.name}] Initialized with enhanced memory and metrics")
+
+    def select_best_provider(self) -> str:
+        """
+        Autonomously selects the best provider based on infrastructure health.
+        """
+        print(f"[{self.name}] Assessing infrastructure for compute resources...")
+        
+        # Check Studio Node (Windows)
+        node_status = self.data_center.check_node_health("studio_node")
+        if node_status['status'] == 'online':
+            print(f"[{self.name}] Studio Node is ONLINE. Selecting 'remote' provider.")
+            return "remote"
+            
+        print(f"[{self.name}] Studio Node is {node_status['status'].upper()}. Falling back to 'gemini'.")
+        return "gemini"
 
     def start_chat(self):
         """Starts a new chat session."""
@@ -239,90 +269,174 @@ class Alchemist:
         norm_v2 = np.linalg.norm(v2)
         return dot_product / (norm_v1 * norm_v2)
 
-    def generate(self, topic: str, doctrine: str, provider: str = "gemini") -> str:
+    def generate(self, topic: str, doctrine: str, provider: str = "auto") -> str:
         """
         Generates a blog post using the specified topic and context.
+        Now includes persistent memory tracking and metrics.
         """
-        print(f"[{self.name}] Researching topic: {topic} using {provider}...")
-        context_items = self.retrieve(topic)
+        start_time = time.time()
+        success = False
+        content = ""
         
-        context_str = ""
-        if context_items:
-            context_str = "\n\nRELEVANT PAST POSTS (Use these for style and continuity):\n"
-            for item in context_items:
-                context_str += f"- Title: {item['title']}\n  Excerpt: {item['excerpt']}\n"
-        
-        print(f"[{self.name}] Found {len(context_items)} relevant past posts.")
-        
-        prompt = f"""
-        You are writing for "Does This Feel Right?", a blog dedicated to emotional honesty and clarity.
-        
-        THE DOCTRINE:
-        {doctrine}
-        
-        CONTEXT FROM PAST POSTS:
-        {context_str}
-        
-        TASK:
-        Write a blog post about: {topic}
-        
-        GUIDELINES:
-        - Tone: Calm, Warm, Reflective, Grounded, Observational.
-        - Voice: Like a friend telling the truth gently. No moralizing. No "shoulds".
-        - Structure: Title, Introduction, 3 Main Sections, Conclusion.
-        - Format: Markdown.
-        - Signature Question: End with the question "Does this feel true?"
-        - Continuity: Subtly reference the themes from the past posts if relevant, to create a sense of a cohesive body of work.
-        
-        Write the post now.
-        """
-        
-        if provider == "huggingface":
-            hf_token = config.HF_TOKEN
-            if not hf_token:
-                raise ValueError("HF_TOKEN not found for Hugging Face provider.")
-            
-            client = InferenceClient(token=hf_token)
-            # Use a good instruct model
-            model = "mistralai/Mistral-7B-Instruct-v0.2" 
-            
-            # Wrap in INST tags for Mistral
-            full_prompt = f"[INST] {prompt} [/INST]"
-            
-            try:
-                response = client.text_generation(full_prompt, model=model, max_new_tokens=1500)
-                content = response
-            except Exception as e:
-                raise Exception(f"Hugging Face generation failed: {e}")
-
-        elif provider == "remote":
-            import requests
-            node_url = config.STUDIO_NODE_URL
-            if not node_url:
-                raise ValueError("STUDIO_NODE_URL not found. Please set it to the address of your Windows machine (e.g., http://192.168.1.x:8000).")
-            
-            print(f"[{self.name}] Offloading task to Studio Node at {node_url}...")
-            
-            try:
-                payload = {
-                    "prompt": prompt,
-                    "model": "mistral", # Default to mistral on the node
-                    "system_prompt": f"You are The Alchemist. {doctrine}"
-                }
-                response = requests.post(f"{node_url}/generate", json=payload, timeout=config.TIMEOUT_REMOTE) # Long timeout for generation
-                response.raise_for_status()
-                content = response.json().get("response", "")
-            except Exception as e:
-                raise Exception(f"Remote generation failed: {e}")
+        try:
+            if provider == "auto":
+                provider = self.select_best_provider()
                 
-        else: # Default to Gemini
-            response = self.model.generate_content(prompt)
-            content = response.text
-        
-        # Clean up markdown wrappers
-        content = content.replace("```markdown", "").replace("```", "").strip()
+            logger.info(f"[{self.name}] Researching topic: {topic} using {provider}...")
+            
+            # Log the generation request to memory
+            self.memory_store.save_conversation(
+                self.session_id, "user", f"Generate post about: {topic}", self.name
+            )
+            
+            # Get learned insights to improve generation
+            insights = self.memory_store.get_insights("generation_preference", min_confidence=0.6)
+            learned_preferences = ""
+            if insights:
+                learned_preferences = "\n\nLEARNED PREFERENCES (from past feedback):\n"
+                for insight in insights[:3]:
+                    learned_preferences += f"- {insight['data'].get('preference', '')}\n"
+            
+            context_items = self.retrieve(topic)
+            
+            context_str = ""
+            if context_items:
+                context_str = "\n\nRELEVANT PAST POSTS (Use these for style and continuity):\n"
+                for item in context_items:
+                    context_str += f"- Title: {item['title']}\n  Excerpt: {item['excerpt']}\n"
+            
+            logger.info(f"[{self.name}] Found {len(context_items)} relevant past posts.")
+            
+            prompt = f"""
+            You are writing for "Does This Feel Right?", a blog dedicated to emotional honesty and clarity.
+            
+            THE DOCTRINE:
+            {doctrine}
+            
+            CONTEXT FROM PAST POSTS:
+            {context_str}
+            {learned_preferences}
+            
+            TASK:
+            Write a blog post about: {topic}
+            
+            GUIDELINES:
+            - Tone: Calm, Warm, Reflective, Grounded, Observational.
+            - Voice: Like a friend telling the truth gently. No moralizing. No "shoulds".
+            - Structure: Title, Introduction, 3 Main Sections, Conclusion.
+            - Format: Markdown.
+            - Signature Question: End with the question "Does this feel true?"
+            - Continuity: Subtly reference the themes from the past posts if relevant, to create a sense of a cohesive body of work.
+            
+            Write the post now.
+            """
+            
+            if provider == "huggingface":
+                hf_token = config.HF_TOKEN
+                if not hf_token:
+                    raise ValueError("HF_TOKEN not found for Hugging Face provider.")
+                
+                client = InferenceClient(token=hf_token)
+                model = "mistralai/Mistral-7B-Instruct-v0.2" 
+                full_prompt = f"[INST] {prompt} [/INST]"
+                
+                try:
+                    response = client.text_generation(full_prompt, model=model, max_new_tokens=1500)
+                    content = response
+                except Exception as e:
+                    raise Exception(f"Hugging Face generation failed: {e}")
+
+            elif provider == "remote":
+                import requests
+                node_url = config.STUDIO_NODE_URL
+                if not node_url:
+                    raise ValueError("STUDIO_NODE_URL not found.")
+                
+                logger.info(f"[{self.name}] Offloading task to Studio Node at {node_url}...")
+                
+                try:
+                    payload = {
+                        "prompt": prompt,
+                        "model": "mistral",
+                        "system_prompt": f"You are The Alchemist. {doctrine}"
+                    }
+                    response = requests.post(f"{node_url}/generate", json=payload, timeout=config.TIMEOUT_REMOTE)
+                    response.raise_for_status()
+                    content = response.json().get("response", "")
+                except Exception as e:
+                    raise Exception(f"Remote generation failed: {e}")
+                    
+            else:  # Default to Gemini
+                response = self.model.generate_content(prompt)
+                content = response.text
+            
+            # Clean up markdown wrappers
+            content = content.replace("```markdown", "").replace("```", "").strip()
+            success = True
+            
+            # Log response to memory
+            self.memory_store.save_conversation(
+                self.session_id, "assistant", content[:500] + "...", self.name
+            )
+            
+        except Exception as e:
+            logger.error(f"[{self.name}] Generation failed: {e}")
+            raise
+        finally:
+            # Track metrics regardless of success/failure
+            duration = time.time() - start_time
+            self.metrics.track_generation(success, provider, duration, topic)
+            self.memory_store.log_generation(topic, provider, content, "", success, duration)
+            self.memory_store.log_agent_action(
+                self.name, "generate", {"topic": topic, "provider": provider},
+                {"success": success, "length": len(content)}, success, duration
+            )
+            logger.info(f"[{self.name}] Generation completed in {duration:.2f}s (success={success})")
         
         return content
+    
+    def learn_from_feedback(self, content_id: str, rating: int, notes: str = None):
+        """
+        Learn from user feedback on generated content.
+        Rating: 1-5 (1=poor, 5=excellent)
+        """
+        self.memory_store.save_feedback(content_id, "blog_post", rating, notes)
+        
+        # If rating is high, extract what made it good
+        if rating >= 4 and notes:
+            self.memory_store.save_insight(
+                "generation_preference",
+                {"preference": notes, "source_content": content_id},
+                confidence=0.7,
+                source="user_feedback"
+            )
+            logger.info(f"[{self.name}] Learned new preference from feedback: {notes}")
+        
+        # If rating is low, note what to avoid
+        elif rating <= 2 and notes:
+            self.memory_store.save_insight(
+                "generation_avoidance",
+                {"avoid": notes, "source_content": content_id},
+                confidence=0.6,
+                source="user_feedback"
+            )
+            logger.info(f"[{self.name}] Learned what to avoid from feedback: {notes}")
+    
+    def get_performance_summary(self) -> Dict:
+        """
+        Get a summary of the Alchemist's performance over time.
+        """
+        gen_stats = self.memory_store.get_generation_stats()
+        feedback = self.memory_store.get_feedback_patterns("blog_post")
+        
+        return {
+            "total_generations": gen_stats.get("total_generations", 0),
+            "success_rate": gen_stats.get("success_rate", 0),
+            "avg_duration": gen_stats.get("avg_duration_seconds", 0),
+            "avg_rating": feedback.get("average_rating", 0),
+            "total_feedback": feedback.get("total_feedback", 0),
+            "by_provider": gen_stats.get("by_provider", {})
+        }
 
 if __name__ == "__main__":
     # Test the Alchemist

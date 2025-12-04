@@ -1,0 +1,72 @@
+{
+  "daily_stats": {
+    "2025-12-03": {
+      "generations": 65,
+      "successes": 65,
+      "failures": 0,
+      "total_duration": 2564.8696310043333,
+      "providers": {
+        "gemini": {
+          "count": 1,
+          "successes": 1
+        },
+        "remote": {
+          "count": 64,
+          "successes": 64
+        }
+      }
+    },
+    "2025-12-04": {
+      "generations": 36,
+      "successes": 36,
+      "failures": 0,
+      "total_duration": 1413.3125112056732,
+      "providers": {
+        "remote": {
+          "count": 36,
+          "successes": 36
+        }
+      }
+    }
+  },
+  "agent_metrics": {
+    "Alchemist": {
+      "total_actions": 1,
+      "successes": 1,
+      "failures": 0,
+      "actions": {
+        "generate": {
+          "count": 1,
+          "successes": 1
+        }
+      },
+      "avg_duration": 5.5
+    },
+    "Guardian": {
+      "total_actions": 1,
+      "successes": 1,
+      "failures": 0,
+      "actions": {
+        "audit": {
+          "count": 1,
+          "successes": 1
+        }
+      },
+      "avg_duration": 0.3
+    },
+    "The Creative Director": {
+      "total_actions": 1,
+      "successes": 1,
+      "failures": 0,
+      "actions": {
+        "create_brief": {
+          "count": 1,
+          "successes": 1
+        }
+      },
+      "avg_duration": 0.0
+    }
+  },
+  "content_metrics": {},
+  "system_events": []
+}

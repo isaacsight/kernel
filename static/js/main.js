@@ -30,6 +30,136 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortBtns = document.querySelectorAll('.sort-btn');
     const postsContainer = document.querySelector('.posts-container');
 
+    // === PAGINATION SYSTEM ===
+    const POSTS_PER_PAGE = 20;
+    let currentPage = 1;
+    let filteredPosts = Array.from(posts);
+
+    function setupPagination() {
+        if (!postsContainer || posts.length <= POSTS_PER_PAGE) return;
+
+        // Create pagination controls if they don't exist
+        let paginationEl = document.querySelector('.pagination');
+        if (!paginationEl) {
+            paginationEl = document.createElement('div');
+            paginationEl.className = 'pagination';
+            postsContainer.after(paginationEl);
+        }
+
+        updatePagination();
+    }
+
+    function updatePagination() {
+        const paginationEl = document.querySelector('.pagination');
+        if (!paginationEl) return;
+
+        const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+
+        if (totalPages <= 1) {
+            paginationEl.style.display = 'none';
+            return;
+        }
+
+        paginationEl.style.display = 'flex';
+
+        let html = '';
+
+        // Previous button
+        html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+
+        // Page numbers (show first, current area, and last)
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+        } else {
+            // Always show first page
+            html += `<button class="page-btn ${currentPage === 1 ? 'active' : ''}" data-page="1">1</button>`;
+
+            if (currentPage > 3) {
+                html += '<span class="page-dots">...</span>';
+            }
+
+            // Show pages around current
+            for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+
+            if (currentPage < totalPages - 2) {
+                html += '<span class="page-dots">...</span>';
+            }
+
+            // Always show last page
+            html += `<button class="page-btn ${currentPage === totalPages ? 'active' : ''}" data-page="${totalPages}">${totalPages}</button>`;
+        }
+
+        // Next button
+        html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+
+        // Post count info
+        const start = (currentPage - 1) * POSTS_PER_PAGE + 1;
+        const end = Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length);
+        html += `<span class="page-info">Showing ${start}-${end} of ${filteredPosts.length} essays</span>`;
+
+        paginationEl.innerHTML = html;
+
+        // Add click handlers
+        paginationEl.querySelectorAll('.page-btn:not(.disabled)').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentPage = parseInt(btn.dataset.page);
+                showCurrentPage();
+                updatePagination();
+                // Scroll to top of posts
+                postsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    }
+
+    function showCurrentPage() {
+        const start = (currentPage - 1) * POSTS_PER_PAGE;
+        const end = start + POSTS_PER_PAGE;
+
+        // Hide all posts first
+        posts.forEach(post => post.style.display = 'none');
+
+        // Show only current page's posts from filtered list
+        filteredPosts.slice(start, end).forEach(post => {
+            post.style.display = 'block';
+        });
+    }
+
+    // Initialize pagination
+    if (postsContainer && posts.length > POSTS_PER_PAGE) {
+        setupPagination();
+        showCurrentPage();
+    }
+
+    // === UPDATE FILTER TO WORK WITH PAGINATION ===
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                // Update filtered posts list
+                if (filterValue === 'all') {
+                    filteredPosts = Array.from(posts);
+                } else {
+                    filteredPosts = Array.from(posts).filter(post =>
+                        post.getAttribute('data-category') === filterValue
+                    );
+                }
+
+                // Reset to page 1 and update display
+                currentPage = 1;
+                showCurrentPage();
+                updatePagination();
+            });
+        });
+    }
+
     if (sortBtns.length > 0 && postsContainer) {
         sortBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -40,9 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
 
                 const sortType = btn.getAttribute('data-sort');
-                const postsArray = Array.from(posts);
 
-                postsArray.sort((a, b) => {
+                filteredPosts.sort((a, b) => {
                     if (sortType === 'date-desc') {
                         const dateA = a.getAttribute('data-date') || '';
                         const dateB = b.getAttribute('data-date') || '';
@@ -59,8 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return 0;
                 });
 
-                // Re-append in sorted order
-                postsArray.forEach(post => postsContainer.appendChild(post));
+                // Reset to page 1 and update display
+                currentPage = 1;
+                showCurrentPage();
+                updatePagination();
             });
         });
     }

@@ -200,7 +200,7 @@ class OllamaManager:
                 return f"Error stopping Ollama: {e}"
         return "Ollama was not started by this manager (or is already stopped)."
 
-def generate_ai_post(topic, provider="gemini"):
+def generate_ai_post(topic, provider="auto"):
     """
     Generates a blog post using The Alchemist (Context-Aware AI) with a self-correcting loop.
     """
@@ -295,7 +295,28 @@ def publish_git():
         subprocess.run(["git", "add", "."], cwd=REPO_DIR, check=True)
         subprocess.run(["git", "commit", "-m", "Content update via Admin TUI"], cwd=REPO_DIR, check=True)
         subprocess.run(["git", "push"], cwd=REPO_DIR, check=True)
-        return "Successfully published to Git."
+        
+        # Auto-broadcast to TikTok
+        try:
+            from .engineers.broadcaster import Broadcaster
+            broadcaster = Broadcaster()
+            latest_date = get_latest_post_date()
+            if latest_date:
+                # Find the post with this date
+                posts = get_posts()
+                latest_post = next((p for p in posts if p.get('date') == latest_date or p.get('date') == str(latest_date)), None)
+                
+                if latest_post:
+                    logger.info(f"Broadcasting post '{latest_post.get('title')}' to TikTok...")
+                    video_path = broadcaster.generate_video(latest_post)
+                    if video_path:
+                        broadcaster.upload_to_tiktok(video_path, description=f"New post: {latest_post.get('title')} #blog")
+        except Exception as e:
+            logger.error(f"Broadcasting failed: {e}")
+            # Don't fail the publish if broadcasting fails
+            pass
+
+        return "Successfully published to Git and broadcasted to TikTok (if configured)."
     except subprocess.CalledProcessError as e:
         raise Exception(f"Git publish failed: {str(e)}")
 

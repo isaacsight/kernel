@@ -2,1635 +2,2223 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>https://www.doesthisfeelright.com/</loc>
+        <loc>https://isaacsight.com/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     
         <url>
-            <loc>https://www.doesthisfeelright.com/about.html</loc>
+            <loc>https://isaacsight.com/about.html</loc>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/collections.html</loc>
+            <loc>https://isaacsight.com/collections.html</loc>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/consulting.html</loc>
+            <loc>https://isaacsight.com/consulting.html</loc>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</loc>
+            <loc>https://isaacsight.com/posts/distributed-ai-architecture-mac-windows-node.html</loc>
             <lastmod>2025-12-04</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-we-mistake-busy-for-important..html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-we-mistake-busy-for-important..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-we-avoid-the-silence-in-our-relationships..html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-we-avoid-the-silence-in-our-relationships..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-craftsmanship-matters-more-than-convenience..html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-craftsmanship-matters-more-than-convenience..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-when-your-feelings-contradict-your-resume..html</loc>
+            <loc>https://isaacsight.com/posts/ai-when-your-feelings-contradict-your-resume..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-when-vulnerability-becomes-your-strongest-signal..html</loc>
+            <loc>https://isaacsight.com/posts/ai-when-vulnerability-becomes-your-strongest-signal..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-when-does-convenience-become-a-liability?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-when-does-convenience-become-a-liability?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-what-makes-a-space-feel-truly-safe?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-what-makes-a-space-feel-truly-safe?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-what-if-we-stopped-optimizing-everything?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-what-if-we-stopped-optimizing-everything?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-what-happens-to-creativity-when-everything-is-instantly-searchable?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-what-happens-to-creativity-when-everything-is-instantly-searchable?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-what-are-you-missing-when-you-look-down?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-what-are-you-missing-when-you-look-down?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-unspoken-rules-of-being-human-right-now..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-unspoken-rules-of-being-human-right-now..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-uncomfortable-luxury-of-having-enough..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-uncomfortable-luxury-of-having-enough..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-slow-decline-of-deep-listening..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-slow-decline-of-deep-listening..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-silent-agreement-to-ignore-our-inner-wisdom..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-silent-agreement-to-ignore-our-inner-wisdom..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-return-to-offline-intelligence..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-return-to-offline-intelligence..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-quiet-revolution-of-showing-up-as-you-are..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-quiet-revolution-of-showing-up-as-you-are..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-quiet-joy-of-necessary-labor..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-quiet-joy-of-necessary-labor..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-power-of-the-single-purpose-device..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-power-of-the-single-purpose-device..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-non-negotiables-of-a-slow-morning..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-non-negotiables-of-a-slow-morning..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-myth-of-digital-multitasking..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-myth-of-digital-multitasking..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-liberation-of-lowering-expectations-(of-yourself)..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-liberation-of-lowering-expectations-(of-yourself)..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-hidden-toll-of-context-switching..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-hidden-toll-of-context-switching..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-freedom-found-in-the-undramatic-choice..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-freedom-found-in-the-undramatic-choice..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ethical-case-for-deleting-apps..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ethical-case-for-deleting-apps..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-erosion-of-patience-in-a-swipe-right-culture..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-erosion-of-patience-in-a-swipe-right-culture..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-emotional-resonance-of-natural-materials..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-emotional-resonance-of-natural-materials..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-emotional-hangover-of-doomscrolling..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-emotional-hangover-of-doomscrolling..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-difference-between-solitude-and-isolation-(and-why-tech-blurs-them)..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-difference-between-solitude-and-isolation-(and-why-tech-blurs-them)..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-deeper-meaning-of-feeling-'off.'.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-deeper-meaning-of-feeling-'off.'.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-cognitive-load-of-perpetual-updates..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-cognitive-load-of-perpetual-updates..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-case-for-clunky-tools-in-a-seamless-world..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-case-for-clunky-tools-in-a-seamless-world..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-art-of-allowing-things-to-be-imperfect..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-art-of-allowing-things-to-be-imperfect..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-setting-boundaries-with-the-infinite..html</loc>
+            <loc>https://isaacsight.com/posts/ai-setting-boundaries-with-the-infinite..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-redefining-efficiency-through-intentional-rest..html</loc>
+            <loc>https://isaacsight.com/posts/ai-redefining-efficiency-through-intentional-rest..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-reclaiming-ownership-over-your-time,-byte-by-byte..html</loc>
+            <loc>https://isaacsight.com/posts/ai-reclaiming-ownership-over-your-time,-byte-by-byte..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-measuring-the-real-roi-of-your-social-media-use..html</loc>
+            <loc>https://isaacsight.com/posts/ai-measuring-the-real-roi-of-your-social-media-use..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-measuring-happiness-by-input-or-by-output?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-measuring-happiness-by-input-or-by-output?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-learning-to-live-without-an-audience..html</loc>
+            <loc>https://isaacsight.com/posts/ai-learning-to-live-without-an-audience..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-is-self-knowledge-an-action-or-an-achievement?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-is-self-knowledge-an-action-or-an-achievement?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-is-constant-documentation-killing-our-memory-formation?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-is-constant-documentation-killing-our-memory-formation?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-to-navigate-the-gap-between-intention-and-action..html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-to-navigate-the-gap-between-intention-and-action..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-to-apply-digital-minimalism-to-your-emotional-calendar..html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-to-apply-digital-minimalism-to-your-emotional-calendar..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-your-physical-space-influences-your-emotional-integrity..html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-your-physical-space-influences-your-emotional-integrity..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-long-does-it-take-to-build-a-sustainable-rhythm?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-long-does-it-take-to-build-a-sustainable-rhythm?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-finding-resistance-in-mass-produced-aesthetics..html</loc>
+            <loc>https://isaacsight.com/posts/ai-finding-resistance-in-mass-produced-aesthetics..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-finding-integrity-in-the-smallest-decisions..html</loc>
+            <loc>https://isaacsight.com/posts/ai-finding-integrity-in-the-smallest-decisions..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-does-this-decision-honor-my-attention-span?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-does-innovation-always-require-speed?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-does-innovation-always-require-speed?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-does-constant-feedback-stunt-self-trust?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-does-constant-feedback-stunt-self-trust?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-an-analog-anchor-in-a-digital-sea..html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-an-analog-anchor-in-a-digital-sea..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-decluttering-the-dashboard-of-the-mind..html</loc>
+            <loc>https://isaacsight.com/posts/ai-decluttering-the-dashboard-of-the-mind..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-choosing-the-right-speed-for-the-task-at-hand..html</loc>
+            <loc>https://isaacsight.com/posts/ai-choosing-the-right-speed-for-the-task-at-hand..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-can-we-find-true-rest-in-a-state-of-perpetual-readiness?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-can-we-find-true-rest-in-a-state-of-perpetual-readiness?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-are-you-living-your-values,-or-just-thinking-about-them?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-are-you-living-your-values,-or-just-thinking-about-them?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-unfollowing-the-noise:-a-guide-to-curated-input..html</loc>
+            <loc>https://isaacsight.com/posts/ai-unfollowing-the-noise:-a-guide-to-curated-input..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-tyranny-of-the-immediate:-why-we-value-speed-over-depth..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-windows-node-experiment-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-screen-as-a-pacifier:-when-we-trade-thought-for-input..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-tyranny-of-the-immediate:-why-we-value-speed-over-depth..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-philosophy-of-enough:-a-guiding-principle-for-life-and-design..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-screen-as-a-pacifier:-when-we-trade-thought-for-input..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-mirror-test:-does-your-outer-life-reflect-your-inner-world?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-philosophy-of-enough:-a-guiding-principle-for-life-and-design..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-geometry-of-comfort:-designing-for-presence..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-mirror-test:-does-your-outer-life-reflect-your-inner-world?.html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-imperfection:-embracing-wabi-sabi-in-daily-life..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-geometry-of-comfort:-designing-for-presence..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-being-present:-a-preamble..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ethics-of-imperfection:-embracing-wabi-sabi-in-daily-life..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-algorithm-as-authoritarian:-recognizing-its-influence..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ethics-of-being-present:-a-preamble..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-aesthetics-of-authenticity:-a-design-manifesto..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-birth-of-studio-os-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-for-longevity:-rejecting-planned-obsolescence..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-algorithm-as-authoritarian:-recognizing-its-influence..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-beyond-‘addiction’:-understanding-digital-compulsion..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-aesthetics-of-authenticity:-a-design-manifesto..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-beyond-productivity:-defining-a-life-worth-living..html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-for-longevity:-rejecting-planned-obsolescence..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-beyond-decluttering:-curating-a-meaningful-environment..html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-antigravity-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/philosophy-remote-work.html</loc>
+            <loc>https://isaacsight.com/posts/ai-beyond-‘addiction’:-understanding-digital-compulsion..html</loc>
             <lastmod>2025-12-03</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-we-document-instead-of-experience..html</loc>
+            <loc>https://isaacsight.com/posts/ai-beyond-productivity:-defining-a-life-worth-living..html</loc>
+            <lastmod>2025-12-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-beyond-decluttering:-curating-a-meaningful-environment..html</loc>
+            <lastmod>2025-12-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-automating-the-flow-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <lastmod>2025-12-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/philosophy-remote-work.html</loc>
+            <lastmod>2025-12-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-why-we-document-instead-of-experience..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-what-does-your-unfiltered-life-actually-look-like?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-what-does-your-unfiltered-life-actually-look-like?.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-future-of-engineering-in-2025.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-future-of-engineering-in-2025.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-future-of-business-in-2025.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-future-of-business-in-2025.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-weightlessness-of-speaking-your-truth..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-weightlessness-of-speaking-your-truth..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-unspoken-language-of-well-made-objects..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-unspoken-language-of-well-made-objects..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-tyranny-of-the-unread-notification..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-tyranny-of-the-unread-notification..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-quiet-power-of-routine-maintenance..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-quiet-power-of-routine-maintenance..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-quiet-joy-of-missing-out-(the-real-jomo)..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-quiet-joy-of-missing-out-(the-real-jomo)..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-philosophy-of-less,-but-better..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-philosophy-of-less,-but-better..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-paradox-of-digital-connection-and-real-isolation..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-paradox-of-digital-connection-and-real-isolation..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-neurochemistry-of-the-endless-scroll..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-neurochemistry-of-the-endless-scroll..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-lost-art-of-waiting-without-filling-the-time..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-lost-art-of-waiting-without-filling-the-time..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-joy-of-distributed-computing.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-joy-of-distributed-computing.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-hidden-cost-of-performing-happiness..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-hidden-cost-of-performing-happiness..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-difference-between-self-care-and-self-soothe..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-difference-between-self-care-and-self-soothe..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-courage-required-to-be-bored..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-courage-required-to-be-bored..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-cost-of-outsourcing-memory-to-the-cloud..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-cost-of-outsourcing-memory-to-the-cloud..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-relearning-how-to-trust-your-gut-feeling..html</loc>
+            <loc>https://isaacsight.com/posts/ai-relearning-how-to-trust-your-gut-feeling..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-is-your-attention-already-sold?-a-modern-inventory..html</loc>
+            <loc>https://isaacsight.com/posts/ai-is-your-attention-already-sold?-a-modern-inventory..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-is-simplicity-easy-or-the-hardest-design-choice?.html</loc>
+            <loc>https://isaacsight.com/posts/ai-is-simplicity-easy-or-the-hardest-design-choice?.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-to-build-friction-into-your-digital-habits..html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-to-build-friction-into-your-digital-habits..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-honesty-as-a-daily-practice,-not-a-grand-reveal..html</loc>
+            <loc>https://isaacsight.com/posts/ai-honesty-as-a-daily-practice,-not-a-grand-reveal..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-your-life-back-from-the-default-settings..html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-your-life-back-from-the-default-settings..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-design-that-honors-the-human-pace..html</loc>
+            <loc>https://isaacsight.com/posts/ai-design-that-honors-the-human-pace..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-authenticity-is-not-an-aesthetic..html</loc>
+            <loc>https://isaacsight.com/posts/ai-authenticity-is-not-an-aesthetic..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-when-utility-trumps-addiction:-reclaiming-tools..html</loc>
+            <loc>https://isaacsight.com/posts/ai-when-utility-trumps-addiction:-reclaiming-tools..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-scarcity-loop:-how-algorithms-exploit-our-fear-of-missing-out..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-scarcity-loop:-how-algorithms-exploit-our-fear-of-missing-out..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-architecture-of-distraction:-a-user’s-guide-to-resistance..html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-architecture-of-distraction:-a-user’s-guide-to-resistance..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-slow-productivity:-the-case-for-doing-one-thing-well..html</loc>
+            <loc>https://isaacsight.com/posts/ai-slow-productivity:-the-case-for-doing-one-thing-well..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-reframing-the-internet:-from-community-to-utility..html</loc>
+            <loc>https://isaacsight.com/posts/ai-reframing-the-internet:-from-community-to-utility..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-emotional-debt:-why-we-lie-to-ourselves-first..html</loc>
+            <loc>https://isaacsight.com/posts/ai-emotional-debt:-why-we-lie-to-ourselves-first..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-beyond-the-facade:-reclaiming-your-inner-narrative..html</loc>
+            <loc>https://isaacsight.com/posts/ai-beyond-the-facade:-reclaiming-your-inner-narrative..html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/studio-os-6-week-journey-week-1.html</loc>
+            <loc>https://isaacsight.com/posts/studio-os-6-week-journey-week-1.html</loc>
             <lastmod>2025-12-02</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-future-of-autonomous-blogging.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-future-of-autonomous-blogging.html</loc>
             <lastmod>2025-12-01</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/why-we-document-instead-of-experience.html</loc>
+            <lastmod>2025-12-01</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-why-your-personal-site-needs-a-soul-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <lastmod>2025-11-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-we-build:-the-psychology-of-side-projects-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-sqlite-is-enough-for-99%-of-projects-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-i-still-write-markdown-in-2025-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-i-fired-myself-as-webmaster-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-dark-mode-is-not-enough-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-why-complexity-is-the-enemy-of-freedom-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-whitespace:-the-most-important-element-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-when-the-server-fixes-itself:-autonomic-computing-in-2025-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-webhooks-are-the-neurons-of-the-web-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-webhooks-are-the-neurons-of-the-web-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-visual-hierarchy-in-text-heavy-interfaces-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-user-experience-in-a-voice-first-world-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-understanding-the-global-interpreter-lock-(gil)-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-understanding-the-global-interpreter-lock-(gil)-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-understanding-asyncio-in-python-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-understanding-asyncio-in-python-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-typography-as-voice-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-type-hinting-in-python:-beyond-the-basics-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-type-hinting-in-python:-beyond-the-basics-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/towards-site-autonomy.html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ephemeral-nature-of-digital-artifacts-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-zero-maintenance-blog:-a-case-study-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-zero-maintenance-blog:-a-case-study-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-weight-of-digital-hoarding-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-weight-of-digital-hoarding-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-uncanny-valley-of-ai-ui-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-stack-of-the-future:-htmx,-sqlite,-and-llms-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-stack-of-the-future:-htmx,-sqlite,-and-llms-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-seo-of-ai-generated-content:-quality-over-quantity-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-seo-of-ai-generated-content:-quality-over-quantity-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-role-of-human-oversight-in-autonomous-systems-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-role-of-human-oversight-in-autonomous-systems-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-rise-of-the-headless-agent:-why-your-cms-is-obsolete-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-rise-of-the-headless-agent:-why-your-cms-is-obsolete-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-return-of-the-personal-web-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-return-of-serifs-on-the-web-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-return-of-serifs-on-the-web-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-psychology-of-loading-screens-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-psychology-of-loading-screens-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-power-of-makefiles-in-modern-projects-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-power-of-makefiles-in-modern-projects-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-nervous-system-of-a-modern-web-app-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-nervous-system-of-a-modern-web-app-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-lost-art-of-deep-reading-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-joy-of-finishing-things-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-importance-of-documentation-as-code-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-importance-of-documentation-as-code-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-impact-of-ai-on-web-design-workflows-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-human-element:-what-ai-can't-replicate-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-future-of-truth:-verifiable-credentials-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-future-of-css:-beyond-tailwind-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-fallacy-of-"no-code"-for-engineers-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-fallacy-of-"no-code"-for-engineers-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ethics-of-open-source-in-an-ai-era-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-open-source-in-an-ai-era-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-autonomous-content-generation-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-end-of-"user"-interface:-designing-for-agents-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-end-of-"user"-interface:-designing-for-agents-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-death-of-the-dashboard:-why-admin-panels-are-legacy-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-death-of-the-dashboard:-why-admin-panels-are-legacy-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-death-of-privacy-in-the-age-of-inference-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-death-of-privacy-in-the-age-of-inference-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-attention-economy-is-a-bubble-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-art-of-the-readme-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-art-of-the-readme-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-architecture-of-codelens:-a-deep-dive-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-architecture-of-codelens:-a-deep-dive-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-algorithm-vs.-the-curator-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-"set-it-and-forget-it"-myth-vs.-reality-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-"set-it-and-forget-it"-myth-vs.-reality-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-"premium"-feel:-what-makes-software-feel-expensive?-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-"premium"-feel:-what-makes-software-feel-expensive?-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-"good-enough"-web-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-"good-enough"-web-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-the-"glitch"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-the-"glitch"-aesthetic-in-2025-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-testing-ai-applications:-determinism-in-a-probabilistic-world-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-testing-ai-applications:-determinism-in-a-probabilistic-world-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-tui-renaissance:-why-text-interfaces-are-back-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-static-sites-are-dead;-long-live-living-sites-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-static-sites-are-dead;-long-live-living-sites-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-slow-web:-a-manifesto-for-deliberate-consumption-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-slow-web:-a-manifesto-for-deliberate-consumption-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-security-first:-auditing-your-own-code-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-security-first:-auditing-your-own-code-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-screen-time-and-the-erosion-of-empathy-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-scaling-to-zero:-the-ultimate-efficiency-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-scaling-to-zero:-the-ultimate-efficiency-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-refactoring-legacy-code-with-ai-agents-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-python-3.14:-what's-new-and-why-it-matters-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-python-3.14:-what's-new-and-why-it-matters-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-proactive-vs.-reactive-web-architecture-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-proactive-vs.-reactive-web-architecture-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-preserving-history-when-history-is-rewritten-by-ai-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-preserving-history-when-history-is-rewritten-by-ai-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-predicting-traffic-spikes-with-local-llms-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-predicting-traffic-spikes-with-local-llms-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-owning-your-signal-in-a-noisy-world-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-optimizing-python-for-performance-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-optimizing-python-for-performance-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-monitoring-the-monitors:-who-watches-the-ai?-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-mobile-first-is-dead;-content-first-is-king-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-micro-interactions:-the-soul-of-the-ui-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-managing-dotfiles-like-a-pro-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-managing-dotfiles-like-a-pro-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-logging-strategies-for-distributed-systems-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-logging-strategies-for-distributed-systems-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-identity-in-a-post-authentication-world-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-icons:-svg-vs.-font-vs.-emojis-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-human-ai-symbiosis:-partners,-not-replacements-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-human-ai-symbiosis:-partners,-not-replacements-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-how-to-train-your-website-to-write-its-own-changelog-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-how-to-train-your-website-to-write-its-own-changelog-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-glassmorphism:-trend-or-timeless?-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-git-workflows-for-solo-developers-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-git-workflows-for-solo-developers-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-from-script-to-application:-packaging-python-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-from-script-to-application:-packaging-python-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-fast-api-vs.-flask:-a-2025-perspective-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-escaping-the-simulation:-are-we-just-training-data?-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-escaping-the-simulation:-are-we-just-training-data?-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-dockerizing-your-life:-containerization-patterns-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-dockerizing-your-life:-containerization-patterns-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-digital-minimalism-for-developers-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-digital-minimalism-for-developers-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-digital-gardening-vs.-digital-farming-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-for-the-terminal:-ascii-art-and-layouts-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-for-the-terminal:-ascii-art-and-layouts-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-for-speed:-perceived-vs.-actual-performance-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-for-speed:-perceived-vs.-actual-performance-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-for-readability:-line-height-and-measure-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-for-readability:-line-height-and-measure-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-designing-for-attention:-the-anti-pattern-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-design-patterns-for-ai-integrated-apps-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-design-patterns-for-ai-integrated-apps-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-dependency-management-in-a-post-pip-world-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-context-aware-publishing:-when-your-site-knows-what-you-mean-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-context-aware-publishing:-when-your-site-knows-what-you-mean-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-consistency-vs.-novelty-in-ui-design-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-color-theory-for-backend-developers-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-color-theory-for-backend-developers-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-coding-as-a-spiritual-practice-(theme:-theme-2:-digital-philosophy-&-ethics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-building-for-the-edge:-latency-matters-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-building-a-digital-twin-of-your-production-environment-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-building-self-healing-websites-with-python-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-building-self-healing-websites-with-python-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-building-robust-clis-with-click-and-rich-(theme:-theme-3:-modern-engineering).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-building-robust-clis-with-click-and-rich-(theme:-theme-3:-modern-engineering).html</loc>
+            <loc>https://isaacsight.com/posts/ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-brain-rot-aesthetics:-the-new-brutalism?-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-beyond-cron-jobs:-true-asynchronous-autonomy-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-automating-the-boring-stuff:-a-janitor-bot-for-your-links-(theme:-theme-1:-the-autonomous-web).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-automating-the-boring-stuff:-a-janitor-bot-for-your-links-(theme:-theme-1:-the-autonomous-web).html</loc>
+            <loc>https://isaacsight.com/posts/ai-accessibility-is-not-an-optional-feature-(theme:-theme-4:-design-&-aesthetics).html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-accessibility-is-not-an-optional-feature-(theme:-theme-4:-design-&-aesthetics).html</loc>
+            <loc>https://isaacsight.com/posts/why-we-romanticize-the-past.html</loc>
             <lastmod>2025-11-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</loc>
+            <loc>https://isaacsight.com/posts/codelens-ml-logging.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/headless-workflow.html</loc>
+            <loc>https://isaacsight.com/posts/headless-workflow.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</loc>
+            <loc>https://isaacsight.com/posts/refactoring-codelens-architecture.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</loc>
+            <loc>https://isaacsight.com/posts/codelens-ai-providers.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/building-a-custom-site-manager.html</loc>
+            <loc>https://isaacsight.com/posts/building-a-custom-site-manager.html</loc>
             <lastmod>2025-11-29</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-return-of-personal-software.html</loc>
+            <loc>https://isaacsight.com/posts/the-courage-to-be-mediocre-at-something-new.html</loc>
+            <lastmod>2025-11-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-return-of-personal-software.html</loc>
             <lastmod>2025-11-28</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/rss-in-2025.html</loc>
+            <loc>https://isaacsight.com/posts/rss-in-2025.html</loc>
             <lastmod>2025-11-28</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/dont-get-locked-in.html</loc>
+            <loc>https://isaacsight.com/posts/dont-get-locked-in.html</loc>
             <lastmod>2025-11-28</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/to-be-witnessed.html</loc>
+            <loc>https://isaacsight.com/posts/to-be-witnessed.html</loc>
             <lastmod>2025-11-27</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-invisible-architect.html</loc>
+            <loc>https://isaacsight.com/posts/the-invisible-architect.html</loc>
             <lastmod>2025-11-27</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-speed-of-thought.html</loc>
+            <loc>https://isaacsight.com/posts/the-speed-of-thought.html</loc>
             <lastmod>2025-11-27</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-breaking-change.html</loc>
+            <loc>https://isaacsight.com/posts/the-breaking-change.html</loc>
             <lastmod>2025-11-27</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/escaping-the-simulation.html</loc>
+            <loc>https://isaacsight.com/posts/escaping-the-simulation.html</loc>
             <lastmod>2025-11-27</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-rise-of-the-non-musician.html</loc>
+            <loc>https://isaacsight.com/posts/the-rise-of-the-non-musician.html</loc>
             <lastmod>2025-11-26</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-new-builders-are-16.html</loc>
+            <loc>https://isaacsight.com/posts/the-new-builders-are-16.html</loc>
             <lastmod>2025-11-26</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/owning-the-signal.html</loc>
+            <loc>https://isaacsight.com/posts/owning-the-signal.html</loc>
             <lastmod>2025-11-26</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-weight-of-iteration.html</loc>
+            <loc>https://isaacsight.com/posts/learning-to-hold-space-without-fixing.html</loc>
+            <lastmod>2025-11-26</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-weight-of-iteration.html</loc>
             <lastmod>2025-11-25</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/modern-man-extinction.html</loc>
+            <loc>https://isaacsight.com/posts/modern-man-extinction.html</loc>
             <lastmod>2025-11-25</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/the-engine-and-the-gallery.html</loc>
+            <loc>https://isaacsight.com/posts/the-engine-and-the-gallery.html</loc>
             <lastmod>2025-11-25</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/irresponsibility-content.html</loc>
+            <loc>https://isaacsight.com/posts/irresponsibility-content.html</loc>
             <lastmod>2025-11-24</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/ai-friendship.html</loc>
+            <loc>https://isaacsight.com/posts/the-friends-we-outgrow.html</loc>
+            <lastmod>2025-11-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/ai-friendship.html</loc>
             <lastmod>2025-11-20</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/social-media-first-contact.html</loc>
+            <loc>https://isaacsight.com/posts/social-media-first-contact.html</loc>
             <lastmod>2025-11-18</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/scaling-coffee-shop.html</loc>
+            <loc>https://isaacsight.com/posts/the-emotion-that-has-no-name.html</loc>
+            <lastmod>2025-11-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/scaling-coffee-shop.html</loc>
             <lastmod>2025-11-15</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/richest-women-overshadowed.html</loc>
+            <loc>https://isaacsight.com/posts/the-anger-underneath-the-sadness.html</loc>
+            <lastmod>2025-11-12</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-mourn-who-we-used-to-be.html</loc>
+            <lastmod>2025-11-11</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/richest-women-overshadowed.html</loc>
             <lastmod>2025-11-10</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/building-with-antigravity.html</loc>
+            <loc>https://isaacsight.com/posts/learning-to-hold-contradictions.html</loc>
+            <lastmod>2025-11-08</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-distance-brings-clarity.html</loc>
+            <lastmod>2025-11-06</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/building-with-antigravity.html</loc>
             <lastmod>2025-11-05</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-masks-we-forgot-were-wearing.html</loc>
+            <lastmod>2025-11-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-comfort-of-melancholy.html</loc>
+            <lastmod>2025-10-25</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-weight-of-unopened-notifications.html</loc>
+            <lastmod>2025-10-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-apologizing-without-explaining.html</loc>
+            <lastmod>2025-10-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-edit-our-true-feelings.html</loc>
+            <lastmod>2025-10-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/learning-to-want-what-you-have.html</loc>
+            <lastmod>2025-10-13</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-attract-what-were-not-ready-for.html</loc>
+            <lastmod>2025-10-12</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-nostalgia-lies-to-us.html</loc>
+            <lastmod>2025-10-12</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-change-happens-without-permission.html</loc>
+            <lastmod>2025-10-08</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-fear-behind-the-frustration.html</loc>
+            <lastmod>2025-10-07</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-difference-between-patience-and-avoidance.html</loc>
+            <lastmod>2025-09-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-fear-being-truly-known.html</loc>
+            <lastmod>2025-09-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/learning-to-grieve-small-losses.html</loc>
+            <lastmod>2025-09-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-future-were-afraid-to-want.html</loc>
+            <lastmod>2025-09-28</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-beauty-of-purposeless-pursuits.html</loc>
+            <lastmod>2025-09-26</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-difference-between-being-heard-and-being-under.html</loc>
+            <lastmod>2025-09-25</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-chase-goals-that-dont-matter.html</loc>
+            <lastmod>2025-09-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-versions-of-yourself-youve-left-behind.html</loc>
+            <lastmod>2025-09-23</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-the-same-lesson-keeps-returning.html</loc>
+            <lastmod>2025-09-20</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-being-unreachable.html</loc>
+            <lastmod>2025-09-19</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-starting-again.html</loc>
+            <lastmod>2025-09-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-exhaustion-of-performing-yourself.html</loc>
+            <lastmod>2025-09-13</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-unbearable-weight-of-potential.html</loc>
+            <lastmod>2025-09-12</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-feeling-without-fixing.html</loc>
+            <lastmod>2025-09-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-happiness-feels-suspicious.html</loc>
+            <lastmod>2025-09-06</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-being-wrong-gracefully.html</loc>
+            <lastmod>2025-09-04</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-doing-nothing-well.html</loc>
+            <lastmod>2025-08-31</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/finding-presence-in-a-distracted-world.html</loc>
+            <lastmod>2025-08-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-honesty-requires-courage.html</loc>
+            <lastmod>2025-08-27</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-connection-breeds-loneliness.html</loc>
+            <lastmod>2025-08-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-conversations-we-avoid-having.html</loc>
+            <lastmod>2025-08-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-peace-on-the-other-side-of-acceptance.html</loc>
+            <lastmod>2025-08-22</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-cry-at-unexpected-moments.html</loc>
+            <lastmod>2025-08-20</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-saying-no-without-guilt.html</loc>
+            <lastmod>2025-08-20</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-advice-you-gave-comes-back-for-you.html</loc>
+            <lastmod>2025-08-19</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-pressure-to-have-a-passion.html</loc>
+            <lastmod>2025-08-19</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-meaning-finds-you-instead.html</loc>
+            <lastmod>2025-08-13</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-resist-what-we-need-most.html</loc>
+            <lastmod>2025-08-11</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-freedom-of-lowered-expectations.html</loc>
+            <lastmod>2025-08-11</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-cost-of-constant-availability.html</loc>
+            <lastmod>2025-08-11</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-fear-empty-time.html</loc>
+            <lastmod>2025-08-09</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-your-online-self-feels-more-real.html</loc>
+            <lastmod>2025-08-09</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-vulnerability-feels-like-weakness-but-isnt.html</loc>
+            <lastmod>2025-08-06</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-moment-before-clarity-arrives.html</loc>
+            <lastmod>2025-08-05</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-silence-speaks-louder-than-words.html</loc>
+            <lastmod>2025-08-04</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/learning-to-trust-your-own-judgment.html</loc>
+            <lastmod>2025-08-02</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-freedom-of-being-disliked.html</loc>
+            <lastmod>2025-08-01</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-difference-between-busy-and-fulfilled.html</loc>
+            <lastmod>2025-07-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-time-between-who-you-were-and-who-youre-becomi.html</loc>
+            <lastmod>2025-07-27</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-numbness-is-the-loudest-feeling.html</loc>
+            <lastmod>2025-07-26</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-push-away-what-we-need.html</loc>
+            <lastmod>2025-07-25</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/loving-someone-without-losing-yourself.html</loc>
+            <lastmod>2025-07-16</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-ambition-becomes-escape.html</loc>
+            <lastmod>2025-07-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-fear-our-own-potential.html</loc>
+            <lastmod>2025-07-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-illusion-of-productivity.html</loc>
+            <lastmod>2025-07-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-wisdom-often-feels-like-loss.html</loc>
+            <lastmod>2025-06-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-authenticity-meets-rejection.html</loc>
+            <lastmod>2025-06-20</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-lessons-that-take-years-to-land.html</loc>
+            <lastmod>2025-06-20</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/what-your-recurring-thoughts-are-trying-to-tell-yo.html</loc>
+            <lastmod>2025-06-19</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-humility-of-not-knowing.html</loc>
+            <lastmod>2025-06-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-understanding-arrives-too-late.html</loc>
+            <lastmod>2025-06-16</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-weight-of-unspoken-words.html</loc>
+            <lastmod>2025-06-14</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/learning-to-let-chapters-end.html</loc>
+            <lastmod>2025-06-14</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/learning-to-disappoint-people-gracefully.html</loc>
+            <lastmod>2025-06-14</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-questions-that-have-no-answers.html</loc>
+            <lastmod>2025-06-12</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/when-selfimprovement-becomes-selfrejection.html</loc>
+            <lastmod>2025-06-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-exhaustion-of-endless-optimization.html</loc>
+            <lastmod>2025-06-08</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/why-we-scroll-when-we-should-sleep.html</loc>
+            <lastmod>2025-06-07</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-art-of-sitting-with-discomfort.html</loc>
+            <lastmod>2025-06-07</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://isaacsight.com/posts/the-version-of-you-others-need-you-to-be.html</loc>
+            <lastmod>2025-06-06</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>
