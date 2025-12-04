@@ -20,8 +20,7 @@
                 <div class="actions">
                     <button type="button" onclick="refinePost()" class="btn-secondary" style="margin-right: 10px;">✨
                         Refine</button>
-                    <button type="button" onclick="publishSubstack()" class="btn-secondary"
-                        style="margin-right: 10px;">📧 Publish to Substack</button>
+
                     <button type="submit" class="btn-primary">Save Post</button>
                 </div>
             </header>
@@ -77,45 +76,7 @@
     <script>
         var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
 
-        async function publishSubstack() {
-            const filename = document.querySelector('input[name="filename"]').value;
-            if (!filename) {
-                alert('Please save the post first before publishing to Substack.');
-                return;
-            }
 
-            if (!confirm('Are you sure you want to email this draft to your Substack secret email?')) {
-                return;
-            }
-
-            const btn = document.querySelector('button[onclick="publishSubstack()"]');
-            const originalText = btn.textContent;
-            btn.textContent = 'Sending...';
-            btn.disabled = true;
-
-            try {
-                const response = await fetch('/publish-substack', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ filename: filename })
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    alert('Success! Draft sent to Substack.');
-                } else {
-                    alert('Error: ' + result.message);
-                }
-            } catch (e) {
-                alert('Network Error: ' + e);
-            } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
-        }
 
         // AI Refine Logic
         let currentRefinement = '';

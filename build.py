@@ -445,11 +445,11 @@ def build():
     
     # Add Sort Controls
     filter_html += '''
-    <div class="sort-bar" style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center;">
-        <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; font-weight: 700;">Sort:</span>
-        <button class="sort-btn active" data-sort="date-desc" style="background:none; border:none; cursor:pointer; font-size:0.9rem; color:#111; font-weight:600; padding:0;">Newest</button>
-        <span style="color:#ccc">/</span>
-        <button class="sort-btn" data-sort="date-asc" style="background:none; border:none; cursor:pointer; font-size:0.9rem; color:#666; font-weight:400; padding:0;">Oldest</button>
+    <div class="sort-bar">
+        <span class="sort-label">Sort:</span>
+        <button class="sort-btn active" data-sort="date-desc">Newest</button>
+        <span class="sort-divider">/</span>
+        <button class="sort-btn" data-sort="date-asc">Oldest</button>
     </div>
     '''
     
@@ -765,7 +765,7 @@ def build():
                 <h1>{meta.get('title')}</h1>
                 {body}
                 <div class="newsletter-box newsletter-embed">
-                    <iframe src="https://doesthisfeelright.substack.com/embed" width="100%" height="320" class="substack-embed" frameborder="0" scrolling="no"></iframe>
+                    <p>Subscribe via <a href="feed.xml">RSS</a> to get new posts directly.</p>
                 </div>
             </article>
         """

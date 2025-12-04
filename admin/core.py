@@ -1,7 +1,7 @@
 """
 This core module provides the main functionality for the admin dashboard application.
 It handles tasks such as fetching and saving blog posts, generating AI-written content,
-refining content, and publishing updates to the Git repository and Substack.
+refining content, and publishing updates to the Git repository.
 """
 
 import os
@@ -10,20 +10,34 @@ import datetime
 import frontmatter
 import subprocess
 import google.generativeai as genai
-import openai
-import anthropic
+# openai and anthropic removed as they are unused
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
 load_dotenv()
 
+from .config import config
+
 # Configuration
-CONTENT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../content'))
-REPO_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
+CONTENT_DIR = config.CONTENT_DIR
+REPO_DIR = config.BASE_DIR
+
+import logging
+
+# Configure Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - [%(levelname)s] - %(message)s',
+    handlers=[
+        logging.FileHandler(os.path.join(os.path.dirname(__file__), "admin.log")),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger("AdminCore")
 
 # Supabase Setup
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+url: str = config.SUPABASE_URL
+key: str = config.SUPABASE_KEY
 supabase: Client = create_client(url, key) if url and key else None
 
 def get_posts():
@@ -43,7 +57,7 @@ def get_posts():
                     post['slug'] = filename.replace('.md', '')
                     posts.append(post)
             except Exception as e:
-                print(f"Warning: Failed to load post {filename}: {e}")
+                logger.warning(f"Warning: Failed to load post {filename}: {e}")
                 continue
     return posts
 
@@ -213,9 +227,9 @@ def generate_ai_post(topic, provider="gemini"):
         feedback = ""
         
         while current_try < max_retries:
-            print(f"[The Alchemist] Generating draft (Attempt {current_try + 1}/{max_retries})...")
+            logger.info(f"[The Alchemist] Generating draft (Attempt {current_try + 1}/{max_retries})...")
             if feedback:
-                print(f"[The Alchemist] Incorporating feedback: {feedback}")
+                logger.info(f"[The Alchemist] Incorporating feedback: {feedback}")
                 # Append feedback to topic/prompt effectively
                 adjusted_topic = f"{topic}. IMPORTANT FEEDBACK FROM PREVIOUS DRAFT: {feedback}"
                 content = alchemist.generate(adjusted_topic, doctrine, provider=provider)
@@ -223,18 +237,18 @@ def generate_ai_post(topic, provider="gemini"):
                 content = alchemist.generate(topic, doctrine, provider=provider)
             
             # 2. Guardian: Audit (Safety)
-            print("[The Guardian] Auditing content...")
+            logger.info("[The Guardian] Auditing content...")
             safety_issues = guardian.audit_content(content)
             critical_issues = [i for i in safety_issues if i['level'] == 'CRITICAL']
             
             if critical_issues:
-                print(f"[The Guardian] Blocked content: {critical_issues}")
+                logger.warning(f"[The Guardian] Blocked content: {critical_issues}")
                 feedback = f"The previous draft violated safety rules: {critical_issues}. Please rewrite to be safe and aligned."
                 current_try += 1
                 continue
             
             # 3. Editor: Audit (Style)
-            print("[The Editor] Auditing style...")
+            logger.info("[The Editor] Auditing style...")
             style_issues = editor.audit(content)
             
             # If there are significant style issues, we could also retry, or just log them.
@@ -243,7 +257,7 @@ def generate_ai_post(topic, provider="gemini"):
             if style_issues and current_try < max_retries - 1:
                  # Check if we should refine based on style
                  # For now, let's just print them. Implementing full style-loop might be too expensive/slow for now.
-                 print(f"[The Editor] Style suggestions: {style_issues}")
+                 logger.info(f"[The Editor] Style suggestions: {style_issues}")
                  # Optional: feedback += f" Style feedback: {style_issues}"
                  # current_try += 1
                  # continue
@@ -260,7 +274,7 @@ def generate_ai_post(topic, provider="gemini"):
         saved_filename = save_post(filename, title, datetime.date.today(), "Engineering", ["ai", "alchemist"], content)
         
         # 5. Librarian: Update Graph
-        print("[The Librarian] Updating Knowledge Graph...")
+        logger.info("[The Librarian] Updating Knowledge Graph...")
         librarian = Librarian()
         posts = get_posts() # Reload to include new post
         librarian.build_graph(posts)

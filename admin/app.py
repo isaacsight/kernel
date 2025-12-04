@@ -67,21 +67,7 @@ def publish():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
-@app.route('/publish-substack', methods=['POST'])
-def publish_substack():
-    try:
-        data = request.json
-        filename = data.get('filename')
-        
-        if not filename:
-            return jsonify({'status': 'error', 'message': 'No filename provided'})
-            
-        message = core.publish_substack(filename)
-        return jsonify({'status': 'success', 'message': message})
-        
-    except Exception as e:
-        print(f"Substack Error: {e}")
-        return jsonify({'status': 'error', 'message': str(e)})
+
 
 
 

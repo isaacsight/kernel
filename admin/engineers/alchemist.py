@@ -5,6 +5,10 @@ import numpy as np
 import google.generativeai as genai
 from huggingface_hub import InferenceClient
 from typing import List, Dict, Optional
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import config
 
 class Alchemist:
     """
@@ -20,20 +24,20 @@ class Alchemist:
     def __init__(self):
         self.name = "The Alchemist"
         self.role = "Machine Learning Engineer"
-        self.brain_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../brain'))
+        self.brain_dir = config.BRAIN_DIR
         self.memory_file = os.path.join(self.brain_dir, 'memory.json')
-        self.content_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../content'))
+        self.content_dir = config.CONTENT_DIR
         
         # Ensure brain directory exists
         os.makedirs(self.brain_dir, exist_ok=True)
         
         # Configure Gemini
-        api_key = os.environ.get("GEMINI_API_KEY")
+        api_key = config.GEMINI_API_KEY
         if not api_key:
             raise ValueError("GEMINI_API_KEY not found in environment variables.")
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-flash-latest')
-        self.embedding_model = 'models/text-embedding-004'
+        self.model = genai.GenerativeModel(config.GEMINI_MODEL)
+        self.embedding_model = config.EMBEDDING_MODEL
         self.chat_session = None
 
     def start_chat(self):
@@ -114,17 +118,17 @@ class Alchemist:
                 
                 # Generate embedding with retry logic
                 embedding = None
-                retries = 3
+                retries = config.MAX_RETRIES
                 for attempt in range(retries):
                     try:
                         # Check for Studio Node offloading
-                        node_url = os.environ.get("STUDIO_NODE_URL")
+                        node_url = config.STUDIO_NODE_URL
                         if node_url:
                             import requests
                             response = requests.post(
                                 f"{node_url}/embeddings",
                                 json={"model": "nomic-embed-text", "prompt": text_to_embed},
-                                timeout=10
+                                timeout=config.TIMEOUT_EMBEDDING
                             )
                             response.raise_for_status()
                             embedding = response.json().get("embedding")
@@ -191,14 +195,14 @@ class Alchemist:
             return []
             
         # Embed the query
-        node_url = os.environ.get("STUDIO_NODE_URL")
+        node_url = config.STUDIO_NODE_URL
         if node_url:
             import requests
             try:
                 response = requests.post(
                     f"{node_url}/embeddings",
                     json={"model": "nomic-embed-text", "prompt": query},
-                    timeout=10
+                    timeout=config.TIMEOUT_EMBEDDING
                 )
                 response.raise_for_status()
                 query_embedding = response.json().get("embedding")
@@ -274,7 +278,7 @@ class Alchemist:
         """
         
         if provider == "huggingface":
-            hf_token = os.environ.get("HF_TOKEN")
+            hf_token = config.HF_TOKEN
             if not hf_token:
                 raise ValueError("HF_TOKEN not found for Hugging Face provider.")
             
@@ -293,7 +297,7 @@ class Alchemist:
 
         elif provider == "remote":
             import requests
-            node_url = os.environ.get("STUDIO_NODE_URL")
+            node_url = config.STUDIO_NODE_URL
             if not node_url:
                 raise ValueError("STUDIO_NODE_URL not found. Please set it to the address of your Windows machine (e.g., http://192.168.1.x:8000).")
             
@@ -305,7 +309,7 @@ class Alchemist:
                     "model": "mistral", # Default to mistral on the node
                     "system_prompt": f"You are The Alchemist. {doctrine}"
                 }
-                response = requests.post(f"{node_url}/generate", json=payload, timeout=120) # Long timeout for generation
+                response = requests.post(f"{node_url}/generate", json=payload, timeout=config.TIMEOUT_REMOTE) # Long timeout for generation
                 response.raise_for_status()
                 content = response.json().get("response", "")
             except Exception as e:

@@ -234,13 +234,13 @@ CREATE TABLE IF NOT EXISTS api_keys (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Integrations (GitHub, Substack, etc.)
+-- Integrations (GitHub, Medium, etc.)
 CREATE TABLE IF NOT EXISTS integrations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     
     -- Integration details
-    integration_type VARCHAR(50) NOT NULL, -- github, substack, medium, wordpress
+    integration_type VARCHAR(50) NOT NULL, -- github, medium, wordpress
     config JSONB NOT NULL,
     
     -- Status

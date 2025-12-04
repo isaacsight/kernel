@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Newsletter Form Handling (Replaced by Substack Embeds)
+    // Newsletter Form Handling (Removed)
 
     // Post Filtering Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -97,32 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Welcome Gate Logic
-    const welcomeGate = document.getElementById('welcome-gate');
-    const enterBtn = document.getElementById('enter-site-btn');
-
-    if (welcomeGate && enterBtn) {
-        // Check if user has seen the gate
-        const hasSeenGate = localStorage.getItem('hasSeenWelcomeGate');
-
-        if (!hasSeenGate) {
-            // Show gate
-            welcomeGate.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-
-            enterBtn.addEventListener('click', () => {
-                // Hide gate
-                welcomeGate.style.opacity = '0';
-                welcomeGate.style.transition = 'opacity 0.5s ease';
-
-                setTimeout(() => {
-                    welcomeGate.style.display = 'none';
-                    document.body.style.overflow = ''; // Restore scrolling
-                    localStorage.setItem('hasSeenWelcomeGate', 'true');
-                }, 500);
-            });
-        }
-    }
+    // Welcome Gate Logic (Removed)
 
     // Reaction Button Logic
     const reactionBtn = document.getElementById('reaction-btn');
@@ -141,6 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Fetch current count
         async function fetchCount() {
+            if (!window.supabaseClient) {
+                console.warn('Supabase client not initialized. Reactions disabled.');
+                return;
+            }
             try {
                 const { data, error } = await window.supabaseClient
                     .from('reactions')
