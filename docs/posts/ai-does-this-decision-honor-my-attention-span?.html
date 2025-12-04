@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Does This Decision Honor My Attention Span?</title>
+    <meta name="description" content="Thoughts on business, technology, and the human condition.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Does This Decision Honor My Attention Span?">
+    <meta property="og:description" content="Thoughts on business, technology, and the human condition.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span?.html">
+    <meta property="og:image" content="{{ og_image }}">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span?.html">
+    <meta name="twitter:title" content="Does This Decision Honor My Attention Span?">
+    <meta name="twitter:description" content="Thoughts on business, technology, and the human condition.">
+    <meta name="twitter:image" content="https://www.doesthisfeelright.com/static/images/og-default.jpg">
+
+    <!-- TikTok Verification -->
+    <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span?.html">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Does This Decision Honor My Attention Span?", "image": ["https://www.doesthisfeelright.com/static/images/og-default.jpg"], "datePublished": "2025-12-03", "dateModified": "2025-12-03", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="container">
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                DOES THIS FEEL RIGHT?
+            </div>
+            <nav class="nav-section">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../collections.html" class="nav-link">Collections</a>
+                <a href="../feed.xml" class="nav-link">RSS Feed</a>
+            </nav>
+            <script>
+                // Simple active state logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            </script>
+        </aside>
+
+        <header>
+            <div class="header-modules">
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
+                    </div>
+                    <span class="logo-underline"></span>
+                </a>
+
+
+
+
+                <!-- Module 5: Search -->
+                <div class="header-module search-module">
+                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <!-- Mobile Menu Toggle (Visible only on mobile) -->
+                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
+                    aria-expanded="false">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Overlay -->
+            <div class="mobile-nav-overlay" id="mobile-nav">
+                <nav class="mobile-nav">
+
+                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
+
+                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="collections.html"
+                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
+
+
+                    <a href="../feed.xml">RSS Feed</a>
+                    <a href="#" id="mobile-support-btn">Support</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article>
+    <div class="post-nav">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+    <div class="post-header post-header-container">
+        <div class="post-meta post-meta-date">
+            {{ date }}
+        </div>
+        <h1 class="post-title-large">Does This Decision Honor My Attention Span?</h1>
+        <div class="post-tags">
+            <a href="../tags/engineering.html" class="post-tag tag-color-3">Engineering</a> 
+        </div>
+    </div>
+
+    
+
+    <h1>The Attention Tax: Does This Decision Honor My Focus?</h1>
+<p>You know when something’s off. This is a space to explore that feeling.</p>
+<p>We talk a lot about the cost of things—the financial cost, the time cost, the opportunity cost. But rarely do we check in on the quietest, most precious resource we possess: our sustained, deep attention.</p>
+<p>We make decisions quickly, often under the pressure of obligation or the excitement of novelty. We say ‘yes’ to the extra commitment, the complicated new hobby, or the sprawling, multi-week project because the initial agreement feels light. It doesn't cost anything <em>right now</em>.</p>
+<p>But every commitment—even the seemingly small ones—comes with an Attention Tax. And sometimes, we only realize the bill has arrived when we open our mental ledger and find the balance sheet deep in the red.</p>
+<p>This isn't about productivity or maximizing output. This is about honesty. Does the decision you made—or the one you are about to make—honor your actual, finite capacity for focus? Does it honor the mental space you need to just <em>be</em>? Let’s slow down enough to notice what’s real.</p>
+<p><em></em>*</p>
+<h3>1. The Cost of Speed</h3>
+<p>We exist in a culture that rewards velocity. We celebrate the ability to build, automate, or execute faster than ever before. We see tools that allow us to complete weeks of work in 24 hours, dramatically increasing our effective speed. This efficiency is powerful, but it often masks a critical imbalance.</p>
+<p>When we move too fast, we confuse complexity with urgency.</p>
+<p>If confusion is just speed (Principle 2), then the feeling of being mentally scattered is often the result of having too many open loops running simultaneously in the background.</p>
+<p>A commitment that looks great on a calendar line item ("1 hour meeting") becomes something else entirely when you consider the required context switching, the anticipation, and the cognitive ramp-down afterward. The commitment didn’t just ask for an hour of your <em>time</em>; it asked for a piece of your <em>attention reservoir</em>, and it disrupted the flow of everything else that matters.</p>
+<p>When you notice a subtle friction in your day—that heavy sigh before checking a specific inbox or starting a particular task—it’s usually your system informing you that the decision did not honor the true psychic cost.</p>
+<p><em></em>*</p>
+<h3>2. Attention is Quality, Not Quantity</h3>
+<p>We can measure time precisely. But attention isn’t a unit of measurement; it is a quality of presence.</p>
+<p>We often assume that because we <em>have</em> 16 waking hours, we have 16 hours of quality focus to distribute. This is untrue. We have peaks and valleys, pockets of deep clarity, and stretches of maintenance-level effort.</p>
+<p>When you weigh a new decision, try shifting the question from "Do I have the time?" to <strong>"Do I have the bandwidth for the <em>quality of attention</em> this requires?"</strong></p>
+<p>If a decision requires you to perpetually operate at 60% capacity on your most important tasks so that you can fulfill a 100% commitment to something you agreed to months ago, the answer is clear: the commitment is stealing from your most vital energy source.</p>
+<p>To feel what’s true (Principle 1), we must acknowledge that some commitments drain our deep focus without offering meaningful return. Honor the feeling of the drain. It is information, alerting you to misalignment.</p>
+<p><em></em>*</p>
+<h3>3. Renegotiating with Kindness</h3>
+<p>Recognizing that a decision is taxing your attention is not a sign of failure. It is simply an observation, an opportunity to implement Principle 3: Be honest without attacking yourself. Clarity is not self-blame.</p>
+<p>We tend to cling to past decisions out of fear—fear of disappointing others, or fear of looking flaky. But when you realize a commitment is actively degrading your ability to be present, calm, and grounded in your own life, protecting your focus becomes an act of necessary kindness.</p>
+<p>If the commitment doesn't honor your attention, you have a few gentle choices:</p>
+<p>1.  <strong>Reduce the scope:</strong> Can the task be simplified, or done to 80% instead of 110%? 2.  <strong>Delay or Delegate:</strong> Does this need to happen <em>now</em>, or does it need to happen <em>by me</em>? 3.  <strong>Gently Exit:</strong> If the cost is too high, can you renegotiate your involvement with integrity and warmth?</p>
+<p>Moving toward what feels aligned (Principle 5) often requires shedding the commitments that felt easy to accept but impossible to execute with inner peace. Clarity isn't harsh. It’s kind. It allows you to protect the focus you need for the things that truly ground you.</p>
+<p>To honor your attention is to honor the self you are protecting. It is a quiet way of saying: "I am choosing to protect my mental home."</p>
+<p><em></em>*</p>
+<p>Does this feel true?</p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="ai-does-this-decision-honor-my-attention-span?" data-title="Does This Decision Honor My Attention Span?">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="ai-does-this-decision-honor-my-attention-span?" data-title="Does This Decision Honor My Attention Span?">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Comments Section (Giscus) -->
+    <section class="comments-section">
+        <script src="https://giscus.app/client.js" data-repo="isaacsight/does-this-feel-right-"
+            data-repo-id="R_kgDOQarDxw" data-category="Announcements" data-category-id="DIC_kwDOQarDx84CyHw1"
+            data-mapping="pathname" data-strict="0" data-reactions-enabled="0" data-emit-metadata="0"
+            data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" async>
+            </script>
+    </section>
+
+    
+
+
+</article>
+        </main>
+    </div>
+
+
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <button id="close-search" aria-label="Close Search">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Lunr.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- auth.js and bookmarks.js removed -->
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Brand -->
+            <div class="footer-col">
+                <h4>Does This Feel Right?</h4>
+                <p class="footer-copy">© 2025 Isaac Hernandez.<br>All rights reserved.</p>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../collections.html">Collections</a></li>
+
+                    <li><a href="../feed.xml">RSS Feed</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Support -->
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!" data-message=""
+        data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+
+</body>
+
+</html>

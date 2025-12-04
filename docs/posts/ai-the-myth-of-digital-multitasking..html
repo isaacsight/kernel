@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Myth of Digital Multitasking.</title>
+    <meta name="description" content="Thoughts on business, technology, and the human condition.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="The Myth of Digital Multitasking.">
+    <meta property="og:description" content="Thoughts on business, technology, and the human condition.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/ai-the-myth-of-digital-multitasking..html">
+    <meta property="og:image" content="{{ og_image }}">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/ai-the-myth-of-digital-multitasking..html">
+    <meta name="twitter:title" content="The Myth of Digital Multitasking.">
+    <meta name="twitter:description" content="Thoughts on business, technology, and the human condition.">
+    <meta name="twitter:image" content="https://www.doesthisfeelright.com/static/images/og-default.jpg">
+
+    <!-- TikTok Verification -->
+    <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/ai-the-myth-of-digital-multitasking..html">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "The Myth of Digital Multitasking.", "image": ["https://www.doesthisfeelright.com/static/images/og-default.jpg"], "datePublished": "2025-12-03", "dateModified": "2025-12-03", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="container">
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                DOES THIS FEEL RIGHT?
+            </div>
+            <nav class="nav-section">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../collections.html" class="nav-link">Collections</a>
+                <a href="../feed.xml" class="nav-link">RSS Feed</a>
+            </nav>
+            <script>
+                // Simple active state logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            </script>
+        </aside>
+
+        <header>
+            <div class="header-modules">
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
+                    </div>
+                    <span class="logo-underline"></span>
+                </a>
+
+
+
+
+                <!-- Module 5: Search -->
+                <div class="header-module search-module">
+                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <!-- Mobile Menu Toggle (Visible only on mobile) -->
+                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
+                    aria-expanded="false">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Overlay -->
+            <div class="mobile-nav-overlay" id="mobile-nav">
+                <nav class="mobile-nav">
+
+                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
+
+                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="collections.html"
+                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
+
+
+                    <a href="../feed.xml">RSS Feed</a>
+                    <a href="#" id="mobile-support-btn">Support</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article>
+    <div class="post-nav">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+    <div class="post-header post-header-container">
+        <div class="post-meta post-meta-date">
+            {{ date }}
+        </div>
+        <h1 class="post-title-large">The Myth of Digital Multitasking.</h1>
+        <div class="post-tags">
+            <a href="../tags/engineering.html" class="post-tag tag-color-3">Engineering</a> 
+        </div>
+    </div>
+
+    
+
+    <h1>The Myth of Doing It All At Once</h1>
+<p>You know when something’s off.</p>
+<p>It’s that subtle, frantic vibration you feel when you have eight browser tabs open, two separate chat windows running, and a podcast playing quietly in the background—all while attempting to craft a deeply thoughtful email. You are doing everything, but you are present for nothing.</p>
+<p>This is a space to explore that feeling.</p>
+<p>In the digital era, we have been sold a specific kind of efficiency, one where speed is the highest virtue. We see the ease with which technology can handle immense processing power—the ability to automate entire systems or generate vast amounts of content in a fraction of a second. It's exhilarating, and it makes our own human limitations feel almost shameful. We try to mimic the speed of the machine.</p>
+<p>We call this "multitasking." We wear it like a badge of honor.</p>
+<p>But if we slow down enough to actually feel what’s happening inside our own system, we realize that multitasking is often just a sophisticated name for chronic, restless confusion. And confusion, as we’ve discussed before, is simply speed.</p>
+<p>Let’s unpack the myth of digital multitasking and notice what we are truly giving up in the pursuit of supposed efficiency.</p>
+<p><em></em>*</p>
+<h2>1. The Real Physics of Switching</h2>
+<p>When we talk about digital multitasking, we are rarely talking about truly running two cognitive processes simultaneously. We are talking about rapid, high-friction task switching.</p>
+<p>Imagine trying to read a chapter in a book, but every 45 seconds, someone snaps their fingers and makes you quickly summarize the last twenty emails you received. You can do it. But every time you snap back to the book, you lose the narrative thread. You have to rewind a paragraph or two to remember the emotional context or the core argument.</p>
+<p>That moment of rewinding is the cognitive cost.</p>
+<p>It’s the invisible tax on your attention, and it’s paid not just in lost time, but in emotional energy. This constant forcing of the system—the pivot from deep focus on one thing to shallow scanning of another—leaves us drained. We might check off more items on the list, but we feel fundamentally less effective, because we haven't allowed ourselves the quiet immersion required for true clarity.</p>
+<p>Principle 2 reminds us that confusion is just speed. The frantic speed of switching keeps us perpetually confused about where our attention actually belongs.</p>
+<h2>2. The Erosion of Emotional Presence</h2>
+<p>What multitasking truly sacrifices is the quality of our presence.</p>
+<p>If you are constantly splitting your focus—half-listening to a partner while half-scanning a notification—you are not just diminishing the quality of the interaction; you are denying yourself the experience of full, clean attention.</p>
+<p>Digital multitasking trains us to live in a state of perpetually divided attention. This state is marked by a low, consistent level of anxiety. You are always mentally reaching for the next thing, or reviewing the last thing, which means you are rarely settled in the current moment.</p>
+<p>When we are scattered, we are less likely to <strong>feel what’s true</strong> (Principle 1). We bypass the subtle signals of alignment. <em>Is this email actually important? Does this project feel nourishing? Am I connecting authentically with the person in front of me?</em></p>
+<p>If we are moving too fast, using distraction as a mechanism to handle the sheer volume of information the digital world throws at us, we trade depth of feeling for superficial movement. We become good at processing data, but poor at sensing ourselves. In trying to manage the external world, we lose sovereignty over our internal landscape.</p>
+<h2>3. Reclaiming the Single Thread</h2>
+<p>This isn't an argument for becoming perfectly productive, nor is it a mandate to disconnect entirely. It's simply an invitation to notice the texture of your own experience when you choose singularity over switching.</p>
+<p>When you decide to focus on one single task—whether that’s writing for 20 minutes, giving your full attention to a child, or simply doing the dishes—you reclaim something powerful: the feeling of wholeness.</p>
+<p>When you move toward a single thread of focus, you are choosing alignment (Principle 5). You are choosing to work with, rather than against, your current capacity.</p>
+<p>This practice is inherently kind. It’s a way of saying to your nervous system: "You don't have to fight multiple battles right now. You can just handle this one thing, thoroughly and completely."</p>
+<p>The moment you feel the impulse to switch—to glance at the other screen, to check the phone, to pivot to a new thought—is the moment to gently pause. Use that pause to ask yourself: <em>What does my internal system actually need right now?</em></p>
+<p>Does it need more stimulation, or does it need grounding?</p>
+<p>Clarity isn’t harsh. It’s kind. And sometimes the kindest thing we can do for ourselves is to slow the digital torrent down to a manageable stream, allowing us to finish a task with a feeling of deep, quiet satisfaction, rather than anxious fragmentation. When we stop trying to be the machine, we start to feel real again.</p>
+<p>Does this feel true?</p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="ai-the-myth-of-digital-multitasking." data-title="The Myth of Digital Multitasking.">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="ai-the-myth-of-digital-multitasking." data-title="The Myth of Digital Multitasking.">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Comments Section (Giscus) -->
+    <section class="comments-section">
+        <script src="https://giscus.app/client.js" data-repo="isaacsight/does-this-feel-right-"
+            data-repo-id="R_kgDOQarDxw" data-category="Announcements" data-category-id="DIC_kwDOQarDx84CyHw1"
+            data-mapping="pathname" data-strict="0" data-reactions-enabled="0" data-emit-metadata="0"
+            data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" async>
+            </script>
+    </section>
+
+    
+
+
+</article>
+        </main>
+    </div>
+
+
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <button id="close-search" aria-label="Close Search">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Lunr.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- auth.js and bookmarks.js removed -->
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Brand -->
+            <div class="footer-col">
+                <h4>Does This Feel Right?</h4>
+                <p class="footer-copy">© 2025 Isaac Hernandez.<br>All rights reserved.</p>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../collections.html">Collections</a></li>
+
+                    <li><a href="../feed.xml">RSS Feed</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Support -->
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!" data-message=""
+        data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+
+</body>
+
+</html>

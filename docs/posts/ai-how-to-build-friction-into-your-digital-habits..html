@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Build Friction into Your Digital Habits.</title>
+    <meta name="description" content="Thoughts on business, technology, and the human condition.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="How to Build Friction into Your Digital Habits.">
+    <meta property="og:description" content="Thoughts on business, technology, and the human condition.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/ai-how-to-build-friction-into-your-digital-habits..html">
+    <meta property="og:image" content="{{ og_image }}">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/ai-how-to-build-friction-into-your-digital-habits..html">
+    <meta name="twitter:title" content="How to Build Friction into Your Digital Habits.">
+    <meta name="twitter:description" content="Thoughts on business, technology, and the human condition.">
+    <meta name="twitter:image" content="https://www.doesthisfeelright.com/static/images/og-default.jpg">
+
+    <!-- TikTok Verification -->
+    <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/ai-how-to-build-friction-into-your-digital-habits..html">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "How to Build Friction into Your Digital Habits.", "image": ["https://www.doesthisfeelright.com/static/images/og-default.jpg"], "datePublished": "2025-12-02", "dateModified": "2025-12-02", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="container">
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                DOES THIS FEEL RIGHT?
+            </div>
+            <nav class="nav-section">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../collections.html" class="nav-link">Collections</a>
+                <a href="../feed.xml" class="nav-link">RSS Feed</a>
+            </nav>
+            <script>
+                // Simple active state logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentPath = window.location.pathname;
+                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            </script>
+        </aside>
+
+        <header>
+            <div class="header-modules">
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
+                        <span class="logo-tagline">A place to notice what's real.</span>
+                    </div>
+                    <span class="logo-underline"></span>
+                </a>
+
+
+
+
+                <!-- Module 5: Search -->
+                <div class="header-module search-module">
+                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <!-- Mobile Menu Toggle (Visible only on mobile) -->
+                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
+                    aria-expanded="false">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Overlay -->
+            <div class="mobile-nav-overlay" id="mobile-nav">
+                <nav class="mobile-nav">
+
+                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
+
+                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="collections.html"
+                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
+
+
+                    <a href="../feed.xml">RSS Feed</a>
+                    <a href="#" id="mobile-support-btn">Support</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article>
+    <div class="post-nav">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+    <div class="post-header post-header-container">
+        <div class="post-meta post-meta-date">
+            {{ date }}
+        </div>
+        <h1 class="post-title-large">How to Build Friction into Your Digital Habits.</h1>
+        <div class="post-tags">
+            <a href="../tags/engineering.html" class="post-tag tag-color-3">Engineering</a> 
+        </div>
+    </div>
+
+    
+
+    <h1>Building the Break: Why Digital Friction Is the Kindest Habit</h1>
+<p><strong>You know when something’s off. This is a space to explore that feeling.</strong></p>
+<p>Sometimes, that "off" feeling isn’t about a large crisis or a dramatic life choice. It’s the subtle, low-grade hum of being moved too quickly—of living in the slipstream of seamless digital flow.</p>
+<p>In our continuous quest for efficiency, we have engineered almost all resistance out of our technology. We want instant access, instant answers, and instant gratification. While this speed might help us build an entire publication backend in 24 hours (a fascinating feat of modern anti-gravity), it also leaves us perpetually unmoored.</p>
+<p>When confusion sets in, it’s often just a sign that we’re moving too fast to hear ourselves think. <em>Clarity requires slowness.</em></p>
+<p>This post isn't about quitting the internet or shaming the tools we use. It’s about introducing a necessary, intentional slowness—a slight, protective friction—between the impulse and the action. It's about remembering that when we choose alignment, small steps count.</p>
+<p>---</p>
+<h2>1. The Real Cost of Zero Effort</h2>
+<p>Our interfaces are designed, brilliantly, to minimize effort. Two taps to purchase, one swipe to scroll, zero resistance to entry. This efficiency is the core mechanism of engagement.</p>
+<p>But what happens when the path of least resistance is also the path of least consciousness?</p>
+<p>We are often drawn to our devices not out of a specific need, but out of a vague restlessness. We don't consciously decide, "I will now spend twenty minutes learning about the glitch aesthetic of 2025." We simply slide into the feed because the door is always open.</p>
+<p>If we don't build our own internal checks, the environment will define our pace. Zero effort means we stop practicing the necessary skill of choice. We become reactive—always responding to the ping, the notification, or the visual density that some have rightly called a kind of "brain rot aesthetics."</p>
+<p>The goal of friction, then, is simple: to transform a reactive slide into an intentional pause. We need to create enough space to ask, genuinely: <em>Does this feel true?</em></p>
+<p>---</p>
+<h2>2. Introducing Intentional Speed Bumps</h2>
+<p>Friction doesn’t have to be a monumental overhaul of your life. It can be small, almost invisible adjustments that force you to slow down enough to see clearly. These are moments to feel what’s true, not what’s convenient.</p>
+<h3>A. The Requirement for Physical Movement</h3>
+<p>The simplest form of digital friction is spatial. If the tool you use for distraction is always within arm’s reach, it will always win.</p>
+<p>Instead of keeping your phone on your desk, put it in a drawer across the room, or even in a different room entirely. If you want to check an app, you now have to stand up, walk to the drawer, pick up the phone, and unlock it.</p>
+<p>This small physical journey serves as a powerful speed bump. It gives your conscious mind 5 to 10 seconds of processing time to ask: <em>Is this truly necessary right now?</em> Often, by the time you reach the drawer, the impulse has softened.</p>
+<h3>B. The De-Personalization Principle</h3>
+<p>Most of our tools are designed to streamline access based on past history—suggesting content, auto-filling passwords, and presenting ready-made icons. Remove these conveniences for high-friction tasks.</p>
+<ul>
+<li><strong>Delete the App Icon:</strong> Force yourself to type the URL of high-distraction sites instead of clicking the bookmark or the icon. This requires effort and focus, demanding that you be honest about what you are seeking.</li>
+<li><strong>Log Out Fully:</strong> Log out of high-stakes platforms (social media, streaming sites) after every use. Logging back in requires you to actively enter a password, confirming your decision. It ensures you are entering the space with awareness, not identity, driving the action.</li>
+</ul>
+<h3>C. The Two-Question Checkpoint</h3>
+<p>Before you open a new tab or unlock your device, install a quick, mental checkpoint. This checkpoint introduces cognitive friction.</p>
+<p>Ask yourself two things:</p>
+<p>1. <strong>What is my internal state right now?</strong> (Am I bored, anxious, avoiding something?) 2. <strong>What is the single, specific task I intend to accomplish in the next five minutes on this device?</strong></p>
+<p>If the answer to the second question is "I don't know," or "Just scrolling," you have clarity. You can then choose consciously whether or not you want to proceed with an unknown purpose. This practice helps ensure your feelings inform you, rather than define you.</p>
+<p>---</p>
+<h2>3. Clarity Isn't Harsh, It's Kind</h2>
+<p>We often associate the need for friction with failure—as if we need to punish ourselves into better habits. This is a misunderstanding of clarity.</p>
+<p>Introducing friction is not about self-attack; it is an act of deep self-protection. It is a gentle boundary we set for ourselves, protecting our finite reserves of attention from the relentless efficiency of the digital world.</p>
+<p>When we slow down, we finally give ourselves the opportunity to listen to the whisper of our own intuition, instead of the roar of the constant information flow.</p>
+<p>Friction is simply the physical manifestation of the boundary that says: "My inner quiet is worth the extra few seconds of effort." It allows us to move toward what feels truly aligned, rather than what feels simply easy.</p>
+<p>--- A place to notice what's real.</p>
+<p>Does this feel true?</p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="ai-how-to-build-friction-into-your-digital-habits." data-title="How to Build Friction into Your Digital Habits.">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="ai-how-to-build-friction-into-your-digital-habits." data-title="How to Build Friction into Your Digital Habits.">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Comments Section (Giscus) -->
+    <section class="comments-section">
+        <script src="https://giscus.app/client.js" data-repo="isaacsight/does-this-feel-right-"
+            data-repo-id="R_kgDOQarDxw" data-category="Announcements" data-category-id="DIC_kwDOQarDx84CyHw1"
+            data-mapping="pathname" data-strict="0" data-reactions-enabled="0" data-emit-metadata="0"
+            data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" async>
+            </script>
+    </section>
+
+    
+
+
+</article>
+        </main>
+    </div>
+
+
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <button id="close-search" aria-label="Close Search">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Lunr.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- auth.js and bookmarks.js removed -->
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Col 1: Brand -->
+            <div class="footer-col">
+                <h4>Does This Feel Right?</h4>
+                <p class="footer-copy">© 2025 Isaac Hernandez.<br>All rights reserved.</p>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../collections.html">Collections</a></li>
+
+                    <li><a href="../feed.xml">RSS Feed</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Support -->
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Me a Coffee Widget (Hidden Launcher) -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+        data-id="doesthisfeelright" data-description="Support me on Buy me a coffee!" data-message=""
+        data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+
+</body>
+
+</html>
