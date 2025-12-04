@@ -1,6 +1,6 @@
 ---
 title: "The difference between busy and fulfilled"
-date: 2025-07-30
+date: 2025-11-28
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

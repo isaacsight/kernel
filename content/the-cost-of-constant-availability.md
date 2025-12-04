@@ -1,6 +1,6 @@
 ---
 title: "The cost of constant availability"
-date: 2025-08-11
+date: 2025-11-28
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

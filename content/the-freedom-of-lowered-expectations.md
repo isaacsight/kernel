@@ -1,6 +1,6 @@
 ---
 title: "The freedom of lowered expectations"
-date: 2025-08-11
+date: 2025-11-25
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

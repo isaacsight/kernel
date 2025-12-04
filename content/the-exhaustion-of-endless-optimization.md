@@ -1,6 +1,6 @@
 ---
 title: "The exhaustion of endless optimization"
-date: 2025-06-08
+date: 2025-11-25
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

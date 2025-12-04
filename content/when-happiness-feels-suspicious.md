@@ -1,6 +1,6 @@
 ---
 title: "When happiness feels suspicious"
-date: 2025-09-06
+date: 2025-11-21
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

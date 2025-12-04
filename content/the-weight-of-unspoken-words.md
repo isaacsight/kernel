@@ -1,6 +1,6 @@
 ---
 title: "The weight of unspoken words"
-date: 2025-06-14
+date: 2025-11-25
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

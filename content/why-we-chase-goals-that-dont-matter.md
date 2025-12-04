@@ -1,6 +1,6 @@
 ---
 title: "Why we chase goals that don't matter"
-date: 2025-09-24
+date: 2025-11-29
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

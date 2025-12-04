@@ -1,6 +1,6 @@
 ---
 title: "Learning to trust your own judgment"
-date: 2025-08-02
+date: 2025-12-02
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

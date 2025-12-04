@@ -1,6 +1,6 @@
 ---
 title: "Why we attract what we're not ready for"
-date: 2025-10-12
+date: 2025-11-29
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

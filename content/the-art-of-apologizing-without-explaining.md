@@ -1,6 +1,6 @@
 ---
 title: "The art of apologizing without explaining"
-date: 2025-10-24
+date: 2025-11-30
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

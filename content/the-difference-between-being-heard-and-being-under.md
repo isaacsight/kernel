@@ -1,6 +1,6 @@
 ---
 title: "The difference between being heard and being understood"
-date: 2025-09-25
+date: 2025-11-21
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

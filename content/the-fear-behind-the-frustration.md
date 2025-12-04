@@ -1,6 +1,6 @@
 ---
 title: "The fear behind the frustration"
-date: 2025-10-07
+date: 2025-11-29
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

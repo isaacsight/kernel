@@ -1,6 +1,6 @@
 ---
 title: "The art of doing nothing well"
-date: 2025-08-31
+date: 2025-11-23
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

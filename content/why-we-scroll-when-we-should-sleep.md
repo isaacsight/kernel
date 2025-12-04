@@ -1,6 +1,6 @@
 ---
 title: "Why we scroll when we should sleep"
-date: 2025-06-07
+date: 2025-11-24
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

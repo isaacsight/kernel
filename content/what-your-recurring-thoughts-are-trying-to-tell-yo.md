@@ -1,6 +1,6 @@
 ---
 title: "What your recurring thoughts are trying to tell you"
-date: 2025-06-19
+date: 2025-11-30
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

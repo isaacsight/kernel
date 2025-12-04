@@ -1,6 +1,6 @@
 ---
 title: "The beauty of purposeless pursuits"
-date: 2025-09-26
+date: 2025-11-30
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

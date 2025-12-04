@@ -1,6 +1,6 @@
 ---
 title: "The conversations we avoid having"
-date: 2025-08-24
+date: 2025-11-23
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

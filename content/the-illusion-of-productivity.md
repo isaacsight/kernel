@@ -1,6 +1,6 @@
 ---
 title: "The illusion of productivity"
-date: 2025-07-03
+date: 2025-11-23
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

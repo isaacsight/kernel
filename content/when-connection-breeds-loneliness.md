@@ -1,6 +1,6 @@
 ---
 title: "When connection breeds loneliness"
-date: 2025-08-24
+date: 2025-11-22
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

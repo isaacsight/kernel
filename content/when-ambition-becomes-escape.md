@@ -1,6 +1,6 @@
 ---
 title: "When ambition becomes escape"
-date: 2025-07-10
+date: 2025-11-26
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

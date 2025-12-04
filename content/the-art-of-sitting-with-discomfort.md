@@ -1,6 +1,6 @@
 ---
 title: "The art of sitting with discomfort"
-date: 2025-06-07
+date: 2025-11-29
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

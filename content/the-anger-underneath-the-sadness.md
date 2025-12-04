@@ -1,6 +1,6 @@
 ---
 title: "The anger underneath the sadness"
-date: 2025-11-12
+date: 2025-11-22
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

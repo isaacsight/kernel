@@ -1,6 +1,6 @@
 ---
 title: "Why we fear empty time"
-date: 2025-08-09
+date: 2025-11-24
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

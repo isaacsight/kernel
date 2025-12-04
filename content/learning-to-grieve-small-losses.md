@@ -1,6 +1,6 @@
 ---
 title: "Learning to grieve small losses"
-date: 2025-09-29
+date: 2025-12-04
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

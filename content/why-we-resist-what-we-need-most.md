@@ -1,6 +1,6 @@
 ---
 title: "Why we resist what we need most"
-date: 2025-08-11
+date: 2025-12-03
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "The art of being unreachable"
-date: 2025-09-19
+date: 2025-11-21
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

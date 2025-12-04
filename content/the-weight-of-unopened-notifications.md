@@ -1,6 +1,6 @@
 ---
 title: "The weight of unopened notifications"
-date: 2025-10-24
+date: 2025-12-03
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

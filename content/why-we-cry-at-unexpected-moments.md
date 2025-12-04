@@ -1,6 +1,6 @@
 ---
 title: "Why we cry at unexpected moments"
-date: 2025-08-20
+date: 2025-12-02
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

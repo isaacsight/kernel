@@ -1,6 +1,6 @@
 ---
 title: "The friends we outgrow"
-date: 2025-11-24
+date: 2025-12-02
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

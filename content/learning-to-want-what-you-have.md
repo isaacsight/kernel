@@ -1,6 +1,6 @@
 ---
 title: "Learning to want what you have"
-date: 2025-10-13
+date: 2025-11-27
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

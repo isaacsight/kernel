@@ -1,6 +1,6 @@
 ---
 title: "The comfort of melancholy"
-date: 2025-10-25
+date: 2025-12-01
 category: "Reflections"
 tags: ["reflection", "growth", "self-awareness"]
 ---

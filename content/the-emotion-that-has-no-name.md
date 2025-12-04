@@ -1,6 +1,6 @@
 ---
 title: "The emotion that has no name"
-date: 2025-11-17
+date: 2025-12-03
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

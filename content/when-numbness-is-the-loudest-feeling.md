@@ -1,6 +1,6 @@
 ---
 title: "When numbness is the loudest feeling"
-date: 2025-07-26
+date: 2025-11-30
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

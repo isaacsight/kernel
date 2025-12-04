@@ -1,6 +1,6 @@
 ---
 title: "Finding presence in a distracted world"
-date: 2025-08-30
+date: 2025-11-26
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "The courage to be mediocre at something new"
-date: 2025-11-29
+date: 2025-11-27
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

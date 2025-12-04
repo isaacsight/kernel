@@ -1,6 +1,6 @@
 ---
 title: "When distance brings clarity"
-date: 2025-11-06
+date: 2025-11-22
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "The art of feeling without fixing"
-date: 2025-09-10
+date: 2025-11-27
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

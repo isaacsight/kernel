@@ -1,6 +1,6 @@
 ---
 title: "Why we document instead of experience"
-date: 2025-12-01
+date: 2025-12-04
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

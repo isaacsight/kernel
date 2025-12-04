@@ -1,6 +1,6 @@
 ---
 title: "Why we push away what we need"
-date: 2025-07-25
+date: 2025-11-28
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

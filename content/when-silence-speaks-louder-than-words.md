@@ -1,6 +1,6 @@
 ---
 title: "When silence speaks louder than words"
-date: 2025-08-04
+date: 2025-12-01
 category: "Inner Work"
 tags: ["reflection", "growth", "self-awareness"]
 ---

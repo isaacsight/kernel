@@ -1,6 +1,6 @@
 ---
 title: "When self-improvement becomes self-rejection"
-date: 2025-06-10
+date: 2025-11-28
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

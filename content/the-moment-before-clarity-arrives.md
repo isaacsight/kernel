@@ -1,6 +1,6 @@
 ---
 title: "The moment before clarity arrives"
-date: 2025-08-05
+date: 2025-12-04
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "When meaning finds you instead"
-date: 2025-08-13
+date: 2025-12-01
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

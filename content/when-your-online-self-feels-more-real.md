@@ -1,6 +1,6 @@
 ---
 title: "When your online self feels more real"
-date: 2025-08-09
+date: 2025-11-27
 category: "Modern Life"
 tags: ["reflection", "growth", "self-awareness"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "The difference between patience and avoidance"
-date: 2025-09-30
+date: 2025-12-01
 category: "Connection"
 tags: ["reflection", "growth", "self-awareness"]
 ---

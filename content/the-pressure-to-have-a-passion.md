@@ -1,6 +1,6 @@
 ---
 title: "The pressure to have a passion"
-date: 2025-08-19
+date: 2025-12-02
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---

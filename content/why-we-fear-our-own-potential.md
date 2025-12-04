@@ -1,6 +1,6 @@
 ---
 title: "Why we fear our own potential"
-date: 2025-07-03
+date: 2025-11-26
 category: "Growth"
 tags: ["reflection", "growth", "self-awareness"]
 ---
