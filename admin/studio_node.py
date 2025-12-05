@@ -130,6 +130,29 @@ def generate_text(request: GenerateRequest):
         logger.error(f"Generation failed: {e}")
         raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
 
+@app.post("/embeddings")
+def generate_embeddings(request: GenerateRequest):
+    """Generates embeddings using the local Ollama instance."""
+    logger.info(f"Received embedding request for model: {request.model}")
+    try:
+        import requests
+        ollama_url = "http://localhost:11434/api/embeddings"
+        
+        payload = {
+            "model": request.model or "nomic-embed-text",
+            "prompt": request.prompt
+        }
+        
+        response = requests.post(ollama_url, json=payload)
+        response.raise_for_status()
+        
+        result = response.json()
+        return {"embedding": result.get("embedding", [])}
+        
+    except Exception as e:
+        logger.error(f"Embedding failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Embedding failed: {str(e)}")
+
 # ==================== Sync Endpoints ====================
 
 @app.post("/sync/push")
