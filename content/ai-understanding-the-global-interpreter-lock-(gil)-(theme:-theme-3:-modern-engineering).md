@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Understanding the Global Interpreter Lock (GIL) (Theme: Theme'
-  3: Modern Engineering)'
+title: 'Understanding the Global Interpreter Lock (GIL) (Theme: Theme 3: Modern Engineering)'
 ---
 
 ## Decoding the GIL: A Modern Engineer's Guide to Python's Concurrency Conundrum

@@ -1,0 +1,65 @@
+{
+    "platforms": {
+        "tiktok": {
+            "enabled": true,
+            "username": "studio_os_demo",
+            "default_hashtags": [
+                "#ai",
+                "#tech",
+                "#coding",
+                "#future"
+            ],
+            "video_duration_max": 60,
+            "upload_method": "browser_cookies"
+        },
+        "instagram": {
+            "enabled": true,
+            "username": "studio_os_official",
+            "default_hashtags": [
+                "#innovation",
+                "#design",
+                "#visuals",
+                "#creative"
+            ],
+            "post_types": [
+                "reel",
+                "carousel"
+            ],
+            "carousel_template": "minimal_dark"
+        },
+        "twitter": {
+            "enabled": true,
+            "username": "StudioOS_AI",
+            "thread_delimiter": "🧵",
+            "max_chars": 280
+        },
+        "linkedin": {
+            "enabled": true,
+            "username": "isaac-hernandez",
+            "professional_tone": true,
+            "default_hashtags": [
+                "#leadership",
+                "#softwareengineering",
+                "#personalbranding"
+            ]
+        },
+        "youtube": {
+            "enabled": true,
+            "channel_name": "Studio OS",
+            "default_tags": [
+                "education",
+                "technology",
+                "programming"
+            ],
+            "shorts_allowed": true
+        }
+    },
+    "schedule": {
+        "timezone": "America/Los_Angeles",
+        "posting_windows": {
+            "morning": "09:00",
+            "afternoon": "13:00",
+            "evening": "18:00"
+        }
+    }
+}

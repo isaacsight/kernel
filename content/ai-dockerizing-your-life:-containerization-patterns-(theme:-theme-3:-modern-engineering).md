@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Dockerizing Your Life: Containerization Patterns (Theme: Theme'
-  3: Modern Engineering)'
+title: 'Dockerizing Your Life: Containerization Patterns (Theme: Theme 3: Modern Engineering)'
 ---
 
 ## Dockerizing Your Life: Containerization Patterns for Modern Engineering

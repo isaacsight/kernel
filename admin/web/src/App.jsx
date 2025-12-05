@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import PostList from './components/PostList';
 import PostEditor from './components/PostEditor';
+import DesignStudio from './components/DesignStudio';
 import Settings from './components/Settings';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/content" element={<PostList />} />
           <Route path="/content/new" element={<PostEditor />} />
           <Route path="/content/:slug" element={<PostEditor />} />
+          <Route path="/design" element={<DesignStudio />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>

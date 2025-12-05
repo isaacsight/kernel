@@ -9,7 +9,7 @@ CONTENT_DIR = 'content'
 TEMPLATE_DIR = 'templates'
 OUTPUT_DIR = 'docs'
 STATIC_DIR = 'static'
-BASE_URL = 'https://isaacsight.com'
+BASE_URL = 'https://www.doesthisfeelright.com'
 DEFAULT_IMAGE = 'https://isaacsight.com/static/images/og-default.jpg' # Placeholder
 
 def read_file(path):
@@ -195,24 +195,20 @@ def build():
     
     # 2. Copy Static Assets
     print("Step 2: Copying Static Assets...")
+    # Copy all static assets to docs/static (Primary Location)
     shutil.copytree(STATIC_DIR, os.path.join(OUTPUT_DIR, 'static'))
-    # Also copy style.css to root css/ folder for compatibility if needed, 
-    # but our templates use {{ root }}static/css so we should be good.
-    # Wait, templates use {{ root }}css/style.css. 
-    # Let's match the template expectation: static/css -> docs/css
-    # Actually, let's just copy static/* to docs/*
-    # So docs/css/style.css exists.
-    
-    # Re-copying to match structure
-    # static/css -> docs/css
-    # static/js -> docs/js
-    for item in os.listdir(STATIC_DIR):
+
+    # Selective Copy to Root (Legacy Compatibility for Templates)
+    # Only copy 'css' and 'js' to docs/css and docs/js
+    # We consciously SKIP 'images' and 'videos' to save space (avoiding duplication)
+    for item in ['css', 'js']:
         s = os.path.join(STATIC_DIR, item)
         d = os.path.join(OUTPUT_DIR, item)
-        if os.path.isdir(s):
-            shutil.copytree(s, d)
-        else:
-            shutil.copy2(s, d)
+        if os.path.exists(s):
+            if os.path.isdir(s):
+                shutil.copytree(s, d)
+            else:
+                shutil.copy2(s, d)
 
     # 3. Load Templates
     print("Step 3: Loading Templates...")
@@ -295,11 +291,64 @@ def build():
     # Tertiary: Title (Z > A if reverse=True, which is weird).
     
     # Better approach:
-    posts.sort(key=lambda x: (
-        x.get('featured', 'false').lower() == 'true', # True (1) > False (0)
-        x.get('date', '1970-01-01'),
-        x.get('title', '')
-    ), reverse=True)
+    
+    # --- Move Logic Here ---
+    # Sort posts by date (descending) for general usage
+    posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
+
+    # Split Featured vs Recent vs Experiments
+    starter_set_slugs = [
+        'to-be-witnessed',
+        'the-invisible-architect',
+        'the-rise-of-the-non-musician'
+    ]
+    
+    starter_set_posts = []
+    experiments_posts = []
+    main_feed_posts = []
+    
+    for post in posts:
+        if post['slug'] == 'about':
+            continue
+            
+        # Check for Starter Set
+        if post['slug'] in starter_set_slugs:
+            starter_set_posts.append(post)
+            continue
+            
+        # Check for Experiments (AI posts)
+        if post['slug'].startswith('ai-'):
+            experiments_posts.append(post)
+            continue
+            
+        # Otherwise, Main Feed
+        main_feed_posts.append(post)
+
+    # Sort Starter Set by the order in starter_set_slugs
+    starter_set_posts.sort(key=lambda x: starter_set_slugs.index(x['slug']))
+
+    # Generate Starter Set HTML & Nav HTML
+    starter_set_html = ""
+    starter_set_nav_html = ""
+    for i, post in enumerate(starter_set_posts):
+        tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
+        tags = [t.strip() for t in tags if t.strip()]
+        primary_tag = tags[0] if tags else 'General'
+        
+        starter_set_html += f"""
+            <a href="posts/{post['slug']}.html" class="starter-card">
+                <div class="starter-header">
+                    <span class="starter-number">0{i+1}</span>
+                    <span class="starter-chip">Start Here</span>
+                </div>
+                <h3 class="starter-title">{post.get('title', 'Untitled')}</h3>
+                <p class="starter-excerpt">{post.get('excerpt', '')}</p>
+                <div class="starter-meta">{primary_tag}</div>
+            </a>
+        """
+        
+        # Sidebar Nav Item
+        starter_set_nav_html += f'<a href="{{{{ root }}}}posts/{post["slug"]}.html" class="nav-link">{post.get("title", "Untitled")}</a>'
 
     # 4b. Second Pass: Generate HTML for Posts
     print("Step 4b: Generating HTML for Posts...")
@@ -401,6 +450,22 @@ def build():
         post_html = post_html.replace('{{ related_posts }}', related_html)
         post_html = post_html.replace('{{ root }}', '../')
         post_html = post_html.replace('{{ slug }}', slug)
+
+        # Date formatting
+        date_str = post.get('date', '')
+        try:
+            # Flexible date parsing
+            date_str = str(date_str).strip()
+            if len(date_str) == 10: # YYYY-MM-DD
+                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            else:
+                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            
+            date_display = date_obj.strftime('%B %d, %Y')
+        except Exception as e:
+            # print(f"Date formatting error for {slug}: {e}")
+            date_display = date_str
+        post_html = post_html.replace('{{ date }}', date_display)
         
         # Generate JSON-LD
         import json
@@ -420,6 +485,7 @@ def build():
         json_ld_script = f'<script type="application/ld+json">{json.dumps(json_ld_data)}</script>'
 
         full_page = base_template.replace('{{ title }}', post.get('title', 'Untitled'))
+        full_page = full_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
         full_page = full_page.replace('{{ content }}', post_html)
         full_page = full_page.replace('{{ root }}', '../')
         full_page = full_page.replace('{{ description }}', post.get('excerpt', 'Thoughts on business, technology, and the human condition.'))
@@ -432,8 +498,7 @@ def build():
 
     # 5. Generate Homepage
     print("Step 5: Generating Homepage...")
-    # Sort posts by date (descending)
-    posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
+    # Sorting and Splitting already done above.
     
     # Generate Filter HTML
     categories = sorted(list(set(p.get('category', 'General') for p in posts if p.get('slug') != 'about')))
@@ -453,100 +518,14 @@ def build():
     </div>
     '''
     
-    # Split Featured vs Recent vs Experiments
-    starter_set_slugs = [
-        'to-be-witnessed',
-        'the-invisible-architect',
-        'the-rise-of-the-non-musician'
-    ]
-    
-    starter_set_posts = []
-    experiments_posts = []
-    main_feed_posts = []
-    
-    for post in posts:
-        if post['slug'] == 'about':
-            continue
-            
-        # Check for Starter Set
-        if post['slug'] in starter_set_slugs:
-            starter_set_posts.append(post)
-            continue
-            
-        # Check for Experiments (AI posts)
-        # Assuming AI posts start with 'ai-' based on file listing
-        if post['slug'].startswith('ai-'):
-            experiments_posts.append(post)
-            continue
-            
-        # Otherwise, Main Feed
-        main_feed_posts.append(post)
+    # Logic moved up.
+    # Logic moved up.
 
-    # Sort Starter Set by the order in starter_set_slugs
-    starter_set_posts.sort(key=lambda x: starter_set_slugs.index(x['slug']))
-    
-    # Generate Starter Set HTML
-    starter_set_html = ""
-    for i, post in enumerate(starter_set_posts):
-        tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
-        tags = [t.strip() for t in tags if t.strip()]
-        primary_tag = tags[0] if tags else 'General'
-        
-        starter_set_html += f"""
-            <a href="posts/{post['slug']}.html" class="starter-card">
-                <div class="starter-header">
-                    <span class="starter-number">0{i+1}</span>
-                    <span class="starter-chip">Start Here</span>
-                </div>
-                <h3 class="starter-title">{post.get('title', 'Untitled')}</h3>
-                <p class="starter-excerpt">{post.get('excerpt', '')}</p>
-                <div class="starter-meta">{primary_tag}</div>
-            </a>
-        """
-
-    # Generate Main Feed HTML
-    posts_html = ""
-    for post in main_feed_posts:
-        # Handle tags for display
-        tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
-        tags = [t.strip() for t in tags if t.strip()]
-        primary_tag = tags[0] if tags else 'General'
-        
-        # Format date
-        date_str = post.get('date', '')
-        if date_str:
-            try:
-                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-                date_display = date_obj.strftime('%b %d, %Y')
-            except:
-                date_display = date_str
-        else:
-            date_display = ""
-            
-        posts_html += f"""
-            <a href="posts/{post['slug']}.html" class="post-card category-{post.get('category', 'general').lower().replace(' ', '-')}" data-category="{post.get('category', 'General')}" data-date="{post.get('date', '')}">
-                <div class="post-card-content">
-                    <div class="post-header">
-                        <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
-                        <span class="post-category-chip">{primary_tag}</span>
-                    </div>
-                    <p class="post-excerpt">{post.get('excerpt', '')}</p>
-                    <div class="post-meta-row">
-                        <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
-                    </div>
-                </div>
-            </a>
-        """
-        
-    # Generate Experiments HTML (Lab Notebook Style)
-    experiments_html = ""
-    # Group by month/year or just list cleanly
-    # Let's do a clean list with date and status indicator
-    
+    # Generate Experiments Sidebar HTML (Top 8 for Homepage)
     # Sort experiments by date descending
     experiments_posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
     
-    # Limit to top 8 for sidebar
+    experiments_sidebar_html = ""
     sidebar_experiments = experiments_posts[:8]
     
     for post in sidebar_experiments:
@@ -558,45 +537,42 @@ def build():
             date_display = ""
             
         title = post.get('title', 'Untitled')
-        # Clean up title
         title = title.replace('AI: ', '').replace('Experiment: ', '')
-        # Remove Theme suffix if present (e.g. "(Theme: ...)")
         if '(Theme:' in title:
             title = title.split('(Theme:')[0].strip()
             
-        experiments_html += f"""
-            <li class="experiment-item">
-                <a href="posts/{post['slug']}.html" class="experiment-link">
-                    <div class="experiment-meta">
-                        <span class="experiment-date">{date_display}</span>
-                        <span class="experiment-status"></span>
-                    </div>
-                    <span class="experiment-title">{title}</span>
-                </a>
-            </li>
+        experiments_sidebar_html += f"""
+            <a href="posts/{post['slug']}.html" class="experiment-card-small">
+                <span class="experiment-date">{date_display}</span>
+                <span class="experiment-title">{title}</span>
+            </a>
         """
         
-    experiments_html += """
-        <li class="experiment-item view-all">
-            <a href="experiments.html" class="experiment-link">
-                <span class="experiment-title" style="color: var(--text-main); font-weight: 600;">View all experiments →</span>
-            </a>
-        </li>
+    experiments_sidebar_html += """
+        <a href="experiments.html" class="experiment-card-small view-all">
+            <span class="experiment-title">View All Experiments →</span>
+        </a>
     """
-        
+
     # Generate Sidebar Collections List
-    # We need to calculate counts first (which we do later in step 6, but let's do a quick pass here or reorder)
-    # Let's just do a quick pass to get counts
     tag_counts = {}
     for post in posts:
         if post['slug'] == 'about': continue
-        post_tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
-        for tag in post_tags:
+        
+        raw_tags = post.get('tags', '')
+        if raw_tags.startswith('[') and raw_tags.endswith(']'):
+            raw_tags = raw_tags[1:-1]
+            
+        tags_list = raw_tags.split(',') if raw_tags else [post.get('category', 'General')]
+        
+        for tag in tags_list:
             tag = tag.strip()
+            if (tag.startswith("'") and tag.endswith("'")) or (tag.startswith('"') and tag.endswith('"')):
+                tag = tag[1:-1]
+                
             if not tag: continue
             tag_counts[tag] = tag_counts.get(tag, 0) + 1
             
-    # Sort tags by count (descending) and take top 5
     top_tags = sorted(tag_counts.items(), key=lambda x: x[1], reverse=True)[:5]
     
     collections_list_html = ""
@@ -610,138 +586,231 @@ def build():
                 </a>
             </li>
         """
-        
-    index_content = index_template.replace('{{ starter_set }}', starter_set_html)
-    index_content = index_content.replace('{{ recent_posts }}', posts_html)
-    index_content = index_content.replace('{{ experiments_list }}', experiments_html)
-    index_content = index_content.replace('{{ filters }}', filter_html)
-    index_content = index_content.replace('{{ collections_list }}', collections_list_html)
-    
-    full_index = base_template.replace('{{ title }}', 'Does This Feel Right?')
-    full_index = full_index.replace('{{ content }}', index_content)
-    full_index = full_index.replace('{{ root }}', '') # Root is empty for index
-    full_index = full_index.replace('{{ description }}', 'Thoughts on business, technology, and the human condition.')
-    full_index = full_index.replace('{{ url }}', f"{BASE_URL}/index.html")
-    full_index = full_index.replace('{{ image }}', DEFAULT_IMAGE)
-    full_index = full_index.replace('{{ og_type }}', 'website')
-    full_index = full_index.replace('{{ json_ld }}', '')
-    
-    write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_index)
 
-    # 6. Generate Tag Pages & Collections Index
-    # Collect all tags
-    all_tags = {}
-    for post in posts:
-        if post['slug'] == 'about': continue
-        
-        post_tags = post.get('tags', '').split(',') if post.get('tags') else [post.get('category', 'General')]
-        for tag in post_tags:
-            tag = tag.strip()
-            if not tag: continue
-            if tag not in all_tags:
-                all_tags[tag] = []
-            all_tags[tag].append(post)
+    # --- Pagination Logic Helper ---
+    def generate_pagination_html(current_page, total_pages, base_url_pattern):
+        if total_pages <= 1:
+            return ""
             
-    # Generate individual tag pages
-    tag_template = read_file(os.path.join(TEMPLATE_DIR, 'tag.html'))
-    
-    for tag, tag_posts in all_tags.items():
-        tag_slug = tag.lower().replace(' ', '-')
+        html = '<div class="pagination">'
         
-        tag_posts_html = ""
-        for post in tag_posts:
-            tag_posts_html += f"""
-                <a href="../posts/{post['slug']}.html" class="post-card">
-                    <span class="post-meta">{post.get('read_time', '5 min read')}</span>
-                    <h2>{post.get('title', 'Untitled')}</h2>
-                    <p class="post-excerpt">{post.get('excerpt', '')}</p>
+        # Previous
+        if current_page > 1:
+            prev_url = base_url_pattern.format(page=current_page - 1) if current_page - 1 > 1 else 'index.html'
+            # Check if pattern handles page 1 explicitly or we assume index.html
+            # base_url_pattern for homepage: 'latest-essays-{page}.html'
+            # Page 1 is index.html.
+            if 'latest-essays' in base_url_pattern:
+                if current_page == 2:
+                    prev_url = 'index.html'
+                else:
+                    prev_url = f'latest-essays-{current_page - 1}.html'
+            elif 'experiments' in base_url_pattern:
+                 if current_page == 2:
+                    prev_url = 'experiments.html'
+                 else:
+                    prev_url = f'experiments-{current_page - 1}.html'
+            
+            html += f'<a href="{prev_url}" class="pagination-link prev">&larr; Previous</a>'
+        
+        # Numbers
+        # Show window of pages? For now, just show current/total text or simple numbers
+        html += f'<span class="pagination-info">Page {current_page} of {total_pages}</span>'
+        
+        # Next
+        if current_page < total_pages:
+            next_url = base_url_pattern.format(page=current_page + 1)
+            html += f'<a href="{next_url}" class="pagination-link next">Next &rarr;</a>'
+            
+        html += '</div>'
+        return html
+
+    # --- Generate Paginated Homepage (Latest Essays) ---
+    POSTS_PER_PAGE = 8
+    total_posts = len(main_feed_posts)
+    total_pages = (total_posts + POSTS_PER_PAGE - 1) // POSTS_PER_PAGE
+    
+    for page in range(1, total_pages + 1):
+        start_idx = (page - 1) * POSTS_PER_PAGE
+        end_idx = start_idx + POSTS_PER_PAGE
+        display_posts = main_feed_posts[start_idx:end_idx]
+        
+        posts_html = ""
+        for post in display_posts:
+            raw_tags = post.get('tags', '')
+            if raw_tags.startswith('[') and raw_tags.endswith(']'):
+                raw_tags = raw_tags[1:-1]
+            tags_list = raw_tags.split(',') if raw_tags else [post.get('category', 'General')]
+            cleaned_tags = []
+            for t in tags_list:
+                t = t.strip()
+                if (t.startswith("'") and t.endswith("'")) or (t.startswith('"') and t.endswith('"')):
+                    t = t[1:-1]
+                if t: cleaned_tags.append(t)
+            tags = cleaned_tags if cleaned_tags else ['General']
+            primary_tag = tags[0]
+            
+            date_str = post.get('date', '')
+            try:
+                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+                date_display = date_obj.strftime('%b %d, %Y')
+            except:
+                date_display = date_str
+                
+            posts_html += f"""
+                <a href="posts/{post['slug']}.html" class="post-card category-{post.get('category', 'general').lower().replace(' ', '-')}" data-category="{post.get('category', 'General')}" data-date="{post.get('date', '')}">
+                    <div class="post-card-content">
+                        <div class="post-header">
+                            <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
+                            <span class="post-category-chip">{primary_tag}</span>
+                        </div>
+                        <p class="post-excerpt">{post.get('excerpt', '')}</p>
+                        <div class="post-meta-row">
+                            <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
+                        </div>
+                    </div>
                 </a>
             """
             
-        tag_page = tag_template.replace('{{ tag }}', tag)
-        tag_page = tag_page.replace('{{ count }}', str(len(tag_posts)))
-        tag_page = tag_page.replace('{{ posts_list }}', tag_posts_html)
-        tag_page = tag_page.replace('{{ root }}', '../')
+        # Add Pagination Control
+        pagination_html = generate_pagination_html(page, total_pages, 'latest-essays-{page}.html')
         
-        full_tag_page = base_template.replace('{{ title }}', f'{tag} - Does This Feel Right?')
-        full_tag_page = full_tag_page.replace('{{ content }}', tag_page)
-        full_tag_page = full_tag_page.replace('{{ root }}', '../')
-        full_tag_page = full_tag_page.replace('{{ description }}', f'Essays about {tag}.')
-        full_tag_page = full_tag_page.replace('{{ url }}', f"{BASE_URL}/tags/{tag_slug}.html")
-        full_tag_page = full_tag_page.replace('{{ image }}', DEFAULT_IMAGE)
-        full_tag_page = full_tag_page.replace('{{ og_type }}', 'website')
-        full_tag_page = full_tag_page.replace('{{ json_ld }}', '')
+        # Replace placeholders
+        index_content = index_template.replace('{{ starter_set }}', starter_set_html)
+        index_content = index_content.replace('{{ recent_posts }}', posts_html + pagination_html) # Append pagination
+        index_content = index_content.replace('{{ experiments_list }}', experiments_sidebar_html)
+        index_content = index_content.replace('{{ filters }}', filter_html)
+        index_content = index_content.replace('{{ collections_list }}', collections_list_html)
         
-        write_file(os.path.join(OUTPUT_DIR, 'tags', f'{tag_slug}.html'), full_tag_page)
-        
-    # Generate Collections Index
-    collections_template = read_file(os.path.join(TEMPLATE_DIR, 'collections.html'))
-    
-    collections_html = ""
-    for tag in sorted(all_tags.keys()):
-        tag_slug = tag.lower().replace(' ', '-')
-        count = len(all_tags[tag])
-        collections_html += f"""
-            <a href="tags/{tag_slug}.html" class="collection-card">
-                <h3>{tag}</h3>
-                <span class="count">{count} essay{'s' if count != 1 else ''}</span>
-            </a>
-        """
-        
-    full_collections = collections_template.replace('{{ collections_list }}', collections_html)
-    
-    full_collections_page = base_template.replace('{{ title }}', 'Collections - Does This Feel Right?')
-    full_collections_page = full_collections_page.replace('{{ content }}', full_collections)
-    full_collections_page = full_collections_page.replace('{{ root }}', '')
-    full_collections_page = full_collections_page.replace('{{ description }}', 'Explore essays by topic.')
-    full_collections_page = full_collections_page.replace('{{ url }}', f"{BASE_URL}/collections.html")
-    full_collections_page = full_collections_page.replace('{{ image }}', DEFAULT_IMAGE)
-    full_collections_page = full_collections_page.replace('{{ og_type }}', 'website')
-    full_collections_page = full_collections_page.replace('{{ json_ld }}', '')
-    
-    write_file(os.path.join(OUTPUT_DIR, 'collections.html'), full_collections_page)
+        if page == 1:
+            full_index = base_template.replace('{{ content }}', index_content)
+            full_index = full_index.replace('{{ starter_set_nav }}', starter_set_nav_html)
+            full_index = full_index.replace('{{ root }}', '') 
+            full_index = full_index.replace('{{ image }}', DEFAULT_IMAGE)
+            full_index = full_index.replace('{{ og_type }}', 'website')
+            full_index = full_index.replace('{{ json_ld }}', '')
 
-    # 8. Generate Experiments Page
-    # Reuse collections template or similar
-    experiments_page_html = '<div class="experiments-archive">'
-    experiments_page_html += '<h1 class="experiments-archive-title">Experiments</h1>'
-    experiments_page_html += '<p class="experiments-archive-desc">Technical notes, AI workshops, and raw ideas.</p>'
-    experiments_page_html += '<div class="experiments-grid">'
-    
-    for post in experiments_posts:
-        date_str = post.get('date', '')
-        try:
-            date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-            date_display = date_obj.strftime('%b %d, %Y')
-        except:
-            date_display = ""
+            full_index = full_index.replace('{{ title }}', 'Does This Feel Right?')
+            full_index = full_index.replace('{{ description }}', 'Thoughts on business, technology, and the human condition.')
+            full_index = full_index.replace('{{ url }}', f"{BASE_URL}/index.html")
+            write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_index)
+        else:
+            # On pages 2+, hide the Bento, Start Here, and Experiments top sections
+            # We do this by replacing them with empty strings BEFORE replacing {{ content }}
+            # Wait, index_content is already built with them.
+            # We need to rebuild index_content for pages > 1 or have conditional logic inside the loop.
+            # Easier to rebuild or use a different template, but let's just strip them out of the string using replace.
             
-        title = post.get('title', 'Untitled')
-        title = title.replace('AI: ', '').replace('Experiment: ', '')
-        if '(Theme:' in title:
-            title = title.split('(Theme:')[0].strip()
+            # Reconstruct index_content for pagination
+            # We want ONLY the Main Feed part. 
+            # The template structure is:
+            # magazine-layout -> bento-section -> start-here-section -> experiments-section -> content-wrapper
             
-        experiments_page_html += f"""
-            <a href="posts/{post['slug']}.html" class="experiment-card">
-                <div class="experiment-card-header">
-                    <span class="experiment-card-date">{date_display}</span>
-                    <span class="experiment-card-chip">Experiment</span>
-                </div>
-                <h3 class="experiment-card-title">{title}</h3>
-            </a>
-        """
-    experiments_page_html += '</div></div>'
+            # Let's use a simpler approach: CSS hiding or different replacements.
+            # But the replacements modify {{ starter_set }} etc.
+            
+            # Let's replace the top sections with emtpy strings for page > 1
+            paginated_index_content = index_template.replace('{{ starter_set }}', '') # Empty
+            paginated_index_content = paginated_index_content.replace('{{ experiments_list }}', '') # Empty
+            # But the SECTIONS (HTML tags) are in the template, not the variable.
+            # {{ starter_set }} is just the CARDS.
+            # So <section class="start-here-section"> ... </section> remains.
+            
+            # We need to modify templates/index.html to wrap these in conditional blocks OR 
+            # we need to use a different logic.
+            # Since we can't do logic in HTML easily without Jinja env (which we are mimicking),
+            # Let's hack it: 
+            # We can't easily remove the surrounding HTML without parsing.
+            
+            # ALTERNATIVE: Use a CSS class for page > 1.
+            # Add a class to the body or main container like "is-paginated".
+            # Then CSS: .is-paginated .bento-section { display: none; }
+            
+            # Let's try to inject a style block into {{ content }} or add a class to body?
+            # base.html has <body>. We don't have a variable for body class.
+            
+            # Let's look at index.html again.
+            # It has <div class="magazine-layout"> at the top.
+            # We can replace <div class="magazine-layout"> with <div class="magazine-layout paginated-view">
+            
+            paginated_index_content = index_content.replace('class="magazine-layout"', 'class="magazine-layout paginated-view"')
+            
+            full_index = base_template.replace('{{ content }}', paginated_index_content)
+            full_index = full_index.replace('{{ starter_set_nav }}', starter_set_nav_html)
+            full_index = full_index.replace('{{ root }}', '') 
+            full_index = full_index.replace('{{ image }}', DEFAULT_IMAGE)
+            full_index = full_index.replace('{{ og_type }}', 'website')
+            full_index = full_index.replace('{{ json_ld }}', '')
+
+            full_index = full_index.replace('{{ title }}', f'Latest Essays - Page {page}')
+            full_index = full_index.replace('{{ description }}', f'Latest essays page {page}.')
+            full_index = full_index.replace('{{ url }}', f"{BASE_URL}/latest-essays-{page}.html")
+            write_file(os.path.join(OUTPUT_DIR, f'latest-essays-{page}.html'), full_index)
+
+
+    # 8. Generate Experiments Page (Paginated)
+    print("Step 8: Generating Experiments Page...")
     
-    full_experiments_page = base_template.replace('{{ title }}', 'Experiments - Does This Feel Right?')
-    full_experiments_page = full_experiments_page.replace('{{ content }}', experiments_page_html)
-    full_experiments_page = full_experiments_page.replace('{{ root }}', '')
-    full_experiments_page = full_experiments_page.replace('{{ description }}', 'Technical notes and experiments.')
-    full_experiments_page = full_experiments_page.replace('{{ url }}', f"{BASE_URL}/experiments.html")
-    full_experiments_page = full_experiments_page.replace('{{ image }}', DEFAULT_IMAGE)
-    full_experiments_page = full_experiments_page.replace('{{ og_type }}', 'website')
-    full_experiments_page = full_experiments_page.replace('{{ json_ld }}', '')
+    EXP_PER_PAGE = 8 # Same limit for consistency
+    total_exp = len(experiments_posts)
+    total_exp_pages = (total_exp + EXP_PER_PAGE - 1) // EXP_PER_PAGE
     
-    write_file(os.path.join(OUTPUT_DIR, 'experiments.html'), full_experiments_page)
+    for page in range(1, total_exp_pages + 1):
+        start_idx = (page - 1) * EXP_PER_PAGE
+        end_idx = start_idx + EXP_PER_PAGE
+        display_exp = experiments_posts[start_idx:end_idx]
+        
+        experiments_page_inner_html = '<div class="experiments-archive">'
+        experiments_page_inner_html += '<h1 class="experiments-archive-title">Experiments</h1>'
+        experiments_page_inner_html += '<p class="experiments-archive-desc">Technical notes, AI workshops, and raw ideas.</p>'
+        experiments_page_inner_html += '<div class="experiments-grid">'
+        
+        for post in display_exp:
+            date_str = post.get('date', '')
+            try:
+                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+                date_display = date_obj.strftime('%b %d, %Y')
+            except:
+                date_display = ""
+                
+            title = post.get('title', 'Untitled')
+            title = title.replace('AI: ', '').replace('Experiment: ', '')
+            if '(Theme:' in title:
+                title = title.split('(Theme:')[0].strip()
+                
+            experiments_page_inner_html += f"""
+                <a href="posts/{post['slug']}.html" class="experiment-card">
+                    <div class="experiment-card-header">
+                        <span class="experiment-card-date">{date_display}</span>
+                        <span class="experiment-card-chip">Experiment</span>
+                    </div>
+                    <h3 class="experiment-card-title">{title}</h3>
+                </a>
+            """
+        experiments_page_inner_html += '</div>'
+        
+        # Add Pagination
+        experiments_page_inner_html += generate_pagination_html(page, total_exp_pages, 'experiments-{page}.html')
+        
+        experiments_page_inner_html += '</div>'
+        
+        full_experiments_page = base_template.replace('{{ content }}', experiments_page_inner_html)
+        full_experiments_page = full_experiments_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+        full_experiments_page = full_experiments_page.replace('{{ root }}', '')
+        full_experiments_page = full_experiments_page.replace('{{ image }}', DEFAULT_IMAGE)
+        full_experiments_page = full_experiments_page.replace('{{ og_type }}', 'website')
+        full_experiments_page = full_experiments_page.replace('{{ json_ld }}', '')
+        
+        if page == 1:
+            full_experiments_page = full_experiments_page.replace('{{ title }}', 'Experiments - Does This Feel Right?')
+            full_experiments_page = full_experiments_page.replace('{{ description }}', 'Technical notes and experiments.')
+            full_experiments_page = full_experiments_page.replace('{{ url }}', f"{BASE_URL}/experiments.html")
+            write_file(os.path.join(OUTPUT_DIR, 'experiments.html'), full_experiments_page)
+        else:
+            full_experiments_page = full_experiments_page.replace('{{ title }}', f'Experiments - Page {page}')
+            full_experiments_page = full_experiments_page.replace('{{ description }}', f'Experiments page {page}.')
+            full_experiments_page = full_experiments_page.replace('{{ url }}', f"{BASE_URL}/experiments-{page}.html")
+            write_file(os.path.join(OUTPUT_DIR, f'experiments-{page}.html'), full_experiments_page)
 
 
 
@@ -771,6 +840,7 @@ def build():
         """
         
         full_about = base_template.replace('{{ title }}', meta.get('title'))
+        full_about = full_about.replace('{{ starter_set_nav }}', starter_set_nav_html)
         full_about = full_about.replace('{{ content }}', about_html)
         full_about = full_about.replace('{{ root }}', '')
         full_about = full_about.replace('{{ description }}', meta.get('excerpt', 'About us.'))

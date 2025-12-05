@@ -90,6 +90,15 @@ class TikTokWorkflow:
             "music_volume": 0.25,
             "caption_style": "white",
             "target_duration": 15
+        },
+        "thought_leader": {
+            "description": "Premium engineering/tech leadership format",
+            "vibe": "tech",
+            "voice": "en-US-BrianMultilingualNeural", # Deep, authoritative
+            "hook_style": "story",
+            "music_volume": 0.35,
+            "caption_style": "green", # Matrix style captions? or standard
+            "target_duration": 60
         }
     }
     
@@ -130,7 +139,7 @@ class TikTokWorkflow:
         collective = get_collective_intelligence()
         
         # Get lessons relevant to this specific template/vibe
-        context = f"tiktok {self.config['template']} {self.config['vibe']}"
+        context = f"tiktok {self.template_name} {self.config['vibe']}"
         past_lessons = collective.get_relevant_lessons(context)
         
         if past_lessons:
@@ -193,6 +202,20 @@ class TikTokWorkflow:
                 {"video_path": video_result.get("video_path")}
             )
             
+            if not review["approved"]:
+                raise ValueError(f"Video review failed: {review.get('reason')}")
+
+            # Step 6: Upload
+            upload = self._execute_step(
+                "upload",
+                self._step_upload,
+                {
+                    "video_path": review["video_path"],
+                    "post": post,
+                    "script": final_script
+                }
+            )
+            
             result["completed_at"] = datetime.now().isoformat()
             result["success"] = True
             result["video_path"] = video_result.get("video_path")
@@ -219,8 +242,35 @@ class TikTokWorkflow:
                 steps_data.append(step_dict)
             result["steps"] = steps_data
             
+        # Sanitize result for JSON serialization (handle date objects)
+        def json_serial(obj):
+            if isinstance(obj, (datetime, date)):
+                return obj.isoformat()
+            if isinstance(obj, Enum):
+               return obj.value
+            raise TypeError (f"Type {type(obj)} not serializable")
+            
+        # We can't easily pass a custom encoder to memory.save_insight if it uses json.dumps internally.
+        # So we pre-serialize or sanitize the dict.
+        import json
+        from datetime import date
+        
+        # Recursive sanitization
+        def sanitize(obj):
+            if isinstance(obj, (datetime, date)):
+                return obj.isoformat()
+            if isinstance(obj, Enum):
+                return obj.value
+            if isinstance(obj, dict):
+                return {k: sanitize(v) for k, v in obj.items()}
+            if isinstance(obj, list):
+                return [sanitize(v) for v in obj]
+            return obj
+            
+        result_clean = sanitize(result)
+
         # Save to memory for future reference
-        self.memory.save_insight("workflow_execution", result, confidence=1.0, source="TikTokWorkflow")
+        self.memory.save_insight("workflow_execution", result_clean, confidence=1.0, source="TikTokWorkflow")
         
         # LEARNING LOOP: Save explicit lesson if we have clear feedback
         if result["success"]:
@@ -404,7 +454,7 @@ class TikTokWorkflow:
         post = data["post"]
         post["script"] = data["script"]  # Inject improved script
         
-        video_path = broadcaster.generate_video(post, vibe=data["vibe"])
+        video_path = broadcaster.generate_video(post, vibe=data["vibe"], voice=data["voice"])
         
         return {
             "video_path": video_path,
@@ -434,6 +484,30 @@ class TikTokWorkflow:
             "approved": True,
             "video_path": video_path,
             "file_size_mb": round(size_mb, 2)
+        }
+
+    def _step_upload(self, data: Dict) -> Dict:
+        """Uploads the video to TikTok."""
+        from admin.engineers.broadcaster import Broadcaster
+        
+        broadcaster = Broadcaster()
+        video_path = data["video_path"]
+        post = data["post"]
+        
+        # Create description with hashtags
+        title = post.get("title", "New Post")
+        hashtags = "#blog #tech #ai #fyp" # Could be dynamic from repurpose step
+        description = f"{title}\n\n{hashtags}"
+        
+        success = broadcaster.upload_to_tiktok(video_path, description)
+        
+        if not success:
+            raise RuntimeError("Upload failed. Check logs or cookies.")
+            
+        return {
+            "uploaded": True,
+            "video_path": video_path,
+            "timestamp": datetime.now().isoformat()
         }
     
     @classmethod

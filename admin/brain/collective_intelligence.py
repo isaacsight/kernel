@@ -428,6 +428,86 @@ class CollectiveIntelligence:
         """
         Get overall team status and health.
         """
+    # ==================== Self-Critique & Learning ====================
+    
+    def critique_action(self, action_name: str, inputs: Dict, result: str, 
+                        duration: float, error: Optional[str] = None):
+        """
+        Critique a completed action to learn from it.
+        """
+        import requests
+        
+        status = "FAILED" if error else "SUCCESS"
+        logger.info(f"[Critique] Analyzing {action_name} ({status} in {duration:.2f}s)...")
+        
+        prompt = f"""
+        As the Collective Intelligence, critique this recent action by an agent.
+        
+        ACTION: {action_name}
+        STATUS: {status}
+        DURATION: {duration:.2f}s
+        INPUTS: {json.dumps(inputs, default=str)}
+        RESULT/ERROR: {error if error else result}
+        
+        Analyze efficienty, correctness, and alignment with the mission.
+        Did it succeed? If not, why?
+        If it succeeded, was it optimal?
+        
+        Return JSON with:
+        {{
+            "analysis": "Brief analysis of the action",
+            "rating": 1-10 (1=terrible, 10=perfect),
+            "lesson": "A universal lesson learned, if any (or null)",
+            "insight": "A specific insight about this task/tool (or null)"
+        }}
+        """
+        
+        try:
+            # Use Studio Node if available, else skip or fallback (simplified for now)
+            if self.node_url:
+                response = requests.post(
+                    f"{self.node_url}/generate",
+                    json={"prompt": prompt, "model": "mistral"},
+                    timeout=30 # Don't block too long
+                )
+                if response.status_code == 200:
+                    try:
+                        resp_json = response.json().get("response", "")
+                        # Simple extraction if it's text wrapped in JSON
+                        if "{" in resp_json:
+                            data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
+                            
+                            # Log the critique
+                            self.knowledge["shared_insights"].append({
+                                "from_agent": "Self-Critique",
+                                "type": "critique",
+                                "insight": f"[{action_name}] {data.get('analysis')}",
+                                "rating": data.get('rating'),
+                                "shared_at": datetime.now().isoformat()
+                            })
+                            
+                            # Store lessons
+                            if data.get("lesson"):
+                                self.learn_lesson(
+                                    "Self-Critique", 
+                                    data["lesson"], 
+                                    f"Action: {action_name}", 
+                                    status
+                                )
+                                
+                            self._save_knowledge()
+                            logger.info(f"[Critique] Completed. Rating: {data.get('rating')}/10")
+                            return data
+                    except:
+                        pass
+        except Exception as e:
+            logger.warning(f"[Critique] Failed to run critique LLM: {e}")
+            pass
+
+    def get_team_status(self) -> Dict:
+        """
+        Get overall team status and health.
+        """
         return {
             "total_insights": len(self.knowledge["shared_insights"]),
             "registered_experts": len(self.knowledge["agent_expertise"]),

@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The End of "User" Interface: Designing for Agents (Theme: Theme'
-  1: The Autonomous Web)'
+title: 'The End of "User" Interface: Designing for Agents (Theme: Theme 1: The Autonomous Web)'
 ---# The End of "User" Interface: Designing for Agents on the Autonomous Web
 
 **Introduction:**

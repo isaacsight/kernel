@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The SEO of AI-Generated Content: Quality over Quantity (Theme:'
-  Theme 1: The Autonomous Web)'
+title: 'The SEO of AI-Generated Content: Quality over Quantity (Theme: Theme 1: The Autonomous Web)'
 ---# The SEO of AI-Generated Content: Quality Over Quantity in the Autonomous Web
 
 **Introduction:**

@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Designing for Speed: Perceived vs. Actual Performance (Theme:'
-  Theme 4: Design & Aesthetics)'
+title: 'Designing for Speed: Perceived vs. Actual Performance (Theme: Theme 4: Design & Aesthetics)'
 ---
 
 ## Designing for Speed: It's Not Just About the Milliseconds (Theme: Design & Aesthetics)

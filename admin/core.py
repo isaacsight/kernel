@@ -17,6 +17,7 @@ from supabase import create_client, Client
 load_dotenv()
 
 from .config import config
+from .decorators import critique_action
 
 # Configuration
 CONTENT_DIR = config.CONTENT_DIR
@@ -200,6 +201,7 @@ class OllamaManager:
                 return f"Error stopping Ollama: {e}"
         return "Ollama was not started by this manager (or is already stopped)."
 
+@critique_action("Generate Blog Post")
 def generate_ai_post(topic, provider="auto"):
     """
     Generates a blog post using The Alchemist (Context-Aware AI) with a self-correcting loop.
@@ -287,6 +289,7 @@ def generate_ai_post(topic, provider="auto"):
         raise Exception(f"Alchemist Generation failed: {str(e)}")
 
 
+@critique_action("Publish to Git")
 def publish_git():
     """
     Commits and pushes changes to the git repository.

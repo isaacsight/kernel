@@ -4,9 +4,10 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Testing AI Applications: Determinism in a Probabilistic World'
-  (Theme: Theme 3: Modern Engineering)'
----# Testing AI Applications: Determinism in a Probabilistic World
+title: 'Testing AI Applications: Determinism in a Probabilistic World (Theme: Theme 3: Modern Engineering)'
+---
+
+# Testing AI Applications: Determinism in a Probabilistic World
 
 **Introduction:**
 

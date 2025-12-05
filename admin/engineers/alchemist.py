@@ -15,6 +15,7 @@ from config import config
 from admin.infrastructure.data_center import DataCenter
 from admin.brain.memory_store import get_memory_store
 from admin.brain.metrics_collector import get_metrics_collector
+from admin.decorators import critique_action
 
 logger = logging.getLogger("Alchemist")
 
@@ -224,26 +225,26 @@ class Alchemist:
         if not memory:
             return []
             
-        # Embed the query
+        # Embed the query - skip remote if node is offline (uses cached status)
         node_url = config.STUDIO_NODE_URL
-        if node_url:
+        query_embedding = None
+        
+        # Only try remote if node is actually online (fast cached check)
+        if node_url and self.data_center.is_node_online("studio_node"):
             import requests
             try:
                 response = requests.post(
                     f"{node_url}/embeddings",
                     json={"model": "nomic-embed-text", "prompt": query},
-                    timeout=config.TIMEOUT_EMBEDDING
+                    timeout=5  # Shorter timeout since we know node is up
                 )
                 response.raise_for_status()
                 query_embedding = response.json().get("embedding")
             except Exception as e:
                 print(f"[{self.name}] Remote embedding failed: {e}. Falling back to Gemini.")
-                query_embedding = genai.embed_content(
-                    model=self.embedding_model,
-                    content=query,
-                    task_type="retrieval_query"
-                )['embedding']
-        else:
+        
+        # Fallback to Gemini if no embedding yet
+        if query_embedding is None:
             query_embedding = genai.embed_content(
                 model=self.embedding_model,
                 content=query,
@@ -269,6 +270,7 @@ class Alchemist:
         norm_v2 = np.linalg.norm(v2)
         return dot_product / (norm_v1 * norm_v2)
 
+    @critique_action("Alchemist Generate Post")
     def generate(self, topic: str, doctrine: str, provider: str = "auto") -> str:
         """
         Generates a blog post using the specified topic and context.

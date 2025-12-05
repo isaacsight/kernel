@@ -1,9 +1,13 @@
 import os
 import logging
-from moviepy import TextClip, CompositeVideoClip, ColorClip
+from moviepy import CompositeVideoClip, ColorClip
 from tiktok_uploader.upload import upload_video
 
 logger = logging.getLogger("Broadcaster")
+
+# Apply nest_asyncio to allow re-entrant event loops (fixes "running loop" errors)
+import nest_asyncio
+nest_asyncio.apply()
 
 class Broadcaster:
     def __init__(self):
@@ -12,135 +16,163 @@ class Broadcaster:
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-    def generate_video(self, post, vibe="chill"):
+    def generate_video(self, post, vibe="chill", voice=None):
         """
-        Generates a video from blog post screenshots with background music and effects.
-        vibe: 'chill' (default), 'upbeat', 'tech'
+        Generates a high-quality video using the Hybrid Video Engine (Programmatic CapCut).
         """
         try:
-            from ..config import config
-            from moviepy import concatenate_videoclips, ImageClip, AudioFileClip, CompositeVideoClip, vfx, CompositeAudioClip
-            from moviepy.audio.fx import AudioFadeOut, AudioNormalize, MultiplyVolume, AudioLoop
-            from selenium import webdriver
-            from selenium.webdriver.chrome.options import Options
-            import time
-
+            from .video_engine import VideoEngine, Director, VisualAsset, VisualType
+            
             title = post.get('title', 'New Post')
             slug = post.get('slug')
             
-            # 1. Capture Screenshots
+            # 1. Generate Script & Audio (The Foundation)
+            voiceover_path, vtt_path = self.generate_voiceover(post, vibe, voice)
+            if not voiceover_path:
+                logger.error("Failed to generate voiceover. Aborting video.")
+                return None
+                
+            # Read the script text (simulated from vtt or re-generation)
+            # Ideally generate_voiceover returns the text too. 
+            # For now, let's re-read the script if possible or extract from VTT/Prompt.
+            # Hack: We'll regenerate the script text essentially or pass it if I update generate_voiceover.
+            # Let's update generate_voiceover to return script_text too? 
+            # Or just use the one we generated.
+            # Let's retrieve it from the file system or re-run for now (cheap).
+            script_text = self.generate_script(post, vibe) # This is cached/fast usually
+            
+            # 2. The Director Plans the Scenes
+            director = Director()
+            # We need to map audio to scenes. 
+            # Simple approach: Evenly split duration? No, that's bad.
+            # Better approach: Map VTT timestamps to scenes.
+            
+            # Parse VTT to get timings
+            # We need a helper for VTT parsing here or use KineticTextEngine's
+            from .kinetic_text import KineticTextEngine
+            kte = KineticTextEngine()
+            captions = kte.parse_vtt(vtt_path) if vtt_path else []
+            
+            # Create Scenes from Captions
+            # Each caption is essentially a mini-scene for now to ensure sync
+            scenes = []
+            
+            # Capture Screenshots just in case (as assets)
             screenshots = self.capture_screenshots(slug)
-            if not screenshots:
-                logger.error("No screenshots captured.")
+            
+            # Assets Pool
+            import random
+            
+            for i, (start, end, text) in enumerate(captions):
+                duration = end - start
+                
+                # Director chooses visual for this segment
+                visual = director._choose_visual(text, i, len(captions))
+                
+                # Resolve Asset Source
+                # If it's an IMAGE type, assign a screenshot or fallback
+                if visual.asset_type == VisualType.IMAGE:
+                    # Cycle through screenshots
+                    if screenshots:
+                        visual.source_path = screenshots[i % len(screenshots)]
+                    else:
+                        visual.asset_type = VisualType.COLOR
+                        visual.color = "#111111"
+                
+                # If it's AI VIDEO, we leave it (Engine handles generation? No, Engine expects path)
+                # !! Critical: Engine expects paths. Broadcaster must fetch assets.
+                if visual.asset_type == VisualType.GENERATED_VEO:
+                    # Try to retrieve/generate
+                    # For V1 speed: Fallback to Screenshot but log "Would Generate: {visual.prompt}"
+                    # Or check if cached
+                    # TODO: Implement cached asset retrieval
+                    logger.info(f"Scene {i} requires AI Video: {visual.prompt}")
+                    if screenshots:
+                        visual.source_path = screenshots[i % len(screenshots)]
+                        visual.asset_type = VisualType.IMAGE # Fallback
+                        visual.effects.append("glitch") # Add glitch to signify "AI-ness"
+                    else:
+                         visual.asset_type = VisualType.COLOR
+                         visual.color = "#002244"
+                
+                # Create Scene
+                from .video_engine import Scene, AudioAsset
+                
+                # Audio splicing is hard without re-cutting. 
+                # Simpler: The Audio is ONE track for the whole video. 
+                # But VideoEngine renders scenes individually.
+                # Solution: VideoEngine renders visual scenes. We overlay the Master Audio at the end.
+                # SO: Scene.audio is None.
+                
+                scene = Scene(
+                    id=i,
+                    text=text,
+                    duration=duration,
+                    visual=visual,
+                    audio=None # We add master track later
+                )
+                scenes.append(scene)
+            
+            if not scenes:
+                logger.error("Director failed to create scenes.")
                 return None
 
-            # 2. Create Video Clips with Ken Burns Effect
-            clips = []
-            slide_duration = 4
-            transition_duration = 0.5
+            # 3. The Engine Assembles the Video
+            engine = VideoEngine()
             
-            # Adjust pacing based on vibe
-            if vibe == "upbeat":
-                slide_duration = 2.5
-            elif vibe == "tech":
-                slide_duration = 3
+            # Temp output
+            filename = f"{slug}_temp.mp4"
+            temp_path = os.path.join(self.output_dir, filename)
             
-            for i, screen_path in enumerate(screenshots):
-                # Create Image Clip
-                clip = ImageClip(screen_path).with_duration(slide_duration + transition_duration)
+            success = engine.render_project(scenes, temp_path)
+            if not success:
+                return None
                 
-                # Apply Ken Burns (Zoom In)
-                # Zoom from 1.0 to 1.1 over the duration
-                # MoviePy v2: use with_effects
-                try:
-                    # Try v2 syntax first
-                    clip = clip.with_effects([vfx.Resize(lambda t: 1 + 0.02 * t)]) 
-                except AttributeError:
-                    # Fallback to v1 syntax if vfx not found or different
-                    # But we know it's v2 from previous error.
-                    # Let's assume vfx is imported from moviepy
-                    pass
-
-                # Center the clip (important after resizing)
-                clip = clip.with_position('center')
-                
-                # Fade in/out for smooth transitions
-                if i > 0:
-                    clip = clip.with_effects([vfx.CrossFadeIn(transition_duration)])
-                
-                clips.append(clip)
-
-            # Combine clips
-            final_video = concatenate_videoclips(clips, method="compose", padding=-transition_duration)
-
-            # 3. Add Audio
-            # Path relative to admin/engineers/ is ../static/audio/lofi_beat.mp            # 3. Add Audio
-            # Select track based on vibe
-            audio_filename = "lofi_beat.mp3" # Default chill
-            if vibe == "upbeat":
-                audio_filename = "upbeat.mp3" 
-            elif vibe == "tech":
-                audio_filename = "tech.mp3" 
-                
+            # 4. Final Polish (Master Audio + Background Music)
+            from moviepy import VideoFileClip, AudioFileClip, CompositeAudioClip
+            from moviepy.audio.fx import AudioNormalize, MultiplyVolume, AudioFadeOut, AudioLoop
+            
+            final_clip = VideoFileClip(temp_path)
+            
+            # Voiceover
+            voice_audio = AudioFileClip(voiceover_path)
+            
+            # Background Music
+            audio_filename = "lofi_beat.mp3" 
+            if vibe == "upbeat": audio_filename = "upbeat.mp3" 
+            elif vibe == "tech": audio_filename = "tech.mp3" 
+            
             bg_music_path = os.path.join(os.path.dirname(__file__), f"../static/audio/{audio_filename}")
             if not os.path.exists(bg_music_path):
                  bg_music_path = os.path.join(os.path.dirname(__file__), "../static/audio/lofi_beat.mp3")
-
-            # Generate Voiceover with Captions (re-enabled!)
-            voiceover_path, vtt_path = self.generate_voiceover(post, vibe)
             
-            final_audio = None
-            
+            final_audio = voice_audio
             if os.path.exists(bg_music_path):
-                try:
-                    logger.info(f"Found background audio at {bg_music_path}")
-                    bg_music = AudioFileClip(bg_music_path)
-                    
-                    # Loop background music to match video duration
-                    if bg_music.duration < final_video.duration:
-                        bg_music = AudioLoop(duration=final_video.duration).apply(bg_music)
-                    else:
-                        bg_music = bg_music.subclipped(0, final_video.duration)
-                    
-                    # Mix voiceover with background music if voiceover exists
-                    if voiceover_path and os.path.exists(voiceover_path):
-                        logger.info(f"Mixing voiceover from {voiceover_path}")
-                        voiceover = AudioFileClip(voiceover_path)
-                        
-                        # Reduce bg music volume when voiceover is present (ducking)
-                        bg_music = bg_music.with_effects([MultiplyVolume(0.3)])  # 30% volume for background
-                        voiceover = voiceover.with_effects([AudioNormalize(), MultiplyVolume(2.0)])  # Boost voiceover
-                        
-                        # Composite audio: voiceover + background
-                        final_audio = CompositeAudioClip([bg_music, voiceover])
-                        final_audio = final_audio.with_effects([AudioFadeOut(2)])
-                        
-                        # Add captions if VTT exists
-                        if vtt_path and os.path.exists(vtt_path):
-                            logger.info(f"Adding captions from {vtt_path}")
-                            final_video = self.add_captions(final_video, vtt_path)
-                    else:
-                        # Just background music (no voiceover)
-                        bg_music = bg_music.with_effects([AudioFadeOut(2), AudioNormalize(), MultiplyVolume(2.5)])
-                        final_audio = bg_music
-                        
-                    final_video.audio = final_audio
-                        
-                except Exception as e:
-                    logger.error(f"Failed to add audio: {e}")
-
-            # Sanitize filename - remove special characters that break FFMPEG
+                bg_music = AudioFileClip(bg_music_path)
+                # Loop and Duck
+                bg_music = AudioLoop(duration=final_clip.duration).apply(bg_music)
+                bg_music = bg_music.with_effects([MultiplyVolume(0.2)])
+                voice_audio = voice_audio.with_effects([AudioNormalize(), MultiplyVolume(1.5)])
+                final_audio = CompositeAudioClip([bg_music, voice_audio])
+                
+            final_clip.audio = final_audio
+            
+            # Final Write
             import re
-            safe_title = re.sub(r'[^\w\s-]', '', title.lower())  # Remove non-alphanumeric except spaces/hyphens
-            safe_title = re.sub(r'\s+', '-', safe_title)  # Replace spaces with hyphens
-            safe_title = safe_title[:50]  # Limit length
-            filename = f"{safe_title}.mp4"
-            output_path = os.path.join(self.output_dir, filename)
+            safe_title = re.sub(r'[^\w\s-]', '', title.lower())
+            safe_title = re.sub(r'\s+', '-', safe_title)[:50]
+            final_output_path = os.path.join(self.output_dir, f"{safe_title}.mp4")
             
-            # Write video file with audio codec and bitrate
-            final_video.write_videofile(output_path, fps=24, audio_codec='aac', audio_bitrate='192k')
+            final_clip.write_videofile(final_output_path, fps=30, audio_codec='aac')
             
-            return output_path
+            # Cleanup temp
+            try:
+                os.remove(temp_path)
+            except:
+                pass
+                
+            return final_output_path
+
         except Exception as e:
             logger.error(f"Failed to generate video: {e}")
             import traceback
@@ -185,10 +217,11 @@ class Broadcaster:
             traceback.print_exc()
             return None
 
-    def generate_voiceover(self, post, vibe="chill"):
-        """Generates voiceover audio and subtitles using edge-tts."""
+    def generate_voiceover(self, post, vibe="chill", voice=None):
+        """Generates voiceover audio and subtitles using VoiceActor (ElevenLabs/edge-tts)."""
         try:
-            import subprocess
+            import asyncio
+            from admin.engineers.voice_actor import VoiceActor
             
             script = self.generate_script(post, vibe)
             if not script:
@@ -196,35 +229,30 @@ class Broadcaster:
                 
             logger.info(f"Generated Script: {script}")
             
-            # Select voice based on vibe
-            # edge-tts voices:
-            # Chill: en-GB-SoniaNeural (British, soft)
-            # Upbeat: en-US-GuyNeural (Energetic)
-            # Tech: en-US-ChristopherNeural (Professional)
-            
-            voice = "en-GB-SoniaNeural"
-            if vibe == "upbeat":
-                voice = "en-US-GuyNeural"
-            elif vibe == "tech":
-                voice = "en-US-ChristopherNeural"
-            
             filename_base = f"voiceover_{post.get('slug', 'temp')}"
             audio_path = os.path.join(self.output_dir, f"{filename_base}.mp3")
-            vtt_path = os.path.join(self.output_dir, f"{filename_base}.vtt")
             
-            # Use edge-tts CLI
-            # edge-tts --voice en-US-GuyNeural --text "Hello" --write-media hello.mp3 --write-subtitles hello.vtt
+            # Use VoiceActor
+            actor = VoiceActor()
             
-            cmd = [
-                "edge-tts",
-                "--voice", voice,
-                "--text", script,
-                "--write-media", audio_path,
-                "--write-subtitles", vtt_path
-            ]
-            
-            subprocess.run(cmd, check=True)
-            
+            # Run async method in sync context
+            # Check if we are already in an event loop
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    # This is tricky if we are already in a loop.
+                    # But Broadcaster is usually called from a sync workflow step.
+                    # If we are in a loop, we should await it, but this method is sync.
+                    # For now, assuming sync context or using nest_asyncio if needed.
+                    # Let's try standard asyncio.run first.
+                    audio_path, vtt_path = asyncio.run(actor.speak(script, audio_path, voice))
+                else:
+                    audio_path, vtt_path = asyncio.run(actor.speak(script, audio_path, voice))
+            except RuntimeError:
+                # If loop is running (e.g. in a notebook or existing loop), use this hack or fix architecture
+                # For this codebase, it seems mostly sync.
+                 audio_path, vtt_path = asyncio.run(actor.speak(script, audio_path, voice))
+
             return audio_path, vtt_path
         except Exception as e:
             logger.error(f"Failed to generate voiceover: {e}")
@@ -233,174 +261,94 @@ class Broadcaster:
             return None, None
 
     def add_captions(self, video_clip, vtt_path):
-        """Overlays captions from a VTT file onto the video."""
+        """Overlays dynamic kinetic captions from a VTT file."""
         try:
-            import webvtt
-            from moviepy import TextClip, CompositeVideoClip
+            from admin.engineers.kinetic_text import KineticTextEngine
+            from moviepy import CompositeVideoClip
             
-            captions = []
+            # Initialize engine
+            engine = KineticTextEngine()
             
-            # Parse VTT
-            # We need a simple VTT parser or just regex if webvtt not installed
-            # Let's try to install webvtt-py or just parse manually
-            # Simple manual parser for now to avoid extra dependency if possible, 
-            # but edge-tts output is standard.
+            # Generate kinetic clips
+            caption_clips = engine.generate_kinetic_captions(
+                vtt_path, 
+                video_clip.w, 
+                video_clip.h
+            )
             
-            def time_to_seconds(time_str):
-                # 00:00:00.000 or 00:00:00,000
-                time_str = time_str.replace(',', '.')
-                h, m, s = time_str.split(':')
-                return float(h) * 3600 + float(m) * 60 + float(s)
-
-            with open(vtt_path, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
-            
-            # Simple state machine
-            start = None
-            end = None
-            text = []
-            
-            for line in lines:
-                line = line.strip()
-                
-                # Skip WEBVTT header and block numbers
-                if line.startswith('WEBVTT') or line.isdigit():
-                    continue
-                    
-                if '-->' in line:
-                    # Time line
-                    times = line.split(' --> ')
-                    start = time_to_seconds(times[0])
-                    end = time_to_seconds(times[1])
-                    text = []
-                elif line and start is not None:
-                    # Text line
-                    text.append(line)
-                elif not line and start is not None:
-                    # End of block
-                    if text:
-                        full_text = "\n".join(text)
-                        
-                        # Create TextClip
-                    # TikTok Style: Yellow text, Black stroke, Bottom Center
-                    try:
-                        # Determine font - try to find a bold one
-                        font_path = 'Arial-Bold'
-                        if os.path.exists('/System/Library/Fonts/Supplemental/Arial Bold.ttf'):
-                            font_path = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
-                        elif os.path.exists('/System/Library/Fonts/Supplemental/Impact.ttf'):
-                            font_path = '/System/Library/Fonts/Supplemental/Impact.ttf'
-
-                        txt_clip = TextClip(
-                            text=full_text,
-                            font_size=70,  # Larger for mobile
-                            color='yellow',
-                            stroke_color='black',
-                            stroke_width=4,  # Thicker stroke
-                            font=font_path,
-                            method='caption', # Wrap text
-                            size=(video_clip.w * 0.8, None), # 80% width
-                            text_align='center'
-                        )
-                        
-                        txt_clip = txt_clip.with_start(start).with_duration(end - start)
-                        txt_clip = txt_clip.with_position(('center', 0.65), relative=True) # Higher up to avoid UI
-                        
-                        captions.append(txt_clip)
-                        logger.info(f"Added caption: {full_text[:30]}...")
-                    except Exception as e:
-                        logger.error(f"Failed to create TextClip: {e}")
-                    
-                    start = None
-                    end = None
-            
-            # Handle last block if file doesn't end with newline
-            if start is not None and text:
-                 full_text = "\n".join(text)
-                 txt_clip = TextClip(
-                    text=full_text,
-                    font_size=40,
-                    color='yellow',
-                    stroke_color='black',
-                    stroke_width=2,
-                    font='/System/Library/Fonts/Supplemental/Arial Bold.ttf',
-                    method='caption',
-                    size=(video_clip.w * 0.9, None),
-                    text_align='center'
-                )
-                 txt_clip = txt_clip.with_start(start).with_duration(end - start)
-                 txt_clip = txt_clip.with_position(('center', 0.8), relative=True)
-                 captions.append(txt_clip)
-
-            if captions:
-                return CompositeVideoClip([video_clip] + captions)
-            else:
+            if not caption_clips:
+                logger.warning("No captions generated by KineticTextEngine.")
                 return video_clip
                 
+            # Composite
+            final_clip = CompositeVideoClip([video_clip] + caption_clips)
+            return final_clip
+
         except Exception as e:
-            logger.error(f"Failed to add captions: {e}")
+            logger.error(f"Failed to add kinetic captions: {e}")
+            # Import traceback to debug if needed
             import traceback
             traceback.print_exc()
             return video_clip
 
     def capture_screenshots(self, slug):
         """
-        Captures screenshots of the blog post using Selenium.
+        Captures screenshots of the blog post using Playwright (v2).
         """
         try:
-            from selenium import webdriver
-            from selenium.webdriver.chrome.options import Options
+            from playwright.sync_api import sync_playwright
             import time
 
-            options = Options()
-            options.add_argument("--headless=new")
-            options.add_argument("--window-size=1080,1920") # Mobile aspect ratio
-            options.add_argument("--hide-scrollbars")
-            
-            driver = webdriver.Chrome(options=options)
-            
             # Construct file URL
-            # Assuming running from project root
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
             file_path = os.path.join(project_root, "docs", "posts", f"{slug}.html")
             
             if not os.path.exists(file_path):
-                logger.error(f"Post file not found: {file_path}")
-                return []
+                # Try fallback to localhost if file doesn't exist (e.g. if we want to capture live server)
+                # But for now, just warning
+                logger.warning(f"Static file not found at {file_path}. Playwright capture might fail.")
                 
             url = f"file://{file_path}"
             logger.info(f"Navigating to {url}")
-            driver.get(url)
-            time.sleep(2) # Wait for render
             
             screenshots = []
             
-            # Screenshot 1: Top (Title)
-            path1 = os.path.join(self.output_dir, f"{slug}-1.png")
-            driver.save_screenshot(path1)
-            screenshots.append(path1)
-            
-            # Screenshot 2: Middle (Scroll down)
-            driver.execute_script("window.scrollBy(0, 1000);")
-            time.sleep(1)
-            path2 = os.path.join(self.output_dir, f"{slug}-2.png")
-            driver.save_screenshot(path2)
-            screenshots.append(path2)
-            
-            # Screenshot 3: Bottom (CTA/Footer)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(1)
-            path3 = os.path.join(self.output_dir, f"{slug}-3.png")
-            driver.save_screenshot(path3)
-            screenshots.append(path3)
-            
-            driver.quit()
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                # Mobile viewport mostly
+                page = browser.new_page(viewport={'width': 1080, 'height': 1920})
+                
+                try:
+                    page.goto(url, wait_until="networkidle", timeout=10000)
+                except:
+                    # If networkidle times out, maybe it's fine (static file)
+                    pass
+                
+                # Screenshot 1 (Top)
+                path1 = os.path.join(self.output_dir, f"{slug}-1.png")
+                page.screenshot(path=path1)
+                screenshots.append(path1)
+                
+                # Screenshot 2 (Scrolled)
+                page.evaluate("window.scrollBy(0, 800)")
+                # Wait for potential animations
+                page.wait_for_timeout(500)
+                
+                path2 = os.path.join(self.output_dir, f"{slug}-2.png")
+                page.screenshot(path=path2)
+                screenshots.append(path2)
+                
+                browser.close()
+                
             return screenshots
+            
         except Exception as e:
             logger.error(f"Screenshot capture failed: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
-    def upload_to_tiktok(self, video_path, description="New post on my blog! #blog #tech"):
+    def upload_to_tiktok(self, video_path, description="New post! #blog #tech"):
         """
         Uploads a video to TikTok.
         """
@@ -410,12 +358,8 @@ class Broadcaster:
         
         try:
             from ..config import config
-            # ... rest of upload logic ...
-            # We need to re-implement this part because I'm replacing the whole method block in the tool call
-            # Wait, the tool call replaces from line 15 to 76.
-            # I need to include upload_to_tiktok implementation.
             
-            full_description = f"{description}\n\nRead more at: {config.SITE_URL}/posts/{os.path.basename(video_path).replace('.mp4', '')}"
+            full_description = f"{description}\n\nRead more at: {config.SITE_URL}"
             
             upload_video(
                 filename=video_path,
@@ -427,4 +371,259 @@ class Broadcaster:
             return True
         except Exception as e:
             logger.error(f"Failed to upload to TikTok: {e}")
+            return False
+
+    def distribute_to_twitter(self, thread_data: dict) -> bool:
+        """
+        Posts a thread to Twitter/X.
+        Tries API first, falls back to browser automation if API fails (e.g., Free tier).
+        Also stages to content/social_drafts/twitter_{timestamp}.md
+        """
+        try:
+            import time
+            timestamp = int(time.time())
+            
+            filename = f"twitter_thread_{timestamp}.md"
+            filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../content/social_drafts", filename))
+            
+            tweets = thread_data.get("tweets", [])
+            posted = False
+            
+            # Try API first
+            from ..config import config
+            if config.TWITTER_CONSUMER_KEY and config.TWITTER_ACCESS_TOKEN:
+                try:
+                    import tweepy
+                    client = tweepy.Client(
+                        consumer_key=config.TWITTER_CONSUMER_KEY,
+                        consumer_secret=config.TWITTER_CONSUMER_SECRET,
+                        access_token=config.TWITTER_ACCESS_TOKEN,
+                        access_token_secret=config.TWITTER_ACCESS_TOKEN_SECRET
+                    )
+                    
+                    previous_tweet_id = None
+                    logger.info(f"Posting {len(tweets)} tweets via API...")
+                    
+                    for i, tweet_text in enumerate(tweets):
+                        logger.info(f"Sending tweet {i+1}...")
+                        if i == 0:
+                            response = client.create_tweet(text=tweet_text)
+                        else:
+                            response = client.create_tweet(text=tweet_text, in_reply_to_tweet_id=previous_tweet_id)
+                        
+                        previous_tweet_id = response.data['id']
+                        logger.info(f"Tweet {i+1} posted with ID: {previous_tweet_id}")
+                        
+                        if i < len(tweets) - 1:
+                            time.sleep(2)
+                    
+                    posted = True
+                    
+                except Exception as e:
+                    logger.warning(f"API posting failed: {e}. Trying browser automation...")
+            
+            # Fallback: Browser automation
+            if not posted and tweets:
+                posted = self._post_tweet_browser(tweets[0])  # Post first tweet
+            
+            # Stage draft regardless
+            with open(filepath, "w") as f:
+                f.write(f"# Twitter Thread Draft\n\n")
+                f.write(f"**STATUS:** {'🟢 POSTED' if posted else '🟡 STAGED'}\n")
+                f.write(f"**Total Tweets:** {thread_data.get('tweet_count')}\n")
+                f.write(f"**Chars:** {thread_data.get('total_characters')}\n\n")
+                f.write("---\n\n")
+                
+                for tweet in tweets:
+                    f.write(f"{tweet}\n\n---\n\n")
+            
+            logger.info(f"🐦 Twitter thread {'posted' if posted else 'staged'}: {filepath}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to distribute to Twitter: {e}")
+            return False
+    
+    def _post_tweet_browser(self, tweet_text: str) -> bool:
+        """Post a single tweet using Playwright browser automation."""
+        import asyncio
+        
+        async def _post():
+            try:
+                from playwright.async_api import async_playwright
+                
+                cookies = self._parse_twitter_cookies()
+                if not cookies:
+                    logger.warning("No Twitter cookies found for browser posting")
+                    return False
+                
+                async with async_playwright() as p:
+                    browser = await p.chromium.launch(headless=True)
+                    context = await browser.new_context(
+                        viewport={'width': 1280, 'height': 800},
+                        user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                    )
+                    await context.add_cookies(cookies)
+                    
+                    page = await context.new_page()
+                    await page.goto('https://x.com/compose/tweet', wait_until='domcontentloaded', timeout=60000)
+                    await asyncio.sleep(3)
+                    
+                    textarea = await page.wait_for_selector('[data-testid="tweetTextarea_0"]', timeout=15000)
+                    await textarea.click()
+                    await textarea.type(tweet_text, delay=30)
+                    await asyncio.sleep(1)
+                    
+                    post_button = await page.wait_for_selector('[data-testid="tweetButton"]', timeout=10000)
+                    await post_button.click(force=True)
+                    await asyncio.sleep(3)
+                    
+                    await browser.close()
+                    logger.info("Tweet posted via browser automation")
+                    return True
+                    
+            except Exception as e:
+                logger.error(f"Browser posting failed: {e}")
+                return False
+        
+        return asyncio.run(_post())
+    
+    def _parse_twitter_cookies(self):
+        """Parse Twitter cookies from cookies.txt file."""
+        cookies = []
+        if not os.path.exists(self.cookies_path):
+            return cookies
+        
+        with open(self.cookies_path, 'r') as f:
+            for line in f:
+                if line.startswith('#') or not line.strip():
+                    continue
+                parts = line.strip().split('\t')
+                if len(parts) >= 7:
+                    domain = parts[0]
+                    if 'x.com' in domain or 'twitter.com' in domain:
+                        cookie = {
+                            'name': parts[5],
+                            'value': parts[6],
+                            'domain': '.x.com',
+                            'path': parts[2],
+                            'secure': parts[3] == 'TRUE',
+                            'httpOnly': False,
+                            'sameSite': 'Lax'
+                        }
+                        try:
+                            expiry = int(parts[4])
+                            if expiry > 0:
+                                cookie['expires'] = expiry
+                        except:
+                            pass
+                        cookies.append(cookie)
+        return cookies
+
+    def distribute_to_linkedin(self, post_data: dict) -> bool:
+        """
+        Simulates posting to LinkedIn.
+        Saves to content/social_drafts/linkedin_{timestamp}.md
+        """
+        try:
+            import time
+            timestamp = int(time.time())
+            
+            filename = f"linkedin_post_{timestamp}.md"
+            filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../content/social_drafts", filename))
+            
+            with open(filepath, "w") as f:
+                f.write(f"# LinkedIn Post Draft\n\n")
+                f.write(f"**Read Time:** {post_data.get('estimated_read_time')}\n\n")
+                f.write("---\n\n")
+                f.write(post_data.get("post", ""))
+            
+            logger.info(f"💼 LinkedIn post staged: {filepath}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to distribute to LinkedIn: {e}")
+            return False
+
+    def distribute_to_instagram(self, carousel_data: dict) -> bool:
+        """
+        Generates Instagram carousel images using VisualArtist.
+        """
+        try:
+            import time
+            from .visual_artist import VisualArtist
+            
+            artist = VisualArtist()
+            timestamp = int(time.time())
+            folder_name = f"instagram_carousel_{timestamp}"
+            folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../content/social_drafts", folder_name))
+            
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+            
+            slides = carousel_data.get("slides", [])
+            for slide in slides:
+                slide_num = slide.get("slide_number")
+                text_content = ""
+                
+                if slide.get("type") == "cover":
+                    text_content = slide.get("headline", "") + "\n\n" + slide.get("subtext", "")
+                elif slide.get("type") == "content":
+                    text_content = slide.get("text", "")
+                elif slide.get("type") == "cta":
+                    text_content = slide.get("headline", "") + "\n\n" + slide.get("cta", "")
+                    
+                output_file = os.path.join(folder_path, f"slide_{slide_num}.png")
+                artist.generate_carousel_slide(text_content, output_file)
+                
+            # Save caption
+            caption_path = os.path.join(folder_path, "caption.md")
+            with open(caption_path, "w") as f:
+                f.write(carousel_data.get("caption", ""))
+                
+            logger.info(f"📸 Instagram carousel staged: {folder_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to distribute to Instagram: {e}")
+            return False
+
+    def distribute_to_youtube(self, shorts_data: dict, video_path: str = None) -> bool:
+        """
+        Stages YouTube Short metadata.
+        If 'client_secrets.json' is present in admin/, enables LIVE uploading.
+        """
+        try:
+            import time
+            timestamp = int(time.time())
+            
+            # Check for PROPER OAuth credentials
+            secrets_path = os.path.join(os.path.dirname(__file__), "../client_secrets.json")
+            live_mode = False
+            
+            if os.path.exists(secrets_path):
+                # We have the secrets file, we *could* upload.
+                # However, this triggers a browser flow.
+                # For now, let's just mark it as "READY_FOR_AUTH"
+                live_mode = True
+                
+            filename = f"youtube_shorts_{timestamp}.md"
+            filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../content/social_drafts", filename))
+            
+            with open(filepath, "w") as f:
+                f.write(f"# YouTube Shorts Metadata\n\n")
+                if live_mode:
+                    f.write("**STATUS:** 🟢 READY FOR AUTH (client_secrets.json found)\n")
+                else:
+                    f.write("**STATUS:** 🟡 STAGING MODE (Missing client_secrets.json)\n")
+                    
+                f.write(f"**Title:** {shorts_data.get('title')}\n\n")
+                f.write(f"**Description:**\n{shorts_data.get('description')}\n\n")
+                f.write("---\n\n")
+                if video_path:
+                    f.write(f"**Video File:** {video_path}\n")
+                else:
+                    f.write("**Video File:** (Use generated TikTok video)\n")
+            
+            logger.info(f"▶️ YouTube Shorts staged: {filepath}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to distribute to YouTube: {e}")
             return False

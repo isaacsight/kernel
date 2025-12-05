@@ -1,4 +1,5 @@
 <!-- Magazine Layout -->
+<h1 class="sr-only">Does This Feel Right?</h1>
 <div class="magazine-layout">
 
 
@@ -16,31 +17,38 @@
                 </div>
             </a>
 
-            <!-- Starter Item 1 -->
-            <a href="posts/the-weight-of-iteration.html" class="bento-item starter-item">
-                <div class="bento-content">
-                    <span class="bento-label">Studio</span>
-                    <h3 class="bento-title">The Weight of Iteration</h3>
-                </div>
-            </a>
 
-            <!-- Starter Item 2 -->
-            <a href="posts/modern-man-extinction.html" class="bento-item starter-item">
-                <div class="bento-content">
-                    <span class="bento-label">Culture</span>
-                    <h3 class="bento-title">The Extinction of the Modern Man</h3>
-                </div>
-            </a>
 
             <!-- About/Intro Item -->
             <div class="bento-item about-item">
                 <div class="bento-content">
-                    <h3 class="bento-title">Start Here</h3>
-                    <p class="bento-text">Essays that define the ethos of this studio.</p>
+                    <h3 class="bento-title">Does This Feel Right?</h3>
+                    <p class="bento-text">A studio for noticing what is real.</p>
                 </div>
             </div>
 
+        </div>
+    </section>
 
+    <!-- Start Here Section (Soft Band) -->
+    <section class="start-here-section">
+        <div class="section-header">
+            <h2 class="section-label">Start Here</h2>
+            <p class="section-desc">Essays that define the ethos of this studio.</p>
+        </div>
+        <div class="starter-grid">
+            {{ starter_set }}
+        </div>
+    </section>
+
+    <!-- Experiments Workbench Section -->
+    <section class="experiments-section">
+        <div class="section-header">
+            <h2 class="section-label">Studio / Workbench</h2>
+            <p class="section-desc">Technical notes, AI workshops, and raw ideas.</p>
+        </div>
+        <div class="experiments-grid-small">
+            {{ experiments_list }}
         </div>
     </section>
 
@@ -59,15 +67,6 @@
 
         <!-- 4. Sidebar (Right Column) -->
         <aside class="blog-sidebar">
-
-            <!-- Experiments Widget -->
-            <div class="sidebar-widget experiments-widget">
-                <h3>Experiments</h3>
-                <p class="widget-desc">Technical notes & AI workshops.</p>
-                <ul class="experiments-list">
-                    {{ experiments_list }}
-                </ul>
-            </div>
 
             <!-- Collections Widget -->
             <div class="sidebar-widget collections-widget">

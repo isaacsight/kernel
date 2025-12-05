@@ -78,6 +78,9 @@ class ContentRepurposer:
             
         if "linkedin" in platforms:
             result["outputs"]["linkedin"] = self._generate_linkedin(title, content, tags)
+
+        if "youtube" in platforms:
+            result["outputs"]["youtube"] = self._generate_youtube(title, content, tags)
             
         # Track for metrics
         self.metrics.log_event("repurposer", {
@@ -250,23 +253,26 @@ Drop a comment below 👇
         return good_sentences[:max_points] if good_sentences else raw_sentences[:max_points]
     
     def _generate_hashtags(self, title: str, tags: List[str], platform: str) -> str:
-        """Generates platform-appropriate hashtags."""
+        """Generates platform-appropriate hashtags using social_config.json."""
+        
+        # Load config
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "social_config.json")
+        social_config = {}
+        if os.path.exists(config_path):
+            with open(config_path, "r") as f:
+                social_config = json.load(f)
         
         # Base hashtags from tags
         hashtags = [f"#{tag.replace(' ', '').replace('-', '')}" for tag in tags[:3]]
         
-        # Add platform-specific defaults
-        defaults = {
-            "tiktok": ["#fyp", "#foryou", "#mindset", "#lifelessons"],
-            "instagram": ["#motivation", "#mindset", "#growth", "#inspiration"],
-            "twitter": [],  # Twitter doesn't love hashtags
-            "linkedin": ["#leadership", "#growth", "#personaldevelopment"]
-        }
+        # Add platform-specific defaults from config
+        platform_config = social_config.get("platforms", {}).get(platform, {})
+        defaults = platform_config.get("default_hashtags", [])
         
-        hashtags.extend(defaults.get(platform, [])[:3])
+        hashtags.extend(defaults[:3])
         
         # Limit based on platform norms
-        max_tags = {"tiktok": 5, "instagram": 15, "twitter": 2, "linkedin": 5}
+        max_tags = {"tiktok": 5, "instagram": 15, "twitter": 2, "linkedin": 5, "youtube": 10}
         hashtags = hashtags[:max_tags.get(platform, 5)]
         
         return " ".join(hashtags)
@@ -283,6 +289,30 @@ Drop a comment below 👇
             return "upbeat"
         else:
             return "chill"  # Default
+
+    def _generate_youtube(self, title: str, content: str, tags: List[str]) -> Dict:
+        """Generates YouTube Shorts script (similar to TikTok but optimized for YT SEO)."""
+        
+        script_data = self._generate_tiktok(title, content, tags)
+        
+        # YouTube specific metadata
+        seo_title = f"{title} #Shorts"
+        description = f"""
+{title}
+
+{self._extract_main_points(content, 1)[0]}
+
+Subscribe for more: @StudioOS
+
+{self._generate_hashtags(title, tags, 'youtube')}
+"""
+        return {
+            "type": "shorts_script",
+            "title": seo_title,
+            "description": description.strip(),
+            "script": script_data["script"],
+            "hook": script_data["hook"]
+        }
 
 
 # Quick access function

@@ -495,6 +495,187 @@ class AchievementTracker:
         lines.append("╰────────────────────╯")
         return "\n".join(lines)
 
+    # ============================================================
+    # Steam-Inspired Engagement Features
+    # ============================================================
+    
+    def get_close_achievements(self, threshold: float = 0.8) -> List[Dict]:
+        """
+        Get achievements that are close to being unlocked.
+        
+        Inspired by Steam's "Almost There" notifications.
+        """
+        close = []
+        
+        for achievement_id in ACHIEVEMENTS.keys():
+            if achievement_id in self.data["unlocked"]:
+                continue
+            
+            progress = self.get_progress(achievement_id)
+            if progress and progress["percentage"] >= threshold * 100:
+                close.append({
+                    "id": achievement_id,
+                    "name": progress["achievement"]["name"],
+                    "icon": progress["achievement"]["icon"],
+                    "current": progress["current"],
+                    "target": progress["target"],
+                    "percentage": progress["percentage"],
+                    "remaining": progress["target"] - progress["current"]
+                })
+        
+        return sorted(close, key=lambda x: x["percentage"], reverse=True)
+    
+    def generate_motivation_message(self) -> str:
+        """
+        Generate a motivational message about nearby achievements.
+        
+        Inspired by Steam's "You're close to..." notifications.
+        """
+        close = self.get_close_achievements(threshold=0.6)
+        
+        if not close:
+            return "🎯 Keep going! New achievements await on your journey."
+        
+        # Pick the closest one
+        nearest = close[0]
+        remaining = nearest["remaining"]
+        
+        messages = [
+            f"🔥 You're just **{remaining}** away from '{nearest['name']}'!",
+            f"⭐ Almost there! Only **{remaining}** more to unlock '{nearest['name']}'.",
+            f"🎮 {nearest['icon']} '{nearest['name']}' is within reach — just **{remaining}** to go!",
+        ]
+        
+        import random
+        return random.choice(messages)
+    
+    def streak_reminder(self) -> Optional[Dict]:
+        """
+        Check streak status and generate reminder if at risk.
+        
+        Inspired by Steam's daily login/activity streaks.
+        """
+        stats = self.data["stats"]
+        last_post = stats.get("last_post_date")
+        
+        if not last_post:
+            return {
+                "status": "no_streak",
+                "message": "🚀 Start your streak today! Post your first content."
+            }
+        
+        last_date = datetime.fromisoformat(last_post).date()
+        today = datetime.now().date()
+        days_since = (today - last_date).days
+        
+        current_streak = stats.get("current_streak", 0)
+        
+        if days_since == 0:
+            return {
+                "status": "active",
+                "streak": current_streak,
+                "message": f"🔥 Streak active! Day {current_streak} — keep it going!"
+            }
+        elif days_since == 1:
+            return {
+                "status": "at_risk",
+                "streak": current_streak,
+                "message": f"⚠️ Post today to maintain your {current_streak}-day streak!"
+            }
+        else:
+            return {
+                "status": "broken",
+                "previous_streak": current_streak,
+                "gap_days": days_since,
+                "message": f"💔 Streak broken after {current_streak} days. Start fresh today!"
+            }
+    
+    def get_daily_quests(self) -> List[Dict]:
+        """
+        Generate daily quests for short-term engagement.
+        
+        Inspired by Steam's daily challenges and quests.
+        """
+        stats = self.data["stats"]
+        today = datetime.now().strftime("%Y-%m-%d")
+        
+        # Initialize daily quest tracking if needed
+        if "daily_quests" not in self.data:
+            self.data["daily_quests"] = {}
+        
+        # Generate new quests for today if needed
+        if self.data["daily_quests"].get("date") != today:
+            self.data["daily_quests"] = {
+                "date": today,
+                "quests": [
+                    {
+                        "id": "daily_post",
+                        "name": "Daily Writer",
+                        "description": "Create 1 post today",
+                        "icon": "✍️",
+                        "target": 1,
+                        "current": 0,
+                        "points": 5,
+                        "completed": False
+                    },
+                    {
+                        "id": "daily_review",
+                        "name": "Quality Check",
+                        "description": "Run 1 Guardian audit",
+                        "icon": "🔍",
+                        "target": 1,
+                        "current": 0,
+                        "points": 3,
+                        "completed": False
+                    },
+                    {
+                        "id": "daily_evolution",
+                        "name": "Evolve",
+                        "description": "Complete 1 evolution cycle",
+                        "icon": "🧬",
+                        "target": 1,
+                        "current": 0,
+                        "points": 5,
+                        "completed": False
+                    }
+                ]
+            }
+            self._save_data()
+        
+        return self.data["daily_quests"]["quests"]
+    
+    def update_daily_quest(self, quest_id: str, increment: int = 1) -> Optional[Dict]:
+        """Update progress on a daily quest."""
+        quests = self.get_daily_quests()
+        
+        for quest in quests:
+            if quest["id"] == quest_id and not quest["completed"]:
+                quest["current"] = min(quest["current"] + increment, quest["target"])
+                
+                if quest["current"] >= quest["target"]:
+                    quest["completed"] = True
+                    self.data["total_points"] += quest["points"]
+                    logger.info(f"[{self.name}] ✅ Daily quest completed: {quest['name']} (+{quest['points']} pts)")
+                
+                self._save_data()
+                return quest
+        
+        return None
+    
+    def get_engagement_dashboard(self) -> Dict:
+        """
+        Get a full engagement dashboard for the user.
+        
+        Combines achievements, streaks, quests, and motivation.
+        """
+        return {
+            "streak": self.streak_reminder(),
+            "close_achievements": self.get_close_achievements()[:3],
+            "daily_quests": self.get_daily_quests(),
+            "motivation": self.generate_motivation_message(),
+            "summary": self.get_summary()
+        }
+
 
 # Singleton
 _tracker = None

@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Why We Build: The Psychology of Side Projects (Theme: Theme'
-  2: Digital Philosophy & Ethics)'
+title: 'Why We Build: The Psychology of Side Projects (Theme: Theme 2: Digital Philosophy & Ethics)'
 ---
 
 ## Why We Build: The Psychology of Side Projects in the Age of Algorithm

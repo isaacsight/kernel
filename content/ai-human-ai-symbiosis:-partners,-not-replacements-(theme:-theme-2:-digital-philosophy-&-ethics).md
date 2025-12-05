@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Human-AI Symbiosis: Partners, Not Replacements (Theme: Theme'
-  2: Digital Philosophy & Ethics)'
+title: 'Human-AI Symbiosis: Partners, Not Replacements (Theme: Theme 2: Digital Philosophy & Ethics)'
 ---
 
 ## Human-AI Symbiosis: Partners, Not Replacements - A Digital Philosophy Perspective

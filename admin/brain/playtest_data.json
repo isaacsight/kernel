@@ -1,0 +1,98 @@
+{
+  "testers": [
+    {
+      "id": "tester_0001",
+      "email": "alice@example.com",
+      "name": "Alice Engineer",
+      "interests": [
+        "Tech",
+        "Code"
+      ],
+      "registered_at": "2025-12-05T13:04:23.446744",
+      "tests_participated": 0,
+      "feedback_count": 1
+    },
+    {
+      "id": "tester_0002",
+      "email": "bob@example.com",
+      "name": "Bob Designer",
+      "interests": [
+        "UI/UX",
+        "Typography"
+      ],
+      "registered_at": "2025-12-05T13:04:23.447185",
+      "tests_participated": 0,
+      "feedback_count": 2
+    },
+    {
+      "id": "tester_0003",
+      "email": "charlie@example.com",
+      "name": "Charlie Reader",
+      "interests": [
+        "Philosophy",
+        "Life"
+      ],
+      "registered_at": "2025-12-05T13:04:23.447333",
+      "tests_participated": 0,
+      "feedback_count": 2
+    }
+  ],
+  "feedback": [
+    {
+      "id": "fb_0001",
+      "tester_id": "tester_0001",
+      "tester_name": "Alice Engineer",
+      "category": "usability",
+      "severity": "medium",
+      "feature": "Typography",
+      "feedback": "The font size on mobile feels a bit small.",
+      "submitted_at": "2025-12-05T13:04:23.537264",
+      "status": "new"
+    },
+    {
+      "id": "fb_0002",
+      "tester_id": "tester_0002",
+      "tester_name": "Bob Designer",
+      "category": "usability",
+      "severity": "medium",
+      "feature": "Typography",
+      "feedback": "The font size on mobile feels a bit small.",
+      "submitted_at": "2025-12-05T13:04:24.040852",
+      "status": "new"
+    },
+    {
+      "id": "fb_0003",
+      "tester_id": "tester_0002",
+      "tester_name": "Bob Designer",
+      "category": "usability",
+      "severity": "medium",
+      "feature": "Typography",
+      "feedback": "The font size on mobile feels a bit small.",
+      "submitted_at": "2025-12-05T13:04:24.545824",
+      "status": "new"
+    },
+    {
+      "id": "fb_0004",
+      "tester_id": "tester_0003",
+      "tester_name": "Charlie Reader",
+      "category": "bug",
+      "severity": "low",
+      "feature": "Newsletter",
+      "feedback": "The 'Subscribe' button flickers when I hover over it.",
+      "submitted_at": "2025-12-05T13:04:25.046766",
+      "status": "new"
+    },
+    {
+      "id": "fb_0005",
+      "tester_id": "tester_0003",
+      "tester_name": "Charlie Reader",
+      "category": "praise",
+      "severity": "low",
+      "feature": "Content",
+      "feedback": "The article 'I Fired My AI Team' was hilarious.",
+      "submitted_at": "2025-12-05T13:04:25.551838",
+      "status": "new"
+    }
+  ],
+  "playtests": []
+}

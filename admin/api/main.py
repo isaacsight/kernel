@@ -141,6 +141,22 @@ async def run_agent(action: AgentAction, background_tasks: BackgroundTasks):
              # Placeholder for audit logic
              return {"message": "Guardian finished audit"}
 
+    elif action.agent_name == "The Visionary":
+        from admin.engineers.visionary import Visionary
+        visionary = Visionary()
+        
+        if action.action == "critique":
+            css = action.parameters.get("css", "")
+            html = action.parameters.get("html", "")
+            critique = visionary.critique_design(css, html)
+            return {"result": critique}
+            
+        elif action.action == "generate_css":
+            requirements = action.parameters.get("requirements", "")
+            current_css = action.parameters.get("current_css", "")
+            css = visionary.generate_css(requirements, current_css)
+            return {"result": css}
+
     raise HTTPException(status_code=400, detail="Unknown agent or action")
 
 @app.post("/system/git/publish")

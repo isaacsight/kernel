@@ -295,6 +295,142 @@ class WorkshopManager:
             with open(file_path, 'w') as f:
                 json.dump(item, f, indent=2)
     
+    # ============================================================
+    # Steam-Inspired Community Features
+    # ============================================================
+    
+    def rate_item(self, item_id: str, rating: int, reviewer: str = "anonymous") -> Dict:
+        """
+        Rate a workshop item (1-5 stars).
+        
+        Inspired by Steam's rating system.
+        """
+        if rating < 1 or rating > 5:
+            return {"success": False, "error": "Rating must be 1-5"}
+        
+        # Find the item across all types
+        for item_type in self.dirs.keys():
+            item = self.get_item(item_type, item_id)
+            if item:
+                file_path = os.path.join(self.dirs[item_type], f"{item_id}.json")
+                
+                # Initialize ratings list if needed
+                if "ratings" not in item:
+                    item["ratings"] = []
+                
+                # Add or update rating
+                existing = next((r for r in item["ratings"] if r["reviewer"] == reviewer), None)
+                if existing:
+                    existing["rating"] = rating
+                    existing["updated_at"] = datetime.now().isoformat()
+                else:
+                    item["ratings"].append({
+                        "reviewer": reviewer,
+                        "rating": rating,
+                        "created_at": datetime.now().isoformat()
+                    })
+                
+                # Recalculate average
+                total = sum(r["rating"] for r in item["ratings"])
+                item["rating"] = round(total / len(item["ratings"]), 2)
+                item["ratings_count"] = len(item["ratings"])
+                
+                with open(file_path, 'w') as f:
+                    json.dump(item, f, indent=2)
+                
+                logger.info(f"[{self.name}] ⭐ {reviewer} rated '{item['name']}' {rating}/5")
+                return {"success": True, "new_average": item["rating"], "total_ratings": item["ratings_count"]}
+        
+        return {"success": False, "error": "Item not found"}
+    
+    def add_comment(self, item_id: str, comment: str, author: str = "anonymous") -> Dict:
+        """
+        Add a comment/discussion to a workshop item.
+        
+        Inspired by Steam Workshop discussions.
+        """
+        for item_type in self.dirs.keys():
+            item = self.get_item(item_type, item_id)
+            if item:
+                file_path = os.path.join(self.dirs[item_type], f"{item_id}.json")
+                
+                if "comments" not in item:
+                    item["comments"] = []
+                
+                comment_id = hashlib.md5(f"{comment}{datetime.now().isoformat()}".encode()).hexdigest()[:8]
+                
+                item["comments"].append({
+                    "id": comment_id,
+                    "author": author,
+                    "text": comment,
+                    "created_at": datetime.now().isoformat(),
+                    "helpful_votes": 0
+                })
+                
+                with open(file_path, 'w') as f:
+                    json.dump(item, f, indent=2)
+                
+                logger.info(f"[{self.name}] 💬 {author} commented on '{item['name']}'")
+                return {"success": True, "comment_id": comment_id, "total_comments": len(item["comments"])}
+        
+        return {"success": False, "error": "Item not found"}
+    
+    def get_popular(self, limit: int = 10) -> List[Dict]:
+        """
+        Get trending/popular workshop items by downloads and rating.
+        
+        Inspired by Steam's Popular/Trending section.
+        """
+        all_items = self.list_items()
+        
+        # Score = downloads * rating (weighted popularity)
+        for item in all_items:
+            downloads = item.get("downloads", 0)
+            rating = item.get("rating", 0)
+            item["_popularity_score"] = downloads * (rating if rating > 0 else 1)
+        
+        all_items.sort(key=lambda x: x.get("_popularity_score", 0), reverse=True)
+        
+        # Clean up temp score
+        for item in all_items[:limit]:
+            item.pop("_popularity_score", None)
+        
+        return all_items[:limit]
+    
+    def get_featured(self) -> List[Dict]:
+        """
+        Get curated/featured workshop items.
+        
+        Returns items with high ratings (4+) and multiple downloads.
+        """
+        all_items = self.list_items()
+        
+        featured = [
+            item for item in all_items
+            if item.get("rating", 0) >= 4 and item.get("downloads", 0) >= 3
+        ]
+        
+        return featured[:5]  # Top 5 featured
+    
+    def get_item_stats(self, item_id: str) -> Optional[Dict]:
+        """
+        Get detailed stats for a workshop item.
+        """
+        for item_type in self.dirs.keys():
+            item = self.get_item(item_type, item_id)
+            if item:
+                return {
+                    "name": item.get("name"),
+                    "downloads": item.get("downloads", 0),
+                    "rating": item.get("rating", 0),
+                    "ratings_count": item.get("ratings_count", 0),
+                    "comments_count": len(item.get("comments", [])),
+                    "created_at": item.get("created_at"),
+                    "author": item.get("author")
+                }
+        return None
+
+
     def create_default_templates(self):
         """Create default workshop templates."""
         # Blog post prompt template

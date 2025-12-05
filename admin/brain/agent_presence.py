@@ -86,6 +86,8 @@ class AgentPresence:
             ("Achievement Tracker", "Gamification Engine", "🏆"),
             ("Preview Generator", "Visual Validator", "👁️"),
             ("Workshop Manager", "Template Curator", "🛠️"),
+            # Communication Intelligence
+            ("Communication Analyzer", "Conversation Intelligence", "📡"),
         ]
         
         for name, role, emoji in known_agents:

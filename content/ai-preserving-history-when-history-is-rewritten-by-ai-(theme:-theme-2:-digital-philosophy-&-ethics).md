@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Preserving History when History is Rewritten by AI (Theme: Theme'
-  2: Digital Philosophy & Ethics)'
+title: 'Preserving History when History is Rewritten by AI (Theme: Theme 2: Digital Philosophy & Ethics)'
 ---# Preserving Authentic History in the Age of AI Revisionism
 
 **Introduction:**

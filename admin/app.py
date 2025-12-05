@@ -191,5 +191,192 @@ def upload_video_route():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/mission-control')
+def mission_control():
+    return render_template('mission_control.html')
+
+@app.route('/api/mission-control')
+def api_mission_control():
+    try:
+        from .engineers.data_analyst import DataAnalyst
+        analyst = DataAnalyst()
+        data = analyst.get_mission_control_data()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    try:
+        data = request.json
+        user_message = data.get('message')
+        session_id = data.get('session_id', request.remote_addr)
+        
+        if not user_message:
+            return jsonify({'status': 'error', 'message': 'No message provided'}), 400
+
+        # Use the new route_and_log function for automatic conversation tracking
+        from .engineers.command_router import route_and_log
+        result = route_and_log(user_message, session_id=session_id)
+        
+        return jsonify({'status': 'success', 'result': result})
+        
+    except Exception as e:
+        print(f"Chat Error: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# ==================== COMMUNICATION ANALYTICS ====================
+
+@app.route('/api/communication/stats')
+def communication_stats():
+    """Get communication analytics and statistics."""
+    try:
+        from .engineers.communication_analyzer import get_communication_analyzer
+        analyzer = get_communication_analyzer()
+        return jsonify({
+            'status': 'success',
+            'analytics': analyzer.get_analytics(),
+            'health': analyzer.get_communication_health()
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/communication/insights')
+def communication_insights():
+    """Get AI-powered improvement suggestions."""
+    try:
+        from .engineers.communication_analyzer import get_communication_analyzer
+        analyzer = get_communication_analyzer()
+        return jsonify({
+            'status': 'success',
+            'insights': analyzer.get_improvement_suggestions()
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/communication/history')
+def communication_history():
+    """Get recent conversation history."""
+    try:
+        from .engineers.communication_analyzer import get_communication_analyzer
+        analyzer = get_communication_analyzer()
+        
+        limit = request.args.get('limit', 50, type=int)
+        session_id = request.args.get('session_id')
+        intent = request.args.get('intent')
+        
+        return jsonify({
+            'status': 'success',
+            'conversations': analyzer.get_conversation_history(
+                limit=limit,
+                session_id=session_id,
+                intent_filter=intent
+            )
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/communication/feedback', methods=['POST'])
+def communication_feedback():
+    """Submit feedback for a conversation."""
+    try:
+        from .engineers.communication_analyzer import get_communication_analyzer
+        analyzer = get_communication_analyzer()
+        
+        data = request.json
+        conversation_id = data.get('conversation_id')
+        feedback = data.get('feedback', '')
+        rating = data.get('rating')  # 1-5 stars
+        
+        if not conversation_id:
+            return jsonify({'status': 'error', 'message': 'conversation_id required'}), 400
+        
+        success = analyzer.add_user_feedback(conversation_id, feedback, rating)
+        
+        return jsonify({
+            'status': 'success' if success else 'error',
+            'message': 'Feedback recorded' if success else 'Conversation not found'
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/communication')
+def communication_dashboard():
+    """Communication analytics dashboard."""
+    return render_template('communication_dashboard.html')
+
+# ==================== SOCIAL NETWORK ====================
+
+@app.route('/api/social/feed')
+def social_feed():
+    try:
+        from .engineers.social_engine import get_social_engine
+        engine = get_social_engine()
+        return jsonify({
+            'status': 'success',
+            'feed': engine.get_feed()
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/social/agents')
+def social_agents():
+    try:
+        from .engineers.social_engine import get_social_engine
+        engine = get_social_engine()
+        return jsonify({
+            'status': 'success',
+            'agents': engine.get_personas()
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# ==================== OFFICE SPACE ====================
+
+@app.route('/office')
+def office_space():
+    """Visual Office Space."""
+    return render_template('ai_office.html')
+
+@app.route('/api/office/state')
+def office_state():
+    try:
+        from .engineers.office_manager import get_office_manager
+        mgr = get_office_manager()
+        return jsonify({
+            'status': 'success',
+            'state': mgr.get_office_state()
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/office/whiteboard', methods=['POST'])
+def update_whiteboard():
+    try:
+        from .engineers.office_manager import get_office_manager
+        mgr = get_office_manager()
+        data = request.json
+        
+        if data.get('action') == 'add':
+            item = mgr.add_whiteboard_item(
+                data.get('content'), 
+                data.get('author', 'User'), 
+                data.get('category', 'Idea')
+            )
+            return jsonify({'status': 'success', 'item': item})
+            
+        elif data.get('action') == 'clear':
+            mgr.clear_whiteboard()
+            return jsonify({'status': 'success', 'message': 'Whiteboard cleared'})
+            
+        return jsonify({'status': 'error', 'message': 'Invalid action'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5001)
+

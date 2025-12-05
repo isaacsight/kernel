@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from admin.brain.metrics_collector import get_metrics_collector
 from admin.brain.memory_store import get_memory_store
+from admin.engineers.web_scout import get_web_scout
 
 logger = logging.getLogger("Visionary")
 
@@ -31,6 +32,7 @@ class Visionary:
         # Initialize metrics for data-driven decisions
         self.metrics = get_metrics_collector()
         self.memory_store = get_memory_store()
+        self.web_scout = get_web_scout()
 
     def generate_og_image(self, title, slug):
         """
@@ -204,3 +206,117 @@ class Visionary:
             "things_to_avoid": len(avoidances),
             "recent_insights": insights[:5]
         }
+
+    def critique_design(self, css_content: str, html_snippet: str = "") -> str:
+        """
+        Analyzes CSS and HTML to provide design critiques.
+        """
+        logger.info("Critiquing design...")
+        
+        # In a real scenario, we would send this to a Vision LLM or a code-aware LLM
+        # For now, we will use the text generation endpoint
+        
+        node_url = os.environ.get("STUDIO_NODE_URL")
+        if not node_url:
+            return "Cannot critique: Studio Node URL not set."
+            
+        import requests
+        try:
+            prompt = f"""
+            You are The Visionary, a world-class UI/UX Designer.
+            Critique the following CSS and HTML snippet.
+            
+            Focus on:
+            1. Visual Hierarchy
+            2. Color Harmony
+            3. Spacing and Layout
+            4. Modern Aesthetics (Glassmorphism, Gradients, etc.)
+            
+            CSS:
+            {css_content[:1000]}...
+            
+            HTML Context:
+            {html_snippet[:500]}...
+            
+            Provide specific, actionable feedback in bullet points.
+            """
+            
+            response = requests.post(
+                f"{node_url}/generate",
+                json={"prompt": prompt, "model": "mistral"},
+                timeout=60
+            )
+            response.raise_for_status()
+            return response.json().get("response", "No critique generated.")
+            
+        except Exception as e:
+            logger.error(f"Design critique failed: {e}")
+            return f"Error during critique: {e}"
+
+    def generate_css(self, requirements: str, current_css: str = "") -> str:
+        """
+        Generates CSS based on natural language requirements.
+        """
+        logger.info(f"Generating CSS for: {requirements}")
+        
+        node_url = os.environ.get("STUDIO_NODE_URL")
+        if not node_url:
+            return "/* Cannot generate: Studio Node URL not set. */"
+            
+        import requests
+        try:
+            prompt = f"""
+            You are The Visionary, a world-class UI/UX Designer.
+            Write CSS to satisfy the following requirements:
+            "{requirements}"
+            
+            Existing CSS Context (to maintain consistency):
+            {current_css[:500]}...
+            
+            Return ONLY valid CSS code. No markdown, no explanations.
+            """
+            
+            response = requests.post(
+                f"{node_url}/generate",
+                json={"prompt": prompt, "model": "codellama"}, # Use a code model if available
+                timeout=60
+            )
+            response.raise_for_status()
+            
+            css = response.json().get("response", "")
+            # Clean up markdown
+            if "```css" in css:
+                css = css.split("```css")[1].split("```")[0]
+            elif "```" in css:
+                css = css.split("```")[1].split("```")[0]
+                
+            return css.strip()
+            
+        except Exception as e:
+            logger.error(f"CSS generation failed: {e}")
+            return f"/* Error generating CSS: {e} */"
+
+    def research_design_trends(self, topic: str = "web design trends 2025") -> dict:
+        """
+        Actively researches current design trends using Web Scout.
+        """
+        logger.info(f"[{self.name}] Scouting design trends for: {topic}")
+        
+        # 1. Broad Search
+        trends = self.web_scout.search(topic, num_results=5)
+        
+        # 2. Specific Logic (Color, Typography, Layout)
+        color_trends = self.web_scout.search(f"{topic} color palettes", num_results=3)
+        type_trends = self.web_scout.search(f"{topic} typography", num_results=3)
+        
+        # 3. Compile Report
+        report = {
+            "topic": topic,
+            "timestamp": "Now",
+            "general_trends": [t['snippet'] for t in trends],
+            "color_trends": [t['snippet'] for t in color_trends],
+            "typography_trends": [t['snippet'] for t in type_trends],
+            "sources": [t['url'] for t in trends]
+        }
+        
+        return report

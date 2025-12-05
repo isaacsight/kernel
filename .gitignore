@@ -1,4 +1,4 @@
-```
+
 # Python
 __pycache__/
 *.py[cod]
@@ -29,3 +29,5 @@ dist/
 *.log
 .env
 .aider*
+admin/brain/kokoro_models/
+admin/brain/kokoro_models/*.onnx

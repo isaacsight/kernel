@@ -13,3 +13,7 @@ tiktok-uploader
 moviepy
 gTTS
 edge-tts
+stripe
+email-validator
+playwright
+nest_asyncio

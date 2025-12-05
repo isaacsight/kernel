@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme'
-  1: The Autonomous Web)'
+title: 'The Stack of the Future: HTMX, SQLite, and LLMs (Theme: Theme 1: The Autonomous Web)'
 ---# The Autonomous Web: HTMX, SQLite, and LLMs - The Stack of the Future?
 
 The internet is constantly evolving. From static HTML pages to complex single-page applications, we've chased the dream of a richer, more interactive experience. But have we overcomplicated things? What if we could build powerful, autonomous web applications with a surprisingly simple stack? Enter HTMX, SQLite, and Large Language Models (LLMs) – a combination poised to revolutionize how we build for the future. Forget complex frameworks and bloated JavaScript bundles; this trio offers a pathway to efficient, intelligent, and truly dynamic web experiences. Let's explore why this stack might just be the key to unlocking the "Autonomous Web."

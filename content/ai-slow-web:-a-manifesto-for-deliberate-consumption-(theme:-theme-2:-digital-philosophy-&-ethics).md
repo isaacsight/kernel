@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme'
-  2: Digital Philosophy & Ethics)'
+title: 'Slow Web: A Manifesto for Deliberate Consumption (Theme: Theme 2: Digital Philosophy & Ethics)'
 ---
 
 ## The Slow Web: A Manifesto for Deliberate Consumption in the Digital Age

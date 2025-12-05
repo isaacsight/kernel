@@ -178,46 +178,49 @@ class WebScout:
             return []
     
     def _search_duckduckgo(self, query: str, num: int) -> List[Dict]:
-        """Search using DuckDuckGo HTML (no API key needed)."""
+        """Search using DuckDuckGo HTML scraping (no API key needed)."""
         try:
-            # Use DuckDuckGo instant answer API
+            from bs4 import BeautifulSoup
+            
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            }
+            
             response = requests.get(
-                "https://api.duckduckgo.com/",
-                params={
-                    "q": query,
-                    "format": "json",
-                    "no_redirect": 1,
-                    "no_html": 1
-                },
+                "https://html.duckduckgo.com/html/",
+                params={"q": query},
+                headers=headers,
                 timeout=10
             )
             response.raise_for_status()
-            data = response.json()
             
+            soup = BeautifulSoup(response.text, 'html.parser')
             results = []
             
-            # Add abstract if available
-            if data.get("Abstract"):
-                results.append({
-                    "title": data.get("Heading", query),
-                    "url": data.get("AbstractURL", ""),
-                    "snippet": data.get("Abstract"),
-                    "source": "duckduckgo"
-                })
-            
-            # Add related topics
-            for topic in data.get("RelatedTopics", [])[:num]:
-                if isinstance(topic, dict) and topic.get("Text"):
+            for result in soup.select('.result'):
+                if len(results) >= num:
+                    break
+                    
+                title_elem = result.select_one('.result__a')
+                snippet_elem = result.select_one('.result__snippet')
+                
+                if title_elem and snippet_elem:
+                    link = title_elem['href']
                     results.append({
-                        "title": topic.get("Text", "")[:100],
-                        "url": topic.get("FirstURL", ""),
-                        "snippet": topic.get("Text"),
-                        "source": "duckduckgo"
+                        "title": title_elem.get_text(strip=True),
+                        "url": link,
+                        "snippet": snippet_elem.get_text(strip=True),
+                        "source": "duckduckgo_html"
                     })
             
-            return results[:num]
+            if not results and "anomaly-modal" in response.text:
+                logger.warning(f"[{self.name}] DuckDuckGo blocked the request (bot detection).")
+                logger.warning(f"[{self.name}] TIP: Set SERPER_API_KEY or BRAVE_API_KEY for reliable search.")
+
+            return results
         except Exception as e:
             logger.warning(f"[{self.name}] DuckDuckGo search failed: {e}")
+            logger.warning(f"[{self.name}] TIP: Set SERPER_API_KEY or BRAVE_API_KEY for reliable search.")
             return []
     
     def research_topic(self, topic: str) -> Dict:

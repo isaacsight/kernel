@@ -87,14 +87,12 @@ class ViralCoach:
     def analyze_tiktok_script(self, script: str, hook_style: str = "auto") -> Dict:
         """
         Analyzes a TikTok script and returns viral potential scores.
-        
-        Args:
-            script: The script text to analyze
-            hook_style: Preferred hook style or "auto" to recommend
-            
-        Returns:
-            Dict with scores and suggestions
+        Now includes Trend Awareness via TrendScout.
         """
+        # Import TrendScout (lazy import to avoid circular deps if any)
+        from admin.engineers.trend_scout import TrendScout
+        scout = TrendScout()
+        
         words = script.split()
         word_count = len(words)
         
@@ -108,13 +106,22 @@ class ViralCoach:
         # Analyze CTA
         cta_score = self._score_cta(script)
         
-        # Calculate overall viral score
-        overall_score = (hook_score * 0.4 + retention_score * 0.35 + cta_score * 0.25)
+        # Analyze Trends (New)
+        trend_report = scout.check_relevance(script)
+        trend_score = trend_report["score"] * 10.0 # Convert 0-1 to 0-10
+        
+        # Calculate overall viral score (Weighted)
+        # Hook: 35%, Retention: 30%, CTA: 20%, Trends: 15%
+        overall_score = (hook_score * 0.35 + retention_score * 0.30 + cta_score * 0.20 + trend_score * 0.15)
         
         # Generate suggestions
         suggestions = self._generate_suggestions(
             script, hook_score, retention_score, cta_score, hook_style
         )
+        
+        # Add trend suggestion if missing
+        if trend_score < 5.0:
+            suggestions.append(f"Trend Alert: {trend_report['suggestion']}")
         
         # Recommend hook style if auto
         recommended_style = self._recommend_hook_style(script) if hook_style == "auto" else hook_style
@@ -123,12 +130,14 @@ class ViralCoach:
             "hook_score": round(hook_score, 1),
             "retention_score": round(retention_score, 1),
             "cta_score": round(cta_score, 1),
+            "trend_score": round(trend_score, 1),
             "overall_score": round(overall_score, 1),
             "word_count": word_count,
             "estimated_duration_seconds": word_count / 2.5,  # ~150 words/min speaking rate
             "recommended_hook_style": recommended_style,
             "suggestions": suggestions,
-            "improved_hook": self._generate_improved_hook(script, recommended_style)
+            "improved_hook": self._generate_improved_hook(script, recommended_style),
+            "trend_context": trend_report["hits"]
         }
         
         # Log for learning

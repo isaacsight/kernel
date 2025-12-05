@@ -4,8 +4,7 @@ date: 2025-11-30
 tags:
 - ai
 - generated
-title: 'How to Train Your Website to Write Its Own Changelog (Theme:'
-  Theme 1: The Autonomous Web)'
+title: 'How to Train Your Website to Write Its Own Changelog (Theme: Theme 1: The Autonomous Web)'
 ---# Training Your Website to Write Its Own Changelog: The Autonomous Web in Action
 
 The future is autonomous. From self-driving cars to AI-powered assistants, we're increasingly offloading repetitive tasks to machines. Why should website development be any different? One particularly tedious but vital task is maintaining a changelog – a record of every update, bug fix, and feature addition made to your website.

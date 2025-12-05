@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio OS | Mission Control</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f1115;
+            --bg-card: #181b21;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-primary: #3b82f6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: #2d3748;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            display: grid;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-big {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--accent-success);
+        }
+
+        .status-badge.critical {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--accent-danger);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Mission Control</h1>
+            <div class="metric-label">System Overview</div>
+        </div>
+        <div class="status-badge">SYSTEM ONLINE</div>
+    </header>
+
+    <!-- Top KPIs -->
+    <div class="grid">
+        <div class="card">
+            <h2>Viral Velocity</h2>
+            <div class="metric-big" id="avg-viral-score">--</div>
+            <div class="metric-label">Avg. Content Score (Last 10)</div>
+        </div>
+        <div class="card">
+            <h2>Audience Reach</h2>
+            <div class="metric-big" id="total-views">--</div>
+            <div class="metric-label">Total Simulated Views</div>
+        </div>
+        <div class="card">
+            <h2>System Health</h2>
+            <div id="health-check-list" style="margin-top: 1rem;">
+                <!-- Populated by JS -->
+                Loading metrics...
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts & Lists -->
+    <div class="grid">
+        <div class="card" style="grid-column: span 2;">
+            <h2>Recent Content Performance</h2>
+            <div class="chart-placeholder" id="viral-chart">
+                <!-- Data visualization would go here -->
+                [Viral Score Chart Placeholder]
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Recent Executions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="execution-log">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                // In a real app, this would fetch from /api/mission-control
+                // For this demo, we'll assume the Python backend injects data or we fetch JSON
+                const response = await fetch('/api/mission-control');
+                const data = await response.json();
+
+                // Update basic metrics
+                document.getElementById('avg-viral-score').innerText = data.viral_scores.average_score.toFixed(1);
+                document.getElementById('total-views').innerText = data.engagement_metrics.total_views.toLocaleString();
+
+                // Update Health
+                const healthContainer = document.getElementById('health-check-list');
+                healthContainer.innerHTML = '';
+                for (const [service, status] of Object.entries(data.system_health)) {
+                    const div = document.createElement('div');
+                    div.style.display = 'flex';
+                    div.style.justifyContent = 'space-between';
+                    div.style.marginBottom = '0.5rem';
+                    div.style.fontSize = '0.875rem';
+                    div.innerHTML = `
+                        <span style="text-transform: capitalize; color: var(--text-muted)">${service.replace('_', ' ')}</span>
+                        <span class="status-badge ${status !== 'healthy' && status !== 'valid' && status !== 'installed' ? 'critical' : ''}">${status}</span>
+                    `;
+                    healthContainer.appendChild(div);
+                }
+
+                // Update Logs
+                const logBody = document.getElementById('execution-log');
+                logBody.innerHTML = '';
+                data.viral_scores.recent_scores.slice(0, 5).forEach(item => {
+                    const row = document.createElement('tr');
+                    const date = new Date(item.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                    row.innerHTML = `
+                        <td class="mono">${date}</td>
+                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.title}</td>
+                        <td>${item.score}/10</td>
+                    `;
+                    logBody.appendChild(row);
+                });
+
+            } catch (e) {
+                console.error("Failed to load data", e);
+            }
+        }
+
+        // Poll for updates
+        loadData();
+        setInterval(loadData, 30000);
+    </script>
+</body>
+
+</html>
