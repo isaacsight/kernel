@@ -9,7 +9,7 @@ echo "🚀 Starting Studio OS..."
 # Start Backend
 echo "📦 Starting Backend (FastAPI)..."
 cd "$(dirname "$0")"
-uvicorn admin.api.main:app --reload --port 8000 &
+uvicorn admin.api.main:app --reload --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
 
 # Start Frontend

@@ -215,3 +215,134 @@ async def trigger_evolution(background_tasks: BackgroundTasks):
         return {"message": "Evolution Cycle Complete", "report": report}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== New Features (Replit/Spark/Discord/Steam Inspired) ====================
+
+class CommandInput(BaseModel):
+    """Input for natural language command routing."""
+    command: str
+
+@app.post("/command")
+async def route_command(input: CommandInput):
+    """
+    Natural language command interface.
+    Routes commands to appropriate agents automatically.
+    
+    Examples:
+    - "Write a post about AI ethics"
+    - "Publish the site"
+    - "What's the status?"
+    """
+    try:
+        from admin.engineers.command_router import get_command_router
+        router = get_command_router()
+        
+        # Route the command
+        routed = router.route(input.command)
+        
+        if not routed.get("success"):
+            return {
+                "success": False,
+                "error": routed.get("error"),
+                "suggestion": routed.get("suggestion")
+            }
+        
+        # Execute the command
+        result = router.execute(routed)
+        
+        return {
+            "success": True,
+            "intent": routed.get("intent"),
+            "agents_involved": routed.get("target_agents"),
+            "execution_plan": routed.get("execution_plan"),
+            "result": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/command/help")
+async def get_command_help():
+    """Get help about available natural language commands."""
+    try:
+        from admin.engineers.command_router import get_command_router
+        router = get_command_router()
+        return router.get_help()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/agents/presence")
+async def get_agents_presence():
+    """
+    Get real-time presence status for all agents.
+    Shows what each agent is currently doing.
+    """
+    try:
+        from admin.brain.agent_presence import get_agent_presence
+        presence = get_agent_presence()
+        return {
+            "agents": presence.get_team_presence(),
+            "summary": presence.get_status_summary()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/models")
+async def get_available_models():
+    """Get list of available AI models."""
+    try:
+        from admin.brain.model_router import get_model_router
+        router = get_model_router()
+        return {
+            "models": router.get_available_models()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class ModelSelectionRequest(BaseModel):
+    """Request for model selection."""
+    task_type: str
+    prefer_local: Optional[bool] = None
+    prefer_cheap: Optional[bool] = None
+    prefer_fast: Optional[bool] = None
+    prefer_quality: Optional[bool] = None
+
+@app.post("/models/select")
+async def select_model(request: ModelSelectionRequest):
+    """
+    Select the best model for a given task type.
+    
+    Task types: creative_writing, code_generation, analysis, 
+                summarization, chat, embedding, fast_simple
+    """
+    try:
+        from admin.brain.model_router import get_model_router, TaskType
+        router = get_model_router()
+        
+        # Convert string to TaskType enum
+        try:
+            task_type = TaskType(request.task_type)
+        except ValueError:
+            valid_types = [t.value for t in TaskType]
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid task_type. Valid types: {valid_types}"
+            )
+        
+        constraints = {}
+        if request.prefer_local is not None:
+            constraints["prefer_local"] = request.prefer_local
+        if request.prefer_cheap is not None:
+            constraints["prefer_cheap"] = request.prefer_cheap
+        if request.prefer_fast is not None:
+            constraints["prefer_fast"] = request.prefer_fast
+        if request.prefer_quality is not None:
+            constraints["prefer_quality"] = request.prefer_quality
+        
+        result = router.select_model(task_type, constraints)
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

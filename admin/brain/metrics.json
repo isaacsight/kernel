@@ -17,14 +17,14 @@
       }
     },
     "2025-12-04": {
-      "generations": 36,
-      "successes": 36,
+      "generations": 37,
+      "successes": 37,
       "failures": 0,
-      "total_duration": 1413.3125112056732,
+      "total_duration": 1455.7551951408386,
       "providers": {
         "remote": {
-          "count": 36,
-          "successes": 36
+          "count": 37,
+          "successes": 37
         }
       }
     }
@@ -68,5 +68,483 @@
     }
   },
   "content_metrics": {},
-  "system_events": []
+  "system_events": [
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 3.0,
+          "retention_score": 6.8,
+          "cta_score": 3.0,
+          "overall_score": 4.3,
+          "word_count": 28,
+          "estimated_duration_seconds": 11.2,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Strengthen your hook - try a 'auto' style opening",
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add a clear CTA at the end (e.g., 'Follow for more' or ask a question)",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Today I want to talk..."
+        }
+      },
+      "timestamp": "2025-12-04T21:42:00.210386"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "The Lost Art of Stillness",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T21:42:13.301806"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "The Lost Art of Stillness",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T21:42:44.743076"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.6,
+          "cta_score": 7.5,
+          "overall_score": 6.6,
+          "word_count": 64,
+          "estimated_duration_seconds": 25.6,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:42:44.743495"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.6,
+          "cta_score": 7.5,
+          "overall_score": 6.6,
+          "word_count": 64,
+          "estimated_duration_seconds": 25.6,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:42:44.743754"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.6,
+          "cta_score": 7.5,
+          "overall_score": 6.6,
+          "word_count": 64,
+          "estimated_duration_seconds": 25.6,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:42:44.744006"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "The Secret Sauce Behind Viral Content: What I Learned from $100M Startups",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T21:46:06.742075"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 96,
+          "estimated_duration_seconds": 38.4,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:46:06.743006"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 96,
+          "estimated_duration_seconds": 38.4,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:46:06.743810"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 96,
+          "estimated_duration_seconds": 38.4,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T21:46:06.744722"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "The Secret Sauce Behind Viral Content: What I Learned from $100M Startups",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T22:02:09.918865"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 6.8,
+          "cta_score": 7.5,
+          "overall_score": 7.1,
+          "word_count": 28,
+          "estimated_duration_seconds": 11.2,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:02:09.919617"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "The Secret Sauce Behind Viral Content: What I Learned from $100M Startups",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T22:02:14.632459"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 6.8,
+          "cta_score": 7.5,
+          "overall_score": 7.1,
+          "word_count": 28,
+          "estimated_duration_seconds": 11.2,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:02:14.632973"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "I Fired My AI Social Media Team (And Built a Better One)",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T22:10:15.940185"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "story",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "So this happened... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:10:15.941337"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:10:15.941849"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:10:15.942312"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "I Fired My AI Social Media Team (And Built a Better One)",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T22:16:03.217629"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "story",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "So this happened... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:16:03.218780"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:16:03.219335"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:16:03.219827"
+    },
+    {
+      "type": "repurposer",
+      "data": {
+        "title": "I Fired My AI Social Media Team (And Built a Better One)",
+        "platforms": [
+          "tiktok"
+        ],
+        "output_count": 1
+      },
+      "timestamp": "2025-12-04T22:21:45.033905"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "story",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "So this happened... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:21:45.035208"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:21:45.035893"
+    },
+    {
+      "type": "viral_coach",
+      "data": {
+        "action": "script_analyzed",
+        "result": {
+          "hook_score": 7.0,
+          "retention_score": 5.3,
+          "cta_score": 7.5,
+          "overall_score": 6.5,
+          "word_count": 65,
+          "estimated_duration_seconds": 26.0,
+          "recommended_hook_style": "curiosity",
+          "suggestions": [
+            "Add a question at second 3-5 to create an 'open loop'",
+            "Add more questions to boost engagement"
+          ],
+          "improved_hook": "I just discovered something that... Nobody talks about this, but..."
+        }
+      },
+      "timestamp": "2025-12-04T22:21:45.036419"
+    },
+    {
+      "type": "workflow",
+      "data": {
+        "workflow_id": "20251204_222145",
+        "success": true,
+        "template": "storytime"
+      },
+      "timestamp": "2025-12-04T22:22:21.300401"
+    }
+  ]
 }

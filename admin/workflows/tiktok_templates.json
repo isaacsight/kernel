@@ -1,0 +1,38 @@
+{
+    "storytime": {
+        "description": "Personal narrative format - best for blog content",
+        "vibe": "chill",
+        "voice": "en-GB-SoniaNeural",
+        "hook_style": "story",
+        "music_volume": 0.4,
+        "caption_style": "yellow",
+        "target_duration": 45
+    },
+    "viral_hook": {
+        "description": "High-energy controversial hook format",
+        "vibe": "upbeat",
+        "voice": "en-US-GuyNeural",
+        "hook_style": "controversy",
+        "music_volume": 0.3,
+        "caption_style": "white",
+        "target_duration": 30
+    },
+    "educational": {
+        "description": "Calm explainer format - tips and how-tos",
+        "vibe": "tech",
+        "voice": "en-US-ChristopherNeural",
+        "hook_style": "listicle",
+        "music_volume": 0.35,
+        "caption_style": "yellow",
+        "target_duration": 60
+    },
+    "quick_hit": {
+        "description": "Ultra-short punchy format",
+        "vibe": "upbeat",
+        "voice": "en-US-GuyNeural",
+        "hook_style": "shock",
+        "music_volume": 0.25,
+        "caption_style": "white",
+        "target_duration": 15
+    }
+}

@@ -64,6 +64,96 @@ class CollectiveIntelligence:
         """Persist knowledge to disk."""
         with open(self.knowledge_file, 'w') as f:
             json.dump(self.knowledge, f, indent=2)
+            
+    # ==================== Synchronization ====================
+    
+    def merge_knowledge(self, external_knowledge: Dict) -> Dict:
+        """
+        Merge knowledge from an external source (e.g., another node).
+        Returns a summary of what was added.
+        """
+        added = {
+            "insights": 0,
+            "lessons": 0,
+            "decisions": 0
+        }
+        
+        # Merge insights
+        existing_insights = set(
+            (i["from_agent"], i["type"], str(i["insight"])) 
+            for i in self.knowledge["shared_insights"]
+        )
+        
+        for insight in external_knowledge.get("shared_insights", []):
+            key = (insight["from_agent"], insight["type"], str(insight["insight"]))
+            if key not in existing_insights:
+                self.knowledge["shared_insights"].append(insight)
+                added["insights"] += 1
+        
+        # Merge lessons
+        existing_lessons = set(
+            (l["from_agent"], l["lesson"], l["context"]) 
+            for l in self.knowledge["lessons_learned"]
+        )
+        
+        for lesson in external_knowledge.get("lessons_learned", []):
+            key = (lesson["from_agent"], lesson["lesson"], lesson["context"])
+            if key not in existing_lessons:
+                self.knowledge["lessons_learned"].append(lesson)
+                added["lessons"] += 1
+                
+        # Merge decisions (simple append for now, could be smarter)
+        existing_decision_ids = set(d["id"] for d in self.knowledge["team_decisions"])
+        
+        for decision in external_knowledge.get("team_decisions", []):
+            if decision["id"] not in existing_decision_ids:
+                self.knowledge["team_decisions"].append(decision)
+                added["decisions"] += 1
+            else:
+                # Merge votes if decision exists
+                local_decision = next(d for d in self.knowledge["team_decisions"] if d["id"] == decision["id"])
+                for voter, vote_data in decision.get("votes", {}).items():
+                    if voter not in local_decision["votes"]:
+                        local_decision["votes"][voter] = vote_data
+        
+        if any(added.values()):
+            self._save_knowledge()
+            logger.info(f"[Collective] Merged knowledge: {added}")
+            
+        return added
+
+    def get_knowledge_since(self, timestamp: str) -> Dict:
+        """
+        Get all knowledge created/updated since the given timestamp.
+        """
+        updates = {
+            "shared_insights": [],
+            "lessons_learned": [],
+            "team_decisions": []
+        }
+        
+        # Filter insights
+        for insight in self.knowledge["shared_insights"]:
+            if insight.get("shared_at", "") > timestamp:
+                updates["shared_insights"].append(insight)
+                
+        # Filter lessons
+        for lesson in self.knowledge["lessons_learned"]:
+            if lesson.get("learned_at", "") > timestamp:
+                updates["lessons_learned"].append(lesson)
+                
+        # Filter decisions (include if proposed OR voted recently)
+        for decision in self.knowledge["team_decisions"]:
+            is_new = decision.get("proposed_at", "") > timestamp
+            has_new_votes = any(
+                v.get("voted_at", "") > timestamp 
+                for v in decision.get("votes", {}).values()
+            )
+            
+            if is_new or has_new_votes:
+                updates["team_decisions"].append(decision)
+                
+        return updates
     
     # ==================== Knowledge Sharing ====================
     

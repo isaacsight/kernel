@@ -86,8 +86,8 @@ class Broadcaster:
             if not os.path.exists(bg_music_path):
                  bg_music_path = os.path.join(os.path.dirname(__file__), "../static/audio/lofi_beat.mp3")
 
-            # NOTE: Voiceover and captions disabled for now
-            # voiceover_path, vtt_path = self.generate_voiceover(post, vibe)
+            # Generate Voiceover with Captions (re-enabled!)
+            voiceover_path, vtt_path = self.generate_voiceover(post, vibe)
             
             final_audio = None
             
@@ -102,16 +102,39 @@ class Broadcaster:
                     else:
                         bg_music = bg_music.subclipped(0, final_video.duration)
                     
-                    # Just background music (no voiceover mixing)
-                    bg_music = bg_music.with_effects([AudioFadeOut(2), AudioNormalize(), MultiplyVolume(2.5)])
-                    final_audio = bg_music
+                    # Mix voiceover with background music if voiceover exists
+                    if voiceover_path and os.path.exists(voiceover_path):
+                        logger.info(f"Mixing voiceover from {voiceover_path}")
+                        voiceover = AudioFileClip(voiceover_path)
+                        
+                        # Reduce bg music volume when voiceover is present (ducking)
+                        bg_music = bg_music.with_effects([MultiplyVolume(0.3)])  # 30% volume for background
+                        voiceover = voiceover.with_effects([AudioNormalize(), MultiplyVolume(2.0)])  # Boost voiceover
+                        
+                        # Composite audio: voiceover + background
+                        final_audio = CompositeAudioClip([bg_music, voiceover])
+                        final_audio = final_audio.with_effects([AudioFadeOut(2)])
+                        
+                        # Add captions if VTT exists
+                        if vtt_path and os.path.exists(vtt_path):
+                            logger.info(f"Adding captions from {vtt_path}")
+                            final_video = self.add_captions(final_video, vtt_path)
+                    else:
+                        # Just background music (no voiceover)
+                        bg_music = bg_music.with_effects([AudioFadeOut(2), AudioNormalize(), MultiplyVolume(2.5)])
+                        final_audio = bg_music
                         
                     final_video.audio = final_audio
                         
                 except Exception as e:
                     logger.error(f"Failed to add audio: {e}")
 
-            filename = f"{title.lower().replace(' ', '-')}.mp4"
+            # Sanitize filename - remove special characters that break FFMPEG
+            import re
+            safe_title = re.sub(r'[^\w\s-]', '', title.lower())  # Remove non-alphanumeric except spaces/hyphens
+            safe_title = re.sub(r'\s+', '-', safe_title)  # Replace spaces with hyphens
+            safe_title = safe_title[:50]  # Limit length
+            filename = f"{safe_title}.mp4"
             output_path = os.path.join(self.output_dir, filename)
             
             # Write video file with audio codec and bitrate
@@ -224,7 +247,8 @@ class Broadcaster:
             # but edge-tts output is standard.
             
             def time_to_seconds(time_str):
-                # 00:00:00.000
+                # 00:00:00.000 or 00:00:00,000
+                time_str = time_str.replace(',', '.')
                 h, m, s = time_str.split(':')
                 return float(h) * 3600 + float(m) * 60 + float(s)
 
@@ -258,28 +282,34 @@ class Broadcaster:
                         full_text = "\n".join(text)
                         
                         # Create TextClip
-                        # TikTok Style: Yellow text, Black stroke, Bottom Center
-                        # Font: Arial-Bold or similar
-                        try:
-                            txt_clip = TextClip(
-                                text=full_text,
-                                font_size=40,
-                                color='yellow',
-                                stroke_color='black',
-                                stroke_width=2,
-                                font='/System/Library/Fonts/Supplemental/Arial Bold.ttf',
-                                method='caption', # Wrap text
-                                size=(video_clip.w * 0.9, None), # 90% width
-                                text_align='center'
-                            )
-                            
-                            txt_clip = txt_clip.with_start(start).with_duration(end - start)
-                            txt_clip = txt_clip.with_position(('center', 0.8), relative=True) # Bottom 20%
-                            
-                            captions.append(txt_clip)
-                            logger.info(f"Added caption: {full_text[:30]}...")
-                        except Exception as e:
-                            logger.error(f"Failed to create TextClip: {e}")
+                    # TikTok Style: Yellow text, Black stroke, Bottom Center
+                    try:
+                        # Determine font - try to find a bold one
+                        font_path = 'Arial-Bold'
+                        if os.path.exists('/System/Library/Fonts/Supplemental/Arial Bold.ttf'):
+                            font_path = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
+                        elif os.path.exists('/System/Library/Fonts/Supplemental/Impact.ttf'):
+                            font_path = '/System/Library/Fonts/Supplemental/Impact.ttf'
+
+                        txt_clip = TextClip(
+                            text=full_text,
+                            font_size=70,  # Larger for mobile
+                            color='yellow',
+                            stroke_color='black',
+                            stroke_width=4,  # Thicker stroke
+                            font=font_path,
+                            method='caption', # Wrap text
+                            size=(video_clip.w * 0.8, None), # 80% width
+                            text_align='center'
+                        )
+                        
+                        txt_clip = txt_clip.with_start(start).with_duration(end - start)
+                        txt_clip = txt_clip.with_position(('center', 0.65), relative=True) # Higher up to avoid UI
+                        
+                        captions.append(txt_clip)
+                        logger.info(f"Added caption: {full_text[:30]}...")
+                    except Exception as e:
+                        logger.error(f"Failed to create TextClip: {e}")
                     
                     start = None
                     end = None

@@ -1008,6 +1008,42 @@
       },
       "confidence": 0.7,
       "shared_at": "2025-12-04T00:24:12.296125"
+    },
+    {
+      "from_agent": "RemoteAgent",
+      "type": "test_insight",
+      "insight": "Remote works!",
+      "confidence": 0.9,
+      "shared_at": "2025-12-04T22:10:36.800686"
+    },
+    {
+      "from_agent": "NodeAgent",
+      "type": "sync_test",
+      "insight": "Sync works",
+      "confidence": 1.0,
+      "shared_at": "2025-12-04T22:10:36.805037"
+    },
+    {
+      "from_agent": "Researcher",
+      "type": "content_strategy",
+      "insight": {
+        "type": "content_strategy",
+        "insight": "Top tech creators (e.g., Joe Karlsson) blend humor with technical depth.",
+        "confidence": 0.9
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-04T22:28:39.358466"
+    },
+    {
+      "from_agent": "Researcher",
+      "type": "visual_trend",
+      "insight": {
+        "type": "visual_trend",
+        "insight": "Green screen effects are highly effective for code walkthroughs.",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "shared_at": "2025-12-04T22:28:39.360848"
     }
   ],
   "agent_expertise": {
@@ -1039,7 +1075,7 @@
         "content review",
         "campaign planning"
       ],
-      "registered_at": "2025-12-03T23:12:27.704949"
+      "registered_at": "2025-12-04T22:24:27.369089"
     }
   },
   "lessons_learned": [
@@ -1049,8 +1085,63 @@
       "context": "blog post review",
       "outcome": "increased engagement",
       "learned_at": "2025-12-03T23:12:26.941667"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "The first 3 seconds are critical. Use a visual or audio hook immediately.",
+      "context": "tiktok viral_hook retention",
+      "outcome": "positive",
+      "learned_at": "2025-12-04T22:28:39.353101"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Kinetic typography (moving text) increases retention significantly compared to static slides.",
+      "context": "tiktok visual_style typography",
+      "outcome": "positive",
+      "learned_at": "2025-12-04T22:28:39.354131"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Authenticity wins. overly polished 'corporate' content performs worse than raw, personal stories.",
+      "context": "tiktok brand_voice authenticity",
+      "outcome": "positive",
+      "learned_at": "2025-12-04T22:28:39.355113"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Educational content must be concise. Avoid long intros. Get to the value immediately.",
+      "context": "tiktok education pacing",
+      "outcome": "positive",
+      "learned_at": "2025-12-04T22:28:39.355898"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Trending audio can boost reach, but only if relevant to the niche.",
+      "context": "tiktok audio trends",
+      "outcome": "neutral",
+      "learned_at": "2025-12-04T22:28:39.356653"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Engagement bait ('smash like') is detected and penalized by users and algorithms.",
+      "context": "tiktok engagement_tactics avoidance",
+      "outcome": "negative",
+      "learned_at": "2025-12-04T22:28:39.357384"
     }
   ],
   "team_decisions": [],
-  "active_goals": []
+  "active_goals": [
+    {
+      "id": "goal-1764916513",
+      "goal": "[EXPLORATION] Experiment with different writing styles to see what resonates best.",
+      "assigned_to": [
+        "Architect",
+        "Operator"
+      ],
+      "priority": "high",
+      "status": "active",
+      "progress": 0,
+      "created_at": "2025-12-04T22:35:13.126780"
+    }
+  ]
 }

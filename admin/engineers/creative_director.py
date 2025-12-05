@@ -198,6 +198,41 @@ class CreativeDirector:
         
         self.metrics.track_agent_action(self.name, 'review_content', True, 0)
         return review
+
+    def review_tiktok_script(self, script: str, vibe: str) -> Dict:
+        """
+        Reviews a TikTok script for brand alignment.
+        Rejects scripts that sound too generic, robotic, or "salesy".
+        """
+        logger.info(f"[{self.name}] Reviewing TikTok script...")
+        
+        # Quick heuristic check first (fail fast)
+        issues = []
+        
+        # Check for banned words/tones
+        banned = ["smash that like button", "link in bio", "buy now", "act fast"]
+        for phrase in banned:
+            if phrase in script.lower():
+                issues.append(f"Contains banned phrase: '{phrase}'")
+                
+        # Check for brand voice alignment
+        # "Does This Feel Right?" voice is calm, reflective, honest.
+        # It should NOT be: Hype-beast, aggressive, or clickbaity.
+        
+        if script.count("!") > 3:
+            issues.append("Too many exclamation marks (feels hype-y)")
+            
+        if "wait for the end" in script.lower():
+            issues.append("Cheap engagement tactic ('wait for end')")
+            
+        approved = len(issues) == 0
+        
+        return {
+            "approved": approved,
+            "issues": issues,
+            "feedback": "Script aligns with brand voice." if approved else "Script violates brand guidelines.",
+            "reviewed_by": self.name
+        }
     
     def plan_campaign(self, theme: str, duration_weeks: int = 4) -> Dict:
         """

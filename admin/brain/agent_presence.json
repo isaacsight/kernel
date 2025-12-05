@@ -1,0 +1,178 @@
+{
+  "Alchemist": {
+    "status": "working",
+    "role": "Content Generator",
+    "emoji": "\ud83e\uddea",
+    "current_task": "Writing AI Ethics post",
+    "progress": 45,
+    "started_at": "2025-12-04T21:07:09.114517",
+    "last_active": "2025-12-04T21:07:09.114824",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Guardian": {
+    "status": "queued",
+    "role": "Safety Officer",
+    "emoji": "\ud83d\udee1\ufe0f",
+    "current_task": "Queued: Audit pending",
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.115372",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Editor": {
+    "status": "idle",
+    "role": "Style & Quality",
+    "emoji": "\u270f\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114041",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Operator": {
+    "status": "idle",
+    "role": "System Manager",
+    "emoji": "\u2699\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114043",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Visionary": {
+    "status": "idle",
+    "role": "Strategic Planner",
+    "emoji": "\ud83d\udd2e",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114044",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Architect": {
+    "status": "idle",
+    "role": "Solutions Designer",
+    "emoji": "\ud83c\udfd7\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114046",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Designer": {
+    "status": "idle",
+    "role": "Visual Creator",
+    "emoji": "\ud83c\udfa8",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114047",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Researcher": {
+    "status": "idle",
+    "role": "Trend Analyst",
+    "emoji": "\ud83d\udd0d",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114049",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Analyst": {
+    "status": "idle",
+    "role": "Data Expert",
+    "emoji": "\ud83d\udcca",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114050",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Librarian": {
+    "status": "idle",
+    "role": "Knowledge Keeper",
+    "emoji": "\ud83d\udcda",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114051",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Scheduler": {
+    "status": "idle",
+    "role": "Calendar Manager",
+    "emoji": "\ud83d\udcc5",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114053",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Translator": {
+    "status": "idle",
+    "role": "Language Expert",
+    "emoji": "\ud83c\udf0d",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114055",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Narrator": {
+    "status": "idle",
+    "role": "Voice Creator",
+    "emoji": "\ud83c\udf99\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114056",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Curator": {
+    "status": "idle",
+    "role": "Content Curator",
+    "emoji": "\ud83d\uddbc\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114057",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Broadcaster": {
+    "status": "idle",
+    "role": "Social Media",
+    "emoji": "\ud83d\udce2",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114059",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Creative Director": {
+    "status": "idle",
+    "role": "Creative Lead",
+    "emoji": "\ud83c\udfac",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-04T21:07:09.114060",
+    "tasks_completed": 0,
+    "errors": 0
+  }
+}
