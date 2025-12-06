@@ -216,6 +216,17 @@ class TikTokWorkflow:
                 }
             )
             
+            # Step 7: Cleanup
+            # NEW: Delete the video file after successful upload
+            cleanup = self._execute_step(
+                "cleanup",
+                self._step_cleanup,
+                {
+                    "video_path": video_result.get("video_path"),
+                    "uploaded": upload.get("uploaded", False)
+                }
+            )
+            
             result["completed_at"] = datetime.now().isoformat()
             result["success"] = True
             result["video_path"] = video_result.get("video_path")
@@ -509,6 +520,26 @@ class TikTokWorkflow:
             "video_path": video_path,
             "timestamp": datetime.now().isoformat()
         }
+
+    def _step_cleanup(self, data: Dict) -> Dict:
+        """Deletes the video file after posting."""
+        video_path = data.get("video_path")
+        uploaded = data.get("uploaded")
+        
+        if not uploaded:
+            logger.warning("Skipping cleanup: Video was not uploaded.")
+            return {"deleted": False, "reason": "Not uploaded"}
+            
+        if video_path and os.path.exists(video_path):
+            try:
+                os.remove(video_path)
+                logger.info(f"Deleted uploaded video: {video_path}")
+                return {"deleted": True, "path": video_path}
+            except Exception as e:
+                logger.error(f"Failed to delete video: {e}")
+                raise
+        
+        return {"deleted": False, "reason": "File not found"}
     
     @classmethod
     def auto_select_template(cls, post: Dict) -> str:

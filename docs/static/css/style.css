@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('ornaments.css');
 
 :root {
     /* Hybrid Design System: DevRev Structure + Cash App Boldness */
@@ -1344,7 +1345,9 @@ td {
     text-align: center;
     border-top: 1px dashed var(--border-subtle);
     margin-top: var(--space-6);
-}/* Breadcrumbs */
+}
+
+/* Breadcrumbs */
 .breadcrumb-nav {
     margin-bottom: var(--space-6);
     font-size: var(--text-sm);
@@ -1420,7 +1423,9 @@ td {
     font-size: var(--text-xs);
     color: var(--text-tertiary);
     letter-spacing: 0.05em;
-}/* Sidebar Headers */
+}
+
+/* Sidebar Headers */
 .nav-header {
     display: block;
     font-size: var(--text-xs);
@@ -1430,7 +1435,9 @@ td {
     margin-bottom: var(--space-3);
     font-weight: 700;
     padding-left: var(--space-3);
-}/* Paginated View - Hide Hero Sections */
+}
+
+/* Paginated View - Hide Hero Sections */
 .magazine-layout.paginated-view .bento-section,
 .magazine-layout.paginated-view .start-here-section,
 .magazine-layout.paginated-view .experiments-section {

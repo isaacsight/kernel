@@ -88,6 +88,10 @@ class AgentPresence:
             ("Workshop Manager", "Template Curator", "🛠️"),
             # Communication Intelligence
             ("Communication Analyzer", "Conversation Intelligence", "📡"),
+            # User Requested Agents
+            ("Harvester", "AI Web Scraper", "🕸️"),
+            ("Collector", "AI Data Scraper", "🗄️"),
+            ("White Hat", "Security Researcher", "💻"),
         ]
         
         for name, role, emoji in known_agents:

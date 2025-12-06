@@ -174,5 +174,104 @@
     "last_active": "2025-12-04T21:07:09.114060",
     "tasks_completed": 0,
     "errors": 0
+  },
+  "Time Keeper": {
+    "status": "idle",
+    "role": "System Historian",
+    "emoji": "\u23f3",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194133",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Web Scout": {
+    "status": "idle",
+    "role": "Research Intelligence",
+    "emoji": "\ud83c\udf10",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194142",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Achievement Tracker": {
+    "status": "idle",
+    "role": "Gamification Engine",
+    "emoji": "\ud83c\udfc6",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194143",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Preview Generator": {
+    "status": "idle",
+    "role": "Visual Validator",
+    "emoji": "\ud83d\udc41\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194144",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Workshop Manager": {
+    "status": "idle",
+    "role": "Template Curator",
+    "emoji": "\ud83d\udee0\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194145",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Communication Analyzer": {
+    "status": "idle",
+    "role": "Conversation Intelligence",
+    "emoji": "\ud83d\udce1",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194147",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "Harvester": {
+    "status": "idle",
+    "role": "AI Web Scraper",
+    "emoji": "\ud83d\udd78\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.720335",
+    "tasks_completed": 1,
+    "errors": 0
+  },
+  "Collector": {
+    "status": "idle",
+    "role": "AI Data Scraper",
+    "emoji": "\ud83d\uddc4\ufe0f",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:02.194149",
+    "tasks_completed": 0,
+    "errors": 0
+  },
+  "White Hat": {
+    "status": "idle",
+    "role": "Security Researcher",
+    "emoji": "\ud83d\udcbb",
+    "current_task": null,
+    "progress": 0,
+    "started_at": null,
+    "last_active": "2025-12-05T15:50:11.464222",
+    "tasks_completed": 1,
+    "errors": 0
   }
 }

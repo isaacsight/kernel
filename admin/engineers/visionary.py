@@ -4,6 +4,8 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import config
+import google.generativeai as genai
 from admin.brain.metrics_collector import get_metrics_collector
 from admin.brain.memory_store import get_memory_store
 from admin.engineers.web_scout import get_web_scout
@@ -29,10 +31,14 @@ class Visionary:
         self.og_dir = os.path.join(self.static_dir, 'images', 'og')
         os.makedirs(self.og_dir, exist_ok=True)
         
-        # Initialize metrics for data-driven decisions
         self.metrics = get_metrics_collector()
         self.memory_store = get_memory_store()
         self.web_scout = get_web_scout()
+        
+        # Configure Gemini if available
+        if config.GEMINI_API_KEY:
+            genai.configure(api_key=config.GEMINI_API_KEY)
+            self.model = genai.GenerativeModel(config.GEMINI_MODEL)
 
     def generate_og_image(self, title, slug):
         """
@@ -217,41 +223,50 @@ class Visionary:
         # For now, we will use the text generation endpoint
         
         node_url = os.environ.get("STUDIO_NODE_URL")
-        if not node_url:
-            return "Cannot critique: Studio Node URL not set."
-            
-        import requests
-        try:
-            prompt = f"""
-            You are The Visionary, a world-class UI/UX Designer.
-            Critique the following CSS and HTML snippet.
-            
-            Focus on:
-            1. Visual Hierarchy
-            2. Color Harmony
-            3. Spacing and Layout
-            4. Modern Aesthetics (Glassmorphism, Gradients, etc.)
-            
-            CSS:
-            {css_content[:1000]}...
-            
-            HTML Context:
-            {html_snippet[:500]}...
-            
-            Provide specific, actionable feedback in bullet points.
-            """
-            
-            response = requests.post(
-                f"{node_url}/generate",
-                json={"prompt": prompt, "model": "mistral"},
-                timeout=60
-            )
-            response.raise_for_status()
-            return response.json().get("response", "No critique generated.")
-            
-        except Exception as e:
-            logger.error(f"Design critique failed: {e}")
-            return f"Error during critique: {e}"
+        
+        prompt = f"""
+        You are The Visionary, a world-class UI/UX Designer.
+        Critique the following CSS and HTML snippet.
+        
+        Focus on:
+        1. Visual Hierarchy
+        2. Color Harmony
+        3. Spacing and Layout
+        4. Modern Aesthetics (Glassmorphism, Gradients, etc.)
+        
+        CSS:
+        {css_content[:1000]}...
+        
+        HTML Context:
+        {html_snippet[:500]}...
+        
+        Provide specific, actionable feedback in bullet points.
+        """
+
+        # method 1: specific node url
+        if node_url:
+            import requests
+            try:
+                response = requests.post(
+                    f"{node_url}/generate",
+                    json={"prompt": prompt, "model": "mistral"},
+                    timeout=60
+                )
+                response.raise_for_status()
+                return response.json().get("response", "No critique generated.")
+            except Exception as e:
+                logger.error(f"Design critique failed (Remote): {e}")
+
+        # method 2: Gemini
+        if hasattr(self, 'model'):
+             try:
+                response = self.model.generate_content(prompt)
+                return response.text
+             except Exception as e:
+                logger.error(f"Design critique failed (Gemini): {e}")
+                return f"Error during critique: {e}"
+
+        return "Cannot critique: No AI provider configured."
 
     def generate_css(self, requirements: str, current_css: str = "") -> str:
         """
@@ -260,41 +275,52 @@ class Visionary:
         logger.info(f"Generating CSS for: {requirements}")
         
         node_url = os.environ.get("STUDIO_NODE_URL")
-        if not node_url:
-            return "/* Cannot generate: Studio Node URL not set. */"
             
-        import requests
-        try:
-            prompt = f"""
-            You are The Visionary, a world-class UI/UX Designer.
-            Write CSS to satisfy the following requirements:
-            "{requirements}"
+        prompt = f"""
+        You are The Visionary, a world-class UI/UX Designer.
+        Write CSS to satisfy the following requirements:
+        "{requirements}"
+        
+        Existing CSS Context (to maintain consistency):
+        {current_css[:500]}...
+        
+        Return ONLY valid CSS code. No markdown, no explanations.
+        """
+
+        css = ""
+        # method 1: specific node url
+        if node_url: 
+            import requests
+            try:
+                response = requests.post(
+                    f"{node_url}/generate",
+                    json={"prompt": prompt, "model": "codellama"}, # Use a code model if available
+                    timeout=60
+                )
+                response.raise_for_status()
+                css = response.json().get("response", "")
+            except Exception as e:
+                logger.error(f"CSS generation failed (Remote): {e}")
+        
+        # method 2: Gemini
+        elif hasattr(self, 'model') and not css:
+             try:
+                response = self.model.generate_content(prompt)
+                css = response.text
+             except Exception as e:
+                logger.error(f"CSS generation failed (Gemini): {e}")
+                return f"/* Error generating CSS: {e} */"
+        
+        else:
+             return "/* Cannot generate: No AI provider configured. */"
+
+        # Clean up markdown
+        if "```css" in css:
+            css = css.split("```css")[1].split("```")[0]
+        elif "```" in css:
+            css = css.split("```")[1].split("```")[0]
             
-            Existing CSS Context (to maintain consistency):
-            {current_css[:500]}...
-            
-            Return ONLY valid CSS code. No markdown, no explanations.
-            """
-            
-            response = requests.post(
-                f"{node_url}/generate",
-                json={"prompt": prompt, "model": "codellama"}, # Use a code model if available
-                timeout=60
-            )
-            response.raise_for_status()
-            
-            css = response.json().get("response", "")
-            # Clean up markdown
-            if "```css" in css:
-                css = css.split("```css")[1].split("```")[0]
-            elif "```" in css:
-                css = css.split("```")[1].split("```")[0]
-                
-            return css.strip()
-            
-        except Exception as e:
-            logger.error(f"CSS generation failed: {e}")
-            return f"/* Error generating CSS: {e} */"
+        return css.strip()
 
     def research_design_trends(self, topic: str = "web design trends 2025") -> dict:
         """
