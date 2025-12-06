@@ -170,8 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Search Match
             let searchMatch = true;
             if (searchTerm) {
-                const titleEl = post.querySelector('.post-title');
-                const excerptEl = post.querySelector('.post-excerpt');
+                // Flexible selectors for different card types
+                const titleEl = post.querySelector('.post-title, .experiment-card-title, .collection-card h3, h3');
+                const excerptEl = post.querySelector('.post-excerpt, .experiment-excerpt');
 
                 const title = titleEl ? titleEl.textContent.toLowerCase() : '';
                 const excerpt = excerptEl ? excerptEl.textContent.toLowerCase() : '';
