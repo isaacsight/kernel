@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+    <title>Does This Feel Right?</title>
+    <link>https://www.doesthisfeelright.com</link>
+    <description>Thoughts on business, technology, and the human condition.</description>
+    <language>en-us</language>
+    
+            <item>
+                <title>AI: Failure on Prompt Engineering #905</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-failure-prompt-engineering-15.html</link>
+                <description>Automated generation of a test post regarding Prompt Engineering.</description>
+                <category>Experiments</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-failure-prompt-engineering-15.html</guid>
+                <pubDate>Wed, 24 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>AI: Workshop on Prompt Engineering #268</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-workshop-prompt-engineering-45.html</link>
+                <description>Automated generation of a test post regarding Prompt Engineering.</description>
+                <category>Experiments</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-workshop-prompt-engineering-45.html</guid>
+                <pubDate>Tue, 23 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>AI: Workshop on Neural NeRFs #477</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-workshop-neural-nerfs-95.html</link>
+                <description>Automated generation of a test post regarding Neural NeRFs.</description>
+                <category>Experiments</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-workshop-neural-nerfs-95.html</guid>
+                <pubDate>Mon, 22 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>AI: Experiment on Transformer Architecture #616</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-experiment-transformer-architecture-24.html</link>
+                <description>Automated generation of a test post regarding Transformer Architecture.</description>
+                <category>Experiments</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-experiment-transformer-architecture-24.html</guid>
+                <pubDate>Thu, 18 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>What We Accomplished Today</title>
+                <link>https://www.doesthisfeelright.com/posts/what-we-accomplished-today.html</link>
+                <description>A recap of the significant improvements made to the Studio OS, from pagination to visual hierarchy.</description>
+                <category>Journal</category>
+                <guid>https://www.doesthisfeelright.com/posts/what-we-accomplished-today.html</guid>
+                <pubDate>Fri, 05 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;Engineering Progress: Kokoro TTS and Team Empowerment&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/2025-12-05-engineering-progress-kokoro-tts-voice-of-ai.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/2025-12-05-engineering-progress-kokoro-tts-voice-of-ai.html</guid>
+                <pubDate>Fri, 05 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;The Glitch &amp; The Sketch: Why We&#x27;re Swapping Midjourney for Rare GitHub Tools&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/2025-12-05-visual-upgrade-ascii-animated.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/2025-12-05-visual-upgrade-ascii-animated.html</guid>
+                <pubDate>Fri, 05 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;Collective AI: The Next Frontier&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/collective-ai-the-next-frontier.html</link>
+                <description>Everyone&#x27;s building AI that serves the individual. But what if the truly rare thing is AI that serves the collective—and gets smarter because of it?</description>
+                <category>Technology</category>
+                <guid>https://www.doesthisfeelright.com/posts/collective-ai-the-next-frontier.html</guid>
+                <pubDate>Fri, 05 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;The Other Computer: Awakening the Studio Node&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/awakening-the-studio-node.html</link>
+                <description></description>
+                <category>&quot;Engineering&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/awakening-the-studio-node.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;Why vulnerability feels like weakness but isn&#x27;t&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/why-vulnerability-feels-like-weakness-but-isnt.html</link>
+                <description></description>
+                <category>&quot;Growth&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/why-vulnerability-feels-like-weakness-but-isnt.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;Learning to grieve small losses&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/learning-to-grieve-small-losses.html</link>
+                <description></description>
+                <category>&quot;Reflections&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/learning-to-grieve-small-losses.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;The moment before clarity arrives&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/the-moment-before-clarity-arrives.html</link>
+                <description></description>
+                <category>&quot;Growth&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/the-moment-before-clarity-arrives.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;I Fired My AI Social Media Team (And Built a Better One)&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</link>
+                <description></description>
+                <category>Tech</category>
+                <guid>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;Why we document instead of experience&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/why-we-document-instead-of-experience.html</link>
+                <description></description>
+                <category>&quot;Modern Life&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/why-we-document-instead-of-experience.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;Distributed AI Architecture: Mac + Windows Studio Node&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</link>
+                <description>&quot;Deep dive into Studio OS&#x27;s distributed architecture: how I offload AI workloads to a Windows machine, why it matters, and how you can build your own multi-node AI system.&quot;</description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</guid>
+                <pubDate>Thu, 04 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Emotional Resonance of Natural Materials.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-emotional-resonance-of-natural-materials.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-emotional-resonance-of-natural-materials.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Does Constant Feedback Stunt Self-Trust?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-does-constant-feedback-stunt-self-trust.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-does-constant-feedback-stunt-self-trust.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&quot;The emotion that has no name&quot;</title>
+                <link>https://www.doesthisfeelright.com/posts/the-emotion-that-has-no-name.html</link>
+                <description></description>
+                <category>&quot;Connection&quot;</category>
+                <guid>https://www.doesthisfeelright.com/posts/the-emotion-that-has-no-name.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;The Geometry of Comfort: Designing for Presence.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-geometry-of-comfort-designing-for-presence.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-geometry-of-comfort-designing-for-presence.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Finding Integrity in the Smallest Decisions.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-finding-integrity-in-the-smallest-decisions.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-finding-integrity-in-the-smallest-decisions.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>What Happens to Creativity When Everything is Instantly Searchable?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-what-happens-to-creativity-when-everything-is-instantly-searchable.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-what-happens-to-creativity-when-everything-is-instantly-searchable.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Emotional Hangover of Doomscrolling.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-emotional-hangover-of-doomscrolling.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-emotional-hangover-of-doomscrolling.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;The Tyranny of the Immediate: Why We Value Speed Over Depth.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-tyranny-of-the-immediate-why-we-value-speed-over-depth.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-tyranny-of-the-immediate-why-we-value-speed-over-depth.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;Beyond ‘Addiction’: Understanding Digital Compulsion.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-beyond-‘addiction’-understanding-digital-compulsion.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-beyond-‘addiction’-understanding-digital-compulsion.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Can We Find True Rest in a State of Perpetual Readiness?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-can-we-find-true-rest-in-a-state-of-perpetual-readiness.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-can-we-find-true-rest-in-a-state-of-perpetual-readiness.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Uncomfortable Luxury of Having Enough.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-uncomfortable-luxury-of-having-enough.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-uncomfortable-luxury-of-having-enough.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>What Are You Missing When You Look Down?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-what-are-you-missing-when-you-look-down.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-what-are-you-missing-when-you-look-down.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Quiet Revolution of Showing Up As You Are.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-quiet-revolution-of-showing-up-as-you-are.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-quiet-revolution-of-showing-up-as-you-are.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Difference Between Solitude and Isolation (and why tech blurs them).</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-difference-between-solitude-and-isolation-(and-why-tech-blurs-them).html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-difference-between-solitude-and-isolation-(and-why-tech-blurs-them).html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Return to Offline Intelligence.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-return-to-offline-intelligence.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-return-to-offline-intelligence.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>How Long Does It Take to Build a Sustainable Rhythm?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-how-long-does-it-take-to-build-a-sustainable-rhythm.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-how-long-does-it-take-to-build-a-sustainable-rhythm.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Is Constant Documentation Killing Our Memory Formation?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-is-constant-documentation-killing-our-memory-formation.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-is-constant-documentation-killing-our-memory-formation.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;Beyond Productivity: Defining a Life Worth Living.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-beyond-productivity-defining-a-life-worth-living.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-beyond-productivity-defining-a-life-worth-living.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Ethical Case for Deleting Apps.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-ethical-case-for-deleting-apps.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-ethical-case-for-deleting-apps.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>What Makes a Space Feel Truly Safe?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-what-makes-a-space-feel-truly-safe.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-what-makes-a-space-feel-truly-safe.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>When Your Feelings Contradict Your Resume.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-when-your-feelings-contradict-your-resume.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-when-your-feelings-contradict-your-resume.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;The Ethics of Imperfection: Embracing Wabi-Sabi in Daily Life.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-imperfection-embracing-wabi-sabi-in-daily-life.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-ethics-of-imperfection-embracing-wabi-sabi-in-daily-life.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Power of the Single-Purpose Device.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-power-of-the-single-purpose-device.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-power-of-the-single-purpose-device.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Are You Living Your Values, or Just Thinking About Them?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-are-you-living-your-values,-or-just-thinking-about-them.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-are-you-living-your-values,-or-just-thinking-about-them.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Non-Negotiables of a Slow Morning.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-non-negotiables-of-a-slow-morning.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-non-negotiables-of-a-slow-morning.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;The Mirror Test: Does Your Outer Life Reflect Your Inner World?&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-mirror-test-does-your-outer-life-reflect-your-inner-world.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-mirror-test-does-your-outer-life-reflect-your-inner-world.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>How to Apply Digital Minimalism to Your Emotional Calendar.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-how-to-apply-digital-minimalism-to-your-emotional-calendar.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-how-to-apply-digital-minimalism-to-your-emotional-calendar.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>How Your Physical Space Influences Your Emotional Integrity.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-how-your-physical-space-influences-your-emotional-integrity.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-how-your-physical-space-influences-your-emotional-integrity.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>&#x27;The Screen as a Pacifier: When We Trade Thought for Input.&#x27;</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-screen-as-a-pacifier-when-we-trade-thought-for-input.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-screen-as-a-pacifier-when-we-trade-thought-for-input.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Erosion of Patience in a Swipe-Right Culture.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-erosion-of-patience-in-a-swipe-right-culture.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-erosion-of-patience-in-a-swipe-right-culture.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Does This Decision Honor My Attention Span?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-does-this-decision-honor-my-attention-span.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Liberation of Lowering Expectations (of yourself).</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-liberation-of-lowering-expectations-(of-yourself).html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-liberation-of-lowering-expectations-(of-yourself).html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>The Silent Agreement to Ignore Our Inner Wisdom.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-the-silent-agreement-to-ignore-our-inner-wisdom.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-the-silent-agreement-to-ignore-our-inner-wisdom.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Reclaiming Ownership Over Your Time, Byte by Byte.</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-reclaiming-ownership-over-your-time,-byte-by-byte.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-reclaiming-ownership-over-your-time,-byte-by-byte.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+            <item>
+                <title>Is Self-Knowledge an Action or an Achievement?</title>
+                <link>https://www.doesthisfeelright.com/posts/ai-is-self-knowledge-an-action-or-an-achievement.html</link>
+                <description></description>
+                <category>Engineering</category>
+                <guid>https://www.doesthisfeelright.com/posts/ai-is-self-knowledge-an-action-or-an-achievement.html</guid>
+                <pubDate>Wed, 03 Dec 2025 08:00:00 GMT</pubDate>
+            </item>
+            
+</channel>
+</rss>

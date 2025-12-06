@@ -881,55 +881,54 @@ def build():
         
         write_file(os.path.join(OUTPUT_DIR, 'consulting.html'), full_consulting)
 
-    # 10. Generate RSS Feed
+    # 10. Generate RSS Feed (Split into chunks for Substack import)
     import html
-    
-    rss_items = ""
-    for post in posts:
-        if post['slug'] == 'about':
-            continue
-        
-        # Escape XML special characters
-        title = html.escape(post.get('title', 'Untitled'))
-        excerpt = html.escape(post.get('excerpt', ''))
-        category = html.escape(post.get('category', 'General'))
-        
-        # Format Date for RSS (RFC 822)
-        pub_date = ""
-        date_val = post.get('date')
-        if date_val:
-            try:
-                import datetime
-                import email.utils
-                
-                if isinstance(date_val, str):
-                    date_obj = datetime.datetime.strptime(date_val, '%Y-%m-%d')
-                elif isinstance(date_val, datetime.date):
-                    # Convert date to datetime (midnight)
-                    date_obj = datetime.datetime.combine(date_val, datetime.time.min)
-                elif isinstance(date_val, datetime.datetime):
-                    date_obj = date_val
-                else:
-                    date_obj = None
-                
-                if date_obj:
-                    pub_date = email.utils.formatdate(date_obj.timestamp(), usegmt=True)
-            except Exception as e:
-                print(f"Error parsing date for RSS: {e}")
-                pass
+    import datetime
+    import email.utils
 
-        rss_items += f"""
-        <item>
-            <title>{title}</title>
-            <link>{BASE_URL}/posts/{html.escape(post['slug'])}.html</link>
-            <description>{excerpt}</description>
-            <category>{category}</category>
-            <guid>{BASE_URL}/posts/{html.escape(post['slug'])}.html</guid>
-            <pubDate>{pub_date}</pubDate>
-        </item>
-        """
-    
-    rss_feed = f"""<?xml version="1.0" encoding="UTF-8" ?>
+    def generate_rss_xml(post_list, output_filename):
+        rss_items = ""
+        for post in post_list:
+            if post['slug'] == 'about':
+                continue
+            
+            # Escape XML special characters
+            title = html.escape(post.get('title', 'Untitled'))
+            excerpt = html.escape(post.get('excerpt', ''))
+            category = html.escape(post.get('category', 'General'))
+            
+            # Format Date for RSS (RFC 822)
+            pub_date = ""
+            date_val = post.get('date')
+            if date_val:
+                try:
+                    if isinstance(date_val, str):
+                        date_obj = datetime.datetime.strptime(date_val, '%Y-%m-%d')
+                    elif isinstance(date_val, datetime.date):
+                        date_obj = datetime.datetime.combine(date_val, datetime.time.min)
+                    elif isinstance(date_val, datetime.datetime):
+                        date_obj = date_val
+                    else:
+                        date_obj = None
+                    
+                    if date_obj:
+                        pub_date = email.utils.formatdate(date_obj.timestamp(), usegmt=True)
+                except Exception as e:
+                    print(f"Error parsing date for RSS: {e}")
+                    pass
+
+            rss_items += f"""
+            <item>
+                <title>{title}</title>
+                <link>{BASE_URL}/posts/{html.escape(post['slug'])}.html</link>
+                <description>{excerpt}</description>
+                <category>{category}</category>
+                <guid>{BASE_URL}/posts/{html.escape(post['slug'])}.html</guid>
+                <pubDate>{pub_date}</pubDate>
+            </item>
+            """
+        
+        rss_feed = f"""<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
     <title>Does This Feel Right?</title>
@@ -939,8 +938,47 @@ def build():
     {rss_items}
 </channel>
 </rss>"""
+        write_file(os.path.join(OUTPUT_DIR, output_filename), rss_feed)
+
+    # 1. Generate Main Feed (All posts)
+    generate_rss_xml(posts, 'feed.xml')
+
+    # 2. Generate Chunks (50 posts each)
+    CHUNK_SIZE = 50
+    # Filter out 'about' first to be precise
+    content_posts = [p for p in posts if p['slug'] != 'about']
+    chunks = [content_posts[i:i + CHUNK_SIZE] for i in range(0, len(content_posts), CHUNK_SIZE)]
     
-    write_file(os.path.join(OUTPUT_DIR, 'feed.xml'), rss_feed)
+    rss_index_html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RSS Feed Chunks</title>
+        <style>
+            body { font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+            h1 { font-size: 24px; margin-bottom: 20px; }
+            ul { list-style: none; padding: 0; }
+            li { margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 6px; }
+            a { color: #0066cc; text-decoration: none; font-weight: 500; }
+            a:hover { text-decoration: underline; }
+            .meta { color: #666; font-size: 14px; margin-left: 10px; }
+        </style>
+    </head>
+    <body>
+        <h1>RSS Feed Import Chunks</h1>
+        <p>Use these individual links to import your content into Substack (limit ~50 items per import).</p>
+        <ul>
+    """
+    
+    for i, chunk in enumerate(chunks):
+        filename = f"feed-{i+1}.xml"
+        generate_rss_xml(chunk, filename)
+        rss_index_html += f'<li><a href="{filename}">{filename}</a> <span class="meta">({len(chunk)} articles)</span></li>'
+        
+    rss_index_html += "</ul></body></html>"
+    write_file(os.path.join(OUTPUT_DIR, 'rss.html'), rss_index_html)
     
     # Hook: Post-Build
     architect.run_hook('on_post_build', OUTPUT_DIR)
