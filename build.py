@@ -501,7 +501,19 @@ def build():
     # Sorting and Splitting already done above.
     
     # Generate Filter HTML
-    categories = sorted(list(set(p.get('category', 'General') for p in posts if p.get('slug') != 'about')))
+    # Generate Filter HTML
+    # Normalize categories
+    raw_categories = [p.get('category', 'General') for p in posts if p.get('slug') != 'about']
+    clean_categories = set()
+    for cat in raw_categories:
+        # Remove quotes if present
+        cat = cat.strip()
+        if (cat.startswith('"') and cat.endswith('"')) or (cat.startswith("'") and cat.endswith("'")):
+            cat = cat[1:-1]
+        clean_categories.add(cat)
+    
+    categories = sorted(list(clean_categories))
+
     filter_html = '<div class="filter-bar">'
     filter_html += '<button class="filter-btn active" data-filter="all">All</button>'
     for cat in categories:

@@ -7,6 +7,9 @@ Original Team (9 agents):
 New Team (8 agents):
 - Analyst, Curator, Socialite, Researcher, Scheduler, Translator, Designer, Narrator
 
+Design Team (2 agents):
+- WebDesigner, DesignEngineer
+
 Leadership:
 - Creative Director
 """
@@ -32,6 +35,10 @@ from .translator import Translator
 from .designer import Designer
 from .narrator import Narrator
 
+# Design Team
+from .web_designer import WebDesigner
+from .design_engineer import DesignEngineer
+
 # Leadership
 from .creative_director import CreativeDirector
 
@@ -55,6 +62,9 @@ __all__ = [
     'Translator',
     'Designer',
     'Narrator',
+    # Design Team
+    'WebDesigner',
+    'DesignEngineer',
     # Leadership
     'CreativeDirector'
 ]

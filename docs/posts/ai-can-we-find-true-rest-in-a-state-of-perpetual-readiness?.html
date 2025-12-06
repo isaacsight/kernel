@@ -41,36 +41,94 @@
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=3">
 </head>
 
 <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <div class="container">
         <!-- Desktop Sidebar (Visible on Desktop) -->
+        <!-- Desktop Sidebar (Visible on Desktop) -->
+        <!-- Desktop Sidebar (Visible on Desktop) -->
         <aside class="sidebar">
-            <div class="sidebar-logo">
-                DOES THIS FEEL RIGHT?
-            </div>
-            <nav class="nav-section">
-                <span class="nav-header">Start Here</span>
-                <a href="../posts/to-be-witnessed.html" class="nav-link">'To Be Witnessed'</a><a href="../posts/the-invisible-architect.html" class="nav-link">'The Invisible Architect'</a><a href="../posts/the-rise-of-the-non-musician.html" class="nav-link">'The Rise of the Non-Musician'</a>
-            </nav>
+            <div class="sidebar-content">
+                <div class="sidebar-top">
+                    <a href="../index.html" class="sidebar-logo" aria-label="Home">
+                        <div class="logo-icon">
+                            <!-- New Logo: Gateway "D" -->
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
+                                <circle cx="12" cy="12" r="2" />
+                            </svg>
+                        </div>
+                    </a>
 
-            <nav class="nav-section">
-                <span class="nav-header">Menu</span>
-                <a href="../index.html" class="nav-link">Home</a>
-                <a href="../about.html" class="nav-link">About</a>
-                <a href="../collections.html" class="nav-link">Collections</a>
-                <a href="../feed.xml" class="nav-link">RSS Feed</a>
-            </nav>
+
+                </div> <!-- Navigation Items -->
+                <nav class="sidebar-nav-items">
+
+
+                    <a href="../collections.html" class="sidebar-item" data-tooltip="Collections">
+                        <div class="icon-container">
+                            <!-- Original Icon: The Stack (Collections) -->
+                            <!-- New Icon: The Layers (Collections) -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <span class="label">Collections</span>
+                    </a>
+
+                    <a href="../experiments.html" class="sidebar-item" data-tooltip="Studio">
+                        <div class="icon-container">
+                            <!-- Original Icon: The Spark (Studio) -->
+                            <!-- New Icon: The Cube (Studio) -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                </path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <span class="label">Studio</span>
+                    </a>
+
+                    <a href="../about.html" class="sidebar-item" data-tooltip="About">
+                        <div class="icon-container">
+                            <!-- Original Icon: The Info (About) -->
+                            <!-- New Icon: The User (About) -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <span class="label">About</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-spacer"></div>
+
+                <div class="sidebar-bottom">
+
+
+                </div>
+            </div>
+
             <script>
-                // Simple active state logic
+                // Active state logic
                 document.addEventListener('DOMContentLoaded', () => {
                     const currentPath = window.location.pathname;
-                    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                    const navLinks = document.querySelectorAll('.sidebar-item');
                     navLinks.forEach(link => {
-                        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                        const href = link.getAttribute('href');
+                        if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== '../index.html'))) {
                             link.classList.add('active');
                         }
                     });
@@ -78,23 +136,20 @@
             </script>
         </aside>
 
-        <header>
-            <div class="header-modules">
-                <!-- Module 1: Logo -->
-                <a href="../index.html" class="header-module logo-module">
-                    <div class="logo-container">
-                        <span class="logo-text">DOES THIS FEEL RIGHT?</span>
-                        <span class="logo-tagline">A place to notice what's real.</span>
-                    </div>
-                    <span class="logo-underline"></span>
-                </a>
-
-
-
-
-                <!-- Module 5: Search -->
-                <div class="header-module search-module">
-                    <button class="search-trigger" id="search-toggle" aria-label="Search">
+        <header class="mobile-header">
+            <div class="header-inner">
+                <!-- Module 1: Controls (Search + Menu) -->
+                <div class="header-controls">
+                    <!-- Mobile Menu Trigger -->
+                    <button class="control-btn mobile-menu-trigger" aria-label="Menu">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transform: scaleX(-1);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                    <!-- Search -->
+                    <button class="control-btn search-trigger" id="search-toggle" aria-label="Search">
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -102,34 +157,12 @@
                     </button>
                 </div>
 
-
-
-                <!-- Mobile Menu Toggle (Visible only on mobile) -->
-                <button class="mobile-menu-btn" aria-label="Toggle Menu" aria-controls="mobile-nav"
-                    aria-expanded="false">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Mobile Nav Overlay -->
-            <div class="mobile-nav-overlay" id="mobile-nav">
-                <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-                <nav class="mobile-nav">
-                    <a href="index.html" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
-                    <a href="about.html" class="{% if active_page == 'about' %}active{% endif %}">About</a>
-                    <a href="collections.html"
-                        class="{% if active_page == 'collections' %}active{% endif %}">Collections</a>
-                    <a href="../feed.xml">RSS Feed</a>
-                    <a href="#" id="mobile-support-btn">Support</a>
-                </nav>
+                <!-- Module 2: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL <span class="logo-highlight">RIGHT?</span></span>
+                    </div>
+                </a>
             </div>
         </header>
 
@@ -227,11 +260,73 @@
 
 
 
+    <!-- Modified Mobile Drawer -->
+    <div id="mobile-drawer" class="mobile-drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">Menu</span>
+            <button id="close-drawer" class="control-btn" aria-label="Close Menu">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="../index.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon-svg">
+                        <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+                        <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+                        <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+                        <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+                    </svg>
+                </div>
+                <span>Home</span>
+            </a>
+            <a href="../collections.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon-svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <span>Collections</span>
+            </a>
+            <a href="../experiments.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon-svg">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <span>Studio</span>
+            </a>
+            <a href="../about.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon-svg">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span>About</span>
+            </a>
+        </nav>
+    </div>
+    <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
     <!-- Search Overlay -->
     <div id="search-overlay" class="search-overlay">
         <div class="search-container">
             <div class="search-header">
-                <input type="text" id="search-input" placeholder="Type to search..." autocomplete="off">
+                <input type="text" id="search-input" placeholder="Ask anything..." autocomplete="off">
                 <button id="close-search" aria-label="Close Search">
                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
