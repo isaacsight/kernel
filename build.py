@@ -1204,8 +1204,8 @@ Sitemap: {BASE_URL}/sitemap.xml
     # 9. Generate RSS Feed
     print("Step 9: Generating RSS Feed...")
     rss_items = ""
-    # Use top 20 posts for feed
-    for post in main_feed_posts[:20]:
+    # Use top 200 posts for feed to capture the new batch for Substack
+    for post in main_feed_posts[:200]:
         title = post.get('title', 'Untitled')
         slug = post['slug']
         link = f"{BASE_URL}/posts/{slug}.html"
