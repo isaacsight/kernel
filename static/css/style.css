@@ -1787,6 +1787,51 @@ td {
     font-weight: 600;
 }
 
+/* Feed Search (Desktop Only) */
+.feed-search-container {
+    margin-left: auto;
+    /* Push to right */
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#feed-search-input {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 6px 12px 6px 32px;
+    /* Space for icon */
+    border-radius: 100px;
+    font-size: var(--text-xs);
+    width: 200px;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+}
+
+#feed-search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+}
+
+.feed-search-container .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+}
+
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
 .sort-btn {
     background: none;
     border: none;
@@ -1987,4 +2032,19 @@ body.menu-open {
 .drawer-link .icon-container svg {
     width: 24px;
     height: 24px;
+}
+
+/* Archive Header Flex */
+.archive-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Centered looks better usually */
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 2rem;
+}
+
+.archive-header-flex .header-content {
+    flex: 1;
 }
