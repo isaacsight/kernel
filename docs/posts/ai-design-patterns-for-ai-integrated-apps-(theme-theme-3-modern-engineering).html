@@ -41,7 +41,7 @@
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
 
-    <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
@@ -138,16 +138,15 @@
 
         <header class="mobile-header">
             <div class="header-inner">
-                <!-- Module 1: Controls (Search + Menu) -->
+                <!-- Module 1: Logo -->
+                <a href="../index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <span class="logo-text">DOES THIS FEEL <span class="logo-highlight">RIGHT?</span></span>
+                    </div>
+                </a>
+
+                <!-- Module 3: Controls (Search Only) -->
                 <div class="header-controls">
-                    <!-- Mobile Menu Trigger -->
-                    <button class="control-btn mobile-menu-trigger" aria-label="Menu">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            style="transform: scaleX(-1);">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </button>
                     <!-- Search -->
                     <button class="control-btn search-trigger" id="search-toggle" aria-label="Search">
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,14 +154,14 @@
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </button>
+                    <!-- Mobile Menu Trigger would go here -->
+                    <button class="control-btn mobile-menu-trigger" aria-label="Menu">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
                 </div>
-
-                <!-- Module 2: Logo -->
-                <a href="../index.html" class="header-module logo-module">
-                    <div class="logo-container">
-                        <span class="logo-text">DOES THIS FEEL <span class="logo-highlight">RIGHT?</span></span>
-                    </div>
-                </a>
             </div>
         </header>
 
@@ -371,7 +370,6 @@
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../about.html">About</a></li>
                     <li><a href="../collections.html">Collections</a></li>
-                    <li><a href="../feed.xml">RSS</a></li>
                 </ul>
             </div>
 

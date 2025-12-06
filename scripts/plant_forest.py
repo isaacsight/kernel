@@ -19,22 +19,64 @@ class ForestPlanter:
 
     def _generate_seeds(self, count):
         """
-        Generates topics (seeds) for the forest.
-        For now, we'll use a mix of preset and AI-generated seeds.
+        Generates 100 unique topics based on recent engineering and design work.
         """
-        base_seeds = [
-            "The Psychology of Waiting for AI",
-            "Why Local LLMs Feel More Personal",
-            "Designing Interfaces for Non-Human Intelligence",
-            "The Silence of a Turned-Off Server",
-            "Digital Gardening vs Digital Farming"
+        import random
+        
+        themes = [
+            "The Geometry of Perspective", "Automating the Soul", "The Invisible Architects",
+            "Responsive Realities", "Margins of Error", "The Hexagon vs The Gateway",
+            "Digital Gardening", "Code as Poetry", "The Ethics of Automation",
+            "Designing for Silence", "The Weight of pixels", "Algorithmic Serendipity",
+            "Brutalist Web Design", "The Human in the Loop", "Caching Consciousness",
+            "Visual Hierarchy", "The Sidebar Paradox", "Gateway D", "CSS Variables as DNA",
+            "The Purpose of Padding"
         ]
         
-        # If we need more, we could ask the Alchemist to brainstorm, 
-        # but let's stick to a robust list for the first run or repeat/vary them.
-        seeds = base_seeds
+        adjectives = [
+            "Hidden", "Silent", "Recursive", "Iterative", "Broken", "Perfect", "Human",
+            "Artificial", "Organic", "Structural", "Fluid", "Static", "Dynamic", "Lost"
+        ]
+        
+        nouns = [
+            "Systems", "Interfaces", "loops", "Nodes", "Artifacts", "Memories", "Gaps",
+            "Spaces", "Connections", "Reflections", "Shadows", "Signals", "Noise"
+        ]
+        
+        seeds = []
+        
+        # 1. Add specific recent work topics
+        core_topics = [
+            "Why We Abandoned the Hexagon",
+            "Fixing the 72px Gap",
+            "The Footer That Vanished",
+            "Designing the Gateway Logo",
+            "100 Posts in 1 Minute",
+            "The Alchemist's Perspective",
+            "When width: 100% is a Lie",
+            "Responsive Design is a Dialogue",
+            "The Studio Node Connection",
+            "Batch Processing Creativity"
+        ]
+        seeds.extend(core_topics)
+        
+        # 2. Generate variations
         while len(seeds) < count:
-            seeds.append(f"Reflection on Digital Existence {len(seeds) + 1}")
+            theme = random.choice(themes)
+            adj = random.choice(adjectives)
+            noun = random.choice(nouns)
+            
+            formats = [
+                f"{theme}: {adj} {noun}",
+                f"The {adj} {noun} of {theme}",
+                f"Why {theme} Matters",
+                f"Meditations on {theme}",
+                f"The {adj} Nature of {noun}"
+            ]
+            
+            title = random.choice(formats)
+            if title not in seeds:
+                seeds.append(title)
             
         return seeds[:count]
 
@@ -44,11 +86,11 @@ class ForestPlanter:
         """
         print(f"🌱 Planting: '{topic}'...")
         try:
-            # Explicitly request remote provider
+            # Auto-select best provider (Remote vs Gemini)
             content = self.alchemist.generate(
                 topic=topic,
-                doctrine="Focus on the feeling of technology, not just the function.",
-                provider="remote"
+                doctrine="Focus on the feeling of technology, not just the function. Be brief but profound.",
+                provider="auto"
             )
             return f"✅ Grew: '{topic}' ({len(content)} chars)"
         except Exception as e:
