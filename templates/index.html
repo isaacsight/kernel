@@ -1,34 +1,8 @@
 <!-- Magazine Layout -->
 <h1 class="sr-only">Does This Feel Right?</h1>
-<div class="magazine-layout paginated-view">
+<div class="magazine-layout">
 
 
-
-    <!-- Bento Grid Section -->
-    <section class="bento-section">
-        <div class="bento-grid">
-            <!-- Hero Item (Featured Essay) -->
-            <a href="posts/owning-the-signal.html" class="bento-item hero-item">
-                <div class="bento-content">
-                    <span class="bento-label">Featured Essay</span>
-                    <h2 class="bento-title">Owning the Signal</h2>
-                    <p class="bento-excerpt">Why relying on third-party platforms is a losing game.</p>
-                    <span class="bento-meta">Engineering • Nov 26, 2025</span>
-                </div>
-            </a>
-
-
-
-            <!-- About/Intro Item -->
-            <div class="bento-item about-item">
-                <div class="bento-content">
-                    <h3 class="bento-title">Does This Feel Right?</h3>
-                    <p class="bento-text">A studio for noticing what is real.</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
     <!-- Start Here Section (Soft Band) -->
     <section class="start-here-section">
@@ -41,22 +15,11 @@
         </div>
     </section>
 
-    <!-- Experiments Workbench Section -->
-    <section class="experiments-section">
-        <div class="section-header">
-            <h2 class="section-label">Studio / Workbench</h2>
-            <p class="section-desc">Technical notes, AI workshops, and raw ideas.</p>
-        </div>
-        <div class="experiments-grid-small">
-            {{ experiments_list }}
-        </div>
-    </section>
-
     <div class="content-wrapper">
         <!-- 3. Main Feed (Left Column) -->
         <main class="main-feed">
             <div class="feed-header">
-                <h2>Latest Essays</h2>
+                <h1>Essays</h1>
                 {{ filters }}
             </div>
 
