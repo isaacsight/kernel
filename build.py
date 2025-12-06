@@ -1222,6 +1222,9 @@ Sitemap: {BASE_URL}/sitemap.xml
         except:
             pub_date = date_str
 
+        # Get full content
+        content_body = post_bodies.get(slug, "")
+        
         rss_items += f"""
         <item>
             <title>{title}</title>
@@ -1229,14 +1232,16 @@ Sitemap: {BASE_URL}/sitemap.xml
             <guid>{link}</guid>
             <pubDate>{pub_date}</pubDate>
             <description><![CDATA[{description}]]></description>
+            <content:encoded><![CDATA[{content_body}]]></content:encoded>
         </item>
         """
 
     rss_xml = f"""<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
     <title>Does This Feel Right?</title>
     <link>{BASE_URL}</link>
+    <atom:link href="{BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />
     <description>Thoughts on business, technology, and the human condition.</description>
     <language>en-us</language>
     {rss_items}
