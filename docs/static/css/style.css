@@ -70,6 +70,19 @@
     padding: 0;
 }
 
+/* Screen Reader Only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 body {
     font-family: var(--font-body);
     background-color: var(--bg-primary);
@@ -228,7 +241,11 @@ a:hover {
 }
 
 .sidebar-logo {
-    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 96px;
+    /* Approx 1 inch spacing */
     color: var(--text-primary);
     transition: transform 0.2s ease;
 }
@@ -370,12 +387,7 @@ a:hover {
 }
 
 /* Main Content Area */
-#main-content {
-    margin-left: 0;
-    min-height: 100vh;
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    width: 100%;
-}
+
 
 
 .nav-.logo-text {
@@ -454,6 +466,8 @@ a:hover {
     margin-left: var(--sidebar-width);
     min-height: 100vh;
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
 }
 
 /* Hero Section */
@@ -719,6 +733,20 @@ header {
     text-transform: uppercase;
 }
 
+/* Header Icon Refinement */
+.logo-module .icon-svg {
+    width: 28px;
+    height: 28px;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+}
+
+.logo-module:hover .icon-svg {
+    color: var(--text-primary);
+    /* Keep white on hover */
+    opacity: 0.8;
+}
+
 .logo-highlight {
     color: var(--accent-primary);
     text-shadow: 0 0 20px rgba(0, 214, 163, 0.4);
@@ -754,17 +782,15 @@ header {
 
 /* Header Controls (Search) */
 .header-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    margin-left: auto;
-    /* Push to right if needed, though justify-content: space-between handles it */
+    display: contents;
+    /* Unwraps children for flex spacing */
 }
 
 .control-btn {
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    /* White */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -790,6 +816,18 @@ header {
     .header-inner {
         flex-wrap: nowrap;
         height: 80px;
+    }
+
+    .header-controls {
+        display: flex;
+        /* Restore flex for desktop */
+        margin-left: auto;
+        gap: var(--space-4);
+        align-items: center;
+    }
+
+    .logo-text {
+        display: none;
     }
 
     .desktop-nav {

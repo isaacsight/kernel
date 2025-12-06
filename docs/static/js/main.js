@@ -351,4 +351,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         }
     }
+    // === GENERIC FEED SEARCH (Experiments, Collections) ===
+    const feedSearchInput = document.getElementById('feed-search-input');
+    if (feedSearchInput) {
+        feedSearchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+
+            // Define targets to filter
+            const targets = document.querySelectorAll('.experiment-card, .collection-card, .post-card');
+            const targetSmall = document.querySelectorAll('.experiment-card-small'); // Sidebar items if needed? No, usually main feed.
+
+            targets.forEach(card => {
+                // Find text content
+                const title = card.querySelector('h3, h2, .post-title')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('p, .post-excerpt')?.textContent.toLowerCase() || '';
+
+                if (title.includes(query) || desc.includes(query)) {
+                    // Reset to default CSS value (usually block, flex, or grid item)
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
 });
