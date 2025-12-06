@@ -116,15 +116,17 @@
 
             <!-- Mobile Nav Overlay -->
             <div class="mobile-nav-overlay" id="mobile-nav">
+                <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
                 <nav class="mobile-nav">
-
-                    <a href="index.html" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a>
-
-                    <a href="about.html" class="nav-link {% if active_page == 'about' %}active{% endif %}">About</a>
+                    <a href="index.html" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
+                    <a href="about.html" class="{% if active_page == 'about' %}active{% endif %}">About</a>
                     <a href="collections.html"
-                        class="nav-link {% if active_page == 'collections' %}active{% endif %}">Collections</a>
-
-
+                        class="{% if active_page == 'collections' %}active{% endif %}">Collections</a>
                     <a href="../feed.xml">RSS Feed</a>
                     <a href="#" id="mobile-support-btn">Support</a>
                 </nav>

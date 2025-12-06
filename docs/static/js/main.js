@@ -199,17 +199,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu Toggle
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
+    const mobileNavClose = document.getElementById('mobile-nav-close');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+
+    function closeMobileMenu() {
+        if (mobileNavOverlay) {
+            mobileNavOverlay.classList.remove('active');
+            if (mobileBtn) {
+                mobileBtn.innerHTML = '<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+            }
+        }
+    }
+
+    function openMobileMenu() {
+        if (mobileNavOverlay) {
+            mobileNavOverlay.classList.add('active');
+            if (mobileBtn) {
+                mobileBtn.innerHTML = '<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+            }
+        }
+    }
 
     if (mobileBtn && mobileNavOverlay) {
         mobileBtn.addEventListener('click', () => {
-            mobileNavOverlay.classList.toggle('active');
-
-            // Toggle icon between hamburger and X
             const isOpen = mobileNavOverlay.classList.contains('active');
             if (isOpen) {
-                mobileBtn.innerHTML = '<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                closeMobileMenu();
             } else {
-                mobileBtn.innerHTML = '<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+                openMobileMenu();
+            }
+        });
+    }
+
+    // Close button handler
+    if (mobileNavClose) {
+        mobileNavClose.addEventListener('click', closeMobileMenu);
+    }
+
+    // Close menu when clicking a link
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Close menu when clicking outside
+    if (mobileNavOverlay) {
+        mobileNavOverlay.addEventListener('click', (e) => {
+            if (e.target === mobileNavOverlay) {
+                closeMobileMenu();
             }
         });
     }
