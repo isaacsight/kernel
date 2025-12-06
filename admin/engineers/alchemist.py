@@ -157,7 +157,7 @@ class Alchemist:
                         if node_url:
                             import requests
                             response = requests.post(
-                                f"{node_url}/embeddings",
+                                f"{node_url}/api/embeddings",
                                 json={"model": "nomic-embed-text", "prompt": text_to_embed},
                                 timeout=config.TIMEOUT_EMBEDDING
                             )
@@ -234,7 +234,7 @@ class Alchemist:
             import requests
             try:
                 response = requests.post(
-                    f"{node_url}/embeddings",
+                    f"{node_url}/api/embeddings",
                     json={"model": "nomic-embed-text", "prompt": query},
                     timeout=5  # Shorter timeout since we know node is up
                 )
@@ -360,9 +360,10 @@ class Alchemist:
                     payload = {
                         "prompt": prompt,
                         "model": "mistral",
-                        "system_prompt": f"You are The Alchemist. {doctrine}"
+                        "system": f"You are The Alchemist. {doctrine}",
+                        "stream": False
                     }
-                    response = requests.post(f"{node_url}/generate", json=payload, timeout=config.TIMEOUT_REMOTE)
+                    response = requests.post(f"{node_url}/api/generate", json=payload, timeout=config.TIMEOUT_REMOTE)
                     response.raise_for_status()
                     content = response.json().get("response", "")
                 except Exception as e:

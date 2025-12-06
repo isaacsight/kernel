@@ -29,18 +29,18 @@
       }
     },
     "2025-12-05": {
-      "generations": 8,
-      "successes": 6,
-      "failures": 2,
-      "total_duration": 153.87887477874756,
+      "generations": 10,
+      "successes": 7,
+      "failures": 3,
+      "total_duration": 229.98296093940735,
       "providers": {
         "gemini": {
           "count": 6,
           "successes": 6
         },
         "remote": {
-          "count": 2,
-          "successes": 0
+          "count": 4,
+          "successes": 1
         }
       }
     }
