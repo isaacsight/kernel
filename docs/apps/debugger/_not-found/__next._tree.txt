@@ -1,0 +1,2 @@
+:HL["/apps/debugger/_next/static/chunks/8f7bc76ec8be3612.css","style"]
+0:{"buildId":"HNtS44_pQlBan8d4BQnuC","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"/_not-found","paramType":null,"paramKey":"/_not-found","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
