@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Post Filtering Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const posts = document.querySelectorAll('.post-card');
+    const posts = document.querySelectorAll('.post-card, .experiment-card, .collection-card');
 
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
@@ -12,23 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                // 2. Filter Posts
-                const filterValue = btn.getAttribute('data-filter');
-
-                posts.forEach(post => {
-                    if (filterValue === 'all' || post.getAttribute('data-category') === filterValue) {
-                        post.style.display = 'block';
-                    } else {
-                        post.style.display = 'none';
-                    }
-                });
+                // 2. Filter Posts using unified logic
+                filterPosts();
             });
         });
     }
 
     // Post Sorting Logic
     const sortBtns = document.querySelectorAll('.sort-btn');
-    const postsContainer = document.querySelector('.posts-container');
+    const postsContainer = document.querySelector('.posts-container') || document.querySelector('.experiments-grid') || document.querySelector('.collections-grid') || document.querySelector('.post-feed');
 
     // === PAGINATION SYSTEM ===
     const POSTS_PER_PAGE = 20;
@@ -36,7 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredPosts = Array.from(posts);
 
     function setupPagination() {
-        if (!postsContainer || posts.length <= POSTS_PER_PAGE) return;
+        // If postsContainer is missing or not enough posts, don't paginate
+        // BUT if filtering reduces count, we need pagination structure ready?
+        // Actually, if posts.length <= POSTS_PER_PAGE, we might still receive search results > 0 but < PER_PAGE.
+        // We generally need the container to append pagination to.
+        if (!postsContainer) return;
 
         // Create pagination controls if they don't exist
         let paginationEl = document.querySelector('.pagination');
@@ -134,31 +130,68 @@ document.addEventListener('DOMContentLoaded', () => {
         showCurrentPage();
     }
 
-    // === UPDATE FILTER TO WORK WITH PAGINATION ===
-    if (filterBtns.length > 0) {
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
 
-                const filterValue = btn.getAttribute('data-filter');
 
-                // Update filtered posts list
-                if (filterValue === 'all') {
-                    filteredPosts = Array.from(posts);
-                } else {
-                    filteredPosts = Array.from(posts).filter(post =>
-                        post.getAttribute('data-category') === filterValue
-                    );
-                }
+    // === SEARCH LOGIC ===
+    const searchInput = document.getElementById('feed-search-input');
 
-                // Reset to page 1 and update display
-                currentPage = 1;
-                showCurrentPage();
-                updatePagination();
-            });
+    if (searchInput) {
+        console.log('Feed search input found');
+        searchInput.addEventListener('input', (e) => {
+            console.log('Search input event fired:', e.target.value);
+            filterPosts();
         });
+    } else {
+        console.log('Feed search input NOT found');
     }
+
+    // Initial Pagination Setup
+    currentPage = 1;
+    showCurrentPage();
+    updatePagination();
+
+
+    function filterPosts() {
+        console.log('Filtering posts...');
+        // Get active filter
+        const activeBtn = document.querySelector('.filter-btn.active');
+        const filterCategory = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+        console.log('Filter category:', filterCategory);
+
+        // Get search term
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        console.log('Search term:', searchTerm);
+
+        // Filter list
+        filteredPosts = Array.from(posts).filter(post => {
+            // Category Match
+            const categoryMatch = (filterCategory === 'all') || (post.getAttribute('data-category') === filterCategory);
+
+            // Search Match
+            let searchMatch = true;
+            if (searchTerm) {
+                const titleEl = post.querySelector('.post-title');
+                const excerptEl = post.querySelector('.post-excerpt');
+
+                const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+                const excerpt = excerptEl ? excerptEl.textContent.toLowerCase() : '';
+
+                searchMatch = title.includes(searchTerm) || excerpt.includes(searchTerm);
+            }
+
+            return categoryMatch && searchMatch;
+        });
+
+        console.log('Filtered posts count:', filteredPosts.length);
+
+        // Reset page
+        currentPage = 1;
+        showCurrentPage();
+        updatePagination();
+    }
+
+    // Update Filter Logic to use unified function
+
 
     if (sortBtns.length > 0 && postsContainer) {
         sortBtns.forEach(btn => {

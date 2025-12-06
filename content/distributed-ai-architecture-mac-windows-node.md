@@ -9,7 +9,7 @@ read_time: 10 min read
 
 # Distributed AI Architecture: Mac + Windows Studio Node
 
-*Part of the [6-Week Studio OS Journey](/posts/studio-os-6-week-journey-week-1)*
+*Part of the [6-Week Studio OS Journey](/posts/studio-os-6-week-journey-week-1.html)*
 
 ## The Problem: AI is Computationally Expensive
 
@@ -311,4 +311,4 @@ The entire setup is documented in the repo. Questions?
 
 *Next post: "Setting Up Your Own AI Studio Node" (step-by-step guide)*
 
-*This is part of the [6-week Studio OS monetization journey](/posts/studio-os-6-week-journey-week-1). Follow along!*
+*This is part of the [6-week Studio OS monetization journey](/posts/studio-os-6-week-journey-week-1.html). Follow along!*
