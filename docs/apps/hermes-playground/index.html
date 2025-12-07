@@ -430,129 +430,191 @@ Try something creative like:
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        // Configuration - tries local first, falls back to cloud
-        const ENDPOINTS = {
-            local: 'http://localhost:8000',
-            // Together.ai hosts Hermes models - user needs to set API key
-            cloud: 'https://api.together.xyz/v1'
-        };
+                <!-- WebLLM - runs models in browser -->
+                <script type="module">
+                    import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 
-        let activeEndpoint = null;
-        const statusDot = document.getElementById('status-dot');
-        const statusText = document.getElementById('status-text');
-        const promptInput = document.getElementById('prompt-input');
-        const taskType = document.getElementById('task-type');
-        const generateBtn = document.getElementById('generate-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const placeholder = document.getElementById('placeholder');
-        const responseContent = document.getElementById('response-content');
-        const errorMessage = document.getElementById('error-message');
-        const statsRow = document.getElementById('stats-row');
-        const modelName = document.getElementById('model-name');
-
-        let isConnected = false;
-        let isGenerating = false;
-
-        async function checkConnection() {
-            // Try local Studio Node first
-            try {
-                const response = await fetch(`${ENDPOINTS.local}/health`, { method: 'GET', mode: 'cors' });
-                const data = await response.json();
-                isConnected = true;
-                activeEndpoint = 'local';
-                statusDot.classList.add('connected');
-                statusText.textContent = `Local • ${data.models} models`;
-                return true;
-            } catch (error) {
-                // Local not available - show demo mode
-                isConnected = false;
-                activeEndpoint = null;
-                statusDot.classList.remove('connected');
-                statusText.textContent = 'Demo Mode';
-                return false;
-            }
-        }
-
-        async function generate() {
-            if (isGenerating || !promptInput.value.trim()) return;
-            const prompt = promptInput.value.trim();
-            const task = taskType.value;
-
-            isGenerating = true;
-            generateBtn.disabled = true;
-            generateBtn.innerHTML = '<span class="spinner"></span><span>Generating...</span>';
-
-            placeholder.style.display = 'none';
-            errorMessage.style.display = 'none';
-            responseContent.style.display = 'block';
-            responseContent.textContent = '';
-            statsRow.style.display = 'none';
-
-            const startTime = Date.now();
-
-            try {
-                let data;
-
-                if (activeEndpoint === 'local') {
-                    // Use local Studio Node
-                    const response = await fetch(`${ENDPOINTS.local}/generate`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
-                    });
-                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    data = await response.json();
-                } else {
-                    // Demo mode - show sample response
-                    await new Promise(r => setTimeout(r, 1000)); // Simulate delay
-                    data = {
-                        response: `[Demo Mode] This is a simulated response.\n\nTo use the real Hermes 3 model:\n1. Start Studio Node locally: cd admin && python3 studio_node.py\n2. Pull the model: ollama pull hermes3\n3. Refresh this page\n\nYour prompt was: "${prompt}"`,
-                        model_used: 'demo'
+                    // Configuration
+                    const ENDPOINTS = {
+                        local: 'http://localhost:8000'
                     };
-                }
 
-                const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+                    // WebLLM model (smaller model that works in browser)
+                    const WEBLLM_MODEL = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
 
-                responseContent.textContent = data.response || 'No response generated.';
-                document.getElementById('stat-model').textContent = data.model_used || 'hermes3';
-                document.getElementById('stat-tokens').textContent = data.response?.split(' ').length || '—';
-                document.getElementById('stat-time').textContent = `${elapsed}s`;
-                statsRow.style.display = 'flex';
-                modelName.textContent = data.model_used || 'hermes3';
-            } catch (error) {
-                responseContent.style.display = 'none';
-                errorMessage.style.display = 'block';
-                errorMessage.textContent = `Error: ${error.message}. Run Studio Node locally to use Hermes 3.`;
-            } finally {
-                isGenerating = false;
-                generateBtn.disabled = false;
-                generateBtn.innerHTML = '<span>Generate</span><span>→</span>';
-            }
-        }
+                    let activeEndpoint = null;
+                    let engine = null;
+                    let isLoadingModel = false;
 
-        function clear() {
-            promptInput.value = '';
-            responseContent.textContent = '';
-            responseContent.style.display = 'none';
-            errorMessage.style.display = 'none';
-            statsRow.style.display = 'none';
-            placeholder.style.display = 'flex';
-        }
+                    const statusDot = document.getElementById('status-dot');
+                    const statusText = document.getElementById('status-text');
+                    const promptInput = document.getElementById('prompt-input');
+                    const taskType = document.getElementById('task-type');
+                    const generateBtn = document.getElementById('generate-btn');
+                    const clearBtn = document.getElementById('clear-btn');
+                    const placeholder = document.getElementById('placeholder');
+                    const responseContent = document.getElementById('response-content');
+                    const errorMessage = document.getElementById('error-message');
+                    const statsRow = document.getElementById('stats-row');
+                    const modelName = document.getElementById('model-name');
 
-        generateBtn.addEventListener('click', generate);
-        clearBtn.addEventListener('click', clear);
-        promptInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.metaKey) generate();
-        });
+                    let isConnected = false;
+                    let isGenerating = false;
 
-        checkConnection();
-        setInterval(checkConnection, 30000);
-    </script>
+                    async function checkConnection() {
+                        // Try local Studio Node first
+                        try {
+                            const response = await fetch(`${ENDPOINTS.local}/health`, { method: 'GET', mode: 'cors' });
+                            const data = await response.json();
+                            isConnected = true;
+                            activeEndpoint = 'local';
+                            statusDot.classList.add('connected');
+                            statusText.textContent = `Local • ${data.models} models`;
+                            return true;
+                        } catch (error) {
+                            // Check WebGPU support for browser inference
+                            if (navigator.gpu) {
+                                activeEndpoint = 'webllm';
+                                statusDot.classList.add('connected');
+                                statusText.textContent = 'Browser AI Ready';
+                                isConnected = true;
+                                return true;
+                            } else {
+                                isConnected = false;
+                                activeEndpoint = 'demo';
+                                statusDot.classList.remove('connected');
+                                statusText.textContent = 'Demo Mode';
+                                return false;
+                            }
+                        }
+                    }
+
+                    async function loadWebLLM() {
+                        if (engine || isLoadingModel) return engine;
+
+                        isLoadingModel = true;
+                        statusText.textContent = 'Loading AI...';
+
+                        try {
+                            engine = await webllm.CreateMLCEngine(WEBLLM_MODEL, {
+                                initProgressCallback: (progress) => {
+                                    statusText.textContent = `Loading: ${Math.round(progress.progress * 100)}%`;
+                                }
+                            });
+                            statusText.textContent = 'Browser AI Ready';
+                            isLoadingModel = false;
+                            return engine;
+                        } catch (err) {
+                            console.error("WebLLM failed:", err);
+                            isLoadingModel = false;
+                            activeEndpoint = 'demo';
+                            statusText.textContent = 'Demo Mode';
+                            return null;
+                        }
+                    }
+
+                    async function generate() {
+                        if (isGenerating || !promptInput.value.trim()) return;
+                        const prompt = promptInput.value.trim();
+                        const task = taskType.value;
+
+                        isGenerating = true;
+                        generateBtn.disabled = true;
+                        generateBtn.innerHTML = '<span class="spinner"></span><span>Generating...</span>';
+
+                        placeholder.style.display = 'none';
+                        errorMessage.style.display = 'none';
+                        responseContent.style.display = 'block';
+                        responseContent.textContent = '';
+                        statsRow.style.display = 'none';
+
+                        const startTime = Date.now();
+
+                        try {
+                            let data;
+
+                            if (activeEndpoint === 'local') {
+                                // Use local Studio Node
+                                const response = await fetch(`${ENDPOINTS.local}/generate`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
+                                });
+                                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                                data = await response.json();
+
+                            } else if (activeEndpoint === 'webllm') {
+                                // Use browser-based AI (WebLLM)
+                                const llm = await loadWebLLM();
+                                if (!llm) throw new Error("Could not load browser AI");
+
+                                const systemPrompt = task === 'creative_writing'
+                                    ? "You are a creative writing assistant. Be imaginative and expressive."
+                                    : task === 'analysis'
+                                        ? "You are an analytical assistant. Be precise and thorough."
+                                        : "You are a helpful assistant.";
+
+                                const reply = await llm.chat.completions.create({
+                                    messages: [
+                                        { role: "system", content: systemPrompt },
+                                        { role: "user", content: prompt }
+                                    ],
+                                    temperature: 0.7,
+                                    max_tokens: 512
+                                });
+
+                                data = {
+                                    response: reply.choices[0].message.content,
+                                    model_used: 'Llama-3.2-1B (Browser)'
+                                };
+
+                            } else {
+                                // Demo mode
+                                await new Promise(r => setTimeout(r, 1000));
+                                data = {
+                                    response: `[Demo Mode] Your browser doesn't support WebGPU for in-browser AI.\n\nTo use real AI:\n• Use Chrome/Edge with WebGPU support, or\n• Run Studio Node locally\n\nYour prompt: "${prompt}"`,
+                                    model_used: 'demo'
+                                };
+                            }
+
+                            const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+
+                            responseContent.textContent = data.response || 'No response generated.';
+                            document.getElementById('stat-model').textContent = data.model_used || 'hermes3';
+                            document.getElementById('stat-tokens').textContent = data.response?.split(' ').length || '—';
+                            document.getElementById('stat-time').textContent = `${elapsed}s`;
+                            statsRow.style.display = 'flex';
+                            modelName.textContent = data.model_used || 'hermes3';
+
+                        } catch (error) {
+                            responseContent.style.display = 'none';
+                            errorMessage.style.display = 'block';
+                            errorMessage.textContent = `Error: ${error.message}`;
+                        } finally {
+                            isGenerating = false;
+                            generateBtn.disabled = false;
+                            generateBtn.innerHTML = '<span>Generate</span><span>→</span>';
+                        }
+                    }
+
+                    function clear() {
+                        promptInput.value = '';
+                        responseContent.textContent = '';
+                        responseContent.style.display = 'none';
+                        errorMessage.style.display = 'none';
+                        statsRow.style.display = 'none';
+                        placeholder.style.display = 'flex';
+                    }
+
+                    generateBtn.addEventListener('click', generate);
+                    clearBtn.addEventListener('click', clear);
+                    promptInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && e.metaKey) generate();
+                    });
+
+                    checkConnection();
+                </script>
 </body>
 
 </html>
