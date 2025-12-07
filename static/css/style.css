@@ -1026,11 +1026,11 @@ hr {
     padding: var(--space-8) 0;
     margin-top: var(--space-10);
     background: var(--bg-secondary);
-    margin-left: 0;
-    /* Reset margin */
+    margin-left: var(--sidebar-width);
+    /* Prevent sidebar overlap */
 }
 
-@media (max-width: 968px) {
+@media (max-width: 768px) {
     .site-footer {
         margin-left: 0;
     }
