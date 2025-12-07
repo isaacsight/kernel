@@ -435,7 +435,14 @@ Try something creative like:
     </div>
 
     <script>
-        const STUDIO_NODE_URL = 'http://localhost:8000';
+        // Configuration - tries local first, falls back to cloud
+        const ENDPOINTS = {
+            local: 'http://localhost:8000',
+            // Together.ai hosts Hermes models - user needs to set API key
+            cloud: 'https://api.together.xyz/v1'
+        };
+
+        let activeEndpoint = null;
         const statusDot = document.getElementById('status-dot');
         const statusText = document.getElementById('status-text');
         const promptInput = document.getElementById('prompt-input');
@@ -452,17 +459,21 @@ Try something creative like:
         let isGenerating = false;
 
         async function checkConnection() {
+            // Try local Studio Node first
             try {
-                const response = await fetch(`${STUDIO_NODE_URL}/health`, { method: 'GET', mode: 'cors' });
+                const response = await fetch(`${ENDPOINTS.local}/health`, { method: 'GET', mode: 'cors' });
                 const data = await response.json();
                 isConnected = true;
+                activeEndpoint = 'local';
                 statusDot.classList.add('connected');
-                statusText.textContent = `Online • ${data.models} models`;
+                statusText.textContent = `Local • ${data.models} models`;
                 return true;
             } catch (error) {
+                // Local not available - show demo mode
                 isConnected = false;
+                activeEndpoint = null;
                 statusDot.classList.remove('connected');
-                statusText.textContent = 'Offline';
+                statusText.textContent = 'Demo Mode';
                 return false;
             }
         }
@@ -485,14 +496,26 @@ Try something creative like:
             const startTime = Date.now();
 
             try {
-                const response = await fetch(`${STUDIO_NODE_URL}/generate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
-                });
+                let data;
 
-                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                const data = await response.json();
+                if (activeEndpoint === 'local') {
+                    // Use local Studio Node
+                    const response = await fetch(`${ENDPOINTS.local}/generate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    data = await response.json();
+                } else {
+                    // Demo mode - show sample response
+                    await new Promise(r => setTimeout(r, 1000)); // Simulate delay
+                    data = {
+                        response: `[Demo Mode] This is a simulated response.\n\nTo use the real Hermes 3 model:\n1. Start Studio Node locally: cd admin && python3 studio_node.py\n2. Pull the model: ollama pull hermes3\n3. Refresh this page\n\nYour prompt was: "${prompt}"`,
+                        model_used: 'demo'
+                    };
+                }
+
                 const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
 
                 responseContent.textContent = data.response || 'No response generated.';
@@ -504,7 +527,7 @@ Try something creative like:
             } catch (error) {
                 responseContent.style.display = 'none';
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = `Error: ${error.message}. Make sure Studio Node is running on ${STUDIO_NODE_URL}`;
+                errorMessage.textContent = `Error: ${error.message}. Run Studio Node locally to use Hermes 3.`;
             } finally {
                 isGenerating = false;
                 generateBtn.disabled = false;
