@@ -147,6 +147,17 @@ class ModelRouter:
                 "context_window": 8000,
                 "available": self._check_ollama_available()
             },
+            # Nous Research Models (Open-weight, Agentic-focused)
+            "hermes3": {
+                "provider": "ollama",
+                "type": "local",
+                "strengths": [TaskType.CREATIVE_WRITING, TaskType.CHAT, TaskType.ANALYSIS],
+                "cost_tier": "free",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 128000,
+                "available": self._check_ollama_available()
+            },
             # Hugging Face models
             "mistral-7b-instruct": {
                 "provider": "huggingface",
@@ -161,12 +172,14 @@ class ModelRouter:
         }
         
         # Task to model preferences (ordered by preference)
+        # Task to model preferences (ordered by preference)
+        # Hermes3 prioritized for creative/chat/analysis per Nous Research practices
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CREATIVE_WRITING: ["hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
             TaskType.CODE_GENERATION: ["claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["gemini-1.5-flash", "gpt-4o-mini", "mistral"],
-            TaskType.CHAT: ["gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.ANALYSIS: ["hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["gemini-1.5-flash", "gpt-4o-mini", "hermes3", "mistral"],
+            TaskType.CHAT: ["hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
             TaskType.FAST_SIMPLE: ["llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
         }
@@ -375,7 +388,7 @@ class ModelRouter:
         self.models["gpt-4o-mini"]["available"] = self._check_openai_available()
         
         ollama_available = self._check_ollama_available()
-        for name in ["mistral", "codestral", "llama3.2", "deepseek-coder", "nomic-embed-text"]:
+        for name in ["mistral", "codestral", "llama3.2", "deepseek-coder", "nomic-embed-text", "hermes3"]:
             self.models[name]["available"] = ollama_available
         
         self.models["mistral-7b-instruct"]["available"] = self._check_hf_available()

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes Playground | Nous Research Integration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --border: #2a2a2a;
+            --border-hover: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-primary: #a855f7;
+            --accent-secondary: #22d3ee;
+            --accent-glow: rgba(168, 85, 247, 0.3);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-text p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--warning);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: var(--success);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            min-height: 0;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .prompt-area {
+            width: 100%;
+            height: 100%;
+            min-height: 200px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .prompt-area:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .prompt-area::placeholder {
+            color: var(--text-muted);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), #9333ea);
+            color: white;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .response-content {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            color: var(--text-secondary);
+        }
+
+        .response-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: var(--text-muted);
+            gap: 16px;
+        }
+
+        .placeholder-icon {
+            font-size: 48px;
+            opacity: 0.5;
+        }
+
+        .model-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--accent-primary);
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 0.875rem;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+        }
+
+        .error-message {
+            padding: 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            color: var(--error);
+            font-size: 0.875rem;
+        }
+
+        .config-select {
+            padding: 8px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">🔮</div>
+                <div class="header-text">
+                    <h1>Hermes Playground</h1>
+                    <p>Nous Research Model Integration</p>
+                </div>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Checking...</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Prompt</span>
+                    <select class="config-select" id="task-type">
+                        <option value="chat">Chat</option>
+                        <option value="creative_writing">Creative Writing</option>
+                        <option value="analysis">Analysis</option>
+                    </select>
+                </div>
+                <div class="panel-body">
+                    <textarea class="prompt-area" id="prompt-input" placeholder="Enter your prompt here...
+
+Try something creative like:
+• Write a haiku about open-source AI
+• Explain why local LLMs matter
+• Create a story about a curious robot"></textarea>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" id="generate-btn">
+                        <span>Generate</span>
+                        <span>→</span>
+                    </button>
+                    <button class="btn btn-secondary" id="clear-btn">Clear</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Response</span>
+                    <div class="model-info" id="model-info">
+                        <span>🤖</span>
+                        <span id="model-name">hermes3</span>
+                    </div>
+                </div>
+                <div class="panel-body" id="response-body">
+                    <div class="response-placeholder" id="placeholder">
+                        <div class="placeholder-icon">✨</div>
+                        <p>Your response will appear here</p>
+                        <p style="font-size: 0.75rem; max-width: 300px;">
+                            Hermes 3 is optimized for creative, agentic, and analytical tasks.
+                        </p>
+                    </div>
+                    <div class="response-content" id="response-content" style="display: none;"></div>
+                    <div class="error-message" id="error-message" style="display: none;"></div>
+                    <div class="stats-row" id="stats-row" style="display: none;">
+                        <div class="stat-item">
+                            <span class="stat-label">Model</span>
+                            <span class="stat-value" id="stat-model">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tokens</span>
+                            <span class="stat-value" id="stat-tokens">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Time</span>
+                            <span class="stat-value" id="stat-time">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STUDIO_NODE_URL = 'http://localhost:8000';
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+        const promptInput = document.getElementById('prompt-input');
+        const taskType = document.getElementById('task-type');
+        const generateBtn = document.getElementById('generate-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const placeholder = document.getElementById('placeholder');
+        const responseContent = document.getElementById('response-content');
+        const errorMessage = document.getElementById('error-message');
+        const statsRow = document.getElementById('stats-row');
+        const modelName = document.getElementById('model-name');
+
+        let isConnected = false;
+        let isGenerating = false;
+
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${STUDIO_NODE_URL}/health`, { method: 'GET', mode: 'cors' });
+                const data = await response.json();
+                isConnected = true;
+                statusDot.classList.add('connected');
+                statusText.textContent = `Online • ${data.models} models`;
+                return true;
+            } catch (error) {
+                isConnected = false;
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'Offline';
+                return false;
+            }
+        }
+
+        async function generate() {
+            if (isGenerating || !promptInput.value.trim()) return;
+            const prompt = promptInput.value.trim();
+            const task = taskType.value;
+
+            isGenerating = true;
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<span class="spinner"></span><span>Generating...</span>';
+
+            placeholder.style.display = 'none';
+            errorMessage.style.display = 'none';
+            responseContent.style.display = 'block';
+            responseContent.textContent = '';
+            statsRow.style.display = 'none';
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch(`${STUDIO_NODE_URL}/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const data = await response.json();
+                const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+
+                responseContent.textContent = data.response || 'No response generated.';
+                document.getElementById('stat-model').textContent = data.model_used || 'hermes3';
+                document.getElementById('stat-tokens').textContent = data.response?.split(' ').length || '—';
+                document.getElementById('stat-time').textContent = `${elapsed}s`;
+                statsRow.style.display = 'flex';
+                modelName.textContent = data.model_used || 'hermes3';
+            } catch (error) {
+                responseContent.style.display = 'none';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = `Error: ${error.message}. Make sure Studio Node is running on ${STUDIO_NODE_URL}`;
+            } finally {
+                isGenerating = false;
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<span>Generate</span><span>→</span>';
+            }
+        }
+
+        function clear() {
+            promptInput.value = '';
+            responseContent.textContent = '';
+            responseContent.style.display = 'none';
+            errorMessage.style.display = 'none';
+            statsRow.style.display = 'none';
+            placeholder.style.display = 'flex';
+        }
+
+        generateBtn.addEventListener('click', generate);
+        clearBtn.addEventListener('click', clear);
+        promptInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.metaKey) generate();
+        });
+
+        checkConnection();
+        setInterval(checkConnection, 30000);
+    </script>
+</body>
+
+</html>
