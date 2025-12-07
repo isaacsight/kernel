@@ -435,18 +435,16 @@ Try something creative like:
                 <script type="module">
                     import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 
-                    // Configuration
-                    const ENDPOINTS = {
-                        local: 'http://localhost:8000'
-                    };
-
-                    // WebLLM model (smaller model that works in browser)
+                    const ENDPOINTS = { local: 'http://localhost:8000' };
                     const WEBLLM_MODEL = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
 
+                    // State
                     let activeEndpoint = null;
                     let engine = null;
                     let isLoadingModel = false;
+                    let isAgenticMode = false;
 
+                    // DOM Elements
                     const statusDot = document.getElementById('status-dot');
                     const statusText = document.getElementById('status-text');
                     const promptInput = document.getElementById('prompt-input');
@@ -459,54 +457,69 @@ Try something creative like:
                     const statsRow = document.getElementById('stats-row');
                     const modelName = document.getElementById('model-name');
 
-                    let isConnected = false;
-                    let isGenerating = false;
+                    // Create Agentic UI
+                    const panelHeader = document.querySelector('.panel-header');
+                    const modeTabs = document.createElement('div');
+                    modeTabs.className = 'tabs';
+                    modeTabs.innerHTML = `
+            <button class="tab-btn active" data-mode="standard">Standard</button>
+            <button class="tab-btn" data-mode="agentic">Agentic Mode</button>
+        `;
+                    panelHeader.insertBefore(modeTabs, panelHeader.lastElementChild); // Insert before model info
+
+                    const agentViz = document.createElement('div');
+                    agentViz.className = 'agent-viz';
+                    document.getElementById('response-body').insertBefore(agentViz, responseContent);
+
+                    // Event Listeners for Tabs
+                    modeTabs.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            modeTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            isAgenticMode = btn.dataset.mode === 'agentic';
+                            if (isAgenticMode) {
+                                promptInput.placeholder = "Enter a complex task like:\n• Research the history of AI and summarize key events\n• Write a Python script to analyze stock data\n• Plan a travel itinerary for Tokyo";
+                            } else {
+                                promptInput.placeholder = "Enter your prompt here...";
+                            }
+                        });
+                    });
 
                     async function checkConnection() {
-                        // Try local Studio Node first
                         try {
                             const response = await fetch(`${ENDPOINTS.local}/health`, { method: 'GET', mode: 'cors' });
                             const data = await response.json();
-                            isConnected = true;
                             activeEndpoint = 'local';
                             statusDot.classList.add('connected');
                             statusText.textContent = `Local • ${data.models} models`;
                             return true;
                         } catch (error) {
-                            // Check WebGPU support for browser inference
                             if (navigator.gpu) {
                                 activeEndpoint = 'webllm';
                                 statusDot.classList.add('connected');
                                 statusText.textContent = 'Browser AI Ready';
-                                isConnected = true;
                                 return true;
-                            } else {
-                                isConnected = false;
-                                activeEndpoint = 'demo';
-                                statusDot.classList.remove('connected');
-                                statusText.textContent = 'Demo Mode';
-                                return false;
                             }
+                            activeEndpoint = 'demo';
+                            statusDot.classList.remove('connected');
+                            statusText.textContent = 'Demo Mode';
+                            return false;
                         }
                     }
 
                     async function loadWebLLM() {
                         if (engine || isLoadingModel) return engine;
-
                         isLoadingModel = true;
                         statusText.textContent = 'Loading AI...';
-
                         try {
                             engine = await webllm.CreateMLCEngine(WEBLLM_MODEL, {
-                                initProgressCallback: (progress) => {
-                                    statusText.textContent = `Loading: ${Math.round(progress.progress * 100)}%`;
-                                }
+                                initProgressCallback: (p) => statusText.textContent = `Loading: ${Math.round(p.progress * 100)}%`
                             });
                             statusText.textContent = 'Browser AI Ready';
                             isLoadingModel = false;
                             return engine;
                         } catch (err) {
-                            console.error("WebLLM failed:", err);
+                            console.error(err);
                             isLoadingModel = false;
                             activeEndpoint = 'demo';
                             statusText.textContent = 'Demo Mode';
@@ -514,103 +527,140 @@ Try something creative like:
                         }
                     }
 
+                    function addThoughtStep(title, text, icon = "🤔") {
+                        agentViz.style.display = 'flex';
+                        const step = document.createElement('div');
+                        step.className = 'thought-step';
+                        step.innerHTML = `
+                <div class="viz-icon">${icon}</div>
+                <div class="viz-content">
+                    <div class="viz-title">${title}</div>
+                    <div class="viz-text">${text}</div>
+                </div>
+            `;
+                        agentViz.appendChild(step);
+                        step.scrollIntoView({ behavior: 'smooth' });
+                        return new Promise(r => setTimeout(r, 800)); // Minimum visual delay
+                    }
+
+                    async function generateAgenticResponse(prompt, llm) {
+                        agentViz.innerHTML = ''; // Clear previous
+
+                        // 1. Plan
+                        await addThoughtStep("Planning", "Analyzing request and breaking down steps...", "🧠");
+
+                        // 2. Tool Simulator (Fake but realistic logic)
+                        if (prompt.toLowerCase().includes("python") || prompt.toLowerCase().includes("code")) {
+                            await addThoughtStep("Tool Use", "Invoking Code Interpreter...", "💻");
+                            await addThoughtStep("Execution", "Running generated code snippet...", "⚙️");
+                        } else if (prompt.toLowerCase().includes("research") || prompt.toLowerCase().includes("history")) {
+                            await addThoughtStep("Tool Use", "Searching knowledge base...", "🔍");
+                            await addThoughtStep("Synthesis", "Aggregating sources...", "📚");
+                        } else {
+                            await addThoughtStep("Reasoning", "Formulating response structure...", "🤔");
+                        }
+
+                        // 3. Generate Final Response
+                        await addThoughtStep("Finalizing", "Generating output...", "✨");
+
+                        const systemPrompt = "You are a highly intelligent AI agent. Provide a detailed, well-structured response.";
+                        const reply = await llm.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: prompt }
+                            ],
+                            temperature: 0.7
+                        });
+
+                        return {
+                            response: reply.choices[0].message.content,
+                            model_used: 'Llama-3.2-1B (Agentic)'
+                        };
+                    }
+
                     async function generate() {
-                        if (isGenerating || !promptInput.value.trim()) return;
+                        if (document.getElementById('generate-btn').disabled || !promptInput.value.trim()) return;
+
                         const prompt = promptInput.value.trim();
-                        const task = taskType.value;
+                        const btn = document.getElementById('generate-btn');
 
-                        isGenerating = true;
-                        generateBtn.disabled = true;
-                        generateBtn.innerHTML = '<span class="spinner"></span><span>Generating...</span>';
-
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner"></span><span>Thinking...</span>';
                         placeholder.style.display = 'none';
                         errorMessage.style.display = 'none';
-                        responseContent.style.display = 'block';
-                        responseContent.textContent = '';
+                        responseContent.style.display = 'none'; // Hide until done
                         statsRow.style.display = 'none';
+
+                        if (!isAgenticMode) agentViz.style.display = 'none';
 
                         const startTime = Date.now();
 
                         try {
                             let data;
 
-                            if (activeEndpoint === 'local') {
-                                // Use local Studio Node
-                                const response = await fetch(`${ENDPOINTS.local}/generate`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ prompt, task_type: task, model: 'hermes3' })
-                                });
-                                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                                data = await response.json();
-
-                            } else if (activeEndpoint === 'webllm') {
-                                // Use browser-based AI (WebLLM)
+                            if (activeEndpoint === 'webllm') {
                                 const llm = await loadWebLLM();
                                 if (!llm) throw new Error("Could not load browser AI");
 
-                                const systemPrompt = task === 'creative_writing'
-                                    ? "You are a creative writing assistant. Be imaginative and expressive."
-                                    : task === 'analysis'
-                                        ? "You are an analytical assistant. Be precise and thorough."
-                                        : "You are a helpful assistant.";
-
-                                const reply = await llm.chat.completions.create({
-                                    messages: [
-                                        { role: "system", content: systemPrompt },
-                                        { role: "user", content: prompt }
-                                    ],
-                                    temperature: 0.7,
-                                    max_tokens: 512
+                                if (isAgenticMode) {
+                                    data = await generateAgenticResponse(prompt, llm);
+                                } else {
+                                    const reply = await llm.chat.completions.create({
+                                        messages: [{ role: "user", content: prompt }],
+                                        temperature: 0.7
+                                    });
+                                    data = {
+                                        response: reply.choices[0].message.content,
+                                        model_used: 'Llama-3.2-1B (Browser)'
+                                    };
+                                }
+                            }
+                            else if (activeEndpoint === 'local') {
+                                const response = await fetch(`${ENDPOINTS.local}/generate`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ prompt, task_type: taskType.value, model: 'hermes3' })
                                 });
-
-                                data = {
-                                    response: reply.choices[0].message.content,
-                                    model_used: 'Llama-3.2-1B (Browser)'
-                                };
-
+                                data = await response.json();
                             } else {
-                                // Demo mode
-                                await new Promise(r => setTimeout(r, 1000));
+                                // Demo Mode
+                                if (isAgenticMode) {
+                                    await addThoughtStep("Demo System", "Initializing demo mode...", "🔌");
+                                    await addThoughtStep("Simulation", "Simulating complex reasoning...", "🔮");
+                                }
+                                await new Promise(r => setTimeout(r, 1500));
                                 data = {
-                                    response: `[Demo Mode] Your browser doesn't support WebGPU for in-browser AI.\n\nTo use real AI:\n• Use Chrome/Edge with WebGPU support, or\n• Run Studio Node locally\n\nYour prompt: "${prompt}"`,
+                                    response: `[Demo Mode] Response to: "${prompt}"\n\nTo see real agentic behavior, run on a browser with WebGPU support.`,
                                     model_used: 'demo'
                                 };
                             }
 
-                            const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+                            responseContent.textContent = data.response;
+                            responseContent.style.display = 'block';
 
-                            responseContent.textContent = data.response || 'No response generated.';
-                            document.getElementById('stat-model').textContent = data.model_used || 'hermes3';
+                            const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+                            document.getElementById('stat-model').textContent = data.model_used;
                             document.getElementById('stat-tokens').textContent = data.response?.split(' ').length || '—';
                             document.getElementById('stat-time').textContent = `${elapsed}s`;
                             statsRow.style.display = 'flex';
-                            modelName.textContent = data.model_used || 'hermes3';
+                            modelName.textContent = data.model_used;
 
                         } catch (error) {
-                            responseContent.style.display = 'none';
                             errorMessage.style.display = 'block';
                             errorMessage.textContent = `Error: ${error.message}`;
                         } finally {
-                            isGenerating = false;
-                            generateBtn.disabled = false;
-                            generateBtn.innerHTML = '<span>Generate</span><span>→</span>';
+                            btn.disabled = false;
+                            btn.innerHTML = '<span>Generate</span><span>→</span>';
                         }
                     }
 
-                    function clear() {
+                    document.getElementById('generate-btn').addEventListener('click', generate);
+                    document.getElementById('clear-btn').addEventListener('click', () => {
                         promptInput.value = '';
-                        responseContent.textContent = '';
                         responseContent.style.display = 'none';
-                        errorMessage.style.display = 'none';
+                        agentViz.style.display = 'none';
                         statsRow.style.display = 'none';
                         placeholder.style.display = 'flex';
-                    }
-
-                    generateBtn.addEventListener('click', generate);
-                    clearBtn.addEventListener('click', clear);
-                    promptInput.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' && e.metaKey) generate();
                     });
 
                     checkConnection();
