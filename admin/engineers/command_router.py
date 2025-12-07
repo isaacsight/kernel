@@ -125,15 +125,11 @@ class CommandRouter:
             result_data = {}
             
             if action == "generate_post":
-                from admin.engineers.alchemist import Alchemist
-                alchemist = Alchemist()
-                # Get the doctrine (simplifying import)
-                from admin.core import get_doctrine
-                doctrine = get_doctrine()
+                from admin.core import generate_ai_post
                 
                 topic = params.get("topic", "General")
-                # We can run this async in a real app, but for now blocking is fine or we return a "started" message
-                filename = alchemist.generate(topic, doctrine)
+                # We use the core function to ensure all checks (Guardian, FactChecker) run
+                filename = generate_ai_post(topic)
                 result_data = {"filename": filename, "preview": f"Generated post about {topic}"}
                 
             elif action == "publish":

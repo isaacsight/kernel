@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --research-bg: #0a0a0a;
+    --research-card-bg: #111;
+    --research-border: #222;
+    --research-border-hover: #444;
+    --research-accent: #3b82f6;
+    /* Blue for "Science" */
+    --research-text: #eee;
+    --research-text-muted: #888;
+    --mono-font: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
+}
+
+@layer base {
+    body {
+        background-color: var(--research-bg);
+        color: var(--research-text);
+    }
+}
+
+.mono {
+    font-family: var(--mono-font);
+    letter-spacing: -0.03em;
+}
+
+/* Research Card Styles for reuse if needed */
+.research-card {
+    background: var(--research-card-bg);
+    border: 1px solid var(--research-border);
+}

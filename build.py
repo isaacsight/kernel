@@ -334,10 +334,21 @@ def build():
             # IF that was the intent, but usually "Latest Essays" implies chronological list of EVERYTHING.
             # Let's add everything to main_feed_posts.
         
-        if post['slug'].startswith('ai-'):
+        # Logic to identify Experiments/Studio content
+        # Include:
+        # 1. Slugs starting with 'ai-'
+        # 2. Category 'Engineering'
+        # 3. Tags containing 'experiment'
+        is_experiment = (
+            post['slug'].startswith('ai-') or 
+            post.get('category') == 'Engineering' or 
+            'experiment' in post.get('tags', '').lower()
+        )
+
+        if is_experiment:
             experiments_posts.append(post)
-            # Also add to main feed!
             
+        # Always add to main feed (blended)
         main_feed_posts.append(post)
 
     # Sort Starter Set by the order in starter_set_slugs
@@ -746,7 +757,7 @@ def build():
     
     EXP_PER_PAGE = 8 # Same limit for consistency
     total_exp = len(experiments_posts)
-    total_exp_pages = (total_exp + EXP_PER_PAGE - 1) // EXP_PER_PAGE
+    total_exp_pages = max(1, (total_exp + EXP_PER_PAGE - 1) // EXP_PER_PAGE)
     
     for page in range(1, total_exp_pages + 1):
         start_idx = (page - 1) * EXP_PER_PAGE
@@ -945,25 +956,21 @@ def build():
     # Hook: Post-Build
     architect.run_hook('on_post_build', OUTPUT_DIR)
 
-    # 10b. Generate Search Index
+    # 12. Generate Search Index (search.json)
     import json
     search_index = []
     for post in posts:
         if post['slug'] == 'about': continue
         
-        # Strip HTML from excerpt for cleaner search
-        import re
-        clean_excerpt = re.sub('<[^<]+?>', '', post.get('excerpt', ''))
-        
-        search_index.append({
+        search_item = {
             'title': post.get('title', 'Untitled'),
             'slug': post['slug'],
-            'excerpt': clean_excerpt,
+            'excerpt': post.get('excerpt', ''),
             'tags': post.get('tags', ''),
             'category': post.get('category', 'General'),
             'date': post.get('date', '')
-        })
-    
+        }
+        search_index.append(search_item)
     search_index_path = os.path.join(OUTPUT_DIR, 'search.json')
     write_file(search_index_path, json.dumps(search_index))
     
@@ -1251,6 +1258,131 @@ Sitemap: {BASE_URL}/sitemap.xml
     write_file(os.path.join(OUTPUT_DIR, 'feed.xml'), rss_xml)
 
     print(f"Build complete. Output in {OUTPUT_DIR}/")
+
+    # 9. Generate Projects Page
+    print("Step 9: Generating Projects Page...")
+    projects_template = read_file(os.path.join(TEMPLATE_DIR, 'projects.html'))
+    
+    full_projects = base_template.replace('{{ content }}', projects_template)
+    # Restore substitutions that were deleted
+    full_projects = full_projects.replace('{{ starter_set_nav }}', starter_set_nav_html) 
+    full_projects = full_projects.replace('{{ root }}', '')
+    full_projects = full_projects.replace('{{ image }}', DEFAULT_IMAGE)
+    full_projects = full_projects.replace('{{ og_type }}', 'website')
+    full_projects = full_projects.replace('{{ json_ld }}', '')
+    full_projects = full_projects.replace('{{ title }}', 'AI Research Tools - Does This Feel Right?')
+    full_projects = full_projects.replace('{{ description }}', 'Experimental interfaces and debuggers for Large Language Models.')
+    full_projects = full_projects.replace('{{ url }}', f"{BASE_URL}/projects.html")
+    
+    write_file(os.path.join(OUTPUT_DIR, 'projects.html'), full_projects)
+
+    # 10. Generate Meta Project Page (Standalone)
+    print("Step 10: Generating Meta Project Page...")
+    meta_content = read_file(os.path.join(TEMPLATE_DIR, 'meta.html'))
+    write_file(os.path.join(OUTPUT_DIR, 'meta.html'), meta_content)
+
+    # 11. Generate App Wrappers
+    print("Step 11: Generating App Wrappers...")
+    apps_wrapper = read_file(os.path.join(TEMPLATE_DIR, 'apps_wrapper.html'))
+    
+    # Debugger
+    debugger_page = base_template.replace('{{ content }}', apps_wrapper)
+    debugger_page = debugger_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+    debugger_page = debugger_page.replace('{{ root }}', '')
+    debugger_page = debugger_page.replace('{{ app_url }}', 'apps/debugger/index.html')
+    debugger_page = debugger_page.replace('{{ app_title }}', 'Logit Debugger | Research Suite')
+    debugger_page = debugger_page.replace('{{ title }}', 'Logit Debugger | Research Suite')
+    debugger_page = debugger_page.replace('{{ description }}', 'Real-time alignment debugger.')
+    debugger_page = debugger_page.replace('{{ url }}', f"{BASE_URL}/debugger.html")
+    # Clean up leftovers
+    debugger_page = debugger_page.replace('{{ image }}', DEFAULT_IMAGE)
+    debugger_page = debugger_page.replace('{{ og_type }}', 'website')
+    debugger_page = debugger_page.replace('{{ json_ld }}', '')
+    
+    # Fix positioning context and define app layout
+    style_injection = '''<style>
+        #main-content { animation: none !important; transform: none !important; }
+        .app-wrapper {
+            position: fixed !important;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        @media (min-width: 768px) {
+            .app-wrapper {
+                top: 0;
+                left: 72px; /* Sidebar width */
+            }
+        }
+    </style></head>'''
+    debugger_page = debugger_page.replace('</head>', style_injection)
+
+    write_file(os.path.join(OUTPUT_DIR, 'debugger.html'), debugger_page)
+    
+    # Visualizer
+    viz_page = base_template.replace('{{ content }}', apps_wrapper)
+    viz_page = viz_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+    viz_page = viz_page.replace('{{ root }}', '')
+    viz_page = viz_page.replace('{{ app_url }}', 'apps/visualizer/index.html')
+    viz_page = viz_page.replace('{{ app_title }}', 'Dynamics Visualizer | Research Suite')
+    viz_page = viz_page.replace('{{ title }}', 'Dynamics Visualizer | Research Suite')
+    viz_page = viz_page.replace('{{ description }}', 'Transformer state visualization.')
+    viz_page = viz_page.replace('{{ url }}', f"{BASE_URL}/visualizer.html")
+    # Clean up leftovers
+    viz_page = viz_page.replace('{{ image }}', DEFAULT_IMAGE)
+    viz_page = viz_page.replace('{{ og_type }}', 'website')
+    viz_page = viz_page.replace('{{ json_ld }}', '')
+    
+    # Fix positioning context and define app layout
+    style_injection = '''<style>
+        #main-content { animation: none !important; transform: none !important; }
+        .app-wrapper {
+            position: fixed !important;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        @media (min-width: 768px) {
+            .app-wrapper {
+                top: 0;
+                left: 72px; /* Sidebar width */
+            }
+        }
+    </style></head>'''
+    viz_page = viz_page.replace('</head>', style_injection)
+
+    write_file(os.path.join(OUTPUT_DIR, 'visualizer.html'), viz_page)
+
+    # 11b. Copy App Static Builds
+    print("Step 11b: Copying App Static Builds...")
+    apps_dest_dir = os.path.join(OUTPUT_DIR, 'apps')
+    os.makedirs(apps_dest_dir, exist_ok=True)
+
+    # Debugger
+    debugger_src = os.path.join('ai-tools', 'apps', 'debugger', 'out')
+    debugger_dest = os.path.join(apps_dest_dir, 'debugger')
+    if os.path.exists(debugger_src):
+        if os.path.exists(debugger_dest): shutil.rmtree(debugger_dest)
+        shutil.copytree(debugger_src, debugger_dest)
+        print(f"Copied debugger app to {debugger_dest}")
+    else:
+        print(f"WARNING: Debugger app build not found at {debugger_src}. Run 'turbo build' in ai-tools first.")
+
+    # Visualizer (Context Viewer)
+    visualizer_src = os.path.join('ai-tools', 'apps', 'context-viewer', 'out')
+    visualizer_dest = os.path.join(apps_dest_dir, 'visualizer')
+    if os.path.exists(visualizer_src):
+        if os.path.exists(visualizer_dest): shutil.rmtree(visualizer_dest)
+        shutil.copytree(visualizer_src, visualizer_dest)
+        print(f"Copied visualizer app to {visualizer_dest}")
+    else:
+        print(f"WARNING: Visualizer app build not found at {visualizer_src}. Run 'turbo build' in ai-tools first.")
+
+    print("Build Complete!")
 
 if __name__ == "__main__":
     build()

@@ -271,7 +271,7 @@ class Alchemist:
         return dot_product / (norm_v1 * norm_v2)
 
     @critique_action("Alchemist Generate Post")
-    def generate(self, topic: str, doctrine: str, provider: str = "auto") -> str:
+    def generate(self, topic: str, doctrine: str, provider: str = "auto") -> tuple[str, str]:
         """
         Generates a blog post using the specified topic and context.
         Now includes persistent memory tracking and metrics.
@@ -396,7 +396,7 @@ class Alchemist:
             )
             logger.info(f"[{self.name}] Generation completed in {duration:.2f}s (success={success})")
         
-        return content
+        return content, context_str
     
     def learn_from_feedback(self, content_id: str, rating: int, notes: str = None):
         """

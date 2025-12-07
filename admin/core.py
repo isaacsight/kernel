@@ -210,11 +210,14 @@ def generate_ai_post(topic, provider="auto"):
         from .engineers.alchemist import Alchemist
         from .engineers.guardian import Guardian
         from .engineers.editor import Editor
+        from .engineers.editor import Editor
         from .engineers.librarian import Librarian
+        from .engineers.fact_checker import FactChecker
 
         alchemist = Alchemist()
         guardian = Guardian()
         editor = Editor()
+        fact_checker = FactChecker()
         
         # Ensure memory is built
         if not os.path.exists(alchemist.memory_file):
@@ -234,11 +237,20 @@ def generate_ai_post(topic, provider="auto"):
                 logger.info(f"[The Alchemist] Incorporating feedback: {feedback}")
                 # Append feedback to topic/prompt effectively
                 adjusted_topic = f"{topic}. IMPORTANT FEEDBACK FROM PREVIOUS DRAFT: {feedback}"
-                content = alchemist.generate(adjusted_topic, doctrine, provider=provider)
+                content, context = alchemist.generate(adjusted_topic, doctrine, provider=provider)
             else:
-                content = alchemist.generate(topic, doctrine, provider=provider)
+                content, context = alchemist.generate(topic, doctrine, provider=provider)
             
-            # 2. Guardian: Audit (Safety)
+            # 2. FactChecker: Truth Verification
+            logger.info("[The FactChecker] Verifying accuracy...")
+            fact_check = fact_checker.verify(content, context)
+            if not fact_check["is_valid"]:
+                logger.warning(f"[The FactChecker] Issues found: {fact_check['feedback']}")
+                feedback = f"The previous draft contained factual inaccuracies: {fact_check['feedback']}. Please correct these."
+                current_try += 1
+                continue
+            
+            # 3. Guardian: Audit (Safety)
             logger.info("[The Guardian] Auditing content...")
             safety_issues = guardian.audit_content(content)
             critical_issues = [i for i in safety_issues if i['level'] == 'CRITICAL']
@@ -249,7 +261,7 @@ def generate_ai_post(topic, provider="auto"):
                 current_try += 1
                 continue
             
-            # 3. Editor: Audit (Style)
+            # 4. Editor: Audit (Style)
             logger.info("[The Editor] Auditing style...")
             style_issues = editor.audit(content)
             

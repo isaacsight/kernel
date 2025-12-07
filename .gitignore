@@ -31,3 +31,4 @@ dist/
 .aider*
 admin/brain/kokoro_models/
 admin/brain/kokoro_models/*.onnx
+node_modules/

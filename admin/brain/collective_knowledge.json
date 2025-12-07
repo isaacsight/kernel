@@ -1044,6 +1044,22 @@
       },
       "confidence": 0.85,
       "shared_at": "2025-12-04T22:28:39.360848"
+    },
+    {
+      "from_agent": "System Architect",
+      "type": "technical_study",
+      "insight": {
+        "topic": "Hermes Playground & Browser Inference Study",
+        "findings": [
+          "WebLLM allows for free, private, in-browser AI inference using WebGPU (Llama-3.2-1B).",
+          "Agentic UI patterns (Chain-of-Thought visualization) significantly enhance user trust and perceived intelligence.",
+          "Hybrid architecture (Local Fallback + Browser Priority) ensures maximum availability and zero cost impacting scalability.",
+          "Performance is heavily dependent on client-side GPU; UI must manage expectations (One-time download)."
+        ],
+        "category": "Architecture"
+      },
+      "confidence": 1.0,
+      "shared_at": "2025-12-07T09:05:00.000000"
     }
   ],
   "agent_expertise": {
