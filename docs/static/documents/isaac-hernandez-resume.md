@@ -41,4 +41,4 @@ Innovative engineer and creator of "Does This Feel Right?", a platform exploring
 
 ## Contact
 *   **Email:** isaacsight@gmail.com
-*   **GitHub:** [github.com/isaachernandez](https://github.com/isaachernandez)
+*   **GitHub:** [github.com/isaacsight](https://github.com/isaacsight)

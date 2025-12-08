@@ -1,65 +1,263 @@
 import asyncio
 import os
+import re
 from playwright.async_api import async_playwright
 from markdown_it import MarkdownIt
 
 # Configuration
 DOCS_DIR = "static/documents"
 FILES = [
-    {"input": "isaac-hernandez-resume.md", "output": "Isaac_Hernandez_Resume.pdf"},
-    {"input": "isaac-hernandez-cover-letter.md", "output": "Isaac_Hernandez_Cover_Letter.pdf"}
+    {"input": "isaac-hernandez-resume.md", "output": "Isaac_Hernandez_Resume.pdf", "type": "resume"},
+    {"input": "isaac-hernandez-cover-letter.md", "output": "Isaac_Hernandez_Cover_Letter.pdf", "type": "cover_letter"}
 ]
 
-# Simple, clean CSS for professional output
-CSS = """
+# Standard CSS for Cover Letter
+COVER_LETTER_CSS = """
 <style>
     body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        line-height: 1.5;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        line-height: 1.6;
         max-width: 800px;
         margin: 0 auto;
         padding: 40px;
         color: #333;
+        font-size: 11pt;
     }
-    h1 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-    h2 { border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }
-    h3 { margin-top: 20px; margin-bottom: 5px; }
-    a { color: #2563eb; text-decoration: none; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 5px; }
-    code { background: #f5f5f5; padding: 2px 5px; border-radius: 3px; font-family: "SF Mono", Menlo, monospace; font-size: 0.9em; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; font-size: 24px; }
     p { margin-bottom: 16px; }
+    a { color: #2563eb; text-decoration: none; }
+</style>
+"""
+
+# Advanced CSS for Resume (2-Column)
+RESUME_CSS = """
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     
-    /* Header/Contact info styling */
-    h1 + p { 
-        margin-top: -15px; 
-        color: #666; 
-        font-size: 0.95em;
+    body {
+        font-family: 'Inter', sans-serif;
+        line-height: 1.5;
+        color: #1f2937;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Main (2/3) | Sidebar (1/3) */
+        min-height: 100vh;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+        background: #f3f4f6;
+        padding: 40px 30px;
+        border-left: 1px solid #e5e7eb;
+    }
+
+    /* Main Content Styling */
+    .main-content {
+        padding: 40px 40px;
+    }
+
+    /* Header (Spans both if needed, but we'll put it in Main) */
+    .header {
+        margin-bottom: 30px;
+        border-bottom: 2px solid #1f2937;
+        padding-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0 0 5px 0;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        font-weight: 400;
+        color: #4b5563;
+        margin: 0;
+        font-family: 'Inter', monospace;
+    }
+
+    /* Headings */
+    h2 {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #6b7280;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 8px;
+        margin-top: 25px;
+        margin-bottom: 15px;
+    }
+
+    .sidebar h2 {
+        color: #4b5563;
+        border-color: #d1d5db;
+    }
+
+    /* Content Typography */
+    h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 15px 0 2px 0;
+        color: #111;
+    }
+
+    p {
+        font-size: 10pt;
+        margin-bottom: 8px;
+        color: #374151;
+    }
+    
+    strong { font-weight: 600; }
+
+    /* List Styling */
+    ul {
+        padding-left: 18px;
+        margin-top: 5px;
+    }
+
+    li {
+        font-size: 10pt;
+        margin-bottom: 4px;
+        color: #374151;
+    }
+
+    /* Links */
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+    /* Contact Block in Sidebar */
+    .contact-block {
+        margin-bottom: 30px;
+    }
+    .contact-item {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        word-break: break-word;
+    }
+    
+    /* Project Tags */
+    code {
+        background: #e5e7eb;
+        color: #374151;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-family: monospace;
     }
 </style>
 """
 
-async def generate_pdf(input_path, output_path):
+def parse_resume(md_content):
+    """
+    Parses the flat Markdown into sections for the 2-column layout.
+    """
+    md = MarkdownIt()
+    
+    # Simple regex parsing to extract blocks
+    # Logic:
+    # 1. Header: Everything up to the first H2
+    # 2. Sections: Split by H2
+    
+    sections = {}
+    
+    lines = md_content.split('\n')
+    
+    # 1. Extract Header (Name and Title)
+    header_raw = []
+    line_idx = 0
+    for i, line in enumerate(lines):
+        if line.startswith('## '):
+            line_idx = i
+            break
+        header_raw.append(line)
+        
+    header_md = '\n'.join(header_raw).strip()
+    
+    # 2. Extract Sections
+    remaining_content = '\n'.join(lines[line_idx:])
+    raw_sections = re.split(r'(^## .+$)', remaining_content, flags=re.MULTILINE)
+    
+    current_section = None
+    for part in raw_sections:
+        if part.startswith('## '):
+            current_section = part.replace('## ', '').strip()
+            sections[current_section] = ""
+        elif current_section:
+            sections[current_section] += part
+            
+    # Assemble HTML
+    # We will manually build the grid structure
+    
+    # Render Header
+    header_html = md.render(header_md)
+    # Tweak Header HTML to wrap name/subtitle if possible, or just accept MD render
+    # We'll use CSS to style the H1 and p inside .header
+    
+    # Define Column Distribution
+    sidebar_keys = ['Contact', 'Core Competencies', 'Philosophy & Writing']
+    main_keys = ['Professional Summary', 'Featured Projects']
+    
+    sidebar_html = ""
+    for key in sidebar_keys:
+        if key in sections:
+            sidebar_html += f"<h2>{key}</h2>"
+            sidebar_html += md.render(sections[key])
+            
+    main_html = f"<div class='header'>{header_html}</div>"
+    for key in main_keys:
+        if key in sections:
+            main_html += f"<h2>{key}</h2>"
+            main_html += md.render(sections[key])
+            
+    final_html = f"""
+    <div class="container">
+        <div class="main-content">
+            {main_html}
+        </div>
+        <div class="sidebar">
+            {sidebar_html}
+        </div>
+    </div>
+    """
+    
+    return final_html
+
+async def generate_pdf(input_path, output_path, doc_type="resume"):
     print(f"Generating {output_path}...")
     
-    # Read Markdown
     with open(input_path, "r") as f:
         md_content = f.read()
     
-    # Convert to HTML
-    md = MarkdownIt()
-    html_content = md.render(md_content)
-    
-    # Combine with CSS
+    if doc_type == "resume":
+        html_body = parse_resume(md_content)
+        css = RESUME_CSS
+    else:
+        # Cover Letter - Standard Render
+        md = MarkdownIt()
+        html_body = md.render(md_content)
+        css = COVER_LETTER_CSS
+
     full_html = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8">
-        {CSS}
+        {css}
     </head>
     <body>
-        {html_content}
+        {html_body}
     </body>
     </html>
     """
@@ -68,7 +266,7 @@ async def generate_pdf(input_path, output_path):
         browser = await p.chromium.launch()
         page = await browser.new_page()
         await page.set_content(full_html)
-        await page.pdf(path=output_path, format="Letter", margin={"top": "0.5in", "bottom": "0.5in", "left": "0.5in", "right": "0.5in"})
+        await page.pdf(path=output_path, format="Letter", print_background=True)
         await browser.close()
     
     print(f"Done: {output_path}")
@@ -83,7 +281,7 @@ async def main():
         output_full_path = os.path.join(DOCS_DIR, file_info["output"])
         
         if os.path.exists(input_full_path):
-            await generate_pdf(input_full_path, output_full_path)
+            await generate_pdf(input_full_path, output_full_path, file_info.get("type", "resume"))
         else:
             print(f"Input file not found: {input_full_path}")
 
