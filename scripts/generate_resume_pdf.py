@@ -41,35 +41,37 @@ RESUME_CSS = """
         margin: 0;
         padding: 0;
         background: #fff;
+        -webkit-print-color-adjust: exact;
     }
 
     .container {
         display: grid;
-        grid-template-columns: 2fr 1fr; /* Main (2/3) | Sidebar (1/3) */
-        min-height: 100vh;
+        grid-template-columns: 68% 32%; /* Optimized ratio */
+        height: 100%; /* allows expansion */
     }
 
     /* Sidebar Styling */
     .sidebar {
         background: #f3f4f6;
-        padding: 40px 30px;
+        padding: 40px 25px;
         border-left: 1px solid #e5e7eb;
+        height: 100%; /* Ensure it spans the full grid height */
     }
 
     /* Main Content Styling */
     .main-content {
-        padding: 40px 40px;
+        padding: 40px 35px;
     }
 
-    /* Header (Spans both if needed, but we'll put it in Main) */
+    /* Header */
     .header {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
         border-bottom: 2px solid #1f2937;
-        padding-bottom: 20px;
+        padding-bottom: 15px;
     }
 
     h1 {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 700;
         margin: 0 0 5px 0;
         letter-spacing: -0.02em;
@@ -77,7 +79,7 @@ RESUME_CSS = """
     }
 
     .subtitle {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 400;
         color: #4b5563;
         margin: 0;
@@ -86,32 +88,35 @@ RESUME_CSS = """
 
     /* Headings */
     h2 {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: #6b7280;
         border-bottom: 1px solid #e5e7eb;
-        padding-bottom: 8px;
-        margin-top: 25px;
-        margin-bottom: 15px;
+        padding-bottom: 5px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        page-break-after: avoid; /* Keep heading with content */
     }
 
     .sidebar h2 {
         color: #4b5563;
         border-color: #d1d5db;
+        margin-top: 20px;
     }
 
     /* Content Typography */
     h3 {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
-        margin: 15px 0 2px 0;
+        margin: 12px 0 2px 0;
         color: #111;
+        page-break-after: avoid;
     }
 
     p {
-        font-size: 10pt;
+        font-size: 9.5pt;
         margin-bottom: 8px;
         color: #374151;
     }
@@ -120,14 +125,16 @@ RESUME_CSS = """
 
     /* List Styling */
     ul {
-        padding-left: 18px;
-        margin-top: 5px;
+        padding-left: 16px;
+        margin-top: 4px;
+        margin-bottom: 10px;
     }
 
     li {
-        font-size: 10pt;
-        margin-bottom: 4px;
+        font-size: 9.5pt;
+        margin-bottom: 3px;
         color: #374151;
+        line-height: 1.4;
     }
 
     /* Links */
@@ -138,12 +145,12 @@ RESUME_CSS = """
 
     /* Contact Block in Sidebar */
     .contact-block {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
     .contact-item {
         display: block;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
+        margin-bottom: 6px;
+        font-size: 0.85rem;
         word-break: break-word;
     }
     
@@ -151,10 +158,34 @@ RESUME_CSS = """
     code {
         background: #e5e7eb;
         color: #374151;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.85em;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 0.8em;
         font-family: monospace;
+    }
+
+    /* Print Logic */
+    @media print {
+        .container {
+            display: grid;
+        }
+        
+        /* Ensure blocks don't break awkwardly */
+        .section-block, li, h3, p {
+            page-break-inside: auto;
+        }
+        
+        h2, h3 {
+            page-break-after: avoid;
+        }
+        
+        /* Force background printing is usually browser setting, 
+           but playwright handles it via argument. 
+           We just ensure CSS doesn't hide it. */
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
     }
 </style>
 """
