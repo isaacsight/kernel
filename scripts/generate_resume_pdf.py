@@ -166,8 +166,16 @@ RESUME_CSS = """
 
     /* Print Logic */
     @media print {
+        body {
+            height: auto;
+        }
         .container {
             display: grid;
+            height: auto; /* Remove fixed height for print to avoid forcing pages */
+        }
+        
+        .sidebar {
+            height: auto; /* Let grid handle the height */
         }
         
         /* Ensure blocks don't break awkwardly */
@@ -179,9 +187,7 @@ RESUME_CSS = """
             page-break-after: avoid;
         }
         
-        /* Force background printing is usually browser setting, 
-           but playwright handles it via argument. 
-           We just ensure CSS doesn't hide it. */
+        /* Force background printing */
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
