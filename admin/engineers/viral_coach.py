@@ -93,6 +93,15 @@ class ViralCoach:
         from admin.engineers.trend_scout import TrendScout
         scout = TrendScout()
         
+        # Strip YAML frontmatter if present
+        if script.strip().startswith("---"):
+            try:
+                parts = script.split("---", 2)
+                if len(parts) >= 3:
+                    script = parts[2].strip()
+            except Exception:
+                pass
+
         words = script.split()
         word_count = len(words)
         

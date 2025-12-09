@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontier Team | Mission Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505;
+            color: #e0e0e0;
+        }
+
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-bg {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+
+<body class="grid-bg min-h-screen p-8">
+
+    <!-- Header -->
+    <header class="flex justify-between items-end mb-12 border-b border-gray-800 pb-4">
+        <div>
+            <h1 class="text-4xl font-bold text-white tracking-tighter">THE FRONTIER TEAM</h1>
+            <p class="text-gray-500 mt-1 uppercase tracking-widest text-sm">Advanced Agentic Workforce</p>
+        </div>
+        <div class="text-right">
+            <div id="connection-status" class="flex items-center justify-end gap-2 text-red-500">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span class="text-sm font-mono">DISCONNECTED</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-1 font-mono">STUDIO NODE</p>
+        </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Column 1: The Team (Roster) -->
+        <div class="lg:col-span-1 space-y-4">
+            <h2 class="text-xl font-semibold text-gray-400 mb-4 flex items-center gap-2">
+                <span>👥</span> ACTIVE AGENTS
+            </h2>
+
+            <div id="team-roster" class="space-y-3">
+                <!-- Agents injected here -->
+                <div class="glass-panel p-4 rounded-lg animate-pulse">
+                    <div class="h-4 bg-gray-800 rounded w-1/2 mb-2"></div>
+                    <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2: Audit & Reports -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Audit Panel -->
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-blue-500">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">System Audit</h3>
+                        <p class="text-gray-400 text-sm">Orchestrated by Engineering Manager</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-bold text-white" id="team-gpa">--</div>
+                        <div class="text-xs text-gray-500 uppercase">Team GPA</div>
+                    </div>
+                </div>
+
+                <div id="audit-results" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Audit Cards injected here -->
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="runAudit()"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium transition-colors">
+                        Run New Audit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console Output -->
+            <div class="glass-panel p-4 rounded-lg h-64 overflow-hidden flex flex-col">
+                <div class="flex justify-between items-center mb-2 border-b border-gray-800 pb-2">
+                    <span class="text-xs font-mono text-gray-500">TERMINAL OUTPUT</span>
+                    <span class="text-xs font-mono text-green-500">● LIVE</span>
+                </div>
+                <div id="console-output" class="font-mono text-xs text-green-400 overflow-y-auto flex-1 space-y-1">
+                    <div>> System initialized...</div>
+                    <div>> Waiting for command...</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Log to custom console
+        function log(msg, type = 'info') {
+            const consoleEl = document.getElementById('console-output');
+            const div = document.createElement('div');
+            const time = new Date().toLocaleTimeString();
+            div.innerHTML = `<span class="opacity-50">[${time}]</span> ${msg}`;
+            if (type === 'error') div.className = 'text-red-400';
+            if (type === 'success') div.className = 'text-blue-400';
+            consoleEl.appendChild(div);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        // Fetch Node Status
+        async function checkNode() {
+            try {
+                const res = await fetch('/api/team/node-status');
+                const data = await res.json();
+
+                const statusEl = document.getElementById('connection-status');
+                if (data.status === 'online') {
+                    statusEl.innerHTML = `
+                        <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></span>
+                        <span class="text-sm font-mono text-green-500">CONNECTED (${data.latency})</span>
+                    `;
+                    log(`Connected to Studio Node: ${data.models_available} models available`, 'success');
+                } else {
+                    statusEl.innerHTML = `
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span class="text-sm font-mono text-red-500">OFFLINE</span>
+                    `;
+                    log(`Studio Node Offline: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Fetch Team Roster
+        async function fetchTeam() {
+            const res = await fetch('/api/team/roster');
+            const data = await res.json();
+
+            const rosterEl = document.getElementById('team-roster');
+            rosterEl.innerHTML = data.agents.map(agent => `
+                <div class="glass-panel p-3 rounded-lg flex items-center justify-between group hover:bg-white/5 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl" role="img">${agent.emoji}</span>
+                        <div>
+                            <div class="font-medium text-white text-sm">${agent.name}</div>
+                            <div class="text-xs text-gray-500">${agent.role}</div>
+                        </div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-green-500 opacity-50 group-hover:opacity-100"></div>
+                </div>
+            `).join('');
+        }
+
+        // Run Audit
+        async function runAudit() {
+            log('Starting Team Audit...', 'info');
+            const res = await fetch('/api/team/audit', { method: 'POST' });
+            const data = await res.json();
+
+            document.getElementById('team-gpa').innerText = data.team_gpa;
+
+            const auditEl = document.getElementById('audit-results');
+            // Helper to render issues list
+            const renderIssues = (issues) => {
+                if (!issues || issues.length === 0) return '<div class="text-xs text-green-500 mt-2">No issues found.</div>';
+                return `<ul class="mt-2 space-y-1">${issues.map(i => `<li class="text-xs text-red-400 truncate" title="${i}">${i}</li>`).join('')}</ul>`;
+            };
+
+            auditEl.innerHTML = Object.entries(data.results).map(([key, result]) => `
+                <div class="bg-black/40 p-3 rounded border border-gray-800">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-gray-300 text-sm">${result.emoji || '🤖'} ${key}</span>
+                        <span class="text-xs font-mono font-bold ${result.score > 7 ? 'text-green-500' : 'text-yellow-500'}">
+                            Score: ${result.score}/10
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-500 mb-2">${result.status}</div>
+                    ${renderIssues(result.issues)}
+                </div>
+            `).join('');
+
+            log(`Audit Complete. Team GPA: ${data.team_gpa}`, 'success');
+        }
+
+        // Init
+        fetchTeam();
+        checkNode();
+        runAudit(); // Auto-run on load
+    </script>
+</body>
+
+</html>

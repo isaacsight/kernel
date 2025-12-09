@@ -65,19 +65,25 @@ We classify vulnerabilities using this scale:
    - No passwords in files
    - Use `.env` for secrets (gitignored)
    - Use `.env.example` as template
+   
+2. **Handle Cookie Files**
+   - **NEVER** commit `cookies.txt` or `sora_cookies.txt`
+   - These contain sensitive session tokens (`oai-did`, etc.)
+   - Ensure they are in `.gitignore` checking sensitive runtime state
 
-2. **Validate All Inputs**
+
+3. **Validate All Inputs**
    - Sanitize user inputs
    - Validate file paths
    - Check data types
    - Prevent injection attacks
 
-3. **Keep Dependencies Updated**
+4. **Keep Dependencies Updated**
    - Run `pip-audit` regularly
    - Update vulnerable packages
    - Review dependency changes
 
-4. **Use Security Tools**
+5. **Use Security Tools**
    ```bash
    # Run security scans
    bash scripts/security_scan.sh

@@ -3,22 +3,22 @@ import re
 import os
 from huggingface_hub import InferenceClient
 
+from core.agent_interface import BaseAgent
+from typing import Dict, List, Any
+
 logger = logging.getLogger("Editor")
 
-class Editor:
+class Editor(BaseAgent):
     """
-    The Editor (NLP Engineer)
-    
-    Mission: Maintain the editorial voice and ensure content quality.
+    The Editor (Copy Engineer)
     
     Responsibilities:
-    - Style Transfer (Gentle Doctrine)
-    - Semantic Analysis
-    - Automated Editing & Proofreading
+    - Logic Flow Analysis
+    - Style Consistency
+    - Grammar & Clarity
     """
     def __init__(self):
-        self.name = "The Editor"
-        self.role = "NLP Engineer"
+        super().__init__()
         self.doctrine_rules = [
             {
                 "name": "No Moralizing",
@@ -36,6 +36,19 @@ class Editor:
         self.hf_token = os.environ.get("HF_TOKEN")
         self.hf_client = InferenceClient(token=self.hf_token) if self.hf_token else None
         self.editor_model = "mistralai/Mistral-7B-Instruct-v0.2"
+
+    @property
+    def name(self) -> str:
+        return "The Editor"
+
+    @property
+    def role(self) -> str:
+        return "Style & Clarity"
+
+    def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        content = task.get("content", "")
+        issues = self.audit(content)
+        return {"status": "success", "issues": issues}
 
     def audit(self, content):
         """

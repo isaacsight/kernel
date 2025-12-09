@@ -11,15 +11,18 @@ const Layout = ({ children }) => {
     ];
 
     return (
-        <div className="flex min-h-screen bg-background text-foreground">
+        <div className="flex min-h-screen bg-background text-foreground font-sans">
             {/* Sidebar */}
-            <aside className="w-64 border-r border-border bg-card/30 backdrop-blur-md flex flex-col">
-                <div className="p-6 border-b border-border">
-                    <h1 className="text-xl font-bold flex items-center gap-2 tracking-tighter">
-                        <Rocket className="text-accent" size={20} />
-                        Studio OS
+            <aside className="w-64 border-r border-border glass-panel flex flex-col z-20">
+                <div className="p-6 border-b border-white/5">
+                    <h1 className="text-xl font-bold flex items-center gap-2 tracking-tighter text-white">
+                        <Rocket className="text-primary" size={20} />
+                        <span className="font-mono">STUDIO_OS</span>
                     </h1>
-                    <p className="text-xs text-muted-foreground mt-1 font-medium">Mission Control</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="status-dot online"></span>
+                        <p className="text-xs text-muted-foreground font-mono">SYSTEM ONLINE</p>
+                    </div>
                 </div>
 
                 <nav className="flex-1 p-4 space-y-1">
@@ -28,10 +31,7 @@ const Layout = ({ children }) => {
                             key={item.path}
                             to={item.path}
                             className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${isActive
-                                    ? 'bg-accent/10 text-accent border border-accent/20 shadow-sm'
-                                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent'
-                                }`
+                                `nav-item ${isActive ? 'active' : ''}`
                             }
                         >
                             <item.icon size={18} />
@@ -40,32 +40,42 @@ const Layout = ({ children }) => {
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-border space-y-4">
+                <div className="p-4 border-t border-white/5 space-y-4">
                     <button
                         onClick={async () => {
-                            if (!confirm('Are you sure you want to publish changes to the live site?')) return;
+                            if (!confirm('INITIATE DEPLOYMENT SEQUENCE?')) return;
                             try {
                                 const res = await fetch('http://localhost:8000/system/git/publish', { method: 'POST' });
                                 const data = await res.json();
                                 alert(data.message);
                             } catch (err) {
-                                alert('Publish failed: ' + err.message);
+                                alert('DEPLOYMENT ERROR: ' + err.message);
                             }
                         }}
-                        className="w-full py-2.5 px-4 bg-accent hover:bg-accent/90 text-accent-foreground rounded-lg text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                        className="w-full py-2.5 px-4 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 rounded-lg text-xs font-mono font-bold transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wide"
                     >
-                        <Rocket size={16} />
-                        Publish Site
+                        <Rocket size={14} />
+                        Deploy Site
                     </button>
-                    <div className="text-xs text-muted-foreground text-center font-mono">
-                        v2.0.0 • Antigravity
+                    <div className="text-[10px] text-muted-foreground text-center font-mono opacity-50">
+                        v2.4.0 • SYSTEM_READY
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
-                {children}
+            <main className="flex-1 overflow-y-auto relative">
+                {/* Grid Overlay */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
+                    style={{
+                        backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+                        backgroundSize: '40px 40px'
+                    }}
+                />
+
+                <div className="relative z-10">
+                    {children}
+                </div>
             </main>
         </div>
     );

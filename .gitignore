@@ -32,3 +32,12 @@ dist/
 admin/brain/kokoro_models/
 admin/brain/kokoro_models/*.onnx
 node_modules/
+.turbo/
+
+# Sensitive / Runtime files
+admin/cookies.txt
+admin/sora_cookies.txt
+admin/brain/studio_memory.db
+admin/brain/*.json
+!admin/brain/mock_comments.json
+!admin/brain/achievements.json

@@ -33,7 +33,7 @@ class Config:
     TWITTER_ACCESS_TOKEN_SECRET = os.environ.get("TWITTER_ACCESS_TOKEN_SECRET")
     
     # Remote Node
-    STUDIO_NODE_URL = os.environ.get("STUDIO_NODE_URL")
+    STUDIO_NODE_URL = os.environ.get("STUDIO_NODE_URL") or "http://100.98.193.42:52415"
     
     # Settings
     MAX_RETRIES = 3

@@ -185,6 +185,39 @@ class Broadcaster:
             import google.generativeai as genai
             from ..config import config
             
+            # Get content - handle both dict and frontmatter.Post objects
+            content = post.get('content', '') if isinstance(post, dict) else getattr(post, 'content', '')
+
+            # Check for Studio Node (Windows)
+            if config.STUDIO_NODE_URL:
+                 try:
+                     import requests
+                     payload = {
+                         "prompt": f"""
+                         You are a TikTok content creator. Write a short, engaging script (max 30 seconds spoken) summarizing this blog post.
+                         The vibe is {vibe}.
+                         
+                         Title: {post.get('title')}
+                         Content: {str(content)[:2000]}...
+                         
+                         Rules:
+                         - Start with a hook.
+                         - Keep it conversational and punchy.
+                         - No emojis or hashtags in the spoken text.
+                         - Just return the plain text script.
+                         """,
+                         "model": "mistral",
+                         "stream": False
+                     }
+                     response = requests.post(f"{config.STUDIO_NODE_URL}/api/generate", json=payload, timeout=config.TIMEOUT_REMOTE or 30)
+                     if response.status_code == 200:
+                         data = response.json()
+                         text = data.get("response") or data.get("content") or data.get("output")
+                         if text:
+                             return text.strip()
+                 except Exception as ex:
+                     logger.warning(f"Studio Node generation failed: {ex}. Falling back to Gemini.")
+
             if not config.GEMINI_API_KEY:
                 logger.warning("No Gemini API key found. Skipping script generation.")
                 return None
@@ -192,15 +225,12 @@ class Broadcaster:
             genai.configure(api_key=config.GEMINI_API_KEY)
             model = genai.GenerativeModel(config.GEMINI_MODEL)
             
-            # Get content - handle both dict and frontmatter.Post objects
-            content = post.get('content', '') if isinstance(post, dict) else getattr(post, 'content', '')
-            
             prompt = f"""
             You are a TikTok content creator. Write a short, engaging script (max 30 seconds spoken) summarizing this blog post.
             The vibe is {vibe}.
             
             Title: {post.get('title')}
-            Content: {content[:2000]}...
+            Content: {str(content)[:2000]}...
             
             Rules:
             - Start with a hook.

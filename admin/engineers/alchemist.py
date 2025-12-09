@@ -5,7 +5,7 @@ import frontmatter
 import numpy as np
 import google.generativeai as genai
 from huggingface_hub import InferenceClient
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 import sys
 import os
 import logging
@@ -55,6 +55,34 @@ class Alchemist:
         self.metrics = get_metrics_collector()
         self.session_id = f"session-{int(time.time())}"
         logger.info(f"[{self.name}] Initialized with enhanced memory and metrics")
+
+    async def execute(self, action: str, **params) -> Dict[str, Any]:
+        """
+        Executes an action via the unified Agent Interface.
+        """
+        if action == "generate":
+            topic = params.get("topic")
+            deep_mode = params.get("deep_mode", False)
+            
+            if not topic:
+                raise ValueError("Topic is required for generation.")
+                
+            from admin.core import get_doctrine
+            doctrine = get_doctrine()
+            
+            content, context = self.generate(topic, doctrine, deep_mode=deep_mode)
+            return {
+                "content": content,
+                "context": context,
+                "status": "success"
+            }
+            
+        elif action == "chat":
+            message = params.get("message")
+            return {"response": self.chat(message)}
+            
+        else:
+            raise NotImplementedError(f"Action {action} not supported by Alchemist.")
 
     def select_best_provider(self) -> str:
         """
@@ -271,7 +299,7 @@ class Alchemist:
         return dot_product / (norm_v1 * norm_v2)
 
     @critique_action("Alchemist Generate Post")
-    def generate(self, topic: str, doctrine: str, provider: str = "auto") -> tuple[str, str]:
+    def generate(self, topic: str, doctrine: str, provider: str = "auto", deep_mode: bool = False) -> tuple[str, str]:
         """
         Generates a blog post using the specified topic and context.
         Now includes persistent memory tracking and metrics.
@@ -292,46 +320,91 @@ class Alchemist:
             )
             
             # Get learned insights to improve generation
-            insights = self.memory_store.get_insights("generation_preference", min_confidence=0.6)
-            learned_preferences = ""
-            if insights:
-                learned_preferences = "\n\nLEARNED PREFERENCES (from past feedback):\n"
-                for insight in insights[:3]:
-                    learned_preferences += f"- {insight['data'].get('preference', '')}\n"
-            
-            context_items = self.retrieve(topic)
+            # 1. Retrieve Context (Max Capabilities = More Context)
+            # Fetch more items if deep_mode to fill context window
+            limit = 10 if deep_mode else 3
+            context_items = self.retrieve(topic, top_k=limit) # Changed top_k to limit
             
             context_str = ""
             if context_items:
-                context_str = "\n\nRELEVANT PAST POSTS (Use these for style and continuity):\n"
+                context_str = "\n\nRELEVANT PAST POSTS (Deep Style Analysis):\n" if deep_mode else "\n\nRELEVANT PAST POSTS (Use these for style and continuity):\n"
                 for item in context_items:
                     context_str += f"- Title: {item['title']}\n  Excerpt: {item['excerpt']}\n"
+                    
+            # 2. Construct Prompt
+            # Load learned preferences
+            # Original: insights = self.memory_store.get_insights("generation_preference", min_confidence=0.6)
+            # Original: learned_preferences = ""
+            # Original: if insights:
+            # Original:     learned_preferences = "\n\nLEARNED PREFERENCES (from past feedback):\n"
+            # Original:     for insight in insights[:3]:
+            # Original:         learned_preferences += f"- {insight['data'].get('preference', '')}\n"
             
-            logger.info(f"[{self.name}] Found {len(context_items)} relevant past posts.")
+            # New learned preferences logic
+            preferences = self.memory_store.get_insights("generation_preference", min_confidence=0.6) # Assuming memory_store has get_insights
+            learned_preferences = ""
+            if preferences:
+                learned_preferences = "\nLEARNED PREFERENCES:\n" + "\n".join([f"- {p['data'].get('preference', '')}" for p in preferences[:3]]) # Adjusted to match original insight structure
             
-            prompt = f"""
-            You are writing for "Does This Feel Right?", a blog dedicated to emotional honesty and clarity.
+            logger.info(f"[{self.name}] Researching topic: {topic} ({'Deep Mode' if deep_mode else 'Standard'})...")
             
-            THE DOCTRINE:
-            {doctrine}
+            # Log the generation request to memory
+            self.memory_store.save_conversation(
+                self.session_id, "user", f"Generate post about: {topic}", self.name
+            )
             
-            CONTEXT FROM PAST POSTS:
-            {context_str}
-            {learned_preferences}
-            
-            TASK:
-            Write a blog post about: {topic}
-            
-            GUIDELINES:
-            - Tone: Calm, Warm, Reflective, Grounded, Observational.
-            - Voice: Like a friend telling the truth gently. No moralizing. No "shoulds".
-            - Structure: Title, Introduction, 3 Main Sections, Conclusion.
-            - Format: Markdown.
-            - Signature Question: End with the question "Does this feel true?"
-            - Continuity: Subtly reference the themes from the past posts if relevant, to create a sense of a cohesive body of work.
-            
-            Write the post now.
-            """
+            if deep_mode:
+                # Chain of Thought Prompt for Qwen 72B
+                prompt = f"""
+                You are The Alchemist. You are running on a Qwen 2.5 72B engine.
+                Your goal is to write a MASTERPIECE blog post about: "{topic}"
+                
+                THE DOCTRINE:
+                {doctrine}
+                
+                STYLE & MEMORY (Use this to match the voice perfectly):
+                {context_str}
+                {learned_preferences}
+                
+                INSTRUCTIONS (DEEP REASONING MODE):
+                1.  **Analyze**: First, think about the topic deeply. What is the subtle, counter-intuitive truth here?
+                2.  **Plan**: Outline 3 key emotional beats for the post.
+                3.  **Draft**: Write the post. It must be "Gentle, Honest, Observational". 
+                    - Avoid cliches. 
+                    - Use short, punchy sentences mixed with lyrical flow.
+                    - End with a question that feels like a hug.
+                4.  **Refine**: Review your draft. Cut 10% of the words. Make it sharper.
+                
+                OUTPUT FORMAT:
+                Return ONLY the final polished blog post. Do not show your reasoning steps in the final output, but use them to generate the best possible work.
+                """
+            else:
+                # Standard Prompt
+                prompt = f"""
+                You are writing for "Does This Feel Right?", a blog dedicated to emotional honesty and clarity.
+                
+                THE DOCTRINE:
+                {doctrine}
+                
+                CONTEXT FROM PAST POSTS:
+                {context_str}
+                {learned_preferences}
+                
+                TASK:
+                Write a blog post about: {topic}
+                
+                GUIDELINES:
+                - Tone: Calm, Warm, Reflective, Grounded, Observational.
+                - Voice: Like a friend telling the truth gently. No moralizing. No "shoulds".
+                - Structure: Title, Introduction, 3 Main Sections, Conclusion.
+                - Format: Markdown.
+                - Signature Question: End with the question "Does this feel true?"
+                - Continuity: Subtly reference the themes from the past posts if relevant, to create a sense of a cohesive body of work.
+                
+                Write the post now.
+                """
+                
+            logger.info(f"[{self.name}] Found {len(context_items)} relevant past posts.") # Moved this line here
             
             if provider == "huggingface":
                 hf_token = config.HF_TOKEN
@@ -357,15 +430,51 @@ class Alchemist:
                 logger.info(f"[{self.name}] Offloading task to Studio Node at {node_url}...")
                 
                 try:
+                    # Auto-select model like FrontierResearcher
+                    # Default to our new powerful model
+                    model_to_use = "qwen-2.5-72b"
+                    
+                    # Fallback check if specific request fails vs generic availability
+                    try:
+                        tags_res = requests.get(f"{node_url}/api/tags", timeout=5)
+                        if tags_res.status_code == 200:
+                            models = tags_res.json().get("models", [])
+                            # If Qwen is there, great. If not, find a decent fallback.
+                            available_names = [m["name"] for m in models]
+                            if model_to_use not in available_names:
+                                # Try to find another qwen or mistral
+                                gen_models = [m["name"] for m in models if "embed" not in m["name"] and "bert" not in m["name"]]
+                                if gen_models:
+                                    model_to_use = gen_models[0]
+                                    logger.warning(f"[{self.name}] Qwen 72B not found in tags. Falling back to {model_to_use}")
+                    except:
+                        pass
+
                     payload = {
-                        "prompt": prompt,
-                        "model": "mistral",
-                        "system": f"You are The Alchemist. {doctrine}",
+                        "model": model_to_use,
+                        "messages": [
+                            {"role": "system", "content": f"You are The Alchemist. {doctrine}"},
+                            {"role": "user", "content": prompt}
+                        ],
                         "stream": False
                     }
-                    response = requests.post(f"{node_url}/api/generate", json=payload, timeout=config.TIMEOUT_REMOTE)
+                    # Use OpenAI compatible endpoint
+                    # Ensure node_url doesn't end with slash
+                    base_url = node_url.rstrip("/")
+                    response = requests.post(f"{base_url}/v1/chat/completions", json=payload, timeout=config.TIMEOUT_REMOTE)
                     response.raise_for_status()
-                    content = response.json().get("response", "")
+                    
+                    data = response.json()
+                    # Parse OpenAI format
+                    if "choices" in data and len(data["choices"]) > 0:
+                        content = data["choices"][0]["message"]["content"]
+                    else:
+                        # Fallback for other formats
+                        content = data.get("response") or data.get("content") or data.get("output") or data.get("text")
+                    
+                    if not content:
+                        raise Exception(f"Empty response from node. Raw: {json.dumps(data)}")
+
                 except Exception as e:
                     raise Exception(f"Remote generation failed: {e}")
                     

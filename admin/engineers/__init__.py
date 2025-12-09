@@ -42,6 +42,18 @@ from .design_engineer import DesignEngineer
 # Leadership
 from .creative_director import CreativeDirector
 
+# Frontier Team
+from .frontier_researcher import FrontierResearcher
+from .infrastructure_engineer import InfrastructureEngineer
+from .principal_engineer import PrincipalEngineer
+from .quant_researcher import QuantResearcher
+from .robotics_engineer import RoboticsEngineer
+from .security_architect import SecurityArchitect
+from .engineering_manager import EngineeringManager
+from .reality_engineer import RealityEngineer
+from .kernel_engineer import KernelEngineer
+from .product_engineer import ProductEngineer
+
 __all__ = [
     # Original Team
     'Alchemist',
@@ -66,5 +78,17 @@ __all__ = [
     'WebDesigner',
     'DesignEngineer',
     # Leadership
-    'CreativeDirector'
+    'CreativeDirector',
+
+    # Frontier Team
+    'FrontierResearcher',
+    'InfrastructureEngineer',
+    'PrincipalEngineer',
+    'QuantResearcher',
+    'RoboticsEngineer',
+    'SecurityArchitect',
+    'EngineeringManager',
+    'RealityEngineer',
+    'KernelEngineer',
+    'ProductEngineer'
 ]

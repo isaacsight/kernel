@@ -109,55 +109,27 @@ async def save_post(post: Post):
 
 @app.post("/agents/run")
 async def run_agent(action: AgentAction, background_tasks: BackgroundTasks):
-    if action.agent_name == "The Alchemist":
-        if action.action == "generate":
-            topic = action.parameters.get("topic")
-            provider = action.parameters.get("provider", "gemini")
-            if not topic:
-                raise HTTPException(status_code=400, detail="Topic is required")
-            
-            # Run in background to not block
-            # Note: core.generate_ai_post is synchronous, so we might want to wrap it
-            # For now, we'll just run it. In a real app, use a task queue.
-            try:
-                filename = core.generate_ai_post(topic, provider=provider)
-                return {"message": "Alchemist finished", "filename": filename}
-            except Exception as e:
-                raise HTTPException(status_code=500, detail=str(e))
-                
-    elif action.agent_name == "The Librarian":
-        if action.action == "rebuild_graph":
-            try:
-                from admin.engineers.librarian import Librarian
-                librarian = Librarian()
-                posts = core.get_posts()
-                librarian.build_graph(posts)
-                return {"message": "Knowledge Graph updated"}
-            except Exception as e:
-                raise HTTPException(status_code=500, detail=str(e))
+    from core.plugin_loader import registry
+    
+    # Lazy load if needed
+    if not registry._loaded:
+        registry.discover_plugins(["admin/engineers"])
+        registry._loaded = True
 
-    elif action.agent_name == "The Guardian":
-         if action.action == "audit":
-             # Placeholder for audit logic
-             return {"message": "Guardian finished audit"}
+    agent = registry.get_agent(action.agent_name)
+    
+    if not agent:
+         raise HTTPException(status_code=404, detail=f"Agent '{action.agent_name}' not found in registry.")
 
-    elif action.agent_name == "The Visionary":
-        from admin.engineers.visionary import Visionary
-        visionary = Visionary()
+    try:
+        params = action.parameters or {}
+        result = await agent.execute(action.action, **params)
+        return result
         
-        if action.action == "critique":
-            css = action.parameters.get("css", "")
-            html = action.parameters.get("html", "")
-            critique = visionary.critique_design(css, html)
-            return {"result": critique}
-            
-        elif action.action == "generate_css":
-            requirements = action.parameters.get("requirements", "")
-            current_css = action.parameters.get("current_css", "")
-            css = visionary.generate_css(requirements, current_css)
-            return {"result": css}
-
-    raise HTTPException(status_code=400, detail="Unknown agent or action")
+    except NotImplementedError:
+        raise HTTPException(status_code=400, detail=f"Action '{action.action}' not supported by {action.agent_name}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/system/git/publish")
 async def publish_git():

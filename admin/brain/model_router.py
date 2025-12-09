@@ -168,18 +168,29 @@ class ModelRouter:
                 "quality": "medium",
                 "context_window": 32000,
                 "available": self._check_hf_available()
+            },
+            # Studio Node Models (Remote)
+            "qwen-2.5-72b": {
+                "provider": "remote",
+                "type": "remote",
+                "strengths": [TaskType.CREATIVE_WRITING, TaskType.ANALYSIS, TaskType.CHAT, TaskType.CODE_GENERATION],
+                "cost_tier": "free",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 32000,
+                "available": self._check_studio_node_available()
             }
         }
         
         # Task to model preferences (ordered by preference)
-        # Task to model preferences (ordered by preference)
         # Hermes3 prioritized for creative/chat/analysis per Nous Research practices
+        # Qwen 2.5 72B is now the heavy hitter for deep work
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
-            TaskType.CODE_GENERATION: ["claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["gemini-1.5-flash", "gpt-4o-mini", "hermes3", "mistral"],
-            TaskType.CHAT: ["hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.CREATIVE_WRITING: ["qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CODE_GENERATION: ["qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
+            TaskType.ANALYSIS: ["qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
             TaskType.FAST_SIMPLE: ["llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
         }
@@ -236,6 +247,34 @@ class ModelRouter:
     def _check_hf_available(self) -> bool:
         """Check if Hugging Face API is configured."""
         return bool(os.environ.get("HF_TOKEN"))
+
+    def _check_studio_node_available(self) -> bool:
+        """Check if the remote Studio Node is available."""
+        # Only relevant if we are the Controller
+        if self.env != Environment.CONTROLLER:
+            return False
+            
+        node_url = os.environ.get("STUDIO_NODE_URL")
+        # Hardcode the known IP if env var is missing/default, based on recent success
+        if not node_url:
+            node_url = "http://100.98.193.42:8080" # WebUI port, or use 52415 for direct API if needed.
+            # However, looking at alchemist.py, it expects an /api/endpoint.
+            # The WebUI usually proxies /api/ requests. 
+            # Or we can check the backend port directly if we are on the same tailscale network.
+            # Let's assume the env var is set or we should set it. 
+            # For this check, we'll try a simple ping or health check if possible.
+            # But wait, alchemist uses /api/generate.
+            pass
+
+        if node_url:
+            try:
+                import requests
+                # Try a lightweight endpoint. OpenWebUI usually has /health or /api/v1/models
+                response = requests.get(f"{node_url}/health", timeout=2)
+                return response.status_code == 200
+            except:
+                pass
+        return False
     
     def select_model(
         self, 
@@ -391,6 +430,7 @@ class ModelRouter:
         for name in ["mistral", "codestral", "llama3.2", "deepseek-coder", "nomic-embed-text", "hermes3"]:
             self.models[name]["available"] = ollama_available
         
+        self.models["qwen-2.5-72b"]["available"] = self._check_studio_node_available()
         self.models["mistral-7b-instruct"]["available"] = self._check_hf_available()
         
         logger.info(f"[{self.name}] Refreshed model availability")

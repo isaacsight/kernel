@@ -377,6 +377,62 @@ def update_whiteboard():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+# ==================== FRONTIER TEAM DASHBOARD ====================
+
+@app.route('/team')
+def team_dashboard():
+    """Render the Frontier Team Mission Control."""
+    return render_template('team_dashboard.html')
+
+@app.route('/api/team/roster')
+def team_roster():
+    """Get the list of all active agents."""
+    # This could be dynamic, but utilizing our init exports
+    from .engineers import (
+        FrontierResearcher, InfrastructureEngineer, PrincipalEngineer, 
+        QuantResearcher, RoboticsEngineer, SecurityArchitect, 
+        EngineeringManager, RealityEngineer, KernelEngineer, ProductEngineer
+    )
+    
+    # Instantiate briefly to get metadata
+    agents = [
+        EngineeringManager(),
+        FrontierResearcher(),
+        InfrastructureEngineer(),
+        PrincipalEngineer(),
+        ProductEngineer(),
+        SecurityArchitect(),
+        QuantResearcher(),
+        RoboticsEngineer(),
+        RealityEngineer(),
+        KernelEngineer()
+    ]
+    
+    return jsonify({
+        "status": "success",
+        "agents": [{"name": a.name, "role": a.role, "emoji": a.emoji} for a in agents]
+    })
+
+@app.route('/api/team/node-status')
+def team_node_status():
+    """Check Studio Node via Infrastructure Engineer."""
+    from .engineers import InfrastructureEngineer
+    infra = InfrastructureEngineer()
+    status = infra.check_node_health()
+    return jsonify(status)
+
+@app.route('/api/team/audit', methods=['POST'])
+def team_audit():
+    """Run the Team Audit via Engineering Manager."""
+    from .engineers import EngineeringManager
+    manager = EngineeringManager()
+    
+    # Root dir is 2 levels up from app.py (admin/app.py -> admin -> root)
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    report = manager.audit_team(root_dir)
+    return jsonify(report)
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5001)
 

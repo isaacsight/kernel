@@ -41,6 +41,13 @@ repos:
       - id: check-merge-conflict
       - id: check-json
       - id: detect-private-key
+  
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package.lock.json|yarn.lock
 
   # Type Checking (optional, can be slow)
   # Uncomment to enable mypy in pre-commit

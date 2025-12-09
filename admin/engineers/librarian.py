@@ -4,9 +4,12 @@ import json
 import networkx as nx
 from networkx.readwrite import json_graph
 
+from core.agent_interface import BaseAgent
+from typing import Dict
+
 logger = logging.getLogger("Librarian")
 
-class Librarian:
+class Librarian(BaseAgent):
     """
     The Librarian (Data Scientist)
     
@@ -18,9 +21,24 @@ class Librarian:
     - Content Analytics
     """
     def __init__(self):
-        self.name = "The Librarian"
-        self.role = "Data Scientist"
         self.graph = nx.Graph()
+
+    @property
+    def name(self) -> str:
+        return "The Librarian"
+
+    @property
+    def role(self) -> str:
+        return "Data Scientist"
+
+    async def execute(self, action: str, **params) -> Dict:
+        if action == "rebuild_graph":
+             from admin.core import get_posts
+             posts = params.get("posts") or get_posts()
+             self.build_graph(posts)
+             return {"message": "Knowledge Graph updated", "nodes": self.graph.number_of_nodes()}
+        else:
+             raise NotImplementedError(f"Action {action} not supported by Librarian.")
 
     def build_graph(self, posts_metadata):
         """

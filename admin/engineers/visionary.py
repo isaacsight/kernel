@@ -10,9 +10,12 @@ from admin.brain.metrics_collector import get_metrics_collector
 from admin.brain.memory_store import get_memory_store
 from admin.engineers.web_scout import get_web_scout
 
+from core.agent_interface import BaseAgent
+from typing import Dict
+
 logger = logging.getLogger("Visionary")
 
-class Visionary:
+class Visionary(BaseAgent):
     """
     The Visionary (Computer Vision Engineer)
     
@@ -25,8 +28,6 @@ class Visionary:
     - Data-Driven Mission Proposal
     """
     def __init__(self):
-        self.name = "The Visionary"
-        self.role = "Computer Vision Engineer"
         self.static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../static'))
         self.og_dir = os.path.join(self.static_dir, 'images', 'og')
         os.makedirs(self.og_dir, exist_ok=True)
@@ -36,9 +37,40 @@ class Visionary:
         self.web_scout = get_web_scout()
         
         # Configure Gemini if available
+        # Configure Gemini if available
         if config.GEMINI_API_KEY:
             genai.configure(api_key=config.GEMINI_API_KEY)
             self.model = genai.GenerativeModel(config.GEMINI_MODEL)
+
+    @property
+    def name(self) -> str:
+        return "The Visionary"
+
+    @property
+    def role(self) -> str:
+        return "Computer Vision Engineer"
+
+    async def execute(self, action: str, **params) -> Dict:
+        if action == "critique":
+            css = params.get("css", "")
+            html = params.get("html", "")
+            critique = self.critique_design(css, html)
+            return {"result": critique}
+            
+        elif action == "generate_css":
+            requirements = params.get("requirements", "")
+            current_css = params.get("current_css", "")
+            css = self.generate_css(requirements, current_css)
+            return {"result": css}
+            
+        elif action == "generate_og_image":
+             title = params.get("title")
+             slug = params.get("slug")
+             path = self.generate_og_image(title, slug)
+             return {"path": path}
+             
+        else:
+             raise NotImplementedError(f"Action {action} not supported by Visionary.")
 
     def generate_og_image(self, title, slug):
         """

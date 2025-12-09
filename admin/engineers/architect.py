@@ -99,7 +99,7 @@ class Architect:
                 "model": "mistral",
                 "system_prompt": "You are a senior software architect. Output ONLY JSON."
             }
-            response = requests.post(f"{self.node_url}/generate", json=payload, timeout=60)
+            response = requests.post(f"{self.node_url}/api/generate", json=payload, timeout=60)
             response.raise_for_status()
             
             content = response.json().get("response", "")

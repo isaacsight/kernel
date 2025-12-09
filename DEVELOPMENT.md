@@ -434,4 +434,26 @@ git merge feature/new-feature
 
 ---
 
+## System Architecture
+
+### Background Processes (The "Spin Up")
+
+The system "spins up" in the background using the `launch-studio.sh` script, which orchestrates two main components:
+
+1.  **Backend (`uvicorn`)**: 
+    - Runs `admin.api.main:app` on port 8000.
+    - Launched with `&` to run in the background.
+    - Manages Agents (Alchemist, Guardian), Database (Supabase), and File Operations.
+
+2.  **Frontend (`vite`)**:
+    - Runs `npm run dev` in `admin/web` on port 5173.
+    - Launched with `&` to run in the background.
+    - Provides the UI for the Admin Dashboard.
+
+**How it works:**
+The script captures the Process IDs (PIDs) of these background jobs (`$!`) and sets a `trap` to kill them when you press Ctrl+C. This ensures both "spin up" together and shut down cleanly.
+
+### Agent Plugin System (Planned)
+We are moving towards a dynamic plugin system where agents can be dropped into a `plugins/` directory. Currently, agents are hardcoded in `core/agents.py`, but the new architecture will allow for modular extension.
+
 **Questions?** Check the artifacts or use AI assistance (Cursor/Aider).

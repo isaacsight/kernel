@@ -3,9 +3,12 @@ import re
 import os
 from huggingface_hub import InferenceClient
 
+from core.agent_interface import BaseAgent
+from typing import Dict
+
 logger = logging.getLogger("Guardian")
 
-class Guardian:
+class Guardian(BaseAgent):
     """
     The Guardian (AI Ethicist)
     
@@ -17,8 +20,6 @@ class Guardian:
     - Gentle Doctrine Enforcement (Safety Layer)
     """
     def __init__(self):
-        self.name = "The Guardian"
-        self.role = "AI Ethicist"
         self.safety_rules = [
             {
                 "name": "Restricted Topics",
@@ -33,6 +34,35 @@ class Guardian:
                 "message": "Content contains AI boilerplate."
             }
         ]
+        # Hugging Face Setup (Moved from validate_system to init for consistency)
+        self.hf_token = os.environ.get("HF_TOKEN")
+        try:
+            self.hf_client = InferenceClient(token=self.hf_token) if self.hf_token else None
+        except:
+             self.hf_client = None
+        self.safety_model = "unitary/toxic-bert"
+
+    @property
+    def name(self) -> str:
+        return "The Guardian"
+
+    @property
+    def role(self) -> str:
+        return "AI Ethicist"
+
+    async def execute(self, action: str, **params) -> Dict:
+        if action == "audit":
+            content = params.get("content")
+            if not content:
+                 raise ValueError("Content is required for audit.")
+            issues = self.audit_content(content)
+            return {"issues": issues, "status": "safe" if not issues else "flagged"}
+        elif action == "verify_evolution":
+             blueprint = params.get("blueprint")
+             allowed, msg = self.verify_evolution(blueprint)
+             return {"allowed": allowed, "message": msg}
+        else:
+             raise NotImplementedError(f"Action {action} not supported by Guardian.")
         
     def verify_evolution(self, blueprint):
         """
