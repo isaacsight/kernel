@@ -4,38 +4,56 @@
 <section class="graph">
     <div class="graph__header">
         <h1>Map (Graph)</h1>
-        <p class="muted">A living topology of the notebook. Drag nodes. Click to open.</p>
-
-        <div class="graph__controls">
-            <input id="graphFilter" class="graph__input" type="search" placeholder="Filter (title / pillar / mode)…"
-                autocomplete="off" />
-            <label class="graph__toggle">
-                <input id="graphCanonOnly" type="checkbox" />
-                Canon only
-            </label>
-            <select id="graphDirection" class="graph__select" aria-label="Direction">
-                <option value="all">All links</option>
-                <option value="out">Outgoing</option>
-                <option value="in">Incoming</option>
-            </select>
-            <button id="graphReset" class="btn btn--ghost" type="button">Reset</button>
-            <a class="btn btn--ghost" href="./index.html">List view</a>
-        </div>
+        <!-- Controls moved inside graph__wrap for overlay -->
     </div>
 
     <div class="graph__wrap">
+        <!-- Floating HUD: Controls -->
+        <div class="graph__controls">
+            <input id="graphFilter" class="graph__input" type="search" placeholder="Filter nodes..."
+                autocomplete="off" />
+            <label class="graph__toggle">
+                <input id="graphCanonOnly" type="checkbox" />
+                <span>Canon</span>
+            </label>
+            <select id="graphDirection" class="graph__select" aria-label="Direction">
+                <option value="all">All Links</option>
+                <option value="out">Outgoing</option>
+                <option value="in">Incoming</option>
+            </select>
+            <button id="graphReset" class="btn-icon" aria-label="Reset Layout" title="Reset Layout">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                </svg>
+            </button>
+            <a class="btn-icon" href="./index.html" title="List View">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+            </a>
+        </div>
+
+        <!-- Floating HUD: Pin Bar -->
         <div id="pinBar" class="pinbar" style="display:none;">
-            <div class="pinbar__left">
+            <div class="pinbar__content">
                 <span class="pinbar__label">Pinned</span>
                 <a id="pinTitle" class="pinbar__title" href="#"></a>
-                <span class="pinbar__hint muted">Press ESC to clear</span>
-            </div>
-            <div class="pinbar__right">
-                <button id="copyPinLink" class="btn btn--ghost" type="button">Copy link</button>
-                <button id="clearPin" class="btn btn--ghost" type="button">Clear</button>
+                <div class="pinbar__actions">
+                    <button id="copyPinLink" class="btn-tiny">Copy</button>
+                    <button id="clearPin" class="btn-tiny text-red">Unpin</button>
+                </div>
             </div>
         </div>
+
         <canvas id="graphCanvas" width="1200" height="720"></canvas>
+
+        <!-- Floating HUD: Hint / Sidebar -->
         <div id="graphHint" class="graph__hint"></div>
     </div>
 </section>

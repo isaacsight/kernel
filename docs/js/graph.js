@@ -29,16 +29,39 @@
 
     function setPinUI(node) {
         if (!pinBar || !pinTitle) return;
+
         if (!node) {
+            // Hide
             pinBar.style.display = "none";
-            pinTitle.textContent = "";
-            pinTitle.href = "#";
+            // Also clear hint if we just unpinned
+            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
             return;
         }
-        pinBar.style.display = "";
+
+        // Show
+        pinBar.style.display = "flex";
         pinTitle.textContent = node.title || node.id;
         const url = node.url || ("../posts/" + node.id + ".html");
-        pinTitle.href = url;
+        pinTitle.setAttribute("href", url);
+
+        // Update Copy Button state (optional feedback)
+        const copyBtn = document.getElementById("copyPinLink");
+        if (copyBtn) copyBtn.textContent = "Copy";
+    }
+
+    // copy link
+    if (copyPinLinkBtn) {
+        copyPinLinkBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // prevent form submit if inside form
+            if (!pinnedNode) return;
+            const url = pinnedNode.url || (window.location.origin + "/posts/" + pinnedNode.id + ".html");
+            // Make absolute if relative
+            const absUrl = new URL(url, window.location.href).href;
+            navigator.clipboard.writeText(absUrl).then(() => {
+                copyPinLinkBtn.textContent = "Copied!";
+                setTimeout(() => copyPinLinkBtn.textContent = "Copy", 2000);
+            });
+        });
     }
 
     if (clearPinBtn) {
@@ -46,26 +69,7 @@
             pinnedNode = null;
             setPinUI(null);
             if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-            // redraw to clear highlight
             if (!running) { tick(); draw(); }
-        });
-    }
-
-    if (copyPinLinkBtn) {
-        copyPinLinkBtn.addEventListener("click", async () => {
-            if (!pinnedNode) return;
-            const url = pinnedNode.url || ("../posts/" + pinnedNode.id + ".html");
-            const fullUrl = new URL(url, window.location.href).href;
-            // Fix: window.location.href might be /map/graph.html, so relative path needs resolution. 
-            // Actually, if we use new URL(rel, base), base is current page.
-            // If url is "../posts/foo", and we are at "/map/graph.html", result is "/posts/foo". Correct.
-            try {
-                await navigator.clipboard.writeText(fullUrl);
-                copyPinLinkBtn.textContent = "Copied";
-                setTimeout(() => (copyPinLinkBtn.textContent = "Copy link"), 900);
-            } catch (e) {
-                window.prompt("Copy link:", fullUrl);
-            }
         });
     }
 
@@ -468,8 +472,6 @@
         const links = getVisibleLinks();
 
         // Priority: Pinned > Hover
-        // But if pinned, we might still want to see hover?
-        // Request says: "highlighting uses pinned node first."
         const focus = (pinnedNode && pinnedNode.visible)
             ? pinnedNode
             : ((hoverNode && hoverNode.visible) ? hoverNode : null);
@@ -492,23 +494,31 @@
             return focusSet.has(n.id);
         }
 
-        // Links
+        // --- Draw Links ---
+        ctx.globalCompositeOperation = 'source-over';
+
+        // 1. Base/Dimmed Links
         ctx.lineWidth = 1;
-        ctx.globalAlpha = focus ? 0.10 : 0.35;
         ctx.beginPath();
         for (const l of links) {
+            // Optimization: If focused, rely on highlight loop for active ones? 
+            // Or just draw all faint first.
+            if (focus) {
+                ctx.globalAlpha = 0.06;
+                ctx.strokeStyle = "#777";
+            } else {
+                ctx.globalAlpha = 0.2;
+                ctx.strokeStyle = "#666";
+            }
             ctx.moveTo(l.source.x, l.source.y);
             ctx.lineTo(l.target.x, l.target.y);
         }
         ctx.stroke();
-        ctx.globalAlpha = 1;
 
+        // 2. Highlighted Links (Glow / Gradient)
         if (focus) {
-            ctx.globalAlpha = 0.75;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
+            ctx.lineWidth = 1.5;
             for (const l of links) {
-                // Check Directional Hit
                 let hit = false;
                 if (directionMode === "out") {
                     hit = (l.source.id === focus.id && focusSet.has(l.target.id));
@@ -520,32 +530,77 @@
                 }
 
                 if (!hit) continue;
+
+                // Gradient: Active Node -> Target
+                const grad = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
+
+                // If we are looking OUT: Source(Focus) -> Target
+                // If we are looking IN: Source -> Target(Focus)
+                // Let's color them differently? 
+                // Primary Accent: #00D6A3. 
+
+                if (l.source.id === focus.id) {
+                    // Outgoing: Green to transparent
+                    grad.addColorStop(0, "rgba(0, 214, 163, 0.9)");
+                    grad.addColorStop(1, "rgba(0, 214, 163, 0.1)");
+                } else {
+                    // Incoming: Transparent to White/Bright
+                    grad.addColorStop(0, "rgba(255, 255, 255, 0.1)");
+                    grad.addColorStop(1, "rgba(255, 255, 255, 0.9)");
+                }
+
+                ctx.globalAlpha = 0.8;
+                ctx.strokeStyle = grad;
+                ctx.beginPath();
                 ctx.moveTo(l.source.x, l.source.y);
                 ctx.lineTo(l.target.x, l.target.y);
-            }
-            ctx.stroke();
-            ctx.globalAlpha = 1;
-            ctx.lineWidth = 1;
-        }
-
-        // Nodes
-        for (const n of nodes) {
-            const connected = isConnected(n);
-            ctx.globalAlpha = focus ? (connected ? 1 : 0.18) : 1;
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-            ctx.fill();
-
-            if (n.canonical) {
-                ctx.globalAlpha = focus ? (connected ? 0.65 : 0.12) : 0.6;
-                ctx.lineWidth = 2;
                 ctx.stroke();
-                ctx.lineWidth = 1;
             }
         }
         ctx.globalAlpha = 1;
 
-        // No canvas hover label needed anymore; we use the sidebar hint
+        // --- Draw Nodes ---
+        for (const n of nodes) {
+            const connected = isConnected(n);
+            const isFocus = focus && n.id === focus.id;
+
+            // Dim unconnected
+            ctx.globalAlpha = focus ? (connected ? 1 : 0.08) : 1;
+
+            ctx.beginPath();
+            // Canon nodes slightly larger visually? (already handled by radius r)
+            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+
+            if (n.canonical) {
+                // Canon Style: White/Bright
+                ctx.fillStyle = isFocus ? "#fff" : "#eee";
+                // Glow
+                ctx.shadowBlur = isFocus ? 24 : 12;
+                ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
+            } else {
+                // Normal Style: Grey or Green if Focused
+                ctx.fillStyle = isFocus ? "#00D6A3" : (connected && focus ? "#ccc" : "#666");
+                if (isFocus) {
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = "rgba(0, 214, 163, 0.5)";
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            ctx.fill();
+            ctx.shadowBlur = 0; // Reset for performance/next item
+
+            // Ring for Canon to give 'weight'
+            if (n.canonical) {
+                ctx.lineWidth = 2; // Thicker ring
+                ctx.strokeStyle = "rgba(0,0,0,0.5)"; // Inner dark stroke? Or outer ring?
+                // Let's stroke outside with faint ring
+                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)";
+                ctx.stroke();
+            }
+        }
+        ctx.globalAlpha = 1;
     }
 
     function frame() {
