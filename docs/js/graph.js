@@ -413,12 +413,10 @@
                     </div>
                 `;
             } else {
-                // WANDER MODE: Poetic Empty State
+                // WANDER MODE: Minimal Empty State (Center Hint handles poetic text)
                 inspector.innerHTML = `
-                <div class="graph__empty-state" style="opacity:0.6; margin-top:40%;">
-                    <p style="font-weight:600; font-family:serif; font-size:18px; margin-bottom:8px;">Wander.</p>
-                    <p style="font-style:italic; font-family:serif; font-size:15px;">Some ideas reveal themselves slowly.</p>
-                    <p class="muted" style="margin-top:12px; font-size:11px;">Drag to pan • Scroll to zoom</p>
+                <div class="graph__empty-state" style="opacity:0.4; margin-top:50%; text-align:center;">
+                    <p class="muted" style="font-size:12px;">Drag to pan • Scroll to zoom</p>
                 </div>`;
             }
             return;
