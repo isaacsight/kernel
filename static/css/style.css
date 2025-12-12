@@ -2535,15 +2535,8 @@ body.menu-open {
     cursor: grab;
 }
 
-position: relative;
-width: 100%;
-height: 80vh;
-/* Viewport height fallback */
-background: var(--bg-body);
-/* or darker? */
-overflow: hidden;
-border: 1px solid var(--border-color);
-border-radius: 12px;
+canvas#graphCanvas:active {
+    cursor: grabbing;
 }
 
 canvas#graphCanvas {
@@ -2575,6 +2568,110 @@ canvas#graphCanvas:active {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     z-index: 10;
     transition: opacity 0.2s;
+    max-width: calc(100vw - 40px);
+    overflow-x: auto;
+    /* Safety scroll */
+    scrollbar-width: none;
+    /* Hide scrollbar */
+}
+
+.graph__glass-pill::-webkit-scrollbar {
+    display: none;
+}
+
+/* ... existing inputs ... */
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .graph__glass-pill {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        justify-content: space-between;
+        padding: 6px 12px;
+    }
+
+    /* Hide specific controls on mobile to save space */
+    .graph__toggle,
+    /* Core only */
+    .graph__select,
+    /* Direction */
+    .graph__glass-pill .btn-icon-plain,
+    /* Reset */
+    .graph__glass-pill .btn-text,
+    /* List */
+    .graph__glass-pill .vr {
+        display: none;
+    }
+
+    .graph__input {
+        width: 100px;
+    }
+
+    .graph__input:focus {
+        width: 120px;
+    }
+
+    /* Bottom Sheet Sidebar */
+    .graph__sidebar {
+        top: auto;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+        width: 100%;
+        height: auto;
+        max-height: 45vh;
+        border-radius: 16px 16px 0 0;
+        border-right: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(10, 10, 10, 0.95);
+        /* More opaque for readability */
+    }
+
+    .graph__hint {
+        top: auto;
+        bottom: 80px;
+        /* Above bottom sheet */
+        left: 20px;
+        right: 20px;
+        width: auto;
+    }
+}
+
+/* Loading Overlay */
+.graph__loading {
+    position: absolute;
+    inset: 0;
+    background: #050505;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: opacity 0.5s ease;
+    pointer-events: all;
+    /* Block clicks */
+}
+
+.graph__loading.loaded {
+    opacity: 0;
+    pointer-events: none;
+    /* Allow clicks */
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .graph__search-group {

@@ -102,6 +102,10 @@
         graph = await res.json();
     } catch (e) { return; }
 
+    // Hide Loading
+    const loader = document.getElementById("graphLoading");
+    if (loader) loader.classList.add("loaded");
+
     resize();
 
     nodesAll = graph.nodes.map((n, i) => ({
