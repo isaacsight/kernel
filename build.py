@@ -2142,6 +2142,7 @@ Sitemap: {BASE_URL}/sitemap.xml
                     <input id="mapCanonOnly" type="checkbox" />
                     Canon only
                   </label>
+                  <a href="./graph.html" class="btn-text" style="text-decoration:none; margin-left:var(--space-3);" title="Switch to Visual Graph">Graph</a>
                 </div>
               </div>
             
