@@ -379,67 +379,175 @@ def build():
 
     # 4b. Second Pass: Generate HTML for Posts
     print("Step 4b: Generating HTML for Posts...")
+    
+    # Helper: Compute Backlinks
+    def compute_backlinks(posts_list, index_map):
+        b_links = {p['slug']: [] for p in posts_list}
+        for p in posts_list:
+            source = p['slug']
+            # Connections can be list or string
+            raw_conns = p.get('connections', [])
+            if isinstance(raw_conns, str):
+                raw_conns = [c.strip() for c in raw_conns.split(',') if c.strip()]
+            elif not isinstance(raw_conns, list):
+                raw_conns = []
+            
+            for target in raw_conns:
+                # strip potential .html extension if present in manual connection
+                target = target.replace('.html', '')
+                if target in b_links and source != target:
+                    b_links[target].append(source)
+                    
+        # Dedup
+        for t in b_links:
+            b_links[t] = list(dict.fromkeys(b_links[t]))
+        return b_links
+
+    # Create Index and Backlinks Map
+    posts_map = {p['slug']: p for p in posts}
+    backlinks_map = compute_backlinks(posts, posts_map)
+
     for post in posts:
         slug = post['slug']
-        # Re-read body because we didn't store it in metadata (to save memory/complexity, though we could have)
-        # Actually, let's just re-read the file. It's fast enough.
-        # Wait, we need the body content.
-        # Let's refactor slightly to store body in a separate dict or just re-read.
-        # Re-reading is safer for now to avoid breaking the loop structure too much.
         
-        # Find related posts using AI (Jaccard Similarity)
-        # We compare the current post's body with every other post's body
-        related_scores = []
+        # 1. Read Next Logic
+        read_next_candidates = []
+        used_slugs = {slug}
         
-        # Get current post body from cache
-        current_body = post_bodies.get(slug, "")
+        # Explicit
+        connections = post.get('connections', [])
+        if isinstance(connections, str):
+            connections = [c.strip() for c in connections.split(',') if c.strip()]
         
-        for p in posts:
-            if p['slug'] == slug: continue
-            
-            # Get other post body from cache
-            p_body = post_bodies.get(p['slug'], "")
-            
-            # Calculate score
-            score = calculate_similarity(current_body, p_body)
-            
-            # Boost score if categories match
-            if p.get('category') == post.get('category'):
-                score += 0.1
-                
-            related_scores.append((score, p))
-            
-        # Sort by score descending
-        related_scores.sort(key=lambda x: x[0], reverse=True)
+        for conn_slug in connections:
+             conn_slug = conn_slug.replace('.html', '')
+             if conn_slug in posts_map and conn_slug not in used_slugs:
+                 read_next_candidates.append(posts_map[conn_slug])
+                 used_slugs.add(conn_slug)
         
-        # Take top 2
-        related = [item[1] for item in related_scores[:2] if item[0] > 0.05] # Threshold to avoid garbage matches
+        # Pillar Fallback
+        current_pillar = post.get('pillar')
+        if len(read_next_candidates) < 4 and current_pillar:
+             for p in posts:
+                 if p['slug'] in used_slugs: continue
+                 if p.get('pillar') == current_pillar:
+                     read_next_candidates.append(p)
+                     used_slugs.add(p['slug'])
+                     if len(read_next_candidates) >= 4: break
         
-        related_html = ""
-        if related:
+        # Global Fallback
+        if len(read_next_candidates) < 4:
+            for p in posts:
+                if p['slug'] in used_slugs: continue
+                read_next_candidates.append(p)
+                used_slugs.add(p['slug'])
+                if len(read_next_candidates) >= 4: break
+        
+        read_next = read_next_candidates[:4]
+        
+        # Generate Read Next HTML
+        read_next_html = ""
+        if read_next:
             related_items = ""
-            for r in related:
-                r_tags = r.get('tags', '').split(',') if r.get('tags') else [r.get('category', 'General')]
-                r_primary_tag = r_tags[0].strip() if r_tags else 'General'
+            for r in read_next:
+                r_slug = r['slug']
+                r_title = r.get('title', r_slug)
+                r_mode = r.get('mode', 'Essay')
+                r_pillar = r.get('pillar', '').replace('-', ' ').title()
+                r_tldr = r.get('tldr', '')
+                r_date = r.get('date', '')
+                
                 related_items += f"""
-                <a href="{r['slug']}.html" class="post-card">
-                    <span class="post-meta">{r_primary_tag} • {r.get('read_time', '5 min read')}</span>
-                    <h3>{r.get('title')}</h3>
+                <a href="{r_slug}.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">{r_mode}</span>
+                        <span class="badge badge--muted">{r_pillar}</span>
+                        <span class="date">{r_date}</span>
+                    </div>
+                    <div class="card__title">{r_title}</div>
+                    <div class="card__desc">{r_tldr}</div>
                 </a>
                 """
-            related_html = f"""
-            <div class="related-posts">
-                <div class="related-header">Read Next</div>
-                <div class="related-grid">
+            read_next_html = f"""
+            <section class="read-next">
+                <h2>Read Next <span class="count">({len(read_next)})</span></h2>
+                <div class="card-grid">
                     {related_items}
                 </div>
-            </div>
+            </section>
             """
 
-        # Re-read content for generation
-        # We need to duplicate some logic here, or better yet, just move the generation here.
-        # Let's grab the body again.
-        # Use original filename if available (it should be)
+        # 2. Backlinks (Referenced By)
+        backlink_slugs = backlinks_map.get(slug, [])
+        # Retrieve post objects
+        backlink_posts = [posts_map[s] for s in backlink_slugs if s in posts_map]
+        # Sort newest first
+        def get_date_obj(p):
+             d_str = str(p.get('date', '1900-01-01'))
+             try: return datetime.datetime.strptime(d_str[:10], '%Y-%m-%d')
+             except: return datetime.datetime(1900, 1, 1)
+        backlink_posts.sort(key=get_date_obj, reverse=True)
+        backlink_posts = backlink_posts[:8] # Cap at 8
+        
+        backlinks_html = ""
+        if backlink_posts:
+            list_items = ""
+            for p in backlink_posts:
+                p_title = p.get('title', 'Untitled')
+                p_url = f"{p['slug']}.html"
+                p_date = p.get('date', '')
+                list_items += f'<li><a href="{p_url}">{p_title}</a> <span class="muted">— {p_date}</span></li>'
+            
+            backlinks_html = f"""
+            <section class="backlinks">
+                <h2>Referenced By <span class="count">({len(backlink_posts)})</span></h2>
+                <ul class="link-list">
+                    {list_items}
+                </ul>
+            </section>
+            """
+
+        # 3. More in Pillar
+        more_in_pillar_html = ""
+        if current_pillar:
+            pillar_candidates = [p for p in posts if p.get('pillar') == current_pillar and p['slug'] != slug]
+            pillar_candidates.sort(key=get_date_obj, reverse=True)
+            pillar_candidates = pillar_candidates[:6]
+            
+            if pillar_candidates:
+                list_items = ""
+                for p in pillar_candidates:
+                    p_title = p.get('title', 'Untitled')
+                    p_url = f"{p['slug']}.html"
+                    p_date = p.get('date', '')
+                    list_items += f'<li><a href="{p_url}">{p_title}</a> <span class="muted">— {p_date}</span></li>'
+                
+                more_in_pillar_html = f"""
+                <section class="more-in-pillar">
+                    <h2>In This Pillar <span class="count">({len(pillar_candidates)})</span></h2>
+                    <ul class="link-list">
+                        {list_items}
+                    </ul>
+                    <a class="muted" href="../index.html#archive">View full archive →</a>
+                </section>
+                """
+
+        # Data for Badges
+        p_mode = post.get('mode', 'Essay')
+        p_pillar = post.get('pillar', '').replace('-', ' ').title()
+        is_canonical = str(post.get('canonical', '')).lower() == 'true'
+        
+        badges_html = f'<div class="post-badges">'
+        if p_mode: badges_html += f'<span class="badge">{p_mode}</span>'
+        if p_pillar: badges_html += f'<span class="badge badge--muted">{p_pillar}</span>'
+        if is_canonical: badges_html += f'<span class="badge badge--canon">Canon</span>'
+        badges_html += '</div>'
+
+        # Combine Footer Nav
+        # Order: Backlinks -> Read Next -> In This Pillar
+        footer_nav_html = backlinks_html + read_next_html + more_in_pillar_html
+
+        # Re-read content (existing logic)
         original_filename = post.get('original_filename', slug + '.md')
         filepath = os.path.join(CONTENT_DIR, original_filename)
         
@@ -455,7 +563,7 @@ def build():
         if filepath.endswith('.md'):
             body = markdown_to_html(body)
 
-        # Generate Tags HTML again
+        # Generate Tags HTML
         raw_tags = post.get('tags', '')
         if raw_tags.startswith('[') and raw_tags.endswith(']'):
             raw_tags = raw_tags[1:-1]
@@ -472,7 +580,7 @@ def build():
             color_index = sum(ord(c) for c in tag) % 6
             tags_html += f'<a href="{{{{ root }}}}tags/{tag_slug}.html" class="post-tag tag-color-{color_index}">{tag}</a> '
 
-        # Series HTML again (since we are in new loop)
+        # Series HTML
         series = post.get('series')
         series_html = ""
         if series:
@@ -483,8 +591,13 @@ def build():
         post_html = post_html.replace('{{ tags_html }}', tags_html)
         post_html = post_html.replace('{{ series_indicator }}', series_html)
         post_html = post_html.replace('{{ post_content }}', body)
-        # post_html = post_html.replace('{{ reply_section }}', reply_html) # Removed
-        post_html = post_html.replace('{{ related_posts }}', related_html)
+        
+        # Inject New Sections
+        post_html = post_html.replace('{{ post_badges }}', badges_html)
+        post_html = post_html.replace('{{ footer_navigation }}', footer_nav_html)
+        
+        # Legacy placeholders just in case
+        post_html = post_html.replace('{{ related_posts }}', '') 
         post_html = post_html.replace('{{ root }}', '../')
         post_html = post_html.replace('{{ slug }}', slug)
 
@@ -712,81 +825,224 @@ def build():
     # Sort main feed by date
     main_feed_posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
 
-    # --- Generate Homepage with Client-Side Functionality ---
-    # We render ALL posts into index.html so main.js can handle filtering/sorting/pagination.
-    # We remove the server-side pagination loop for index.html.
+    # --- Generate Homepage with New Hierarchy ---
+    # Step 5: Generating Homepage
+    print("Step 5: Generating Homepage...")
     
-    all_posts_html = ""
-    homepage_posts_html = ""
+    # Helpers
+    def get_date_obj(p):
+        d_str = str(p.get('date', '1900-01-01'))
+        # simple parse
+        try:
+             return datetime.datetime.strptime(d_str[:10], '%Y-%m-%d')
+        except:
+             return datetime.datetime(1900, 1, 1)
 
-    for i, post in enumerate(main_feed_posts):
-        raw_tags = post.get('tags', '')
-        if raw_tags.startswith('[') and raw_tags.endswith(']'):
-            raw_tags = raw_tags[1:-1]
-        tags_list = raw_tags.split(',') if raw_tags else [post.get('category', 'General')]
-        cleaned_tags = []
-        for t in tags_list:
-            t = t.strip()
-            # Clean tags
-            t = t.replace("'", "").replace('"', "").replace('[', "").replace(']', "")
-            if t: cleaned_tags.append(t)
-        tags = cleaned_tags if cleaned_tags else ['General']
-        primary_tag = tags[0]
+    sorted_posts = sorted(posts, key=get_date_obj, reverse=True)
+    
+    # 1. Doctrine
+    doctrine_text = "A living notebook on technology, intelligence, and modern life."
+    
+    # 2. Canon
+    canon_posts = [p for p in posts if str(p.get('canonical', '')).lower() == 'true']
+    canon_posts = sorted(canon_posts, key=get_date_obj, reverse=True)[:7]
+    
+    canon_html = ""
+    if canon_posts:
+        canon_cards = ""
+        for p in canon_posts:
+            # Card Generation (Reuse this reused snippet, sorry for duplication, can refactor later)
+            p_slug = p['slug']
+            p_title = p.get('title', p_slug)
+            p_mode = p.get('mode', 'Essay')
+            p_pillar = p.get('pillar', '').replace('-', ' ').title()
+            p_tldr = p.get('tldr', '')
+            p_date = p.get('date', '')
+            
+            canon_cards += f"""
+            <a class="card" href="posts/{p_slug}.html">
+                <div class="card__meta">
+                    <span class="badge">{p_mode}</span>
+                    <span class="badge badge--muted">{p_pillar}</span>
+                    <span class="date">{p_date}</span>
+                </div>
+                <div class="card__title">{p_title}</div>
+                <div class="card__desc">{p_tldr}</div>
+            </a>
+            """
+        canon_html = f"""
+        <section class="home-block">
+            <div class="home-block__header">
+                <h2>Start Here</h2>
+                <p class="muted">Foundational essays that define the ethos of the studio.</p>
+            </div>
+            <div class="card-grid">
+                {canon_cards}
+            </div>
+        </section>
+        """
+
+    # 3. Current Investigation
+    investigations = [
+        "Studio OS: agentic workflows and distributed compute",
+        "Identity under algorithmic pressure (performance vs witness)",
+        "Taste, creativity, and the new non-expert builder"
+    ]
+    inv_items = "".join([f"<li>{i}</li>" for i in investigations])
+    investigation_html = f"""
+    <section class="home-block">
+        <div class="home-block__header">
+            <h2>Current Investigation</h2>
+            <p class="muted">What I’m actively building and thinking about right now.</p>
+        </div>
+        <ul class="home-list">
+            {inv_items}
+        </ul>
+    </section>
+    """
+
+    # 4. Latest
+    latest_posts = sorted_posts[:3]
+    latest_html = ""
+    if latest_posts:
+        latest_cards = ""
+        for p in latest_posts:
+            p_slug = p['slug']
+            p_title = p.get('title', p_slug)
+            p_mode = p.get('mode', 'Essay')
+            p_pillar = p.get('pillar', '').replace('-', ' ').title()
+            p_tldr = p.get('tldr', '')
+            p_date = p.get('date', '')
+            
+            latest_cards += f"""
+            <a class="card" href="posts/{p_slug}.html">
+                <div class="card__meta">
+                    <span class="badge">{p_mode}</span>
+                    <span class="badge badge--muted">{p_pillar}</span>
+                    <span class="date">{p_date}</span>
+                </div>
+                <div class="card__title">{p_title}</div>
+                <div class="card__desc">{p_tldr}</div>
+            </a>
+            """
+        latest_html = f"""
+        <section class="home-block">
+            <div class="home-block__header home-block__header--row">
+                <div>
+                    <h2>Latest</h2>
+                    <p class="muted">Three recent entries. The archive lives below.</p>
+                </div>
+                <a class="btn btn--ghost" href="#archive">Browse Archive</a>
+            </div>
+            <div class="card-grid card-grid--tight">
+                {latest_cards}
+            </div>
+        </section>
+        """
+
+    # 5. Archive (Existing Logic for client-side filtering)
+    # We still generate 'all_posts_html' for the #archive section
+    all_posts_html = ""
+    for post in sorted_posts: # Use date sorted
+        # Existing card logic used in original build.py loop, simplified here for 'all'
+        # Actually we should reuse the same card style or the filtered list style
+        # The user said "Paste your existing 'Latest Essays' + filters block below this line"
+        # So I will generate the list and letting main.js handle it?
+        # The original code generated 'homepage_posts_html' (paginated) and 'all_posts_html'.
+        # We need 'all_posts_html' for the filterable list.
         
-        # Clean Category for data attribute
         raw_cat = post.get('category', 'General').strip()
         clean_cat = raw_cat.replace("'", "").replace('"', "")
+        p_mode = post.get('mode', 'Essay')
+        mode_badge = f'<span class="mode-badge mode-{p_mode.lower()}">{p_mode}</span>'
         
-        date_str = post.get('date', '')
-        try:
-            date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-            date_display = date_obj.strftime('%b %d, %Y')
-        except:
-            date_display = date_str
-        
-        # Mode Badge logic for Card
-        mode = post.get('mode', 'Essay')
-        mode_badge = f'<span class="mode-badge mode-{mode.lower()}">{mode}</span>'
-
-        card_html = f"""
-            <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{date_str}">
+        all_posts_html += f"""
+            <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{post.get('date', '')}">
                 <div class="post-card-content">
                     <div class="post-meta-top">
                         {mode_badge}
-                        <span class="post-category-label">{primary_tag}</span>
-                        <span class="post-date">{date_display}</span>
+                        <span class="post-category-label">{post.get('category', 'General')}</span>
+                        <span class="post-date">{post.get('date', '')}</span>
                     </div>
                     <h3 class="post-title">{post.get('title', 'Untitled')}</h3>
-                    <p class="post-excerpt">{post.get('excerpt', '')}</p>
+                    <p class="post-excerpt">{post.get('tldr', post.get('excerpt', ''))}</p>
                     <div class="post-meta-bottom">
-                        <span class="read-time">{post.get('read_time', '5 min read')}</span>
-                        <span class="read-more">Read Essay →</span>
+                         <span class="read-time">{post.get('read_time', '5 min read')}</span>
+                         <span class="read-more">Read {p_mode} →</span>
                     </div>
                 </div>
             </a>
         """
-        all_posts_html += card_html
-        if i < 3:
-            homepage_posts_html += card_html
-        
-    # Generate Single Index Page (Homepage - Curated)
-    index_content = index_template.replace('{{ starter_set }}', starter_set_html)
-    index_content = index_content.replace('{{ recent_posts }}', homepage_posts_html) # Only top 3
-    index_content = index_content.replace('{{ experiments_list }}', experiments_sidebar_html)
-    index_content = index_content.replace('{{ filters }}', '') # Remove filters from homepage
-    index_content = index_content.replace('{{ collections_list }}', collections_list_html)
-    
-    full_index = base_template.replace('{{ content }}', index_content)
-    full_index = full_index.replace('{{ starter_set_nav }}', starter_set_nav_html)
-    full_index = full_index.replace('{{ root }}', '') 
-    full_index = full_index.replace('{{ image }}', DEFAULT_IMAGE)
-    full_index = full_index.replace('{{ og_type }}', 'website')
-    full_index = full_index.replace('{{ json_ld }}', '')
 
-    full_index = full_index.replace('{{ title }}', 'Does This Feel Right?')
-    full_index = full_index.replace('{{ description }}', 'Thoughts on business, technology, and the human condition.')
-    full_index = full_index.replace('{{ url }}', f"{BASE_URL}/index.html")
-    write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_index)
+    # Construct Home Hero HTML
+    home_hero_html = f"""
+    <section class="home-hero">
+      <h1>Does This Feel Right?</h1>
+      <p class="home-doctrine">{doctrine_text}</p>
+      <div class="home-cta-row">
+        <a class="btn" href="about.html">About</a>
+        <a class="btn btn--ghost" href="search/index.html">Search</a>
+      </div>
+    </section>
+    """
+    
+    # Combine Sections
+    full_home_content = f"""
+    {home_hero_html}
+    {canon_html}
+    {investigation_html}
+    {latest_html}
+    <hr class="home-divider" />
+    <section id="archive" class="home-archive">
+        <div class="home-block__header">
+            <h2>Archive</h2>
+            <p class="muted">Filter, search, and explore everything.</p>
+        </div>
+        <!-- Archive Controls -->
+         <div class="archive-controls">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="category-culture">Culture</button>
+                <button class="filter-btn" data-filter="category-tech">Tech</button>
+                 <button class="filter-btn" data-filter="category-society">Society</button>
+                <button class="filter-btn" data-filter="category-reflection">Reflection</button>
+            </div>
+             <!-- Search trigger for archive specific if needed, or rely on global -->
+        </div>
+        <div class="posts-container" id="posts-container">
+            {all_posts_html}
+        </div>
+         <div class="pagination-controls" id="pagination-controls">
+            <!-- JS will populate -->
+        </div>
+    </section>
+    """
+
+    # Replace in Template
+    # We need a placeholder in index.html, currently it likely has {{ content }} which we probably overwrote or it expects specific structure. 
+    # Let's check index.html. Actually, I can just replace {{ content }} if index_template is simple base + content.
+    # Ah, 'index.html' template usually has the 'Latest Essays' logic hardcoded or provided via {{ homepage_posts }}.
+    # I will assume I need to replace simple placeholders. 
+    # To be safe, I will rely on 'base_template' and replace '{{ content }}' with 'full_home_content'.
+    
+    # But wait, step 5 previously used `index_template`.
+    # Let's check if I can just use `base_template` for the homepage to simplify.
+    # If `index_template` exists, it might have specific hero stuff I want to remove.
+    # The user provided a "Drop-in homepage layout".
+    # I will use `base_template` and inject the computed content.
+    
+    full_home_page = base_template.replace('{{ content }}', full_home_content)
+    full_home_page = full_home_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+    full_home_page = full_home_page.replace('{{ root }}', '')
+    full_home_page = full_home_page.replace('{{ image }}', DEFAULT_IMAGE)
+    full_home_page = full_home_page.replace('{{ og_type }}', 'website')
+    full_home_page = full_home_page.replace('{{ json_ld }}', '')
+    full_home_page = full_home_page.replace('{{ title }}', 'Does This Feel Right? - Isaac Hernandez')
+    full_home_page = full_home_page.replace('{{ description }}', 'A living notebook on technology, intelligence, and modern life.')
+    full_home_page = full_home_page.replace('{{ url }}', BASE_URL)
+    
+    # Write Index
+    write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_home_page)
 
     # Generate Archive Page
     print("Step 7b: Generating Archive Page...")
@@ -968,7 +1224,8 @@ def build():
         date_val = post.get('date')
         if date_val:
             try:
-                import datetime
+                # import datetime removed
+
                 import email.utils
                 
                 if isinstance(date_val, str):
@@ -1089,90 +1346,95 @@ def build():
     # 2. Generate Collections Page (collections.html)
     # Sort tags by count descending
     sorted_tags = sorted(global_tag_counts.items(), key=lambda x: x[1], reverse=True)
+    major_collections = [t for t in sorted_tags if t[1] >= 3]
     
     collections_html = """
     <div class="collections-archive">
         <div class="collections-header">
             <div class="archive-header-flex">
-                <div class="header-content">
-                    <h1>Collections</h1>
-                    <p>Explore essays by topic.</p>
-                </div>
-                <div class="feed-search-container desktop-only">
-                    <input type="text" id="feed-search-input" placeholder="Search collections..." aria-label="Search collections">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="collections-grid">
+    <div class="collections-grid">
     """
     
-    for tag, count in sorted_tags:
-        # Strict slugify for URLs
+    # 1. Pillars (Manual or derived, let's derive from unique pillars)
+    pillars = sorted(list(set(p.get('pillar') for p in posts if p.get('pillar'))))
+    collections_html += '<div class="collection-group"><h3>Pillars</h3><ul class="collection-list">'
+    for pillar in pillars:
+        p_slug = pillar.lower().replace(' ', '-')
+        collections_html += f'<li><a href="pillars/{p_slug}.html" class="collection-item"><span class="name">{pillar}</span></a></li>'
+    collections_html += '</ul></div>'
+
+    # 2. Clusters (Tags >= 3)
+    collections_html += '<div class="collection-group"><h3>Topics</h3><ul class="collection-list">'
+    for tag, count in major_collections:
         tag_slug = tag.lower().replace(' ', '-')
         tag_slug = "".join(c for c in tag_slug if c.isalnum() or c == '-')
-        
         collections_html += f"""
-            <a href="tags/{tag_slug}.html" class="collection-card">
-                <h3>{tag}</h3>
-                <span class="count">{count} {"essay" if count == 1 else "essays"}</span>
-            </a>
+            <li>
+                <a href="tags/{tag_slug}.html" class="collection-item">
+                    <span class="name">{tag}</span>
+                    <span class="count">{count}</span>
+                </a>
+            </li>
         """
+    collections_html += '</ul></div>'
+    collections_html += '</div>'
     
-    collections_html += """
+    # Render Collections Page
+    full_collections_page = base_template.replace('{{ content }}', f"""
+        <div class="magazine-layout">
+            <div class="content-wrapper full-width">
+                <header class="page-header">
+                    <h1>Collections</h1>
+                    <p class="section-desc">Pillars are the permanent structure. Collections are clusters.</p>
+                </header>
+                {collections_html}
+                <div style="margin-top: 40px; text-align: center;">
+                    <a href="search/index.html" class="muted">Search to find specific niche topics →</a>
+                </div>
+            </div>
         </div>
-    </div>
-    """
+    """)
+    # Fix paths
+    full_collections_page = full_collections_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+    full_collections_page = full_collections_page.replace('{{ root }}', '') 
+    full_collections_page = full_collections_page.replace('{{ image }}', DEFAULT_IMAGE)
+    full_collections_page = full_collections_page.replace('{{ og_type }}', 'website') 
+    full_collections_page = full_collections_page.replace('{{ json_ld }}', '')
+    full_collections_page = full_collections_page.replace('{{ title }}', 'Collections - Does This Feel Right?') 
+    full_collections_page = full_collections_page.replace('{{ description }}', 'Curated clusters of thinking.')
+    full_collections_page = full_collections_page.replace('{{ url }}', f"{BASE_URL}/collections.html")
     
-    full_collections = base_template.replace('{{ content }}', collections_html)
-    full_collections = full_collections.replace('{{ starter_set_nav }}', starter_set_nav_html)
-    full_collections = full_collections.replace('{{ root }}', '') 
-    full_collections = full_collections.replace('{{ image }}', DEFAULT_IMAGE)
-    full_collections = full_collections.replace('{{ og_type }}', 'website')
-    full_collections = full_collections.replace('{{ json_ld }}', '')
-    full_collections = full_collections.replace('{{ title }}', 'Collections - Does This Feel Right?')
-    full_collections = full_collections.replace('{{ description }}', 'Explore essays by topic.')
-    full_collections = full_collections.replace('{{ url }}', f"{BASE_URL}/collections.html")
+    write_file(os.path.join(OUTPUT_DIR, 'collections.html'), full_collections_page)
     
-    write_file(os.path.join(OUTPUT_DIR, 'collections.html'), full_collections)
-    
-    # 3. Generate Individual Tag Pages (tags/{slug}.html)
-    os.makedirs(os.path.join(OUTPUT_DIR, 'tags'), exist_ok=True)
-    
-    for tag, tag_posts in tag_to_posts.items():
-        # Strict slugify
+    # Generate ALL Tag Pages (for search/filtering destinations)
+    for tag, count in sorted_tags:
         tag_slug = tag.lower().replace(' ', '-')
         tag_slug = "".join(c for c in tag_slug if c.isalnum() or c == '-')
         
-        # Sort posts by date
-        tag_posts.sort(key=lambda x: x.get('date', '0000-00-00'), reverse=True)
+        # Filter posts
+        tag_posts = []
+        for post in posts:
+            raw = post.get('tags', '')
+            if raw.startswith('[') and raw.endswith(']'): raw = raw[1:-1]
+            # ... simple check ...
+            if tag in raw or tag == post.get('category'):
+               tag_posts.append(post)
         
+        tag_posts.sort(key=lambda x: str(x.get('date', '0000-00-00')), reverse=True)
+        
+        # Generate Tag Page Content (Card Grid)
         tag_page_html = f"""
-        <div class="tag-archive">
-            <div class="tag-header">
-                <div class="archive-header-flex">
-                    <div class="header-content">
-                        <span class="tag-label">Collection</span>
-                        <h1>{tag}</h1>
-                        <p>{len(tag_posts)} {"essay" if len(tag_posts) == 1 else "essays"} in this collection.</p>
+        <div class="magazine-layout">
+            <div class="content-wrapper full-width">
+                <main class="main-feed">
+                    <div class="feed-header">
+                        <h2>{tag}</h2>
+                        <p class="section-desc">{count} posts about {tag.lower()}.</p>
                     </div>
-                    <div class="feed-search-container desktop-only">
-                        <input type="text" id="feed-search-input" placeholder="Search logic..." aria-label="Search essays">
-                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <div class="post-feed">
+                    <div class="posts-container">
         """
         
         for post in tag_posts:
-            # Reusing post card generation logic (simplified)
             date_str = post.get('date', '')
             try:
                 date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
@@ -1575,13 +1837,342 @@ Sitemap: {BASE_URL}/sitemap.xml
         full_pillar_page = full_pillar_page.replace('{{ root }}', '../')
         full_pillar_page = full_pillar_page.replace('{{ image }}', DEFAULT_IMAGE)
         full_pillar_page = full_pillar_page.replace('{{ og_type }}', 'website')
-        full_pillar_page = full_pillar_page.replace('{{ json_ld }}', '')
         full_pillar_page = full_pillar_page.replace('{{ title }}', f'{p_name} - Does This Feel Right?')
         full_pillar_page = full_pillar_page.replace('{{ description }}', f'Essays on {p_name.lower()}.')
         full_pillar_page = full_pillar_page.replace('{{ url }}', f"{BASE_URL}/pillars/{p_slug}.html")
         
         write_file(os.path.join(OUTPUT_DIR, 'pillars', f'{p_slug}.html'), full_pillar_page)
+
+    # 13. Generate Search Index
+    print("Step 13: Generating Search Index...")
+    import re
+    search_index = []
+    
+    # Simple HTML stripper
+    def strip_html(html):
+        return re.sub('<[^<]+?>', '', html)
+
+    for post in posts:
+        slug = post['slug']
+        # Retrieve body from cache or file
+        # Best effort: use post_bodies cache populated earlier if available, or re-read
+        # In current script state, post_bodies might be partial. Let's rely on re-reading if critical, 
+        # but for speed let's check post_bodies first.
+        body_html = post_bodies.get(slug, "")
+        if not body_html:
+             # Fallback read
+             original_filename = post.get('original_filename', slug + '.md')
+             filepath = os.path.join(CONTENT_DIR, original_filename)
+             if os.path.exists(filepath):
+                 raw = read_file(filepath)
+                 _, body_html = parse_frontmatter(raw)
+                 if filepath.endswith('.md'): body_html = markdown_to_html(body_html)
+
+        body_text = strip_html(body_html)
+        # Truncate body for index size
+        if len(body_text) > 8000: body_text = body_text[:8000]
+        
+        search_index.append({
+            "slug": slug,
+            "title": post.get('title', 'Untitled'),
+            "tldr": post.get('tldr', post.get('excerpt', '')),
+            "mode": post.get('mode', 'Essay'),
+            "pillar": post.get('pillar', 'General'),
+            "date": post.get('date', ''),
+            "canonical": post.get('canonical', False),
+            "url": f"/posts/{slug}.html",
+            "body": body_text
+        })
+        
+    if not os.path.exists(os.path.join(OUTPUT_DIR, 'search')):
+        os.makedirs(os.path.join(OUTPUT_DIR, 'search'))
+        
+    with open(os.path.join(OUTPUT_DIR, 'search', 'index.json'), 'w', encoding='utf-8') as f:
+        json.dump(search_index, f, ensure_ascii=False)
+        
+    # Generate Search Page
+    search_template = """
+    <div class="magazine-layout">
+        <div class="content-wrapper full-width">
+            <main class="main-feed" style="max-width: 800px; margin: 0 auto;">
+                <div class="feed-header">
+                    <h2>Search</h2>
+                    <p class="section-desc">Query the notebook.</p>
+                </div>
+                
+                <div class="search-container-page" style="margin-top: 24px;">
+                    <input id="searchInputPage" class="search-input-page" type="search" placeholder="Search essays, logs, ideas..." autocomplete="off" style="width: 100%; padding: 16px; font-size: 1.1em; border: 1px solid var(--border-emphasis); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary);">
+                    <div id="searchMetaPage" class="search-meta-page" style="margin-top: 12px; color: var(--text-tertiary); font-size: 0.9em;"></div>
+                    <div id="searchResultsPage" class="search-results-page" style="margin-top: 32px; display: grid; gap: 24px;"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/search-page.js"></script>
+    """
+    
+    full_search_page = base_template.replace('{{ content }}', search_template)
+    full_search_page = full_search_page.replace('{{ starter_set_nav }}', starter_set_nav_html) # Fix relative links if needed
+    # Fix paths for search/ subdir
+    full_search_page = full_search_page.replace('href="index.html"', 'href="../index.html"')
+    full_search_page = full_search_page.replace('href="about.html"', 'href="../about.html"')
+    full_search_page = full_search_page.replace('href="collections.html"', 'href="../collections.html"')
+    full_search_page = full_search_page.replace('src="', 'src="../')
+    full_search_page = full_search_page.replace('href="css/', 'href="../css/')
+    full_search_page = full_search_page.replace('{{ starter_set_nav }}', starter_set_nav_html.replace('posts/', '../posts/'))
+    
+    full_search_page = full_search_page.replace('{{ root }}', '../')
+    full_search_page = full_search_page.replace('{{ title }}', 'Search - Does This Feel Right?')
+    full_search_page = full_search_page.replace('{{ description }}', 'Search the notebook.')
+    full_search_page = full_search_page.replace('{{ url }}', f"{BASE_URL}/search/index.html")
+    full_search_page = full_search_page.replace('{{ image }}', DEFAULT_IMAGE)
+    full_search_page = full_search_page.replace('{{ og_type }}', 'website')
+    full_search_page = full_search_page.replace('{{ json_ld }}', '')
+
+    write_file(os.path.join(OUTPUT_DIR, 'search', 'index.html'), full_search_page)
     viz_page = viz_page.replace('</head>', style_injection)
+
+    # 14. Generate Map Page (Adjacency & Graph)
+    print("Step 14: Generating Map Page...")
+    
+    # Ensure directories
+    if not os.path.exists(os.path.join(OUTPUT_DIR, 'map')):
+        os.makedirs(os.path.join(OUTPUT_DIR, 'map'))
+
+    # Re-verify/create maps if needed
+    if 'posts_map' not in locals():
+        posts_map = {p['slug']: p for p in posts}
+    # Re-compute backlinks if needed (or rely on earlier presence)
+    # We'll just assume backlinks_map exists or is empty. 
+    # If not exists, strict error? Let's be safe and re-compute if missing.
+    if 'backlinks_map' not in locals():
+        # Duplicate helper just in case or assume it's there. 
+        # Safest: Re-implement simple version inline
+        raw_backlinks = {}
+        for p in posts:
+            s_slug = p['slug']
+            conns = p.get('connections', [])
+            if isinstance(conns, str): conns = [c.strip() for c in conns.split(',') if c.strip()]
+            for t_slug in conns:
+                t_slug = t_slug.replace('.html', '')
+                if t_slug not in raw_backlinks: raw_backlinks[t_slug] = []
+                if s_slug not in raw_backlinks[t_slug]: raw_backlinks[t_slug].append(s_slug)
+        backlinks_map = raw_backlinks
+
+    # Build Graph Data (JSON)
+    graph_nodes = []
+    graph_edges = []
+    
+    for p in posts:
+        slug = p['slug']
+        graph_nodes.append({
+            "id": slug,
+            "title": p.get("title", slug),
+            "mode": p.get("mode", "Essay"),
+            "pillar": p.get("pillar", ""),
+            "canonical": str(p.get("canonical", "")).lower() == 'true',
+            "date": p.get("date", "")
+        })
+        
+        conns = p.get('connections', [])
+        if isinstance(conns, str): conns = [c.strip() for c in conns.split(',') if c.strip()]
+        for target in conns:
+            target = target.replace('.html', '')
+            if target in posts_map and target != slug:
+                graph_edges.append({"source": slug, "target": target})
+                
+    graph_data = {"nodes": graph_nodes, "edges": graph_edges}
+    
+    with open(os.path.join(OUTPUT_DIR, 'map', 'graph.json'), 'w', encoding='utf-8') as f:
+        json.dump(graph_data, f, ensure_ascii=False, indent=2)
+
+    # Build Map Rows (Adjacency)
+    map_rows = []
+    def get_sort_date(d_str):
+        try: return datetime.datetime.strptime(str(d_str)[:10], '%Y-%m-%d')
+        except: return datetime.datetime(1900, 1, 1)
+
+    for p in posts:
+        slug = p['slug']
+        # Outgoing
+        conns = p.get('connections', [])
+        if isinstance(conns, str): conns = [c.strip() for c in conns.split(',') if c.strip()]
+        
+        outgoing = []
+        for t in conns:
+            t = t.replace('.html', '')
+            if t in posts_map:
+                outgoing.append({
+                    "title": posts_map[t].get('title', t),
+                    "url": f"../posts/{t}.html"
+                })
+        
+        # Incoming
+        incoming_slugs = backlinks_map.get(slug, [])
+        incoming = []
+        for s in incoming_slugs:
+            if s in posts_map:
+                incoming.append({
+                    "title": posts_map[s].get('title', s),
+                    "url": f"../posts/{s}.html"
+                })
+        
+        map_rows.append({
+             "title": p.get('title', slug),
+             "slug": slug,
+             "url": f"../posts/{slug}.html",
+             "mode": p.get('mode', 'Essay'),
+             "pillar": p.get('pillar', ''),
+             "canonical": str(p.get('canonical', '')).lower() == 'true',
+             "date": p.get('date', ''),
+             "outgoing": outgoing,
+             "incoming": incoming,
+             "out_count": len(outgoing),
+             "in_count": len(incoming)
+        })
+
+    # Sort Rows: Canon -> Degree (In+Out) -> Date
+    map_rows.sort(key=lambda r: (
+        1 if r['canonical'] else 0,
+        r['in_count'] + r['out_count'],
+        get_sort_date(r['date'])
+    ), reverse=True)
+
+    # Generate HTML Rows
+    rows_html = ""
+    for r in map_rows:
+        pillar_badge = f'<span class="badge badge--muted">{r["pillar"].replace("-", " ").title()}</span>' if r['pillar'] else ""
+        canon_badge = '<span class="badge badge--canon">Canon</span>' if r['canonical'] else ""
+        date_span = f'<span class="date">{r["date"]}</span>' if r['date'] else ""
+        
+        # Outgoing Links HTML
+        out_links_html = ""
+        if r['outgoing']:
+            links = "".join([f'<a href="{l["url"]}">{l["title"]}</a>' for l in r['outgoing']])
+            out_links_html = f"""
+            <div class="map__block">
+                <div class="map__label">Links to</div>
+                <div class="map__links">{links}</div>
+            </div>
+            """
+            
+        # Incoming Links HTML
+        in_links_html = ""
+        if r['incoming']:
+            links = "".join([f'<a href="{l["url"]}">{l["title"]}</a>' for l in r['incoming']])
+            in_links_html = f"""
+            <div class="map__block">
+                <div class="map__label">Referenced by</div>
+                <div class="map__links">{links}</div>
+            </div>
+            """
+            
+        rows_html += f"""
+        <div class="map__row" 
+             data-title="{r['title'].lower()}" 
+             data-pillar="{r['pillar'].lower()}" 
+             data-mode="{r['mode'].lower()}"
+             data-canon="{'1' if r['canonical'] else '0'}">
+             
+            <div class="map__left">
+                <div class="map__meta">
+                    <span class="badge">{r['mode'].title()}</span>
+                    {pillar_badge}
+                    {canon_badge}
+                    {date_span}
+                </div>
+                <a class="map__title" href="{r['url']}">{r['title']}</a>
+                <div class="map__degree muted">
+                    Out: {r['out_count']} • In: {r['in_count']}
+                </div>
+            </div>
+            
+            <div class="map__right">
+                {out_links_html}
+                {in_links_html}
+            </div>
+        </div>
+        """
+
+    # Full Map Page Content
+    # Client-side filtering script included inline
+    map_script = """
+    <script>
+    (function () {
+      const input = document.getElementById("mapFilter");
+      const canonOnly = document.getElementById("mapCanonOnly");
+      const rows = Array.from(document.querySelectorAll(".map__row"));
+    
+      function apply() {
+        const q = (input.value || "").trim().toLowerCase();
+        const canon = canonOnly.checked;
+    
+        rows.forEach(r => {
+          const title = r.dataset.title || "";
+          const pillar = r.dataset.pillar || "";
+          const mode = r.dataset.mode || "";
+          const isCanon = r.dataset.canon === "1";
+    
+          const matchQ = !q || title.includes(q) || pillar.includes(q) || mode.includes(q);
+          const matchCanon = !canon || isCanon;
+    
+          r.style.display = (matchQ && matchCanon) ? "" : "none";
+        });
+      }
+    
+      input.addEventListener("input", apply);
+      canonOnly.addEventListener("change", apply);
+    })();
+    </script>
+    """
+
+    map_page_content = f"""
+    <div class="magazine-layout">
+        <div class="content-wrapper full-width">
+            <section class="map">
+              <div class="map__header">
+                <h1>Map</h1>
+                <p class="muted">
+                  {len(graph_nodes)} nodes • {len(graph_edges)} connections
+                </p>
+            
+                <div class="map__controls">
+                  <input id="mapFilter" class="map__input" type="search" placeholder="Filter by title, pillar, mode…" autocomplete="off" />
+                  <label class="map__toggle">
+                    <input id="mapCanonOnly" type="checkbox" />
+                    Canon only
+                  </label>
+                </div>
+              </div>
+            
+              <div class="map__table" id="mapTable">
+                {rows_html}
+              </div>
+            </section>
+            {map_script}
+        </div>
+    </div>
+    """
+    
+    full_map_page = base_template.replace('{{ content }}', map_page_content)
+    full_map_page = full_map_page.replace('{{ starter_set_nav }}', starter_set_nav_html) 
+    # Fix paths for sub-directory
+    full_map_page = full_map_page.replace('href="index.html"', 'href="../index.html"')
+    full_map_page = full_map_page.replace('href="about.html"', 'href="../about.html"')
+    full_map_page = full_map_page.replace('href="collections.html"', 'href="../collections.html"')
+    full_map_page = full_map_page.replace('src="', 'src="../')
+    full_map_page = full_map_page.replace('href="css/', 'href="../css/')
+    full_map_page = full_map_page.replace('{{ starter_set_nav }}', starter_set_nav_html.replace('posts/', '../posts/'))
+    
+    full_map_page = full_map_page.replace('{{ root }}', '../')
+    full_map_page = full_map_page.replace('{{ title }}', 'Map - Does This Feel Right?')
+    full_map_page = full_map_page.replace('{{ description }}', 'The network of thoughts.')
+    full_map_page = full_map_page.replace('{{ url }}', f"{BASE_URL}/map/index.html")
+    full_map_page = full_map_page.replace('{{ image }}', DEFAULT_IMAGE)
+    full_map_page = full_map_page.replace('{{ og_type }}', 'website')
+    full_map_page = full_map_page.replace('{{ json_ld }}', '')
+    
+    write_file(os.path.join(OUTPUT_DIR, 'map', 'index.html'), full_map_page)
 
     write_file(os.path.join(OUTPUT_DIR, 'visualizer.html'), viz_page)
 

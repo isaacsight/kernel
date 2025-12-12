@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="graph">
+    <div class="graph__header">
+        <h1>Map (Graph)</h1>
+        <p class="muted">A living topology of the notebook. Drag nodes. Click to open.</p>
+
+        <div class="graph__controls">
+            <input id="graphFilter" class="graph__input" type="search" placeholder="Filter (title / pillar / mode)…"
+                autocomplete="off" />
+            <label class="graph__toggle">
+                <input id="graphCanonOnly" type="checkbox" />
+                Canon only
+            </label>
+            <select id="graphDirection" class="graph__select" aria-label="Direction">
+                <option value="all">All links</option>
+                <option value="out">Outgoing</option>
+                <option value="in">Incoming</option>
+            </select>
+            <button id="graphReset" class="btn btn--ghost" type="button">Reset</button>
+            <a class="btn btn--ghost" href="./index.html">List view</a>
+        </div>
+    </div>
+
+    <div class="graph__wrap">
+        <div id="pinBar" class="pinbar" style="display:none;">
+            <div class="pinbar__left">
+                <span class="pinbar__label">Pinned</span>
+                <a id="pinTitle" class="pinbar__title" href="#"></a>
+                <span class="pinbar__hint muted">Press ESC to clear</span>
+            </div>
+            <div class="pinbar__right">
+                <button id="copyPinLink" class="btn btn--ghost" type="button">Copy link</button>
+                <button id="clearPin" class="btn btn--ghost" type="button">Clear</button>
+            </div>
+        </div>
+        <canvas id="graphCanvas" width="1200" height="720"></canvas>
+        <div id="graphHint" class="graph__hint"></div>
+    </div>
+</section>
+
+<script src="../static/js/graph.js"></script>
+{% endblock %}

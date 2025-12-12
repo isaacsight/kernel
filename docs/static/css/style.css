@@ -175,10 +175,45 @@ h3 {
     margin-top: var(--space-7);
 }
 
-/* --- Engineering Upgrade (Phase 2) --- */
+/* --- Engineering Upgrade (Phase 2 & 3) --- */
 
-/* Mode Badges */
+/* Post Badges (Header) */
+.post-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary);
+}
+
+.badge--muted {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-tertiary);
+    background: transparent;
+}
+
+.badge--canon {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: rgba(0, 214, 163, 0.1);
+}
+
+/* Mode Badges (Legacy/Specific support) */
 .mode-badge {
+    @extend .badge;
+    /* conceptual */
     display: inline-block;
     padding: 2px 8px;
     border-radius: 4px;
@@ -226,7 +261,63 @@ h3 {
     margin-left: 4px;
 }
 
-/* Connections Block */
+
+/* Read Next Section */
+.read-next {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.read-next h2,
+.more-in-pillar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+}
+
+.read-next-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+/* More In Pillar Section */
+.more-in-pillar {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.link-list li {
+    font-size: 1.05rem;
+}
+
+.link-list a {
+    text-decoration: none;
+    color: var(--text-primary);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.link-list a:hover {
+    border-bottom-color: var(--accent-primary);
+}
+
+.link-list .muted {
+    font-size: 0.85em;
+    margin-left: 8px;
+}
+
+/* Connections Block (Legacy support) */
 .connections-block {
     background: var(--bg-secondary);
     border-left: 2px solid var(--accent-primary);
@@ -1834,6 +1925,75 @@ td {
     opacity: 0.7;
 }
 
+/* Graph Sidebar & Controls */
+.graph__select {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.graph__hint {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    font-size: 13px;
+    opacity: 0.92;
+    background: var(--bg-primary);
+    /* Ensure readability over canvas if overlapping, or just good practice */
+}
+
+.graph__hint .muted {
+    opacity: 0.7;
+}
+
+.graph__hint h3 {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+}
+
+.graph__hint .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.graph__hint .pill {
+    padding: 2px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.graph__hint .cols {
+    display: grid;
+    gap: 10px;
+}
+
+@media (min-width: 900px) {
+    .graph__hint .cols {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.graph__hint ul {
+    margin: 6px 0 0 0;
+    padding-left: 16px;
+    display: grid;
+    gap: 6px;
+}
+
+.graph__hint a {
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.graph__hint a:hover {
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+}
+
 .experiment-card-small .experiment-title {
     display: block;
     font-size: var(--text-sm);
@@ -2347,4 +2507,47 @@ body.menu-open {
     border: 0;
     height: 1px;
     background: var(--border-subtle);
+}
+
+/* Graph Pin Bar */
+.pinbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.pinbar__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pinbar__label {
+    padding: 2px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.pinbar__title {
+    font-weight: 650;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.pinbar__title:hover {
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+}
+
+.pinbar__right {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }

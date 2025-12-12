@@ -1,16 +1,17 @@
 <article>
     <nav class="breadcrumb-nav" aria-label="Breadcrumb">
         <ol class="breadcrumb-list">
-            <li><a href="{{ root }}index.html">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li class="separator">/</li>
-            <li><a href="{{ root }}index.html#latest">Essays</a></li>
+            <li><a href="../index.html#latest">Essays</a></li>
             <li class="separator">/</li>
             <li aria-current="page">{{ title }}</li>
         </ol>
     </nav>
     <div class="post-header post-header-container">
+        {{ post_badges }}
         <div class="post-meta post-meta-date">
-            {{ date }} • {{ mode_display }} {{ version_display }}
+            {{ date }}
         </div>
         <h1 class="post-title-large">{{ title }}</h1>
         <div class="post-tags">
@@ -21,8 +22,7 @@
     {{ series_indicator }}
 
     <div class="post-context">
-        {{ connections }}
-        Part of an ongoing exploration into AI and systems design.
+        {{ post_context }}
     </div>
     <hr class="context-divider">
 
@@ -50,11 +50,10 @@
     </div>
 
 
-
     <!-- Comments Section (Giscus) -->
 
 
-    {{ related_posts }}
+    {{ footer_navigation }}
 
 
 </article>
