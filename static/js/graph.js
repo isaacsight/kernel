@@ -15,7 +15,7 @@
     if (!canvas) return;
 
     // --- STATE ---
-    let MODE = "read"; // 'read' | 'wander'
+    let MODE = null; // Force initial setup on filtered load
     let nodesAll = [];
     let linksAll = [];
     let byId = new Map();
@@ -84,7 +84,9 @@
         const display = isRead ? "" : "none";
 
         if (canonOnly && canonOnly.parentElement) canonOnly.parentElement.style.display = display;
-        if (directionSel) directionSel.style.display = display;
+
+        // Fix: Hide wrapper, not just select
+        if (directionSel && directionSel.parentElement) directionSel.parentElement.style.display = display;
 
         const listBtn = document.querySelector(".graph__glass-pill .btn-text"); // List
         if (listBtn) listBtn.style.display = display;
@@ -125,7 +127,8 @@
     // Check URL param on load
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("mode") === "wander") {
-        document.getElementById("modeWander").checked = true;
+        const rad = document.getElementById("modeWander");
+        if (rad) rad.checked = true;
         setMode("wander");
     } else {
         setMode("read"); // default
@@ -192,7 +195,7 @@
             // Monochrome / Faint
             if (isFocus) return "#fff";
             if (isConn) return "rgba(255,255,255,0.4)";
-            return "rgba(255,255,255,0.15)";
+            return "rgba(255,255,255,0.28)"; // Brighter base (was 0.15)
         } else {
             // Read Mode: Functional
             if (isFocus) return "#fff";
@@ -635,15 +638,9 @@
     if (resetBtn) resetBtn.addEventListener("click", resetLayout);
 
     function applyFilter() {
-        // In Wander mode, ignore inputs? 
-        // Spec says: "Controls: Hide Analytical Controls".
-        // But search is separate.
-        // Let's assume filters apply in READ mode.
-        // In WANDER mode: show all? Or respect search?
-        // "Search (optional)". Let's respect search if it exists.
-
-        const q = (filterInput.value || "").trim().toLowerCase();
-        const canon = (MODE === "read" && canonOnly.checked);
+        // Fix: Use optional chaining to prevent crashes on missing IDs
+        const q = ((filterInput && filterInput.value) || "").trim().toLowerCase();
+        const canon = (MODE === "read" && canonOnly && canonOnly.checked);
 
         nodesAll.forEach(n => {
             const h = `${n.title} ${n.pillar} ${n.mode}`.toLowerCase();
