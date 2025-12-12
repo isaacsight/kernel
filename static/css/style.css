@@ -2701,32 +2701,74 @@ canvas#graphCanvas:active {
     transition: width 0.2s ease;
 }
 
-.graph__toggle {
+/* Control Groups */
+.graph__control-group {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+}
+
+/* Center Hint Overlay */
+.graph__center-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 5;
+    color: var(--text-main);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+}
+
+.graph__center-hint.hint-hidden {
+    opacity: 0;
+}
+
+.graph__center-hint h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.graph__center-hint p {
+    font-size: 15px;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+/* Refined Mode Toggle */
+.mode-toggle {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    /* Darker track */
+    border-radius: 100px;
+    padding: 2px;
+}
+
+.mode-toggle label {
     cursor: pointer;
-    font-size: 13px;
+    padding: 8px 16px;
+    /* Bigger touch target */
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-muted);
+    border-radius: 100px;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    font-weight: 600;
     user-select: none;
 }
 
-.graph__toggle input {
-    accent-color: var(--color-primary);
+.mode-toggle input:checked+label {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.graph__toggle:hover {
-    color: var(--text-main);
-}
-
-.graph__select {}
-
-.text-red:hover {
-    color: #ff6b6b;
-}
-
-
-/* -- Bottom Right: Sidebar / Hint -- */
+/* Loading Overlay */
 .graph__hint {
     top: 20px;
     right: 20px;

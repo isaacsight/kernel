@@ -187,9 +187,18 @@
     <div class="graph__wrap">
         <canvas id="graphCanvas" width="1200" height="720"></canvas>
 
+        <!-- Center Hint (New) -->
+        <div id="graphCenterHint" class="graph__center-hint">
+            <div class="hint-content">
+                <h2>Map</h2>
+                <p>Click a node to explore connections.</p>
+            </div>
+        </div>
+
         <!-- Top Left: Consolidated Glass Pill -->
         <div class="graph__glass-pill">
-            <div class="graph__search-group">
+            <!-- Find -->
+            <div class="graph__control-group">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     class="muted">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -200,28 +209,33 @@
 
             <div class="vr"></div>
 
-            <label class="graph__toggle" title="Show only Core Essays">
-                <input id="graphCanonOnly" type="checkbox" />
-                <span>Core only</span>
-            </label>
+            <!-- Filter -->
+            <div class="graph__control-group">
+                <label class="graph__toggle" title="Show only Core Essays">
+                    <input id="graphCanonOnly" type="checkbox" />
+                    <span>Core only</span>
+                </label>
 
-            <select id="graphDirection" class="graph__select" aria-label="Link Direction"
-                title="Filter links by direction">
-                <option value="all">All links</option>
-                <option value="out">References</option>
-                <option value="in">Referenced by</option>
-            </select>
+                <select id="graphDirection" class="graph__select" aria-label="Link Direction"
+                    title="Filter links by direction">
+                    <option value="all">All links</option>
+                    <option value="out">References</option>
+                    <option value="in">Referenced by</option>
+                </select>
+            </div>
 
             <div class="vr"></div>
 
-            <button id="graphReset" class="btn-icon-plain" title="Reset Camera">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                    <path d="M3 3v5h5" />
-                </svg>
-            </button>
-
-            <a href="./index.html" class="btn-text" title="Switch to List View">List</a>
+            <!-- Actions -->
+            <div class="graph__control-group">
+                <button id="graphReset" class="btn-icon-plain" title="Reset Camera">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                    </svg>
+                </button>
+                <a href="./index.html" class="btn-text" title="Switch to List View">List</a>
+            </div>
 
             <div class="vr"></div>
 
@@ -233,27 +247,21 @@
                 <input type="radio" name="mode" id="modeWander" value="wander">
                 <label for="modeWander" title="Explore ideas without direction">Wander</label>
             </div>
-
-            <!-- Right Side: Persistent Inspector -->
-            <div id="graphInspector" class="graph__sidebar">
-                <div class="graph__empty-state">
-                    <div class="empty-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1" class="muted">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </div>
-                    <p>Click a node to focus</p>
-                    <small class="muted">Drag to pan • Scroll to zoom</small>
-                </div>
-            </div>
-
-            <!-- Loading Overlay -->
-            <div id="graphLoading" class="graph__loading">
-                <div class="spinner"></div>
-            </div>
+            stroke-width="1" class="muted">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+            </svg>
         </div>
+        <p>Click a node to focus</p>
+        <small class="muted">Drag to pan • Scroll to zoom</small>
+    </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="graphLoading" class="graph__loading">
+        <div class="spinner"></div>
+    </div>
+    </div>
 </section>
 
 <script src="../../static/js/graph.js"></script>

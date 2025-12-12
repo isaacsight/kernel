@@ -63,6 +63,21 @@
             container.classList.add(`mode-${MODE}`);
         }
 
+        // Update Center Hint
+        const centerHint = document.getElementById("graphCenterHint");
+        if (centerHint) {
+            const h2 = centerHint.querySelector("h2");
+            const p = centerHint.querySelector("p");
+            if (newMode === "read") {
+                if (h2) h2.textContent = "Map";
+                if (p) p.textContent = "Click a node to explore connections.";
+            } else {
+                if (h2) h2.textContent = "Wander";
+                if (p) p.textContent = "Some ideas reveal themselves slowly.";
+            }
+            centerHint.classList.remove("hint-hidden");
+        }
+
         // Restore / Clear selection on mode switch?
         // Spec says: Wander has no selection initially.
         selectedNode = null;
@@ -99,8 +114,14 @@
     let graph;
     try {
         const res = await fetch("graph.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         graph = await res.json();
-    } catch (e) { return; }
+    } catch (e) {
+        console.error("Graph load failed", e);
+        const loader = document.getElementById("graphLoading");
+        if (loader) loader.innerHTML = `<div style="color:#ff6b6b; font-family:var(--font-mono);">Failed to load map.<br><small>${e.message}</small></div>`;
+        return;
+    }
 
     // Hide Loading
     const loader = document.getElementById("graphLoading");
@@ -624,6 +645,17 @@
     }
     if (filterInput) filterInput.addEventListener("input", applyFilter);
     if (canonOnly) canonOnly.addEventListener("change", applyFilter);
+
+    // --- HINT INTERACTION ---
+    const centerHint = document.getElementById("graphCenterHint");
+    function hideHint() {
+        if (centerHint && !centerHint.classList.contains("hint-hidden")) {
+            centerHint.classList.add("hint-hidden");
+        }
+    }
+    canvas.addEventListener("mousedown", hideHint);
+    canvas.addEventListener("wheel", hideHint, { passive: false });
+    canvas.addEventListener("touchstart", hideHint, { passive: true });
 
     // Loop
     function frame() {
