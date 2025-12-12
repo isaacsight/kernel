@@ -14,7 +14,7 @@ BACKEND_PID=$!
 
 # Start Frontend
 echo "🎨 Starting Frontend (Vite)..."
-cd admin/web
+cd frontend
 npm run dev &
 FRONTEND_PID=$!
 

@@ -227,10 +227,15 @@ class CollectiveIntelligence:
     # ==================== Collective Learning ====================
     
     def learn_lesson(self, agent_name: str, lesson: str, 
-                     context: str, outcome: str):
+                     context: str, outcome: str, tags: List[str] = None):
         """
         Record a lesson learned for the whole team.
+        Now uses persistent SQLite storage.
         """
+        # Save to DB
+        self.memory.save_lesson(agent_name, lesson, context, outcome, tags)
+        
+        # Keep legacy JSON for now (optional, but good for backward compat)
         entry = {
             "from_agent": agent_name,
             "lesson": lesson,
@@ -238,7 +243,6 @@ class CollectiveIntelligence:
             "outcome": outcome,
             "learned_at": datetime.now().isoformat()
         }
-        
         self.knowledge["lessons_learned"].append(entry)
         self._save_knowledge()
         logger.info(f"[Collective] Lesson learned: {lesson[:50]}...")
@@ -246,19 +250,84 @@ class CollectiveIntelligence:
     def get_relevant_lessons(self, context: str) -> List[Dict]:
         """
         Get lessons relevant to a particular context.
+        Uses SQLite search.
         """
-        # Simple keyword matching (could be enhanced with embeddings)
-        context_words = set(context.lower().split())
+        return self.memory.search_lessons(query=context, limit=5)
+
+    def consult_collective(self, action_type: str, context: str) -> List[str]:
+        """
+        Proactive Check: Consult the collective before taking an action.
+        Returns a list of warnings or advice based on past failures/lessons.
+        """
+        lessons = self.memory.search_lessons(query=action_type, limit=5)
         
-        scored = []
-        for lesson in self.knowledge["lessons_learned"]:
-            lesson_words = set(lesson["context"].lower().split())
-            overlap = len(context_words.intersection(lesson_words))
-            if overlap > 0:
-                scored.append((overlap, lesson))
+        advice = []
+        for lesson in lessons:
+            # simple filter to see if context matches enough to be relevant
+            if lesson["outcome"] == "FAILED":
+                advice.append(f"⚠️ WARNING: Previous attempt failed. Lesson: {lesson['lesson']}")
+            else:
+                advice.append(f"💡 TIP: {lesson['lesson']}")
+                
+        return advice
+
+    def learn_from_failure(self, agent_name: str, action: str, error: str, context: Optional[Dict] = None):
+        """
+        Reflexive Learning: Automatically analyze a failure and learn from it.
+        """
+        logger.info(f"[Collective] 🛑 Analyzing failure in {action} by {agent_name}...")
         
-        scored.sort(key=lambda x: x[0], reverse=True)
-        return [lesson for _, lesson in scored[:5]]
+        prompt = f"""
+        As the Collective Intelligence, analyze this system failure to prevent it from happening again.
+        
+        AGENT: {agent_name}
+        ACTION: {action}
+        ERROR: {error}
+        CONTEXT: {json.dumps(context, default=str) if context else "N/A"}
+        
+        1. Identify the root cause (Code error? Environment? API outage? User error?)
+        2. Formulate a concise, actionable LESSON for the future.
+           - Bad: "Something went wrong."
+           - Good: "When using CapCut API, always ensure the export path exists before rendering."
+        3. Suggest ONE immediate fix or check to perform next time.
+        
+        Return JSON:
+        {{
+            "root_cause": "...",
+            "lesson": "...", 
+            "fix": "...",
+            "tags": ["tag1", "tag2"]
+        }}
+        """
+        
+        if self.node_url:
+            import requests
+            try:
+                response = requests.post(
+                    f"{self.node_url}/generate",
+                    json={"prompt": prompt, "model": "mistral"}, # Fast model for quick error handling
+                    timeout=30
+                )
+                if response.status_code == 200:
+                    resp_json = response.json().get("response", "")
+                    if "{" in resp_json:
+                        data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
+                        
+                        lesson_text = data.get("lesson")
+                        if lesson_text:
+                            self.learn_lesson(
+                                agent_name, 
+                                lesson_text, 
+                                f"Failure in {action}: {error}", 
+                                "FAILED",
+                                data.get("tags", [])
+                            )
+                            logger.info(f"[Collective] 🧠 Learned from failure: {lesson_text}")
+                            return data
+            except Exception as e:
+                logger.error(f"[Collective] Failed to learn from failure: {e}")
+                
+        return None
     
     # ==================== Collective Decisions ====================
     
@@ -424,6 +493,39 @@ class CollectiveIntelligence:
             "confidence": 0.3
         }
     
+    # ==================== Research & Investigation ====================
+    
+    def request_research(self, topic: str) -> Dict:
+        """
+        Request the Researcher to investigate a topic.
+        """
+        from admin.engineers.researcher import Researcher
+        researcher = Researcher()
+        result = researcher.investigate(topic)
+        
+        if result["status"] == "success":
+            # Share the findings with the collective
+            self.share_insight(
+                "Researcher",
+                "research_findings",
+                {
+                    "topic": topic,
+                    "summary": result["summary"],
+                    "top_findings": [f["name"] for f in result["findings"]]
+                },
+                confidence=0.9
+            )
+            
+            # Store full details as a lesson/resource
+            self.learn_lesson(
+                "Researcher",
+                f"Research on {topic} yielded {len(result['findings'])} results.",
+                f"Research: {topic}",
+                "SUCCESS"
+            )
+            
+        return result
+
     def get_team_status(self) -> Dict:
         """
         Get overall team status and health.

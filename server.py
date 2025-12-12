@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import logging
@@ -25,7 +25,13 @@ app.add_middleware(
 # Mount static files (like the mobile client)
 app.mount("/static", StaticFiles(directory="docs", html=True), name="static")
 
-@app.get("/")
+# Mount frontend assets
+import os
+frontend_dist = os.path.join(os.path.dirname(__file__), "frontend/dist")
+if os.path.exists(frontend_dist):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
+
+@app.get("/api/health")
 async def health_check():
     """Health check endpoint."""
     return {"status": "online", "system": "Frontier Team Server"}
@@ -54,6 +60,109 @@ async def websocket_endpoint(websocket: WebSocket):
     except Exception as e:
         logger.error(f"Error in websocket loop: {e}")
         await websocket.close()
+
+from core.client_service import client_service
+
+@app.websocket("/ws/client")
+async def client_websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    logger.info("New Client WebSocket connection accepted")
+    
+    try:
+        while True:
+            raw_data = await websocket.receive_text()
+            
+            # Try parsing as JSON (New Protocol)
+            try:
+                payload = json.loads(raw_data)
+                # It expects {'text': str, 'images': [b64]}
+                # If it's old protocol (just string), we wrap it
+                if isinstance(payload, str):
+                     payload = {"text": payload, "images": []}
+            except json.JSONDecodeError:
+                # Fallback for old protocol (just text)
+                payload = {"text": raw_data, "images": []}
+                
+            async for update in client_service.process_message(payload):
+                await websocket.send_text(json.dumps(update))
+    except WebSocketDisconnect:
+        logger.info("Client WebSocket disconnected")
+    except Exception as e:
+        logger.error(f"Error in client websocket loop: {e}")
+        await websocket.close()
+
+# SPA Catch-all (must be last)
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # API/Websocket routes are handled above automatically
+    # Check if file exists in frontend_dist (e.g. favicon.ico)
+    target_path = os.path.join(frontend_dist, full_path)
+    if full_path and os.path.exists(target_path) and os.path.isfile(target_path):
+        return FileResponse(target_path)
+    
+    # Otherwise return index.html for client-side routing
+    index_path = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    
+    return {"error": "Frontend not built or found", "path": full_path}
+
+
+# Data Models
+from pydantic import BaseModel
+
+class InquiryModel(BaseModel):
+    name: str
+    contact: str
+    message: str
+    history: list = []
+
+@app.post("/api/inquiry")
+async def submit_inquiry(inquiry: InquiryModel):
+    """
+    Handle client inquiries from the chat widget.
+    Saves to admin/inquiries.json and sends email notification.
+    """
+    try:
+        inquiry_data = inquiry.dict()
+        inquiry_data["timestamp"] = __import__("datetime").datetime.now().isoformat()
+        
+        # 1. Save to File
+        os.makedirs("admin", exist_ok=True)
+        file_path = os.path.join("admin", "inquiries.json")
+        
+        existing_data = []
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    existing_data = json.load(f)
+                except json.JSONDecodeError:
+                    existing_data = []
+        
+        existing_data.append(inquiry_data)
+        
+        with open(file_path, "w") as f:
+            json.dump(existing_data, f, indent=2)
+            
+        logger.info(f"New inquiry received from {inquiry.name}")
+        
+        # 2. Email Notification (Placeholder)
+        # TODO: Configure SMTP settings in admin/config.py
+        # For now, we just log it.
+        email_body = f"""
+        New Inquiry from {inquiry.name} ({inquiry.contact}):
+        
+        Message: {inquiry.message}
+        
+        History Length: {len(inquiry.history)} messages
+        """
+        logger.info(f"--- EMAIL NOTIFICATION SIMULATION ---\n{email_body}\n---------------------------------------")
+        
+        return {"status": "success", "message": "Inquiry received"}
+        
+    except Exception as e:
+        logger.error(f"Error saving inquiry: {e}")
+        return {"status": "error", "message": str(e)}
 
 if __name__ == "__main__":
     # Host 0.0.0.0 is CRITICAL for mobile access

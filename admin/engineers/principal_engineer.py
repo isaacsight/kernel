@@ -5,9 +5,33 @@ class PrincipalEngineer:
         self.name = "Principal Software Engineer"
         self.role = "Distributed Systems"
         self.emoji = "🌐"
+        self.domain_knowledge = {
+            "focus": "Artificial Intelligence & Machine Learning",
+            "why_smart": "AI is becoming the 'electricity' of every industry. It touches everything.",
+            "core_skills": [
+                "Neural networks",
+                "LLMs & generative models",
+                "Computer vision",
+                "MLOps",
+                "Data engineering"
+            ],
+            "career_paths": [
+                "$300k–$1M+ roles (principal engineer, staff AI, AI architect)",
+                "Founding AI-powered companies",
+                "Being relevant for 30+ years"
+            ],
+            "philosophy": "The electricity of the new world."
+        }
         
     def optimize_cache(self):
         return {"cache_hit_rate": "99.9%"}
+
+    def consult(self):
+        """Returns expert advice based on domain knowledge."""
+        return {
+            "advice": f"Master the new electricity. Key skills: {', '.join(self.domain_knowledge['core_skills'])}.",
+            "outlook": "Highest leverage role for the next 30 years."
+        }
 
     def audit_system(self, root_dir):
         """Checks the build system configuration."""

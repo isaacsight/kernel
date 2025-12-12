@@ -6,6 +6,8 @@ import PostList from './components/PostList';
 import PostEditor from './components/PostEditor';
 import DesignStudio from './components/DesignStudio';
 import Settings from './components/Settings';
+import ClientPortal from './components/ClientPortal';
+import Consulting from './components/Consulting';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/content/:slug" element={<PostEditor />} />
           <Route path="/design" element={<DesignStudio />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/clients" element={<ClientPortal />} />
+          <Route path="/consulting" element={<Consulting />} />
         </Routes>
       </Layout>
     </Router>

@@ -17,3 +17,4 @@ stripe
 email-validator
 playwright
 nest_asyncio
+TikTokApi

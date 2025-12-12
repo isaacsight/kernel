@@ -23,49 +23,67 @@ def critique_action(action_name: str, context_provider: Optional[Callable] = Non
             result = None
             error = None
             
+            # Get CI
+            ci = get_collective_intelligence()
+
+            # Extract inputs for context (early extraction for proactive check)
+            inputs = {}
+            try:
+                sig = inspect.signature(func)
+                bound_args = sig.bind_partial(*args, **kwargs)
+                bound_args.apply_defaults()
+                
+                for k, v in bound_args.arguments.items():
+                    if k != 'self' and isinstance(v, (str, int, float, bool, list)):
+                        if isinstance(v, str) and len(v) > 500:
+                            inputs[k] = v[:500] + "..."
+                        elif isinstance(v, list) and len(v) > 5:
+                            inputs[k] = str(v[:5]) + f" and {len(v)-5} more..."
+                        else:
+                            inputs[k] = v
+            except:
+                pass
+
+            # 1. Proactive Check
+            try:
+                warnings = ci.consult_collective(action_name, str(inputs))
+                if warnings:
+                    logger.warning(f"[{action_name}] ⚠️ Collective Advice: {warnings}")
+            except Exception:
+                pass
+
             # Execute the action
             try:
                 result = func(*args, **kwargs)
                 return result
             except Exception as e:
                 error = e
+                # 2. Reflexive Learning (Failure)
+                try:
+                    ci.learn_from_failure(
+                        agent_name="Agent", # Ideally extract from self.name if available
+                        action=action_name,
+                        error=str(e),
+                        context=inputs
+                    )
+                except:
+                    pass
                 raise
             finally:
-                # Always critique, even on failure
-                duration = time.time() - start_time
-                
-                try:
-                    # Extract inputs for context
-                    inputs = {}
-                    # Simple extraction of key args
-                    sig = inspect.signature(func)
-                    bound_args = sig.bind_partial(*args, **kwargs)
-                    bound_args.apply_defaults()
-                    
-                    for k, v in bound_args.arguments.items():
-                        if k != 'self' and isinstance(v, (str, int, float, bool, list)):
-                            # Limit size
-                            if isinstance(v, str) and len(v) > 500:
-                                inputs[k] = v[:500] + "..."
-                            elif isinstance(v, list) and len(v) > 5:
-                                inputs[k] = str(v[:5]) + f" and {len(v)-5} more..."
-                            else:
-                                inputs[k] = v
-                                
-                    # Get CI
-                    ci = get_collective_intelligence()
-                    
-                    # Schedule critique (fire and forget pattern ideally, but we'll do sync for now to ensure learning)
-                    # In a high-perf system, this should be a background task
-                    ci.critique_action(
-                        action_name=action_name,
-                        inputs=inputs,
-                        result=str(result)[:1000] if result else "None", # Truncate large results
-                        duration=duration,
-                        error=str(error) if error else None
-                    )
-                except Exception as critique_err:
-                    logger.error(f"Critique mechanism failed: {critique_err}")
+                # 3. Success Critique (if no error)
+                if not error:
+                    duration = time.time() - start_time
+                    try:
+                        ci.critique_action(
+                            action_name=action_name,
+                            inputs=inputs,
+                            result=str(result)[:1000] if result else "None",
+                            duration=duration,
+                            error=None
+                        )
+                    except Exception as critique_err:
+                        logger.error(f"Critique mechanism failed: {critique_err}")
+
                     
         return wrapper
     return decorator

@@ -1,0 +1,162 @@
+{
+  "Prompt Engineering Tools": [
+    {
+      "name": "awesome-gpt-prompt-engineering",
+      "url": "https://github.com/snwfdhmp/awesome-gpt-prompt-engineering",
+      "desc": "A curated list of awesome resources, tools, and other shiny things for LLM prompt engineering.",
+      "stars": 1472
+    },
+    {
+      "name": "Claude-Code-Everything-You-Need-to-Know",
+      "url": "https://github.com/wesammustafa/Claude-Code-Everything-You-Need-to-Know",
+      "desc": "The ultimate all-in-one guide to mastering Claude Code. From setup, prompt engineering, commands, hooks, workflows, automation, and integrations, to MCP servers, tools, and the BMAD method\u2014packed with step-by-step tutorials, real-world examples, and expert strategies to make this the global go-to repo for Claude mastery.",
+      "stars": 582
+    },
+    {
+      "name": "youtube-transcript-splitter",
+      "url": "https://github.com/Christoph-Beckmann/youtube-transcript-splitter",
+      "desc": "The primary purpose of this tool is to make it easier to input long YouTube transcripts into ChatGPT by splitting them into smaller chunks. Additionally, prompt-engineering techniques have been incorporated to improve the quality of the output.",
+      "stars": 14
+    },
+    {
+      "name": "anotherai",
+      "url": "https://github.com/anotherai-dev/anotherai",
+      "desc": "MCP server for AI engineering. Tools to compare any models, debug production, deploy prompts without a code change. Initial preview.",
+      "stars": 12
+    },
+    {
+      "name": "agentic-prompt-rewriter",
+      "url": "https://github.com/Croups/agentic-prompt-rewriter",
+      "desc": "Agentic Prompt Rewriter - Transform Simple Instructions into Powerful Prompts Transform one-line instructions into comprehensive, production-ready prompts with this multi-agent AI system. This tool combines GPT-4's intelligence with structured prompt engineering to help you create perfect prompts for any AI task.",
+      "stars": 9
+    }
+  ],
+  "Advanced Agent Frameworks": [
+    {
+      "name": "langchain",
+      "url": "https://github.com/langchain-ai/langchain",
+      "desc": "\ud83e\udd9c\ud83d\udd17 The platform for reliable agents.",
+      "stars": 121758
+    },
+    {
+      "name": "MetaGPT",
+      "url": "https://github.com/FoundationAgents/MetaGPT",
+      "desc": "\ud83c\udf1f The Multi-Agent Framework: First AI Software Company, Towards Natural Language Programming",
+      "stars": 60557
+    },
+    {
+      "name": "autogen",
+      "url": "https://github.com/microsoft/autogen",
+      "desc": "A programming framework for agentic AI",
+      "stars": 52457
+    },
+    {
+      "name": "llama_index",
+      "url": "https://github.com/run-llama/llama_index",
+      "desc": "LlamaIndex is the leading framework for building LLM-powered agents over your data.",
+      "stars": 45781
+    },
+    {
+      "name": "crewAI",
+      "url": "https://github.com/crewAIInc/crewAI",
+      "desc": "Framework for orchestrating role-playing, autonomous AI agents. By fostering collaborative intelligence, CrewAI empowers agents to work together seamlessly, tackling complex tasks.",
+      "stars": 41311
+    }
+  ],
+  "Prompt Optimization": [
+    {
+      "name": "Context-Engineering",
+      "url": "https://github.com/davidkimai/Context-Engineering",
+      "desc": "\"Context engineering is the delicate art and science of filling the context window with just the right information for the next step.\" \u2014 Andrej Karpathy. A frontier, first-principles handbook inspired by Karpathy and 3Blue1Brown for moving beyond prompt engineering to the wider discipline of context design, orchestration, and optimization.",
+      "stars": 7957
+    },
+    {
+      "name": "PromptWizard",
+      "url": "https://github.com/microsoft/PromptWizard",
+      "desc": "Task-Aware Agent-driven Prompt Optimization Framework",
+      "stars": 3709
+    },
+    {
+      "name": "P-tuning-v2",
+      "url": "https://github.com/THUDM/P-tuning-v2",
+      "desc": "An optimized deep prompt tuning strategy comparable to fine-tuning across scales and tasks",
+      "stars": 2069
+    },
+    {
+      "name": "PrefixTuning",
+      "url": "https://github.com/XiangLi1999/PrefixTuning",
+      "desc": "Prefix-Tuning: Optimizing Continuous Prompts for Generation",
+      "stars": 956
+    },
+    {
+      "name": "promptimizer",
+      "url": "https://github.com/hinthornw/promptimizer",
+      "desc": "Prompt optimization scratch",
+      "stars": 876
+    }
+  ],
+  "Generative UI Design": [
+    {
+      "name": "cofounder",
+      "url": "https://github.com/raidendotai/cofounder",
+      "desc": "ai-generated apps , full stack + generative UI",
+      "stars": 6636
+    },
+    {
+      "name": "MayaScript_HouseGenerator",
+      "url": "https://github.com/LucasHartman/MayaScript_HouseGenerator",
+      "desc": "\u2018Generative House Algorithm\u2019 was constructed for one simple reason, being one click away from creating a range of uniquely designed model houses. At the beginning of 2020, the start of the covid-19 pandemic, I started learning programming. My background is in developing 3D motion graphics, but my work goes into different directions. I feel inspired by trying out new things, but often feel constrained by the software I use. I never found the right software that could satisfy my every need. A few years back, I visited a motion graphics event in Prague. Here I saw a presentation by Simon Homedal from Man vs. Machine and he introduced me to procedural programming for digital art. And so my journey into learning to code started.  Being stuck at home because of covid-19, I was presented with a change to really jump in and start developing a few coding projects. I started out with a simple board game in Java, where I was introduced to \u2018object oriented programming\u2019 and UI development and many other general concepts. At the end of this project I came to the conclusion that simple programming is not enough, I needed to combine with something I already have experience of. So I started using Python inside Maya, focusing on asset development of simple programs I could execute whenever I\u2019m working on a 3D project. At the time I was wondering if I could deconstruct houses to an algorithm.   The inspiration for this project came from wandering around the residential areas where I lived. Zandberg has very diverse styles of architecture; Terrace houses with high ceilings, classical villas with roofs made of straw and modern villas built after WWII. I was captivated by the diversity in design.   Breakdown A simple UI inside Maya, where the uses can specify the value for generating a number of houses. Simple things like level and roof height, number of doors, max number of levels, etc. Lastly a button that would take in the value and run the algorithm.  The back-end consists of a number of Python modules, textures and .obj files. One Python file called the \u201cMain\u201d, is where the files are assembled and executed.    Process Developing a generative algorithm is a process of trial and error. At the start of the project I treated the project like any other modeling project, only every design decision was programmed in with a number of possible solutions.   Over time this would become very complex and unstructured. It became impossible to go back and modify what I already wrote down. Another problem was that the algorithm was creating the model for running the code. This meant that selecting, adding and subtracting mesh to the model cost a lot of processing power, to the point my computer would freeze up. I needed to rethink my process and develop a framework which is easy to modify and light on the processor.   My new plan of attack was to do as little as possible in Maya. All design instructions needed to be solved before anything can be created in Maya. Going into this direction was a hard choice. First off, it\u2019s not a guarantee for success. The moment I would go too deep, things can get messy very easily. Besides I consider myself more of a visual thinker. Working outside of Maya meant every hurdle would be some sort of math problem. I already knew I had no choice, and understood this is the type of problem solving a programmer has to deal with. So I started out doing a little bit of RnD.    My first test was to create a number of lists. Generally every list would hold some type of value. Like positional data, labels, dimensions, objects etc. and the rest would be a range of functions iterating, generating, gathering, and sorting data into these lists. These seemed flexible enough, if I needed to add new details to the model, I would make a new list and apply this into the framework.   This type of framework was not very structured as I hoped. Luckily I discarded this ideal before it really began. I was already attracted by the idea of using a matrix instead of lists at the top of lists. The matrix would provide data in three dimensions, like a volume or a box made out of separate units. I would add an extra dimension to each unit, which is a list of six values.  Each value would represent each side of a unit. The general ideal of a matrix is like a fluid simulation, which is made out of a matrix of voxels, or like Minecraft where each unit can be some type of block. This would create a data structure that is easy to modify. The next step would be to feed the matrix with values. A value can represent walls, doors, windows, levels, rooftops, position and  direction. It starts with an empty matrix, and secondly fill it with values of 1 (later on inside Maya, value 1 would generate a wall, the location within the matrix would be translated to 3D space). If you\u2019d stop here and translate the matrix to mesh in Maya, you would get a cluster of boxes stacked next or on top of each other.  Adding more data to the matrix meant it needed to structure itself, so it would generate a cohesive design. If not the final result would be a house with holes in the wall or floating rooms. Therefore a number of functions are needed for searching for patterns, and modifying the data. A standard function would iterate over each unit in the matrix and check the neighboring values. If some sort of condition is met, the proper value will be modified. Going back to our cluster of boxes example. If a has a neighbouring box in front and to the left, but nothing on top, this would be a condition where a corner roof would be generated. And so different functions would solve design problems. In the end you would be left with a matrix of values that would serve as a blueprint for generating in house inside Maya.    Finally the model needs to be made in Maya. A number of parts like a wall, door or window are generated or imported in Maya. When iterating over the finished matrix, a certain value in a certain place in the matrix will decide which objects (example wall or roof) needs to be instanced and placed in the right position and direction. When the matrix is fully realised in Maya the model gets a final cleanup, by merging the model, deleting unused parts and empty groups. What is left is the house model. If a range of houses needs to be generated, the process is simply looped over a number of times.  Final word This project took way longer than I had anticipated and is far from finished. I learned a lot and at the same time it feels like I have only just begun. I hope to pick up this project again in the near future. I would love to add more elements to the house, like roof-windows or balconies and create procedural shaders. And possibly try out machine learning or some type of genetic algorithm.  If you have any questions or are intrigued please contact me at ljh.hartman@gmail.com.  Cheers!",
+      "stars": 12
+    },
+    {
+      "name": "StarryStudioAI-Automating-UI-Design-With-Code-Based-Generative-AI-and-RAG-",
+      "url": "https://github.com/priyavarahan/StarryStudioAI-Automating-UI-Design-With-Code-Based-Generative-AI-and-RAG-",
+      "desc": "It\u2019s an innovative Figma plugin powered by advanced Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG). Automating design workflows saves time, reduces manual effort, and fosters creativity\u2014bridging the gap between text-based prompts and pixel-perfect designs. ",
+      "stars": 4
+    },
+    {
+      "name": "workshop.captcha2022.p5",
+      "url": "https://github.com/guidoschmidt/workshop.captcha2022.p5",
+      "desc": "Repository of my p5.js workshop 'Intro to Generative Illustrations' at Captcha Design Festival (captcha-mannheim.de) in Mannheim",
+      "stars": 2
+    },
+    {
+      "name": "nft-burner-ui",
+      "url": "https://github.com/avernikoz/nft-burner-ui",
+      "desc": "NFT Burner is a generative art web3 game built on top of webGL, designed to streamline and simplify the process of burning non-fungible tokens (NFTs).",
+      "stars": 1
+    }
+  ],
+  "LLM Observability": [
+    {
+      "name": "RagaAI-Catalyst",
+      "url": "https://github.com/raga-ai-hub/RagaAI-Catalyst",
+      "desc": "Python SDK for Agent AI Observability, Monitoring and Evaluation Framework. Includes features like agent, llm and tools tracing, debugging multi-agentic system, self-hosted dashboard and advanced analytics with timeline and execution graph view ",
+      "stars": 16085
+    },
+    {
+      "name": "openllmetry",
+      "url": "https://github.com/traceloop/openllmetry",
+      "desc": "Open-source observability for your GenAI or LLM application, based on OpenTelemetry",
+      "stars": 6680
+    },
+    {
+      "name": "agenta",
+      "url": "https://github.com/Agenta-AI/agenta",
+      "desc": "The open-source LLMOps platform: prompt playground, prompt management, LLM evaluation, and LLM observability all in one place.",
+      "stars": 3516
+    },
+    {
+      "name": "mcp-context-forge",
+      "url": "https://github.com/IBM/mcp-context-forge",
+      "desc": "A Model Context Protocol (MCP) Gateway & Registry. Serves as a central management point for tools, resources, and prompts that can be accessed by MCP-compatible LLM applications. Converts REST API endpoints to MCP, composes virtual MCP servers with added security and observability, and converts between protocols (stdio, SSE, Streamable HTTP).",
+      "stars": 2947
+    },
+    {
+      "name": "openlit",
+      "url": "https://github.com/openlit/openlit",
+      "desc": "Open source platform for AI Engineering: OpenTelemetry-native LLM Observability, GPU Monitoring, Guardrails, Evaluations, Prompt Management, Vault, Playground. \ud83d\ude80\ud83d\udcbb Integrates with 50+ LLM Providers, VectorDBs, Agent Frameworks and GPUs.",
+      "stars": 2078
+    }
+  ]
+}

@@ -41,3 +41,8 @@ admin/brain/studio_memory.db
 admin/brain/*.json
 !admin/brain/mock_comments.json
 !admin/brain/achievements.json
+
+
+# Electron Artifacts
+admin/web/dist_electron/
+*.dmg

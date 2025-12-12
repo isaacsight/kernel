@@ -50,6 +50,17 @@ class Operator:
             msg = self.server_manager.start_server()
             logger.info(f"Recovery result: {msg}")
 
+    def check_pulse(self):
+        """
+        Called by the Heartbeat service to perform periodic checks.
+        """
+        logger.info("Pulse received. Performing quick health scan...")
+        self.check_health()
+        
+        # In the future, this can be expanded to check more complex states
+        # without blocking the main heartbeat loop.
+        return "Pulse Check OK"
+
     def manage_content(self):
         """
         Checks the editorial calendar and commissions new content if needed.

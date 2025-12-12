@@ -221,71 +221,173 @@ class Socialite:
 
     def distribute_to_substack(self, post_data):
         """
-        Distributes a post to Substack.
-        
-        Args:
-            post_data (dict): Dictionary containing 'title', 'content' (HTML or Markdown), 'excerpt', etc.
-            
-        Returns:
-            bool: True if successful (or staged), False otherwise.
+        Distributes a post to Substack using Browser Automation.
+        REQUIRES: 'substack_cookies.json' in project root.
         """
         logger.info(f"Preparing Substack distribution for: {post_data.get('title')}")
         
-        # 1. Check for Authentication (cookies.txt)
-        cookies_path = os.path.join(os.path.dirname(__file__), '../../cookies.txt')
-        has_cookies = os.path.exists(cookies_path)
+        # Paths
+        cookie_file = os.path.join(os.path.dirname(__file__), '../../substack_cookies.json')
         
-        # 2. Format Content (Convert HTML to Markdown if needed, or just use as is)
-        # Substack editor handles Markdown well enough or we can paste formatted text.
-        # For this implementation, we'll assume we want a clean Markdown version for staging.
-        content = post_data.get('content', '')
-        title = post_data.get('title', 'Untitled')
-        subtitle = post_data.get('excerpt', '')
-        
-        # 3. Automated Posting (if cookies exist)
-        if has_cookies:
-            # TODO: Implement Playwright automation here
-            # For now, fallback to staging even if cookies exist until full browser flow is built?
-            # Or just log that we would post.
-            logger.info("Substack cookies found. (Browser automation would run here).")
-            # In a full impl: 
-            # browser = await playwright.chromium.launch()
-            # page = await browser.new_page()
-            # ... login logic ...
-            # ... post logic ...
-            pass
-        
-        # 4. Fallback: Stage Draft
-        # Creating a dedicated draft file for manual posting
+        # 1. Check for Cookies
+        if not os.path.exists(cookie_file):
+            logger.warning("No 'substack_cookies.json' found. Falling back to staging draft.")
+            return self._stage_subtack_draft(post_data)
+            
+        try:
+            import datetime
+            import re
+            from playwright.sync_api import sync_playwright
+            
+            with sync_playwright() as p:
+                logger.info("Launching browser for Substack automation...")
+                # Headless=True for production, can be False for debugging
+                browser = p.chromium.launch(headless=True)
+                
+                # Load auth state
+                context = browser.new_context(storage_state=cookie_file)
+                page = context.new_page()
+                
+                # 2. Navigation
+                # Use specific subdomain to ensure we hit the correct editor
+                subdomain = "doesthisfeelright"
+                create_url = f"https://{subdomain}.substack.com/publish/post"
+                
+                logger.info(f"Navigating to {create_url}...")
+                try:
+                    page.goto(create_url, wait_until='domcontentloaded', timeout=45000)
+                    # Wait a bit for redirects
+                    page.wait_for_timeout(5000)
+                except Exception as nav_e:
+                    logger.error(f"Navigation timeout/error: {nav_e}")
+                    page.screenshot(path="debug_nav_failure.png")
+                    raise nav_e
+                
+                logger.info(f"Landed on: {page.url}")
+
+                # Check if login worked (redirected to login page?)
+                if "login" in page.url or "sign-in" in page.url:
+                    logger.error("Cookies expired or invalid. Redirected to login.")
+                    page.screenshot(path="debug_login_redirect.png")
+                    browser.close()
+                    return self._stage_subtack_draft(post_data)
+
+                # 3. Input Content
+                title = post_data.get('title', 'Untitled')
+                # Fix: Prioritize 'subtitle' if present, fallback to 'excerpt'
+                subtitle = post_data.get('subtitle') or post_data.get('excerpt', '')
+                content = post_data.get('content', '') 
+                
+                logger.info("Filling post details...")
+                
+                # Robust Selector Strategy
+                # 1. Title
+                # Identified via DOM dump: data-testid="post-title"
+                try:
+                    title_input = page.locator('[data-testid="post-title"]')
+                    title_input.fill(title)
+                    # Force autosave trigger
+                    title_input.dispatch_event("input")
+                except:
+                    logger.warning("Could not find Title via data-testid. Trying generic placeholders.")
+                    try:
+                        page.get_by_placeholder("Title").fill(title)
+                    except:
+                        page.get_by_placeholder("Add a title...").fill(title)
+
+                # 2. Subtitle
+                # identified via DOM dump: placeholder="Add a subtitle…"
+                try:
+                    # Use Regex to be robust against ellipsis vs three dots
+                    subtitle_input = page.get_by_placeholder(re.compile(r"Add a subtitle", re.IGNORECASE))
+                    
+                    if subtitle_input.is_visible():
+                        subtitle_input.fill(subtitle)
+                        subtitle_input.dispatch_event("input")
+                    else:
+                        logger.warning("Subtitle input found but not visible.")
+                        # Try forcing a click on the 'Add subtitle' button if it exists?
+                        # Sometimes it's a button with text "Add subtitle"
+                        add_sub_btn = page.get_by_text("Add subtitle", exact=True)
+                        if add_sub_btn.is_visible():
+                            add_sub_btn.click()
+                            page.wait_for_timeout(500)
+                            subtitle_input.fill(subtitle)
+                            subtitle_input.dispatch_event("input")
+                except Exception as e:
+                     logger.warning(f"Could not fill subtitle: {e}")
+
+                # 3. Content
+                # Use robust data-testid selector
+                editor = page.locator('[data-testid="editor"]')
+                
+                if not editor.is_visible():
+                     # Fallback to class but restrict to first if multiple (though testid should work)
+                     editor = page.locator('.tiptap.ProseMirror').first
+                
+                if editor.is_visible():
+                    editor.click()
+                    # Use evaluate to inject HTML content directly into the editor
+                    safe_content = content.replace("`", "\\`").replace("${", "\\${")
+                    
+                    # Pass the element handle to evaluate to avoid re-querying ambiguity
+                    editor.evaluate(f"(element) => element.innerHTML = `{safe_content}`")
+                    
+                    # FORCE AUTOSAVE: 
+                    # Dispatch input event so React/app knows it changed
+                    editor.evaluate("(element) => element.dispatchEvent(new Event('input', { bubbles: true }))")
+                    
+                    # Extra safety: Type a space and delete it to trigger keystroke listeners
+                    editor.press("End") 
+                    editor.type(" ")
+                    editor.press("Backspace")
+                else:
+                    logger.warning("Could not find editor. contenteditable not found.")
+                    page.screenshot(path="debug_no_editor.png")
+                
+                # 4. Wait for Save
+                # Substack usually shows "Saved" in the top bar. 
+                # We'll wait a bit longer and check.
+                logger.info("Waiting for Substack autosave...")
+                page.wait_for_timeout(5000)
+                
+                # Optional: Try to find "Saved" text
+                # clean_status = page.locator("div", has_text="Saved").first
+                # if clean_status.is_visible():
+                #    logger.info("Confirmed 'Saved' status.")
+                
+                logger.info("Draft process completed. Taking confirmation screenshot...")
+                page.screenshot(path="debug_substack_final.png", full_page=True)
+                
+                browser.close()
+                print("✅ Posted to Substack successfully via automation!")
+                return True
+
+        except Exception as e:
+            logger.error(f"Playwright automation failed: {e}")
+            return self._stage_subtack_draft(post_data)
+
+    def _stage_subtack_draft(self, post_data):
+        """Helper to stage a markdown draft."""
         draft_dir = os.path.join(os.path.dirname(__file__), '../../content/social_drafts')
         os.makedirs(draft_dir, exist_ok=True)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        title = post_data.get('title', 'Untitled')
+        content = post_data.get('content', '')
+        subtitle = post_data.get('excerpt', '')
+        
         safe_title = "".join([c for c in title if c.isalnum() or c in (' ', '-', '_')]).strip().replace(' ', '_')
         filename = f"substack_{timestamp}_{safe_title}.md"
         filepath = os.path.join(draft_dir, filename)
         
-        draft_content = f"""# {title}
-## Subtitle
-{subtitle}
-
-## Body
-{content}
-
----
-*Generated by Socialite on {datetime.now()}*
-"""
+        draft_content = f"# {title}\n## {subtitle}\n\n{content}\n\n---\n*Staged for Manual Posting*"
         
-        try:
-            with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(draft_content)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(draft_content)
             
-            logger.info(f"Substack draft staged at: {filepath}")
-            print(f"✅ Substack draft saved for manual publishing: {filepath}")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to stage Substack draft: {e}")
-            return False
+        print(f"⚠️ Automation unavailable. Draft staged: {filepath}")
+        return True
 
 
 if __name__ == "__main__":

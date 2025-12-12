@@ -65,6 +65,19 @@ class VideoEngine:
         self.w, self.h = resolution
         self.fps = 30
     
+    def _parse_color(self, color_str):
+        if not color_str: return (0, 0, 0)
+        if isinstance(color_str, (tuple, list)): return color_str
+        
+        color_str = color_str.lstrip('#')
+        if len(color_str) == 3:
+            color_str = ''.join([c*2 for c in color_str])
+            
+        try:
+            return tuple(int(color_str[i:i+2], 16) for i in (0, 2, 4))
+        except:
+            return (0, 0, 0)
+
     def render_scene(self, scene: Scene) -> Optional[CompositeVideoClip]:
         """Technically renders a single scene into a CompositeVideoClip."""
         try:
@@ -72,7 +85,7 @@ class VideoEngine:
             clip = None
             
             if scene.visual.asset_type == VisualType.COLOR:
-                color = scene.visual.color or "#000000"
+                color = self._parse_color(scene.visual.color or "#000000")
                 clip = ColorClip(size=(self.w, self.h), color=color, duration=scene.duration)
                 
             elif scene.visual.asset_type == VisualType.IMAGE:
@@ -82,30 +95,69 @@ class VideoEngine:
                     clip = self._resize_cover(clip)
                 else:
                     logger.error(f"Image not found: {scene.visual.source_path}")
-                    clip = ColorClip(size=(self.w, self.h), color="#333333", duration=scene.duration)
+                    clip = ColorClip(size=(self.w, self.h), color=self._parse_color("#333333"), duration=scene.duration)
             
             elif scene.visual.asset_type in [VisualType.VIDEO, VisualType.GENERATED_VEO, VisualType.GENERATED_SORA]:
                  if scene.visual.source_path and os.path.exists(scene.visual.source_path):
                      clip = VideoFileClip(scene.visual.source_path)
-                     # Loop if too short
+                     
+                     # --- Smart Stretch (Generative Extend Simulation) ---
                      if clip.duration < scene.duration:
-                         from moviepy.video.fx import Loop
-                         clip = clip.with_effects([vfx.Loop(duration=scene.duration)])
+                         # Case 1: Slightly short (stretch it / slow mo)
+                         # If it's within 50% of target, just slow it down
+                         if clip.duration > scene.duration * 0.5:
+                             factor = scene.duration / clip.duration
+                             clip = clip.with_effects([vfx.Speedx(1.0/factor)])
+                         
+                         # Case 2: Very short (Loop with Boomerang for smoothness)
+                         else:
+                             # Boomerang: Forward + Reverse
+                             rev = clip.with_effects([vfx.TimeMirror()])
+                             boomerang = concatenate_videoclips([clip, rev])
+                             # Loop the boomerang
+                             from moviepy.video.fx import Loop
+                             clip = boomerang.with_effects([vfx.Loop(duration=scene.duration)])
+                             
+                     # Trim if too long
                      else:
                          clip = clip.subclipped(0, scene.duration)
+                         
                      clip = self._resize_cover(clip)
+                     
+                     # --- Apply Cinematic Look ---
+                     # Heuristic: Tech = Teal/Orange, Nature = Warm Glow
+                     # We can randomize or look at text
+                     # For V1: Randomize for variety if not specified
+                     # if random.random() > 0.7:
+                     #    clip = VisualEffects.apply_look(clip, "teal_orange")
                  else:
                      logger.warning(f"Video asset missing: {scene.visual.source_path}")
-                     clip = ColorClip(size=(self.w, self.h), color="#220000", duration=scene.duration)
+                     clip = ColorClip(size=(self.w, self.h), color=self._parse_color("#220000"), duration=scene.duration)
 
             if not clip:
                 return None
-
-            # Apply Effects (CapCut Style)
-            from admin.engineers.visual_effects import VisualEffects
-            for effect_name in scene.visual.effects:
-                clip = VisualEffects.apply_effect(clip, effect_name, duration=scene.duration)
                 
+            # Apply Transitions (Zoom In default for retention)
+            # We use VisualEffects.zoom_3d_fake for a Ken Burns effect
+            from admin.engineers.visual_effects import VisualEffects
+            clip = VisualEffects.zoom_3d_fake(clip, intensity=0.15)
+            
+            # Apply Look if triggered (e.g. "film", "cinema", "movie" in text)
+            if "film" in scene.text.lower() or "cinema" in scene.text.lower():
+                 clip = VisualEffects.apply_look(clip, "teal_orange")
+            elif "dark" in scene.text.lower() or "night" in scene.text.lower():
+                 clip = VisualEffects.apply_look(clip, "noir")
+            elif "sun" in scene.text.lower() or "morning" in scene.text.lower():
+                 clip = VisualEffects.apply_look(clip, "warm_glow")
+            
+            # Layer Effects (Glitch, Hacker, etc applied inside VisualEffects if passed, 
+            # but Scene.visual.effects list handles specific ones)
+            if scene.visual.effects:
+                for fx in scene.visual.effects:
+                     clip = VisualEffects.apply_effect(clip, fx)
+
+            # Audio for this scene (Not used in V1, handled by Broadcaster)
+            # ...   
             # Default "Slow Pan" if no effects on an image (avoid static boring images)
             if scene.visual.asset_type == VisualType.IMAGE and not scene.visual.effects:
                 clip = VisualEffects.apply_effect(clip, "slow_pan", duration=scene.duration)
@@ -157,7 +209,11 @@ class VideoEngine:
                      except: 
                         pass
                      
-                     clip = CompositeVideoClip([clip, txt_clip])
+                     clip = CompositeVideoClip([clip, txt_clip], size=(self.w, self.h))
+            
+            # Force final strict resize to ensure integers matching mask
+            # Unconditional resize to catch any frame generation mismatches
+            clip = clip.resized((self.w, self.h))
             
             return clip
             
@@ -166,6 +222,40 @@ class VideoEngine:
             import traceback
             traceback.print_exc()
             return None
+
+    def render_project(self, scenes: List[Scene], output_path: str) -> bool:
+        """
+        Renders the full project by assembling all scenes.
+        """
+        try:
+            clips = []
+            for scene in scenes:
+                logger.info(f"Rendering scene {scene.id}...")
+                clip = self.render_scene(scene)
+                if clip:
+                    clips.append(clip)
+            
+            if not clips:
+                logger.error("No clips rendered.")
+                return False
+                
+            from moviepy import concatenate_videoclips
+            final_video = concatenate_videoclips(clips, method="compose")
+            
+            # Write temp file (Broadcaster handles audio mixing later)
+            final_video.write_videofile(
+                output_path, 
+                fps=self.fps,
+                codec="libx264",
+                audio_codec="aac"
+            )
+            return True
+            
+        except Exception as e:
+            logger.error(f"Project output failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
 
     def _resize_cover(self, clip):
         """Resizes clip to cover the resolution (CSS object-fit: cover)."""
@@ -236,7 +326,28 @@ class Director:
         """Decides best visual for the text context with CapCut flair."""
         text_lower = text.lower()
         
-        # 1. Special Sections
+        # 0. Generative B-Roll Override (High Fidelity)
+        # Check for pre-generated assets based on scene index
+        gen_map = {
+            0: "gen_hook.png",
+            1: "gen_body1.png",
+            2: "gen_body2.png",
+            3: "gen_climax.png",
+            4: "gen_outro.png"
+        }
+        
+        if index in gen_map:
+            fname = gen_map[index]
+            fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), f"../../static/images/{fname}"))
+            if os.path.exists(fpath):
+                # Use the high-quality asset with a slow pan
+                return VisualAsset(
+                    asset_type=VisualType.IMAGE, 
+                    source_path=fpath, 
+                    effects=["slow_pan"]
+                )
+
+        # 1. Special Sections (Fallback)
         if index == 0:
             # Hook: Glitch or 3D Zoom
             return VisualAsset(asset_type=VisualType.IMAGE, effects=["glitch", "zoom_3d"])
@@ -256,10 +367,14 @@ class Director:
         if any(w in text_lower for w in pulse_triggers):
              return VisualAsset(asset_type=VisualType.IMAGE, effects=["velocity_pulse"])
              
-        # Tech/Glitch -> Glitch
-        glitch_triggers = ["error", "hack", "bug", "broken", "digital", "weird"]
+        # Tech/Glitch -> Glitch or Hacker Overlay
+        glitch_triggers = ["error", "hack", "bug", "broken", "digital", "weird", "code", "system", "terminal"]
         if any(w in text_lower for w in glitch_triggers):
-             return VisualAsset(asset_type=VisualType.IMAGE, effects=["glitch"])
+             # 50/50 chance of glitch vs overlay for variety
+             # User requested CLEAN edit: Disable hacker overlay for now
+             # if random.random() > 0.5:
+             #     return VisualAsset(asset_type=VisualType.IMAGE, effects=["hacker_overlay"])
+             return VisualAsset(asset_type=VisualType.IMAGE, effects=[]) # No effects, just clean
              
         # Nostalgia/Focus -> 3D Zoom
         zoom_triggers = ["remember", "focus", "look", "deep", "realize"]

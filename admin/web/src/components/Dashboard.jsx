@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import AgentCard from './AgentCard';
-import axios from 'axios';
-import { Terminal, Users, PenTool, Cpu } from 'lucide-react';
+import MissionControl from './MissionControl';
+import EcosystemNeuralNet from './EcosystemNeuralNet';
 
 const Dashboard = () => {
     const [agents, setAgents] = useState([]);
     const [command, setCommand] = useState('');
     const [cmdResult, setCmdResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [heartbeat, setHeartbeat] = useState(null);
 
     const fetchAgents = async () => {
         try {
@@ -18,9 +18,22 @@ const Dashboard = () => {
         }
     };
 
+    const fetchHeartbeat = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/system/heartbeat');
+            setHeartbeat(res.data);
+        } catch (err) {
+            console.error("Failed to fetch heartbeat:", err);
+        }
+    };
+
     useEffect(() => {
         fetchAgents();
-        const interval = setInterval(fetchAgents, 5000);
+        fetchHeartbeat();
+        const interval = setInterval(() => {
+            fetchAgents();
+            fetchHeartbeat();
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -102,16 +115,24 @@ const Dashboard = () => {
                         Orchestrate your autonomous agent swarm. Status: <span className="text-green-500">OPERATIONAL</span>
                     </p>
                 </div>
-                <div className="flex gap-4">
-                    <div className="text-right">
-                        <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest mb-1">Compute Node</p>
-                        <div className="flex items-center justify-end gap-2">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                            <span className="text-sm font-bold text-white font-mono">QWEN-72B</span>
-                        </div>
-                    </div>
-                </div>
             </header>
+
+            {/* Neural Ecosystem View */}
+            <section className="h-[400px] w-full bg-black/40 rounded-xl border border-white/5 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px]" />
+                <EcosystemNeuralNet agents={agents} />
+
+                {/* Overlay Title */}
+                <div className="absolute top-4 left-4 pointer-events-none">
+                    <h2 className="text-xs font-mono font-bold text-white/50 uppercase tracking-widest flex items-center gap-2">
+                        <span className="w-1 h-1 bg-purple-500 rounded-full animate-ping"></span>
+                        Neural State
+                    </h2>
+                </div>
+            </section>
+
+            {/* Mission Control Status Board */}
+            <MissionControl heartbeat={heartbeat} agents={agents} />
 
             {/* Command Center */}
             <section className="glass-panel p-1 rounded-xl">

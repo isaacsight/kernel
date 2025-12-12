@@ -14,6 +14,7 @@ import json
 from datetime import datetime
 from typing import List, Dict, Optional, Any
 import logging
+import math
 
 logger = logging.getLogger("MemoryStore")
 
@@ -95,6 +96,32 @@ class MemoryStore:
                 insight_data TEXT NOT NULL,
                 confidence REAL,
                 source TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Lessons table (specific actionable learnings)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS lessons (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                agent_name TEXT NOT NULL,
+                lesson TEXT NOT NULL,
+                context TEXT,
+                outcome TEXT,
+                tags TEXT, -- JSON list of tags
+                learned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                last_used DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Vector Store (for Semantic Search)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS vector_store (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                doc_id TEXT NOT NULL,
+                text_chunk TEXT NOT NULL,
+                vector JSON NOT NULL,
+                metadata JSON,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -346,6 +373,161 @@ class MemoryStore:
             for r in rows
         ]
     
+    # ==================== Lessons ====================
+
+    def save_lesson(self, agent_name: str, lesson: str, context: str, 
+                   outcome: str, tags: List[str] = None):
+        """Save a specific lesson learned."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if similar lesson exists to update frequency
+        cursor.execute(
+            "SELECT id, frequency FROM lessons WHERE lesson = ? AND agent_name = ?",
+            (lesson, agent_name)
+        )
+        existing = cursor.fetchone()
+        
+        if existing:
+            cursor.execute(
+                """UPDATE lessons 
+                   SET frequency = frequency + 1, last_used = CURRENT_TIMESTAMP 
+                   WHERE id = ?""",
+                (existing[0],)
+            )
+            logger.info(f"Updated lesson frequency: {lesson[:30]}...")
+        else:
+            cursor.execute(
+                """INSERT INTO lessons 
+                   (agent_name, lesson, context, outcome, tags) 
+                   VALUES (?, ?, ?, ?, ?)""",
+                (agent_name, lesson, context, outcome, json.dumps(tags or []))
+            )
+            logger.info(f"New lesson saved: {lesson[:30]}...")
+            
+        conn.commit()
+        conn.close()
+
+    def search_lessons(self, query: str = None, tags: List[str] = None, 
+                      limit: int = 5) -> List[Dict]:
+        """Search for lessons relevant to a query or tags."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        sql = "SELECT * FROM lessons"
+        params = []
+        conditions = []
+        
+        if tags:
+            # This is a simple text match for tags, ideal would be JSON operators but SQLite is limited
+            tag_conditions = []
+            for tag in tags:
+                tag_conditions.append("tags LIKE ?")
+                params.append(f"%{tag}%")
+            if tag_conditions:
+                conditions.append(f"({' OR '.join(tag_conditions)})")
+                
+        if query:
+            # Simple keyword search on lesson and context
+            conditions.append("(lesson LIKE ? OR context LIKE ?)")
+            params.append(f"%{query}%")
+            params.append(f"%{query}%")
+            
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
+            
+        sql += " ORDER BY frequency DESC, learned_at DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor.execute(sql, params)
+        rows = cursor.fetchall()
+        
+        results = []
+        for row in rows:
+            results.append({
+                "agent_name": row["agent_name"],
+                "lesson": row["lesson"],
+                "context": row["context"],
+                "outcome": row["outcome"],
+                "tags": json.loads(row["tags"]) if row["tags"] else [],
+                "frequency": row["frequency"]
+            })
+            
+        conn.close()
+        return results
+    
+    # ==================== Vector Search ====================
+
+    def save_embedding(self, doc_id: str, text: str, vector: List[float], metadata: Dict = None):
+        """Save a text chunk and its embedding vector."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if exists to update (simple upsert logic equivalent)
+        cursor.execute("SELECT id FROM vector_store WHERE doc_id = ? AND text_chunk = ?", (doc_id, text))
+        existing = cursor.fetchone()
+        
+        if existing:
+            cursor.execute(
+                "UPDATE vector_store SET vector = ?, metadata = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ?",
+                (json.dumps(vector), json.dumps(metadata or {}), existing[0])
+            )
+        else:
+            cursor.execute(
+                "INSERT INTO vector_store (doc_id, text_chunk, vector, metadata) VALUES (?, ?, ?, ?)",
+                (doc_id, text, json.dumps(vector), json.dumps(metadata or {}))
+            )
+            
+        conn.commit()
+        conn.close()
+
+    def search_vectors(self, query_vector: List[float], limit: int = 5) -> List[Dict]:
+        """
+        Search for most similar vectors using cosine similarity.
+        Note: Performed in-memory. For <100k items, this is fast enough.
+        """
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        # Fetch all vectors (optimization: could filter by metadata if needed)
+        cursor.execute("SELECT doc_id, text_chunk, vector, metadata FROM vector_store")
+        rows = cursor.fetchall()
+        conn.close()
+        
+        results = []
+        
+        # Calculate Cosine Similarity
+        # Dot product / (Magnitude A * Magnitude B)
+        # Assuming query_vector is already normalized can allow optimization, but we'll do full calc
+        
+        def cosine_similarity(v1, v2):
+            dot_product = sum(a * b for a, b in zip(v1, v2))
+            magnitude1 = math.sqrt(sum(a * a for a in v1))
+            magnitude2 = math.sqrt(sum(b * b for b in v2))
+            if magnitude1 == 0 or magnitude2 == 0:
+                return 0
+            return dot_product / (magnitude1 * magnitude2)
+
+        for row in rows:
+            try:
+                vec = json.loads(row["vector"])
+                score = cosine_similarity(query_vector, vec)
+                if score > 0.3: # Threshold
+                    results.append({
+                        "doc_id": row["doc_id"],
+                        "text": row["text_chunk"],
+                        "metadata": json.loads(row["metadata"]) if row["metadata"] else {},
+                        "score": score
+                    })
+            except Exception as e:
+                continue
+                
+        # Sort by score DESC
+        results.sort(key=lambda x: x["score"], reverse=True)
+        return results[:limit]
+
     # ==================== Summary ====================
     
     def get_memory_summary(self) -> Dict:

@@ -1,0 +1,185 @@
+{
+  "cookies": [
+    {
+      "name": "ab_experiment_sampled",
+      "value": "%22false%22",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1795824477,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ajs_anonymous_id",
+      "value": "%22d72870d4-6b22-40ac-8ec2-6b98f8701cac%22",
+      "domain": "substack.com",
+      "path": "/",
+      "expires": 1795307537,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.747245993.1763771538",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1799879733,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cookie_storage_key",
+      "value": "bfb93c46-f6fa-4dcf-97e5-e8da955ed6b7",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1771547540,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1763771680751.893012154418356373",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1772777637,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.600115723.1763771539.906600763.1764279849.1764279900",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1771547539,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ab_testing_id",
+      "value": "%224e0b30ea-04fd-4ed9-b5be-e522e96552e6%22",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1796856214,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "substack.sid",
+      "value": "s%3AmCq8a5xe-iwKYKCpbdtjq6K-bl_VWPID.LLr5T0II3v6e%2F0mNyFOmr8AmaFjPL%2BqmkLhnYtIWJC0",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1773096214,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ajs_anonymous_id",
+      "value": "%221ebb2b8f-8cc4-4d15-9a96-3155822287b0%22",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1796856214,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "substack.lli",
+      "value": "1",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1772775772,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_JB7SWX1F6V",
+      "value": "GS2.1.s1765319638$o5$g1$t1765319640$j58$l0$h0",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1799879640,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "cj3zh.c3DAsAvFUvngY_4srUKg9Pn4KqQ9F_MGNywro-1765319645-1.0.1.1-eWJTOWo9mlZ4zLf6vhjqQ06a3._mj2mGt8ft.NIsSjMem6HFLwKJaXouVdHwbOk2moW4kPB6RY9wg0P9AYcRYOj7GoEBfU3.KOMgFKC153k",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1765321445,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "visit_id",
+      "value": "%7B%22id%22%3A%22251f61cb-45b1-404c-9be2-6275a76d0bb1%22%2C%22timestamp%22%3A%222025-12-09T22%3A35%3A32.985Z%22%2C%22utm_source%22%3A%22user-menu%22%7D",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1765322014,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_TLW0DF6G5V",
+      "value": "GS2.1.s1765319646$o1$g1$t1765319741$j52$l0$h0",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1799879741,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AWSALBTG",
+      "value": "E+sMhEzmS/Btb2GCdEzAxW/hFzLXYY3JHEg8hHkh8LubzIQYsm+9+y6vTnToRLQ6OLzl48GmAOqch5LMYmptG0Q8Yy8pUnIrgB1HDnwEnHIodh32z6zn0CHW54KB8N7S71LgkpB8CXl04y7FaN4md9Gnl3DrbGCTmygNvGDJ4tSg",
+      "domain": "substack.com",
+      "path": "/",
+      "expires": 1765925014,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AWSALBTGCORS",
+      "value": "E+sMhEzmS/Btb2GCdEzAxW/hFzLXYY3JHEg8hHkh8LubzIQYsm+9+y6vTnToRLQ6OLzl48GmAOqch5LMYmptG0Q8Yy8pUnIrgB1HDnwEnHIodh32z6zn0CHW54KB8N7S71LgkpB8CXl04y7FaN4md9Gnl3DrbGCTmygNvGDJ4tSg",
+      "domain": "substack.com",
+      "path": "/",
+      "expires": 1765925014,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_dd_s",
+      "value": "rum=0&expire=1765321118367",
+      "domain": "substack.com",
+      "path": "/",
+      "expires": 1765321125,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "uLw2p62HKxgeIG0Or6ERTGi8s_nMrHuIMhUxWThJ__M-1765319646-1.2.1.1-9frxjcqCtPVxZz_R6DbDosh.jzyRv6WkXQ4qI4s9.uuhinzHCeaSYbdOpFHlwy7ZoDCG64D3kelAWo2XhGbFsCMwy4m6JxITmnma_aii7DDpJWBdj8UulqHjSPdekJNkV8dYtCVuJ5kIN2Ao8aUIF1Hf88tQk9NFbslff5NyzDO_uFUezNNwD3G8CVCual9fxTVYVHX8imbKBMt1ErFxnc0Jd6V0z9h9kWjDUMQ5IBg",
+      "domain": ".substack.com",
+      "path": "/",
+      "expires": 1796855646,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

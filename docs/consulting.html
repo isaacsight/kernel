@@ -68,11 +68,22 @@
                 </div> <!-- Navigation Items -->
                 <nav class="sidebar-nav-items">
 
-
-                    <a href="collections.html" class="sidebar-item" data-tooltip="Collections">
+                    <a href="index.html" class="sidebar-item" data-tooltip="Essays">
                         <div class="icon-container">
-                            <!-- Original Icon: The Stack (Collections) -->
-                            <!-- New Icon: The Layers (Collections) -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <span class="label">Essays</span>
+                    </a>
+
+                    <a href="collections.html" class="sidebar-item" data-tooltip="Topics">
+                        <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
@@ -80,43 +91,11 @@
                                 <path d="M2 12l10 5 10-5"></path>
                             </svg>
                         </div>
-                        <span class="label">Collections</span>
-                    </a>
-
-                    <a href="experiments.html" class="sidebar-item" data-tooltip="Studio">
-                        <div class="icon-container">
-                            <!-- Original Icon: The Spark (Studio) -->
-                            <!-- New Icon: The Cube (Studio) -->
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path
-                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                </path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Studio</span>
-                    </a>
-
-                    <a href="projects.html" class="sidebar-item" data-tooltip="Projects">
-                        <div class="icon-container">
-                            <!-- New Icon: Flask (Projects) -->
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M10 2v7.31"></path>
-                                <path d="M14 2v7.31"></path>
-                                <path d="M8.5 2h7"></path>
-                                <path d="M14 9.31L22 22H2l8-12.69z"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Projects</span>
+                        <span class="label">Topics</span>
                     </a>
 
                     <a href="about.html" class="sidebar-item" data-tooltip="About">
                         <div class="icon-container">
-                            <!-- Original Icon: The Info (About) -->
-                            <!-- New Icon: The User (About) -->
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -125,6 +104,20 @@
                         </div>
                         <span class="label">About</span>
                     </a>
+
+                    <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
+                        target="_blank">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <span class="label">Subscribe</span>
+                    </a>
+
                 </nav>
 
                 <div class="sidebar-spacer"></div>
@@ -187,17 +180,10 @@
             
             <article>
                 <h1>'Consulting'</h1>
-                <p><div style="font-family: var(--font-serif); max-width: 600px; margin: 0 auto;"></p>
-<p><h1 style="font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2;">Let’s Fix Your Problem.</h1></p>
-<p><p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;"> Tell me who you are, how to reach you, and the problem you’re trying to solve. It doesn’t need to be formal—just write what’s on your mind, what’s not working, or what you want to create. </p></p>
-<p><p style="font-size: 1.2rem; line-height: 1.6;"> Email me anytime at <a href="mailto:isaacsight@gmail.com" style="color: var(--text-main); text-decoration: underline; text-underline-offset: 4px;">isaacsight@gmail.com</a> or use the form below. </p></p>
-<p><form id="consulting-form" class="consulting-form"> <div class="form-group"> <label for="name">Name</label> <input type="text" id="name" name="name" required placeholder="Jane Doe"> </div></p>
-<p><div class="form-group"> <label for="email">Email</label> <input type="email" id="email" name="email" required placeholder="jane@example.com"> </div></p>
-<p><div class="form-group"> <label for="message">How can I help?</label> <textarea id="message" name="message" rows="5" required maxlength="5000" placeholder="Tell me about your project..."></textarea> </div></p>
-<p><button type="submit" class="submit-btn">Send Message</button> </form></p>
-<p><div id="form-success" style="display: none; text-align: center; padding: 2rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; color: #166534;"> <h3 style="margin-top: 0;">Message Sent</h3> <p>Thanks for reaching out. I'll get back to you shortly.</p> </div></p>
+                <p><link rel="stylesheet" href="css/consulting.css"></p>
+<p><div class="consulting-container"></p>
+<p><div class="consulting-header"> <h1 class="consulting-title">Let’s Fix Your Problem.</h1> <p class="consulting-intro"> Tell me who you are, how to reach you, and the problem you’re trying to solve. It doesn’t need to be formal—just write what’s on your mind. </p> <p class="consulting-intro" style="margin-top: 1rem;"> Email me at <a href="mailto:isaacsight@gmail.com" class="consulting-email-link">isaacsight@gmail.com</a>. </p> </div></p>
 <p></div></p>
-<p><script src="js/consulting.js"></script></p>
             </article>
         
         </main>
@@ -264,6 +250,16 @@
                     </svg>
                 </div>
                 <span>Projects</span>
+            </a>
+            <a href="consulting.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="icon-svg">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <span>Consulting</span>
             </a>
             <a href="about.html" class="drawer-link">
                 <div class="icon-container">

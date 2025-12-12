@@ -96,6 +96,36 @@ class ModelRouter:
                 "context_window": 128000,
                 "available": self._check_openai_available()
             },
+            "gpt-5.2-instant": {
+                "provider": "openai",
+                "type": "cloud",
+                "strengths": [TaskType.FAST_SIMPLE, TaskType.CHAT],
+                "cost_tier": "low",
+                "speed": "fast",
+                "quality": "high",
+                "context_window": 128000,
+                "available": self._check_openai_available()
+            },
+            "gpt-5.2-thinking": {
+                "provider": "openai",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CODE_GENERATION, TaskType.CHAT],
+                "cost_tier": "high",
+                "speed": "medium",
+                "quality": "highest",
+                "context_window": 200000,
+                "available": self._check_openai_available()
+            },
+            "gpt-5.2-pro": {
+                "provider": "openai",
+                "type": "cloud",
+                "strengths": [TaskType.CREATIVE_WRITING, TaskType.CHAT, TaskType.ANALYSIS],
+                "cost_tier": "high",
+                "speed": "medium",
+                "quality": "highest",
+                "context_window": 200000,
+                "available": self._check_openai_available()
+            },
             # Local/Remote Ollama models
             "mistral": {
                 "provider": "ollama",
@@ -186,13 +216,13 @@ class ModelRouter:
         # Hermes3 prioritized for creative/chat/analysis per Nous Research practices
         # Qwen 2.5 72B is now the heavy hitter for deep work
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
-            TaskType.CODE_GENERATION: ["qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
-            TaskType.CHAT: ["qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.CREATIVE_WRITING: ["gpt-5.2-pro", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CODE_GENERATION: ["gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
+            TaskType.ANALYSIS: ["gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
-            TaskType.FAST_SIMPLE: ["llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
+            TaskType.FAST_SIMPLE: ["gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
         }
         
         logger.info(f"[{self.name}] Initialized with {len(self.models)} models")
@@ -425,6 +455,9 @@ class ModelRouter:
         self.models["claude-3.5-sonnet"]["available"] = self._check_anthropic_available()
         self.models["gpt-4o"]["available"] = self._check_openai_available()
         self.models["gpt-4o-mini"]["available"] = self._check_openai_available()
+        self.models["gpt-5.2-instant"]["available"] = self._check_openai_available()
+        self.models["gpt-5.2-thinking"]["available"] = self._check_openai_available()
+        self.models["gpt-5.2-pro"]["available"] = self._check_openai_available()
         
         ollama_available = self._check_ollama_available()
         for name in ["mistral", "codestral", "llama3.2", "deepseek-coder", "nomic-embed-text", "hermes3"]:

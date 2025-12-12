@@ -16,8 +16,16 @@ from supabase import create_client, Client
 
 load_dotenv()
 
-from .config import config
-from .decorators import critique_action
+try:
+    from .config import config
+    from .decorators import critique_action
+except ImportError:
+    try:
+        from admin.config import config
+        from admin.decorators import critique_action
+    except ImportError:
+        import config
+        from decorators import critique_action
 
 # Configuration
 CONTENT_DIR = config.CONTENT_DIR
@@ -99,7 +107,7 @@ def auto_generate_idea():
     return topic
 
 
-def save_post(filename, title, date, category, tags, content):
+def save_post(filename, title, date, category, tags, content, excerpt=None):
     """
     Saves a blog post to the content directory.
     """
@@ -119,6 +127,8 @@ def save_post(filename, title, date, category, tags, content):
     post['date'] = date
     post['category'] = category
     post['tags'] = tags
+    if excerpt:
+        post['excerpt'] = excerpt
     
     with open(filepath, 'wb') as f:
         frontmatter.dump(post, f)
@@ -284,8 +294,39 @@ def generate_ai_post(topic, provider="auto"):
 
         # 4. Save Post
         title = topic
+        
+        # Extract Excerpt (First substantial paragraph)
+        # 1. Skip headers
+        # 2. Skip lines that are just punctuation/symbols (like *** or ---)
+        # 3. Prefer bold text if it appears early
+        excerpt = ""
+        lines = content.split('\n')
+        
+        import re
+        
+        for line in lines:
+            clean_line = line.strip()
+            # Skip empty or headers
+            if not clean_line or clean_line.startswith('#'):
+                continue
+                
+            # Skip separator lines (e.g. * * * or - - -)
+            # Check if line has at least some alphanumeric characters
+            if not re.search(r'[a-zA-Z0-9]', clean_line):
+                continue
+                
+            # If we're here, it's a candidate.
+            # Clean up markdown bold/italic for the plain text excerpt
+            candidate = clean_line.replace('**', '').replace('*', '').replace('__', '').replace('_', '')
+            
+            if len(candidate) > 10: # Avoid very short fragments
+                excerpt = candidate
+                if len(excerpt) > 200:
+                    excerpt = excerpt[:197] + "..."
+                break
+        
         filename = f"ai-{topic.lower().replace(' ', '-')}.md"
-        saved_filename = save_post(filename, title, datetime.date.today(), "Engineering", ["ai", "alchemist"], content)
+        saved_filename = save_post(filename, title, datetime.date.today(), "Engineering", ["ai", "alchemist"], content, excerpt)
         
         # 5. Librarian: Update Graph
         logger.info("[The Librarian] Updating Knowledge Graph...")

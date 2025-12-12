@@ -401,20 +401,19 @@ def build():
             p_body = post_bodies.get(p['slug'], "")
             
             # Calculate score
-            # score = calculate_similarity(current_body, p_body)
+            score = calculate_similarity(current_body, p_body)
             
             # Boost score if categories match
-            # if p.get('category') == post.get('category'):
-            #     score += 0.1
+            if p.get('category') == post.get('category'):
+                score += 0.1
                 
-            # related_scores.append((score, p))
+            related_scores.append((score, p))
             
         # Sort by score descending
-        # related_scores.sort(key=lambda x: x[0], reverse=True)
+        related_scores.sort(key=lambda x: x[0], reverse=True)
         
         # Take top 2
-        # related = [item[1] for item in related_scores[:2] if item[0] > 0.05] # Threshold to avoid garbage matches
-        related = []
+        related = [item[1] for item in related_scores[:2] if item[0] > 0.05] # Threshold to avoid garbage matches
         
         related_html = ""
         if related:
@@ -713,17 +712,18 @@ def build():
             date_display = date_obj.strftime('%b %d, %Y')
         except:
             date_display = date_str
-            
         posts_html += f"""
             <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{date_str}">
                 <div class="post-card-content">
-                    <div class="post-header">
-                        <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
-                        <span class="post-category-chip">{primary_tag}</span>
+                    <div class="post-meta-top">
+                        <span class="post-category-label">{primary_tag}</span>
+                        <span class="post-date">{date_display}</span>
                     </div>
+                    <h3 class="post-title">{post.get('title', 'Untitled')}</h3>
                     <p class="post-excerpt">{post.get('excerpt', '')}</p>
-                    <div class="post-meta-row">
-                        <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
+                    <div class="post-meta-bottom">
+                        <span class="read-time">{post.get('read_time', '5 min read')}</span>
+                        <span class="read-more">Read Essay →</span>
                     </div>
                 </div>
             </a>

@@ -37,5 +37,24 @@ class SecurityArchitect:
             "status": "Security Scan Complete"
         }
 
+    async def execute(self, action: str, **params):
+        """Executes an action."""
+        if action == "consult":
+            return self.consult()
+        elif action == "report_status":
+            return {"status": self.report_status()}
+        elif action == "audit":
+             root_dir = params.get("root_dir", ".") # Default to current dir or pass explicitly
+             return self.audit_security(root_dir)
+        else:
+            raise NotImplementedError(f"Action {action} not supported by Security Architect.")
+
+    def consult(self):
+         """Returns expert advice."""
+         return {
+             "advice": "Prioritize security by design. Audit dependencies, rotate secrets, and implement least-privilege access.",
+             "outlook": "Cybersecurity is the immune system of the digital age."
+         }
+
     def report_status(self):
         return f"{self.emoji} {self.name}: Perimeter secure."

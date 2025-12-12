@@ -29,6 +29,20 @@ class Visionary(BaseAgent):
     """
     def __init__(self):
         self.static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../static'))
+        self.brain_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../brain'))
+        self.vision_file = os.path.join(self.brain_dir, 'vision.md')
+        self.future_paths = [
+            "Artificial Intelligence & Machine Learning",
+            "Quantum Computing",
+            "Biotechnology / Bioengineering",
+            "Robotics Engineering",
+            "Computer Science",
+            "Electrical Engineering",
+            "Strategic Finance / Economics"
+        ]
+        
+        # Ensure brain directory exists
+        os.makedirs(self.brain_dir, exist_ok=True)
         self.og_dir = os.path.join(self.static_dir, 'images', 'og')
         os.makedirs(self.og_dir, exist_ok=True)
         

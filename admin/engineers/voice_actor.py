@@ -43,7 +43,7 @@ class VoiceActor:
             "en-US-BrianMultilingualNeural": "am_michael" # Map deep authoritative to Michael
         }
         
-        target_voice = voice or "en-GB-SoniaNeural"
+        target_voice = voice or "en-US-AriaNeural"
         kokoro_voice = kokoro_map.get(target_voice, "bf_isabella")
         # Prepare paths
         base_name = os.path.splitext(output_path)[0]

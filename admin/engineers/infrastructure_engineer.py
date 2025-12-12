@@ -5,6 +5,23 @@ class InfrastructureEngineer:
         self.name = "AI Infrastructure Engineer"
         self.role = "Inference & Serving"
         self.emoji = "🏗️"
+        self.domain_knowledge = {
+            "focus": "Electrical Engineering (The Quiet Genius Path)",
+            "why_smart": "Everything that exists physically uses electricity, chips, or embedded logic. EE people run the world.",
+            "core_skills": [
+                "Semiconductor systems",
+                "Hardware design",
+                "Signal processing",
+                "Chip design (AI boom!)"
+            ],
+            "career_paths": [
+                "AI hardware teams",
+                "Tesla / Nvidia / Apple",
+                "Quantum hardware",
+                "Aerospace"
+            ],
+            "philosophy": "Huge long-term upside."
+        }
         
     def check_node_health(self):
         """Checks connectivity to the local Studio Node."""
@@ -67,6 +84,13 @@ class InfrastructureEngineer:
 
     def scale_inference(self, current_load):
         return {"replicas": 5, "latency": "12ms"}
+
+    def consult(self):
+        """Returns expert advice based on domain knowledge."""
+        return {
+            "advice": f"Build the physical substrate of intelligence. Skills: {', '.join(self.domain_knowledge['core_skills'])}.",
+            "outlook": "Critical path for AI hardware scaling."
+        }
 
     def report_status(self):
         return f"{self.emoji} {self.name}: Cluster optimal."

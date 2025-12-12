@@ -5,9 +5,34 @@ class ProductEngineer:
         self.name = "AI Product Engineer"
         self.role = "Application Layer"
         self.emoji = "📱"
+        self.domain_knowledge = {
+            "focus": "Computer Science (The Most Versatile Degree on Earth)",
+            "why_smart": "Often considered the 'King of Degrees'. Every industry needs software.",
+            "core_skills": [
+                "Foundation for AI",
+                "Robotics",
+                "Quantum software",
+                "Cybersecurity",
+                "Fintech", 
+                "Apps"
+            ],
+            "career_paths": [
+                "Pivot into anything",
+                "Software Engineering",
+                "Founding companies"
+            ],
+            "philosophy": "Even if you pivot later, CS never loses value."
+        }
         
     def build_feature(self, spec):
         return {"status": "shipped", "user_delight": "high"}
+
+    def consult(self):
+        """Returns expert advice based on domain knowledge."""
+        return {
+            "advice": f"The ultimate pivot degree. It unlocks: {', '.join(self.domain_knowledge['core_skills'])}.",
+            "outlook": "Maximum optionality and safety."
+        }
 
     def audit_ux(self, templates_dir):
         """Checks for basic UX/SEO elements in templates."""

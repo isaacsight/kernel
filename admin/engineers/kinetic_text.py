@@ -159,7 +159,7 @@ class KineticTextEngine:
             
             for f in candidates:
                 try:
-                    font_obj = ImageFont.truetype(f, fontsize)
+                    font_obj = ImageFont.truetype(f, int(fontsize))
                     break
                 except (IOError, OSError):
                     continue
@@ -192,21 +192,29 @@ class KineticTextEngine:
             if align == 'left':
                 x = 40
             
-            # Draw stroke
-            if stroke_width > 0:
-                stroke_color = 'black'
-                for adj_x in range(-stroke_width, stroke_width+1):
-                    for adj_y in range(-stroke_width, stroke_width+1):
-                        if adj_x**2 + adj_y**2 <= stroke_width**2:
-                            draw.text((x+adj_x, y+adj_y), text, font=font_obj, fill=stroke_color)
-                
-            # Draw main text
-            draw.text((x, y), text, font=font_obj, fill=color)
+            # Draw Shadow first
+            shadow_offset = int(fontsize * 0.05)
+            draw.text((x + shadow_offset, y + shadow_offset), text, font=font_obj, fill="black")
             
+            # Draw Stroke/Outline by drawing multiple times
+            if stroke_width > 0:
+                stroke_fill = "black"
+                # Pillow's stroke support is decent in newer versions, but manual offset is safer for older envs
+                # But let's try standard stroke_width arg first which we passed
+                draw.text((x, y), text, font=font_obj, fill=color, stroke_width=stroke_width, stroke_fill=stroke_fill)
+            else:
+                draw.text((x, y), text, font=font_obj, fill=color)
+            
+            # Crop to text content if needed, but we wanted full size
+            # let's return the full image
+            
+            # Convert to MoviePy ImageClip
             return ImageClip(np.array(img))
             
         except Exception as e:
-            logger.error(f"Pillow text creation failed: {e}")
+            logger.error(f"Failed to create text clip PIL: {e}")
+            import traceback
+            traceback.print_exc()
             return None
 
     def generate_kinetic_captions(self, vtt_path: str, video_w: int, video_h: int, style="capcut_pop") -> List:
@@ -221,10 +229,10 @@ class KineticTextEngine:
         clips = []
         
         # Style config
-        fontsize = int(video_w * 0.06) 
+        fontsize = int(video_w * 0.08) # Bigger
         color = '#FFFFFF'
-        stroke_width = int(fontsize * 0.1)
-        font = "Impact"
+        stroke_width = int(fontsize * 0.08)
+        font = "Arial-Black" # More standard viral font
         
         for start, end, text in captions:
             duration = end - start
@@ -248,27 +256,21 @@ class KineticTextEngine:
                 txt_clip = txt_clip.with_duration(duration).with_position(('center', 0.7), relative=True).with_start(start)
                 
                 # 2. Apply Animation based on Style
-                if style == "capcut_pop":
-                    # The classic "Spring Pop"
-                    def spring_scale(t):
-                        if t > 0.4: return 1.0
-                        val = self._spring_solver(t * 3.0, stiffness=300, damping=18)
-                        return max(0.01, val)
-                    
-                    try:
-                        effect_clip = txt_clip.with_effects([vfx.Resize(spring_scale)])
-                        clips.append(effect_clip)
-                    except:
-                        clips.append(txt_clip)
+                if style == "capcut_pop" or style == "karaoke": 
+                    # Unified Modern Clean Style:
+                    # White text, Black outline, Spring Pop
+                    pass 
 
-                elif style == "typewriter":
-                    # Masking left to right?
-                    # Hard to do with ImageClip without frame-by-frame generation
-                    # Alternative: Show words sequentially (Word-level granularity needed)
-                    # For now, just Pop-IN but faster
-                    clips.append(txt_clip)
-
-                else:
+                # Always apply Spring Pop for dynamic feel
+                def spring_scale(t):
+                    if t > 0.4: return 1.0
+                    val = self._spring_solver(t * 3.0, stiffness=300, damping=18)
+                    return max(0.01, val)
+                
+                try:
+                    effect_clip = txt_clip.with_effects([vfx.Resize(spring_scale)])
+                    clips.append(effect_clip)
+                except:
                     clips.append(txt_clip)
                     
             except Exception as e:

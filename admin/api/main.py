@@ -9,18 +9,45 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
 from admin import core
+from admin.heartbeat import heartbeat
 from admin.api.models import Post, AgentAction
 from admin.api.premium import router as premium_router
 
 app = FastAPI(title="Studio OS API", version="1.0.0")
 
+# Mount static files (Frontend Build)
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Ensure dist directory exists before mounting
+dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../frontend/dist'))
+
+if not os.path.exists(dist_path):
+    print(f"WARNING: Frontend build not found at {dist_path}")
+    os.makedirs(dist_path, exist_ok=True) # Prevent crash on startup if missing
+
+app.mount("/assets", StaticFiles(directory=os.path.join(dist_path, "assets")), name="assets")
+
 # Include premium essay endpoints
-app.include_router(premium_router)
+
+# ==================== Consulting ====================
+from admin.api.consulting import router as consulting_router
+app.include_router(consulting_router, prefix="/api/consulting", tags=["Consulting"])
+
+
+@app.on_event("startup")
+async def startup_event():
+    heartbeat.start()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    heartbeat.stop()
 
 # CORS Configuration
 origins = [
     "http://localhost:5173",  # Vite Dev Server
     "http://localhost:3000",
+    "http://localhost:8081",  # Local Static Server
     "https://doesthisfeelright.com",  # Production
 ]
 
@@ -43,6 +70,15 @@ async def system_status():
         "status": "operational",
         "server_status": server_manager.get_status(),
         "version": "1.0.0"
+    }
+
+@app.get("/system/heartbeat")
+async def heartbeat_status():
+    return {
+        "status": heartbeat.status,
+        "running": heartbeat.running,
+        "interval": heartbeat.interval,
+        "last_beat": heartbeat.last_beat
     }
 
 @app.get("/agents")
@@ -205,6 +241,10 @@ async def trigger_evolution(background_tasks: BackgroundTasks):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ==================== Client Portal Chat ====================
+from admin.api.chat import router as chat_router
+app.include_router(chat_router)
+
 # ==================== New Features (Replit/Spark/Discord/Steam Inspired) ====================
 
 class CommandInput(BaseModel):
@@ -333,4 +373,19 @@ async def select_model(request: ModelSelectionRequest):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# SPA Catch-all route
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # Skip API routes and static files since they are handled earlier
+    if full_path.startswith("api/") or full_path.startswith("assets/"):
+        raise HTTPException(status_code=404, detail="Not found")
+    
+    # Check if index.html exists
+    index_path = os.path.join(dist_path, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+        
+    return {"message": "Frontend not built. Please run 'npm run build' in admin/web"}
 

@@ -4,7 +4,8 @@ import ProjectHub from './pages/ProjectHub';
 import TitanDB from './pages/TitanDB';
 import ProjectPlaceholder from './pages/ProjectPlaceholder';
 import StudioChat from './pages/StudioChat';
-import './App.css';
+import ClientPortal from './pages/ClientPortal';
+
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ProjectHub />} />
             <Route path="/chat" element={<StudioChat />} />
+            <Route path="/clients" element={<ClientPortal />} />
             <Route path="/projects/titan" element={<TitanDB />} />
             <Route path="/projects/:id" element={<ProjectPlaceholder />} />
             <Route path="*" element={<ProjectHub />} />

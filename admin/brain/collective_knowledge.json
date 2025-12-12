@@ -1060,6 +1060,21 @@
       },
       "confidence": 1.0,
       "shared_at": "2025-12-07T09:05:00.000000"
+    },
+    {
+      "from_agent": "Researcher",
+      "type": "research_findings",
+      "insight": {
+        "topic": "video automation for tiktok",
+        "summary": "Found 3 relevant resources for 'video automation for tiktok'.",
+        "top_findings": [
+          "ShortGPT",
+          "short-video-maker",
+          "AI-Youtube-Shorts-Generator"
+        ]
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-10T12:55:26.311006"
     }
   ],
   "agent_expertise": {
@@ -1091,7 +1106,7 @@
         "content review",
         "campaign planning"
       ],
-      "registered_at": "2025-12-05T15:39:01.674266"
+      "registered_at": "2025-12-10T12:37:17.486709"
     }
   },
   "lessons_learned": [
@@ -1150,6 +1165,27 @@
       "context": "tiktok storytime",
       "outcome": "positive",
       "learned_at": "2025-12-05T09:19:00.455789"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "Research on video automation for tiktok yielded 3 results.",
+      "context": "Research: video automation for tiktok",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-10T12:55:26.313441"
+    },
+    {
+      "from_agent": "TestBot",
+      "lesson": "Always check file permissions before accessing restricted configs.",
+      "context": "Failure in test_hazardous_action: FileNotFoundError: /restricted/config.xml is not accessible",
+      "outcome": "FAILED",
+      "learned_at": "2025-12-10T12:59:34.713041"
+    },
+    {
+      "from_agent": "TestBot",
+      "lesson": "Always check file permissions before accessing restricted configs.",
+      "context": "Failure in test_hazardous_action: FileNotFoundError: /restricted/config.xml is not accessible",
+      "outcome": "FAILED",
+      "learned_at": "2025-12-10T13:02:53.699347"
     }
   ],
   "team_decisions": [],
@@ -1201,6 +1237,18 @@
       "status": "active",
       "progress": 0,
       "created_at": "2025-12-07T11:15:30.187723"
+    },
+    {
+      "id": "goal-1765400893",
+      "goal": "[DATA-DRIVEN] Content Generation: Review provider configuration and content prompts",
+      "assigned_to": [
+        "Architect",
+        "Operator"
+      ],
+      "priority": "high",
+      "status": "active",
+      "progress": 0,
+      "created_at": "2025-12-10T13:08:13.405638"
     }
   ]
 }

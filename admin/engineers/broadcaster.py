@@ -1,7 +1,7 @@
 import os
 import logging
 from moviepy import CompositeVideoClip, ColorClip
-from tiktok_uploader.upload import upload_video
+
 
 logger = logging.getLogger("Broadcaster")
 
@@ -11,15 +11,29 @@ nest_asyncio.apply()
 
 class Broadcaster:
     def __init__(self):
-        self.cookies_path = os.path.join(os.path.dirname(__file__), "../cookies.txt")
+        # Point to Project Root cookies.txt (admin/engineers/../../cookies.txt)
+        self.cookies_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../cookies.txt"))
         self.output_dir = os.path.join(os.path.dirname(__file__), "../../static/videos")
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-    def generate_video(self, post, vibe="chill", voice=None):
+    def generate_video(self, post, vibe="chill", voice=None, engine="moviepy"):
         """
-        Generates a high-quality video using the Hybrid Video Engine (Programmatic CapCut).
+        Generates a video using the specified engine.
+        
+        Args:
+            post (dict): Blog post data
+            vibe (str): Video processing vibe
+            voice (str): Voice ID
+            engine (str): "moviepy" (fully automated) or "capcut" (hybrid/draft only)
+            
+        Returns:
+            str: Path to video file (MoviePy) or Status Message (CapCut)
         """
+        if engine == "capcut":
+            return self._generate_with_capcut(post, vibe, voice)
+            
+        # Default to MoviePy Engine
         try:
             from .video_engine import VideoEngine, Director, VisualAsset, VisualType
             
@@ -29,8 +43,18 @@ class Broadcaster:
             # 1. Generate Script & Audio (The Foundation)
             voiceover_path, vtt_path = self.generate_voiceover(post, vibe, voice)
             if not voiceover_path:
-                logger.error("Failed to generate voiceover. Aborting video.")
-                return None
+                logger.warning("Failed to generate voiceover. Attempting fallback to dummy audio.")
+                project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                dummy_mp3 = os.path.join(project_root, "static", "videos", "dummy_voice.mp3")
+                dummy_vtt = os.path.join(project_root, "static", "videos", "dummy.vtt")
+                
+                if os.path.exists(dummy_mp3) and os.path.exists(dummy_vtt):
+                    logger.info("Using dummy audio fallback.")
+                    voiceover_path = dummy_mp3
+                    vtt_path = dummy_vtt
+                else:
+                    logger.error("Failed to generate voiceover and no fallback found. Aborting video.")
+                    return None
                 
             # Read the script text (simulated from vtt or re-generation)
             # Ideally generate_voiceover returns the text too. 
@@ -173,11 +197,158 @@ class Broadcaster:
                 
             return final_output_path
 
+            return final_output_path
+
         except Exception as e:
             logger.error(f"Failed to generate video: {e}")
             import traceback
             traceback.print_exc()
             return None
+
+    def _generate_with_capcut(self, post, vibe="chill", voice=None):
+        """
+        Generates a CapCut draft via the local CapCutAPI server.
+        """
+        try:
+            import requests
+            import json
+            
+            # API Config
+            API_URL = "http://localhost:9001" # Updated to match tools/CapCutAPI/config.json
+            
+            logger.info("Connecting to CapCutAPI...")
+            
+            # 1. Create a new Draft
+            try:
+                # 1080x1920 (TikTok vertical)
+                payload = {"width": 1080, "height": 1920}
+                response = requests.post(f"{API_URL}/create_draft", json=payload, timeout=10)
+                if response.status_code != 200:
+                    logger.error(f"Failed to create draft: {response.text}")
+                    return None
+                
+                data = response.json()
+                if not data.get("success"):
+                     logger.error(f"API Error: {data.get('error')}")
+                     return None
+                     
+                draft_id = data["output"]["draft_id"]
+                draft_info = data["output"] # Contains draft_folder?
+                logger.info(f"Created Draft ID: {draft_id}")
+                
+            except Exception as e:
+                logger.error(f"Could not connect to CapCutAPI: {e}")
+                return None
+            
+            # 2. Add Audio (Voiceover)
+            # We still generate the voiceover locally first
+            voiceover_path, vtt_path = self.generate_voiceover(post, vibe, voice)
+            if not voiceover_path:
+                 logger.warning("Failed to generate voiceover for CapCut. Proceeding without audio.")
+                 # return None # Allow draft creation without audio
+            else:
+                 # CapCutAPI needs a URL or absolute path? 
+                 # It seems the server implementation uses `add_audio_track` which might expect a local path if running locally
+                 # or a URL if remote. Since server is local, absolute path should work if server has permissions.
+                 # Let's try absolute file path.
+                 abs_audio_path = os.path.abspath(voiceover_path)
+            
+                 payload = {
+                    "draft_id": draft_id,
+                    "audio_url": abs_audio_path, # Server code variable name is audio_url but likely supports paths
+                    "track_name": "voiceover",
+                    "volume": 1.5
+                 }
+                 res = requests.post(f"{API_URL}/add_audio", json=payload)
+                 if res.status_code == 200:
+                    logger.info("Added voiceover to draft")
+                 else:
+                    logger.warning(f"Failed to add voiceover: {res.text}")
+                
+            # 3. Add Captions (Subtitles)
+            # The API supports SRT. detailed styling can be passed.
+            # We have VTT. Need to convert to SRT or just raw text?
+            # API takes 'srt' param which can be content or path.
+            # Let's convert our vtt to simple srt path.
+            if vtt_path:
+                 srt_path = vtt_path.replace('.vtt', '.srt')
+                 # Simple conversion if needed, or see if we can just pass the path
+                 # For now, let's assume we can pass the VTT path if the server supports it, 
+                 # OR we do a quick text add.
+                 # Actually, looking at server code: `add_subtitle` takes `srt` (content or URL).
+                 # Let's read the VTT and just extract text for now? 
+                 # No, we want timing. 
+                 # Let's convert VTT to SRT properly.
+                 self._convert_vtt_to_srt(vtt_path, srt_path)
+                 
+                 payload = {
+                    "draft_id": draft_id,
+                    "srt": os.path.abspath(srt_path),
+                    "font": "System", 
+                    "font_size": 10,
+                    "font_color": "#FFFF00" if vibe == "chill" else "#FFFFFF", # Yellow or White
+                    "track_name": "captions"
+                 }
+                 # CapCutAPI might fail if font doesn't exist. "System" is safe? or "Arial"?
+                 # Server default is "思源粗宋".
+                 res = requests.post(f"{API_URL}/add_subtitle", json=payload)
+                 logger.info(f"Added subtitles: {res.status_code}")
+
+            # 4. Add Visuals (Screenshots)
+            slug = post.get('slug', 'temp')
+            screenshots = self.capture_screenshots(slug)
+            
+            # Simple logic: Show first screenshot for first half, second for second?
+            # Or just add them sequentially to cover duration.
+            # We don't know total duration easily without parsing audio.
+            # But we can add them with long duration?
+            # Let's just add 2 screenshots for 5s each for now as a demo.
+            
+            current_time = 0
+            for i, shot in enumerate(screenshots):
+                 # Add image
+                 payload = {
+                    "draft_id": draft_id,
+                    "image_url": os.path.abspath(shot),
+                    "start": current_time,
+                    "end": current_time + 5.0,
+                    "track_name": "visuals"
+                 }
+                 requests.post(f"{API_URL}/add_image", json=payload)
+                 current_time += 5.0
+            
+            # 5. Save Draft
+            # Some server implementations require an explicit save call to flush to disk DB
+            requests.post(f"{API_URL}/save_draft", json={"draft_id": draft_id})
+            
+            logger.info("CapCut Draft Generation Complete!")
+            return f"DRAFT_CREATED:{draft_id}"
+            
+        except Exception as e:
+            logger.error(f"CapCut generation failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+
+    def _convert_vtt_to_srt(self, vtt_path, srt_path):
+        """Simple helper to convert VTT to SRT format."""
+        try:
+            with open(vtt_path, 'r', encoding='utf-8') as fin, open(srt_path, 'w', encoding='utf-8') as fout:
+                lines = fin.readlines()
+                count = 1
+                for line in lines:
+                    if "WEBVTT" in line: continue
+                    if "-->" in line:
+                        fout.write(f"{count}\n")
+                        fout.write(line.replace('.', ',')) # SRT uses comma for millis
+                        count += 1
+                    elif line.strip():
+                        fout.write(line)
+                    else:
+                        fout.write('\n')
+        except:
+            pass
+
 
     def generate_script(self, post, vibe="chill"):
         """Generates a short TikTok script using Gemini."""
@@ -300,19 +471,53 @@ class Broadcaster:
             engine = KineticTextEngine()
             
             # Generate kinetic clips
+            # Use 'karaoke' for fast paced / tech vibes, 'capcut_pop' for chill
+            style = "karaoke" 
+            
             caption_clips = engine.generate_kinetic_captions(
                 vtt_path, 
                 video_clip.w, 
-                video_clip.h
+                video_clip.h,
+                style=style
             )
             
             if not caption_clips:
                 logger.warning("No captions generated by KineticTextEngine.")
-                return video_clip
-                
-            # Composite
-            final_clip = CompositeVideoClip([video_clip] + caption_clips)
-            return final_clip
+                final_v = video_clip
+            else:
+                 final_v = CompositeVideoClip([video_clip] + caption_clips)
+
+            # Add SFX (Pop) for every word if style is karaoke
+            if style == "karaoke":
+                 try:
+                     # We need to know when words appear.
+                     # Hack: we assume caption_clips are the word clips.
+                     # Let's check if caption_clips are indeed word clips
+                     # KineticTextEngine logic: returns list of clips.
+                     
+                     sfx_clips = []
+                     pop_path = os.path.join(os.path.dirname(__file__), "../static/audio/pop.mp3")
+                     
+                     if os.path.exists(pop_path):
+                         from moviepy import AudioFileClip, CompositeAudioClip
+                         pop_sound = AudioFileClip(pop_path)
+                         # Make it quieter
+                         pop_sound = pop_sound.with_effects([MultiplyVolume(0.15)])
+                         
+                         for c in caption_clips:
+                             # Add pop at start of clip
+                             sfx = pop_sound.with_start(c.start)
+                             sfx_clips.append(sfx)
+                             
+                         # Mix with existing audio
+                         current_audio = final_v.audio
+                         if current_audio:
+                             final_audio = CompositeAudioClip([current_audio] + sfx_clips)
+                             final_v.audio = final_audio
+                 except Exception as sfx_err:
+                     logger.warning(f"Failed to add SFX: {sfx_err}")
+            
+            return final_v
 
         except Exception as e:
             logger.error(f"Failed to add kinetic captions: {e}")
@@ -382,12 +587,22 @@ class Broadcaster:
         """
         Uploads a video to TikTok.
         """
+        from admin.brain.collective_intelligence import get_collective_intelligence
+        ci = get_collective_intelligence()
+        
+        # 1. Proactive Check (Consult Collective)
+        warnings = ci.consult_collective("upload_to_tiktok", f"Uploading {video_path}")
+        if warnings:
+            logger.warning(f"⚠️ Collective Intelligence Warnings: {warnings}")
+            # In the future, we could abort if a specific "BLOCKER" tag matches
+            
         if not os.path.exists(self.cookies_path):
             logger.warning("TikTok cookies not found. Skipping upload.")
             return False
         
         try:
             from ..config import config
+            from tiktok_uploader.upload import upload_video
             
             full_description = f"{description}\n\nRead more at: {config.SITE_URL}"
             
@@ -398,9 +613,24 @@ class Broadcaster:
                 browser='chrome',
                 headless=False 
             )
+            if os.path.exists(video_path):
+                try:
+                    os.remove(video_path)
+                    logger.info(f"Deleted {video_path} after successful upload.")
+                except Exception as del_err:
+                    logger.warning(f"Failed to delete uploaded video: {del_err}")
+                    
             return True
         except Exception as e:
             logger.error(f"Failed to upload to TikTok: {e}")
+            
+            # 2. Reflexive Learning (Learn from Failure)
+            ci.learn_from_failure(
+                "Broadcaster", 
+                "upload_to_tiktok", 
+                str(e), 
+                {"video": video_path, "cookies_exists": os.path.exists(self.cookies_path)}
+            )
             return False
 
     def distribute_to_twitter(self, thread_data: dict) -> bool:

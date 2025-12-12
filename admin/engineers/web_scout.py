@@ -12,6 +12,14 @@ import requests
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from urllib.parse import quote_plus
+import asyncio
+try:
+    from TikTokApi import TikTokApi
+    import nest_asyncio
+    nest_asyncio.apply()
+    TIKTOK_AVAILABLE = True
+except ImportError:
+    TIKTOK_AVAILABLE = False
 
 logger = logging.getLogger("WebScout")
 
@@ -315,6 +323,71 @@ class WebScout:
             lines.append(f"   Source: {r.get('url', 'Unknown')}\n")
         
         return "\n".join(lines)
+
+    async def _fetch_tiktok_async(self, query: Optional[str] = None, count: int = 10, method: str = "trending"):
+        """Internal async method to interact with TikTokApi"""
+        if not TIKTOK_AVAILABLE:
+            logger.warning(f"[{self.name}] TikTokApi not available. Install it with: pip install TikTokApi playwright")
+            return []
+
+        ms_token = os.environ.get("ms_token", None)
+        results = []
+        
+        try:
+            async with TikTokApi() as api:
+                # 'webkit' helps avoid bot detection
+                await api.create_sessions(ms_tokens=[ms_token], num_sessions=1, sleep_after=3, browser='webkit')
+                
+                iterator = None
+                if method == "trending":
+                    iterator = api.trending.videos(count=count)
+                elif method == "search" and query:
+                    # 'item' type is for videos. 
+                    # Note: search might require auth (ms_token) for videos, but we'll try.
+                    iterator = api.search.search_type(query, "item", count=count)
+                
+                
+                if iterator:
+                    async for video in iterator:
+                        try:
+                            data = video.as_dict
+                            stats = data.get('stats', {})
+                            results.append({
+                                "id": data.get('id'),
+                                "desc": data.get('desc', ''),
+                                "author": data.get('author', {}).get('nickname', 'Unknown'),
+                                "author_id": data.get('author', {}).get('uniqueId', ''),
+                                "likes": stats.get('diggCount', 0),
+                                "plays": stats.get('playCount', 0),
+                                "url": f"https://www.tiktok.com/@{data.get('author', {}).get('uniqueId')}/video/{data.get('id')}",
+                                "source": "tiktok"
+                            })
+                        except Exception as e:
+                            logger.warning(f"[{self.name}] Error parsing TikTok video: {e}")
+        except Exception as e:
+            logger.error(f"[{self.name}] TikTok API error: {e}")
+            
+        return results
+
+    def get_tiktok_trends(self, count: int = 10) -> List[Dict]:
+        """Get trending TikTok videos."""
+        logger.info(f"[{self.name}] Fetching TikTok trends...")
+        try:
+            return asyncio.run(self._fetch_tiktok_async(count=count, method="trending"))
+        except RuntimeError:
+            # Handle case where loop is already running (e.g. inside another async function)
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(self._fetch_tiktok_async(count=count, method="trending"))
+
+    def search_tiktok(self, query: str, count: int = 10) -> List[Dict]:
+        """Search for TikTok videos."""
+        logger.info(f"[{self.name}] Searching TikTok for: {query}")
+        try:
+            return asyncio.run(self._fetch_tiktok_async(query=query, count=count, method="search"))
+        except RuntimeError:
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(self._fetch_tiktok_async(query=query, count=count, method="search"))
+
 
 
 # Singleton instance

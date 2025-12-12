@@ -3,15 +3,17 @@ import os
 import sys
 
 # Add project root to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
 
 from admin.engineers.socialite import Socialite
 
 def finalize_distribution():
-    filename = "content/ai-meet-your-ai-engineering-team.md"
-    print(f"Reading {filename}...")
+    # Target the new Self-Evolving Studio Devlog
+    post_path = os.path.join(project_root, "content", "2025-12-10-technicians-trap.md")
+    import markdown
     
-    with open(filename, 'r', encoding='utf-8') as f:
+    with open(post_path, 'r', encoding='utf-8') as f:
         raw_content = f.read()
         
     parts = raw_content.split('---', 2)
@@ -25,10 +27,14 @@ def finalize_distribution():
                 key, val = line.split(':', 1)
                 meta[key.strip()] = val.strip()
         
+        # Convert markdown body to HTML
+        html_content = markdown.markdown(body)
+        
         post_data = {
             'title': meta.get('title', 'Untitled'),
+            'subtitle': meta.get('subtitle', ''),
             'excerpt': meta.get('excerpt', ''),
-            'content': body
+            'content': html_content
         }
     else:
         post_data = {'title': 'AI Team Post', 'content': raw_content}

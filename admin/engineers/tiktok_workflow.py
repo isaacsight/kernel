@@ -102,9 +102,10 @@ class TikTokWorkflow:
         }
     }
     
-    def __init__(self, template: str = "storytime"):
+    def __init__(self, template: str = "storytime", engine: str = "moviepy"):
         self.template_name = template
         self.config = self.TEMPLATES.get(template, self.TEMPLATES["storytime"])
+        self.engine = engine  # New engine selector
         self.steps: List[WorkflowStep] = []
         self.current_step_index = -1
         self.workflow_id = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -191,9 +192,27 @@ class TikTokWorkflow:
                     "post": post,
                     "script": final_script,
                     "vibe": self.config["vibe"],
-                    "voice": self.config["voice"]
+                    "voice": self.config["voice"],
+                    "engine": self.engine
                 }
             )
+            
+            # Special Handling for CapCut (Hybrid Workflow)
+            if self.engine == "capcut" and "DRAFT_CREATED" in str(video_result.get("video_path", "")):
+                # Stop here and notify
+                draft_id = video_result.get("video_path").split(":")[-1]
+                logger.info(f"✨ CAPCUT DRAFT CREATED: {draft_id}")
+                logger.info("⚠️  ACTION REQUIRED: Manual Export Needed")
+                logger.info("1. Open CapCut Desktop")
+                logger.info("2. Open the new draft")
+                logger.info("3. Click 'Export'")
+                logger.info(f"4. Save to: {os.path.abspath(os.path.join(os.path.dirname(__file__), '../../static/videos'))}")
+                
+                result["status"] = "paused_for_export"
+                result["draft_id"] = draft_id
+                # Return early or wait? 
+                # For the agentic loop, we return so the Agent can notify the user.
+                return result
             
             # Step 5: Review
             review = self._execute_step(
@@ -465,7 +484,12 @@ class TikTokWorkflow:
         post = data["post"]
         post["script"] = data["script"]  # Inject improved script
         
-        video_path = broadcaster.generate_video(post, vibe=data["vibe"], voice=data["voice"])
+        video_path = broadcaster.generate_video(
+            post, 
+            vibe=data["vibe"], 
+            voice=data["voice"], 
+            engine=data.get("engine", "moviepy")
+        )
         
         return {
             "video_path": video_path,
