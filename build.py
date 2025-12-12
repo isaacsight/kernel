@@ -2193,7 +2193,7 @@ Sitemap: {BASE_URL}/sitemap.xml
             full_map_graph_page = full_map_graph_page.replace('../static/', '../static/')
 
             full_map_graph_page = full_map_graph_page.replace('{{ root }}', '../')
-            full_map_graph_page = full_map_graph_page.replace('{{ title }}', 'Map (Graph) - Does This Feel Right?')
+            full_map_graph_page = full_map_graph_page.replace('{{ title }}', 'Map — Does This Feel Right?')
             full_map_graph_page = full_map_graph_page.replace('{{ description }}', 'The network of thoughts.')
             full_map_graph_page = full_map_graph_page.replace('{{ url }}', f"{BASE_URL}/map/graph.html")
             full_map_graph_page = full_map_graph_page.replace('{{ image }}', DEFAULT_IMAGE)

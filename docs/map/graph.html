@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map (Graph) - Does This Feel Right?</title>
+    <title>Map — Does This Feel Right?</title>
     <meta name="description" content="The network of thoughts.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Map (Graph) - Does This Feel Right?">
+    <meta property="og:title" content="Map — Does This Feel Right?">
     <meta property="og:description" content="The network of thoughts.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.doesthisfeelright.com/map/graph.html">
@@ -25,7 +25,7 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.doesthisfeelright.com/map/graph.html">
-    <meta name="twitter:title" content="Map (Graph) - Does This Feel Right?">
+    <meta name="twitter:title" content="Map — Does This Feel Right?">
     <meta name="twitter:description" content="The network of thoughts.">
     <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
 
@@ -247,20 +247,15 @@
                 <input type="radio" name="mode" id="modeWander" value="wander">
                 <label for="modeWander" title="Explore ideas without direction">Wander</label>
             </div>
-            stroke-width="1" class="muted">
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="3"></circle>
-            </svg>
         </div>
-        <p>Click a node to focus</p>
-        <small class="muted">Drag to pan • Scroll to zoom</small>
-    </div>
+        <!-- Right Side: Persistent Inspector -->
+        <div id="graphInspector" class="graph__sidebar"></div>
+
     </div>
 
     <!-- Loading Overlay -->
     <div id="graphLoading" class="graph__loading">
         <div class="spinner"></div>
-    </div>
     </div>
 </section>
 

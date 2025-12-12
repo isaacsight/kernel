@@ -78,6 +78,27 @@
             centerHint.classList.remove("hint-hidden");
         }
 
+        // CONTROL VISIBILITY (Wander Mode Minimalism)
+        // User requested: Hide Core Only, Links, List in Wander.
+        const isRead = newMode === "read";
+        const display = isRead ? "" : "none";
+
+        if (canonOnly && canonOnly.parentElement) canonOnly.parentElement.style.display = display;
+        if (directionSel) directionSel.style.display = display;
+
+        const listBtn = document.querySelector(".graph__glass-pill .btn-text"); // List
+        if (listBtn) listBtn.style.display = display;
+
+        // Also the VR dividers? 
+        const vrs = document.querySelectorAll(".graph__glass-pill .vr");
+        vrs.forEach(vr => vr.style.display = display);
+        // Maybe keep the one between Search and Actions? 
+        // Search (Group 1) -> VR -> Filter (Group 2 - Hidden) -> VR -> Actions (Group 3)
+        // If Group 2 is hidden, we have VR -> VR.
+        // Let's just hide all VRs for simplicity in Wander, or specific ones. 
+        // User didn't specify, but double dividers look bad.
+        // Hiding all VRs in Wander makes it Search ... Reset ... Toggle. Clean.
+
         // Restore / Clear selection on mode switch?
         // Spec says: Wander has no selection initially.
         selectedNode = null;
@@ -385,18 +406,11 @@
         // EMPTY STATE
         if (!node) {
             if (MODE === "read") {
-                // SUGGESTED PATHS (Read Mode)
-                const coreNodes = nodesAll.filter(n => n.canonical).sort(() => 0.5 - Math.random()).slice(0, 3);
-                const list = coreNodes.map(n => nodeLinkHTML(n.id)).join("");
-
+                // Read Mode: Minimal empty state (Center Hint handles instruction)
                 inspector.innerHTML = `
-                <div class="graph__empty-state">
-                    <div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
-                    <p style="font-weight:600; color:var(--text-main);">Click a node to explore.</p>
-                    <p class="muted" style="margin-top:4px;">Drag to pan • Scroll to zoom</p>
-                    <button class="btn-text" style="margin-top:12px; font-size:12px;" onclick="document.getElementById('modeWander').click()">Prefer vibes? Try Wander.</button>
-                </div>
-                ${list ? `<div class="inspector__section" style="margin-top:24px;"><div class="inspector__section-title">Suggested Paths</div><ul class="inspector__list">${list}</ul></div>` : ""}
+                    <div class="graph__empty-state" style="margin-top:50%; text-align:center; opacity:0.3;">
+                        <p class="muted">Select a node to view details</p>
+                    </div>
                 `;
             } else {
                 // WANDER MODE: Poetic Empty State
@@ -660,6 +674,12 @@
     // Loop
     function frame() {
         if (running) {
+            // Safety: If canvas is 0 (first frame race condition), try resize/reset.
+            if (canvas.width === 0 || canvas.height === 0) {
+                resize();
+                if (canvas.width > 0) resetLayout();
+            }
+
             tick();
             draw();
             // Stop if stable?
