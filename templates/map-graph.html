@@ -23,7 +23,7 @@
 
             <label class="graph__toggle" title="Show only Core Essays">
                 <input id="graphCanonOnly" type="checkbox" />
-                <span>Core Essays</span>
+                <span>Core only</span>
             </label>
 
             <select id="graphDirection" class="graph__select" aria-label="Link Direction"
@@ -43,23 +43,33 @@
             </button>
 
             <a href="./index.html" class="btn-text" title="Switch to List View">List</a>
-        </div>
 
-        <!-- Right Side: Persistent Inspector -->
-        <div id="graphInspector" class="graph__sidebar">
-            <div class="graph__empty-state">
-                <div class="empty-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
-                        class="muted">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
+            <div class="vr"></div>
+
+            <!-- Mode Switch -->
+            <div class="mode-toggle">
+                <input type="radio" name="mode" id="modeRead" value="read" checked>
+                <label for="modeRead" title="Explore essays by connection">Read</label>
+
+                <input type="radio" name="mode" id="modeWander" value="wander">
+                <label for="modeWander" title="Explore ideas without direction">Wander</label>
+            </div>
+
+            <!-- Right Side: Persistent Inspector -->
+            <div id="graphInspector" class="graph__sidebar">
+                <div class="graph__empty-state">
+                    <div class="empty-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" class="muted">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                    <p>Click a node to focus</p>
+                    <small class="muted">Drag to pan • Scroll to zoom</small>
                 </div>
-                <p>Click a node to focus</p>
-                <small class="muted">Drag to pan • Scroll to zoom</small>
             </div>
         </div>
-    </div>
 </section>
 
 <script src="../static/js/graph.js"></script>
