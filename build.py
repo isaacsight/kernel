@@ -2189,6 +2189,10 @@ Sitemap: {BASE_URL}/sitemap.xml
             full_map_graph_page = full_map_graph_page.replace('src="', 'src="../')
             full_map_graph_page = full_map_graph_page.replace('href="css/', 'href="../css/')
             
+            # Fix absolute URLs broken by aggressive path replacement
+            full_map_graph_page = full_map_graph_page.replace('src="../http', 'src="http')
+            full_map_graph_page = full_map_graph_page.replace('src="..///', 'src="//')
+
             # Clean up double dots in static path if happened
             full_map_graph_page = full_map_graph_page.replace('../static/', '../static/')
 
