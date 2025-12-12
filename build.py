@@ -2173,6 +2173,38 @@ Sitemap: {BASE_URL}/sitemap.xml
     full_map_page = full_map_page.replace('{{ json_ld }}', '')
     
     write_file(os.path.join(OUTPUT_DIR, 'map', 'index.html'), full_map_page)
+    
+    # Render map-graph.html
+    try:
+        map_graph_path = os.path.join(TEMPLATE_DIR, 'map-graph.html')
+        if os.path.exists(map_graph_path):
+            map_graph_template = read_file(map_graph_path)
+            full_map_graph_page = base_template.replace('{{ content }}', map_graph_template)
+            full_map_graph_page = full_map_graph_page.replace('{{ starter_set_nav }}', starter_set_nav_html) 
+            
+            # Fix paths for sub-directory
+            full_map_graph_page = full_map_graph_page.replace('href="index.html"', 'href="../index.html"')
+            full_map_graph_page = full_map_graph_page.replace('href="about.html"', 'href="../about.html"')
+            full_map_graph_page = full_map_graph_page.replace('href="collections.html"', 'href="../collections.html"')
+            full_map_graph_page = full_map_graph_page.replace('src="', 'src="../')
+            full_map_graph_page = full_map_graph_page.replace('href="css/', 'href="../css/')
+            
+            # Clean up double dots in static path if happened
+            full_map_graph_page = full_map_graph_page.replace('../static/', '../static/')
+
+            full_map_graph_page = full_map_graph_page.replace('{{ root }}', '../')
+            full_map_graph_page = full_map_graph_page.replace('{{ title }}', 'Map (Graph) - Does This Feel Right?')
+            full_map_graph_page = full_map_graph_page.replace('{{ description }}', 'The network of thoughts.')
+            full_map_graph_page = full_map_graph_page.replace('{{ url }}', f"{BASE_URL}/map/graph.html")
+            full_map_graph_page = full_map_graph_page.replace('{{ image }}', DEFAULT_IMAGE)
+            full_map_graph_page = full_map_graph_page.replace('{{ og_type }}', 'website') 
+            full_map_graph_page = full_map_graph_page.replace('{{ json_ld }}', '')
+            
+            write_file(os.path.join(OUTPUT_DIR, 'map', 'graph.html'), full_map_graph_page)
+        else:
+            print("Template map-graph.html not found.")
+    except Exception as e:
+        print(f"Error generating map/graph.html: {e}")
 
     write_file(os.path.join(OUTPUT_DIR, 'visualizer.html'), viz_page)
 
