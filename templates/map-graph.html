@@ -1,6 +1,3 @@
-{% extends "base.html" %}
-{% block content %}
-
 <section class="graph">
     <div class="graph__header">
         <h1>Map (Graph)</h1>
@@ -8,55 +5,60 @@
     </div>
 
     <div class="graph__wrap">
-        <!-- Floating HUD: Controls -->
-        <div class="graph__controls">
-            <input id="graphFilter" class="graph__input" type="search" placeholder="Filter nodes..."
-                autocomplete="off" />
-            <label class="graph__toggle">
+        <canvas id="graphCanvas" width="1200" height="720"></canvas>
+
+        <!-- Top Left: Consolidated Glass Pill -->
+        <div class="graph__glass-pill">
+            <div class="graph__search-group">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    class="muted">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input id="graphFilter" class="graph__input" type="search" placeholder="Search..." autocomplete="off" />
+            </div>
+
+            <div class="vr"></div>
+
+            <label class="graph__toggle" title="Show only canonical nodes">
                 <input id="graphCanonOnly" type="checkbox" />
                 <span>Canon</span>
             </label>
-            <select id="graphDirection" class="graph__select" aria-label="Direction">
-                <option value="all">All Links</option>
-                <option value="out">Outgoing</option>
-                <option value="in">Incoming</option>
+
+            <select id="graphDirection" class="graph__select" aria-label="Link Direction"
+                title="Filter links by direction">
+                <option value="all">All</option>
+                <option value="out">Out</option>
+                <option value="in">In</option>
             </select>
-            <button id="graphReset" class="btn-icon" aria-label="Reset Layout" title="Reset Layout">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <div class="vr"></div>
+
+            <button id="graphReset" class="btn-icon-plain" title="Reset Camera">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                     <path d="M3 3v5h5" />
                 </svg>
             </button>
-            <a class="btn-icon" href="./index.html" title="List View">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6" />
-                    <line x1="8" y1="12" x2="21" y2="12" />
-                    <line x1="8" y1="18" x2="21" y2="18" />
-                    <line x1="3" y1="6" x2="3.01" y2="6" />
-                    <line x1="3" y1="12" x2="3.01" y2="12" />
-                    <line x1="3" y1="18" x2="3.01" y2="18" />
-                </svg>
-            </a>
+
+            <a href="./index.html" class="btn-text" title="Switch to List View">List</a>
         </div>
 
-        <!-- Floating HUD: Pin Bar -->
-        <div id="pinBar" class="pinbar" style="display:none;">
-            <div class="pinbar__content">
-                <span class="pinbar__label">Pinned</span>
-                <a id="pinTitle" class="pinbar__title" href="#"></a>
-                <div class="pinbar__actions">
-                    <button id="copyPinLink" class="btn-tiny">Copy</button>
-                    <button id="clearPin" class="btn-tiny text-red">Unpin</button>
+        <!-- Right Side: Persistent Inspector -->
+        <div id="graphInspector" class="graph__sidebar">
+            <div class="graph__empty-state">
+                <div class="empty-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        class="muted">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
                 </div>
+                <p>Click a node to focus</p>
+                <small class="muted">Drag to pan • Scroll to zoom</small>
             </div>
         </div>
-
-        <canvas id="graphCanvas" width="1200" height="720"></canvas>
-
-        <!-- Floating HUD: Hint / Sidebar -->
-        <div id="graphHint" class="graph__hint"></div>
     </div>
 </section>
 
 <script src="../static/js/graph.js"></script>
-{% endblock %}

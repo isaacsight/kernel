@@ -1,14 +1,10 @@
 (async function () {
     const canvas = document.getElementById("graphCanvas");
-    const hint = document.getElementById("graphHint");
+    const inspector = document.getElementById("graphInspector");
     const filterInput = document.getElementById("graphFilter");
     const canonOnly = document.getElementById("graphCanonOnly");
     const resetBtn = document.getElementById("graphReset");
     const directionSel = document.getElementById("graphDirection");
-    const pinBar = document.getElementById("pinBar");
-    const pinTitle = document.getElementById("pinTitle");
-    const copyPinLinkBtn = document.getElementById("copyPinLink");
-    const clearPinBtn = document.getElementById("clearPin");
 
     let directionMode = "all";
     if (directionSel) {
@@ -21,182 +17,152 @@
 
     if (!canvas) return;
 
-    // Hint initial state
-    if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
+    let selectedNode = null;
+    let hoverNode = null;
 
-    // Pin Logic Helpers
-    let pinnedNode = null;
-
-    function setPinUI(node) {
-        if (!pinBar || !pinTitle) return;
+    // --- INSPECTOR Logic ---
+    function renderInspector(node) {
+        if (!inspector) return;
 
         if (!node) {
-            // Hide
-            pinBar.style.display = "none";
-            // Also clear hint if we just unpinned
-            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
+            inspector.innerHTML = `
+            <div class="graph__empty-state">
+                <div class="empty-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="muted">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <p>Click a node to focus</p>
+                <small class="muted">Drag to pan • Scroll to zoom</small>
+            </div>`;
+            // Remove selection class from sidebar if any
             return;
         }
 
-        // Show
-        pinBar.style.display = "flex";
-        pinTitle.textContent = node.title || node.id;
+        const outSet = outNeighbors.get(node.id) || new Set();
+        const inSet = inNeighbors.get(node.id) || new Set();
+
+        // Sort neighbors
+        const sortFn = (a, b) => (byId.get(a)?.title || a).localeCompare(byId.get(b)?.title || b);
+        const outList = Array.from(outSet).sort(sortFn);
+        const inList = Array.from(inSet).sort(sortFn);
+
+        const title = escapeHtml(node.title || node.id);
+        const mode = escapeHtml(node.mode || "");
+        const pillar = escapeHtml((node.pillar || "").replaceAll("-", " "));
         const url = node.url || ("../posts/" + node.id + ".html");
-        pinTitle.setAttribute("href", url);
 
-        // Update Copy Button state (optional feedback)
-        const copyBtn = document.getElementById("copyPinLink");
-        if (copyBtn) copyBtn.textContent = "Copy";
-    }
+        const absoluteUrl = new URL(url, window.location.href).href;
 
-    // copy link
-    if (copyPinLinkBtn) {
-        copyPinLinkBtn.addEventListener("click", (e) => {
-            e.preventDefault(); // prevent form submit if inside form
-            if (!pinnedNode) return;
-            const url = pinnedNode.url || (window.location.origin + "/posts/" + pinnedNode.id + ".html");
-            // Make absolute if relative
-            const absUrl = new URL(url, window.location.href).href;
-            navigator.clipboard.writeText(absUrl).then(() => {
-                copyPinLinkBtn.textContent = "Copied!";
-                setTimeout(() => copyPinLinkBtn.textContent = "Copy", 2000);
+        inspector.innerHTML = `
+          <div class="inspector__header">
+            <span class="inspector__overline">${pillar || "Thought"}</span>
+            <h2 class="inspector__title"><a href="${url}">${title}</a></h2>
+            <div class="inspector__meta">
+               ${mode ? `<span class="pill-tag">${mode}</span>` : ""}
+               ${node.canonical ? `<span class="pill-tag canon">Canon</span>` : ""}
+            </div>
+            
+            <div class="inspector__actions">
+                <a href="${url}" class="btn-primary-small">Open</a>
+                <button id="btnCopyLink" class="btn-secondary-small">Copy Link</button>
+            </div>
+          </div>
+
+          <div class="inspector__section">
+             <div class="inspector__section-title">Connections</div>
+             <div class="inspector__meta" style="gap:16px;">
+                <div title="Outgoing"><span class="muted">Out:</span> ${outList.length}</div>
+                <div title="Incoming"><span class="muted">In:</span> ${inList.length}</div>
+             </div>
+          </div>
+
+          <div class="inspector__section">
+            ${outList.length ? `<div class="inspector__section-title">Outgoing</div><ul class="inspector__list">${outList.map(nodeLinkHTML).join("")}</ul>` : ""}
+            ${inList.length ? `<div class="inspector__section-title" style="margin-top:16px">Incoming</div><ul class="inspector__list">${inList.map(nodeLinkHTML).join("")}</ul>` : ""}
+          </div>
+        `;
+
+        const btnCopy = document.getElementById("btnCopyLink");
+        if (btnCopy) {
+            btnCopy.addEventListener("click", () => {
+                navigator.clipboard.writeText(absoluteUrl).then(() => {
+                    btnCopy.textContent = "Copied!";
+                    setTimeout(() => btnCopy.textContent = "Copy Link", 2000);
+                });
             });
-        });
-    }
-
-    if (clearPinBtn) {
-        clearPinBtn.addEventListener("click", () => {
-            pinnedNode = null;
-            setPinUI(null);
-            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-            if (!running) { tick(); draw(); }
-        });
-    }
-
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            pinnedNode = null;
-            setPinUI(null);
-            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-            // redraw
-            if (!running) { tick(); draw(); }
         }
-    });
+    }
+
+    function escapeHtml(s) {
+        return String(s || "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function nodeLinkHTML(slug) {
+        const n = byId.get(slug);
+        if (!n) return `<li><span class="muted">${slug}</span></li>`;
+        const title = escapeHtml(n.title || slug);
+        // Use # to prevent page reload, handle via graphSelect
+        return `<li><a href="#" onclick="window.graphSelect('${n.id}'); return false;">${title}</a></li>`;
+    }
+
+    window.graphSelect = (id) => {
+        const n = byId.get(id);
+        if (n) {
+            selectedNode = n;
+            renderInspector(n);
+            if (!running) draw();
+        }
+    };
 
     const ctx = canvas.getContext("2d");
     const DPR = Math.max(1, Math.floor(window.devicePixelRatio || 1));
 
     function resize() {
         const parent = canvas.parentElement;
-        const w = Math.min(1200, parent.clientWidth);
-        const h = Math.min(780, Math.max(520, Math.floor(window.innerHeight * 0.62)));
-        canvas.style.width = w + "px";
-        canvas.style.height = h + "px";
-        canvas.width = w * DPR;
-        canvas.height = h * DPR;
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        if (parent) {
+            const w = parent.clientWidth;
+            const h = parent.clientHeight;
+            canvas.width = w * DPR;
+            canvas.height = h * DPR;
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
     }
-    resize();
-    window.addEventListener("resize", () => {
-        resize();
-        resetLayout(true);
-    });
+    window.addEventListener("resize", () => { resize(); if (!running) draw(); });
 
     let graph;
     try {
         const res = await fetch("graph.json", { cache: "no-store" });
         graph = await res.json();
-    } catch (e) {
-        if (hint) hint.textContent = "Failed to load graph.json";
-        return;
-    }
+    } catch (e) { return; }
 
-    // Build node lookup
+    // Init Logic
+    resize();
+
     const nodesAll = graph.nodes.map((n, i) => ({
         ...n,
         id: n.id || n.slug,
         i,
         x: Math.random(),
         y: Math.random(),
-        vx: 0,
-        vy: 0,
-        r: n.canonical ? 8 : 5,
+        vx: 0, vy: 0,
+        r: n.canonical ? 14 : 6,
         visible: true,
     }));
     const byId = new Map(nodesAll.map(n => [n.id, n]));
-
     const linksAll = graph.edges
         .map(e => ({ source: byId.get(e.source), target: byId.get(e.target) }))
         .filter(l => l.source && l.target);
 
-    // Directed neighbors for hover highlighting
-    const outNeighbors = new Map(); // slug -> Set(targetSlug)
-    const inNeighbors = new Map(); // slug -> Set(sourceSlug)
-
-    function add(map, a, b) {
-        if (!map.has(a)) map.set(a, new Set());
-        map.get(a).add(b);
-    }
-
+    const outNeighbors = new Map();
+    const inNeighbors = new Map();
+    function add(map, a, b) { if (!map.has(a)) map.set(a, new Set()); map.get(a).add(b); }
     for (const l of linksAll) {
         add(outNeighbors, l.source.id, l.target.id);
         add(inNeighbors, l.target.id, l.source.id);
-    }
-
-    // Helpers for Hint
-    function escapeHtml(s) {
-        return String(s || "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
-    }
-
-    function nodeLinkHTML(slug) {
-        const n = byId.get(slug);
-        if (!n) return "";
-        const title = (n.title || slug);
-        // Build URL: graph.json nodes might have 'url' if I added it, otherwise construct it
-        // The previous write of graph.json in build.py added 'url' to map_rows but NOT explicitly to graph.json payload
-        // Wait, I updated build.py to write graph.json but I did NOT add "url" to the nodes there.
-        // I should fix graph.json generation later, but here I can fallback.
-        const url = n.url || ("../posts/" + slug + ".html");
-        return `<li><a href="${url}">${escapeHtml(title)}</a></li>`;
-    }
-
-    // --- CAMERA STATE ---
-    const camera = { x: 0, y: 0, k: 0.85 }; // x,y is Screen Center Offset
-
-    function toWorld(sx, sy) {
-        return { x: (sx - camera.x) / camera.k, y: (sy - camera.y) / camera.k };
-    }
-
-    // Normalize initial positions on a circle
-    function resetLayout(keepVel) {
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-        const cx = 0;
-        const cy = 0;
-        const radius = Math.min(w, h) * 0.5; // Wider start
-        const visibleNodes = nodesAll.filter(n => n.visible);
-
-        visibleNodes.forEach((n, k) => {
-            const a = (k / Math.max(1, visibleNodes.length)) * Math.PI * 2;
-            n.x = cx + Math.cos(a) * radius;
-            n.y = cy + Math.sin(a) * radius;
-            if (!keepVel) { n.vx = 0; n.vy = 0; }
-        });
-
-        // Center Camera
-        camera.x = w / 2;
-        camera.y = h / 2;
-        camera.k = 0.85;
-
-        // Warm up physics
-        if (!keepVel) {
-            for (let i = 0; i < 30; i++) tick();
-        }
     }
 
     const degree = new Map();
@@ -206,326 +172,203 @@
     });
     nodesAll.forEach(n => {
         const d = degree.get(n.id) || 0;
-        n.r = n.canonical ? 12 : 5 + Math.min(7, Math.floor(d / 2));
+        n.r = n.canonical ? 14 : 5 + Math.min(10, Math.floor(Math.sqrt(d) * 2.5));
     });
 
-    // Physics params
-    let running = true;
-    const params = {
-        linkDistance: 80,
-        linkStrength: 0.05,
-        charge: 400,
-        centerStrength: 0.008,
-        damping: 0.85,
-        maxSpeed: 10,
-    };
+    const camera = { x: 0, y: 0, k: 0.8 };
+    function toWorld(sx, sy) { return { x: (sx - camera.x) / camera.k, y: (sy - camera.y) / camera.k }; }
+
+    function resetLayout(keepVel) {
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+        const radius = Math.min(w, h) * 0.5;
+        const visible = nodesAll.filter(n => n.visible);
+        visible.forEach((n, k) => {
+            const a = (k / Math.max(1, visible.length)) * Math.PI * 2;
+            n.x = Math.cos(a) * radius; n.y = Math.sin(a) * radius;
+            if (!keepVel) { n.vx = 0; n.vy = 0; }
+        });
+        camera.x = w / 2; camera.y = h / 2; camera.k = 0.85;
+        if (!keepVel) for (let i = 0; i < 40; i++) tick();
+    }
+    if (resetBtn) resetBtn.addEventListener("click", () => resetLayout(false));
 
     function getVisibleNodes() { return nodesAll.filter(n => n.visible); }
     function getVisibleLinks() { return linksAll.filter(l => l.source.visible && l.target.visible); }
-
     function applyFilter() {
         const q = (filterInput.value || "").trim().toLowerCase();
         const canon = canonOnly.checked;
         nodesAll.forEach(n => {
-            const hay = `${n.title} ${n.pillar} ${n.mode}`.toLowerCase();
-            const matchQ = !q || hay.includes(q);
-            const matchCanon = !canon || n.canonical;
-            n.visible = matchQ && matchCanon;
+            const h = `${n.title} ${n.pillar} ${n.mode}`.toLowerCase();
+            n.visible = (!q || h.includes(q)) && (!canon || n.canonical);
         });
-
-        if (!getVisibleNodes().length) {
-            nodesAll.forEach(n => (n.visible = !canon || n.canonical));
-        }
         resetLayout(false);
     }
-
     if (filterInput) filterInput.addEventListener("input", applyFilter);
     if (canonOnly) canonOnly.addEventListener("change", applyFilter);
-    if (resetBtn) resetBtn.addEventListener("click", () => resetLayout(false));
 
-    resetLayout(false);
+    let running = true;
+    const params = { linkDistance: 80, linkStrength: 0.05, charge: 500, centerStrength: 0.015, damping: 0.85, maxSpeed: 12 };
 
-    // --- INTERACTION ---
-    let hoverNode = null;
     let dragNode = null;
     let isPanning = false;
     let lastMouse = { x: 0, y: 0 };
-    let dragOffset = { x: 0, y: 0 };
 
-    function dist2(ax, ay, bx, by) {
-        return (ax - bx) ** 2 + (ay - by) ** 2;
-    }
-
-    // wx, wy are WORLD coordinates
+    function dist2(ax, ay, bx, by) { return (ax - bx) ** 2 + (ay - by) ** 2; }
     function findNodeAt(wx, wy) {
         const visible = getVisibleNodes();
-        let best = null;
-        let bestD = Infinity;
+        let best = null, bestD = Infinity;
         for (const n of visible) {
             const d = dist2(n.x, n.y, wx, wy);
-            const rr = (n.r + 10) ** 2; // Generous hit area
-            if (d <= rr && d < bestD) {
-                best = n; bestD = d;
-            }
+            const rr = (n.r + 8) ** 2;
+            if (d <= rr && d < bestD) { best = n; bestD = d; }
         }
         return best;
     }
 
     function getMousePos(evt) {
-        const rect = canvas.getBoundingClientRect();
-        return { x: (evt.clientX - rect.left), y: (evt.clientY - rect.top) };
+        const r = canvas.getBoundingClientRect();
+        return { x: evt.clientX - r.left, y: evt.clientY - r.top };
     }
 
-    // 1. ZOOM (Wheel)
-    canvas.addEventListener("wheel", (evt) => {
-        evt.preventDefault();
-        const m = getMousePos(evt);
-        const w1 = toWorld(m.x, m.y); // World point under mouse BEFORE zoom
-
-        const zoomSpeed = 0.0015;
-        const zoomChange = Math.exp(-evt.deltaY * zoomSpeed);
-        // Clamp Zoom
-        const newK = Math.max(0.1, Math.min(4, camera.k * zoomChange));
-
-        // We want w1 to stay at screen m
-        // screen = world * k + camX
-        // camX = screen - world * k
-        camera.k = newK;
+    canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const m = getMousePos(e);
+        const w1 = toWorld(m.x, m.y);
+        const speed = 0.0015;
+        const zoom = Math.exp(-e.deltaY * speed);
+        camera.k = Math.max(0.1, Math.min(5, camera.k * zoom));
         camera.x = m.x - w1.x * camera.k;
         camera.y = m.y - w1.y * camera.k;
-
         if (!running) draw();
     }, { passive: false });
 
-    // 2. DRAG / PAN (MouseDown)
-    canvas.addEventListener("mousedown", (evt) => {
-        const m = getMousePos(evt);
+    canvas.addEventListener("mousedown", (e) => {
+        const m = getMousePos(e);
         const w = toWorld(m.x, m.y);
         const n = findNodeAt(w.x, w.y);
-
         lastMouse = m;
-
-        if (n) {
-            dragNode = n;
-            dragOffset.x = n.x - w.x;
-            dragOffset.y = n.y - w.y;
-            dragNode.vx = 0;
-            dragNode.vy = 0;
-            return;
-        }
-
-        // Pan Background
+        if (n) { dragNode = n; n.vx = 0; n.vy = 0; return; }
         isPanning = true;
         canvas.style.cursor = "grabbing";
     });
 
     window.addEventListener("mouseup", () => {
         dragNode = null;
-        if (isPanning) {
-            isPanning = false;
-            canvas.style.cursor = "default"; // Will update to grab/pointer on move
-        }
+        if (isPanning) { isPanning = false; canvas.style.cursor = "default"; }
     });
 
-    canvas.addEventListener("mousemove", (evt) => {
-        const m = getMousePos(evt);
+    canvas.addEventListener("mousemove", (e) => {
+        const m = getMousePos(e);
         const w = toWorld(m.x, m.y);
 
         if (dragNode) {
-            dragNode.x = w.x + dragOffset.x;
-            dragNode.y = w.y + dragOffset.y;
-            dragNode.vx = 0;
-            dragNode.vy = 0;
+            dragNode.x = w.x; dragNode.y = w.y;
+            dragNode.vx = 0; dragNode.vy = 0;
             if (!running) { tick(); draw(); }
             return;
         }
-
         if (isPanning) {
-            const dx = m.x - lastMouse.x;
-            const dy = m.y - lastMouse.y;
-            camera.x += dx;
-            camera.y += dy;
+            camera.x += m.x - lastMouse.x;
+            camera.y += m.y - lastMouse.y;
             lastMouse = m;
             if (!running) draw();
             return;
         }
-
         lastMouse = m;
 
-        // Hover
         const prevHover = hoverNode;
         hoverNode = findNodeAt(w.x, w.y);
+        canvas.style.cursor = hoverNode ? "pointer" : "default";
 
-        if (hoverNode) canvas.style.cursor = "pointer";
-        else {
-            canvas.style.cursor = isPanning ? "grabbing" : "grab";
-        }
-
-        // Update Hint
-        if (hint && hoverNode !== prevHover) {
-            if (!hoverNode) {
-                if (!pinnedNode) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-            } else {
-                renderHint(hoverNode);
-            }
+        if (hoverNode !== prevHover) {
+            if (!running) draw();
         }
     });
 
-    // 3. CLICK (Selection)
-    canvas.addEventListener("click", (evt) => {
-        // Did we move? (Click vs Drag distinction)
-        // Simple check: we rely on standard click. 
-        const m = getMousePos(evt);
-        const w = toWorld(m.x, m.y);
-        const n = findNodeAt(w.x, w.y);
-
-        // Click Background -> Clear Pin
-        if (!n) {
-            if (pinnedNode) {
-                pinnedNode = null;
-                setPinUI(null);
-                if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-            }
-            return;
-        }
-
-        const url = n.url || ("../posts/" + n.id + ".html");
-
-        // Modifier key -> Open
-        if (evt.metaKey || evt.ctrlKey) {
-            window.open(url, "_blank");
-            return;
-        }
-
-        // Toggle Pin
-        if (pinnedNode && pinnedNode.id === n.id) {
-            pinnedNode = null;
-            setPinUI(null);
-            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
-        } else {
-            pinnedNode = n;
-            setPinUI(pinnedNode);
-            hoverNode = n;
-            renderHint(n);
-        }
-    });
-
-    canvas.addEventListener("dblclick", (evt) => {
-        const m = getMousePos(evt);
+    canvas.addEventListener("click", (e) => {
+        // Prevent click if panning logic needed, but here simple click is fine
+        const m = getMousePos(e);
         const w = toWorld(m.x, m.y);
         const n = findNodeAt(w.x, w.y);
         if (n) {
-            const url = n.url || ("../posts/" + n.id + ".html");
-            window.location.href = url;
+            if (e.metaKey || e.ctrlKey) { window.open(n.url || `../posts/${n.id}.html`, "_blank"); }
+            else {
+                selectedNode = n;
+                renderInspector(n);
+                draw();
+            }
         } else {
-            // Optional: Reset Camera?
-            resetLayout(false); // Recenters
+            selectedNode = null;
+            renderInspector(null);
+            draw();
         }
     });
 
-    // --- PHYSICS LOOP ---
     function tick() {
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
         const nodes = getVisibleNodes();
         const links = getVisibleLinks();
-
-        // Forces
         for (let i = 0; i < nodes.length; i++) {
             const a = nodes[i];
             for (let j = i + 1; j < nodes.length; j++) {
                 const b = nodes[j];
-                const dx = b.x - a.x;
-                const dy = b.y - a.y;
+                const dx = b.x - a.x, dy = b.y - a.y;
                 let d2 = dx * dx + dy * dy;
-                // Optimization
-                if (d2 > 200000 || d2 === 0) continue;
-
-                const f = params.charge / (d2 + 50);
+                if (d2 === 0) d2 = 0.1;
+                if (d2 > 250000) continue;
+                const f = params.charge / (d2 + 100);
                 const dp = Math.sqrt(d2);
-                const fx = (dx / dp) * f;
-                const fy = (dy / dp) * f;
-                a.vx -= fx; a.vy -= fy;
-                b.vx += fx; b.vy += fy;
+                const fx = (dx / dp) * f, fy = (dy / dp) * f;
+                a.vx -= fx; a.vy -= fy; b.vx += fx; b.vy += fy;
             }
         }
-
         for (const l of links) {
-            const a = l.source;
-            const b = l.target;
-            const dx = b.x - a.x;
-            const dy = b.y - a.y;
+            const a = l.source, b = l.target;
+            const dx = b.x - a.x, dy = b.y - a.y;
             const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            const diff = dist - params.linkDistance;
-            const f = diff * params.linkStrength;
-            const fx = (dx / dist) * f;
-            const fy = (dy / dist) * f;
-            a.vx += fx; a.vy += fy;
-            b.vx -= fx; b.vy -= fy;
+            const f = (dist - params.linkDistance) * params.linkStrength;
+            const fx = (dx / dist) * f, fy = (dy / dist) * f;
+            a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy;
         }
-
         for (const n of nodes) {
             if (n === dragNode) continue;
-            // Center Gravity -> 0,0
-            n.vx -= n.x * params.centerStrength;
-            n.vy -= n.y * params.centerStrength;
-
-            n.vx *= params.damping;
-            n.vy *= params.damping;
-
+            n.vx -= n.x * params.centerStrength; n.vy -= n.y * params.centerStrength;
+            n.vx *= params.damping; n.vy *= params.damping;
             const sp = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
-            if (sp > params.maxSpeed) {
-                n.vx = (n.vx / sp) * params.maxSpeed;
-                n.vy = (n.vy / sp) * params.maxSpeed;
-            }
-            n.x += n.vx;
-            n.y += n.vy;
-            // NO BOUNDS! Infinite.
+            if (sp > params.maxSpeed) { n.vx = (n.vx / sp) * params.maxSpeed; n.vy = (n.vy / sp) * params.maxSpeed; }
+            n.x += n.vx; n.y += n.vy;
         }
     }
 
     function draw() {
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
+        const w = canvas.width / DPR;
+        const h = canvas.height / DPR;
 
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // Reset
-        ctx.clearRect(0, 0, w, h);
+        ctx.resetTransform();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Apply Camera Transform
         ctx.setTransform(DPR * camera.k, 0, 0, DPR * camera.k, camera.x * DPR, camera.y * DPR);
 
         const nodes = getVisibleNodes();
         const links = getVisibleLinks();
 
-        // Priority Logic
-        const focus = (pinnedNode && pinnedNode.visible)
-            ? pinnedNode
-            : ((hoverNode && hoverNode.visible) ? hoverNode : null);
+        const focus = selectedNode || hoverNode;
+        const active = selectedNode;
 
         let focusSet = null;
         if (focus) {
             if (directionMode === "out") focusSet = outNeighbors.get(focus.id) || new Set();
             else if (directionMode === "in") focusSet = inNeighbors.get(focus.id) || new Set();
             else {
-                const outS = outNeighbors.get(focus.id) || new Set();
-                const inS = inNeighbors.get(focus.id) || new Set();
-                focusSet = new Set([...outS, ...inS]);
+                const o = outNeighbors.get(focus.id) || new Set();
+                const i = inNeighbors.get(focus.id) || new Set();
+                focusSet = new Set([...o, ...i]);
             }
         }
 
-        function isConnected(n) {
-            if (!focus) return true;
-            if (n.id === focus.id) return true;
-            return focusSet.has(n.id);
-        }
-
-        // Links
-        ctx.lineWidth = 1.5;
-        // Optimization: Background links faint
+        ctx.lineWidth = 1;
         ctx.globalAlpha = focus ? 0.08 : 0.2;
-        ctx.fillStyle = "#555"; // Wait, stroke style?
         ctx.strokeStyle = "#555";
-
         ctx.beginPath();
         for (const l of links) {
             ctx.moveTo(l.source.x, l.source.y);
@@ -533,72 +376,74 @@
         }
         ctx.stroke();
 
-        // Highlight
         if (focus) {
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             for (const l of links) {
-                let hit = false;
-                if (directionMode === "out") hit = (l.source.id === focus.id && focusSet.has(l.target.id));
-                else if (directionMode === "in") hit = (l.target.id === focus.id && focusSet.has(l.source.id));
-                else hit = (l.source.id === focus.id && focusSet.has(l.target.id)) || (l.target.id === focus.id && focusSet.has(l.source.id));
+                const isConnected =
+                    (l.source.id === focus.id && focusSet.has(l.target.id)) ||
+                    (l.target.id === focus.id && focusSet.has(l.source.id));
 
-                if (!hit) continue;
-
-                const grad = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
-                if (l.source.id === focus.id) {
-                    grad.addColorStop(0, "rgba(0, 214, 163, 0.95)");
-                    grad.addColorStop(1, "rgba(0, 214, 163, 0.05)");
-                } else {
-                    grad.addColorStop(0, "rgba(255, 255, 255, 0.05)");
-                    grad.addColorStop(1, "rgba(255, 255, 255, 0.95)");
+                if (isConnected) {
+                    const grd = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
+                    if (l.source.id === focus.id) {
+                        grd.addColorStop(0, "rgba(0, 214, 163, 0.9)");
+                        grd.addColorStop(1, "rgba(0, 214, 163, 0.05)");
+                    } else {
+                        grd.addColorStop(0, "rgba(255,255,255,0.05)");
+                        grd.addColorStop(1, "rgba(255,255,255,0.9)");
+                    }
+                    ctx.strokeStyle = grd;
+                    ctx.globalAlpha = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(l.source.x, l.source.y);
+                    ctx.lineTo(l.target.x, l.target.y);
+                    ctx.stroke();
                 }
-                ctx.strokeStyle = grad;
-                ctx.beginPath();
-                ctx.moveTo(l.source.x, l.source.y);
-                ctx.lineTo(l.target.x, l.target.y);
-                ctx.stroke();
             }
         }
-        ctx.globalAlpha = 1;
 
-        // Nodes
         for (const n of nodes) {
-            const connected = isConnected(n);
-            const isFocus = focus && n.id === focus.id;
+            const isSel = selectedNode && n.id === selectedNode.id;
+            const isHov = hoverNode && n.id === hoverNode.id;
+            const isConn = focusSet && focusSet.has(n.id);
+            const isFocus = isSel || isHov;
 
-            ctx.globalAlpha = focus ? (connected ? 1 : 0.1) : 1;
+            ctx.globalAlpha = focus ? (isFocus || isConn ? 1 : 0.1) : 1;
 
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
 
             if (n.canonical) {
                 ctx.fillStyle = isFocus ? "#fff" : "#eee";
-                ctx.shadowBlur = isFocus ? 32 : 16;
-                ctx.shadowColor = "rgba(255, 255, 255, 0.35)";
+                ctx.shadowBlur = isFocus ? 24 : 12;
+                ctx.shadowColor = "rgba(255,255,255,0.4)";
             } else {
-                ctx.fillStyle = isFocus ? "#00D6A3" : (connected && focus ? "#ccc" : "#666");
-                if (isFocus) {
-                    ctx.shadowBlur = 24;
-                    ctx.shadowColor = "rgba(0, 214, 163, 0.6)";
-                } else ctx.shadowBlur = 0;
+                ctx.fillStyle = isFocus ? "#00D6A3" : (isConn ? "#ccc" : "#666");
+                ctx.shadowBlur = isFocus ? 24 : 0;
+                ctx.shadowColor = "rgba(0,214,163,0.5)";
             }
             ctx.fill();
             ctx.shadowBlur = 0;
 
             if (n.canonical) {
+                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.2)";
                 ctx.lineWidth = 2;
-                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)";
                 ctx.stroke();
+            }
+
+            if (isFocus || (isConn && camera.k > 1.2)) {
+                ctx.fillStyle = "#fff";
+                ctx.font = "12px Inter, sans-serif";
+                ctx.fillText(n.title || n.id, n.x + n.r + 6, n.y + 4);
             }
         }
         ctx.globalAlpha = 1;
     }
 
-    function frame() {
-        if (!running) return;
-        tick();
-        draw();
-        requestAnimationFrame(frame);
-    }
+    function frame() { if (running) { tick(); draw(); requestAnimationFrame(frame); } }
+
+    resetLayout(false);
+    renderInspector(null);
     frame();
+
 })();
