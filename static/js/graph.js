@@ -38,6 +38,7 @@
         let isPanning = false;
         let lastMouse = { x: 0, y: 0 };
         let camera = { x: 0, y: 0, k: 0.8 };
+        let camTarget = null; // smooth transition target
         let running = true; // Physics loop
 
         // Alive Read Configuration
@@ -498,12 +499,141 @@
                 else {
                     selectedNode = n;
                     renderInspector(n);
-                    draw();
+
+                    // Smooth Fly To Node
+                    // Center the node (account for sidebar offset if needed, but center is fine)
+                    const w = canvas.width / DPR;
+                    const h = canvas.height / DPR;
+
+                    // Target zoom: 1.2 for focus
+                    const targetK = 1.25;
+                    // We want n.x, n.y to be at center w/2, h/2
+                    // formula: center = camera.x + world * camera.k
+                    // camera.x = center - world * camera.k
+                    const tx = (w / 2) - n.x * targetK;
+                    const ty = (h / 2) - n.y * targetK;
+
+                    flyTo(tx, ty, targetK);
                 }
             } else {
-                // In wander mode, background click deselects? Yes.
                 window.graphDeselect();
             }
+        });
+
+        function flyTo(x, y, k) {
+            camTarget = { x, y, k };
+            // Ensure loop runs
+            if (!running) requestAnimationFrame(frame);
+        }
+
+        // Keyboard Controls
+        window.addEventListener("keydown", (e) => {
+            if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+            const step = 50;
+            switch (e.key) {
+                case "Escape": window.graphDeselect(); break;
+                case "=": case "+": flyTo(camera.x - (canvas.width / DPR) * 0.1, camera.y - (canvas.height / DPR) * 0.1, camera.k * 1.2); break; // Zoom to center rough
+                // Actually zoom needs proper focus point. Simpler: just modify camera.k and adjust x/y to keep center stable.
+                // Re-impl below.
+
+                case "ArrowLeft": camera.x += step; draw(); break;
+                case "ArrowRight": camera.x -= step; draw(); break;
+                case "ArrowUp": camera.y += step; draw(); break;
+                case "ArrowDown": camera.y -= step; draw(); break;
+            }
+
+            if (e.key === "=" || e.key === "+" || e.key === "-") {
+                const centerW = (canvas.width / DPR) / 2;
+                const centerH = (canvas.height / DPR) / 2;
+                const worldC = toWorld(centerW + camera.x, centerH + camera.y); // wait, toWorld uses camera
+                // map center in world:
+                const wx = (centerW - camera.x) / camera.k;
+                const wy = (centerH - camera.y) / camera.k;
+
+                let newK = camera.k;
+                if (e.key === "-") newK /= 1.2;
+                else newK *= 1.2;
+
+                newK = Math.max(0.1, Math.min(5, newK));
+
+                // newCamX = centerW - wx * newK
+                const newX = centerW - wx * newK;
+                const newY = centerH - wy * newK;
+
+                flyTo(newX, newY, newK);
+            }
+        });
+
+        // Touch Controls
+        let lastDist = 0;
+        let lastCenter = null;
+
+        canvas.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                const t = e.touches[0];
+                const r = canvas.getBoundingClientRect();
+                lastMouse = { x: t.clientX - r.left, y: t.clientY - r.top };
+                isPanning = true;
+            } else if (e.touches.length === 2) {
+                isPanning = false;
+                lastDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const r = canvas.getBoundingClientRect();
+                lastCenter = {
+                    x: ((e.touches[0].clientX + e.touches[1].clientX) / 2) - r.left,
+                    y: ((e.touches[0].clientY + e.touches[1].clientY) / 2) - r.top
+                };
+            }
+        }, { passive: false });
+
+        canvas.addEventListener("touchmove", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            if (e.touches.length === 1 && isPanning) {
+                const t = e.touches[0];
+                const r = canvas.getBoundingClientRect();
+                const m = { x: t.clientX - r.left, y: t.clientY - r.top };
+                camera.x += m.x - lastMouse.x;
+                camera.y += m.y - lastMouse.y;
+                lastMouse = m;
+                if (!running) draw();
+            } else if (e.touches.length === 2) {
+                const dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const r = canvas.getBoundingClientRect();
+                const center = {
+                    x: ((e.touches[0].clientX + e.touches[1].clientX) / 2) - r.left,
+                    y: ((e.touches[0].clientY + e.touches[1].clientY) / 2) - r.top
+                };
+
+                if (lastDist > 0) {
+                    const zoom = dist / lastDist;
+                    const limit = CONFIG.zoomLimit;
+
+                    // Zoom around previous center (stabilize interaction)
+                    const wx = (lastCenter.x - camera.x) / camera.k;
+                    const wy = (lastCenter.y - camera.y) / camera.k;
+
+                    camera.k = Math.max(limit[0], Math.min(limit[1], camera.k * zoom));
+
+                    // Adjust camera so world point is at new center
+                    camera.x = center.x - wx * camera.k;
+                    camera.y = center.y - wy * camera.k;
+                }
+
+                lastDist = dist;
+                lastCenter = center;
+                if (!running) draw();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener("touchend", () => {
+            isPanning = false;
+            lastDist = 0;
         });
 
         // Reset Layout
@@ -557,21 +687,37 @@
 
         // Loop
         function frame() {
-            if (running) {
-                // Safety: If canvas is 0 (first frame race condition), try resize/reset.
+            if (running || camTarget) {
+                // Safety
                 if (canvas.width === 0 || canvas.height === 0) {
                     resize();
                     if (canvas.width > 0) resetLayout();
                 }
 
-                tick();
-                draw();
-                // Stop if stable?
-                // In Wander mode, drift keeps it running forever.
-                // In Read mode, we can sleep.
-                tick();
-                draw();
-                // Alive Mode: Forever loop for drift
+                // Smooth Camera Ease
+                if (camTarget) {
+                    const ease = 0.1;
+                    const diffX = camTarget.x - camera.x;
+                    const diffY = camTarget.y - camera.y;
+                    const diffK = camTarget.k - camera.k;
+
+                    camera.x += diffX * ease;
+                    camera.y += diffY * ease;
+                    camera.k += diffK * ease;
+
+                    // Snap if close
+                    if (Math.abs(diffX) < 0.5 && Math.abs(diffY) < 0.5 && Math.abs(diffK) < 0.001) {
+                        camera.x = camTarget.x;
+                        camera.y = camTarget.y;
+                        camera.k = camTarget.k;
+                        camTarget = null;
+                    }
+                    // Always redraw during transition
+                    draw();
+                } else if (running) {
+                    tick();
+                    draw();
+                }
             }
             requestAnimationFrame(frame);
         }
