@@ -18,6 +18,7 @@
 
 
         // --- STATE ---
+        const DPR = Math.max(1, Math.floor(window.devicePixelRatio || 1));
         let MODE = null; // Force initial setup on filtered load
         let nodesAll = [];
         let linksAll = [];
@@ -258,7 +259,6 @@
 
         // --- DRAW ---
         const ctx = canvas.getContext("2d");
-        const DPR = Math.max(1, Math.floor(window.devicePixelRatio || 1));
 
         function draw() {
             ctx.resetTransform();
