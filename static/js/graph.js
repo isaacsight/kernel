@@ -165,13 +165,20 @@
         return `<li><a href="${url}">${escapeHtml(title)}</a></li>`;
     }
 
+    // --- CAMERA STATE ---
+    const camera = { x: 0, y: 0, k: 0.85 }; // x,y is Screen Center Offset
+
+    function toWorld(sx, sy) {
+        return { x: (sx - camera.x) / camera.k, y: (sy - camera.y) / camera.k };
+    }
+
     // Normalize initial positions on a circle
     function resetLayout(keepVel) {
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
-        const cx = w / 2;
-        const cy = h / 2;
-        const radius = Math.min(w, h) * 0.32;
+        const cx = 0;
+        const cy = 0;
+        const radius = Math.min(w, h) * 0.5; // Wider start
         const visibleNodes = nodesAll.filter(n => n.visible);
 
         visibleNodes.forEach((n, k) => {
@@ -180,10 +187,18 @@
             n.y = cy + Math.sin(a) * radius;
             if (!keepVel) { n.vx = 0; n.vy = 0; }
         });
+
+        // Center Camera
+        camera.x = w / 2;
+        camera.y = h / 2;
+        camera.k = 0.85;
+
+        // Warm up physics
+        if (!keepVel) {
+            for (let i = 0; i < 30; i++) tick();
+        }
     }
 
-    // Degree for sizing / centering (Calculate degree based on visible links? 
-    // Usually static degree is better for stability, but let's stick to initial degree)
     const degree = new Map();
     linksAll.forEach(l => {
         degree.set(l.source.id, (degree.get(l.source.id) || 0) + 1);
@@ -191,31 +206,26 @@
     });
     nodesAll.forEach(n => {
         const d = degree.get(n.id) || 0;
-        n.r = n.canonical ? 9 : 5 + Math.min(5, Math.floor(d / 2));
+        n.r = n.canonical ? 12 : 5 + Math.min(7, Math.floor(d / 2));
     });
 
     // Physics params
     let running = true;
     const params = {
-        linkDistance: 64,
-        linkStrength: 0.06,
-        charge: 220,
-        centerStrength: 0.02,
-        damping: 0.86,
-        maxSpeed: 8,
+        linkDistance: 80,
+        linkStrength: 0.05,
+        charge: 400,
+        centerStrength: 0.008,
+        damping: 0.85,
+        maxSpeed: 10,
     };
 
-    function getVisibleNodes() {
-        return nodesAll.filter(n => n.visible);
-    }
-    function getVisibleLinks() {
-        return linksAll.filter(l => l.source.visible && l.target.visible);
-    }
+    function getVisibleNodes() { return nodesAll.filter(n => n.visible); }
+    function getVisibleLinks() { return linksAll.filter(l => l.source.visible && l.target.visible); }
 
     function applyFilter() {
         const q = (filterInput.value || "").trim().toLowerCase();
         const canon = canonOnly.checked;
-
         nodesAll.forEach(n => {
             const hay = `${n.title} ${n.pillar} ${n.mode}`.toLowerCase();
             const matchQ = !q || hay.includes(q);
@@ -235,24 +245,25 @@
 
     resetLayout(false);
 
-    // Interaction
+    // --- INTERACTION ---
     let hoverNode = null;
     let dragNode = null;
+    let isPanning = false;
+    let lastMouse = { x: 0, y: 0 };
     let dragOffset = { x: 0, y: 0 };
 
-    function dist2(a, b) {
-        const dx = a.x - b.x, dy = a.y - b.y;
-        return dx * dx + dy * dy;
+    function dist2(ax, ay, bx, by) {
+        return (ax - bx) ** 2 + (ay - by) ** 2;
     }
 
-    function findNodeAt(x, y) {
-        const m = { x, y };
+    // wx, wy are WORLD coordinates
+    function findNodeAt(wx, wy) {
         const visible = getVisibleNodes();
         let best = null;
         let bestD = Infinity;
         for (const n of visible) {
-            const d = dist2(n, m);
-            const rr = (n.r + 6) * (n.r + 6);
+            const d = dist2(n.x, n.y, wx, wy);
+            const rr = (n.r + 10) ** 2; // Generous hit area
             if (d <= rr && d < bestD) {
                 best = n; bestD = d;
             }
@@ -260,122 +271,127 @@
         return best;
     }
 
-    function canvasPos(evt) {
+    function getMousePos(evt) {
         const rect = canvas.getBoundingClientRect();
         return { x: (evt.clientX - rect.left), y: (evt.clientY - rect.top) };
     }
 
-    canvas.addEventListener("mousemove", (evt) => {
-        const p = canvasPos(evt);
-        if (dragNode) {
-            dragNode.x = p.x + dragOffset.x;
-            dragNode.y = p.y + dragOffset.y;
+    // 1. ZOOM (Wheel)
+    canvas.addEventListener("wheel", (evt) => {
+        evt.preventDefault();
+        const m = getMousePos(evt);
+        const w1 = toWorld(m.x, m.y); // World point under mouse BEFORE zoom
+
+        const zoomSpeed = 0.0015;
+        const zoomChange = Math.exp(-evt.deltaY * zoomSpeed);
+        // Clamp Zoom
+        const newK = Math.max(0.1, Math.min(4, camera.k * zoomChange));
+
+        // We want w1 to stay at screen m
+        // screen = world * k + camX
+        // camX = screen - world * k
+        camera.k = newK;
+        camera.x = m.x - w1.x * camera.k;
+        camera.y = m.y - w1.y * camera.k;
+
+        if (!running) draw();
+    }, { passive: false });
+
+    // 2. DRAG / PAN (MouseDown)
+    canvas.addEventListener("mousedown", (evt) => {
+        const m = getMousePos(evt);
+        const w = toWorld(m.x, m.y);
+        const n = findNodeAt(w.x, w.y);
+
+        lastMouse = m;
+
+        if (n) {
+            dragNode = n;
+            dragOffset.x = n.x - w.x;
+            dragOffset.y = n.y - w.y;
             dragNode.vx = 0;
             dragNode.vy = 0;
             return;
         }
 
-        // If pinned, keep focus pinned but allow drag
-        if (pinnedNode) {
-            canvas.style.cursor = dragNode ? "grabbing" : "default";
-            // We still update hoverNode if we want to show non-pinned hover? 
-            // Request says: "Pinned node remains the focus while you move around."
-            // Meaning highlighting stays on pinned. 
-            // But do we update the hover variable? 
-            // "hoverNode = findNodeAt..." logic might overwrite highlighting if draw() uses hoverNode fallback.
-            // draw() usage: const focus = (pinnedNode && ...) ? pinnedNode : (hoverNode...)
-            // So draw() respects pinnedNode.
-            // But we shouldn't update sidebar (hint) if pinned.
+        // Pan Background
+        isPanning = true;
+        canvas.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("mouseup", () => {
+        dragNode = null;
+        if (isPanning) {
+            isPanning = false;
+            canvas.style.cursor = "default"; // Will update to grab/pointer on move
+        }
+    });
+
+    canvas.addEventListener("mousemove", (evt) => {
+        const m = getMousePos(evt);
+        const w = toWorld(m.x, m.y);
+
+        if (dragNode) {
+            dragNode.x = w.x + dragOffset.x;
+            dragNode.y = w.y + dragOffset.y;
+            dragNode.vx = 0;
+            dragNode.vy = 0;
+            if (!running) { tick(); draw(); }
             return;
         }
 
-        const prevHover = hoverNode;
-        hoverNode = findNodeAt(p.x, p.y);
-        canvas.style.cursor = hoverNode ? "pointer" : "default";
+        if (isPanning) {
+            const dx = m.x - lastMouse.x;
+            const dy = m.y - lastMouse.y;
+            camera.x += dx;
+            camera.y += dy;
+            lastMouse = m;
+            if (!running) draw();
+            return;
+        }
 
-        // Update Hint if changed
+        lastMouse = m;
+
+        // Hover
+        const prevHover = hoverNode;
+        hoverNode = findNodeAt(w.x, w.y);
+
+        if (hoverNode) canvas.style.cursor = "pointer";
+        else {
+            canvas.style.cursor = isPanning ? "grabbing" : "grab";
+        }
+
+        // Update Hint
         if (hint && hoverNode !== prevHover) {
             if (!hoverNode) {
-                hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
+                if (!pinnedNode) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
             } else {
                 renderHint(hoverNode);
             }
         }
     });
 
-    // Extracted renderHint for reuse
-    function renderHint(node) {
-        const outSet = outNeighbors.get(node.id) || new Set();
-        const inSet = inNeighbors.get(node.id) || new Set();
-
-        const outList = Array.from(outSet).sort((a, b) => {
-            const A = (byId.get(a)?.title || a).toLowerCase();
-            const B = (byId.get(b)?.title || b).toLowerCase();
-            return A.localeCompare(B);
-        });
-        const inList = Array.from(inSet).sort((a, b) => {
-            const A = (byId.get(a)?.title || a).toLowerCase();
-            const B = (byId.get(b)?.title || b).toLowerCase();
-            return A.localeCompare(B);
-        });
-
-        const title = escapeHtml(node.title || node.id);
-        const mode = escapeHtml(node.mode || "");
-        const pillar = escapeHtml((node.pillar || "").replaceAll("-", " "));
-        const url = node.url || ("../posts/" + node.id + ".html");
-
-        hint.innerHTML = `
-          <h3>${url ? `<a href="${url}">${title}</a>` : title}</h3>
-          <div class="row">
-            ${mode ? `<span class="pill">${mode}</span>` : ""}
-            ${pillar ? `<span class="pill">${pillar}</span>` : ""}
-            ${node.canonical ? `<span class="pill">canon</span>` : ""}
-            ${pinnedNode && pinnedNode.id === node.id ? `<span class="pill">pinned</span>` : ""}
-            <span class="pill">out: ${outList.length}</span>
-            <span class="pill">in: ${inList.length}</span>
-          </div>
-    
-          <div class="cols">
-            <div>
-              <div class="muted">Outgoing</div>
-              ${outList.length ? `<ul>${outList.map(nodeLinkHTML).join("")}</ul>` : `<div class="muted">None</div>`}
-            </div>
-            <div>
-              <div class="muted">Incoming</div>
-              ${inList.length ? `<ul>${inList.map(nodeLinkHTML).join("")}</ul>` : `<div class="muted">None</div>`}
-            </div>
-          </div>
-        `;
-    }
-
-    canvas.addEventListener("mousedown", (evt) => {
-        const p = canvasPos(evt);
-        const n = findNodeAt(p.x, p.y);
-        if (!n) return;
-        dragNode = n;
-        dragOffset.x = n.x - p.x;
-        dragOffset.y = n.y - p.y;
-    });
-
-    window.addEventListener("mouseup", () => {
-        dragNode = null;
-    });
-
+    // 3. CLICK (Selection)
     canvas.addEventListener("click", (evt) => {
-        const p = canvasPos(evt);
-        const n = findNodeAt(p.x, p.y);
+        // Did we move? (Click vs Drag distinction)
+        // Simple check: we rely on standard click. 
+        const m = getMousePos(evt);
+        const w = toWorld(m.x, m.y);
+        const n = findNodeAt(w.x, w.y);
 
-        // Empty click clears pin
+        // Click Background -> Clear Pin
         if (!n) {
-            pinnedNode = null;
-            setPinUI(null);
-            if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
+            if (pinnedNode) {
+                pinnedNode = null;
+                setPinUI(null);
+                if (hint) hint.innerHTML = `<span class="muted">Hover a node to see connections.</span>`;
+            }
             return;
         }
 
         const url = n.url || ("../posts/" + n.id + ".html");
 
-        // Cmd/Ctrl Click -> Open
+        // Modifier key -> Open
         if (evt.metaKey || evt.ctrlKey) {
             window.open(url, "_blank");
             return;
@@ -389,67 +405,74 @@
         } else {
             pinnedNode = n;
             setPinUI(pinnedNode);
-            // Force sidebar render
             hoverNode = n;
             renderHint(n);
         }
     });
 
     canvas.addEventListener("dblclick", (evt) => {
-        const p = canvasPos(evt);
-        const n = findNodeAt(p.x, p.y);
+        const m = getMousePos(evt);
+        const w = toWorld(m.x, m.y);
+        const n = findNodeAt(w.x, w.y);
         if (n) {
             const url = n.url || ("../posts/" + n.id + ".html");
             window.location.href = url;
+        } else {
+            // Optional: Reset Camera?
+            resetLayout(false); // Recenters
         }
     });
 
+    // --- PHYSICS LOOP ---
     function tick() {
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
-        const cx = w / 2, cy = h / 2;
-
         const nodes = getVisibleNodes();
         const links = getVisibleLinks();
 
         // Forces
-        for (const l of links) {
-            const a = l.source, b = l.target;
-            const dx = b.x - a.x;
-            const dy = b.y - a.y;
-            const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
-            const diff = dist - params.linkDistance;
-            const fx = (dx / dist) * diff * params.linkStrength;
-            const fy = (dy / dist) * diff * params.linkStrength;
-            a.vx += fx; a.vy += fy;
-            b.vx -= fx; b.vy -= fy;
-        }
-
         for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
             for (let j = i + 1; j < nodes.length; j++) {
-                const a = nodes[i], b = nodes[j];
+                const b = nodes[j];
                 const dx = b.x - a.x;
                 const dy = b.y - a.y;
-                const d2 = dx * dx + dy * dy;
-                if (d2 === 0) continue;
-                const dist = Math.sqrt(d2);
-                const minDist = a.r + b.r + 6;
-                const strength = params.charge / d2;
-                const overlap = Math.max(0, minDist - dist);
-                const push = strength + overlap * 0.02;
-                const fx = (dx / dist) * push;
-                const fy = (dy / dist) * push;
+                let d2 = dx * dx + dy * dy;
+                // Optimization
+                if (d2 > 200000 || d2 === 0) continue;
+
+                const f = params.charge / (d2 + 50);
+                const dp = Math.sqrt(d2);
+                const fx = (dx / dp) * f;
+                const fy = (dy / dp) * f;
                 a.vx -= fx; a.vy -= fy;
                 b.vx += fx; b.vy += fy;
             }
         }
 
+        for (const l of links) {
+            const a = l.source;
+            const b = l.target;
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const diff = dist - params.linkDistance;
+            const f = diff * params.linkStrength;
+            const fx = (dx / dist) * f;
+            const fy = (dy / dist) * f;
+            a.vx += fx; a.vy += fy;
+            b.vx -= fx; b.vy -= fy;
+        }
+
         for (const n of nodes) {
             if (n === dragNode) continue;
-            n.vx += (cx - n.x) * params.centerStrength * 0.01;
-            n.vy += (cy - n.y) * params.centerStrength * 0.01;
+            // Center Gravity -> 0,0
+            n.vx -= n.x * params.centerStrength;
+            n.vy -= n.y * params.centerStrength;
+
             n.vx *= params.damping;
             n.vy *= params.damping;
+
             const sp = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
             if (sp > params.maxSpeed) {
                 n.vx = (n.vx / sp) * params.maxSpeed;
@@ -457,21 +480,24 @@
             }
             n.x += n.vx;
             n.y += n.vy;
-            const pad = 24;
-            n.x = Math.max(pad, Math.min(w - pad, n.x));
-            n.y = Math.max(pad, Math.min(h - pad, n.y));
+            // NO BOUNDS! Infinite.
         }
     }
 
     function draw() {
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
+
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // Reset
         ctx.clearRect(0, 0, w, h);
+
+        // Apply Camera Transform
+        ctx.setTransform(DPR * camera.k, 0, 0, DPR * camera.k, camera.x * DPR, camera.y * DPR);
 
         const nodes = getVisibleNodes();
         const links = getVisibleLinks();
 
-        // Priority: Pinned > Hover
+        // Priority Logic
         const focus = (pinnedNode && pinnedNode.visible)
             ? pinnedNode
             : ((hoverNode && hoverNode.visible) ? hoverNode : null);
@@ -481,7 +507,6 @@
             if (directionMode === "out") focusSet = outNeighbors.get(focus.id) || new Set();
             else if (directionMode === "in") focusSet = inNeighbors.get(focus.id) || new Set();
             else {
-                // all
                 const outS = outNeighbors.get(focus.id) || new Set();
                 const inS = inNeighbors.get(focus.id) || new Set();
                 focusSet = new Set([...outS, ...inS]);
@@ -494,62 +519,39 @@
             return focusSet.has(n.id);
         }
 
-        // --- Draw Links ---
-        ctx.globalCompositeOperation = 'source-over';
+        // Links
+        ctx.lineWidth = 1.5;
+        // Optimization: Background links faint
+        ctx.globalAlpha = focus ? 0.08 : 0.2;
+        ctx.fillStyle = "#555"; // Wait, stroke style?
+        ctx.strokeStyle = "#555";
 
-        // 1. Base/Dimmed Links
-        ctx.lineWidth = 1;
         ctx.beginPath();
         for (const l of links) {
-            // Optimization: If focused, rely on highlight loop for active ones? 
-            // Or just draw all faint first.
-            if (focus) {
-                ctx.globalAlpha = 0.06;
-                ctx.strokeStyle = "#777";
-            } else {
-                ctx.globalAlpha = 0.2;
-                ctx.strokeStyle = "#666";
-            }
             ctx.moveTo(l.source.x, l.source.y);
             ctx.lineTo(l.target.x, l.target.y);
         }
         ctx.stroke();
 
-        // 2. Highlighted Links (Glow / Gradient)
+        // Highlight
         if (focus) {
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 3;
             for (const l of links) {
                 let hit = false;
-                if (directionMode === "out") {
-                    hit = (l.source.id === focus.id && focusSet.has(l.target.id));
-                } else if (directionMode === "in") {
-                    hit = (l.target.id === focus.id && focusSet.has(l.source.id));
-                } else {
-                    hit = (l.source.id === focus.id && focusSet.has(l.target.id)) ||
-                        (l.target.id === focus.id && focusSet.has(l.source.id));
-                }
+                if (directionMode === "out") hit = (l.source.id === focus.id && focusSet.has(l.target.id));
+                else if (directionMode === "in") hit = (l.target.id === focus.id && focusSet.has(l.source.id));
+                else hit = (l.source.id === focus.id && focusSet.has(l.target.id)) || (l.target.id === focus.id && focusSet.has(l.source.id));
 
                 if (!hit) continue;
 
-                // Gradient: Active Node -> Target
                 const grad = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
-
-                // If we are looking OUT: Source(Focus) -> Target
-                // If we are looking IN: Source -> Target(Focus)
-                // Let's color them differently? 
-                // Primary Accent: #00D6A3. 
-
                 if (l.source.id === focus.id) {
-                    // Outgoing: Green to transparent
-                    grad.addColorStop(0, "rgba(0, 214, 163, 0.9)");
-                    grad.addColorStop(1, "rgba(0, 214, 163, 0.1)");
+                    grad.addColorStop(0, "rgba(0, 214, 163, 0.95)");
+                    grad.addColorStop(1, "rgba(0, 214, 163, 0.05)");
                 } else {
-                    // Incoming: Transparent to White/Bright
-                    grad.addColorStop(0, "rgba(255, 255, 255, 0.1)");
-                    grad.addColorStop(1, "rgba(255, 255, 255, 0.9)");
+                    grad.addColorStop(0, "rgba(255, 255, 255, 0.05)");
+                    grad.addColorStop(1, "rgba(255, 255, 255, 0.95)");
                 }
-
-                ctx.globalAlpha = 0.8;
                 ctx.strokeStyle = grad;
                 ctx.beginPath();
                 ctx.moveTo(l.source.x, l.source.y);
@@ -559,44 +561,33 @@
         }
         ctx.globalAlpha = 1;
 
-        // --- Draw Nodes ---
+        // Nodes
         for (const n of nodes) {
             const connected = isConnected(n);
             const isFocus = focus && n.id === focus.id;
 
-            // Dim unconnected
-            ctx.globalAlpha = focus ? (connected ? 1 : 0.08) : 1;
+            ctx.globalAlpha = focus ? (connected ? 1 : 0.1) : 1;
 
             ctx.beginPath();
-            // Canon nodes slightly larger visually? (already handled by radius r)
             ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
 
             if (n.canonical) {
-                // Canon Style: White/Bright
                 ctx.fillStyle = isFocus ? "#fff" : "#eee";
-                // Glow
-                ctx.shadowBlur = isFocus ? 24 : 12;
-                ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
+                ctx.shadowBlur = isFocus ? 32 : 16;
+                ctx.shadowColor = "rgba(255, 255, 255, 0.35)";
             } else {
-                // Normal Style: Grey or Green if Focused
                 ctx.fillStyle = isFocus ? "#00D6A3" : (connected && focus ? "#ccc" : "#666");
                 if (isFocus) {
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = "rgba(0, 214, 163, 0.5)";
-                } else {
-                    ctx.shadowBlur = 0;
-                }
+                    ctx.shadowBlur = 24;
+                    ctx.shadowColor = "rgba(0, 214, 163, 0.6)";
+                } else ctx.shadowBlur = 0;
             }
-
             ctx.fill();
-            ctx.shadowBlur = 0; // Reset for performance/next item
+            ctx.shadowBlur = 0;
 
-            // Ring for Canon to give 'weight'
             if (n.canonical) {
-                ctx.lineWidth = 2; // Thicker ring
-                ctx.strokeStyle = "rgba(0,0,0,0.5)"; // Inner dark stroke? Or outer ring?
-                // Let's stroke outside with faint ring
-                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)";
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)";
                 ctx.stroke();
             }
         }
