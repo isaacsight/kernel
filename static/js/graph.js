@@ -58,12 +58,20 @@
 
         // Alive Read Configuration
         const CONFIG = {
-            charge: 500,        // Balance structure/space
-            linkDist: 110,      // Room to breathe
-            damping: 0.9,       // Fluid but stable
-            drift: 0.08,        // "Alive" breathing (Wander DNA)
-            zoomLimit: [0.1, 5],
-            labels: true
+            charge: -170, // Repulsion
+            linkDist: 80,
+            damping: 0.85, // Smooth float
+            drift: 0.008, // Gentle wander
+            zoomLimit: [0.1, 5]
+        };
+
+        const PILLARS = {
+            "being-seen": "#fbbf24", // Amber
+            "systems-power": "#ef4444", // Red
+            "doing-the-work": "#3b82f6", // Blue
+            "engineering": "#8b5cf6", // Violet
+            "design": "#ec4899", // Pink
+            "default": "#10b981" // Emerald
         };
 
         // --- INITIALIZATION ---
@@ -135,11 +143,13 @@
 
         function getNodeColor(n, isFocus, isConn) {
             if (isFocus) return "#fff";
-            if (isConn) return n.canonical ? "#eee" : "#ccc"; // Connected dim
+            if (isConn) return n.canonical ? "#eee" : "#aaa"; // Connected dim
 
             if (n.canonical) return "#fff";
-            if ((n.mode || "").toLowerCase() === "essay") return "#00D6A3"; // Mint
-            return "#666"; // Thoughts
+
+            // Pillar Coloring
+            const p = (n.pillar || "").toLowerCase();
+            return PILLARS[p] || PILLARS.default;
         }
 
         // --- PHYSICS ---
