@@ -193,7 +193,10 @@
         <!-- Center Hint -->
         <div id="graphCenterHint" class="graph__center-hint">
             <div class="hint-content">
-                <p>Click a node to explore.</p>
+                <p><strong>Start anywhere — or begin with a core essay.</strong><br>
+                    <span style="opacity:0.7; font-size:0.9em;">Each dot is a thought. Lines show how they
+                        connect.</span>
+                </p>
             </div>
         </div>
 
@@ -214,8 +217,8 @@
             <!-- Filter -->
             <div class="graph__control-group">
                 <label class="graph__toggle" title="Show only Core Essays">
-                    <input id="graphCanonOnly" type="checkbox" />
-                    <span>Core only</span>
+                    <input id="graphCanonOnly" type="checkbox" checked />
+                    <span>Core thoughts</span>
                 </label>
 
                 <select id="graphDirection" class="graph__select" aria-label="Link Direction"
@@ -236,7 +239,7 @@
                         <path d="M3 3v5h5" />
                     </svg>
                 </button>
-                <a href="./index.html" class="btn-text" title="Switch to List View">List</a>
+                <a href="./index.html" class="btn-text" title="Switch to Index View">Index</a>
             </div>
         </div>
         <!-- Right Side: Persistent Inspector -->

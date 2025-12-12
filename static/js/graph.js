@@ -15,7 +15,7 @@
         const modeRadios = document.querySelectorAll('input[name="mode"]');
 
         // Defaults
-        if (canonOnly) canonOnly.checked = false; // Starve no more
+        // if (canonOnly) canonOnly.checked = false; // REMOVED: Default is On now.
 
         if (!canvas) { console.error("Graph: Canvas not found!"); return; }
 
@@ -37,7 +37,7 @@
         let dragNode = null;
         let isPanning = false;
         let lastMouse = { x: 0, y: 0 };
-        let camera = { x: 0, y: 0, k: 0.8 };
+        let camera = { x: 0, y: 0, k: 0.95 }; // Start slightly closer
         let camTarget = null; // smooth transition target
         let running = true; // Physics loop
 
@@ -112,10 +112,10 @@
 
         // --- VISUAL COMPUTATION ---
         function getNodeRadius(n) {
-            if (n.canonical) return 18;
+            if (n.canonical) return 22; // Larger Core
             const d = degree.get(n.id) || 0;
-            if (d > 6) return 10;
-            return 6;
+            if (d > 6) return 12;
+            return 5;
         }
 
         function getNodeColor(n, isFocus, isConn) {
@@ -254,9 +254,10 @@
                     if (isFocus) alpha = 1;
                     else if (isConn) alpha = 0.8;
                     else alpha = 0.1;
-                } else {
                     // Default
-                    alpha = (!n.canonical) ? 0.8 : 1;
+                    const deg = degree.get(n.id) || 0;
+                    if (deg === 0) alpha = 0.4; // Dim orphans
+                    else alpha = (!n.canonical) ? 0.8 : 1;
                 }
 
                 // Hover Growth
@@ -359,6 +360,7 @@
                 </div>
               </div>
               <div class="inspector__section">
+                ${(outList.length || inList.length) ? `<div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">This thought connects to:</div>` : ""}
                 ${outList.length ? `<div class="inspector__section-title">References (${outList.length})</div><ul class="inspector__list">${outList.map(nodeLinkHTML).join("")}</ul>` : ""}
                 ${inList.length ? `<div class="inspector__section-title" style="margin-top:16px">Referenced by (${inList.length})</div><ul class="inspector__list">${inList.map(nodeLinkHTML).join("")}</ul>` : ""}
               </div>
