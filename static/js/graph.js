@@ -25,6 +25,21 @@
         if (!inspector) return;
 
         if (!node) {
+            // LANDING STATE: "Suggested Paths" if nothing selected
+            // Pick 3 random core nodes (if available)
+            const coreNodes = nodesAll.filter(n => n.canonical).sort(() => 0.5 - Math.random()).slice(0, 3);
+
+            let suggestionHTML = "";
+            if (coreNodes.length > 0) {
+                suggestionHTML = `
+                <div class="inspector__section" style="margin-top:24px;">
+                    <div class="inspector__section-title">Suggested Paths</div>
+                    <ul class="inspector__list">
+                        ${coreNodes.map(n => nodeLinkHTML(n.id)).join("")}
+                    </ul>
+                </div>`;
+            }
+
             inspector.innerHTML = `
             <div class="graph__empty-state">
                 <div class="empty-icon">
@@ -35,15 +50,15 @@
                 </div>
                 <p>Click a node to focus</p>
                 <small class="muted">Drag to pan • Scroll to zoom</small>
-            </div>`;
-            // Remove selection class from sidebar if any
+            </div>
+            ${suggestionHTML}
+            `;
             return;
         }
 
         const outSet = outNeighbors.get(node.id) || new Set();
         const inSet = inNeighbors.get(node.id) || new Set();
 
-        // Sort neighbors
         const sortFn = (a, b) => (byId.get(a)?.title || a).localeCompare(byId.get(b)?.title || b);
         const outList = Array.from(outSet).sort(sortFn);
         const inList = Array.from(inSet).sort(sortFn);
@@ -61,7 +76,7 @@
             <h2 class="inspector__title"><a href="${url}">${title}</a></h2>
             <div class="inspector__meta">
                ${mode ? `<span class="pill-tag">${mode}</span>` : ""}
-               ${node.canonical ? `<span class="pill-tag canon">Canon</span>` : ""}
+               ${node.canonical ? `<span class="pill-tag canon">Core</span>` : ""}
             </div>
             
             <div class="inspector__actions">
@@ -103,7 +118,6 @@
         const n = byId.get(slug);
         if (!n) return `<li><span class="muted">${slug}</span></li>`;
         const title = escapeHtml(n.title || slug);
-        // Use # to prevent page reload, handle via graphSelect
         return `<li><a href="#" onclick="window.graphSelect('${n.id}'); return false;">${title}</a></li>`;
     }
 
@@ -142,6 +156,7 @@
     // Init Logic
     resize();
 
+    // Node Init
     const nodesAll = graph.nodes.map((n, i) => ({
         ...n,
         id: n.id || n.slug,
@@ -149,7 +164,7 @@
         x: Math.random(),
         y: Math.random(),
         vx: 0, vy: 0,
-        r: n.canonical ? 14 : 6,
+        r: 5, // Base size, recalculated later
         visible: true,
     }));
     const byId = new Map(nodesAll.map(n => [n.id, n]));
@@ -165,14 +180,20 @@
         add(inNeighbors, l.target.id, l.source.id);
     }
 
+    // Degree & Size Scaling
     const degree = new Map();
     linksAll.forEach(l => {
         degree.set(l.source.id, (degree.get(l.source.id) || 0) + 1);
         degree.set(l.target.id, (degree.get(l.target.id) || 0) + 1);
     });
+
     nodesAll.forEach(n => {
         const d = degree.get(n.id) || 0;
-        n.r = n.canonical ? 14 : 5 + Math.min(10, Math.floor(Math.sqrt(d) * 2.5));
+        // Core/Canon nodes get a boost, plus degree scaling
+        // Hierarchy: Canon (Big) > High Degree (Med) > Small (Low)
+        const base = n.canonical ? 18 : 6;
+        const scale = n.canonical ? 1.5 : 2.5; // Degree impacts small nodes more
+        n.r = base + Math.min(12, Math.floor(Math.sqrt(d) * scale));
     });
 
     const camera = { x: 0, y: 0, k: 0.8 };
@@ -208,7 +229,7 @@
     if (canonOnly) canonOnly.addEventListener("change", applyFilter);
 
     let running = true;
-    const params = { linkDistance: 80, linkStrength: 0.05, charge: 500, centerStrength: 0.015, damping: 0.85, maxSpeed: 12 };
+    const params = { linkDistance: 100, linkStrength: 0.04, charge: 600, centerStrength: 0.012, damping: 0.85, maxSpeed: 12 };
 
     let dragNode = null;
     let isPanning = false;
@@ -220,7 +241,7 @@
         let best = null, bestD = Infinity;
         for (const n of visible) {
             const d = dist2(n.x, n.y, wx, wy);
-            const rr = (n.r + 8) ** 2;
+            const rr = (n.r + 8) ** 2; // Hit target padding
             if (d <= rr && d < bestD) { best = n; bestD = d; }
         }
         return best;
@@ -287,7 +308,6 @@
     });
 
     canvas.addEventListener("click", (e) => {
-        // Prevent click if panning logic needed, but here simple click is fine
         const m = getMousePos(e);
         const w = toWorld(m.x, m.y);
         const n = findNodeAt(w.x, w.y);
@@ -366,8 +386,14 @@
             }
         }
 
+        // --- SPOTLIGHT MODE ---
+        // If focusing, fade everything else hard.
+        // If not focusing, normal state.
+
+        // Links
         ctx.lineWidth = 1;
-        ctx.globalAlpha = focus ? 0.08 : 0.2;
+        // If focus: extremely faint background links (0.03). If not: normal (0.15)
+        ctx.globalAlpha = focus ? 0.03 : 0.15;
         ctx.strokeStyle = "#555";
         ctx.beginPath();
         for (const l of links) {
@@ -376,6 +402,7 @@
         }
         ctx.stroke();
 
+        // Highlight Links
         if (focus) {
             ctx.lineWidth = 2;
             for (const l of links) {
@@ -386,9 +413,11 @@
                 if (isConnected) {
                     const grd = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
                     if (l.source.id === focus.id) {
+                        // Outgoing color
                         grd.addColorStop(0, "rgba(0, 214, 163, 0.9)");
                         grd.addColorStop(1, "rgba(0, 214, 163, 0.05)");
                     } else {
+                        // Incoming color
                         grd.addColorStop(0, "rgba(255,255,255,0.05)");
                         grd.addColorStop(1, "rgba(255,255,255,0.9)");
                     }
@@ -402,39 +431,86 @@
             }
         }
 
+        // Nodes
         for (const n of nodes) {
             const isSel = selectedNode && n.id === selectedNode.id;
             const isHov = hoverNode && n.id === hoverNode.id;
             const isConn = focusSet && focusSet.has(n.id);
             const isFocus = isSel || isHov;
 
-            ctx.globalAlpha = focus ? (isFocus || isConn ? 1 : 0.1) : 1;
+            // Spotlight Opacity: 
+            // - Focused: 1
+            // - Connected: 0.8
+            // - Unrelated: 0.05 (Ghosted)
+            let alpha = 1;
+            if (focus) {
+                if (isFocus) alpha = 1;
+                else if (isConn) alpha = 0.8;
+                else alpha = 0.05;
+            } else {
+                // Default view
+                alpha = n.canonical ? 1 : 0.7; // Core nodes pop more
+            }
 
+            ctx.globalAlpha = alpha;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
 
-            if (n.canonical) {
-                ctx.fillStyle = isFocus ? "#fff" : "#eee";
-                ctx.shadowBlur = isFocus ? 24 : 12;
-                ctx.shadowColor = "rgba(255,255,255,0.4)";
-            } else {
-                ctx.fillStyle = isFocus ? "#00D6A3" : (isConn ? "#ccc" : "#666");
-                ctx.shadowBlur = isFocus ? 24 : 0;
-                ctx.shadowColor = "rgba(0,214,163,0.5)";
+            // Colors:
+            // - Core/Canon: White
+            // - Essays: Primary Green
+            // - Thoughts/Fragments: Muted grey/blue
+            let fill = "#666";
+            if (n.canonical) fill = "#fff";
+            else if ((n.mode || "").toLowerCase() === "essay") fill = "#00D6A3"; // Green
+            else fill = "#888"; // Muted for thoughts
+
+            // Override for focus
+            if (isFocus) {
+                fill = "#fff"; // Highlight white
+            } else if (isConn) {
+                fill = n.canonical ? "#fff" : "#ccc";
             }
+
+            ctx.fillStyle = fill;
+
+            // Shadow / Glow
+            if (n.canonical || isFocus) {
+                // Pulse effect for core nodes?
+                // Just static glow for now
+                ctx.shadowBlur = isFocus ? 24 : 12;
+                ctx.shadowColor = isFocus ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)";
+            } else {
+                ctx.shadowBlur = 0;
+            }
+
             ctx.fill();
             ctx.shadowBlur = 0;
 
+            // Stroke for core nodes
             if (n.canonical) {
-                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.2)";
+                ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)";
                 ctx.lineWidth = 2;
                 ctx.stroke();
             }
 
-            if (isFocus || (isConn && camera.k > 1.2)) {
-                ctx.fillStyle = "#fff";
-                ctx.font = "12px Inter, sans-serif";
-                ctx.fillText(n.title || n.id, n.x + n.r + 6, n.y + 4);
+            // Labels
+            // Show if: Focused OR (Connected AND Zoomed In) OR (Canon AND Zoomed In slightly)
+            const showLabel = isFocus || (isConn && camera.k > 1.2) || (n.canonical && camera.k > 0.6);
+
+            if (showLabel) {
+                ctx.fillStyle = isFocus ? "#fff" : "rgba(255,255,255,0.7)";
+                ctx.font = isFocus ? "600 13px Inter, sans-serif" : "11px Inter, sans-serif";
+
+                // Avoid drawing text on top of node
+                const textX = n.x + n.r + 6;
+                const textY = n.y + 4;
+
+                // Optional: dark backing for text?
+                // ctx.globalAlpha = alpha * 0.8;
+                // ctx.fillStyle = "rgba(0,0,0,0.5)"; ... rect ...
+
+                ctx.fillText(n.title || n.id, textX, textY);
             }
         }
         ctx.globalAlpha = 1;
@@ -443,6 +519,7 @@
     function frame() { if (running) { tick(); draw(); requestAnimationFrame(frame); } }
 
     resetLayout(false);
+    // Initial Render of Inspector with Suggestions
     renderInspector(null);
     frame();
 
