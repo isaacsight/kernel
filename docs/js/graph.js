@@ -437,6 +437,7 @@
 
         canvas.addEventListener("wheel", (e) => {
             e.preventDefault();
+            camTarget = null; // Interrupt
             const m = getMousePos(e);
             const w1 = toWorld(m.x, m.y);
             const limit = CONFIG[MODE].zoomLimit;
@@ -449,6 +450,7 @@
         }, { passive: false });
 
         canvas.addEventListener("mousedown", (e) => {
+            camTarget = null; // Interrupt
             // Ephemeral Hint
             const h = document.getElementById("graphCenterHint");
             if (h) h.style.opacity = "0";
@@ -531,6 +533,10 @@
         // Keyboard Controls
         window.addEventListener("keydown", (e) => {
             if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+            // Don't interrupt if hitting flyTo keys (+ or =), but interrupt on manual arrows
+            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Escape"].includes(e.key)) {
+                camTarget = null;
+            }
 
             const step = 50;
             switch (e.key) {
@@ -572,6 +578,7 @@
         let lastCenter = null;
 
         canvas.addEventListener("touchstart", (e) => {
+            camTarget = null; // Interrupt
             if (e.touches.length === 1) {
                 const t = e.touches[0];
                 const r = canvas.getBoundingClientRect();
@@ -654,7 +661,7 @@
                 n.x = Math.cos(a) * radius; n.y = Math.sin(a) * radius;
                 n.vx = 0; n.vy = 0;
             });
-            camera.x = w / 2; camera.y = h / 2; camera.k = 0.85;
+            camera.x = w / 2; camera.y = h / 2; camera.k = 0.95;
             running = true;
         }
         if (resetBtn) resetBtn.addEventListener("click", resetLayout);

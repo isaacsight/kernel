@@ -1798,6 +1798,55 @@ td {
     font-weight: 400;
 }
 
+/* Home Blocks */
+.home-block {
+    padding: var(--space-6) 0;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-6);
+}
+
+.home-block:last-child {
+    border-bottom: none;
+}
+
+.home-block__header {
+    margin-bottom: var(--space-6);
+}
+
+.home-block__header h2 {
+    font-size: var(--text-3xl);
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+}
+
+.home-block__header .muted {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+.home-block__header--row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+
+/* Reusable Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-5);
+}
+
+.card-grid--tight {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+
 /* Start Here Section */
 .start-here-section {
     margin: var(--space-8) 0;
