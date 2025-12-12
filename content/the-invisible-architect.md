@@ -3,6 +3,12 @@ title: 'The Invisible Architect'
 date: 2025-11-27
 category: Society
 tags: Psychology, Culture, Technology
+mode: essay
+pillar: systems-power
+canonical: true
+version: v1.0
+tldr: We are no longer just citizens; we are subjects in a global behavioral experiment. How the soft science of nudging became the hard infrastructure of our lives.
+connections: to-be-witnessed
 excerpt: We are no longer just citizens; we are subjects in a global behavioral experiment. How the soft science of nudging became the hard infrastructure of our lives.
 read_time: 6 min read
 featured: true

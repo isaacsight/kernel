@@ -503,6 +503,35 @@ def build():
             # print(f"Date formatting error for {slug}: {e}")
             date_display = date_str
         post_html = post_html.replace('{{ date }}', date_display)
+
+        # Mode Badge
+        mode = post.get('mode', 'Essay')
+        mode_html = f'<span class="mode-badge mode-{mode.lower()}">{mode}</span>'
+        post_html = post_html.replace('{{ mode_display }}', mode_html)
+
+        # Version Badge
+        version = post.get('version', '')
+        version_html = ""
+        if version:
+             version_html = f'<span class="version-badge">{version}</span>'
+        post_html = post_html.replace('{{ version_display }}', version_html)
+
+        # Connections (Graph)
+        connects_to = post.get('connects_to', '')
+        connections_html = ""
+        if connects_to:
+            connections_list = [c.strip() for c in connects_to.split(',') if c.strip()]
+            links = []
+            for c in connections_list:
+                 # Find permalink for the connected title/slug
+                 # Best effort match
+                 target_slug = c.lower().replace(' ', '-')
+                 links.append(f'<a href="{target_slug}.html" class="connection-link">{c}</a>')
+            
+            if links:
+                 connections_html = f'<div class="connections-block"><span class="connection-label">Connects to:</span> {" • ".join(links)}</div>'
+        
+        post_html = post_html.replace('{{ connections }}', connections_html)
         
         # Generate JSON-LD
         import json
@@ -687,8 +716,10 @@ def build():
     # We render ALL posts into index.html so main.js can handle filtering/sorting/pagination.
     # We remove the server-side pagination loop for index.html.
     
-    posts_html = ""
-    for post in main_feed_posts:
+    all_posts_html = ""
+    homepage_posts_html = ""
+
+    for i, post in enumerate(main_feed_posts):
         raw_tags = post.get('tags', '')
         if raw_tags.startswith('[') and raw_tags.endswith(']'):
             raw_tags = raw_tags[1:-1]
@@ -712,10 +743,16 @@ def build():
             date_display = date_obj.strftime('%b %d, %Y')
         except:
             date_display = date_str
-        posts_html += f"""
+        
+        # Mode Badge logic for Card
+        mode = post.get('mode', 'Essay')
+        mode_badge = f'<span class="mode-badge mode-{mode.lower()}">{mode}</span>'
+
+        card_html = f"""
             <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{date_str}">
                 <div class="post-card-content">
                     <div class="post-meta-top">
+                        {mode_badge}
                         <span class="post-category-label">{primary_tag}</span>
                         <span class="post-date">{date_display}</span>
                     </div>
@@ -728,12 +765,15 @@ def build():
                 </div>
             </a>
         """
+        all_posts_html += card_html
+        if i < 3:
+            homepage_posts_html += card_html
         
-    # Generate Single Index Page (No Server Pagination)
+    # Generate Single Index Page (Homepage - Curated)
     index_content = index_template.replace('{{ starter_set }}', starter_set_html)
-    index_content = index_content.replace('{{ recent_posts }}', posts_html) # No server pagination
+    index_content = index_content.replace('{{ recent_posts }}', homepage_posts_html) # Only top 3
     index_content = index_content.replace('{{ experiments_list }}', experiments_sidebar_html)
-    index_content = index_content.replace('{{ filters }}', filter_html)
+    index_content = index_content.replace('{{ filters }}', '') # Remove filters from homepage
     index_content = index_content.replace('{{ collections_list }}', collections_list_html)
     
     full_index = base_template.replace('{{ content }}', index_content)
@@ -747,6 +787,24 @@ def build():
     full_index = full_index.replace('{{ description }}', 'Thoughts on business, technology, and the human condition.')
     full_index = full_index.replace('{{ url }}', f"{BASE_URL}/index.html")
     write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_index)
+
+    # Generate Archive Page
+    print("Step 7b: Generating Archive Page...")
+    archive_template = read_file(os.path.join(TEMPLATE_DIR, 'archive.html'))
+    archive_content = archive_template.replace('{{ recent_posts }}', all_posts_html)
+    archive_content = archive_content.replace('{{ filters }}', filter_html)
+    
+    full_archive = base_template.replace('{{ content }}', archive_content)
+    full_archive = full_archive.replace('{{ starter_set_nav }}', starter_set_nav_html)
+    full_archive = full_archive.replace('{{ root }}', '')
+    full_archive = full_archive.replace('{{ image }}', DEFAULT_IMAGE)
+    full_archive = full_archive.replace('{{ og_type }}', 'website')
+    full_archive = full_archive.replace('{{ json_ld }}', '')
+    
+    full_archive = full_archive.replace('{{ title }}', 'Archive - Does This Feel Right?')
+    full_archive = full_archive.replace('{{ description }}', 'Complete archive of essays and experiments.')
+    full_archive = full_archive.replace('{{ url }}', f"{BASE_URL}/archive.html")
+    write_file(os.path.join(OUTPUT_DIR, 'archive.html'), full_archive)
 
     # Note: We are SKIPPING generation of latest-essays-N.html to force client-side pagination usage
     # If users have JS disabled, they will see ONE LONG PAGE, which is acceptable/better than partial pages.
@@ -1353,6 +1411,176 @@ Sitemap: {BASE_URL}/sitemap.xml
             }
         }
     </style></head>'''
+    
+    # 9a. Generate Mode Pages
+    print("Step 9a: Generating Mode Pages...")
+    modes = ['Essay', 'Log', 'Research', 'Note']
+    for mode in modes:
+        mode_slug = mode.lower() + 's' # pluralize roughly
+        if mode == 'Research': mode_slug = 'research' # exception
+        
+        mode_posts = [p for p in posts if p.get('mode', 'Essay').lower() == mode.lower()]
+        mode_posts.sort(key=lambda x: str(x.get('date', '0000-00-00')), reverse=True)
+        
+        mode_html = ""
+        for post in mode_posts:
+            # Re-use card generation logic or simple list
+            raw_cat = post.get('category', 'General').strip()
+            clean_cat = raw_cat.replace("'", "").replace('"', "")
+            date_str = post.get('date', '')
+             # Mode Badge logic for Card
+            mode_badge = f'<span class="mode-badge mode-{mode.lower()}">{mode}</span>'
+            
+            mode_html += f"""
+                <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{date_str}">
+                    <div class="post-card-content">
+                        <div class="post-meta-top">
+                             {mode_badge}
+                            <span class="post-category-label">{post.get('category', 'General')}</span>
+                            <span class="post-date">{post.get('date', '')}</span>
+                        </div>
+                        <h3 class="post-title">{post.get('title', 'Untitled')}</h3>
+                        <p class="post-excerpt">{post.get('tldr', post.get('excerpt', ''))}</p>
+                        <div class="post-meta-bottom">
+                            <span class="read-time">{post.get('read_time', '5 min read')}</span>
+                            <span class="read-more">Read {mode} →</span>
+                        </div>
+                    </div>
+                </a>
+            """
+            
+        # Create Mode Page
+        mode_page_content = f"""
+        <div class="magazine-layout">
+            <div class="content-wrapper full-width">
+                <main class="main-feed">
+                    <div class="feed-header">
+                        <h2>{mode}s</h2>
+                        <p class="section-desc">Filtered archive of {mode.lower()}s.</p>
+                    </div>
+                    <div class="posts-container">
+                        {mode_html}
+                    </div>
+                </main>
+            </div>
+        </div>
+        """
+        
+        full_mode_page = base_template.replace('{{ content }}', mode_page_content)
+        full_mode_page = full_mode_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+        full_mode_page = full_mode_page.replace('{{ root }}', '')
+        full_mode_page = full_mode_page.replace('{{ image }}', DEFAULT_IMAGE)
+        full_mode_page = full_mode_page.replace('{{ og_type }}', 'website')
+        full_mode_page = full_mode_page.replace('{{ json_ld }}', '')
+        full_mode_page = full_mode_page.replace('{{ title }}', f'{mode}s - Does This Feel Right?')
+        full_mode_page = full_mode_page.replace('{{ description }}', f'Archive of {mode.lower()}s.')
+        full_mode_page = full_mode_page.replace('{{ url }}', f"{BASE_URL}/{mode_slug}.html")
+        
+        write_file(os.path.join(OUTPUT_DIR, f'{mode_slug}.html'), full_mode_page)
+
+
+    # 9b. Generate Pillar Pages
+    print("Step 9b: Generating Pillar Pages...")
+    # Define Pillars (Hardcoded or Dynamic, let's dynamic from posts to be safe, but map to known pillars)
+    known_pillars = {
+        'being-seen': 'Being Seen',
+        'systems-power': 'Systems & Power',
+        'making-public': 'Making Things in Public',
+        'meaning-resistance': 'Meaning & Resistance'
+    }
+    
+    # Bucket posts
+    pillar_buckets = {k: [] for k in known_pillars.keys()}
+    pillar_buckets['general'] = []
+    
+    for post in posts:
+        p_slug = post.get('pillar', 'general').lower().replace(' & ', '-').replace(' ', '-')
+        # Normalize
+        found = False
+        for k in known_pillars.keys():
+            if k in p_slug: # Loose matching
+                pillar_buckets[k].append(post)
+                found = True
+                break
+        if not found:
+            pillar_buckets['general'].append(post)
+            
+    # Create output dir
+    if not os.path.exists(os.path.join(OUTPUT_DIR, 'pillars')):
+        os.makedirs(os.path.join(OUTPUT_DIR, 'pillars'))
+
+    for p_slug, p_name in known_pillars.items():
+        pillar_posts = pillar_buckets[p_slug]
+        if not pillar_posts: continue
+        
+        pillar_posts.sort(key=lambda x: str(x.get('date', '0000-00-00')), reverse=True)
+        
+        pillar_html = ""
+        for post in pillar_posts:
+            # Re-use card generation logic
+            raw_cat = post.get('category', 'General').strip()
+            clean_cat = raw_cat.replace("'", "").replace('"', "")
+            date_str = post.get('date', '')
+            mode = post.get('mode', 'Essay')
+            mode_badge = f'<span class="mode-badge mode-{mode.lower()}">{mode}</span>'
+            
+            pillar_html += f"""
+                <a href="../posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{date_str}">
+                    <div class="post-card-content">
+                        <div class="post-meta-top">
+                            {mode_badge}
+                            <span class="post-category-label">{post.get('category', 'General')}</span>
+                            <span class="post-date">{post.get('date', '')}</span>
+                        </div>
+                        <h3 class="post-title">{post.get('title', 'Untitled')}</h3>
+                        <p class="post-excerpt">{post.get('tldr', post.get('excerpt', ''))}</p>
+                        <div class="post-meta-bottom">
+                            <span class="read-time">{post.get('read_time', '5 min read')}</span>
+                            <span class="read-more">Read Essay →</span>
+                        </div>
+                    </div>
+                </a>
+            """
+            
+        # Create Pillar Page
+        pillar_page_content = f"""
+        <div class="magazine-layout">
+            <div class="content-wrapper full-width">
+                <main class="main-feed">
+                    <div class="feed-header">
+                        <h2>{p_name}</h2>
+                        <p class="section-desc">Essays on {p_name.lower()}.</p>
+                    </div>
+                    <div class="posts-container">
+                        {pillar_html}
+                    </div>
+                </main>
+            </div>
+        </div>
+        """
+        
+        # Adjust root for pillars/ subdirectory
+        # Actually simplest is to adjust links in pillar_html to be ../posts/ and put file in pillars/
+        
+        full_pillar_page = base_template.replace('{{ content }}', pillar_page_content)
+        # Fix nav links for subdirectory
+        # A bit hacky: simple replace
+        full_pillar_page = full_pillar_page.replace('href="index.html"', 'href="../index.html"')
+        full_pillar_page = full_pillar_page.replace('href="about.html"', 'href="../about.html"')
+        full_pillar_page = full_pillar_page.replace('href="collections.html"', 'href="../collections.html"')
+        full_pillar_page = full_pillar_page.replace('src="', 'src="../') # Fix scripts/css
+        full_pillar_page = full_pillar_page.replace('href="css/', 'href="../css/')
+        
+        full_pillar_page = full_pillar_page.replace('{{ starter_set_nav }}', starter_set_nav_html.replace('posts/', '../posts/'))
+        full_pillar_page = full_pillar_page.replace('{{ root }}', '../')
+        full_pillar_page = full_pillar_page.replace('{{ image }}', DEFAULT_IMAGE)
+        full_pillar_page = full_pillar_page.replace('{{ og_type }}', 'website')
+        full_pillar_page = full_pillar_page.replace('{{ json_ld }}', '')
+        full_pillar_page = full_pillar_page.replace('{{ title }}', f'{p_name} - Does This Feel Right?')
+        full_pillar_page = full_pillar_page.replace('{{ description }}', f'Essays on {p_name.lower()}.')
+        full_pillar_page = full_pillar_page.replace('{{ url }}', f"{BASE_URL}/pillars/{p_slug}.html")
+        
+        write_file(os.path.join(OUTPUT_DIR, 'pillars', f'{p_slug}.html'), full_pillar_page)
     viz_page = viz_page.replace('</head>', style_injection)
 
     write_file(os.path.join(OUTPUT_DIR, 'visualizer.html'), viz_page)

@@ -175,6 +175,118 @@ h3 {
     margin-top: var(--space-7);
 }
 
+/* --- Engineering Upgrade (Phase 2) --- */
+
+/* Mode Badges */
+.mode-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.mode-essay {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mode-log {
+    background: rgba(0, 214, 163, 0.1);
+    color: var(--accent-primary);
+    border: 1px solid rgba(0, 214, 163, 0.3);
+}
+
+.mode-research {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60A5FA;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.mode-note {
+    background: rgba(245, 158, 11, 0.1);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Version Badge */
+.version-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--text-tertiary);
+    background: var(--bg-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+    margin-left: 4px;
+}
+
+/* Connections Block */
+.connections-block {
+    background: var(--bg-secondary);
+    border-left: 2px solid var(--accent-primary);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.connection-label {
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+}
+
+.connection-link {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.connection-link:hover {
+    border-bottom-color: var(--accent-primary);
+}
+
+/* Investigation List Styles */
+.investigation-block {
+    margin-bottom: 48px;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+}
+
+.investigation-list {
+    list-style: none;
+    margin-top: 16px;
+}
+
+.investigation-list li {
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+
+.investigation-list strong {
+    color: var(--text-primary);
+}
+
+.inv-bullet {
+    color: var(--accent-primary);
+    margin-right: 8px;
+}
+
 p {
     margin-bottom: var(--space-5);
     color: var(--text-secondary);

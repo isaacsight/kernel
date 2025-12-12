@@ -1,27 +1,25 @@
-<!-- Magazine Layout -->
+<!-- Studio Layout -->
 <h1 class="sr-only">Does This Feel Right?</h1>
 <div class="magazine-layout">
 
-
-
-    <!-- Hero Section -->
-    <section class="hero-section">
+    <!-- Hero Section (Doctrine + Framing) -->
+    <section class="hero-section center-aligned">
         <div class="hero-content">
-            <h1 class="hero-title">A living notebook on technology, intelligence, and modern life.</h1>
-            <p class="hero-subtitle">Essays exploring AI, systems thinking, creativity, and the unease of building in
-                public.</p>
+            <h1 class="hero-title">Does This Feel Right? is a public thinking system for navigating technology,
+                identity, and the unease of modern life.</h1>
+            <p class="hero-subtitle">I’m Isaac. I build systems, write in public, and document what it costs.</p>
             <div class="hero-actions">
-                <a href="#essays" class="btn-primary">Read the essays</a>
-                <a href="about.html" class="btn-secondary">About</a>
+                <a href="#canon" class="btn-primary">The Canon</a>
+                <a href="about.html" class="btn-secondary">The Studio</a>
             </div>
         </div>
     </section>
 
-    <!-- Start Here Section (Soft Band) -->
-    <section class="start-here-section">
+    <!-- Canon Section -->
+    <section class="start-here-section" id="canon">
         <div class="section-header">
-            <h2 class="section-label">Start Here</h2>
-            <p class="section-desc">Essays that define the ethos of this studio.</p>
+            <h2 class="section-label">The Canon</h2>
+            <p class="section-desc">Foundational essays that define the doctrine.</p>
         </div>
         <div class="starter-grid">
             {{ starter_set }}
@@ -29,36 +27,57 @@
     </section>
 
     <div class="content-wrapper">
-        <!-- 3. Main Feed (Left Column) -->
+        <!-- Main Feed -->
         <main class="main-feed" id="essays">
-            <div class="feed-header">
-                <h2>Latest Essays</h2>
-                {{ filters }}
+
+            <!-- Current Investigation -->
+            <div class="investigation-block">
+                <h3>Current Investigation</h3>
+                <ul class="investigation-list">
+                    <li><span class="inv-bullet">•</span> <strong>AI as Infrastructure</strong> — Beyond the chat box.
+                    </li>
+                    <li><span class="inv-bullet">•</span> <strong>Public Selfhood</strong> — The cost of being seen.
+                    </li>
+                    <li><span class="inv-bullet">•</span> <strong>Studio OS</strong> — Designing the perfect creative
+                        environment.</li>
+                </ul>
             </div>
+
+            <div class="feed-header">
+                <h2>Recent Work</h2>
+                <a href="archive.html" class="view-all-link">View Archive →</a>
+            </div>
+
+            <!-- {{ filters }} removed for clarity -->
 
             <div class="posts-container">
                 {{ recent_posts }}
             </div>
         </main>
 
-        <!-- 4. Sidebar (Right Column) -->
+        <!-- Sidebar -->
         <aside class="blog-sidebar">
 
-            <!-- Collections Widget -->
+            <!-- Pillars Widget -->
             <div class="sidebar-widget collections-widget">
-                <h3>Collections</h3>
+                <h3>Pillars</h3>
                 <ul class="collection-list">
-                    {{ collections_list }}
+                    <li><a href="tags/identity.html" class="collection-link"><span class="name">Being Seen</span></a>
+                    </li>
+                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems &
+                                Power</span></a></li>
+                    <li><a href="tags/building.html" class="collection-link"><span class="name">Making Things in
+                                Public</span></a></li>
+                    <li><a href="tags/philosophy.html" class="collection-link"><span class="name">Meaning &
+                                Resistance</span></a></li>
                 </ul>
-                <a href="collections.html" class="text-link">View all collections →</a>
             </div>
 
             <!-- About Widget -->
             <div class="sidebar-widget about-widget">
-                <h3>About</h3>
-                <p><strong>Does This Feel Right?</strong> is a collection of essays on technology, philosophy, and the
-                    human condition.</p>
-                <a href="about.html" class="text-link">Read more →</a>
+                <h3>The Studio</h3>
+                <p>This work feeds into tools, studios, and consulting.</p>
+                <a href="about.html" class="text-link">Work with me →</a>
             </div>
 
         </aside>

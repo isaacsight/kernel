@@ -2,16 +2,15 @@ import logging
 import sys
 import os
 import json
+import time
 from typing import Dict, List, Optional
 
 # Add parent directory to path
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-print("DEBUG: PromptEngineer script started (Pre-Imports)", flush=True)
-
 from admin.config import config
 from admin.brain.model_router import get_model_router, TaskType
+from admin.brain.metrics_collector import get_metrics_collector
 
 logger = logging.getLogger("PromptEngineer")
 logging.basicConfig(level=logging.INFO)
@@ -31,6 +30,7 @@ class PromptEngineer:
         self.name = "The Prompt Engineer"
         self.role = "Meta-Optimizer"
         self.model_router = get_model_router()
+        self.metrics = get_metrics_collector()
         logger.info(f"[{self.name}] Initialized.")
 
     def _call_llm(self, prompt: str, task_type: TaskType = TaskType.ANALYSIS) -> str:
@@ -52,6 +52,9 @@ class PromptEngineer:
             logger.info(f"[{self.name}] Attempting with {provider}/{model_name}...")
 
             try:
+                start_time = time.time()
+                result = None
+                
                 if provider == "google":
                     import google.generativeai as genai
                     if not config.GEMINI_API_KEY:
@@ -67,7 +70,7 @@ class PromptEngineer:
                          clean_name = "gemini-2.5-pro"
                          
                     m = genai.GenerativeModel(clean_name)
-                    return m.generate_content(prompt).text
+                    result = m.generate_content(prompt).text
                     
                 elif provider == "openai":
                     from openai import OpenAI
@@ -78,7 +81,7 @@ class PromptEngineer:
                         model=model_name,
                         messages=[{"role": "user", "content": prompt}]
                     )
-                    return response.choices[0].message.content
+                    result = response.choices[0].message.content
                     
                 elif provider == "anthropic":
                     import anthropic
@@ -90,7 +93,7 @@ class PromptEngineer:
                         max_tokens=4096,
                         messages=[{"role": "user", "content": prompt}]
                     )
-                    return message.content[0].text
+                    result = message.content[0].text
                     
                 elif provider == "remote":
                      # Studio Node
@@ -105,12 +108,20 @@ class PromptEngineer:
                      resp = requests.post(url, json=payload, timeout=60)
                      if resp.status_code == 200:
                          data = resp.json()
-                         return data["choices"][0]["message"]["content"]
-                     # fall through to next candidate on error
-                     logger.warning(f"Remote failed: {resp.text}")
+                         result = data["choices"][0]["message"]["content"]
+                     else:
+                         # fall through to next candidate on error
+                         logger.warning(f"Remote failed: {resp.text}")
+                
+                # Report Metrics
+                if result:
+                    duration = time.time() - start_time
+                    self.metrics.track_generation(True, provider, duration, task_type.value)
+                    return result
 
             except Exception as e:
                 logger.error(f"LLM call failed for {model_name}: {e}")
+                self.metrics.track_generation(False, provider, 0, str(e))
                 continue # Try next candidate
             
         return "Error: All models failed."
@@ -119,6 +130,7 @@ class PromptEngineer:
         """
         Rewrites a prompt to better achieve the specified goal.
         """
+        start_time = time.time()
         logger.info(f"[{self.name}] Optimizing prompt for goal: {goal}")
         
         meta_prompt = f"""
@@ -140,12 +152,17 @@ class PromptEngineer:
         Output ONLY the optimized prompt.
         """
         
-        return self._call_llm(meta_prompt, TaskType.CODE_GENERATION) # Code generation models are often good at structured logic
+        result = self._call_llm(meta_prompt, TaskType.CODE_GENERATION)
+        
+        success = "Error" not in result
+        self.metrics.track_agent_action(self.name, "optimize", success, time.time() - start_time)
+        return result
 
     def critique(self, prompt: str) -> str:
         """
         Analyzes a prompt for weaknesses.
         """
+        start_time = time.time()
         logger.info(f"[{self.name}] Critiquing prompt...")
         
         meta_prompt = f"""
@@ -163,12 +180,17 @@ class PromptEngineer:
         4. Specific suggestions for improvement
         """
         
-        return self._call_llm(meta_prompt, TaskType.ANALYSIS)
+        result = self._call_llm(meta_prompt, TaskType.ANALYSIS)
+        
+        success = "Error" not in result
+        self.metrics.track_agent_action(self.name, "critique", success, time.time() - start_time)
+        return result
 
     def evolve(self, current_prompt: str, goal: str = "Improve clarity and robustness", iterations: int = 2) -> str:
         """
         Iteratively evolves a prompt using a genetic-algorithm-lite approach (PromptWizard style).
         """
+        start_time = time.time()
         logger.info(f"[{self.name}] Evolving prompt for goal: {goal} ({iterations} iterations)")
         
         best_prompt = current_prompt
@@ -184,6 +206,7 @@ class PromptEngineer:
             best_prompt = self._select_best_variation(variations, goal)
             logger.info(f"[{self.name}] Generation {i+1} Winner: {best_prompt[:50]}...")
             
+        self.metrics.track_agent_action(self.name, "evolve", True, time.time() - start_time)
         return best_prompt
 
     def _generate_variations(self, base_prompt: str, goal: str) -> List[str]:

@@ -3,6 +3,12 @@ title: 'To Be Witnessed'
 date: 2025-11-27
 category: Culture
 tags: Intimacy, Media, Humanism
+mode: essay
+pillar: being-seen
+canonical: true
+version: v1.0
+tldr: We are obsessed with being watched, but we are starving to be witnessed. The difference is the difference between a performance and a life.
+connections: the-invisible-architect
 excerpt: We are obsessed with being watched, but we are starving to be witnessed. The difference is the difference between a performance and a life.
 read_time: 4 min read
 featured: true

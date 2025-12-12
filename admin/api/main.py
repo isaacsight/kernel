@@ -373,6 +373,21 @@ async def select_model(request: ModelSelectionRequest):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+@app.get("/system/metrics")
+async def get_system_metrics():
+    """Get system-wide metrics and analytics."""
+    try:
+        from admin.brain.metrics_collector import get_metrics_collector
+        collector = get_metrics_collector()
+        
+        return {
+            "daily_summary": collector.get_daily_summary(),
+            "trends": collector.get_trend_analysis(),
+            "agent_rankings": collector.get_agent_rankings(),
+            "opportunities": collector.get_improvement_opportunities()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # SPA Catch-all route

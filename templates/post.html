@@ -10,7 +10,7 @@
     </nav>
     <div class="post-header post-header-container">
         <div class="post-meta post-meta-date">
-            {{ date }}
+            {{ date }} • {{ mode_display }} {{ version_display }}
         </div>
         <h1 class="post-title-large">{{ title }}</h1>
         <div class="post-tags">
@@ -21,6 +21,7 @@
     {{ series_indicator }}
 
     <div class="post-context">
+        {{ connections }}
         Part of an ongoing exploration into AI and systems design.
     </div>
     <hr class="context-divider">
