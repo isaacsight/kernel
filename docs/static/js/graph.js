@@ -41,6 +41,21 @@
         let camTarget = null; // smooth transition target
         let running = true; // Physics loop
 
+        // Gesture Hint
+        let gestureHintTimeout;
+        const gestureHint = document.createElement("div");
+        gestureHint.style.cssText = "position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.7); color:#fff; padding:12px 24px; border-radius:30px; font-size:14px; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:100; text-align:center; backdrop-filter:blur(4px); font-weight:500;";
+        if (container) container.appendChild(gestureHint);
+
+        function showGestureHint(msg) {
+            gestureHint.innerText = msg;
+            gestureHint.style.opacity = "1";
+            clearTimeout(gestureHintTimeout);
+            gestureHintTimeout = setTimeout(() => {
+                gestureHint.style.opacity = "0";
+            }, 1500);
+        }
+
         // Alive Read Configuration
         const CONFIG = {
             charge: 500,        // Balance structure/space
@@ -436,17 +451,25 @@
         }
 
         canvas.addEventListener("wheel", (e) => {
-            e.preventDefault();
-            camTarget = null; // Interrupt
-            const m = getMousePos(e);
-            const w1 = toWorld(m.x, m.y);
-            const limit = CONFIG[MODE].zoomLimit;
-            const speed = 0.0015;
-            const zoom = Math.exp(-e.deltaY * speed);
-            camera.k = Math.max(limit[0], Math.min(limit[1], camera.k * zoom));
-            camera.x = m.x - w1.x * camera.k;
-            camera.y = m.y - w1.y * camera.k;
-            if (!running) draw();
+            // Cooperative Zoom: Only zoom if Ctrl/Meta is pressed
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                camTarget = null; // Interrupt
+                const m = getMousePos(e);
+                const w1 = toWorld(m.x, m.y);
+                const limit = CONFIG.zoomLimit;
+                const speed = 0.0015;
+                const zoom = Math.exp(-e.deltaY * speed);
+                camera.k = Math.max(limit[0], Math.min(limit[1], camera.k * zoom));
+                camera.x = m.x - w1.x * camera.k;
+                camera.y = m.y - w1.y * camera.k;
+                if (!running) draw();
+                // Remove hints if successfully zooming
+                if (gestureHint.style.opacity === "1") gestureHint.style.opacity = "0";
+            } else {
+                // Hint if trying to scroll-zoom
+                showGestureHint("Use Ctrl + Scroll to zoom");
+            }
         }, { passive: false });
 
         canvas.addEventListener("mousedown", (e) => {
@@ -579,13 +602,9 @@
 
         canvas.addEventListener("touchstart", (e) => {
             camTarget = null; // Interrupt
-            if (e.touches.length === 1) {
-                const t = e.touches[0];
-                const r = canvas.getBoundingClientRect();
-                lastMouse = { x: t.clientX - r.left, y: t.clientY - r.top };
-                isPanning = true;
-            } else if (e.touches.length === 2) {
-                isPanning = false;
+            if (e.touches.length === 2) {
+                // 2 Fingers: Pan + Zoom
+                isPanning = false; // 2 fingers = pan+zoom, not 1-finger pan
                 lastDist = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
@@ -596,19 +615,13 @@
                     y: ((e.touches[0].clientY + e.touches[1].clientY) / 2) - r.top
                 };
             }
+            // 1 Finger: Do nothing, let browser handle (scroll, tap for click)
         }, { passive: false });
 
         canvas.addEventListener("touchmove", (e) => {
-            e.preventDefault(); // Prevent scrolling
-            if (e.touches.length === 1 && isPanning) {
-                const t = e.touches[0];
-                const r = canvas.getBoundingClientRect();
-                const m = { x: t.clientX - r.left, y: t.clientY - r.top };
-                camera.x += m.x - lastMouse.x;
-                camera.y += m.y - lastMouse.y;
-                lastMouse = m;
-                if (!running) draw();
-            } else if (e.touches.length === 2) {
+            // Only capture if 2 fingers
+            if (e.touches.length === 2) {
+                e.preventDefault(); // Prevent page scroll
                 const dist = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
@@ -623,13 +636,10 @@
                     const zoom = dist / lastDist;
                     const limit = CONFIG.zoomLimit;
 
-                    // Zoom around previous center (stabilize interaction)
                     const wx = (lastCenter.x - camera.x) / camera.k;
                     const wy = (lastCenter.y - camera.y) / camera.k;
 
                     camera.k = Math.max(limit[0], Math.min(limit[1], camera.k * zoom));
-
-                    // Adjust camera so world point is at new center
                     camera.x = center.x - wx * camera.k;
                     camera.y = center.y - wy * camera.k;
                 }
@@ -637,6 +647,8 @@
                 lastDist = dist;
                 lastCenter = center;
                 if (!running) draw();
+            } else {
+                showGestureHint("Use two fingers to move the map");
             }
         }, { passive: false });
 
