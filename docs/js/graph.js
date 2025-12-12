@@ -367,8 +367,9 @@
                 inspector.innerHTML = `
                 <div class="graph__empty-state">
                     <div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
-                    <p style="font-weight:600; color:var(--text-main);">Start anywhere.</p>
-                    <p class="muted" style="margin-top:4px;">Click a node to explore connections.</p>
+                    <p style="font-weight:600; color:var(--text-main);">Click a node to explore.</p>
+                    <p class="muted" style="margin-top:4px;">Drag to pan • Scroll to zoom</p>
+                    <button class="btn-text" style="margin-top:12px; font-size:12px;" onclick="document.getElementById('modeWander').click()">Prefer vibes? Try Wander.</button>
                 </div>
                 ${list ? `<div class="inspector__section" style="margin-top:24px;"><div class="inspector__section-title">Suggested Paths</div><ul class="inspector__list">${list}</ul></div>` : ""}
                 `;
@@ -376,7 +377,9 @@
                 // WANDER MODE: Poetic Empty State
                 inspector.innerHTML = `
                 <div class="graph__empty-state" style="opacity:0.6; margin-top:40%;">
+                    <p style="font-weight:600; font-family:serif; font-size:18px; margin-bottom:8px;">Wander.</p>
                     <p style="font-style:italic; font-family:serif; font-size:15px;">Some ideas reveal themselves slowly.</p>
+                    <p class="muted" style="margin-top:12px; font-size:11px;">Drag to pan • Scroll to zoom</p>
                 </div>`;
             }
             return;
