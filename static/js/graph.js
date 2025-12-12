@@ -14,12 +14,16 @@
         // Toggle
         const modeRadios = document.querySelectorAll('input[name="mode"]');
 
+        // Defaults
+        if (canonOnly) canonOnly.checked = false; // Starve no more
+
         if (!canvas) { console.error("Graph: Canvas not found!"); return; }
 
 
         // --- STATE ---
+        // --- STATE ---
         const DPR = Math.max(1, Math.floor(window.devicePixelRatio || 1));
-        let MODE = null; // Force initial setup on filtered load
+
         let nodesAll = [];
         let linksAll = [];
         let byId = new Map();
@@ -36,106 +40,31 @@
         let camera = { x: 0, y: 0, k: 0.8 };
         let running = true; // Physics loop
 
-        // Parameters per Mode
+        // Alive Read Configuration
         const CONFIG = {
-            read: {
-                charge: 600,
-                linkDist: 100,
-                damping: 0.85,
-                drift: 0,
-                zoomLimit: [0.1, 5],
-                labels: true
-            },
-            wander: {
-                charge: 400,
-                linkDist: 120,
-                damping: 0.95, // floaty
-                drift: 0.05,
-                zoomLimit: [0.2, 3],
-                labels: false
-            }
+            charge: 500,        // Balance structure/space
+            linkDist: 110,      // Room to breathe
+            damping: 0.9,       // Fluid but stable
+            drift: 0.08,        // "Alive" breathing (Wander DNA)
+            zoomLimit: [0.1, 5],
+            labels: true
         };
 
-        // --- MODE SWITCHING ---
-        function setMode(newMode) {
-            if (MODE === newMode) return;
-            MODE = newMode;
+        // --- INITIALIZATION ---
+        // Defaults
+        if (container) container.classList.add("mode-read"); // Default style hook
 
-            // Update UI Classes
-            if (container) {
-                container.classList.remove("mode-read", "mode-wander");
-                container.classList.add(`mode-${MODE}`);
-            }
-
-            // Update Center Hint
-            const centerHint = document.getElementById("graphCenterHint");
-            if (centerHint) {
-                const h2 = centerHint.querySelector("h2");
-                const p = centerHint.querySelector("p");
-                if (newMode === "read") {
-                    if (h2) h2.textContent = "Map";
-                    if (p) p.textContent = "Click a node to explore connections.";
-                } else {
-                    if (h2) h2.textContent = "Wander";
-                    if (p) p.textContent = "Some ideas reveal themselves slowly.";
-                }
-                centerHint.classList.remove("hint-hidden");
-            }
-
-            // CONTROL VISIBILITY (Wander Mode Minimalism)
-            // User requested: Hide Core Only, Links, List in Wander.
-            const isRead = newMode === "read";
-            const display = isRead ? "" : "none";
-
-            if (canonOnly && canonOnly.parentElement) canonOnly.parentElement.style.display = display;
-
-            // Fix: Hide wrapper, not just select
-            if (directionSel && directionSel.parentElement) directionSel.parentElement.style.display = display;
-
-            const listBtn = document.querySelector(".graph__glass-pill .btn-text"); // List
-            if (listBtn) listBtn.style.display = display;
-
-            // Also the VR dividers? 
-            const vrs = document.querySelectorAll(".graph__glass-pill .vr");
-            vrs.forEach(vr => vr.style.display = display);
-            // Maybe keep the one between Search and Actions? 
-            // Search (Group 1) -> VR -> Filter (Group 2 - Hidden) -> VR -> Actions (Group 3)
-            // If Group 2 is hidden, we have VR -> VR.
-            // Let's just hide all VRs for simplicity in Wander, or specific ones. 
-            // User didn't specify, but double dividers look bad.
-            // Hiding all VRs in Wander makes it Search ... Reset ... Toggle. Clean.
-
-            // Restore / Clear selection on mode switch?
-            // Spec says: Wander has no selection initially.
-            selectedNode = null;
-            renderInspector(null);
-
-            // Physics kick
-            running = true;
-
-            // Reset Layout gently?
-            // No, keep positions, just change forces/visuals.
-
-            // Update URL state (silent)
-            const url = new URL(window.location);
-            url.searchParams.set("mode", MODE);
-            window.history.replaceState({}, "", url);
+        // Initial Center Hint Logic (Clean)
+        const centerHint = document.getElementById("graphCenterHint");
+        if (centerHint) {
+            centerHint.classList.remove("hint-hidden");
         }
 
-        modeRadios.forEach(r => {
-            r.addEventListener("change", (e) => {
-                if (e.target.checked) setMode(e.target.value);
-            });
-        });
-
-        // Check URL param on load
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("mode") === "wander") {
-            const rad = document.getElementById("modeWander");
-            if (rad) rad.checked = true;
-            setMode("wander");
-        } else {
-            setMode("read"); // default
+        // Clean up URL (remove mode param if present)
+        const url = new URL(window.location);
+        if (url.searchParams.has("mode")) {
+            url.searchParams.delete("mode");
+            window.history.replaceState({}, "", url);
         }
 
         // --- DATA LOADING ---
@@ -161,8 +90,8 @@
             ...n,
             id: n.id || n.slug,
             i,
-            x: Math.random(),
-            y: Math.random(),
+            x: (Math.random() - 0.5) * 1200, // Wide scatter
+            y: (Math.random() - 0.5) * 1200,
             vx: 0, vy: 0,
             visible: true
         }));
@@ -180,41 +109,26 @@
             degree.set(l.target.id, (degree.get(l.target.id) || 0) + 1);
         }
 
-        // --- VISUAL COMPUTATION (Dynamic per mode) ---
+        // --- VISUAL COMPUTATION ---
         function getNodeRadius(n) {
-            if (MODE === "wander") {
-                return 5; // Uniform
-            } else {
-                // Read Mode: Hierarchy
-                const d = degree.get(n.id) || 0;
-                // Canon = Large (18), High Degree (>8) = Med (12), Else = Small (6)
-                if (n.canonical) return 18;
-                if (d > 6) return 10;
-                return 6;
-            }
+            if (n.canonical) return 18;
+            const d = degree.get(n.id) || 0;
+            if (d > 6) return 10;
+            return 6;
         }
 
         function getNodeColor(n, isFocus, isConn) {
-            if (MODE === "wander") {
-                // Monochrome / Faint
-                if (isFocus) return "#fff";
-                if (isConn) return "rgba(255,255,255,0.4)";
-                return "rgba(255,255,255,0.28)"; // Brighter base (was 0.15)
-            } else {
-                // Read Mode: Functional
-                if (isFocus) return "#fff";
-                if (isConn) return n.canonical ? "#eee" : "#ccc"; // Connected dim
+            if (isFocus) return "#fff";
+            if (isConn) return n.canonical ? "#eee" : "#ccc"; // Connected dim
 
-                // Base Colors
-                if (n.canonical) return "#fff";
-                if ((n.mode || "").toLowerCase() === "essay") return "#00D6A3"; // Mint
-                return "#666"; // Thoughts
-            }
+            if (n.canonical) return "#fff";
+            if ((n.mode || "").toLowerCase() === "essay") return "#00D6A3"; // Mint
+            return "#666"; // Thoughts
         }
 
         // --- PHYSICS ---
         function tick() {
-            const cfg = CONFIG[MODE];
+            const cfg = CONFIG;
 
             // Repulse
             for (let i = 0; i < nodesAll.length; i++) {
@@ -267,8 +181,8 @@
             ctx.setTransform(DPR * camera.k, 0, 0, DPR * camera.k, camera.x * DPR, camera.y * DPR);
 
             const focus = selectedNode || hoverNode;
-            // Direction filter only applies in READ mode
-            let dirMode = (MODE === "read" && directionSel) ? directionSel.value : "all";
+            // Direction filter
+            let dirMode = (directionSel) ? directionSel.value : "all";
 
             let focusSet = null;
             if (focus) {
@@ -281,11 +195,12 @@
                 }
             }
 
-            // Links
             ctx.lineWidth = 1;
             // Default opacity
-            let linkAlpha = (MODE === "wander") ? 0.05 : 0.15;
-            if (focus) linkAlpha = 0.02; // Fade harder when focusing
+            ctx.lineWidth = 1;
+            // Default opacity: Faint but visible
+            let linkAlpha = 0.15;
+            if (focus) linkAlpha = 0.05; // Fade background links on focus
 
             ctx.globalAlpha = linkAlpha;
             ctx.strokeStyle = "#555";
@@ -306,19 +221,13 @@
 
                     if (isConnected) {
                         const grd = ctx.createLinearGradient(l.source.x, l.source.y, l.target.x, l.target.y);
-                        // READ: Colored Gradients. WANDER: White Gradients.
-                        if (MODE === "read") {
-                            if (l.source.id === focus.id) {
-                                grd.addColorStop(0, "rgba(0, 214, 163, 0.9)");
-                                grd.addColorStop(1, "rgba(0, 214, 163, 0.05)");
-                            } else {
-                                grd.addColorStop(0, "rgba(255,255,255,0.05)");
-                                grd.addColorStop(1, "rgba(255,255,255,0.9)");
-                            }
+
+                        if (l.source.id === focus.id) {
+                            grd.addColorStop(0, "rgba(0, 214, 163, 0.9)");
+                            grd.addColorStop(1, "rgba(0, 214, 163, 0.05)");
                         } else {
-                            // Wander
-                            grd.addColorStop(0, "rgba(255,255,255,0.6)");
-                            grd.addColorStop(1, "rgba(255,255,255,0.1)");
+                            grd.addColorStop(0, "rgba(255,255,255,0.05)");
+                            grd.addColorStop(1, "rgba(255,255,255,0.9)");
                         }
 
                         ctx.strokeStyle = grd;
@@ -342,12 +251,11 @@
                 let alpha = 1;
                 if (focus) {
                     if (isFocus) alpha = 1;
-                    else if (isConn) alpha = MODE === "read" ? 0.8 : 0.5;
-                    else alpha = MODE === "read" ? 0.1 : 0.05; // Ghost harder in wander
+                    else if (isConn) alpha = 0.8;
+                    else alpha = 0.1;
                 } else {
-                    // Default Opacity
-                    alpha = (MODE === "read" && !n.canonical) ? 0.8 : 1;
-                    if (MODE === "wander") alpha = 0.6; // Uniform dim
+                    // Default
+                    alpha = (!n.canonical) ? 0.8 : 1;
                 }
 
                 // Hover Growth
@@ -360,49 +268,42 @@
                 ctx.fillStyle = getNodeColor(n, isFocus, isConn);
 
                 // Shadows
-                if (MODE === "wander") {
-                    if (isFocus) {
-                        ctx.shadowBlur = 30;
-                        ctx.shadowColor = "rgba(255,255,255,0.9)";
-                    } else {
-                        // Ambient Starlight
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = "rgba(255,255,255,0.25)";
-                    }
+                // Shadows (Alive Glow)
+                if (n.canonical || isFocus) {
+                    ctx.shadowBlur = isFocus ? 24 : 16;
+                    ctx.shadowColor = isFocus ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)";
                 } else {
-                    // Read Mode: Tactical Glows
-                    if (n.canonical || isFocus) {
-                        ctx.shadowBlur = isFocus ? 24 : 16;
-                        ctx.shadowColor = isFocus ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.25)";
-                    } else { ctx.shadowBlur = 0; }
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = "rgba(255,255,255,0.15)";
                 }
 
                 ctx.fill();
                 ctx.shadowBlur = 0;
 
                 // Stroke (Core only in Read mode)
-                if (MODE === "read" && n.canonical) {
+                // Stroke (Core only)
+                if (n.canonical) {
                     ctx.strokeStyle = isFocus ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)";
                     ctx.lineWidth = 2;
                     ctx.stroke();
                 }
 
                 // Labels
-                let showLabel = false;
-                // READ: Hover, Focus, Conn (zoomed), Canon (zoomed)
-                if (MODE === "read") {
-                    showLabel = isFocus || (isConn && camera.k > 1.2) || (n.canonical && camera.k > 0.6);
-                }
-                // WANDER: Focus Only.
-                if (MODE === "wander") {
-                    showLabel = isSel; // Only on selection? Or Hover? User said "Hover: No labels yet. Click: Connections appear".
-                    // Let's hide hover labels in Wander.
-                }
+                let showLabel = isFocus || (isConn && camera.k > 1.2) || (n.canonical && camera.k > 0.6);
 
                 if (showLabel) {
-                    ctx.fillStyle = isFocus ? "#fff" : "rgba(255,255,255,0.7)";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "middle";
+
+                    // Halo for readability
+                    ctx.lineJoin = "round";
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = "rgba(0,0,0,0.8)";
                     ctx.font = isFocus ? "600 13px Inter, sans-serif" : "11px Inter, sans-serif";
-                    ctx.fillText(n.title || n.id, n.x + r + 6, n.y + 4);
+                    ctx.strokeText(n.title || n.id, n.x + r + 8, n.y);
+
+                    ctx.fillStyle = isFocus ? "#fff" : "rgba(255,255,255,0.85)";
+                    ctx.fillText(n.title || n.id, n.x + r + 8, n.y);
                 }
             }
             ctx.globalAlpha = 1;
@@ -412,21 +313,21 @@
         function renderInspector(node) {
             if (!inspector) return;
 
+            // Link Direction Visibility (Read Mode only on selection)
+            // Link Direction
+            if (directionSel && directionSel.parentElement) {
+                directionSel.parentElement.style.display = node ? "" : "none";
+            }
+
             // EMPTY STATE
             if (!node) {
-                if (MODE === "read") {
-                    // Read Mode: Minimal empty state (Center Hint handles instruction)
+                if (true) { // Always Read-like empty state, or just empty?
+                    // Center Hint handles the "Click a node to explore"
                     inspector.innerHTML = `
                     <div class="graph__empty-state" style="margin-top:50%; text-align:center; opacity:0.3;">
                         <p class="muted">Select a node to view details</p>
                     </div>
                 `;
-                } else {
-                    // WANDER MODE: Minimal Empty State (Center Hint handles poetic text)
-                    inspector.innerHTML = `
-                <div class="graph__empty-state" style="opacity:0.4; margin-top:50%; text-align:center;">
-                    <p class="muted" style="font-size:12px;">Drag to pan • Scroll to zoom</p>
-                </div>`;
                 }
                 return;
             }
@@ -435,16 +336,15 @@
             const title = escapeHtml(node.title || node.id);
             const url = node.url || ("../posts/" + node.id + ".html");
 
-            if (MODE === "read") {
-                // READ MODE: Utilitarian
-                const outSet = outNeighbors.get(node.id) || new Set();
-                const inSet = inNeighbors.get(node.id) || new Set();
-                const sortFn = (a, b) => (byId.get(a)?.title || a).localeCompare(byId.get(b)?.title || b);
+            // Inspector Content
+            const outSet = outNeighbors.get(node.id) || new Set();
+            const inSet = inNeighbors.get(node.id) || new Set();
+            const sortFn = (a, b) => (byId.get(a)?.title || a).localeCompare(byId.get(b)?.title || b);
 
-                const outList = Array.from(outSet).sort(sortFn);
-                const inList = Array.from(inSet).sort(sortFn);
+            const outList = Array.from(outSet).sort(sortFn);
+            const inList = Array.from(inSet).sort(sortFn);
 
-                inspector.innerHTML = `
+            inspector.innerHTML = `
               <div class="inspector__header">
                 <span class="inspector__overline">${escapeHtml(node.pillar || "Thought")}</span>
                 <h2 class="inspector__title"><a href="${url}">${title}</a></h2>
@@ -462,27 +362,7 @@
                 ${inList.length ? `<div class="inspector__section-title" style="margin-top:16px">Referenced by (${inList.length})</div><ul class="inspector__list">${inList.map(nodeLinkHTML).join("")}</ul>` : ""}
               </div>
             `;
-            } else {
-                // WANDER MODE: Poetic / Minimal
-                // Count total connections
-                const deg = (degree.get(node.id) || 0);
 
-                inspector.innerHTML = `
-              <div class="inspector__header" style="border:none; margin-top:20%;">
-                <h2 class="inspector__title" style="font-family:serif; font-size:24px; font-weight:400; margin-bottom:12px;">${title}</h2>
-                <p class="muted" style="font-style:italic;">One thought led to another.</p>
-                
-                <div style="margin-top:24px; color:var(--text-muted); font-size:13px;">
-                    Connected thoughts: ${deg}
-                </div>
-                
-                <div class="inspector__actions" style="margin-top:32px; justify-content:flex-start;">
-                    <a href="${url}" class="btn-secondary-small" style="background:transparent; border:1px solid rgba(255,255,255,0.2);">Enter</a>
-                    <button onclick="window.graphDeselect()" class="btn-text" style="color:var(--text-muted);">Wander more</button>
-                </div>
-              </div>
-            `;
-            }
 
             // Copy logic
             const btnCopy = document.getElementById("btnCopyLink");
@@ -546,7 +426,7 @@
             let best = null, bestD = Infinity;
             for (const n of nodes) {
                 const d = dist2(n.x, n.y, wx, wy);
-                let r = MODE === "wander" ? 8 : (n.canonical ? 20 : 10);
+                let r = n.canonical ? 20 : 10;
                 if (d <= (r + 5) ** 2 && d < bestD) { best = n; bestD = d; }
             }
             return best;
@@ -566,6 +446,10 @@
         }, { passive: false });
 
         canvas.addEventListener("mousedown", (e) => {
+            // Ephemeral Hint
+            const h = document.getElementById("graphCenterHint");
+            if (h) h.style.opacity = "0";
+
             const m = getMousePos(e);
             const w = toWorld(m.x, m.y);
             const n = findNodeAt(w.x, w.y);
@@ -646,7 +530,7 @@
         function applyFilter() {
             // Fix: Use optional chaining to prevent crashes on missing IDs
             const q = ((filterInput && filterInput.value) || "").trim().toLowerCase();
-            const canon = (MODE === "read" && canonOnly && canonOnly.checked);
+            const canon = (canonOnly && canonOnly.checked);
 
             nodesAll.forEach(n => {
                 const h = `${n.title} ${n.pillar} ${n.mode}`.toLowerCase();
@@ -662,7 +546,6 @@
         if (canonOnly) canonOnly.addEventListener("change", applyFilter);
 
         // --- HINT INTERACTION ---
-        const centerHint = document.getElementById("graphCenterHint");
         function hideHint() {
             if (centerHint && !centerHint.classList.contains("hint-hidden")) {
                 centerHint.classList.add("hint-hidden");
@@ -686,11 +569,9 @@
                 // Stop if stable?
                 // In Wander mode, drift keeps it running forever.
                 // In Read mode, we can sleep.
-                if (MODE === "read") {
-                    let maxV = 0;
-                    nodesAll.forEach(n => maxV = Math.max(maxV, Math.abs(n.vx) + Math.abs(n.vy)));
-                    if (maxV < 0.005) running = false;
-                }
+                tick();
+                draw();
+                // Alive Mode: Forever loop for drift
             }
             requestAnimationFrame(frame);
         }

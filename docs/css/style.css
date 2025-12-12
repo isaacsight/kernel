@@ -2730,34 +2730,7 @@ canvas#graphCanvas:active {
     font-weight: 400;
 }
 
-/* Refined Mode Toggle */
-.mode-toggle {
-    display: flex;
-    background: rgba(0, 0, 0, 0.4);
-    /* Darker track */
-    border-radius: 100px;
-    padding: 2px;
-}
 
-.mode-toggle label {
-    cursor: pointer;
-    padding: 8px 16px;
-    /* Bigger touch target */
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    border-radius: 100px;
-    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-    font-weight: 600;
-    user-select: none;
-}
-
-.mode-toggle input:checked+label {
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
 
 /* Loading Overlay */
 .graph__hint {
