@@ -363,14 +363,17 @@
                 if (MODE === "wander") {
                     if (isFocus) {
                         ctx.shadowBlur = 30;
-                        ctx.shadowColor = "rgba(255,255,255,0.6)";
+                        ctx.shadowColor = "rgba(255,255,255,0.9)";
                     } else {
-                        ctx.shadowBlur = 0;
+                        // Ambient Starlight
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = "rgba(255,255,255,0.25)";
                     }
                 } else {
+                    // Read Mode: Tactical Glows
                     if (n.canonical || isFocus) {
-                        ctx.shadowBlur = isFocus ? 24 : 12;
-                        ctx.shadowColor = isFocus ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)";
+                        ctx.shadowBlur = isFocus ? 24 : 16;
+                        ctx.shadowColor = isFocus ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.25)";
                     } else { ctx.shadowBlur = 0; }
                 }
 
