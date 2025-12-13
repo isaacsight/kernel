@@ -1,6 +1,14 @@
 {
   "nodes": [
     {
+      "id": "2025-12-12-dev-update",
+      "title": "\"Devlog: The Graph Reborn\"",
+      "mode": "Essay",
+      "pillar": "",
+      "canonical": false,
+      "date": "2025-12-12"
+    },
+    {
       "id": "2025-12-10-technicians-trap",
       "title": "\"The Technician's Trap: Building a Digital Brain to Escape Myself\"",
       "mode": "Essay",
@@ -1043,14 +1051,6 @@
     {
       "id": "tiktok_overlay",
       "title": "tiktok_overlay",
-      "mode": "Essay",
-      "pillar": "",
-      "canonical": false,
-      "date": ""
-    },
-    {
-      "id": "2025-12-12-dev-update",
-      "title": "\"Devlog: The Graph Reborn\"",
       "mode": "Essay",
       "pillar": "",
       "canonical": false,

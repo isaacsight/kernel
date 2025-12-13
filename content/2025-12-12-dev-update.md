@@ -2,6 +2,8 @@
 title: "Devlog: The Graph Reborn"
 subtitle: "Moving from 3D chaos to Swiss precision, plus a massive speed boost."
 excerpt: "Today was a marathon: Switched the AI brain to Gemini Flash 2.0, fixed the tracking bugs, deployed the new site, and completely rewrote the knowledge graph engine."
+date: 2025-12-12
+category: Engineering
 ---
 
 Here are a batch of updates summarizing today's work.
