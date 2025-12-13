@@ -9,6 +9,7 @@ from datetime import datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from admin.engineers.web_scout import get_web_scout, WebScout
+from admin.engineers.trend_scout import TrendScout
 from admin.engineers.researcher import Researcher
 from admin.engineers.librarian import Librarian
 from admin.brain.memory_store import get_memory_store
@@ -24,6 +25,7 @@ logger = logging.getLogger("ResearchFlywheel")
 class ResearchFlywheel:
     def __init__(self):
         self.scout = get_web_scout()
+        self.trend_scout = TrendScout()
         self.researcher = Researcher()
         self.librarian = Librarian()
         self.memory = get_memory_store()
@@ -33,13 +35,19 @@ class ResearchFlywheel:
         
         # 1. SCOUTING
         logger.info("Step 1: Scouting for topics...")
-        # In a real deployed version, we'd use get_trending(). 
-        # For now, we simulate finding a topic to avoid burning search credits unnecessarily in development
-        # or we can try a targeted search.
         
-        # trends = self.scout.get_trending("technology") 
-        # For reliability in this demo, let's pick a known relevant topic if trends fail
-        topic = "Local vs Cloud AI Architectures" 
+        # Use the new DomainRotator to pick a random field (Science, History, Art, etc.)
+        trends = self.trend_scout.get_current_trends(niche="auto")
+        
+        if not trends:
+            logger.warning("No trends found, defaulting.")
+            topic = "The Impact of AI on Human Creativity"
+        else:
+            # Pick the top trend
+            selected_trend = trends[0]
+            topic = selected_trend.get('topic')
+            context = selected_trend.get('context')
+            logger.info(f"✨ Insight Detected in [{context}]: {topic}")
         
         # Check if we've researched this recently
         recent_insights = self.memory.get_insights("research_report", min_confidence=0.8)
