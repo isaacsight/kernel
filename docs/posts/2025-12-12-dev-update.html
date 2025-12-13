@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collections - Does This Feel Right?</title>
-    <meta name="description" content="Curated clusters of thinking.">
+    <title>"Devlog: The Graph Reborn"</title>
+    <meta name="description" content=""Today was a marathon: Switched the AI brain to Gemini Flash 2.0, fixed the tracking bugs, deployed the new site, and completely rewrote the knowledge graph engine."">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Collections - Does This Feel Right?">
-    <meta property="og:description" content="Curated clusters of thinking.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.doesthisfeelright.com/collections.html">
+    <meta property="og:title" content=""Devlog: The Graph Reborn"">
+    <meta property="og:description" content=""Today was a marathon: Switched the AI brain to Gemini Flash 2.0, fixed the tracking bugs, deployed the new site, and completely rewrote the knowledge graph engine."">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/2025-12-12-dev-update.html">
     <meta property="og:image" content="{{ og_image }}">
 
     <!-- PWA / Mobile Experience -->
@@ -27,24 +27,24 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://www.doesthisfeelright.com/collections.html">
-    <meta name="twitter:title" content="Collections - Does This Feel Right?">
-    <meta name="twitter:description" content="Curated clusters of thinking.">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/2025-12-12-dev-update.html">
+    <meta name="twitter:title" content=""Devlog: The Graph Reborn"">
+    <meta name="twitter:description" content=""Today was a marathon: Switched the AI brain to Gemini Flash 2.0, fixed the tracking bugs, deployed the new site, and completely rewrote the knowledge graph engine."">
     <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
 
     <!-- TikTok Verification -->
     <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.doesthisfeelright.com/collections.html">
+    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/2025-12-12-dev-update.html">
 
     <!-- Structured Data (JSON-LD) -->
-    
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "\"Devlog: The Graph Reborn\"", "image": ["https://isaacsight.com/static/images/og-default.jpg"], "datePublished": "", "dateModified": "", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
 
     <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="../feed.xml">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
@@ -56,7 +56,7 @@
         <aside class="sidebar">
             <div class="sidebar-content">
                 <div class="sidebar-top">
-                    <a href="index.html" class="sidebar-logo" aria-label="Home">
+                    <a href="../index.html" class="sidebar-logo" aria-label="Home">
                         <div class="logo-icon">
                             <!-- New Logo: Gateway "D" -->
                             <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
@@ -71,7 +71,7 @@
                 </div> <!-- Navigation Items -->
                 <nav class="sidebar-nav-items">
 
-                    <a href="index.html" class="sidebar-item" data-tooltip="Essays">
+                    <a href="../index.html" class="sidebar-item" data-tooltip="Essays">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
@@ -85,7 +85,7 @@
                         <span class="label">Essays</span>
                     </a>
 
-                    <a href="collections.html" class="sidebar-item" data-tooltip="Topics">
+                    <a href="../collections.html" class="sidebar-item" data-tooltip="Topics">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
@@ -97,7 +97,7 @@
                         <span class="label">Topics</span>
                     </a>
 
-                    <a href="about.html" class="sidebar-item" data-tooltip="About">
+                    <a href="../about.html" class="sidebar-item" data-tooltip="About">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
@@ -138,7 +138,7 @@
                     const navLinks = document.querySelectorAll('.sidebar-item');
                     navLinks.forEach(link => {
                         const href = link.getAttribute('href');
-                        if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== 'index.html'))) {
+                        if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== '../index.html'))) {
                             link.classList.add('active');
                         }
                     });
@@ -149,7 +149,7 @@
         <header class="mobile-header">
             <div class="header-inner">
                 <!-- Module 1: Logo -->
-                <a href="index.html" class="header-module logo-module">
+                <a href="../index.html" class="header-module logo-module">
                     <div class="logo-container">
                         <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -180,130 +180,138 @@
         </header>
 
         <main id="main-content">
+            <article>
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumb-list">
+            <li><a href="../index.html">Home</a></li>
+            <li class="separator">/</li>
+            <li><a href="../index.html#latest">Essays</a></li>
+            <li class="separator">/</li>
+            <li aria-current="page">"Devlog: The Graph Reborn"</li>
+        </ol>
+    </nav>
+    <div class="post-header post-header-container">
+        <div class="post-badges"><span class="badge">Essay</span></div>
+        <div class="post-meta post-meta-date">
             
-        <div class="magazine-layout">
-            <div class="content-wrapper full-width">
-                <header class="page-header">
-                    <h1>Collections</h1>
-                    <p class="section-desc">Pillars are the permanent structure. Collections are clusters.</p>
-                </header>
-                
-    <div class="collections-archive">
-        <div class="collections-header">
-            <div class="archive-header-flex">
-    <div class="collections-grid">
-    <div class="collection-group"><h3>Pillars</h3><ul class="collection-list"><li><a href="pillars/being-seen.html" class="collection-item"><span class="name">being-seen</span></a></li><li><a href="pillars/systems-power.html" class="collection-item"><span class="name">systems-power</span></a></li></ul></div><div class="collection-group"><h3>Topics</h3><ul class="collection-list">
-            <li>
-                <a href="tags/reflection.html" class="collection-item">
-                    <span class="name">reflection</span>
-                    <span class="count">80</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/growth.html" class="collection-item">
-                    <span class="name">growth</span>
-                    <span class="count">80</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/self-awareness.html" class="collection-item">
-                    <span class="name">self-awareness</span>
-                    <span class="count">80</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/ai.html" class="collection-item">
-                    <span class="name">ai</span>
-                    <span class="count">11</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/engineering.html" class="collection-item">
-                    <span class="name">Engineering</span>
-                    <span class="count">10</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/ai.html" class="collection-item">
-                    <span class="name">AI</span>
-                    <span class="count">6</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/studio-os.html" class="collection-item">
-                    <span class="name">studio-os</span>
-                    <span class="count">5</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/future.html" class="collection-item">
-                    <span class="name">Future</span>
-                    <span class="count">5</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/psychology.html" class="collection-item">
-                    <span class="name">Psychology</span>
-                    <span class="count">5</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/general.html" class="collection-item">
-                    <span class="name">General</span>
-                    <span class="count">4</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/technology.html" class="collection-item">
-                    <span class="name">Technology</span>
-                    <span class="count">4</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/society.html" class="collection-item">
-                    <span class="name">Society</span>
-                    <span class="count">4</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/architecture.html" class="collection-item">
-                    <span class="name">architecture</span>
-                    <span class="count">3</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/strategy.html" class="collection-item">
-                    <span class="name">Strategy</span>
-                    <span class="count">3</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/culture.html" class="collection-item">
-                    <span class="name">Culture</span>
-                    <span class="count">3</span>
-                </a>
-            </li>
-        </ul></div></div>
-                <div style="margin-top: 40px; text-align: center;">
-                    <a href="search/index.html" class="muted">Search to find specific niche topics →</a>
-                </div>
-            </div>
         </div>
+        <h1 class="post-title-large">"Devlog: The Graph Reborn"</h1>
+        <div class="post-tags">
+            <a href="../tags/general.html" class="post-tag tag-color-0">General</a> 
+        </div>
+    </div>
+
     
+
+    <div class="post-context">
+        {{ post_context }}
+    </div>
+    <hr class="context-divider">
+
+    <p>Here are a batch of updates summarizing today's work.</p>
+<h3>1. The Engine Room (Performance & AI)</h3>
+<p>Spent the morning doing a deep dive into performance. We switched the chatbot over to `gemini-2.0-flash`, which has drastically cut down latency—messages are now feeling effectively real-time. Also fixed some stubborn WebSocket protocol errors that were dropping connections, and finally squashed a Supabase RPC bug that was preventing page view counts from incrementing correctly. The backend is feeling solid.</p>
+<h3>2. UX & Polish</h3>
+<p>Ships are made in the details. Pushed a few key quality-of-life updates:</p>
+<ul>
+<li><strong>Search Navigation:</strong> You can now fully navigate search results with the keyboard (arrow keys + enter).</li>
+<li><strong>Layout Fixes:</strong> Cleaned up the alignment in the "Start Here" section and fixed a missing style block on the homepage.</li>
+<li><strong>Site Deploy:</strong> The major site overhaul is officially live on production.</li>
+</ul>
+<h3>3. The Knowledge Graph Refactor (Technical)</h3>
+<p>We completely ripped out the old 3D graph visualization today. It was buggy, hard to control, and resource-heavy. We replaced it with a custom 2D force-directed graph built from scratch using HTML5 Canvas.</p>
+<ul>
+<li><strong>Physics Engine:</strong> Tuned repulsion, damping, and center gravity to stop the "exploding graph" effect.</li>
+<li><strong>Performance:</strong> Optimized for dozens of nodes without frame drops.</li>
+<li><strong>Interactivity:</strong> Smooth zooming, panning, and hover states that don't jitter.</li>
+</ul>
+<h3>4. Design Aesthetics (The New Look)</h3>
+<p>For the new graph visualizer, we’re pivoting to a "Swiss Design" aesthetic. Moving away from dark mode sci-fi tropes to something cleaner and more editorial.</p>
+<ul>
+<li><strong>Palette:</strong> White background, vibrant International Orange (`#ea580c`), and Deep Blue (`#2563eb`).</li>
+<li><strong>Typography:</strong> Using Inter with high-contrast labels.</li>
+<li><strong>Vibe:</strong> It feels less like a video game and more like an interactive OS for thought.</li>
+</ul>
+<p>---</p>
+<h3><strong>One-Line Summary</strong></h3>
+<p>"Today was a marathon: Switched the AI brain to Gemini Flash 2.0, fixed the tracking bugs, deployed the new site, and completely rewrote the knowledge graph engine to look like a Swiss design poster."</p>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <p class="share-label">Share this essay:</p>
+        <div class="share-buttons">
+            <button class="share-btn twitter" data-slug="2025-12-12-dev-update" data-title=""Devlog: The Graph Reborn"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Twitter
+            </button>
+            <button class="share-btn linkedin" data-slug="2025-12-12-dev-update" data-title=""Devlog: The Graph Reborn"">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24" />
+                </svg>
+                LinkedIn
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Comments Section (Giscus) -->
+
+
+    
+            <section class="read-next">
+                <h2>Read Next <span class="count">(4)</span></h2>
+                <div class="card-grid">
+                    
+                <a href="2025-12-10-technicians-trap.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-10</span>
+                    </div>
+                    <div class="card__title">"The Technician's Trap: Building a Digital Brain to Escape Myself"</div>
+                    <div class="card__desc"></div>
+                </a>
+                
+                <a href="ai-meet-your-ai-engineering-team.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-09</span>
+                    </div>
+                    <div class="card__title">Meet Your AI Engineering Team</div>
+                    <div class="card__desc"></div>
+                </a>
+                
+                <a href="devlog-mobile-publishing-and-agents.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-09</span>
+                    </div>
+                    <div class="card__title">"Devlog: Mobile Publishing & The Agentic Workflow"</div>
+                    <div class="card__desc"></div>
+                </a>
+                
+                <a href="studio-os-deep-reasoning.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-09</span>
+                    </div>
+                    <div class="card__title">"Studio OS: Awakening the 72B Mind"</div>
+                    <div class="card__desc"></div>
+                </a>
+                
+                </div>
+            </section>
+            
+
+
+</article>
         </main>
     </div>
 
@@ -321,7 +329,7 @@
             </button>
         </div>
         <nav class="drawer-nav">
-            <a href="index.html" class="drawer-link">
+            <a href="../index.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -333,7 +341,7 @@
                 </div>
                 <span>Home</span>
             </a>
-            <a href="collections.html" class="drawer-link">
+            <a href="../collections.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -344,7 +352,7 @@
                 </div>
                 <span>Collections</span>
             </a>
-            <a href="experiments.html" class="drawer-link">
+            <a href="../experiments.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -357,7 +365,7 @@
                 </div>
                 <span>Studio</span>
             </a>
-            <a href="projects.html" class="drawer-link">
+            <a href="../projects.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -369,7 +377,7 @@
                 </div>
                 <span>Projects</span>
             </a>
-            <a href="consulting.html" class="drawer-link">
+            <a href="../consulting.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -379,7 +387,7 @@
                 </div>
                 <span>Consulting</span>
             </a>
-            <a href="about.html" class="drawer-link">
+            <a href="../about.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -415,13 +423,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- App Scripts -->
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
     <!-- auth.js and bookmarks.js removed -->
-    <script src="js/reading-progress.js"></script>
-    <script src="js/share.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/support.js"></script>
+    <script src="../js/reading-progress.js"></script>
+    <script src="../js/share.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/support.js"></script>
 
     <footer class="site-footer">
         <div class="footer-grid">
@@ -435,11 +443,11 @@
             <div class="footer-col">
                 <h4>Explore</h4>
                 <div class="nav-links">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="map/graph.html" class="nav-link active">Map</a>
-                    <a href="map/index.html" class="nav-link">Index</a>
-                    <a href="about.html" class="nav-link">About</a>
-                    <a href="collections.html" class="nav-link">Collections</a>
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="../map/graph.html" class="nav-link active">Map</a>
+                    <a href="../map/index.html" class="nav-link">Index</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../collections.html" class="nav-link">Collections</a>
                 </div>
             </div>
 
