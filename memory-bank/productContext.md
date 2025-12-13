@@ -1,28 +1,36 @@
 # Product Context
 
 ## Problem Statement
-Traditional CMSs can be bloated and insecure, while raw static site generators often lack user-friendly management tools. This project bridges the gap by offering a custom, high-performance static site generator coupled with a powerful terminal-based admin interface and AI assistance.
+Traditional blogging platforms lack the "soul" of a hand-crafted digital garden. This project creates a **"Swiss Console"** aesthetic—functional, precise, and beautiful—powered by a custom Python engine that gives the author absolute control over every pixel and link.
 
 ## User Experience
-- **Readers**: fast, responsive, and visually distinct blog experience ("Swiss Console" design).
-- **Authors/Admins**: A productive command-line interface (TUI) for drafting, editing, and publishing posts, aided by AI tools for generating content and ideas.
+- **The Reader ("The User")**:
+    - **Aesthetic**: "Swiss Console". Clean typography, minimal noise, high utility.
+    - **Navigation**: associative rather than just linear. Readers can "drift" through content via "Read Next", "Referenced By", and graph connections.
+    - **Discovery**: Explicit "Start Here" tracks vs. "Experiments" vs. "Main Feed".
+- **The Author ("The Operator")**:
+    - **Interface**: A Terminal UI (TUI) that feels like a sci-fi command deck.
+    - **Workflow**: 
+        1. Check "Mission Control" for system status.
+        2. "Commission" AI agents to draft ideas.
+        3. Refine content in the "Content Studio" editor.
+        4. "Publish" via Git integration.
 
-## Feature Description
-### Static Site Engine
-- **Custom Build Script**: `build.py` handles the conversion of markdown to HTML, template rendering, and asset management.
-- **Frontmatter**: Uses YAML frontmatter for metadata (title, date, tags, etc.).
+## Design System Elements (Inferred)
+- **Colors**:
+    - Surface / Background: Dark/Light modes (handled via CSS variables).
+    - Accents: Used for Agent Status ("Green" for Running, "Red" for Stopped) and Tag colors (modulo 6 color rotation in `build.py`).
+- **Typography**:
+    - Headers: `#`, `##` converted to standard HTML tags.
+    - Badges: `mode-badge`, `version-badge` used to distinguish content types.
+- **Layout**:
+    - **Cards**: "Starter Set" cards, "Experiment" cards.
+    - **Grid**: `card-grid` class for listings.
+- **Badges**:
+    - "Canon" (Canonical posts).
+    - "Essay" vs "Experiment".
+    - Pillars (Thematic groupings).
 
-### Admin Interface (TUI)
-- **Framework**: Built with `Textual`.
-- **Capabilities**:
-    - Manage posts (create, edit, delete).
-    - Generate content using AI.
-    - Git operations (commit, push).
-
-### AI Integration
-- **Providers**: Google Gemini, OpenAI, Anthropic.
-- **Functions**: generating post ideas, drafting content, and potentially editing/refining text.
-
-### Deployment & Security
-- **GitHub Pages**: Automated deployment target.
-- **Security**: `bandit` for security scanning, `ruff` for linting.
+## AI Persona ("The Alchemist")
+- **Role**: Content Generator.
+- **Capabilities**: Topic research, drafting, checking against a "Style Guide".

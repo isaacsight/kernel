@@ -245,6 +245,15 @@ def build():
 
         # Hook: Post-Process
         architect.run_hook('on_post_process', metadata, body)
+
+        # VALIDATION: Ensure critical metadata exists
+        if 'title' not in metadata:
+            print(f"ERROR: Missing 'title' in {filename}")
+            raise ValueError(f"Post {filename} is missing a 'title'. Build aborted.")
+        
+        if 'date' not in metadata:
+            print(f"ERROR: Missing 'date' in {filename}")
+            raise ValueError(f"Post {filename} is missing a 'date'. Build aborted.")
         
         # Series Indicator
         series = metadata.get('series')
