@@ -3,8 +3,10 @@ from typing import Any, Union
 from jose import jwt
 from passlib.context import CryptContext
 
-# Configuration (Move to config.py ideally, hardcoded safely for v1)
-SECRET_KEY = "CHANGE_THIS_TO_A_REALLY_LONG_SECRET_STRING_IN_PROD" 
+from app.core.config import settings
+
+# Configuration
+SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 8  # 8 days for calm access
 
