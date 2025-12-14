@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio OS // Command</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --panel-color: #111111;
+            --accent-color: #00ff00;
+            /* Matrix Green / Terminal Style */
+            --text-color: #e0e0e0;
+            --muted-color: #666666;
+            --border-color: #333333;
+            --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        #sidebar {
+            width: 260px;
+            background-color: var(--panel-color);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        #logo {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        #agent-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+        }
+
+        .agent-item {
+            padding: 10px 12px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .agent-item.active {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+        }
+
+        .agent-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Main Chat Area */
+        #main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            gap: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background-color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background-color: var(--panel-color);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .message.user .message-content {
+            background-color: rgba(0, 255, 0, 0.05);
+            border-color: rgba(0, 255, 0, 0.2);
+        }
+
+        /* Markdown Styling within messages */
+        .message-content pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .message-content code {
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .message-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        /* Input Area */
+        #input-area {
+            padding: 20px 40px 40px;
+            background: linear-gradient(to top, var(--bg-color) 80%, transparent);
+        }
+
+        #input-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #message-input {
+            width: 100%;
+            background-color: var(--panel-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 16px;
+            padding-right: 50px;
+            border-radius: 12px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            resize: none;
+            height: 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        #message-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #send-btn {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background: none;
+            border: none;
+            color: var(--muted-color);
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+
+        #send-btn:hover {
+            color: var(--accent-color);
+        }
+
+        #send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Status Indicator */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <div id="logo">
+            <span class="status-dot"></span>Studio OS
+        </div>
+        <div style="font-size: 0.8rem; color: var(--muted-color); margin-bottom: 10px; font-family: var(--font-mono);">
+            ACTIVE AGENTS
+        </div>
+        <ul id="agent-list">
+            <!-- Populated via JS -->
+            <li class="agent-item active" data-model="Studio Router">
+                <span class="agent-icon">🧠</span>
+                <span>Studio Router</span>
+            </li>
+        </ul>
+    </div>
+
+    <div id="main">
+        <div id="chat-history">
+            <div class="message">
+                <div class="avatar">🧠</div>
+                <div class="message-content">
+                    Ready. Connected to Local Brain.<br>
+                    Select an agent or just type to start routing.
+                </div>
+            </div>
+        </div>
+
+        <div id="input-area">
+            <div id="input-container">
+                <textarea id="message-input" placeholder="Commad the system... (Cmd+Enter to send)"></textarea>
+                <button id="send-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const historyDiv = document.getElementById('chat-history');
+        const agentList = document.getElementById('agent-list');
+
+        let currentModel = "Studio Router";
+        let isGenerating = false;
+
+        // Auto-resize textarea
+        input.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if (this.value === '') this.style.height = '60px';
+        });
+
+        // Load Agents
+        async function loadAgents() {
+            try {
+                const res = await fetch('/v1/models');
+                const data = await res.json();
+
+                agentList.innerHTML = ''; // Clear default
+
+                // Add Router First
+                addAgentToList({ id: "Studio Router" }, true);
+
+                data.data.forEach(model => {
+                    if (model.id !== "Studio Router") {
+                        addAgentToList(model);
+                    }
+                });
+
+            } catch (e) {
+                console.error("Failed to load models", e);
+            }
+        }
+
+        function addAgentToList(model, isActive = false) {
+            const li = document.createElement('li');
+            li.className = `agent-item ${isActive ? 'active' : ''}`;
+            li.dataset.model = model.id;
+
+            // Simple icon mapping based on name
+            let icon = "🤖";
+            const name = model.id.toLowerCase();
+            if (name.includes("alchemist")) icon = "⚗️";
+            if (name.includes("architect")) icon = "🏗️";
+            if (name.includes("guardian")) icon = "🛡️";
+            if (name.includes("operator")) icon = "⚙️";
+            if (name.includes("librarian")) icon = "📚";
+            if (name.includes("router")) icon = "🧠";
+
+            li.innerHTML = `<span class="agent-icon">${icon}</span><span>${model.id}</span>`;
+
+            li.onclick = () => {
+                document.querySelectorAll('.agent-item').forEach(el => el.classList.remove('active'));
+                li.classList.add('active');
+                currentModel = model.id;
+                // Optional: Show "switched to..." toast
+            };
+
+            agentList.appendChild(li);
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const text = input.value.trim();
+            if (!text || isGenerating) return;
+
+            // 1. Add User Message
+            addMessage("user", text);
+            input.value = '';
+            input.style.height = '60px';
+            isGenerating = true;
+            sendBtn.disabled = true;
+
+            // 2. Add Placeholder Assistant Message
+            const assistantMsgId = addMessage("assistant", "Thinking...");
+            const assistantContentDiv = document.getElementById(assistantMsgId).querySelector('.message-content');
+
+            try {
+                // 3. API Call
+                const response = await fetch('/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: currentModel,
+                        messages: [{ role: "user", content: text }] // Simple stateless for now, or build history array
+                    })
+                });
+
+                const data = await response.json();
+                const reply = data.choices[0].message.content;
+
+                // 4. Update Assistant Message
+                assistantContentDiv.innerHTML = marked.parse(reply);
+
+                // Highlight code blocks
+                assistantContentDiv.querySelectorAll('pre code').forEach((block) => {
+                    // hljs.highlightBlock(block); // If we had highlight.js
+                });
+
+            } catch (e) {
+                assistantContentDiv.innerHTML = `<span style="color:red">Error: ${e.message}</span>`;
+            }
+
+            isGenerating = false;
+            sendBtn.disabled = false;
+        }
+
+        function addMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            const id = 'msg-' + Date.now();
+            div.id = id;
+
+            const icon = role === 'user' ? '👤' : getAgentIcon(currentModel);
+
+            div.innerHTML = `
+                <div class="avatar">${icon}</div>
+                <div class="message-content">${role === 'user' ? text : '...'}</div>
+            `;
+
+            historyDiv.appendChild(div);
+            historyDiv.scrollTo(0, historyDiv.scrollHeight);
+
+            return id;
+        }
+
+        function getAgentIcon(name) {
+            name = name.toLowerCase();
+            if (name.includes("alchemist")) return "⚗️";
+            if (name.includes("router")) return "🧠";
+            if (name.includes("guardian")) return "🛡️";
+            return "🤖";
+        }
+
+        // Event Listeners
+        sendBtn.addEventListener('click', sendMessage);
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                sendMessage();
+            }
+        });
+
+        // Initialize
+        loadAgents();
+
+    </script>
+</body>
+
+</html>

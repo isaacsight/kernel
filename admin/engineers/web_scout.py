@@ -191,16 +191,43 @@ class WebScout:
             from bs4 import BeautifulSoup
             
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9"
             }
             
-            response = requests.get(
-                "https://html.duckduckgo.com/html/",
-                params={"q": query},
-                headers=headers,
-                timeout=10
-            )
-            response.raise_for_status()
+            import time
+            import random
+            
+            # Simple retry logic
+            max_retries = 2
+            for attempt in range(max_retries + 1):
+                try:
+                    # Add jitter delay
+                    if attempt > 0:
+                        time.sleep(random.uniform(2, 5))
+                    
+                    response = requests.get(
+                        "https://html.duckduckgo.com/html/",
+                        params={"q": query},
+                        headers=headers,
+                        timeout=15
+                    )
+                    
+                    if "anomaly-modal" in response.text or response.status_code == 429:
+                        if attempt < max_retries:
+                            logger.info(f"[{self.name}] Rate limited, retrying in a moment...")
+                            continue
+                        else:
+                            logger.warning(f"[{self.name}] DuckDuckGo blocked the request (bot detection).")
+                            return []
+
+                    response.raise_for_status()
+                    break # Success
+                except Exception as e:
+                    if attempt < max_retries:
+                        continue
+                    raise e
             
             soup = BeautifulSoup(response.text, 'html.parser')
             results = []
@@ -221,10 +248,6 @@ class WebScout:
                         "source": "duckduckgo_html"
                     })
             
-            if not results and "anomaly-modal" in response.text:
-                logger.warning(f"[{self.name}] DuckDuckGo blocked the request (bot detection).")
-                logger.warning(f"[{self.name}] TIP: Set SERPER_API_KEY or BRAVE_API_KEY for reliable search.")
-
             return results
         except Exception as e:
             logger.warning(f"[{self.name}] DuckDuckGo search failed: {e}")

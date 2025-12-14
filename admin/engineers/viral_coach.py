@@ -12,7 +12,7 @@ import logging
 from typing import Dict, List, Optional
 from datetime import datetime
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from admin.brain.memory_store import get_memory_store
 from admin.brain.metrics_collector import get_metrics_collector
 from config import config
@@ -80,10 +80,17 @@ class ViralCoach:
         "Part 2?"
     ]
     
+    
     def __init__(self):
         self.memory = get_memory_store()
         self.metrics = get_metrics_collector()
         
+        # INTELLIGENCE UPGRADE
+        from admin.brain.model_router import get_model_router
+        from admin.engineers.contrarian import Contrarian
+        self.model_router = get_model_router()
+        self.contrarian = Contrarian()
+
     def analyze_tiktok_script(self, script: str, hook_style: str = "auto") -> Dict:
         """
         Analyzes a TikTok script and returns viral potential scores.
@@ -128,13 +135,24 @@ class ViralCoach:
             script, hook_score, retention_score, cta_score, hook_style
         )
         
-        # Add trend suggestion if missing
-        if trend_score < 5.0:
+        # Add trend suggestion from Memory (New)
+        trend_suggestion = self.suggest_trending_angle(script)
+        if trend_suggestion:
+            suggestions.append(f"Trend Pivot: {trend_suggestion}")
+        
+        # Add trend suggestion if missing (Old fallback)
+        if trend_score < 5.0 and not trend_suggestion:
             suggestions.append(f"Trend Alert: {trend_report['suggestion']}")
         
         # Recommend hook style if auto
         recommended_style = self._recommend_hook_style(script) if hook_style == "auto" else hook_style
         
+        # Generate Improved Hook (AI Powered)
+        improved_hook = self._generate_ai_hook(script, recommended_style)
+        
+        # Generate Roast (Adversarial)
+        roast = self.roast_script(script)
+
         result = {
             "hook_score": round(hook_score, 1),
             "retention_score": round(retention_score, 1),
@@ -145,8 +163,9 @@ class ViralCoach:
             "estimated_duration_seconds": word_count / 2.5,  # ~150 words/min speaking rate
             "recommended_hook_style": recommended_style,
             "suggestions": suggestions,
-            "improved_hook": self._generate_improved_hook(script, recommended_style),
-            "trend_context": trend_report["hits"]
+            "improved_hook": improved_hook,
+            "trend_context": trend_report["hits"],
+            "roast": roast
         }
         
         # Log for learning
@@ -277,8 +296,40 @@ class ViralCoach:
             
         return suggestions
     
-    def _generate_improved_hook(self, script: str, style: str) -> str:
-        """Generates an improved hook for the script."""
+    def _generate_ai_hook(self, script: str, style: str) -> str:
+        """
+        Uses LLM to generate a creative hook based on the script.
+        """
+        # Force Gemini Flash for Zero Cost
+        model = {
+            "selected": "gemini-2.0-flash",
+            "provider": "google",
+            "type": "cloud_free"
+        }
+        
+        prompt = f"""
+        You are an Expert Content Creator.
+        
+        Script Topic: {script[:200]}...
+        Target Style: {style}
+        
+        Task: Write ONE viral opening hook/sentence for this script.
+        Rules:
+        - Must be under 15 words.
+        - Must create immediate curiosity or emotion.
+        - Do NOT use generic starts like "Hey guys".
+        - Style guidance: {self.HOOK_PATTERNS.get(style, ["Make it punchy"])[0]}
+        
+        Output ONLY the hook text.
+        """
+        
+        try:
+            return self.contrarian._call_llm(model, prompt).strip('"')
+        except:
+             return self._generate_improved_hook_legacy(script, style)
+
+    def _generate_improved_hook_legacy(self, script: str, style: str) -> str:
+        """Generates an improved hook for the script (Template Fallback)."""
         # Get first sentence (the "topic")
         first_sentence = script.split(".")[0] if "." in script else script[:50]
         
@@ -292,11 +343,49 @@ class ViralCoach:
         
         return f"{pattern} {topic_hint}..."
     
+    def suggest_trending_angle(self, script: str) -> Optional[str]:
+        """Checks Memory for recent research insights to pivot the script."""
+        insights = self.memory.get_insights("research_report", min_confidence=0.8)
+        if not insights:
+            return None
+            
+        # Find most relevant insight (simple string matching for now)
+        # Ideally we use vector search, but this is a lightweight check
+        for insight in insights[:2]:
+            topic = insight['data'].get("topic", "")
+            if topic: 
+                return f"Mention '{topic}' (Recent Research: {insight['data'].get('summary')[:30]}...)"
+        return None
+
+    def roast_script(self, script: str) -> str:
+        """
+        Uses The Contrarian to roast the script for boredom/cringe.
+        """
+        prompt = f"""
+        ROAST THIS SCRIPT.
+        
+        Script: "{script[:500]}"
+        
+        Tell me exactly why a viewer would scroll past this. 
+        Be harsh but constructive. Focus on the first 3 seconds.
+        Limit to 2 sentences.
+        """
+        
+        # Force Gemini Flash for Zero Cost
+        model = {
+            "selected": "gemini-2.0-flash",
+            "provider": "google",
+            "type": "cloud_free"
+        }
+        
+        try:
+            return self.contrarian._call_llm(model, prompt).strip()
+        except:
+            return "Roast failed (Contrarian offline)."
+
     def improve_script(self, script: str, target_score: float = 8.0) -> Dict:
         """
         Attempts to improve a script to meet target viral score.
-        
-        Returns the improved script with before/after analysis.
         """
         # Analyze original
         original_analysis = self.analyze_tiktok_script(script)
@@ -313,9 +402,9 @@ class ViralCoach:
         improved_script = script
         style = original_analysis["recommended_hook_style"]
         
-        # Improve hook
+        # Improve hook (Using AI Hook now)
         if original_analysis["hook_score"] < 7:
-            improved_hook = original_analysis["improved_hook"]
+            improved_hook = original_analysis["improved_hook"] # Now AI generated
             # Replace first sentence
             sentences = script.split(".", 1)
             if len(sentences) > 1:

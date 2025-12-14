@@ -284,6 +284,21 @@ def build():
             metadata['is_html_source'] = filename.endswith('.html')
             metadata['file_path'] = file_path
             
+            # Determine Output Relative Path (relative to docs root)
+            if rel_dir:
+                 # Subdirectory content (notes, systems)
+                 out_rel_path = os.path.join(rel_dir, clean_slug + '.html')
+            else:
+                # Top level content check
+                if metadata.get('is_html_source', False):
+                     # Top level pages (about.html)
+                     out_rel_path = clean_slug + '.html'
+                else:
+                     # Standard posts -> output to posts/ (Legacy)
+                     out_rel_path = os.path.join('posts', clean_slug + '.html')
+            
+            metadata['output_rel_path'] = out_rel_path
+
             # Store body in post dict (metadata + content)
             post = metadata.copy()
             post['content'] = body
@@ -394,7 +409,7 @@ def build():
         primary_tag = tags[0] if tags else 'General'
         
         starter_set_html += f"""
-            <a href="posts/{post['slug']}.html" class="starter-card">
+            <a href="{post['output_rel_path']}" class="starter-card">
                 <div class="starter-header">
                     <span class="starter-number">0{i+1}</span>
                     <span class="starter-chip">Start Here</span>
@@ -406,7 +421,7 @@ def build():
         """
         
         # Sidebar Nav Item
-        starter_set_nav_html += f'<a href="{{{{ root }}}}posts/{post["slug"]}.html" class="nav-link">{post.get("title", "Untitled")}</a>'
+        starter_set_nav_html += f'<a href="{{{{ root }}}}{post["output_rel_path"]}" class="nav-link">{post.get("title", "Untitled")}</a>'
 
     # 4b. Second Pass: Generate HTML for Posts
     print("Step 4b: Generating HTML for Posts...")
@@ -440,7 +455,15 @@ def build():
 
     for post in posts:
         slug = post['slug']
-        
+        current_out_rel_path = post.get('output_rel_path') # Should be set in Pass 1
+        current_out_dir = os.path.dirname(current_out_rel_path)
+
+        # Helper for Relative Links
+        def get_rel_link(target_post):
+            target_out = target_post.get('output_rel_path')
+            if not target_out: return "#"
+            return os.path.relpath(target_out, current_out_dir)
+
         # 1. Read Next Logic
         read_next_candidates = []
         used_slugs = {slug}
@@ -487,9 +510,10 @@ def build():
                 r_pillar = r.get('pillar', '').replace('-', ' ').title()
                 r_tldr = r.get('tldr', '')
                 r_date = r.get('date', '')
+                r_link = get_rel_link(r)
                 
                 related_items += f"""
-                <a href="{r_slug}.html" class="card">
+                <a href="{r_link}" class="card">
                     <div class="card__meta">
                         <span class="badge">{r_mode}</span>
                         <span class="badge badge--muted">{r_pillar}</span>
@@ -525,7 +549,7 @@ def build():
             list_items = ""
             for p in backlink_posts:
                 p_title = p.get('title', 'Untitled')
-                p_url = f"{p['slug']}.html"
+                p_url = get_rel_link(p)
                 p_date = p.get('date', '')
                 list_items += f'<li><a href="{p_url}">{p_title}</a> <span class="muted">— {p_date}</span></li>'
             
@@ -549,9 +573,13 @@ def build():
                 list_items = ""
                 for p in pillar_candidates:
                     p_title = p.get('title', 'Untitled')
-                    p_url = f"{p['slug']}.html"
+                    p_url = get_rel_link(p)
                     p_date = p.get('date', '')
                     list_items += f'<li><a href="{p_url}">{p_title}</a> <span class="muted">— {p_date}</span></li>'
+                
+                # Dynamic link to archive with filter? For now just static
+                # Need consistent link to index.html from here
+                index_link = os.path.relpath('index.html', current_out_dir)
                 
                 more_in_pillar_html = f"""
                 <section class="more-in-pillar">
@@ -559,7 +587,7 @@ def build():
                     <ul class="link-list">
                         {list_items}
                     </ul>
-                    <a class="muted" href="../index.html#archive">View full archive →</a>
+                    <a class="muted" href="{index_link}#archive">View full archive →</a>
                 </section>
                 """
 
@@ -597,7 +625,9 @@ def build():
             tag_slug = tag.lower().replace(' ', '-')
             tag_slug = "".join(c for c in tag_slug if c.isalnum() or c == '-')
             color_index = sum(ord(c) for c in tag) % 6
-            tags_html += f'<a href="{{{{ root }}}}tags/{tag_slug}.html" class="post-tag tag-color-{color_index}">{tag}</a> '
+            # Tag Link
+            tag_rel = os.path.relpath(f"tags/{tag_slug}.html", current_out_dir)
+            tags_html += f'<a href="{tag_rel}" class="post-tag tag-color-{color_index}">{tag}</a> '
 
         # Series HTML
         series = post.get('series')
@@ -611,69 +641,38 @@ def build():
         post_html = post_html.replace('{{ series_indicator }}', series_html)
         post_html = post_html.replace('{{ post_content }}', body)
         
+        # Metadata replacements
+        post_html = post_html.replace('{{ date }}', post.get('date', ''))
+        # Context note - optional
+        context_html = ""
+        if post.get('context'):
+             context_html = f'<p class="context-note">{post.get("context")}</p>'
+        post_html = post_html.replace('{{ post_context }}', context_html)
+        
         # Inject New Sections
         post_html = post_html.replace('{{ post_badges }}', badges_html)
         post_html = post_html.replace('{{ footer_navigation }}', footer_nav_html)
         
         # Legacy placeholders just in case
         post_html = post_html.replace('{{ related_posts }}', '') 
-        post_html = post_html.replace('{{ root }}', '../')
+        
+        # Root Path Calculation
+        # Determine strict root prefix for assets
+        root_prefix = os.path.relpath('.', current_out_dir)
+        if root_prefix == '.': root_prefix = './'
+        if not root_prefix.endswith('/'): root_prefix += '/'
+        
+        post_html = post_html.replace('{{ root }}', root_prefix)
         post_html = post_html.replace('{{ slug }}', slug)
 
-        # Determine output directory
-        rel_dir = post.get('rel_dir', '')
-        slug = post['slug']
-
-        if rel_dir:
-             # Subdirectory content (notes, systems)
-             out_dir = os.path.join(OUTPUT_DIR, rel_dir)
-             out_path = os.path.join(out_dir, slug + '.html')
-        else:
-            # Top level content check
-            if post.get('is_html_source', False):
-                 # Top level pages (about.html) -> output to root of docs/
-                 out_dir = OUTPUT_DIR
-                 out_path = os.path.join(out_dir, slug + '.html')
-            else:
-                 # Standard posts -> output to posts/ (Legacy)
-                 out_dir = os.path.join(OUTPUT_DIR, 'posts')
-                 out_path = os.path.join(out_dir, slug + '.html')
+        # Output Path
+        out_path = os.path.join(OUTPUT_DIR, current_out_rel_path)
         
-        # Calculate root prefix
-        if rel_dir:
-            depth = len([x for x in rel_dir.split(os.sep) if x])
-            root_prefix = "../" * depth + ("../" if depth > 0 else "") 
-            # Wait, if rel_dir is 'notes', depth is 1. We need '../' to get to docs root.
-            # If rel_dir is 'systems', depth is 1. '../'.
-            # If rel_dir is 'a/b', depth is 2. '../../'.
-            root_prefix = "../" * depth
-        elif not post.get('is_html_source', False):
-             # It went to posts/ which is depth 1
-             root_prefix = "../"
-        else:
-             # It went to docs/ root
-             root_prefix = "./"
-
-        post_html = post_html.replace('{{ root }}', root_prefix)
-        # Fix CSS paths in base template if needed?
-        # Assuming base template uses relative paths like 'css/style.css', we need to prefix them.
-        # But base template is already loaded. We might need to replace 'href="css/' with 'href="{{ root }}css/'.
-        # Or blindly trust it works if we use {{ root }}.
-        
-        # Write File
-        write_file(out_path, post_html)
-        
-        # Version Badge (Legacy logic preserved if needed, but 'version' was undefined in previous edit block scope)
+        # Version Badge (Legacy logic)
         version = post.get('version', '')
         version_html = ""
         if version:
              version_html = f'<span class="version-badge">{version}</span>'
-             # Note: We already wrote the file above. If we needed to inject version_html, we should have done it before write_file.
-             # However, the previous code block ended with writing the file.
-             # Checking previous context: 'version' was used further down?
-             # No, it seems I cut off the block mid-function in the previous edit or `version` was used in `post_html` replacements?
-             # Let's check where `version` is used.
-             pass
         post_html = post_html.replace('{{ version_display }}', version_html)
 
         # Connections (Graph)
@@ -686,12 +685,21 @@ def build():
                  # Find permalink for the connected title/slug
                  # Best effort match
                  target_slug = c.lower().replace(' ', '-')
-                 links.append(f'<a href="{target_slug}.html" class="connection-link">{c}</a>')
+                 # Look up in map if possible, or just guess
+                 # If we have a post usage:
+                 target_post = posts_map.get(target_slug)
+                 if target_post:
+                     l_href = get_rel_link(target_post)
+                 else:
+                     l_href = f"{target_slug}.html" # Fallback
+                     
+                 links.append(f'<a href="{l_href}" class="connection-link">{c}</a>')
             
             if links:
                  connections_html = f'<div class="connections-block"><span class="connection-label">Connects to:</span> {" • ".join(links)}</div>'
         
         post_html = post_html.replace('{{ connections }}', connections_html)
+        
         
         # Generate JSON-LD
         import json
@@ -713,14 +721,14 @@ def build():
         full_page = base_template.replace('{{ title }}', post.get('title', 'Untitled'))
         full_page = full_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
         full_page = full_page.replace('{{ content }}', post_html)
-        full_page = full_page.replace('{{ root }}', '../')
+        full_page = full_page.replace('{{ root }}', root_prefix)
         full_page = full_page.replace('{{ description }}', post.get('excerpt', 'Thoughts on business, technology, and the human condition.'))
         full_page = full_page.replace('{{ url }}', f"{BASE_URL}/posts/{slug}.html")
         full_page = full_page.replace('{{ image }}', post.get('image', DEFAULT_IMAGE))
         full_page = full_page.replace('{{ og_type }}', 'article')
         full_page = full_page.replace('{{ json_ld }}', json_ld_script)
         
-        write_file(os.path.join(OUTPUT_DIR, 'posts', f'{slug}.html'), full_page)
+        write_file(out_path, full_page)
 
     # 5. Generate Homepage
     print("Step 5: Generating Homepage...")
@@ -789,7 +797,7 @@ def build():
             title = title.split('(Theme:')[0].strip()
             
         experiments_sidebar_html += f"""
-            <a href="posts/{post['slug']}.html" class="experiment-card-small">
+            <a href="{post['output_rel_path']}" class="experiment-card-small">
                 <span class="experiment-date">{date_display}</span>
                 <span class="experiment-title">{title}</span>
             </a>
@@ -907,7 +915,7 @@ def build():
             p_date = p.get('date', '')
             
             canon_cards += f"""
-            <a class="card" href="posts/{p_slug}.html">
+            <a class="card" href="{p['output_rel_path']}">
                 <div class="card__meta">
                     <span class="badge">{p_mode}</span>
                     <span class="badge badge--muted">{p_pillar}</span>
@@ -962,7 +970,7 @@ def build():
             p_date = p.get('date', '')
             
             latest_cards += f"""
-            <a class="card" href="posts/{p_slug}.html">
+            <a class="card" href="{p['output_rel_path']}">
                 <div class="card__meta">
                     <span class="badge">{p_mode}</span>
                     <span class="badge badge--muted">{p_pillar}</span>
@@ -1004,7 +1012,7 @@ def build():
         mode_badge = f'<span class="mode-badge mode-{p_mode.lower()}">{p_mode}</span>'
         
         all_posts_html += f"""
-            <a href="posts/{post['slug']}.html" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{post.get('date', '')}">
+            <a href="{post['output_rel_path']}" class="post-card category-{clean_cat.lower().replace(' ', '-')}" data-category="{clean_cat}" data-date="{post.get('date', '')}">
                 <div class="post-card-content">
                     <div class="post-meta-top">
                         {mode_badge}
@@ -1027,7 +1035,7 @@ def build():
     <section class="ceo-hero">
         <h1 class="ceo-headline">This is where systems are decided.</h1>
         <div class="ceo-subhead">
-            <p>Founder & CEO working at the intersection of design, technology, and execution.</p>
+            <p>Founder working at the intersection of design, technology, and execution.</p>
             <p>I build and direct systems that need clarity before they scale.</p>
         </div>
         <div class="ceo-actions">
@@ -1121,7 +1129,7 @@ def build():
     # FOOTER (Strong, minimal)
     footer_html = """
     <section class="ceo-footer-content">
-        <p class="ceo-footer-title">Founder & CEO</p>
+        <p class="ceo-footer-title">Founder</p>
         <p>Design · Technology · Systems</p>
         <p class="ceo-copyright">© does this feel right</p>
     </section>
@@ -1233,7 +1241,7 @@ def build():
                 title = title.split('(Theme:')[0].strip()
                 
             experiments_page_inner_html += f"""
-                <a href="posts/{post['slug']}.html" class="experiment-card">
+                <a href="{post['output_rel_path']}" class="experiment-card">
                     <div class="experiment-card-header">
                         <span class="experiment-card-date">{date_display}</span>
                         <span class="experiment-card-chip">Experiment</span>
@@ -1370,10 +1378,10 @@ def build():
         rss_items += f"""
         <item>
             <title>{title}</title>
-            <link>{BASE_URL}/posts/{html.escape(post['slug'])}.html</link>
+            <link>{BASE_URL}/{html.escape(post['output_rel_path'])}</link>
             <description>{excerpt}</description>
             <category>{category}</category>
-            <guid>{BASE_URL}/posts/{html.escape(post['slug'])}.html</guid>
+            <guid>{BASE_URL}/{html.escape(post['output_rel_path'])}</guid>
             <pubDate>{pub_date}</pubDate>
         </item>
         """
@@ -1570,7 +1578,7 @@ def build():
             # But here we just use it. If the post file exists, verify_links will check it.
                 
             tag_page_html += f"""
-                <a href="../posts/{post['slug']}.html" class="post-card">
+                <a href="../{post['output_rel_path']}" class="post-card">
                     <div class="post-card-content">
                         <div class="post-header">
                             <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
@@ -1592,9 +1600,87 @@ def build():
         """
         
         full_tag_page = base_template.replace('{{ content }}', tag_page_html)
-        # Fix root path for subdirectory
-        full_tag_page = full_tag_page.replace('{{ starter_set_nav }}', starter_set_nav_html.replace('href="', 'href="../').replace('src="', 'src="../'))
-        full_tag_page = full_tag_page.replace('{{ root }}', '../') 
+        full_tag_page = full_tag_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+        full_tag_page = full_tag_page.replace('{{ root }}', '../')
+        full_tag_page = full_tag_page.replace('{{ image }}', DEFAULT_IMAGE)
+        full_tag_page = full_tag_page.replace('{{ og_type }}', 'website')
+        full_tag_page = full_tag_page.replace('{{ json_ld }}', '')
+        full_tag_page = full_tag_page.replace('{{ title }}', f'{tag} - Does This Feel Right?')
+        full_tag_page = full_tag_page.replace('{{ description }}', f'Posts about {tag}.')
+        full_tag_page = full_tag_page.replace('{{ url }}', f"{BASE_URL}/tags/{tag_slug}.html")
+        
+        # Ensure tags dir exists
+        tags_dir = os.path.join(OUTPUT_DIR, 'tags')
+        if not os.path.exists(tags_dir):
+            os.makedirs(tags_dir)
+            
+        write_file(os.path.join(tags_dir, f'{tag_slug}.html'), full_tag_page)
+
+    # 13a. Generate Pillar Pages
+    print("Step 9c: Generating Pillar Pages...")
+    pillars_dir = os.path.join(OUTPUT_DIR, 'pillars')
+    if not os.path.exists(pillars_dir):
+        os.makedirs(pillars_dir)
+
+    for pillar in pillars:
+        p_slug = pillar.lower().replace(' ', '-')
+        
+        # Filter posts
+        pillar_posts = [p for p in posts if p.get('pillar') == pillar]
+        pillar_posts.sort(key=lambda x: str(x.get('date', '0000-00-00')), reverse=True)
+        
+        pillar_page_html = f"""
+        <div class="magazine-layout">
+            <div class="content-wrapper full-width">
+                <main class="main-feed">
+                    <div class="feed-header">
+                        <h2>{pillar}</h2>
+                        <p class="section-desc">{len(pillar_posts)} foundational essays.</p>
+                    </div>
+                    <div class="posts-container">
+        """
+        
+        for post in pillar_posts:
+            date_str = post.get('date', '')
+            try:
+                date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+                date_display = date_obj.strftime('%b %d, %Y')
+            except:
+                date_display = date_str
+                
+            pillar_page_html += f"""
+                <a href="../{post['output_rel_path']}" class="post-card">
+                    <div class="post-card-content">
+                        <div class="post-header">
+                            <h2 class="post-title">{post.get('title', 'Untitled')}</h2>
+                        </div>
+                        <p class="post-excerpt">{post.get('excerpt', '')}</p>
+                        <div class="post-meta-row">
+                            <span class="post-meta">{date_display} • {post.get('read_time', '5 min read')}</span>
+                        </div>
+                    </div>
+                </a>
+            """
+            
+        pillar_page_html += """
+            </div>
+            <div class="back-link-container">
+                <a href="../collections.html" class="back-link">← All Collections</a>
+            </div>
+        </div>
+        """
+        
+        full_pillar_page = base_template.replace('{{ content }}', pillar_page_html)
+        full_pillar_page = full_pillar_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
+        full_pillar_page = full_pillar_page.replace('{{ root }}', '../')
+        full_pillar_page = full_pillar_page.replace('{{ image }}', DEFAULT_IMAGE)
+        full_pillar_page = full_pillar_page.replace('{{ og_type }}', 'website')
+        full_pillar_page = full_pillar_page.replace('{{ json_ld }}', '')
+        full_pillar_page = full_pillar_page.replace('{{ title }}', f'{pillar} - Does This Feel Right?')
+        full_pillar_page = full_pillar_page.replace('{{ description }}', f'Pillar: {pillar}.')
+        full_pillar_page = full_pillar_page.replace('{{ url }}', f"{BASE_URL}/pillars/{p_slug}.html")
+        
+        write_file(os.path.join(pillars_dir, f'{p_slug}.html'), full_pillar_page)
         full_tag_page = full_tag_page.replace('{{ image }}', DEFAULT_IMAGE)
         full_tag_page = full_tag_page.replace('{{ og_type }}', 'website')
         full_tag_page = full_tag_page.replace('{{ json_ld }}', '')

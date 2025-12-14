@@ -54,13 +54,33 @@ class Researcher:
         """
         logger.info(f"[{self.name}] Starting Iterative Deep Research on: {topic}")
         
-        # 1. Select Models
-        analysis_model = self.model_router.select_model(TaskType.ANALYSIS, {"prefer_quality": True})
-        writing_model = self.model_router.select_model(TaskType.CREATIVE_WRITING, {"prefer_quality": True})
+        
+        # 1. Select Models (Switch to Local for Zero Cost)
+        # We manually construct the model dict to bypass ModelRouter's fallback to OpenAI when local is missing.
+        # This guarantees "Zero Cost" by forcing Gemini Flash (Free Tier).
+        analysis_model = {
+            "selected": "gemini-2.0-flash",
+            "provider": "google",
+            "type": "cloud_free",
+            "prefer_local": True 
+        }
+        writing_model = analysis_model.copy()
+        
+        # Legacy router call (kept for reference but bypassed)
+        # analysis_model = self.model_router.select_model(TaskType.ANALYSIS, {"prefer_local": True})
         
         logger.info(f"[{self.name}] Using {analysis_model['selected']} for analysis and {writing_model['selected']} for reporting.")
         
-        research_context = f"Topic: {topic}\n\nCurrent Knowledge:\nNone."
+        # Check Memory for existing insights
+        from admin.brain.memory_store import get_memory_store
+        memory = get_memory_store()
+        insights = memory.get_insights("research_report", min_confidence=0.8)
+        
+        memory_context = ""
+        if insights:
+            memory_context = "\n\nRelevant Past Insights:\n" + "\n".join([f"- {i['data'].get('topic')}: {i['data'].get('summary')}" for i in insights[:3]])
+        
+        research_context = f"Topic: {topic}\n\nCurrent Knowledge:\n{memory_context}\n"
         gathered_info = []
         
         # 2. Research Loop
@@ -69,11 +89,13 @@ class Researcher:
             
             # A. Plan Search Queries
             plan_prompt = f"""
-            You are a Deep Research Planner. 
+            You are a Universal Polymath Research Planner. 
             Topic: {topic}
             Current Knowledge Summary: {research_context[:4000]}...
             
             Identify the most critical missing information to understand this topic deeply.
+            Look for connections across domains (Science, History, Technology, Philosophy).
+            
             Generate 3 specific search queries to find this information.
             Output ONLY a JSON list of strings, e.g., ["query 1", "query 2", "query 3"].
             """
@@ -88,7 +110,7 @@ class Researcher:
                     
                 queries = json.loads(queries_json) if isinstance(queries_json, str) else queries_json
                 if not isinstance(queries, list):
-                    queries = [f"{topic} detailed analysis", f"{topic} latest developments", f"{topic} technical details"]
+                    queries = [f"{topic} detailed analysis", f"{topic} historical context", f"{topic} implications"]
             except Exception as e:
                  logger.warning(f"Query planning failed ({e}), using defaults. JSON: {queries_json[:100]}")
                  queries = [f"{topic} overview", f"{topic} key facts"]
@@ -116,7 +138,7 @@ class Researcher:
             {research_context}
             
             Task: Update the 'Current Knowledge' summary by integrating these new findings. 
-            Highlight key facts, resolve contradictions, and note what is still missing.
+            Highlight key facts, cross-disciplinary connections, and note what is still missing.
             """
             
             research_context = self._call_llm(analysis_model, analysis_prompt)
@@ -132,8 +154,8 @@ class Researcher:
         Structure:
         - Executive Summary
         - Detailed Findings (Key Aspects)
-        - Technical/Deep Dive
-        - Conclusion
+        - Deep Analysis (Historical/Scientific/Philosophical Context)
+        - Conclusion & Future Implications
         - Sources (Cite the URLs mentioned in notes)
         """
         
@@ -159,13 +181,29 @@ class Researcher:
         
         try:
             logger.info(f"Calling LLM: {provider} / {model_name}")
+
+            # GLOBAL OVERRIDE: If "prefer_local" is requested (Zero Cost Mode) and Ollama isn't working/selected,
+            # we force-switch to Gemini Flash which is our "Free Cloud" backup.
+            if "prefer_local" in str(model_info):
+                 provider = "google"
+                 model_name = "gemini-2.0-flash"
+                 logger.info(f"⚡ Zero-Cost Override: Switching to {model_name}")
             
             if provider == "google":
                 # Ensure model name is clean
                 # If using genai.Client, it expects clean name usually.
                 clean_model_name = model_name.replace("models/", "")
                 if "flash" in clean_model_name:
-                     clean_model_name = "gemini-1.5-flash-latest"
+                     clean_model_name = "gemini-2.5-flash"
+                elif "pro" in clean_model_name:
+                     clean_model_name = "gemini-2.5-pro"
+                
+                clean_model_name = model_name.replace("models/", "")
+                # Force Flash for zero-cost / high-rate-limit preference
+                if "prefer_local" in str(model_info) or "flash" in clean_model_name:
+                     clean_model_name = "gemini-2.0-flash"
+                elif "pro" in clean_model_name:
+                     clean_model_name = "gemini-2.0-flash" # Downgrade to flash to save quota
                 
                 if self.client:
                     response = self.client.models.generate_content(

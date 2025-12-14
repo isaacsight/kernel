@@ -93,6 +93,15 @@ class CommandRouter:
             
         except Exception as e:
             logger.error(f"Routing failed: {e}")
+            if "429" in str(e) or "ResourceExhausted" in str(e):
+                 return {
+                    "success": True, # Fail open to chat
+                    "intent": "chat",
+                    "action": None,
+                    "target_agent": None,
+                    "response_text": "My brain is a bit tired (Rate Limit Reached). Give me a minute to recharge?"
+                 }
+            
             return {
                 "success": False, 
                 "error": str(e),

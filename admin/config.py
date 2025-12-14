@@ -14,7 +14,8 @@ class Config:
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-2.0-flash-exp"
+    GEMINI_MODEL = "gemini-1.5-flash" # Stable, High Rate Limits (15 RPM / 1M TPM)
+    # GEMINI_MODEL = "gemini-2.0-flash-exp" # Experimental, Low Limits
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
     SAFETY_MODEL = "unitary/toxic-bert"

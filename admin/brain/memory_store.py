@@ -349,13 +349,13 @@ class MemoryStore:
             cursor.execute(
                 """SELECT insight_type, insight_data, confidence, source, timestamp 
                    FROM insights WHERE insight_type = ? AND confidence >= ? 
-                   ORDER BY confidence DESC""",
+                   ORDER BY timestamp DESC""",
                 (insight_type, min_confidence)
             )
         else:
             cursor.execute(
                 """SELECT insight_type, insight_data, confidence, source, timestamp 
-                   FROM insights WHERE confidence >= ? ORDER BY confidence DESC""",
+                   FROM insights WHERE confidence >= ? ORDER BY timestamp DESC""",
                 (min_confidence,)
             )
             

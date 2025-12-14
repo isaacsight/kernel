@@ -10,7 +10,7 @@ from admin.engineers.socialite import Socialite
 
 def finalize_distribution():
     # Target the new Self-Evolving Studio Devlog
-    post_path = os.path.join(project_root, "content", "2025-12-12-dev-update.md")
+    post_path = os.path.join(project_root, "content", "2025-12-13-the-death-of-coding.md")
     import markdown
     
     with open(post_path, 'r', encoding='utf-8') as f:

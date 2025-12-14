@@ -44,7 +44,19 @@ from admin.config import config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("OpenWebUIBridge")
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+
 app = FastAPI(title="Studio Agent Bridge", description="OpenAI-compatible API for Studio Agents")
+
+# Mount React/Static Chat UI
+chat_path = os.path.join(os.path.dirname(__file__), "chat")
+if os.path.exists(chat_path):
+    app.mount("/chat", StaticFiles(directory=chat_path, html=True), name="chat")
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/chat")
 
 # --- Data Models (OpenAI Compatible) ---
 
@@ -263,4 +275,5 @@ async def chat_completions(request: ChatCompletionRequest):
 
 if __name__ == "__main__":
     # Reload logic only works if run as module, but here we just run directly
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    # Force asyncio loop to avoid RuntimeErrors with nest_asyncio/uvloop in some envs
+    uvicorn.run(app, host="0.0.0.0", port=8001, loop="asyncio")

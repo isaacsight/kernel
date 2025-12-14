@@ -189,6 +189,18 @@ class Analyst:
                 f"  • Avg Rating: {feedback['average_rating']:.1f}/5",
                 f"  • Total Reviews: {feedback['total_feedback']}"
             ])
+            
+        # Add Research Insights
+        insights = self.memory.get_insights("research_report", min_confidence=0.8)
+        if insights:
+             report.extend([
+                "",
+                "🧠 Recent Research Insights (The Flywheel):",
+             ])
+             for insight in insights[:5]:
+                 data = insight['data']
+                 summary = data.get('summary', '')[:100].replace("\n", " ")
+                 report.append(f"  • {data.get('topic')}: {summary}...")
         
         return "\n".join(report)
 

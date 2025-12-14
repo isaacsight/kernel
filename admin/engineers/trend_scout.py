@@ -38,24 +38,60 @@ class TrendScout:
             "Fast Phonk (for speedruns)"
         ]
 
-    def get_current_trends(self, niche: str = "tech") -> List[Dict]:
+    
+    def get_current_trends(self, niche: str = "auto") -> List[Dict]:
         """
-        Returns a list of currently trending topics relevant to the niche.
+        Returns a list of currently trending topics. 
+        If niche is 'auto', it rotates through diverse domains.
         """
+        # If auto, pick a random domain
+        if niche == "auto":
+            domains = ["tech", "science", "history", "philosophy", "economics", "psychology", "art"]
+            niche = random.choice(domains)
+            
         logger.info(f"🔍 Scouting trends for niche: {niche}...")
+
+        # Simulated Knowledge Base for Demo
+        # In production, this hits multiple APIs (ArXiv, Google Trends, etc.)
+        domain_topics = {
+            "tech": [
+                {"topic": "AI Agents", "volume": "High", "context": "Autonomous teams"},
+                {"topic": "Local LLMs", "volume": "High", "context": "Privacy & Cost"}, 
+            ],
+            "science": [
+                {"topic": "CRISPR 2.0", "volume": "High", "context": "Gene editing advances"},
+                {"topic": "Fusion Energy", "volume": "Medium", "context": "Breakthrough results"},
+            ],
+            "history": [
+                {"topic": "The Bronze Age Collapse", "volume": "Steady", "context": "Systems failure"},
+                {"topic": "Industrial Revolution paralleling AI", "volume": "High", "context": "Economic shifts"},
+            ],
+            "philosophy": [
+                {"topic": "Stoicism in Tech", "volume": "High", "context": "Managing burnout"},
+                {"topic": "Simulation Hypothesis", "volume": "Medium", "context": "Reality debates"},
+            ],
+            "economics": [
+                {"topic": "UBI", "volume": "High", "context": "AI displacement solutions"},
+                {"topic": "De-dollarization", "volume": "Medium", "context": "Global currency shifts"},
+            ],
+            "psychology": [
+                {"topic": "Dopamine Detox", "volume": "High", "context": "Attention span recovery"},
+                {"topic": "Flow States", "volume": "Steady", "context": "Productivity science"},
+            ],
+            "art": [
+                {"topic": "Generative Art Copyright", "volume": "High", "context": "Legal battles"},
+                {"topic": "Digital brutalism", "volume": "Low", "context": "UI design trends"},
+            ]
+        }
         
-        # Filter or prioritize based on niche (simple simulation)
-        if niche.lower() in ["tech", "coding", "ai"]:
-            # Return top 3-5 trends
-            trends = random.sample(self._trend_database, k=min(len(self._trend_database), 4))
-            return trends
-        else:
-            # Generic trends
-            return [{"topic": "Viral Dance", "volume": "High", "context": "Generic viral trend"}]
+        # Return trends for selected domain or generic fallback
+        trends = domain_topics.get(niche.lower(), [{"topic": "Unknown", "volume": "Low"}])
+        return trends  # Return all for now
 
     def get_trending_audio(self) -> str:
         """Returns a trending audio track name."""
         return random.choice(self._trending_audio)
+
 
     def check_relevance(self, script_content: str) -> Dict:
         """
