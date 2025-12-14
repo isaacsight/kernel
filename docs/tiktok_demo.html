@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Does This Feel Right</title>
+    <style>
+        :root {
+            --primary: #000;
+            --accent: #fe2c55;
+            /* TikTok Red */
+            --bg: #fff;
+            --text: #121212;
+            --gray: #f1f1f1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 40px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-tiktok {
+            background: var(--primary);
+            /* Black helps TikTok logo pop or standard brand color */
+        }
+
+        /* Mock Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .stat-card {
+            background: var(--gray);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .success-checkmark {
+            color: #2e7d32;
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Does This Feel Right?</div>
+        <div id="auth-status">Not logged in</div>
+    </header>
+
+    <div class="container">
+
+        <!-- Screen 1: Login -->
+        <div id="screen-login" class="screen active">
+            <h1>Creator Studio</h1>
+            <p class="subtitle">Manage your content and analytics across platforms.</p>
+
+            <button class="btn btn-tiktok" onclick="startAuth()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
+                </svg>
+                Continue with TikTok
+            </button>
+        </div>
+
+        <!-- Screen 2: Dashboard -->
+        <div id="screen-dashboard" class="screen">
+            <div class="user-profile">
+                <div class="avatar">
+                    <!-- Placeholder generic avatar -->
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="#ccc">
+                        <circle cx="12" cy="12" r="12" />
+                    </svg>
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-weight: 700; font-size: 1.1rem;">Isaac Sight</div>
+                    <div style="color: #666;">@isaacsight</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <span class="stat-value">12.5K</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">142</span>
+                    <span class="stat-label">Videos</span>
+                </div>
+            </div>
+
+            <div style="text-align: left;">
+                <h3 style="margin-bottom: 15px;">Upload New Content</h3>
+
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">☁️</div>
+                    <div>Click to select video (MP4, MOV)</div>
+                </div>
+                <input type="file" id="file-input" style="display: none" onchange="handleFileSelect(this)">
+
+                <div id="file-details"
+                    style="display: none; margin-bottom: 20px; padding: 10px; background: #eef; border-radius: 8px;">
+                    Selected: <span id="filename">video.mp4</span>
+                </div>
+
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Caption</label>
+                <input type="text" placeholder="Check out my new video! #doesthisfeelright">
+
+                <button class="btn" onclick="uploadVideo()">Post to TikTok</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Success -->
+        <div id="screen-success" class="screen">
+            <div class="success-checkmark">✓</div>
+            <h1>Published!</h1>
+            <p class="subtitle">Your video has been successfully uploaded to TikTok.</p>
+
+            <button class="btn" onclick="resetDemo()">Upload Another</button>
+        </div>
+
+        <!-- Simulation Logic -->
+        <script>
+            function showScreen(id) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+            }
+
+            function startAuth() {
+                // Simulate OAuth Popup
+                const width = 600;
+                const height = 700;
+                const left = (window.innerWidth - width) / 2;
+                const top = (window.innerHeight - height) / 2;
+
+                // Usually we'd open a real popup, but for demo video we can fake the delay
+                // Or better: open a blank window that closes itself to look like Auth
+                const popup = window.open("", "TikTok Login", `width=${width},height=${height},top=${top},left=${left}`);
+
+                if (popup) {
+                    popup.document.write('<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;background:#000;color:white;"><h2>Connecting to TikTok...</h2><p>(Simulated OAuth Screen)</p></body></html>');
+
+                    setTimeout(() => {
+                        popup.close();
+                        loginSuccess();
+                    }, 2000);
+                } else {
+                    // If popup blocked, just proceed
+                    loginSuccess();
+                }
+            }
+
+            function loginSuccess() {
+                document.getElementById('auth-status').textContent = "Logged in as @isaacsight";
+                showScreen('screen-dashboard');
+            }
+
+            function handleFileSelect(input) {
+                if (input.files && input.files[0]) {
+                    document.getElementById('file-details').style.display = 'block';
+                    document.getElementById('filename').textContent = input.files[0].name;
+                }
+            }
+
+            function uploadVideo() {
+                const btn = document.querySelector('#screen-dashboard .btn');
+                const originalText = btn.textContent;
+
+                btn.textContent = "Uploading...";
+                btn.style.opacity = "0.7";
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.opacity = "1";
+                    showScreen('screen-success');
+                }, 2000);
+            }
+
+            function resetDemo() {
+                location.reload();
+            }
+        </script>
+
+    </div>
+</body>
+
+</html>
