@@ -276,10 +276,59 @@ h3 {
     color: var(--text-primary);
 }
 
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
 .read-next-card h3 {
     margin-top: 0;
     margin-bottom: 8px;
     font-size: 1.1rem;
+}
+
+/* Article Lists (Markdown) - Swiss Console Style */
+article ul,
+article ol {
+    margin-bottom: 24px;
+    padding-left: 24px;
+}
+
+article li {
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    position: relative;
+    line-height: 1.6;
+}
+
+article ul {
+    list-style: none;
+    /* remove default bullets */
+}
+
+article ul li::before {
+    content: "•";
+    color: var(--accent-primary);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+}
+
+/* Specific styling for investigation list to match */
+.investigation-list li {
+    padding-left: 16px;
+    position: relative;
+}
+
+.investigation-list .inv-bullet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    /* margin-right is handled by positioning */
 }
 
 /* More In Pillar Section */
