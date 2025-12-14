@@ -210,6 +210,15 @@ def build():
             else:
                 shutil.copy2(s, d)
 
+    # NEW: Copy root-level files from static/ to docs/ (e.g. verification files, robots.txt)
+    print("Step 2b: Copying Root Static Files...")
+    for item in os.listdir(STATIC_DIR):
+        s = os.path.join(STATIC_DIR, item)
+        d = os.path.join(OUTPUT_DIR, item)
+        if os.path.isfile(s):
+            shutil.copy2(s, d)
+
+
     # 3. Load Templates
     print("Step 3: Loading Templates...")
     base_template = read_file(os.path.join(TEMPLATE_DIR, 'base.html'))
