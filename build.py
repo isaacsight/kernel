@@ -1346,67 +1346,8 @@ def build():
         
         write_file(os.path.join(OUTPUT_DIR, 'consulting.html'), full_consulting)
 
-    # 10. Generate RSS Feed
-    import html
-    
-    rss_items = ""
-    for post in posts:
-        if post['slug'] == 'about':
-            continue
-        
-        # Escape XML special characters
-        title = html.escape(post.get('title', 'Untitled'))
-        excerpt = html.escape(post.get('excerpt', ''))
-        category = html.escape(post.get('category', 'General'))
-        
-        # Format Date for RSS (RFC 822)
-        pub_date = ""
-        date_val = post.get('date')
-        if date_val:
-            try:
-                # import datetime removed
-
-                import email.utils
-                
-                if isinstance(date_val, str):
-                    date_obj = datetime.datetime.strptime(date_val, '%Y-%m-%d')
-                elif isinstance(date_val, datetime.date):
-                    # Convert date to datetime (midnight)
-                    date_obj = datetime.datetime.combine(date_val, datetime.time.min)
-                elif isinstance(date_val, datetime.datetime):
-                    date_obj = date_val
-                else:
-                    date_obj = None
-                
-                if date_obj:
-                    pub_date = email.utils.formatdate(date_obj.timestamp(), usegmt=True)
-            except Exception as e:
-                print(f"Error parsing date for RSS: {e}")
-                pass
-
-        rss_items += f"""
-        <item>
-            <title>{title}</title>
-            <link>{BASE_URL}/{html.escape(post['output_rel_path'])}</link>
-            <description>{excerpt}</description>
-            <category>{category}</category>
-            <guid>{BASE_URL}/{html.escape(post['output_rel_path'])}</guid>
-            <pubDate>{pub_date}</pubDate>
-        </item>
-        """
-    
-    rss_feed = f"""<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-<channel>
-    <title>Does This Feel Right?</title>
-    <link>{BASE_URL}</link>
-    <description>Thoughts on business, technology, and the human condition.</description>
-    <language>en-us</language>
-    {rss_items}
-</channel>
-</rss>"""
-    
-    write_file(os.path.join(OUTPUT_DIR, 'feed.xml'), rss_feed)
+    # 10. Generate RSS Feed - MOVED to later in script
+    pass
     
     # Hook: Post-Build
     architect.run_hook('on_post_build', OUTPUT_DIR)
