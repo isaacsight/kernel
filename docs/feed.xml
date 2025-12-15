@@ -8,7 +8,7 @@
     <language>en-us</language>
     
         <item>
-            <title>"Engineering Log: The Polymath & The Graph"</title>
+            <title>&quot;Engineering Log: The Polymath &amp; The Graph&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-polymath-graph.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-polymath-graph.html</guid>
             <pubDate>Sat, 13 Dec 2025 00:00:00 +0000</pubDate>
@@ -161,7 +161,7 @@
         </item>
         
         <item>
-            <title>"Engineering Log: The System Remembers"</title>
+            <title>&quot;Engineering Log: The System Remembers&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-system-memory.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-system-memory.html</guid>
             <pubDate>Sat, 13 Dec 2025 00:00:00 +0000</pubDate>
@@ -306,7 +306,7 @@
         </item>
         
         <item>
-            <title>"Devlog: The Graph Reborn"</title>
+            <title>&quot;Devlog: The Graph Reborn&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-12-dev-update.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-12-dev-update.html</guid>
             <pubDate>Fri, 12 Dec 2025 00:00:00 +0000</pubDate>
@@ -341,7 +341,7 @@
         </item>
         
         <item>
-            <title>"The Technician's Trap: Building a Digital Brain to Escape Myself"</title>
+            <title>&quot;The Technician&#x27;s Trap: Building a Digital Brain to Escape Myself&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-10-technicians-trap.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-10-technicians-trap.html</guid>
             <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
@@ -418,7 +418,7 @@
         </item>
         
         <item>
-            <title>"Devlog: Mobile Publishing & The Agentic Workflow"</title>
+            <title>&quot;Devlog: Mobile Publishing &amp; The Agentic Workflow&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/devlog-mobile-publishing-and-agents.html</link>
             <guid>https://www.doesthisfeelright.com/posts/devlog-mobile-publishing-and-agents.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -438,7 +438,7 @@
         </item>
         
         <item>
-            <title>"Studio OS: Awakening the 72B Mind"</title>
+            <title>&quot;Studio OS: Awakening the 72B Mind&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/studio-os-deep-reasoning.html</link>
             <guid>https://www.doesthisfeelright.com/posts/studio-os-deep-reasoning.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -466,7 +466,7 @@ INSTRUCTIONS (DEEP REASONING MODE):
         </item>
         
         <item>
-            <title>"The Self-Evolving Studio: A Website That Builds Itself"</title>
+            <title>&quot;The Self-Evolving Studio: A Website That Builds Itself&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/devlog-self-evolving-studio.html</link>
             <guid>https://www.doesthisfeelright.com/posts/devlog-self-evolving-studio.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -492,7 +492,7 @@ INSTRUCTIONS (DEEP REASONING MODE):
         </item>
         
         <item>
-            <title>"Studio OS: An AI-First Operating System"</title>
+            <title>&quot;Studio OS: An AI-First Operating System&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/studio-os.html</link>
             <guid>https://www.doesthisfeelright.com/posts/studio-os.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -524,7 +524,7 @@ INSTRUCTIONS (DEEP REASONING MODE):
         </item>
         
         <item>
-            <title>"Top 7 Smartest Educations for the Future Economy (2025-2035)"</title>
+            <title>&quot;Top 7 Smartest Educations for the Future Economy (2025-2035)&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/smartest-educations-2025.html</link>
             <guid>https://www.doesthisfeelright.com/posts/smartest-educations-2025.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -644,7 +644,7 @@ INSTRUCTIONS (DEEP REASONING MODE):
         </item>
         
         <item>
-            <title>"Devlog: The Cinematic Upgrade & Self-Evolution"</title>
+            <title>&quot;Devlog: The Cinematic Upgrade &amp; Self-Evolution&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/devlog-cinematic-upgrade.html</link>
             <guid>https://www.doesthisfeelright.com/posts/devlog-cinematic-upgrade.html</guid>
             <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
@@ -705,7 +705,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"The Quantum Cloud Revolution: How IBM is Democratizing Access"</title>
+            <title>&quot;The Quantum Cloud Revolution: How IBM is Democratizing Access&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-08-ibm-quantum-cloud-revolution.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-08-ibm-quantum-cloud-revolution.html</guid>
             <pubDate>Mon, 08 Dec 2025 00:00:00 +0000</pubDate>
@@ -732,7 +732,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"How I Hired a Digital Frontier Team"</title>
+            <title>&quot;How I Hired a Digital Frontier Team&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/hiring-the-frontier-team.html</link>
             <guid>https://www.doesthisfeelright.com/posts/hiring-the-frontier-team.html</guid>
             <pubDate>Sun, 07 Dec 2025 00:00:00 +0000</pubDate>
@@ -756,7 +756,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"Engineering Log: Hermes Playground & Studio Refinements"</title>
+            <title>&quot;Engineering Log: Hermes Playground &amp; Studio Refinements&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-07-engineering-log-hermes-and-studio.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-07-engineering-log-hermes-and-studio.html</guid>
             <pubDate>Sun, 07 Dec 2025 00:00:00 +0000</pubDate>
@@ -782,7 +782,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"Studio Research Roadmap: Q1 2026"</title>
+            <title>&quot;Studio Research Roadmap: Q1 2026&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/research-roadmap.html</link>
             <guid>https://www.doesthisfeelright.com/posts/research-roadmap.html</guid>
             <pubDate>Sun, 07 Dec 2025 00:00:00 +0000</pubDate>
@@ -799,7 +799,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"The Frontier Team: An Org Chart for the Future"</title>
+            <title>&quot;The Frontier Team: An Org Chart for the Future&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-frontier-team.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-frontier-team.html</guid>
             <pubDate>Sun, 07 Dec 2025 00:00:00 +0000</pubDate>
@@ -899,7 +899,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"Engineering Progress: Kokoro TTS and Team Empowerment"</title>
+            <title>&quot;Engineering Progress: Kokoro TTS and Team Empowerment&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-05-engineering-progress-kokoro-tts-voice-of-ai.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-05-engineering-progress-kokoro-tts-voice-of-ai.html</guid>
             <pubDate>Fri, 05 Dec 2025 00:00:00 +0000</pubDate>
@@ -940,7 +940,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>"The Glitch & The Sketch: Why We're Swapping Midjourney for Rare GitHub Tools"</title>
+            <title>&quot;The Glitch &amp; The Sketch: Why We&#x27;re Swapping Midjourney for Rare GitHub Tools&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/2025-12-05-visual-upgrade-ascii-animated.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2025-12-05-visual-upgrade-ascii-animated.html</guid>
             <pubDate>Fri, 05 Dec 2025 00:00:00 +0000</pubDate>
@@ -972,7 +972,7 @@ python3 scripts/forge.py create SystemMonitor --role "Diagnostic Agent"
         </item>
         
         <item>
-            <title>'Collective AI: The Next Frontier'</title>
+            <title>&#x27;Collective AI: The Next Frontier&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/collective-ai-the-next-frontier.html</link>
             <guid>https://www.doesthisfeelright.com/posts/collective-ai-the-next-frontier.html</guid>
             <pubDate>Fri, 05 Dec 2025 00:00:00 +0000</pubDate>
@@ -1045,7 +1045,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"The Other Computer: Awakening the Studio Node"</title>
+            <title>&quot;The Other Computer: Awakening the Studio Node&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/awakening-the-studio-node.html</link>
             <guid>https://www.doesthisfeelright.com/posts/awakening-the-studio-node.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1067,7 +1067,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"Why vulnerability feels like weakness but isn't"</title>
+            <title>&quot;Why vulnerability feels like weakness but isn&#x27;t&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-vulnerability-feels-like-weakness-but-isnt.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-vulnerability-feels-like-weakness-but-isnt.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1088,7 +1088,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"Learning to grieve small losses"</title>
+            <title>&quot;Learning to grieve small losses&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-grieve-small-losses.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-grieve-small-losses.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1112,7 +1112,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"The moment before clarity arrives"</title>
+            <title>&quot;The moment before clarity arrives&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-moment-before-clarity-arrives.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-moment-before-clarity-arrives.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1136,7 +1136,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"I Fired My AI Social Media Team (And Built a Better One)"</title>
+            <title>&quot;I Fired My AI Social Media Team (And Built a Better One)&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</link>
             <guid>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1155,7 +1155,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"Why we document instead of experience"</title>
+            <title>&quot;Why we document instead of experience&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-document-instead-of-experience.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-document-instead-of-experience.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1177,7 +1177,7 @@ Creator B faces same problem → AI already knows
         </item>
         
         <item>
-            <title>"Distributed AI Architecture: Mac + Windows Studio Node"</title>
+            <title>&quot;Distributed AI Architecture: Mac + Windows Studio Node&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</link>
             <guid>https://www.doesthisfeelright.com/posts/distributed-ai-architecture-mac-windows-node.html</guid>
             <pubDate>Thu, 04 Dec 2025 00:00:00 +0000</pubDate>
@@ -1447,7 +1447,7 @@ return refined
         </item>
         
         <item>
-            <title>"The emotion that has no name"</title>
+            <title>&quot;The emotion that has no name&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-emotion-that-has-no-name.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-emotion-that-has-no-name.html</guid>
             <pubDate>Wed, 03 Dec 2025 00:00:00 +0000</pubDate>
@@ -1469,7 +1469,7 @@ return refined
         </item>
         
         <item>
-            <title>"The Philosophy of Remote Work: Beyond the Office"</title>
+            <title>&quot;The Philosophy of Remote Work: Beyond the Office&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/philosophy-remote-work.html</link>
             <guid>https://www.doesthisfeelright.com/posts/philosophy-remote-work.html</guid>
             <pubDate>Wed, 03 Dec 2025 00:00:00 +0000</pubDate>
@@ -1582,7 +1582,7 @@ return refined
         </item>
         
         <item>
-            <title>"The weight of unopened notifications"</title>
+            <title>&quot;The weight of unopened notifications&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-weight-of-unopened-notifications.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-weight-of-unopened-notifications.html</guid>
             <pubDate>Wed, 03 Dec 2025 00:00:00 +0000</pubDate>
@@ -1604,7 +1604,7 @@ return refined
         </item>
         
         <item>
-            <title>"Learning to hold space without fixing"</title>
+            <title>&quot;Learning to hold space without fixing&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-hold-space-without-fixing.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-hold-space-without-fixing.html</guid>
             <pubDate>Wed, 03 Dec 2025 00:00:00 +0000</pubDate>
@@ -1626,7 +1626,7 @@ return refined
         </item>
         
         <item>
-            <title>"Why we resist what we need most"</title>
+            <title>&quot;Why we resist what we need most&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-resist-what-we-need-most.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-resist-what-we-need-most.html</guid>
             <pubDate>Wed, 03 Dec 2025 00:00:00 +0000</pubDate>
@@ -1650,7 +1650,7 @@ return refined
         </item>
         
         <item>
-            <title>"Learning to trust your own judgment"</title>
+            <title>&quot;Learning to trust your own judgment&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-trust-your-own-judgment.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-trust-your-own-judgment.html</guid>
             <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
@@ -1671,7 +1671,7 @@ return refined
         </item>
         
         <item>
-            <title>"The pressure to have a passion"</title>
+            <title>&quot;The pressure to have a passion&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-pressure-to-have-a-passion.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-pressure-to-have-a-passion.html</guid>
             <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
@@ -1693,7 +1693,7 @@ return refined
         </item>
         
         <item>
-            <title>"Why we cry at unexpected moments"</title>
+            <title>&quot;Why we cry at unexpected moments&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-cry-at-unexpected-moments.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-cry-at-unexpected-moments.html</guid>
             <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
@@ -1714,7 +1714,7 @@ return refined
         </item>
         
         <item>
-            <title>"The friends we outgrow"</title>
+            <title>&quot;The friends we outgrow&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-friends-we-outgrow.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-friends-we-outgrow.html</guid>
             <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
@@ -1734,7 +1734,7 @@ return refined
         </item>
         
         <item>
-            <title>"Building Studio OS in Public: The 6-Week Monetization Journey Begins"</title>
+            <title>&quot;Building Studio OS in Public: The 6-Week Monetization Journey Begins&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/studio-os-6-week-journey-week-1.html</link>
             <guid>https://www.doesthisfeelright.com/posts/studio-os-6-week-journey-week-1.html</guid>
             <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
@@ -1883,7 +1883,7 @@ return refined
         </item>
         
         <item>
-            <title>"The comfort of melancholy"</title>
+            <title>&quot;The comfort of melancholy&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-comfort-of-melancholy.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-comfort-of-melancholy.html</guid>
             <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
@@ -1904,7 +1904,7 @@ return refined
         </item>
         
         <item>
-            <title>"The difference between patience and avoidance"</title>
+            <title>&quot;The difference between patience and avoidance&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-difference-between-patience-and-avoidance.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-difference-between-patience-and-avoidance.html</guid>
             <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
@@ -1925,7 +1925,7 @@ return refined
         </item>
         
         <item>
-            <title>"When meaning finds you instead"</title>
+            <title>&quot;When meaning finds you instead&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-meaning-finds-you-instead.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-meaning-finds-you-instead.html</guid>
             <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
@@ -1949,7 +1949,7 @@ return refined
         </item>
         
         <item>
-            <title>"When silence speaks louder than words"</title>
+            <title>&quot;When silence speaks louder than words&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-silence-speaks-louder-than-words.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-silence-speaks-louder-than-words.html</guid>
             <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
@@ -1966,7 +1966,7 @@ return refined
         </item>
         
         <item>
-            <title>"When numbness is the loudest feeling"</title>
+            <title>&quot;When numbness is the loudest feeling&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-numbness-is-the-loudest-feeling.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-numbness-is-the-loudest-feeling.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -1990,7 +1990,7 @@ return refined
         </item>
         
         <item>
-            <title>"Why we romanticize the past"</title>
+            <title>&quot;Why we romanticize the past&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-romanticize-the-past.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-romanticize-the-past.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -2013,7 +2013,7 @@ return refined
         </item>
         
         <item>
-            <title>"The art of apologizing without explaining"</title>
+            <title>&quot;The art of apologizing without explaining&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-apologizing-without-explaining.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-apologizing-without-explaining.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -2035,7 +2035,7 @@ return refined
         </item>
         
         <item>
-            <title>'Towards Site Autonomy'</title>
+            <title>&#x27;Towards Site Autonomy&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</link>
             <guid>https://www.doesthisfeelright.com/posts/towards-site-autonomy.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -2063,7 +2063,7 @@ return refined
         </item>
         
         <item>
-            <title>"What your recurring thoughts are trying to tell you"</title>
+            <title>&quot;What your recurring thoughts are trying to tell you&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/what-your-recurring-thoughts-are-trying-to-tell-yo.html</link>
             <guid>https://www.doesthisfeelright.com/posts/what-your-recurring-thoughts-are-trying-to-tell-yo.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -2087,7 +2087,7 @@ return refined
         </item>
         
         <item>
-            <title>"The beauty of purposeless pursuits"</title>
+            <title>&quot;The beauty of purposeless pursuits&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-beauty-of-purposeless-pursuits.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-beauty-of-purposeless-pursuits.html</guid>
             <pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
@@ -2111,7 +2111,7 @@ return refined
         </item>
         
         <item>
-            <title>"The fear behind the frustration"</title>
+            <title>&quot;The fear behind the frustration&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-fear-behind-the-frustration.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-fear-behind-the-frustration.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2134,7 +2134,7 @@ return refined
         </item>
         
         <item>
-            <title>"Why we attract what we're not ready for"</title>
+            <title>&quot;Why we attract what we&#x27;re not ready for&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-attract-what-were-not-ready-for.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-attract-what-were-not-ready-for.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2158,7 +2158,7 @@ return refined
         </item>
         
         <item>
-            <title>'Multi-Model AI: Managing Claude and Gemini Providers'</title>
+            <title>&#x27;Multi-Model AI: Managing Claude and Gemini Providers&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</link>
             <guid>https://www.doesthisfeelright.com/posts/codelens-ai-providers.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2191,7 +2191,7 @@ Now, the application logic is simple:
         </item>
         
         <item>
-            <title>'Refactoring for AI: From Script to Package'</title>
+            <title>&#x27;Refactoring for AI: From Script to Package&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</link>
             <guid>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2222,7 +2222,7 @@ This refactor lays the groundwork for more advanced features like automated eval
         </item>
         
         <item>
-            <title>"Why we chase goals that don't matter"</title>
+            <title>&quot;Why we chase goals that don&#x27;t matter&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-chase-goals-that-dont-matter.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-chase-goals-that-dont-matter.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2248,7 +2248,7 @@ This refactor lays the groundwork for more advanced features like automated eval
         </item>
         
         <item>
-            <title>'Tracking AI Experiments: Building a Custom Logger'</title>
+            <title>&#x27;Tracking AI Experiments: Building a Custom Logger&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</link>
             <guid>https://www.doesthisfeelright.com/posts/codelens-ml-logging.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2293,7 +2293,7 @@ Data is the fuel for AI, and now CodeLens is harvesting its own fuel.
         </item>
         
         <item>
-            <title>"The art of sitting with discomfort"</title>
+            <title>&quot;The art of sitting with discomfort&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-sitting-with-discomfort.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-sitting-with-discomfort.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2320,7 +2320,7 @@ Data is the fuel for AI, and now CodeLens is harvesting its own fuel.
         </item>
         
         <item>
-            <title>'Building a Custom Site Manager'</title>
+            <title>&#x27;Building a Custom Site Manager&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/building-a-custom-site-manager.html</link>
             <guid>https://www.doesthisfeelright.com/posts/building-a-custom-site-manager.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2343,7 +2343,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>'The Ultimate Workflow: Going Headless'</title>
+            <title>&#x27;The Ultimate Workflow: Going Headless&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/headless-workflow.html</link>
             <guid>https://www.doesthisfeelright.com/posts/headless-workflow.html</guid>
             <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
@@ -2436,7 +2436,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>'The Return of Personal Software'</title>
+            <title>&#x27;The Return of Personal Software&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-return-of-personal-software.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-return-of-personal-software.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2478,7 +2478,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>"When self-improvement becomes self-rejection"</title>
+            <title>&quot;When self-improvement becomes self-rejection&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-selfimprovement-becomes-selfrejection.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-selfimprovement-becomes-selfrejection.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2498,7 +2498,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>"Why we push away what we need"</title>
+            <title>&quot;Why we push away what we need&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-push-away-what-we-need.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-push-away-what-we-need.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2523,7 +2523,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>"The cost of constant availability"</title>
+            <title>&quot;The cost of constant availability&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-cost-of-constant-availability.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-cost-of-constant-availability.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2547,7 +2547,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>"The difference between busy and fulfilled"</title>
+            <title>&quot;The difference between busy and fulfilled&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-difference-between-busy-and-fulfilled.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-difference-between-busy-and-fulfilled.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2568,7 +2568,7 @@ Now, I have a single "Command Center" for my entire blog workflow.
         </item>
         
         <item>
-            <title>"Don't Get Locked In"</title>
+            <title>&quot;Don&#x27;t Get Locked In&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/dont-get-locked-in.html</link>
             <guid>https://www.doesthisfeelright.com/posts/dont-get-locked-in.html</guid>
             <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
@@ -2679,7 +2679,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Speed of Thought'</title>
+            <title>&#x27;The Speed of Thought&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-speed-of-thought.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-speed-of-thought.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2708,7 +2708,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Breaking Change'</title>
+            <title>&#x27;The Breaking Change&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-breaking-change.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-breaking-change.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2733,7 +2733,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'Escaping the Simulation of Self'</title>
+            <title>&#x27;Escaping the Simulation of Self&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/escaping-the-simulation.html</link>
             <guid>https://www.doesthisfeelright.com/posts/escaping-the-simulation.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2760,7 +2760,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"When your online self feels more real"</title>
+            <title>&quot;When your online self feels more real&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-your-online-self-feels-more-real.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-your-online-self-feels-more-real.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2782,7 +2782,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Invisible Architect'</title>
+            <title>&#x27;The Invisible Architect&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-invisible-architect.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-invisible-architect.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2818,7 +2818,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"The art of feeling without fixing"</title>
+            <title>&quot;The art of feeling without fixing&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-feeling-without-fixing.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-feeling-without-fixing.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2839,7 +2839,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'To Be Witnessed'</title>
+            <title>&#x27;To Be Witnessed&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/to-be-witnessed.html</link>
             <guid>https://www.doesthisfeelright.com/posts/to-be-witnessed.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2864,7 +2864,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"The courage to be mediocre at something new"</title>
+            <title>&quot;The courage to be mediocre at something new&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-courage-to-be-mediocre-at-something-new.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-courage-to-be-mediocre-at-something-new.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2886,7 +2886,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"Learning to want what you have"</title>
+            <title>&quot;Learning to want what you have&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-want-what-you-have.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-want-what-you-have.html</guid>
             <pubDate>Thu, 27 Nov 2025 00:00:00 +0000</pubDate>
@@ -2907,7 +2907,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Rise of the Non-Musician'</title>
+            <title>&#x27;The Rise of the Non-Musician&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-rise-of-the-non-musician.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-rise-of-the-non-musician.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -2930,7 +2930,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"When ambition becomes escape"</title>
+            <title>&quot;When ambition becomes escape&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-ambition-becomes-escape.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-ambition-becomes-escape.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -2955,7 +2955,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'Owning the Signal'</title>
+            <title>&#x27;Owning the Signal&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/owning-the-signal.html</link>
             <guid>https://www.doesthisfeelright.com/posts/owning-the-signal.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -2975,7 +2975,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"Finding presence in a distracted world"</title>
+            <title>&quot;Finding presence in a distracted world&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/finding-presence-in-a-distracted-world.html</link>
             <guid>https://www.doesthisfeelright.com/posts/finding-presence-in-a-distracted-world.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -2999,7 +2999,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The New Builders Are 16'</title>
+            <title>&#x27;The New Builders Are 16&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-new-builders-are-16.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-new-builders-are-16.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -3031,7 +3031,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"Why we fear our own potential"</title>
+            <title>&quot;Why we fear our own potential&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-fear-our-own-potential.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-fear-our-own-potential.html</guid>
             <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
@@ -3054,7 +3054,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"The freedom of lowered expectations"</title>
+            <title>&quot;The freedom of lowered expectations&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-freedom-of-lowered-expectations.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-freedom-of-lowered-expectations.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3078,7 +3078,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"The weight of unspoken words"</title>
+            <title>&quot;The weight of unspoken words&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-weight-of-unspoken-words.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-weight-of-unspoken-words.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3099,7 +3099,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Weight of Iteration'</title>
+            <title>&#x27;The Weight of Iteration&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-weight-of-iteration.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-weight-of-iteration.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3126,7 +3126,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"The exhaustion of endless optimization"</title>
+            <title>&quot;The exhaustion of endless optimization&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-exhaustion-of-endless-optimization.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-exhaustion-of-endless-optimization.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3150,7 +3150,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Engine and The Gallery'</title>
+            <title>&#x27;The Engine and The Gallery&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/the-engine-and-the-gallery.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-engine-and-the-gallery.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3175,7 +3175,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>'The Extinction of the Modern Man'</title>
+            <title>&#x27;The Extinction of the Modern Man&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/modern-man-extinction.html</link>
             <guid>https://www.doesthisfeelright.com/posts/modern-man-extinction.html</guid>
             <pubDate>Tue, 25 Nov 2025 00:00:00 +0000</pubDate>
@@ -3197,7 +3197,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>"Loving someone without losing yourself"</title>
+            <title>&quot;Loving someone without losing yourself&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/loving-someone-without-losing-yourself.html</link>
             <guid>https://www.doesthisfeelright.com/posts/loving-someone-without-losing-yourself.html</guid>
             <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
@@ -3220,7 +3220,7 @@ for deployment, git for version control, and multiple AI providers for flexibili
         </item>
         
         <item>
-            <title>Why Most Content Feels Like 'People Are Irresponsible'</title>
+            <title>Why Most Content Feels Like &#x27;People Are Irresponsible&#x27;</title>
             <link>https://www.doesthisfeelright.com/posts/irresponsibility-content.html</link>
             <guid>https://www.doesthisfeelright.com/posts/irresponsibility-content.html</guid>
             <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
@@ -3328,7 +3328,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why we scroll when we should sleep"</title>
+            <title>&quot;Why we scroll when we should sleep&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-scroll-when-we-should-sleep.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-scroll-when-we-should-sleep.html</guid>
             <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
@@ -3348,7 +3348,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why we fear empty time"</title>
+            <title>&quot;Why we fear empty time&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-fear-empty-time.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-fear-empty-time.html</guid>
             <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
@@ -3370,7 +3370,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The art of doing nothing well"</title>
+            <title>&quot;The art of doing nothing well&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-doing-nothing-well.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-doing-nothing-well.html</guid>
             <pubDate>Sun, 23 Nov 2025 00:00:00 +0000</pubDate>
@@ -3391,7 +3391,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The conversations we avoid having"</title>
+            <title>&quot;The conversations we avoid having&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-conversations-we-avoid-having.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-conversations-we-avoid-having.html</guid>
             <pubDate>Sun, 23 Nov 2025 00:00:00 +0000</pubDate>
@@ -3418,7 +3418,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The illusion of productivity"</title>
+            <title>&quot;The illusion of productivity&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-illusion-of-productivity.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-illusion-of-productivity.html</guid>
             <pubDate>Sun, 23 Nov 2025 00:00:00 +0000</pubDate>
@@ -3440,7 +3440,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When connection breeds loneliness"</title>
+            <title>&quot;When connection breeds loneliness&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-connection-breeds-loneliness.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-connection-breeds-loneliness.html</guid>
             <pubDate>Sat, 22 Nov 2025 00:00:00 +0000</pubDate>
@@ -3464,7 +3464,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When distance brings clarity"</title>
+            <title>&quot;When distance brings clarity&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-distance-brings-clarity.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-distance-brings-clarity.html</guid>
             <pubDate>Sat, 22 Nov 2025 00:00:00 +0000</pubDate>
@@ -3488,7 +3488,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The anger underneath the sadness"</title>
+            <title>&quot;The anger underneath the sadness&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-anger-underneath-the-sadness.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-anger-underneath-the-sadness.html</guid>
             <pubDate>Sat, 22 Nov 2025 00:00:00 +0000</pubDate>
@@ -3509,7 +3509,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When happiness feels suspicious"</title>
+            <title>&quot;When happiness feels suspicious&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-happiness-feels-suspicious.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-happiness-feels-suspicious.html</guid>
             <pubDate>Fri, 21 Nov 2025 00:00:00 +0000</pubDate>
@@ -3529,7 +3529,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The difference between being heard and being understood"</title>
+            <title>&quot;The difference between being heard and being understood&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-difference-between-being-heard-and-being-under.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-difference-between-being-heard-and-being-under.html</guid>
             <pubDate>Fri, 21 Nov 2025 00:00:00 +0000</pubDate>
@@ -3553,7 +3553,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The art of being unreachable"</title>
+            <title>&quot;The art of being unreachable&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-being-unreachable.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-being-unreachable.html</guid>
             <pubDate>Fri, 21 Nov 2025 00:00:00 +0000</pubDate>
@@ -3575,7 +3575,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>Social Media is Our "First Contact"</title>
+            <title>Social Media is Our &quot;First Contact&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/social-media-first-contact.html</link>
             <guid>https://www.doesthisfeelright.com/posts/social-media-first-contact.html</guid>
             <pubDate>Tue, 18 Nov 2025 00:00:00 +0000</pubDate>
@@ -3867,7 +3867,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why we mourn who we used to be"</title>
+            <title>&quot;Why we mourn who we used to be&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-mourn-who-we-used-to-be.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-mourn-who-we-used-to-be.html</guid>
             <pubDate>Tue, 11 Nov 2025 00:00:00 +0000</pubDate>
@@ -3889,7 +3889,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>There Are Richest Women—But They're Often Overshadowed</title>
+            <title>There Are Richest Women—But They&#x27;re Often Overshadowed</title>
             <link>https://www.doesthisfeelright.com/posts/richest-women-overshadowed.html</link>
             <guid>https://www.doesthisfeelright.com/posts/richest-women-overshadowed.html</guid>
             <pubDate>Mon, 10 Nov 2025 00:00:00 +0000</pubDate>
@@ -4086,7 +4086,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Learning to hold contradictions"</title>
+            <title>&quot;Learning to hold contradictions&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-hold-contradictions.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-hold-contradictions.html</guid>
             <pubDate>Sat, 08 Nov 2025 00:00:00 +0000</pubDate>
@@ -4217,7 +4217,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The masks we forgot we're wearing"</title>
+            <title>&quot;The masks we forgot we&#x27;re wearing&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-masks-we-forgot-were-wearing.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-masks-we-forgot-were-wearing.html</guid>
             <pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate>
@@ -4238,7 +4238,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why we edit our true feelings"</title>
+            <title>&quot;Why we edit our true feelings&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-edit-our-true-feelings.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-edit-our-true-feelings.html</guid>
             <pubDate>Fri, 17 Oct 2025 00:00:00 +0000</pubDate>
@@ -4262,7 +4262,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When nostalgia lies to us"</title>
+            <title>&quot;When nostalgia lies to us&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-nostalgia-lies-to-us.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-nostalgia-lies-to-us.html</guid>
             <pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate>
@@ -4285,7 +4285,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When change happens without permission"</title>
+            <title>&quot;When change happens without permission&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-change-happens-without-permission.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-change-happens-without-permission.html</guid>
             <pubDate>Wed, 08 Oct 2025 00:00:00 +0000</pubDate>
@@ -4310,7 +4310,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why we fear being truly known"</title>
+            <title>&quot;Why we fear being truly known&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-we-fear-being-truly-known.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-we-fear-being-truly-known.html</guid>
             <pubDate>Mon, 29 Sep 2025 00:00:00 +0000</pubDate>
@@ -4333,7 +4333,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The future we're afraid to want"</title>
+            <title>&quot;The future we&#x27;re afraid to want&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-future-were-afraid-to-want.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-future-were-afraid-to-want.html</guid>
             <pubDate>Sun, 28 Sep 2025 00:00:00 +0000</pubDate>
@@ -4358,7 +4358,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The versions of yourself you've left behind"</title>
+            <title>&quot;The versions of yourself you&#x27;ve left behind&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-versions-of-yourself-youve-left-behind.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-versions-of-yourself-youve-left-behind.html</guid>
             <pubDate>Tue, 23 Sep 2025 00:00:00 +0000</pubDate>
@@ -4378,7 +4378,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why the same lesson keeps returning"</title>
+            <title>&quot;Why the same lesson keeps returning&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-the-same-lesson-keeps-returning.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-the-same-lesson-keeps-returning.html</guid>
             <pubDate>Sat, 20 Sep 2025 00:00:00 +0000</pubDate>
@@ -4399,7 +4399,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The art of starting again"</title>
+            <title>&quot;The art of starting again&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-starting-again.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-starting-again.html</guid>
             <pubDate>Mon, 15 Sep 2025 00:00:00 +0000</pubDate>
@@ -4422,7 +4422,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The exhaustion of performing yourself"</title>
+            <title>&quot;The exhaustion of performing yourself&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-exhaustion-of-performing-yourself.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-exhaustion-of-performing-yourself.html</guid>
             <pubDate>Sat, 13 Sep 2025 00:00:00 +0000</pubDate>
@@ -4444,7 +4444,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The unbearable weight of potential"</title>
+            <title>&quot;The unbearable weight of potential&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-unbearable-weight-of-potential.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-unbearable-weight-of-potential.html</guid>
             <pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate>
@@ -4464,7 +4464,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The art of being wrong gracefully"</title>
+            <title>&quot;The art of being wrong gracefully&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-being-wrong-gracefully.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-being-wrong-gracefully.html</guid>
             <pubDate>Thu, 04 Sep 2025 00:00:00 +0000</pubDate>
@@ -4484,7 +4484,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When honesty requires courage"</title>
+            <title>&quot;When honesty requires courage&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-honesty-requires-courage.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-honesty-requires-courage.html</guid>
             <pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate>
@@ -4504,7 +4504,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The peace on the other side of acceptance"</title>
+            <title>&quot;The peace on the other side of acceptance&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-peace-on-the-other-side-of-acceptance.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-peace-on-the-other-side-of-acceptance.html</guid>
             <pubDate>Fri, 22 Aug 2025 00:00:00 +0000</pubDate>
@@ -4531,7 +4531,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The art of saying no without guilt"</title>
+            <title>&quot;The art of saying no without guilt&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-art-of-saying-no-without-guilt.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-art-of-saying-no-without-guilt.html</guid>
             <pubDate>Wed, 20 Aug 2025 00:00:00 +0000</pubDate>
@@ -4553,7 +4553,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When advice you gave comes back for you"</title>
+            <title>&quot;When advice you gave comes back for you&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-advice-you-gave-comes-back-for-you.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-advice-you-gave-comes-back-for-you.html</guid>
             <pubDate>Tue, 19 Aug 2025 00:00:00 +0000</pubDate>
@@ -4577,7 +4577,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The freedom of being disliked"</title>
+            <title>&quot;The freedom of being disliked&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-freedom-of-being-disliked.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-freedom-of-being-disliked.html</guid>
             <pubDate>Fri, 01 Aug 2025 00:00:00 +0000</pubDate>
@@ -4598,7 +4598,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The time between who you were and who you're becoming"</title>
+            <title>&quot;The time between who you were and who you&#x27;re becoming&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-time-between-who-you-were-and-who-youre-becomi.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-time-between-who-you-were-and-who-youre-becomi.html</guid>
             <pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate>
@@ -4620,7 +4620,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Why wisdom often feels like loss"</title>
+            <title>&quot;Why wisdom often feels like loss&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/why-wisdom-often-feels-like-loss.html</link>
             <guid>https://www.doesthisfeelright.com/posts/why-wisdom-often-feels-like-loss.html</guid>
             <pubDate>Mon, 30 Jun 2025 00:00:00 +0000</pubDate>
@@ -4650,7 +4650,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When authenticity meets rejection"</title>
+            <title>&quot;When authenticity meets rejection&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-authenticity-meets-rejection.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-authenticity-meets-rejection.html</guid>
             <pubDate>Fri, 20 Jun 2025 00:00:00 +0000</pubDate>
@@ -4675,7 +4675,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The lessons that take years to land"</title>
+            <title>&quot;The lessons that take years to land&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-lessons-that-take-years-to-land.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-lessons-that-take-years-to-land.html</guid>
             <pubDate>Fri, 20 Jun 2025 00:00:00 +0000</pubDate>
@@ -4695,7 +4695,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The humility of not knowing"</title>
+            <title>&quot;The humility of not knowing&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-humility-of-not-knowing.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-humility-of-not-knowing.html</guid>
             <pubDate>Tue, 17 Jun 2025 00:00:00 +0000</pubDate>
@@ -4721,7 +4721,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"When understanding arrives too late"</title>
+            <title>&quot;When understanding arrives too late&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/when-understanding-arrives-too-late.html</link>
             <guid>https://www.doesthisfeelright.com/posts/when-understanding-arrives-too-late.html</guid>
             <pubDate>Mon, 16 Jun 2025 00:00:00 +0000</pubDate>
@@ -4741,7 +4741,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Learning to disappoint people gracefully"</title>
+            <title>&quot;Learning to disappoint people gracefully&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-disappoint-people-gracefully.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-disappoint-people-gracefully.html</guid>
             <pubDate>Sat, 14 Jun 2025 00:00:00 +0000</pubDate>
@@ -4761,7 +4761,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"Learning to let chapters end"</title>
+            <title>&quot;Learning to let chapters end&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/learning-to-let-chapters-end.html</link>
             <guid>https://www.doesthisfeelright.com/posts/learning-to-let-chapters-end.html</guid>
             <pubDate>Sat, 14 Jun 2025 00:00:00 +0000</pubDate>
@@ -4785,7 +4785,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The questions that have no answers"</title>
+            <title>&quot;The questions that have no answers&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-questions-that-have-no-answers.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-questions-that-have-no-answers.html</guid>
             <pubDate>Thu, 12 Jun 2025 00:00:00 +0000</pubDate>
@@ -4806,7 +4806,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The version of you others need you to be"</title>
+            <title>&quot;The version of you others need you to be&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/the-version-of-you-others-need-you-to-be.html</link>
             <guid>https://www.doesthisfeelright.com/posts/the-version-of-you-others-need-you-to-be.html</guid>
             <pubDate>Fri, 06 Jun 2025 00:00:00 +0000</pubDate>
@@ -5317,7 +5317,7 @@ average.*]]></content:encoded>
         </item>
         
         <item>
-            <title>"The Secret Sauce Behind Viral Content: What I Learned from $100M Startups"</title>
+            <title>&quot;The Secret Sauce Behind Viral Content: What I Learned from $100M Startups&quot;</title>
             <link>https://www.doesthisfeelright.com/posts/viral-content-secrets.html</link>
             <guid>https://www.doesthisfeelright.com/posts/viral-content-secrets.html</guid>
             <pubDate>Wed, 04 Dec 2024 00:00:00 +0000</pubDate>

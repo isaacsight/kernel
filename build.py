@@ -1689,12 +1689,17 @@ Sitemap: {BASE_URL}/sitemap.xml
     write_file(os.path.join(OUTPUT_DIR, 'CNAME'), 'www.doesthisfeelright.com')
     # 9. Generate RSS Feed
     print("Step 9: Generating RSS Feed...")
+    import html
     rss_items = ""
     # Use top 200 posts for feed to capture the new batch for Substack
     for post in main_feed_posts[:200]:
-        title = post.get('title', 'Untitled')
+        title = html.escape(post.get('title', 'Untitled'))
         slug = post['slug']
-        link = f"{BASE_URL}/posts/{slug}.html"
+        link = html.escape(f"{BASE_URL}/posts/{slug}.html")
+        # Description might contain HTML entities if it came from markdown, but usually it's plain text. 
+        # We wrap in CDATA, so it's mostly fine, but let's be safe and NOT escape if using CDATA, 
+        # OR escape if NOT using CDATA. Standard RSS uses plain text description often.
+        # But here we use CDATA.
         description = post.get('excerpt', '')
         date_str = post.get('date', '')
         
