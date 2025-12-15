@@ -37,7 +37,10 @@ def parse_frontmatter(content):
     for line in frontmatter.split('\n'):
         if ':' in line:
             key, value = line.split(':', 1)
-            metadata[key.strip()] = value.strip()
+            value = value.strip()
+            if len(value) >= 2 and ((value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'"))):
+                 value = value[1:-1]
+            metadata[key.strip()] = value
             
     return metadata, body
 
