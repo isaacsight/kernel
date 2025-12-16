@@ -15,13 +15,11 @@ if (Get-Command "cloudflared" -ErrorAction SilentlyContinue) {
     }
 }
 
-# 2. Login (Conditional)
-if (-not (Test-Path "$env:USERPROFILE\.cloudflared\cert.pem")) {
-    Write-Host "Please login to Cloudflare..." -ForegroundColor Cyan
-    cloudflared tunnel login
-}
-
-# 3. Create Tunnel (Optional - usually user does quick tunnel or named tunnel)
+# 2. Run Tunnel (Free / Quick Mode)
+Write-Host "Starting Free Cloudflare Tunnel..." -ForegroundColor Cyan
+Write-Host "NOTE: This will generate a random URL (e.g. https://...trycloudflare.com)" -ForegroundColor Yellow
+Write-Host "Keep this window OPEN to keep the site live." -ForegroundColor Yellow
+Write-Host ""
 Write-Host "To expose your local server (port 8000) to the world, run:" -ForegroundColor Cyan
 Write-Host "cloudflared tunnel --url http://localhost:8000" -ForegroundColor White
 Write-Host ""
