@@ -9,6 +9,8 @@ image: /static/images/studio-os.jpg
 
 Does This Feel Right? is a small frontier studio that runs on its own operating system first—and invites other builders to watch, copy, or commission that system, not generic services.[[1]](https://www.doesthisfeelright.com)
 
+![Isaac Hernandez](/static/images/isaac-profile.jpg)
+
 ## What this studio is
 
 This is not an agency or a content brand. It is a tightly scoped studio-of-one that uses AI agents, automations, and opinionated workflows to run real work: thinking, writing, building, and deciding.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)

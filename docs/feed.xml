@@ -8,6 +8,104 @@
     <language>en-us</language>
     
         <item>
+            <title>System Architecture</title>
+            <link>https://www.doesthisfeelright.com/posts/architecture.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/architecture.html</guid>
+            <pubDate>Tue, 16 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>System Architecture</h1>
+<p>The "IanSight" System operates as a dual-layer architecture: a <strong>Public Presence</strong> (the website) and a <strong>Private Studio</strong> (the brain/admin system).</p>
+<pre><code>
+graph TD
+    subgraph public_zone ["Public Zone (Port 8000)"]
+        Server["FastAPI Server<br>server.py"]
+        Docs["Static Site<br>/docs"]
+        WS_Chat["WebSocket<br>/ws/chat"]
+        FrontEnd["Frontend SPA<br>frontend/dist"]
+        
+        Server --> Docs
+        Server --> FrontEnd
+        Server --> WS_Chat
+    end
+
+    subgraph studio_zone ["Studio Zone (Admin Port 5001)"]
+        AdminApp["Flask Admin App<br>admin/app.py"]
+        AdminCore["Admin Core<br>admin/core.py"]
+        Builder["Build Script<br>build.py"]
+        
+        subgraph engineers_group ["Engineers (Agents)"]
+            Architect
+            Alchemist["Alchemist<br>(Content Gen)"]
+            Broadcaster["Broadcaster<br>(Social/TikTok)"]
+            Guardian["Guardian<br>(Safety)"]
+            Evolution["Evolution Loop<br>(Background Process)"]
+            ManyOthers["80+ Specialized Agents..."]
+        end
+        
+        AdminApp --> AdminCore
+        AdminCore --> Alchemist
+        Builder --> Architect
+        AdminCore --> Broadcaster
+        Evolution --> AdminCore
+    end
+
+    subgraph data_infra ["Data & Infrastructure"]
+        Content["Content Store<br>/content (*.md)"]
+        Brain["Brain State<br>/admin/brain"]
+        Ollama["Ollama (Local LLM)"]
+        TikTok["TikTok API"]
+    end
+
+    %% Relationships
+    Builder -- Reads --> Content
+    Builder -- Generates --> Docs
+    
+    AdminCore -- Reads/Writes --> Content
+    AdminCore -- Uses --> Ollama
+    Broadcaster -- Uploads --> TikTok
+    
+    WS_Chat -- Simulates --> Engineers
+    
+    classDef public fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef studio fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    
+    class Server,Docs,WS_Chat,FrontEnd public;
+    class AdminApp,AdminCore,Builder,Architect,Alchemist,Broadcaster,Guardian,Evolution,ManyOthers studio;
+    class Content,Brain,Ollama,TikTok data;
+</code></pre>
+<h2>Core Components</h2>
+<h3>1. The Public Server (`server.py`)</h3>
+<ul>
+<li><strong>Technology</strong>: FastAPI</li>
+<li><strong>Port</strong>: 8000</li>
+<li><strong>Role</strong>: Serves the generated static site (`docs/`) and the client-side application (`frontend/dist`).</li>
+<li><strong>Features</strong>:</li>
+</ul>
+<p>- WebSockets for "Chat with Team" (`core.team.team_orchestrator`). - Public APIs for health checks and inquiry forms. - Mobile client support via CORS and asset mounting.</p>
+<h3>2. The Admin Studio (`admin/`)</h3>
+<ul>
+<li><strong>Technology</strong>: Flask (`admin/app.py`) + Custom Python Modules</li>
+<li><strong>Port</strong>: 5001</li>
+<li><strong>Role</strong>: The "Mission Control" for managing content, media, and evolution.</li>
+<li><strong>Key Modules</strong>:</li>
+</ul>
+<p>- <strong>`admin/core.py`</strong>: The central business logic hub. Handles persistence, AI generation pipelines, and server management. - <strong>`build.py`</strong>: A custom static site generator. It uses the `Architect` agent to register plugins (like `Guardian`) and processes markdown from `content/` into `docs/`.</p>
+<h3>3. The Federation of Engineers (`admin/engineers/`)</h3>
+<p>A massive suite of specialized Python classes acting as agents.</p>
+<ul>
+<li><strong>Architect</strong>: Manages system design and build hooks.</li>
+<li><strong>Alchemist</strong>: Generates content using LLMs (Ollama/Google).</li>
+<li><strong>Broadcaster</strong>: Handles video generation and TikTok uploading.</li>
+<li><strong>Guardian</strong>: Audits content for safety and quality.</li>
+<li><strong>Evolution Loop</strong>: A background process that continuously "improves" the system.</li>
+<li><strong>Others</strong>: `VideoEditor`, `SocialEngine`, `Librarian`, `Weaver`, etc.</li>
+</ul>
+<h3>4. Data Flow</h3>
+<p>1.  <strong>Content Creation</strong>: New content is created manually or via `Alchemist` in `admin/` and saved to `content/` as Markdown. 2.  <strong>Build Process</strong>: `build.py` reads `content/`, applies templates, and generates HTML in `docs/`. 3.  <strong>Deployment</strong>: `server.py` serves the new `docs/`. The `Broadcaster` may automatically generate a video summary and upload it to TikTok.</p>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>Studio OS Reference</title>
             <link>https://www.doesthisfeelright.com/posts/studio.html</link>
             <guid>https://www.doesthisfeelright.com/posts/studio.html</guid>
@@ -24,6 +122,20 @@
 <li><strong>The Director</strong>: Autonomous agent orchestration.</li>
 <li><strong>Does This Feel Right?</strong>: Signals and philosophy.</li>
 </ul>]]></content:encoded>
+        </item>
+        
+        <item>
+            <title>Council Strategic Roadmap</title>
+            <link>https://www.doesthisfeelright.com/posts/2025-12-16-council-strategic-roadmap.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/2025-12-16-council-strategic-roadmap.html</guid>
+            <pubDate>Tue, 16 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>Council Deliberation: Create a 30-day Strategic Roadmap for the 'IsaacSight' blog. Focus on 'AI Agents', 'System 2 Thinking', and 'Automated Creativity'.</h1>
+<p>Error: Failed after max retries.</p>
+<p>---</p>
+<h3>Intelligence Used</h3>
+<p>--- Agent: Trend Scout --- Trends: [{'topic': 'The Bronze Age Collapse', 'volume': 'Steady', 'context': 'Systems failure'}, {'topic': 'Industrial Revolution paralleling AI', 'volume': 'High', 'context': 'Economic shifts'}]</p>
+<p>--- Agent: Publisher --- Status: Alive. Type: Publisher</p>]]></content:encoded>
         </item>
         
         <item>
@@ -237,16 +349,17 @@
             <description><![CDATA[]]></description>
             <content:encoded><![CDATA[<h1>Research Roadmap</h1>
 <p><strong>The Studio OS is not a finished product; it is a continuous inquiry.</strong> We explore four core lanes to define the future of AI-native work.</p>
-<div class="mermaid">
-<p>graph TD %% Base Styles classDef hub fill:#fff,stroke:#000,stroke-width:2px,color:#000 classDef lane fill:#f5f5f5,stroke:#333,stroke-width:1px,color:#000 classDef exp fill:#e6f3ff,stroke:#0066cc,stroke-width:1px,color:#0066cc</p>
-<p>%% Core Node OS[Studio OS]:::hub</p>
+<div class="mermaid" style="display: flex; justify-content: center; margin: 2rem 0;">
+<p>graph TD %% Base Styles - Cyber/Dark Theme classDef hub fill:#000,stroke:#fff,stroke-width:4px,color:#fff,shape:hexagon classDef lane fill:#111,stroke:#444,stroke-width:2px,color:#eee,rx:5,ry:5 classDef exp fill:#1a1a1a,stroke:#00d4a1,stroke-width:1px,color:#00d4a1,stroke-dasharray: 4 2</p>
+<p>%% Core Node OS(Studio OS):::hub</p>
 <p>%% Research Lanes L1[Frontier Agents]:::lane L2[Studio Product]:::lane L3[Org Design]:::lane L4[Ethics / Alignment]:::lane</p>
 <p>%% Relationships OS --> L1 OS --> L2 OS --> L3 OS --> L4</p>
-<p>%% Experiments L1 --> E1(The Architect):::exp L1 --> E2(The Guardian):::exp L2 --> E3(Min Viable Studio):::exp L3 --> E4(Frontier Team):::exp L4 --> E5(Alignment Lens):::exp</p>
+<p>%% Experiments L1 -.-> E1(The Architect):::exp L1 -.-> E2(The Guardian):::exp L2 -.-> E3(Min Viable Studio):::exp L3 -.-> E4(Frontier Team):::exp L4 -.-> E5(Alignment Lens):::exp</p>
+<p>%% Link Styles linkStyle default stroke:#444,stroke-width:2px;</p>
 </div>
 <!-- mermaid-js -->
 <script type="module">
-<p>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</p>
+<p>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { background: 'transparent', primaryColor: '#000', edgeLabelBackground: '#111', tertiaryColor: '#1a1a1a' } });</p>
 </script>
 <div class="research-lanes">
 <h2>Lane 1: Frontier Agents & The OS Layer</h2>

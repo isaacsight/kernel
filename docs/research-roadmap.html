@@ -142,6 +142,19 @@
                         <span class="label">Find</span>
                     </a>
 
+                    <a href="./architecture.html" class="sidebar-item" data-tooltip="Architecture">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 22h20L12 2z"></path>
+                                <path d="M2 22h20"></path>
+                                <path d="M12 2v20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg>
+                        </div>
+                        <span class="label">Structure</span>
+                    </a>
+
                     <a href="./about.html" class="sidebar-item" data-tooltip="About">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -278,16 +291,17 @@
 
     <h1>Research Roadmap</h1>
 <p><strong>The Studio OS is not a finished product; it is a continuous inquiry.</strong> We explore four core lanes to define the future of AI-native work.</p>
-<div class="mermaid">
-<p>graph TD %% Base Styles classDef hub fill:#fff,stroke:#000,stroke-width:2px,color:#000 classDef lane fill:#f5f5f5,stroke:#333,stroke-width:1px,color:#000 classDef exp fill:#e6f3ff,stroke:#0066cc,stroke-width:1px,color:#0066cc</p>
-<p>%% Core Node OS[Studio OS]:::hub</p>
+<div class="mermaid" style="display: flex; justify-content: center; margin: 2rem 0;">
+<p>graph TD %% Base Styles - Cyber/Dark Theme classDef hub fill:#000,stroke:#fff,stroke-width:4px,color:#fff,shape:hexagon classDef lane fill:#111,stroke:#444,stroke-width:2px,color:#eee,rx:5,ry:5 classDef exp fill:#1a1a1a,stroke:#00d4a1,stroke-width:1px,color:#00d4a1,stroke-dasharray: 4 2</p>
+<p>%% Core Node OS(Studio OS):::hub</p>
 <p>%% Research Lanes L1[Frontier Agents]:::lane L2[Studio Product]:::lane L3[Org Design]:::lane L4[Ethics / Alignment]:::lane</p>
 <p>%% Relationships OS --> L1 OS --> L2 OS --> L3 OS --> L4</p>
-<p>%% Experiments L1 --> E1(The Architect):::exp L1 --> E2(The Guardian):::exp L2 --> E3(Min Viable Studio):::exp L3 --> E4(Frontier Team):::exp L4 --> E5(Alignment Lens):::exp</p>
+<p>%% Experiments L1 -.-> E1(The Architect):::exp L1 -.-> E2(The Guardian):::exp L2 -.-> E3(Min Viable Studio):::exp L3 -.-> E4(Frontier Team):::exp L4 -.-> E5(Alignment Lens):::exp</p>
+<p>%% Link Styles linkStyle default stroke:#444,stroke-width:2px;</p>
 </div>
 <!-- mermaid-js -->
 <script type="module">
-<p>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</p>
+<p>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { background: 'transparent', primaryColor: '#000', edgeLabelBackground: '#111', tertiaryColor: '#1a1a1a' } });</p>
 </script>
 <div class="research-lanes">
 <h2>Lane 1: Frontier Agents & The OS Layer</h2>
@@ -352,6 +366,16 @@
                 <h2>Read Next <span class="count">(4)</span></h2>
                 <div class="card-grid">
                     
+                <a href="architecture.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-16</span>
+                    </div>
+                    <div class="card__title">System Architecture</div>
+                    <div class="card__desc"></div>
+                </a>
+                
                 <a href="studio.html" class="card">
                     <div class="card__meta">
                         <span class="badge">Essay</span>
@@ -362,6 +386,16 @@
                     <div class="card__desc"></div>
                 </a>
                 
+                <a href="posts/2025-12-16-council-strategic-roadmap.html" class="card">
+                    <div class="card__meta">
+                        <span class="badge">Essay</span>
+                        <span class="badge badge--muted"></span>
+                        <span class="date">2025-12-16</span>
+                    </div>
+                    <div class="card__title">Council Strategic Roadmap</div>
+                    <div class="card__desc"></div>
+                </a>
+                
                 <a href="posts/2025-12-15-content-factory-blueprint.html" class="card">
                     <div class="card__meta">
                         <span class="badge">Essay</span>
@@ -369,26 +403,6 @@
                         <span class="date">2025-12-15</span>
                     </div>
                     <div class="card__title">The Content Factory Blueprint: From Creator to Business Owner</div>
-                    <div class="card__desc"></div>
-                </a>
-                
-                <a href="decision-log.html" class="card">
-                    <div class="card__meta">
-                        <span class="badge">Essay</span>
-                        <span class="badge badge--muted"></span>
-                        <span class="date">2025-12-15</span>
-                    </div>
-                    <div class="card__title">Decision Log</div>
-                    <div class="card__desc"></div>
-                </a>
-                
-                <a href="changelog.html" class="card">
-                    <div class="card__meta">
-                        <span class="badge">Essay</span>
-                        <span class="badge badge--muted"></span>
-                        <span class="date">2025-12-15</span>
-                    </div>
-                    <div class="card__title">Studio Changelog</div>
                     <div class="card__desc"></div>
                 </a>
                 
@@ -479,6 +493,18 @@
                     </svg>
                 </div>
                 <span>Find</span>
+            </a>
+            <a href="./architecture.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 22h20L12 2z"></path>
+                        <path d="M2 22h20"></path>
+                        <path d="M12 2v20"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                </div>
+                <span>Structure</span>
             </a>
             <a href="./about.html" class="drawer-link">
                 <div class="icon-container">
