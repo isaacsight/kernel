@@ -164,7 +164,7 @@ This is the live nervous system of the studio. You are seeing the actual "though
     // CONFIGURATION
     // Replace this URL with your Cloudflare Tunnel URL (e.g. https://cool-name.trycloudflare.com/api/studio/status)
     // Or leave as relative '/api/studio/status' if hosting backend on the same domain (e.g. Fly.io)
-    const STUDIO_API_URL = '/api/studio/status'; 
+    const STUDIO_API_URL = 'https://animation-harper-principal-evanescence.trycloudflare.com/api/studio/status'; 
 
     async function updateDashboard() {
         try {
