@@ -19,5 +19,9 @@ echo.
 echo Starting Server on 0.0.0.0:8000...
 echo You can access this from your phone using your Windows machine's IP address.
 echo.
+echo [OPTIONAL] To expose this to the live internet:
+echo 1. Open a new PowerShell window
+echo 2. Run: powershell -ExecutionPolicy Bypass -File setup_tunnel.ps1
+echo.
 python server.py
 pause

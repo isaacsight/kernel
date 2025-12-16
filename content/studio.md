@@ -161,9 +161,22 @@ This is the live nervous system of the studio. You are seeing the actual "though
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true });
 
+    // CONFIGURATION
+    // Replace this URL with your Cloudflare Tunnel URL (e.g. https://cool-name.trycloudflare.com/api/studio/status)
+    // Or leave as relative '/api/studio/status' if hosting backend on the same domain (e.g. Fly.io)
+    const STUDIO_API_URL = '/api/studio/status'; 
+
     async function updateDashboard() {
         try {
-            const response = await fetch('/api/studio/status');
+            // Check if we are on the live site (Netlify) but config is still relative
+            let fetchUrl = STUDIO_API_URL;
+            if (window.location.hostname !== 'localhost' && STUDIO_API_URL.startsWith('/')) {
+                 // We are live, but URL is relative. This technically implies backend is NOT on Netlify.
+                 // We need a fallback or a way to inject the tunnel URL here.
+                 // For now, we will log a warning if it fails.
+            }
+
+            const response = await fetch(fetchUrl);
             const data = await response.json();
 
             // Update Text
