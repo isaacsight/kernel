@@ -127,13 +127,13 @@ class Guardian(BaseAgent):
         # 2. AI Safety Check (Deep Semantic)
         node_url = os.environ.get("STUDIO_NODE_URL")
         
-        if node_url:
+        if node_url and not getattr(self, '_remote_disabled', False):
             try:
                 import requests
                 response = requests.post(
                     f"{node_url}/audit",
                     json={"model": "mistral", "prompt": content[:1000]},
-                    timeout=10
+                    timeout=2  # Reduced timeout
                 )
                 response.raise_for_status()
                 result = response.json().get("audit", {})
@@ -153,7 +153,8 @@ class Guardian(BaseAgent):
                         "message": f"Remote Guardian flagged issues: {result.get('issues', ['Unknown'])}"
                     })
             except Exception as e:
-                logger.warning(f"Remote Guardian check failed: {e}")
+                logger.warning(f"Remote Guardian check failed (disabling remote for this session): {e}")
+                self._remote_disabled = True
                 
         elif self.hf_client:
             try:
@@ -180,3 +181,20 @@ class Guardian(BaseAgent):
         Ensures the content feels "Gentle" and not manipulative.
         """
         pass
+
+    def audit_xml(self, content):
+        """
+        Audits XML content for well-formedness.
+        Returns a list of issues.
+        """
+        import xml.etree.ElementTree as ET
+        issues = []
+        try:
+            ET.fromstring(content)
+        except ET.ParseError as e:
+            issues.append({
+                "rule": "XML Validation",
+                "level": "CRITICAL",
+                "message": f"XML Parse Error: {str(e)}"
+            })
+        return issues

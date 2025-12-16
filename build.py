@@ -96,6 +96,17 @@ def markdown_to_html(text):
             content = line[level+1:].strip()
             html_lines.append(f'<h{level}>{content}</h{level}>')
             continue
+
+        # HTML Block Passthrough (Simple heuristic)
+        # If line starts with <div, <script, <style, </div, etc., treat as raw
+        stripped = line.strip()
+        if stripped.startswith('<') and not stripped.startswith('<a') and not stripped.startswith('<strong') and not stripped.startswith('<em') and not stripped.startswith('<span'):
+             flush_paragraph()
+             if in_list:
+                html_lines.append('</ul>')
+                in_list = False
+             html_lines.append(line)
+             continue
             
         # Lists
         if line.startswith('* ') or line.startswith('- '):
@@ -181,7 +192,7 @@ def build():
     # architect.register_plugin(StyleGuidePlugin())
     # architect.register_plugin(VisualQAPlugin())
     # architect.register_plugin(LibrarianPlugin())
-    # architect.register_plugin(GuardianPlugin())
+    architect.register_plugin(GuardianPlugin())
     
     # Hook: Pre-Build
     architect.run_hook('on_pre_build')
@@ -227,6 +238,77 @@ def build():
     base_template = read_file(os.path.join(TEMPLATE_DIR, 'base.html'))
     post_template = read_file(os.path.join(TEMPLATE_DIR, 'post.html'))
     index_template = read_file(os.path.join(TEMPLATE_DIR, 'index.html'))
+
+    # 3b. Load Intelligence Context (Reasoning Engine)
+    # We read studio-snapshot.md early to get the "Reasoning State"
+    print("Step 3b: Loading Intelligence Context...")
+    snapshot_path = os.path.join(CONTENT_DIR, 'studio-snapshot.md')
+    intelligence_context = {}
+    
+    if os.path.exists(snapshot_path):
+        raw_snap = read_file(snapshot_path)
+        snap_meta, _ = parse_frontmatter(raw_snap)
+        intelligence_data = snap_meta.get('intelligence', {})
+        
+        # If it's a string (because frontmatter parser might not handle nested dicts well with simple split), 
+        # we might need to handle it. Actually my simple parser DOES NOT handle nested yaml well.
+        # It splits by newline. 
+        # My simple parser at line 37: `for line in frontmatter.split('\n'): if ':' in line...`
+        # It flattens indentation. '  focus: "..."' becomes key='focus', val='...' (with leading spaces stripped from key? No, `key.strip()`).
+        # So `focus` key will be found.
+        # But `intelligence:` line has no value. 
+        # Wait, if I used standard yaml format:
+        # intelligence:
+        #   focus: ...
+        # My simple parser on line 39: `key, value = line.split(':', 1)`. 
+        # Line `intelligence:` -> key=`intelligence`, value=``
+        # Line `  focus: ...` -> key=`focus`, value=`...`
+        # So `snap_meta` will actually have 'focus', 'hypothesis' etc as top level keys if I am lucky, 
+        # OR they override each other if keys duplicate.
+        # Let's assume for now they are effectively top-level keys due to my naive parser. 
+        # I should check if I need to make them unique. 'focus' is unique.
+        
+        # Let's extract them directly from snap_meta assuming flattened keys
+        intelligence_context['studio_focus'] = snap_meta.get('focus', 'Defining the Loop')
+        intelligence_context['studio_hypothesis'] = snap_meta.get('hypothesis', 'System over intent.')
+        intelligence_context['last_decision'] = snap_meta.get('last_decision', 'Replaced n8n with Python.')
+        intelligence_context['next_evolution'] = snap_meta.get('next_evolution', 'Memory integration.')
+        intelligence_context['health_status'] = snap_meta.get('health_status', 'green')
+        intelligence_context['health_reason'] = snap_meta.get('health_reason', 'Systems nominal.')
+        
+    # Inject into Base Template (Global Replace) -> effectively creating a "Base Context"
+    # But we do replacements per page. So we will just define the replacements map here.
+    # Actually, let's pre-inject into base_template to save time?
+    # No, base_template is used for every page. We can update the `base_template` string in memory.
+    
+    # Generate Widget HTML
+    status_color = intelligence_context['health_status']
+    reasoning_widget_html = f"""
+    <div class="reasoning-widget">
+        <div class="rw-header">
+            <span class="rw-label">Studio Reasoning Engine</span>
+            <span class="rw-status status-{status_color}" data-tooltip="{intelligence_context['health_reason']}"></span>
+        </div>
+        <div class="rw-content">
+            <div class="rw-item">
+                <span class="rw-key">Focus</span>
+                <span class="rw-val">{intelligence_context['studio_focus']}</span>
+            </div>
+            <div class="rw-item">
+                <span class="rw-key">Hypothesis</span>
+                <span class="rw-val">{intelligence_context['studio_hypothesis']}</span>
+            </div>
+            <div class="rw-item">
+                <span class="rw-key">Last Decision</span>
+                <span class="rw-val">{intelligence_context['last_decision']}</span>
+            </div>
+        </div>
+    </div>
+    """
+    
+    base_template = base_template.replace('{{ reasoning_widget }}', reasoning_widget_html)
+
+    # 4. Processing Posts (Continue...)
 
     # Step 4: Processing Posts
     print("Step 4: Processing Posts...")
@@ -302,8 +384,8 @@ def build():
                  out_rel_path = os.path.join(rel_dir, clean_slug + '.html')
             else:
                 # Top level content check
-                if metadata.get('is_html_source', False):
-                     # Top level pages (about.html)
+                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap']:
+                     # Top level pages
                      out_rel_path = clean_slug + '.html'
                 else:
                      # Standard posts -> output to posts/ (Legacy)
@@ -661,6 +743,79 @@ def build():
              context_html = f'<p class="context-note">{post.get("context")}</p>'
         post_html = post_html.replace('{{ post_context }}', context_html)
         
+        # Intelligence Card Logic
+        intelligence_html = ""
+        # Check for flattened keys first (due to naive parser)
+        # OR check if 'intelligence' dict exists (if parser improved)
+        
+        # We look for key indicators of intelligence data
+        intel_data = post.get('intelligence', {})
+        if not isinstance(intel_data, dict):
+             intel_data = {}
+             
+        intel_date = post.get('adoption_date') or intel_data.get('adoption_date')
+        intel_status = post.get('status') or intel_data.get('status')
+        intel_metric = post.get('metric_target') or intel_data.get('metric_target')
+        intel_impact = post.get('metric_impact') or intel_data.get('metric_impact')
+        
+        if intel_date or intel_metric:
+            # Default to active if not set
+            if not intel_status: intel_status = "Active"
+            
+            # Color logic
+            status_class = "status-green"
+            if "retired" in str(intel_status).lower(): status_class = "status-red"
+            if "experiment" in str(intel_status).lower(): status_class = "status-yellow"
+            
+            intelligence_html = f"""
+            <div class="intelligence-card">
+                <div class="intel-header">
+                    <span class="intel-label">Studio Intelligence</span>
+                    <span class="intel-status-pill {status_class}">{intel_status}</span>
+                </div>
+                <div class="intel-grid">
+                    <div class="intel-item">
+                        <span class="intel-key">Adopted</span>
+                        <span class="intel-val">{intel_date}</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">Metric</span>
+                        <span class="intel-val">{intel_metric}</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">Impact</span>
+                        <span class="intel-val highlight">{intel_impact}</span>
+                    </div>
+                </div>
+            </div>
+            """
+
+        post_html = post_html.replace('{{ intelligence_card }}', intelligence_html)
+
+        # Retired Patterns Logic
+        if post.get('slug') == 'retired-patterns':
+            retired_html = ""
+            for p in posts:
+                p_intel = p.get('intelligence', {})
+                if not isinstance(p_intel, dict): p_intel = {}
+                p_status = p.get('status') or p_intel.get('status')
+                if p_status and "retired" in str(p_status).lower():
+                    retired_html += f"""
+                    <div class="card">
+                        <div class="card__meta">
+                            <span class="badge badge--muted">Retired</span>
+                            <span class="date">{p.get('adoption_date', 'N/A')}</span>
+                        </div>
+                        <div class="card__title"><a href="{p['slug']}.html">{p['title']}</a></div>
+                        <div class="card__desc">{p.get('description', '')}</div>
+                    </div>
+                    """
+            if not retired_html:
+                retired_html = "<p>No retired patterns found.</p>"
+            post_html = post_html.replace('{{ retired_patterns }}', retired_html)
+        else:
+             post_html = post_html.replace('{{ retired_patterns }}', '')
+
         # Inject New Sections
         post_html = post_html.replace('{{ post_badges }}', badges_html)
         post_html = post_html.replace('{{ footer_navigation }}', footer_nav_html)
@@ -1041,140 +1196,89 @@ def build():
             </a>
         """
 
-    # Construct New CEO-Level Home Structure
-    # HERO (Above the fold)
-    home_hero_html = """
-    <section class="ceo-hero">
-        <h1 class="ceo-headline">This is where systems are decided.</h1>
-        <div class="ceo-subhead">
-            <p>Founder working at the intersection of design, technology, and execution.</p>
-            <p>I build and direct systems that need clarity before they scale.</p>
-        </div>
-        <div class="ceo-actions">
-            <a href="#thinking" class="btn-primary">→ Read the thinking</a>
-            <a href="#systems" class="btn-secondary">→ View systems</a>
-        </div>
-    </section>
-    """
+    # 5. Generate Homepage (Real Implementation)
+    print("Step 5: Generating Homepage...")
 
-    # POSITIONING (Short, authoritative)
-    positioning_html = """
-    <section class="ceo-section ceo-positioning">
-        <p class="ceo-lead">I operate as a founder and executive — not a vendor.</p>
-        <p>My work lives between vision and execution: where ideas either become systems or collapse under their own weight.</p>
-        <p>I focus on alignment — how something feels, how it functions, and how it scales.</p>
-    </section>
-    """
-
-    # WHAT I DO (CEO framing)
-    what_i_do_html = """
-    <section class="ceo-section">
-        <h2 class="ceo-label">WHAT I DO</h2>
-        <p class="ceo-statement">I don’t sell services. I make decisions.</p>
-        <p>I spend my time on:</p>
-        <ul class="ceo-list">
-            <li>Defining direction before execution begins</li>
-            <li>Designing and architecting systems (digital, technical, organizational)</li>
-            <li>Preventing costly misalignment between design and engineering</li>
-            <li>Turning ambiguous ideas into clear, buildable realities</li>
-            <li>Knowing when not to build</li>
-        </ul>
-        <p class="ceo-emphasis">This is where leverage comes from.</p>
-    </section>
-    """
-
-    # SYSTEMS (Replace “Portfolio”)
-    systems_html = """
-    <section id="systems" class="ceo-section">
-        <h2 class="ceo-label">SYSTEMS</h2>
-        <p class="ceo-statement">Selected Systems & Initiatives</p>
-        <p>Each system represents a problem worth solving — not a finished artifact.</p>
-        <ul class="ceo-list">
-            <li><a href="systems/director.html">The Director</a>: Autonomous digital organization</li>
-            <li><a href="about.html">The Studio</a>: Creative-technical vehicle</li>
-            <li><a href="systems/graph.html">The Graph</a>: Knowledge architecture (Case Study)</li>
-        </ul>
-        <p>Systems are never “done.”<br>They either evolve — or fail quietly.</p>
-    </section>
-    """
-
-    # THINKING (Your essays, reframed)
-    thinking_html = """
-    <section id="thinking" class="ceo-section">
-        <h2 class="ceo-label">THINKING</h2>
-        <p class="ceo-statement">Notes on Direction</p>
-        <p>This is where you earn authority.</p>
-        <p>Topics might include:</p>
-        <ul class="ceo-list">
-            <li><a href="notes/why-products-feel-wrong.html">Why most products feel wrong</a></li>
-            <li><a href="notes/cost-of-unclear-execution.html">The cost of unclear execution</a></li>
-            <li><a href="notes/design-without-engineering.html">Design without engineering is fiction</a></li>
-            <li><a href="notes/speed-without-alignment.html">Speed without alignment is waste</a></li>
-            <li><a href="notes/taste-as-executive-skill.html">Taste as an executive skill</a></li>
-        </ul>
-        <p>These are not blog posts.<br>They are signals.</p>
-    </section>
-    """
-
-    # HOW I WORK (Subtle, executive)
-    how_i_work_html = """
-    <section class="ceo-section">
-        <h2 class="ceo-label">HOW I WORK</h2>
-        <p class="ceo-lead">I work selectively.</p>
-        <p>I partner with founders, teams, and organizations who value clarity, taste, and long-term thinking.</p>
-        <p>Engagements are advisory, strategic, or build-directional — not transactional.</p>
-    </section>
-    """
-
-    # CONTACT / ACCESS
-    contact_html = """
-    <section class="ceo-section ceo-contact">
-        <h2 class="ceo-label">CONTACT / ACCESS</h2>
-        <p class="ceo-lead">Inquiries</p>
-        <p>If you believe alignment matters before scale,<br>reach out with context — not a brief.</p>
-        <div class="ceo-actions">
-            <a href="mailto:isaacsight@gmail.com" class="btn-primary">→ Inquire</a>
-        </div>
-    </section>
-    """
-
-    # FOOTER (Strong, minimal)
-    footer_html = """
-    <section class="ceo-footer-content">
-        <p class="ceo-footer-title">Founder</p>
-        <p>Design · Technology · Systems</p>
-        <p class="ceo-copyright">© does this feel right</p>
-    </section>
-    """
-
-    # Combine Sections
-    full_home_content = f"""
-    <div class="ceo-layout">
-        {home_hero_html}
-        {positioning_html}
-        {what_i_do_html}
-        {systems_html}
-        {thinking_html}
-        {how_i_work_html}
-        {contact_html}
-        {footer_html}
-    </div>
-    """
-
-    # Replace in Template
-    # We need a placeholder in index.html, currently it likely has {{ content }} which we probably overwrote or it expects specific structure. 
-    # Let's check index.html. Actually, I can just replace {{ content }} if index_template is simple base + content.
-    # Ah, 'index.html' template usually has the 'Latest Essays' logic hardcoded or provided via {{ homepage_posts }}.
-    # I will assume I need to replace simple placeholders. 
-    # To be safe, I will rely on 'base_template' and replace '{{ content }}' with 'full_home_content'.
+    # A. Generate Starter Set (Canon)
+    # Filter for canonical: true (or featured: true for backward compatibility)
+    # We want "Studio Patterns" here.
     
-    # But wait, step 5 previously used `index_template`.
-    # Let's check if I can just use `base_template` for the homepage to simplify.
-    # If `index_template` exists, it might have specific hero stuff I want to remove.
-    # The user provided a "Drop-in homepage layout".
-    # I will use `base_template` and inject the computed content.
+    starter_set_posts = [p for p in posts if str(p.get('canonical', '')).lower() == 'true']
+    if not starter_set_posts:
+         # Fallback to featured if no canonical
+         starter_set_posts = [p for p in posts if str(p.get('featured', '')).lower() == 'true']
     
-    full_home_page = base_template.replace('{{ content }}', full_home_content)
+    # Sort by date
+    starter_set_posts = sorted(starter_set_posts, key=get_date_obj, reverse=True)[:6]
+
+    starter_set_html = ""
+    for p in starter_set_posts:
+        p_slug = p['slug']
+        p_title = p.get('title', p_slug)
+        p_mode = p.get('mode', 'Essay')
+        p_pillar = p.get('pillar', '').replace('-', ' ').title()
+        p_tldr = p.get('tldr', p.get('description', ''))
+        p_date = p.get('date', '')
+        
+        starter_set_html += f"""
+        <a class="card" href="{p['output_rel_path']}">
+            <div class="card__meta">
+                <span class="badge">{p_mode}</span>
+                <span class="badge badge--muted">{p_pillar}</span>
+            </div>
+            <div class="card__title">{p_title}</div>
+            <div class="card__desc">{p_tldr}</div>
+        </a>
+        """
+        
+    # B. Generate Recent Posts (Studio Logs)
+    # Exclude canonical ones from the main feed to avoid duplication? 
+    # Or just show everything. Let's show everything sorted by date.
+    recent_feed_posts = sorted_posts[:20] # Show last 20
+    
+    recent_posts_html = ""
+    for p in recent_feed_posts:
+        p_slug = p['slug']
+        if p_slug == 'about': continue
+        
+        p_title = p.get('title', p_slug)
+        p_excerpt = p.get('excerpt', p.get('description', ''))
+        p_date = p.get('date', '')
+        p_read_time = p.get('read_time', '5 min read')
+        p_cat = p.get('category', 'General')
+        p_mode = p.get('mode', 'Essay')
+        
+        cat_class = p_cat.lower().replace(' ', '-')
+        
+        recent_posts_html += f"""
+        <a href="{p['output_rel_path']}" class="post-card category-{cat_class}">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-{p_mode.lower()}">{p_mode}</span>
+                     <span class="post-category-label">{p_cat}</span>
+                     <span class="post-date">{p_date}</span>
+                </div>
+                <h3 class="post-title">{p_title}</h3>
+                <p class="post-excerpt">{p_excerpt}</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">{p_read_time}</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        """
+
+    # C. Render Template
+    # Load the actual index template
+    index_template_str = read_file(os.path.join(TEMPLATE_DIR, 'index.html'))
+    
+    full_home_page = base_template.replace('{{ content }}', index_template_str)
+    
+    # Inject Content
+    full_home_page = full_home_page.replace('{{ starter_set }}', starter_set_html)
+    full_home_page = full_home_page.replace('{{ recent_posts }}', recent_posts_html)
+    
+    # Standard Replacements
     full_home_page = full_home_page.replace('{{ starter_set_nav }}', starter_set_nav_html)
     full_home_page = full_home_page.replace('{{ root }}', '')
     full_home_page = full_home_page.replace('{{ image }}', DEFAULT_IMAGE)
@@ -1184,7 +1288,6 @@ def build():
     full_home_page = full_home_page.replace('{{ description }}', 'A living notebook on technology, intelligence, and modern life.')
     full_home_page = full_home_page.replace('{{ url }}', BASE_URL)
     
-    # Write Index
     write_file(os.path.join(OUTPUT_DIR, 'index.html'), full_home_page)
 
     # Generate Archive Page
@@ -1352,8 +1455,8 @@ def build():
     # 10. Generate RSS Feed - MOVED to later in script
     pass
     
-    # Hook: Post-Build
-    architect.run_hook('on_post_build', OUTPUT_DIR)
+    # Hook: Post-Build (Moved to end of script)
+    # architect.run_hook('on_post_build', OUTPUT_DIR)
 
     # 12. Generate Search Index (search.json)
     import json
@@ -2131,6 +2234,9 @@ Sitemap: {BASE_URL}/sitemap.xml
         print(f"WARNING: Visualizer app build not found at {visualizer_src}. Run 'turbo build' in ai-tools first.")
 
     print("Build Complete!")
+    
+    # Hook: Post-Build
+    architect.run_hook('on_post_build', output_dir=OUTPUT_DIR)
 
 if __name__ == "__main__":
     build()

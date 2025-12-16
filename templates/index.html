@@ -2,33 +2,67 @@
 <h1 class="sr-only">Does This Feel Right?</h1>
 <div class="magazine-layout">
 
-    <!-- Hero Section (Doctrine + Framing) -->
-    <!-- Hero Section (Doctrine + Framing) -->
+    <!-- Hero Section (Studio OS Framing) -->
     <section class="hero-section center-aligned">
         <div class="hero-content">
-            <h1 class="hero-title">This is where systems are decided.</h1>
-            <p class="hero-subtitle">Founder working at the intersection of design, technology, and execution.</p>
-            <p class="hero-subtitle">I build and direct systems that need clarity before they scale.</p>
+            <h1 class="hero-title">A frontier studio that runs on its own OS.</h1>
+            <p class="hero-subtitle">I build systems that bridge the gap between vision and execution.</p>
+            <p class="hero-subtitle">This site is a live operating system: watch it run, copy the patterns, or
+                commission the architecture.</p>
             <div class="hero-actions">
-                <a href="#canon" class="btn-primary">Read the thinking</a>
-                <a href="tags/systems.html" class="btn-secondary">View systems</a>
+                <a href="studio-thesis.html" class="btn-primary">Read the Thesis</a>
+                <a href="studio-snapshot.html" class="btn-secondary">View Studio Snapshot</a>
             </div>
 
             <div class="hero-manifesto"
-                style="margin-top: 2.5rem; text-align: left; max-width: 38rem; margin-inline: auto; opacity: 0.9;">
-                <p style="margin-bottom: 0.75rem;">I operate as a founder and executive — not a vendor.</p>
-                <p style="margin-bottom: 0.75rem;">My work lives between vision and execution: where ideas either become
-                    systems or collapse under their own weight.</p>
-                <p>I focus on alignment — how something feels, how it functions, and how it scales.</p>
+                style="margin-top: 2.5rem; text-align: left; max-width: 40rem; margin-inline: auto; opacity: 0.9;">
+                <p style="margin-bottom: 0.75rem;"><strong>Does This Feel Right?</strong> is a studio-of-one.</p>
+                <p>It exists to demonstrate a different way of building: identifying "Studio Patterns" that align
+                    design, technology, and execution, then exporting them for others to use.</p>
             </div>
         </div>
     </section>
 
-    <!-- Canon Section -->
+    <!-- Studio Options (Watch, Copy, Commission) -->
+    <section class="studio-options-section" style="margin-bottom: 4rem;">
+        <div class="grid-3-col"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+            <!-- Option 1: Watch -->
+            <div class="studio-card">
+                <h3>Watch</h3>
+                <p>Follow the evolution of a live Frontier Studio. See the changelog, the decisions, and the mistakes.
+                </p>
+                <a href="#essays" class="text-link">Read the logs →</a>
+            </div>
+
+            <!-- Option 2: Copy -->
+            <div class="studio-card">
+                <h3>Copy</h3>
+                <p>Steal named patterns, agent configurations, and workflows. Built to be forked.</p>
+                <a href="tags/pattern.html" class="text-link">Browse patterns →</a>
+            </div>
+
+            <!-- Option 3: Advisory -->
+            <div class="studio-card">
+                <h3>Advisory</h3>
+                <p>For select founders: equity-aligned advisory guidance to help you design and run your own Agentic OS.
+                </p>
+                <div class="link-group" style="display: flex; gap: 1rem; align-items: baseline;">
+                    <a href="about.html" class="text-link">Work with me →</a>
+                    <a href="is-this-for-you.html" class="text-link" style="font-size: 0.9rem; opacity: 0.8;">Is this
+                        for you?</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Canon Section (Retained but lighter) -->
     <section class="start-here-section" id="canon">
         <div class="section-header">
-            <h2 class="section-label">The Canon</h2>
-            <p class="section-desc">Foundational essays that define the doctrine.</p>
+            <h2 class="section-label">Studio Patterns & Canon</h2>
+            <p class="section-desc">Foundational patterns and thinking that define the Doctrine.</p>
         </div>
         <div class="starter-grid">
             {{ starter_set }}
@@ -39,21 +73,8 @@
         <!-- Main Feed -->
         <main class="main-feed" id="essays">
 
-            <!-- Current Investigation -->
-            <div class="investigation-block">
-                <h3>Current Investigation</h3>
-                <ul class="investigation-list">
-                    <li><span class="inv-bullet">•</span> <strong>AI as Infrastructure</strong> — Beyond the chat box.
-                    </li>
-                    <li><span class="inv-bullet">•</span> <strong>Public Selfhood</strong> — The cost of being seen.
-                    </li>
-                    <li><span class="inv-bullet">•</span> <strong>Studio OS</strong> — Designing the perfect creative
-                        environment.</li>
-                </ul>
-            </div>
-
             <div class="feed-header">
-                <h2>Recent Work</h2>
+                <h2>Studio Logs & Essays</h2>
                 <a href="archive.html" class="view-all-link">View Archive →</a>
             </div>
 
@@ -67,18 +88,27 @@
         <!-- Sidebar -->
         <aside class="blog-sidebar">
 
+            <!-- Snapshot Widget -->
+            <div class="sidebar-widget snapshot-widget">
+                <h3>Studio Status</h3>
+                <p><strong>Focus:</strong> Closing the Loop</p>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Active Agents: 3<br>
+                    Shipping: Weekly
+                </div>
+                <a href="studio-snapshot.html" class="text-link" style="margin-top: 0.75rem; display: block;">Full
+                    Snapshot →</a>
+            </div>
+
             <!-- Pillars Widget -->
             <div class="sidebar-widget collections-widget">
-                <h3>Pillars</h3>
+                <h3>Systems</h3>
                 <ul class="collection-list">
-                    <li><a href="tags/identity.html" class="collection-link"><span class="name">Being Seen</span></a>
-                    </li>
-                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems &
-                                Power</span></a></li>
-                    <li><a href="tags/building.html" class="collection-link"><span class="name">Making Things in
+                    <li><a href="tags/pattern.html" class="collection-link"><span class="name">Patterns</span></a></li>
+                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems
+                                Architecture</span></a></li>
+                    <li><a href="tags/building.html" class="collection-link"><span class="name">Building in
                                 Public</span></a></li>
-                    <li><a href="tags/philosophy.html" class="collection-link"><span class="name">Meaning &
-                                Resistance</span></a></li>
                 </ul>
             </div>
 

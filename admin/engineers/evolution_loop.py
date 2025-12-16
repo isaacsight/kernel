@@ -1,83 +1,153 @@
-#!/usr/bin/env python3
-"""
-The Evolution Loop: A self-improvement cycle for the Studio OS.
-
-Process:
-1. Visionary: Analyzes data and "dreams" of a mission (Goal).
-2. Collective Intelligence: Registers the goal.
-3. Architect: Creates a technical blueprint to achieve the goal.
-4. Operator: (Future) Executes the blueprint.
-"""
-
-import sys
-import os
-import json
+import time
 import logging
-from datetime import datetime
+import random
+import json
+import os
+from admin.engineers.strategist import get_strategist
+from admin.engineers.trend_scout import TrendScout
+from admin.engineers.content_repurposer import get_content_repurposer
+from admin.engineers.tiktok_workflow import get_tiktok_workflow
+from admin.engineers.publisher import get_publisher
 
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from admin.engineers.visionary import Visionary
-from admin.engineers.architect import Architect
-from admin.brain.collective_intelligence import get_collective_intelligence
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - [%(name)s] - %(message)s',
-    datefmt='%H:%M:%S'
-)
-logger = logging.getLogger("EvolutionLoop")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-def run_evolution_cycle():
-    print("🧬 STARTING EVOLUTION CYCLE")
-    print("=" * 60)
-    
-    # 1. The Visionary Dreams
-    print("\n👁️  Step 1: The Visionary is analyzing system data...")
-    visionary = Visionary()
-    mission = visionary.dream()
-    
-    if not mission:
-        print("   No clear mission identified. System is stable.")
-        return
+STATE_FILE = os.path.join(os.path.dirname(__file__), "../brain/evolution_state.json")
 
-    print(f"   ✨ Proposed Mission: {mission}")
-    
-    # 2. Collective Intelligence Registers Goal
-    print("\n🧠 Step 2: Registering goal with Collective Intelligence...")
-    ci = get_collective_intelligence()
-    goal_entry = ci.set_goal(mission, ["Architect", "Operator"], priority="high")
-    print(f"   ✅ Goal ID: {goal_entry['id']}")
-    
-    # 3. The Architect Plans
-    print("\n📐 Step 3: The Architect is drafting a blueprint...")
-    architect = Architect()
-    
-    # Check if we have Node connection for complex planning
-    if not architect.node_url:
-        print("   ⚠️  Studio Node not connected. Cannot generate complex blueprint.")
-        print("   (To enable: set STUDIO_NODE_URL environment variable)")
-        return
+def save_state(state):
+    """Saves the current evolution state to a JSON file."""
+    try:
+        with open(STATE_FILE, "w") as f:
+            json.dump(state, f, indent=2)
+    except Exception as e:
+        logging.error(f"Failed to save state: {e}")
 
-    blueprint = architect.create_blueprint(mission)
+def run_evolution_loop():
+    print("Starting Evolution Loop...")
     
-    if "error" in blueprint:
-        print(f"   ❌ Blueprint generation failed: {blueprint['error']}")
-    else:
-        print("\n   📄 BLUEPRINT GENERATED:")
-        print(f"   Summary: {blueprint.get('plan_summary')}")
-        print("   Proposed Changes:")
-        for change in blueprint.get("changes", []):
-            print(f"   • {change['action'].upper()} {change['file']}")
+    # Initialize the Strategist
+    strategist = get_strategist()
+    
+    # Initialize Engineers
+    trend_scout = TrendScout()
+    repurposer = get_content_repurposer()
+    publisher = get_publisher()
+    
+    # Example state data (Mocking the genetic data for now)
+    current_state = {
+        "cycle": 1,
+        "status": "active",
+        "last_log": "System initialized.",
+        "data": ["gene_1", "gene_2"],
+        "metrics": {
+            "fitness": 0.8,
+            "complexity": 0.5
+        }
+    }
+    
+    save_state(current_state)
+
+    try:
+        while True:
+            print(f"\n--- Cycle {current_state['cycle']} ---")
             
-        # In a fully autonomous mode, we might execute this.
-        # For now, we stop at the proposal stage for safety.
-        print("\n   🔒 Execution paused (Safety Mode). Review blueprint before applying.")
+            # --- CONSULT STRATEGIST ---
+            current_state["status"] = "thinking"
+            current_state["last_log"] = "Consulting Strategist..."
+            save_state(current_state)
+            
+            # We send the current state to the Strategist to decide the next step or mutation
+            response = strategist.process_evolution(current_state)
+            
+            # (Test mock removed)
+            
+            # Handle the response
+            if "error" not in response:
+                print(f"Strategist Instruction: {response}")
+                
+                # Execute the instruction
+                if response.get("next_action") == "mutate":
+                    current_state["status"] = "working"
+                    current_state["last_log"] = "Received 'Mutation'. Engaging Engineers..."
+                    save_state(current_state)
+                    
+                    print(">> EXECUTION: Received 'Mutation' Command. Engaging Engineers...")
+                    
+                    # 1. Scout for Trends
+                    print("   [1/3] Scouting for Trends...")
+                    trends = trend_scout.get_current_trends("tech")
+                    if trends:
+                        selected_trend = random.choice(trends)
+                        print(f"   ✓ Selected Trend: {selected_trend['topic']} ({selected_trend['context']})")
+                        current_state["last_log"] = f"Scouted Trend: {selected_trend['topic']}"
+                        save_state(current_state)
+                        
+                        # 2. Generate Concept (Mocking a creative director process)
+                        concept = {
+                            "title": f"Why {selected_trend['topic']} Matters",
+                            "content": f"We are seeing a huge shift in {selected_trend['topic']}. {selected_trend['context']}. It's time to pay attention because...",
+                            "tags": ["tech", "trends", "future"]
+                        }
+                        
+                        # 3. Generate Video (Real Production)
+                        print(f"   [2/3] Producing Video for '{concept['title']}'...")
+                        current_state["last_log"] = f"Producing Video: {concept['title']}..."
+                        save_state(current_state)
 
-    print("\n" + "=" * 60)
-    print("✅ Evolution Cycle Complete")
+                        # Use the full workflow
+                        workflow = get_tiktok_workflow(template="educational") 
+                        video_result = workflow.execute(concept)
+                        
+                        if video_result.get("success"):
+                            video_path = video_result.get('video_path')
+                            print("   [3/3] Video Produced Successfully!")
+                            print(f"   path: {video_path}")
+                            
+                            current_state["last_log"] = f"Video Ready. Publishing..."
+                            save_state(current_state)
+                            
+                            # 4. Publish (Distribution)
+                            print(f"   [4/4] Publishing to Platforms...")
+                            pub_result = publisher.publish(video_path)
+                            
+                            if pub_result.get("success"):
+                                print(f"   ✓ Published and Archived!")
+                                current_state["last_log"] = f"Published: {concept['title']}"
+                            else:
+                                print(f"   ⚠ Publishing Issues: {pub_result.get('results')}")
+                                current_state["last_log"] = "Publishing Partial Fail."
+                                
+                            save_state(current_state)
+                        else:
+                            print(f"   [3/3] Video Generation Failed: {video_result.get('error')}")
+                            current_state["last_log"] = "Video Generation Failed."
+                            save_state(current_state)
+                        
+                    else:
+                        print("   ⚠ Mos trends found.")
+                    
+                # Update state for next cycle
+                current_state["cycle"] += 1
+                current_state["status"] = "idle"
+                # Simulate changing metrics
+                current_state["metrics"]["fitness"] = round(random.uniform(0.1, 0.9), 2)
+                current_state["metrics"]["complexity"] = round(random.uniform(0.1, 0.9), 2)
+                
+                current_state["last_log"] = f"Cycle complete. New Fitness: {current_state['metrics']['fitness']}"
+                save_state(current_state)
+                
+            else:
+                print(f"Skipping cycle due to operator error: {response.get('message')}")
+                current_state["last_log"] = f"Error: {response.get('message')}"
+                save_state(current_state)
+
+
+            # Wait before next cycle based on complexity
+            time.sleep(5) 
+            
+    except KeyboardInterrupt:
+        print("\nEvolution Loop stopped.")
 
 if __name__ == "__main__":
-    run_evolution_cycle()
+    run_evolution_loop()

@@ -10,7 +10,12 @@
                 "#future"
             ],
             "video_duration_max": 60,
-            "upload_method": "browser_cookies"
+            "upload_method": "browser_cookies",
+            "client_key": "aw52zqe6aqeyfvwi",
+            "client_secret": "0bAn9GkJtFXeVzy6EtSqorjfSmkMUyjB",
+            "access_token": null,
+            "refresh_token": null,
+            "token_scopes": null
         },
         "instagram": {
             "enabled": true,

@@ -611,7 +611,7 @@ class Broadcaster:
                 description=full_description,
                 cookies=self.cookies_path,
                 browser='chrome',
-                headless=False 
+                headless=True 
             )
             if os.path.exists(video_path):
                 try:

@@ -14,7 +14,7 @@ class Config:
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-1.5-flash" # Stable, High Rate Limits (15 RPM / 1M TPM)
+    GEMINI_MODEL = "gemini-1.5-flash-001" # Stable, High Rate Limits (15 RPM / 1M TPM)
     # GEMINI_MODEL = "gemini-2.0-flash-exp" # Experimental, Low Limits
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -33,7 +33,13 @@ class Config:
     TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
     TWITTER_BEARER_TOKEN = os.environ.get("TWITTER_BEARER_TOKEN")
     TWITTER_ACCESS_TOKEN = os.environ.get("TWITTER_ACCESS_TOKEN")
+    TWITTER_ACCESS_TOKEN = os.environ.get("TWITTER_ACCESS_TOKEN")
     TWITTER_ACCESS_TOKEN_SECRET = os.environ.get("TWITTER_ACCESS_TOKEN_SECRET")
+    
+    # TikTok Config
+    TIKTOK_CLIENT_KEY = os.environ.get("TIKTOK_CLIENT_KEY")
+    TIKTOK_CLIENT_SECRET = os.environ.get("TIKTOK_CLIENT_SECRET")
+
     
     # Remote Node
     STUDIO_NODE_URL = os.environ.get("STUDIO_NODE_URL") or "http://100.98.193.42:52415"

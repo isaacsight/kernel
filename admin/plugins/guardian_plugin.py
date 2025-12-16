@@ -24,3 +24,24 @@ class GuardianPlugin(Plugin):
                 # raise Exception(msg) 
             else:
                 logger.warning(msg)
+
+    def on_post_build(self, output_dir):
+        """
+        Audits build artifacts (e.g. feed.xml).
+        """
+        import os
+        
+        # Audit RSS Feed
+        feed_path = os.path.join(output_dir, 'feed.xml')
+        if os.path.exists(feed_path):
+            with open(feed_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            issues = self.guardian.audit_xml(content)
+            for issue in issues:
+                msg = f"Guardian Validation Failed for feed.xml: {issue['message']}"
+                logger.error(msg)
+                # Fail the build if XML is invalid
+                raise Exception(msg)
+        else:
+             logger.warning("Guardian could not find feed.xml to validate.")

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 import os
 import sys
+import json
 
 # Add project root to path to allow importing admin.core
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
@@ -239,6 +240,21 @@ async def trigger_evolution(background_tasks: BackgroundTasks):
         return {"message": "Evolution Cycle Complete", "report": report}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/system/evolution/state")
+async def get_evolution_state():
+    """
+    Returns the live state of the evolution loop.
+    """
+    state_file = os.path.join(os.path.dirname(__file__), "../brain/evolution_state.json")
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, "r") as f:
+                return json.load(f)
+        except Exception:
+            return {"status": "error", "message": "Failed to read state file"}
+    else:
+        return {"status": "offline", "message": "Evolution loop not running"}
 
 
 # ==================== Client Portal Chat ====================

@@ -3074,3 +3074,211 @@ body:has(.ceo-layout) .site-footer {
         margin-bottom: 60px;
     }
 }
+
+/* Reasoning Widget */
+.reasoning-widget {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+    font-size: var(--text-xs);
+}
+
+.rw-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px dashed var(--border-subtle);
+}
+
+.rw-label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    font-size: 0.65rem;
+}
+
+.rw-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.status-green {
+    color: #2ecc71;
+    background: #2ecc71;
+}
+
+.status-yellow {
+    color: #f1c40f;
+    background: #f1c40f;
+}
+
+.status-red {
+    color: #e74c3c;
+    background: #e74c3c;
+}
+
+.rw-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.rw-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rw-key {
+    color: var(--text-tertiary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rw-val {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    line-height: 1.4;
+    font-size: 0.75rem;
+}
+
+/* Intelligence Card (Patterns) */
+.intelligence-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    margin: var(--space-6) 0;
+}
+
+.intel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px dashed var(--border-subtle);
+}
+
+.intel-label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+}
+
+.intel-status-pill {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+    color: #000;
+}
+
+.intel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.intel-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.intel-key {
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.intel-val {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.intel-val.highlight {
+    color: var(--accent-primary);
+}
+
+@media (max-width: 600px) {
+    .intel-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+}
+
+/* Decision Log */
+.decision-feed h2 {
+    font-size: 1.1rem;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px dashed var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.decision-feed ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.decision-feed li {
+    margin-bottom: var(--space-2);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.decision-feed strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.status-pill {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+    color: #000;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.status-pill.status-green {
+    background: #2ecc71;
+    color: #000;
+}
+
+.status-pill.status-yellow {
+    background: #f1c40f;
+    color: #000;
+}
+
+.status-pill.status-red {
+    background: #e74c3c;
+    color: #fff;
+}

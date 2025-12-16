@@ -26,6 +26,104 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/studio.html</loc>
+            <lastmod>2025-12-16</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/2025-12-15-content-factory-blueprint.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/decision-log.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/changelog.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/studio-snapshot.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/is-this-for-you.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/retired-patterns.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/research-roadmap.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/studio-thesis.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/recommendation-engine.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/alignment-lens.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/frontier-agents-os.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/frontier-team-v1.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/the-architect.html</loc>
+            <lastmod>2025-12-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-polymath-graph.html</loc>
             <lastmod>2025-12-13</lastmod>
             <changefreq>monthly</changefreq>
@@ -55,6 +153,13 @@
         
         <url>
             <loc>https://www.doesthisfeelright.com/posts/2025-12-13-engineering-log-system-memory.html</loc>
+            <lastmod>2025-12-13</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/about_legacy.html</loc>
             <lastmod>2025-12-13</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
@@ -202,13 +307,6 @@
         
         <url>
             <loc>https://www.doesthisfeelright.com/posts/2025-12-07-engineering-log-hermes-and-studio.html</loc>
-            <lastmod>2025-12-07</lastmod>
-            <changefreq>monthly</changefreq>
-            <priority>0.9</priority>
-        </url>
-        
-        <url>
-            <loc>https://www.doesthisfeelright.com/posts/research-roadmap.html</loc>
             <lastmod>2025-12-07</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
@@ -1176,6 +1274,13 @@
         <url>
             <loc>https://www.doesthisfeelright.com/posts/viral-content-secrets.html</loc>
             <lastmod>2024-12-04</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
+            <loc>https://www.doesthisfeelright.com/posts/legacy-automation.html</loc>
+            <lastmod>2024-01-15</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
         </url>

@@ -59,6 +59,14 @@ const MissionControl = ({ heartbeat, agents }) => {
                 subtext="Session: 2h 14m"
                 status="neutral"
             />
+
+            <StatCard
+                icon={Zap}
+                label="Evolution Cycle"
+                value={evolution?.status === 'active' || evolution?.status === 'thinking' || evolution?.status === 'working' ? `CYCLE ${evolution.cycle}` : "OFFLINE"}
+                subtext={evolution?.last_log || "Waiting..."}
+                status={evolution?.status === 'working' ? "active" : evolution?.status === 'thinking' ? "warning" : "neutral"}
+            />
         </section>
     );
 };

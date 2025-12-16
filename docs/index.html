@@ -71,10 +71,33 @@
                 </div> <!-- Navigation Items -->
                 <nav class="sidebar-nav-items">
 
-                    <a href="index.html" class="sidebar-item" data-tooltip="Essays">
+                    <a href="index.html" class="sidebar-item" data-tooltip="Studio">
                         <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </div>
+                        <span class="label">Studio</span>
+                    </a>
+
+                    <a href="studio-snapshot.html" class="sidebar-item" data-tooltip="Snapshot">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <span class="label">Snapshot</span>
+                    </a>
+
+                    <a href="decision-log.html" class="sidebar-item" data-tooltip="Decisions">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                                 <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -82,19 +105,41 @@
                                 <polyline points="10 9 9 9 8 9"></polyline>
                             </svg>
                         </div>
-                        <span class="label">Essays</span>
+                        <span class="label">Log</span>
                     </a>
 
-                    <a href="collections.html" class="sidebar-item" data-tooltip="Topics">
+                    <a href="research-roadmap.html" class="sidebar-item" data-tooltip="Research">
                         <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                            </svg>
+                        </div>
+                        <span class="label">Research</span>
+                    </a>
+
+                    <a href="tags/pattern.html" class="sidebar-item" data-tooltip="Patterns">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                                 <path d="M2 17l10 5 10-5"></path>
                                 <path d="M2 12l10 5 10-5"></path>
                             </svg>
                         </div>
-                        <span class="label">Topics</span>
+                        <span class="label">Patterns</span>
+                    </a>
+
+                    <a href="recommendation-engine.html" class="sidebar-item" data-tooltip="Find">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <span class="label">Find</span>
                     </a>
 
                     <a href="about.html" class="sidebar-item" data-tooltip="About">
@@ -126,8 +171,28 @@
                 <div class="sidebar-spacer"></div>
 
                 <div class="sidebar-bottom">
-
-
+                    
+    <div class="reasoning-widget">
+        <div class="rw-header">
+            <span class="rw-label">Studio Reasoning Engine</span>
+            <span class="rw-status status-"green" # green, yellow, red" data-tooltip="Shipping consistently, no major blockers."></span>
+        </div>
+        <div class="rw-content">
+            <div class="rw-item">
+                <span class="rw-key">Focus</span>
+                <span class="rw-val">Closing the loop between Research and Publishing</span>
+            </div>
+            <div class="rw-item">
+                <span class="rw-key">Hypothesis</span>
+                <span class="rw-val">If I remove the manual copy-paste friction, shipping cadence will double.</span>
+            </div>
+            <div class="rw-item">
+                <span class="rw-key">Last Decision</span>
+                <span class="rw-val">Retired n8n for simple cron jobs; pure Python is more observable.</span>
+            </div>
+        </div>
+    </div>
+    
                 </div>
             </div>
 
@@ -180,99 +245,489 @@
         </header>
 
         <main id="main-content">
+            <!-- Studio Layout -->
+<h1 class="sr-only">Does This Feel Right?</h1>
+<div class="magazine-layout">
+
+    <!-- Hero Section (Studio OS Framing) -->
+    <section class="hero-section center-aligned">
+        <div class="hero-content">
+            <h1 class="hero-title">A frontier studio that runs on its own OS.</h1>
+            <p class="hero-subtitle">I build systems that bridge the gap between vision and execution.</p>
+            <p class="hero-subtitle">This site is a live operating system: watch it run, copy the patterns, or
+                commission the architecture.</p>
+            <div class="hero-actions">
+                <a href="studio-thesis.html" class="btn-primary">Read the Thesis</a>
+                <a href="studio-snapshot.html" class="btn-secondary">View Studio Snapshot</a>
+            </div>
+
+            <div class="hero-manifesto"
+                style="margin-top: 2.5rem; text-align: left; max-width: 40rem; margin-inline: auto; opacity: 0.9;">
+                <p style="margin-bottom: 0.75rem;"><strong>Does This Feel Right?</strong> is a studio-of-one.</p>
+                <p>It exists to demonstrate a different way of building: identifying "Studio Patterns" that align
+                    design, technology, and execution, then exporting them for others to use.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Studio Options (Watch, Copy, Commission) -->
+    <section class="studio-options-section" style="margin-bottom: 4rem;">
+        <div class="grid-3-col"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+            <!-- Option 1: Watch -->
+            <div class="studio-card">
+                <h3>Watch</h3>
+                <p>Follow the evolution of a live Frontier Studio. See the changelog, the decisions, and the mistakes.
+                </p>
+                <a href="#essays" class="text-link">Read the logs →</a>
+            </div>
+
+            <!-- Option 2: Copy -->
+            <div class="studio-card">
+                <h3>Copy</h3>
+                <p>Steal named patterns, agent configurations, and workflows. Built to be forked.</p>
+                <a href="tags/pattern.html" class="text-link">Browse patterns →</a>
+            </div>
+
+            <!-- Option 3: Advisory -->
+            <div class="studio-card">
+                <h3>Advisory</h3>
+                <p>For select founders: equity-aligned advisory guidance to help you design and run your own Agentic OS.
+                </p>
+                <div class="link-group" style="display: flex; gap: 1rem; align-items: baseline;">
+                    <a href="about.html" class="text-link">Work with me →</a>
+                    <a href="is-this-for-you.html" class="text-link" style="font-size: 0.9rem; opacity: 0.8;">Is this
+                        for you?</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Canon Section (Retained but lighter) -->
+    <section class="start-here-section" id="canon">
+        <div class="section-header">
+            <h2 class="section-label">Studio Patterns & Canon</h2>
+            <p class="section-desc">Foundational patterns and thinking that define the Doctrine.</p>
+        </div>
+        <div class="starter-grid">
             
-    <div class="ceo-layout">
+        <a class="card" href="patterns/alignment-lens.html">
+            <div class="card__meta">
+                <span class="badge">Essay</span>
+                <span class="badge badge--muted">Philosophy</span>
+            </div>
+            <div class="card__title">The Alignment Lens</div>
+            <div class="card__desc">A diagnostic tool to ensure your AI systems feel right.</div>
+        </a>
         
-    <section class="ceo-hero">
-        <h1 class="ceo-headline">This is where systems are decided.</h1>
-        <div class="ceo-subhead">
-            <p>Founder working at the intersection of design, technology, and execution.</p>
-            <p>I build and direct systems that need clarity before they scale.</p>
-        </div>
-        <div class="ceo-actions">
-            <a href="#thinking" class="btn-primary">→ Read the thinking</a>
-            <a href="#systems" class="btn-secondary">→ View systems</a>
-        </div>
-    </section>
-    
+        <a class="card" href="patterns/frontier-agents-os.html">
+            <div class="card__meta">
+                <span class="badge">Essay</span>
+                <span class="badge badge--muted">Systems</span>
+            </div>
+            <div class="card__title">Frontier Agents, Meet Your OS</div>
+            <div class="card__desc">Why your autonomous agents need an operating system to survive.</div>
+        </a>
         
-    <section class="ceo-section ceo-positioning">
-        <p class="ceo-lead">I operate as a founder and executive — not a vendor.</p>
-        <p>My work lives between vision and execution: where ideas either become systems or collapse under their own weight.</p>
-        <p>I focus on alignment — how something feels, how it functions, and how it scales.</p>
-    </section>
-    
+        <a class="card" href="patterns/frontier-team-v1.html">
+            <div class="card__meta">
+                <span class="badge">Essay</span>
+                <span class="badge badge--muted">Systems</span>
+            </div>
+            <div class="card__title">Frontier Team v1</div>
+            <div class="card__desc">A pattern for organizing human and AI agents into distinct roles.</div>
+        </a>
         
-    <section class="ceo-section">
-        <h2 class="ceo-label">WHAT I DO</h2>
-        <p class="ceo-statement">I don’t sell services. I make decisions.</p>
-        <p>I spend my time on:</p>
-        <ul class="ceo-list">
-            <li>Defining direction before execution begins</li>
-            <li>Designing and architecting systems (digital, technical, organizational)</li>
-            <li>Preventing costly misalignment between design and engineering</li>
-            <li>Turning ambiguous ideas into clear, buildable realities</li>
-            <li>Knowing when not to build</li>
-        </ul>
-        <p class="ceo-emphasis">This is where leverage comes from.</p>
-    </section>
-    
+        <a class="card" href="posts/the-invisible-architect.html">
+            <div class="card__meta">
+                <span class="badge">essay</span>
+                <span class="badge badge--muted">Systems Power</span>
+            </div>
+            <div class="card__title">The Invisible Architect</div>
+            <div class="card__desc">We are no longer just citizens; we are subjects in a global behavioral experiment. How the soft science of nudging became the hard infrastructure of our lives.</div>
+        </a>
         
-    <section id="systems" class="ceo-section">
-        <h2 class="ceo-label">SYSTEMS</h2>
-        <p class="ceo-statement">Selected Systems & Initiatives</p>
-        <p>Each system represents a problem worth solving — not a finished artifact.</p>
-        <ul class="ceo-list">
-            <li><a href="systems/director.html">The Director</a>: Autonomous digital organization</li>
-            <li><a href="about.html">The Studio</a>: Creative-technical vehicle</li>
-            <li><a href="systems/graph.html">The Graph</a>: Knowledge architecture (Case Study)</li>
-        </ul>
-        <p>Systems are never “done.”<br>They either evolve — or fail quietly.</p>
-    </section>
-    
+        <a class="card" href="posts/to-be-witnessed.html">
+            <div class="card__meta">
+                <span class="badge">essay</span>
+                <span class="badge badge--muted">Being Seen</span>
+            </div>
+            <div class="card__title">To Be Witnessed</div>
+            <div class="card__desc">We are obsessed with being watched, but we are starving to be witnessed. The difference is the difference between a performance and a life.</div>
+        </a>
         
-    <section id="thinking" class="ceo-section">
-        <h2 class="ceo-label">THINKING</h2>
-        <p class="ceo-statement">Notes on Direction</p>
-        <p>This is where you earn authority.</p>
-        <p>Topics might include:</p>
-        <ul class="ceo-list">
-            <li><a href="notes/why-products-feel-wrong.html">Why most products feel wrong</a></li>
-            <li><a href="notes/cost-of-unclear-execution.html">The cost of unclear execution</a></li>
-            <li><a href="notes/design-without-engineering.html">Design without engineering is fiction</a></li>
-            <li><a href="notes/speed-without-alignment.html">Speed without alignment is waste</a></li>
-            <li><a href="notes/taste-as-executive-skill.html">Taste as an executive skill</a></li>
-        </ul>
-        <p>These are not blog posts.<br>They are signals.</p>
-    </section>
-    
+        <a class="card" href="patterns/legacy-automation.html">
+            <div class="card__meta">
+                <span class="badge">Essay</span>
+                <span class="badge badge--muted"></span>
+            </div>
+            <div class="card__title">Legacy Automation</div>
+            <div class="card__desc">Why we stopped using fragile n8n webhooks for core logic.</div>
+        </a>
         
-    <section class="ceo-section">
-        <h2 class="ceo-label">HOW I WORK</h2>
-        <p class="ceo-lead">I work selectively.</p>
-        <p>I partner with founders, teams, and organizations who value clarity, taste, and long-term thinking.</p>
-        <p>Engagements are advisory, strategic, or build-directional — not transactional.</p>
-    </section>
-    
-        
-    <section class="ceo-section ceo-contact">
-        <h2 class="ceo-label">CONTACT / ACCESS</h2>
-        <p class="ceo-lead">Inquiries</p>
-        <p>If you believe alignment matters before scale,<br>reach out with context — not a brief.</p>
-        <div class="ceo-actions">
-            <a href="mailto:isaacsight@gmail.com" class="btn-primary">→ Inquire</a>
         </div>
     </section>
-    
+
+    <div class="content-wrapper">
+        <!-- Main Feed -->
+        <main class="main-feed" id="essays">
+
+            <div class="feed-header">
+                <h2>Studio Logs & Essays</h2>
+                <a href="archive.html" class="view-all-link">View Archive →</a>
+            </div>
+
+            <!-- {{ filters }} removed for clarity -->
+
+            <div class="posts-container">
+                
+        <a href="posts/studio.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-16</span>
+                </div>
+                <h3 class="post-title">Studio OS Reference</h3>
+                <p class="post-excerpt">A live look at the intelligent system powering this studio.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
         
-    <section class="ceo-footer-content">
-        <p class="ceo-footer-title">Founder</p>
-        <p>Design · Technology · Systems</p>
-        <p class="ceo-copyright">© does this feel right</p>
-    </section>
-    
+        <a href="posts/2025-12-15-content-factory-blueprint.html" class="post-card category-engineering">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Engineering</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">The Content Factory Blueprint: From Creator to Business Owner</h3>
+                <p class="post-excerpt">A breakdown of Alex Hormozi's 9-step business blueprint, applied to building an autonomous content engineering system.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="decision-log.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Decision Log</h3>
+                <p class="post-excerpt">A record of the architectural and strategic decisions made by the Studio OS.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="changelog.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Studio Changelog</h3>
+                <p class="post-excerpt">A record of what the Studio OS has learned.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="studio-snapshot.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Studio Snapshot</h3>
+                <p class="post-excerpt">A live view of the studio's focus, active systems, and metrics.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="is-this-for-you.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Is This For You?</h3>
+                <p class="post-excerpt">Who the Studio OS is designed to serve.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="retired-patterns.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Retired Patterns</h3>
+                <p class="post-excerpt">Patterns that have been deprecated or replaced.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="research-roadmap.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Research Roadmap</h3>
+                <p class="post-excerpt">The active questions driving the evolution of the Studio OS.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="studio-thesis.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Studio Thesis</h3>
+                <p class="post-excerpt">Does This Feel Right? is the reference implementation for an Agentic OS.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="recommendation-engine.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Pattern Recommendation Engine</h3>
+                <p class="post-excerpt">Find the right Studio Pattern for your team.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="patterns/alignment-lens.html" class="post-card category-pattern">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Pattern</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">The Alignment Lens</h3>
+                <p class="post-excerpt">A diagnostic tool to ensure your AI systems feel right.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="patterns/frontier-agents-os.html" class="post-card category-pattern">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Pattern</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Frontier Agents, Meet Your OS</h3>
+                <p class="post-excerpt">Why your autonomous agents need an operating system to survive.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="patterns/frontier-team-v1.html" class="post-card category-pattern">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Pattern</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Frontier Team v1</h3>
+                <p class="post-excerpt">A pattern for organizing human and AI agents into distinct roles.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="modules/the-architect.html" class="post-card category-module">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Module</span>
+                     <span class="post-date">2025-12-15</span>
+                </div>
+                <h3 class="post-title">Module: The Architect</h3>
+                <p class="post-excerpt">A rentable role for your Frontier Team.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="posts/2025-12-13-engineering-log-polymath-graph.html" class="post-card category-engineering">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Engineering</span>
+                     <span class="post-date">2025-12-13</span>
+                </div>
+                <h3 class="post-title">Engineering Log: The Polymath & The Graph</h3>
+                <p class="post-excerpt">We verified the new Universal Polymath research system, fixed critical build pipeline issues, and stabilized the knowledge graph with a new D3 physics engine.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="advisory.html" class="post-card category-private">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-signal">Signal</span>
+                     <span class="post-category-label">Private</span>
+                     <span class="post-date">2025-12-13</span>
+                </div>
+                <h3 class="post-title">Advisory Access</h3>
+                <p class="post-excerpt">High-leverage direction for founders who need to move faster.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="posts/2025-12-13-the-death-of-coding.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-13</span>
+                </div>
+                <h3 class="post-title">The Death of Coding (And the Birth of the Architect)</h3>
+                <p class="post-excerpt"></p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="posts/decoding-tiktok-architecture.html" class="post-card category-general">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">General</span>
+                     <span class="post-date">2025-12-13</span>
+                </div>
+                <h3 class="post-title">Decoding TikTok: A Masterclass in System Design</h3>
+                <p class="post-excerpt"></p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="posts/2025-12-13-engineering-log-system-memory.html" class="post-card category-engineering">
+            <div class="post-card-content">
+                <div class="post-meta-top">
+                     <span class="mode-badge mode-essay">Essay</span>
+                     <span class="post-category-label">Engineering</span>
+                     <span class="post-date">2025-12-13</span>
+                </div>
+                <h3 class="post-title">Engineering Log: The System Remembers</h3>
+                <p class="post-excerpt">We cracked open the system's memory today. 17 vectorized documents on design philosophy and a growing collective knowledge base prove the Studio OS is beginning to learn.</p>
+                <div class="post-meta-bottom">
+                     <span class="read-time">5 min read</span>
+                     <span class="read-more">Read &rarr;</span>
+                </div>
+            </div>
+        </a>
+        
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+
+            <!-- Snapshot Widget -->
+            <div class="sidebar-widget snapshot-widget">
+                <h3>Studio Status</h3>
+                <p><strong>Focus:</strong> Closing the Loop</p>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Active Agents: 3<br>
+                    Shipping: Weekly
+                </div>
+                <a href="studio-snapshot.html" class="text-link" style="margin-top: 0.75rem; display: block;">Full
+                    Snapshot →</a>
+            </div>
+
+            <!-- Pillars Widget -->
+            <div class="sidebar-widget collections-widget">
+                <h3>Systems</h3>
+                <ul class="collection-list">
+                    <li><a href="tags/pattern.html" class="collection-link"><span class="name">Patterns</span></a></li>
+                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems
+                                Architecture</span></a></li>
+                    <li><a href="tags/building.html" class="collection-link"><span class="name">Building in
+                                Public</span></a></li>
+                </ul>
+            </div>
+
+            <!-- About Widget -->
+            <div class="sidebar-widget about-widget">
+                <h3>The Studio</h3>
+                <p>This work feeds into tools, studios, and consulting.</p>
+                <a href="about.html" class="text-link">Work with me →</a>
+            </div>
+
+        </aside>
     </div>
-    
+
+</div>
         </main>
     </div>
 
@@ -292,8 +747,29 @@
         <nav class="drawer-nav">
             <a href="index.html" class="drawer-link">
                 <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="icon-svg">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <span>Studio</span>
+            </a>
+            <a href="studio-snapshot.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <span>Snapshot</span>
+            </a>
+            <a href="decision-log.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -301,18 +777,38 @@
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                 </div>
-                <span>Essays</span>
+                <span>Log</span>
             </a>
-            <a href="collections.html" class="drawer-link">
+            <a href="research-roadmap.html" class="drawer-link">
                 <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="icon-svg">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                    </svg>
+                </div>
+                <span>Research</span>
+            </a>
+            <a href="tags/pattern.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                         <path d="M2 17l10 5 10-5"></path>
                         <path d="M2 12l10 5 10-5"></path>
                     </svg>
                 </div>
-                <span>Topics</span>
+                <span>Patterns</span>
+            </a>
+            <a href="recommendation-engine.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <span>Find</span>
             </a>
             <a href="about.html" class="drawer-link">
                 <div class="icon-container">

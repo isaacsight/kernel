@@ -91,6 +91,50 @@ async def client_websocket_endpoint(websocket: WebSocket):
         logger.error(f"Error in client websocket loop: {e}")
         await websocket.close()
 
+# TikTok Verification & Demo Routes
+@app.get("/tiktok_demo.html")
+async def tiktok_demo():
+    return FileResponse("static/tiktok_demo.html")
+
+@app.get("/terms")
+async def terms():
+    return FileResponse("static/terms.html")
+
+@app.get("/privacy")
+async def privacy():
+    return FileResponse("static/privacy.html")
+
+@app.get("/tiktokHbV7mqFxkaukcOO1ZN0JhqfuMu6zjo58.txt")
+async def verify1():
+    return FileResponse("static/tiktokHbV7mqFxkaukcOO1ZN0JhqfuMu6zjo58.txt")
+
+@app.get("/tiktokFQp5Br7vA7p6Rt7wamDT3mHX38rFmR9Z.txt")
+async def verify2():
+    return FileResponse("static/tiktokFQp5Br7vA7p6Rt7wamDT3mHX38rFmR9Z.txt")
+
+# Studio OS Status
+@app.get("/api/studio/status")
+async def studio_status():
+    """Returns the current state of the Evolution Loop (The Brain)."""
+    try:
+        # Path to the shared brain state
+        state_path = os.path.join("admin", "brain", "evolution_state.json")
+        
+        if os.path.exists(state_path):
+            with open(state_path, "r") as f:
+                return json.load(f)
+        
+        # If file doesn't exist, return a default "sleeping" state
+        return {
+            "cycle": 0,
+            "status": "sleeping", 
+            "last_log": "System is offline.",
+            "metrics": {"fitness": 0, "complexity": 0}
+        }
+    except Exception as e:
+        logger.error(f"Error reading studio status: {e}")
+        return {"status": "error", "message": str(e)}
+
 # SPA Catch-all (must be last)
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str):
@@ -116,6 +160,8 @@ class InquiryModel(BaseModel):
     contact: str
     message: str
     history: list = []
+
+
 
 @app.post("/api/inquiry")
 async def submit_inquiry(inquiry: InquiryModel):

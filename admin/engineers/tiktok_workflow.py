@@ -1,5 +1,5 @@
 """
-TikTok Workflow - n8n-Inspired Workflow Orchestrator
+TikTok Workflow - Workflow Orchestrator
 
 Orchestrates the full TikTok content creation pipeline with
 step tracking, replay capability, and workflow templates.
@@ -44,7 +44,7 @@ class WorkflowStep:
 
 class TikTokWorkflow:
     """
-    n8n-Style Workflow Orchestrator for TikTok Content
+    Workflow Orchestrator for TikTok Content
     
     Features:
     - Step-by-step execution with logging

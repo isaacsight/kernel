@@ -203,12 +203,23 @@
             <h1>Creator Studio</h1>
             <p class="subtitle">Manage your content and analytics across platforms.</p>
 
+            <div
+                style="margin-bottom: 20px; font-size: 0.9rem; color: #666; background: #f9f9f9; padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+                <strong>Requested Scopes:</strong>
+                <ul style="margin: 5px 0 0 20px; padding: 0;">
+                    <li><code>user.info.basic</code> (Get profile info)</li>
+                    <li><code>video.list</code> (Display existing videos)</li>
+                    <li><code>video.upload</code> (Post new content)</li>
+                </ul>
+            </div>
+            <br>
+
             <button class="btn btn-tiktok" onclick="startAuth()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
                 </svg>
-                Continue with TikTok
+                Log in with TikTok
             </button>
         </div>
 
@@ -231,10 +242,28 @@
                 <div class="stat-card">
                     <span class="stat-value">12.5K</span>
                     <span class="stat-label">Followers</span>
+                    <div style="margin-top: 5px; font-size: 0.7rem; color: #999;">(via user.info.basic)</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-value">142</span>
                     <span class="stat-label">Videos</span>
+                    <div style="margin-top: 5px; font-size: 0.7rem; color: #999;">(via video.list / Display API)</div>
+                </div>
+            </div>
+
+            <!-- Display API Section -->
+            <div style="text-align: left; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px;">Recent Videos (Display API)</h3>
+                <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                    <div
+                        style="min-width: 120px; height: 180px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        Video 1</div>
+                    <div
+                        style="min-width: 120px; height: 180px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        Video 2</div>
+                    <div
+                        style="min-width: 120px; height: 180px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        Video 3</div>
                 </div>
             </div>
 
@@ -255,7 +284,11 @@
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Caption</label>
                 <input type="text" placeholder="Check out my new video! #doesthisfeelright">
 
-                <button class="btn" onclick="uploadVideo()">Post to TikTok</button>
+                <button class="btn" onclick="uploadVideo()">Post to TikTok (Content Posting API)</button>
+                <div style="margin-top: 15px;">
+                    <button class="btn" style="background: #25F4EE; color: #000;" onclick="shareVideo()">Share to TikTok
+                        (Share Kit)</button>
+                </div>
             </div>
         </div>
 
@@ -276,23 +309,42 @@
             }
 
             function startAuth() {
+                // Configured Credentials
+                const clientKey = "aw52zqe6aqeyfvwi";
+                const redirectUri = "https://www.doesthisfeelright.com/auth/callback";
+                const scope = "user.info.basic,user.info.profile,user.info.stats,video.upload";
+
+                const authUrl = `https://www.tiktok.com/v2/auth/authorize?client_key=${clientKey}&scope=${scope}&response_type=code&redirect_uri=${redirectUri}`;
+
+                console.log("Initiating TikTok Auth:", authUrl);
+
                 // Simulate OAuth Popup
                 const width = 600;
                 const height = 700;
                 const left = (window.innerWidth - width) / 2;
                 const top = (window.innerHeight - height) / 2;
 
-                // Usually we'd open a real popup, but for demo video we can fake the delay
-                // Or better: open a blank window that closes itself to look like Auth
+                // For demo purposes, we open a simulated window that "redirects" back
                 const popup = window.open("", "TikTok Login", `width=${width},height=${height},top=${top},left=${left}`);
 
                 if (popup) {
-                    popup.document.write('<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;background:#000;color:white;"><h2>Connecting to TikTok...</h2><p>(Simulated OAuth Screen)</p></body></html>');
+                    popup.document.write(`
+                        <html>
+                            <body style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#000;color:white;text-align:center;">
+                                <div style="margin-bottom:20px;">
+                                    <svg width="60" height="60" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4ZM24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24C48 37.2548 37.2548 48 24 48Z" fill="white" fill-opacity="0.01"/><path d="M36.1912 11.2078C35.4326 13.9664 34.0934 16.4862 32.2618 18.6366C35.4057 18.8927 38.3813 20.0734 40.8986 21.9867V28.1824C38.0016 26.0827 34.5422 24.8986 30.9389 24.8986C30.6865 24.8986 30.4357 24.9067 30.1867 24.9221V36.3361C30.1867 41.6702 25.8622 46 20.5281 46C15.1939 46 10.8694 41.6702 10.8694 36.3361C10.8694 31.002 15.1939 26.6775 20.5281 26.6775C21.4394 26.6775 22.3168 26.8041 23.1497 27.0423V19.4678L23.1425 19.4674C23.1257 19.4667 23.1089 19.4664 23.0921 19.4664C23.0569 19.4664 23.0219 19.4671 22.9869 19.4687C22.2037 19.1417 21.3653 18.9622 20.4869 18.9622C15.8601 18.9622 12.0945 22.5645 11.8388 27.1264H5.97852V20.1553C8.42177 20.1553 10.7578 19.2016 12.5186 17.6534C14.2794 16.1052 15.313 14.072 15.4225 11.8654H21.6186V3.88672H27.5332C27.5332 7.78857 30.6974 10.9527 34.5993 10.9527C35.1378 10.9527 35.667 11.0396 36.1912 11.2078Z" fill="white"/></svg>
+                                </div>
+                                <h2>Connecting to TikTok...</h2>
+                                <p style="color:#888; margin-top:10px;">Auth Scopes: User Info, Video Upload</p>
+                                <p style="color:#444; font-size:12px; margin-top:20px;">${authUrl}</p>
+                            </body>
+                        </html>
+                    `);
 
                     setTimeout(() => {
                         popup.close();
                         loginSuccess();
-                    }, 2000);
+                    }, 2500);
                 } else {
                     // If popup blocked, just proceed
                     loginSuccess();
@@ -312,7 +364,7 @@
             }
 
             function uploadVideo() {
-                const btn = document.querySelector('#screen-dashboard .btn');
+                const btn = document.querySelector('#screen-dashboard .btn'); // Be careful, this selects the first button
                 const originalText = btn.textContent;
 
                 btn.textContent = "Uploading...";
@@ -323,6 +375,10 @@
                     btn.style.opacity = "1";
                     showScreen('screen-success');
                 }, 2000);
+            }
+
+            function shareVideo() {
+                alert("This would trigger the native Share UI on mobile or open the web share flow.");
             }
 
             function resetDemo() {

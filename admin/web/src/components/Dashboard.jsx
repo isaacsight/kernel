@@ -8,6 +8,7 @@ const Dashboard = () => {
     const [cmdResult, setCmdResult] = useState(null);
     const [loading, setLoading] = useState(false);
     const [heartbeat, setHeartbeat] = useState(null);
+    const [evolution, setEvolution] = useState(null);
 
     const fetchAgents = async () => {
         try {
@@ -27,13 +28,24 @@ const Dashboard = () => {
         }
     };
 
+    const fetchEvolution = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/system/evolution/state');
+            setEvolution(res.data);
+        } catch (err) {
+            console.error("Failed to fetch evolution:", err);
+        }
+    };
+
     useEffect(() => {
         fetchAgents();
         fetchHeartbeat();
+        fetchEvolution();
         const interval = setInterval(() => {
             fetchAgents();
             fetchHeartbeat();
-        }, 5000);
+            fetchEvolution();
+        }, 2000); // 2s for faster updates
         return () => clearInterval(interval);
     }, []);
 
@@ -132,7 +144,7 @@ const Dashboard = () => {
             </section>
 
             {/* Mission Control Status Board */}
-            <MissionControl heartbeat={heartbeat} agents={agents} />
+            <MissionControl heartbeat={heartbeat} agents={agents} evolution={evolution} />
 
             {/* Command Center */}
             <section className="glass-panel p-1 rounded-xl">

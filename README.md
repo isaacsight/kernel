@@ -75,9 +75,20 @@ python build.py
 python -m http.server 8000 --directory docs
 # Visit http://localhost:8000
 
-# Or run the admin TUI
-python3 admin/tui.py
-```
+78: # Or run the admin TUI
+79: python3 admin/tui.py
+80: ```
+81:
+82: ### Run n8n locally
+83: ```bash
+84: ./admin/start_n8n.sh
+85: ```
+86:
+87: ### Test n8n startup
+88: ```bash
+89: ./admin/test_n8n.sh
+90: ```
+
 
 ## Development Workflow
 

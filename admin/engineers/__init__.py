@@ -18,7 +18,7 @@ Leadership:
 from .alchemist import Alchemist
 from .architect import Architect
 from .editor import Editor
-from .operator import Operator
+from .strategist import Strategist
 from .librarian import Librarian
 from .visionary import Visionary
 from .guardian import Guardian
@@ -64,12 +64,15 @@ from .graphic_designer import GraphicDesigner
 from .vector_designer import VectorDesigner
 from .prompt_engineer import PromptEngineer
 
+# Remote Resource
+from .remote_worker import RemoteWorker
+
 __all__ = [
     # Original Team
     'Alchemist',
     'Architect',
     'Editor',
-    'Operator',
+    'Strategist',
     'Librarian',
     'Visionary',
     'Guardian',
@@ -110,4 +113,7 @@ __all__ = [
     'GraphicDesigner',
     'VectorDesigner',
     'PromptEngineer',
+    
+    # Remote
+    'RemoteWorker'
 ]
