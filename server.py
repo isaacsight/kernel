@@ -9,6 +9,7 @@ from core.team import team_orchestrator
 from admin.engineers.frontier_team import FrontierTeam
 from admin.brain.memory_store import get_memory_store
 from admin.brain.felt_right_index import fri_engine
+from admin.engineers.revenue_agent import get_revenue_agent
 
 
 # Initialize unified Frontier Team and Memory
@@ -271,6 +272,20 @@ async def get_fri(days: int = 7):
         return fri_engine.calculate_fri(days=days)
     except Exception as e:
         logger.error(f"Error calculating FRI: {e}")
+        return {"status": "error", "message": str(e)}
+
+# --- Studio OS Revenue API ---
+
+@app.get("/api/studio/revenue")
+async def get_revenue():
+    """
+    Get the monetization summary from the Revenue Agent.
+    """
+    try:
+        agent = get_revenue_agent()
+        return agent.get_revenue_summary()
+    except Exception as e:
+        logger.error(f"Error fetching revenue summary: {e}")
         return {"status": "error", "message": str(e)}
 
 # --- Studio OS Decision Ledger API ---

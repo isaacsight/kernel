@@ -3312,3 +3312,212 @@ body:has(.ceo-layout) .site-footer {
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
+/* ============================================
+   ORIENTATION LAYER STYLES
+   Homepage human-first entry point
+   ============================================ */
+
+/* Orientation Block (Hero) */
+.orientation-block {
+    text-align: center;
+    padding: var(--space-10) var(--space-6) var(--space-9);
+    max-width: var(--container-md);
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.orientation-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-4);
+}
+
+.orientation-headline {
+    font-size: var(--text-5xl);
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: var(--space-5);
+    letter-spacing: -0.03em;
+}
+
+.orientation-statement {
+    font-size: var(--text-xl);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-3);
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+.orientation-audience {
+    font-size: var(--text-lg);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-7);
+}
+
+.orientation-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Entry Paths Section */
+.entry-paths-section {
+    padding: var(--space-9) var(--space-6);
+    max-width: var(--container-xl);
+    margin: 0 auto;
+}
+
+.entry-paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+}
+
+.entry-path-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    transition: all 0.3s ease;
+}
+
+.entry-path-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--accent-glow);
+}
+
+.entry-path-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-4);
+}
+
+.entry-path-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.entry-path-card h3 {
+    font-size: var(--text-xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    margin-top: 0;
+}
+
+.entry-path-card p {
+    color: var(--text-secondary);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-4);
+}
+
+.entry-path-links {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.entry-path-links a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--accent-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.entry-path-links a:hover {
+    border-bottom-color: var(--accent-primary);
+}
+
+/* Value Block (What You Can Steal) */
+.value-block {
+    padding: var(--space-8) var(--space-6);
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    text-align: center;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.value-header {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-5);
+    margin-top: 0;
+}
+
+.value-grid {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+}
+
+.value-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.value-icon {
+    color: var(--accent-primary);
+    font-size: var(--text-sm);
+}
+
+.value-item a {
+    color: var(--text-primary);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.value-item a:hover {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+}
+
+/* Studio Anchor (Canonical Sentence) */
+.studio-anchor {
+    padding: var(--space-6) var(--space-6);
+    max-width: var(--container-md);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.studio-anchor p {
+    font-size: var(--text-lg);
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .orientation-headline {
+        font-size: var(--text-4xl);
+    }
+    
+    .orientation-statement {
+        font-size: var(--text-lg);
+    }
+    
+    .entry-paths-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .value-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}

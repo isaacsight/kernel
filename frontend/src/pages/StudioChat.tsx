@@ -13,10 +13,11 @@ type Message = {
 type StreamEvent =
   | { type: 'status'; content: string }
   | { type: 'thought'; content: string }
-  | { type: 'result'; agent: string; content: string; citations?: any[] }
+  | { type: 'result'; agent: string; content: string; citations?: Array<{ title: string; url: string }> }
   | { type: 'done' };
 
 function StudioChat() {
+  const [fri, setFri] = useState<{ score: number, label: string } | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -30,6 +31,26 @@ function StudioChat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket | null>(null);
 
+  // Fetch FRI
+  const fetchFRI = async () => {
+    try {
+      const resp = await fetch(`http://${window.location.hostname}:8000/api/studio/fri`);
+      const data = await resp.json();
+      setFri(data);
+    } catch (e) {
+      console.error("Failed to fetch FRI", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchFRI();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(fetchFRI, 30000); // Every 30s
+    return () => clearInterval(interval);
+  }, []);
+
   // Auto-scroll
   useEffect(() => {
     if (scrollRef.current) {
@@ -39,6 +60,7 @@ function StudioChat() {
 
   const addMessage = useCallback((msg: Message) => {
     setMessages(prev => [...prev, msg]);
+    if (msg.role === 'user') fetchFRI(); // Refresh on user action
   }, []);
 
   // WebSocket Connection
@@ -104,20 +126,39 @@ function StudioChat() {
       <header className="glass-panel" style={{
         padding: '20px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', background: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 900, fontSize: '20px' }}>S</div>
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '16px' }}>The Studio</div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Frontier Team Active</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', background: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 900, fontSize: '20px' }}>S</div>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '16px' }}>The Studio</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Frontier Team Active</div>
+            </div>
           </div>
+
+          {/* Sovereignty Index (FRI) */}
+          {fri && (
+            <div style={{
+              display: 'flex', flexDirection: 'column',
+              borderLeft: '1px solid var(--glass-border)', paddingLeft: '24px'
+            }}>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sovereignty Index</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px', fontWeight: 700, color: 'var(--primary)' }}>{fri.score}%</span>
+                <span style={{ fontSize: '12px', color: '#a1a1aa' }}>• {fri.label}</span>
+              </div>
+            </div>
+          )}
         </div>
-        <div style={{
-          fontSize: '12px', padding: '6px 12px', borderRadius: '20px',
-          background: isConnecting ? 'rgba(234, 179, 8, 0.1)' : 'rgba(74, 222, 128, 0.1)',
-          color: isConnecting ? '#EAB308' : '#4ADE80',
-          border: '1px solid currentColor'
-        }}>
-          {isConnecting ? 'CONNECTING...' : '● SYSTEM ONLINE'}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{
+            fontSize: '12px', padding: '6px 12px', borderRadius: '20px',
+            background: isConnecting ? 'rgba(234, 179, 8, 0.1)' : 'rgba(74, 222, 128, 0.1)',
+            color: isConnecting ? '#EAB308' : '#4ADE80',
+            border: '1px solid currentColor'
+          }}>
+            {isConnecting ? 'CONNECTING...' : '● SYSTEM ONLINE'}
+          </div>
         </div>
       </header>
 

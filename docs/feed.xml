@@ -193,6 +193,65 @@
         </item>
         
         <item>
+            <title>Start Here</title>
+            <link>https://www.doesthisfeelright.com/posts/start.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/start.html</guid>
+            <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[How to navigate this studio and get the most out of it.]]></description>
+            <content:encoded><![CDATA[<h1>How This Works</h1>
+<p><strong>Does This Feel Right?</strong> is a live operating system for a studio-of-one. It's not a blog, not a portfolio—it's a working system that builds agentic products and patterns in public.</p>
+<p>This page explains how to navigate it.</p>
+<p>---</p>
+<h2>What this studio is</h2>
+<p>The Studio is a system that turns research into shipped artifacts through agents, patterns, and decision logs.</p>
+<p>Unlike a consulting firm or agency, this studio:</p>
+<ul>
+<li><strong>Runs on its own OS first</strong> — every pattern was battle-tested internally before being published</li>
+<li><strong>Publishes the infrastructure</strong> — see the actual decision logs, agent configs, and system designs</li>
+<li><strong>Invites copying</strong> — patterns are built to be forked, not just admired</li>
+</ul>
+<p>---</p>
+<h2>Three ways to engage</h2>
+<h3>1. Learn</h3>
+<p>If you want to understand how frontier studios think and operate:</p>
+<ul>
+<li><a href="/archive.html"><strong>Essays</strong></a> — Long-form thinking on systems, AI, and building</li>
+<li><a href="/tags/pattern.html"><strong>Patterns</strong></a> — Named, reusable building blocks</li>
+<li><a href="/research-roadmap.html"><strong>Research Roadmap</strong></a> — Active investigations</li>
+</ul>
+<h3>2. Build</h3>
+<p>If you want to steal and implement ideas:</p>
+<ul>
+<li><a href="/products.html"><strong>Products</strong></a> — See what's being built</li>
+<li><a href="/architecture.html"><strong>Architecture</strong></a> — Technical system design</li>
+<li><a href="/extensions.html"><strong>Extensions</strong></a> — How the OS extends to new surfaces</li>
+<li><a href="/the-frontier-team.html"><strong>Frontier Team</strong></a> — Agent configurations you can fork</li>
+</ul>
+<h3>3. Work together</h3>
+<p>If you're a founder who needs help designing agentic systems:</p>
+<ul>
+<li><a href="/about.html"><strong>About</strong></a> — How the studio operates</li>
+<li><a href="/is-this-for-you.html"><strong>Is This For You?</strong></a> — Honest assessment of fit</li>
+</ul>
+<p>---</p>
+<h2>What's live vs. archival</h2>
+<p>| Type | Description | |------|-------------| | <strong>Patterns</strong> | Active, reusable building blocks | | <strong>Essays</strong> | Long-form thinking (some evergreen, some dated) | | <strong>Logs</strong> | Engineering updates and decision records | | <strong>Retired Patterns</strong> | Experiments that were tested and killed |</p>
+<p>The <a href="/studio-snapshot.html">Studio Snapshot</a> shows the current focus and active systems.</p>
+<p>---</p>
+<h2>The canonical sentence</h2>
+<blockquote><em>The Studio is a system that turns research into shipped artifacts through agents, patterns, and decision logs.</em></blockquote>
+<p>If you remember nothing else, remember that. It explains why everything here exists.</p>
+<p>---</p>
+<h2>Start reading</h2>
+<p>If you only have 10 minutes: 1. <a href="/posts/the-invisible-architect.html"><strong>The Invisible Architect</strong></a> — Why the studio exists 2. <a href="/studio-thesis.html"><strong>Studio Thesis</strong></a> — The operating principles 3. <a href="/tags/pattern.html"><strong>Patterns</strong></a> — What you can steal today</p>
+<p>---</p>
+<p><em>Ready to explore?</em></p>
+<div class="hero-actions" style="margin-top: 2rem;">
+<p><a href="index.html" class="btn-primary">Return to Studio</a> <a href="tags/pattern.html" class="btn-secondary">Browse Patterns</a></p>
+</div>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>System Architecture</title>
             <link>https://www.doesthisfeelright.com/posts/architecture.html</link>
             <guid>https://www.doesthisfeelright.com/posts/architecture.html</guid>

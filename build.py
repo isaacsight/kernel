@@ -386,7 +386,7 @@ def build():
                  out_rel_path = os.path.join(rel_dir, clean_slug + '.html')
             else:
                 # Top level content check
-                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio', 'architecture', 'agentic-systems-engineering', 'extensions', 'products']:
+                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio', 'architecture', 'agentic-systems-engineering', 'extensions', 'products', 'start', 'strategy']:
                      # Top level pages
                      out_rel_path = clean_slug + '.html'
                 else:

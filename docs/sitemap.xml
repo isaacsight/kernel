@@ -54,6 +54,13 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/start.html</loc>
+            <lastmod>2025-12-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/architecture.html</loc>
             <lastmod>2025-12-16</lastmod>
             <changefreq>monthly</changefreq>
