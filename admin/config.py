@@ -9,12 +9,13 @@ class Config:
     CONTENT_DIR = os.path.join(BASE_DIR, 'content')
     DOCS_DIR = os.path.join(BASE_DIR, 'docs')
     BRAIN_DIR = os.path.join(os.path.dirname(__file__), 'brain')
+    SKILLS_DIR = os.path.join(os.path.dirname(__file__), 'skills')
     
     # Site
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-1.5-flash-001" # Stable, High Rate Limits (15 RPM / 1M TPM)
+    GEMINI_MODEL = "gemini-flash-latest" # Resilient, Higher Quota
     # GEMINI_MODEL = "gemini-2.0-flash-exp" # Experimental, Low Limits
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"

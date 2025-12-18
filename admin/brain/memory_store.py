@@ -125,6 +125,19 @@ class MemoryStore:
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+        # Decisions Table ("Does this feel right?" Ledger)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS decisions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                topic TEXT NOT NULL,
+                context TEXT,
+                decision TEXT NOT NULL, -- 'yes', 'no', 'defer'
+                agent_id TEXT,
+                metadata JSON,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
         
         conn.commit()
         conn.close()
@@ -527,6 +540,47 @@ class MemoryStore:
         # Sort by score DESC
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:limit]
+
+    # ==================== Decisions Ledger ====================
+
+    def save_decision(self, topic: str, decision: str, context: str = None, 
+                      agent_id: str = None, metadata: Dict = None):
+        """Save a 'Does this feel right?' decision."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT INTO decisions (topic, decision, context, agent_id, metadata) 
+               VALUES (?, ?, ?, ?, ?)""",
+            (topic, decision, context, agent_id, json.dumps(metadata or {}))
+        )
+        conn.commit()
+        conn.close()
+        logger.info(f"Decision logged: {topic} -> {decision}")
+
+    def get_decision_history(self, limit: int = 20) -> List[Dict]:
+        """Retrieve recent decisions."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM decisions ORDER BY timestamp DESC LIMIT ?",
+            (limit,)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {
+                "id": r["id"],
+                "topic": r["topic"],
+                "decision": r["decision"],
+                "context": r["context"],
+                "agent_id": r["agent_id"],
+                "metadata": json.loads(r["metadata"]) if r["metadata"] else {},
+                "timestamp": r["timestamp"]
+            }
+            for r in rows
+        ]
 
     # ==================== Summary ====================
     

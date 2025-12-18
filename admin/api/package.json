@@ -1,0 +1,15 @@
+{
+    "name": "antigravity-mcp-server",
+    "version": "1.0.0",
+    "description": "MCP Server exposing Antigravity Skills",
+    "main": "mcp-server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node mcp-server.js"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.0.1",
+        "front-matter": "^4.0.2",
+        "glob": "^10.3.10"
+    }
+}

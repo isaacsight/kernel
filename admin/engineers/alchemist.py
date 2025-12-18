@@ -7,7 +7,6 @@ import google.generativeai as genai
 from huggingface_hub import InferenceClient
 from typing import List, Dict, Optional, Any
 import sys
-import os
 import logging
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -16,23 +15,19 @@ from admin.infrastructure.data_center import DataCenter
 from admin.brain.memory_store import get_memory_store
 from admin.brain.metrics_collector import get_metrics_collector
 from admin.decorators import critique_action
+from admin.brain.agent_base import BaseAgent  # New Import
 
 logger = logging.getLogger("Alchemist")
 
-class Alchemist:
+class Alchemist(BaseAgent):  # Inherit from BaseAgent
     """
     The Alchemist (Machine Learning Engineer)
-    
-    Mission: Imbue the system with memory, context, and a "soul".
-    
-    Responsibilities:
-    - RAG (Retrieval-Augmented Generation)
-    - Model Routing (Claude vs Gemini vs Llama)
-    - Fine-tuning and Persona Management
+    Now fully data-driven via admin/brain/agents/alchemist/
     """
     def __init__(self):
-        self.name = "The Alchemist"
-        self.role = "Machine Learning Engineer"
+        # Initialize BaseAgent to load Profile & Skills
+        super().__init__(agent_id="alchemist")
+        
         self.brain_dir = config.BRAIN_DIR
         self.memory_file = os.path.join(self.brain_dir, 'memory.json')
         self.content_dir = config.CONTENT_DIR
@@ -40,12 +35,15 @@ class Alchemist:
         # Ensure brain directory exists
         os.makedirs(self.brain_dir, exist_ok=True)
         
-        # Configure Gemini
+        # Configure Gemini (Keep existing logic for now)
         api_key = config.GEMINI_API_KEY
         if not api_key:
-            raise ValueError("GEMINI_API_KEY not found in environment variables.")
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(config.GEMINI_MODEL)
+            # warn instead of raise to allow partial initialization
+             logger.warning("GEMINI_API_KEY not found. Alchemist running with limited capacity.")
+        else:
+            genai.configure(api_key=api_key)
+            self.model = genai.GenerativeModel(config.GEMINI_MODEL)
+
         self.embedding_model = config.EMBEDDING_MODEL
         self.chat_session = None
         self.data_center = DataCenter(config)
@@ -54,6 +52,7 @@ class Alchemist:
         self.memory_store = get_memory_store()
         self.metrics = get_metrics_collector()
         self.session_id = f"session-{int(time.time())}"
+        
         logger.info(f"[{self.name}] Initialized with enhanced memory and metrics")
 
     async def execute(self, action: str, **params) -> Dict[str, Any]:
@@ -70,7 +69,7 @@ class Alchemist:
             from admin.core import get_doctrine
             doctrine = get_doctrine()
             
-            content, context = self.generate(topic, doctrine, deep_mode=deep_mode)
+            content, context = await self.generate(topic, doctrine, deep_mode=deep_mode)
             return {
                 "content": content,
                 "context": context,
@@ -299,7 +298,7 @@ class Alchemist:
         return dot_product / (norm_v1 * norm_v2)
 
     @critique_action("Alchemist Generate Post")
-    def generate(self, topic: str, doctrine: str, provider: str = "auto", deep_mode: bool = False) -> tuple[str, str]:
+    async def generate(self, topic: str, doctrine: str, provider: str = "auto", deep_mode: bool = False) -> tuple[str, str]:
         """
         Generates a blog post using the specified topic and context.
         Now includes persistent memory tracking and metrics.
@@ -479,6 +478,7 @@ class Alchemist:
                     raise Exception(f"Remote generation failed: {e}")
                     
             else:  # Default to Gemini
+                # Use the model initialized in __init__
                 response = self.model.generate_content(prompt)
                 content = response.text
             

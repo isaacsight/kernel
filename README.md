@@ -17,7 +17,37 @@ A modern, static blog built with Python featuring AI-powered content generation,
 - 🚀 **Automated Deployment**: GitHub Actions CI/CD to GitHub Pages
 - 🎨 **SEO Optimized**: JSON-LD, sitemaps, RSS feeds, and meta tags
 
+
+## System Architecture
+
+The "IanSight" System operates as a dual-layer architecture: a **Public Presence** (FastAPI) and a **Private Studio** (Flask Admin).
+
+[View Live System Architecture](https://www.doesthisfeelright.com/architecture.html)
+
+```mermaid
+graph TD
+    subgraph public_zone ["Public Zone (Port 8000)"]
+        Server["FastAPI Server"] --> Docs["Static Site"]
+        Server --> FrontEnd["Frontend SPA"]
+        Server --> WS_Chat["WebSocket (Chat)"]
+    end
+
+    subgraph studio_zone ["Studio Zone (Admin Port 5001)"]
+        AdminApp["Flask Admin App"] --> AdminCore["Admin Core"]
+        Builder["Build Script"] --> Architect
+        AdminCore --> Brain["Brain State"]
+        
+        subgraph agents ["Engineers (Agents)"]
+            Architect
+            Alchemist["Alchemist (Content)"]
+            Broadcaster["Broadcaster (Social)"]
+            Guardian["Guardian (Safety)"]
+        end
+    end
+```
+
 ## Tech Stack
+
 
 **Core:**
 - Python 3.9+

@@ -157,6 +157,13 @@ This is the live nervous system of the studio. You are seeing the actual "though
     </div>
 </div>
 
+---
+
+## Product Roadmap
+The systems you see running here are evolving into a suite of modular products designed for founders and frontier teams.
+
+[View the Product Ecosystem →](/products.html)
+
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true });

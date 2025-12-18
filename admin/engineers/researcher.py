@@ -4,30 +4,23 @@ import os
 import json
 import time
 from datetime import datetime
-
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from typing import List, Dict, Optional, Any, Tuple
 from config import config
 from admin.engineers.web_scout import get_web_scout
 from admin.brain.model_router import get_model_router, TaskType
+from admin.brain.agent_base import BaseAgent
 
 logger = logging.getLogger("Researcher")
-logging.basicConfig(level=logging.INFO)
 
-class Researcher:
+class Researcher(BaseAgent):
     """
     The Researcher (AI Research Scientist)
     
-    Mission: Explore the unknown using autonomous iterative deep research.
-    
-    Responsibilities:
-    - Deep Dive Research (Iterative Loop)
-    - Fact Gathering
-    - Report Generation
+    Now data-driven via admin/brain/agents/researcher/
     """
     def __init__(self):
-        self.name = "The Researcher"
-        self.role = "AI Research Scientist"
+        # Initialize BaseAgent to load Profile & Skills
+        super().__init__(agent_id="researcher")
         
         # Initialize components
         self.web_scout = get_web_scout()
@@ -46,7 +39,29 @@ class Researcher:
         else:
             self.client = None
             
-        logger.info(f"[{self.name}] Initialized with Deep Research capabilities")
+        logger.info(f"[{self.name}] Initialized with Deep Research capabilities and enabled skills")
+
+    async def execute(self, action: str, **params) -> Dict[str, Any]:
+        """
+        Executes an action via the unified Agent Interface.
+        """
+        if action == "research" or action == "investigate":
+            topic = params.get("topic")
+            max_iterations = params.get("max_iterations", 3)
+            
+            if not topic:
+                raise ValueError("Topic is required for research.")
+                
+            result = self.iterative_research(topic, max_iterations=max_iterations)
+            return result
+            
+        elif action == "chat":
+            message = params.get("message")
+            # Logic for generic chat using system prompt
+            return {"response": "Researcher chat functionality coming soon."}
+            
+        else:
+            raise NotImplementedError(f"Action {action} not supported by Researcher.")
 
     def iterative_research(self, topic: str, max_iterations: int = 3) -> dict:
         """
@@ -80,7 +95,10 @@ class Researcher:
         if insights:
             memory_context = "\n\nRelevant Past Insights:\n" + "\n".join([f"- {i['data'].get('topic')}: {i['data'].get('summary')}" for i in insights[:3]])
         
-        research_context = f"Topic: {topic}\n\nCurrent Knowledge:\n{memory_context}\n"
+        # Inject Skills Discovery
+        skills_context = self.skill_loader.get_system_prompt_additions()
+        
+        research_context = f"Topic: {topic}\n\nCurrent Knowledge:\n{memory_context}\n{skills_context}\n"
         gathered_info = []
         
         # 2. Research Loop

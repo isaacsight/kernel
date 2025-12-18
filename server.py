@@ -6,6 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 import logging
 from core.team import team_orchestrator
+from admin.engineers.frontier_team import FrontierTeam
+from admin.brain.memory_store import get_memory_store
+from admin.brain.felt_right_index import fri_engine
+
+
+# Initialize unified Frontier Team and Memory
+frontier_team = FrontierTeam()
+memory = get_memory_store()
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -135,23 +143,6 @@ async def studio_status():
         logger.error(f"Error reading studio status: {e}")
         return {"status": "error", "message": str(e)}
 
-# SPA Catch-all (must be last)
-@app.get("/{full_path:path}")
-async def serve_spa(full_path: str):
-    # API/Websocket routes are handled above automatically
-    # Check if file exists in frontend_dist (e.g. favicon.ico)
-    target_path = os.path.join(frontend_dist, full_path)
-    if full_path and os.path.exists(target_path) and os.path.isfile(target_path):
-        return FileResponse(target_path)
-    
-    # Otherwise return index.html for client-side routing
-    index_path = os.path.join(frontend_dist, "index.html")
-    if os.path.exists(index_path):
-        return FileResponse(index_path)
-    
-    return {"error": "Frontend not built or found", "path": full_path}
-
-
 # Data Models
 from pydantic import BaseModel
 
@@ -160,8 +151,6 @@ class InquiryModel(BaseModel):
     contact: str
     message: str
     history: list = []
-
-
 
 @app.post("/api/inquiry")
 async def submit_inquiry(inquiry: InquiryModel):
@@ -210,6 +199,147 @@ async def submit_inquiry(inquiry: InquiryModel):
         logger.error(f"Error saving inquiry: {e}")
         return {"status": "error", "message": str(e)}
 
+# --- Rushed Release Loop API ---
+from admin.brain.loops.rushed_release import rushed_release_loop
+from fastapi import Request, HTTPException
+
+@app.post("/v1/ingest")
+async def ingest_signal(request: Request):
+    try:
+        data = await request.json()
+        
+        # Handle mobile batches
+        if "batch" in data:
+            results = []
+            for signal in data["batch"]:
+                # Normalize mobile signal to common format
+                normalized = {
+                    "user_id": data.get("user_id", "anon_abc123"),
+                    "event_type": signal.get("type", "unknown"),
+                    "context": signal.get("context", signal) # Fallback to full signal as context
+                }
+                # Ensure context has the url
+                if "url" in signal and "url" not in normalized["context"]:
+                    normalized["context"]["url"] = signal["url"]
+                
+                results.append(rushed_release_loop.process_ingest(normalized))
+            return {"status": "batch_queued", "count": len(results)}
+            
+        result = rushed_release_loop.process_ingest(data)
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Ingest error: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@app.get("/v1/snapshot")
+async def get_snapshot(user_id: str):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Missing user_id")
+    
+    result = rushed_release_loop.get_snapshot(user_id)
+    # Unify 'decisions' as 'entries' for popup compatibility
+    result['entries'] = result.get('decisions', [])
+    return result
+
+@app.post("/v1/review")
+async def review_entry(data: dict):
+    """
+    User reviews a decision (Yes/No/Defer).
+    """
+    try:
+        entry_id = data.get('entry_id')
+        action = data.get('action')
+        if not entry_id or not action:
+            raise HTTPException(status_code=400, detail="Missing entry_id or action")
+            
+        result = rushed_release_loop.mark_review(entry_id, action)
+        return result
+    except Exception as e:
+        logger.error(f"Review error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# --- Studio OS Metrics API (FRI) ---
+
+@app.get("/api/studio/fri")
+async def get_fri(days: int = 7):
+    """
+    Calculate and return the Felt Right Index.
+    """
+    try:
+        return fri_engine.calculate_fri(days=days)
+    except Exception as e:
+        logger.error(f"Error calculating FRI: {e}")
+        return {"status": "error", "message": str(e)}
+
+# --- Studio OS Decision Ledger API ---
+
+@app.get("/api/decisions")
+async def get_decisions(limit: int = 20):
+    """Retrieve the decision ledger."""
+    try:
+        return memory.get_decision_history(limit=limit)
+    except Exception as e:
+        logger.error(f"Error fetching decisions: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/decisions")
+async def log_decision(data: dict):
+    """Log a manual decision signal."""
+    try:
+        topic = data.get("topic")
+        decision = data.get("decision")
+        if not topic or not decision:
+            raise HTTPException(status_code=400, detail="Missing topic or decision")
+            
+        memory.save_decision(
+            topic=topic,
+            decision=decision,
+            context=data.get("context"),
+            agent_id=data.get("agent_id", "user"),
+            metadata=data.get("metadata")
+        )
+        return {"status": "success"}
+    except Exception as e:
+        logger.error(f"Error saving decision: {e}")
+        return {"status": "error", "message": str(e)}
+
+# --- Frontier Team Tasks ---
+
+@app.post("/api/team/task")
+async def run_team_task(data: dict):
+    """Trigger a multi-agent frontier team task."""
+    try:
+        prompt = data.get("prompt")
+        if not prompt:
+            raise HTTPException(status_code=400, detail="Missing prompt")
+            
+        # Run the multi-agent solving loop
+        result = await frontier_team.solve_task(prompt)
+        return result
+    except Exception as e:
+        logger.error(f"Team task failed: {e}")
+        return {"status": "error", "message": str(e)}
+
+# SPA Catch-all (must be last)
+
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # API/Websocket routes are handled above automatically
+    # Check if file exists in frontend_dist (e.g. favicon.ico)
+    target_path = os.path.join(frontend_dist, full_path)
+    if full_path and os.path.exists(target_path) and os.path.isfile(target_path):
+        return FileResponse(target_path)
+    
+    # Otherwise return index.html for client-side routing
+    index_path = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    
+    return {"error": "Frontend not built or found", "path": full_path}
+
+
 if __name__ == "__main__":
     # Host 0.0.0.0 is CRITICAL for mobile access
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, loop="asyncio")

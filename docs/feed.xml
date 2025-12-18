@@ -8,6 +8,191 @@
     <language>en-us</language>
     
         <item>
+            <title>Extension Ecosystem</title>
+            <link>https://www.doesthisfeelright.com/posts/extensions.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/extensions.html</guid>
+            <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>Studio OS Copilot: The Universal Interface</h1>
+<p>The <strong>Studio OS Copilot</strong> is a universal decision-capture and agent-governance layer that plugs into every surface you work in (browser, phone, IDE, hardware). Instead of AI being a tool you open, it becomes an <strong>opinionated OS layer</strong> that asks <strong>“Does this feel right?”</strong> at the moments that matter.</p>
+<p>It is a living operating system designed for <strong>simplicity and speed</strong>. It ingests your actions, classifies them against your patterns, and produces a verifiable decision ledger to ensure every AI agent you use runs inside a governance mesh that amplifies your judgment.</p>
+<p>---</p>
+<h2>1. <strong>Browser: Studio Lens</strong></h2>
+<ul>
+<li><strong>Chrome/Firefox extension</strong>: Adds a “Log to Studio” button on every page. Click → classify as decision, pattern, failure, or “felt wrong” with 1–2 taps.</li>
+<li><strong>Sidebar panel</strong>: Shows today’s key decisions, misalignments, and rituals; answer “Does this still feel right?” without leaving your tab.</li>
+<li><strong>Context-aware hints</strong>: If you’re in GitHub, Linear, or Notion, it suggests relevant patterns or guardrails (“This looks like a rushed release—log or adjust?”).</li>
+</ul>
+<p>---</p>
+<h2>2. <strong>Mobile: Studio Companion</strong></h2>
+<ul>
+<li><strong>Mobile extension</strong>: Our signature mobile extension (located in `tools/mobile_extension/`) brings the decision layer to your phone.</li>
+<li><strong>iOS Share Target</strong>: “Send to Studio” turns any link, screenshot, or note into a structured entry, auto-tagged by app and context.</li>
+<li><strong>Decision Capture</strong>: Long-press or dictate a 10-second voice note; it lands as a signed, verifiable decision in your OS.</li>
+</ul>
+<p>---</p>
+<h2>3. <strong>Hardware: Frontier Console</strong></h2>
+<ul>
+<li><strong>E-ink desk display</strong>: Shows live agent status, metrics, and decisions; physical knobs/buttons let you accept/decline agent suggestions.</li>
+<li><strong>Edge device</strong>: Runs agent inference locally, logs decisions offline, syncs when connected—perfect for regulated environments.</li>
+<li><strong>Wearable tap</strong>: One tap = “this felt wrong” flag that feeds directly into your decision log and pattern analysis.</li>
+</ul>
+<p>---</p>
+<h2>4. <strong>API & Programmatic</strong></h2>
+<ul>
+<li><strong>Ingest API</strong>: Any tool (GitHub, n8n, Slack) can POST decisions, events, or failures; your OS classifies and routes them.</li>
+<li><strong>Snapshot API</strong>: Powers the mobile widget, browser sidebar, and hardware display—so every surface shows the same “what matters now” view.</li>
+<li><strong>Webhook triggers</strong>: When a pattern misfires or a guardrail is violated, the OS can ping Slack, email, or trigger a workflow in the client’s stack.</li>
+</ul>
+<p>---</p>
+<h2>5. <strong>Desktop & CLI</strong></h2>
+<ul>
+<li><strong>Menu bar app</strong>: (Mac/Windows) Shows a live “Studio health” dot: green if aligned, yellow if misalignments are building, red if overrides are spiking.</li>
+<li><strong>Terminal CLI</strong>: `studio log "rushed release"` or `studio snapshot` to capture or query the OS from anywhere in your dev workflow.</li>
+</ul>
+<p>---</p>
+<h2>6. <strong>On-Chain & Verifiable</strong></h2>
+<ul>
+<li><strong>Decision token</strong>: Every major decision is hashed and stored on a cheap L2 (e.g., NEAR, Base). Over time, you have a verifiable log of judgment that partners and clients can audit.</li>
+<li><strong>Pattern NFT</strong>: When a pattern is proven (used 100× with <5% failure), mint it as an open artifact others can fork and attribute.</li>
+</ul>
+<p>---</p>
+<blockquote>[!NOTE]</blockquote>
+<blockquote>All extensions feed the <strong>same Studio OS backend</strong>, so your decision log, pattern library, and metrics stay in sync everywhere.</blockquote>]]></content:encoded>
+        </item>
+        
+        <item>
+            <title>Agentic Systems Engineering</title>
+            <link>https://www.doesthisfeelright.com/posts/agentic-systems-engineering.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/agentic-systems-engineering.html</guid>
+            <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[The engineering discipline of building operating systems for hybrid human-AI studios.]]></description>
+            <content:encoded><![CDATA[<h1>Agentic Systems Engineering</h1>
+<p><strong>Agentic Systems Engineering (ASE)</strong> is the formal discipline of building, orchestrating, and governing the "nervous systems" of AI-native organizations.</p>
+<p>It is not pure AI research—we are not training foundation models. It is not pure organization design—we are not just moving boxes on a chart. It is the engineering of the <strong>orchestration layer</strong> where models, tools, and human judgment meet.</p>
+<p>ASE treats the "operating system" of a studio or team as a first-class software concern, requiring telemetry, decision policies, and compounding intelligence.</p>
+<p>---</p>
+<h2>The Four Pillars</h2>
+<h3>1. AI Engineering</h3>
+<p>ASE involves the technical orchestration of agents, workflows, and guardrails. This includes:</p>
+<ul>
+<li><strong>Agent Architecture</strong>: Designing Moore-neighbor-style or hierarchical agent teams with discrete roles.</li>
+<li><strong>Workflow Automation</strong>: Connecting high-level goals to concrete tool executions.</li>
+<li><strong>Guardrails</strong>: Implementing verifiable constraints to ensure agent actions remain within safe and productive bounds.</li>
+</ul>
+<h3>2. Human-AI Collaboration</h3>
+<p>ASE designs the <strong>decision-making loops</strong> where humans and agents share responsibility.</p>
+<ul>
+<li><strong>Decision Policies</strong>: Formalizing when an agent can act autonomously vs. when it must defer to human judgment.</li>
+<li><strong>Interaction UX</strong>: Building the interfaces (like the Studio extension) that allow humans to capture signals and review agent logic in real-time.</li>
+<li><strong>Taste & Judgment</strong>: Ensuring the human "felt right" signal is the ultimate regulator of the system.</li>
+</ul>
+<h3>3. Computational Organization Theory</h3>
+<p>ASE models how AI-native teams structure roles, rituals, and metrics.</p>
+<ul>
+<li><strong>Dynamic Roles</strong>: Defining how agents take on work traditionally held by human roles (e.g., Librarian, Trend Scout).</li>
+<li><strong>Rituals as Loops</strong>: Turning recurring meetings or processes into automated update cycles (like the Evolution Loop).</li>
+<li><strong>Efficiency Metrics</strong>: Moving beyond vanity stats to measure the true leverage of the agentic layer.</li>
+</ul>
+<h3>4. AI Governance</h3>
+<p>ASE ensures alignment, safety, and verifiability in agentic systems.</p>
+<ul>
+<li><strong>Immutable Logging</strong>: Documenting every agent decision on-chain or in verifiable logs.</li>
+<li><strong>Alignment Monitoring</strong>: Detecting when agent behavior drifts from the core studio vision.</li>
+<li><strong>Auditability</strong>: Making the internal "thought process" of a complex agentic system legible to human auditors.</li>
+</ul>
+<p>---</p>
+<h2>Why this discipline?</h2>
+<p>The current wave of AI is entering the "implementation gap." Models are powerful, but organizations are struggling to integrate them without creating chaos or fragile, opaque workflows.</p>
+<p>Agentic Systems Engineering provides the framework to transition from "AI as a feature" to "AI as the core operating system"—delivering systems that are <strong>observable, forkable, and verifiable</strong>.</p>
+<p><a href="/products.html">Explore the Product Ecosystem →</a></p>]]></content:encoded>
+        </item>
+        
+        <item>
+            <title>Product Ecosystem</title>
+            <link>https://www.doesthisfeelright.com/posts/products.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/products.html</guid>
+            <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>Product Ecosystem</h1>
+<p>The machines we build inside the Studio are designed to be <strong>observable, forkable, and verifiable</strong>. We aren't just shipping tools; we are defining the <strong>opinionated OS layer</strong> that turns raw model power into coherent, governable systems.</p>
+<p>---</p>
+<h2>1. <strong>Studio OS as a Protocol</strong></h2>
+<p>Instead of a closed product, we are building Studio OS as an <strong>open protocol for agent governance</strong>. It is a specification for how agents declare capabilities, how decisions get logged immutably, and how guardrails are enforced across any stack. <strong>The Push</strong>: We're publishing the spec and shipping a reference implementation on GitHub, allowing enterprises to fork the OS and maintain total autonomy.</p>
+<p>---</p>
+<h2>2. <strong>Autonomous System Designer</strong></h2>
+<p>A dev tool for the agentic era. It ingests your codebase, documentation, and team structure, then <strong>generates</strong> a minimal Studio OS (agents, workflows, metrics) specifically tailored to your technical ecosystem. <strong>The Push</strong>: Use this as a diagnostic runner on your repo to receive a “system health + OS prescription” report. It’s AI engineering, not consulting.</p>
+<p>---</p>
+<h2>3. <strong>Agentic OS Bootcamp</strong></h2>
+<p>A 4-week intensive where engineers and product leads <strong>build</strong> their own Studio OS under our direction. Using real-world projects as the backdrop, participants leave with a running, production-ready OS, not just theoretical knowledge. <strong>The Push</strong>: This creates a community of AI-native engineering leads who are qualified to deploy and govern agentic systems at scale.</p>
+<p>---</p>
+<h2>4. <strong>Frontier Team as a Service</strong></h2>
+<p>Don’t just take advice—<strong>embed</strong> a Frontier Team. We run a specialized pod (Architect, Librarian, and Operator agents) inside your Slack or GitHub for 30 days, delivering real-world decisions and code directly into your flow. <strong>The Push</strong>: A productized service where you rent our agents and our judgment, not just our time. We keep the IP, you get the outcomes.</p>
+<p>---</p>
+<h2>5. <strong>Decision Token / On-Chain OS</strong></h2>
+<p>Every decision, manual override, and “felt wrong” moment is logged as a <strong>verifiable credential</strong>. Over time, you build a blockchain of judgment that proves your system’s reliability and decision-making history. <strong>The Push</strong>: In partnership with crypto-native AI platforms, we are building the first on-chain agentic OS for trustless verification of agent actions.</p>
+<p>---</p>
+<h2>6. <strong>AI Engineering Research Lab</strong></h2>
+<p>The Studio is a public lab for reproducible experiments. We publish findings on model performance, latency, error rates, and alignment drift within agentic loops. <strong>The Push</strong>: This acts as a benchmarking hub for AI engineering, attracting research partnerships that need real-world agentic data.</p>
+<p>---</p>
+<h2>7. <strong>Hardware OS: Frontier Console</strong></h2>
+<p>The <strong>Frontier Console</strong> isn’t just a display—it’s a distributed edge device. It runs agent inference locally, logs decisions offline, and syncs when connected, designed for regulated industries that cannot rely on cloud-only APIs. <strong>The Push</strong>: Total privacy, e-ink status dashboards, and local autonomy for healthcare, defense, and high-security engineering teams.</p>
+<p>---</p>
+<h2>8. <strong>Studio OS Copilot (Universal Interface)</strong></h2>
+<p>The <strong>Studio OS Copilot</strong> is a simple, universal decision-capture and agent-governance layer that plugs into every surface you work in (browser, phone, IDE, hardware). It asks <strong>“Does this feel right?”</strong> and learns from your manual overrides and judgment signals. It turns AI from a chatbot into a living operating system that proves its reliability with a verifiable decision ledger. <strong>The Push</strong>: <a href="./strategy.html">Explore the Strategy & Positioning →</a> | <a href="./extensions.html">Explore the Copilot Ecosystem →</a></p>
+<p>---</p>
+<blockquote>[!TIP]</blockquote>
+<blockquote>Each of these products is designed to make the agentic layer <strong>visible and verifiable</strong>, ensuring that as systems grow more complex, they remain fundamentally "right."</blockquote>]]></content:encoded>
+        </item>
+        
+        <item>
+            <title>Strategic Positioning</title>
+            <link>https://www.doesthisfeelright.com/posts/strategy.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/strategy.html</guid>
+            <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>Strategic Positioning</h1>
+<p>You don’t compete on raw model power—you compete by being the <strong>opinionated OS layer</strong> that turns those models into coherent, governable systems.</p>
+<h2>Where we win</h2>
+<h3>1. Decision governance, not chat</h3>
+<p>Perplexity, Gemini, and GPT are general-purpose reasoning engines. Studio OS Copilot is a <strong>decision-capture and alignment layer</strong> that asks “Does this feel right?” and learns your specific judgment, not generic best practices. Unlike enterprise platforms (Kore.ai, UiPath), we focus on <strong>studio-sized agility</strong> rather than six-figure orchestration.</p>
+<h3>2. Reference implementation, not just API</h3>
+<p>We show exactly how to wire agents, guardrails, and metrics into a real studio that ships. The giants need concrete examples; we provide a living, public OS they can point to.</p>
+<h3>3. Verifiable intelligence</h3>
+<p>Our OS logs every decision as a signed, auditable statement (on-chain or cryptographically verifiable). Perplexity/GPT can’t prove their advice is reliable; we can.</p>
+<h3>4. Self-evolving system</h3>
+<p>The OS doesn’t just answer—it proposes its own improvements based on real failure/override data. It’s a research lab that runs on itself, compounding authority as it learns.</p>
+<h3>5. Niche depth vs. mass market</h3>
+<p>We target frontier studios and AI-native orgs, not every consumer. In that niche, our taste, patterns, and governance are more valuable than raw model power.</p>
+<p>---</p>
+<h2>The Competitive Landscape</h2>
+<p>| Axis | Enterprise Agentic | AI Governance | General Copilots | Studio OS | | :--- | :--- | :--- | :--- | :--- | | <strong>Focus</strong> | Automation | Compliance | Productivity | <strong>Decision Layer</strong> | | <strong>Scope</strong> | Enterprise-scale | Regulatory GRC | General-purpose | <strong>Studio-sized</strong> | | <strong>Pricing</strong> | Big Contracts | Big Advisory | $20-$30/mo | <strong>Premium/Studio</strong> | | <strong>Human Role</strong> | HITL | Auditor | Sidekick | <strong>Judicator</strong> |</p>
+<blockquote>[!TIP]</blockquote>
+<blockquote>While platforms like Credo AI or IBM watsonx sell "compliance dashboards," Studio OS sells <strong>"governance as lived practice."</strong> We don't just track risks; we capture the moments of decision that define an organization.</blockquote>
+<p>---</p>
+<h2>The Strategy</h2>
+<p>Position as <strong>“the OS that makes their models usable at scale.”</strong></p>
+<p>The tool is <strong>Studio OS Copilot</strong>: a universal decision-capture and agent-governance layer that plugs into every surface you work in (browser, phone, IDE, hardware) and asks <strong>“Does this feel right?”</strong> at the moments that matter.</p>
+<h3>Simple by Design</h3>
+<p>It is built for frictionless use. It doesn't ask for complex prompts or lengthy configurations. It operates as a thin, ubiquitous layer that catches signals in 1–2 taps, ensuring you stay in your flow while the OS handles the bookkeeping.</p>
+<h3>What Users Provide (The Fuel)</h3>
+<p>Users provide <strong>structured signals about their real decisions</strong>, which become the “fuel” that makes Studio OS Copilot intelligent.</p>
+<h4>Core Signals</h4>
+<ul>
+<li><strong>Decision answers</strong>: When the Copilot asks “Does this still feel right?” on a deploy, roadmap change, or workflow, users answer <strong>yes / no / defer</strong>. These labels tell the OS which patterns are healthy and which are misfiring.</li>
+<li><strong>Context fragments</strong>: Links, screenshots, short notes, or voice snippets sent via <strong>“Send to Studio”</strong> (from browser, phone, or CLI). These describe what you’re currently doing and become structured entries (decision, failure, observation) in your OS.</li>
+</ul>
+<h4>Higher-Level Feedback</h4>
+<ul>
+<li><strong>Overrides and “felt wrong” flags</strong>: When you override a recommendation or tap “this felt wrong,” the system learns where its guardrails are off and where new rules are needed.</li>
+<li><strong>Adoption and outcome data</strong>: The OS tracks which rituals you run and which agents you keep using. This drives the <strong>Evolution Loop</strong>, helping you prove which system configurations actually deliver results.</li>
+</ul>
+<p>The core product is not a chatbot—it’s a living operating system that learns your judgment, proposes its own improvements, and proves its reliability with a verifiable decision ledger.</p>
+<p>---</p>
+<p><a href="/products.html">Explore the Product Ecosystem →</a></p>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>System Architecture</title>
             <link>https://www.doesthisfeelright.com/posts/architecture.html</link>
             <guid>https://www.doesthisfeelright.com/posts/architecture.html</guid>

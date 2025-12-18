@@ -6,16 +6,17 @@ import sys
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from admin.engineers.researcher import Researcher # Reuse researcher for LLM calls if needed, or standalone
 from admin.brain.model_router import get_model_router
 
-logger = logging.getLogger("CouncilOfMinds")
+logger = logging.getLogger("GrandCouncil")
 
-class Council:
+class GrandCouncil:
     """
-    The Council of Minds (System 2 Thinking).
+    The Grand Council of Agents (System 2 Thinking).
     
-    Orchestrates a multi-agent debate to produce high-quality insights.
+    Orchestrates a multi-agent deliberation where various specialized agents
+    (Trend Scout, Publisher, etc.) submit their reports/context, and the
+    Council personas debate the best course of action.
     
     Personas:
     1. The Architect: Plans the structure and key arguments.
@@ -24,39 +25,73 @@ class Council:
     """
     def __init__(self):
         self.router = get_model_router()
-        # Force zero-cost model for all council members
         self.model = "gemini-2.0-flash" 
+        self.registered_agents = {}
+
+    def register_agent(self, name: str, agent_instance):
+        """Registers a specialist agent to the council."""
+        self.registered_agents[name] = agent_instance
+        logger.info(f"📝 Agent registered to Council: {name}")
+
+    def deliberate(self, topic: str, state: dict) -> dict:
+        """
+        Runs the full deliberation loop on a topic, incorporating agent reports.
+        """
+        import time
+        logger.info(f"🏛️ Convening The Grand Council for: '{topic}'")
         
-    def deliberate(self, topic: str) -> dict:
-        """
-        Runs the full deliberation loop on a topic.
-        """
-        logger.info(f"🏛️ Convening The Council for: '{topic}'")
+        # 0. Gather Intelligence
+        intelligence_report = self._gather_intelligence()
+        context_str = f"Current System State: {state}\n\nAgent Intelligence Reports:\n{intelligence_report}"
         
         # 1. The Architect (The Plan)
-        plan = self._consult_architect(topic)
+        plan = self._consult_architect(topic, context_str)
         logger.info("   ↳ Architect has spoken.")
+        time.sleep(5) # Space out calls to avoid rate limits
         
         # 2. The Skeptic (The Critique)
-        critique = self._consult_skeptic(topic, plan)
+        critique = self._consult_skeptic(topic, plan, context_str)
         logger.info("   ↳ Skeptic has spoken.")
+        time.sleep(5) # Space out calls
         
         # 3. The Synthesizer (The Result)
-        final_insight = self._consult_synthesizer(topic, plan, critique)
+        final_insight = self._consult_synthesizer(topic, plan, critique, context_str)
         logger.info("   ↳ Synthesizer has resolved the debate.")
         
         return {
             "topic": topic,
             "council_output": final_insight,
+            "intelligence": intelligence_report,
             "process": {
                 "architect_plan": plan,
                 "skeptic_critique": critique
             }
         }
 
+    def _gather_intelligence(self) -> str:
+        """Asks all registered agents for a status report."""
+        reports = []
+        for name, agent in self.registered_agents.items():
+            try:
+                # If agent has a specific report method, use it. Otherwise str(agent)
+                if hasattr(agent, "get_report"):
+                    report = agent.get_report()
+                elif hasattr(agent, "get_current_trends"): # TrendScout specific
+                    report = f"Trends: {agent.get_current_trends()}"
+                else:
+                    report = f"Status: Alive. Type: {type(agent).__name__}"
+                
+                reports.append(f"--- Agent: {name} ---\n{report}\n")
+            except Exception as e:
+                logger.error(f"Failed to get report from {name}: {e}")
+                reports.append(f"--- Agent: {name} ---\n(Failed to report: {e})\n")
+                
+        return "\n".join(reports)
+
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
         """Helper to call Gemini Flash directly."""
         import google.generativeai as genai
+        import time
         
         api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         if not api_key:
@@ -67,61 +102,88 @@ class Council:
         # Using flash for zero cost
         model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_prompt)
         
-        try:
-            response = model.generate_content(user_prompt)
-            return response.text
-        except Exception as e:
-            logger.error(f"Gemini Inference Failed: {e}")
-            return f"Error generation content: {e}"
+        retries = 5
+        delay = 5
+        
+        for i in range(retries):
+            try:
+                response = model.generate_content(user_prompt)
+                return response.text
+            except Exception as e:
+                if "429" in str(e):
+                    logger.warning(f"Rate limited (429). Retrying in {delay}s... (Attempt {i+1}/{retries})")
+                    time.sleep(delay)
+                    delay *= 2 # Exponential backoff
+                else:
+                    logger.error(f"Gemini Inference Failed: {e}")
+                    return f"Error generation content: {e}"
+        
+        return "Error: Failed after max retries."
 
-    def _consult_architect(self, topic: str) -> str:
+    def _consult_architect(self, topic: str, context: str) -> str:
         sys_prompt = """You are THE ARCHITECT.
-        Your goal is to outline a comprehensive, structural, and novel analysis of the user's topic.
+        Your goal is to propose a strategic evolution for the system based on the capabilities of the available agents.
         
-        - Do not write the full essay.
-        - Output a structured BLUEPRINT:
-          1. Core Thesis (Must be non-obvious).
-          2. Three Pillars of Argument (The 'Why').
-          3. The Implications (Second-order effects).
+        Input:
+        - A Topic/Goal.
+        - Intelligence Reports from specialized agents (Trend Scout, Publisher, etc.).
         
-        Be bold. Avoid generic advice."""
+        Output:
+        - A structured PLAN of action.
+        - 1. Core Objective.
+        - 2. Which agents should be deployed and why.
+        - 3. Expected outcome.
         
-        return self._call_llm(sys_prompt, f"Topic: {topic}")
+        Be bold but actionable."""
+        
+        return self._call_llm(sys_prompt, f"Topic: {topic}\n\nContext:\n{context}")
 
-    def _consult_skeptic(self, topic: str, plan: str) -> str:
+    def _consult_skeptic(self, topic: str, plan: str, context: str) -> str:
         sys_prompt = """You are THE SKEPTIC.
-        Your only job is to tear down the Architect's plan.
+        Your job is to critique the Architect's plan given the intelligence reports.
         
-        - Identify Logical Fallacies.
-        - Point out Optimism Bias.
-        - Ask "What if the opposite is true?"
-        - Highlight missing variables.
+        - Are the selected trends actually relevant?
+        - Are we over-estimating our capabilities?
+        - Is there a simpler way?
         
-        Be ruthless but constructive. Do not be mean, be rigorous."""
+        Be rigorous."""
         
-        return self._call_llm(sys_prompt, f"Topic: {topic}\n\nArchitect's Plan:\n{plan}")
+        return self._call_llm(sys_prompt, f"Topic: {topic}\n\nContext:\n{context}\n\nArchitect's Plan:\n{plan}")
 
-    def _consult_synthesizer(self, topic: str, plan: str, critique: str) -> str:
+    def _consult_synthesizer(self, topic: str, plan: str, critique: str, context: str) -> str:
         sys_prompt = """You are THE SYNTHESIZER.
-        Your job is to produce the Final Insight.
+        Your job is to produce the Final Command for the Strategist.
         
-        1. Read the Architect's Plan (The Thesis).
-        2. Read the Skeptic's Critique (The Antithesis).
-        3. Create the SYNTHESIS.
+        1. Read the Architect's Plan and Skeptic's Critique.
+        2. Decide on the final BEST ACTION.
         
-        The final output should be a polished, deep-reasoning report.
-        - Acknowledge the complexity raised by the Skeptic.
-        - Strengthen the arguments of the Architect where valid.
-        - Discard weak points.
+        IMPORTANT: Your output must contain a JSON block at the end with the specific command.
         
-        Format as Markdown."""
+        Format:
+        [Reasoning text...]
         
-        return self._call_llm(sys_prompt, f"Topic: {topic}\n\nPlan:\n{plan}\n\nCritique:\n{critique}")
+        ```json
+        {
+            "action": "mutate" | "idle",
+            "directive": "Specific instructions for the engineers...",
+            "target_agent": "Name of best suited agent" 
+        }
+        ```
+        """
+        
+        return self._call_llm(sys_prompt, f"Topic: {topic}\n\nContext:\n{context}\n\nPlan:\n{plan}\n\nCritique:\n{critique}")
 
 if __name__ == "__main__":
     # Test Run
     logging.basicConfig(level=logging.INFO)
-    council = Council()
-    result = council.deliberate("Why AI might reduce human intelligence")
+    council = GrandCouncil()
+    
+    # Mock Agents
+    class MockScout:
+        def get_current_trends(self): return [{"topic": "AI Coding", "volume": "High"}]
+    
+    council.register_agent("TrendScout", MockScout())
+    
+    result = council.deliberate("Evolution Strategy", {"cycle": 1})
     print("\nFINAL OUTPUT:\n")
     print(result['council_output'])

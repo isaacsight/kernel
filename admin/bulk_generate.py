@@ -3,7 +3,9 @@ import time
 import re
 from core import generate_ai_post
 
-def main():
+import asyncio
+
+async def main():
     titles_file = os.path.join(os.path.dirname(__file__), 'proposed_titles.txt')
     
     if not os.path.exists(titles_file):
@@ -39,25 +41,19 @@ def main():
     for i, (title, theme) in enumerate(titles):
         print(f"[{i+1}/{len(titles)}] Generating: {title} ({theme})...")
         try:
-            # We pass the theme as context/category if possible, but generate_ai_post 
-            # currently just takes topic. We'll append theme to topic for better context.
-            # actually generate_ai_post signature is (topic, provider="gemini")
-            # It saves with category "AI". We might want to modify core.py later to accept category,
-            # but for now let's just generate.
-            
-            filename = generate_ai_post(f"{title} (Theme: {theme})", provider="gemini")
+            filename = await generate_ai_post(f"{title} (Theme: {theme})", provider="gemini")
             print(f"  -> Saved to {filename}")
             success_count += 1
             
             # Rate limiting
-            time.sleep(2) 
+            await asyncio.sleep(2) 
             
         except Exception as e:
             print(f"  -> FAILED: {e}")
             fail_count += 1
-            time.sleep(5) # Wait a bit longer on error
+            await asyncio.sleep(5) # Wait a bit longer on error
 
     print(f"\nDone! Success: {success_count}, Failed: {fail_count}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

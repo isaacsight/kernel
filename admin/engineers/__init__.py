@@ -63,6 +63,7 @@ from .video_editor import VideoEditor
 from .graphic_designer import GraphicDesigner
 from .vector_designer import VectorDesigner
 from .prompt_engineer import PromptEngineer
+from .local_llama import LocalLlama
 
 # Remote Resource
 from .remote_worker import RemoteWorker
@@ -113,6 +114,7 @@ __all__ = [
     'GraphicDesigner',
     'VectorDesigner',
     'PromptEngineer',
+    'LocalLlama',
     
     # Remote
     'RemoteWorker'

@@ -26,13 +26,20 @@ def save_state(state):
 def run_evolution_loop():
     print("Starting Evolution Loop...")
     
-    # Initialize the Strategist
-    strategist = get_strategist()
-    
-    # Initialize Engineers
+    # Initialize Engineers FIRST
     trend_scout = TrendScout()
     repurposer = get_content_repurposer()
     publisher = get_publisher()
+    tiktok_workflow = get_tiktok_workflow(template="educational")
+
+    engineers = {
+        "Trend Scout": trend_scout,
+        "Publisher": publisher,
+        "TikTok Workflow": tiktok_workflow
+    }
+
+    # Initialize the Strategist with Engineers
+    strategist = get_strategist(engineers=engineers)
     
     # Example state data (Mocking the genetic data for now)
     current_state = {

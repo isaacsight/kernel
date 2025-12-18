@@ -212,7 +212,7 @@ class OllamaManager:
         return "Ollama was not started by this manager (or is already stopped)."
 
 @critique_action("Generate Blog Post")
-def generate_ai_post(topic, provider="auto"):
+async def generate_ai_post(topic, provider="auto"):
     """
     Generates a blog post using The Alchemist (Context-Aware AI) with a self-correcting loop.
     """
@@ -247,9 +247,9 @@ def generate_ai_post(topic, provider="auto"):
                 logger.info(f"[The Alchemist] Incorporating feedback: {feedback}")
                 # Append feedback to topic/prompt effectively
                 adjusted_topic = f"{topic}. IMPORTANT FEEDBACK FROM PREVIOUS DRAFT: {feedback}"
-                content, context = alchemist.generate(adjusted_topic, doctrine, provider=provider)
+                content, context = await alchemist.generate(adjusted_topic, doctrine, provider=provider)
             else:
-                content, context = alchemist.generate(topic, doctrine, provider=provider)
+                content, context = await alchemist.generate(topic, doctrine, provider=provider)
             
             # 2. FactChecker: Truth Verification
             logger.info("[The FactChecker] Verifying accuracy...")

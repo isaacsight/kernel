@@ -9,6 +9,13 @@ extend-exclude = '''
   | \.venv
   | build
   | dist
+  | tools
+  | admin/web
+  | admin/brain
+  | ai-tools
+  | Director
+  | mobile
+  | frontend
 )/
 '''
 
@@ -45,6 +52,13 @@ exclude = [
     "build",
     "dist",
     ".eggs",
+    "tools",
+    "admin/web",
+    "admin/brain",
+    "ai-tools",
+    "Director",
+    "mobile",
+    "frontend",
 ]
 
 [tool.ruff.per-file-ignores]
@@ -76,6 +90,13 @@ omit = [
     "*/dist/*",
     "setup.py",
     "conftest.py",
+    "*/tools/*",
+    "*/admin/web/*",
+    "*/admin/brain/*",
+    "*/ai-tools/*",
+    "*/Director/*",
+    "*/mobile/*",
+    "*/frontend/*",
 ]
 
 [tool.coverage.report]

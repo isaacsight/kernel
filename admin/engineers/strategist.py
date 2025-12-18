@@ -4,38 +4,52 @@ import time
 
 logger = logging.getLogger("Strategist")
 
+from admin.engineers.council import GrandCouncil
+
+logger = logging.getLogger("Strategist")
+
 class Strategist:
     """
     The Strategist is the brain of the evolution loop.
     It runs as a local agent to maintain system stability and direct the evolution process.
     """
     
-    def __init__(self):
+    def __init__(self, engineers: dict = None):
         self.name = "The Strategist"
+        self.council = GrandCouncil()
+        self.engineers = engineers or {}
+        
+        # Register engineers to council
+        if self.engineers:
+            for name, agent in self.engineers.items():
+                self.council.register_agent(name, agent)
         
     def process_evolution(self, state):
         """
-        Simulates the decision making process.
-        Returns a decision to 'mutate' (take action) or 'idle' (wait).
+        Simulates the decision making process using the Grand Council.
         """
-        logger.info("Consulting Strategist...")
+        logger.info("Consulting Strategist & The Grand Council...")
         
-        # Simulate thinking time
-        time.sleep(1)
+        # Run Council Deliberation
+        council_result = self.council.deliberate("Determine next evolutionary step", state)
         
-        # Simple random decision logic
-        # 40% chance to mutate if status is active/thinking
-        if state.get("status") in ["active", "thinking"]:
-            action = random.choices(["mutate", "idle"], weights=[0.4, 0.6], k=1)[0]
-        else:
-            action = "idle"
-            
+        # Parse result (naive parsing for now, looking for json block in future iteration or utilizing the structured output found in text)
+        output_text = council_result.get("council_output", "")
+        
+        action = "idle"
+        directive = "Thinking..."
+        
+        if "mutate" in output_text.lower() and '"action": "mutate"' in output_text:
+             action = "mutate"
+             directive = "Council elected to Mutate."
+             
         logger.info(f"Strategist decided: {action}")
         
         return {
             "next_action": action,
-            "message": "Strategist decision"
+            "message": directive,
+            "council_transcript": council_result
         }
 
-def get_strategist():
-    return Strategist()
+def get_strategist(engineers=None):
+    return Strategist(engineers)

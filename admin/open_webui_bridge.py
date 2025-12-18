@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any, Union
 import importlib
 import google.generativeai as genai
+import requests
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -146,6 +147,17 @@ def load_agents():
 # Initial load
 load_agents()
 
+def get_ollama_models() -> List[str]:
+    """Checks if Ollama is running and returns available models."""
+    try:
+        response = requests.get("http://localhost:11434/api/tags", timeout=2)
+        if response.status_code == 200:
+            models = response.json().get("models", [])
+            return [m["name"] for m in models]
+    except Exception:
+        pass
+    return []
+
 # --- Helpers ---
 
 def get_agent_response(agent, messages: List[Message]) -> str:
@@ -208,11 +220,16 @@ def get_agent_response(agent, messages: List[Message]) -> str:
 
 @app.get("/v1/models", response_model=ModelList)
 async def list_models():
-    """Lists available agents as models."""
+    """Lists available agents and local Ollama models."""
     models = []
     # Add agents
     for agent_name in AGENTS.keys():
         models.append(ModelCard(id=agent_name))
+        
+    # Add Ollama models
+    ollama_models = get_ollama_models()
+    for model_name in ollama_models:
+        models.append(ModelCard(id=model_name, owned_by="ollama"))
         
     # Add a "Universal Router" model
     models.append(ModelCard(id="Studio Router"))
@@ -240,6 +257,22 @@ async def chat_completions(request: ChatCompletionRequest):
         agent = AGENTS[model_id]
         response_text = get_agent_response(agent, request.messages)
         
+    elif model_id in get_ollama_models():
+        # Route directly to Ollama
+        logger.info(f"Routing request to local Ollama model: {model_id}")
+        try:
+            payload = {
+                "model": model_id,
+                "messages": [{"role": m.role, "content": m.content} for m in request.messages],
+                "stream": False
+            }
+            res = requests.post("http://localhost:11434/v1/chat/completions", json=payload, timeout=60)
+            res.raise_for_status()
+            data = res.json()
+            response_text = data["choices"][0]["message"]["content"]
+        except Exception as e:
+            response_text = f"Error calling local Ollama: {e}"
+
     else:
         # Fuzzy match or fallback
         # Try to find partial match

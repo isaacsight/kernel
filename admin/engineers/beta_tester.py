@@ -1,374 +1,155 @@
 """
-The Beta Tester - Quality Assurance Agent
+The Beta Tester AI - Quality Assurance & Review Agent
 
-Responsible for automated testing, link verification,
-and ensuring a high-quality user experience.
-
-Enhanced with Steam Playtest-inspired features for
-collecting structured beta tester feedback.
+Reviews code, design, and content artifacts to ensure they meet the team's standards
+and provide a user-centric perspective on technical implementations.
 """
 
 import os
 import sys
 import json
 import logging
-import requests
-import time
+from typing import Dict, List, Optional, Any
 from datetime import datetime
-from typing import Dict, List, Set, Optional
-from urllib.parse import urlparse, urljoin
-from bs4 import BeautifulSoup
 
-# Add project root to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from admin.brain.memory_store import get_memory_store
+from admin.brain.metrics_collector import get_metrics_collector
+from admin.brain.model_router import get_model_router
+from config import config
+from admin.brain.agent_base import BaseAgent
 
 logger = logging.getLogger("BetaTester")
 
-class BetaTester:
+class BetaTester(BaseAgent):
     """
-    The Beta Tester (QA Engineer)
+    The Beta Tester AI (QA Specialist)
     
-    Mission: Break things so users don't have to.
-    
-    Responsibilities:
-    - Crawl site for broken links
-    - validate basic accessibility (A11y)
-    - Check page performance (file sizes, load times)
-    - Verify critical flows
-    - Steam Playtest-inspired: Collect beta tester feedback
+    Now data-driven via admin/brain/agents/beta_tester/
     """
     
     def __init__(self):
-        self.name = "The Beta Tester"
-        self.role = "QA Engineer"
-        self.emoji = "🧪"
-        self.visited_urls: Set[str] = set()
-        self.broken_links: List[Dict] = []
-        self.issues: List[Dict] = []
-        
-        # Steam Playtest-inspired: Tester registry and feedback storage
-        self.brain_dir = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'brain'
-        )
-        self.playtest_file = os.path.join(self.brain_dir, "playtest_data.json")
-        self.playtest_data = self._load_playtest_data()
+        # Initialize BaseAgent to load Profile & Skills
+        super().__init__(agent_id="beta_tester")
+        self.memory = get_memory_store()
+        self.metrics = get_metrics_collector()
+        self.model_router = get_model_router()
 
-        
-    def run_suite(self, target_url: str = "http://localhost:8080", max_pages: int = 50) -> Dict:
+    async def execute(self, action: str, **params) -> Dict[str, Any]:
         """
-        Runs the full test suite against a target.
+        Executes an action via the unified Agent Interface.
         """
-        logger.info(f"[{self.name}] Starting test suite on {target_url}")
-        self.issues = []
-        self.broken_links = []
-        self.visited_urls = set()
+        if action == "review":
+            artifact_type = params.get("artifact_type")
+            content = params.get("content")
+            
+            if not artifact_type or not content:
+                raise ValueError("artifact_type and content are required for review.")
+                
+            result = self.review_artifact(artifact_type, content)
+            return result
+            
+        elif action == "simulate":
+            ui_context = params.get("ui_context")
+            if not ui_context:
+                raise ValueError("ui_context is required for simulation.")
+            
+            result = self.simulate_user_interaction(ui_context)
+            return {"simulation": result}
+            
+        else:
+            raise NotImplementedError(f"Action {action} not supported by BetaTester.")
+
+    def review_artifact(self, artifact_type: str, content: str) -> Dict:
+        """
+        Reviews an artifact (code, css, html, or content) and provides feedback.
+        """
+        logger.info(f"Reviewing {artifact_type} artifact...")
         
-        start_time = time.time()
+        prompt = f"""
+        {self.get_system_prompt()}
         
-        # 1. Crawl and Verify
-        self._crawl(target_url, target_url, max_pages)
+        TASK: Review the following {artifact_type} artifact.
         
-        # 2. Compile Report
-        report = {
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "target": target_url,
-            "duration": f"{time.time() - start_time:.2f}s",
-            "pages_scanned": len(self.visited_urls),
-            "issues_found": len(self.issues),
-            "broken_links": len(self.broken_links),
-            "details": {
-                "issues": self.issues,
-                "broken_links": self.broken_links
-            },
-            "status": "PASS" if not self.issues and not self.broken_links else "FAIL"
+        CONTENT:
+        ---
+        {content}
+        ---
+        
+        CRITERIA:
+        1. Correctness: Does it work? Are there logic flaws?
+        2. Friction: Is the UX intuitive? (If applicable)
+        3. Professionalism: Does it meet "Studio OS" high-fidelity standards?
+        4. Performance: Are there unnecessary complexities?
+        
+        OUTPUT FORMAT (JSON ONLY):
+        {{
+            "confidence_score": 0.0-1.0,
+            "blocker_status": "LOWERED" | "RAISED",
+            "critical_issues": ["issue 1", ...],
+            "minor_suggestions": ["suggestion 1", ...],
+            "user_perspective": "How a real user would feel...",
+            "summary": "One sentence summary"
+        }}
+        """
+
+        # Use standardized config model
+        model = {
+            "selected": config.GEMINI_MODEL,
+            "provider": "google",
+            "type": "cloud_free"
         }
         
-        logger.info(f"[{self.name}] Test suite complete. Status: {report['status']}")
-        return report
-
-    def _crawl(self, url: str, base_domain: str, limit: int):
-        """
-        Recursively crawls internal links.
-        """
-        if len(self.visited_urls) >= limit or url in self.visited_urls:
-            return
-            
-        self.visited_urls.add(url)
-        logger.debug(f"Scanning: {url}")
-        
         try:
-            response = requests.get(url, timeout=5)
+            from admin.engineers.contrarian import Contrarian
+            c = Contrarian()
+            raw_response = c._call_llm(model, prompt)
             
-            if response.status_code != 200:
-                self.broken_links.append({"url": url, "status": response.status_code, "source": "crawler"})
-                return
+            # Extract JSON from potential markdown blocks
+            if "```json" in raw_response:
+                raw_response = raw_response.split("```json")[1].split("```")[0].strip()
+            elif "```" in raw_response:
+                raw_response = raw_response.split("```")[1].split("```")[0].strip()
                 
-            # Parse Content
-            content_type = response.headers.get("Content-Type", "")
-            if "text/html" not in content_type:
-                return
-                
-            soup = BeautifulSoup(response.text, "html.parser")
-            
-            # Run Checks
-            self._check_accessibility(url, soup)
-            self._check_seo_basics(url, soup)
-            
-            # Find Links
-            for link in soup.find_all("a", href=True):
-                href = link["href"]
-                full_url = urljoin(url, href)
-                
-                # Normalize
-                parsed = urlparse(full_url)
-                clean_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-                
-                # Check if internal
-                if base_domain in full_url:
-                    self._crawl(clean_url, base_domain, limit)
-                else:
-                    # External link check (head request only)
-                    self._check_external_link(full_url, url)
-                    
+            report = json.loads(raw_response)
         except Exception as e:
-            logger.error(f"Failed to crawl {url}: {e}")
-            self.issues.append({"url": url, "type": "crawl_error", "message": str(e)})
-
-    def _check_external_link(self, url: str, source_page: str):
-        """
-        Verifies an external link without downloading the body.
-        """
-        # specialized logic to skip checking certain domains to avoid bans or massive delays
-        # or basic caching. For now, simple HEAD request.
-        try:
-            # Skip checking same external link multiple times in one run
-            # (In a real implementation, we'd cache this across the run)
-            pass 
-        except Exception:
-            pass
-
-    def _check_accessibility(self, url: str, soup: BeautifulSoup):
-        """
-        Basic A11y checks.
-        """
-        # 1. Images missing alt text
-        images = soup.find_all("img")
-        for img in images:
-            if not img.get("alt"):
-                self.issues.append({
-                    "url": url,
-                    "type": "accessibility",
-                    "severity": "medium",
-                    "message": f"Image missing alt text: {img.get('src', 'unknown')}"
-                })
-                
-        # 2. Page title missing
-        if not soup.title:
-             self.issues.append({
-                "url": url,
-                "type": "accessibility",
-                "severity": "high",
-                "message": "Page missing <title> tag"
-            })
-
-    def _check_seo_basics(self, url: str, soup: BeautifulSoup):
-        """
-        Basic SEO checks.
-        """
-        # 1. Heading hierarchy (only one H1)
-        h1s = soup.find_all("h1")
-        if len(h1s) > 1:
-            self.issues.append({
-                "url": url,
-                "type": "seo",
-                "severity": "low",
-                "message": f"Multiple H1 tags found ({len(h1s)})"
-            })
-        elif len(h1s) == 0:
-             self.issues.append({
-                "url": url,
-                "type": "seo",
-                "severity": "medium",
-                "message": "No H1 tag found"
-            })
-
-    # ============================================================
-    # Steam Playtest-Inspired Features
-    # ============================================================
-    
-    def _load_playtest_data(self) -> Dict:
-        """Load playtest registry and feedback."""
-        if os.path.exists(self.playtest_file):
-            try:
-                with open(self.playtest_file, 'r') as f:
-                    return json.load(f)
-            except:
-                pass
-        return {
-            "testers": [],
-            "feedback": [],
-            "playtests": []
-        }
-    
-    def _save_playtest_data(self):
-        """Persist playtest data."""
-        os.makedirs(self.brain_dir, exist_ok=True)
-        with open(self.playtest_file, 'w') as f:
-            json.dump(self.playtest_data, f, indent=2)
-    
-    def register_playtester(
-        self, 
-        email: str, 
-        name: str = "Anonymous",
-        interests: List[str] = None
-    ) -> Dict:
-        """
-        Register a beta tester for playtests.
-        
-        Inspired by Steam Playtest's tester signup.
-        """
-        # Check if already registered
-        existing = next((t for t in self.playtest_data["testers"] if t["email"] == email), None)
-        if existing:
-            return {"success": False, "error": "Already registered", "tester": existing}
-        
-        tester = {
-            "id": f"tester_{len(self.playtest_data['testers']) + 1:04d}",
-            "email": email,
-            "name": name,
-            "interests": interests or [],
-            "registered_at": datetime.now().isoformat(),
-            "tests_participated": 0,
-            "feedback_count": 0
-        }
-        
-        self.playtest_data["testers"].append(tester)
-        self._save_playtest_data()
-        
-        logger.info(f"[{self.name}] 🎮 New tester registered: {name} ({email})")
-        return {"success": True, "tester": tester}
-    
-    def collect_feedback(
-        self, 
-        tester_id: str, 
-        category: str,
-        feedback: str,
-        severity: str = "medium",
-        feature: str = None
-    ) -> Dict:
-        """
-        Collect structured feedback from a playtester.
-        
-        Categories: bug, feature_request, usability, praise, other
-        Severity: low, medium, high, critical
-        """
-        tester = next((t for t in self.playtest_data["testers"] if t["id"] == tester_id), None)
-        
-        feedback_entry = {
-            "id": f"fb_{len(self.playtest_data['feedback']) + 1:04d}",
-            "tester_id": tester_id,
-            "tester_name": tester["name"] if tester else "Unknown",
-            "category": category,
-            "severity": severity,
-            "feature": feature,
-            "feedback": feedback,
-            "submitted_at": datetime.now().isoformat(),
-            "status": "new"
-        }
-        
-        self.playtest_data["feedback"].append(feedback_entry)
-        
-        # Update tester stats
-        if tester:
-            tester["feedback_count"] = tester.get("feedback_count", 0) + 1
-        
-        self._save_playtest_data()
-        
-        logger.info(f"[{self.name}] 📝 Feedback collected: {category} - {feedback[:50]}...")
-        return {"success": True, "feedback_id": feedback_entry["id"]}
-    
-    def run_playtest(self, feature_flag: str, tester_ids: List[str] = None) -> Dict:
-        """
-        Start a limited playtest for specific features.
-        
-        Inspired by Steam's controlled playtest releases.
-        """
-        playtest = {
-            "id": f"pt_{len(self.playtest_data['playtests']) + 1:03d}",
-            "feature_flag": feature_flag,
-            "started_at": datetime.now().isoformat(),
-            "status": "active",
-            "participants": tester_ids or [],
-            "feedback_collected": 0
-        }
-        
-        self.playtest_data["playtests"].append(playtest)
-        self._save_playtest_data()
-        
-        logger.info(f"[{self.name}] 🚀 Playtest started: {feature_flag}")
-        return {"success": True, "playtest": playtest}
-    
-    def generate_playtest_report(self) -> Dict:
-        """
-        Generate a summary report of playtest feedback.
-        
-        Inspired by Steam's developer feedback dashboard.
-        """
-        feedback = self.playtest_data["feedback"]
-        
-        # Categorize feedback
-        by_category = {}
-        by_severity = {"critical": 0, "high": 0, "medium": 0, "low": 0}
-        
-        for fb in feedback:
-            cat = fb.get("category", "other")
-            by_category[cat] = by_category.get(cat, 0) + 1
+            logger.error(f"LLM Review failed: {e}")
+            report = {
+                "confidence_score": 0.0,
+                "blocker_status": "RAISED",
+                "critical_issues": [f"Review System Error: {str(e)}"],
+                "minor_suggestions": [],
+                "user_perspective": "The tester is confused by an internal error.",
+                "summary": "System failure during review."
+            }
             
-            sev = fb.get("severity", "medium")
-            if sev in by_severity:
-                by_severity[sev] += 1
+        # Log event
+        self.metrics.log_event("beta_tester", {"action": "artifact_reviewed", "type": artifact_type, "report": report})
         
-        # Recent feedback
-        recent = sorted(feedback, key=lambda x: x.get("submitted_at", ""), reverse=True)[:10]
-        
-        report = {
-            "generated_at": datetime.now().isoformat(),
-            "total_testers": len(self.playtest_data["testers"]),
-            "total_feedback": len(feedback),
-            "active_playtests": len([p for p in self.playtest_data["playtests"] if p.get("status") == "active"]),
-            "by_category": by_category,
-            "by_severity": by_severity,
-            "recent_feedback": recent,
-            "action_items": [
-                fb for fb in feedback 
-                if fb.get("severity") in ["critical", "high"] and fb.get("status") == "new"
-            ]
-        }
-        
-        logger.info(f"[{self.name}] 📊 Playtest report generated: {report['total_feedback']} feedback items")
         return report
 
-    def run_task(self, task: str, context: Dict = {}) -> Dict:
+    def simulate_user_interaction(self, ui_context: str) -> str:
         """
-        Executes a task based on instructions.
-        Compatible with Studio Node's generic agent runner.
+        Simulates a user walking through a UI described in text/html.
         """
-        logger.info(f"[{self.name}] Received task: {task}")
+        prompt = f"{self.get_system_prompt()}\n\nTASK: Describe your exact steps and frustrations when trying to use this interface: {ui_context}"
         
-        # Parse context for parameters
-        target_url = context.get("target_url", "http://localhost:8080")
-        max_pages = context.get("max_pages", 50)
+        model = {
+            "selected": "gemini-2.0-flash",
+            "provider": "google",
+            "type": "cloud_free"
+        }
         
-        if "crawl" in task.lower() or "test" in task.lower():
-            return self.run_suite(target_url, max_pages)
-            
-        return {"status": "skipped", "message": "Task not understood. Supported tasks: 'crawl', 'test', 'run suite'"}
+        try:
+            from admin.engineers.contrarian import Contrarian
+            c = Contrarian()
+            return c._call_llm(model, prompt)
+        except Exception as e:
+            return f"Interaction simulation failed: {e}"
+
+def get_beta_tester():
+    return BetaTester()
 
 if __name__ == "__main__":
-    # Test run
-    logging.basicConfig(level=logging.INFO)
     tester = BetaTester()
-    # Mocking a run if localhost isn't up, or trying it.
-    # Assuming user might have it running or we just test the class instantiation.
-    print(f"Beta Tester {tester.emoji} initialized.")
+    sample_css = ".button { color: red; }"
+    print(tester.review_artifact("css", sample_css))

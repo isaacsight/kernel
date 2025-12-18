@@ -4,22 +4,31 @@ date: 2025-12-15
 category: Meta
 mode: Page
 excerpt: "A small frontier studio that runs on its own operating system first."
-image: /static/images/studio-os.jpg
+image: static/images/isaac-profile.jpg
 ---
 
-Does This Feel Right? is a small frontier studio that runs on its own operating system first—and invites other builders to watch, copy, or commission that system, not generic services.[[1]](https://www.doesthisfeelright.com)
+Does This Feel Right? is a small frontier studio that runs on its own operating system first. It is a laboratory for **Agentic Systems Engineering**—the discipline of building the **opinionated OS layer** for hybrid human-AI teams—and invites other builders to watch, copy, or commission that system, not generic services.[[1]](https://www.doesthisfeelright.com)
 
-![Isaac Hernandez](/static/images/isaac-profile.jpg)
+<div class="profile-block">
+    <div class="profile-image-wrapper">
+        <img src="static/images/isaac-profile.jpg" alt="Isaac Hernandez">
+    </div>
+    <span class="profile-caption">Isaac Hernandez // Studio Lead</span>
+</div>
 
 ## What this studio is
 
-This is not an agency or a content brand. It is a tightly scoped studio-of-one that uses AI agents, automations, and opinionated workflows to run real work: thinking, writing, building, and deciding.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
-The primary product is the Studio OS itself—a live, evolving configuration of tools, agents, rituals, and metrics that makes one human unusually effective in an AI-saturated world.[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)
+This is not an agency or a content brand. It is an engineering lab focused on **Agentic Systems Engineering** (or AI-Native Organization Design). We build and orchestrate agents, workflows, and guardrails as first-class software concerns.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
+The primary product is the [Studio OS Protocol](/products.html)—a forkable, verifiable specification for agentic governance that makes one human or team unusually effective.[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)
 
-## Where it sits in the AI stack
+The giants—OpenAI, Anthropic (Claude), Google (Gemini), Perplexity, and others—provide foundation models, tools, and ecosystems. At the same time, enterprise platforms like Kore.ai and UiPath offer heavy, six-figure orchestration for the Fortune 2000.
 
-The giants—OpenAI, Anthropic (Claude), Google (Gemini), Perplexity, and others—provide foundation models, tools, and ecosystems.[[5]](https://xenoss.io/blog/openai-vs-anthropic-vs-google-gemini-enterprise-llm-platform-guide)[[6]](https://productstudio.substack.com/p/openai-vs-anthropic-a-detailed-comparison)[[7]](https://www.promptitude.io/post/navigating-the-ai-landscape-openai-vs-anthropic-vs-google-ai-in-2024)[[8]](https://beam.ai/agentic-insights/the-rise-of-ai-ecosystems-lessons-for-startups-building-on-foundation-models)
-Does This Feel Right sits one layer above them as an agentic OS and taste layer: a specific, lived way of orchestrating multiple models and tools into a coherent studio, avoiding lock-in and chaos.[[8]](https://beam.ai/agentic-insights/the-rise-of-ai-ecosystems-lessons-for-startups-building-on-foundation-models)[[9]](https://www.mckinsey.com/capabilities/quantumblack/our-insights/seizing-the-agentic-ai-advantage)[[10]](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-223.pdf)[[11]](https://arxiv.org/html/2503.23037v1)
+Does This Feel Right sits one layer above the models and as an **opinionated, studio-sized alternative** to the enterprise giants. We are the decision layer for frontier teams who need agility and taste rather than complex compliance dashboards. We practice a specific engineering discipline focused on [Strategic Positioning](/strategy.html) at the intersection of:
+
+- **AI Engineering**: Building and orchestrating agents, workflows, and guardrails.
+- **Human-AI Collaboration**: Designing decision-making loops where humans and agents share responsibility.
+- **Computational Organization Theory**: Modeling how AI-native teams structure roles, rituals, and metrics.
+- **AI Governance**: Ensuring alignment, safety, and verifiability in agentic systems.[[8]](https://beam.ai/agentic-insights/the-rise-of-ai-ecosystems-lessons-for-startups-building-on-foundation-models)[[9]](https://www.mckinsey.com/capabilities/quantumblack/our-insights/seizing-the-agentic-ai-advantage)[[10]](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-223.pdf)[[11]](https://arxiv.org/html/2503.23037v1)
 
 ## Who it is for
 
@@ -79,11 +88,11 @@ Everything routes through three verbs:
 - Watch  
   Follow the studio snapshot, changelog, and essays to see how one frontier studio actually runs day to day.[[1]](https://www.doesthisfeelright.com)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
 
-- Copy  
-  Take specific patterns and utilities (diagrams, workflows, configs) and adapt them to your own stack and team.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
+- [Build](/products.html)  
+  Join the **Agentic OS Bootcamp** to build your own Studio OS spine, or run the **Autonomous System Designer** on your own repo to receive a system health and OS prescription.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
 
-- Commission  
-  For a small number of aligned teams, commission a custom frontier system: a Studio OS spine or Frontier Team design tailored to their product and stack, using the studio’s own OS as the reference implementation.[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
+- [Embed](/products.html)  
+  For high-alignment teams, we provide **Frontier Team as a Service**: embedding our agents and protocols directly into your flow to deliver real decisions and code.[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
 
 Commissions are not ongoing “fractional” roles; they are focused system-design engagements: one or a few flows, one OS spine, one clear before/after.
 
@@ -96,3 +105,4 @@ To stay intelligent and sharp, the studio deliberately avoids:
 - Engagements where leadership is unwilling to change structure or workflows in response to what the OS reveals.
 
 The thesis is simple: by running the cleanest, most opinionated frontier studio it can for itself—and making that OS partially legible—Does This Feel Right can give other builders something rarer than another tool or talk: a concrete, living example of an AI-native way of working that actually feels right.[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[1]](https://www.doesthisfeelright.com)[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
+ 

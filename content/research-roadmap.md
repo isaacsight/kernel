@@ -11,15 +11,15 @@ type: page
 **The Studio OS is not a finished product; it is a continuous inquiry.**
 We explore four core lanes to define the future of AI-native work.
 
-<div class="mermaid">
+<div class="mermaid" style="display: flex; justify-content: center; margin: 2rem 0;">
 graph TD
-    %% Base Styles
-    classDef hub fill:#fff,stroke:#000,stroke-width:2px,color:#000
-    classDef lane fill:#f5f5f5,stroke:#333,stroke-width:1px,color:#000
-    classDef exp fill:#e6f3ff,stroke:#0066cc,stroke-width:1px,color:#0066cc
-    
+    %% Base Styles - Cyber/Dark Theme
+    classDef hub fill:#000,stroke:#fff,stroke-width:4px,color:#fff,shape:hexagon
+    classDef lane fill:#111,stroke:#444,stroke-width:2px,color:#eee,rx:5,ry:5
+    classDef exp fill:#1a1a1a,stroke:#00d4a1,stroke-width:1px,color:#00d4a1,stroke-dasharray: 4 2
+
     %% Core Node
-    OS[Studio OS]:::hub
+    OS(Studio OS):::hub
     
     %% Research Lanes
     L1[Frontier Agents]:::lane
@@ -34,17 +34,29 @@ graph TD
     OS --> L4
     
     %% Experiments
-    L1 --> E1(The Architect):::exp
-    L1 --> E2(The Guardian):::exp
-    L2 --> E3(Min Viable Studio):::exp
-    L3 --> E4(Frontier Team):::exp
-    L4 --> E5(Alignment Lens):::exp
+    L1 -.-> E1(The Architect):::exp
+    L1 -.-> E2(The Guardian):::exp
+    L2 -.-> E3(Min Viable Studio):::exp
+    L3 -.-> E4(Frontier Team):::exp
+    L4 -.-> E5(Alignment Lens):::exp
+    
+    %% Link Styles
+    linkStyle default stroke:#444,stroke-width:2px;
 </div>
 
 <!-- mermaid-js -->
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+mermaid.initialize({ 
+    startOnLoad: true, 
+    theme: 'dark',
+    themeVariables: {
+        background: 'transparent',
+        primaryColor: '#000',
+        edgeLabelBackground: '#111',
+        tertiaryColor: '#1a1a1a'
+    }
+});
 </script>
 
 <div class="research-lanes">

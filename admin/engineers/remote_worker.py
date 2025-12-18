@@ -96,5 +96,5 @@ class RemoteWorker:
             logger.error(f"Download exception: {e}")
             return False
 
-def get_remote_worker():
-    return RemoteWorker()
+def get_remote_worker(host="100.77.171.23", user="isaachernandez", key_path=None):
+    return RemoteWorker(host=host, user=user, key_path=key_path)

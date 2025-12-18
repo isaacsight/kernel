@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --text: #ffffff;
+            --accent: #40DCA5;
+            --muted: #666;
+            --card-bg: #1a1a1a;
+            --warning: #ffb700;
+        }
+
+        body {
+            width: 320px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 16px;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            margin-top: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+        }
+
+        .copilot-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #35b88a;
+        }
+
+        #snapshot {
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 12px;
+            border: 1px solid #333;
+        }
+
+        .decision-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #222;
+        }
+
+        .decision-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question {
+            display: block;
+            margin-bottom: 8px;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background: #333;
+        }
+
+        #status {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--muted);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="section">
+        <div class="copilot-header">
+            <h2>Studio OS Copilot</h2>
+            <div class="status-dot"></div>
+        </div>
+        <label>DOES THIS STILL FEEL RIGHT?</label>
+        <div id="snapshot">Scanning for decisions...</div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #222; margin: 16px 0;">
+
+    <div class="section">
+        <h2>Capture Decision</h2>
+
+        <label>PATTERN OBSERVED</label>
+        <select id="pattern">
+            <option value="rushed_release">Rushed Release</option>
+            <option value="felt_wrong">Something Felt Wrong</option>
+            <option value="decision">Strategic Decision</option>
+        </select>
+
+        <label>CONTEXT / FEELING</label>
+        <textarea id="note" placeholder="Why does this matter?"></textarea>
+
+        <button id="capture">COMMIT TO OS</button>
+    </div>
+
+    <div id="status"></div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

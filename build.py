@@ -145,6 +145,8 @@ def markdown_to_html(text):
     html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html)
     # Italic
     html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html)
+    # Images
+    html = re.sub(r'!\[(.*?)\]\((.*?)\)', r'<img src="\2" alt="\1">', html)
     # Links
     html = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', html)
     
@@ -384,7 +386,7 @@ def build():
                  out_rel_path = os.path.join(rel_dir, clean_slug + '.html')
             else:
                 # Top level content check
-                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio']:
+                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio', 'architecture', 'agentic-systems-engineering', 'extensions', 'products']:
                      # Top level pages
                      out_rel_path = clean_slug + '.html'
                 else:

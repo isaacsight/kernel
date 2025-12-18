@@ -1,0 +1,11 @@
+{
+    "exclude": [
+        "tools",
+        "admin/web",
+        "admin/brain",
+        "ai-tools",
+        "Director",
+        "mobile",
+        "frontend"
+    ]
+}

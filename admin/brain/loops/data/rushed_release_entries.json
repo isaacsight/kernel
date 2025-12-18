@@ -1,0 +1,175 @@
+{
+  "entries": [
+    {
+      "entry_id": "entry_1766002370_0",
+      "user_id": "test12345",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.87,
+        "guardrails": [
+          "no_friday_deploys",
+          "review_required"
+        ]
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://example.com",
+        "title": "Deploy",
+        "source": "test"
+      },
+      "created_at": "2025-12-17T20:12:50.325822"
+    },
+    {
+      "entry_id": "entry_1766002388_1",
+      "user_id": "test12345",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.87,
+        "guardrails": [
+          "no_friday_deploys",
+          "review_required"
+        ]
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://example.com",
+        "title": "Deploy",
+        "source": "test"
+      },
+      "created_at": "2025-12-17T20:13:08.038939"
+    },
+    {
+      "entry_id": "entry_1766003711_2",
+      "user_id": "test_llm",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.87,
+        "guardrails": [
+          "no_friday_deploys",
+          "review_required"
+        ]
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://github.com/myrepo/release/v1",
+        "title": "Late Night Push",
+        "note": "Honestly just wanted to go to bed",
+        "source": "curl_test"
+      },
+      "created_at": "2025-12-17T20:35:11.175735"
+    },
+    {
+      "entry_id": "entry_1766013519_3",
+      "user_id": "verify_llm_v8_retry",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": true,
+        "overrides": 0,
+        "reviewed": true,
+        "reviewed_at": "2025-12-17T23:25:17.556289"
+      },
+      "context": {
+        "url": "https://github.com/company/hotfix",
+        "title": "Emergency Fix",
+        "note": "Pushing directly to main to fix the outage",
+        "source": "verification_script_v8_retry"
+      },
+      "created_at": "2025-12-17T23:18:39.435221"
+    },
+    {
+      "entry_id": "entry_1766015221_4",
+      "user_id": "anon_abc123",
+      "type": "optimization_suggested",
+      "classification": {
+        "pattern": "moved_resource",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "original_url": "file:///Users/isaachernandez/blog%20design/docs/posts/extensions.html",
+        "suggested_url": "file:///Users/isaachernandez/blog%20design/docs/extensions.html",
+        "reason": "Legacy posts/ directory moved to top-level docs/",
+        "source": "self_healing_nav"
+      },
+      "created_at": "2025-12-17T23:47:01.032088"
+    },
+    {
+      "entry_id": "entry_1766015404_5",
+      "user_id": "isaac_demo",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://github.com/isaac/blog-design/deploy",
+        "title": "Late Night Deploy",
+        "note": "Pushing this quickly before bed.",
+        "source": "terminal"
+      },
+      "created_at": "2025-12-17T23:50:04.876368"
+    },
+    {
+      "entry_id": "entry_1766015457_6",
+      "user_id": "isaac_demo",
+      "type": "decision",
+      "classification": {
+        "pattern": "rushed_release",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": true,
+        "overrides": 0,
+        "reviewed": true,
+        "reviewed_at": "2025-12-17T23:51:09.472662"
+      },
+      "context": {
+        "url": "https://github.com/isaac/blog-design/deploy",
+        "title": "Late Night Deploy",
+        "note": "Pushing this quickly before bed.",
+        "source": "terminal"
+      },
+      "created_at": "2025-12-17T23:50:57.334818"
+    }
+  ],
+  "pattern_counts": {
+    "rushed_release": 6,
+    "moved_resource": 1
+  }
+}

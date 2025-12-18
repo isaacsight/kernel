@@ -352,7 +352,32 @@ python -m cProfile -o profile.stats build.py
 python -m pstats profile.stats
 # Then: sort cumtime, stats 10
 ```
+## System Optimization & Maintenance
 
+### 1. Health Check Script
+We have a script to monitor for high CPU usage and workspace bloat. Run this if your system feels slow.
+```bash
+python scripts/check_health.py
+```
+
+### 2. Workspace Exclusions
+To keep VS Code and the Language Server fast, large data directories **must** be excluded from indexing.
+**Current Exclusions:**
+- `tools/` (>12k files)
+- `node_modules/`
+- `.venv/`
+
+**How to Exclude a New Directory:**
+If you add a folder with many files (datasets, logs, etc.), you must add it to:
+1.  **`pyproject.toml`** (under `black`, `ruff`, `mypy`).
+2.  **`.vscode/settings.json`** (under `python.analysis.exclude` and `files.watcherExclude`).
+3.  **`pyrightconfig.json`**.
+
+### 3. Emergency Fixes
+If VS Code is using high CPU:
+1.  Run `python scripts/check_health.py` to identify the cause.
+2.  **Reload Window**: Press `Cmd+Shift+P` -> "Developer: Reload Window".
+3.  **Kill Process**: If it's stuck, kill the `run-jedi-language-server` process.
 ## Code Style Guidelines
 
 ### Python Style (PEP 8)
