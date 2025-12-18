@@ -3167,6 +3167,101 @@ body:has(.ceo-layout) .site-footer {
     font-size: 0.75rem;
 }
 
+/* Reasoning Widget - Main Content Version */
+.reasoning-section {
+    padding: var(--space-8) var(--space-6);
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.reasoning-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.reasoning-widget-main {
+    background: linear-gradient(135deg, rgba(64, 220, 165, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid var(--border-emphasis);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.reasoning-widget-main:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--accent-glow);
+    transform: translateY(-2px);
+}
+
+.reasoning-widget-main .rw-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-emphasis);
+}
+
+.reasoning-widget-main .rw-label {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+}
+
+.reasoning-widget-main .rw-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 0 12px currentColor;
+}
+
+.reasoning-widget-main .rw-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+}
+
+.reasoning-widget-main .rw-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.reasoning-widget-main .rw-key {
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.reasoning-widget-main .rw-val {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    font-size: var(--text-lg);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .reasoning-section {
+        padding: var(--space-6) var(--space-4);
+    }
+
+    .reasoning-widget-main {
+        padding: var(--space-5);
+    }
+
+    .reasoning-widget-main .rw-val {
+        font-size: var(--text-base);
+    }
+}
+
 /* Intelligence Card (Patterns) */
 .intelligence-card {
     background: rgba(255, 255, 255, 0.03);
