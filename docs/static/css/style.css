@@ -632,7 +632,8 @@ a:hover {
     flex-direction: column;
     gap: 16px;
     align-items: center;
-    padding-bottom: 8px;
+    padding-bottom: 24px;
+    width: 100%;
 }
 
 .avatar {
@@ -1429,6 +1430,8 @@ hr {
 @media (max-width: 768px) {
     .site-footer {
         margin-left: 0;
+        position: static;
+        z-index: 1;
     }
 }
 
@@ -2508,6 +2511,7 @@ body.menu-open {
     left: 0;
     bottom: 0;
     width: 280px;
+    max-height: 100vh;
     background: var(--bg-secondary);
     z-index: 2000;
     transform: translateX(-100%);
@@ -2516,6 +2520,8 @@ body.menu-open {
     padding: var(--space-6);
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .mobile-drawer.active {
@@ -3540,5 +3546,17 @@ body:has(.ceo-layout) .site-footer {
     .value-grid {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* Buy Me a Coffee Widget Z-Index Fix */
+#bmc-wbtn {
+    z-index: 1998 !important;
+}
+
+/* Mobile: Hide widget when menu is open */
+@media (max-width: 768px) {
+    body.menu-open #bmc-wbtn {
+        display: none !important;
     }
 }
