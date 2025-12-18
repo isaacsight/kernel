@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Settings, Rocket, Palette } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Rocket, Palette, DollarSign } from 'lucide-react';
 
 const Layout = ({ children }) => {
     const navItems = [
         { icon: LayoutDashboard, label: 'Mission Control', path: '/' },
         { icon: FileText, label: 'Content Studio', path: '/content' },
         { icon: Palette, label: 'Design Studio', path: '/design' },
+        { icon: DollarSign, label: 'Revenue', path: '/revenue' },
         { icon: Settings, label: 'Settings', path: '/settings' },
     ];
 

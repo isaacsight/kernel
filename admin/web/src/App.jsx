@@ -8,6 +8,7 @@ import DesignStudio from './components/DesignStudio';
 import Settings from './components/Settings';
 import ClientPortal from './components/ClientPortal';
 import Consulting from './components/Consulting';
+import RevenueDashboard from './components/RevenueDashboard';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/clients" element={<ClientPortal />} />
           <Route path="/consulting" element={<Consulting />} />
+          <Route path="/revenue" element={<RevenueDashboard />} />
         </Routes>
       </Layout>
     </Router>
@@ -29,3 +31,4 @@ function App() {
 }
 
 export default App;
+

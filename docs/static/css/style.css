@@ -480,7 +480,7 @@ a:hover {
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
+    height: 100vh;
     width: var(--sidebar-width);
     background: var(--bg-secondary);
     border-right: 1px solid var(--border-subtle);
@@ -489,6 +489,26 @@ a:hover {
     flex-direction: column;
     align-items: center;
     padding: 20px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .sidebar-content {
@@ -3312,6 +3332,7 @@ body:has(.ceo-layout) .site-footer {
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
+
 /* ============================================
    ORIENTATION LAYER STYLES
    Homepage human-first entry point
@@ -3507,15 +3528,15 @@ body:has(.ceo-layout) .site-footer {
     .orientation-headline {
         font-size: var(--text-4xl);
     }
-    
+
     .orientation-statement {
         font-size: var(--text-lg);
     }
-    
+
     .entry-paths-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .value-grid {
         flex-direction: column;
         align-items: center;
