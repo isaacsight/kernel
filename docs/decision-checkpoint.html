@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Checkpoint - Does This Feel Right?</title>
+    <meta name="description"
+        content="A structured pause before you automate, delegate, or launch. Forces judgment, not answers.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Decision Checkpoint - Does This Feel Right?">
+    <meta property="og:description"
+        content="A structured pause before you automate, delegate, or launch. Forces judgment, not answers.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/decision-checkpoint.html">
+
+    <!-- PWA / Mobile Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DTFR">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+    <link rel="icon" type="image/png" href="/static/images/icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
+
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Decision Checkpoint Widget Styles */
+        .checkpoint-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: var(--space-6) var(--space-4);
+            min-height: 100vh;
+        }
+
+        .checkpoint-hero {
+            text-align: center;
+            margin-bottom: var(--space-8);
+            padding-top: var(--space-7);
+        }
+
+        .checkpoint-hero h1 {
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .checkpoint-hero .subtitle {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .checkpoint-hero .philosophy {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            margin-top: var(--space-4);
+            font-style: italic;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: var(--space-6);
+        }
+
+        .progress-bar-outer {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), #4ade80);
+            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 999px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--space-2);
+        }
+
+        .progress-step {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            transition: color 0.3s;
+        }
+
+        .progress-step.active {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .progress-step.completed {
+            color: var(--text-secondary);
+        }
+
+        /* Step Cards */
+        .step-card {
+            display: none;
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-card.active {
+            display: block;
+        }
+
+        .step-label {
+            font-size: var(--text-xs);
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-3);
+            font-weight: 600;
+        }
+
+        .step-question {
+            font-size: var(--text-2xl);
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: var(--space-2);
+        }
+
+        .step-hint {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-5);
+            font-style: italic;
+        }
+
+        .step-input {
+            width: 100%;
+            min-height: 140px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-emphasis);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .step-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-subtle);
+        }
+
+        .step-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        /* Decision Input (Step 0) */
+        .decision-intro {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-emphasis);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .decision-intro h2 {
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-3);
+            margin-top: 0;
+        }
+
+        .decision-intro p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        /* Navigation Buttons */
+        .step-nav {
+            display: flex;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+
+        .btn-next {
+            flex: 1;
+            background: var(--accent-primary);
+            color: #000;
+            font-weight: 600;
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: var(--text-base);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(102, 181, 110, 0.3);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--border-emphasis);
+            color: var(--text-secondary);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-base);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--text-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Verdict Display */
+        .verdict-container {
+            display: none;
+            text-align: center;
+            padding: var(--space-8) var(--space-4);
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .verdict-container.active {
+            display: block;
+        }
+
+        .verdict-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: var(--space-4);
+        }
+
+        .verdict-badge {
+            display: inline-block;
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+        }
+
+        .verdict-badge.feels-right {
+            background: linear-gradient(135deg, rgba(102, 181, 110, 0.15), rgba(74, 222, 128, 0.1));
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .verdict-badge.feels-risky {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+            color: #FBBF24;
+            border: 2px solid #FBBF24;
+        }
+
+        .verdict-badge.feels-premature {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+            color: #EF4444;
+            border: 2px solid #EF4444;
+        }
+
+        .verdict-message {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin: 0 auto var(--space-8);
+        }
+
+        /* Decision Snapshot */
+        .snapshot-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-emphasis);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            text-align: left;
+            margin-bottom: var(--space-6);
+        }
+
+        .snapshot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .snapshot-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .snapshot-date {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            font-family: var(--font-mono);
+        }
+
+        .snapshot-decision {
+            font-size: var(--text-base);
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: var(--space-4);
+            padding: var(--space-3);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .snapshot-qa {
+            margin-bottom: var(--space-3);
+        }
+
+        .snapshot-q {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-1);
+        }
+
+        .snapshot-a {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Export Buttons */
+        .export-actions {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-emphasis);
+            color: var(--text-primary);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .btn-export:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-export svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-restart {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-tertiary);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            margin-top: var(--space-4);
+            transition: all 0.2s;
+        }
+
+        .btn-restart:hover {
+            border-color: var(--text-tertiary);
+            color: var(--text-secondary);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-primary);
+            color: var(--text-primary);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .checkpoint-container {
+                padding: var(--space-4) var(--space-3);
+            }
+
+            .checkpoint-hero h1 {
+                font-size: var(--text-3xl);
+            }
+
+            .step-question {
+                font-size: var(--text-xl);
+            }
+
+            .verdict-badge {
+                font-size: var(--text-2xl);
+                padding: var(--space-3) var(--space-5);
+            }
+
+            .step-nav {
+                flex-direction: column-reverse;
+            }
+
+            .btn-back {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="container">
+        <!-- Minimal Header for Tool -->
+        <header class="mobile-header">
+            <div class="header-inner">
+                <a href="index.html" class="header-module logo-module">
+                    <div class="logo-container">
+                        <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
+                            <circle cx="12" cy="12" r="2" />
+                        </svg>
+                    </div>
+                </a>
+                <div class="header-controls">
+                    <a href="index.html" class="control-btn" aria-label="Back to Studio"
+                        style="color: var(--text-secondary); font-size: var(--text-sm);">
+                        ← Back to Studio
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <div class="checkpoint-container">
+                <!-- Hero -->
+                <div class="checkpoint-hero">
+                    <h1>Decision Checkpoint</h1>
+                    <p class="subtitle">A structured pause before you automate, delegate, or launch.</p>
+                    <p class="philosophy">Not advice. Not a chatbot. Just the questions you should be asking yourself.
+                    </p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progress-container" style="display: none;">
+                    <div class="progress-bar-outer">
+                        <div class="progress-bar-inner" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <span class="progress-step" data-step="1">1</span>
+                        <span class="progress-step" data-step="2">2</span>
+                        <span class="progress-step" data-step="3">3</span>
+                        <span class="progress-step" data-step="4">4</span>
+                        <span class="progress-step" data-step="5">5</span>
+                    </div>
+                </div>
+
+                <!-- Step 0: Decision Input -->
+                <div class="step-card active" data-step="0">
+                    <div class="decision-intro">
+                        <h2>What's the decision?</h2>
+                        <p>Describe the thing you're about to do. Be specific.</p>
+                        <textarea class="step-input" id="decision-input"
+                            placeholder="e.g., I'm about to automate our customer support responses with AI..."></textarea>
+                        <div class="step-nav">
+                            <button class="btn-next" id="start-btn" disabled>Begin Checkpoint →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="step-card" data-step="1">
+                    <span class="step-label">Question 1 of 5</span>
+                    <h2 class="step-question">What problem does this actually solve?</h2>
+                    <p class="step-hint">Not the proxy problem. The real one.</p>
+                    <textarea class="step-input" id="answer-1"
+                        placeholder="Be honest. What are you really trying to fix?"></textarea>
+                    <div class="step-nav">
+                        <button class="btn-back" data-back>← Back</button>
+                        <button class="btn-next" data-next disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card" data-step="2">
+                    <span class="step-label">Question 2 of 5</span>
+                    <h2 class="step-question">What assumption am I making that could quietly fail?</h2>
+                    <p class="step-hint">The thing you're taking for granted.</p>
+                    <textarea class="step-input" id="answer-2"
+                        placeholder="What are you assuming will always be true?"></textarea>
+                    <div class="step-nav">
+                        <button class="btn-back" data-back>← Back</button>
+                        <button class="btn-next" data-next disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card" data-step="3">
+                    <span class="step-label">Question 3 of 5</span>
+                    <h2 class="step-question">What human judgment am I removing?</h2>
+                    <p class="step-hint">And are you okay with that?</p>
+                    <textarea class="step-input" id="answer-3"
+                        placeholder="What decisions will no longer require a person?"></textarea>
+                    <div class="step-nav">
+                        <button class="btn-back" data-back>← Back</button>
+                        <button class="btn-next" data-next disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card" data-step="4">
+                    <span class="step-label">Question 4 of 5</span>
+                    <h2 class="step-question">If this works perfectly, what new problem does it create?</h2>
+                    <p class="step-hint">Success always creates new constraints.</p>
+                    <textarea class="step-input" id="answer-4"
+                        placeholder="What happens when this succeeds beyond your expectations?"></textarea>
+                    <div class="step-nav">
+                        <button class="btn-back" data-back>← Back</button>
+                        <button class="btn-next" data-next disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card" data-step="5">
+                    <span class="step-label">Question 5 of 5</span>
+                    <h2 class="step-question">What would make this feel wrong six months from now?</h2>
+                    <p class="step-hint">Future you is watching.</p>
+                    <textarea class="step-input" id="answer-5"
+                        placeholder="What scenario would make you regret this decision?"></textarea>
+                    <div class="step-nav">
+                        <button class="btn-back" data-back>← Back</button>
+                        <button class="btn-next" id="finish-btn" data-finish disabled>See Verdict →</button>
+                    </div>
+                </div>
+
+                <!-- Verdict Display -->
+                <div class="verdict-container" id="verdict-container">
+                    <p class="verdict-label">Your Decision</p>
+                    <div class="verdict-badge" id="verdict-badge">Feels Right</div>
+                    <p class="verdict-message" id="verdict-message">
+                        Your answers suggest clarity and intentionality. Proceed with confidence.
+                    </p>
+
+                    <!-- Decision Snapshot -->
+                    <div class="snapshot-card" id="snapshot-card">
+                        <div class="snapshot-header">
+                            <span class="snapshot-title">Decision Snapshot</span>
+                            <span class="snapshot-date" id="snapshot-date"></span>
+                        </div>
+                        <div class="snapshot-decision" id="snapshot-decision"></div>
+                        <div id="snapshot-answers"></div>
+                    </div>
+
+                    <div class="export-actions">
+                        <button class="btn-export" id="copy-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            Copy to Clipboard
+                        </button>
+                        <button class="btn-export" id="download-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download
+                        </button>
+                    </div>
+                    <button class="btn-restart" id="restart-btn">Start Over</button>
+                </div>
+
+                <!-- Toast -->
+                <div class="toast" id="toast">Copied to clipboard!</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Decision Checkpoint Widget Logic
+        (function () {
+            // State
+            let currentStep = 0;
+            const totalSteps = 5;
+            const answers = {};
+
+            // DOM Elements
+            const stepCards = document.querySelectorAll('.step-card');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const verdictContainer = document.getElementById('verdict-container');
+            const toast = document.getElementById('toast');
+
+            // Initialize
+            function init() {
+                setupInputListeners();
+                setupNavigationListeners();
+                setupExportListeners();
+                loadFromStorage();
+            }
+
+            // Input validation
+            function setupInputListeners() {
+                document.querySelectorAll('.step-input').forEach(input => {
+                    input.addEventListener('input', function () {
+                        const step = this.closest('.step-card').dataset.step;
+                        const nextBtn = this.closest('.step-card').querySelector('.btn-next');
+
+                        if (this.value.trim().length > 0) {
+                            nextBtn.disabled = false;
+                        } else {
+                            nextBtn.disabled = true;
+                        }
+
+                        // Store answer
+                        if (step === '0') {
+                            answers.decision = this.value;
+                        } else {
+                            answers[`q${step}`] = this.value;
+                        }
+
+                        saveToStorage();
+                    });
+                });
+            }
+
+            // Navigation
+            function setupNavigationListeners() {
+                // Start button
+                document.getElementById('start-btn').addEventListener('click', () => {
+                    goToStep(1);
+                });
+
+                // Back buttons
+                document.querySelectorAll('[data-back]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        goToStep(currentStep - 1);
+                    });
+                });
+
+                // Next buttons
+                document.querySelectorAll('[data-next]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        goToStep(currentStep + 1);
+                    });
+                });
+
+                // Finish button
+                document.getElementById('finish-btn').addEventListener('click', showVerdict);
+
+                // Restart button
+                document.getElementById('restart-btn').addEventListener('click', restart);
+            }
+
+            // Go to step
+            function goToStep(step) {
+                currentStep = step;
+
+                // Update step cards
+                stepCards.forEach(card => {
+                    card.classList.remove('active');
+                    if (parseInt(card.dataset.step) === step) {
+                        card.classList.add('active');
+                    }
+                });
+
+                // Show/hide progress
+                if (step > 0 && step <= totalSteps) {
+                    progressContainer.style.display = 'block';
+                    updateProgress(step);
+                } else {
+                    progressContainer.style.display = 'none';
+                }
+
+                // Hide verdict if going back
+                if (step <= totalSteps) {
+                    verdictContainer.classList.remove('active');
+                }
+
+                saveToStorage();
+            }
+
+            // Update progress bar
+            function updateProgress(step) {
+                const percent = (step / totalSteps) * 100;
+                progressBar.style.width = `${percent}%`;
+
+                progressSteps.forEach(el => {
+                    const stepNum = parseInt(el.dataset.step);
+                    el.classList.remove('active', 'completed');
+                    if (stepNum === step) {
+                        el.classList.add('active');
+                    } else if (stepNum < step) {
+                        el.classList.add('completed');
+                    }
+                });
+            }
+
+            // Calculate verdict
+            function calculateVerdict() {
+                const allText = Object.values(answers).join(' ').toLowerCase();
+
+                // Premature signals
+                const prematureSignals = [
+                    "don't know", "not sure", "uncertain", "maybe", "i guess",
+                    "haven't thought", "no idea", "unclear", "confused"
+                ];
+
+                // Risky signals
+                const riskySignals = [
+                    "could fail", "might break", "risk", "dangerous", "worried",
+                    "scared", "nervous", "concerned", "problematic", "issue"
+                ];
+
+                let prematureCount = 0;
+                let riskyCount = 0;
+
+                prematureSignals.forEach(signal => {
+                    if (allText.includes(signal)) prematureCount++;
+                });
+
+                riskySignals.forEach(signal => {
+                    if (allText.includes(signal)) riskyCount++;
+                });
+
+                if (prematureCount >= 2) {
+                    return {
+                        verdict: 'Feels Premature',
+                        class: 'feels-premature',
+                        message: 'Your answers reveal uncertainty. Consider gathering more information before proceeding.'
+                    };
+                } else if (riskyCount >= 2) {
+                    return {
+                        verdict: 'Feels Risky',
+                        class: 'feels-risky',
+                        message: 'You\'ve identified real concerns. Proceed with caution and mitigation plans.'
+                    };
+                } else {
+                    return {
+                        verdict: 'Feels Right',
+                        class: 'feels-right',
+                        message: 'Your answers suggest clarity and intentionality. Proceed with confidence.'
+                    };
+                }
+            }
+
+            // Show verdict
+            function showVerdict() {
+                stepCards.forEach(card => card.classList.remove('active'));
+                progressContainer.style.display = 'none';
+
+                const result = calculateVerdict();
+
+                const badge = document.getElementById('verdict-badge');
+                badge.textContent = result.verdict;
+                badge.className = 'verdict-badge ' + result.class;
+
+                document.getElementById('verdict-message').textContent = result.message;
+
+                // Build snapshot
+                const date = new Date().toISOString().split('T')[0];
+                document.getElementById('snapshot-date').textContent = date;
+                document.getElementById('snapshot-decision').textContent = answers.decision || 'No decision provided';
+
+                const questions = [
+                    'What problem does this actually solve?',
+                    'What assumption could quietly fail?',
+                    'What human judgment am I removing?',
+                    'If this works perfectly, what new problem does it create?',
+                    'What would make this feel wrong in 6 months?'
+                ];
+
+                const answersHtml = questions.map((q, i) => `
+                    <div class="snapshot-qa">
+                        <p class="snapshot-q">${q}</p>
+                        <p class="snapshot-a">${answers[`q${i + 1}`] || 'No answer'}</p>
+                    </div>
+                `).join('');
+
+                document.getElementById('snapshot-answers').innerHTML = answersHtml;
+
+                verdictContainer.classList.add('active');
+                answers.verdict = result.verdict;
+                answers.date = date;
+                saveToStorage();
+            }
+
+            // Export functionality
+            function setupExportListeners() {
+                document.getElementById('copy-btn').addEventListener('click', () => {
+                    const text = generateExportText();
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('Copied to clipboard!');
+                    });
+                });
+
+                document.getElementById('download-btn').addEventListener('click', () => {
+                    const text = generateExportText();
+                    const blob = new Blob([text], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `decision-checkpoint-${answers.date || new Date().toISOString().split('T')[0]}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showToast('Downloaded!');
+                });
+            }
+
+            function generateExportText() {
+                const questions = [
+                    'What problem does this actually solve?',
+                    'What assumption could quietly fail?',
+                    'What human judgment am I removing?',
+                    'If this works perfectly, what new problem does it create?',
+                    'What would make this feel wrong in 6 months?'
+                ];
+
+                let text = `DECISION CHECKPOINT\n`;
+                text += `Date: ${answers.date || new Date().toISOString().split('T')[0]}\n`;
+                text += `Verdict: ${answers.verdict || 'Unknown'}\n`;
+                text += `\n---\n\n`;
+                text += `DECISION:\n${answers.decision || 'No decision provided'}\n\n`;
+
+                questions.forEach((q, i) => {
+                    text += `Q${i + 1}: ${q}\n`;
+                    text += `A: ${answers[`q${i + 1}`] || 'No answer'}\n\n`;
+                });
+
+                text += `---\nGenerated by doesthisfeelright.com/decision-checkpoint`;
+                return text;
+            }
+
+            // Toast
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+
+            // Restart
+            function restart() {
+                Object.keys(answers).forEach(key => delete answers[key]);
+                document.querySelectorAll('.step-input').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('.btn-next').forEach(btn => {
+                    btn.disabled = true;
+                });
+                verdictContainer.classList.remove('active');
+                localStorage.removeItem('decisionCheckpoint');
+                goToStep(0);
+            }
+
+            // Local Storage
+            function saveToStorage() {
+                localStorage.setItem('decisionCheckpoint', JSON.stringify({
+                    currentStep,
+                    answers
+                }));
+            }
+
+            function loadFromStorage() {
+                const saved = localStorage.getItem('decisionCheckpoint');
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        Object.assign(answers, data.answers);
+
+                        // Restore input values
+                        if (answers.decision) {
+                            document.getElementById('decision-input').value = answers.decision;
+                            document.getElementById('start-btn').disabled = false;
+                        }
+
+                        for (let i = 1; i <= 5; i++) {
+                            const input = document.getElementById(`answer-${i}`);
+                            if (input && answers[`q${i}`]) {
+                                input.value = answers[`q${i}`];
+                                const btn = input.closest('.step-card').querySelector('.btn-next');
+                                if (btn) btn.disabled = false;
+                            }
+                        }
+
+                        // Return to saved step
+                        if (data.currentStep > 0 && data.currentStep <= 5) {
+                            goToStep(data.currentStep);
+                        }
+                    } catch (e) {
+                        console.error('Failed to load saved state', e);
+                    }
+                }
+            }
+
+            // Boot
+            init();
+        })();
+    </script>
+</body>
+
+</html>
