@@ -1,0 +1,17 @@
+2025/12/17-23:48:58.594 8bd7a5 Creating DB /Users/isaachernandez/blog design/.chrome_dev_profile/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb since it was missing.
+2025/12/17-23:48:58.596 8bd7a5 Reusing MANIFEST /Users/isaachernandez/blog design/.chrome_dev_profile/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/18-00:12:55.703 8bd7a3 Level-0 table #5: started
+2025/12/18-00:12:55.710 8bd7a3 Level-0 table #5: 1105357 bytes OK
+2025/12/18-00:12:55.711 8bd7a3 Delete type=0 #3
+2025/12/18-00:13:28.769 8bd7a5 Level-0 table #7: started
+2025/12/18-00:13:28.770 8bd7a5 Level-0 table #7: 27804 bytes OK
+2025/12/18-00:13:28.773 8bd7a5 Delete type=0 #4
+2025/12/18-00:13:28.774 8bd7a5 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2025/12/18-00:13:28.774 8bd7a5 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x05\x01 \x03\x00\x00\x00\x00\x00\x00\xf0?\x00\x04\x02\x01\x17\x00s\x00e\x00r\x00v\x00i\x00c\x00e\x00:\x00t\x00o\x00p\x00b\x00a\x00r\x00:\x00f\x00a\x00l\x00l\x00b\x00a\x00c\x00k\x03\x00\x00\x00\x00\x00\x00\xf0?' @ 4922 : 1
+2025/12/18-00:13:28.774 8bd7a5 Compacting 1@1 + 1@2 files
+2025/12/18-00:13:28.779 8bd7a5 Generated table #8@1: 456 keys, 78725 bytes
+2025/12/18-00:13:28.779 8bd7a5 Compacted 1@1 + 1@2 files => 78725 bytes
+2025/12/18-00:13:28.780 8bd7a5 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/18-00:13:28.780 8bd7a5 Delete type=2 #7
+2025/12/18-00:13:28.780 8bd7a5 Delete type=2 #5
+2025/12/18-00:13:28.781 8bd7a5 Manual compaction at level-1 from '\x00\x05\x01 \x03\x00\x00\x00\x00\x00\x00\xf0?\x00\x04\x02\x01\x17\x00s\x00e\x00r\x00v\x00i\x00c\x00e\x00:\x00t\x00o\x00p\x00b\x00a\x00r\x00:\x00f\x00a\x00l\x00l\x00b\x00a\x00c\x00k\x03\x00\x00\x00\x00\x00\x00\xf0?' @ 4922 : 1 .. (end); will stop at (end)

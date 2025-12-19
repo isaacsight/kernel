@@ -375,4 +375,82 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // === AMBIENT AGENT (LAB-005) ===
+    class AmbientAgent {
+        constructor() {
+            this.container = document.getElementById('awareness-container');
+            this.currentCue = null;
+            this.idleTimer = null;
+            this.lastAction = Date.now();
+
+            this.cues = [
+                { trigger: 'idle', text: "Deep work portal active. Ready when you are." },
+                { trigger: 'idle', text: "High cognitive load detected. Consider a 5-minute Pomodoro break." },
+                { trigger: 'scroll', text: "Exploring the patterns? Look for the 'Attribution Chain' concept." },
+                { trigger: 'nav', text: "Synthesizing latest research findings for your view..." },
+                { trigger: 'generic', text: "Shadow Agent monitoring system health and alignment." }
+            ];
+
+            if (this.container) {
+                this.initListeners();
+                this.startIdleMonitor();
+            }
+        }
+
+        initListeners() {
+            // Track scrolling
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                this.lastAction = Date.now();
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    if (Math.random() < 0.2) this.showCue('scroll');
+                }, 1000);
+            });
+
+            // Track any interaction
+            ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
+                window.addEventListener(evt, () => this.lastAction = Date.now());
+            });
+        }
+
+        startIdleMonitor() {
+            setInterval(() => {
+                const idleTime = Date.now() - this.lastAction;
+                if (idleTime > 30000 && !this.currentCue) { // 30 seconds idle
+                    this.showCue('idle');
+                }
+            }, 5000);
+        }
+
+        showCue(trigger) {
+            if (this.currentCue) return;
+
+            const relevantCues = this.cues.filter(c => c.trigger === trigger || c.trigger === 'generic');
+            const cue = relevantCues[Math.floor(Math.random() * relevantCues.length)];
+
+            const bar = document.createElement('div');
+            bar.className = 'awareness-bar';
+            bar.innerHTML = `<span class="cue-meta">Shadow Agent //</span> <span class="cue-text">${cue.text}</span>`;
+
+            this.container.appendChild(bar);
+            this.currentCue = bar;
+
+            // Animate in
+            setTimeout(() => bar.classList.add('active'), 100);
+
+            // Auto-remove after 6 seconds
+            setTimeout(() => {
+                bar.classList.remove('active');
+                setTimeout(() => {
+                    bar.remove();
+                    this.currentCue = null;
+                }, 600);
+            }, 6000);
+        }
+    }
+
+    // Initialize Ambient Layer
+    const agent = new AmbientAgent();
 });

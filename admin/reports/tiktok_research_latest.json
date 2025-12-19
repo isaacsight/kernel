@@ -1,0 +1,48 @@
+{
+    "meta": {
+        "generated_by": "TikTokResearcher",
+        "timestamp": "2025-12-18T21:16:30",
+        "status": "Success"
+    },
+    "trends": {
+        "hashtags": [
+            {
+                "tag": "fp",
+                "category": "General",
+                "volume": "High"
+            },
+            {
+                "tag": "decemberdump",
+                "category": "Seasonal",
+                "volume": "Growing"
+            },
+            {
+                "tag": "techtok",
+                "category": "Niche: Tech",
+                "volume": "Steady"
+            }
+        ],
+        "audio": [
+            {
+                "title": "All I Want For Christmas Is You",
+                "artist": "Mariah Carey",
+                "status": "Seasonal Peak"
+            },
+            {
+                "title": "Sped Up - Nightcore",
+                "artist": "Various",
+                "status": "Viral Format"
+            }
+        ],
+        "topics": [
+            "AI productivity tools",
+            "Day in the life (Mini-vlogs)",
+            "Coding ASMR"
+        ]
+    },
+    "suggested_actions": [
+        "Create a 'Day in the life' video using the 'decemberdump' format.",
+        "Use 'Sped Up' audio for a quick tutorial on AI tools.",
+        "Post a 'techtok' sharing your VS Code setup."
+    ]
+}

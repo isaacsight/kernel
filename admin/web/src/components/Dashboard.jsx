@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Terminal, PenTool, Cpu, Users } from 'lucide-react';
 import MissionControl from './MissionControl';
 import EcosystemNeuralNet from './EcosystemNeuralNet';
-import AgentCard from './AgentCard';
 
 const Dashboard = () => {
     const [agents, setAgents] = useState([]);
