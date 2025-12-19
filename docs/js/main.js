@@ -452,5 +452,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize Ambient Layer
-    const agent = new AmbientAgent();
+    window.ambientAgent = new AmbientAgent();
 });
