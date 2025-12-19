@@ -3580,6 +3580,20 @@ body:has(.ceo-layout) .site-footer {
     transform: translateY(0);
 }
 
+.awareness-bar.lab-pulse {
+    animation: pulse-glow 4s infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), var(--accent-glow);
+    }
+
+    100% {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(102, 181, 110, 0.4);
+    }
+}
+
 .awareness-bar .cue-meta {
     color: var(--text-tertiary);
     margin-right: 8px;
