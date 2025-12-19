@@ -3665,4 +3665,9 @@ body:has(.ceo-layout) .site-footer {
         width: 40px;
         height: 40px;
     }
+
+    /* Hide Buy Me A Coffee Widget on mobile to prevent overlap */
+    #bmc-wbtn {
+        display: none !important;
+    }
 }
