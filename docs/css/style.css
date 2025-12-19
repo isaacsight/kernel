@@ -3544,3 +3544,125 @@ body:has(.ceo-layout) .site-footer {
 }
 
 /* ---/* End of style.css */
+
+/* --- Mobile Navigation Enhancements --- */
+
+/* 1. Reading Progress Bar */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: var(--accent-primary);
+    z-index: 9999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 10px var(--accent-primary);
+}
+
+/* 2. Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-emphasis);
+    border-radius: 50%;
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 15px rgba(102, 181, 110, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 3. Mobile Bottom Navigation */
+.mobile-bottom-nav {
+    display: none;
+    /* Hidden on desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-glass);
+    z-index: 1000;
+    padding: 0 16px;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    font-size: 10px;
+    gap: 4px;
+    min-width: 60px;
+    height: 100%;
+    transition: color 0.2s ease;
+}
+
+.mobile-nav-item svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2px;
+}
+
+.mobile-nav-item.active {
+    color: var(--accent-primary);
+}
+
+.mobile-nav-item:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+
+    /* Adjust main content to not be covered by bottom nav */
+    #main-content {
+        padding-bottom: 80px;
+    }
+
+    /* Adjust back to top button position */
+    .back-to-top {
+        bottom: 80px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+    }
+}
