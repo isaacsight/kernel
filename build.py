@@ -283,32 +283,7 @@ def build():
     # Actually, let's pre-inject into base_template to save time?
     # No, base_template is used for every page. We can update the `base_template` string in memory.
     
-    # Generate Widget HTML
-    status_color = intelligence_context['health_status']
-    reasoning_widget_html = f"""
-    <div class="reasoning-widget">
-        <div class="rw-header">
-            <span class="rw-label">Studio Reasoning Engine</span>
-            <span class="rw-status status-{status_color}" data-tooltip="{intelligence_context['health_reason']}"></span>
-        </div>
-        <div class="rw-content">
-            <div class="rw-item">
-                <span class="rw-key">Focus</span>
-                <span class="rw-val">{intelligence_context['studio_focus']}</span>
-            </div>
-            <div class="rw-item">
-                <span class="rw-key">Hypothesis</span>
-                <span class="rw-val">{intelligence_context['studio_hypothesis']}</span>
-            </div>
-            <div class="rw-item">
-                <span class="rw-key">Last Decision</span>
-                <span class="rw-val">{intelligence_context['last_decision']}</span>
-            </div>
-        </div>
-    </div>
-    """
     
-    base_template = base_template.replace('{{ reasoning_widget }}', reasoning_widget_html)
 
     # 4. Processing Posts (Continue...)
 
