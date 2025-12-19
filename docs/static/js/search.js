@@ -10,7 +10,7 @@ const Search = {
         const searchOverlay = document.getElementById('search-overlay');
         const searchInput = document.getElementById('search-input');
         const searchResults = document.getElementById('search-results');
-        const searchToggle = document.getElementById('search-toggle');
+        const searchToggles = document.querySelectorAll('.search-trigger');
         const closeSearch = document.getElementById('close-search');
 
         if (!searchOverlay || !searchInput) return;
@@ -40,12 +40,16 @@ const Search = {
         }
 
         // Event Listeners
-        searchToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            searchOverlay.style.display = 'flex';
-            searchInput.focus();
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-        });
+        if (searchToggles.length > 0) {
+            searchToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    searchOverlay.style.display = 'flex';
+                    searchInput.focus();
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                });
+            });
+        }
 
         closeSearch.addEventListener('click', () => {
             searchOverlay.style.display = 'none';
