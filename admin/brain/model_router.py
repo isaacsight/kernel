@@ -209,6 +209,17 @@ class ModelRouter:
                 "quality": "high",
                 "context_window": 32000,
                 "available": self._check_studio_node_available()
+            },
+            # OpenAI Codex CLI (Local Exec)
+            "codex-exec": {
+                "provider": "openai",
+                "type": "local",
+                "strengths": [TaskType.CODE_GENERATION, TaskType.ANALYSIS],
+                "cost_tier": "medium",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 128000,
+                "available": self._check_codex_available()
             }
         }
         
@@ -305,6 +316,15 @@ class ModelRouter:
             except:
                 pass
         return False
+    
+    def _check_codex_available(self) -> bool:
+        """Check if Codex CLI is installed and accessible."""
+        import subprocess
+        try:
+            subprocess.run(["codex", "--version"], capture_output=True, check=True)
+            return True
+        except:
+            return False
     
     def select_model(
         self, 
@@ -465,6 +485,7 @@ class ModelRouter:
         
         self.models["qwen-2.5-72b"]["available"] = self._check_studio_node_available()
         self.models["mistral-7b-instruct"]["available"] = self._check_hf_available()
+        self.models["codex-exec"]["available"] = self._check_codex_available()
         
         logger.info(f"[{self.name}] Refreshed model availability")
     

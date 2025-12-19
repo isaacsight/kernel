@@ -119,46 +119,50 @@ class Architect:
 
     def implement_blueprint(self, blueprint):
         """
-        Executes the changes defined in the blueprint.
+        Executes the changes defined in the blueprint using the Codex CLI.
         """
-        logger.info("Implementing blueprint...")
+        logger.info("Implementing blueprint via Codex CLI...")
         
         if "error" in blueprint:
             return f"Cannot implement blueprint with errors: {blueprint['error']}"
             
         changes = blueprint.get("changes", [])
-        results = []
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        if not changes:
+            return "No changes to implement."
 
-        for change in changes:
-            try:
-                file_path = os.path.join(base_dir, change["file"])
-                action = change.get("action")
-                
-                if action == "modify":
-                    if not os.path.exists(file_path):
-                        results.append(f"Failed: File not found {change['file']}")
-                        continue
-                        
-                    with open(file_path, 'r') as f:
-                        content = f.read()
-                    
-                    search_text = change.get("search")
-                    replace_text = change.get("replace")
-                    
-                    if search_text in content:
-                        new_content = content.replace(search_text, replace_text)
-                        with open(file_path, 'w') as f:
-                            f.write(new_content)
-                        results.append(f"Modified {change['file']}")
-                    else:
-                        results.append(f"Failed: Search text not found in {change['file']}")
-                        
-                elif action == "create":
-                    # Handle creation
-                    pass
-                    
-            except Exception as e:
-                results.append(f"Error processing {change.get('file')}: {e}")
-                
+        import subprocess
+        import json
+        
+        results = []
+        # We pass the entire list of changes to Codex for an atomic-ish execution
+        # Use workspace-write mode for safety
+        try:
+            prompt = f"Apply these changes to the codebase accurately:\n{json.dumps(changes, indent=2)}"
+            
+            # Run codex exec with full-auto mode and explicit API key
+            api_key = os.environ.get("OPENAI_API_KEY")
+            config_arg = f"api_key=\"{api_key}\"" if api_key else ""
+            
+            cmd = ["codex"]
+            if config_arg:
+                cmd.extend(["-c", config_arg])
+            cmd.extend(["--full-auto", "exec", prompt])
+            
+            process = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            results.append("Codex Execution Output:")
+            results.append(process.stdout)
+            
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Codex execution failed: {e.stderr}")
+            results.append(f"Command failed with error: {e.stderr}")
+        except Exception as e:
+            logger.error(f"Error during Codex execution: {e}")
+            results.append(f"Error: {str(e)}")
+            
         return "\n".join(results)

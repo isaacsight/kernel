@@ -19,7 +19,8 @@ const PostEditor = () => {
 
     const fetchPost = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/posts/${slug}`);
+            const apiBase = `http://${window.location.hostname}:8000`;
+            const res = await axios.get(`${apiBase}/posts/${slug}`);
             const data = res.data;
             // Convert tags array to string for editing
             if (Array.isArray(data.tags)) {
@@ -45,13 +46,14 @@ const PostEditor = () => {
 
     const handleSave = async () => {
         try {
+            const apiBase = `http://${window.location.hostname}:8000`;
             // Prepare payload
             const payload = {
                 ...post,
                 tags: post.tags.split(',').map(t => t.trim()).filter(Boolean)
             };
 
-            const res = await axios.post('http://localhost:8000/posts', payload);
+            const res = await axios.post(`${apiBase}/posts`, payload);
             alert("Post saved!");
             if (isNew && res.data.filename) {
                 // Navigate to edit mode of new post (assuming slug is filename without ext)
@@ -73,8 +75,9 @@ const PostEditor = () => {
         setAiLoading(true);
         setAiFeedback(null);
         try {
+            const apiBase = `http://${window.location.hostname}:8000`;
             if (action === 'critique') {
-                const res = await axios.post('http://localhost:8000/agents/audit', {
+                const res = await axios.post(`${apiBase}/agents/audit`, {
                     agent_name: 'The Editor',
                     action: 'audit',
                     parameters: { content: post.content }
@@ -86,7 +89,8 @@ const PostEditor = () => {
                     setAiLoading(false);
                     return;
                 }
-                const res = await axios.post('http://localhost:8000/agents/run', {
+                const apiBase = `http://${window.location.hostname}:8000`;
+                const res = await axios.post(`${apiBase}/agents/run`, {
                     agent_name: 'The Alchemist',
                     action: 'generate',
                     parameters: { topic }

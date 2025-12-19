@@ -14,49 +14,62 @@ interface AgentCardProps {
     name: string;
     role: string;
     status: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onAction?: (name: string, action: string) => void;
 }
 
 const AgentCard: React.FC<AgentCardProps> = ({ name, role, status, onAction }) => {
     const Icon = icons[name] || Activity;
-    const isIdle = status === 'Idle' || status === 'Ready';
+    const isOnline = status === 'Active' || status === 'Ready' || status === 'Running';
 
     return (
-        <div className="tech-card group">
-            <div className="flex items-start justify-between mb-4">
-                <div className="p-2 rounded bg-white/5 text-primary">
-                    <Icon size={20} />
+        <div className="tech-card group flex flex-col justify-between">
+            <div>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 rounded-xl bg-white/[0.04] text-white/90 group-hover:bg-white/[0.08] transition-all">
+                            <Icon size={20} strokeWidth={1.5} />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-semibold tracking-tight text-white/90">{name}</h3>
+                            <div className="flex items-center gap-2 mt-0.5">
+                                <span className={`status-dot ${isOnline ? 'online' : 'warning'}`}></span>
+                                <span className="text-[10px] font-medium uppercase tracking-wider text-white/30">
+                                    {status.toUpperCase()}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <span className={`status-dot ${isIdle ? 'warning' : 'online'}`}></span>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
-                        {status.toUpperCase()}
-                    </span>
-                </div>
+
+                <p className="text-[13px] leading-relaxed text-white/50 mb-6 font-normal line-clamp-2">
+                    {role}
+                </p>
             </div>
 
-            <h3 className="text-base font-bold mb-1 tracking-tight text-white">{name}</h3>
-            <p className="text-xs text-muted-foreground mb-4 font-mono line-clamp-2 min-h-[2.5em]">{role}</p>
-
-            <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+                <button
+                    onClick={async () => {
+                        try {
+                            const { Haptics, ImpactStyle } = await import('@capacitor/haptics');
+                            await Haptics.impact({ style: ImpactStyle.Light });
+                        } catch {
+                            console.warn("Haptics not available");
+                        }
+                        onAction && onAction(name, 'interact');
+                    }}
+                    className="flex-1 py-3 px-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-[13px] font-semibold text-white/70 active:bg-white/[0.08] active:scale-[0.98] transition-all"
+                >
+                    Intervene
+                </button>
                 {name === "The Alchemist" && (
-                    <div className="flex gap-2 mb-2">
-                        <span className="px-2 py-1 bg-primary/10 text-primary text-[9px] font-mono font-bold uppercase tracking-wider rounded border border-primary/20 flex items-center gap-1 w-full justify-center">
-                            <Zap size={8} /> Node: Qwen-72B
-                        </span>
+                    <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] text-white/40">
+                        <Zap size={14} />
                     </div>
                 )}
-
-                <button
-                    onClick={() => onAction && onAction(name, 'interact')}
-                    className="w-full py-2 px-4 rounded bg-white/5 hover:bg-white/10 text-xs font-bold font-mono uppercase tracking-wide border border-white/10"
-                >
-                    Details
-                </button>
             </div>
         </div>
     );
 };
+
 
 export default AgentCard;

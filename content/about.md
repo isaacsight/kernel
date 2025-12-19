@@ -63,6 +63,24 @@ The studio treats itself as its first and most important client:
 
 The internal rule: ideas that don’t survive real use inside the studio do not become patterns for anyone else.
 
+## The Stack vs. The Signal
+
+The studio operates on a helpful tension between technical reality and strategic narrative.
+
+### The Reality (The "Plumbing")
+The hard skills that make the system work are rigorous and concrete:
+- **Hybrid Cloud & Distributed Systems**: Stitching together local Mac control planes with remote Windows/Linux compute nodes.
+- **Agent Orchestration**: Managing state, handling tool failures, and building specialized "swarms" that survive stochastic errors.
+- **Infrastructure as Code**: A custom Python-based infrastructure where the code itself defines and spins up the environment.
+- **Reliability & Observability**: Systems designed to "fail loudly" with custom health metrics like the *Felt Right Index*.
+
+### The Signal (The Discipline)
+This technical reality is packaged into a higher-leverage narrative:
+- **Agentic Systems Engineering (ASE)**: Not just using AI tools, but inventing the discipline of designing the "nervous systems" for modern organizations.
+- **Founder-Credible Architecture**: Solving misalignment and system sprawl at the level of Systems Architect rather than individual contributor.
+- **Operating System Design**: Understanding the full stack deeply enough to abstract it away into a cohesive interface.
+- **Taste & Judgment**: Explicitly valuing "Actionable Taste" and human judgment over raw efficiency.
+
 ## What gets exposed publicly
 
 The site exposes only the sharpest abstractions from this internal OS:

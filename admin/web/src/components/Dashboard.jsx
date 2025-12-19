@@ -10,9 +10,11 @@ const Dashboard = () => {
     const [heartbeat, setHeartbeat] = useState(null);
     const [evolution, setEvolution] = useState(null);
 
+    const apiBase = `http://${window.location.hostname}:8000`;
+
     const fetchAgents = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/agents');
+            const res = await axios.get(`${apiBase}/agents`);
             setAgents(res.data);
         } catch (err) {
             console.error("Failed to fetch agents:", err);
@@ -21,7 +23,7 @@ const Dashboard = () => {
 
     const fetchHeartbeat = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/system/heartbeat');
+            const res = await axios.get(`${apiBase}/system/heartbeat`);
             setHeartbeat(res.data);
         } catch (err) {
             console.error("Failed to fetch heartbeat:", err);
@@ -30,7 +32,7 @@ const Dashboard = () => {
 
     const fetchEvolution = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/system/evolution/state');
+            const res = await axios.get(`${apiBase}/system/evolution/state`);
             setEvolution(res.data);
         } catch (err) {
             console.error("Failed to fetch evolution:", err);
@@ -56,7 +58,7 @@ const Dashboard = () => {
         setLoading(true);
         setCmdResult(null);
         try {
-            const res = await axios.post('http://localhost:8000/command', { command });
+            const res = await axios.post(`${apiBase}/command`, { command });
             setCmdResult(res.data);
             if (res.data.success) {
                 setCommand('');
@@ -79,14 +81,14 @@ const Dashboard = () => {
                 // Deep Mode logic if action is generate_deep, or just default to it for Alchemist now
                 const isDeep = action === 'generate_deep';
 
-                await axios.post('http://localhost:8000/agents/run', {
+                await axios.post(`${apiBase}/agents/run`, {
                     agent_name: agentName,
                     action: 'generate', // Backend expects 'generate' method
                     parameters: { topic, deep_mode: isDeep }
                 });
                 alert("Alchemist commissioned! Deep Work started. This may take 60s.");
             } else {
-                await axios.post('http://localhost:8000/agents/run', {
+                await axios.post(`${apiBase}/agents/run`, {
                     agent_name: agentName,
                     action: action
                 });

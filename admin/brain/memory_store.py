@@ -33,8 +33,12 @@ class MemoryStore:
         
     def _init_db(self):
         """Initialize the database schema."""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path, timeout=30)
         cursor = conn.cursor()
+        
+        # Enable WAL mode for better concurrency
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute("PRAGMA synchronous=NORMAL")
         
         # Conversations table
         cursor.execute("""
@@ -136,6 +140,33 @@ class MemoryStore:
                 agent_id TEXT,
                 metadata JSON,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Raw Intake Table (The OS Intake Pipeline)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS raw_intake (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source_type TEXT NOT NULL, -- 'file', 'url', 'text', 'repo'
+                source_path TEXT,
+                content TEXT,
+                metadata JSON,
+                status TEXT DEFAULT 'pending', -- 'pending', 'processing', 'completed', 'failed'
+                processed_at DATETIME,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Agent Subscriptions Tracker (Who has seen what)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS agent_subscriptions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                intake_id INTEGER NOT NULL,
+                agent_id TEXT NOT NULL,
+                status TEXT DEFAULT 'pending', -- 'pending', 'indexing', 'summarizing', 'completed', 'failed'
+                result_metadata JSON,
+                processed_at DATETIME,
+                FOREIGN KEY (intake_id) REFERENCES raw_intake (id)
             )
         """)
         

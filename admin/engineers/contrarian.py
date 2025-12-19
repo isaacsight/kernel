@@ -31,15 +31,13 @@ class Contrarian:
         """
         logger.info(f"[{self.name}] Challenging thesis: {thesis}")
         
-        # 1. Select Model (FORCE GEMINI FLASH for Cost-Free Mode)
-        # Bypassing ModelRouter because it defaults to OpenAI when local is missing, 
-        # and we want to ensure zero-cost execution.
+        # 1. Select Model (Use Configured Model to avoid Rate Limits)
         model = {
-            "selected": "gemini-2.0-flash",
+            "selected": config.GEMINI_MODEL,  # Use the safe default from config
             "provider": "google",
             "type": "cloud_free"
         }
-        logger.info(f"[{self.name}] Force-selected model: {model['selected']}")
+        logger.info(f"[{self.name}] Selected model: {model['selected']}")
         
         # 2. Identify Attack Vectors
         plan_prompt = f"""

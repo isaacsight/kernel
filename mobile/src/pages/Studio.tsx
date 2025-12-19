@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AgentService, SystemService } from '../services/api';
+import { RefreshCw } from 'lucide-react';
 
 
 // Simple Tabs implementation since we don't have shadcn yet, or we mock it
@@ -29,12 +30,10 @@ const Studio: React.FC = () => {
             } else if (activeTab === 'write') {
                 action = 'generate';
                 agent = 'The Alchemist';
-                // Input is Topic, Context is Doctrine
                 params = { topic: input, doctrine: context || "Agile, Modern, Professional" };
             }
 
             const data = await AgentService.runAction(agent, action, params);
-            // Alchemist return format might differ
             setResult(data.result || data.content || JSON.stringify(data));
         } catch (error) {
             setResult('Error executing studio action.');
@@ -45,7 +44,7 @@ const Studio: React.FC = () => {
     };
 
     const handlePublish = async () => {
-        if (!confirm("Are you sure you want to publish to the live site?")) return;
+        if (!confirm("Confirm deployment to production?")) return;
         setLoading(true);
         try {
             const res = await SystemService.publish();
@@ -58,87 +57,89 @@ const Studio: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-full animate-fade-in pb-20">
-            <header className="px-4 pb-4 border-b border-white/5">
-                <h1 className="text-xl font-bold tracking-tighter text-white">Design Studio</h1>
-                <p className="text-xs text-muted-foreground">Collaborate with The Visionary.</p>
+        <div className="flex flex-col h-full animate-fade-in px-4 pb-32">
+            <header className="py-6">
+                <h1 className="text-xl font-semibold tracking-tight text-white inline-flex items-center gap-2">
+                    Design Lab
+                </h1>
+                <p className="text-white/30 text-[11px] font-medium uppercase tracking-[0.2em] mt-1">
+                    Multimodal Creative Suite
+                </p>
             </header>
 
-            <div className="flex p-2 gap-2 bg-black/20 mx-4 mt-4 rounded-lg">
-                <button
-                    onClick={() => setActiveTab('write')}
-                    className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all ${activeTab === 'write' ? 'bg-primary text-black' : 'text-muted-foreground'}`}
-                >
-                    Write
-                </button>
-                <button
-                    onClick={() => setActiveTab('critique')}
-                    className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all ${activeTab === 'critique' ? 'bg-primary text-black' : 'text-muted-foreground'}`}
-                >
-                    Critique
-                </button>
-                <button
-                    onClick={() => setActiveTab('generate')}
-                    className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md transition-all ${activeTab === 'generate' ? 'bg-primary text-black' : 'text-muted-foreground'}`}
-                >
-                    Generate
-                </button>
+            <div className="flex p-1 gap-1 bg-white/[0.03] border border-white/[0.05] rounded-[20px] mb-8">
+                {(['write', 'critique', 'generate'] as const).map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-[16px] transition-all ${activeTab === tab ? 'bg-white text-black shadow-lg shadow-white/5' : 'text-white/30 hover:text-white/60'}`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                <div className="space-y-4">
-                    <div>
-                        <label className="text-[10px] uppercase font-bold text-muted-foreground mb-1 block">
-                            {activeTab === 'critique' ? 'CSS Snippet' : activeTab === 'write' ? 'Topic' : 'Requirements'}
+            <div className="flex-1 overflow-y-auto space-y-6">
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] uppercase font-bold text-white/20 tracking-[0.1em] ml-1">
+                            {activeTab === 'critique' ? 'CSS Entry' : activeTab === 'write' ? 'Core Topic' : 'Specifications'}
                         </label>
                         <textarea
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            className="w-full h-32 bg-white/5 border border-white/10 rounded-md p-3 text-xs font-mono text-white focus:outline-none focus:border-primary/50"
-                            placeholder={activeTab === 'critique' ? ".btn { ... }" : activeTab === 'write' ? "The Future of AI..." : "Make a glassmorphic card..."}
+                            className="input-field min-h-[140px] resize-none"
+                            placeholder={activeTab === 'critique' ? ".button { ... }" : activeTab === 'write' ? "Define your thesis..." : "Explain requirements..."}
                         />
                     </div>
 
-                    <div>
-                        <label className="text-[10px] uppercase font-bold text-muted-foreground mb-1 block">
-                            {activeTab === 'critique' ? 'HTML Context' : activeTab === 'write' ? 'Doctrine / Vibes' : 'Existing CSS'}
+                    <div className="space-y-2">
+                        <label className="text-[10px] uppercase font-bold text-white/20 tracking-[0.1em] ml-1">
+                            {activeTab === 'critique' ? 'Markup Context' : activeTab === 'write' ? 'Style Guidelines' : 'Environmental Context'}
                         </label>
                         <textarea
                             value={context}
                             onChange={(e) => setContext(e.target.value)}
-                            className="w-full h-24 bg-white/5 border border-white/10 rounded-md p-3 text-xs font-mono text-white focus:outline-none focus:border-primary/50"
-                            placeholder={activeTab === 'critique' ? "<button>..." : activeTab === 'write' ? "Agile, Clean, Professional" : "@layer base { ... }"}
+                            className="input-field min-h-[100px] resize-none"
+                            placeholder={activeTab === 'critique' ? "<div>...</div>" : activeTab === 'write' ? "Professional, Minimalist" : "Local context..."}
                         />
                     </div>
 
-                    <button
-                        onClick={handleAction}
-                        disabled={loading}
-                        className="w-full py-3 bg-primary text-black font-bold uppercase tracking-wide text-xs rounded-lg active:scale-95 transition-all disabled:opacity-50"
-                    >
-                        {loading ? 'Processing...' : activeTab === 'critique' ? 'Run Critique' : activeTab === 'write' ? 'Draft Post' : 'Generate'}
-                    </button>
-
-                    {activeTab === 'write' && result && (
+                    <div className="flex flex-col gap-3">
                         <button
-                            onClick={handlePublish}
-                            disabled={loading}
-                            className="w-full py-3 mt-2 bg-red-500/20 border border-red-500/50 text-red-500 hover:bg-red-500/30 font-bold uppercase tracking-wide text-xs rounded-lg active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            onClick={handleAction}
+                            disabled={loading || !input.trim()}
+                            className="btn-primary w-full"
                         >
-                            <span>🚀</span> Publish Live
+                            {loading ? 'Synthesizing...' : activeTab === 'critique' ? 'Analyze Design' : activeTab === 'write' ? 'Draft Project' : 'Generate Asset'}
                         </button>
-                    )}
+
+                        {activeTab === 'write' && result && (
+                            <button
+                                onClick={handlePublish}
+                                disabled={loading}
+                                className="w-full py-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-2"
+                            >
+                                <RefreshCw size={16} strokeWidth={1.5} />
+                                Deploy to Production
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {result && (
-                    <div className="mt-6 bg-black/40 border border-white/10 rounded-lg p-4">
-                        <h3 className="text-[10px] font-bold text-muted-foreground mb-2 uppercase">Result</h3>
-                        <pre className="text-[10px] font-mono whitespace-pre-wrap opacity-90">{result}</pre>
+                    <div className="mt-8 glass-panel rounded-3xl p-6 border-white/[0.08]">
+                        <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+                            <h3 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Synthesis Result</h3>
+                            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                        </div>
+                        <pre className="text-[13px] leading-relaxed font-sans text-white/80 whitespace-pre-wrap">{result}</pre>
                     </div>
                 )}
             </div>
         </div>
     );
 };
+
 
 export default Studio;

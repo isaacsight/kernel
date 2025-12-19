@@ -14,6 +14,8 @@ class Operator(BaseAgent):
     """
     def __init__(self):
         super().__init__(agent_id="operator")
+        from admin.brain.memory_store import get_memory_store
+        self.memory = get_memory_store()
         
     async def execute(self, action: str, **params) -> Dict[str, Any]:
         """
@@ -53,6 +55,41 @@ class Operator(BaseAgent):
                 }
             except Exception as e:
                 return {"status": "error", "message": str(e)}
+
+        elif action == "bridge_to_mobile":
+            """
+            Prepares a 'Handover' packet for the mobile app, allowing Google Gemini on mobile
+             to pick up the OS's context.
+            """
+            content = params.get("content")
+            title = params.get("title", "Studio OS Handover")
+            
+            # This logs a special event that the mobile app subscribes to
+            from admin.api.connection_manager import get_connection_manager
+            import asyncio
+            import json
+            
+            manager = get_connection_manager()
+            asyncio.create_task(manager.broadcast(json.dumps({
+                "type": "mobile_handover",
+                "title": title,
+                "content": content,
+                "target": "gemini_mobile"
+            })))
+            
+            return {"status": "success", "message": f"Handover for '{title}' broadcasted to mobile."}
+
+        elif action == "system_telemetry":
+            """Provides a deep state report for the 'System Integrator' (Antigravity)."""
+            from admin.brain.metrics_collector import get_metrics_collector
+            metrics = get_metrics_collector()
+            
+            return {
+                "os_status": "operational",
+                "intake_queue": "active",
+                "metrics": metrics.get_daily_summary(),
+                "recent_insights": self.memory.get_insights()[:5]
+            }
         
         else:
-            raise NotImplementedError(f"Action {action} not supported by Operator.")
+             raise NotImplementedError(f"Action {action} not supported by Operator.")

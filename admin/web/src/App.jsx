@@ -9,24 +9,38 @@ import Settings from './components/Settings';
 import ClientPortal from './components/ClientPortal';
 import Consulting from './components/Consulting';
 import RevenueDashboard from './components/RevenueDashboard';
+import SynapticLattice from './components/SynapticLattice';
+import ChatInterface from './components/ChatInterface';
+import { ModeProvider } from './context/ModeContext';
 
 function App() {
   return (
-    <Router>
-      <Layout>
+    <ModeProvider>
+      <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/content" element={<PostList />} />
-          <Route path="/content/new" element={<PostEditor />} />
-          <Route path="/content/:slug" element={<PostEditor />} />
-          <Route path="/design" element={<DesignStudio />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/clients" element={<ClientPortal />} />
-          <Route path="/consulting" element={<Consulting />} />
-          <Route path="/revenue" element={<RevenueDashboard />} />
+          {/* Default entry point: Pure, distraction-free Agent Chat */}
+          <Route path="/" element={<ChatInterface />} />
+
+          {/* Nested routes that still use the Admin Layout shell */}
+          <Route path="/*" element={
+            <Layout>
+              <Routes>
+                <Route path="galaxy" element={<SynapticLattice />} />
+                <Route path="legacy-dashboard" element={<Dashboard />} />
+                <Route path="content" element={<PostList />} />
+                <Route path="content/new" element={<PostEditor />} />
+                <Route path="content/:slug" element={<PostEditor />} />
+                <Route path="design" element={<DesignStudio />} />
+                <Route path="revenue" element={<RevenueDashboard />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="consulting" element={<Consulting />} />
+                {/* ClientPortal was removed from the instruction, so it's removed here */}
+              </Routes>
+            </Layout>
+          } />
         </Routes>
-      </Layout>
-    </Router>
+      </Router>
+    </ModeProvider>
   );
 }
 

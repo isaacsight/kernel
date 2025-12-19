@@ -47,7 +47,7 @@ class Visionary(BaseAgent):
         os.makedirs(self.og_dir, exist_ok=True)
         
         self.metrics = get_metrics_collector()
-        self.memory_store = get_memory_store()
+        self.memory = get_memory_store()
         self.web_scout = get_web_scout()
         
         # Configure Gemini if available
@@ -83,8 +83,56 @@ class Visionary(BaseAgent):
              path = self.generate_og_image(title, slug)
              return {"path": path}
              
+        elif action == "process_pending":
+            return await self.process_pending_intake()
+            
         else:
              raise NotImplementedError(f"Action {action} not supported by Visionary.")
+
+    async def process_pending_intake(self):
+        """
+        Subscription-based reaction to new work. Extracts vision/themes.
+        """
+        from admin.brain.intake import get_intake_manager
+        intake = get_intake_manager()
+        
+        pending = intake.get_subscriptions("visionary")
+        if not pending:
+            return {"message": "No pending intake for the Visionary."}
+            
+        results = []
+        for work in pending:
+            try:
+                res = await self._analyze_vision(work)
+                intake.update_subscription_status(work['sub_id'], "completed", res)
+                results.append(res)
+            except Exception as e:
+                logger.error(f"Visionary failed to process intake {work['id']}: {e}")
+                intake.update_subscription_status(work['sub_id'], "failed", {"error": str(e)})
+                
+        return {"processed": len(results), "details": results}
+
+    async def _analyze_vision(self, work: Dict):
+        """Extracts themes and future opportunities from intake."""
+        content = work.get('content', '')
+        prompt = f"Visionary Perspective: Analyze this content for themes, opportunities, and future directions for the Studio OS. Content:\n\n{content}"
+        
+        # Use existing model if configured
+        if hasattr(self, 'model'):
+             response = self.model.generate_content(prompt)
+             vision = response.text
+        else:
+             vision = "Visionary AI not configured. (Stub analysis completed)"
+        
+        # Save as an insight
+        self.memory.save_insight(
+            insight_type="visionary_theme",
+            insight_data={"intake_id": work['id'], "vision": vision},
+            confidence=0.8,
+            source="Visionary Intake Pipeline"
+        )
+            
+        return {"id": work['id'], "insight_logged": True}
 
     def generate_og_image(self, title, slug):
         """

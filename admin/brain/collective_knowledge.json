@@ -1075,6 +1075,204 @@
       },
       "confidence": 0.9,
       "shared_at": "2025-12-10T12:55:26.311006"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Generative Art Copyright",
+        "volume": "High",
+        "context": "Legal battles"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T11:17:02.630154"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Digital brutalism",
+        "volume": "Low",
+        "context": "UI design trends"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T11:17:02.633674"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:22:48.602933"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:22:48.605470"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Generative Art Copyright",
+        "volume": "High",
+        "context": "Legal battles"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:33:13.812667"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Digital brutalism",
+        "volume": "Low",
+        "context": "UI design trends"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:33:13.822863"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:38:37.781355"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:38:37.782872"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Generative Art Copyright",
+        "volume": "High",
+        "context": "Legal battles"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:49:00.538182"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Digital brutalism",
+        "volume": "Low",
+        "context": "UI design trends"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:49:00.542812"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Dopamine Detox",
+        "volume": "High",
+        "context": "Attention span recovery"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:59:01.487813"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Flow States",
+        "volume": "Steady",
+        "context": "Productivity science"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T12:59:01.500045"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Generative Art Copyright",
+        "volume": "High",
+        "context": "Legal battles"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:09:02.410242"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Digital brutalism",
+        "volume": "Low",
+        "context": "UI design trends"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:09:02.429255"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Generative Art Copyright",
+        "volume": "High",
+        "context": "Legal battles"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:19:03.337839"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Digital brutalism",
+        "volume": "Low",
+        "context": "UI design trends"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:19:03.350770"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "The Bronze Age Collapse",
+        "volume": "Steady",
+        "context": "Systems failure"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:29:04.283524"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Industrial Revolution paralleling AI",
+        "volume": "High",
+        "context": "Economic shifts"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T13:29:04.291844"
     }
   ],
   "agent_expertise": {

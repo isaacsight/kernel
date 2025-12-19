@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Terminal, RefreshCw } from 'lucide-react';
 import AgentCard from '../components/AgentCard';
-import { AgentService, SystemService } from '../services/api';
+import NeuralLattice from '../components/NeuralLattice';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { AgentService, SystemService, getActiveBaseUrl, setUrlChangeListener } from '../services/api';
 
 interface Agent {
     name: string;
@@ -14,6 +16,11 @@ const Home: React.FC = () => {
     const [agents, setAgents] = useState<Agent[]>([]);
     const [loading, setLoading] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [activeUrl, setActiveUrl] = useState(getActiveBaseUrl());
+
+    useEffect(() => {
+        setUrlChangeListener(setActiveUrl);
+    }, []);
 
     const fetchAgents = async () => {
         setIsRefreshing(true);
@@ -39,12 +46,14 @@ const Home: React.FC = () => {
 
         setLoading(true);
         try {
+            await Haptics.impact({ style: ImpactStyle.Medium });
             await SystemService.sendCommand(command);
             setCommand('');
             fetchAgents();
-            // In a real app we'd show the result notification here
+            await Haptics.notification({ type: 'SUCCESS' as any });
         } catch (error) {
             console.error("Command failed", error);
+            await Haptics.notification({ type: 'ERROR' as any });
             alert("Command failed to execute");
         } finally {
             setLoading(false);
@@ -61,55 +70,63 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div className="space-y-6 pb-20 animate-fade-in">
-            {/* Header */}
-            <header className="flex justify-between items-end pb-4 border-b border-white/5">
-                <div>
-                    <h1 className="text-xl font-bold tracking-tighter text-white mb-1 flex items-center gap-2">
-                        <Terminal className="text-primary" size={20} />
-                        MISSION_CTRL
+        <div className="space-y-8 pb-32 animate-fade-in px-4">
+            {/* Minimal Header */}
+            <header className="flex justify-between items-center py-10 relative">
+                <NeuralLattice />
+                <div className="relative z-10">
+                    <h1 className="text-3xl font-bold tracking-tighter text-white flex items-center gap-2">
+                        Studio Control
                     </h1>
-                    <p className="text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
-                        Status: <span className="text-[var(--status-online)]">OPERATIONAL</span>
-                    </p>
-                </div>
-                <div className="text-right">
-                    <div className="flex items-center justify-end gap-3">
-                        <button onClick={() => fetchAgents()} className={`text-white/50 ${isRefreshing ? 'animate-spin' : ''}`}>
-                            <RefreshCw size={14} />
-                        </button>
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--status-online)] animate-pulse"></div>
-                            <span className="text-[10px] font-bold text-white font-mono">QWEN-72B</span>
-                        </div>
+                    <div className="flex items-center gap-2 mt-1.5">
+                        <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em]">
+                            System {activeUrl.includes('100.81.9.128') ? 'Operational' : 'Fallback'}
+                        </p>
+                        <div className={`w-1.5 h-1.5 rounded-full ${activeUrl.includes('100.81.9.128') ? 'bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.6)]' : 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.6)]'}`}></div>
                     </div>
                 </div>
+                <button
+                    onClick={async () => {
+                        await Haptics.impact({ style: ImpactStyle.Light });
+                        fetchAgents();
+                    }}
+                    className={`p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-white/50 transition-all ${isRefreshing ? 'animate-spin' : 'active:scale-90'}`}
+                >
+                    <RefreshCw size={22} strokeWidth={1.5} />
+                </button>
             </header>
 
-            {/* Command Interface */}
-            <section className="bg-black/40 border border-white/10 rounded-lg p-4">
-                <h2 className="text-[10px] font-mono font-bold text-primary mb-3 uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-0.5 h-3 bg-primary rounded-sm"></span>
-                    Command Interface
-                </h2>
-                <form onSubmit={handleCommand} className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span className="text-primary font-mono text-sm">{'>'}</span>
-                    </div>
+            {/* Premium Command Bar */}
+            <section className="relative">
+                <form onSubmit={handleCommand}>
                     <input
                         type="text"
                         value={command}
                         onChange={(e) => setCommand(e.target.value)}
-                        placeholder="Enter system command..."
+                        placeholder="Ask anything or enter command..."
                         disabled={loading}
-                        className="w-full bg-white/5 border border-white/10 rounded-md pl-7 pr-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-white/20 disabled:opacity-50"
+                        className="input-field pr-12"
                     />
+                    <button
+                        type="submit"
+                        disabled={loading || !command.trim()}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-white/40 disabled:opacity-20 transition-all"
+                    >
+                        <Terminal size={20} strokeWidth={1.5} />
+                    </button>
                 </form>
             </section>
 
             {/* Agent Grid */}
-            <section className="space-y-4">
-                <h3 className="text-sm font-bold text-white/80">Active Agents</h3>
+            <section className="space-y-6">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold text-white/20 uppercase tracking-[0.15em]">Active Agent Swarm</h3>
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/[0.03] border border-white/[0.05]">
+                        <div className="w-1 h-1 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                        <span className="text-[9px] font-semibold text-white/40 tracking-wider">QWEN-72B</span>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-4">
                     {agents.map((agent) => (
                         <AgentCard
@@ -119,8 +136,8 @@ const Home: React.FC = () => {
                         />
                     ))}
                     {agents.length === 0 && !isRefreshing && (
-                        <div className="p-8 text-center border border-dashed border-white/10 rounded-lg">
-                            <p className="text-muted-foreground text-xs">No active agents found.</p>
+                        <div className="p-12 text-center glass-panel rounded-3xl border-dashed">
+                            <p className="text-white/20 text-xs font-medium">No active agents online.</p>
                         </div>
                     )}
                 </div>
@@ -128,5 +145,6 @@ const Home: React.FC = () => {
         </div>
     );
 };
+
 
 export default Home;

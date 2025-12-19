@@ -22,24 +22,62 @@ const ClientChatWidget = () => {
         };
 
         ws.current.onmessage = (event) => {
-            const text = event.data;
-            if (text === '[DONE]') {
-                setIsTyping(false);
-                return;
-            }
+            try {
+                const data = JSON.parse(event.data);
 
-            setMessages(prev => {
-                const lastMsg = prev[prev.length - 1];
-                if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
-                    return [
-                        ...prev.slice(0, -1),
-                        { ...lastMsg, content: lastMsg.content + text }
-                    ];
-                } else {
-                    return [...prev, { role: 'assistant', content: text, isStreaming: true }];
+                if (data.type === 'response_chunk') {
+                    setMessages(prev => {
+                        const lastMsg = prev[prev.length - 1];
+                        if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
+                            return [
+                                ...prev.slice(0, -1),
+                                { ...lastMsg, content: lastMsg.content + data.content }
+                            ];
+                        } else {
+                            return [...prev, { role: 'assistant', content: data.content, isStreaming: true }];
+                        }
+                    });
+                } else if (data.type === 'user_message') {
+                    setMessages(prev => {
+                        // If it's from mobile, we always add it and show typing
+                        if (data.source === 'mobile') {
+                            setIsTyping(true);
+                            return [...prev, { role: 'user', content: data.content, source: 'mobile' }];
+                        }
+
+                        // If it's from web (possibly this session or another browser tab)
+                        // Check if we already have it locally
+                        const lastMsg = prev[prev.length - 1];
+                        if (lastMsg && lastMsg.role === 'user' && lastMsg.content === data.content && !lastMsg.source) {
+                            return prev; // Deduplicate
+                        }
+                        return [...prev, { role: 'user', content: data.content }];
+                    });
+                } else if (data.type === 'assistant_response' || data.type === 'response_done') {
+                    setIsTyping(false);
+                    setMessages(prev => {
+                        const lastMsg = prev[prev.length - 1];
+                        if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
+                            return [
+                                ...prev.slice(0, -1),
+                                { ...lastMsg, isStreaming: false }
+                            ];
+                        }
+                        if (data.type === 'assistant_response') {
+                            return [...prev, { role: 'assistant', content: data.content }];
+                        }
+                        return prev;
+                    });
                 }
-            });
-            setIsTyping(false);
+            } catch (e) {
+                // Fallback for raw text if any
+                const text = event.data;
+                if (text === '[DONE]') {
+                    setIsTyping(false);
+                    return;
+                }
+                setMessages(prev => [...prev, { role: 'assistant', content: text }]);
+            }
         };
 
         ws.current.onclose = () => {
@@ -61,8 +99,6 @@ const ClientChatWidget = () => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(input);
             setIsTyping(true);
-            // Prepare streaming placeholder
-            setMessages(prev => [...prev, { role: 'assistant', content: '', isStreaming: true }]);
         }
 
         setInput('');
@@ -79,8 +115,8 @@ const ClientChatWidget = () => {
                 {messages.map((msg, idx) => (
                     <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[80%] rounded-lg p-3 ${msg.role === 'user'
-                                ? 'bg-orange-600 text-white'
-                                : 'bg-stone-800 text-stone-300'
+                            ? 'bg-orange-600 text-white'
+                            : 'bg-stone-800 text-stone-300'
                             }`}>
                             {msg.content}
                         </div>

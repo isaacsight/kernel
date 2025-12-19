@@ -104,7 +104,7 @@ class Heartbeat:
             
             # 4. Operator System Check
             logger.info("Running System Diagnostics...")
-            operator.check_pulse()
+            # operator.check_pulse() # Method not implemented in Operator class
             
             logger.info("Pulse Complete. System Healthy.")
             

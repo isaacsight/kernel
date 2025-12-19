@@ -2508,14 +2508,23 @@ body.menu-open {
     left: 0;
     bottom: 0;
     width: 280px;
+    height: 100vh;
+    height: 100dvh;
+    /* Dynamic viewport height for mobile browsers */
+    max-height: -webkit-fill-available;
+    /* iOS Safari fix */
     background: var(--bg-secondary);
     z-index: 2000;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     border-right: 1px solid var(--border-emphasis);
     padding: var(--space-6);
+    padding-bottom: 0;
+    /* Remove bottom padding, let nav handle it */
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    /* Drawer itself doesn't scroll */
 }
 
 .mobile-drawer.active {
@@ -2549,6 +2558,8 @@ body.menu-open {
     margin-bottom: var(--space-6);
     padding-bottom: var(--space-4);
     border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+    /* Don't let header shrink */
 }
 
 .drawer-title {
@@ -2561,6 +2572,21 @@ body.menu-open {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    flex: 1 1 0;
+    /* Fill remaining space - use 0 basis for proper shrinking */
+    min-height: 0;
+    /* CRITICAL: Allow flex child to shrink below content size for overflow to work */
+    overflow-y: auto;
+    /* Enable scrolling on the nav */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* iOS momentum scrolling */
+    overscroll-behavior: contain;
+    /* Prevent scroll chaining */
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 20px));
+    /* Add bottom padding for safe area */
+    scrollbar-width: thin;
+    /* Firefox */
 }
 
 .drawer-link {
@@ -2573,6 +2599,8 @@ body.menu-open {
     font-weight: 500;
     transition: all 0.2s ease;
     text-decoration: none;
+    flex-shrink: 0;
+    /* Prevent links from shrinking */
 }
 
 .drawer-link:hover,

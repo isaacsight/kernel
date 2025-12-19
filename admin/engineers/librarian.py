@@ -61,7 +61,11 @@ class Librarian(BaseAgent):
         elif action == "index_content":
             return await self.index_local_content()
             
+        elif action == "process_pending":
+            return await self.process_pending_intake()
+            
         elif action == "query_knowledge":
+            # ... (rest stays same)
             question = params.get("question")
             if not question: raise ValueError("Question required")
             return await self.answer_question(question)
@@ -74,8 +78,82 @@ class Librarian(BaseAgent):
             if not title or not content:
                 raise ValueError("Title and content are required for create_notion_page")
             return await self.create_page(title, content)
+            
+        elif action == "query_code_reasoning":
+            question = params.get("question")
+            if not question: raise ValueError("Question required")
+            return await self.query_code_with_codex(question)
+            
         else:
              raise NotImplementedError(f"Action {action} not supported by Librarian.")
+
+    async def process_pending_intake(self):
+        """
+        Subscription-based reaction to new work entering the system.
+        """
+        from admin.brain.intake import get_intake_manager
+        intake = get_intake_manager()
+        
+        pending = intake.get_subscriptions("librarian")
+        if not pending:
+            return {"message": "No pending intake for the Librarian."}
+            
+        results = []
+        for work in pending:
+            try:
+                res = await self._index_intake(work)
+                intake.update_subscription_status(work['sub_id'], "completed", res)
+                results.append(res)
+            except Exception as e:
+                logger.error(f"Librarian failed to process intake {work['id']}: {e}")
+                intake.update_subscription_status(work['sub_id'], "failed", {"error": str(e)})
+                
+        return {"processed": len(results), "details": results}
+
+    async def _index_intake(self, work: Dict):
+        """
+        Specific logic for indexing a single intake item.
+        """
+        logger.info(f"Librarian indexing intake {work['id']} ({work['source_type']})")
+        
+        # 1. Fetch chunks for this intake
+        import sqlite3
+        conn = sqlite3.connect(self.memory.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, text_chunk FROM vector_store WHERE doc_id LIKE ?", (f"intake:{work['id']}:%",))
+        chunks = cursor.fetchall()
+        
+        indexed = 0
+        for chunk in chunks:
+            vector = await self._get_embedding(chunk['text_chunk'])
+            if vector:
+                cursor.execute(
+                    "UPDATE vector_store SET vector = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ?",
+                    (json.dumps(vector), chunk['id'])
+                )
+                indexed += 1
+                
+        # 2. Update Knowledge Graph (simple node addition)
+        metadata = work.get('metadata')
+        if not metadata: metadata = {}
+        if isinstance(metadata, str):
+            try:
+                metadata = json.loads(metadata)
+            except:
+                metadata = {}
+        
+        if not isinstance(metadata, dict):
+            metadata = {}
+                
+        title = metadata.get('title') or f"Intake {work['id']}"
+        logger.info(f"Librarian adding graph node for {title}")
+        self.graph.add_node(f"intake:{work['id']}", type='document', label=title, source=work['source_type'])
+        
+        conn.commit()
+        conn.close()
+        
+        return {"id": work['id'], "chunks_indexed": indexed, "graph_node_added": True}
 
     def build_graph(self, posts_metadata):
         """
@@ -292,3 +370,38 @@ class Librarian(BaseAgent):
         except Exception as e:
             logger.error(f"Embedding failed: {e}")
             return None
+
+    async def query_code_with_codex(self, question: str):
+        """
+        Uses Codex CLI to reason about the codebase directly.
+        This provides deeper insights than standard RAG for complex architectural questions.
+        """
+        import subprocess
+        logger.info(f"Librarian querying Codex about: {question}")
+        
+        try:
+            # Use read-only mode for safety and pass API key explicitly
+            api_key = os.environ.get("OPENAI_API_KEY")
+            config_arg = f"api_key=\"{api_key}\"" if api_key else ""
+            
+            cmd = ["codex"]
+            if config_arg:
+                cmd.extend(["-c", config_arg])
+            cmd.extend(["--sandbox", "read-only", "exec", question])
+            
+            process = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            return {
+                "answer": process.stdout,
+                "engine": "codex-cli"
+            }
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Codex code query failed: {e.stderr}")
+            return {"error": f"Codex failed: {e.stderr}"}
+        except Exception as e:
+            logger.error(f"Error during Codex code query: {e}")
+            return {"error": str(e)}

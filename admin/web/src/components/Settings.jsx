@@ -12,8 +12,9 @@ const Settings = () => {
 
     const fetchStatus = async () => {
         try {
-            const serverRes = await axios.get('http://localhost:8000/system/status');
-            const ollamaRes = await axios.post('http://localhost:8000/system/ollama/status');
+            const apiBase = `http://${window.location.hostname}:8000`;
+            const serverRes = await axios.get(`${apiBase}/system/status`);
+            const ollamaRes = await axios.post(`${apiBase}/system/ollama/status`);
 
             setSystemStatus({
                 server: serverRes.data.server_status,
@@ -26,7 +27,8 @@ const Settings = () => {
 
     const fetchAgents = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/agents');
+            const apiBase = `http://${window.location.hostname}:8000`;
+            const res = await axios.get(`${apiBase}/agents`);
             setAgents(res.data);
         } catch (err) {
             console.error("Failed to fetch agents:", err);
@@ -46,7 +48,8 @@ const Settings = () => {
     const handleOllamaAction = async (action) => {
         setLoading(true);
         try {
-            const res = await axios.post(`http://localhost:8000/system/ollama/${action}`);
+            const apiBase = `http://${window.location.hostname}:8000`;
+            const res = await axios.post(`${apiBase}/system/ollama/${action}`);
             alert(res.data.message);
             fetchStatus();
         } catch (err) {
@@ -75,8 +78,8 @@ const Settings = () => {
                         <div className="flex justify-between items-center p-4 bg-secondary/30 rounded-lg border border-border/50">
                             <span className="font-semibold text-sm">API Server</span>
                             <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${systemStatus.server.includes('Running')
-                                    ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                                    : 'bg-red-500/20 text-red-400 border-red-500/30'
+                                ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                                : 'bg-red-500/20 text-red-400 border-red-500/30'
                                 }`}>
                                 {systemStatus.server}
                             </span>
@@ -86,8 +89,8 @@ const Settings = () => {
                             <span className="font-semibold text-sm">Ollama (Local AI)</span>
                             <div className="flex items-center gap-2">
                                 <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${systemStatus.ollama === 'Running'
-                                        ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                                        : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                                    ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                                    : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
                                     }`}>
                                     {systemStatus.ollama}
                                 </span>

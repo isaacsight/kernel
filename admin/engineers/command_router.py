@@ -11,9 +11,41 @@ import time
 import google.generativeai as genai
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+import requests
 from admin.config import config
 
 logger = logging.getLogger("CommandRouter")
+
+class RemoteNode:
+    """Helper to interact with the remote Studio Node (Windows)."""
+    def __init__(self, url):
+        self.url = url
+
+    def execute_agent(self, agent_name, task, context=None):
+        try:
+            response = requests.post(
+                f"{self.url}/agent/run",
+                json={
+                    "agent_name": agent_name,
+                    "task": task,
+                    "context": context or {}
+                },
+                timeout=30
+            )
+            return response.json()
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def relay_command(self, command):
+        try:
+            response = requests.post(
+                f"{self.url}/execute",
+                json={"command": command},
+                timeout=30
+            )
+            return response.json()
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
 
 class CommandRouter:
     """
@@ -36,11 +68,15 @@ class CommandRouter:
         self.agents = {
             "Alchemist": "Generates blog posts, essays, and content. Params: 'topic'",
             "Guardian": "Audits content for safety and alignment. Params: 'content'",
-            "Operator": "Manages system status, health, and deployment (publishing).",
+            "Operator": "Manages system status, health, deployments, and mobile bridge. Actions: 'bridge_to_mobile', 'system_telemetry', 'apply', 'run_command'.",
             "Researcher": "Performs web research and finds trends. Params: 'query'",
             "Status": "Checks system health and team status.",
+            "Librarian": "Queries the Knowledge Graph and indexes docs.",
             "Help": "Explains how to use the system."
         }
+        
+        # Remote Node
+        self.node = RemoteNode(config.STUDIO_NODE_URL) if config.STUDIO_NODE_URL else None
         
     def route(self, user_input: str) -> Dict[str, Any]:
         """
@@ -60,18 +96,20 @@ class CommandRouter:
         
         INSTRUCTIONS:
         1. Analyze the user's intent.
-        2. If it's a casual greeting or chit-chat, set "intent" to "chat" and write a friendly "response_text".
-        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help].
-        4. Extract relevant parameters (e.g., topic, query).
-        5. Return ONLY valid JSON.
+        2. If it's a casual greeting, set "intent" to "chat".
+        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control].
+        4. "mobile_handover": Use when the user wants to send context/data to their phone or Gemini mobile.
+        5. "system_control": Use for deep system operations or telemetry requests.
+        6. Extract relevant parameters (e.g., topic, query, content).
+        7. Return ONLY valid JSON.
         
         JSON STRUCTURE:
         {{
             "intent": "action" | "chat",
-            "action": "generate_post" | "publish" | "status" | "research" | "help" | null,
-            "target_agent": "Alchemist" | "Operator" | etc or null,
-            "parameters": {{ "topic": "...", "query": "..." }},
-            "response_text": "A brief, natural language response to the user confirming the action or replying to chat."
+            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control",
+            "target_agent": "Alchemist" | "Operator" | "Librarian" | etc,
+            "parameters": {{ "topic": "...", "query": "...", "content": "Brief summary for handover" }},
+            "response_text": "A brief, natural language response confirming the action."
         }}
         """
         
@@ -109,7 +147,7 @@ class CommandRouter:
                 "response_text": "I'm sorry, I'm having trouble connecting to my brain right now."
             }
     
-    def execute(self, routed_command: Dict) -> Dict[str, Any]:
+    async def execute(self, routed_command: Dict) -> Dict[str, Any]:
         """
         Executes the routed command.
         """
@@ -157,8 +195,29 @@ class CommandRouter:
                 }
                 
             elif action == "research":
-                 # Placeholder for researcher
+                 # Use Remote Node for Research if available (often better for isolation/tools)
+                 if self.node:
+                     return self.node.execute_agent("Researcher", f"Research {params.get('query', 'trends')}")
                  result_data = {"info": "Research agent not fully linked yet."}
+
+            elif action == "mobile_handover":
+                from admin.engineers.operator import Operator
+                op = Operator()
+                result_data = await op.execute("bridge_to_mobile", **params)
+                
+            elif action == "system_control":
+                from admin.engineers.operator import Operator
+                op = Operator()
+                # If content is provided, it might be a direct command to run
+                if params.get('command'):
+                    result_data = await op.execute("run_command", command=params['command'])
+                else:
+                    result_data = await op.execute("system_telemetry", **params)
+
+            # Failover / Relay check: If action isn't handled locally or explicitly requested remote
+            if not result_data and params.get("remote") and self.node:
+                logger.info(f"Relaying command to remote node: {action}")
+                return self.node.execute_agent(routed_command.get("target_agent", "GeneralAgent"), action, params)
 
             return {
                 "success": True,
@@ -185,7 +244,7 @@ def get_command_router() -> CommandRouter:
     return _router
 
 
-def route_and_log(user_input: str, session_id: str = None) -> Dict[str, Any]:
+async def route_and_log(user_input: str, session_id: str = None) -> Dict[str, Any]:
     """
     Routes a command and logs the conversation to Communication Analyzer.
     
@@ -201,7 +260,7 @@ def route_and_log(user_input: str, session_id: str = None) -> Dict[str, Any]:
     routed = router.route(user_input)
     
     # Execute the command
-    result = router.execute(routed)
+    result = await router.execute(routed)
     
     # Calculate response time
     response_time_ms = int((time.time() - start_time) * 1000)

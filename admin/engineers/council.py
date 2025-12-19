@@ -41,7 +41,7 @@ class GrandCouncil:
         logger.info(f"🏛️ Convening The Grand Council for: '{topic}'")
         
         # 0. Gather Intelligence
-        intelligence_report = self._gather_intelligence()
+        intelligence_report = self._gather_intelligence(topic)
         context_str = f"Current System State: {state}\n\nAgent Intelligence Reports:\n{intelligence_report}"
         
         # 1. The Architect (The Plan)
@@ -68,14 +68,20 @@ class GrandCouncil:
             }
         }
 
-    def _gather_intelligence(self) -> str:
+    def _gather_intelligence(self, topic: str = "") -> str:
         """Asks all registered agents for a status report."""
         reports = []
         for name, agent in self.registered_agents.items():
             try:
-                # If agent has a specific report method, use it. Otherwise str(agent)
+                # If agent has a specific report method, use it.
                 if hasattr(agent, "get_report"):
-                    report = agent.get_report()
+                    # Check if get_report accepts a topic argument
+                    import inspect
+                    sig = inspect.signature(agent.get_report)
+                    if "topic" in sig.parameters:
+                        report = agent.get_report(topic)
+                    else:
+                        report = agent.get_report()
                 elif hasattr(agent, "get_current_trends"): # TrendScout specific
                     report = f"Trends: {agent.get_current_trends()}"
                 else:

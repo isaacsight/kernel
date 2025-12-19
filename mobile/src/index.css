@@ -6,36 +6,36 @@
 
 @layer base {
   :root {
-    /* --- Merged from Admin Panel --- */
-    --background: 0 0% 1%;
-    --foreground: 0 0% 100%;
+    /* --- Refined Neutral Aesthetic (Antigravity/Perplexity Inspired) --- */
+    --background: 240 10% 2%;
+    /* Deeper Black */
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 3%;
-    --card-foreground: 0 0% 100%;
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 3%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 240 10% 2%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 166 100% 42%;
-    --primary-foreground: 0 0% 0%;
+    /* Accent: Professional Blue-ish Gray */
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 0 0% 6%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 240 4% 12%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 6%;
-    --muted-foreground: 240 5% 64%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 60%;
 
-    --accent: 166 100% 42%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 217 91% 60%;
+    /* High-Fidelity Blue */
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --border: 240 4% 12%;
+    --input: 240 4% 12%;
+    --ring: 240 5% 60%;
 
-    --border: 0 0% 12%;
-    --input: 0 0% 12%;
-    --ring: 166 100% 42%;
-
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --status-online: 142 71% 45%;
     --status-warning: 45 93% 47%;
@@ -44,7 +44,7 @@
     /* --- Mobile Specifics --- */
     --safe-area-top: env(safe-area-inset-top);
     --safe-area-bottom: env(safe-area-inset-bottom);
-    --nav-height: 64px;
+    --nav-height: 80px;
   }
 }
 
@@ -57,36 +57,66 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
-    /* Grid Pattern */
-    background-image:
-      radial-gradient(circle at 50% 0%, rgba(0, 199, 199, 0.03) 0%, transparent 50%),
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 50% -10%, #0f172a 0%, #020617 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-card/85 backdrop-blur-md border border-white/5 shadow-xl;
-    /* Removed fixed top border from previous mobile css, using border-white/5 */
+    @apply bg-white/[0.01] backdrop-blur-2xl border border-white/[0.05] shadow-2xl;
   }
 
   .tech-card {
-    @apply bg-black/40 border border-white/10 rounded-lg p-4 transition-all active:scale-95 touch-manipulation;
+    @apply bg-white/[0.02] border border-white/[0.06] rounded-[24px] p-6 transition-all duration-300 active:scale-[0.97] touch-manipulation;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  }
+
+  .tech-card:active {
+    @apply bg-white/[0.04] border-white/[0.1];
   }
 
   .status-dot {
-    @apply w-2 h-2 rounded-full;
-    box-shadow: 0 0 8px currentColor;
+    @apply w-1.5 h-1.5 rounded-full;
   }
 
   .status-dot.online {
-    @apply bg-[hsl(var(--status-online))] text-[hsl(var(--status-online))];
+    @apply bg-[hsl(var(--status-online))];
+    box-shadow: 0 0 12px hsla(var(--status-online) / 0.5);
   }
 
   .status-dot.warning {
-    @apply bg-[hsl(var(--status-warning))] text-[hsl(var(--status-warning))];
+    @apply bg-[hsl(var(--status-warning))];
+    box-shadow: 0 0 12px hsla(var(--status-warning) / 0.5);
+  }
+
+  .btn-primary {
+    @apply bg-white text-black font-bold rounded-full px-8 py-4 active:scale-95 transition-all text-sm flex items-center justify-center gap-2 shadow-xl shadow-white/5;
+  }
+
+  .input-field {
+    @apply w-full bg-white/[0.02] border border-white/[0.05] rounded-[20px] px-6 py-4 text-sm text-white font-sans focus:outline-none focus:border-white/[0.15] focus:bg-white/[0.04] transition-all duration-300 placeholder:text-white/20;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .neural-node {
+    @apply absolute w-1 h-1 rounded-full bg-accent/40 blur-[1px];
+    animation: pulse-neural 4s infinite ease-in-out;
+  }
+
+  @keyframes pulse-neural {
+
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: scale(1.5);
+    }
   }
 }

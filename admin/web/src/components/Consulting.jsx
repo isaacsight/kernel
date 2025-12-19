@@ -40,7 +40,8 @@ const Consulting = () => {
         });
 
         try {
-            await axios.post('http://localhost:8000/api/consulting/submit', data, {
+            const apiBase = `http://${window.location.hostname}:8000`;
+            await axios.post(`${apiBase}/api/consulting/submit`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

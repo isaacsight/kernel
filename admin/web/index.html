@@ -9,6 +9,16 @@
 </head>
 
 <body>
+  <script>
+    (function () {
+      try {
+        const mode = localStorage.getItem('studio_mode') || 'standard';
+        document.body.className = mode;
+      } catch (e) {
+        console.error('Theme resolution failed', e);
+      }
+    })();
+  </script>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

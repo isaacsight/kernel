@@ -11,21 +11,80 @@ from admin.brain.memory_store import get_memory_store
 
 logger = logging.getLogger("MasterEditor")
 
-class Editor:
+from core.agent_interface import BaseAgent
+from typing import Dict
+
+logger = logging.getLogger("MasterEditor")
+
+class Editor(BaseAgent):
     """
     The Master Editor (Writer).
-    Transforms Deep Reasoning insights into publication-ready essays.
-    
-    Process:
-    1. Outliner: Structure the argument.
-    2. Drafter: Write the content.
-    3. Polisher: Refine voice and flow.
+    Transforms intake and deep reasoning into publication-ready essays.
     """
     def __init__(self):
         self.memory = get_memory_store()
         self.drafts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "brain", "drafts")
         os.makedirs(self.drafts_dir, exist_ok=True)
-        self.model = "gemini-2.0-flash"
+        self.model_name = "gemini-2.0-flash"
+
+    @property
+    def name(self) -> str:
+        return "The Editor"
+
+    @property
+    def role(self) -> str:
+        return "Master Editor"
+
+    async def execute(self, action: str, **params) -> Dict:
+        if action == "process_pending":
+            return await self.process_pending_intake()
+        elif action == "write_essay":
+            topic = params.get("topic")
+            source = params.get("source")
+            self.write_essay(topic, source)
+            return {"status": "success"}
+        else:
+             raise NotImplementedError(f"Action {action} not supported by Editor.")
+
+    async def process_pending_intake(self):
+        """
+        Subscription-based reaction to new work. Normalizes and summarizes.
+        """
+        from admin.brain.intake import get_intake_manager
+        intake = get_intake_manager()
+        
+        pending = intake.get_subscriptions("editor")
+        if not pending:
+            return {"message": "No pending intake for the Editor."}
+            
+        results = []
+        for work in pending:
+            try:
+                res = await self._summarize_intake(work)
+                intake.update_subscription_status(work['sub_id'], "completed", res)
+                results.append(res)
+            except Exception as e:
+                logger.error(f"Editor failed to process intake {work['id']}: {e}")
+                intake.update_subscription_status(work['sub_id'], "failed", {"error": str(e)})
+                
+        return {"processed": len(results), "details": results}
+
+    async def _summarize_intake(self, work: Dict):
+        """Generates a brief/summary of the intake."""
+        content = work.get('content', '')
+        prompt = f"Summarize this work and extract key themes for the Studio OS. Content:\n\n{content}"
+        
+        summary = self._call_llm("You are the Master Editor. Be concise and professional.", prompt)
+        
+        # Save as a draft brief
+        safe_title = "".join([c if c.isalnum() else "_" for c in (work.get('source_path') or f"intake_{work['id']}")])[:50]
+        filename = f"BRIEF_{safe_title}.md"
+        path = os.path.join(self.drafts_dir, filename)
+        
+        with open(path, 'w') as f:
+            f.write(f"# Summary of {work['source_type']}\n\n{summary}")
+            
+        return {"id": work['id'], "summary_saved": filename}
         
     def run_check(self):
         """Checks for new DEEP REASONING insights and writes essays."""

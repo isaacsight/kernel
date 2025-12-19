@@ -1,10 +1,14 @@
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
 import sys
 import json
+import logging
+
+logger = logging.getLogger("StudioAPI")
+logging.basicConfig(level=logging.INFO)
 
 # Add project root to path to allow importing admin.core
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
@@ -12,7 +16,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from admin import core
 from admin.heartbeat import heartbeat
 from admin.api.models import Post, AgentAction
-from admin.api.premium import router as premium_router
+
+class IntakeInput(BaseModel):
+    source_type: str # 'file', 'text', 'url', 'repo'
+    content: Optional[str] = None
+    source_path: Optional[str] = None
+    metadata: Optional[dict] = None
 
 app = FastAPI(title="Studio OS API", version="1.0.0")
 
@@ -45,16 +54,10 @@ async def shutdown_event():
     heartbeat.stop()
 
 # CORS Configuration
-origins = [
-    "http://localhost:5173",  # Vite Dev Server
-    "http://localhost:3000",
-    "http://localhost:8081",  # Local Static Server
-    "https://doesthisfeelright.com",  # Production
-]
-
+# Allow all origins in development/Tailscale environment for mobile bridge stability
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -85,31 +88,31 @@ async def heartbeat_status():
 @app.get("/agents")
 async def get_agents():
     """
-    Returns the current status of all agents.
+    Returns the real-time presence status of all agents.
     """
-    # In a real system, these would be dynamic.
-    # For now, we'll check if their dependencies are met.
-    
-    # Check Alchemist (Gemini/Ollama)
-    alchemist_status = "Ready"
-    
-    # Check Operator (Server)
-    server_manager = core.ServerManager()
-    operator_status = "Active" if server_manager.get_status() == "Running" else "Standby"
-    
-    # Check Librarian (Graph)
-    librarian_status = "Ready"
-    if os.path.exists(os.path.join(core.REPO_DIR, "docs/static/graph.json")):
-        librarian_status = "Active"
-
-    return [
-        {"name": "The Alchemist", "role": "Content Generator", "status": alchemist_status},
-        {"name": "The Guardian", "role": "Safety Officer", "status": "Active"},
-        {"name": "The Editor", "role": "Style & Quality", "status": "Active"},
-        {"name": "The Librarian", "role": "Knowledge Graph", "status": librarian_status},
-        {"name": "The Operator", "role": "System Manager", "status": operator_status},
-        {"name": "The Visionary", "role": "Visual Design", "status": "Dreaming"},
-    ]
+    try:
+        from admin.brain.agent_presence import get_agent_presence
+        presence = get_agent_presence()
+        return presence.get_team_presence()
+    except Exception as e:
+        logger.error(f"Error fetching agent presence: {e}")
+        # Fallback to a minimal list if presence fails
+@app.get("/agents")
+async def get_agents():
+    """
+    Returns the real-time presence status of all agents.
+    """
+    try:
+        from admin.brain.agent_presence import get_agent_presence
+        presence = get_agent_presence()
+        return presence.get_team_presence()
+    except Exception as e:
+        logger.error(f"Error fetching agent presence: {e}")
+        # Fallback to a minimal list if presence fails
+        return [
+            {"name": "The Alchemist", "role": "Content Generator", "status": "Ready"},
+            {"name": "The Operator", "role": "System Manager", "status": "Ready"}
+        ]
 
 @app.get("/posts", response_model=List[dict])
 async def get_posts():
@@ -257,7 +260,64 @@ async def get_evolution_state():
         return {"status": "offline", "message": "Evolution loop not running"}
 
 
-# ==================== Client Portal Chat ====================
+@app.post("/api/intake")
+async def process_intake(input: IntakeInput, background_tasks: BackgroundTasks):
+    """
+    Central Intake Endpoint. Ingests work and triggers the agent swarm.
+    """
+    from admin.brain.intake import get_intake_manager
+    manager = get_intake_manager()
+    
+    intake_id = manager.ingest(
+        source_type=input.source_type,
+        content=input.content,
+        source_path=input.source_path,
+        metadata=input.metadata
+    )
+    
+    # Trigger the swarm in the background
+    background_tasks.add_task(process_intake_background, intake_id)
+    
+    return {"status": "accepted", "intake_id": intake_id, "message": "Work ingested. Swarm notified."}
+
+async def process_intake_background(intake_id: int):
+    """
+    Orchestrates agent reactions to new intake and broadcasts progress to the UI.
+    """
+    from admin.engineers.librarian import Librarian
+    from admin.engineers.editor import Editor
+    from admin.engineers.visionary import Visionary
+    from admin.api.connection_manager import get_connection_manager
+    
+    manager = get_connection_manager()
+    
+    # helper for broadcasting system events
+    async def broadcast_event(agent: str, message: str, type: str = "assistant_response"):
+        await manager.broadcast(json.dumps({
+            "type": type,
+            "content": f"[{agent}] {message}",
+            "source": "system"
+        }))
+
+    # 1. Librarian (Indexing)
+    await broadcast_event("Librarian", "Starting indexing...")
+    librarian = Librarian()
+    lib_res = await librarian.execute("process_pending")
+    await broadcast_event("Librarian", f"Indexing complete. {lib_res.get('processed', 0)} documents processed.")
+    
+    # 2. Editor (Normalization/Summary)
+    await broadcast_event("Editor", "Analyzing content and creating summary...")
+    editor = Editor()
+    edt_res = await editor.execute("process_pending")
+    await broadcast_event("Editor", f"Summary created: {edt_res.get('details', [{}])[0].get('summary_saved', 'N/A')}")
+    
+    # 3. Visionary (Themes/Insights)
+    await broadcast_event("Visionary", "Extracting future themes and opportunities...")
+    visionary = Visionary()
+    vis_res = await visionary.execute("process_pending")
+    await broadcast_event("Visionary", "Visionary analysis complete. Insights logged to shared memory.")
+
+    print(f"Intake {intake_id} processing sequence complete.")
 from admin.api.chat import router as chat_router
 app.include_router(chat_router)
 
@@ -272,37 +332,34 @@ async def route_command(input: CommandInput):
     """
     Natural language command interface.
     Routes commands to appropriate agents automatically.
-    
-    Examples:
-    - "Write a post about AI ethics"
-    - "Publish the site"
-    - "What's the status?"
     """
     try:
-        from admin.engineers.command_router import get_command_router
-        router = get_command_router()
+        from admin.engineers.command_router import route_and_log
+        from admin.api.connection_manager import get_connection_manager
         
-        # Route the command
-        routed = router.route(input.command)
+        manager = get_connection_manager()
         
-        if not routed.get("success"):
-            return {
-                "success": False,
-                "error": routed.get("error"),
-                "suggestion": routed.get("suggestion")
-            }
+        # 1. Broadcast the incoming mobile command to the laptop UI immediately
+        await manager.broadcast(json.dumps({
+            "type": "user_message",
+            "content": input.command,
+            "source": "mobile"
+        }))
         
-        # Execute the command
-        result = router.execute(routed)
+        # 2. Route and execute (this also logs to CommunicationAnalyzer)
+        result = await route_and_log(input.command)
         
-        return {
-            "success": True,
-            "intent": routed.get("intent"),
-            "agents_involved": routed.get("target_agents"),
-            "execution_plan": routed.get("execution_plan"),
-            "result": result
-        }
+        # 3. Broadcast the result/response to the laptop UI
+        await manager.broadcast(json.dumps({
+            "type": "assistant_response",
+            "content": result.get("message", ""),
+            "intent": result.get("intent"),
+            "data": result.get("data")
+        }))
+        
+        return result
     except Exception as e:
+        logger.error(f"Mobile command failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/command/help")
@@ -406,7 +463,104 @@ async def get_system_metrics():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# SPA Catch-all route
+# --- Studio OS Status & Metrics ---
+
+@app.get("/api/studio/status")
+async def studio_status():
+    """Returns the current state of the Evolution Loop (The Brain)."""
+    try:
+        # Path to the shared brain state
+        state_path = os.path.join(os.path.dirname(__file__), "../../admin/brain/evolution_state.json")
+        
+        if os.path.exists(state_path):
+            with open(state_path, "r") as f:
+                return json.load(f)
+        
+        return {
+            "cycle": 0,
+            "status": "sleeping", 
+            "last_log": "System is offline.",
+            "metrics": {"fitness": 0, "complexity": 0}
+        }
+    except Exception as e:
+        logger.error(f"Error reading studio status: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/studio/fri")
+async def get_fri(days: int = 7):
+    """Calculate and return the Felt Right Index."""
+    try:
+        from admin.brain.felt_right_index import fri_engine
+        return fri_engine.calculate_fri(days=days)
+    except Exception as e:
+        logger.error(f"Error calculating FRI: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/studio/revenue")
+async def get_revenue():
+    """Get the monetization summary from the Revenue Agent."""
+    try:
+        from admin.engineers.revenue_agent import get_revenue_agent
+        agent = get_revenue_agent()
+        return agent.get_revenue_summary()
+    except Exception as e:
+        logger.error(f"Error fetching revenue summary: {e}")
+        return {"status": "error", "message": str(e)}
+
+# --- Rushed Release (Mobile/Ingest) API ---
+
+@app.post("/v1/ingest")
+async def ingest_signal(request: Request):
+    from admin.brain.loops.rushed_release import rushed_release_loop
+    from fastapi import Request
+    try:
+        data = await request.json()
+        
+        # Handle mobile batches
+        if "batch" in data:
+            results = []
+            for signal in data["batch"]:
+                normalized = {
+                    "user_id": data.get("user_id", "anon_abc123"),
+                    "event_type": signal.get("type", "unknown"),
+                    "context": signal.get("context", signal)
+                }
+                if "url" in signal and "url" not in normalized["context"]:
+                    normalized["context"]["url"] = signal["url"]
+                
+                results.append(rushed_release_loop.process_ingest(normalized))
+            return {"status": "batch_queued", "count": len(results)}
+            
+        result = rushed_release_loop.process_ingest(data)
+        return result
+    except Exception as e:
+        logger.error(f"Ingest error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/v1/snapshot")
+async def get_snapshot(user_id: str):
+    from admin.brain.loops.rushed_release import rushed_release_loop
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Missing user_id")
+    
+    result = rushed_release_loop.get_snapshot(user_id)
+    result['entries'] = result.get('decisions', [])
+    return result
+
+@app.post("/v1/review")
+async def review_entry(data: dict):
+    from admin.brain.loops.rushed_release import rushed_release_loop
+    try:
+        entry_id = data.get('entry_id')
+        action = data.get('action')
+        if not entry_id or not action:
+            raise HTTPException(status_code=400, detail="Missing entry_id or action")
+            
+        result = rushed_release_loop.mark_review(entry_id, action)
+        return result
+    except Exception as e:
+        logger.error(f"Review error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str):
     # Skip API routes and static files since they are handled earlier
