@@ -58,6 +58,7 @@ class CommandRouter:
         # Configure Gemini
         api_key = config.GEMINI_API_KEY
         if api_key:
+            logger.info(f"CommandRouter initialized with API Key: {api_key[:10]}...")
             genai.configure(api_key=api_key)
             self.model = genai.GenerativeModel(config.GEMINI_MODEL)
         else:
@@ -131,21 +132,29 @@ class CommandRouter:
             
         except Exception as e:
             logger.error(f"Routing failed: {e}")
-            if "429" in str(e) or "ResourceExhausted" in str(e):
-                 return {
-                    "success": True, # Fail open to chat
+            
+            # Alchemy Transmutation: Turn unknown errors into solutions
+            logger.warning(f"Router failed ({e}). Summoning Alchemist for fallback...")
+            try:
+                from admin.engineers.alchemist import Alchemist
+                alchemist = Alchemist()
+                # Ask Alchemist to handle the user's input directly as a chat fallback
+                fallback_response = alchemist.chat(f"System Error in Router: {str(e)}. User said: '{user_input}'. Reply to user creatively as if you are the system recovering.")
+                return {
+                    "success": True,
                     "intent": "chat",
                     "action": None,
-                    "target_agent": None,
-                    "response_text": "My brain is a bit tired (Rate Limit Reached). Give me a minute to recharge?"
-                 }
-            
-            return {
-                "success": False, 
-                "error": str(e),
-                "intent": "unknown",
-                "response_text": "I'm sorry, I'm having trouble connecting to my brain right now."
-            }
+                    "target_agent": "Alchemist (Fallback)",
+                    "response_text": fallback_response
+                }
+            except Exception as e2:
+                logger.error(f"Even Alchemy failed: {e2}")
+                return {
+                    "success": False, 
+                    "error": str(e),
+                    "intent": "unknown",
+                    "response_text": "System Overload. All circuits busy. Please retry."
+                }
     
     async def execute(self, routed_command: Dict) -> Dict[str, Any]:
         """

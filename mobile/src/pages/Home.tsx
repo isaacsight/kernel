@@ -13,6 +13,7 @@ interface Agent {
 
 const Home: React.FC = () => {
     const [command, setCommand] = useState('');
+    const [lastResponse, setLastResponse] = useState<{ message: string; agent?: string } | null>(null);
     const [agents, setAgents] = useState<Agent[]>([]);
     const [loading, setLoading] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -47,8 +48,17 @@ const Home: React.FC = () => {
         setLoading(true);
         try {
             await Haptics.impact({ style: ImpactStyle.Medium });
-            await SystemService.sendCommand(command);
+            const result = await SystemService.sendCommand(command);
             setCommand('');
+
+            // Show response
+            if (result && result.message) {
+                setLastResponse({
+                    message: result.message,
+                    agent: result.target_agent || 'System'
+                });
+            }
+
             fetchAgents();
             await Haptics.notification({ type: 'SUCCESS' as any });
         } catch (error) {
@@ -116,6 +126,19 @@ const Home: React.FC = () => {
                     </button>
                 </form>
             </section>
+
+            {/* Chat Response Area */}
+            {lastResponse && (
+                <div className="animate-fade-in mx-1 p-4 rounded-2xl bg-white/[0.05] border border-white/[0.1] backdrop-blur-md">
+                    <div className="flex items-center gap-2 mb-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.6)]"></div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">{lastResponse.agent}</span>
+                    </div>
+                    <p className="text-sm font-medium text-white/80 leading-relaxed">
+                        {lastResponse.message}
+                    </p>
+                </div>
+            )}
 
             {/* Agent Grid */}
             <section className="space-y-6">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,119 +6,64 @@
 
 @layer base {
   :root {
-    /* Hybrid Design System: DevRev Structure + Cash App Boldness */
-
-    /* Colors - Studio OS Ultra Dark */
-    --background: 0 0% 1%;
-    /* #020202 */
+    --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    /* #FFFFFF */
-
-    --card: 0 0% 3%;
-    /* #080808 (bg-secondary) */
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 3%;
-    --popover-foreground: 0 0% 100%;
-
-    /* Accent: #00D6A3 (166 100% 42%) */
-    --primary: 166 100% 42%;
-    --primary-foreground: 0 0% 0%;
-
-    --secondary: 0 0% 6%;
-    /* #0F0F0F (bg-tertiary) */
+    --primary: 126 35% 55%;
+    /* #66B56E - Studio Green */
+    --primary-foreground: 126 35% 10%;
+    --secondary: 120 2% 10%;
     --secondary-foreground: 0 0% 100%;
-
-    --muted: 0 0% 6%;
-    --muted-foreground: 240 5% 64%;
-    /* #A1A1AA */
-
-    --accent: 166 100% 42%;
-    --accent-foreground: 0 0% 0%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
+    --muted: 0 0% 40%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 126 35% 20%;
+    --accent-foreground: 126 35% 90%;
     --border: 0 0% 12%;
-    /* #1F1F1F */
     --input: 0 0% 12%;
-    --ring: 166 100% 42%;
-
-    --radius: 0.5rem;
-
-    /* Status Colors (Used in status-dot class) */
-    --status-online: 142 71% 45%;
-    /* Green */
-    --status-warning: 45 93% 47%;
-    /* Amber */
-    --status-error: 0 84% 60%;
-    /* Red */
-
-    /* Type Mapping */
-    --font-heading: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
+    --ring: 126 35% 55%;
+    --radius: 0.75rem;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
-    background-image:
-      radial-gradient(circle at 50% 0%, rgba(0, 199, 199, 0.03) 0%, transparent 50%),
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
-  }
-
-  /* Monospace Hierarchy */
-  code,
-  .mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+    background-image: radial-gradient(circle at top, #111 0%, #000 100%);
+    background-attachment: fixed;
   }
 }
 
 @layer components {
-
-  /* Glass Panel - The Core Module */
-  .glass-panel {
-    @apply bg-card/60 backdrop-blur-md border border-white/5 shadow-xl;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  .pro-container {
+    @apply max-w-4xl mx-auto w-full px-4 md:px-8;
   }
 
-  /* Tech Card - For Data Display */
-  .tech-card {
-    @apply bg-black/40 border border-white/10 rounded-lg p-4 transition-all hover:border-primary/50 hover:shadow-[0_0_15px_-5px_theme(colors.primary.DEFAULT)];
+  .neural-input {
+    @apply flex items-end gap-2 bg-[#111] backdrop-blur-3xl rounded-[28px] p-2 pl-4 border border-white/10 focus-within:border-primary/40 shadow-2xl shadow-black transition-all duration-500;
   }
 
-  /* Status Dot */
-  .status-dot {
-    @apply w-2 h-2 rounded-full;
-    box-shadow: 0 0 8px currentColor;
+  .sidebar-rail-item {
+    @apply flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300 text-white/40 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95;
   }
 
-  .status-dot.online {
-    @apply bg-[hsl(var(--status-online))] text-[hsl(var(--status-online))];
-  }
-
-  .status-dot.warning {
-    @apply bg-[hsl(var(--status-warning))] text-[hsl(var(--status-warning))];
-  }
-
-  .status-dot.error {
-    @apply bg-[hsl(var(--status-error))] text-[hsl(var(--status-error))];
-  }
-
-  /* Navigation Item */
-  .nav-item {
-    @apply flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5;
-  }
-
-  .nav-item.active {
+  .sidebar-rail-item.active {
     @apply text-primary bg-primary/10 border border-primary/20;
   }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
 }

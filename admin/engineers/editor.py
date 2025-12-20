@@ -12,7 +12,7 @@ from admin.brain.memory_store import get_memory_store
 logger = logging.getLogger("MasterEditor")
 
 from core.agent_interface import BaseAgent
-from typing import Dict
+from typing import Dict, List, Any
 
 logger = logging.getLogger("MasterEditor")
 
@@ -107,6 +107,61 @@ class Editor(BaseAgent):
             
         logger.info(f"✍️ The Master Editor is writing: {topic}")
         self.write_essay(topic, council_output)
+
+    async def audit(self, content: str) -> List[Dict]:
+        """
+        Audits content for style, flow, and doctrine alignment.
+        """
+        logger.info(f"[{self.name}] Auditing style...")
+        
+        prompt = f"""
+        You are the Master Editor. Audit this blog post for style and doctrine alignment.
+        
+        THE DOCTRINE:
+        "Be honest, clear, and kind. Avoid cliches. Use lyrical flow."
+        
+        CONTENT:
+        {content}
+        
+        Identify style issues, run-on sentences, or sections that feel "AI-generated" or impersonal.
+        
+        Return ONLY valid JSON:
+        {{
+            "is_polished": true/false,
+            "suggestions": [
+                "Issue 1: suggestion",
+                "Issue 2: suggestion"
+            ]
+        }}
+        """
+        
+        try:
+            # We use flash for fast auditing
+            response = await self.execute_llm(prompt, system_instruction="You are the Master Editor.")
+            if not response:
+                return []
+                
+            # Direct text extraction
+            text = response if isinstance(response, str) else response.text
+            
+            # Simple JSON extraction
+            if "{" in text:
+                import json
+                data = json.loads(text[text.find("{"):text.rfind("}")+1])
+                return data.get("suggestions", [])
+            return []
+        except Exception as e:
+            logger.warning(f"Editor audit failed: {e}")
+            return []
+
+    async def execute_llm(self, prompt: str, system_instruction: str = "") -> Any:
+        # Helper to use the model configured in __init__
+        import google.generativeai as genai
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key: return None
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(self.model_name, system_instruction=system_instruction)
+        return await model.generate_content_async(prompt)
 
     def write_essay(self, topic: str, source_material: str):
         """Executes the 3-step writing loop."""

@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 class Config:
     # Paths
@@ -15,8 +15,7 @@ class Config:
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-flash-latest" # Resilient, Higher Quota
-    # GEMINI_MODEL = "gemini-2.0-flash-exp" # Experimental, Low Limits
+    GEMINI_MODEL = "gemini-flash-latest" # STABLE: Paid Tier Compatible
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
     SAFETY_MODEL = "unitary/toxic-bert"
@@ -53,5 +52,17 @@ class Config:
     # Notion
     NOTION_API_KEY = os.environ.get("NOTION_API_KEY")
     NOTION_DATABASE_ID = os.environ.get("NOTION_DATABASE_ID")
+
+    # Latency Optimization (Variables for Tuning)
+    CHAT_HISTORY_LIMIT = 20 # 10 turns
+    USE_STREAMING = True
+    MINIMIZE_COLD_STARTS = True
+    TRIM_PROMPT_CONTEXT = True
+
+    # Lab Experiment Variables (Tunable via Lab Scientists)
+    CONTROL_PRECISION = float(os.environ.get("CONTROL_PRECISION", 0.9)) # 0.0 to 1.0
+    AGENT_CREATIVITY = float(os.environ.get("AGENT_CREATIVITY", 0.7)) # 0.0 to 1.0
+    THINKING_DEPTH = int(os.environ.get("THINKING_DEPTH", 3)) # Number of re-evaluation loops
+    ALLOW_OS_COMMANDS = os.environ.get("ALLOW_OS_COMMANDS", "true").lower() == "true"
 
 config = Config()

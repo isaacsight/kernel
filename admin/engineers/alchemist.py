@@ -112,7 +112,9 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
             response = self.chat_session.send_message(message)
             return response.text
         except Exception as e:
-            return f"Error in chat: {e}"
+            logger.warning(f"Alchemist brain offline: {e}")
+            # Thematic Fallback (True Alchemy)
+            return "My neural core is cooling down from super-luminal processing. Give me a moment to realign my cognitive matrix."
 
     def analyze_code(self, file_paths: List[str], query: str) -> str:
         """

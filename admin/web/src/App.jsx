@@ -17,28 +17,20 @@ function App() {
   return (
     <ModeProvider>
       <Router>
-        <Routes>
-          {/* Default entry point: Pure, distraction-free Agent Chat */}
-          <Route path="/" element={<ChatInterface />} />
-
-          {/* Nested routes that still use the Admin Layout shell */}
-          <Route path="/*" element={
-            <Layout>
-              <Routes>
-                <Route path="galaxy" element={<SynapticLattice />} />
-                <Route path="legacy-dashboard" element={<Dashboard />} />
-                <Route path="content" element={<PostList />} />
-                <Route path="content/new" element={<PostEditor />} />
-                <Route path="content/:slug" element={<PostEditor />} />
-                <Route path="design" element={<DesignStudio />} />
-                <Route path="revenue" element={<RevenueDashboard />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="consulting" element={<Consulting />} />
-                {/* ClientPortal was removed from the instruction, so it's removed here */}
-              </Routes>
-            </Layout>
-          } />
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<ChatInterface />} />
+            <Route path="/galaxy" element={<SynapticLattice />} />
+            <Route path="/legacy-dashboard" element={<Dashboard />} />
+            <Route path="/content" element={<PostList />} />
+            <Route path="/content/new" element={<PostEditor />} />
+            <Route path="/content/:slug" element={<PostEditor />} />
+            <Route path="/design" element={<DesignStudio />} />
+            <Route path="/revenue" element={<RevenueDashboard />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/consulting" element={<Consulting />} />
+          </Routes>
+        </Layout>
       </Router>
     </ModeProvider>
   );

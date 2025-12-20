@@ -1,6 +1,7 @@
 from fastapi import WebSocket
 from typing import List
 import logging
+import asyncio
 
 logger = logging.getLogger("ConnectionManager")
 
@@ -27,11 +28,18 @@ class ConnectionManager:
         await websocket.send_text(message)
 
     async def broadcast(self, message: str):
+        if not self.active_connections:
+            return
+            
+        tasks = []
         for connection in self.active_connections:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.error(f"Broadcast error: {e}")
+            tasks.append(connection.send_text(message))
+            
+        if tasks:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    logger.error(f"Broadcast error to connection {i}: {result}")
 
 # Singleton helper
 def get_connection_manager() -> ConnectionManager:

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Primary: Mac Controller (via Tailscale)
-const PRIMARY_API_URL = `http://100.81.9.128:8000`;
+const PRIMARY_API_URL = `http://100.81.9.128:8001`;
 // Secondary: Windows Node (Fallback)
 const SECONDARY_API_URL = `http://100.98.193.42:5173`; // Adjusted to typical local node port if needed, or matched config
 
@@ -56,7 +56,7 @@ export const AgentService = {
 
 export const SystemService = {
     sendCommand: async (command: string) => {
-        const response = await api.post('/command', { command });
+        const response = await api.post('/execute', { command });
         return response.data;
     },
     publish: async () => {

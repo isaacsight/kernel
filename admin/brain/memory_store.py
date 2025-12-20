@@ -610,8 +610,23 @@ class MemoryStore:
                 "metadata": json.loads(r["metadata"]) if r["metadata"] else {},
                 "timestamp": r["timestamp"]
             }
-            for r in rows
         ]
+
+    # ==================== Raw Intake (OS Pipeline) ====================
+
+    def save_intake(self, source_type: str, source_path: str, content: str, 
+                   metadata: Dict = None, status: str = "pending"):
+        """Save raw content into the intake pipeline."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT INTO raw_intake (source_type, source_path, content, metadata, status, processed_at) 
+               VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)""",
+            (source_type, source_path, content, json.dumps(metadata or {}), status)
+        )
+        conn.commit()
+        conn.close()
+        logger.info(f"Intake saved: {source_path}")
 
     # ==================== Summary ====================
     

@@ -14,6 +14,7 @@ async def websocket_client_chat(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
+            print(f"DEBUG: Received message via WS: {data}")
             
             # Broadcast user message to all devices
             await manager.broadcast(json.dumps({
@@ -23,10 +24,12 @@ async def websocket_client_chat(websocket: WebSocket):
             }))
             
             # Stream response and broadcast chunks
-            async for chunk in service.stream_chat(data):
+            async for chunk_info in service.stream_chat(data):
+                chunk_type = "reasoning_chunk" if chunk_info.get("type") == "thought" else "response_chunk"
+                print(f"DEBUG: Broadcasting {chunk_type}: {chunk_info.get('content', '')[:20]}...")
                 await manager.broadcast(json.dumps({
-                    "type": "response_chunk",
-                    "content": chunk
+                    "type": chunk_type,
+                    "content": chunk_info.get("content", "")
                 }))
             
             # Broadcast completion

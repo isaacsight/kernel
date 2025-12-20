@@ -32,9 +32,11 @@ export default {
                 ring: "hsl(var(--ring))",
             },
             borderRadius: {
-                sm: 'var(--radius-sm)',
-                md: 'var(--radius-md)',
-                lg: 'var(--radius-lg)',
+                'sm': '0.375rem',
+                'md': '0.75rem',
+                'lg': '1rem',
+                'xl': '1.5rem',
+                '2xl': '2rem',
             },
             backdropBlur: {
                 xs: '2px',

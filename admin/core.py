@@ -273,7 +273,7 @@ async def generate_ai_post(topic, provider="auto"):
             
             # 4. Editor: Audit (Style)
             logger.info("[The Editor] Auditing style...")
-            style_issues = editor.audit(content)
+            style_issues = await editor.audit(content)
             
             # If there are significant style issues, we could also retry, or just log them.
             # For now, let's retry if there are MANY issues, or just accept it.
@@ -348,7 +348,17 @@ def publish_git():
     Commits and pushes changes to the git repository.
     """
     try:
+        # Check current status
+        status_before = subprocess.run(["git", "status", "--porcelain"], cwd=REPO_DIR, capture_output=True, text=True)
+        
         subprocess.run(["git", "add", "."], cwd=REPO_DIR, check=True)
+        
+        # Check if there are changes to commit after add
+        status_after = subprocess.run(["git", "status", "--porcelain"], cwd=REPO_DIR, capture_output=True, text=True)
+        
+        if not status_after.stdout.strip():
+            return "No changes detected. Site is already up to date."
+            
         subprocess.run(["git", "commit", "-m", "Content update via Admin TUI"], cwd=REPO_DIR, check=True)
         subprocess.run(["git", "push"], cwd=REPO_DIR, check=True)
         
@@ -364,6 +374,7 @@ def publish_git():
                 
                 if latest_post:
                     logger.info(f"Broadcasting post '{latest_post.get('title')}' to TikTok...")
+                    # generate_video might be slow or fail, keep it safe
                     video_path = broadcaster.generate_video(latest_post)
                     if video_path:
                         broadcaster.upload_to_tiktok(video_path, description=f"New post: {latest_post.get('title')} #blog")
@@ -372,8 +383,9 @@ def publish_git():
             # Don't fail the publish if broadcasting fails
             pass
 
-        return "Successfully published to Git and broadcasted to TikTok (if configured)."
+        return "Successfully published to Git."
     except subprocess.CalledProcessError as e:
+        logger.error(f"Git execution failed: {e.stderr if hasattr(e, 'stderr') else str(e)}")
         raise Exception(f"Git publish failed: {str(e)}")
 
 class ServerManager:
