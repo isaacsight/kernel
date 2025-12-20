@@ -12,6 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from admin.config import config
 from admin.engineers.web_scout import get_web_scout
 from admin.brain.agent_base import BaseAgent
+from admin.brain.model_router import get_model_router, TaskType
 
 logger = logging.getLogger("JobHunter")
 
@@ -24,19 +25,9 @@ class JobHunter(BaseAgent):
         self.web_scout = get_web_scout()
         self.reports_dir = os.path.join(config.BRAIN_DIR, "job_hunts")
         os.makedirs(self.reports_dir, exist_ok=True)
-        
-        # Initialize LLM Client (using same logic as Researcher/Base)
-        self.api_key = config.GEMINI_API_KEY
-        if self.api_key:
-             try:
-                 from google import genai
-                 self.client = genai.Client(api_key=self.api_key)
-             except ImportError:
-                 self.client = None
-        else:
-            self.client = None
+        self.model_router = get_model_router()
             
-        logger.info(f"[{self.name}] Initialized. Target: Japan (English Speaking, Sponsor).")
+        logger.info(f"[{self.name}] Initialized. Ready to hunt.")
 
     def execute(self, action: str, **params) -> Dict[str, Any]:
         if action == "hunt" or action == "search":
@@ -107,8 +98,35 @@ class JobHunter(BaseAgent):
             For each, generate a SHORT "Draft Application Email" snippet to the hiring manager.
             """
             
-            # Use a basic model call
-            report = self._simple_llm_call(prompt)
+            # Use ModelRouter for robust generation
+            # Fallback to simple logic if router fails
+            report = ""
+            try:
+                model = self.model_router.select_model(TaskType.ANALYSIS, {"prefer_fast": True})
+                logger.info(f"Using model: {model['selected']}")
+                
+                if model['provider'] == 'google':
+                    import google.generativeai as genai
+                    genai.configure(api_key=config.GEMINI_API_KEY)
+                    m = genai.GenerativeModel(model['selected'])
+                    res = m.generate_content(prompt)
+                    report = res.text
+                elif model['provider'] == 'openai':
+                    from openai import OpenAI
+                    client = OpenAI(api_key=config.OPENAI_API_KEY)
+                    # Fallback to a safe model if 5.2 fails
+                    model_name = model['selected']
+                    if "5.2" in model_name: 
+                        model_name = "gpt-4o"
+                    res = client.chat.completions.create(model=model_name, messages=[{"role": "user", "content": prompt}])
+                    report = res.choices[0].message.content
+                else: 
+                     # Fallback for local models (simplified)
+                     report = "Analysis model provider not fully supported in this script version."
+
+            except Exception as e:
+                logger.error(f"LLM Analysis Failed: {e}")
+                report = f"**Automated Analysis Failed** ({e})\n\n**Raw Job Links**:\n" + jobs_text
             
             report_path = self._save_report(f"{role_focus}_{mode}", report)
             
@@ -137,19 +155,8 @@ class JobHunter(BaseAgent):
             
         return filepath
 
-    def _simple_llm_call(self, prompt: str) -> str:
-        """ Simplified LLM call using Gemini Flash (Hardcoded for efficiency) """
-        try:
-            if self.client:
-                response = self.client.models.generate_content(
-                    model="gemini-2.0-flash",
-                    contents=prompt
-                )
-                return response.text
-            else:
-                 return "LLM Client not available. Raw results: " + prompt[:500]
-        except Exception as e:
-            return f"Error generating report: {e}"
+    # Removed _simple_llm_call
+
 
 if __name__ == "__main__":
     hunter = JobHunter()

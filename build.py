@@ -2096,6 +2096,13 @@ Sitemap: {BASE_URL}/sitemap.xml
 
     # 13. Generate Search Index
     print("Step 13: Generating Search Index...")
+    
+    # 13b. Generate posts.json for Archive (Dynamic)
+    # This ensures accuracy of output_rel_path for client-side routing
+    print("Step 13b: Generating posts.json for Archive...")
+    with open(os.path.join(OUTPUT_DIR, 'posts.json'), 'w', encoding='utf-8') as f:
+        json.dump(posts, f, ensure_ascii=False, indent=2)
+
     import re
     search_index = []
     

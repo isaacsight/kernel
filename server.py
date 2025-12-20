@@ -288,6 +288,21 @@ async def get_revenue():
         logger.error(f"Error fetching revenue summary: {e}")
         return {"status": "error", "message": str(e)}
 
+# --- Studio OS Treasurer API ---
+from admin.engineers.treasurer import Treasurer
+
+@app.get("/api/studio/finance")
+async def get_finance_report(days: int = 30):
+    """
+    Get the financial health report from the Treasurer (CFO).
+    """
+    try:
+        cfo = Treasurer()
+        return cfo.get_financial_report(days=days)
+    except Exception as e:
+        logger.error(f"Error fetching finance report: {e}")
+        return {"status": "error", "message": str(e)}
+
 # --- Studio OS Decision Ledger API ---
 
 @app.get("/api/decisions")

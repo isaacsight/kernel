@@ -11,6 +11,7 @@ import Consulting from './components/Consulting';
 import RevenueDashboard from './components/RevenueDashboard';
 import SynapticLattice from './components/SynapticLattice';
 import ChatInterface from './components/ChatInterface';
+import FinanceDashboard from './components/FinanceDashboard';
 import { ModeProvider } from './context/ModeContext';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/content/:slug" element={<PostEditor />} />
             <Route path="/design" element={<DesignStudio />} />
             <Route path="/revenue" element={<RevenueDashboard />} />
+            <Route path="/finance" element={<FinanceDashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/consulting" element={<Consulting />} />
           </Routes>
