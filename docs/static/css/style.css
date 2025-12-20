@@ -177,10 +177,14 @@ body {
    Elements fade in as they enter viewport
    ============================================ */
 .reveal {
+    opacity: 1;
+    transform: none;
+    /* Animation disabled to ensure visibility
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    */
 }
 
 .reveal.visible {
@@ -3816,4 +3820,594 @@ body:has(.ceo-layout) .site-footer {
     #bmc-wbtn {
         display: none !important;
     }
+}
+
+/* ============================================
+   BRAND HUB PAGE
+   ============================================ */
+
+.brand-hub {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero */
+.brand-hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 4rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+}
+
+.brand-title {
+    font-size: 8rem;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #fff, #666);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+    font-size: 2rem;
+    color: var(--text-primary);
+    font-weight: 300;
+}
+
+.brand-meta {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+/* Abstract Background Shapes */
+.brand-hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.abstract-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+}
+
+.shape-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-primary), transparent);
+    top: -200px;
+    right: -200px;
+    animation: float 10s ease-in-out infinite;
+}
+
+.shape-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #333, transparent);
+    bottom: -100px;
+    left: 10%;
+    animation: float 12s ease-in-out infinite reverse;
+}
+
+/* Navigation */
+.brand-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(2, 2, 2, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1rem 4rem;
+    display: flex;
+    gap: 2rem;
+    z-index: 100;
+}
+
+.brand-nav a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.brand-nav a:hover {
+    color: var(--accent-primary);
+}
+
+/* Container */
+.brand-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+}
+
+.brand-section {
+    padding-bottom: 8rem;
+    margin-bottom: 8rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    margin-bottom: 4rem;
+    max-width: 600px;
+}
+
+.section-header h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text-white);
+}
+
+/* Logo Grid */
+.logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.logo-card {
+    aspect-ratio: 1/1;
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.logo-card:hover {
+    border-color: var(--accent-primary);
+}
+
+.logo-display {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.logo-display svg {
+    width: 80px;
+    height: 80px;
+}
+
+.logo-label {
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    border-top: 1px solid var(--border-subtle);
+    width: 100%;
+    text-align: center;
+}
+
+.logo-card.light {
+    background: #fff;
+}
+
+.logo-card.outline .logo-display {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.logo-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-brand {
+    padding: 12px 24px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-emphasis);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-brand:hover {
+    background: var(--accent-primary);
+    color: #000;
+}
+
+/* Swatches */
+.color-group {
+    margin-bottom: 4rem;
+}
+
+.color-group h3 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.swatch {
+    cursor: pointer;
+}
+
+.swatch-color {
+    height: 120px;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s;
+}
+
+.swatch:hover .swatch-color {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.swatch-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.swatch-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.swatch-hex {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.swatch-var {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+}
+
+/* Typography */
+.type-specimen {
+    padding: 4rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 4rem;
+}
+
+.type-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+}
+
+.font-name {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.font-usage {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+}
+
+.type-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: baseline;
+}
+
+.type-label {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+.type-specimen.mono .type-example {
+    font-family: var(--font-mono);
+}
+
+/* Voice */
+.voice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.voice-card {
+    padding: 3rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+}
+
+.voice-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.voice-list {
+    margin-top: 2rem;
+    padding-left: 0;
+    list-style: none;
+}
+
+.voice-list li {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.voice-list li.do {
+    background: rgba(102, 181, 110, 0.1);
+    color: var(--text-primary);
+    border-left: 3px solid var(--accent-primary);
+}
+
+.voice-list li.dont {
+    background: rgba(255, 99, 71, 0.1);
+    color: #ff6b6b;
+    border-left: 3px solid #ff6b6b;
+}
+
+/* Lexicon */
+.lexicon-box {
+    padding: 3rem;
+    border: 1px dashed var(--border-glass);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.lexicon-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.lex-tag {
+    padding: 8px 16px;
+    background: var(--bg-tertiary);
+    border-radius: 99px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .brand-title {
+        font-size: 4rem;
+    }
+
+    .logo-grid,
+    .voice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .type-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+}
+
+/* ============================================
+   CREATIVE POLISH (AURORA & MOTION)
+   ============================================ */
+
+/* Aurora Background Animation */
+.aurora-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background: #020202;
+}
+
+.aurora-blob {
+    position: absolute;
+    filter: blur(80px);
+    opacity: 0.6;
+    animation: aurora-float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+}
+
+.aurora-1 {
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(102, 181, 110, 0.3), transparent 70%);
+    animation-delay: 0s;
+}
+
+.aurora-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);
+    animation-delay: -5s;
+}
+
+.aurora-3 {
+    top: 40%;
+    left: 40%;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%);
+    animation-delay: -10s;
+}
+
+@keyframes aurora-float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* Premium Glassmorphism */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glossy highlight/shine effect */
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.glass-panel:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-4px) scale(1.005);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel:hover::before {
+    opacity: 1;
+}
+
+/* Magnetic/Hover Effects for Interactivity */
+.magnetic-wrap {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-wrap:hover {
+    transform: scale(1.1);
+}
+
+/* Typography Polish */
+.brand-hero-content h1 {
+    font-size: clamp(4rem, 10vw, 9rem);
+    /* Responsive Giant Text */
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 80px rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.brand-section h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.brand-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+}
+
+/* Grid Polish */
+.swatch-grid,
+.logo-grid,
+.type-scale {
+    gap: 2rem;
+}
+
+/* Floating Parallax Elements (Utility) */
+.float-1 {
+    animation: aurora-float 8s infinite reverse;
+}
+
+.float-2 {
+    animation: aurora-float 12s infinite;
+}
+
+.float-3 {
+    animation: aurora-float 15s infinite reverse;
+}
+
+/* Custom Scrollbar for Brand Page */
+body.brand-page::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.brand-page::-webkit-scrollbar-thumb {
+    background: var(--text-tertiary);
+    border-radius: 5px;
+    border: 2px solid var(--bg-primary);
 }

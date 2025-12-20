@@ -240,6 +240,7 @@ def build():
     base_template = read_file(os.path.join(TEMPLATE_DIR, 'base.html'))
     post_template = read_file(os.path.join(TEMPLATE_DIR, 'post.html'))
     index_template = read_file(os.path.join(TEMPLATE_DIR, 'index.html'))
+    brand_template = read_file(os.path.join(TEMPLATE_DIR, 'brand.html'))
 
     # 3b. Load Intelligence Context (Reasoning Engine)
     # We read studio-snapshot.md early to get the "Reasoning State"
@@ -361,7 +362,7 @@ def build():
                  out_rel_path = os.path.join(rel_dir, clean_slug + '.html')
             else:
                 # Top level content check
-                if metadata.get('is_html_source', False) or clean_slug in ['about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio', 'architecture', 'agentic-systems-engineering', 'extensions', 'products', 'start', 'strategy']:
+                if metadata.get('is_html_source', False) or clean_slug in ['brand', 'about', 'studio-thesis', 'studio-snapshot', 'is-this-for-you', 'decision-log', 'changelog', 'recommendation-engine', 'retired-patterns', 'research-roadmap', 'studio', 'architecture', 'agentic-systems-engineering', 'extensions', 'products', 'start', 'strategy']:
                      # Top level pages
                      out_rel_path = clean_slug + '.html'
                 else:
@@ -706,11 +707,14 @@ def build():
         if series:
             series_html = f'<div class="series-indicator">Series: {series}</div>'
 
-        post_html = post_template.replace('{{ title }}', post.get('title', 'Untitled'))
-        post_html = post_html.replace('{{ category }}', post.get('category', 'General'))
-        post_html = post_html.replace('{{ tags_html }}', tags_html)
-        post_html = post_html.replace('{{ series_indicator }}', series_html)
-        post_html = post_html.replace('{{ post_content }}', body)
+        if post.get('layout') == 'brand':
+             post_html = brand_template
+        else:
+             post_html = post_template.replace('{{ title }}', post.get('title', 'Untitled'))
+             post_html = post_html.replace('{{ category }}', post.get('category', 'General'))
+             post_html = post_html.replace('{{ tags_html }}', tags_html)
+             post_html = post_html.replace('{{ series_indicator }}', series_html)
+             post_html = post_html.replace('{{ post_content }}', body)
         
         # Metadata replacements
         post_html = post_html.replace('{{ date }}', post.get('date', ''))
