@@ -5,7 +5,11 @@ import json
 import time
 from datetime import datetime
 from typing import List, Dict, Optional, Any, Tuple
-from config import config
+
+# Add root to path so we can import admin
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from admin.config import config
 from admin.engineers.web_scout import get_web_scout
 from admin.brain.agent_base import BaseAgent
 
@@ -41,31 +45,43 @@ class JobHunter(BaseAgent):
         else:
              raise NotImplementedError(f"Action {action} not supported by JobHunter.")
 
-    def hunt_jobs(self, role_focus: str) -> dict:
+    def hunt_jobs(self, role_focus: str, mode: str = "freelance") -> dict:
         """
-        Performs a targeted job search for Japan-based, English-speaking roles.
+        Performs a targeted job search.
+        Modes: 'freelance', 'contract', 'fulltime_japan'
         """
-        logger.info(f"[{self.name}] Starting Job Hunt for: {role_focus} in Japan")
+        logger.info(f"[{self.name}] Starting Job Hunt for: {role_focus} [Mode: {mode}]")
         
-        # 1. Define Search Strategy
-        # We hardcode high-value queries for this specific use case
-        queries = [
-            f'site:tokyodev.com "{role_focus}" "visa sponsorship" "no japanese"',
-            f'site:japan-dev.com "{role_focus}" "visa sponsorship" "no japanese"',
-            f'site:linkedin.com/jobs/ "Japan" "{role_focus}" "English" "Visa Sponsorship"',
-            f'"{role_focus}" jobs in Japan "visa support" "English only"',
-            f'AI Engineer jobs Tokyo "English speaking" "visa sponsorship"'
-        ]
+        # 1. Define Search Strategy based on Mode
+        queries = []
+        if mode == "freelance" or mode == "contract":
+            queries = [
+                f'"{role_focus}" freelance remote contract',
+                f'site:upwork.com "{role_focus}" "expert" -entry',
+                f'site:linkedin.com/jobs/ "{role_focus}" contract remote',
+                f'site:weworkremotely.com "{role_focus}" contract',
+                f'"{role_focus}" fractional "part-time" remote'
+            ]
+        elif mode == "fulltime_japan":
+             queries = [
+                f'site:tokyodev.com "{role_focus}" "visa sponsorship" "no japanese"',
+                f'site:japan-dev.com "{role_focus}" "visa sponsorship" "no japanese"',
+                f'site:linkedin.com/jobs/ "Japan" "{role_focus}" "English" "Visa Sponsorship"'
+            ]
+        else:
+            # Default global remote
+            queries = [f'"{role_focus}" remote jobs', f'site:linkedin.com/jobs/ "{role_focus}" remote']
         
         gathered_jobs = []
         
         # 2. Execute Search
         for query in queries:
             logger.info(f"[{self.name}] Searching: {query}")
-            results = self.web_scout.search(query, num_results=4)
+            results = self.web_scout.search(query, num_results=3)
             for res in results:
                 # Basic filter to ensure we aren't just getting junk
-                if "job" in res.get('title', '').lower() or "career" in res.get('title', '').lower() or "hiring" in res.get('title', '').lower() or "engineer" in res.get('title', '').lower():
+                title = res.get('title', '').lower()
+                if any(x in title for x in ["job", "career", "hiring", "engineer", "developer", "architect", "lead"]):
                     gathered_jobs.append(res)
         
         # 3. Analyze & Rank (using LLM)
@@ -74,25 +90,27 @@ class JobHunter(BaseAgent):
             
             # Simple ranking/filtering prompt
             prompt = f"""
-            You are an expert tech recruiter for Japan.
+            You are an expert Headhunter.
             
-            Filter and rank the following job search results for an English-speaking AI Engineer/Creative Technologist.
-            Requirements:
-            - Location: Japan
-            - Language: English Only (No Japanese required)
-            - Visa: Sponsorship available/likely
+            Filter and rank the following opportunities for a Senior/Principal {role_focus}.
+            Mode: {mode.upper()}
+            
+            Criteria:
+            - High Value / High Rate
+            - Remote / Flexible
+            - Relevant to "Agentic AI", "Systems Architecture", "Python"
             
             Jobs found:
             {jobs_text}
             
-            Output a Markdown report summarizing the TOP 5 most promising opportunities.
-            For each, explain WHY it fits the profile.
+            Output a Markdown report summarizing the TOP 3 most promising opportunities.
+            For each, generate a SHORT "Draft Application Email" snippet to the hiring manager.
             """
             
-            # Use a basic model call (simplifying _call_llm from Researcher for now)
+            # Use a basic model call
             report = self._simple_llm_call(prompt)
             
-            report_path = self._save_report(role_focus, report)
+            report_path = self._save_report(f"{role_focus}_{mode}", report)
             
             return {
                 "status": "success",
