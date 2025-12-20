@@ -1515,6 +1515,94 @@
       },
       "confidence": 0.9,
       "shared_at": "2025-12-19T19:21:20.608334"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:05.145323"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:05.156137"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:45.571308"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:45.581623"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:56.952553"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T19:29:56.964652"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T20:30:38.719010"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-19T20:30:38.799251"
     }
   ],
   "agent_expertise": {

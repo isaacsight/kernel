@@ -1,4 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === SCROLL REVEAL ANIMATIONS ===
+    // Elements will fade in as they enter the viewport
+    const initScrollReveal = () => {
+        const revealElements = document.querySelectorAll(
+            '.post-card, article h2, article h3, .card-grid > *, .hero h1, .hero-subtitle, .investigation-block, .read-next-card'
+        );
+
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal', 'visible');
+                        // Optionally stop observing after reveal
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px' // Trigger slightly before fully in view
+            });
+
+            revealElements.forEach(el => {
+                el.classList.add('reveal');
+                revealObserver.observe(el);
+            });
+        } else {
+            // Fallback: just show everything
+            revealElements.forEach(el => el.classList.add('visible'));
+        }
+    };
+
+    // Run after a small delay to let page paint first
+    requestAnimationFrame(() => {
+        requestAnimationFrame(initScrollReveal);
+    });
+
     // Newsletter Form Handling (Removed)
 
     // Post Filtering Logic

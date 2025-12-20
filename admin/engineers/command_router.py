@@ -73,6 +73,7 @@ class CommandRouter:
             "Researcher": "Performs web research and finds trends. Params: 'query'",
             "Status": "Checks system health and team status.",
             "Librarian": "Queries the Knowledge Graph and indexes docs.",
+            "Antigravity": "Autonomous coding agent. Can read/write files, run commands, and implement code changes. Actions: 'code', 'build', 'implement', 'fix', 'refactor'. Params: 'task'",
             "Help": "Explains how to use the system."
         }
         
@@ -98,16 +99,17 @@ class CommandRouter:
         INSTRUCTIONS:
         1. Analyze the user's intent.
         2. If it's a casual greeting, set "intent" to "chat".
-        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control].
+        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control, code].
         4. "mobile_handover": Use when the user wants to send context/data to their phone or Gemini mobile.
         5. "system_control": Use for deep system operations or telemetry requests.
-        6. Extract relevant parameters (e.g., topic, query, content).
-        7. Return ONLY valid JSON.
+        6. "code": Use for coding tasks like building features, fixing bugs, refactoring, or implementing changes. Route to Antigravity.
+        7. Extract relevant parameters (e.g., topic, query, content, task).
+        8. Return ONLY valid JSON.
         
         JSON STRUCTURE:
         {{
             "intent": "action" | "chat",
-            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control",
+            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control" | "code",
             "target_agent": "Alchemist" | "Operator" | "Librarian" | etc,
             "parameters": {{ "topic": "...", "query": "...", "content": "Brief summary for handover" }},
             "response_text": "A brief, natural language response confirming the action."
@@ -222,6 +224,13 @@ class CommandRouter:
                     result_data = await op.execute("run_command", command=params['command'])
                 else:
                     result_data = await op.execute("system_telemetry", **params)
+
+            elif action == "code":
+                from admin.engineers.antigravity_engineer import AntigravityEngineer
+                agent = AntigravityEngineer()
+                task_description = params.get('task', routed_command.get('original_input', ''))
+                result = await agent.execute(task_description)
+                result_data = {"result": result}
 
             # Failover / Relay check: If action isn't handled locally or explicitly requested remote
             if not result_data and params.get("remote") and self.node:
