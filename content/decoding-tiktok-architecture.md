@@ -1,5 +1,5 @@
 ---
-title: Decoding TikTok: A Masterclass in System Design
+title: "Decoding TikTok: A Masterclass in System Design"
 date: 2025-12-13
 pillar: Systems
 mode: Essay
