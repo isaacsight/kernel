@@ -11,7 +11,7 @@ Run the sharpest personal Studio OS on the internet, use my own life as the lab,
 ### Strategic Pillars
 
 **1. AI Agents (The Council)**
-Move beyond simple chatbots to autonomous agents with distinct roles (Explorer, Architect, Sage) that actively contribute to the Studio OS. The system should feel "alive" even when I'm not looking at it.
+Move beyond simple chatbots to autonomous agents with distinct roles (Explorer, Architect, Sage) that actively contribute to the Studio OS. The system should feel "alive" even when I'm not looking at it. **Leverage Frontier Enterprise Models (Gemini 3 Flash) for high-speed, low-latency agent reasoning.**
 
 **2. System 2 Thinking**
 Prioritize depth over speed. Publish "patterns" and architectural thinking, not just fleeting updates. Use the blog as a repository for high-signal engineering and design thoughts.
@@ -23,7 +23,7 @@ Build pipelines that amplify human intent. Example: The "Century Batch" of essay
 
 #### Week 1: Stabilization
 *   **Goal**: Ensure the "Council" (current agent swarm) is stable and the Studio OS core is bug-free.
-*   **Actions**: Audit current agent runtimes, fix lingering API glitches, establishes strict typing for all inter-agent communication.
+*   **Actions**: Audit current agent runtimes, fix lingering API glitches, establishes strict typing for all inter-agent communication, and **evaluate Gemini 3 Flash for core agent logic**.
 
 #### Week 2: Pipeline Integration
 *   **Goal**: Connect the "Brain" (content generation) to the "Mouth" (Distribution: Blog, TikTok, Twitter).

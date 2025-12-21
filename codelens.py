@@ -106,6 +106,125 @@ class GeminiProvider(AIProvider):
         return response.text
 
 
+class AutoCompleter:
+    def __init__(self, editor: ctk.CTkTextbox):
+        self.ctk_textbox = editor
+        self.text_widget = editor._textbox
+        self.popup: Optional[tk.Toplevel] = None
+        self.listbox: Optional[tk.Listbox] = None
+        self.current_matches = []
+        self.prefix_len = 0
+        
+        # Bind events to internal text widget for better control
+        self.text_widget.bind("<KeyRelease>", self.on_key_release, add="+")
+        self.text_widget.bind("<FocusOut>", self.hide_suggestions, add="+")
+        self.text_widget.bind("<Tab>", self.on_tab_key, add="+")
+        self.text_widget.bind("<Return>", self.on_enter_key, add="+")
+        self.text_widget.bind("<Up>", self.on_up_row, add="+")
+        self.text_widget.bind("<Down>", self.on_down_row, add="+")
+        self.text_widget.bind("<Escape>", self.hide_suggestions, add="+")
+        
+    def on_key_release(self, event):
+        if event.keysym in ("Up", "Down", "Return", "Tab", "Escape", "Shift_L", "Shift_R", "Control_L", "Control_R"):
+            return
+        self.check_completion()
+        
+    def check_completion(self):
+        text_before = self.text_widget.get("insert linestart", "insert")
+        match = re.search(r'(\w+)$', text_before)
+        
+        if not match:
+            self.hide_suggestions()
+            return
+            
+        prefix = match.group(1)
+        if len(prefix) < 2:
+            self.hide_suggestions()
+            return
+            
+        # Scan entire document for completion candidates
+        content = self.text_widget.get("1.0", "end-1c")
+        # Find all words of length 2+
+        all_words = set(re.findall(r'\b\w{2,}\b', content))
+        suggestions = sorted([w for w in all_words if w.startswith(prefix) and w != prefix])
+        
+        if not suggestions:
+            self.hide_suggestions()
+            return
+            
+        self.show_suggestions(suggestions, prefix)
+        
+    def show_suggestions(self, matches, prefix):
+        if not self.popup:
+            self.popup = tk.Toplevel(self.text_widget)
+            self.popup.wm_overrideredirect(True)
+            self.popup.configure(bg=COLORS["bg_card"])
+            
+            self.listbox = tk.Listbox(
+                self.popup, font=("Consolas", 12),
+                bg=COLORS["bg_card"], fg=COLORS["text_primary"],
+                selectbackground=COLORS["accent"], selectforeground=COLORS["bg_primary"],
+                borderwidth=1, relief="solid", highlightthickness=0
+            )
+            self.listbox.pack(fill="both", expand=True)
+            
+        self.current_matches = matches
+        self.prefix_len = len(prefix)
+        
+        self.listbox.delete(0, "end")
+        for w in matches:
+            self.listbox.insert("end", w)
+        self.listbox.selection_set(0)
+        
+        # Calculate position
+        bbox = self.text_widget.bbox("insert")
+        if bbox:
+            x, y, _, h = bbox
+            root_x = self.text_widget.winfo_rootx() + x
+            root_y = self.text_widget.winfo_rooty() + y + h
+            self.popup.geometry(f"250x150+{root_x}+{root_y}")
+            self.popup.deiconify()
+            self.popup.lift()
+            
+    def hide_suggestions(self, event=None):
+        if self.popup:
+            self.popup.destroy()
+            self.popup = None
+            
+    def on_tab_key(self, event):
+        if self.popup:
+            self.accept_suggestion()
+            return "break"
+            
+    def on_enter_key(self, event):
+        if self.popup:
+            self.accept_suggestion()
+            return "break"
+            
+    def on_up_row(self, event):
+        if self.popup:
+            self.listbox.event_generate("<Up>")
+            return "break"
+            
+    def on_down_row(self, event):
+        if self.popup:
+            self.listbox.event_generate("<Down>")
+            return "break"
+            
+    def accept_suggestion(self):
+        if not self.popup: return
+        
+        sel = self.listbox.curselection()
+        if not sel: return
+        
+        word = self.listbox.get(sel[0])
+        
+        # Replace prefix with word
+        self.text_widget.delete(f"insert-{self.prefix_len}c", "insert")
+        self.text_widget.insert("insert", word)
+        self.hide_suggestions()
+
+
 class DiffViewer(ctk.CTkToplevel):
     """Window for viewing and applying code diffs."""
     
@@ -577,6 +696,10 @@ class CodeLensApp(ctk.CTk):
         )
         self.code_editor.pack(fill="both", expand=True, padx=5, pady=5)
         self.code_editor.insert("1.0", "# Paste your code here or open a file\n# Then use the action buttons below to:\n#   🔍 Review - Find issues and get suggestions\n#   ✨ Improve - Auto-fix and enhance code\n#   🔧 Refactor - Restructure and optimize\n#   💡 Explain - Understand what code does\n#   💬 Chat - Ask questions about your code\n\ndef example():\n    pass\n")
+        
+        # Initialize AutoCompleter
+        self.autocompleter = AutoCompleter(self.code_editor)
+
         
         # Action buttons bar
         actions = ctk.CTkFrame(panel, fg_color=COLORS["bg_tertiary"], height=60)

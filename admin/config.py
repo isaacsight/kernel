@@ -15,7 +15,7 @@ class Config:
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-flash-latest" # STABLE: Paid Tier Compatible
+    GEMINI_MODEL = "gemini-3.0-flash-exp" # STABLE: Paid Tier Compatible
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
     SAFETY_MODEL = "unitary/toxic-bert"

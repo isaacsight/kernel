@@ -1221,10 +1221,7 @@ header {
     align-items: center;
 }
 
-/* Reuse existing button classes but ensure they look good */
-.btn-primary {
-    /* Existing styles should be fine */
-}
+
 
 /* --- POST CARD REDESIGN --- */
 .post-card {
@@ -1277,6 +1274,8 @@ header {
     line-height: 1.25;
     margin: 0;
     letter-spacing: -0.02em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .post-excerpt {
@@ -1286,6 +1285,7 @@ header {
     line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1315,7 +1315,9 @@ header {
 .feed-header h2 {
     font-size: var(--text-3xl);
     font-weight: 800;
-    margin-bottom: var(--space-2);
+    margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 
@@ -1386,6 +1388,24 @@ header {
 
     .sidebar {
         display: none !important;
+    }
+
+    .orientation-block {
+        padding: var(--space-7) var(--space-4) var(--space-5);
+    }
+
+    .orientation-headline {
+        font-size: var(--text-3xl);
+        margin-bottom: var(--space-4);
+    }
+
+    .magazine-layout {
+        padding: 0 var(--space-4);
+    }
+
+    .content-wrapper {
+        padding: 0;
+        gap: var(--space-4);
     }
 }
 
@@ -2395,6 +2415,11 @@ td {
 
 /* Filter & Sort Bar (Added by Antigravity) */
 .feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-4);
     margin-bottom: var(--space-6);
 }
 
@@ -4399,6 +4424,40 @@ body:has(.ceo-layout) .site-footer {
 
 .float-3 {
     animation: aurora-float 15s infinite reverse;
+}
+
+/* Responsive Iframe Wrapper */
+.responsive-iframe {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    margin: var(--space-6) 0;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+}
+
+.responsive-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Safety net for tiny devices */
+@media (max-width: 375px) {
+    body {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .orientation-headline {
+        font-size: var(--text-3xl);
+    }
 }
 
 /* Custom Scrollbar for Brand Page */

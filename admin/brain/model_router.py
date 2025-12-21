@@ -66,6 +66,16 @@ class ModelRouter:
                 "context_window": 1000000,
                 "available": self._check_gemini_available()
             },
+            "gemini-3.0-flash": {
+                "provider": "google",
+                "type": "cloud",
+                "strengths": [TaskType.FAST_SIMPLE, TaskType.SUMMARIZATION, TaskType.CHAT, TaskType.ANALYSIS, TaskType.CODE_GENERATION],
+                "cost_tier": "low",
+                "speed": "fast",
+                "quality": "high",
+                "context_window": 1000000,
+                "available": self._check_gemini_available()
+            },
             "claude-3.5-sonnet": {
                 "provider": "anthropic",
                 "type": "cloud",
@@ -227,13 +237,13 @@ class ModelRouter:
         # Hermes3 prioritized for creative/chat/analysis per Nous Research practices
         # Qwen 2.5 72B is now the heavy hitter for deep work
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["gpt-5.2-pro", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
-            TaskType.CODE_GENERATION: ["gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
-            TaskType.CHAT: ["gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.CREATIVE_WRITING: ["gpt-5.2-pro", "gemini-3.0-flash", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CODE_GENERATION: ["gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
+            TaskType.ANALYSIS: ["gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
-            TaskType.FAST_SIMPLE: ["gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
+            TaskType.FAST_SIMPLE: ["gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
         }
         
         logger.info(f"[{self.name}] Initialized with {len(self.models)} models")
@@ -472,6 +482,7 @@ class ModelRouter:
         """Re-check which models are available."""
         self.models["gemini-1.5-pro"]["available"] = self._check_gemini_available()
         self.models["gemini-1.5-flash"]["available"] = self._check_gemini_available()
+        self.models["gemini-3.0-flash"]["available"] = self._check_gemini_available()
         self.models["claude-3.5-sonnet"]["available"] = self._check_anthropic_available()
         self.models["gpt-4o"]["available"] = self._check_openai_available()
         self.models["gpt-4o-mini"]["available"] = self._check_openai_available()

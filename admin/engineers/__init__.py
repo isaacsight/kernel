@@ -54,6 +54,8 @@ from .reality_engineer import RealityEngineer
 from .kernel_engineer import KernelEngineer
 from .product_engineer import ProductEngineer
 from .system_monitor import Systemmonitor
+from .rhythm_physicist import RhythmPhysicist
+from .cognitive_architect import CognitiveArchitect
 
 from .bio_engineer import BioEngineer
 from .quantum_engineer import QuantumEngineer
@@ -115,6 +117,8 @@ __all__ = [
     'VectorDesigner',
     'PromptEngineer',
     'LocalLlama',
+    'RhythmPhysicist',
+    'CognitiveArchitect',
     
     # Remote
     'RemoteWorker'

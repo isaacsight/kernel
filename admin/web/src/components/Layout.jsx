@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
     MessageSquare, Network, LayoutGrid, FileText,
-    Palette, DollarSign, Briefcase, Settings, Zap
+    Palette, DollarSign, Briefcase, Settings, Zap, Menu, X
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const navItems = [
         { id: 'chat', icon: MessageSquare, path: '/', label: 'Conversation' },
         { id: 'galaxy', icon: Network, path: '/galaxy', label: 'Neural Web' },
@@ -19,8 +21,8 @@ const Layout = ({ children }) => {
 
     return (
         <div className="flex h-screen bg-black overflow-hidden font-sans">
-            {/* Minimal Side Rail */}
-            <aside className="w-[72px] flex flex-col items-center py-6 border-r border-white/5 bg-black z-50">
+            {/* Desktop Side Rail - Hidden on Mobile */}
+            <aside className="hidden md:flex w-[72px] flex-col items-center py-6 border-r border-white/5 bg-black z-50">
                 <div className="mb-10">
                     <Zap size={22} className="text-primary animate-pulse" />
                 </div>
@@ -46,8 +48,39 @@ const Layout = ({ children }) => {
                 </nav>
             </aside>
 
+            {/* Mobile Header */}
+            <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur-lg border-b border-white/5 z-[60] flex items-center justify-between px-6">
+                <Zap size={20} className="text-primary" />
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="text-white/70 hover:text-white transition-colors"
+                >
+                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </header>
+
+            {/* Mobile Menu Overlay */}
+            {isMenuOpen && (
+                <div className="md:hidden fixed inset-0 bg-black z-[55] flex flex-col pt-24 px-8 gap-6 overflow-y-auto">
+                    {navItems.map((item) => (
+                        <NavLink
+                            key={item.id}
+                            to={item.path}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) => `
+                                flex items-center gap-4 py-3 text-lg font-medium
+                                ${isActive ? 'text-primary' : 'text-white/60'}
+                            `}
+                        >
+                            <item.icon size={24} />
+                            <span>{item.label}</span>
+                        </NavLink>
+                    ))}
+                </div>
+            )}
+
             {/* Content Viewport */}
-            <main className="flex-1 overflow-hidden relative">
+            <main className="flex-1 overflow-hidden relative pt-16 md:pt-0">
                 {children}
             </main>
         </div>

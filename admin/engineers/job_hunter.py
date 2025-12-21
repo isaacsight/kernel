@@ -160,7 +160,8 @@ class JobHunter(BaseAgent):
 
 if __name__ == "__main__":
     hunter = JobHunter()
-    print("Running test hunt...")
-    result = hunter.hunt_jobs("AI Engineer")
+    role = sys.argv[1] if len(sys.argv) > 1 else "AI Engineer"
+    print(f"Running test hunt for: {role}...")
+    result = hunter.hunt_jobs(role)
     print("\nStatus:", result['status'])
     print("Report:\n", result.get('report', 'No report'))

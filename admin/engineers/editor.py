@@ -26,10 +26,49 @@ class Editor(BaseAgent):
         self.drafts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "brain", "drafts")
         os.makedirs(self.drafts_dir, exist_ok=True)
         self.model_name = "gemini-2.0-flash"
+        
+        # Initialize the Refiner Specialist
+        from admin.engineers.refiner import Refiner
+        self.refiner = Refiner()
 
     @property
     def name(self) -> str:
         return "The Editor"
+    
+    # ... (skipping unchanged parts) ...
+
+    async def audit(self, content: str) -> List[Dict]:
+        """
+        Audits content using the Refiner specialist.
+        """
+        result = await self.refiner.audit(content, criteria="""
+        "Be honest, clear, and kind. Avoid cliches. Use lyrical flow."
+        Identify style issues, run-on sentences, or sections that feel "AI-generated" or impersonal.
+        """)
+        
+        return result.get("suggestions", [])
+
+    # ... (skipping unchanged parts) ...
+
+    async def _polish(self, draft: str) -> str:
+        """delegates polishing to the Refiner."""
+        instructions = """
+        Polish this draft for flow, clarity, and impact.
+        - Fix weak verbs.
+        - Shorten run-on sentences.
+        - Ensure "Technician" precision mixed with "Philosopher" depth.
+        - Add a final "Why This Matters" callout if missing.
+        """
+        
+        # We need to bridge the sync/async gap here since write_essay is sync in this version
+        # But Refiner is async. For now, we will wrap it or keep it simple.
+        # Ideally, we should make write_essay async.
+        import asyncio
+        result = asyncio.run(self.refiner.refine(draft, instructions))
+        return result.get("refined_text", draft)
+
+
+
 
     @property
     def role(self) -> str:
@@ -108,56 +147,12 @@ class Editor(BaseAgent):
         logger.info(f"✍️ The Master Editor is writing: {topic}")
         self.write_essay(topic, council_output)
 
-    async def audit(self, content: str) -> List[Dict]:
-        """
-        Audits content for style, flow, and doctrine alignment.
-        """
-        logger.info(f"[{self.name}] Auditing style...")
-        
-        prompt = f"""
-        You are the Master Editor. Audit this blog post for style and doctrine alignment.
-        
-        THE DOCTRINE:
-        "Be honest, clear, and kind. Avoid cliches. Use lyrical flow."
-        
-        CONTENT:
-        {content}
-        
-        Identify style issues, run-on sentences, or sections that feel "AI-generated" or impersonal.
-        
-        Return ONLY valid JSON:
-        {{
-            "is_polished": true/false,
-            "suggestions": [
-                "Issue 1: suggestion",
-                "Issue 2: suggestion"
-            ]
-        }}
-        """
-        
-        try:
-            # We use flash for fast auditing
-            response = await self.execute_llm(prompt, system_instruction="You are the Master Editor.")
-            if not response:
-                return []
-                
-            # Direct text extraction
-            text = response if isinstance(response, str) else response.text
-            
-            # Simple JSON extraction
-            if "{" in text:
-                import json
-                data = json.loads(text[text.find("{"):text.rfind("}")+1])
-                return data.get("suggestions", [])
-            return []
-        except Exception as e:
-            logger.warning(f"Editor audit failed: {e}")
-            return []
+
 
     async def execute_llm(self, prompt: str, system_instruction: str = "") -> Any:
         # Helper to use the model configured in __init__
         import google.generativeai as genai
-        api_key = os.environ.get("GEMINI_API_KEY")
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         if not api_key: return None
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel(self.model_name, system_instruction=system_instruction)
@@ -198,8 +193,9 @@ class Editor(BaseAgent):
         logger.info(f"✅ Published to: {path}")
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
-        """Direct call to Gemini Flash."""
+        """Direct call to Gemini Flash (Async wrapped)."""
         import google.generativeai as genai
+        import asyncio
         
         api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         if not api_key:
@@ -208,9 +204,12 @@ class Editor(BaseAgent):
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_prompt)
         
+        async def run_async():
+            resp = await model.generate_content_async(user_prompt)
+            return resp.text
+            
         try:
-            response = model.generate_content(user_prompt)
-            return response.text
+            return asyncio.run(run_async())
         except Exception as e:
             logger.error(f"Inference Failed: {e}")
             return f"[Generation Error: {e}]"
@@ -239,17 +238,7 @@ class Editor(BaseAgent):
         Do not output preamble, just the content."""
         return self._call_llm(sys_prompt, f"Topic: {topic}\n\nOutline:\n{outline}\n\nDeep Context:\n{context}")
 
-    def _polish(self, draft: str) -> str:
-        sys_prompt = """You are THE EDITOR.
-        Polish this draft for flow, clarity, and impact.
-        
-        - Fix weak verbs.
-        - Shorten run-on sentences.
-        - Ensure "Technician" precision mixed with "Philosopher" depth.
-        - Add a final "Why This Matters" callout if missing.
-        
-        Return the final Markdown."""
-        return self._call_llm(sys_prompt, f"Draft:\n{draft}")
+
 
 if __name__ == "__main__":
     # Test Mode

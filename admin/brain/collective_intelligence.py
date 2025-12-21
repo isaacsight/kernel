@@ -207,6 +207,11 @@ class CollectiveIntelligence:
             "skills": skills,
             "registered_at": datetime.now().isoformat()
         }
+        
+        # Proactively audit intelligence mapped to this new expertise
+        if agent_name == "The Cognitive Architect":
+             self.get_intelligence_map()
+             
         self._save_knowledge()
         
     def find_expert(self, skill_needed: str) -> Optional[str]:

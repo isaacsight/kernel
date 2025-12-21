@@ -9,6 +9,41 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --surface-low: #18181b;
     --surface-high: #27272a;
+
+    /* Design Modes */
+    --bg-cathedral: #050505;
+    --bg-bento: #09090b;
+
+    /* Animations */
+    --animation-breathe: breathe 4s infinite ease-in-out;
+}
+
+.mode-cathedral {
+    background: var(--bg-cathedral);
+    --bg-gradient: none;
+    /* Override default gradient */
+}
+
+.mode-bento {
+    background: var(--bg-bento);
+}
+
+@keyframes breathe {
+    0% {
+        opacity: 0.4;
+        transform: scale(0.98);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    100% {
+        opacity: 0.4;
+        transform: scale(0.98);
+    }
 }
 
 * {

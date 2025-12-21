@@ -88,8 +88,10 @@ class ViralCoach:
         # INTELLIGENCE UPGRADE
         from admin.brain.model_router import get_model_router
         from admin.engineers.contrarian import Contrarian
+        from admin.engineers.rhythm_physicist import RhythmPhysicist
         self.model_router = get_model_router()
         self.contrarian = Contrarian()
+        self.rhythm_physicist = RhythmPhysicist()
 
     def analyze_tiktok_script(self, script: str, hook_style: str = "auto") -> Dict:
         """
@@ -126,9 +128,19 @@ class ViralCoach:
         trend_report = scout.check_relevance(script)
         trend_score = trend_report["score"] * 10.0 # Convert 0-1 to 0-10
         
+        # Analyze Rhythm (Algorhythm Upgrade)
+        rhythm_report = self.rhythm_physicist.predict_resonance(script)
+        resonance_score = rhythm_report["resonance_score"] * 10.0
+        
         # Calculate overall viral score (Weighted)
-        # Hook: 35%, Retention: 30%, CTA: 20%, Trends: 15%
-        overall_score = (hook_score * 0.35 + retention_score * 0.30 + cta_score * 0.20 + trend_score * 0.15)
+        # Hook: 25%, Retention: 20%, CTA: 15%, Trends: 15%, Resonance: 25%
+        overall_score = (
+            hook_score * 0.25 + 
+            retention_score * 0.20 + 
+            cta_score * 0.15 + 
+            trend_score * 0.15 + 
+            resonance_score * 0.25
+        )
         
         # Generate suggestions
         suggestions = self._generate_suggestions(
@@ -165,7 +177,8 @@ class ViralCoach:
             "suggestions": suggestions,
             "improved_hook": improved_hook,
             "trend_context": trend_report["hits"],
-            "roast": roast
+            "roast": roast,
+            "resonance_report": rhythm_report
         }
         
         # Log for learning

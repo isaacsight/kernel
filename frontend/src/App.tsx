@@ -5,6 +5,7 @@ import TitanDB from './pages/TitanDB';
 import ProjectPlaceholder from './pages/ProjectPlaceholder';
 import StudioChat from './pages/StudioChat';
 import ClientPortal from './pages/ClientPortal';
+import Shell from './components/layout/Shell';
 
 
 function App() {
@@ -14,12 +15,36 @@ function App() {
         <Navigation />
         <main>
           <Routes>
-            <Route path="/" element={<ProjectHub />} />
-            <Route path="/chat" element={<StudioChat />} />
-            <Route path="/clients" element={<ClientPortal />} />
-            <Route path="/projects/titan" element={<TitanDB />} />
-            <Route path="/projects/:id" element={<ProjectPlaceholder />} />
-            <Route path="*" element={<ProjectHub />} />
+            <Route path="/" element={
+              <Shell mode="bento">
+                <ProjectHub />
+              </Shell>
+            } />
+            <Route path="/chat" element={
+              <Shell mode="bento">
+                <StudioChat />
+              </Shell>
+            } />
+            <Route path="/clients" element={
+              <Shell mode="bento">
+                <ClientPortal />
+              </Shell>
+            } />
+            <Route path="/projects/titan" element={
+              <Shell mode="bento">
+                <TitanDB />
+              </Shell>
+            } />
+            <Route path="/projects/:id" element={
+              <Shell mode="bento">
+                <ProjectPlaceholder />
+              </Shell>
+            } />
+            <Route path="*" element={
+              <Shell mode="bento">
+                <ProjectHub />
+              </Shell>
+            } />
           </Routes>
         </main>
       </div>
