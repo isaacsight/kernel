@@ -91,7 +91,7 @@ class Classifier:
                  genai.configure(api_key=api_key)
                  # Force flash if not specified to be safe and cheap
                  if "flash" not in model_name and "pro" not in model_name:
-                     model_name = "gemini-2.0-flash"
+                     model_name = config.GEMINI_MODEL
                      
                  model = genai.GenerativeModel(model_name)
                  response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})

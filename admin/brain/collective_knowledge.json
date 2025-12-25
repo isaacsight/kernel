@@ -1669,6 +1669,1811 @@
       },
       "confidence": 0.9,
       "shared_at": "2025-12-21T10:36:03.462056"
+    },
+    {
+      "from_agent": "Collective Intelligence",
+      "type": "systemic_audit",
+      "insight": {
+        "total_insights_processed": 261,
+        "intelligence_axes": [
+          {
+            "axis_index": 1,
+            "primary_theme": "'volume'",
+            "constellation": [
+              [
+                "'volume'",
+                0.366
+              ],
+              [
+                "'context'",
+                0.366
+              ],
+              [
+                "trend_report",
+                0.366
+              ],
+              [
+                "'high'",
+                0.347
+              ],
+              [
+                "'category'",
+                -0.315
+              ]
+            ],
+            "variance_weight": 0.16
+          },
+          {
+            "axis_index": 2,
+            "primary_theme": "{'topic'",
+            "constellation": [
+              [
+                "{'topic'",
+                0.518
+              ],
+              [
+                "collective_trend_report",
+                -0.485
+              ],
+              [
+                "'category'",
+                0.382
+              ],
+              [
+                "content_generated",
+                0.381
+              ],
+              [
+                "'the",
+                0.182
+              ]
+            ],
+            "variance_weight": 0.224
+          },
+          {
+            "axis_index": 3,
+            "primary_theme": "'ai",
+            "constellation": [
+              [
+                "'ai",
+                -0.357
+              ],
+              [
+                "cost'}",
+                0.353
+              ],
+              [
+                "'privacy",
+                0.353
+              ],
+              [
+                "llms'",
+                0.353
+              ],
+              [
+                "'local",
+                0.353
+              ]
+            ],
+            "variance_weight": 0.053
+          }
+        ],
+        "density_score": 9.16
+      },
+      "confidence": 1.0,
+      "shared_at": "2025-12-21T11:13:37.890231"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:12:44.975272"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:12:44.981800"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:12:47.355119"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:12:47.362082"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:13:21.050125"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:13:21.065451"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:17:59.530640"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:17:59.540052"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:07.317412"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:07.325162"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:20.811301"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:20.821786"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:36.586761"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:23:36.593501"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:24:23.082914"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:24:23.092016"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:06.491816"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:06.499616"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:08.825213"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:08.831214"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:18.142266"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:18.149699"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:20.452759"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:25:20.458648"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:26:35.149684"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:26:35.160359"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:09.378586"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:09.392363"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:29.157024"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:29.167163"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:48.065546"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:27:48.071258"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:28:24.921959"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:28:24.930606"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:28:54.374270"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:28:54.382785"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:15.779940"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:15.787232"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:28.109034"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:28.119120"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:44.550074"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:44.557127"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:59.902434"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:29:59.908270"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:14.316666"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:14.324585"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:32.663099"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:32.670460"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:34.946540"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:34.953287"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:37.289643"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:37.298260"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:45.768810"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:30:45.776741"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:37:29.879250"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-22T22:37:29.900058"
+    },
+    {
+      "from_agent": "Antigravity",
+      "type": "advanced_math",
+      "insight": {
+        "topic": "FEP and POMDP Integration",
+        "finding": "Integrating Expected Free Energy (EFE) minimization into the action selection loop can significantly improve agent autonomy and reliability by balancing exploration and exploitation.",
+        "formula": "F = D_KL[q(s)||p(s|o)] - ln p(o)"
+      },
+      "confidence": 0.95,
+      "shared_at": "2025-12-23T09:48:43.114161"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:16:52.023408"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:16:52.029946"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:19:25.758926"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:19:25.774471"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:33:18.890823"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:33:18.919964"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:37:30.036414"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T10:37:30.043222"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T11:37:42.011495"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T11:37:42.019136"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T12:38:03.764171"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T12:38:03.785786"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T13:41:56.646664"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-23T13:41:56.745133"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:36:11.638770"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:36:11.645495"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:54:38.021831"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:54:38.040038"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:56:37.561727"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T22:56:37.569203"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:03:07.668372"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:03:07.679544"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:07:58.123160"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:07:58.131915"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:12:00.513066"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-24T23:12:00.522668"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T00:12:17.387085"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T00:12:17.399707"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T01:12:34.032498"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T01:12:34.044528"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T02:12:50.829823"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T02:12:50.840117"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T03:13:07.636037"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T03:13:07.647361"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T04:13:25.007169"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T04:13:25.017496"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T05:13:42.718580"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T05:13:42.726125"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T06:14:01.034958"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T06:14:01.046283"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T07:14:19.189306"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T07:14:19.200022"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:14:36.506305"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:14:36.517663"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:45:54.365258"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:45:54.378554"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:51:53.392234"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T08:51:53.398732"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:15:10.466226"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:15:10.494628"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:17:43.003962"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:17:43.011737"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:18:50.030393"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:18:50.039273"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:19:37.001087"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:19:37.013482"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:20:11.925938"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:20:11.937093"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:23:34.588282"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:23:34.597638"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:23:50.047758"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:23:50.055790"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:27:41.585189"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:27:41.591538"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:30:51.335166"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:30:51.341061"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:31:40.030219"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:31:40.036964"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:34:11.898306"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:34:11.904996"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:34:27.302824"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:34:27.316047"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:35:23.513743"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:35:23.534322"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[generate_title] The agent successfully generated a relevant title, \"The Future of Qubits,\" for the input topic \"Quantum Computing.\" The action completed efficiently (1.20s) and the result is factually correct and aligned with the topic. While functional, the title is somewhat generic and could benefit from more creativity or a stronger hook to make it truly optimal.",
+      "rating": 7,
+      "shared_at": "2025-12-25T09:35:52.397588"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:35:57.767625"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:35:57.774949"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:36:54.292140"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:36:54.301836"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:37:20.839953"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:37:20.848403"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:39:26.082257"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:39:26.093321"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:40:09.238524"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:40:09.246372"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:46:34.266866"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:46:34.283118"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:56:33.116905"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:56:33.126788"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:57:55.235888"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T09:57:55.248203"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:33:58.912895"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:33:58.924879"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:37:12.343032"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:37:12.352541"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:40:54.993651"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:40:55.001806"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:54:09.191643"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-25T10:54:09.243991"
     }
   ],
   "agent_expertise": {
@@ -1709,7 +3514,7 @@
         "resonance modeling",
         "structural physics"
       ],
-      "registered_at": "2025-12-21T10:36:08.764248"
+      "registered_at": "2025-12-23T09:43:14.765786"
     }
   },
   "lessons_learned": [
@@ -1789,6 +3594,20 @@
       "context": "Failure in test_hazardous_action: FileNotFoundError: /restricted/config.xml is not accessible",
       "outcome": "FAILED",
       "learned_at": "2025-12-10T13:02:53.699347"
+    },
+    {
+      "from_agent": "Researcher",
+      "lesson": "When interacting with external APIs, especially those with free or restricted access tiers, always consult their rate limit documentation and implement robust rate limiting or exponential backoff mechanisms to prevent exceeding usage quotas.",
+      "context": "Failure in fetch_trending_topics: 429 Client Error: Too Many Requests for url: https://api.twitter.com/2/tweets/search/recent",
+      "outcome": "FAILED",
+      "learned_at": "2025-12-25T09:35:47.056699"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "Success in an action does not always equate to optimality. Even correct and efficient outputs can be enhanced by aiming for greater depth, creativity, or specific impact.",
+      "context": "Action: generate_title",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-25T09:35:52.402565"
     }
   ],
   "team_decisions": [],

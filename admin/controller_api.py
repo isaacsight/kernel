@@ -1,6 +1,14 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import sys
+import os
+
+# Inject project root into sys.path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from admin.engineers.command_router import route_and_log
 from admin.brain.agent_presence import get_agent_presence, AgentStatus
 import logging

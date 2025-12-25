@@ -25,7 +25,7 @@ class GrandCouncil:
     """
     def __init__(self):
         self.router = get_model_router()
-        self.model = "gemini-2.0-flash" 
+        self.model = config.GEMINI_MODEL
         self.registered_agents = {}
 
     def register_agent(self, name: str, agent_instance):
@@ -105,8 +105,8 @@ class GrandCouncil:
             
         genai.configure(api_key=api_key)
         
-        # Using flash for zero cost
-        model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_prompt)
+        # Using the model from config
+        model = genai.GenerativeModel(config.GEMINI_MODEL, system_instruction=system_prompt)
         
         retries = 5
         delay = 5

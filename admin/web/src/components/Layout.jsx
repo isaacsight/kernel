@@ -9,18 +9,13 @@ const Layout = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navItems = [
-        { id: 'chat', icon: MessageSquare, path: '/', label: 'Conversation' },
         { id: 'galaxy', icon: Network, path: '/galaxy', label: 'Neural Web' },
         { id: 'legacy', icon: LayoutGrid, path: '/legacy-dashboard', label: 'Monitoring' },
-        { id: 'content', icon: FileText, path: '/content', label: 'Publishing' },
-        { id: 'design', icon: Palette, path: '/design', label: 'Architect' },
-        { id: 'revenue', icon: DollarSign, path: '/revenue', label: 'Financials' },
-        { id: 'consulting', icon: Briefcase, path: '/consulting', label: 'Clients' },
         { id: 'settings', icon: Settings, path: '/settings', label: 'System' },
     ];
 
     return (
-        <div className="flex h-screen bg-black overflow-hidden font-sans">
+        <div className="flex min-h-screen md:h-screen bg-black overflow-visible md:overflow-hidden font-sans">
             {/* Desktop Side Rail - Hidden on Mobile */}
             <aside className="hidden md:flex w-[72px] flex-col items-center py-6 border-r border-white/5 bg-black z-50">
                 <div className="mb-10">
@@ -80,7 +75,7 @@ const Layout = ({ children }) => {
             )}
 
             {/* Content Viewport */}
-            <main className="flex-1 overflow-hidden relative pt-16 md:pt-0">
+            <main className="flex-1 overflow-visible md:overflow-hidden relative pt-16 md:pt-0">
                 {children}
             </main>
         </div>

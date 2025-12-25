@@ -10,11 +10,12 @@ from admin.engineers.frontier_team import FrontierTeam
 from admin.brain.memory_store import get_memory_store
 from admin.brain.felt_right_index import fri_engine
 from admin.engineers.revenue_agent import get_revenue_agent
-
+from admin.engineers.metacognitive_principal import MetacognitivePrincipal
 
 # Initialize unified Frontier Team and Memory
 frontier_team = FrontierTeam()
 memory = get_memory_store()
+sovereign = MetacognitivePrincipal()
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -36,7 +37,7 @@ app.mount("/static", StaticFiles(directory="docs", html=True), name="static")
 
 # Mount frontend assets
 import os
-frontend_dist = os.path.join(os.path.dirname(__file__), "frontend/dist")
+frontend_dist = os.path.join(os.path.dirname(__file__), "admin/web/dist")
 if os.path.exists(frontend_dist):
     app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
 
@@ -143,6 +144,22 @@ async def studio_status():
     except Exception as e:
         logger.error(f"Error reading studio status: {e}")
         return {"status": "error", "message": str(e)}
+
+@app.get("/agents/status")
+async def get_agents_status():
+    """
+    Returns the real-time presence status of all agents for the Neural Lattice.
+    """
+    try:
+        from admin.brain.agent_presence import get_agent_presence
+        presence = get_agent_presence()
+        return {
+            "agents": presence.get_team_presence(),
+            "summary": presence.get_status_summary()
+        }
+    except Exception as e:
+        logger.error(f"Error fetching agent status: {e}")
+        return {"agents": [], "summary": {}}
 
 # Data Models
 from pydantic import BaseModel
@@ -350,6 +367,36 @@ async def run_team_task(data: dict):
         return result
     except Exception as e:
         logger.error(f"Team task failed: {e}")
+        return {"status": "error", "message": str(e)}
+
+# --- The Sovereign API ---
+
+@app.post("/api/sovereign/consult")
+async def consult_sovereign(data: dict):
+    """
+    Direct line to System 2 recursive reasoning.
+    """
+    try:
+        prompt = data.get("prompt")
+        depth = data.get("depth", 3)
+        if not prompt:
+            raise HTTPException(status_code=400, detail="Missing prompt")
+            
+        directive = await sovereign.think_recursive(prompt, depth=depth)
+        return {"status": "success", "directive": directive}
+    except Exception as e:
+        logger.error(f"Sovereign consultation failed: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/sovereign/diagnose")
+async def diagnose_system():
+    """
+    Trigger a system-wide health check via The Sovereign.
+    """
+    try:
+        return sovereign.diagnose_system()
+    except Exception as e:
+        logger.error(f"Sovereign diagnosis failed: {e}")
         return {"status": "error", "message": str(e)}
 
 # SPA Catch-all (must be last)

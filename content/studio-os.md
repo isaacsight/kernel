@@ -34,11 +34,12 @@ A single pane of glass for monitoring the synthetic workforce. It features:
 *   Command-line interface for natural language instruction.
 *   Direct access to "Deep Work" commissioning.
 
-### 2. The Agent Swarm
-*   **The Alchemist**: Creative generation and research. Can consult the 72B model for complex reasoning.
-*   **The Editor**: Style enforcement and rigorous auditing against the "Gentle Doctrine".
-*   **The Librarian**: Knowledge graph management and RAG retrieval.
-*   **The Visionary**: Image asset generation.
+### 2. The Agent Archetypes
+The swarm is organized into three high-level archetypes, each optimized for a specific cognitive loop:
+
+*   **The Design Partner**: (Architect + Librarian) Focused on "does this feel right?". Manages patterns, offers, architectures, and perceptual grounding through Chain-of-Visual-Thought (CoVT).
+*   **The Content Engine Brain**: (Alchemist + Editor) Focused on "Brain -> Mouth". Handles high-speed content generation, audits, and stylistic alignment.
+*   **The Research Copilot**: (Researcher + Antigravity) Focused on "Intelligence Discovery". Deep-dives into technical papers, tools, and autonomous coding tasks.
 
 ## Philosophy
 

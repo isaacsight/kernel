@@ -74,7 +74,11 @@ class CommandRouter:
             "Status": "Checks system health and team status.",
             "Librarian": "Queries the Knowledge Graph and indexes docs.",
             "Antigravity": "Autonomous coding agent. Can read/write files, run commands, and implement code changes. Actions: 'code', 'build', 'implement', 'fix', 'refactor'. Params: 'task'",
-            "Help": "Explains how to use the system."
+            "Design Partner": "Focused on patterns, architectures, and design systems. Integrates Architect and Librarian capabilities. Use for 'does this feel right?' inquiries.",
+            "Content Engine Brain": "High-speed content pipeline. Integrates Alchemist and Editor. Use for end-to-end content generation and auditing.",
+            "Research Copilot": "Technical discovery and autonomous research. Integrates Researcher and Antigravity for deep paper/tool audits.",
+            "Help": "Explains how to use the system.",
+            "MLEngineer": "Expert in Machine Learning and Reinforcement Learning. Use for RL optimization, reward modeling, and deep learning audits."
         }
         
         # Remote Node
@@ -84,6 +88,45 @@ class CommandRouter:
         """
         Uses LLM to analyze user input and determine the best course of action.
         """
+        # --- BYPASS: String-based routing for reliability ---
+        lower_input = user_input.lower().strip()
+        if lower_input.startswith("note:"):
+            return {
+                "success": True,
+                "intent": "action",
+                "action": "capture_note",
+                "target_agent": "Librarian",
+                "parameters": {"content": user_input[5:].strip()},
+                "response_text": "I've captured your note in the system memory. I'll remember this.",
+                "original_input": user_input,
+                "routed_at": datetime.now().isoformat()
+            }
+        
+        if any(word in lower_input for word in ["review", "reflect", "summarize my notes"]):
+            return {
+                "success": True,
+                "intent": "action",
+                "action": "reflect",
+                "target_agent": "ReflectionAgent",
+                "parameters": {},
+                "response_text": "Analyzing your recent thoughts and notes. One moment...",
+                "original_input": user_input,
+                "routed_at": datetime.now().isoformat()
+            }
+        
+        if any(word in lower_input for word in ["reinforcement learning", "rl optimize", "rlvai"]):
+            return {
+                "success": True,
+                "intent": "action",
+                "action": "rl_optimize",
+                "target_agent": "MLEngineer",
+                "parameters": {"topic": "general"},
+                "response_text": "Initiating Reinforcement Learning optimization via the ML Engineer...",
+                "original_input": user_input,
+                "routed_at": datetime.now().isoformat()
+            }
+        # ----------------------------------------------------
+
         if not self.model:
              return {"success": False, "error": "LLM not configured"}
              
@@ -99,19 +142,21 @@ class CommandRouter:
         INSTRUCTIONS:
         1. Analyze the user's intent.
         2. If it's a casual greeting, set "intent" to "chat".
-        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control, code].
+        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control, code, capture_note, reflect].
         4. "mobile_handover": Use when the user wants to send context/data to their phone or Gemini mobile.
         5. "system_control": Use for deep system operations or telemetry requests.
         6. "code": Use for coding tasks like building features, fixing bugs, refactoring, or implementing changes. Route to Antigravity.
-        7. Extract relevant parameters (e.g., topic, query, content, task).
-        8. Return ONLY valid JSON.
+        7. "capture_note": Use when the user wants to save a note, idea, or draft.
+        8. "reflect": Use when the user wants to review, summarize, or reflect on their recent thoughts and notes.
+        9. Extract relevant parameters (e.g., topic, query, content, task).
+        10. Return ONLY valid JSON.
         
         JSON STRUCTURE:
         {{
             "intent": "action" | "chat",
-            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control" | "code",
-            "target_agent": "Alchemist" | "Operator" | "Librarian" | etc,
-            "parameters": {{ "topic": "...", "query": "...", "content": "Brief summary for handover" }},
+            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control" | "code" | "capture_note" | "reflect" | "rl_optimize",
+            "target_agent": "Alchemist" | "Operator" | "Librarian" | "Design Partner" | "Content Engine Brain" | "ReflectionAgent" | "MLEngineer",
+            "parameters": {{ "topic": "...", "query": "...", "content": "Note text or summary", "task": "..." }},
             "response_text": "A brief, natural language response confirming the action."
         }}
         """
@@ -133,15 +178,32 @@ class CommandRouter:
             }
             
         except Exception as e:
-            logger.error(f"Routing failed: {e}")
+            error_str = str(e)
+            logger.error(f"Routing failed: {error_str}")
             
+            # Detect Rate Limiting (429) or Invalid Key (400)
+            if "RESOURCE_EXHAUSTED" in error_str or "429" in error_str:
+                return {
+                    "success": False,
+                    "error": "rate_limit_exceeded",
+                    "intent": "system_error",
+                    "message": "Sovereign Core is currently at capacity (Gemini API 429). Please wait a moment or upgrade to a paid tier for higher limits."
+                }
+            elif "API_KEY_INVALID" in error_str or "400" in error_str and "API Key not found" in error_str:
+                return {
+                    "success": False,
+                    "error": "invalid_api_key",
+                    "intent": "system_error",
+                    "message": "Sovereign Core API Key is balance/invalid. Please check your billing status or generate a new key in Google AI Studio."
+                }
+
             # Alchemy Transmutation: Turn unknown errors into solutions
-            logger.warning(f"Router failed ({e}). Summoning Alchemist for fallback...")
+            logger.warning(f"Router failed ({error_str}). Summoning Alchemist for fallback...")
             try:
                 from admin.engineers.alchemist import Alchemist
                 alchemist = Alchemist()
                 # Ask Alchemist to handle the user's input directly as a chat fallback
-                fallback_response = alchemist.chat(f"System Error in Router: {str(e)}. User said: '{user_input}'. Reply to user creatively as if you are the system recovering.")
+                fallback_response = alchemist.chat(f"System Error in Router: {error_str}. User said: '{user_input}'. Reply to user creatively as if you are the system recovering.")
                 return {
                     "success": True,
                     "intent": "chat",
@@ -153,7 +215,7 @@ class CommandRouter:
                 logger.error(f"Even Alchemy failed: {e2}")
                 return {
                     "success": False, 
-                    "error": str(e),
+                    "error": error_str,
                     "intent": "unknown",
                     "response_text": "System Overload. All circuits busy. Please retry."
                 }
@@ -231,6 +293,38 @@ class CommandRouter:
                 task_description = params.get('task', routed_command.get('original_input', ''))
                 result = await agent.execute(task_description)
                 result_data = {"result": result}
+            
+            elif action == "capture_note":
+                from admin.brain.intake import get_intake_manager
+                manager = get_intake_manager()
+                content = params.get("content") or routed_command.get("original_input", "")
+                # Strip "Note:" prefix if present
+                if content.lower().startswith("note:"):
+                    content = content[5:].strip()
+                
+                intake_id = manager.ingest(
+                    source_type="text",
+                    content=content,
+                    metadata={"source": "mobile_bridge", "intent": "note_capture"}
+                )
+                result_data = {"intake_id": intake_id, "status": "captured"}
+                
+            elif action == "reflect":
+                # Route to the Reflection agent (to be created) or Librarian fallback
+                try:
+                    from admin.engineers.reflection_agent import ReflectionAgent
+                    agent = ReflectionAgent()
+                    result_data = await agent.execute("summarize_recent_notes", **params)
+                except ImportError:
+                    agent = Librarian()
+                    result_data = await agent.execute("query_knowledge", question="Summarize my most recent notes and thoughts.")
+
+            elif action == "rl_optimize":
+                from admin.engineers.ml_engineer import MLEngineer
+                engineer = MLEngineer()
+                # Run the RL demo pipeline as the optimization step
+                result_data = engineer.demo_rl_pipeline()
+                response_text = f"RLvAI Intelligence Layer activated. Optimization Result: {result_data.get('final_reward', 0):.2f} Reward across {result_data.get('environment')}."
 
             # Failover / Relay check: If action isn't handled locally or explicitly requested remote
             if not result_data and params.get("remote") and self.node:

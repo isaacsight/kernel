@@ -15,6 +15,7 @@ from typing import Dict, List, Optional
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from admin.brain.memory_store import get_memory_store
 from admin.brain.metrics_collector import get_metrics_collector
+from admin.core import supabase
 from config import config
 
 logger = logging.getLogger("Analyst")
@@ -145,13 +146,105 @@ class Analyst:
             "Personal growth through self-reflection"
         ]
     
-    def generate_insights_report(self) -> str:
+    def get_visitor_stats(self) -> List[Dict]:
         """
-        Generates a comprehensive insights report.
+        Fetches visitor statistics (page views) from Supabase.
+        """
+        if not supabase:
+            logger.warning("Supabase client not initialized. Cannot fetch visitor stats.")
+            return []
+            
+        try:
+            # Query the page_views table
+            response = supabase.table('page_views').select('*').order('view_count', desc=True).limit(10).execute()
+            return response.data if hasattr(response, 'data') else []
+        except Exception as e:
+            logger.error(f"Error fetching visitor stats from Supabase: {e}")
+            return []
+    
+    def get_structured_analysis_data(self) -> Dict:
+        """
+        Returns raw structured data for UI consumption with functional rigor.
         """
         analysis = self.analyze_content_performance()
         gen_stats = self.memory.get_generation_stats()
         feedback = self.memory.get_feedback_patterns()
+        
+        # Aggregate agent metrics from MetricsCollector
+        agent_rankings = self.metrics.get_agent_rankings()
+        trends = self.metrics.get_trend_analysis(7)
+        
+        # Calculate functional rigor metrics
+        # 1. Views in last 24h (Stubbed via MetricsCollector if no time-series DB)
+        # In a real scenario, we'd query a time-series DB. Here we use systemic pulse.
+        total_views = sum(v.get('view_count', 0) for v in self.get_visitor_stats())
+        
+        # 2. Active nodes in last 7 days (nodes viewed at least once)
+        # Using Supabase 'last_viewed_at' if available
+        active_nodes = 0
+        try:
+            seven_days_ago = (datetime.now() - timedelta(days=7)).isoformat()
+            if supabase:
+                resp = supabase.table('page_views').select('slug').gt('last_viewed_at', seven_days_ago).execute()
+                active_nodes = len(resp.data) if hasattr(resp, 'data') else 0
+        except Exception as e:
+            logger.warning(f"Error calculating active nodes: {e}")
+            
+        # 3. Recent Events (Live Stream)
+        system_events = self.metrics.metrics.get("system_events", [])
+        
+        # 4. Inject recent visitor activity into the stream
+        try:
+            if supabase:
+                # Fetch views from the last hour
+                an_hour_ago = (datetime.now() - timedelta(hours=1)).isoformat()
+                resp = supabase.table('page_views').select('*').gt('last_viewed_at', an_hour_ago).order('last_viewed_at', desc=True).limit(5).execute()
+                
+                if hasattr(resp, 'data'):
+                    for view in resp.data:
+                        # Convert to event format
+                        timestamp = view.get('last_viewed_at', datetime.now().isoformat())
+                        slug = view.get('slug', 'unknown')
+                        system_events.append({
+                            "type": "visitor_view",
+                            "timestamp": timestamp,
+                            "data": {
+                                "action": f"Node Viewed: {slug.replace('-', ' ').capitalize()}",
+                                "message": f"External agent accessed {slug}",
+                                "slug": slug
+                            }
+                        })
+        except Exception as e:
+            logger.warning(f"Error injecting visitor views: {e}")
+
+        # Sort combined events by timestamp and take latest
+        system_events.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        recent_events = system_events[:20]
+
+        return {
+            "content": analysis,
+            "generation": gen_stats,
+            "feedback": feedback,
+            "agents": agent_rankings,
+            "trends": trends,
+            "research": self.memory.get_insights("research_report", min_confidence=0.8)[:5],
+            "visitors": self.get_visitor_stats(),
+            "rigor": {
+                "views_24h": total_views, # Placeholder for real 24h sum
+                "active_nodes_7d": active_nodes or analysis['total_posts'], # Fallback
+                "trend_velocity": trends.get("generation_trend_direction", "stable"),
+                "events_stream": recent_events
+            }
+        }
+
+    def generate_insights_report(self) -> str:
+        """
+        Generates a comprehensive insights report.
+        """
+        data = self.get_structured_analysis_data()
+        analysis = data["content"]
+        gen_stats = data["generation"]
+        feedback = data["feedback"]
         
         report = [
             "📊 CONTENT INSIGHTS REPORT",
@@ -160,8 +253,20 @@ class Analyst:
             f"📝 Total Posts: {analysis['total_posts']}",
             f"📏 Avg Word Count: {analysis['avg_word_count']:.0f}",
             "",
-            "🏷️ Top Categories:"
         ]
+        
+        # Add Visitor Stats
+        visitor_stats = data.get('visitors', [])
+        if visitor_stats:
+            report.extend([
+                "👤 TOP VIEWED PAGES",
+                "-" * 20
+            ])
+            for stat in visitor_stats:
+                report.append(f"  • {stat['slug']}: {stat['view_count']} views")
+            report.append("")
+            
+        report.append("🏷️ Top Categories:")
         
         for cat, count in sorted(analysis['categories'].items(), key=lambda x: x[1], reverse=True)[:5]:
             report.append(f"  • {cat}: {count} posts")

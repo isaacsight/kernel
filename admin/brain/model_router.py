@@ -28,6 +28,7 @@ class TaskType(Enum):
     CHAT = "chat"
     EMBEDDING = "embedding"
     FAST_SIMPLE = "fast_simple"
+    VISUAL_REASONING = "visual_reasoning"
 
 
 class ModelRouter:
@@ -243,7 +244,8 @@ class ModelRouter:
             TaskType.SUMMARIZATION: ["gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
             TaskType.CHAT: ["gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
-            TaskType.FAST_SIMPLE: ["gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"]
+            TaskType.FAST_SIMPLE: ["gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
+            TaskType.VISUAL_REASONING: ["gemini-1.5-pro", "gpt-4o", "gemini-3.0-flash"]
         }
         
         logger.info(f"[{self.name}] Initialized with {len(self.models)} models")
@@ -517,7 +519,10 @@ class ModelRouter:
             "Librarian": TaskType.EMBEDDING,
             "Operator": TaskType.FAST_SIMPLE,
             "Scheduler": TaskType.FAST_SIMPLE,
-            "Translator": TaskType.CREATIVE_WRITING
+            "Translator": TaskType.CREATIVE_WRITING,
+            "Design Partner": TaskType.VISUAL_REASONING,
+            "Content Engine Brain": TaskType.CREATIVE_WRITING,
+            "Research Copilot": TaskType.ANALYSIS
         }
         
         task_type = agent_task_map.get(agent_name, TaskType.CHAT)

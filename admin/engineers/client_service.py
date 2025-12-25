@@ -31,8 +31,12 @@ class ClientService:
                 self.publish_site_action
             ]
             
+            # Use centrally managed model from config
+            target_model = config.GEMINI_MODEL
+            print(f"DEBUG: ClientService initializing with model: {target_model}")
+            
             self._model = genai.GenerativeModel(
-                'gemini-2.0-flash',
+                target_model,
                 system_instruction=self._get_system_params(),
                 tools=tools
             )

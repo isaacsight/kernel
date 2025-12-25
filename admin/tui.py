@@ -11,6 +11,7 @@ import datetime
 from engineers.guardian import Guardian
 from engineers.editor import Editor
 from engineers.librarian import Librarian
+from engineers.analyst import Analyst
 
 class AgentCard(Static):
     """A widget to display agent status and actions."""
@@ -208,9 +209,11 @@ class BlogTUI(App):
                         AgentCard("The Guardian", "Safety Officer", "🛡️", "Active"),
                         AgentCard("The Editor", "Style & Quality", "✍️", "Active"),
                         AgentCard("The Librarian", "Knowledge Graph", "📚", "Indexing"),
+                        AgentCard("Analyst", "Statisics & Research", "📊", "Online"),
                         AgentCard("The Architect", "System Architect", "🏗️", "Remote"),
                         AgentCard("The Operator", "System Manager", "⚙️", "Running"),
                         AgentCard("The Visionary", "Visual Design", "👁️", "Dreaming"),
+                        AgentCard("Kernel Engineer", "Hardware Engine", "💾", "Active"),
                         id="mission-control"
                     ),
                     # Server Logs / System Status
@@ -226,16 +229,19 @@ class BlogTUI(App):
                     )
                 )
 
-            # 2. Content Studio
-            with TabPane("Content Studio", id="posts"):
+            # 2. Intelligence
+            with TabPane("Intelligence", id="intelligence-tab"):
                 yield Container(
-                    ListView(id="post-list"),
-                    id="sidebar"
+                    Markdown("# Intelligence Analytics Dashboard"),
+                    Horizontal(
+                        Button("Refresh Analytics", variant="primary", id="btn-refresh-analytics"),
+                        classes="buttons"
+                    ),
+                    Markdown("", id="analytics-report"),
+                    id="intelligence-container"
                 )
-                yield Container(
-                    Markdown("# Select a post to edit or press 'n' to create new."),
-                    id="main"
-                )
+
+            # 3. Content Studio
                 
         yield Footer()
 
@@ -321,6 +327,18 @@ class BlogTUI(App):
                 self.app.push_screen(ModalScreen(Label(report, classes="report-text")))
             except Exception as e:
                 self.app.notify(f"Evolution Error: {e}", severity="error")
+        elif btn_id == "btn-refresh-analytics":
+            self.refresh_analytics()
+
+    def refresh_analytics(self):
+        self.app.notify("Analyst is crunching the numbers...")
+        try:
+            analyst = Analyst()
+            report = analyst.generate_insights_report()
+            self.query_one("#analytics-report", Markdown).update(report)
+            self.app.notify("Analytics updated.")
+        except Exception as e:
+            self.app.notify(f"Analytics Error: {e}", severity="error")
 
     def refresh_posts(self):
         posts = core.get_posts()

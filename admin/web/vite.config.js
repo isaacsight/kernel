@@ -22,5 +22,17 @@ export default defineConfig({
         rewrite: (path) => path
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-3d': ['three', '@react-three/fiber', '@react-three/drei'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-icons': ['lucide-react']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })

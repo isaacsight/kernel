@@ -1,11 +1,10 @@
 """
-Antigravity Engineer - Autonomous Coding Agent
+Antigravity Engineer - Core Kernel & Intelligence Engineer
 
-An agentic engineer that uses Gemini's function calling to execute
-multi-step coding tasks: reading files, writing files, running commands,
-and researching the web.
-
+The central orchestrator of the Studio OS agent swarm. Responsible for 
+high-level reasoning, system coordination, and automated research & development.
 Inspired by the Antigravity VS Code extension architecture.
+
 """
 
 import os
@@ -104,10 +103,10 @@ TOOL_FUNCTIONS = [
 
 class AntigravityEngineer(BaseAgent):
     """
-    Autonomous coding agent using Gemini function calling.
+    Core Kernel Agent and Intelligence Engineer.
     
-    Can execute multi-step coding tasks by reading files, writing files,
-    running commands, and searching the codebase.
+    Acts as the orchestrator of the Studio OS swarm, using Gemini function 
+    calling to execute multi-step coding, research, and system tasks.
     """
     
     MAX_ITERATIONS = 20  # Safety limit on execution loops

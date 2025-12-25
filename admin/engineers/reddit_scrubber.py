@@ -121,7 +121,7 @@ class RedditScrubber(BaseAgent):
                 
             client = genai.Client(api_key=api_key)
             # Hardcode a safe model for now or use the one from router
-            model_name = "gemini-2.0-flash" 
+            model_name = config.GEMINI_MODEL
             
             response = client.models.generate_content(
                 model=model_name,

@@ -1,0 +1,9 @@
+skills:
+  - name: recursive_reasoning
+    description: Execute multi-pass self-critique loops to refine thoughts.
+  - name: system_diagnosis
+    description: Analyze MetricsCollector and MemoryStore for system hot spots.
+  - name: doctrine_management
+    description: Update system_doctrine.md with Sovereign-driven principles.
+  - name: cognitive_ledger_recording
+    description: Record lessons learned and failure patterns for future refinement.

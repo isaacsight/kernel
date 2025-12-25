@@ -31,11 +31,13 @@ class Researcher(BaseAgent):
         # Initialize Google GenAI Client (for legacy/fallback)
         self.api_key = config.GEMINI_API_KEY
         if self.api_key:
-             try:
-                 from google import genai
-                 self.client = genai.Client(api_key=self.api_key)
-             except ImportError:
-                 self.client = None
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=self.api_key)
+                self.model = genai.GenerativeModel(config.GEMINI_MODEL)
+                self.client = None
+            except ImportError:
+                self.client = None
         else:
             self.client = None
             

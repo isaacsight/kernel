@@ -5,9 +5,7 @@ from moviepy import CompositeVideoClip, ColorClip
 
 logger = logging.getLogger("Broadcaster")
 
-# Apply nest_asyncio to allow re-entrant event loops (fixes "running loop" errors)
-import nest_asyncio
-nest_asyncio.apply()
+# Broadcaster class
 
 class Broadcaster:
     def __init__(self):

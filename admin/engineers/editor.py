@@ -25,11 +25,16 @@ class Editor(BaseAgent):
         self.memory = get_memory_store()
         self.drafts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "brain", "drafts")
         os.makedirs(self.drafts_dir, exist_ok=True)
-        self.model_name = "gemini-2.0-flash"
+        self.model_name = config.GEMINI_MODEL
         
         # Initialize the Refiner Specialist
         from admin.engineers.refiner import Refiner
         self.refiner = Refiner()
+        
+        # Initialize OpenRouter for free model access
+        from admin.config import config
+        from admin.infrastructure.openrouter import OpenRouterClient
+        self.openrouter = OpenRouterClient(config.OPENROUTER_API_KEY)
 
     @property
     def name(self) -> str:
@@ -202,7 +207,7 @@ class Editor(BaseAgent):
             return "Error: No Gemini API Key found."
             
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_prompt)
+        model = genai.GenerativeModel(config.GEMINI_MODEL, system_instruction=system_prompt)
         
         async def run_async():
             resp = await model.generate_content_async(user_prompt)
@@ -211,6 +216,18 @@ class Editor(BaseAgent):
         try:
             return asyncio.run(run_async())
         except Exception as e:
+            # Final fallback to OpenRouter Free
+            if os.environ.get("OPENROUTER_API_KEY"):
+                logger.info(f"[{self.name}] Final fallback to OpenRouter (Free Model)...")
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
+                # Default to Mistral 7B Free for the Editor
+                from admin.config import config
+                response = self.openrouter.chat_completion(config.OR_FREE_MISTRAL, messages)
+                return self.openrouter.extract_text(response)
+                
             logger.error(f"Inference Failed: {e}")
             return f"[Generation Error: {e}]"
 

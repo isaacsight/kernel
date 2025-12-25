@@ -13,15 +13,13 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any
 from urllib.parse import quote_plus
 import asyncio
+logger = logging.getLogger("WebScout")
+
 try:
     from TikTokApi import TikTokApi
-    import nest_asyncio
-    nest_asyncio.apply()
     TIKTOK_AVAILABLE = True
 except ImportError:
     TIKTOK_AVAILABLE = False
-
-logger = logging.getLogger("WebScout")
 
 
 class WebScout:

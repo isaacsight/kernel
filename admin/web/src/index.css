@@ -49,6 +49,56 @@
   .sidebar-rail-item.active {
     @apply text-primary bg-primary/10 border border-primary/20;
   }
+
+  .holographic-glass {
+    @apply bg-black/40 backdrop-blur-2xl border border-white/5 relative overflow-hidden;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  }
+
+  .holographic-border {
+    @apply border border-white/5 hover:border-primary/30 transition-all duration-700;
+    box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .scanline {
+    width: 100%;
+    height: 100px;
+    z-index: 10;
+    background: linear-gradient(0deg, rgba(102, 181, 110, 0) 0%, rgba(102, 181, 110, 0.03) 50%, rgba(102, 181, 110, 0) 100%);
+    opacity: 0.1;
+    position: absolute;
+    bottom: 100%;
+    animation: scanline 8s linear infinite;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {

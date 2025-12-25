@@ -134,7 +134,7 @@ class BetaTester(BaseAgent):
         prompt = f"{self.get_system_prompt()}\n\nTASK: Describe your exact steps and frustrations when trying to use this interface: {ui_context}"
         
         model = {
-            "selected": "gemini-2.0-flash",
+            "selected": config.GEMINI_MODEL,
             "provider": "google",
             "type": "cloud_free"
         }

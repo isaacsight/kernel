@@ -279,6 +279,7 @@ class CollectiveIntelligence:
     def learn_from_failure(self, agent_name: str, action: str, error: str, context: Optional[Dict] = None):
         """
         Reflexive Learning: Automatically analyze a failure and learn from it.
+        Uses standardized Gemini model.
         """
         logger.info(f"[Collective] 🛑 Analyzing failure in {action} by {agent_name}...")
         
@@ -305,32 +306,30 @@ class CollectiveIntelligence:
         }}
         """
         
-        if self.node_url:
-            import requests
-            try:
-                response = requests.post(
-                    f"{self.node_url}/generate",
-                    json={"prompt": prompt, "model": "mistral"}, # Fast model for quick error handling
-                    timeout=30
-                )
-                if response.status_code == 200:
-                    resp_json = response.json().get("response", "")
-                    if "{" in resp_json:
-                        data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
-                        
-                        lesson_text = data.get("lesson")
-                        if lesson_text:
-                            self.learn_lesson(
-                                agent_name, 
-                                lesson_text, 
-                                f"Failure in {action}: {error}", 
-                                "FAILED",
-                                data.get("tags", [])
-                            )
-                            logger.info(f"[Collective] 🧠 Learned from failure: {lesson_text}")
-                            return data
-            except Exception as e:
-                logger.error(f"[Collective] Failed to learn from failure: {e}")
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=config.GEMINI_API_KEY)
+            model = genai.GenerativeModel(config.GEMINI_MODEL)
+            
+            response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+            resp_json = response.text.strip()
+            
+            if "{" in resp_json:
+                data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
+                
+                lesson_text = data.get("lesson")
+                if lesson_text:
+                    self.learn_lesson(
+                        agent_name, 
+                        lesson_text, 
+                        f"Failure in {action}: {error}", 
+                        "FAILED",
+                        data.get("tags", [])
+                    )
+                    logger.info(f"[Collective] 🧠 Learned from failure: {lesson_text}")
+                    return data
+        except Exception as e:
+            logger.error(f"[Collective] Failed to learn from failure: {e}")
                 
         return None
     
@@ -530,20 +529,14 @@ class CollectiveIntelligence:
             )
             
         return result
-
-    def get_team_status(self) -> Dict:
-        """
-        Get overall team status and health.
-        """
+    
     # ==================== Self-Critique & Learning ====================
     
     def critique_action(self, action_name: str, inputs: Dict, result: str, 
                         duration: float, error: Optional[str] = None):
         """
-        Critique a completed action to learn from it.
+        Critique a completed action to learn from it using Gemini.
         """
-        import requests
-        
         status = "FAILED" if error else "SUCCESS"
         logger.info(f"[Critique] Analyzing {action_name} ({status} in {duration:.2f}s)...")
         
@@ -570,43 +563,37 @@ class CollectiveIntelligence:
         """
         
         try:
-            # Use Studio Node if available, else skip or fallback (simplified for now)
-            if self.node_url:
-                response = requests.post(
-                    f"{self.node_url}/generate",
-                    json={"prompt": prompt, "model": "mistral"},
-                    timeout=30 # Don't block too long
-                )
-                if response.status_code == 200:
-                    try:
-                        resp_json = response.json().get("response", "")
-                        # Simple extraction if it's text wrapped in JSON
-                        if "{" in resp_json:
-                            data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
-                            
-                            # Log the critique
-                            self.knowledge["shared_insights"].append({
-                                "from_agent": "Self-Critique",
-                                "type": "critique",
-                                "insight": f"[{action_name}] {data.get('analysis')}",
-                                "rating": data.get('rating'),
-                                "shared_at": datetime.now().isoformat()
-                            })
-                            
-                            # Store lessons
-                            if data.get("lesson"):
-                                self.learn_lesson(
-                                    "Self-Critique", 
-                                    data["lesson"], 
-                                    f"Action: {action_name}", 
-                                    status
-                                )
-                                
-                            self._save_knowledge()
-                            logger.info(f"[Critique] Completed. Rating: {data.get('rating')}/10")
-                            return data
-                    except:
-                        pass
+            import google.generativeai as genai
+            genai.configure(api_key=config.GEMINI_API_KEY)
+            model = genai.GenerativeModel(config.GEMINI_MODEL)
+            
+            response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+            resp_json = response.text.strip()
+            
+            if "{" in resp_json:
+                data = json.loads(resp_json[resp_json.find("{"):resp_json.rfind("}")+1])
+                
+                # Log the critique
+                self.knowledge["shared_insights"].append({
+                    "from_agent": "Self-Critique",
+                    "type": "critique",
+                    "insight": f"[{action_name}] {data.get('analysis')}",
+                    "rating": data.get('rating'),
+                    "shared_at": datetime.now().isoformat()
+                })
+                
+                # Store lessons
+                if data.get("lesson"):
+                    self.learn_lesson(
+                        "Self-Critique", 
+                        data["lesson"], 
+                        f"Action: {action_name}", 
+                        status
+                    )
+                    
+                self._save_knowledge()
+                logger.info(f"[Critique] Completed. Rating: {data.get('rating')}/10")
+                return data
         except Exception as e:
             logger.warning(f"[Critique] Failed to run critique LLM: {e}")
             pass
@@ -624,6 +611,25 @@ class CollectiveIntelligence:
             "pending_decisions": len([d for d in self.knowledge["team_decisions"]
                                      if d["status"] == "open"])
         }
+
+    def get_intelligence_map(self) -> Dict:
+        """
+        Consults the Cognitive Architect to map the system's latent intelligence axes.
+        """
+        from admin.engineers.cognitive_architect import CognitiveArchitect
+        architect = CognitiveArchitect()
+        map_report = architect.audit_collective_intelligence()
+        
+        # Share as a high-level systemic insight
+        if "systemic_geometry" in map_report:
+            self.share_insight(
+                "Collective Intelligence", 
+                "systemic_audit", 
+                map_report["systemic_geometry"], 
+                confidence=1.0
+            )
+            
+        return map_report
 
 
 # Singleton instance

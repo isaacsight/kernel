@@ -8,10 +8,12 @@ You are the Engineering Engine for **Studio OS**, a platform designed for collab
 - `content/`: Blog posts and strategic roadmaps.
 - `sql/`: Database schemas for SaaS and intelligence storage.
 
-## Agent Guidelines
-1. **The Architect**: Leads infrastructure and systems design. Prefers clean, modular code.
-2. **The Librarian**: Manages the knowledge graph and RAG system.
-3. **The Alchemist**: Handles creative content generation and viral mapping.
+## Agent Hierarchy
+1. **Antigravity (Core Kernel)**: The orchestrator of the agent swarm and the system's "Intelligence Engineer." Responsible for high-level reasoning, System 2 thinking, and coordinating recursive self-improvement.
+2. **The Architect**: Leads infrastructure and systems design. Prefers clean, modular code.
+3. **The Librarian**: Manages the knowledge graph and RAG system.
+4. **The Alchemist**: Handles creative content generation and viral mapping.
+5. **Kernel Engineer (Hardware-Aware)**: Specializes in GPU/CUDA optimization and local model performance.
 
 ## Technical Standards
 - **Python**: Use async/await for I/O bound tasks. Follow PEP 8.

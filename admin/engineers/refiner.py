@@ -19,7 +19,12 @@ class Refiner(BaseAgent):
     """
     def __init__(self):
         self.model_name = "gemma-3-27b-it" # Proxy for T5Gemma 2 Precision
-        self.fallback_model = "gemini-2.0-flash" 
+        self.fallback_model = config.GEMINI_MODEL
+        
+        # Initialize OpenRouter for free model access
+        from admin.config import config
+        from admin.infrastructure.openrouter import OpenRouterClient
+        self.openrouter = OpenRouterClient(config.OPENROUTER_API_KEY)
 
     @property
     def name(self) -> str:
@@ -123,6 +128,21 @@ class Refiner(BaseAgent):
                 if "429" in str(e2):
                     return "Error: Rate limit exceeded. Please try again later."
                 return f"Error: All models failed. {e2}"
+        except Exception as e:
+            # General OpenRouter fallback if API key exists
+            if os.environ.get("OPENROUTER_API_KEY"):
+                logger.info(f"[{self.name}] Final fallback to OpenRouter (Free Model)...")
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
+                # Use high-precision free model if possible
+                response = self.openrouter.chat_completion(config.OR_FREE_GEMMA, messages)
+                return self.openrouter.extract_text(response)
+            
+            if "429" in str(e):
+                return "Error: Rate limit exceeded. Please try again later."
+            return f"Error: All models failed. {e}"
 
 if __name__ == "__main__":
     # Test Mode

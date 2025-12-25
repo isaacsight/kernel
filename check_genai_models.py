@@ -8,6 +8,7 @@ api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     print("No GOOGLE_API_KEY found.")
 else:
+    print(f"Using API Key starting with: {api_key[:10]}...")
     genai.configure(api_key=api_key)
     print("Listing models...")
     try:

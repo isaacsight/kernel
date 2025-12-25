@@ -57,6 +57,12 @@ const Home: React.FC = () => {
                     message: result.message,
                     agent: result.target_agent || 'System'
                 });
+            } else if (command.toLowerCase().startsWith('note:') || command.toLowerCase().startsWith('idea:')) {
+                // If it was a quick note, show a confirmation if no response was returned
+                setLastResponse({
+                    message: "Note captured successfully. I'll remember this for later reflection.",
+                    agent: 'System'
+                });
             }
 
             fetchAgents();

@@ -15,7 +15,7 @@ class Config:
     SITE_URL = "https://isaacsight.com"
     
     # AI Models
-    GEMINI_MODEL = "gemini-3.0-flash-exp" # STABLE: Paid Tier Compatible
+    GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "models/gemini-2.5-flash-latest") # STABLE: Paid Tier Compatible
     EMBEDDING_MODEL = "models/text-embedding-004"
     HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
     SAFETY_MODEL = "unitary/toxic-bert"
@@ -27,6 +27,21 @@ class Config:
     HF_TOKEN = os.environ.get("HF_TOKEN")
     SUPABASE_URL = os.environ.get("SUPABASE_URL")
     SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+    OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+
+    # OpenRouter Models
+    OR_CLAUDE_SONNET = "anthropic/claude-3.5-sonnet"
+    OR_CLAUDE_4_5 = "anthropic/claude-4.5-sonnet" # Future proofing
+    OR_GPT4O = "openai/gpt-4o"
+    OR_DEEPSEEK_V3 = "deepseek/deepseek-chat"
+    OR_QWEN_72B = "qwen/qwen-2.5-72b-instruct"
+    
+    # OpenRouter Free Models
+    OR_FREE_MISTRAL = "mistralai/mistral-7b-instruct:free"
+    OR_FREE_OPENORCA = "open-orca/mistral-7b-openorca:free"
+    OR_FREE_GEMMA = "google/gemma-2-9b-it:free"
+    
+    DEFAULT_OR_MODEL = OR_FREE_MISTRAL
     
     # Twitter Config
     TWITTER_CONSUMER_KEY = os.environ.get("TWITTER_CONSUMER_KEY")

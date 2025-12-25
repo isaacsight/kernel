@@ -46,6 +46,8 @@ class LabScientist(BaseAgent):
             return self._experiment_aesthetic_cohesion_audit()
         elif str(experiment_id) == "8":
             return self._experiment_cognitive_depth_study()
+        elif str(experiment_id) == "9":
+            return self._experiment_reasoning_entailment_audit()
         else:
             return {"status": "error", "message": f"Unknown Experiment ID: {experiment_id}"}
 
@@ -491,3 +493,101 @@ The "Intelligence" of the agent is not a fixed property of the model (Gemini-2.0
             f.write(report)
             
         return {"status": "success", "report_path": filepath, "improvement": f"{improvement}%"}
+
+    def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
+        """Helper to call LLM for reasoning tasks."""
+        import google.generativeai as genai
+        import asyncio
+        
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not api_key:
+            return "Error: No Gemini API Key found."
+            
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(config.GEMINI_MODEL, system_instruction=system_prompt)
+        
+        async def run_async():
+            resp = await model.generate_content_async(user_prompt)
+            return resp.text
+            
+        try:
+            return asyncio.run(run_async())
+        except Exception as e:
+            logger.error(f"Inference Failed in LabScientist: {e}")
+            return f"Error: {e}"
+
+    def _experiment_reasoning_entailment_audit(self) -> Dict:
+        """
+        Experiment #9: Reasoning Entailment Audit (Logical Hardening).
+        Hypothesis: Claims in generated content must be logically entailed by the research data.
+        """
+        # 1. Fetch recent content (from drafts)
+        # Fix: Using absolute path to brain/drafts
+        drafts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "brain", "drafts")
+        if not os.path.exists(drafts_dir):
+            return {"status": "failed", "message": f"No drafts directory found at {drafts_dir}."}
+            
+        files = [f for f in os.listdir(drafts_dir) if f.startswith("ESSAY_") and f.endswith(".md")]
+        if not files:
+            return {"status": "failed", "message": "No ESSAY drafts found to audit."}
+            
+        # Audit the most recent one
+        files.sort(key=lambda x: os.path.getmtime(os.path.join(drafts_dir, x)), reverse=True)
+        target_file = files[0]
+        
+        with open(os.path.join(drafts_dir, target_file), 'r') as f:
+            content = f.read()
+
+        # 2. Deconstruct and Audit
+        sys_prompt = """You are the LOGICAL ENTAILMENT AUDITOR.
+        Your job is to deconstruct an essay into core claims and verify if they are logically sound or represent 'AI Vibes'.
+        
+        Format your response as a JSON list of claims, each with:
+        - claim: The statement made.
+        - entailment_score: 1-10 (How well it follows from general technical logic or provided context).
+        - verdict: 'ENTAILED', 'NEUTRAL', or 'HALUCINATION'.
+        - reasoning: Brief explanation.
+        """
+        
+        audit_raw = self._call_llm(sys_prompt, f"Audit this content:\n\n{content}")
+        
+        try:
+            # Clean Markdown if LLM included it
+            clean_json = audit_raw.replace("```json", "").replace("```", "").strip()
+            audit_data = json.loads(clean_json)
+        except:
+            audit_data = [{"error": "Failed to parse audit JSON", "raw": audit_raw}]
+
+        # 3. Calculate "Felt Alignment" Score
+        valid_claims = [c for c in audit_data if isinstance(c, dict) and 'entailment_score' in c]
+        if valid_claims:
+            avg_score = sum(c['entailment_score'] for c in valid_claims) / len(valid_claims)
+        else:
+            avg_score = 0
+
+        report = f"""# Lab Report: Experiment 009 - Reasoning Entailment Audit
+**Date:** {datetime.now().isoformat()}
+**Scientist:** LabScientist (Agent)
+**Subject:** Logical Soundness of {target_file}
+
+## Abstract
+This audit applies the "Logical Entailment" framework (inspired by RIKEN AIP) to verify if the Studio's content is grounded in reasoning or drifting into generative hallucinations.
+
+## Audit Data
+{json.dumps(audit_data, indent=2)}
+
+## Final Metric: Felt Alignment
+**Score:** {avg_score:.2f} / 10.0
+**Verdict:** {"✅ ALIGNED" if avg_score > 8 else "⚠️ DRIFT DETECTED" if avg_score > 6 else "🚨 HIGH HALUCINATION RISK"}
+
+## Conclusion
+The content in `{target_file}` is { "highly dependable" if avg_score > 8 else "socially acceptable but logically thin" if avg_score > 6 else "structurally unsound" }.
+"""
+        filename = f"lab_report_009_entailment_{datetime.now().strftime('%Y%m%d')}.md"
+        filepath = os.path.join(self.reports_dir, filename)
+        with open(filepath, 'w') as f:
+            f.write(report)
+            
+        logger.info(f"[{self.agent_id}] Experiment 9 Complete. Report: {filepath}")
+        
+        return {"status": "success", "report_path": filepath, "felt_alignment_score": avg_score}

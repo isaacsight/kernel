@@ -169,6 +169,32 @@ class MemoryStore:
                 FOREIGN KEY (intake_id) REFERENCES raw_intake (id)
             )
         """)
+
+        # Belief States (Active Inference Substrate)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS belief_states (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                agent_id TEXT NOT NULL,
+                entity_id TEXT NOT NULL, -- e.g., 'user_intent', 'filesystem', 'api_status'
+                belief_data JSON NOT NULL, -- probability distribution or state estimate
+                confidence REAL,
+                entropy REAL, -- measure of uncertainty
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Action Priors (Expected Free Energy)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS action_priors (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                agent_id TEXT NOT NULL,
+                action_type TEXT NOT NULL,
+                expected_free_energy REAL,
+                pragmatic_value REAL,
+                epistemic_value REAL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
         
         conn.commit()
         conn.close()
@@ -384,7 +410,7 @@ class MemoryStore:
         conn.close()
         logger.info(f"Insight saved: {insight_type} (confidence: {confidence})")
         
-    def get_insights(self, insight_type: str = None, min_confidence: float = 0) -> List[Dict]:
+    def get_insights(self, insight_type: str = None, min_confidence: float = 0, limit: int = 50) -> List[Dict]:
         """Retrieve learned insights."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -393,14 +419,14 @@ class MemoryStore:
             cursor.execute(
                 """SELECT insight_type, insight_data, confidence, source, timestamp 
                    FROM insights WHERE insight_type = ? AND confidence >= ? 
-                   ORDER BY timestamp DESC""",
-                (insight_type, min_confidence)
+                   ORDER BY timestamp DESC LIMIT ?""",
+                (insight_type, min_confidence, limit)
             )
         else:
             cursor.execute(
                 """SELECT insight_type, insight_data, confidence, source, timestamp 
-                   FROM insights WHERE confidence >= ? ORDER BY timestamp DESC""",
-                (min_confidence,)
+                   FROM insights WHERE confidence >= ? ORDER BY timestamp DESC LIMIT ?""",
+                (min_confidence, limit)
             )
             
         rows = cursor.fetchall()
@@ -610,6 +636,7 @@ class MemoryStore:
                 "metadata": json.loads(r["metadata"]) if r["metadata"] else {},
                 "timestamp": r["timestamp"]
             }
+            for r in rows
         ]
 
     # ==================== Raw Intake (OS Pipeline) ====================
@@ -627,6 +654,98 @@ class MemoryStore:
         conn.commit()
         conn.close()
         logger.info(f"Intake saved: {source_path}")
+
+    # ==================== Active Inference (Beliefs & Priors) ====================
+
+    def save_belief_state(self, agent_id: str, entity_id: str, belief_data: Dict, 
+                          confidence: float = 0.5, entropy: float = 0.0):
+        """Save an agent's current belief state about an entity."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT INTO belief_states (agent_id, entity_id, belief_data, confidence, entropy) 
+               VALUES (?, ?, ?, ?, ?)""",
+            (agent_id, entity_id, json.dumps(belief_data), confidence, entropy)
+        )
+        conn.commit()
+        conn.close()
+        logger.debug(f"Belief state updated: {agent_id} -> {entity_id}")
+
+    def get_latest_beliefs(self, agent_id: str = None, entity_id: str = None, limit: int = 1) -> List[Dict]:
+        """Retrieve the most recent belief states."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        sql = "SELECT * FROM belief_states"
+        params = []
+        conditions = []
+        
+        if agent_id:
+            conditions.append("agent_id = ?")
+            params.append(agent_id)
+        if entity_id:
+            conditions.append("entity_id = ?")
+            params.append(entity_id)
+            
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
+            
+        sql += " ORDER BY timestamp DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor.execute(sql, params)
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {
+                "agent_id": r["agent_id"],
+                "entity_id": r["entity_id"],
+                "belief_data": json.loads(r["belief_data"]),
+                "confidence": r["confidence"],
+                "entropy": r["entropy"],
+                "timestamp": r["timestamp"]
+            }
+            for r in rows
+        ]
+
+    def save_action_prior(self, agent_id: str, action_type: str, efe: float, 
+                           pragmatic: float = 0.0, epistemic: float = 0.0):
+        """Save a predicted action prior (Expected Free Energy)."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT INTO action_priors (agent_id, action_type, expected_free_energy, pragmatic_value, epistemic_value) 
+               VALUES (?, ?, ?, ?, ?)""",
+            (agent_id, action_type, efe, pragmatic, epistemic)
+        )
+        conn.commit()
+        conn.close()
+
+    def get_top_priors(self, agent_id: str, limit: int = 5) -> List[Dict]:
+        """Get best actions based on lowest Expected Free Energy."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            """SELECT * FROM action_priors 
+               WHERE agent_id = ? 
+               ORDER BY expected_free_energy ASC LIMIT ?""",
+            (agent_id, limit)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {
+                "action_type": r["action_type"],
+                "expected_free_energy": r["expected_free_energy"],
+                "pragmatic_value": r["pragmatic_value"],
+                "epistemic_value": r["epistemic_value"]
+            }
+            for r in rows
+        ]
 
     # ==================== Summary ====================
     

@@ -48,6 +48,10 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
         self.chat_session = None
         self.data_center = DataCenter(config)
         
+        # Initialize OpenRouter
+        from admin.infrastructure.openrouter import OpenRouterClient
+        self.openrouter = OpenRouterClient(config.OPENROUTER_API_KEY)
+        
         # Initialize memory and metrics systems
         self.memory_store = get_memory_store()
         self.metrics = get_metrics_collector()
@@ -97,6 +101,16 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
             
         print(f"[{self.name}] Studio Node is {node_status['status'].upper()}. Falling back to 'gemini'.")
         return "gemini"
+
+    def select_openrouter_model(self, deep_mode: bool = False) -> str:
+        """
+        Selects the appropriate OpenRouter model.
+        Prioritizes FREE models as per user preference.
+        """
+        if deep_mode:
+            # Gemma 2 9B is a great free model for 'deeper' reasoning
+            return config.OR_FREE_GEMMA
+        return config.OR_FREE_MISTRAL
 
     def start_chat(self):
         """Starts a new chat session."""
@@ -479,6 +493,18 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
                 except Exception as e:
                     raise Exception(f"Remote generation failed: {e}")
                     
+            elif provider == "openrouter":
+                logger.info(f"[{self.name}] Calling OpenRouter...")
+                model = self.select_openrouter_model(deep_mode=deep_mode)
+                
+                messages = [
+                    {"role": "system", "content": f"You are The Alchemist. {doctrine}"},
+                    {"role": "user", "content": prompt}
+                ]
+                
+                response = self.openrouter.chat_completion(model, messages, temperature=0.7)
+                content = self.openrouter.extract_text(response)
+                
             else:  # Default to Gemini
                 # Use the model initialized in __init__
                 response = self.model.generate_content(prompt)

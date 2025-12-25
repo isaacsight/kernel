@@ -48,14 +48,78 @@ class RushedReleaseLoop:
         if not all(k in data for k in required):
             raise ValueError(f"Missing required fields: {required}")
 
+        # Create Initial Entry object
+        entry_id = f"entry_{int(time.time())}_{len(self.entries)}"
+        entry = {
+            'entry_id': entry_id,
+            'user_id': data['user_id'],
+            'type': data['event_type'],
+            'classification': {'pattern': 'meta', 'confidence': 1.0, 'reasoning': 'System instruction/context update.'},
+            'state': {'felt_right': True, 'reviewed': True},
+            'context': data['context'],
+            'created_at': datetime.utcnow().isoformat()
+        }
+
         if data['event_type'] == 'meta_update':
             context = data.get('context', {})
             if context.get('action') == 'update_focus':
-                # Update Focus in studio-snapshot.md (Mocking for now, could use Librarian)
-                # For this demo, we'll just log it and return
+                self.entries.append(entry)
+                self._save_data()
                 return {'status': 'meta_updated', 'focus': context.get('value')}
 
-        # --- Integration with Classifier Agent ---
+        if data['event_type'] == 'research_request':
+            context = data.get('context', {})
+            topic = context.get('topic')
+            entry['classification'] = {'pattern': 'strategic_research', 'confidence': 1.0}
+            self.entries.append(entry)
+            self._save_data()
+            return {
+                'status': 'research_started', 
+                'topic': topic, 
+                'entry_id': entry_id,
+                'message': f"The Sovereign has taskized 'The Researcher' to audit {topic}."
+            }
+
+        if data['event_type'] == 'browser_context':
+            entry['classification'] = {'pattern': 'observation', 'confidence': 1.0}
+            self.entries.append(entry)
+            self._save_data()
+
+            # Proactive Agentic Action: Broadcast a signal if deep content is present
+            if 'bodyText' in data['context'] and len(data['context']['bodyText']) > 100:
+                from admin.api.main import manager
+                import asyncio
+                
+                # Check for "Cognitive Drift" (Ma Protocol)
+                # If the user has visited many disparate URLs in a short time
+                recent_contexts = [e for e in self.entries if e['type'] == 'browser_context'][-10:]
+                unique_hosts = len(set([c['context']['url'].split('/')[2] for c in recent_contexts]))
+                
+                async def agent_nudge():
+                    if unique_hosts > 5: # High variance = Cognitive Drift detected
+                        await manager.broadcast({
+                            "action": "signal_alert",
+                            "state": "ma",
+                            "message": "Cognitive Drift detected. Pausing for Ma (space)..."
+                        })
+                        await asyncio.sleep(5)
+
+                    await manager.broadcast({
+                        "action": "signal_alert",
+                        "state": "analyzing",
+                        "message": "The Sovereign is interpreting depth..."
+                    })
+                    await asyncio.sleep(3)
+                    await manager.broadcast({
+                        "action": "signal_alert",
+                        "state": "aligned",
+                        "message": "Resonance Confirmed. Proceed with clarity."
+                    })
+                
+                # Start the nudge
+                asyncio.create_task(agent_nudge())
+
+            return {'status': 'context_captured', 'url': data['context'].get('url')}
         if data['event_type'] == 'optimization_suggested':
             classification = {
                 'pattern': 'optimization',

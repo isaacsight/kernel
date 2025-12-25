@@ -65,14 +65,11 @@ exclude = [
 "__init__.py" = ["F401"]  # Allow unused imports in __init__.py
 
 [tool.pytest.ini_options]
-minversion = "8.0"
+minversion = "7.0"
 addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
-    "--cov=.",
-    "--cov-report=html",
-    "--cov-report=term-missing:skip-covered",
 ]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

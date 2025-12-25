@@ -5,6 +5,7 @@ import TitanDB from './pages/TitanDB';
 import ProjectPlaceholder from './pages/ProjectPlaceholder';
 import StudioChat from './pages/StudioChat';
 import ClientPortal from './pages/ClientPortal';
+import IntelligenceConsole from './pages/IntelligenceConsole';
 import Shell from './components/layout/Shell';
 
 
@@ -23,6 +24,11 @@ function App() {
             <Route path="/chat" element={
               <Shell mode="bento">
                 <StudioChat />
+              </Shell>
+            } />
+            <Route path="/intelligence" element={
+              <Shell mode="bento">
+                <IntelligenceConsole />
               </Shell>
             } />
             <Route path="/clients" element={

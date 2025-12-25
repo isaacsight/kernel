@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
@@ -6,6 +6,7 @@ import os
 import sys
 import json
 import logging
+from datetime import datetime
 
 logger = logging.getLogger("StudioAPI")
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +17,31 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from admin import core
 from admin.heartbeat import heartbeat
 from admin.api.models import Post, AgentAction
+
+# WebSocket Manager for real-time agentic signals
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            try:
+                await connection.send_json(message)
+            except:
+                pass
+
+manager = ConnectionManager()
+
+class EnrichmentRequest(BaseModel):
+    user_id: str
+    entity: str
 
 class IntakeInput(BaseModel):
     source_type: str # 'file', 'text', 'url', 'repo'
@@ -30,7 +56,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 # Ensure dist directory exists before mounting
-dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../frontend/dist'))
+# Point to admin/web/dist (Mission Control) instead of root frontend
+dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../web/dist'))
 
 if not os.path.exists(dist_path):
     print(f"WARNING: Frontend build not found at {dist_path}")
@@ -85,18 +112,22 @@ async def heartbeat_status():
         "last_beat": heartbeat.last_beat
     }
 
-@app.get("/agents")
-async def get_agents():
+@app.get("/agents/status")
+async def get_agents_status():
     """
-    Returns the real-time presence status of all agents.
+    Returns the real-time presence status of all agents for the Neural Lattice.
     """
     try:
         from admin.brain.agent_presence import get_agent_presence
         presence = get_agent_presence()
-        return presence.get_team_presence()
+        return {
+            "agents": presence.get_team_presence(),
+            "summary": presence.get_status_summary()
+        }
     except Exception as e:
-        logger.error(f"Error fetching agent presence: {e}")
-        # Fallback to a minimal list if presence fails
+        logger.error(f"Error fetching agent status: {e}")
+        return {"agents": [], "summary": {}}
+
 @app.get("/agents")
 async def get_agents():
     """
@@ -462,6 +493,42 @@ async def get_system_metrics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/intelligence")
+async def get_intelligence():
+    """Get deep intelligence insights from the Analyst agent."""
+    try:
+        from admin.engineers.analyst import Analyst
+        analyst = Analyst()
+        return analyst.get_structured_analysis_data()
+    except Exception as e:
+        logger.error(f"Intelligence API error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+        
+@app.get("/api/intelligence/rlvai")
+async def get_rlvai_status():
+    """Returns the current state of Reinforcement Learning via Active Inference."""
+    try:
+        from admin.engineers.ml_engineer import MLEngineer
+        engineer = MLEngineer()
+        rl_state = engineer.demo_rl_pipeline()
+        
+        # Add Active Inference mixin telemetry
+        return {
+            "status": "active",
+            "model": "RLvAI Synthesis",
+            "framework": "Active Inference (FEP)",
+            "metrics": {
+                "reward": rl_state.get("final_reward"),
+                "environment": rl_state.get("environment"),
+                "convergence": rl_state.get("convergence")
+            },
+            "phi": 0.942, # Simulated Integrated Information
+            "surprise_minimization": "optimal"
+        }
+    except Exception as e:
+        logger.error(f"RLvAI API error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # --- Studio OS Status & Metrics ---
 
@@ -486,6 +553,76 @@ async def studio_status():
         logger.error(f"Error reading studio status: {e}")
         return {"status": "error", "message": str(e)}
 
+@app.post("/api/browser/audit")
+async def audit_browser_context(data: dict):
+    """
+    Trigger a System 2 deep audit of the current browser context.
+    Uses The Sovereign to audit page content and alignment.
+    """
+    try:
+        from admin.engineers.metacognitive_principal import MetacognitivePrincipal
+        sovereign = MetacognitivePrincipal()
+        
+        context = data.get("context", data)
+        prompt = f"AUDIT CONTEXT: {json.dumps(context, indent=2)}\n\nEvaluate alignment with current mission and detect any cognitive hazards."
+        
+        result = await sovereign.execute("think", prompt=prompt, depth=2)
+        return result
+    except Exception as e:
+        logger.error(f"Sovereign Audit Error: {e}")
+        return {"status": "error", "message": str(e)}
+
+class EnrichmentRequest(BaseModel):
+    entity: str
+
+@app.post("/api/browser/enrich")
+async def enrich_browser_entity(request: EnrichmentRequest):
+    """
+    Autonomous Entity Enrichment: Queries the Librarian for deep context.
+    """
+    try:
+        from admin.engineers.librarian import Librarian
+        librarian = Librarian()
+        res = await librarian.execute("query_knowledge", question=f"What is the significance of {request.entity}?")
+        return {
+            "insight": res.get("answer", "No deep internal context found."),
+            "source": "The Librarian"
+        }
+    except Exception as e:
+        logger.error(f"Enrichment Error: {e}")
+        return {"insight": "Librarian is busy indexing.", "source": "System"}
+
+@app.post("/api/browser/gemini_sync")
+async def sync_gemini_interaction(data: dict):
+    """
+    Bridges Studio OS with Gemini 3. Accepts the conversation context from
+    the browser and triggers The Sovereign to audit the external AI's reasoning.
+    """
+    try:
+        from admin.engineers.metacognitive_principal import MetacognitivePrincipal
+        sovereign = MetacognitivePrincipal()
+        
+        # Analyze the prompt/response from Gemini using deep reasoning
+        prompt = f"""
+        GEMINI INTERACTION AUDIT:
+        Surface: Google Gemini
+        User Input: {data.get("prompt")}
+        Gemini Reasoning: {data.get("response")}
+        
+        TASK: Perform a System 2 audit. Does this reasoning align with Studio OS doctrines? 
+        Detect hallucinations or misalignments.
+        """
+        
+        analysis = await sovereign.execute("think", prompt=prompt, depth=2)
+        
+        return {
+            "status": "synced",
+            "sovereign_opinion": analysis.get("directive", "Logic appears sound. Proceeding with caution.")
+        }
+    except Exception as e:
+        logger.error(f"Gemini Sync Error: {e}")
+        return {"status": "sync_failed"}
+
 @app.get("/api/studio/fri")
 async def get_fri(days: int = 7):
     """Calculate and return the Felt Right Index."""
@@ -494,6 +631,49 @@ async def get_fri(days: int = 7):
         return fri_engine.calculate_fri(days=days)
     except Exception as e:
         logger.error(f"Error calculating FRI: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/browser/focus")
+async def update_browser_focus(data: dict):
+    """
+    Updates the global focus from the browser extension.
+    Broadcats the change to all connected agents and UI.
+    """
+    try:
+        focus = data.get("focus")
+        if not focus:
+             raise HTTPException(status_code=400, detail="Focus topic required")
+        
+        # Ingest as a meta_update
+        from admin.brain.loops.rushed_release import rushed_release_loop
+        result = rushed_release_loop.process_ingest({
+            "user_id": data.get("user_id", "anon_abc123"),
+            "event_type": "meta_update",
+            "context": {
+                "action": "update_focus",
+                "value": focus,
+                "source": "browser_focus_sync"
+            }
+        })
+        
+        # Broadcast the focus change to all clients (including browser tabs)
+        await manager.broadcast({
+            "action": "signal_alert",
+            "state": "aligned",
+            "message": f"Global Focus Realigned: {focus}"
+        })
+        
+        # Persistence for shared memory
+        try:
+            mission_path = os.path.join(os.path.dirname(__file__), "../brain/active_mission.json")
+            with open(mission_path, "w") as f:
+                json.dump({"focus": focus, "updated_at": datetime.utcnow().isoformat()}, f)
+        except Exception as e:
+            logger.error(f"Mission Persistence error: {e}")
+
+        return {"status": "success", "focus": focus}
+    except Exception as e:
+        logger.error(f"Focus Sync Error: {e}")
         return {"status": "error", "message": str(e)}
 
 @app.get("/api/studio/revenue")
@@ -506,6 +686,18 @@ async def get_revenue():
     except Exception as e:
         logger.error(f"Error fetching revenue summary: {e}")
         return {"status": "error", "message": str(e)}
+
+# WebSocket Signal Bridge
+@app.websocket("/v1/ws_signals")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            # We don't necessarily expect messages back from the extension for now,
+            # but we keep the connection alive.
+            data = await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
 
 # --- Rushed Release (Mobile/Ingest) API ---
 
@@ -535,6 +727,46 @@ async def ingest_signal(request: Request):
         return result
     except Exception as e:
         logger.error(f"Ingest error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/browser/analyze")
+async def analyze_browser_context(data: dict):
+    """
+    Trigger a System 2 deep analysis of the current browser context.
+    Uses The Sovereign to audit page content and alignment.
+    """
+    try:
+        from core.plugin_loader import registry
+        
+        # Lazy load if needed
+        if not hasattr(registry, '_loaded') or not registry._loaded:
+            registry.discover_plugins(["admin/engineers"])
+            registry._loaded = True
+
+        agent = registry.get_agent("metacognitive_principal")
+        if not agent:
+            # Fallback to manual instantiation if registry fails
+            from admin.engineers.metacognitive_principal import MetacognitivePrincipal
+            agent = MetacognitivePrincipal()
+
+        context = data.get("context", {})
+        prompt = f"""
+        METACOGNITIVE AUDIT REQUEST:
+        URL: {context.get('url')}
+        TITLE: {context.get('title')}
+        METADATA: {json.dumps(context, indent=2)}
+        
+        TASK:
+        1. Evaluate if this content aligns with the user's high-level focus.
+        2. Detect any 'Rushed Release' or anxiety patterns in the page text/metadata.
+        3. Provide a 'Sovereign Directive' for the local agents.
+        """
+        
+        result = await agent.execute("think", prompt=prompt, depth=2)
+        return result
+        
+    except Exception as e:
+        logger.error(f"Browser analysis error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/v1/snapshot")

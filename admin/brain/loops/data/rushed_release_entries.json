@@ -108,9 +108,10 @@
         "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
       },
       "state": {
-        "felt_right": null,
+        "felt_right": true,
         "overrides": 0,
-        "reviewed": false
+        "reviewed": true,
+        "reviewed_at": "2025-12-23T18:30:35.573923"
       },
       "context": {
         "original_url": "file:///Users/isaachernandez/blog%20design/docs/posts/extensions.html",
@@ -166,10 +167,258 @@
         "source": "terminal"
       },
       "created_at": "2025-12-17T23:50:57.334818"
+    },
+    {
+      "entry_id": "entry_1766514021_7",
+      "user_id": "anon_abc123",
+      "type": "research_request",
+      "classification": {
+        "pattern": "strategic_research",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "topic": "Future of Agentic Systems",
+        "source": "test_script"
+      },
+      "created_at": "2025-12-23T18:20:21.986641"
+    },
+    {
+      "entry_id": "entry_1766514182_8",
+      "user_id": "anon_abc123",
+      "type": "research_request",
+      "classification": {
+        "pattern": "strategic_research",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "topic": "Agents in the Browser",
+        "source": "extension_popup"
+      },
+      "created_at": "2025-12-23T18:23:02.539021"
+    },
+    {
+      "entry_id": "entry_1766514804_9",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "url": "https://active-inference.test",
+        "title": "A Study in Depth",
+        "bodyText": "This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. This is a long article about the Free Energy Principle. "
+      },
+      "created_at": "2025-12-23T18:33:24.005534"
+    },
+    {
+      "entry_id": "entry_1766515430_10",
+      "user_id": "anon_abc123",
+      "type": "research_request",
+      "classification": {
+        "pattern": "strategic_research",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "topic": "Future of Agentic Systems",
+        "source": "test_script"
+      },
+      "created_at": "2025-12-23T18:43:50.549984"
+    },
+    {
+      "entry_id": "entry_1766515481_11",
+      "user_id": "anon_abc123",
+      "type": "research_request",
+      "classification": {
+        "pattern": "strategic_research",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "topic": "Future of Agentic Systems",
+        "source": "test_script"
+      },
+      "created_at": "2025-12-23T18:44:41.701814"
+    },
+    {
+      "entry_id": "entry_1766516775_12",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "chrome://newtab/",
+        "title": "New Tab",
+        "note": "asda",
+        "source": "chrome_extension"
+      },
+      "created_at": "2025-12-23T19:06:15.422856"
+    },
+    {
+      "entry_id": "entry_1766516776_13",
+      "user_id": "anon_abc123",
+      "type": "research_request",
+      "classification": {
+        "pattern": "strategic_research",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "topic": "asdasd",
+        "source": "extension_popup"
+      },
+      "created_at": "2025-12-23T19:06:16.671300"
+    },
+    {
+      "entry_id": "entry_1766516830_14",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Google Search",
+        "url": "https://www.google.com/search?q=&sourceid=chrome&ie=UTF-8&udm=50&aep=48&cud=0&qsubts=1766516829820",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 60,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nImages\nVideos\nNews\nMore\nHi Isaac, what's on your mind today?\nWhat impact does the win over Jake Paul have on Anthony Joshua's career?\nCompare Adobe Photoshop with Affinity Photo\nHow can I use generative AI for visual content in Google Workspace?\nSearch Results",
+        "timestamp": 1766516830587
+      },
+      "created_at": "2025-12-23T19:07:10.643175"
+    },
+    {
+      "entry_id": "entry_1766516898_15",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "deep research studio os - Google Search",
+        "url": "https://www.google.com/search?q=deep+research+studio+os&udm=50",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 27,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nImages\nVideos\nNews\nMore\ndeep research studio os\nThinking\nSearch Results",
+        "timestamp": 1766516898747
+      },
+      "created_at": "2025-12-23T19:08:18.809902"
+    },
+    {
+      "entry_id": "entry_1766517479_16",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "chrome://extensions/?errors=niodmfnppfpnallhjadmcbpelhfjodpa",
+        "title": "Extensions",
+        "note": "Captured via context menu",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-23T19:17:59.951413"
+    },
+    {
+      "entry_id": "entry_1766696959_17",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://notebooklm.google.com/notebook/8d4e857e-7852-4cdd-8858-56d2f863b97a",
+        "title": "The Engineering Cognition of Google Antigravity - NotebookLM",
+        "note": "Captured via context menu",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-25T21:09:19.037941"
+    },
+    {
+      "entry_id": "entry_1766696962_18",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://notebooklm.google.com/notebook/8d4e857e-7852-4cdd-8858-56d2f863b97a",
+        "title": "The Engineering Cognition of Google Antigravity - NotebookLM",
+        "note": "systems",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-25T21:09:22.039469"
     }
   ],
   "pattern_counts": {
     "rushed_release": 6,
-    "moved_resource": 1
+    "moved_resource": 1,
+    "felt_wrong": 4
   }
 }

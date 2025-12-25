@@ -1,7 +1,7 @@
 # Does This Feel Right? - Brand & Design Guide
 
-> **Philosophy**: "The Soulful Architect."
-> A helpful tension between rigorous technical reality and deep human introspection. The studio is a laboratory for **Agentic Systems Engineering**—building the opinionated "nervous system" for hybrid teams—but heavily anchored in the human question: *"Does This Feel Right?"*
+> **Philosophy**: "The Zen Architect."
+> A balanced tension between rigorous technical precision and deep human 'Ma' (negative space). The studio is a laboratory for **Agentic Systems Engineering**—building the opinionated "nervous system" for hybrid teams—but anchored in the disciplined simplicity: *"Does This Feel Right?"*
 
 ## 1. Voice & Tone
 The brand voice bridges two distinct worlds: **The Engineer** and **The Philosopher**.
@@ -16,7 +16,7 @@ The brand voice bridges two distinct worlds: **The Engineer** and **The Philosop
 
 **Tone Guidelines:**
 - **Inquisitive**: Always asking the core question. Not purely declarative, but searching.
-- **High-Resolution**: Densely packed with information but presented with breathing room (Swiss Style).
+- **Zen Precision**: Minimalist, high-resolution information presented with intentional negative space (Ma).
 - **Transparent**: We "work with the garage door open." Logs, errors, and "retired moves" are public.
 - **Opinionated**: We are not a generic agency. We are an "Opinionated OS" with a specific worldview.
 
@@ -71,11 +71,19 @@ A disciplined pairing of Swiss-style sans-serif for clarity and coding monospace
 - `sm`: 14px
 - `xs`: 12px
 
-### Logo
- **The Gateway "D"**: A minimalist geometric D shape.
+### Official Asset
+
+| Asset | Preview | Use Case |
+|-------|---------|----------|
+| **The Mon Crest** | ![Zen Mon](promo_brand_hub/official_zen_mon.png) | Unified brand identity: logos, profile, and seals |
+
+### Logo Construction
+ **The Japanese Minimalist "D"**: A geometric mon crest.
 ```svg
-<path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
-<circle cx="12" cy="12" r="2" />
+<svg viewBox="0 0 24 24" fill="none" stroke="#66B56E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
+    <circle cx="12" cy="12" r="2" />
+</svg>
 ```
 
 ## 4. Design System

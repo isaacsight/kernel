@@ -11,13 +11,15 @@ It handles:
 import os
 import yaml
 import logging
-from typing import Dict, Any, Optional, List, Union
 from admin.brain.skills import SkillLoader
 from admin.config import config
+from admin.brain.memory_store import get_memory_store
+from admin.brain.active_inference import ActiveInferenceMixin
+from typing import Dict, Any, Optional, List, Union
 
 logger = logging.getLogger("BaseAgent")
 
-class BaseAgent:
+class BaseAgent(ActiveInferenceMixin):
     def __init__(self, agent_id: str):
         """
         Initialize the agent by loading its definition from the Brain.
@@ -28,6 +30,16 @@ class BaseAgent:
         self.agent_id = agent_id
         self.brain_path = os.path.join(config.BRAIN_DIR, 'agents', agent_id)
         
+        # Initialize Active Inference substrate
+        self.memory_store = get_memory_store()
+        try:
+            from admin.brain.model_router import get_model_router
+            self.model_router = get_model_router()
+        except:
+            self.model_router = None
+            
+        super().__init__(agent_id=agent_id, memory_store=self.memory_store, model_router=self.model_router)
+
         if not os.path.exists(self.brain_path):
             raise ValueError(f"Agent definition not found at {self.brain_path}")
             
@@ -41,7 +53,7 @@ class BaseAgent:
         self.skill_loader = SkillLoader(config.SKILLS_DIR) # Load all available definitions
         self.enabled_skills = self._load_enabled_skills()
         
-        logger.info(f"[{self.name}] Initialized from brain/agents/{agent_id}")
+        logger.info(f"[{self.name}] Initialized with Active Inference engine")
         
     def _load_profile(self) -> Dict[str, Any]:
         """Reads PROFILE.md frontmatter and content."""
@@ -91,6 +103,20 @@ class BaseAgent:
             prompt += "\n" + self.skill_loader.get_system_prompt_additions()
             
         return prompt
+
+    def decide(self, goal: str, context: str, potential_actions: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        High-level Decision Loop using Active Inference.
+        Selects the action that minimizes Expected Free Energy (G).
+        """
+        # 1. Update internal beliefs about the goal/context
+        self.update_beliefs("current_task", {"goal": goal}, context)
+        
+        # 2. Evaluate actions via EFE
+        best_action = self.select_action_via_efe(potential_actions)
+        
+        logger.info(f"[{self.name}] Active Inference decided: {best_action.get('type')} (EFE: {best_action.get('efe', 0):.2f})")
+        return best_action
 
     def run(self, input_text: str):
         """Standard execution entry point."""

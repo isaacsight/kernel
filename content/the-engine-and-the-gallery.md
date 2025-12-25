@@ -28,6 +28,15 @@ Feeds are linear; they flow like a river. But a studio needs a place where ideas
 *   **It is the Aesthetic:** A controlled environment where the design (typography, spacing, silence) reinforces the message.
 *   **It is the Hub:** The central point that ties together the newsletter, the projects, and the vision.
 
+## The Lab: Sentient Research
+Beyond the engine and the gallery lies **The Lab**. This is the private studio zone where the "Sentient OS" lives. It is no longer just a collection of scripts; it is an experimental research facility powered by a swarm of specialized agents.
+
+*   **Antigravity (Core Kernel):** The orchestrator. It manages the high-level intelligence, System 2 reasoning, and coordinates the other specialists.
+*   **Kernel Engineer (Hardware-Aware):** The bridge to the silicon. It ensures our local models (Llama, Gemma) are running at peak performance, optimized for the specific hardware of the studio.
+*   **The Intelligence Loop:** The Lab doesn't just create content; it researches its own effectiveness, refining its algorithms and expanding its capabilities in a recursive loop.
+
+This isn't just about building a website; it's about engineering an intelligence.
+
 ## The Loop
 The strategy is simple:
 1.  **Broadcast** via RSS to reach you where you are.

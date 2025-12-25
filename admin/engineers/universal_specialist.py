@@ -25,9 +25,11 @@ class UniversalSpecialist:
         self.domain = domain
         self.name = name if name else f"The {domain} Expert"
         self.router = get_model_router()
-        self.model = "gemini-2.0-flash" # Use fast model by default
+        from config import config
+        self.api_key = config.GEMINI_API_KEY
+        self.model_name = config.GEMINI_MODEL
         
-        logger.info(f"🎓 [Universal Specialist] Initialized: {self.name}")
+        logger.info(f"🎓 [Universal Specialist] Initialized: {self.name} with model {self.model_name}")
 
     def get_report(self, topic: str) -> str:
         """
@@ -62,14 +64,13 @@ class UniversalSpecialist:
         import google.generativeai as genai
         import time
         
-        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-        if not api_key:
+        if not self.api_key:
             return "Error: No Gemini API Key found."
             
-        genai.configure(api_key=api_key)
+        genai.configure(api_key=self.api_key)
         
-        # Using flash for speed/cost
-        model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_prompt)
+        # Using model from config
+        model = genai.GenerativeModel(self.model_name, system_instruction=system_prompt)
         
         retries = 3
         delay = 2

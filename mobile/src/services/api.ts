@@ -62,6 +62,17 @@ export const SystemService = {
     publish: async () => {
         const response = await api.post('/system/git/publish');
         return response.data;
+    },
+    uploadNote: async (content: string) => {
+        // We use the central intake endpoint for reliability
+        // We could also use the /command endpoint with "Note:" prefix
+        // but direct /api/intake is cleaner for "data"
+        const response = await api.post('/api/intake', {
+            source_type: "text",
+            content: content,
+            metadata: { source: "mobile_quick_note", intent: "note_capture" }
+        });
+        return response.data;
     }
 };
 

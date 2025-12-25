@@ -315,7 +315,7 @@ class ViralCoach:
         """
         # Force Gemini Flash for Zero Cost
         model = {
-            "selected": "gemini-2.0-flash",
+            "selected": config.GEMINI_MODEL,
             "provider": "google",
             "type": "cloud_free"
         }
@@ -386,7 +386,7 @@ class ViralCoach:
         
         # Force Gemini Flash for Zero Cost
         model = {
-            "selected": "gemini-2.0-flash",
+            "selected": config.GEMINI_MODEL,
             "provider": "google",
             "type": "cloud_free"
         }

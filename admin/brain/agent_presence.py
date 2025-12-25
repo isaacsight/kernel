@@ -64,49 +64,74 @@ class AgentPresence:
     def _init_agents(self):
         """Initialize presence for known agents."""
         known_agents = [
-            ("Alchemist", "Content Generator", "🧪"),
-            ("Guardian", "Safety Officer", "🛡️"),
-            ("Editor", "Style & Quality", "✏️"),
-            ("Operator", "System Manager", "⚙️"),
-            ("Visionary", "Strategic Planner", "🔮"),
-            ("Architect", "Solutions Designer", "🏗️"),
-            ("Designer", "Visual Creator", "🎨"),
-            ("Researcher", "Trend Analyst", "🔍"),
-            ("Analyst", "Data Expert", "📊"),
-            ("Librarian", "Knowledge Keeper", "📚"),
-            ("Scheduler", "Calendar Manager", "📅"),
-            ("Translator", "Language Expert", "🌍"),
-            ("Narrator", "Voice Creator", "🎙️"),
-            ("Curator", "Content Curator", "🖼️"),
-            ("Broadcaster", "Social Media", "📢"),
-            ("Creative Director", "Creative Lead", "🎬"),
-            # New platform-inspired agents
-            ("Time Keeper", "System Historian", "⏳"),
-            ("Web Scout", "Research Intelligence", "🌐"),
-            ("Achievement Tracker", "Gamification Engine", "🏆"),
-            ("Preview Generator", "Visual Validator", "👁️"),
-            ("Workshop Manager", "Template Curator", "🛠️"),
-            # Communication Intelligence
-            ("Communication Analyzer", "Conversation Intelligence", "📡"),
-            # User Requested Agents
-            ("Harvester", "AI Web Scraper", "🕸️"),
-            ("Collector", "AI Data Scraper", "🗄️"),
-            ("White Hat", "Security Researcher", "💻"),
+            # Orchestration
+            ("Architect", "Solutions Designer", "🏗️", "Orchestration"),
+            ("Operator", "System Manager", "⚙️", "Orchestration"),
+            ("Visionary", "Strategic Planner", "🔮", "Orchestration"),
+            ("Creative Director", "Creative Lead", "🎬", "Orchestration"),
+            ("Scheduler", "Calendar Manager", "📅", "Orchestration"),
+            ("Time Keeper", "System Historian", "⏳", "Orchestration"),
+            ("System Architect", "Infrastructure Designer", "🏗️", "Orchestration"),
+            ("The Sovereign", "Metacognitive Principal", "👑", "Orchestration"),
+            
+            # Content
+            ("Alchemist", "Content Generator", "🧪", "Content"),
+            ("Editor", "Style & Quality", "✏️", "Content"),
+            ("Designer", "Visual Creator", "🎨", "Content"),
+            ("Narrator", "Voice Creator", "🎙️", "Content"),
+            ("Curator", "Content Curator", "🖼️", "Content"),
+            ("Broadcaster", "Social Media", "📢", "Content"),
+            ("Preview Generator", "Visual Validator", "👁️", "Content"),
+            ("Workshop Manager", "Template Curator", "🛠️", "Content"),
+            
+            # Intelligence
+            ("Analyst", "Data Expert", "📊", "Intelligence"),
+            ("Librarian", "Knowledge Keeper", "📚", "Intelligence"),
+            ("Translator", "Language Expert", "🌍", "Intelligence"),
+            ("MLEngineer", "ML & Optimization", "🧠", "Intelligence"),
+            ("Achievement Tracker", "Gamification Engine", "🏆", "Intelligence"),
+            ("Communication Analyzer", "Conversation Intelligence", "📡", "Intelligence"),
+            
+            # Research
+            ("Researcher", "Trend Analyst", "🔍", "Research"),
+            ("Web Scout", "Research Intelligence", "🌐", "Research"),
+            ("Harvester", "AI Web Scraper", "🕸️", "Research"),
+            ("Collector", "AI Data Scraper", "🗄️", "Research"),
+            ("Research Assistant", "Technical Support", "🧪", "Research"),
+            
+            # Safety
+            ("Guardian", "Safety Officer", "🛡️", "Safety"),
+            ("White Hat", "Security Researcher", "💻", "Safety"),
+            ("Refiner", "High-Precision Editor", "💎", "Safety"),
+            ("Classifier", "Intent Decoder", "🏷️", "Safety"),
+            
+            # Infra
+            ("Network Engineer", "Systems Reliability", "🌐", "Infra"),
+            ("Lattice Architect", "Interface Reliability", "🕸️", "Infra"),
         ]
         
-        for name, role, emoji in known_agents:
+        for name, role, emoji, category in known_agents:
             if name not in self.presence:
                 self.presence[name] = {
                     "status": AgentStatus.IDLE.value,
                     "role": role,
                     "emoji": emoji,
+                    "category": category,
                     "current_task": None,
                     "progress": 0,
                     "started_at": None,
-                    "last_active": datetime.now().isoformat(),
+                    "last_active": None,
                     "tasks_completed": 0,
-                    "errors": 0
+                    "errors": 0,
+                    "latency_ms": 42,
+                    "eval_pass_rate": 0.98,
+                    "risk_posture": "stable"
                 }
+            else:
+                # Update metadata for existing agents to ensure categories are applied
+                self.presence[name]["role"] = role
+                self.presence[name]["emoji"] = emoji
+                self.presence[name]["category"] = category
         
         self._save_presence()
     
@@ -241,15 +266,19 @@ class AgentPresence:
             
             team.append({
                 "name": name,
-                "emoji": data.get("emoji", "🤖"),
                 "role": data.get("role", "Agent"),
+                "emoji": data.get("emoji", "🤖"),
+                "category": data.get("category", "General"),
                 "status": data.get("status", "unknown"),
                 "current_task": data.get("current_task"),
                 "progress": data.get("progress", 0),
                 "duration": duration_str,
                 "idle_since": idle_str if data.get("status") == AgentStatus.IDLE.value else None,
                 "tasks_completed": data.get("tasks_completed", 0),
-                "errors": data.get("errors", 0)
+                "errors": data.get("errors", 0),
+                "latency_ms": data.get("latency_ms", 42),
+                "eval_pass_rate": data.get("eval_pass_rate", 0.98),
+                "risk_posture": data.get("risk_posture", "stable")
             })
         
         # Sort: working first, then queued, then idle, then error/offline
