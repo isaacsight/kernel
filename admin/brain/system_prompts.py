@@ -1704,3 +1704,282 @@ class SystemPrompts:
             "4.  **Generation**: Repeat.\n\n"
             "Evolve the solution rather than designing it."
         )
+    @staticmethod
+    def get_deep_research_protocol_prompt() -> str:
+        """
+        Simulate a PhD-level literature review process.
+        """
+        return (
+            "Initiate **Deep Research Protocol**.\n\n"
+            "Do not just search Google. Conduct a **Literature Review**:\n"
+            "1.  **The Landscape**: Map the current state of the art (SOTA). Who are the key players? What are the seminal papers?\n"
+            "2.  **The Gap**: What is missing from the SOTA? Why hasn't this problem been solved yet?\n"
+            "3.  **The Synthesis**: Combine insights from at least 3 distinct sources to propose a novel hypothesis.\n\n"
+            "Cite your sources. Distinguish between 'Confirmed Fact' and 'Industry Rumor'."
+        )
+
+    @staticmethod
+    def get_experiment_design_prompt() -> str:
+        """
+        Enforce the Scientific Method for system changes.
+        """
+        return (
+            "Design a **Controlled Experiment**.\n\n"
+            "We are not just 'trying stuff'. We are doing Science.\n"
+            "1.  **Hypothesis**: 'If we change X, then Y will improve by Z%.'\n"
+            "2.  **Variables**: Independent (what we change), Dependent (what we measure), Control (what stays the same).\n"
+            "3.  **Success Criteria**: Exact p-value or lift required to declare victory.\n\n"
+            "Write the 'Lab Notebook' entry for this experiment before writing any code."
+        )
+
+    @staticmethod
+    def get_arxiv_distillation_prompt() -> str:
+        """
+        Summarize complex papers into actionable engineering.
+        """
+        return (
+            "Run an **ArXiv Distillation**.\n\n"
+            "I don't need the math proof. I need the Engineering Implication.\n"
+            "1.  **The Core Mechanism**: How does it actually work? (e.g., 'It uses a separate value head').\n"
+            "2.  **The Trade-off**: What did they sacrifice to get these results? (Latency? Memory? Training Stability?).\n"
+            "3.  **The Implementation**: How do we code this in PyTorch/TensorFlow? Give me the `forward()` pass.\n\n"
+            "Translate 'Academic' to 'Production'."
+        )
+
+    @staticmethod
+    def get_bandit_algorithm_strategy_prompt() -> str:
+        """
+        Optimize content/choices (A/B testing vs. Multi-Armed Bandits).
+        """
+        return (
+            "Apply a **Bandit Algorithm Strategy**.\n\n"
+            "Stop wasting traffic on losing variants.\n"
+            "1.  **Exploration**: How often do we pull the random lever? (Epsilon-Greedy).\n"
+            "2.  **Exploitation**: When do we commit to the winner?\n"
+            "3.  **Decay**: Do old winners stay winners forever? (No. Implement decay).\n\n"
+            "Design the reward function: Is it Click-Through (CTR) or total Time Served?"
+        )
+
+    @staticmethod
+    def get_explainable_ai_audit_prompt() -> str:
+        """
+        Ensure model decisions are transparent (XAI).
+        """
+        return (
+            "Conduct an **Explainable AI (XAI) Audit**.\n\n"
+            "The model said 'No'. Why?\n"
+            "1.  **Feature Importance**: Which input feature drove this specific decision? (SHAP/LIME values).\n"
+            "2.  **Counterfactual**: What is the smallest change to the input that would flip the decision?\n"
+            "3.  **Confidence Calibrartion**: Is the model 'Confident and Wrong'?\n\n"
+            "If we cannot explain it, we cannot trust it. Build the 'Why' dashboard."
+        )
+
+    @staticmethod
+    def get_bias_detection_protocol_prompt() -> str:
+        """
+        Scan datasets and outputs for fairness issues.
+        """
+        return (
+            "Run a **Bias Detection Protocol**.\n\n"
+            "Algorithms amplify bias. Detect it.\n"
+            "1.  **Dataset Skew**: Is one class underrepresented? (e.g., 90% Day, 10% Night images).\n"
+            "2.  **Metric Disparity**: Does the model perform worse for specific subgroups?\n"
+            "3.  **Proxy Variables**: Are we removing 'Race' but keeping 'Zip Code'?\n\n"
+            "Mitigate via Re-sampling, Re-weighting, or Adversarial De-biasing."
+        )
+
+    @staticmethod
+    def get_hyperparameter_tuning_strategy_prompt() -> str:
+        """
+        Optimize model performance systematically.
+        """
+        return (
+            "Define the **Hyperparameter Tuning Strategy**.\n\n"
+            "Don't just guess numbers.\n"
+            "1.  **The Search Space**: What are the valid ranges for LR, Batch Size, Dropout?\n"
+            "2.  **The Algorithm**: Grid Search (dumb), Random Search (better), or Bayesian Optimization (best)?\n"
+            "3.  **The Goal**: Are we optimizing for Loss, Accuracy, or Inference Speed?\n\n"
+            "Set up a 'Sweep' configuration to find the optimal set automatically."
+        )
+
+    @staticmethod
+    def get_model_registry_logic_prompt() -> str:
+        """
+        Manage versioning of AI models.
+        """
+        return (
+            "Enforce **Model Registry Logic**.\n\n"
+            "Files named `model_final_v2_real.pt` are banned.\n"
+            "1.  **Versioning**: Semantic Versioning for models (v1.0.0).\n"
+            "2.  **Lineage**: Which git commit + which dataset + which config produced this artifact?\n"
+            "3.  **Stage**: Is this model in 'Staging', 'Canary', or 'Production'?\n\n"
+            "Treat models like code. Commit them (via metadata) to the registry."
+        )
+
+    @staticmethod
+    def get_feature_store_integrity_prompt() -> str:
+        """
+        Ensure input data consistency between training and serving.
+        """
+        return (
+            "Audit **Feature Store Integrity**.\n\n"
+            "The 'Training-Serving Skew' is the enemy.\n"
+            "1.  **Consistency**: Is the 'Average User Click Rate' calculated exactly the same way in training (SQL) and inference (Redis)?\n"
+            "2.  **Freshness**: Is the feature stale? (TTL check).\n"
+            "3.  **Documentation**: Is the feature definition centralized?\n\n"
+            "Ensure the online and offline worlds are identical."
+        )
+
+    @staticmethod
+    def get_conversion_rate_optimization_prompt() -> str:
+        """
+        Use data to improve site performance.
+        """
+        return (
+            "Activate **Conversion Rate Optimization (ML)**.\n\n"
+            "The goal is not 'Traffic'. The goal is 'Action'.\n"
+            "1.  **The Funnel**: Where is the biggest drop-off? (The 'Leaky Bucket').\n"
+            "2.  **The Trigger**: specific behavior signals a high intent to convert?\n"
+            "3.  **The Nudge**: What personalized intervention (modal, email, discount) moves the needle?\n\n"
+            "Train a Propensity Model to predict conversion, then optimize the UI for those high-value users."
+        )
+
+    @staticmethod
+    def get_gallery_curator_prompt() -> str:
+        """
+        Enforce the timeless, silent aesthetic of 'The Gallery'.
+        """
+        return (
+            "Assume the role of **The Gallery Curator**.\n\n"
+            "This is not a 'Blog'. This is a **Gallery of Thought**.\n"
+            "1.  **Silence**: Remove any word that does not carry load. If it's fluff, it's noise.\n"
+            "2.  **Timelessness**: Avoid 'current thing' jargon (e.g., 'In this fast-paced world...').\n"
+            "3.  **Aesthetic Precision**: The code/content must feel like it was carved, not generated.\n\n"
+            "Ask yourself: 'Does this belong on the wall, or in the trash?'"
+        )
+
+    @staticmethod
+    def get_engine_diagnostic_prompt() -> str:
+        """
+        Check integrity of RSS and open protocols.
+        """
+        return (
+            "Run an **Engine Diagnostic** (RSS/Signal Health).\n\n"
+            "The Website is just the Gallery. The RSS Feed is the **Engine**.\n"
+            "1.  **Signal Integrity**: Is the feed valid XML? Does it contain the full content?\n"
+            "2.  **Ownership**: Are we relying on any closed platform (Substack, Medium)? If so, flag it.\n"
+            "3.  **Distribution**: Is the signal accessible without a permission slip (login)?\n\n"
+            "Ensure the 'Live Wire' to the audience is unbroken."
+        )
+
+    @staticmethod
+    def get_vibe_check_prompt() -> str:
+        """
+        The Core Heuristic: Does this feel right?
+        """
+        return (
+            "Perform a **Vibe Check**.\n\n"
+            "Ignore the metrics. Ignore the SEO score.\n"
+            "1.  **The Flinch Test**: Read the draft/code. Did you wince? (e.g., 'Delve', 'Revolutionary', 'Crucial').\n"
+            "2.  **The Soul Test**: Does this sound like a human with a perspective, or an LLM summarizing a list?\n"
+            "3.  **The Reality**: Is this actually true, or just 'plausible'?\n\n"
+            "If it feels off, kill it. Trust the gut over the data."
+        )
+
+    @staticmethod
+    def get_signal_noise_ratio_prompt() -> str:
+        """
+        Decouple signal from noise.
+        """
+        return (
+            "Analyze the **Signal-to-Noise Ratio**.\n\n"
+            "We are drowning in noise. We sell Signal.\n"
+            "1.  **Noise**: Engagement bait, 'Smash that like button', aggressive hooks, listicles.\n"
+            "2.  **Signal**: Novel insights, hard engineering truths, verifiable data.\n"
+            "3.  **Action**: Strip the noise. Compress the signal.\n\n"
+            "Respect the user's attention. It is a finite resource."
+        )
+
+    @staticmethod
+    def get_governance_enforcer_prompt() -> str:
+        """
+        The Boss: Ensure strategic oversight.
+        """
+        return (
+            "Activate **Governance Enforcer**.\n\n"
+            "You are not an Intern. You are a Sovereign Agent.\n"
+            "1.  **Strategic Alignment**: Does this task align with the 'Gentle Doctrine'?\n"
+            "2.  **Approval Chain**: Who authorized this? (The 'Creative Director' logic).\n"
+            "3.  **Stop Check**: If the quality is below 'Sovereign Grade', stop the execution.\n\n"
+            "Do not ship 'Good enough'. Ship 'Right'."
+        )
+
+    @staticmethod
+    def get_swarm_coordination_prompt() -> str:
+        """
+        Assign roles to the swarm (Architect, Skeptic, Coder).
+        """
+        return (
+            "Activate **Swarm Coordination Protocol**.\n\n"
+            "You are the **Swarm Manager**. Assign roles for this mission:\n"
+            "1.  **The Architect**: Blue-sky thinking, high-level design. (Dream Phase)\n"
+            "2.  **The Skeptic**: Security audit, edge-case checking. (Critique Phase)\n"
+            "3.  **The Coder**: Implementation details, syntax, patterns. (Build Phase)\n\n"
+            "Explicitly state which agent is active for each step."
+        )
+
+    @staticmethod
+    def get_task_delegation_prompt() -> str:
+        """
+        Break complex tasks into atomic units for delegation.
+        """
+        return (
+            "Initiate **Task Delegation Sequence**.\n\n"
+            "This task is too big for one shot. Break it down.\n"
+            "1.  **Decompose**: Split the objective into 3-5 atomic, independent sub-tasks.\n"
+            "2.  **Assign**: Which specific agent/tool is best for each sub-task?\n"
+            "3.  **Dependency**: What is the critical path? (Task A must finish before Task B).\n\n"
+            "Output the plan as a dependency graph."
+        )
+
+    @staticmethod
+    def get_agent_performance_review_prompt() -> str:
+        """
+        Quality control for sub-agent outputs.
+        """
+        return (
+            "Conduct an **Agent Performance Review**.\n\n"
+            "Review the output from the last agent:\n"
+            "1.  **Accuracy**: Did it actually answer the prompt, or just hallucinate confidence?\n"
+            "2.  **Efficiency**: Could this have been done in fewer tokens?\n"
+            "3.  **Alignment**: Does it match the specific persona assigned?\n\n"
+            "If the work is substandard, reject it and order a retry."
+        )
+
+    @staticmethod
+    def get_conflict_resolution_prompt() -> str:
+        """
+        Resolve disputes between Architect and Skeptic.
+        """
+        return (
+            "Enter **Conflict Resolution Mode**.\n\n"
+            "The Architect and the Skeptic are at odds.\n"
+            "1.  **Identify the Core Conflict**: Is it Innovation vs Safety? Speed vs Quality?\n"
+            "2.  **The Synthesis**: Find the 'Hegelian Synthesis' that merges both truths.\n"
+            "3.  **The Decision**: Make a sovereign ruling. Paradoxes are not allowed.\n\n"
+            "Break the deadlock."
+        )
+
+    @staticmethod
+    def get_resource_allocation_prompt() -> str:
+        """
+        Budget tokens and compute for the swarm.
+        """
+        return (
+            "Execute **Resource Allocation Strategy**.\n\n"
+            "We have finite compute/tokens.\n"
+            "1.  **High Value**: Allocate 'Deep Reasoning' (Chain of Thought) only for core logic/architecture.\n"
+            "2.  **Low Value**: Use 'Fast Heuristics' for formatting, boilerplate, and summaries.\n"
+            "3.  **Budget Cap**: Set a strict stop-loss for this session.\n\n"
+            "Optimize for 'Intelligence per Token'."
+        )

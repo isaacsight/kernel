@@ -548,5 +548,65 @@
                 "icon": "MessageCircle"
             }
         ]
+    },
+    {
+        "category": "Brand Protocol (DTFR)",
+        "prompts": [
+            {
+                "label": "GALLERY CURATOR",
+                "command": "Curate this content against the 'Gallery' aesthetic standards.",
+                "icon": "Frame"
+            },
+            {
+                "label": "ENGINE DIAGNOSTIC",
+                "command": "Run diagnostic on the RSS Engine and signal distribution.",
+                "icon": "Activity"
+            },
+            {
+                "label": "VIBE CHECK",
+                "command": "Perform a Vibe Check. Does this feel right?",
+                "icon": "Heart"
+            },
+            {
+                "label": "SIGNAL RATIO",
+                "command": "Analyze Signal-to-Noise ratio. Strip the noise.",
+                "icon": "BarChart2"
+            },
+            {
+                "label": "GOVERNANCE",
+                "command": "Enforce strategic governance oversight on this task.",
+                "icon": "Shield"
+            }
+        ]
+    },
+    {
+        "category": "Agent Manager (Batch 7)",
+        "prompts": [
+            {
+                "label": "SWARM COORDINATE",
+                "command": "Assign roles: Architect (Dream), Skeptic (Critique), Coder (Build).",
+                "icon": "Users"
+            },
+            {
+                "label": "DELEGATE TASK",
+                "command": "Break this task into atomic sub-tasks and delegate.",
+                "icon": "GitPullRequest"
+            },
+            {
+                "label": "PERFORMANCE REVIEW",
+                "command": "Audit the last output. precise accuracy check.",
+                "icon": "Clipboard"
+            },
+            {
+                "label": "RESOLVE CONFLICT",
+                "command": "Resolve dispute between Architect and Skeptic. Ruling mode.",
+                "icon": "Gavel"
+            },
+            {
+                "label": "RESOURCE BUDGET",
+                "command": "Allocate token budget for Deep Reasoning vs Fast Ops.",
+                "icon": "Cpu"
+            }
+        ]
     }
 ]

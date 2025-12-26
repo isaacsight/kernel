@@ -2453,4 +2453,9 @@ Trust no one. Verify everything.
             }
         ]
     }
-]
+]## Batch 5: Research & AI/ML Ops
+*(Refer to system_prompts.py for full text)*
+## Batch 6: Brand Protocol (Site Specific)
+*(Refer to system_prompts.py for full text)*
+## Batch 7: Agent Manager & Swarm Coordination
+*(Refer to system_prompts.py and  for implementation details)*

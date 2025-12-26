@@ -314,6 +314,75 @@ class CommandRouter:
                     doctrine = SystemPrompts.get_aesthetic_integrity_prompt()
                     first_impression = SystemPrompts.get_first_impression_audit_prompt()
                     task_description = f"{doctrine}\n{first_impression}\n\nTASK: {task_description}"
+
+                # --- BATCH 5: RESEARCH & ML HANDLERS ---
+                # Deep Research Protocol
+                elif "research" in task_description.lower() or "investigate" in task_description.lower() or "sota" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    doctrine = SystemPrompts.get_deep_research_protocol_prompt()
+                    task_description = f"{doctrine}\n\nTASK: {task_description}"
+
+                # Experiment Design
+                elif "experiment" in task_description.lower() or "hypothesis" in task_description.lower() or "a/b" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    doctrine = SystemPrompts.get_experiment_design_prompt()
+                    bandit = SystemPrompts.get_bandit_algorithm_strategy_prompt()
+                    task_description = f"{doctrine}\n{bandit}\n\nTASK: {task_description}"
+
+                # ArXiv/Paper Distillation
+                elif "paper" in task_description.lower() or "arxiv" in task_description.lower() or "summary" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    doctrine = SystemPrompts.get_arxiv_distillation_prompt()
+                    task_description = f"{doctrine}\n\nTASK: {task_description}"
+                
+                # ML/Model Audits
+                elif "model" in task_description.lower() or "training" in task_description.lower() or "hparams" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    xai = SystemPrompts.get_explainable_ai_audit_prompt()
+                    tuning = SystemPrompts.get_hyperparameter_tuning_strategy_prompt()
+                    task_description = f"{xai}\n{tuning}\n\nTASK: {task_description}"
+
+                # --- BATCH 6: BRAND PROTOCOL (DTFR) HANDLERS ---
+                # Gallery Curator (Aesthetic/Content)
+                elif "gallery" in task_description.lower() or "curate" in task_description.lower() or "timeless" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    curator = SystemPrompts.get_gallery_curator_prompt()
+                    task_description = f"{curator}\n\nTASK: {task_description}"
+
+                # Engine Diagnostic (RSS/Protocol)
+                elif "engine" in task_description.lower() or "rss" in task_description.lower() or "signal" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    diagnostic = SystemPrompts.get_engine_diagnostic_prompt()
+                    ratio = SystemPrompts.get_signal_noise_ratio_prompt()
+                    task_description = f"{diagnostic}\n{ratio}\n\nTASK: {task_description}"
+
+                # Vibe Check (Governance/Feel)
+                elif "vibe" in task_description.lower() or "feel" in task_description.lower() or "governance" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    vibe = SystemPrompts.get_vibe_check_prompt()
+                    governance = SystemPrompts.get_governance_enforcer_prompt()
+                    task_description = f"{vibe}\n{governance}\n\nTASK: {task_description}"
+
+                # --- BATCH 7: AGENT MANAGER HANDLERS ---
+                # Swarm Coordination (Manager)
+                elif "swarm" in task_description.lower() or "manager" in task_description.lower() or "coordinate" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    coordination = SystemPrompts.get_swarm_coordination_prompt()
+                    delegation = SystemPrompts.get_task_delegation_prompt()
+                    task_description = f"{coordination}\n{delegation}\n\nTASK: {task_description}"
+
+                # Performance Review (QA)
+                elif "review" in task_description.lower() or "performance" in task_description.lower() or "audit" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    review = SystemPrompts.get_agent_performance_review_prompt()
+                    task_description = f"{review}\n\nTASK: {task_description}"
+
+                # Conflict/Resource (High Level)
+                elif "conflict" in task_description.lower() or "budget" in task_description.lower() or "resource" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    conflict = SystemPrompts.get_conflict_resolution_prompt()
+                    resource = SystemPrompts.get_resource_allocation_prompt()
+                    task_description = f"{conflict}\n{resource}\n\nTASK: {task_description}"
                 
                 result = await agent.execute(task_description)
                 result_data = {"result": result}
