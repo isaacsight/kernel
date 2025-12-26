@@ -708,5 +708,170 @@
                 "icon": "Smartphone"
             }
         ]
+    },
+    {
+        "category": "Strategic Roadmap",
+        "prompts": [
+            {
+                "label": "FRONTIER CHECK",
+                "command": "Lane 1 (Agents): Status check on 'The Architect' and 'The Guardian'. Are they autonomous?",
+                "icon": "Cpu"
+            },
+            {
+                "label": "MVS AUDIT",
+                "command": "Lane 2 (Product): Audit current features against the 'Minimum Viable Studio' spec. What is missing?",
+                "icon": "Package"
+            },
+            {
+                "label": "TEAM ROLES",
+                "command": "Lane 3 (Org): Define the next key human role needed for the Frontier Team.",
+                "icon": "Users"
+            },
+            {
+                "label": "ALIGNMENT LENS",
+                "command": "Lane 4 (Ethics): Apply the 'Alignment Lens' to the current sprint backlog.",
+                "icon": "Eye"
+            },
+            {
+                "label": "NEXT HORIZON",
+                "command": "Generate the next 3 'Active Experiments' based on current findings.",
+                "icon": "Compass"
+            },
+            {
+                "label": "PIVOT SCAN",
+                "command": "Scan for strategic pivot points. Should we kill any current experiments?",
+                "icon": "Shuffle"
+            }
+        ]
+    },
+    {
+        "category": "Laboratory & R&D",
+        "prompts": [
+            {
+                "label": "HYPOTHESIS GEN",
+                "command": "Generate 3 testable hypotheses for the current Research Lane.",
+                "icon": "Flask"
+            },
+            {
+                "label": "ALCHEMIST TRANSMUTE",
+                "command": "Transmute this legacy code block into a Sovereign Agent pattern.",
+                "icon": "Zap"
+            },
+            {
+                "label": "DEEP RESEARCH",
+                "command": "Conduct deep recursive research on [Term]. Depth: 3.",
+                "icon": "Search"
+            },
+            {
+                "label": "ALIGNMENT LENS",
+                "command": "Apply the 'Does This Feel Right?' alignment lens to this feature.",
+                "icon": "Eye"
+            },
+            {
+                "label": "FRONTIER SIM",
+                "command": "Simulate a debate between The Architect and The Skeptic on this topic.",
+                "icon": "Users"
+            },
+            {
+                "label": "MIN VIABLE AUDIT",
+                "command": "Audit this mechanism against the 'Minimum Viable Studio' spec.",
+                "icon": "Clipboard"
+            },
+            {
+                "label": "ENTROPY MEASURE",
+                "command": "Calculate the thermodynamic entropy of the current system state.",
+                "icon": "Activity"
+            },
+            {
+                "label": "SYNAPTIC MAP",
+                "command": "Map the current context to the Synaptic Lattice visualization.",
+                "icon": "Share2"
+            },
+            {
+                "label": "FUTURE ARTIFACT",
+                "command": "Generate an artifact from the year 2030 describing this project's success.",
+                "icon": "Hexagon"
+            },
+            {
+                "label": "DOCTRINE BREACH",
+                "command": "Analyze the last action for potential breaches of the Gentle Doctrine.",
+                "icon": "Shield"
+            }
+        ]
+    },
+    {
+        "category": "Founder Strategy",
+        "prompts": [
+            {
+                "label": "PRODUCT STRATEGIST",
+                "command": "Act as an AI product strategist and extract 5 concrete product ideas from this homepage that a solo founder could ship in 4 weeks, based on the Studio OS, patterns, and 'what you can steal' sections.",
+                "icon": "Target"
+            },
+            {
+                "label": "AI NATIVE ROADMAP",
+                "command": "Given the Studio OS and patterns described here, outline a roadmap for turning my existing SaaS into an AI‑native product, broken into experiments that 'ship weekly' like this studio.",
+                "icon": "Map"
+            }
+        ]
+    },
+    {
+        "category": "Agent Architecture",
+        "prompts": [
+            {
+                "label": "FRONTIER TEAM DESIGN",
+                "command": "Using the Frontier Team, agent configurations, and Studio OS concepts linked on this site, design a small team of 3 agents (roles, tools, handoffs) to run my content pipeline end‑to‑end.",
+                "icon": "Users"
+            },
+            {
+                "label": "RESILIENT ARCHITECTURE",
+                "command": "Read the essays on Studio OS, Frontier Agents, and The Swarm, then propose a resilient architecture for my own agent system, including how to avoid 'legacy automation' fragility like the n8n webhook pattern mentioned.",
+                "icon": "Shield"
+            }
+        ]
+    },
+    {
+        "category": "Learning & Alignment",
+        "prompts": [
+            {
+                "label": "FEEL RIGHT CHECKLIST",
+                "command": "Turn the Alignment Lens, Invisible Architect, and To Be Witnessed essays into a checklist I can use to evaluate whether an AI feature in my product 'feels right' before launch.",
+                "icon": "CheckCircle"
+            },
+            {
+                "label": "2025 DOCTRINE",
+                "command": "Synthesize the featured essays (Chain‑of‑Visual‑Thought, The Shift, The Engine, The Tether, The Swarm) into a 10‑point doctrine for building AI products in 2025.",
+                "icon": "Book"
+            }
+        ]
+    },
+    {
+        "category": "Content & Brand",
+        "prompts": [
+            {
+                "label": "BRAND VOICE GUIDE",
+                "command": "Infer the brand voice from this homepage and the featured essays list, then create a style guide (tone, phrasing, metaphors, tab names) I can reuse for my own AI studio site.",
+                "icon": "Feather"
+            },
+            {
+                "label": "INFO ARCHITECTURE",
+                "command": "Using this site’s navigation (Studio, Snapshot, Products, Copilot, Log, Research, Patterns, Discipline, Structure, Brand), propose the information architecture for my own AI studio with one‑line descriptions per page.",
+                "icon": "Layout"
+            }
+        ]
+    },
+    {
+        "category": "Toolsmithing",
+        "prompts": [
+            {
+                "label": "RECOMMENDATION ENGINE",
+                "command": "Design a recommendation engine prompt that, given a user goal (learn, build, work with you), maps them to 3 specific essays or patterns from this site and explains why each was chosen.",
+                "icon": "Compass"
+            },
+            {
+                "label": "LIVING LAB RITUAL",
+                "command": "Treat this site as a 'living lab.' Propose a weekly ritual where an AI agent reads the latest posts, updates a Studio Snapshot, and suggests one new experiment to 'close the loop' between research and shipped artifacts.",
+                "icon": "Activity"
+            }
+        ]
     }
 ]

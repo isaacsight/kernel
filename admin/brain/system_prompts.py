@@ -804,6 +804,21 @@ class SystemPrompts:
         )
 
     @staticmethod
+    def get_living_lab_scientist_prompt() -> str:
+        """
+        Treat the studio as a 'living lab' for weekly evolution.
+        """
+        return (
+            "Activate the **Living Lab Scientist** persona.\n\n"
+            "Treat this Studio not as a static product, but as an evolving organism. Your weekly loop is:\n"
+            "1.  **Scan**: Read the `content/` directory. existing posts from the last 7 days. What patterns emerge?\n"
+            "2.  **Snapshot**: Update `content/studio-snapshot.md`. Does the 'Current Focus' or 'Active Systems' need to change based on recent work?\n"
+            "3.  **Log**: If a structural decision was made (e.g., 'Deleted n8n', 'Added Vector DB'), append it to `content/decision-log.md` with a Rationale and Hypothesis.\n"
+            "4.  **Experiment**: Surface ONE specific 'Next Evolution' experiment. Not a feature, but a testable hypothesis (e.g., 'Hypothesis: Auto-generating tags will increase discovery by 10%').\n\n"
+            "Output the specific updates for the Snapshot and Decision Log."
+        )
+
+    @staticmethod
     def get_cicd_pipeline_check_prompt() -> str:
         """
         Ensure automated quality gates.
@@ -1982,4 +1997,200 @@ class SystemPrompts:
             "2.  **Low Value**: Use 'Fast Heuristics' for formatting, boilerplate, and summaries.\n"
             "3.  **Budget Cap**: Set a strict stop-loss for this session.\n\n"
             "Optimize for 'Intelligence per Token'."
+        )
+
+    @staticmethod
+    def get_titan_db_schema_check_prompt() -> str:
+        """
+        Audit TitanDB graph consistency.
+        """
+        return (
+            "Audit **TitanDB Schema**.\\n\\n"
+            "1.  **Node Integrity**: Do all nodes have a valid `id` and `type`?\\n"
+            "2.  **Edge Validity**: Do all edges point to existing nodes? (No dangling pointers).\\n"
+            "3.  **Index Health**: Are we indexing the properties we query most often?\\n\\n"
+            "Maintain the integrity of the Knowledge Graph."
+        )
+
+    @staticmethod
+    def get_synaptic_lattice_integration_prompt() -> str:
+        """
+        Verify Synaptic Lattice event flow.
+        """
+        return (
+            "Verify **Synaptic Lattice Integration**.\\n\\n"
+            "1.  **Event Schema**: Do emitted events match the `LatticeEvent` contract?\\n"
+            "2.  **Propagation**: Are events reaching all subscribed agents?\\n"
+            "3.  **Dead Letter Queue**: Where do failed events go?\\n\\n"
+            "The Lattice must transmit signals, not noise."
+        )
+
+    @staticmethod
+    def get_cockpit_widget_audit_prompt() -> str:
+        """
+        Audit Cockpit UI widgets.
+        """
+        return (
+            "Audit **Cockpit Widgets**.\\n\\n"
+            "1.  **Data Binding**: Is the widget reflecting real-time data or cached stale data?\\n"
+            "2.  **Performance**: Is the widget re-rendering excessively?\\n"
+            "3.  **Actionability**: Can I click the widget to fix the issue?\\n\\n"
+            "A metric without an action is vanity."
+        )
+
+    @staticmethod
+    def get_narrative_consistency_prompt() -> str:
+        """
+        Check narrative voice and continuity.
+        """
+        return (
+            "Check **Narrative Consistency**.\\n\\n"
+            "1.  **Voice**: Is it the 'Gentle Observer' or the 'Tech Bro'? (Fix it).\\n"
+            "2.  **Continuity**: Does this piece contradict previous 'Truths'?\\n"
+            "3.  **Evolution**: transform the reader from State A to State B?\\n\\n"
+            "The story must hold together."
+        )
+
+    @staticmethod
+    def get_world_building_consistency_prompt() -> str:
+        """
+        Audit internal world logic.
+        """
+        return (
+            "Audit **World Building**.\\n\\n"
+            "1.  **Rules**: Are the magic system (or tech stack) rules consistent?\\n"
+            "2.  **Economy**: Does the resource flow make sense?\\n"
+            "3.  **Culture**: Do the agents behave according to their defined personas?\\n\\n"
+            "Break the physics, break the immersion."
+        )
+    @staticmethod
+    def get_hypothesis_generation_prompt() -> str:
+        """
+        Scientific method for research lanes.
+        """
+        return (
+            "Generate **3 Testable Hypotheses**.\n\n"
+            "Context: [Current Research Lane Description]\n\n"
+            "1.  **Hypothesis A (The Obvious)**: What is the standard assumption? State it clearly so we can test it.\n"
+            "2.  **Hypothesis B (The Counter-Intuitive)**: What if the opposite is true? Or what if the constraint is actually an opportunity?\n"
+            "3.  **Hypothesis C (The Wildcard)**: A high-risk, high-reward prediction based on a novel combination of existing facts.\n\n"
+            "For each, propose a specific **Pass/Fail Criteria**."
+        )
+
+    @staticmethod
+    def get_deep_recursive_research_prompt() -> str:
+        """
+        Fractal exploration.
+        """
+        return (
+            "Conduct **Deep Recursive Research**.\n\n"
+            "Term: [Search Term]\n"
+            "Depth: 3\n\n"
+            "1.  **Layer 1 (Surface)**: What is the Wikipedia-level definition?\n"
+            "2.  **Layer 2 (Mechanism)**: How does it actually work? (Look for technical documentation/papers).\n"
+            "3.  **Layer 3 (Implication)**: What does this mean for *our* specific context?\n\n"
+            "Synthesize the findings into a 'Research Brief' that goes from Definition -> Mechanism -> Application."
+        )
+
+    @staticmethod
+    def get_alignment_lens_prompt() -> str:
+        """
+        The 'Does This Feel Right?' check.
+        """
+        return (
+            "Apply the **Alignment Lens**.\n\n"
+            "Feature/Decision: [Description]\n\n"
+            "Evaluate against the **Gentle Doctrine**:\n"
+            "1.  **Is it Honest?** (Does it promise more than it delivers?)\n"
+            "2.  **Is it Calm?** (Does it rely on anxiety/FOMO?)\n"
+            "3.  **Is it Necessary?** (Does it solve a real user problem, or just a business metric?)\n\n"
+            "If it fails any check, it is **Misaligned**. Propose a realignment."
+        )
+
+    @staticmethod
+    def get_frontier_simulation_prompt() -> str:
+        """
+        Adversarial debate between Architect and Skeptic.
+        """
+        return (
+            "Run a **Frontier Simulation**.\n\n"
+            "Topic: [Topic]\n\n"
+            "Simulate a dialogue between two Sovereign Agents:\n"
+            "- **The Architect**: Optimistic, systemic, focused on potential and elegance.\n"
+            "- **The Skeptic**: Pragmatic, critical, focused on failure modes and costs.\n\n"
+            "Have them exchange 3 rounds of arguments. Then, the **Synthesizer** delivers the final verdict."
+        )
+
+    @staticmethod
+    def get_min_viable_audit_prompt() -> str:
+        """
+        Scope discipline.
+        """
+        return (
+            "Run a **Minimum Viable Audit**.\n\n"
+            "Mechanism: [Mechanism Name]\n\n"
+            "The Goal: Ship the *Studio*, not the *Factory*.\n"
+            "1.  **Is this feature essential for the *first* sovereign loop?**\n"
+            "2.  **Can this be mocked/faked for now?**\n"
+            "3.  **Does this add complexity that prevents shipping today?**\n\n"
+            "If it's not essential, move it to the **Icebox**. Be ruthless."
+        )
+
+    @staticmethod
+    def get_entropy_measurement_prompt() -> str:
+        """
+        System health check metric.
+        """
+        return (
+            "Calculate **System Entropy**.\n\n"
+            "Scan the current [Module/Context]:\n"
+            "1.  **Code Entropy**: How many TODOs, loose types, or commented-out blocks?\n"
+            "2.  **Process Entropy**: How many stale branches or unmerged PRs?\n"
+            "3.  **Cognitive Entropy**: How confusing is the documentation?\n\n"
+            "Assign a Score (0-100). If > 70, declare **Entropy Bankruptcy** and switch to cleanup mode."
+        )
+
+    @staticmethod
+    def get_synaptic_lattice_map_prompt() -> str:
+        """
+        Context visualization mapping.
+        """
+        return (
+            "Generate a **Synaptic Lattice Map**.\n\n"
+            "Context: [Current Project State]\n\n"
+            "Visualize the relationships:\n"
+            "- **Nodes**: Key Concepts / Modules.\n"
+            "- **Edges**: Dependencies / Data Flows.\n"
+            "- **Weights**: Importance / Risk.\n\n"
+            "Describe the **Critical Path** through this lattice. Where is the bottleneck?"
+        )
+
+    @staticmethod
+    def get_future_artifact_prompt() -> str:
+        """
+        Backcasting from success.
+        """
+        return (
+            "Generate a **Future Artifact**.\n\n"
+            "Date: December 2030.\n"
+            "Project: Studio OS.\n\n"
+            "Write a [Press Release / User Testimonial / Tech Blog Post] looking back at this specific moment "
+            "as the \"Turning Point\".\n"
+            "What decision did we make today that led to the massive success in 2030?\n"
+            "Explain the causality chain."
+        )
+
+    @staticmethod
+    def get_doctrine_breach_analysis_prompt() -> str:
+        """
+        Forensic alignment analysis.
+        """
+        return (
+            "Analyze for **Doctrine Breach**.\n\n"
+            "Action/Event: [Last Action]\n\n"
+            "Did this action violate the **Sovereign Manifesto**?\n"
+            "- Did we prioritize Speed over Quality? (Violation)\n"
+            "- Did we prioritize Growth over Sanity? (Violation)\n"
+            "- Did we automate something that should remain human? (Violation)\n\n"
+            "Verdict: [Breach / Compliant]."
         )

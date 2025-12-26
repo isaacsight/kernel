@@ -7,6 +7,7 @@ Enhanced with Communication Analyzer integration for logging and insights.
 import os
 import json
 import logging
+import asyncio
 import time
 import google.generativeai as genai
 from typing import Dict, List, Any, Optional
@@ -83,7 +84,20 @@ class CommandRouter:
         
         # Remote Node
         self.node = RemoteNode(config.STUDIO_NODE_URL) if config.STUDIO_NODE_URL else None
-        
+
+        # Dispatch Map
+        self.action_handlers = {
+            "generate_post": self._handle_generate_post,
+            "publish": self._handle_publish,
+            "status": self._handle_status,
+            "research": self._handle_research,
+            "mobile_handover": self._handle_mobile_handover,
+            "system_control": self._handle_system_control,
+            "code": self._handle_code,
+            "capture_note": self._handle_capture_note,
+            "reflect": self._handle_reflect,
+            "rl_optimize": self._handle_rl_optimize
+        }
     def route(self, user_input: str) -> Dict[str, Any]:
         """
         Uses LLM to analyze user input and determine the best course of action.
@@ -229,7 +243,7 @@ class CommandRouter:
     
     async def execute(self, routed_command: Dict) -> Dict[str, Any]:
         """
-        Executes the routed command.
+        Executes the routed command using the dispatch map.
         """
         if not routed_command.get("success"):
             return routed_command
@@ -249,175 +263,16 @@ class CommandRouter:
             
         # Execute Action
         try:
+            handler = self.action_handlers.get(action)
             result_data = {}
             
-            if action == "generate_post":
-                from admin.core import generate_ai_post
-                
-                topic = params.get("topic", "General")
-                # We use the core function to ensure all checks (Guardian, FactChecker) run
-                filename = generate_ai_post(topic)
-                result_data = {"filename": filename, "preview": f"Generated post about {topic}"}
-                
-            elif action == "publish":
-                from admin.core import publish_git
-                msg = publish_git()
-                result_data = {"status": msg}
-                
-            elif action == "status":
-                from admin.core import ServerManager
-                from admin.brain.collective_intelligence import get_collective_intelligence
-                server = ServerManager()
-                ci = get_collective_intelligence()
-                result_data = {
-                    "server_status": server.get_status(),
-                    "team_status": ci.get_team_status()
-                }
-                
-            elif action == "research":
-                 # Use Remote Node for Research if available (often better for isolation/tools)
-                 if self.node:
-                     return self.node.execute_agent("Researcher", f"Research {params.get('query', 'trends')}")
-                 result_data = {"info": "Research agent not fully linked yet."}
-
-            elif action == "mobile_handover":
-                from admin.engineers.operator import Operator
-                op = Operator()
-                result_data = await op.execute("bridge_to_mobile", **params)
-                
-            elif action == "system_control":
-                from admin.engineers.operator import Operator
-                op = Operator()
-                # If content is provided, it might be a direct command to run
-                if params.get('command'):
-                    result_data = await op.execute("run_command", command=params['command'])
+            if handler:
+                if asyncio.iscoroutinefunction(handler):
+                    result_data = await handler(params, routed_command)
                 else:
-                    result_data = await op.execute("system_telemetry", **params)
-
-            elif action == "code":
-                from admin.engineers.antigravity_engineer import AntigravityEngineer
-                agent = AntigravityEngineer()
-                task_description = params.get('task', routed_command.get('original_input', ''))
-                
-                # --- SOVEREIGN PROMPT INJECTION ---
-                # Check for Entropy/Refactor
-                if "entropy" in task_description.lower() or "refactor" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    doctrine = SystemPrompts.get_entropy_reduction_prompt()
-                    task_description = f"{doctrine}\n\nTASK: {task_description}"
-
-                # Check for UX/Design Audit
-                # Expanded keywords to catch specific UI audits (color, mobile, motion, etc.)
-                design_keywords = ["aesthetic", "design", "ux", "ui", "color", "mobile", "layout", "typography", "motion", "animation", "visual"]
-                if any(k in task_description.lower() for k in design_keywords):
-                    from admin.brain.system_prompts import SystemPrompts
-                    doctrine = SystemPrompts.get_aesthetic_integrity_prompt()
-                    first_impression = SystemPrompts.get_first_impression_audit_prompt()
-                    task_description = f"{doctrine}\n{first_impression}\n\nTASK: {task_description}"
-
-                # --- BATCH 5: RESEARCH & ML HANDLERS ---
-                # Deep Research Protocol
-                elif "research" in task_description.lower() or "investigate" in task_description.lower() or "sota" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    doctrine = SystemPrompts.get_deep_research_protocol_prompt()
-                    task_description = f"{doctrine}\n\nTASK: {task_description}"
-
-                # Experiment Design
-                elif "experiment" in task_description.lower() or "hypothesis" in task_description.lower() or "a/b" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    doctrine = SystemPrompts.get_experiment_design_prompt()
-                    bandit = SystemPrompts.get_bandit_algorithm_strategy_prompt()
-                    task_description = f"{doctrine}\n{bandit}\n\nTASK: {task_description}"
-
-                # ArXiv/Paper Distillation
-                elif "paper" in task_description.lower() or "arxiv" in task_description.lower() or "summary" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    doctrine = SystemPrompts.get_arxiv_distillation_prompt()
-                    task_description = f"{doctrine}\n\nTASK: {task_description}"
-                
-                # ML/Model Audits
-                elif "model" in task_description.lower() or "training" in task_description.lower() or "hparams" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    xai = SystemPrompts.get_explainable_ai_audit_prompt()
-                    tuning = SystemPrompts.get_hyperparameter_tuning_strategy_prompt()
-                    task_description = f"{xai}\n{tuning}\n\nTASK: {task_description}"
-
-                # --- BATCH 6: BRAND PROTOCOL (DTFR) HANDLERS ---
-                # Gallery Curator (Aesthetic/Content)
-                elif "gallery" in task_description.lower() or "curate" in task_description.lower() or "timeless" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    curator = SystemPrompts.get_gallery_curator_prompt()
-                    task_description = f"{curator}\n\nTASK: {task_description}"
-
-                # Engine Diagnostic (RSS/Protocol)
-                elif "engine" in task_description.lower() or "rss" in task_description.lower() or "signal" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    diagnostic = SystemPrompts.get_engine_diagnostic_prompt()
-                    ratio = SystemPrompts.get_signal_noise_ratio_prompt()
-                    task_description = f"{diagnostic}\n{ratio}\n\nTASK: {task_description}"
-
-                # Vibe Check (Governance/Feel)
-                elif "vibe" in task_description.lower() or "feel" in task_description.lower() or "governance" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    vibe = SystemPrompts.get_vibe_check_prompt()
-                    governance = SystemPrompts.get_governance_enforcer_prompt()
-                    task_description = f"{vibe}\n{governance}\n\nTASK: {task_description}"
-
-                # --- BATCH 7: AGENT MANAGER HANDLERS ---
-                # Swarm Coordination (Manager)
-                elif "swarm" in task_description.lower() or "manager" in task_description.lower() or "coordinate" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    coordination = SystemPrompts.get_swarm_coordination_prompt()
-                    delegation = SystemPrompts.get_task_delegation_prompt()
-                    task_description = f"{coordination}\n{delegation}\n\nTASK: {task_description}"
-
-                # Performance Review (QA)
-                elif "review" in task_description.lower() or "performance" in task_description.lower() or "audit" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    review = SystemPrompts.get_agent_performance_review_prompt()
-                    task_description = f"{review}\n\nTASK: {task_description}"
-
-                # Conflict/Resource (High Level)
-                elif "conflict" in task_description.lower() or "budget" in task_description.lower() or "resource" in task_description.lower():
-                    from admin.brain.system_prompts import SystemPrompts
-                    conflict = SystemPrompts.get_conflict_resolution_prompt()
-                    resource = SystemPrompts.get_resource_allocation_prompt()
-                    task_description = f"{conflict}\n{resource}\n\nTASK: {task_description}"
-                
-                result = await agent.execute(task_description)
-                result_data = {"result": result}
-            
-            elif action == "capture_note":
-                from admin.brain.intake import get_intake_manager
-                manager = get_intake_manager()
-                content = params.get("content") or routed_command.get("original_input", "")
-                # Strip "Note:" prefix if present
-                if content.lower().startswith("note:"):
-                    content = content[5:].strip()
-                
-                intake_id = manager.ingest(
-                    source_type="text",
-                    content=content,
-                    metadata={"source": "mobile_bridge", "intent": "note_capture"}
-                )
-                result_data = {"intake_id": intake_id, "status": "captured"}
-                
-            elif action == "reflect":
-                # Route to the Reflection agent (to be created) or Librarian fallback
-                try:
-                    from admin.engineers.reflection_agent import ReflectionAgent
-                    agent = ReflectionAgent()
-                    result_data = await agent.execute("summarize_recent_notes", **params)
-                except ImportError:
-                    agent = Librarian()
-                    result_data = await agent.execute("query_knowledge", question="Summarize my most recent notes and thoughts.")
-
-            elif action == "rl_optimize":
-                from admin.engineers.ml_engineer import MLEngineer
-                engineer = MLEngineer()
-                # Run the RL demo pipeline as the optimization step
-                result_data = engineer.demo_rl_pipeline()
-                response_text = f"RLvAI Intelligence Layer activated. Optimization Result: {result_data.get('final_reward', 0):.2f} Reward across {result_data.get('environment')}."
+                    result_data = handler(params, routed_command)
+            else:
+                 logger.warning(f"No handler found for action: {action}")
 
             # Failover / Relay check: If action isn't handled locally or explicitly requested remote
             if not result_data and params.get("remote") and self.node:
@@ -438,6 +293,156 @@ class CommandRouter:
                 "success": False,
                 "message": f"I tried to {action}, but something went wrong: {str(e)}"
             }
+
+    # --- Action Handlers ---
+
+    def _handle_generate_post(self, params, cmd):
+        from admin.core import generate_ai_post
+        topic = params.get("topic", "General")
+        filename = generate_ai_post(topic)
+        return {"filename": filename, "preview": f"Generated post about {topic}"}
+
+    def _handle_publish(self, params, cmd):
+        from admin.core import publish_git
+        msg = publish_git()
+        return {"status": msg}
+
+    def _handle_status(self, params, cmd):
+        from admin.core import ServerManager
+        from admin.brain.collective_intelligence import get_collective_intelligence
+        server = ServerManager()
+        ci = get_collective_intelligence()
+        return {
+            "server_status": server.get_status(),
+            "team_status": ci.get_team_status()
+        }
+
+    def _handle_research(self, params, cmd):
+        if self.node:
+            return self.node.execute_agent("Researcher", f"Research {params.get('query', 'trends')}")
+        return {"info": "Research agent not fully linked yet."}
+
+    async def _handle_mobile_handover(self, params, cmd):
+        from admin.engineers.operator import Operator
+        op = Operator()
+        return await op.execute("bridge_to_mobile", **params)
+
+    async def _handle_system_control(self, params, cmd):
+        from admin.engineers.operator import Operator
+        op = Operator()
+        if params.get('command'):
+            return await op.execute("run_command", command=params['command'])
+        else:
+            return await op.execute("system_telemetry", **params)
+
+    async def _handle_code(self, params, cmd):
+        from admin.engineers.antigravity_engineer import AntigravityEngineer
+        agent = AntigravityEngineer()
+        task_description = params.get('task', cmd.get('original_input', ''))
+        
+        # Inject Sovereign Prompts
+        task_description = self._inject_sovereign_prompts(task_description)
+        
+        result = await agent.execute(task_description)
+        return {"result": result}
+
+    def _handle_capture_note(self, params, cmd):
+        from admin.brain.intake import get_intake_manager
+        manager = get_intake_manager()
+        content = params.get("content") or cmd.get("original_input", "")
+        if content.lower().startswith("note:"):
+            content = content[5:].strip()
+        
+        intake_id = manager.ingest(
+            source_type="text",
+            content=content,
+            metadata={"source": "mobile_bridge", "intent": "note_capture"}
+        )
+        return {"intake_id": intake_id, "status": "captured"}
+
+    async def _handle_reflect(self, params, cmd):
+        try:
+            from admin.engineers.reflection_agent import ReflectionAgent
+            agent = ReflectionAgent()
+            return await agent.execute("summarize_recent_notes", **params)
+        except ImportError:
+            # Fallback
+            return {"info": "ReflectionAgent not installed."}
+
+    def _handle_rl_optimize(self, params, cmd):
+        from admin.engineers.ml_engineer import MLEngineer
+        engineer = MLEngineer()
+        return engineer.demo_rl_pipeline()
+
+    def _inject_sovereign_prompts(self, task_description: str) -> str:
+        """
+        Injects specific system prompts based on keywords in the task description.
+        This is the "Kinetic Prompt" layer.
+        """
+        task_lower = task_description.lower()
+        
+        # 1. Entropy / Refactor
+        if "entropy" in task_lower or "refactor" in task_lower:
+            from admin.brain.system_prompts import SystemPrompts
+            return f"{SystemPrompts.get_entropy_reduction_prompt()}\\n\\nTASK: {task_description}"
+
+        # 2. UX / Design / Aesthetic
+        design_keywords = ["aesthetic", "design", "ux", "ui", "color", "mobile", "layout", "typography", "motion", "animation", "visual"]
+        if any(k in task_lower for k in design_keywords):
+            from admin.brain.system_prompts import SystemPrompts
+            return f"{SystemPrompts.get_aesthetic_integrity_prompt()}\\n{SystemPrompts.get_first_impression_audit_prompt()}\\n\\nTASK: {task_description}"
+
+        # 3. Deep Research
+        if any(k in task_lower for k in ["research", "investigate", "sota"]):
+            from admin.brain.system_prompts import SystemPrompts
+            return f"{SystemPrompts.get_deep_research_protocol_prompt()}\\n\\nTASK: {task_description}"
+
+        # 4. Experiment / Hypothesis
+        if any(k in task_lower for k in ["experiment", "hypothesis", "a/b"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_experiment_design_prompt()}\\n{SystemPrompts.get_bandit_algorithm_strategy_prompt()}\\n\\nTASK: {task_description}"
+
+        # 5. Paper / ArXiv
+        if any(k in task_lower for k in ["paper", "arxiv", "summary"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_arxiv_distillation_prompt()}\\n\\nTASK: {task_description}"
+
+        # 6. ML / Model
+        if any(k in task_lower for k in ["model", "training", "hparams"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_explainable_ai_audit_prompt()}\\n{SystemPrompts.get_hyperparameter_tuning_strategy_prompt()}\\n\\nTASK: {task_description}"
+
+        # 7. Gallery / Curate
+        if any(k in task_lower for k in ["gallery", "curate", "timeless"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_gallery_curator_prompt()}\\n\\nTASK: {task_description}"
+
+        # 8. Engine / Signal
+        if any(k in task_lower for k in ["engine", "rss", "signal"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_engine_diagnostic_prompt()}\\n{SystemPrompts.get_signal_noise_ratio_prompt()}\\n\\nTASK: {task_description}"
+
+        # 9. Vibe / Governance
+        if any(k in task_lower for k in ["vibe", "feel", "governance"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_vibe_check_prompt()}\\n{SystemPrompts.get_governance_enforcer_prompt()}\\n\\nTASK: {task_description}"
+
+        # 10. Swarm / Management
+        if any(k in task_lower for k in ["swarm", "manager", "coordinate"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_swarm_coordination_prompt()}\\n{SystemPrompts.get_task_delegation_prompt()}\\n\\nTASK: {task_description}"
+
+        # 11. Review / Audit
+        if any(k in task_lower for k in ["review", "performance", "audit"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_agent_performance_review_prompt()}\\n\\nTASK: {task_description}"
+
+        # 12. Conflict / Resource
+        if any(k in task_lower for k in ["conflict", "budget", "resource"]):
+             from admin.brain.system_prompts import SystemPrompts
+             return f"{SystemPrompts.get_conflict_resolution_prompt()}\\n{SystemPrompts.get_resource_allocation_prompt()}\\n\\nTASK: {task_description}"
+
+        return task_description
 
 # Singleton
 _router = None

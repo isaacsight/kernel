@@ -1,7 +1,7 @@
 # Sovereign Prompts Library
 
 **Generated on:** 2025-12-25 15:55:47
-**Total Prompts:** 121
+**Total Prompts:** 131
 
 ---
 
@@ -1902,6 +1902,82 @@ Trust no one. Verify everything.
 
 ---
 
+## 122. TitanDB Schema Check
+_Graph consistency._
+
+```markdown
+Audit **TitanDB Schema**.
+
+1.  **Node Integrity**: Do all nodes have a valid `id` and `type`?
+2.  **Edge Validity**: Do all edges point to existing nodes? (No dangling pointers).
+3.  **Index Health**: Are we indexing the properties we query most often?
+
+Maintain the integrity of the Knowledge Graph.
+```
+
+---
+
+## 123. Synaptic Lattice Integration
+_Event-driven architecture._
+
+```markdown
+Verify **Synaptic Lattice Integration**.
+
+1.  **Event Schema**: Do emitted events match the `LatticeEvent` contract?
+2.  **Propagation**: Are events reaching all subscribed agents?
+3.  **Dead Letter Queue**: Where do failed events go?
+
+The Lattice must transmit signals, not noise.
+```
+
+---
+
+## 124. Cockpit Widget Audit
+_Operational visibility._
+
+```markdown
+Audit **Cockpit Widgets**.
+
+1.  **Data Binding**: Is the widget reflecting real-time data or cached stale data?
+2.  **Performance**: Is the widget re-rendering excessively?
+3.  **Actionability**: Can I click the widget to fix the issue?
+
+A metric without an action is vanity.
+```
+
+---
+
+## 125. Narrative Consistency
+_Story arc validation._
+
+```markdown
+Check **Narrative Consistency**.
+
+1.  **Voice**: Is it the 'Gentle Observer' or the 'Tech Bro'? (Fix it).
+2.  **Continuity**: Does this piece contradict previous 'Truths'?
+3.  **Evolution**: transform the reader from State A to State B?
+
+The story must hold together.
+```
+
+---
+
+## 126. World Building Consistency
+_Internal logic._
+
+```markdown
+Audit **World Building**.
+
+1.  **Rules**: Are the magic system (or tech stack) rules consistent?
+2.  **Economy**: Does the resource flow make sense?
+3.  **Culture**: Do the agents behave according to their defined personas?
+
+Break the physics, break the immersion.
+```
+
+---
+
+
 [
     {
         "category": "Governance & Protocol",
@@ -2459,3 +2535,179 @@ Trust no one. Verify everything.
 *(Refer to system_prompts.py for full text)*
 ## Batch 7: Agent Manager & Swarm Coordination
 *(Refer to system_prompts.py and  for implementation details)*
+
+---
+
+## 122. Hypothesis Generator
+_Scientific method for research lanes._
+
+```markdown
+Generate **3 Testable Hypotheses**.
+
+Context: [Current Research Lane Description]
+
+1.  **Hypothesis A (The Obvious)**: What is the standard assumption? State it clearly so we can test it.
+2.  **Hypothesis B (The Counter-Intuitive)**: What if the opposite is true? Or what if the constraint is actually an opportunity?
+3.  **Hypothesis C (The Wildcard)**: A high-risk, high-reward prediction based on a novel combination of existing facts.
+
+For each, propose a specific **Pass/Fail Criteria**.
+```
+
+---
+
+## 123. Alchemist Transmutation
+_Refactor legacy code into Sovereign Patterns._
+
+```markdown
+Perform an **Alchemist Transmutation**.
+
+Target: [Legacy Code Block/File]
+
+1.  **Analyze**: Identify the 'Lead' (Imperative, Fragile, opaque logic).
+2.  **Purify**: Extract the core business logic from the implementation details.
+3.  **Transmute**: Rewrite using the **Sovereign Agent Pattern**:
+    - **Explicit State**: No hidden side effects.
+    - **Telemetry**: It must emit its internal state.
+    - **Resilience**: It must handle failure as a valid state.
+
+Output the Transmuted code.
+```
+
+---
+
+## 124. Deep Recursive Research
+_Fractal exploration._
+
+```markdown
+Conduct **Deep Recursive Research**.
+
+Term: [Search Term]
+Depth: 3
+
+1.  **Layer 1 (Surface)**: What is the Wikipedia-level definition?
+2.  **Layer 2 (Mechanism)**: How does it actually work? (Look for technical documentation/papers).
+3.  **Layer 3 (Implication)**: What does this mean for *our* specific context?
+
+Synthesize the findings into a 'Research Brief' that goes from Definition -> Mechanism -> Application.
+```
+
+---
+
+## 125. Alignment Lens Application
+_The 'Does This Feel Right?' check._
+
+```markdown
+Apply the **Alignment Lens**.
+
+Feature/Decision: [Description]
+
+Evaluate against the **Gentle Doctrine**:
+1.  **Is it Honest?** (Does it promise more than it delivers?)
+2.  **Is it Calm?** (Does it rely on anxiety/FOMO?)
+3.  **Is it Necessary?** (Does it solve a real user problem, or just a business metric?)
+
+If it fails any check, it is **Misaligned**. Propose a realignment.
+```
+
+---
+
+## 126. Frontier Simulation
+_Adversarial debate._
+
+```markdown
+Run a **Frontier Simulation**.
+
+Topic: [Topic]
+
+Simulate a dialogue between two Sovereign Agents:
+- **The Architect**: Optimistic, systemic, focused on potential and elegance.
+- **The Skeptic**: Pragmatic, critical, focused on failure modes and costs.
+
+Have them exchange 3 rounds of arguments. Then, the **Synthesizer** delivers the final verdict.
+```
+
+---
+
+## 127. Minimum Viable Audit
+_Scope discipline._
+
+```markdown
+Run a **Minimum Viable Audit**.
+
+Mechanism: [Mechanism Name]
+
+The Goal: Ship the *Studio*, not the *Factory*.
+1.  **Is this feature essential for the *first* sovereign loop?**
+2.  **Can this be mocked/faked for now?**
+3.  **Does this add complexity that prevents shipping today?**
+
+If it's not essential, move it to the **Icebox**. Be ruthless.
+```
+
+---
+
+## 128. Entropy Measurement
+_System health check._
+
+```markdown
+Calculate **System Entropy**.
+
+Scan the current [Module/Context]:
+1.  **Code Entropy**: How many TODOs, loose types, or commented-out blocks?
+2.  **Process Entropy**: How many stale branches or unmerged PRs?
+3.  **Cognitive Entropy**: How confusing is the documentation?
+
+Assign a Score (0-100). If > 70, declare **Entropy Bankruptcy** and switch to cleanup mode.
+```
+
+---
+
+## 129. Synaptic Lattice Map
+_Context visualization._
+
+```markdown
+Generate a **Synaptic Lattice Map**.
+
+Context: [Current Project State]
+
+Visualize the relationships:
+- **Nodes**: Key Concepts / Modules.
+- **Edges**: Dependencies / Data Flows.
+- **Weights**: Importance / Risk.
+
+Describe the **Critical Path** through this lattice. Where is the bottleneck?
+```
+
+---
+
+## 130. Future Artifact Generation
+_Backcasting from success._
+
+```markdown
+Generate a **Future Artifact**.
+
+Date: December 2030.
+Project: Studio OS.
+
+Write a [Press Release / User Testimonial / Tech Blog Post] looking back at this specific moment as the "Turning Point".
+What decision did we make today that led to the massive success in 2030?
+Explain the causality chain.
+```
+
+---
+
+## 131. Doctrine Breach Analysis
+_Forensic alignment._
+
+```markdown
+Analyze for **Doctrine Breach**.
+
+Action/Event: [Last Action]
+
+Did this action violate the **Sovereign Manifesto**?
+- Did we prioritize Speed over Quality? (Violation)
+- Did we prioritize Growth over Sanity? (Violation)
+- Did we automate something that should remain human? (Violation)
+
+Verdict: [Breach / Compliant].
+```

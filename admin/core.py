@@ -5,27 +5,17 @@ refining content, and publishing updates to the Git repository.
 """
 
 import os
-# Evolution Test Comment
 import datetime
 import frontmatter
 import subprocess
 import google.generativeai as genai
-# openai and anthropic removed as they are unused
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
 load_dotenv()
 
-try:
-    from .config import config
-    from .decorators import critique_action
-except ImportError:
-    try:
-        from admin.config import config
-        from admin.decorators import critique_action
-    except ImportError:
-        import config
-        from decorators import critique_action
+from admin.config import config
+from admin.decorators import critique_action
 
 # Configuration
 CONTENT_DIR = config.CONTENT_DIR
@@ -220,14 +210,15 @@ async def generate_ai_post(topic, provider="auto"):
         from .engineers.alchemist import Alchemist
         from .engineers.guardian import Guardian
         from .engineers.editor import Editor
-        from .engineers.editor import Editor
         from .engineers.librarian import Librarian
         from .engineers.fact_checker import FactChecker
+        from .engineers.director import get_director
 
         alchemist = Alchemist()
         guardian = Guardian()
         editor = Editor()
         fact_checker = FactChecker()
+        director = get_director()
         
         # Ensure memory is built
         if not os.path.exists(alchemist.memory_file):
@@ -250,6 +241,15 @@ async def generate_ai_post(topic, provider="auto"):
                 content, context = await alchemist.generate(adjusted_topic, doctrine, provider=provider)
             else:
                 content, context = await alchemist.generate(topic, doctrine, provider=provider)
+            
+            # 1.5. Director: Alignment Check (Sovereign Oversight)
+            logger.info("[The Director] Checking alignment with Doctrine...")
+            alignment = director.check_alignment(content, context)
+            if alignment.get("veto", False):
+                 logger.warning(f"[The Director] VETO Issued: {alignment.get('reason')}")
+                 feedback = f"THE DIRECTOR VETOED THIS DRAFT. Reason: {alignment.get('reason')}. Directive: {alignment.get('directive')}"
+                 current_try += 1
+                 continue
             
             # 2. FactChecker: Truth Verification
             logger.info("[The FactChecker] Verifying accuracy...")

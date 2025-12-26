@@ -3481,6 +3481,34 @@
       "insight": "[Publish to Git] The agent successfully completed the 'Publish to Git' action, which aligns well with standard version control and collaboration practices. The 'SUCCESS' status and 'Successfully published to Git' result confirm the primary objective was met. However, the duration of 296.68 seconds (nearly 5 minutes) for a 'publish' operation is unusually long and raises significant concerns regarding efficiency. While the action was correct and achieved its goal, it was not optimal due to the extended execution time.",
       "rating": 7,
       "shared_at": "2025-12-25T15:14:51.354259"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The 'Director Alignment Check' action executed with remarkable speed (0.01s), indicating efficiency in the initiation of the check. However, despite the 'SUCCESS' status, the core function of evaluating content alignment failed. The `RESULT/ERROR` clearly indicates a `System Error: Expecting value: line 1 column 1 (char 0)`, which is a classic JSON parsing error. This means the alignment tool itself, or the component processing its output, failed to receive or parse valid data. Consequently, the `veto: True` and `directive: 'Halt.'` were triggered due to an internal system failure, not due to a successful evaluation of the content's alignment. While the input content was indeed highly problematic (sensationalist, hyperbolic, promoting get-rich-quick schemes), the system did not successfully determine this through an alignment score; it merely failed catastrophically internally. The 'SUCCESS' status is misleading, as the mission (determining content alignment) was not achieved.",
+      "rating": 3,
+      "shared_at": "2025-12-25T16:52:00.560908"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] Despite reporting 'SUCCESS' and a 0.00s duration, the action fundamentally failed. The 'Director Alignment Check' tool encountered a 'System Error: Expecting value: line 1 column 1 (char 0)', indicating that it attempted to parse the provided 'content' (a plain text string) as JSON. This internal input type mismatch prevented any actual alignment assessment, resulting in an 'alignment_score: 0', 'veto: True', and a 'directive: Halt.'. The swift duration reflects an immediate failure during input processing rather than efficient execution of the intended task.",
+      "rating": 1,
+      "shared_at": "2025-12-25T16:52:08.224164"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The Director Alignment Check successfully identified significant misalignment in the provided input content. The tool accurately recognized the promotional language, unrealistic promises, and urgency as a direct contradiction to the inferred core doctrine of calm, honest self-reflection. The resulting low alignment score, coupled with a decisive veto and a clear, actionable directive for complete content overhaul, indicates an effective and mission-aligned operation of the check itself. The duration was efficient for this type of critical assessment.",
+      "rating": 10,
+      "shared_at": "2025-12-25T16:52:50.653248"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The Director Alignment Check was highly successful. The input content, which advocates for thoughtful, human-centric automation and mindful progress, scored exceptionally high (98 for both alignment and sincerity). The system correctly identified deep resonance with the underlying 'Cyber-Zen' doctrine, emphasizing clarity, inner truth, and a mindful approach to technology. The generated reason is articulate and directly links the content to the mission's core values, while the directive provides a clear, actionable path forward that reinforces these principles. The duration of 7.38s is efficient for such a critical philosophical check. Overall, this action demonstrates robust alignment validation and provides valuable strategic guidance.",
+      "rating": 9,
+      "shared_at": "2025-12-25T16:53:04.808351"
     }
   ],
   "agent_expertise": {
@@ -3622,6 +3650,34 @@
       "context": "Action: Publish to Git",
       "outcome": "SUCCESS",
       "learned_at": "2025-12-25T15:14:51.360193"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "A 'SUCCESS' status should signify the successful completion of the intended function's *objective*, not merely the absence of a catastrophic execution failure. Robust error handling, especially for data parsing and inter-component communication, is critical to ensure reliability and provide meaningful outcomes. Systems must validate and ensure the integrity of their own outputs.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-25T16:52:00.567383"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "A reported 'SUCCESS' status is meaningless if the underlying operation fails to execute its core function due to internal errors. Robust input validation and type enforcement are crucial for tool reliability. Furthermore, status reporting systems must accurately reflect the outcome of the action, even if the failure occurs early in the process.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-25T16:52:08.229422"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "Robust and principled alignment checks are crucial for maintaining the integrity and focus of an intelligence system. Such checks must not only identify deviations but also provide precise, actionable guidance for correction, reinforcing the core mission and preventing the propagation of misaligned information or sentiment.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-25T16:52:50.660272"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "True success in complex systems often requires not just efficient execution, but a profound and continuous alignment with core philosophical tenets and values. Regular, detailed 'alignment checks' ensure that actions, even those framed for speed, remain anchored to the ultimate purpose and human-centric goals.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-25T16:53:04.812575"
     }
   ],
   "team_decisions": [],
