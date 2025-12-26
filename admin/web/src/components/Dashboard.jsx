@@ -40,6 +40,7 @@ const Dashboard = () => {
     const [missionExpanded, setMissionExpanded] = useState(false);
     const messagesEndRef = useRef(null);
     const [loading, setLoading] = useState(false);
+    const [activeCategory, setActiveCategory] = useState(0); // Cognitive Load Balancer State
 
     // Initial Logs
     const [logs] = useState([
@@ -143,7 +144,7 @@ const Dashboard = () => {
                             </div>
 
                             {/* Scrollable Log Container */}
-                            <div className="flex-1 overflow-visible md:overflow-y-auto p-4 md:p-0 custom-scrollbar">
+                            <div className="flex-1 overflow-visible md:overflow-y-auto p-4 md:p-0 custom-scrollbar pb-32 md:pb-0">
                                 {/* Desktop Table */}
                                 <table className="w-full text-left border-collapse hidden md:table">
                                     <thead className="sticky top-0 bg-[#080808] z-10 text-[9px] text-white/20 uppercase tracking-widest font-bold">
@@ -243,7 +244,7 @@ const Dashboard = () => {
                                 <div ref={messagesEndRef} />
                             </div>
 
-                            {/* Input Area */}
+                            {/* Category Tabs & Prompts */}
                             <div className="p-4 border-t border-white/5 bg-[#080808]">
                                 <form onSubmit={handleCommand} className="flex gap-3 mb-3">
                                     <div className="flex-1 relative">
@@ -259,24 +260,37 @@ const Dashboard = () => {
                                         EXEC
                                     </button>
                                 </form>
-                                <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
-                                    {/* Load prompts dynamically */}
+
+                                {/* Cognitive Load Balancer: Category Tabs */}
+                                <div className="flex gap-2 mb-3 overflow-x-auto custom-scrollbar pb-1">
                                     {sitePrompts.map((cat, i) => (
-                                        <div key={i} className="flex gap-2">
-                                            {cat.prompts.map((p, j) => (
-                                                <button
-                                                    key={`${i}-${j}`}
-                                                    onClick={() => setCommand(p.command)}
-                                                    title={p.command}
-                                                    className="px-3 py-1.5 rounded bg-white/5 border border-white/5 text-[9px] font-mono text-white/60 hover:text-[#00D6A3] hover:border-[#00D6A3]/30 hover:bg-[#00D6A3]/5 transition-all whitespace-nowrap flex items-center gap-2 group"
-                                                >
-                                                    <span className="opacity-50 group-hover:opacity-100 transition-opacity">
-                                                        {p.label}
-                                                    </span>
-                                                </button>
-                                            ))}
-                                            {i < sitePrompts.length - 1 && <div className="w-px bg-white/10 mx-1" />}
-                                        </div>
+                                        <button
+                                            key={i}
+                                            onClick={() => setActiveCategory(i)}
+                                            className={`whitespace-nowrap px-3 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all
+                                                ${activeCategory === i
+                                                    ? 'bg-[#00D6A3] text-black shadow-[0_0_10px_rgba(0,214,163,0.3)]'
+                                                    : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'}`}
+                                        >
+                                            {cat.category}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Active Prompts Grid */}
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-[120px] overflow-y-auto custom-scrollbar">
+                                    {sitePrompts[activeCategory].prompts.map((p, j) => (
+                                        <button
+                                            key={j}
+                                            onClick={() => setCommand(p.command)}
+                                            title={p.command}
+                                            className="px-3 py-2 rounded bg-white/5 border border-white/5 text-[9px] font-mono text-white/60 hover:text-[#00D6A3] hover:border-[#00D6A3]/30 hover:bg-[#00D6A3]/5 transition-all text-left flex items-center gap-2 group truncate"
+                                        >
+                                            {/* We could map icons here later */}
+                                            <span className="opacity-50 group-hover:opacity-100 transition-opacity truncate">
+                                                {p.label}
+                                            </span>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
@@ -309,9 +323,17 @@ const Dashboard = () => {
                     </button>
                 </form>
                 <div className="flex gap-2 mt-2 overflow-x-auto no-scrollbar">
-                    {sitePrompts.flatMap(cat => cat.prompts).map((p, i) => (
-                        <button key={i} onClick={() => setCommand(p.command)} className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/5 text-[10px] font-mono text-white/50 border border-white/5 hover:bg-[#00D6A3]/10 hover:text-[#00D6A3] transition-colors">
-                            {p.label}
+                    {/* Active Category Tabs - Mobile */}
+                    {sitePrompts.map((cat, i) => (
+                        <button
+                            key={i}
+                            onClick={() => {
+                                // Logic to switch tab would go here if we tracked state on mobile
+                                // For now, just show all but grouped
+                            }}
+                            className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/5 text-[10px] font-mono text-white/50 border border-white/5 hover:bg-[#00D6A3]/10 hover:text-[#00D6A3] transition-colors"
+                        >
+                            {cat.category.split(' ')[0]}
                         </button>
                     ))}
                 </div>

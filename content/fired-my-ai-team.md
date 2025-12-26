@@ -1,6 +1,6 @@
 ---
 title: "I Fired My AI Social Media Team (And Built a Better One)"
-date: 2025-12-04
+date: 2025-12-25
 category: Tech
 tags:
   - ai

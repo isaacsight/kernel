@@ -33,6 +33,13 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</loc>
+            <lastmod>2025-12-25</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/studio-os-visual-thought.html</loc>
             <lastmod>2025-12-22</lastmod>
             <changefreq>monthly</changefreq>
@@ -1182,13 +1189,6 @@
         
         <url>
             <loc>https://www.doesthisfeelright.com/posts/the-moment-before-clarity-arrives.html</loc>
-            <lastmod>2025-12-04</lastmod>
-            <changefreq>monthly</changefreq>
-            <priority>0.9</priority>
-        </url>
-        
-        <url>
-            <loc>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</loc>
             <lastmod>2025-12-04</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>

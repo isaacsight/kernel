@@ -221,7 +221,7 @@ const SynapticLattice = () => {
     }, [agents]);
 
     return (
-        <div className="flex flex-col h-full w-full bg-[#020202] text-white font-mono uppercase select-none overflow-hidden relative">
+        <div className="flex flex-col h-[calc(100dvh-64px)] md:h-full w-full bg-[#020202] text-white font-mono uppercase select-none overflow-hidden relative">
 
             {/* UNIFIED HEADER (Matches Dashboard) */}
             <header className="h-10 border-b border-white/10 flex items-center px-4 bg-black/80 backdrop-blur-xl z-50 shrink-0">

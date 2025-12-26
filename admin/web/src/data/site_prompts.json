@@ -608,5 +608,105 @@
                 "icon": "Cpu"
             }
         ]
+    },
+    {
+        "category": "Studio Director",
+        "prompts": [
+            {
+                "label": "DIRECTOR'S CUT",
+                "command": "Critique this output against the 'Cyber-Zen' aesthetic. Be ruthless. Reject generic tropes.",
+                "icon": "Film"
+            },
+            {
+                "label": "VETO & REFRAME",
+                "command": "Veto the current trajectory. Reframe the problem statement from a First Principles perspective.",
+                "icon": "XCircle"
+            },
+            {
+                "label": "ALIGNMENT CHECK",
+                "command": "Assess the current draft's alignment with the 'Gentle Doctrine'. Score 0-100 on Sincerity vs Hype.",
+                "icon": "Scale"
+            },
+            {
+                "label": "MISSION UPLINK",
+                "command": "Verify: Does this task directly advance the Prime Directive? If not, deprioritize.",
+                "icon": "Radio"
+            }
+        ]
+    },
+    {
+        "category": "Cognitive Forensics",
+        "prompts": [
+            {
+                "label": "SURPRISE METRIC",
+                "command": "Report the 'Surprise' (Free Energy) value of the last observation. Why was it unexpected?",
+                "icon": "Zap"
+            },
+            {
+                "label": "BELIEF UPDATE",
+                "command": "Show the delta between Prior Belief and Posterior Belief after the last ingestion.",
+                "icon": "GitMerge"
+            },
+            {
+                "label": "HALLUCINATION TRAP",
+                "command": "Scan the last response for unverified claims. Deploy the Fact-Checker agent.",
+                "icon": "Shield"
+            },
+            {
+                "label": "MODEL INTROSPECT",
+                "command": "Explain *why* you chose this tool. Reveal the Chain-of-Thought.",
+                "icon": "Eye"
+            }
+        ]
+    },
+    {
+        "category": "Creative Spark",
+        "prompts": [
+            {
+                "label": "OBLIQUE STRATEGY",
+                "command": "Draw a random Oblique Strategy card. Apply it to the current blocker.",
+                "icon": "Shuffle"
+            },
+            {
+                "label": "CHAOS MODE",
+                "command": "Introduce a random constraint to the current task. (e.g., 'No adjectives', 'Explain to a child').",
+                "icon": "CloudLightning"
+            },
+            {
+                "label": "STEELMAN ARGUMENT",
+                "command": "Construct the strongest possible argument *against* your current plan.",
+                "icon": "Swords"
+            }
+        ]
+    },
+    {
+        "category": "Website Ops & Publishing",
+        "prompts": [
+            {
+                "label": "DEPLOY SITE",
+                "command": "Trigger the full site build and deploy to Netlify/Vercel (Production).",
+                "icon": "UploadCloud"
+            },
+            {
+                "label": "SEO AUDIT",
+                "command": "Audit the latest post for SEO meta tags, Open Graph images, and keyword density.",
+                "icon": "Search"
+            },
+            {
+                "label": "LINK CHECKER",
+                "command": "Scan the entire 'docs/' folder for broken internal or external links.",
+                "icon": "Link"
+            },
+            {
+                "label": "CONTENT CALENDAR",
+                "command": "Review the publishing schedule. What is the next 'Pillar' content piece?",
+                "icon": "Calendar"
+            },
+            {
+                "label": "MOBILE PREVIEW",
+                "command": "Generate a mobile viewport snapshot of the homepage and latest post.",
+                "icon": "Smartphone"
+            }
+        ]
     }
 ]
