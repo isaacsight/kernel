@@ -68,6 +68,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    // Bind Product Button
+    document.getElementById('btn_product').onclick = async () => {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = 'Synthesizing Product...';
+
+        try {
+            const resp = await fetch(`${SERVER_URL}/api/studio/report?kind=product`, {
+                method: 'GET'
+            });
+            const data = await resp.json();
+            if (data.status === 'success') {
+                statusDiv.textContent = 'Product Synthesized.';
+                alert("Product Synthesized!\n\nID: " + data.product_id + "\nPath: " + data.path);
+            } else {
+                statusDiv.textContent = 'Synthesis failed.';
+            }
+        } catch (e) {
+            statusDiv.textContent = 'Synthesis failed.';
+        }
+    };
+
     // Bind Focus Button
     document.getElementById('btn_update_focus').onclick = async () => {
         const focus = document.getElementById('focus_input').value;

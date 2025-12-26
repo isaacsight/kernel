@@ -655,6 +655,31 @@ class MemoryStore:
         conn.close()
         logger.info(f"Intake saved: {source_path}")
 
+    def get_recent_intake(self, limit: int = 50) -> List[Dict]:
+        """Retrieve recent raw intake items."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM raw_intake ORDER BY timestamp DESC LIMIT ?",
+            (limit,)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {
+                "id": r["id"],
+                "source_type": r["source_type"],
+                "source_path": r["source_path"],
+                "content": r["content"],
+                "metadata": json.loads(r["metadata"]) if r["metadata"] else {},
+                "status": r["status"],
+                "timestamp": r["timestamp"]
+            }
+            for r in rows
+        ]
+
     # ==================== Active Inference (Beliefs & Priors) ====================
 
     def save_belief_state(self, agent_id: str, entity_id: str, belief_data: Dict, 

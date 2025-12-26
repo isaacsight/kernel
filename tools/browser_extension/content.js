@@ -116,19 +116,48 @@ const mountObserverOverlay = () => {
             .crest:hover .tooltip {
                 display: block;
             }
+            /* Hover Scanner Styles */
+            .studio-hover-target {
+                outline: 1px dashed rgba(64, 220, 165, 0.5);
+                background: rgba(64, 220, 165, 0.05);
+                transition: all 0.2s ease;
+                cursor: help; /* Subtle native hint */
+            }
         </style>
         <div class="crest" id="studio-crest">
             <span style="font-size: 14px;">🎴</span>
             <div class="tooltip" id="studio-tooltip">Studio OS Observing...</div>
         </div>
+        <!-- Scanner Toggle (Hidden by default, activated via Logic) -->
+        <div id="scanner-indicator" style="display:none; position:absolute; top:-10px; right:-10px; width:10px; height:10px; background:#40DCA5; border-radius:50%; box-shadow: 0 0 10px #40DCA5;"></div>
     `;
     shadow.appendChild(wrapper);
     document.body.appendChild(container);
 
     const crest = shadow.getElementById('studio-crest');
     crest.addEventListener('click', () => {
-        chrome.runtime.sendMessage({ action: "open_popup" });
+        // Toggle Scanner Mode on Click
+        toggleScannerMode();
     });
+
+    // Create Satellite Cursor (The "Extension" to the pointer)
+    const satellite = document.createElement('div');
+    satellite.id = 'studio-cursor-satellite';
+    satellite.style.cssText = `
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 24px; 
+        height: 24px; 
+        pointer-events: none; 
+        z-index: 2147483647; 
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.08s ease-out;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'><path d='M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z' stroke='%2340DCA5' stroke-width='1.5' fill='rgba(64, 220, 165, 0.2)'/><circle cx='12' cy='12' r='2' fill='%2340DCA5'/></svg>");
+        background-size: contain;
+    `;
+    document.body.appendChild(satellite);
+    console.log("Studio OS: Satellite Cursor Injected");
 };
 
 // 2. Intelligence Gathering & Deep Extraction
@@ -429,8 +458,106 @@ if (document.readyState === 'complete') {
         analyzePage();
         detectAISurface();
         setTimeout(highlightEntities, 2000);
+        updateScannerUI(); // Initialize scanner UI state
     });
 }
+
+// 6. Hover Scanner (Agentic Cursor)
+let scannerActive = true; // Enabled by default per user request
+let hoverTimer = null;
+let currentHoverTarget = null;
+const HOVER_DWELL_MS = 1000; // 1 second dwell directly triggers insight
+
+const toggleScannerMode = () => {
+    scannerActive = !scannerActive;
+    updateScannerUI();
+};
+
+const updateScannerUI = () => {
+    const root = document.getElementById('studio-os-root');
+    const indicator = root.shadowRoot.getElementById('scanner-indicator');
+    const tooltip = root.shadowRoot.getElementById('studio-tooltip');
+
+    // The Satellite
+    const satellite = document.getElementById('studio-cursor-satellite');
+
+    if (scannerActive) {
+        if (satellite) satellite.style.opacity = '1';
+        // document.body.classList.add('studio-scan-cursor'); // Removed for satellite mode
+        indicator.style.display = 'block';
+        tooltip.textContent = "Scanner Mode: ACTIVE";
+        console.log("Scanner Mode: Enabled");
+        chrome.runtime.sendMessage({ action: "signal_alert", state: "autonomous", message: "Hover Scanner Enabled" });
+    } else {
+        if (satellite) satellite.style.opacity = '0';
+        // document.body.classList.remove('studio-scan-cursor');
+        indicator.style.display = 'none';
+        tooltip.textContent = "Scanner Mode: Standby";
+        console.log("Scanner Mode: Disabled");
+        if (currentHoverTarget) {
+            currentHoverTarget.classList.remove('studio-hover-target');
+            currentHoverTarget = null;
+        }
+    }
+};
+
+document.body.addEventListener('mousemove', (e) => {
+    if (scannerActive) {
+        const satellite = document.getElementById('studio-cursor-satellite');
+        if (satellite) {
+            // Offset by 16px to follow the cursor (Extension style)
+            satellite.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 16}px)`;
+        }
+    }
+});
+
+document.body.addEventListener('mouseover', (e) => {
+    if (!scannerActive) return;
+
+    // Filter relevant elements (Text-heavy or Links)
+    const target = e.target;
+    // console.log("Hovering:", target.tagName); // Log tag for debugging
+
+    // Ignore small structural elements or self
+    if (target.id === 'studio-os-root' || target.closest('#studio-os-root') || target.closest('#studio-insight-overlay')) return;
+
+    const validTags = ['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'A', 'LI', 'SPAN', 'BLOCKQUOTE', 'STRONG', 'EM'];
+
+    if (validTags.includes(target.tagName) && target.innerText.trim().length > 3) {
+        // Highlight
+        if (currentHoverTarget && currentHoverTarget !== target) {
+            currentHoverTarget.classList.remove('studio-hover-target');
+        }
+        currentHoverTarget = target;
+        target.classList.add('studio-hover-target');
+
+        // Start Dwell Timer
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => {
+            if (currentHoverTarget === target) {
+                // Trigger Insight!
+                console.log("Dwell Triggered on:", target);
+                const text = target.innerText.slice(0, 150).trim(); // Short snippet as entity hint
+                // If it looks like a distinct entity (short), use it. If long, use "Context Analysis"
+                const entity = text.length < 60 ? text : "Context Analysis";
+
+                showInsightOverlay(entity, e.pageX, e.pageY);
+
+                // Visual feedback
+                target.classList.remove('studio-hover-target');
+            }
+        }, HOVER_DWELL_MS);
+    }
+});
+
+document.body.addEventListener('mouseout', (e) => {
+    if (!scannerActive) return;
+    if (e.target === currentHoverTarget) {
+        e.target.classList.remove('studio-hover-target');
+        clearTimeout(hoverTimer);
+        currentHoverTarget = null;
+    }
+});
 
 // Listener for signals FROM background
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

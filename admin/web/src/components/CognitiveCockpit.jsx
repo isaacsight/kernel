@@ -5,6 +5,7 @@ import {
     Database, Server, Lock, Clock, AlertCircle,
     CheckCircle2, Search, Brain, Layers
 } from 'lucide-react';
+import NeuralLink from './NeuralLink';
 
 /**
  * COGNITIVE COCKPIT V1
@@ -58,10 +59,8 @@ const CognitiveCockpit = () => {
     // --- State ---
     const [systemLoad, setSystemLoad] = useState("LOW");
     const [uplinkStatus, setUplinkStatus] = useState("ACTIVE");
-    const [logs, setLogs] = useState([]);
     const [cpuData, setCpuData] = useState(Array(30).fill(10));
     const [memData, setMemData] = useState(Array(30).fill(20));
-    const logsEndRef = useRef(null);
 
     // --- Mock Data Generators (Simulating Telemetry) ---
     useEffect(() => {
@@ -73,45 +72,7 @@ const CognitiveCockpit = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // --- Log Stream Simulation ---
-    useEffect(() => {
-        const componentNames = ["KERNEL", "SYS_MON", "ROUTER", "AGENT", "MEMORY_STORE", "HORTICULTURALIST"];
-        const actions = [
-            "Dispatching task: agent.verify_state",
-            "ToolCall: read_file('styles.css')",
-            "Realigning memory vectors...",
-            "Context window optimization: 12% gain",
-            "Health check passed: BETA_NODE",
-            "Refining cognitive model...",
-            "Ingesting external signal...",
-            "Syncing verified state to disk..."
-        ];
-
-        const addLog = () => {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-            const randomComponent = componentNames[Math.floor(Math.random() * componentNames.length)];
-            const randomMsg = actions[Math.floor(Math.random() * actions.length)];
-
-            setLogs(prev => [...prev.slice(-50), {
-                time: timeStr,
-                source: randomComponent,
-                msg: randomMsg,
-                id: Date.now()
-            }]);
-        };
-
-        const logInterval = setInterval(addLog, 2500); // Add a log every 2.5s
-        addLog(); // Initial log
-
-        return () => clearInterval(logInterval);
-    }, []);
-
-    // Auto-scroll logs
-    useEffect(() => {
-        logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [logs]);
+    // --- Pulse Data generator already defined above ---
 
     return (
         <div className="w-full h-screen bg-[#020202] text-white font-sans p-4 md:p-8 flex flex-col overflow-hidden">
@@ -148,43 +109,14 @@ const CognitiveCockpit = () => {
             {/* --- MAIN DASHBOARD GRID --- */}
             <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
 
-                {/* LEFT: LOG STREAM (Main Focus) */}
+                {/* LEFT: NEURAL LINK (Live Data Feed) */}
                 <div className="lg:col-span-8 flex flex-col relative group">
                     <div className="absolute -top-3 left-4 bg-[#020202] px-2 text-[9px] font-black tracking-[0.2em] text-[#00D6A3] uppercase z-10">
-                        Real-Time System Logs
+                        Neural Link // Live Stream
                     </div>
 
-                    <Card className="flex-1 flex flex-col relative bg-black/60 shadow-2xl">
-                        {/* Status Bar */}
-                        <div className="h-10 border-b border-white/5 flex items-center px-4 justify-between bg-white/[0.02]">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-[#00D6A3] animate-pulse" />
-                                <span className="text-[10px] font-mono text-white/40">LIVE_STREAM_ACTIVE</span>
-                            </div>
-                            <div className="flex gap-2 text-[10px] font-mono text-white/20">
-                                <span>PID: 11045</span>
-                                <span>MEM: 2.3GB</span>
-                            </div>
-                        </div>
-
-                        {/* Log Content */}
-                        <div className="flex-1 overflow-y-auto p-6 font-mono text-xs space-y-1 custom-scrollbar">
-                            <AnimatePresence>
-                                {logs.map((log) => (
-                                    <motion.div
-                                        key={log.id}
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="flex items-start gap-3 hover:bg-white/[0.03] p-0.5 rounded transition-colors"
-                                    >
-                                        <span className="text-white/20 shrink-0 select-none">{log.time}</span>
-                                        <span className="text-[#00D6A3] font-bold shrink-0 w-24 text-right">[{log.source}]</span>
-                                        <span className="text-white/70">{log.msg}</span>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                            <div ref={logsEndRef} />
-                        </div>
+                    <Card className="flex-1 flex flex-col relative bg-black/60 shadow-2xl overflow-hidden">
+                        <NeuralLink />
                     </Card>
                 </div>
 

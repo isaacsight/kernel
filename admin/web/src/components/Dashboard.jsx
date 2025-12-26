@@ -8,6 +8,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import sitePrompts from '../data/site_prompts.json'; // Import Prompts
 
+import NeuralLink from './NeuralLink';
+
 const apiBase = `http://${window.location.hostname}:8000`;
 
 const AgentCard = ({ label, value, sub, icon: Icon, color = "text-[#00D6A3]" }) => (
@@ -136,58 +138,9 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        {/* DESKTOP: EVENTS TABLE / MOBILE: CARD LIST */}
+                        {/* DESKTOP: NEURAL LINK FEED / MOBILE: CARD LIST */}
                         <div className="flex-1 flex flex-col h-auto md:h-full overflow-visible md:overflow-hidden bg-[#080808]">
-                            <div className="px-4 md:px-6 py-3 border-b border-white/5 bg-black/20 flex justify-between items-center">
-                                <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30">SOVEREIGNTY EVENTS</h3>
-                                <button className="text-[9px] font-mono text-[#00D6A3] hover:text-white transition-colors">VIEW_ALL</button>
-                            </div>
-
-                            {/* Scrollable Log Container */}
-                            <div className="flex-1 overflow-visible md:overflow-y-auto p-4 md:p-0 custom-scrollbar pb-32 md:pb-0">
-                                {/* Desktop Table */}
-                                <table className="w-full text-left border-collapse hidden md:table">
-                                    <thead className="sticky top-0 bg-[#080808] z-10 text-[9px] text-white/20 uppercase tracking-widest font-bold">
-                                        <tr>
-                                            <th className="py-2 pl-6">Time</th>
-                                            <th className="py-2">Source</th>
-                                            <th className="py-2">Type</th>
-                                            <th className="py-2 pr-6">Message</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-[10px] font-mono text-white/60">
-                                        {logs.map((log, i) => (
-                                            <tr key={i} className="border-b border-white/[0.02] hover:bg-white/[0.02]">
-                                                <td className="py-2 pl-6 text-white/30 w-24">{log.t}</td>
-                                                <td className="py-2 w-24">SYS_CORE</td>
-                                                <td className="py-2 w-16">
-                                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${log.type === 'SEC' ? 'bg-red-500/10 text-red-500' :
-                                                        log.type === 'SYS' ? 'bg-amber-500/10 text-amber-500' :
-                                                            'bg-[#00D6A3]/10 text-[#00D6A3]'
-                                                        }`}>{log.type}</span>
-                                                </td>
-                                                <td className="py-2 pr-6 truncate max-w-[200px]">{log.msg}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-
-                                {/* Mobile List */}
-                                <div className="space-y-2 md:hidden">
-                                    {logs.slice(0, 5).map((log, i) => (
-                                        <div key={i} className="p-3 rounded-lg bg-white/[0.03] border border-white/5">
-                                            <div className="flex justify-between mb-1">
-                                                <span className="text-[9px] font-mono text-white/30">{log.t}</span>
-                                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${log.type === 'SEC' ? 'bg-red-500/10 text-red-500' :
-                                                    log.type === 'SYS' ? 'bg-amber-500/10 text-amber-500' :
-                                                        'bg-[#00D6A3]/10 text-[#00D6A3]'
-                                                    }`}>{log.type}</span>
-                                            </div>
-                                            <div className="text-[11px] text-white/80 line-clamp-1">{log.msg}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <NeuralLink />
                         </div>
                     </div>
 

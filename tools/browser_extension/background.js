@@ -2,17 +2,159 @@
 
 const setupContextMenus = () => {
     chrome.contextMenus.removeAll(() => {
-        chrome.contextMenus.create({
-            id: "send-to-studio",
-            title: "Send to Studio OS",
-            contexts: ["selection", "page"]
-        }, () => {
-            if (chrome.runtime.lastError) {
-                console.log("Context menu suppressed: Item already exists.");
-            }
-        });
+        // Original
+        chrome.contextMenus.create({ id: "send-to-studio", title: "Send to Studio OS", contexts: ["selection", "page"] });
+
+        // --- Phase 1: Core ---
+        chrome.contextMenus.create({ id: "check-reality", title: "Sovereign Reality Check", contexts: ["selection", "page"] });
+        chrome.contextMenus.create({ id: "bridge-context", title: "Bridge to Knowledge Graph", contexts: ["page"] });
+        chrome.contextMenus.create({ id: "task-scout", title: "Extract Tasks & Deadlines", contexts: ["page", "selection"] });
+        chrome.contextMenus.create({ id: "deep-reader", title: "Deep Read (Feynman Protocol)", contexts: ["page"] });
+
+        // --- Phase 2: Domain Specific ---
+        chrome.contextMenus.create({ id: "code-sentinel", title: "Audit Code Safety", contexts: ["selection"] });
+        chrome.contextMenus.create({ id: "design-archaeologist", title: "Steal Design System", contexts: ["page"] });
+        chrome.contextMenus.create({ id: "sovereign-reply", title: "Draft Sovereign Reply", contexts: ["selection"] });
+        chrome.contextMenus.create({ id: "bias-hunter", title: "Analyze Bias & Framing", contexts: ["selection", "page"] });
+        chrome.contextMenus.create({ id: "jargon-buster", title: "Bust Jargon (ELI5)", contexts: ["selection"] });
+        chrome.contextMenus.create({ id: "value-auditor", title: "Value Auditor (Shopping)", contexts: ["page", "selection"] });
+        chrome.contextMenus.create({ id: "zen-mode", title: "Zen Mode (De-Sensationalize)", contexts: ["page", "selection"] });
+
+        // --- Phase 3: Reporting ---
+        chrome.contextMenus.create({ id: "separator-1", type: "separator", contexts: ["page"] });
+        chrome.contextMenus.create({ id: "synthesize-product", title: "Synthesize Sovereign Product", contexts: ["page"] });
     });
 };
+
+// ... (existing helper functions) ...
+
+// 3. Context Menu Handling
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+    if (info.menuItemId === "synthesize-product") {
+        console.log("Triggering Product Synthesis...");
+        chrome.tabs.sendMessage(tab.id, {
+            action: "signal_alert",
+            state: "think",
+            message: "Synthesizing Sovereign Product..."
+        });
+
+        try {
+            const resp = await fetch('http://localhost:8000/api/studio/report?kind=product', {
+                method: 'GET'
+            });
+            const result = await resp.json();
+
+            if (result.status === "success") {
+                chrome.tabs.sendMessage(tab.id, {
+                    action: "signal_alert",
+                    state: "done",
+                    message: `Product Generated: ${result.product_id}`
+                });
+            } else {
+                throw new Error(result.message || "Synthesis failed");
+            }
+        } catch (e) {
+            console.error("Synthesis failed:", e);
+            chrome.tabs.sendMessage(tab.id, {
+                action: "signal_alert",
+                state: "error",
+                message: "Synthesis Failed: System Offline"
+            });
+        }
+        return;
+    }
+
+    if (info.menuItemId === "send-to-studio") {
+        // ... (existing send-to-studio logic) ...
+        const note = info.selectionText || "Captured via context menu";
+        const payload = {
+            user_id: 'anon_abc123',
+            event_type: 'decision',
+            pattern_hint: 'felt_wrong',
+            context: {
+                url: info.pageUrl || tab.url,
+                title: tab.title,
+                note: note,
+                source: 'chrome_context_menu'
+            },
+            timestamp_ms: Date.now()
+        };
+        try {
+            await fetch('http://localhost:8000/v1/ingest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) {
+            console.error("Ingest error:", e);
+        }
+        return;
+    }
+
+    // Handle new Sovereign Prompts
+    const promptKeys = {
+        "check-reality": "reality_check",
+        "bridge-context": "context_bridge",
+        "task-scout": "task_scout",
+        "deep-reader": "deep_reader",
+        "code-sentinel": "code_sentinel",
+        "design-archaeologist": "design_archaeologist",
+        "sovereign-reply": "sovereign_reply",
+        "bias-hunter": "bias_hunter",
+        "jargon-buster": "jargon_buster",
+        "value-auditor": "value_auditor",
+        "zen-mode": "zen_mode_translator"
+    };
+
+    if (promptKeys[info.menuItemId]) {
+        console.log(`Triggering ${info.menuItemId} analysis...`);
+        const selection = info.selectionText || "";
+
+        // Optimistic UI feedback using content script
+        chrome.tabs.sendMessage(tab.id, {
+            action: "signal_alert",
+            state: "think",
+            message: `Running ${info.menuItemId.replace('-', ' ')}...`
+        });
+
+        try {
+            const resp = await fetch('http://localhost:8000/api/browser/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt_key: promptKeys[info.menuItemId],
+                    context: {
+                        url: tab.url,
+                        title: tab.title,
+                        selection: selection,
+                        user_id: 'anon_abc123'
+                    }
+                })
+            });
+
+            const result = await resp.json();
+
+            // Display Result via Alert
+            chrome.tabs.sendMessage(tab.id, {
+                action: "signal_alert",
+                state: "aligned",
+                message: "Analysis Complete. Check Studio Logs." // Ideally show a modal, but alert is MVP
+            });
+
+            // Also open result in a new tab if it's long? For now, we rely on the bridge or console.
+            // A better UX would be to open the sidebar.
+            console.log("Analysis Result:", result);
+
+        } catch (e) {
+            console.error("Analysis failed:", e);
+            chrome.tabs.sendMessage(tab.id, {
+                action: "signal_alert",
+                state: "error",
+                message: "Sovereign Bridge Unreachable."
+            });
+        }
+    }
+});
 
 chrome.runtime.onInstalled.addListener(() => {
     setupContextMenus();
@@ -21,6 +163,43 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 let ws = null;
+
+// Listener for signals FROM content.js
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "enrich_entity") {
+        enrichEntity(request.entity).then(sendResponse);
+        return true; // Keep channel open for async response
+    }
+
+    if (request.action === "heartbeat_context") {
+        sendToSovereign({
+            ...request.data,
+            source: 'content_heartbeat'
+        });
+    }
+
+    if (request.action === "intent_detected") {
+        handleIntent(request.intent, request.context);
+    }
+
+    if (request.action === "browser_interaction") {
+        handleBrowserInteraction(request.type, request.detail);
+    }
+
+    if (request.action === "gemini_sync") {
+        syncGemini({
+            prompt: request.prompt,
+            response: request.response
+        });
+    }
+
+    if (request.action === "open_popup") {
+        // Note: activeTab permission required or user action context.
+        // Opening popup programmatically is restricted in many browsers.
+        console.log("Request to open popup received.");
+    }
+});
+
 function initWebSocket() {
     ws = new WebSocket('ws://localhost:8000/v1/ws_signals');
 
@@ -235,6 +414,15 @@ async function sendToSovereign(data) {
 
 async function enrichEntity(entity) {
     console.log("Autonomous Agency: Enriching", entity);
+
+    // CAPTURE SIGNAL: User interest detected via Hover Scanner
+    addToLearningPackage({
+        type: 'hover_interest',
+        entity: entity,
+        source: 'scanner_dwell',
+        timestamp: Date.now()
+    });
+
     try {
         const resp = await fetch('http://localhost:8000/api/browser/enrich', {
             method: 'POST',
@@ -317,33 +505,7 @@ async function handleBrowserInteraction(type, detail) {
 }
 
 // 3. Context Menu Handling
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-    if (info.menuItemId === "send-to-studio") {
-        const note = info.selectionText || "Captured via context menu";
-        const payload = {
-            user_id: 'anon_abc123',
-            event_type: 'decision',
-            pattern_hint: 'felt_wrong',
-            context: {
-                url: info.pageUrl || tab.url,
-                title: tab.title,
-                note: note,
-                source: 'chrome_context_menu'
-            },
-            timestamp_ms: Date.now()
-        };
-
-        try {
-            await fetch('http://localhost:8000/v1/ingest', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } catch (e) {
-            console.error("Ingest error:", e);
-        }
-    }
-});
+// Context menu listener is now handled above.
 
 // 4. Self-Healing Navigation
 chrome.webNavigation.onErrorOccurred.addListener((details) => {

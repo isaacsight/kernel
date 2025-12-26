@@ -766,17 +766,49 @@ async def analyze_browser_context(data: dict):
             from admin.engineers.metacognitive_principal import MetacognitivePrincipal
             agent = MetacognitivePrincipal()
 
-        context = data.get("context", {})
-        prompt = f"""
-        METACOGNITIVE AUDIT REQUEST:
-        URL: {context.get('url')}
-        TITLE: {context.get('title')}
-        METADATA: {json.dumps(context, indent=2)}
+        from admin.brain.system_prompts import SystemPrompts
         
-        TASK:
-        1. Evaluate if this content aligns with the user's high-level focus.
-        2. Detect any 'Rushed Release' or anxiety patterns in the page text/metadata.
-        3. Provide a 'Sovereign Directive' for the local agents.
+        prompt_key = data.get("prompt_key", "gatekeeper")
+        context = data.get("context", {})
+        selection = context.get("selection", "")
+        url = context.get("url", "")
+        title = context.get("title", "")
+        
+        # Route to correct prompt
+        if prompt_key == "code_sentinel":
+            base_prompt = SystemPrompts.get_code_sentinel_prompt(selection)
+        elif prompt_key == "design_archaeologist":
+            base_prompt = SystemPrompts.get_design_archaeologist_prompt()
+        elif prompt_key == "sovereign_reply":
+            base_prompt = SystemPrompts.get_sovereign_reply_prompt(selection)
+        elif prompt_key == "bias_hunter":
+            base_prompt = SystemPrompts.get_bias_hunter_prompt()
+        elif prompt_key == "jargon_buster":
+            base_prompt = SystemPrompts.get_jargon_buster_prompt(selection)
+        elif prompt_key == "value_auditor":
+            base_prompt = SystemPrompts.get_value_auditor_prompt("Unknown Price", selection or title)
+        elif prompt_key == "zen_mode_translator":
+            base_prompt = SystemPrompts.get_zen_mode_translator_prompt()
+        elif prompt_key == "reality_check":
+            base_prompt = SystemPrompts.get_reality_check_prompt(selection)
+        elif prompt_key == "context_bridge":
+            base_prompt = SystemPrompts.get_browser_context_bridge_prompt(url, title)
+        elif prompt_key == "task_scout":
+            base_prompt = SystemPrompts.get_task_scout_prompt()
+        elif prompt_key == "deep_reader":
+            base_prompt = SystemPrompts.get_deep_reader_prompt()
+        else:
+            # Default to Gatekeeper
+            base_prompt = SystemPrompts.get_attention_gatekeeper_prompt()
+        
+        prompt = f"""
+        {base_prompt}
+        
+        CONTEXT DATA:
+        URL: {url}
+        TITLE: {title}
+        SELECTION: {selection}
+        METADATA: {json.dumps(context, indent=2)}
         """
         
         result = await agent.execute("think", prompt=prompt, depth=2)
@@ -784,6 +816,77 @@ async def analyze_browser_context(data: dict):
         
     except Exception as e:
         logger.error(f"Browser analysis error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/studio/neural_link")
+async def get_neural_link_feed(limit: int = 50):
+    """
+    Get the live feed of 'Neural Link' data (raw intake) from the extension.
+    """
+    from admin.brain.memory_store import get_memory_store
+    store = get_memory_store()
+    try:
+        # Fetch recent intake
+        feed = store.get_recent_intake(limit=limit)
+        return {"feed": feed}
+    except Exception as e:
+        logger.error(f"Neural Link access error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/studio/report")
+async def generate_studio_report(kind: str = "audit", limit: int = 50):
+    """
+    Triggers the Reporter agent to synthesize logs into a product.
+    """
+    from core.plugin_loader import registry
+    
+    # Ensure registry is loaded
+    if not hasattr(registry, '_loaded') or not registry._loaded:
+        registry.discover_plugins(["admin/engineers"])
+        registry._loaded = True
+
+    agent = registry.get_agent("The Reporter")
+    if not agent:
+        # Fallback to manual instantiation
+        from admin.engineers.reporter import Reporter
+        agent = Reporter()
+
+    try:
+        if kind == "audit":
+            result = await agent.execute("generate_audit", limit=limit)
+        elif kind == "product":
+            result = await agent.execute("synthesize_product", limit=limit)
+        else:
+            raise HTTPException(status_code=400, detail="Invalid report kind")
+        
+        return result
+    except Exception as e:
+        logger.error(f"Report generation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/studio/reports")
+async def list_studio_reports():
+    """
+    List all generated reports and products.
+    """
+    report_dir = os.path.join("admin", "reports")
+    if not os.path.exists(report_dir):
+        return {"reports": []}
+    
+    try:
+        files = os.listdir(report_dir)
+        reports = []
+        for f in sorted(files, reverse=True):
+            if f.endswith(".md"):
+                reports.append({
+                    "id": f.replace(".md", ""),
+                    "filename": f,
+                    "type": "audit" if f.startswith("audit") else "product",
+                    "path": os.path.join(report_dir, f)
+                })
+        return {"reports": reports}
+    except Exception as e:
+        logger.error(f"Error listing reports: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/v1/snapshot")

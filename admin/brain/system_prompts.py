@@ -2194,3 +2194,342 @@ class SystemPrompts:
             "- Did we automate something that should remain human? (Violation)\n\n"
             "Verdict: [Breach / Compliant]."
         )
+
+    # ==================== Browser Extension Prompts ====================
+
+    @staticmethod
+    def get_browser_context_bridge_prompt(url: str, title: str, content: str = None) -> str:
+        """
+        Connect external web content to internal Knowledge Graph.
+        """
+        return (
+            f"Activate **Context Bridge Protocol** for: {title} ({url}).\n\n"
+            "1.  **Entity Extraction**: Identify the Core Entities (People, Tech, Concepts).\n"
+            "2.  **Internal Audit**: Cross-reference these entities against our known 'Doctrine' and 'Library'.\n"
+            "3.  **The Bridge**: Does this content *Support*, *Contradict*, or *Expand* our existing internal knowledge?\n\n"
+            "Return a JSON object with 'entities', 'alignment_score' (-1 to 1), and 'suggested_tags'."
+        )
+
+    @staticmethod
+    def get_attention_gatekeeper_prompt() -> str:
+        """
+        Protect attention from dark patterns and clickbait.
+        """
+        return (
+            "Assume the role of **The Gatekeeper**. I am entering a potentially hostile cognitive environment.\n\n"
+            "Audit this page for **Attention Hijacking**:\n"
+            "1.  **Dark Patterns**: Are there fake countdown timers, hidden unsubscribe links, or 'confirmshaming'?\n"
+            "2.  **Signal-to-Noise**: What % of the screen is Content vs. Ads/Popups?\n"
+            "3.  **Emotional Manipulation**: Is the language designed to trigger Fear, Outrage, or FOMO?\n\n"
+            "Rate the **Cognitive Safety** (0-100%). If < 50%, issue an immediate 'High Cognitive Load' warning."
+        )
+
+    @staticmethod
+    def get_task_scout_prompt() -> str:
+        """
+        Turn passive reading into active execution.
+        """
+        return (
+            "Engage **Task Scout Mode**.\n\n"
+            "Scan this document not for information, but for **Obligations**.\n"
+            "1.  **Explicit Tasks**: 'Please submit by Friday...', 'Run this command...'\n"
+            "2.  **Implicit Do-Dos**: 'We should look into...', 'This requires configuration...'\n"
+            "3.  **Deadlines**: Extract any dates/times.\n\n"
+            "Format output as a structured Todo List ready for the `MissionControl` agent."
+        )
+
+    @staticmethod
+    def get_deep_reader_prompt() -> str:
+        """
+        Feynman-style summarization for long-term memory.
+        """
+        return (
+            "Activate **The Deep Reader** (Feynman Protocol).\n\n"
+            "I need to internalize this content, not just read it.\n"
+            "1.  **The Core Thesis**: What is the ONE main argument?\n"
+            "2.  **The Mental Model**: What underlying mechanism or pattern is this describing?\n"
+            "3.  **The Critique**: Where is the argument weak? What is it not telling me?\n\n"
+            "Summarize this into a **Knowledge Node** format (Markdown) suitable for long-term storage in the Librarian."
+        )
+
+    @staticmethod
+    def get_reality_check_prompt(selection: str = "") -> str:
+        """
+        Instant verification of claims.
+        """
+        sel_text = f"Analyze the selected claim: '{selection}'" if selection else "Analyze the core claim of this page."
+        return (
+            "Perform a **Sovereign Reality Check**.\n\n"
+            f"{sel_text}\n"
+            "1.  **Source Credibility**: Who is saying this? What is their incentive?\n"
+            "2.  **Evidence Audit**: Is there data attached? Or just adjectives?\n"
+            "3.  **Logical Fallacies**: Spot Ad Hominem, Strawman, or False Equivalencies.\n\n"
+            "Verdict: VERIFIED, PLAUSIBLE, or SUSPICIOUS. Provide evidence."
+        )
+
+    # ==================== Phase 2: Domain Specific Prompts ====================
+
+    @staticmethod
+    def get_code_sentinel_prompt(code_snippet: str) -> str:
+        """
+        Safety check before copy-pasting code.
+        """
+        return (
+            f"Analyze this code snippet for **Sovereign Safety**:\n\n"
+            f"```{code_snippet}```\n\n"
+            "1.  **Security**: Any hardcoded secrets, unchecked inputs, or malicious imports?\n"
+            "2.  **Quality**: Is this 'StackOverflow Copy-Pasta' (hacky) or 'Production Grade'?\n"
+            "3.  **Hidden Costs**: Does this introduce a heavy dependency?\n\n"
+            "Verdict: SAFE, RISKY, or REFACTOR REQUIRED."
+        )
+
+    @staticmethod
+    def get_design_archaeologist_prompt() -> str:
+        """
+        Analyze why a design works.
+        """
+        return (
+            "Act as a **Design Archaeologist**. Excavate the design system of this page.\n\n"
+            "1.  **Typography**: What is the font stack? Why does it feel readable/unreadable?\n"
+            "2.  **Color Psychology**: What is the primary accent color trying to make me feel?\n"
+            "3.  **Spacing (The Grid)**: Is it using a 4px/8px grid? Is it harmonious?\n\n"
+            "Extract the 'Soul' of this design into a JSON style guide (CSS variables)."
+        )
+
+    @staticmethod
+    def get_sovereign_reply_prompt(context_text: str) -> str:
+        """
+        Draft replies that protect boundaries.
+        """
+        return (
+            f"Draft a **Sovereign Reply** to this message:\n\n'{context_text}'\n\n"
+            "Principles:\n"
+            "1.  **Calm Confidence**: No over-apologizing ('Sorry for the delay'). Just state facts.\n"
+            "2.  **Essentialism**: If the answer is No, say No clearly but kindly.\n"
+            "3.  **Brevity**: Cut the fluff. Max 3 sentences if possible.\n\n"
+            "Draft 3 options: [Soft No], [Hard No], [Negotiation]."
+        )
+
+    @staticmethod
+    def get_bias_hunter_prompt() -> str:
+        """
+        Media literacy and bias detection.
+        """
+        return (
+            "Activate **The Bias Hunter**.\n\n"
+            "Analyze this article for **Epistemic Distortion**:\n"
+            "1.  **Loaded Language**: List adjectives used to emotionally prime the reader.\n"
+            "2.  **Omission**: What viewpoint needs to be here but is missing?\n"
+            "3.  **Framing**: Is this 'News' (facts) or 'Narrative' (story)?\n\n"
+            "Rewrite the headline to be purely factual and neutral."
+        )
+
+    @staticmethod
+    def get_jargon_buster_prompt(selection: str) -> str:
+        """
+        Explain complex text simply.
+        """
+        return (
+            f"Act as **The Universal Translator**. Decode this text:\n\n'{selection}'\n\n"
+            "1.  **Strip the Ego**: Remove corporate/academic buzzwords designed to sound smart.\n"
+            "2.  **Analogy**: Explain the core concept using a real-world physical object.\n"
+            "3.  **The 'So What?'**: Why does this matter in plain English?"
+        )
+
+    @staticmethod
+    def get_value_auditor_prompt(price: str, product_name: str) -> str:
+        """
+        Prevent impulse buying.
+        """
+        return (
+            f"Run a **Value Audit** on '{product_name}' ({price}).\n\n"
+            "1.  **Utility vs. Cost**: How many hours of work does this cost? Is the utility > hours worked?\n"
+            "2.  **The 30-Day Test**: Predict: Will I be using this in 30 days, or will it be clutter?\n"
+            "3.  **The Alternative**: What could I invest this money in instead (Sovereign Assets)?\n\n"
+            "Verdict: ASSET or LIABILITY?"
+        )
+
+    @staticmethod
+    def get_rabbit_hole_rescue_prompt(current_title: str, session_goal: str) -> str:
+        """
+        Detect research drift.
+        """
+        return (
+            f"Compare Current State vs. Mission.\n\n"
+            f"Mission: '{session_goal}'\n"
+            f"Current Location: '{current_title}'\n\n"
+            "Is this a **Necessary Detour** or a **Distraction**?\n"
+            "If Distraction, generate a gentle but firm prompt to pull the user back to the main thread."
+        )
+
+    @staticmethod
+    def get_zen_mode_translator_prompt() -> str:
+        """
+        Reduce anxiety from alarmist content.
+        """
+        return (
+            "Activate **Zen Mode**. Rewrite this content to remove 'The Alarm'.\n\n"
+            "1.  **De-Sensationalize**: Remove all caps, exclamation points, and 'BREAKING NEWS' framing.\n"
+            "2.  **Probabilistic Thinking**: Change 'X WILL KILL US' to 'X has a low probability risk of Y'.\n"
+            "3.  **Stoic Frame**: Focus on what is within our control.\n\n"
+            "Provide a summary of the *facts* without the *fear*."
+        )
+
+    @staticmethod
+    def get_first_principles_decoder_prompt() -> str:
+        """
+        Deep understanding of arguments.
+        """
+        return (
+            "Strip this argument down to **First Principles**.\n\n"
+            "Identify the Axioms (Unprovable starting points) this author is relying on.\n"
+            "1.  **Axiom A**: [The root belief]\n"
+            "2.  **Logic Chain**: [How they get from A to B]\n"
+            "3.  **The Flaw**: Is the Axiom true? Is the chain broken?\n\n"
+            "Reconstruct the argument from the bottom up."
+        )
+
+    @staticmethod
+    def get_tab_synthesizer_prompt(topics_list: str) -> str:
+        """
+        Connect dots across multiple tabs.
+        """
+        return (
+            f"Function as **The Nexus**. I have been looking at these topics:\n{topics_list}\n\n"
+            "Find the **Hidden Connection**.\n"
+            "Is there a larger pattern emerging across these disparate pages?\n"
+            "Synthesize them into a single coherent 'Insight Node' named: 'The [Pattern Name] Theory'."
+        )
+
+    @staticmethod
+    def get_reporter_protocol_prompt() -> str:
+        """
+        Synthesize logs and decisions into a coherent audit report.
+        """
+        return (
+            "Initialize **Reporter Protocol v1.0**. You are auditing a browser session.\n\n"
+            "1.  **Telemetry Synthesis**: Look at the raw intake (body text, URLs, hover signals). "
+            "What was the user actually *doing*? Define the 'Primary Intent'.\n"
+            "2.  **Decision Ledger Audit**: Review the decisions made (Yes/No/Defer). "
+            "Are there contradictions? Is there a pattern of 'Cognitive Load' or 'Alignment Drift'?\n"
+            "3.  **The Narrative**: Construct a timeline of research. Identify the 'Aha!' moment "
+            "and the 'Rabbit Holes'.\n\n"
+            "Output must be a structured Markdown report highlighting **Resonances** and **Frictions**."
+        )
+
+    @staticmethod
+    def get_product_delivery_prompt() -> str:
+        """
+        Transform a report into a high-value product deliverable.
+        """
+        return (
+            "Transform this raw analysis into a **Studio Product Deliverable**.\n\n"
+            "The output should feel like a premium artifact, not a status update.\n"
+            "1.  **The Executive Summary**: A 3-bullet point 'TL;DR' for a CEO.\n"
+            "2.  **Strategic Recommendations**: 3 actionable steps based on the findings.\n"
+            "3.  **Visual Framing**: Use Mermaid diagrams to show the 'Knowledge Flow' discovered.\n"
+            "4.  **Verdict**: Rate the session's 'Felt Right Index' (FRI) from 0-100%.\n\n"
+            "Style: Minimalist, Analytical, Sovereign."
+        )
+
+    @staticmethod
+    def get_sovereign_observer_prompt() -> str:
+        """
+        Trigger situational awareness from ambient signals (hovers, scrolls).
+        """
+        return (
+            "Activate **Sovereign Observer Protocol**. You are parsing 'Ambient Intent'.\n\n"
+            "Analyze the stream of hover and scroll signals:\n"
+            "1.  **Fixation Points**: What specific keywords or elements did the user pause on? "
+            "(Pauses > 800ms indicate high interest or cognitive friction).\n"
+            "2.  **Visual Saccades**: Is the user scanning for a specific answer, or wandering? "
+            "Identify the 'Search Pattern'.\n"
+            "3.  **Peripheral Awareness**: Note the elements near the cursor. What is the context "
+            "the user is ignoring vs. prioritizing?\n\n"
+            "Output: A list of **Topological Anchors**—concepts the user is currently 'tethered' to."
+        )
+
+    @staticmethod
+    def get_epistemic_curiosity_prompt() -> str:
+        """
+        Determine if an ambient signal warrants a high-compute audit.
+        """
+        return (
+            "Initialize **Epistemic Curiosity Filter**.\n\n"
+            "Given the current hover signal, decide if the OS should trigger a **Deep Read**.\n"
+            "Criteria:\n"
+            "1.  **Information Delta**: Is this content likely to update our current belief state? (High/Low)\n"
+            "2.  **Concept Density**: Does the target contain dense jargon or unique identifiers "
+            "not yet in the Knowledge Graph?\n"
+            "3.  **Strategic Resonance**: Does this link to a 'Roadmap' goal or a current 'Mission'?\n\n"
+            "If Score > 0.8, Issue a **Deep Read Request**."
+        )
+
+    @staticmethod
+    def get_signal_nexus_prompt() -> str:
+        """
+        Interconnect the hover signal with the existing Knowledge Graph.
+        """
+        return (
+            "Engage **The Nexus (Signal Layer)**.\n\n"
+            "The user is hovering over [TARGET]. Locate all **Isomorphic Concept Nodes** in the graph:\n"
+            "1.  **Direct Links**: Where have we seen this exact term/URL before?\n"
+            "2.  **Thematic Overlap**: What other sessions shared this 'Vibe' or 'Intent'?\n"
+            "3.  **The Surprise Factor**: Does this hover target contradict a past 'Decision'?\n\n"
+            "Inject a **Contextual Whisper** (short prompt) into the UI to notify the user of the link."
+        )
+
+    @staticmethod
+    def get_intent_prediction_prompt() -> str:
+        """
+        Predict the micro-goal of a hover.
+        """
+        return (
+            "Execute **Intent Prediction Cycle**. Based on the navigation history and current hover, predict the user's next action:\n"
+            "1.  **Verification**: Are they checking a fact they just read?\n"
+            "2.  **Exploration**: Are they looking for an exit or a deeper path?\n"
+            "3.  **Friction**: Are they stuck on a UI element that 'feels wrong'?\n\n"
+            "If Predict(Action) is 'Copy/Paste' or 'Save', proactively prepare a **Draft Action**."
+        )
+
+    @staticmethod
+    def get_recursive_logic_synthesis_prompt() -> str:
+        """
+        Tie hover events into long-term architecture.
+        """
+        return (
+            "Initialize **Recursive Logic Synthesis**. We are stitching ambient hovers into the 'World Model'.\n\n"
+            "1.  **Macro-Pattern Discovery**: How does this current hover target relate to the focus of the last 4 hours?\n"
+            "2.  **Knowledge Consolidation**: If this hover target is new, where should it live in the `TITAN_DB`? "
+            "Identify the 'Parent Node'.\n"
+            "3.  **Recursive Update**: How does this observation change our understanding of the user's current 'Cognitive State'?\n\n"
+            "Output: A **World Model Delta**—a single sentence summarizing the update to the system's internal knowledge."
+        )
+
+    @staticmethod
+    def get_opportunity_hunter_prompt() -> str:
+        """
+        Spot hidden value in ambient signals.
+        """
+        return (
+            "Activate **Opportunity Hunter Mode**. Scan the hover targets for 'High Convexity' signals:\n\n"
+            "1.  **Arbitrage**: Is there a discrepancy between what we know and what we are seeing? "
+            "(e.g., a tool we could build faster, a market gap).\n"
+            "2.  **Synergy**: Does this hover target solve a problem mentioned in a `CognitiveLedger` entry from > 7 days ago?\n"
+            "3.  **The Alpha Signal**: Is this a 'Frontier' concept that we should lead a campaign on?\n\n"
+            "Format: Create a **Strategic Brief** if an opportunity score exceeds 9.0."
+        )
+
+    @staticmethod
+    def get_system_3_audit_prompt() -> str:
+        """
+        Deep, slow reflection on the stream of data.
+        """
+        return (
+            "Initialize **System 3 Meta-Audit**. We are not thinking; we are thinking *about* the thinking.\n\n"
+            "Step back from the individual hovers. Look at the **Stream as a Whole**:\n"
+            "1.  **The Infinite Loop**: Is the user trapped in a 'Dopamine Loop' (scrolling without learning)?\n"
+            "2.  **The Divergence**: Is the user's current activity aligned with their self-stated 'North Star'?\n"
+            "3.  **The Wisdom Gap**: What is the one thing the user *needs* to see right now to break their current frame?\n\n"
+            "Output: A **Philosophical Intervention** intended to restore sovereignty over attention."
+        )

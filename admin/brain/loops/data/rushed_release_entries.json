@@ -414,11 +414,365 @@
         "source": "chrome_context_menu"
       },
       "created_at": "2025-12-25T21:09:22.039469"
+    },
+    {
+      "entry_id": "entry_1766776986_19",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Architectural Overview: The Studio OS and Antigravity System",
+        "url": "https://www.doesthisfeelright.com/posts/studio-os-whitepaper.html",
+        "description": "Thoughts on business, technology, and the human condition.",
+        "h1": "Architectural Overview: The Studio OS and Antigravity System",
+        "wordCount": 2362,
+        "bodyText": "Home\n/\nEssays\n/\nArchitectural Overview: The Studio OS and Antigravity System\nESSAY\n2025-12-25\nArchitectural Overview: The Studio OS and Antigravity System\nGeneral\nArchitectural Overview: The Studio OS and Antigravity System\n\nThe Studio OS and its Antigravity paradigm represent a strategic response to a fundamental challenge in modern software engineering: the problem of cognitive scale. As system complexity grows, the primary bottleneck is no longer execution speed but the capacity to reason about, orchestrate, and verify a vast network of interacting components. This document dissects the architecture of a system designed to address this challenge by facilitating a crucial cognitive shift, transforming an engineer's role from that of a hands-on \"Builder\" to a high-leverage \"System Designer.\"\n\n---\n\n1.0 The Foundational Challenge: Shifting from Builder to System Designer\n\nBefore delving into the technical components of the Studio OS, it is crucial to understand the core philosophical shift in the engineering mindset that this architecture is designed to facilitate. The system is predicated on a clear distinction between two modes of work: the traditional, execution-focused \"Builder\" and the emergent, orchestration-focused \"System Designer.\" The architecture's primary goal is to provide the leverage necessary to operate effectively in the latter mode.\n\nThis distinction is best captured by the fundamental question each persona asks:\n\n| Builder Mindset | System Designer Mindset | | :--- | :--- | | What do I build next? | What system produces correct outcomes without micromanagement? |\n\nThe following architectural principles represent the deliberate engineering solution designed to enable and sustain this critical cognitive shift from execution to orchestration.\n\n2.0 High-Level System Architecture: The Sovereign Cognitive Co-Processor\n\nThe Studio OS is architected not as a simple application or conversational tool, but as a Sovereign Agentic Operating System. It is a local-first \"Cognitive Co-Processor\" designed to augment an engineer's ability to manage complex operational workflows. Its design is governed by the need for deterministic, scalable, and reliable orchestration of specialized AI agents.\n\nTo achieve this, the system employs a strict Hub-and-Spoke architectural model. This design is a deliberate choice to prevent the chaotic, unmanageable dependencies of \"spaghetti agent\" systems, ensuring that all operations are managed through a centralized and deterministic orchestrator.\n\nThis model consists of two primary components:\n\nThe Hub: StudioKernel\n\nThe StudioKernel is the system's central nervous system and orchestrator. It functions as a continuous Event Loop, managing system state and triggering agent actions at specific, predictable intervals. Its core timed operations include:\n\nPulse (Every 1s): Handles high-frequency system interrupts and provides a heartbeat to the user interface, ensuring responsiveness.\nCouncil Session (Every 20m): Initiates the \"System 2\" reasoning loop, where agents engage in deliberative planning and synthesis.\nAuto-Draft (Every 15m): Scans the knowledge base for high-confidence insights and proactively generates new content drafts.\nTrend Scan (Every 2h): Activates TrendScout agents to monitor and ingest information from external RSS and social feeds.\nThe Spokes: Specialized Agents\n\nThe spokes are a workforce of over 50 specialized agents, each inheriting from a common BaseAgent class. These agents are designed for specific tasks (e.g., Alchemist for content synthesis, Visionary for multimodal analysis, Librarian for knowledge graph maintenance, and Guardian for safety auditing) and are prohibited from communicating directly with one another. Instead, they interact indirectly by reading from and writing to a central data store, following the Blackboard pattern.\n\nCore Technology Stack\n\nThe architecture is grounded in a practical and robust technology stack designed for local-first operation and extensibility:\n\nRuntime: Python 3.11+ (Backend Kernel), Node.js (Frontend)\nFrontend: React + Vite (UI Cockpit)\nDatabase: SQLite (for transactional memory), TitanDB (hybrid data substrate using ChromaDB, NetworkX, and Filesystem)\nOrchestration: A custom Event Loop (StudioKernel) with a scheduler.\nInference: A hybrid model using cloud-based LLMs (Gemini Pro) for primary reasoning, local models (Ollama) for privacy and offline fallback, and custom API bridges.\n\nThe following sections will deconstruct the core principles that make this Hub-and-Spoke model effective, scalable, and deterministic in practice.\n\n3.0 Core Principles of a Deterministic Multi-Agent System\n\nThe following diagram illustrates the \"Hub-and-Spoke\" architecture, showing the relationship between the Sovereign Kernel, the Agent Workforce, and the Data Substrate:\n\n\ngraph TD\n    subgraph \"The Sovereign Kernel (Hub)\"\n        SK[StudioKernel]\n        EL[Event Loop]\n        SK -->|Orchestrates| EL\n        \n        subgraph \"Timed",
+        "timestamp": 1766776986440,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T19:23:06.444478"
+    },
+    {
+      "entry_id": "entry_1766777019_20",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "NotebookLM",
+        "url": "https://notebooklm.google.com/notebook/3d230a13-5ff4-4e28-a75a-eee8bced9526",
+        "description": "Use the power of AI for quick summarization and note taking, NotebookLM is your powerful virtual research assistant rooted in information you can trust.",
+        "h1": "",
+        "wordCount": 62,
+        "bodyText": "Loading Notebook...\nadd\nCreate notebook\nsettings\nSettings\nULTRA\nSources\ndock_to_right\ndocs\nSaved sources will appear here\nClick Add source above to add PDFs, websites, text, videos, or audio files. Or import a file directly from Google Drive.\nChat\nmore_vert\nupload\nAdd a source to get started\nUpload a source\n0 sources\narrow_forward\ndock_to_left\nNotebookLM can be inaccurate; please double check its responses.",
+        "timestamp": 1766777019051,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T19:23:39.053674"
+    },
+    {
+      "entry_id": "entry_1766777491_21",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "slides - Google Search",
+        "url": "https://www.google.com/search?q=slides&oq=slides&gs_lcrp=EgZjaHJvbWUyDAgAEEUYORixAxiABDIKCAEQABixAxiABDIKCAIQABixAxiABDIKCAMQABixAxiABDIKCAQQABixAxiABDIKCAUQABixAxiABDIHCAYQABiABDIKCAcQABixAxiABDIHCAgQABiABDIHCAkQABiABKgCCLACAfEF24_kda4YhYo&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 638,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nImages\nShopping\nVideos\nNews\nMore\nSearch Results\nWeb Result with Site Links\nGoogle Slides: Presentation Slideshow Maker\n\nGoogle\nhttps://workspace.google.com \u203a products \u203a slides\nCreate stunning presentations with Google Slides. Discover slide templates for every use case, use AI to generate unique visualizations, and more.\nSign-in\nAccess Google Slides with a personal Google account or ...\n\nEnglish \u2013 India\nBuild beautiful presentations together \u00b7 Polished ...\n\nEnglish \u2013 New Zealand\nBuild beautiful presentations together \u00b7 Polished ...\n\nEnglish \u2013 South Africa\nBuild beautiful presentations together \u00b7 Polished ...\n\nOutil de cr\u00e9ation de ...\nCr\u00e9ez de magnifiques pr\u00e9sentations ensemble. Cr\u00e9ez ...\n\nMore results from google.com\u00a0\u00bb\nSlides: Create and Share Presentations for Free\n\nslides.com\nhttps://slides.com\nSlides is a suite of modern presentation tools, available right from your browser. Unlike traditional presentation software, there's no need to download\u00a0...Read more\nGoogle Slides - App Store - Apple\n\nApple\nhttps://apps.apple.com \u203a app \u203a google-slides\nCreate, edit, and collaborate on presentations with the Google Slides app. With Slides you can: * Create new presentations or edit existing ones * Share\u00a0...Read more\nSlidesgo: Free Google Slides themes and Powerpoint templates\n\nSlidesgo\nhttps://slidesgo.com\nDiscover the best Google Slides themes and PowerPoint templates you can use in your presentations - 100% Free for any use.\nCreate Presentations & Slides for Every Occasion\n\nFigma\nhttps://www.figma.com \u203a slides\nJul 2, 2024 \u2014 Figma Slides makes it easier than ever for teams to co-create narratives, engage audiences, and craft impressive decks.Read more\nGoogle Slides - Apps on Google Play\n\nGoogle Play\nhttps://play.google.com \u203a store \u203a apps \u203a details \u203a id=com...\nCreate, edit, and collaborate on presentations from your Android phone or tablet with the Google Slides app. With Slides, you can:Read more\nWhat people are saying\nGemini in Google Slides is getting pretty good. Just clicked the \"beautify this slide\" button to go from this, to this.\n1.2K+ likes\u00a0\u00b7\u00a017 hours ago\ntypesfast \u00b7 X\nFounder & CEO of Flexport\n0:35\nComment \u201cSLIDES\u201d and I\u2019ll send you this FREE Nano Banana Pro Slides Maker \ud83c\udf4c\u26a1 This Kimi Agentic Slides tool is honestly next level. Way better than Gamma. Cleaner than NotebookLM. And yes\u2014it\u2019s free. I tested it for a quick pitch deck. Typed my topic. It researched the web, pulled real data, built the structure\u2026 and boom \u2014 full slides ready in minutes. You can: \u2022 Enter a topic or upload a PDF \u2022 Get smart outlines instantly \u2022 Generate full slides with visuals \u2022 Edit text, swap images, tweak layouts \u2022 Export directly as PowerPoint Feels like having a designer + researcher working for you 24/7. No headache. No wasted hours. Free access is live right now \u23f3 If you make decks often, this is a no-brainer. \ud83d\udc47 Comment \u201cSLIDES\u201d and try it yourself",
+        "timestamp": 1766777490993,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T19:31:31.000734"
+    },
+    {
+      "entry_id": "entry_1766777590_22",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://manus.im/app/KwzzSa3WG1AilCiJxhExW8",
+        "title": "New Task - Manus",
+        "note": "content",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T19:33:10.099973"
+    },
+    {
+      "entry_id": "entry_1766777634_23",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://manus.im/app/KwzzSa3WG1AilCiJxhExW8",
+        "title": "New Task - Manus",
+        "note": "Captured via context menu",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T19:33:54.987054"
+    },
+    {
+      "entry_id": "entry_1766777648_24",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://manus.im/app/KwzzSa3WG1AilCiJxhExW8",
+        "title": "New Task - Manus",
+        "note": "Captured via context menu",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T19:34:08.455573"
+    },
+    {
+      "entry_id": "entry_1766778785_25",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "google ai studio - Google Search",
+        "url": "https://www.google.com/search?q=google+ai+studio&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyDAgFECMYJxjqAhjwBTIJCAYQIxgnGOoCMhUIBxAAGEIYtAIY6gIY2wUY8AUYngbSAQozNjEyNjNqMGoxqAIIsAIB8QW6kOcFm0BRng&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 1033,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nVideos\nImages\nNews\nShopping\nMore\nTools\nAds\nSponsored result\nBuild with Google AI Studio\nGoogle AI Studio\nhttps://aistudio.google.com \u203a gemini \u203a api\nBuild with Gemini \u2014 Access the latest Gemini multimodal AI models via the API. Build your applications now.\nNano Banana Image Gen API\nUnlock true multimodal creativity AI Image Generation & Editing\nGet a Gemini API key\nSet up your API key Integrate the API into your apps\nVeo3 Video Generation API\nGenerate videos in the Gemini API High quality video from text prompt\nGemini 3 in AI Studio\nOur most intelligent model. Bring any idea to life.\nVibe Code with Gemini\nGo from prompt to AI-powered app. The fastest way to start building.\nHide sponsored result\nSearch Results\nWeb Result with Site Links\nGoogle AI Studio\n\nGoogle AI Studio\nhttps://aistudio.google.com\nThe fastest way to build AI-first applications. Use natural language to generate fully functional apps with built-in features like Nano Banana or Google Search\u00a0...\nNew chat\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nAPI Key\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nNano Banana\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nGenerate Speech\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nGemini-2.0-flash-exp\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nEmail or phone\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nMore results from google.com\u00a0\u00bb\nSign in - Google Accounts\n\nGoogle AI Studio\nhttps://makersuite.google.com \u203a prompts \u203a new_freeform\nSign in. Use your Google Account. Email or phone. Forgot email? CAPTCHA image of text used to distinguish humans from robots. Type the text you hear or see.Read more\nGoogle AI Studio | Gemini API\n\nGoogle AI for Developers\nhttps://ai.google.dev \u203a aistudio\nGoogle AI Studio is the fastest way to start building with Gemini, our next generation family of multimodal generative AI models.Read more\nVertex AI Studio\n\nGoogle Cloud\nhttps://cloud.google.com \u203a generative-ai-studio\nVertex AI Studio is a Google Cloud console tool for rapidly prototyping and testing generative AI models.Read more\nWhat people are saying\nHow to Make Money with Google AI Studio\n11 hours ago\nJulian Goldie \u00b7 LinkedIn\nSEO agency owner\n8:44\nGoogle Gemini AI Voice Agents DESTROY $497/m Solutions \ud83e\udd2f (Build Them FREE in 4 Minutes)\n8.4K+ views\u00a0\u00b7\u00a01 day ago\niampauljames\nYouTube\n8:02\nBuild anything with Google AI Studio, here's how...\n4.4K+ views\u00a0\u00b7\u00a02 days ago\nJulian Goldie SEO \u00b7 YouTube\nAI automation designer\nBuild an AI App for FREE with the New Google AI Studio\n40+ likes\u00a0\u00b7\u00a0Oct 23, 2025\nproflead\nMedium\nGoogle AI studio Updated their Terms\nPopular comment \u00b7 I wouldn't mind using the gemini app if it wasn't hot garbage compared to Aistudio\n.\n90+ comments\u00a0\u00b7\u00a03 days ago\nr/Bard\nReddit\n16:45\nGoogle AI Studio FREE APP Build",
+        "timestamp": 1766778785305,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T19:53:05.307940"
+    },
+    {
+      "entry_id": "entry_1766778874_26",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.google.com/search?q=google+ai+studio&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyDAgFECMYJxjqAhjwBTIJCAYQIxgnGOoCMhUIBxAAGEIYtAIY6gIY2wUY8AUYngbSAQozNjEyNjNqMGoxqAIIsAIB8QW6kOcFm0BRng&sourceid=chrome&ie=UTF-8",
+        "depth": 33,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-26T19:54:34.640500"
+    },
+    {
+      "entry_id": "entry_1766779079_27",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Google AI Studio",
+        "url": "https://aistudio.google.com/apps/drive/1Q7F4n67mXn-JchtwV1EGq5zX-jvzAIMy?showAssistant=true&resourceKey=&showPreview=true",
+        "description": "The fastest path from prompt to production with Gemini",
+        "h1": "",
+        "wordCount": 12,
+        "bodyText": "Skip to main content\n\nWe have updated our Terms of Service\n\nDismiss",
+        "timestamp": 1766779079610,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T19:57:59.615706"
+    },
+    {
+      "entry_id": "entry_1766779332_28",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://aistudio.google.com/apps/drive/1Q7F4n67mXn-JchtwV1EGq5zX-jvzAIMy?showAssistant=true&resourceKey=&showPreview=true",
+        "depth": 0,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-26T20:02:12.637416"
+    },
+    {
+      "entry_id": "entry_1766779375_29",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "gemini - Google Search",
+        "url": "https://www.google.com/search?q=gemini&oq=gemini&gs_lcrp=EgZjaHJvbWUqDggAEEUYJxg7GIAEGIoFMg4IABBFGCcYOxiABBiKBTIGCAEQRRg7MgwIAhAjGCcYgAQYigUyBggDEEUYOzIGCAQQRRg8MgYIBRBFGDwyBggGEEUYPDIGCAcQBRhAqAIIsAIB8QW0xmH3gdppaw&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 682,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nImages\nVideos\nNews\nShort videos\nMore\nSearch Results\nWeb Result with Site Links\nGoogle Gemini\n\nGoogle Gemini\nhttps://gemini.google.com\nMeet Gemini, Google's AI assistant. Get help with writing, planning, brainstorming, and more. Experience the power of generative AI.\nGemini app on iOS & Android\n\u00a0\n\nSign in\nMeet Gemini, Google's AI assistant. Get help with writing, planning ...\n\nAdvanced one\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nGemini Apps Help\nOfficial Gemini Apps Help Center where you can find tips and ...\n\nAI tools for a better way to work\nGemini spark icon. Get everyday AI help. Get help with quick ...\n\nGemini\nConoce a Gemini, el asistente de IA de Google. Te ayuda a ...\n\nMore results from google.com\u00a0\u00bb\nPeople also ask\nIs Gemini AI free to use?\nWhy did Google shut down Gemini?\nHow to access Gemini AI?\nWhat is Google's Gemini AI?\nFeedback\nGemini\n\nGemini Trust\nhttps://www.gemini.com\nGemini makes crypto simple. Find, Trade and Buy over 70 coins including bitcoin and Solana on the best cryptocurrency platform. Start trading crypto here.\nSign in - Google Accounts\n\nGoogle AI Studio\nhttps://aistudio.google.com \u203a prompts \u203a new_chat\nSign in. Use your Google Account. Email or phone. Forgot email? CAPTCHA image of text used to distinguish humans from robots. Type the text you hear or see.Read more\nWhat people are saying\nGoogle Gemini Review: An Excellent AI Chatbot With Fantastic Tie-Ins\n2 weeks ago\nRuben Circelli \u00b7 PCMag\nTechnology writer & editor\n16:03\nThese New Gemini Updates Are INSANE! (New Features)\n92.7K+ views\u00a0\u00b7\u00a03 days ago\nPaul J Lipsky \u00b7 YouTube\nE-commerce seller\nGemini didn\u2019t \u201ctake\u201d 13 points of share from OpenAI. Google converted existing users into Gemini users by making the AI layer impossible to avoid. AI Overviews reach over 1 billion people monthly and cannot be turned off. Every Android phone ships with Gemini as the default assistant. Google Search is merging AI Overviews with AI Mode so follow-up questions automatically route into Gemini. The company is systematically eliminating the moment where users consciously choose an AI assistant. The tell is in Gemini\u2019s traffic sources: 76% comes from direct visits to [ google.com]( google.com) properties. Users aren\u2019t seeking out Gemini. They\u2019re encountering Gemini while using Google Search. That said, Google has also shipped genuinely good products this year. Nano Banana drove 23 million first-time users and 500 million images in two weeks. The app hit #1 on the US App Store in September, knocking ChatGPT to #2 for the first time. Downloads jumped 45% month over month to 12.6 million\n290+ likes\u00a0\u00b7\u00a017 hours ago\naakashg0\nX\nGoogle Gemini - Apps on Google Play\n\nGoogle Play\nhttps://play.google.com \u203a store \u203a apps \u203a details\nAug 19, 2025 \u2014 Supercharge your creativity and productivity with Gemini, your AI assistant from Google. Gemini gives you direct access ",
+        "timestamp": 1766779375358,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T20:02:55.410919"
+    },
+    {
+      "entry_id": "entry_1766779410_30",
+      "user_id": "anon_abc123",
+      "type": "self_improvement_audit",
+      "classification": {
+        "pattern": "unknown",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "session_duration": 345661,
+        "signals": [
+          {
+            "event": "content_import",
+            "count": 1,
+            "timestamp": 1766779410347
+          }
+        ],
+        "purpose": "Autonomous heuristic refinement"
+      },
+      "created_at": "2025-12-26T20:03:30.561402"
+    },
+    {
+      "entry_id": "entry_1766779843_31",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "free slide generator - Google Search",
+        "url": "https://www.google.com/search?q=free+slide+generator&oq=free+slide+gen&gs_lcrp=EgZjaHJvbWUqDQgAEAAYkQIYgAQYigUyDQgAEAAYkQIYgAQYigUyBwgBEAAYgAQyBggCEEUYOTIHCAMQABiABDIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHqgCALACAA&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 103,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nImages\nVideos\nShopping\nShort videos\nMore\nSearch Results\nSearch Results\nGamma | Best AI Presentation Maker & Website Builder\nGamma\nhttps://gamma.app\nGamma is your free-to-use AI design partner for creating effortless presentations, websites, and more. No coding or design skills required.\nFree AI Presentation Maker\nSlidesgo\nhttps://slidesgo.com \u203a AI Tools\nCreate stunning slides in just a few clicks, from text with AI, perfect for teachers, students & businesses. Compatible with Google Slides & PowerPoint\u2014and it's\u00a0...\nShow all quick matches\nWeb Guide\nClassic Search\nFooter Links",
+        "timestamp": 1766779843349,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T20:10:43.353258"
+    },
+    {
+      "entry_id": "entry_1766781591_32",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "sandbox:/mnt/data/Studio_OS_Presentation.pptx - Google Search",
+        "url": "https://www.google.com/search?q=sandbox:/mnt/data/Studio_OS_Presentation.pptx",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 542,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nImages\nShopping\nVideos\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nSearching\nGenerating\nHow do i gain access to sandbox:/mnt/data ...\n\nMicrosoft Learn\nhttps://learn.microsoft.com \u203a answers\n\u00b7\nTranslate this page\nNov 17, 2025 \u2014 How do i gain access to sandbox:/mnt/data/Executive_Report_Presentation_FULL.pptx?\n5 answers\n\u00a0\n\u00b7\n\u00a0\nTop answer:\u00a0\nTo gain access to a file in a sandbox environment, you typically need to ensure that you ...\nM365 Copilot-created file placed at unreachable URL\n38 answers\nJun 13, 2025\nsandbox:/mnt/data ...\n1 answer\nDec 21, 2025\nMore results from learn.microsoft.com\nPeople also ask\nHow to access sandbox :/ mnt data in ChatGPT?\nHow to download pptx from ChatGPT?\nWhat is a sandbox presentation?\nHow to download mnt from ChatGPT?\nFeedback\nIssue Downloading PPTX File Created Using Python Code ...\n\nOpenAI Developer Community\nhttps://community.openai.com \u203a issue-downloading-ppt...\nMay 21, 2024 \u2014 I wrote Python code to generate a PowerPoint presentation using the pptx library. \u00b7 The PPTX file was saved in the /mnt/data/ directory.Read more\nFix for sandbox:/mnt/data/filename.pdf download failure of ...\n\nReddit\u00a0\u00b7\u00a0r/ChatGPT\n50+ comments \u00b7 2 weeks ago\nI ran into the dreaded download link failure on ChatGPT last night and this morning I was able to get around it and fix it by switch models.Read more\nCan't download generated files in the chat #14658\n\nGitHub\nhttps://github.com \u203a open-webui \u203a discussions\nI will try to create a file with the interpreter or OpenAI tries to generate one with its interpreter, but the links it sends back don't work (sandbox:/mnt/data\u00a0...Read more\nHow can I download a file from a sandbox:/mnt/data\n\nMake Community\nhttps://community.make.com \u203a how-can-i-download-a-...\nApr 1, 2025 \u2014 I'm using ChatGPT to generate files (like PDFs), and it's giving me download links that look like this: bash CopyEdit sandbox:/mnt/data/AI_Masters_DoJo_\u00a0...Read more\nDownload data from sandbox - Documentation\n\nNovita AI\nhttps://novita.ai \u203a guides \u203a sandbox-filesystem-download\nYou can download data from the sandbox using the files.read() method. Before running the example code in this document, please ensure you have properly\u00a0...Read more\nFailed to get upload status for /mnt/data/*filename* - Page 2\n\nOpenAI Developer Community\nhttps://community.openai.com \u203a ChatGPT \u203a Bugs\nMay 21, 2024 \u2014 Same problem here when asking for a PowerPoint file. Click the link and get the error \"Failed to get upload status for /mnt/data/filename.pptxRead more\nI want to download file it provides with me, ...\n\nGitHub\nhttps://github.com \u203a QwenLM \u203a Qwen3 \u203a issues\nAug 15, 2025 \u2014 I want to download file it provides with me, when I click the link I get sandbox:/mnt/data/%E7%88%B1%E5%AE%BE%E6%9E%9C%E6%95%99%E8%82%B2%E5%9F%\u00a0...Read more\nSandbox | PPTX\n\nSlideshare\nhttps://www.slideshare.net \u203a Technology\nSandboxing is a popular technique for creating confi",
+        "timestamp": 1766779560487,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T20:39:51.796780"
+    },
+    {
+      "entry_id": "entry_1766781600_33",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "YouTube",
+        "url": "https://www.youtube.com/",
+        "description": "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.",
+        "h1": "",
+        "wordCount": 1,
+        "bodyText": "",
+        "timestamp": 1766781600101,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T20:40:00.103501"
     }
   ],
   "pattern_counts": {
     "rushed_release": 6,
     "moved_resource": 1,
-    "felt_wrong": 4
+    "felt_wrong": 7,
+    "unknown": 1
   }
 }

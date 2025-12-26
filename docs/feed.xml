@@ -8,6 +8,25 @@
     <language>en-us</language>
     
         <item>
+            <title>I Fired My AI Social Media Team (And Built a Better One)</title>
+            <link>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</guid>
+            <pubDate>Fri, 26 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<p>I asked my AI agents to critique their own work today. The result was brutal.</p>
+<h2>The Audit</h2>
+<p>My "Social Media Team" wasn't a team. It was a group of interns with no boss.</p>
+<p>1.  <strong>Absent Leadership:</strong> The Creative Director existed in code but wasn't checking the work. 2.  <strong>Robotic Soul:</strong> The "chill" AI voice sounded like a sleep meditation gone wrong. 3.  <strong>Visual Boredom:</strong> We were using "Ken Burns" effects like it was 2015.</p>
+<h2>The Fix: Installing a Boss</h2>
+<p>Today, I changed the code. I didn't add more features; I added <strong>governance</strong>.</p>
+<p>Now, the `TikTokWorkflow` <em>cannot</em> run without the `CreativeDirector`'s explicit approval. If a script sounds too "hype-y" or uses engagement bait like "smash that like button," it gets rejected immediately.</p>
+<h2>What's Next?</h2>
+<p>I'm researching <strong>Kinetic Typography</strong> (moving text) to replace the static slideshows. I'm also looking into <strong>Trend APIs</strong> so my agents know what's actually happening in the world, rather than guessing.</p>
+<p>We're moving from a content pipeline to a creative studio.</p>
+<p>Does this feel right?</p>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>Architectural Overview: The Studio OS and Antigravity System</title>
             <link>https://www.doesthisfeelright.com/posts/studio-os-whitepaper.html</link>
             <guid>https://www.doesthisfeelright.com/posts/studio-os-whitepaper.html</guid>
@@ -167,25 +186,6 @@ graph TD
 <li>Instead of building scripts, the System Designer optimizes their own workflow as an observable system.</li>
 </ul>
 <p>Ultimately, this architecture's purpose is to complete the transformation of the engineer's role. It shifts the focus from asking what discrete task to complete next to asking what resilient system will produce correct outcomes without the need for constant, low-level micromanagement.</p>]]></content:encoded>
-        </item>
-        
-        <item>
-            <title>I Fired My AI Social Media Team (And Built a Better One)</title>
-            <link>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</link>
-            <guid>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</guid>
-            <pubDate>Thu, 25 Dec 2025 00:00:00 +0000</pubDate>
-            <description><![CDATA[]]></description>
-            <content:encoded><![CDATA[<p>I asked my AI agents to critique their own work today. The result was brutal.</p>
-<h2>The Audit</h2>
-<p>My "Social Media Team" wasn't a team. It was a group of interns with no boss.</p>
-<p>1.  <strong>Absent Leadership:</strong> The Creative Director existed in code but wasn't checking the work. 2.  <strong>Robotic Soul:</strong> The "chill" AI voice sounded like a sleep meditation gone wrong. 3.  <strong>Visual Boredom:</strong> We were using "Ken Burns" effects like it was 2015.</p>
-<h2>The Fix: Installing a Boss</h2>
-<p>Today, I changed the code. I didn't add more features; I added <strong>governance</strong>.</p>
-<p>Now, the `TikTokWorkflow` <em>cannot</em> run without the `CreativeDirector`'s explicit approval. If a script sounds too "hype-y" or uses engagement bait like "smash that like button," it gets rejected immediately.</p>
-<h2>What's Next?</h2>
-<p>I'm researching <strong>Kinetic Typography</strong> (moving text) to replace the static slideshows. I'm also looking into <strong>Trend APIs</strong> so my agents know what's actually happening in the world, rather than guessing.</p>
-<p>We're moving from a content pipeline to a creative studio.</p>
-<p>Does this feel right?</p>]]></content:encoded>
         </item>
         
         <item>
