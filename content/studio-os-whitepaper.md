@@ -58,6 +58,81 @@ The following sections will deconstruct the core principles that make this Hub-a
 
 ## 3.0 Core Principles of a Deterministic Multi-Agent System
 
+The following diagram illustrates the "Hub-and-Spoke" architecture, showing the relationship between the Sovereign Kernel, the Agent Workforce, and the Data Substrate:
+
+```mermaid
+graph TD
+    subgraph "The Sovereign Kernel (Hub)"
+        SK[StudioKernel]
+        EL[Event Loop]
+        SK -->|Orchestrates| EL
+        
+        subgraph "Timed Operations"
+            P[Pulse (1s)]
+            CS[Council Session (20m)]
+            AD[Auto-Draft (15m)]
+            TS[Trend Scan (2h)]
+        end
+        
+        EL --> P
+        EL --> CS
+        EL --> AD
+        EL --> TS
+    end
+
+    subgraph "Agent Workforce (Spokes)"
+        Base[BaseAgent Class]
+        
+        A1[Alchemist<br/>(Content Synthesis)]
+        A2[Visionary<br/>(Multimodal Analysis)]
+        A3[Librarian<br/>(Knowledge Graph)]
+        A4[Guardian<br/>(Safety Auditing)]
+        
+        Base --> A1
+        Base --> A2
+        Base --> A3
+        Base --> A4
+        
+        %% Agents do not communicate directly
+        A1 -.->|No Direct Comms| A2
+        A2 -.->|No Direct Comms| A3
+    end
+
+    subgraph "Shared State (Blackboard)"
+        MS[MemoryStore]
+        
+        EM[Episodic Memory]
+        SM[Semantic Memory]
+        BS[Belief States]
+        FL[Feedback Loop]
+        
+        MS --> EM
+        MS --> SM
+        MS --> BS
+        MS --> FL
+    end
+    
+    subgraph "TitanDB Data Substrate"
+        TDB[TitanDB]
+        
+        VS[(ChromaDB<br/>Vector Store)]
+        GS((NetworkX<br/>Graph Store))
+        FS[Filesystem<br/>Blob Store]
+        
+        TDB --> VS
+        TDB --> GS
+        TDB --> FS
+    end
+
+    %% Connections
+    SK -->|Triggers| Base
+    Base -->|Reads/Writes| MS
+    Base -->|Queries| TDB
+    
+    %% Intent flow
+    User[User Intent] -->|Constitutional Check| SK
+```
+
 The architecture of the Studio OS is built upon a foundation of core principles. These are not arbitrary design choices but are specific, architectural countermeasures to the common catastrophic failure modes of multi-agent systems, such as chaotic communication, loss of context, and ungrounded "hallucinations."
 
 ### 3.1 The Sovereign Kernel: The System's "Prefrontal Cortex"
