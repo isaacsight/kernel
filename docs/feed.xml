@@ -8,6 +8,30 @@
     <language>en-us</language>
     
         <item>
+            <title>Sovereign Intelligence: The v1.8 Extension Upgrade</title>
+            <link>https://www.doesthisfeelright.com/posts/2025-12-26-extension-v1-8-sovereign-intelligence.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/2025-12-26-extension-v1-8-sovereign-intelligence.html</guid>
+            <pubDate>Fri, 26 Dec 2025 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<p>Today we’re pushing <strong>v1.8</strong> of the Studio OS Browser Extension.</p>
+<p>It marks a fundamental shift in how the OS interacts with your attention. We are moving from <strong>Passive Logging</strong> (recording what happened) to <strong>Sovereign Intelligence</strong> (understanding why it’s happening, as it happens).</p>
+<h2>Beyond the Log: Ambient Intent</h2>
+<p>The browser is the most frequent interface for high-velocity research, yet most "copilots" only wake up when you click a button. v1.8 introduces the <strong>7-Tier Hover Stack</strong>.</p>
+<p>The OS now parses your cursor behavior—fixations, saccades, and "hover-dwell"—to determine your ambient intent.</p>
+<ul>
+<li><strong>Epistemic Curiosity</strong>: The system now identifies when your hover suggests a "Deep Read" is necessary and pre-fetches context before you even click.</li>
+<li><strong>Signal Nexus</strong>: Every hover is cross-referenced against your existing Knowledge Graph, highlighting resonances with past research in real-time.</li>
+<li><strong>System 3 Audit</strong>: If the OS detects aimless scrolling or attention-fragmentation, it triggers a philosophical intervention to help you regain focus.</li>
+</ul>
+<h2>On-Demand Product Synthesis</h2>
+<p>We’ve also added a dedicated <strong>PRODUCT</strong> button and a "Synthesize Sovereign Product" context menu.</p>
+<p>With one click, the <strong>Reporter Agent</strong> audits your raw telemetry and decision ledger to produce a premium-grade deliverable. This isn’t just a summary; it’s a strategic brief, complete with Mermaid diagrams of your knowledge flow and a <strong>Felt Right Index (FRI)</strong> score for the session.</p>
+<h2>Does This Feel Right?</h2>
+<p>The goal of Studio OS isn't to automate your thinking, but to provide a <strong>Situational Cockpit</strong> for it. By making the ambient signals of research visible and structured, we allow for a higher level of sovereignty over our own digital artifacts.</p>
+<p>Download v1.8 now and let your OS start watching your intent, not just your clicks.</p>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>I Fired My AI Social Media Team (And Built a Better One)</title>
             <link>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</link>
             <guid>https://www.doesthisfeelright.com/posts/fired-my-ai-team.html</guid>
@@ -5919,48 +5943,6 @@ Now, I have a single "Command Center" for my entire blog workflow.
 <p>You will just get the words, exactly as I wrote them, whenever you are ready to read them.</p>
 
 <p>And in 2025, that feels like a luxury.</p>]]></content:encoded>
-        </item>
-        
-        <item>
-            <title>The Return of Personal Software</title>
-            <link>https://www.doesthisfeelright.com/posts/the-return-of-personal-software.html</link>
-            <guid>https://www.doesthisfeelright.com/posts/the-return-of-personal-software.html</guid>
-            <pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate>
-            <description><![CDATA[For decades, we've been renters in someone else's digital house. But the ability to build desktop apps for personal use is bringing back something we forgot we lost—software sovereignty.]]></description>
-            <content:encoded><![CDATA[<p>There is a quiet revolution happening in the spaces between commercial software releases.</p>
-<p>For the past thirty years, we've been trained to think of software as something that comes in shrink-wrapped boxes (or app stores, if you're under 40). Someone builds it. We buy it. We learn to work within its limitations. If it doesn't do what we need, we wait for version 2.0 or we switch to a competitor.</p>
-<p>We became renters in someone else's digital house.</p>
-<p>But something is shifting. The ability to build desktop apps—real, native applications—for personal use is no longer the domain of professional developers. It's becoming a basic literacy. And it's changing the way we think about what software <em>is for</em>.</p>
-<h2>The Lost Vernacular</h2>
-<p>In the early days of personal computing, building your own software was common. Not because people were all programmers, but because the tools were simple enough and the problems were personal enough that tinkering was natural.</p>
-<p>You didn't <em>buy</em> a spreadsheet to calculate your taxes. You opened VisiCalc or Lotus 1-2-3 and built the exact calculation you needed. You didn't buy project management software. You hacked together a HyperCard stack that worked the way <em>you</em> thought about projects.</p>
-<p>There was a vernacular computing culture—people building small, weird, personal tools that solved their specific problems in their specific way.</p>
-<p>Then software became an industry. Tools became products. Products became platforms. And the vernacular disappeared.</p>
-<h2>The Shift</h2>
-<p>Today, the barriers to building personal software have collapsed in two ways:</p>
-<p><strong>1. The tools are better.</strong> Frameworks like Electron, Tauri, and Swift make it trivial to package a web interface into a native desktop app. You don't need to understand Windows APIs or Cocoa frameworks. If you can build a webpage, you can build an app.</p>
-<p><strong>2. The intelligence is embedded.</strong> AI-assisted development tools (like the one I used to build this blog) have made it possible to <em>describe</em> what you want and have most of the tedious work done for you. You become a director, not a typist.</p>
-<p>The result: building a desktop app for personal use is now a weekend project, not a career.</p>
-<h2>What Does "Personal Software" Look Like?</h2>
-<p>It's not trying to be for everyone. It's hyper-specific.</p>
-<ul>
-<li>A media organizer that works exactly the way <em>you</em> categorize things, not the way Apple Photos thinks you should.</li>
-<li>A note-taking app that mirrors your actual thought process, not someone's idea of "productivity."</li>
-<li>A budgeting tool that handles your weird financial situation (freelance income, crypto holdings, that one rental property) instead of forcing you into someone else's categories.</li>
-</ul>
-<p>Personal software is <strong>opinionated</strong>. It reflects <em>your</em> preferences, <em>your</em> workflow, <em>your</em> aesthetics.</p>
-<p>It doesn't need to scale. It doesn't need to onboard new users. It doesn't need a roadmap or a changelog.</p>
-<p>It just needs to work for you.</p>
-<h2>The Politics of Software Sovereignty</h2>
-<p>There's something subtly radical about building your own tools.</p>
-<p>When you use commercial software, you are subject to its politics. The company decides what features matter. They decide when to deprecate old functionality. They decide whether to sell your data or raise the subscription price.</p>
-<p>You are a guest.</p>
-<p>When you build your own software, you are sovereign. You decide the features. You decide the lifespan. You own the data.</p>
-<p>This isn't just a technical shift. It's a shift in power.</p>
-<h2>The Invitation</h2>
-<p>You don't need to become a "developer" to participate in this. You just need to start thinking of software not as a product you consume, but as a material you shape.</p>
-<p>Build a small tool. Make it ugly. Make it personal. Make it <em>yours</em>.</p>
-<p>The desktop is not dead. It's just been waiting for you to remember that it belongs to you.</p>]]></content:encoded>
         </item>
         
 </channel>

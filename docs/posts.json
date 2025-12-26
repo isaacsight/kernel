@@ -1,5 +1,18 @@
 [
   {
+    "title": "Sovereign Intelligence: The v1.8 Extension Upgrade",
+    "date": "2025-12-26",
+    "category": "Engineering",
+    "tags": "",
+    "slug": "2025-12-26-extension-v1-8-sovereign-intelligence",
+    "original_filename": "2025-12-26-extension-v1-8-sovereign-intelligence.md",
+    "rel_dir": "",
+    "is_html_source": false,
+    "file_path": "content/2025-12-26-extension-v1-8-sovereign-intelligence.md",
+    "output_rel_path": "posts/2025-12-26-extension-v1-8-sovereign-intelligence.html",
+    "content": "<p>Today we’re pushing <strong>v1.8</strong> of the Studio OS Browser Extension.</p>\n<p>It marks a fundamental shift in how the OS interacts with your attention. We are moving from <strong>Passive Logging</strong> (recording what happened) to <strong>Sovereign Intelligence</strong> (understanding why it’s happening, as it happens).</p>\n<h2>Beyond the Log: Ambient Intent</h2>\n<p>The browser is the most frequent interface for high-velocity research, yet most \"copilots\" only wake up when you click a button. v1.8 introduces the <strong>7-Tier Hover Stack</strong>.</p>\n<p>The OS now parses your cursor behavior—fixations, saccades, and \"hover-dwell\"—to determine your ambient intent.</p>\n<ul>\n<li><strong>Epistemic Curiosity</strong>: The system now identifies when your hover suggests a \"Deep Read\" is necessary and pre-fetches context before you even click.</li>\n<li><strong>Signal Nexus</strong>: Every hover is cross-referenced against your existing Knowledge Graph, highlighting resonances with past research in real-time.</li>\n<li><strong>System 3 Audit</strong>: If the OS detects aimless scrolling or attention-fragmentation, it triggers a philosophical intervention to help you regain focus.</li>\n</ul>\n<h2>On-Demand Product Synthesis</h2>\n<p>We’ve also added a dedicated <strong>PRODUCT</strong> button and a \"Synthesize Sovereign Product\" context menu.</p>\n<p>With one click, the <strong>Reporter Agent</strong> audits your raw telemetry and decision ledger to produce a premium-grade deliverable. This isn’t just a summary; it’s a strategic brief, complete with Mermaid diagrams of your knowledge flow and a <strong>Felt Right Index (FRI)</strong> score for the session.</p>\n<h2>Does This Feel Right?</h2>\n<p>The goal of Studio OS isn't to automate your thinking, but to provide a <strong>Situational Cockpit</strong> for it. By making the ambient signals of research visible and structured, we allow for a higher level of sovereignty over our own digital artifacts.</p>\n<p>Download v1.8 now and let your OS start watching your intent, not just your clicks.</p>"
+  },
+  {
     "title": "I Fired My AI Social Media Team (And Built a Better One)",
     "date": "2025-12-26",
     "category": "Tech",
