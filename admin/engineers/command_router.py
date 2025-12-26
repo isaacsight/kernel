@@ -131,35 +131,8 @@ class CommandRouter:
              return {"success": False, "error": "LLM not configured"}
              
         # System Instruction for the Router
-        prompt = f"""
-        You are the "Studio OS" Orchestrator. Your job is to classify user requests and route them to the correct Agent.
-        
-        AVAILABLE AGENTS:
-        {json.dumps(self.agents, indent=2)}
-        
-        USER INPUT: "{user_input}"
-        
-        INSTRUCTIONS:
-        1. Analyze the user's intent.
-        2. If it's a casual greeting, set "intent" to "chat".
-        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control, code, capture_note, reflect].
-        4. "mobile_handover": Use when the user wants to send context/data to their phone or Gemini mobile.
-        5. "system_control": Use for deep system operations or telemetry requests.
-        6. "code": Use for coding tasks like building features, fixing bugs, refactoring, or implementing changes. Route to Antigravity.
-        7. "capture_note": Use when the user wants to save a note, idea, or draft.
-        8. "reflect": Use when the user wants to review, summarize, or reflect on their recent thoughts and notes.
-        9. Extract relevant parameters (e.g., topic, query, content, task).
-        10. Return ONLY valid JSON.
-        
-        JSON STRUCTURE:
-        {{
-            "intent": "action" | "chat",
-            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control" | "code" | "capture_note" | "reflect" | "rl_optimize",
-            "target_agent": "Alchemist" | "Operator" | "Librarian" | "Design Partner" | "Content Engine Brain" | "ReflectionAgent" | "MLEngineer",
-            "parameters": {{ "topic": "...", "query": "...", "content": "Note text or summary", "task": "..." }},
-            "response_text": "A brief, natural language response confirming the action."
-        }}
-        """
+        # System Instruction for the Router
+        prompt = self._get_system_instruction(user_input)
         
         try:
             response = self.model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
@@ -219,6 +192,40 @@ class CommandRouter:
                     "intent": "unknown",
                     "response_text": "System Overload. All circuits busy. Please retry."
                 }
+
+    def _get_system_instruction(self, user_input: str) -> str:
+        """
+        Returns the orchestration prompt.
+        """
+        return f"""
+        You are the "Studio OS" Orchestrator. Your job is to classify user requests and route them to the correct Agent.
+        
+        AVAILABLE AGENTS:
+        {json.dumps(self.agents, indent=2)}
+        
+        USER INPUT: "{user_input}"
+        
+        INSTRUCTIONS:
+        1. Analyze the user's intent.
+        2. If it's a casual greeting, set "intent" to "chat".
+        3. If it's a command, map it to one of these ACTIONS: [generate_post, publish, status, research, help, mobile_handover, system_control, code, capture_note, reflect].
+        4. "mobile_handover": Use when the user wants to send context/data to their phone or Gemini mobile.
+        5. "system_control": Use for deep system operations or telemetry requests.
+        6. "code": Use for coding tasks like building features, fixing bugs, refactoring, or implementing changes. Route to Antigravity.
+        7. "capture_note": Use when the user wants to save a note, idea, or draft.
+        8. "reflect": Use when the user wants to review, summarize, or reflect on their recent thoughts and notes.
+        9. Extract relevant parameters (e.g., topic, query, content, task).
+        10. Return ONLY valid JSON.
+        
+        JSON STRUCTURE:
+        {{
+            "intent": "action" | "chat",
+            "action": "generate_post" | "publish" | "status" | "research" | "help" | "mobile_handover" | "system_control" | "code" | "capture_note" | "reflect" | "rl_optimize",
+            "target_agent": "Alchemist" | "Operator" | "Librarian" | "Design Partner" | "Content Engine Brain" | "ReflectionAgent" | "MLEngineer",
+            "parameters": {{ "topic": "...", "query": "...", "content": "Note text or summary", "task": "..." }},
+            "response_text": "A brief, natural language response confirming the action."
+        }}
+        """
     
     async def execute(self, routed_command: Dict) -> Dict[str, Any]:
         """
@@ -291,6 +298,23 @@ class CommandRouter:
                 from admin.engineers.antigravity_engineer import AntigravityEngineer
                 agent = AntigravityEngineer()
                 task_description = params.get('task', routed_command.get('original_input', ''))
+                
+                # --- SOVEREIGN PROMPT INJECTION ---
+                # Check for Entropy/Refactor
+                if "entropy" in task_description.lower() or "refactor" in task_description.lower():
+                    from admin.brain.system_prompts import SystemPrompts
+                    doctrine = SystemPrompts.get_entropy_reduction_prompt()
+                    task_description = f"{doctrine}\n\nTASK: {task_description}"
+
+                # Check for UX/Design Audit
+                # Expanded keywords to catch specific UI audits (color, mobile, motion, etc.)
+                design_keywords = ["aesthetic", "design", "ux", "ui", "color", "mobile", "layout", "typography", "motion", "animation", "visual"]
+                if any(k in task_description.lower() for k in design_keywords):
+                    from admin.brain.system_prompts import SystemPrompts
+                    doctrine = SystemPrompts.get_aesthetic_integrity_prompt()
+                    first_impression = SystemPrompts.get_first_impression_audit_prompt()
+                    task_description = f"{doctrine}\n{first_impression}\n\nTASK: {task_description}"
+                
                 result = await agent.execute(task_description)
                 result_data = {"result": result}
             

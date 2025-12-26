@@ -16,6 +16,8 @@ from admin.brain.memory_store import get_memory_store
 from admin.brain.metrics_collector import get_metrics_collector
 from admin.decorators import critique_action
 from admin.brain.agent_base import BaseAgent  # New Import
+from admin.engineers.web_scout import get_web_scout
+import shutil
 
 logger = logging.getLogger("Alchemist")
 
@@ -57,6 +59,9 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
         self.metrics = get_metrics_collector()
         self.session_id = f"session-{int(time.time())}"
         
+        # Initialize Web Scout
+        self.web_scout = get_web_scout()
+        
         logger.info(f"[{self.name}] Initialized with enhanced memory and metrics")
 
     async def execute(self, action: str, **params) -> Dict[str, Any]:
@@ -83,6 +88,15 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
         elif action == "chat":
             message = params.get("message")
             return {"response": self.chat(message)}
+            
+        elif action == "research":
+            topic = params.get("topic")
+            return {"research_brief": self.conduct_research(topic)}
+
+        elif action == "refine_code":
+            file_path = params.get("file_path")
+            instruction = params.get("instruction")
+            return self.refine_code(file_path, instruction)
             
         else:
             raise NotImplementedError(f"Action {action} not supported by Alchemist.")
@@ -129,6 +143,96 @@ class Alchemist(BaseAgent):  # Inherit from BaseAgent
             logger.warning(f"Alchemist brain offline: {e}")
             # Thematic Fallback (True Alchemy)
             return "My neural core is cooling down from super-luminal processing. Give me a moment to realign my cognitive matrix."
+
+    def conduct_research(self, topic: str) -> str:
+        """
+        Conducts deep research using the Web Scout and synthesizes a brief.
+        """
+        logger.info(f"[{self.name}] Commissioning Web Scout for: {topic}")
+        findings = self.web_scout.research_topic(topic)
+        
+        # Synthesize logic could be more complex, but for now we format the raw findings
+        brief = f"# Research Brief: {topic}\n\n"
+        brief += f"Generated: {findings['researched_at']}\n\n"
+        
+        brief += "## Key Search Results\n"
+        for item in findings.get('general_results', [])[:5]:
+            brief += f"- **{item.get('title')}**: {item.get('snippet')}\n"
+            
+        brief += "\n## Recent News\n"
+        for item in findings.get('recent_news', [])[:3]:
+            brief += f"- {item.get('title')} ({item.get('date', 'Recent')})\n"
+            
+        brief += "\n## Statistics\n"
+        for item in findings.get('statistics', [])[:3]:
+            brief += f"- {item.get('title')}: {item.get('snippet')}\n"
+            
+        return brief
+
+    def refine_code(self, file_path: str, instruction: str) -> Dict[str, Any]:
+        """
+        Refines code in a file based on instructions.
+        Creates a backup, writes the new code, and returns status.
+        """
+        if not os.path.exists(file_path):
+            return {"status": "error", "message": f"File not found: {file_path}"}
+            
+        logger.info(f"[{self.name}] Refining code in {file_path} with instruction: {instruction}")
+        
+        # 1. Read original content
+        with open(file_path, 'r') as f:
+            original_code = f.read()
+            
+        # 2. Create Backup
+        backup_path = f"{file_path}.bak.{int(time.time())}"
+        shutil.copy(file_path, backup_path)
+        
+        # 3. Generate New Code
+        prompt = f"""
+        You are The Alchemist, an expert software engineer.
+        
+        TASK: Refactor/Update the following code.
+        FILE: {file_path}
+        INSTRUCTION: {instruction}
+        
+        ORIGINAL CODE:
+        {original_code}
+        
+        OUTPUT:
+        Return ONLY the full, valid, updated code. No markdown code blocks, no explanations.
+        """
+        
+        try:
+            # We use the 'auto' provider logic from generate but simplified direct call
+            # For safety, let's use the simplest configured model (Gemini)
+            response = self.model.generate_content(prompt)
+            new_code = response.text
+            
+            # Clean possible markdown
+            if new_code.startswith("```"):
+                lines = new_code.split('\n')
+                if lines[0].strip().startswith("```"):
+                    lines = lines[1:]
+                if lines[-1].strip() == "```":
+                    lines = lines[:-1]
+                new_code = "\n".join(lines)
+            
+            # 4. Write new code
+            with open(file_path, 'w') as f:
+                f.write(new_code)
+                
+            return {
+                "status": "success",
+                "message": "Code refined and saved.",
+                "backup": backup_path,
+                "diff_summary": f"Updated {file_path}"
+            }
+            
+        except Exception as e:
+            logger.error(f"[{self.name}] Code refinement failed: {e}")
+            # Restore backup? Maybe better to leave it broken so user sees what happened, 
+            # but user has backup.
+            return {"status": "error", "message": str(e)}
 
     def analyze_code(self, file_paths: List[str], query: str) -> str:
         """

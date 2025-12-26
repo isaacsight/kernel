@@ -1,0 +1,552 @@
+[
+    {
+        "category": "Governance & Protocol",
+        "prompts": [
+            {
+                "label": "SOVEREIGN ALIGNMENT",
+                "command": "Evaluate system alignment against the Sovereign Manifesto. Score 1-10.",
+                "icon": "Shield"
+            },
+            {
+                "label": "GRAND COUNCIL",
+                "command": "Convened the Grand Council. Split into Architect, Skeptic, and Synthesizer roles to analyze current trajectory.",
+                "icon": "Users"
+            },
+            {
+                "label": "ENTROPY CHECK",
+                "command": "Scan system for entropy and technical debt. Propose 3 immediate refactors.",
+                "icon": "Activity"
+            },
+            {
+                "label": "DOCTRINE AUDIT",
+                "command": "Audit the last 5 decisions against the 'Gentle Doctrine'. Compliance check.",
+                "icon": "Book"
+            },
+            {
+                "label": "CONSTITUTION REFRESH",
+                "command": "Review and propose updates to the system constitution based on recent learnings.",
+                "icon": "FileText"
+            },
+            {
+                "label": "AUTONOMY LEVEL",
+                "command": "Assess current autonomy level (1-5) and identify blockers to Level 5.",
+                "icon": "Zap"
+            },
+            {
+                "label": "MISSION UPLINK",
+                "command": "Verify coherence with the primary mission objective. Signal strength check.",
+                "icon": "Radio"
+            },
+            {
+                "label": "OPERATOR SYNC",
+                "command": "Synchronize context with the Operator's current mental state. Briefing mode.",
+                "icon": "Headphones"
+            },
+            {
+                "label": "ETHICS SENTINEL",
+                "command": "Run an ethics simulation on the next planned feature release.",
+                "icon": "Eye"
+            },
+            {
+                "label": "PROTOCOL OVERRIDE",
+                "command": "Authorize temporary override of standard safety protocols for research.",
+                "icon": "Lock"
+            }
+        ]
+    },
+    {
+        "category": "Content Engine",
+        "prompts": [
+            {
+                "label": "GENERATE MANIFESTO",
+                "command": "Generate a new manifesto post based on current 'Gentle Doctrine'. Deep mode.",
+                "icon": "Sparkles"
+            },
+            {
+                "label": "RESEARCH SPRINT",
+                "command": "Run a deep research sprint on 'AI Agent Architecture'. Synthesize top 5 sources.",
+                "icon": "Search"
+            },
+            {
+                "label": "VOICE CALIBRATION",
+                "command": "Calibrate the AI's tone to be 'Gentle, Honest, Observational'.",
+                "icon": "Mic"
+            },
+            {
+                "label": "NARRATIVE ARC",
+                "command": "Map the narrative arc of the last 10 blog posts. Identify gaps.",
+                "icon": "Map"
+            },
+            {
+                "label": "VIRALITY CHECK",
+                "command": "Analyze current draft for viral potential using the 'Uncertainty' heuristic.",
+                "icon": "TrendingUp"
+            },
+            {
+                "label": "DEEP DIVE TOPIC",
+                "command": "Propose 3 deep-dive topics based on 'hidden truths' in the industry.",
+                "icon": "Anchor"
+            },
+            {
+                "label": "EDITING SPRINT",
+                "command": "Run The Editor agent on the latest draft. Focus on conciseness.",
+                "icon": "Scissors"
+            },
+            {
+                "label": "CONTENT REPURPOSE",
+                "command": "Suggest 3 ways to repurpose the latest blog post into different formats.",
+                "icon": "RefreshCw"
+            },
+            {
+                "label": "AUDIENCE PERSONA",
+                "command": "Simulate feedback from the 'Skeptical Engineer' persona on the current draft.",
+                "icon": "UserCheck"
+            },
+            {
+                "label": "SEO SOVEREIGNTY",
+                "command": "Optimize content for semantic authority, not just keywords.",
+                "icon": "Globe"
+            }
+        ]
+    },
+    {
+        "category": "System Ops",
+        "prompts": [
+            {
+                "label": "SYSTEM HEALTH",
+                "command": "STATUS",
+                "icon": "Cpu"
+            },
+            {
+                "label": "SECURITY AUDIT",
+                "command": "Run full security headers check and vulnerability scan.",
+                "icon": "Lock"
+            },
+            {
+                "label": "DB MIGRATION SAFE",
+                "command": "Simulate safety check for pending database migrations.",
+                "icon": "Database"
+            },
+            {
+                "label": "LOG ANALYSIS",
+                "command": "Analyze the last 1000 lines of logs for anomaly patterns.",
+                "icon": "FileText"
+            },
+            {
+                "label": "CACHE PURGE",
+                "command": "Purge all system caches and verify inconsistency.",
+                "icon": "Trash2"
+            },
+            {
+                "label": "BACKUP VERIFY",
+                "command": "Verify integrity of the latest backup snapshot.",
+                "icon": "Save"
+            },
+            {
+                "label": "DEPENDENCY CHECK",
+                "command": "Scan dependencies for vulnerabilities and outdated packages.",
+                "icon": "Package"
+            },
+            {
+                "label": "API LATENCY",
+                "command": "Measure and report API latency metrics for key endpoints.",
+                "icon": "Activity"
+            },
+            {
+                "label": "DISK USAGE",
+                "command": "Report disk usage and identify large temporary files.",
+                "icon": "HardDrive"
+            },
+            {
+                "label": "PROCESS KILL",
+                "command": "Identify and terminate zombie processes.",
+                "icon": "XCircle"
+            }
+        ]
+    },
+    {
+        "category": "Network & Connectivity",
+        "prompts": [
+            {
+                "label": "NODE DISCOVERY",
+                "command": "Scan local network for available Studio Nodes.",
+                "icon": "Wifi"
+            },
+            {
+                "label": "LATENCY TEST",
+                "command": "Run latency test against the Gemini API and Studio Node.",
+                "icon": "Zap"
+            },
+            {
+                "label": "DNS PROPAGATION",
+                "command": "Check DNS propagation for the main domain.",
+                "icon": "Globe"
+            },
+            {
+                "label": "SSL VERIFY",
+                "command": "Verify SSL certificate validity and expiration.",
+                "icon": "Lock"
+            },
+            {
+                "label": "FIREWALL CHECK",
+                "command": "Audit firewall rules for open ports.",
+                "icon": "Shield"
+            },
+            {
+                "label": "PACKET INSPECT",
+                "command": "Simulate packet inspection for suspicious traffic patterns.",
+                "icon": "Search"
+            },
+            {
+                "label": "VPN TUNNEL",
+                "command": "Verify status of the Tailscale/VPN tunnel.",
+                "icon": "Key"
+            },
+            {
+                "label": "BANDWIDTH USAGE",
+                "command": "Report current bandwidth usage and peaks.",
+                "icon": "BarChart2"
+            },
+            {
+                "label": "WEBHOOK TEST",
+                "command": "Trigger a test webhook event to verify delivery.",
+                "icon": "Send"
+            },
+            {
+                "label": "PROXY TOGGLE",
+                "command": "Toggle traffic routing through the secure proxy.",
+                "icon": "Shuffle"
+            }
+        ]
+    },
+    {
+        "category": "UX & Design",
+        "prompts": [
+            {
+                "label": "COLOR HARMONY",
+                "command": "Audit current color palette for accessibility and harmony.",
+                "icon": "Palette"
+            },
+            {
+                "label": "MOBILE RESPONSIVE",
+                "command": "Simulate mobile viewport and check for layout breaks.",
+                "icon": "Smartphone"
+            },
+            {
+                "label": "TYPOGRAPHY",
+                "command": "Review typography hierarchy and contrast ratios.",
+                "icon": "Type"
+            },
+            {
+                "label": "MOTION AUDIT",
+                "command": "Review animation timings for 'butter-smooth' feel.",
+                "icon": "PlayCircle"
+            },
+            {
+                "label": "DARK MODE",
+                "command": "Toggle Dark/Light mode simulation.",
+                "icon": "Moon"
+            },
+            {
+                "label": "USER FLOW",
+                "command": "Walk through the 'Sign Up' user flow and log friction points.",
+                "icon": "MapPin"
+            },
+            {
+                "label": "NEGATIVE SPACE",
+                "command": "Analyze layout for appropriate use of negative space (Ma).",
+                "icon": "Maximize"
+            },
+            {
+                "label": "ICON CONSISTENCY",
+                "command": "Verify icon set consistency across the dashboard.",
+                "icon": "Grid"
+            },
+            {
+                "label": "LOAD STATE",
+                "command": "Preview loading skeletons and spinner states.",
+                "icon": "Loader"
+            },
+            {
+                "label": "ERROR STATE",
+                "command": "Preview critical error states and feedback messages.",
+                "icon": "AlertTriangle"
+            }
+        ]
+    },
+    {
+        "category": "Data & Memory",
+        "prompts": [
+            {
+                "label": "MEMORY DUMP",
+                "command": "Dump the last session's cognitive context to JSON.",
+                "icon": "Download"
+            },
+            {
+                "label": "CONTEXT PRUNE",
+                "command": "Prune old conversation context to free up tokens.",
+                "icon": "Scissors"
+            },
+            {
+                "label": "VECTOR SYNC",
+                "command": "Synchronize vector embeddings with the latest content.",
+                "icon": "RefreshCcw"
+            },
+            {
+                "label": "KNOWLEDGE GRAPH",
+                "command": "Rebuild the knowledge graph from active documents.",
+                "icon": "Share2"
+            },
+            {
+                "label": "DATA EXPORT",
+                "command": "Export all user data to a portable format.",
+                "icon": "File"
+            },
+            {
+                "label": "CACHE WARM",
+                "command": "Warm up the cache for frequently accessed data.",
+                "icon": "Flame"
+            },
+            {
+                "label": "SCHEMA VALIDATE",
+                "command": "Validate JSON schemas against current data.",
+                "icon": "CheckSquare"
+            },
+            {
+                "label": "PII SCAN",
+                "command": "Scan memory for accidental PII retention.",
+                "icon": "EyeOff"
+            },
+            {
+                "label": "LOG ROTATE",
+                "command": "Force rotation of system logs.",
+                "icon": "RotateCw"
+            },
+            {
+                "label": "STORAGE OPTIMIZE",
+                "command": "Run storage optimization routines.",
+                "icon": "Database"
+            }
+        ]
+    },
+    {
+        "category": "Security & Defense",
+        "prompts": [
+            {
+                "label": "RED TEAM SCAN",
+                "command": "Simulate a Red Team attack on the authentication endpoints.",
+                "icon": "Crosshair"
+            },
+            {
+                "label": "TOKEN REVOKE",
+                "command": "Revoke all active access tokens immediately.",
+                "icon": "XOctagon"
+            },
+            {
+                "label": "IP BLOCK",
+                "command": "Block generic malicious IP ranges.",
+                "icon": "Slash"
+            },
+            {
+                "label": "INJECTION TEST",
+                "command": "Test input fields for SQL/Prompt injection vulnerabilities.",
+                "icon": "Terminal"
+            },
+            {
+                "label": "RATE LIMIT",
+                "command": "Test rate limiting thresholds.",
+                "icon": "Watch"
+            },
+            {
+                "label": "SESSION KILL",
+                "command": "Terminate all active user sessions.",
+                "icon": "LogOut"
+            },
+            {
+                "label": "AUDIT LOGS",
+                "command": "Tail the security audit log.",
+                "icon": "List"
+            },
+            {
+                "label": "DEPENDENCY AUDIT",
+                "command": "Deep audit of npm/pip dependencies.",
+                "icon": "Package"
+            },
+            {
+                "label": "HONEYPOT",
+                "command": "Deploy a honeypot endpoint to detect scrapers.",
+                "icon": "Target"
+            },
+            {
+                "label": "ZERO TRUST",
+                "command": "Verify Zero Trust verification logic.",
+                "icon": "Shield"
+            }
+        ]
+    },
+    {
+        "category": "Strategy & Metacognition",
+        "prompts": [
+            {
+                "label": "SWOT ANALYSIS",
+                "command": "Perform a SWOT analysis on the current project trajectory.",
+                "icon": "Grid"
+            },
+            {
+                "label": "PRE-MORTEM",
+                "command": "Conduct a Pre-Mortem: Assume failure and explain why.",
+                "icon": "Skull"
+            },
+            {
+                "label": "FIRST PRINCIPLES",
+                "command": "Break down the current challenge to first principles.",
+                "icon": "Minimize2"
+            },
+            {
+                "label": "OPPORTUNITY COST",
+                "command": "Analyze the opportunity cost of the current task.",
+                "icon": "DollarSign"
+            },
+            {
+                "label": "BLUE OCEAN",
+                "command": "Identify 'Blue Ocean' opportunities in the current market.",
+                "icon": "Compass"
+            },
+            {
+                "label": "SCENARIO PLAN",
+                "command": "Generate 3 future scenarios for the project (Best, Worst, Weird).",
+                "icon": "Briefcase"
+            },
+            {
+                "label": "KPI REVIEW",
+                "command": "Review current KPIs against the North Star metric.",
+                "icon": "BarChart"
+            },
+            {
+                "label": "COMPETITOR SCAN",
+                "command": "Scan for competitor updates or moves.",
+                "icon": "Radar"
+            },
+            {
+                "label": "RESOURCE ALLOC",
+                "command": "Optimize resource allocation for the next sprint.",
+                "icon": "PieChart"
+            },
+            {
+                "label": "Pivot Check",
+                "command": "Evaluate if a strategic pivot is designated.",
+                "icon": "Shuffle"
+            }
+        ]
+    },
+    {
+        "category": "DevOps & Deploy",
+        "prompts": [
+            {
+                "label": "CI/CD STATUS",
+                "command": "Check the status of the latest CI/CD pipeline.",
+                "icon": "GitMerge"
+            },
+            {
+                "label": "ENVIRONMENT SYNC",
+                "command": "Verify consistency between Dev and Prod environments.",
+                "icon": "Copy"
+            },
+            {
+                "label": "DOCKER PRUNE",
+                "command": "Prune unused Docker images and containers.",
+                "icon": "Trash"
+            },
+            {
+                "label": "ROLLBACK PREP",
+                "command": "Prepare a rollback strategy for the next deployment.",
+                "icon": "Rewind"
+            },
+            {
+                "label": "FEATURE FLAG",
+                "command": "List active feature flags and their status.",
+                "icon": "Flag"
+            },
+            {
+                "label": "PERF BENCHMARK",
+                "command": "Run a standard performance benchmark suite.",
+                "icon": "Stopwatch"
+            },
+            {
+                "label": "SERVER LOAD",
+                "command": "Check server load averages.",
+                "icon": "Server"
+            },
+            {
+                "label": "MEMORY LEAK",
+                "command": "Scan for potential memory leaks in the running app.",
+                "icon": "Droplet"
+            },
+            {
+                "label": "CONFIG DIFF",
+                "command": "Show diff between current config and default config.",
+                "icon": "FileText"
+            },
+            {
+                "label": "UPTIME REPORT",
+                "command": "Generate a 30-day uptime report.",
+                "icon": "Calendar"
+            }
+        ]
+    },
+    {
+        "category": "Experimental",
+        "prompts": [
+            {
+                "label": "DREAM MODE",
+                "command": "Activate 'Dream Mode': Generate random creative associations.",
+                "icon": "Cloud"
+            },
+            {
+                "label": "CHAOS MONKEY",
+                "command": "Simulate random minor failures to test resilience.",
+                "icon": "Zap"
+            },
+            {
+                "label": "POETRY GEN",
+                "command": "Write a haiku about the current system status.",
+                "icon": "Feather"
+            },
+            {
+                "label": "SYNTHESIZER",
+                "command": "Synthesize a new soundscape based on server metrics.",
+                "icon": "Music"
+            },
+            {
+                "label": "GLITCH ART",
+                "command": "Generate glitch art from the current error logs.",
+                "icon": "Image"
+            },
+            {
+                "label": "OBSLIQUE STRATEGY",
+                "command": "Draw an Oblique Strategy card for inspiration.",
+                "icon": "CreditCard"
+            },
+            {
+                "label": "FUTURE NEWS",
+                "command": "Write a news headline from the year 2030 about this project.",
+                "icon": "Radio"
+            },
+            {
+                "label": "ROLEPLAY",
+                "command": "Assume the persona of a 1980s cyberpunk hacker.",
+                "icon": "Terminal"
+            },
+            {
+                "label": "ZEN KOAN",
+                "command": "Generate a Zen Koan for debugging.",
+                "icon": "Sunrise"
+            },
+            {
+                "label": "Q&A SIM",
+                "command": "Simulate a Q&A session with the project's future self.",
+                "icon": "MessageCircle"
+            }
+        ]
+    }
+]

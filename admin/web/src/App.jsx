@@ -25,13 +25,23 @@ const LoadingScreen = () => (
       UPLINKING_COGNITIVE_CORE...
     </div>
     <style>{`
+      /* Sovereign Boot Sequence */
       @keyframes loading {
-        0% { transform: translateX(-100%); }
-        50% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
+        0% { transform: translateX(-100%); opacity: 0; }
+        50% { transform: translateX(0%); opacity: 1; }
+        100% { transform: translateX(100%); opacity: 0; }
       }
+      .font-sovereign { font-family: 'JetBrains Mono', monospace; }
     `}</style>
-  </div>
+    <div className="absolute bottom-12 flex flex-col items-center gap-2">
+      <div className="text-[9px] text-white/20 tracking-widest font-sovereign">ESTABLISHING NEURAL HANDSHAKE</div>
+      <div className="flex gap-1">
+        <div className="w-1 h-1 bg-[#00D6A3] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+        <div className="w-1 h-1 bg-[#00D6A3] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+        <div className="w-1 h-1 bg-[#00D6A3] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+      </div>
+    </div>
+  </div >
 );
 
 function App() {

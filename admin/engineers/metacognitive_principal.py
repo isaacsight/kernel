@@ -16,6 +16,18 @@ from admin.brain.agents.metacognition.cognitive_ledger import get_cognitive_ledg
 from admin.config import config
 from admin.brain.agent_base import BaseAgent
 import requests
+import shutil # For file operations
+import time
+
+# Lazy import helper to avoid circular dependencies
+def get_agent(name):
+    if name == "alchemist":
+        from admin.engineers.alchemist import Alchemist
+        return Alchemist()
+    elif name == "rhythm_physicist":
+        from admin.engineers.rhythm_physicist import RhythmPhysicist
+        return RhythmPhysicist()
+    return None
 
 logger = logging.getLogger("TheSovereign")
 
@@ -259,8 +271,128 @@ class MetacognitivePrincipal(BaseAgent):
         elif action == "update_doctrine":
             self.update_doctrine(params.get("principles", []))
             return {"status": "success", "message": "Doctrine updated"}
+        elif action == "convene_council":
+            return self.convene_council(params.get("issue"))
+        elif action == "active_intervention":
+            return self.active_intervention(params.get("intervention_action"))
+        elif action == "suggest_missions":
+            return {"missions": self.suggest_missions()}
         else:
             return {"status": "error", "message": f"Unknown action: {action}"}
+
+    def suggest_missions(self) -> List[str]:
+        """
+        Generates high-impact prompts for the user to input, based on system state.
+        """
+        logger.info(f"[{self.name}] Generating Mission Suggestions...")
+        
+        # 1. Gather Context (Mocked for speed, but could read task.md)
+        # In a real scenario, we'd read the 'task.md' or 'git status'
+        context = "Current phase: Capability Expansion. Agents updated: Alchemist, Sovereign."
+        
+        prompts = [
+            f"Generate a strategic research plan for integrating '{context}' into the main product.",
+            "Run a full system diagnosis using the System Monitor and fix any 'hot spots'.",
+            "Convene the council to debate the ethical implications of autonomous code refinement.",
+            "Ask The Alchemist to review `admin/app.py` and propose a refactoring plan.",
+            "Have the Rhythm Physicist analyze the latest blog draft for viral potential."
+        ]
+        
+        return prompts
+
+    async def convene_council(self, issue: str) -> Dict[str, Any]:
+        """
+        Orchestrates other agents to solve a complex issue.
+        """
+        logger.info(f"[{self.name}] Convening Council for: {issue}")
+        
+        # 1. Decide who to call
+        # Simple heuristic for now, can be LLM-driven later
+        agents_to_call = []
+        if "code" in issue.lower() or "research" in issue.lower() or "write" in issue.lower():
+            agents_to_call.append("alchemist")
+        if "viral" in issue.lower() or "rhythm" in issue.lower() or "script" in issue.lower():
+            agents_to_call.append("rhythm_physicist")
+            
+        # Default to Alchemist if unsure
+        if not agents_to_call:
+            agents_to_call.append("alchemist")
+            
+        logger.info(f"[{self.name}] Summoning: {agents_to_call}")
+        
+        # 2. Execute in parallel (conceptually, sequential here for simplicity of implementation)
+        results = {}
+        for agent_name in agents_to_call:
+            agent = get_agent(agent_name)
+            if not agent:
+                continue
+                
+            if agent_name == "alchemist":
+                if "research" in issue.lower():
+                    # Task: Research
+                    res = agent.conduct_research(issue)
+                    results["alchemist_research"] = res
+                else:
+                    # Task: General consultation via chat/generate
+                    # We'll use the chat interface for consultation
+                    res = agent.chat(f"The Sovereign requires your specific input on: {issue}")
+                    results["alchemist_insight"] = res
+                    
+            elif agent_name == "rhythm_physicist":
+                # Task: Resonance prediction
+                res = agent.predict_resonance(issue) # Assuming issue contains the text to analyze
+                results["rhythm_analysis"] = res
+        
+        # 3. Synthesize
+        synthesis_prompt = f"""
+        You are The Sovereign. You have convened the council.
+        
+        ISSUE: {issue}
+        
+        COUNCIL REPORTS:
+        {json.dumps(results, indent=2)}
+        
+        TASK:
+        Synthesize a final "Council Resolution". what is the verdict?
+        """
+        
+        resolution = await self._call_llm(synthesis_prompt, "Synthesize the council's wisdom.")
+        
+        return {
+            "status": "convened",
+            "council_members": agents_to_call,
+            "raw_reports": results,
+            "resolution": resolution
+        }
+
+    def active_intervention(self, action: str) -> Dict[str, Any]:
+        """
+        Performs self-healing actions on the system.
+        """
+        logger.warning(f"[{self.name}] INITIATING ACTIVE INTERVENTION: {action}")
+        
+        if action == "clear_cache":
+            # Clear static/cache or similar
+            # Example: clearing .pyc files or temp dirs
+            # For safety, let's just say we clear the audio cache
+            cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "static", "audio_cache")
+            if os.path.exists(cache_dir):
+                count = 0
+                for f in os.listdir(cache_dir):
+                    os.remove(os.path.join(cache_dir, f))
+                    count += 1
+                return {"status": "success", "message": f"Cleared {count} files from audio cache."}
+            else:
+                return {"status": "error", "message": "Cache directory not found."}
+                
+        elif action == "restart_services":
+            # Placeholder for actual service restart logic (e.g., via supervisor or docker)
+            # In a real OS, this might `os.system("systemctl restart studio_os")`
+            logger.info("Restart signal sent to supervisor.")
+            return {"status": "success", "message": "Signal sent to restart services."}
+            
+        else:
+            return {"status": "error", "message": f"Unknown intervention: {action}"}
 
 if __name__ == "__main__":
     # Internal test

@@ -15,6 +15,7 @@ from admin.brain.skills import SkillLoader
 from admin.config import config
 from admin.brain.memory_store import get_memory_store
 from admin.brain.active_inference import ActiveInferenceMixin
+from admin.brain.system_prompts import SystemPrompts
 from typing import Dict, Any, Optional, List, Union
 
 logger = logging.getLogger("BaseAgent")
@@ -117,6 +118,47 @@ class BaseAgent(ActiveInferenceMixin):
         
         logger.info(f"[{self.name}] Active Inference decided: {best_action.get('type')} (EFE: {best_action.get('efe', 0):.2f})")
         return best_action
+
+    def get_metacognitive_prompt(self, prompt_type: str, **kwargs) -> str:
+        """
+        Retrieve a 'Sovereign-Grade' system prompt for metacognitive reasoning.
+        
+        Args:
+            prompt_type: One of 'grand_council', 'intelligence_delta', 'cognitive_ledger', 'sovereign_alignment', 'recursive_optimization'
+            **kwargs: Arguments to pass to the specific prompt generator (e.g. 'code_context')
+            
+        Returns:
+            The requested prompt string.
+        """
+        if prompt_type == 'grand_council':
+            return SystemPrompts.get_grand_council_prompt()
+        elif prompt_type == 'intelligence_delta':
+            return SystemPrompts.get_intelligence_delta_audit_prompt(kwargs.get('code_or_plan'))
+        elif prompt_type == 'cognitive_ledger':
+            return SystemPrompts.get_cognitive_ledger_post_mortem_prompt()
+        elif prompt_type == 'sovereign_alignment':
+            return SystemPrompts.get_sovereign_alignment_check_prompt()
+        elif prompt_type == 'recursive_optimization':
+            return SystemPrompts.get_recursive_optimization_prompt()
+        elif prompt_type == 'active_inference':
+            return SystemPrompts.get_active_inference_ops_prompt()
+        elif prompt_type == 'divergent_stochastics':
+            return SystemPrompts.get_divergent_stochastics_prompt()
+        elif prompt_type == 'sovereign_safety':
+            return SystemPrompts.get_sovereign_safety_prompt()
+        elif prompt_type == 'gallery_curator':
+            return SystemPrompts.get_gallery_curator_prompt()
+        elif prompt_type == 'ux_heuristic':
+            return SystemPrompts.get_ux_heuristic_prompt()
+        elif prompt_type == 'network_weaver':
+            return SystemPrompts.get_network_weaver_prompt()
+        elif prompt_type == 'strategy_alignment':
+            return SystemPrompts.get_strategy_alignment_prompt()
+        elif prompt_type == 'alchemist_transmutation':
+            return SystemPrompts.get_alchemist_transmutation_prompt()
+        else:
+            logger.warning(f"[{self.name}] Unknown metacognitive prompt type: {prompt_type}")
+            return ""
 
     def run(self, input_text: str):
         """Standard execution entry point."""

@@ -1,4 +1,9 @@
 import logging
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from admin.brain.system_prompts import SystemPrompts
 
 class MLEngineer:
     def __init__(self):
@@ -44,6 +49,10 @@ class MLEngineer:
              return self.rl_consult(**params)
         elif action == "demo_rl_pipeline":
              return self.demo_rl_pipeline()
+        elif action == "audit_architecture":
+            return {"prompt": SystemPrompts.get_model_architecture_audit_prompt()}
+        elif action == "debug_training":
+            return {"prompt": SystemPrompts.get_training_dynamics_debugger_prompt()}
         else:
             raise NotImplementedError(f"Action {action} not supported by ML Engineer.")
 

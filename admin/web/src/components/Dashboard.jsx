@@ -6,6 +6,7 @@ import {
     AlertCircle, CheckCircle2, ChevronDown, Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import sitePrompts from '../data/site_prompts.json'; // Import Prompts
 
 const apiBase = `http://${window.location.hostname}:8000`;
 
@@ -258,11 +259,24 @@ const Dashboard = () => {
                                         EXEC
                                     </button>
                                 </form>
-                                <div className="flex gap-2">
-                                    {history.map((cmd, i) => (
-                                        <button key={i} onClick={() => setCommand(cmd)} className="px-2 py-1 rounded bg-white/5 border border-white/5 text-[9px] font-mono text-white/40 hover:text-[#00D6A3] hover:border-[#00D6A3]/30 transition-all">
-                                            {cmd}
-                                        </button>
+                                <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                                    {/* Load prompts dynamically */}
+                                    {sitePrompts.map((cat, i) => (
+                                        <div key={i} className="flex gap-2">
+                                            {cat.prompts.map((p, j) => (
+                                                <button
+                                                    key={`${i}-${j}`}
+                                                    onClick={() => setCommand(p.command)}
+                                                    title={p.command}
+                                                    className="px-3 py-1.5 rounded bg-white/5 border border-white/5 text-[9px] font-mono text-white/60 hover:text-[#00D6A3] hover:border-[#00D6A3]/30 hover:bg-[#00D6A3]/5 transition-all whitespace-nowrap flex items-center gap-2 group"
+                                                >
+                                                    <span className="opacity-50 group-hover:opacity-100 transition-opacity">
+                                                        {p.label}
+                                                    </span>
+                                                </button>
+                                            ))}
+                                            {i < sitePrompts.length - 1 && <div className="w-px bg-white/10 mx-1" />}
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -295,9 +309,9 @@ const Dashboard = () => {
                     </button>
                 </form>
                 <div className="flex gap-2 mt-2 overflow-x-auto no-scrollbar">
-                    {history.map((cmd, i) => (
-                        <button key={i} onClick={() => setCommand(cmd)} className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/5 text-[10px] font-mono text-white/50 border border-white/5">
-                            {cmd}
+                    {sitePrompts.flatMap(cat => cat.prompts).map((p, i) => (
+                        <button key={i} onClick={() => setCommand(p.command)} className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/5 text-[10px] font-mono text-white/50 border border-white/5 hover:bg-[#00D6A3]/10 hover:text-[#00D6A3] transition-colors">
+                            {p.label}
                         </button>
                     ))}
                 </div>
