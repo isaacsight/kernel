@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
     MessageSquare, Network, LayoutGrid, FileText,
-    Palette, DollarSign, Briefcase, Settings, Zap, Menu, X
+    Palette, DollarSign, Briefcase, Settings, Zap, Menu, X, Activity
 } from 'lucide-react';
 
 const Layout = ({ children }) => {

@@ -4,6 +4,7 @@ A modern, static blog built with Python featuring AI-powered content generation,
 
 [![Build Status](https://github.com/isaachernandez/blog-design/workflows/Build%20and%20Deploy/badge.svg)](https://github.com/isaachernandez/blog-design/actions)
 [![Security Scan](https://github.com/isaachernandez/blog-design/workflows/Security%20Scan/badge.svg)](https://github.com/isaachernandez/blog-design/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 🌐 **Live Site**: [doesthisfeelright.com](https://www.doesthisfeelright.com)
 
@@ -16,6 +17,15 @@ A modern, static blog built with Python featuring AI-powered content generation,
 - ✅ **Tested**: Comprehensive test suite with >80% coverage
 - 🚀 **Automated Deployment**: GitHub Actions CI/CD to GitHub Pages
 - 🎨 **SEO Optimized**: JSON-LD, sitemaps, RSS feeds, and meta tags
+- 🏛️ **Studio OS Control Center**: Agentic council driven by a unified doctrine and sovereign rules.
+- 🔓 **Open Source**: Built as an open source platform for the community.
+
+## Open Source
+
+This project is an open source platform. We welcome contributions from the community! Whether you want to fix a bug, suggest a feature, or improve the documentation, please check out our [Contributing Guidelines](CONTRIBUTING.md).
+
+Licensed under the [MIT License](LICENSE).
+
 
 
 ## System Architecture
@@ -239,6 +249,22 @@ Then rebuild:
 ```bash
 python build.py
 ```
+
+## Studio OS: The Living Lab
+
+This workspace is configured as a **Living Studio OS**. Agents operate under a strict **Sovereign Doctrine** defined in `.agent/rules/`.
+
+### 🏛️ Agent Council
+- **Global Rules**: Engraved in `.agent/rules/global-rules.md`. Defines authorship, ethics, and "feels right" heuristics.
+- **Perception Critic**: Audits visual fidelity and brand alignment.
+- **Social Swarm**: Orchestrates high-velocity content distribution.
+
+### 🧪 Research & Development
+- **Artifacts**: Every agent run generates reasoning traces and verifiable plans.
+- **Model Routing**: 
+    - **Strategy**: Gemini 3 Pro
+    - **Velocity**: Gemini 3 Flash
+- **QA**: Automated testing via the Antigravity Chrome Extension.
 
 ## AI-Assisted Development
 

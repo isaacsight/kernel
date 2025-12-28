@@ -68,6 +68,56 @@ class GrandCouncil:
             }
         }
 
+    def execute_task(self, task_id: str):
+        """
+        Executes a seeded task: Gather Intel -> Plan -> Research -> Draft.
+        """
+        task_folder = os.path.join("admin/tasks", task_id)
+        if not os.path.exists(task_folder):
+            logger.error(f"Task folder not found: {task_folder}")
+            return
+
+        with open(os.path.join(task_folder, "task.json"), "r") as f:
+            task_data = json.load(f)
+
+        topic = task_data["title"]
+        description = task_data["description"]
+        
+        logger.info(f"🚀 Executing Task: {topic} ({task_id})")
+        
+        # 0. Deliberate (Architect + Skeptic)
+        res = self.deliberate(topic, {"id": task_id, "description": description})
+        
+        # 1. Update Plan Artifact
+        with open(os.path.join(task_folder, "plan.md"), "w") as f:
+            f.write(f"# Plan: {topic}\n\n## Architect's Execution Strategy\n{res['process']['architect_plan']}\n\n## Skeptic's Critique\n{res['process']['skeptic_critique']}")
+
+        # 2. Research Phase (Librarian/Researcher)
+        # Assuming we have a 'Researcher' agent registered
+        research_report = self._gather_intelligence(topic)
+        with open(os.path.join(task_folder, "research.json"), "w") as f:
+            json.dump({"topic": topic, "intelligence": research_report, "timestamp": datetime.now().isoformat()}, f, indent=4)
+
+        # 3. Drafting Phase (Editor)
+        # We can call the Editor agent here if registered
+        editor = self.registered_agents.get("Editor")
+        if editor:
+            logger.info("   ↳ Commissioning Editor for draft...")
+            editor.write_essay(topic, res['council_output'])
+            # Move the generated essay to the task folder if found in brain/drafts
+            safe_topic = "".join([c if c.isalnum() else "_" for c in topic])[:50]
+            essay_path = os.path.join("brain/drafts", f"ESSAY_{safe_topic}.md")
+            if os.path.exists(essay_path):
+                shutil.copy2(essay_path, os.path.join(task_folder, "draft.md"))
+        
+        # 4. Final Status Update
+        task_data["status"] = "awaiting_review"
+        task_data["completed_at"] = datetime.now().isoformat()
+        with open(os.path.join(task_folder, "task.json"), "w") as f:
+            json.dump(task_data, f, indent=4)
+
+        logger.info(f"✅ Task {task_id} completed. Artifacts generated in {task_folder}")
+
     def _gather_intelligence(self, topic: str = "") -> str:
         """Asks all registered agents for a status report."""
         reports = []

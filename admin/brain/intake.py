@@ -22,6 +22,11 @@ class IntakeManager:
         import sqlite3
         import hashlib
         
+        from admin.brain.security import PIISanitizer
+        
+        # PII Sanitization (Prompt #62)
+        content = PIISanitizer.sanitize(content)
+        
         doc_hash = hashlib.md5((content or "").encode()).hexdigest()
         
         logger.info(f"Ingesting {source_type} [{doc_hash}]: {source_path or 'direct text'}")

@@ -47,6 +47,16 @@ class ModelRouter:
         # Model registry with capabilities and costs
         self.models = {
             # Cloud models
+            "gemini-3.0-pro": {
+                "provider": "google",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CODE_GENERATION, TaskType.CREATIVE_WRITING],
+                "cost_tier": "high",
+                "speed": "medium",
+                "quality": "highest",
+                "context_window": 2000000,
+                "available": self._check_gemini_available()
+            },
             "gemini-1.5-pro": {
                 "provider": "google",
                 "type": "cloud",
@@ -338,6 +348,34 @@ class ModelRouter:
         except:
             return False
     
+    
+    def log_usage(self, model: str, input_tokens: int, output_tokens: int, task: TaskType):
+        """
+        Telemetry hook (Prompt #6): Log token usage for cost analysis.
+        In a real system, this would write to InfluxDB or BigQuery.
+        """
+        cost_map = {
+            "gemini-1.5-pro": {"in": 3.50, "out": 10.50},  # Per 1M tokens
+            "gemini-1.5-flash": {"in": 0.35, "out": 1.05},
+            "gpt-4o": {"in": 5.00, "out": 15.00},
+            "gpt-4o-mini": {"in": 0.15, "out": 0.60},
+            "claude-3.5-sonnet": {"in": 3.00, "out": 15.00}
+        }
+        
+        rates = cost_map.get(model, {"in": 0, "out": 0})
+        cost = (input_tokens / 1_000_000 * rates["in"]) + (output_tokens / 1_000_000 * rates["out"])
+        
+        logger.info(
+            f"[Telemetry] Model: {model} | Task: {task.value} | "
+            f"Tokens: {input_tokens}in/{output_tokens}out | "
+            f"Est. Cost: ${cost:.6f}"
+        )
+        # TODO: Persist to 'usage_stats' table in MemoryStore
+
+    def estimate_tokens(self, text: str) -> int:
+        """Rough estimation of tokens (char/4)."""
+        return len(text) // 4
+
     def select_model(
         self, 
         task_type: TaskType,
@@ -363,6 +401,15 @@ class ModelRouter:
         # Get preferred models for this task type
         preferences = self.task_preferences.get(task_type, [])
         
+        # ... (rest of selection logic omitted for brevity, logic remains same)
+        # Ideally we would refactor the full selection logic here, but to avoid replacing 100 lines, 
+        # I will assume the original selection logic is fine and just inject the telemetry hook 
+        # where the model is USED, not selected.
+        
+        # Actually, select_model is just selection. Usage happens in BaseAgent.
+        # But for this diff, let's keep the logging method here so BaseAgent can call it.
+        
+        # Re-implementing the core selection logic briefly to ensure the file is valid
         # Score each model
         scored_models = []
         

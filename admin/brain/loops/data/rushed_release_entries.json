@@ -767,12 +767,845 @@
         "source": "content_heartbeat"
       },
       "created_at": "2025-12-26T20:40:00.103501"
+    },
+    {
+      "entry_id": "entry_1766782395_34",
+      "user_id": "anon_abc123",
+      "type": "self_improvement_audit",
+      "classification": {
+        "pattern": "unknown",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "session_duration": 802804,
+        "signals": [
+          {
+            "type": "hover_interest",
+            "entity": "knowledge gained from investigation, study, or instruction",
+            "source": "scanner_dwell",
+            "timestamp": 1766781622341
+          },
+          {
+            "type": "hover_interest",
+            "entity": "INFORMATION Definition & Meaning",
+            "source": "scanner_dwell",
+            "timestamp": 1766781637531
+          },
+          {
+            "type": "hover_interest",
+            "entity": "INFORMATION Definition & Meaning",
+            "source": "scanner_dwell",
+            "timestamp": 1766781642807
+          },
+          {
+            "event": "focus_return",
+            "count": 1,
+            "timestamp": 1766782395350
+          }
+        ],
+        "purpose": "Autonomous heuristic refinement"
+      },
+      "created_at": "2025-12-26T20:53:15.562107"
+    },
+    {
+      "entry_id": "entry_1766782395_35",
+      "user_id": "anon_abc123",
+      "type": "self_improvement_audit",
+      "classification": {
+        "pattern": "unknown",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "session_duration": 802849,
+        "signals": [
+          {
+            "type": "hover_interest",
+            "entity": "knowledge gained from investigation, study, or instruction",
+            "source": "scanner_dwell",
+            "timestamp": 1766781622341
+          },
+          {
+            "type": "hover_interest",
+            "entity": "INFORMATION Definition & Meaning",
+            "source": "scanner_dwell",
+            "timestamp": 1766781637531
+          },
+          {
+            "type": "hover_interest",
+            "entity": "INFORMATION Definition & Meaning",
+            "source": "scanner_dwell",
+            "timestamp": 1766781642807
+          },
+          {
+            "event": "focus_return",
+            "count": 1,
+            "timestamp": 1766782395350
+          },
+          {
+            "event": "focus_return",
+            "count": 1,
+            "timestamp": 1766782395395
+          }
+        ],
+        "purpose": "Autonomous heuristic refinement"
+      },
+      "created_at": "2025-12-26T20:53:15.795981"
+    },
+    {
+      "entry_id": "entry_1766782423_36",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "about:blank",
+        "title": "about:blank",
+        "note": "Captured via context menu",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T20:53:43.066004"
+    },
+    {
+      "entry_id": "entry_1766783285_37",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://www.google.com/search?q=google+ai+studio&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyDAgFECMYJxjqAhjwBTIJCAYQIxgnGOoCMhUIBxAAGEIYtAIY6gIY2wUY8AUYngbSAQozNjEyNjNqMGoxqAIIsAIB8QW6kOcFm0BRng&sourceid=chrome&ie=UTF-8",
+        "title": "google ai studio - Google Search",
+        "note": "Introducing vibe coding in Google AI Studio  blog.google https://blog.google \u203a technology \u203a developers \u203a introdu...",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T21:08:05.948206"
+    },
+    {
+      "entry_id": "entry_1766783329_38",
+      "user_id": "anon_abc123",
+      "type": "decision",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "url": "https://www.google.com/search?q=google+ai+studio&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyDAgFECMYJxjqAhjwBTIJCAYQIxgnGOoCMhUIBxAAGEIYtAIY6gIY2wUY8AUYngbSAQozNjEyNjNqMGoxqAIIsAIB8QW6kOcFm0BRng&sourceid=chrome&ie=UTF-8",
+        "title": "google ai studio - Google Search",
+        "note": "Introducing vibe coding in Google AI Studio  blog.google https://blog.google \u203a technology \u203a developers \u203a introdu...",
+        "source": "chrome_context_menu"
+      },
+      "created_at": "2025-12-26T21:08:49.734454"
+    },
+    {
+      "entry_id": "entry_1766783331_39",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Google AI Studio video - Google Search",
+        "url": "https://www.google.com/search?sca_esv=378965eda3ddb2bd&sxsrf=AE3TifOnPz4LkyTc5CGfrSpP_r05sz40yg:1766778784598&q=Google+AI+Studio+video&sa=X&ved=2ahUKEwj-7-jug9yRAxW7IUQIHTbZNgwQ1QJ6BAhEEAE&biw=1350&bih=711&dpr=2",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 585,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nVideos\nShort videos\nImages\nNews\nMore\nTools\nAds\nSponsored result\nGoogle AI Studio\naistudio.google.com\nhttps://aistudio.google.com\nBuild with Gemini AI \u2014 Quickly integrate AI models w/ a Gemini API key. Get started and scale with pay-as-you-go.\nHide sponsored result\nSearch Results\nWeb Result with Site Links\nGoogle AI Studio\n\nGoogle AI Studio\nhttps://aistudio.google.com\nThe fastest path from prompt to production with Gemini.\nEmail or phone\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nVeo 3 and 3.1\nIntegrate videos with breathtaking realism and natively generated ...\n\nNew chat\nSign in. Use your Google Account. Email or phone. Forgot email ...\n\nVibe Code with Gemini\nBuild Mode helps you create AI-native apps. It will automatically ...\n\nGemini 3\nStart building with Gemini 3, our most intelligent model, in ...\n\nGemini 2.5 Flash Image (Nano ...\nGet started using Gemini 2.5 Flash Image (aka Nano Banana) in AI ...\n\nMore results from google.com\u00a0\u00bb\nFlow\n\nGoogle Labs\nhttps://labs.google \u203a flow \u203a about\nFlow is an AI filmmaking tool built with and for creatives. Seamlessly create cinematic clips, scenes and stories using Google's most capable generative AI\u00a0...Read more\nGemini AI video generator powered by Veo 3.1\n\nGoogle Gemini\nhttps://gemini.google \u203a overview \u203a video-generation\nCreate high-quality, 8-second videos with Veo 3.1, our latest AI video generator. Simply describe what you have in mind or upload a photo and watch your ideas\u00a0...\nVideos\nBuild anything with Google AI Studio, here's how...\nYouTube \u00b7 Julian Goldie SEO\n2 days ago\nYouTube \u00b7 Julian Goldie SEO\n8:02\nBuild apps, landing pages, games, and videos without coding using Google AI Studio and Gemini 3 Flash.\nMaster Google Ai Studio in 15 Minutes\nYouTube \u00b7 Darrel Wilson\nJul 23, 2025\nYouTube \u00b7 Darrel Wilson\n17:12\nGoogle AI Studio is a free collection of AI tools that allows you to experiment with Google's Gemini AI models.\nGoogle AI Studio Tutorial - Beginner to Expert in 10 Prompts\nYouTube \u00b7 Santrel Media\n1 month ago\nYouTube \u00b7 Santrel Media\n18:15\nGoogle AI Studio offers various features beyond basic chat, including image generation, video creation, and even app development using a chatbot.\nFeedback\nView all\nVertex AI Studio\n\nGoogle Cloud\nhttps://cloud.google.com \u203a generative-ai-studio\nVertex AI Studio is a Google Cloud console tool for rapidly prototyping and testing generative AI models. Test sample prompts, design your own prompts,\nGoogle Gemini\n\nGoogle Gemini\nhttps://gemini.google.com\nMeet Gemini, Google's AI assistant. Get help with writing, planning, brainstorming, and more. Experience the power of generative AI.\nGoogle Vids: AI-Powered Video Creator and Editor\n\nGoogle\nhttps://workspace.google.com \u203a products \u203a vids\nCreate, edit, and share rich video content with Google Vids - a powerful online video editor infused with Google's AI technology.\nAds\nSponsored res",
+        "timestamp": 1766783331681,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T21:08:51.686617"
+    },
+    {
+      "entry_id": "entry_1766783494_40",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "how does gemini compare to chatgpt - Google Search",
+        "url": "https://www.google.com/search?q=how+does+gemini+compare+to+chatgpt&oq=how+does+gemini+c&gs_lcrp=EgZjaHJvbWUqBwgAEAAYgAQyBwgAEAAYgAQyDAgBEAAYFBiHAhiABDINCAIQABiRAhiABBiKBTIMCAMQABgUGIcCGIAEMgcIBBAAGIAEMgYIBRBFGDkyBwgGEAAYgAQyBwgHEAAYgAQyBwgIEAAYgAQyBwgJEAAYgASoAgiwAgHxBdjxuQnya1o1&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 117,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nVideos\nShort videos\nImages\nNews\nMore\nSearch Results\nSearch Results\nI Tested Gemini vs. ChatGPT and Found the Clear Winner\nG2 Learning Hub\nhttps://learn.g2.com \u203a gemini-vs-chatgpt\nJul 18, 2025 \u2014 ChatGPT is great for writing, brainstorming, and coding, while Gemini excels in real-time research, multimodal processing (text, images, video)\u00a0...\nI switched from ChatGPT to Gemini and I am baffled\nReddit \u00b7 r/GeminiAI\n370+ comments \u00b7 3 weeks ago\nChatGPT generally regarded as the best text generating platform, and actually generally more accurate than Google's Gemini, in my cases anyways.\nShow all quick matches\nWeb Guide\nClassic Search\nFooter Links",
+        "timestamp": 1766783494244,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-26T21:11:34.294371"
+    },
+    {
+      "entry_id": "entry_1766783521_41",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://store.google.com/intl/en/ideas/articles/gemini-camera-updates/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-26T21:12:01.669381"
+    },
+    {
+      "entry_id": "entry_1766783521_42",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://store.google.com/intl/en/ideas/articles/gemini-camera-updates/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-26T21:12:01.903453"
+    },
+    {
+      "entry_id": "entry_1766783522_43",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://store.google.com/intl/en/ideas/articles/gemini-camera-updates/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-26T21:12:02.118604"
+    },
+    {
+      "entry_id": "entry_1766783522_44",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://store.google.com/intl/en/ideas/articles/gemini-camera-updates/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-26T21:12:02.271260"
+    },
+    {
+      "entry_id": "entry_1766783522_45",
+      "user_id": "anon_abc123",
+      "type": "self_improvement_audit",
+      "classification": {
+        "pattern": "unknown",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "session_duration": 379487,
+        "signals": [
+          {
+            "type": "hover_interest",
+            "entity": "Flow",
+            "source": "scanner_dwell",
+            "timestamp": 1766783334010
+          },
+          {
+            "type": "hover_interest",
+            "entity": "Flow",
+            "source": "scanner_dwell",
+            "timestamp": 1766783338952
+          },
+          {
+            "type": "hover_interest",
+            "entity": "More results from google.com\u00a0\u00bb",
+            "source": "scanner_dwell",
+            "timestamp": 1766783343135
+          },
+          {
+            "type": "hover_interest",
+            "entity": "Context Analysis",
+            "source": "scanner_dwell",
+            "timestamp": 1766783517144
+          }
+        ],
+        "purpose": "Autonomous heuristic refinement"
+      },
+      "created_at": "2025-12-26T21:12:02.413377"
+    },
+    {
+      "entry_id": "entry_1766783529_46",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.google.com/search?q=how+does+gemini+copilot+work+within+screen+share&oq=how+does+gemini+copilot+work+within+screen+share&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORigATIHCAEQIRigATIHCAIQIRiPAjIHCAMQIRiPAtIBCTE1NzMzajBqMagCCLACAfEF2PG5CfJrWjU&sourceid=chrome&ie=UTF-8",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-26T21:12:09.857389"
+    },
+    {
+      "entry_id": "entry_1766813178_47",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Inbox (238) - isaacsight@gmail.com - Gmail",
+        "url": "https://mail.google.com/mail/u/0/#inbox",
+        "description": "Google's approach to email",
+        "h1": "GmailSearchtabHelpTrainingSend feedback to GoogleAsk Gemini",
+        "wordCount": 2174,
+        "bodyText": "\nSkip to content\nUsing Gmail with screen readers\n\nSearch\nAsk Gemini\nEnable desktop notifications for Gmail.\n\u00a0\u00a0\u00a0OK\u00a0\u00a0No thanks\nCompose\nLabels\nInbox\n238\nStarred\nSnoozed\nSent\nDrafts\n89\nPurchases\n1,464\nMore\n\u00a0\nLabels\nLabels\nBlog Replies\nimportant aaaaa\n1\nNotes\nticket show\n\u00a0\n1\u201350 of 1,118\nConversations\nPrimary\n27 new\nPromotions\nAudible.com \u2014 Don't forget your free audiobook with your 30-day trial \ud83c\udfa7\nSocial\n1 new\nUpdates\nTikTok \u2014 Salvero reposted: going out by yourself\u00a0\nForums\nno-reply\n3\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Charge for $10.00 on 12/26/2025 at SQ *ROOSEVELT COFFEE, IRVINE, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\n8:44\u202fPM\nDeclan Clowry\nAppointment booked: Declan FoundryLabs (Isaac Hernandez) @ Sat Dec 27, 2025 8am - 8:30am (PST) ([EMAIL_REDACTED])\n\u00a0-\u00a0\nBooked by Isaac Hernandez [EMAIL_REDACTED] Declan FoundryLabs (Isaac Hernandez) Saturday Dec 27, 2025 \u22c5 8am \u2013 8:30am (Pacific Time - Los Angeles) Booked by Isaac Hernandez [EMAIL_REDACTED]\nDec 24\nme, Declan\n3\nExploring collaboration around AI-native systems and agentic workflows\n\u00a0-\u00a0\nHi Declan, Thanks for getting back to me. I've booked a slot for this Saturday. Looking forward to chatting then On Tue, Dec 23, 2025 at 11:29 PM Declan Clowry <[EMAIL_REDACTED]>\n\u00a0\nDec 23\nno-reply\n4\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Charge for $10.00 on 12/23/2025 at SQ *ROOSEVELT COFFEE, IRVINE, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\nDec 23\nno-reply\n3\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Pending charge for $15.98 on 12/22/2025 at MOTHERS MARKET & KITCHEN, COSTA MESA, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\nDec 22\nno-reply\n2\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Pending charge for $1.24 on 12/22/2025 at 76 - NEWPORT 76, COSTA MESA, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\nDec 22\nOpenAI Hiring Team\n2\nThank you for applying to OpenAI\n\u00a0-\u00a0\nHi Isaac, Thank you for applying to OpenAI. Your application has been received and our recruiting team will review it for the role you applied to, along with any similar roles we have open. If we find\n\u00a0\nDec 21\nno-reply\n3\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Pending charge for $14.37 on 12/19/2025 at TRADER JOE S #19 12932 NE, TUSTIN, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\nDec 19\nno-reply\n3\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Charge for $12.00 on 12/18/2025 at SQ *ROOSEVELT COFFEE, IRVINE, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\n\u00a0\nDec 18\nno-reply\n4\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Pending charge for $2.21 on 12/17/2025 at SPROUTS FARMERS MKT#207, TUSTIN, California on card ending in 0790 Important Information from BCU Contact Us | Privacy | [PHONE_REDACTED]\nno-reply\n9\nCard Alert\n\u00a0-\u00a0\nHi ISAAC, Pending charge for $25.66 on 12/17/2025 at NGUYEN'S KITCHEN, ORANGE, California on c",
+        "timestamp": 1766813178865,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-27T05:26:18.872507"
+    },
+    {
+      "entry_id": "entry_1766813747_48",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "what is palanatir fo r - Google Search",
+        "url": "https://www.google.com/search?q=what+is+palanatir+fo+r&oq=what+is+palanatir+fo+r&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQABgNGIAEMgkIAhAAGA0YgAQyCQgDEAAYDRiABDIJCAQQABgNGIAEMgkIBRAAGA0YgAQyCAgGEAAYDRgeMggIBxAAGA0YHjIICAgQABgNGB4yCAgJEAAYFhge0gEIMzMxN2owajGoAgiwAgHxBYzQp7esLYt98QWM0Ke3rC2LfQ&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 128,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nVideos\nNews\nImages\nShopping\nMore\nTools\nSearch Results\nSearch Results\nPalantir: Home\nPalantir\nhttps://www.palantir.com\nWe build software that empowers organizations to effectively integrate their data, decisions, and operations.\nWhat Does Palantir Actually Do?\nWIRED\nhttps://www.wired.com \u203a Business \u203a Palantir\nAug 11, 2025 \u2014 Palantir is often called a data broker, a data miner, or a giant database of personal information. and Customs Enforcement,\nShow all quick matches\nWeb Guide\nClassic Search\nHelp improve Web Guide by providing feedback\nAccess Web Guide at any time via the Web tab.\nFooter Links\nResults are personalized\n-\nTry without personalization\n92701, Santa Ana, CA\u00a0-\u00a0From your IP address\n\u00a0-\u00a0Update location\nHelpSend feedbackPrivacyTerms",
+        "timestamp": 1766813747520,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-27T05:35:47.583384"
+    },
+    {
+      "entry_id": "entry_1766813779_49",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.palantir.com/",
+        "depth": 25,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-27T05:36:19.704107"
+    },
+    {
+      "entry_id": "entry_1766813806_50",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.google.com/search?q=what+is+palanatir+fo+r&oq=what+is+palanatir+fo+r&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQABgNGIAEMgkIAhAAGA0YgAQyCQgDEAAYDRiABDIJCAQQABgNGIAEMgkIBRAAGA0YgAQyCAgGEAAYDRgeMggIBxAAGA0YHjIICAgQABgNGB4yCAgJEAAYFhge0gEIMzMxN2owajGoAgiwAgHxBYzQp7esLYt98QWM0Ke3rC2LfQ&sourceid=chrome&ie=UTF-8",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:36:46.675193"
+    },
+    {
+      "entry_id": "entry_1766813810_51",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.google.com/search?q=what+is+palanatir+fo+r&oq=what+is+palanatir+fo+r&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQABgNGIAEMgkIAhAAGA0YgAQyCQgDEAAYDRiABDIJCAQQABgNGIAEMgkIBRAAGA0YgAQyCAgGEAAYDRgeMggIBxAAGA0YHjIICAgQABgNGB4yCAgJEAAYFhge0gEIMzMxN2owajGoAgiwAgHxBYzQp7esLYt98QWM0Ke3rC2LfQ&sourceid=chrome&ie=UTF-8",
+        "depth": 66,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-27T05:36:50.337825"
+    },
+    {
+      "entry_id": "entry_1766813826_52",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.google.com/search?q=foundry+lab&sca_esv=7323de7827af4722&sxsrf=AE3TifMBeuTCZ5ClxgMVDZh0gTHHn__hIw%3A1766813746723&ei=MnBPab7mK8fmwN4P367p-Qc&ved=0ahUKEwi-x4eOht2RAxVHM9AFHV9XOn8Q4dUDCBE&uact=5&oq=foundry+lab&gs_lp=Egxnd3Mtd2l6LXNlcnAiC2ZvdW5kcnkgbGFiMgQQIxgnMgQQIxgnMgQQIxgnMgsQLhiABBjHARivATIFEAAYgAQyCxAuGIAEGNEDGMcBMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEifFlD2BVj7E3AEeACQAQCYAbUCoAHrDqoBBzAuOC4yLjG4AQPIAQD4AQGYAg-gApwPqAIQwgIKEAAYgAQYsAMYDcICCRAAGLADGA0YHsICCxAAGLADGAgYDRgewgIHECMYJxjqAsICChAjGPAFGCcY6gLCAhcQABiABBiRAhi0AhjnBhiKBRjqAtgBAcICChAjGIAEGCcYigXCAgsQABiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgIIEAAYgAQYsQPCAgsQABiABBixAxiDAcICChAAGIAEGEMYigXCAhAQABiABBixAxhDGIMBGIoFwgIOEC4YgAQYxwEYjgUYrwHCAgUQLhiABMICDRAuGIAEGLEDGEMYigXCAggQLhiABBixA5gDBPEFQFj4AH92rG6IBgGQBgq6BgYIARABGAGSBwc0LjguMi4xoAeQpAGyBwcwLjguMi4xuAeQD8IHBjAuMTIuM8gHIoAIAA&sclient=gws-wiz-serp",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:37:06.736598"
+    },
+    {
+      "entry_id": "entry_1766813917_53",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:38:37.295805"
+    },
+    {
+      "entry_id": "entry_1766814088_54",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:41:28.738473"
+    },
+    {
+      "entry_id": "entry_1766814108_55",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:41:48.338088"
+    },
+    {
+      "entry_id": "entry_1766814108_56",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:41:48.991503"
+    },
+    {
+      "entry_id": "entry_1766814109_57",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:41:49.329694"
+    },
+    {
+      "entry_id": "entry_1766814109_58",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T05:41:49.712675"
+    },
+    {
+      "entry_id": "entry_1766848887_59",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:27.126219"
+    },
+    {
+      "entry_id": "entry_1766848916_60",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:56.383801"
+    },
+    {
+      "entry_id": "entry_1766848916_61",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:56.653736"
+    },
+    {
+      "entry_id": "entry_1766848917_62",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:57.002193"
+    },
+    {
+      "entry_id": "entry_1766848917_63",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:57.330601"
+    },
+    {
+      "entry_id": "entry_1766848918_64",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:21:58.640469"
+    },
+    {
+      "entry_id": "entry_1766848920_65",
+      "user_id": "anon_abc123",
+      "type": "cognitive_load_update",
+      "classification": {
+        "pattern": "felt_wrong",
+        "confidence": 0.5,
+        "guardrails": [],
+        "reasoning": "LLM/Parse Failure: LLM returned JSON without 'pattern' key"
+      },
+      "state": {
+        "felt_right": null,
+        "overrides": 0,
+        "reviewed": false
+      },
+      "context": {
+        "reason": "High scroll jitter detected",
+        "jitter": 11,
+        "url": "https://www.foundrylabs.co.jp/",
+        "source": "behavioral_observer"
+      },
+      "created_at": "2025-12-27T15:22:00.258732"
+    },
+    {
+      "entry_id": "entry_1766848938_66",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "loveable - Google Search",
+        "url": "https://www.google.com/search?q=loveable&oq=loveable&gs_lcrp=EgZjaHJvbWUyDggAEEUYJxg5GIAEGIoFMgYIARAjGCcyCggCEAAYsQMYgAQyBwgDEAAYgAQyBwgEEAAYgAQyBwgFEAAYgAQyCggGEC4YsQMYgAQyBwgHEAAYgAQyBwgIEAAYgAQyBwgJEAAYjwLSAQgxNzQ2ajBqMagCCLACAfEFRc2N5Mo7vXY&sourceid=chrome&ie=UTF-8",
+        "description": "",
+        "h1": "Accessibility Links",
+        "wordCount": 1185,
+        "bodyText": "Accessibility Links\nSkip to main content\nAccessibility help\nAccessibility feedback\nFilters and Topics\nAI Mode\nAll\nWeb\nImages\nVideos\nShopping\nNews\nMore\nTools\n\nIncluding results for lovable\nSearch only for loveable\n\n\nSearch Results\nWeb Result with Site Links\nLovable - Build Apps & Websites with AI, Fast | No Code App ...\n\nLovable\nhttps://lovable.dev\nLovable is an AI app and website builder that turns ideas into production-ready software without coding. Launch faster with AI.\nLogin\nContinue with Google. Continue with GitHub. Or. Email. Email ...\n\nPricing\nAll features in Free, plus: 100 monthly credits; 5 daily credits ...\n\nCreate your account\nCreate your account. Continue with Google. Continue with ...\n\nCustom knowledge\nAdd project guidelines, user personas, design assets, and ...\n\nSolutions\nLet AI help you build your next big idea. Lovable lets you turn your ...\n\nMore results from lovable.dev\u00a0\u00bb\nPeople also ask\nIs it spelled loveable or Lovable?\nWhat does it mean to be loveable?\nWhat is Lovable used for?\nWhat is the difference between Lovable and claude?\nFeedback\nHonest review of Lovable from an AI engineer\n\nMedium\u00a0\u00b7\u00a0Arslan Shahid\n110+ likes \u00b7 4 months ago\nLovable is an online AI-based website creator that allows you to build websites from scratch using just prompts and no code.Read more\nHonest Loveable AI Review and App Building Walkthrough\n\nEntreResource.com\nhttps://entreresource.com \u203a A.I.\nAug 22, 2025 \u2014 Loveable AI is a \"vibe coding\" software that allows non-coders (like me) to build apps, websites and softwares through prompting.Read more\nLOVABLE Definition & Meaning\n\nMerriam-Webster\nhttps://www.merriam-webster.com \u203a dictionary \u203a lovable\nThe meaning of LOVABLE is having qualities that attract affection. How to use lovable in a sentence.\nWhat people are saying\n7:49\nLovable AI Review - 2026 | I Tested Their AI Website Builder - Worth the Hype?\n7.7K+ views\u00a0\u00b7\u00a02 days ago\nDaniel | Tech & Data \u00b7 YouTube\nSoftware developer\nThis startup just killed the coding barrier. @lovable.dev , a Swedish AI startup, raised $330 million and reached a $6.6 billion valuation. That is more than triple its $1.8 billion valuation from July. Lovable lets you build websites and apps using plain language. You do not need to write code. Founders, marketers, and product teams use it to ship working products in hours instead of weeks. The company says it now generates about $200 million in annual recurring revenue with roughly 320,000 paying customers. Software building is shifting from specialists to anyone with a clear idea. If anyone can build apps, what skills matter next? Start vibe-coding @lovable.dev #vibecoding #lovablepartner\n1.5K+ likes\u00a0\u00b7\u00a03 days ago\nchatgptricks\nInstagram\nLovable has launched Lovable Cloud and Lovable AI to simplify full-stack app creation, allowing anyone to build apps with complex AI and backend functionality through simple prompts. The company announced on X that \u201cAnyone can now build apps with co\n40+ reactions\u00a0\u00b7\u00a0Sep 29, 2025\nAIM \u00b7 LinkedIn\nAI med",
+        "timestamp": 1766848938237,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-27T15:22:18.241465"
     }
   ],
   "pattern_counts": {
     "rushed_release": 6,
     "moved_resource": 1,
-    "felt_wrong": 7,
-    "unknown": 1
+    "felt_wrong": 30,
+    "unknown": 4
   }
 }

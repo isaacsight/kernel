@@ -11,12 +11,16 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
+      },
       '/execute': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:8000',
         changeOrigin: true
       },
       '/ws': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:8000',
         ws: true,
         changeOrigin: true,
         rewrite: (path) => path

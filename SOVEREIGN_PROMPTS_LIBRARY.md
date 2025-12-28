@@ -2711,3 +2711,128 @@ Did this action violate the **Sovereign Manifesto**?
 
 Verdict: [Breach / Compliant].
 ```
+# Studio OS // Simulation Evolution: 100 Improvement Prompts (Vol 2)
+
+This second volume of prompts focuses on "Phase 4" of the simulation roadmap: High-fidelity mechanical interaction, emotional agentic states, and hyper-transparent hardware telemetry.
+
+---
+
+## 1. Kinetic & Mechanical Fidelity (The "Heavy Metal" Look)
+1.  **Pneumatic Hiss**: (Visual) Add particle-based "steam" puffs to robot joints when they accelerate from zero.
+2.  **Reactive Suspension**: Make the robot's dome head tilt backwards during acceleration and forwards during braking (physics-based inertia).
+3.  **Tread Friction Sparks**: Emit tiny yellow sparks (Points) when a robot performs a sharp turn on the metallic grid.
+4.  **Chassis Vibration**: Apply a high-frequency perlin noise to the robot's mesh position when the OS Observer reports CPU load > 70%.
+5.  **Mechanical Shudder**: Create a 0.1s "glitch" or shudder animation when a robot is re-routed due to a gateway block.
+6.  **Self-Leveling Struts**: Adjust the robotic base legs to slightly tilt when traversing the neon pathways (simulated uneven terrain).
+7.  **Optic Lens Zoom**: Animate the robot's "eye" scaling up and down based on the proximity to a Tech Island.
+8.  **Internal Gear Rotation**: Add semi-transparent rotating gears inside the robot core that spin faster as the "Activity Score" increases.
+9.  **Hydraulic Damping**: Implement smooth exponential decay (lerping) for the bobbing animation to make it feel "weighted" and industrial.
+10. **Impact Dust**: Spawn a ring of gray particles when a robot "docks" at high speed.
+
+## 2. Lighting & Atmosphere (Digital Twin High-End)
+11. **Anamorphic Lens Flare**: Implement a custom shader that draws horizontal purple flares across the screen when a bot is at the center of the bloom.
+12. **Grid Substrate Glow**: Make the grid lines pulsate with a "circuitry" pattern that follows the flow of data from Hardware to Public Surface.
+13. **Selective Volumetric Fog**: Use a depth-aware shader to pool thick cyan fog only in the "Substrate" layer (Z < -50).
+14. **Dynamic Shadow Softness**: Modulate the directional light's `shadow.radius` based on the system's "Surprise" heuristic (Active Inference).
+15. **Holographic Flicker**: Randomly drop the opacity of island holograms to 0.1 for 50ms to simulate "interference".
+16. **Environment Reflection Mapping**: Use target machine's hardware stats to choose the "Reflection Cube" (e.g., warmer colors for higher temps).
+17. **Refractive Data Cubes**: Spawn small, glass-like cubes that float along the pathways, refracting the neon light behind them.
+18. **Bloom Bleed Refinement**: Implement a dual-stage bloom (small radius for sharp edges, large radius for atmospheric glow).
+19. **Caustics for the Grid**: Project "light ripples" (caustics) onto the metallic grid floor, as if looking through high-density data.
+20. **Color Grading (LUTs)**: Implement a "Cold Tech" LUT (Look Up Table) that increases contrast and pushes shadows toward deep navy.
+
+## 3. Human Gate & Authority (Interactive Sovereignty)
+21. **Security Pulse Wave**: When the gate is "SHIELD ENFORCED", emit a slow, red circular pulse from the Human Socket every 5 seconds.
+22. **Interactive Iris**: Animate a mechanical iris opening on the Human Socket island when the user hovers over the "Approve" button.
+23. **Verification Laser Sweep**: Have the gate arch project 10 individual green lines that "scan" a bot from top to bottom.
+24. **Identity Badge**: Place a 3D "Badge" (small floating disk) above bots that have been verified, matching the human's signature.
+25. **Reject Repulsion**: Create an invisible physics field at the gate that pushes unverified bots backward if they move too close.
+26. **Authority Timeout Visual**: Fade the Human Socket's glow to gray if the user hasn't clicked anything for 5 minutes.
+27. **Guardrail Wall**: Raise a semi-transparent red "energy wall" between the human island and the code island when a block is active.
+28. **Haptic Pulse (Visual)**: Shake the HUD when a bot is manually approved, providing weight to the decision.
+29. **Protocol Text rain**: When a protocol is broken, display the specific rule ID in a vertical falling-text style around the gate.
+30. **Manual Override Glow**: Make the entire simulation's accent color turn "Safety Orange" when in Bypass mode.
+
+## 4. Hardware Telemetry & Spawning (Deep Sync)
+31. **Core-Specific Bots**: Spawn a tiny drone for each CPU core, keeping them tethered to the Hardware Island.
+32. **Disk Latency Warp**: Slightly distort the path tubes' geometry (wobble) when disk latency is detected as high.
+33. **Memory Swapping Smoke**: Emit dark smoke particles from the Memory Island if the OS begins swapping to disk.
+34. **Network waterfall**: Draw cascading streams of bits (Points) falling from the top of the screen into the Public Surface island.
+35. **Thermal Throttling Slow-mo**: If CPU temp > 80C, halve the global animation speed to visualize the thermal clock reduction.
+36. **FileSystem Tracker**: Spawn a bot that specifically moves between the "Code" island and the "Memory" island whenever a file is saved.
+37. **Git Branch Bloom**: Pulse the pathway color uniquely when a `git pull` or `git push` is detected in the background.
+38. **Process Priority size**: Scale robots based on the "Nice" value or priority of the process they represent.
+39. **Zombie Process Bots**: Spawn translucent, grey "glitchy" bots for processes marked as zombies in the OS.
+40. **OS Uptime HUD**: Display the raw system uptime as a monospaced ticker at the bottom of the HUD.
+
+## 5. Agentic States & Emotions (Synthetic Psyche)
+41. **Frustration State**: If a bot is blocked by a guardrail for > 10s, give it a jerky, nervous jitter animation.
+42. **Discovery Bloom**: When a bot reaches a new island for first time, cause it to emit a bright circular "ping" pulse.
+43. **Collaboration Sync**: If two bots are on the same island, sync their bobbing frequency so they appear to be "talking".
+44. **Boredom Idle**: If a bot has no task, have it wander to a random grid coordinate instead of staying at a station.
+45. **Focus Mode**: When a bot is "Scanning", dim the lights of all other islands to emphasize its current work.
+46. **Success Sparkle**: Add a "gold star" particle emitted from robots when they reach the Public Surface.
+47. **Tiredness Gradient**: Slowly desaturate a robot's visor color as it completes more tasks without "resting" at the Pod.
+48. **Alarm Pulse**: Flip the bot's emissive color to red briefly when an error appears in the system log.
+49. **Social Distancing**: Bots should stay at least 50 units away from each other unless they are "exchanging context".
+50. **Agent Resumes**: On hover, show his "Career Path"—which islands he has visited in this session.
+
+## 6. Substrate & Infrastructure (Industrial Lab)
+51. **Mechanical Arms**: Place a static 3D robotic arm at the Code Island that performs "welding" animations (sparks) every 30s.
+52. **Cable Bundles**: Replace simple tubes with three braided wires using a custom TubeGeometry.
+53. **Rotating Foundation**: Make the tech islands sit on large rotating gears that emerge from the grid floor.
+54. **Coolant Pipes**: Add translucent blue pipes running horizontally under the main grid axes.
+55. **Circuitry Overlay**: Project a static texture of a PCB (Printed Circuit Board) onto the void background.
+56. **Island Anchor Bolts**: Add four large metallic bolts to each corner of the island platforms.
+57. **Structure Wobble**: Give the islands a tiny physics-based sway proportional to the number of bots landed on them.
+58. **Maintenance Drone**: Spawn a tiny, uniquely colored bot that only moves to islands that haven't been visited in a while.
+59. **Substrate Depth Pulse**: Cause a wave of light to move downwards through the "Substrate" layer periodically.
+60. **Hardware Blinkenlights**: Randomize the flicker rate of the "server rack" lights based on actual CPU frequency.
+
+## 7. Mathematical & Logical Viz (Deterministic Beauty)
+61. **Vector Field Grid**: Distort the grid lines around robots to visualize their "Influence Field".
+62. **Bezier Pathing**: Curvey the paths between islands using QuadraticBezierCurves for more organic movement.
+63. **Entropy HUD**: Calculate and display a real-time "System Entropy" score based on log activity.
+64. **Markov Blanket Shield**: Draw a semi-transparent sphere around each bot representing its Markov Blanket boundary.
+65. **Bayesian Learning HUD**: Show a "Confidence Bar" above the Alchemist bot that increases as it scans context.
+66. **Decision Tree Viz**: When a bot approaches the gate, draw a faint 3D tree structure showing the logic branches it just evaluated.
+67. **Graph Connection Lines**: Occasionally draw faint lines between all bots currently on the same "plane".
+68. **Pathing Arrows**: Add moving arrows onto the neon paths showing the direction of current "Data Flow".
+69. **Coordinate HUD**: Show the current robot IDs and their Cartesian coordinates in a scrollable list.
+70. **Reality/Model Divergence**: Draw a "shadow" bot that follows the real bot with a 0.5s delay to represent the "Predicted" vs "Actual" state.
+
+## 8. Performance & Optimization (Production Grade)
+71. **Instanced Rendering**: Use `InstancedMesh` for the grid helper components to support up to 10k grid units at 144FPS.
+72. **LOD System**: Reduce the segment count of the island cylinders and robot domes as they move further from the camera.
+73. **Shader Chunking**: Break the main simulation shader into reusable GLSL chunks for better maintainability.
+74. **Offscreen Throttling**: Stop calculating robot positions when the browser tab is not active.
+75. **Worker-Based Physics**: Move the robot destination calculations to a Web Worker to keep the UI thread buttery smooth.
+76. **Texture Compression**: Use KTX2 or Basis Universal textures for all environment maps.
+77. **Manual Cleanup**: Ensure all geometries and materials are disposed of correctly when a bot "expires".
+78. **Delta-Time Decoupling**: Ensure all movement is frame-rate independent using `clock.getDelta()`.
+79. **Draw Call Minification**: Merge all static island geometries into a single mesh.
+80. **Battery Saver Mode**: Turn off Bloom and Shadows if the browser reports `navigator.getBattery()` is low.
+
+## 9. Context & Memory (Deep Knowledge)
+81. **Context Waterfall**: Visualize "Knowledge Items" as falling icons that get caught by the Context Bridge bots.
+82. **Memory Bloom**: When a bot ingest a KI, make the Memory Island's glow double in intensity for 2 seconds.
+83. **Semantic Distance Viz**: Highlight islands that are "semantically related" to the current active file.
+84. **Brain Pulse**: Add a pulsating "Brain" core (fractal sphere) inside the Context Bridge island.
+85. **Synthentic UX Projection**: Have the UX island project a "Screen" into the 3D void showing the blog's homepage.
+86. **Data Shards**: Spawn tiny "shards" of text (markdown snippets) that float around the Code Island.
+87. **Dependency Webs**: Draw a 3D line from the "Code" island to the "Public" island when a build is successful.
+88. **Knowledge Vapor**: Create a purple "mist" that surrounds bots only when they are moving from Memory to Content.
+89. **Archive Piles**: Place small 3D "stack" meshes on the Memory island representing the number of blog posts.
+90. **Search Beam**: When `web_scout` is active, the bot should fire a beam directly UPWARDS to represent "Cloud Research".
+
+## 10. The Grand AI Story (Agentic Presence)
+91. **The Sovereignty Flash**: When the user clicks "Approve", the entire scene should desaturate except for the bot.
+92. **Protocol Breach Alarm**: Make the robots all spin in place and turn red when a major system error occurs.
+93. **Autonomous Shift**: Change the lighting from "Warm" to "Cold" when switching from Human-Led to Autonomous mode.
+94. **The Whisper**: Add floating, very small text snippets of the "Doctrine" that drift across the screen.
+95. **Bot Graduation**: When a bot reaches the Public Surface, it should stay there for 10s and glow brightly before vanishing.
+96. **The Council Table**: Arrange bots in a circle around the Human Socket when they are all "Pending Authority".
+97. **Reality Anchor**: Place a static 3D model of Isaac's actual MacBook on the Human Node island.
+98. **Final Build Ripple**: A gold shockwave that clears all "Data Debris" from the grid.
+99. **System Awake Animation**: When the page loads, have the islands scale up from 0 one by one.
+100. **Absolute Zero**: A hidden "Zen Mode" where everything turns monochrome and silent, showing only the grid.

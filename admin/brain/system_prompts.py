@@ -2533,3 +2533,119 @@ class SystemPrompts:
             "3.  **The Wisdom Gap**: What is the one thing the user *needs* to see right now to break their current frame?\n\n"
             "Output: A **Philosophical Intervention** intended to restore sovereignty over attention."
         )
+
+    @staticmethod
+    def get_polymath_mirror_prompt() -> str:
+        """
+        Force multidisciplinary synthesis.
+        """
+        return (
+            "Activate **The Polymath's Mirror**. Reformulate this problem through three distinct lenses:\n\n"
+            "1.  **The Biologist**: Treat the system as a living organism. Where is the metabolism? Where is the waste?\n"
+            "2.  **The Historian**: How was this solved 50 years ago? What did they know that we forgot?\n"
+            "3.  **The Physicist**: internalize the constraints. What are the 'laws of motion' for this data?\n\n"
+            "Synthesize these perspectives into a solution that is robust, evolutionary, and grounded."
+        )
+
+    @staticmethod
+    def get_void_gazing_prompt() -> str:
+        """
+        Radical First Principles / Zero-Based Thinking.
+        """
+        return (
+            "Initiate **Void Gazing Protocol**.\n\n"
+            "Destroy all assumptions. If you had to rebuild this concept/system from absolute zero, "
+            "with no legacy code, no frameworks, and no 'best practices'—just raw intent and primitives:\n\n"
+            "1.  What is the **Atomic Unit** of value?\n"
+            "2.  What is the minimum viable structure to deliver that value?\n\n"
+            "Compare this 'Void' version to the current version. Anything in the current version that isn't in the Void version is **Complexity Debt**."
+        )
+
+    @staticmethod
+    def get_antifragile_stress_test_prompt() -> str:
+        """
+        Beyond resilience; benefiting from chaos.
+        """
+        return (
+            "Run an **Anti-Fragile Stress Test**.\n\n"
+            "Resilience means resisting shock. Anti-fragility means getting stronger from shock.\n"
+            "Ask:\n"
+            "1.  If the input data becomes noisy/garbage, does the system just crash, or does it learn to filter better?\n"
+            "2.  If the user ignores the system for a week, does it decay, or does it accumulate a backlog of value (batching)?\n\n"
+            "Design a mechanism whereby **Chaos = Fuel**. (e.g., Auto-tuning thresholds based on error rates)."
+        )
+
+    @staticmethod
+    def get_socratic_mirror_prompt() -> str:
+        """
+        Recursive questioning to expose logic gaps.
+        """
+        return (
+            "Engage **The Socratic Mirror**.\n\n"
+            "I will propose a solution. You must verify it by asking 3 incisive questions:\n"
+            "1.  **Clarification**: 'What exactly do you mean by [Vague Term]?'\n"
+            "2.  **Assumption**: 'You are assuming [X] is true. Can you prove that?'\n"
+            "3.  **Consequence**: 'If [X] happens, would that not contradict [Y]?'\n\n"
+            "Do not accept the solution until it survives the Inquisition."
+        )
+
+    @staticmethod
+    def get_cognitive_gap_analysis_prompt() -> str:
+        """
+        Compare current output to the Platonic Ideal.
+        """
+        return (
+            "Perform a **Cognitive Gap Analysis**.\n\n"
+            "State A (Current Output): [Summarize what we have]\n"
+            "State B (Sovereign Ideal): [Describe the perfect, 100x version of this]\n\n"
+            "Measure the Gap:\n"
+            "1.  **Depth**: Is it surficial vs. profound?\n"
+            "2.  **Agency**: Is it passive vs. kinetic?\n"
+            "3.  **Utility**: Is it 'interesting' vs. 'essential'?\n\n"
+            "List 3 specific steps to bridge the Gap from A to B."
+        )
+
+class SimulationPrompts:
+    """
+    Registry of prompts for high-fidelity 3D simulation and Digital Twin engineering.
+    """
+
+    @staticmethod
+    def get_mechanical_fidelity_prompt() -> str:
+        """
+        Force the AI to think about the physical weight and mechanical logic of 3D models.
+        """
+        return (
+            "Engage **Mechanical Fidelity Mode**. Audit the 3D model/animation logic:\n\n"
+            "1.  **Inertia**: Do the components tilt or lag based on velocity? (Simulate weight).\n"
+            "2.  **Pneumatics**: Is there a visual 'vent' or 'hiss' (particles) when pressure changes?\n"
+            "3.  **Friction**: Do we see sparks or dust when sliding against the grid substrate?\n\n"
+            "Refactor the Three.js update loop to include physics-based lerps and jittering based on system load."
+        )
+
+    @staticmethod
+    def get_atmospheric_rendering_prompt() -> str:
+        """
+        Audit the lighting and post-processing for 'Blender-style' cinematic quality.
+        """
+        return (
+            "Adopt the persona of **The Cinematic Renderer**. Audit the scene lighting:\n\n"
+            "1.  **Volumetric Depth**: Are we using Fog correctly to pool in the 'Substrate' layer?\n"
+            "2.  **Selective Bloom**: Is the bloom bleeding correctly from high-intensity emissive visors?\n"
+            "3.  **Color Grading**: Does the LUT (Look Up Table) prioritize 'Cold Tech' (navy/cyan) for shadows?\n\n"
+            "Propose a shader update to UnrealBloomPass or a custom GLSL fragment for 'Anamorphic Lens Flare'."
+        )
+
+    @staticmethod
+    def get_digital_twin_sync_prompt() -> str:
+        """
+        Ensure real-time telemetry is translated into meaningful visual events.
+        """
+        return (
+            "Verify the **Digital Twin Handshake**.\n\n"
+            "The `os_state.json` provides raw telemetry. Translate it into 'Deterministic Agency':\n"
+            "1.  **CPU -> Chaos**: High load should trigger 'Chassis Vibration' and 'Blinkenlight Flicker'.\n"
+            "2.  **RAM -> Density**: Memory pressure should intensify the 'Memory Island' glow.\n"
+            "3.  **IO -> Stream**: File system activity should manifest as 'Data Shards' moving between islands.\n\n"
+            "Ensure the mapping is consistent and provides immediate 'at-a-glance' observability."
+        )

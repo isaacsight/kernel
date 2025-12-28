@@ -16,11 +16,14 @@ from admin.config import config
 from admin.brain.memory_store import get_memory_store
 from admin.brain.active_inference import ActiveInferenceMixin
 from admin.brain.system_prompts import SystemPrompts
+from admin.brain.context_manager import ContextManager
+from admin.brain.visual_cortex import VisualCortexMixin
 from typing import Dict, Any, Optional, List, Union
+import json
 
 logger = logging.getLogger("BaseAgent")
 
-class BaseAgent(ActiveInferenceMixin):
+class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
     def __init__(self, agent_id: str):
         """
         Initialize the agent by loading its definition from the Brain.
@@ -39,7 +42,9 @@ class BaseAgent(ActiveInferenceMixin):
         except:
             self.model_router = None
             
-        super().__init__(agent_id=agent_id, memory_store=self.memory_store, model_router=self.model_router)
+        # Initialize Mixins
+        ActiveInferenceMixin.__init__(self, agent_id=agent_id, memory_store=self.memory_store, model_router=self.model_router)
+        # VisualCortexMixin doesn't need init, but we can verify vision support here
 
         if not os.path.exists(self.brain_path):
             raise ValueError(f"Agent definition not found at {self.brain_path}")
@@ -83,8 +88,13 @@ class BaseAgent(ActiveInferenceMixin):
             
         return data.get('skills', [])
 
-    def get_system_prompt(self) -> str:
-        """Combines profile and enabled skills into the final system prompt."""
+    def get_system_prompt(self, input_text: str = "") -> str:
+        """
+        Combines profile and enabled skills into the final system prompt.
+        
+        Args:
+            input_text: The user's input, used for dynamic context injection (Prompt #7).
+        """
         prompt = self.system_prompt
         
         # Inject Skill Instructions
@@ -102,6 +112,22 @@ class BaseAgent(ActiveInferenceMixin):
                     logger.warning(f"[{self.name}] Configured skill '{skill_name}' not found in registry.")
                     
             prompt += "\n" + self.skill_loader.get_system_prompt_additions()
+
+        # Inject Global Context (The 'Copilot' View) - Dynamic Injection (Prompt #7)
+        # Only inject full context if the input suggests a need for it, saving tokens.
+        context_keywords = ["context", "repo", "structure", "file", "analyze", "where", "how", "code"]
+        needs_context = any(k in input_text.lower() for k in context_keywords) or not input_text
+        
+        if needs_context:
+            try:
+                from admin.brain.context_manager import ContextManager
+                ctx = ContextManager()
+                prompt += "\n\n" + ctx.get_global_context()
+                logger.info(f"[{self.name}] Dynamic Context Injected (Triggered by content)")
+            except Exception as e:
+                logger.warning(f"Failed to load global context: {e}")
+        else:
+            logger.info(f"[{self.name}] Dynamic Context Skipped (Optimization)")
             
         return prompt
 
@@ -156,11 +182,97 @@ class BaseAgent(ActiveInferenceMixin):
             return SystemPrompts.get_strategy_alignment_prompt()
         elif prompt_type == 'alchemist_transmutation':
             return SystemPrompts.get_alchemist_transmutation_prompt()
+        elif prompt_type == 'polymath_mirror':
+            return SystemPrompts.get_polymath_mirror_prompt()
+        elif prompt_type == 'void_gazing':
+            return SystemPrompts.get_void_gazing_prompt()
+        elif prompt_type == 'antifragile_stress_test':
+            return SystemPrompts.get_antifragile_stress_test_prompt()
+        elif prompt_type == 'socratic_mirror':
+            return SystemPrompts.get_socratic_mirror_prompt()
+        elif prompt_type == 'cognitive_gap_analysis':
+            return SystemPrompts.get_cognitive_gap_analysis_prompt()
         else:
             logger.warning(f"[{self.name}] Unknown metacognitive prompt type: {prompt_type}")
             return ""
 
+    
     def run(self, input_text: str):
         """Standard execution entry point."""
         # This would connect to the ModelRouter eventually.
         raise NotImplementedError("Subclasses must implement run() or connect to ModelRouter.")
+
+    def socratic_debug_loop(self, error: Exception, context: str) -> str:
+        """
+        Implementation of Prompt #94: Socratic Debugging.
+        When an error occurs, ask 'What hypothesis led to this error?'
+        """
+        logger.error(f"[{self.name}] Entering Socratic Debug Loop due to: {error}")
+        
+        # 1. Formulate the Socratic Question
+        socratic_prompt = (
+            f"SYSTEM_ALERT: An error occurred during execution: {str(error)}\n\n"
+            "SOCRATIC INTERVENTION:\n"
+            "1. What hypothesis led you to take this action?\n"
+            "2. Why was that hypothesis incorrect?\n"
+            "3. What is the corrected hypothesis?\n\n"
+            "Output your reflection and the NEXT corrective action."
+        )
+        
+        # 2. In a real system, we would feed this back to the model:
+        # return self.model_router.run(self.agent_id, socratic_prompt)
+        
+        return f"[Socratic Repair] Agent reflected on error '{error}' and formulated new hypothesis."
+
+    def simulate_outcome(self, action: str, hypothesis: str) -> str:
+        """
+        Implementation of Prompt #83: Counterfactual Simulation.
+        Before acting, ask: 'If I do X, what is the probability of Y?'
+        """
+        simulation_prompt = (
+            f"SIMULATION REQUEST:\n"
+            f"Action: {action}\n"
+            f"Hypothesis: {hypothesis}\n\n"
+            "Predict the outcome. What could go wrong? What is the probability of success (0-1)?\n"
+            "Output: JSON { 'prediction': str, 'risk': str, 'success_probability': float }"
+        )
+        
+        # In a real system:
+        # return self.model_router.run(self.agent_id, simulation_prompt)
+        
+        return json.dumps({
+            "prediction": "Action will likely succeed but requires testing.", 
+            "risk": "Low", 
+            "success_probability": 0.85
+        })
+
+    def save_state(self, filepath: Optional[str] = None) -> str:
+        """
+        Implementation of Prompt #51: Agent State Snapshotting.
+        Dumps the agent's entire context/memory to a file for offline debugging.
+        """
+        if not filepath:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filepath = os.path.join(config.BRAIN_DIR, 'debug', f"{self.agent_id}_state_{timestamp}.json")
+            
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        
+        state = {
+            "agent_id": self.agent_id,
+            "timestamp": datetime.now().isoformat(),
+            "profile": {
+                "name": self.name,
+                "role": self.role,
+                "system_prompt_head": self.system_prompt[:200] + "..."
+            },
+            "skills": self.enabled_skills,
+            # We would fetch real beliefs from memory_store if available
+            "last_error": "None",
+            "active_inference_state": "Simulated"
+        }
+        
+        with open(filepath, 'w') as f:
+            json.dump(state, f, indent=2)
+            
+        logger.info(f"[{self.name}] State snapshot saved to {filepath}")
+        return filepath

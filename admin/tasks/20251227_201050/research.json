@@ -1,0 +1,20 @@
+{
+    "topic": "Multi-Agent Evaluation Frameworks",
+    "timestamp": "2025-12-27T20:11:30.123456",
+    "intelligence": {
+        "benchmarks": [
+            "AgentBench: A Comprehensive Framework to Evaluate LLMs as Agents",
+            "GAIA: A Benchmark for General AI Assistants",
+            "MINT: Evaluating Multi-agent Interaction in Tool-using Tasks"
+        ],
+        "emerging_patterns": [
+            "Self-Evolving Evaluation: Agents evaluating each other's reasoning traces.",
+            "Visual QA: Using multimodal models to audit UI actions (mirrors our Perception Critic).",
+            "Epistemic Gain: Measuring how much an agent reduces uncertainty during a task."
+        ],
+        "doctrine_alignment": {
+            "Authorship": "Evaluation must track which agent initiated the change.",
+            "Ethics": "Measuring the delta between user intent and agent action."
+        }
+    }
+}

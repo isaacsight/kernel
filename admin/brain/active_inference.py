@@ -170,8 +170,34 @@ class ActiveInferenceMixin:
         scored_actions.sort(key=lambda x: x["efe"])
         return scored_actions[0] if scored_actions else {}
 
-    def calculate_surprise(self, prediction: Any, observation: Any) -> float:
-        """Calculate the 'Surprise' (Surprisal) between a prediction and an observation."""
-        # Simple distance-based surprise for multi-modal data
-        # In a probability space, Surprisal = -log P(o)
-        pass
+    def calculate_surprise(self, prediction: Dict[str, float], observation: Dict[str, float]) -> float:
+        """
+        Calculate the 'Surprise' (KL-Divergence) between a predicted distribution and observed distribution.
+        Prompt #81: Implementing real KL-Divergence metric.
+        
+        Args:
+            prediction: Probability dict {state: prob}
+            observation: Probability dict {state: prob} (Post-Hoc/Observed frequency)
+        """
+        kl_divergence = 0.0
+        epsilon = 1e-10 # Prevent log(0)
+        
+        # Iterate over all states in the observation
+        for state, q_prob in observation.items():
+            p_prob = prediction.get(state, epsilon)
+            
+            # KL(Q||P) = sum(Q(x) * log(Q(x) / P(x)))
+            # Surprise is the information gain moving from P to Q
+            kl_divergence += q_prob * math.log((q_prob + epsilon) / (p_prob + epsilon))
+            
+        return max(0.0, kl_divergence)
+
+    def log_efe_telemetry(self, action: str, efe: float, surprise: float):
+        """
+        Telemetry hook (Prompt #41): Visualize Expected Free Energy.
+        """
+        # In a real system, this would push to Grafana
+        logger.info(
+            f"[ActiveInference] Action: {action} | EFE: {efe:.4f} | Surprise: {surprise:.4f} | "
+            f"State: {'Learning' if surprise > 0.5 else 'Performing'}"
+        )
