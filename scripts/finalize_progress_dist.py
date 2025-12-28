@@ -11,7 +11,7 @@ def distribute():
     socialite = Socialite()
     
     # Manually specify the file we just created
-    file_path = "content/2025-12-13-engineering-log-polymath-graph.md"
+    file_path = "content/frontier-notes-v1.md"
     
     print(f"Preparing Substack distribution for: {file_path}")
     

@@ -1255,7 +1255,37 @@ def build():
     
     full_home_page = base_template.replace('{{ content }}', index_template_str)
     
+    # D. Generate Frontiers Set
+    frontiers_file = os.path.join(CONTENT_DIR, 'frontiers-of-agentic-ai.md')
+    frontier_set_html = ""
+    if os.path.exists(frontiers_file):
+        raw_f = read_file(frontiers_file)
+        _, f_body = parse_frontmatter(raw_f)
+        f_sections = f_body.split('## ')[1:]
+        for f_sec in f_sections:
+            f_lines = f_sec.split('\n')
+            if not f_lines: continue
+            f_title = f_lines[0].strip()
+            # Clean up number if present (e.g. "1. Agentic AI..." -> "Agentic AI...")
+            if '. ' in f_title[:4]:
+                f_title = f_title.split('. ', 1)[1]
+            if f_title == "How to start": continue
+            
+            f_content = '\n'.join(f_lines[1:]).strip()
+            f_preview = markdown_to_html(f_content)
+            
+            frontier_set_html += f"""
+            <div class="frontier-card">
+                <div class="frontier-meta">Concept</div>
+                <h3>{f_title}</h3>
+                <div class="frontier-content">
+                    {f_preview}
+                </div>
+            </div>
+            """
+
     # Inject Content
+    full_home_page = full_home_page.replace('{{ frontier_set }}', frontier_set_html)
     full_home_page = full_home_page.replace('{{ starter_set }}', starter_set_html)
     full_home_page = full_home_page.replace('{{ recent_posts }}', recent_posts_html)
     
