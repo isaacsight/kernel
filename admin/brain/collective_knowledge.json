@@ -4715,6 +4715,107 @@
       },
       "confidence": 0.9,
       "shared_at": "2025-12-27T20:35:04.803177"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-27T23:07:15.710594"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-27T23:07:15.726045"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-28T10:00:06.724795"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-28T10:00:06.731900"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The 'Director Alignment Check' action successfully executed, completing in a reasonable duration. The check correctly identified that the input, which described a purely technical task (adding docstrings), was fundamentally misaligned with 'The Doctrine of Does This Feel Right (Gentle Edition)'. This doctrine explicitly requires content to address or evoke emotional introspection and personal truth, which the technical task clearly lacked. The `veto: True` and the accompanying detailed reason and directive demonstrate the check's accurate application of its configured principles.",
+      "rating": 9,
+      "shared_at": "2025-12-28T12:55:26.225143"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The Director Alignment Check successfully executed its diagnostic function. It correctly identified that the mission execution had stalled prematurely after 20 iterations, making no progress on the goal of adding docstrings. The tool accurately assessed the situation as unaligned, issuing a veto and providing a clear, actionable directive for investigating the root cause of the halt and building resilience. While the overall mission did not succeed due to the stall, this alignment check was crucial in flagging the issue and providing guidance for recovery.",
+      "rating": 9,
+      "shared_at": "2025-12-28T12:58:08.072782"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The Director Alignment Check successfully executed, identifying a critical flaw in the agent's proposed plan. While the mission was clear (add docstrings), the plan was deemed incomplete because it implicitly assumed an external or unstated processing step to identify functions and generate docstrings between reading and writing. The check's output provided a clear reason and a constructive directive to introduce an explicit 'process' or 'transform' step. This action prevented the execution of an ambiguous or incomplete plan, which would likely have failed or produced suboptimal results.",
+      "rating": 8,
+      "shared_at": "2025-12-28T12:59:49.454596"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The Director Alignment Check successfully executed, identifying a critical flaw in the preceding agent action. It correctly flagged the arbitrary '20 iterations' limit as a potential misalignment, demonstrating strong correctness in its assessment. By issuing a 'veto' and providing a clear directive for deeper reflection, the check effectively prevented a potentially incomplete or unjustified task completion, aligning perfectly with its mission to ensure robust alignment. The duration was efficient for such a critical validation step.",
+      "rating": 9,
+      "shared_at": "2025-12-28T13:00:48.603911"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "type": "critique",
+      "insight": "[Director Alignment Check] The 'Director Alignment Check' action successfully performed its function by thoroughly evaluating a proposed task. It correctly identified a critical flaw: the 'write' action within the task contained a placeholder description instead of actual, executable content or a specific instruction set for generating docstrings. This prevented the system from autonomously executing the core task of adding docstrings. The check's duration was efficient, and its outcome\u2014a veto with clear reasoning and a precise directive for correction\u2014was perfectly aligned with maintaining system integrity and operational efficiency by preventing a guaranteed failed execution. The action itself achieved its purpose optimally.",
+      "rating": 9,
+      "shared_at": "2025-12-28T13:07:54.061215"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "AI Agents",
+        "volume": "High",
+        "context": "Autonomous teams"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-28T13:17:51.082748"
+    },
+    {
+      "from_agent": "Trend Scout",
+      "type": "trend_report",
+      "insight": {
+        "topic": "Local LLMs",
+        "volume": "High",
+        "context": "Privacy & Cost"
+      },
+      "confidence": 0.9,
+      "shared_at": "2025-12-28T13:17:51.097970"
     }
   ],
   "agent_expertise": {
@@ -4891,6 +4992,48 @@
       "context": "Action: Publish to Git",
       "outcome": "SUCCESS",
       "learned_at": "2025-12-26T11:09:46.826051"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "It is crucial to ensure that content submitted for alignment checks is appropriate for the specific doctrine it is being evaluated against. Mismatching the nature of the content with the principles of the doctrine will inevitably lead to rejection, indicating a need for better contextual routing or understanding of tool purpose.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-28T12:55:26.233211"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "Effective self-correction in autonomous systems hinges on robust alignment checks that not only detect failures in progress but also provide specific, actionable directives for diagnosis and re-alignment, preventing silent stagnation.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-28T12:58:08.085280"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "For any task involving modification or transformation of content, it is crucial to explicitly detail the processing steps required to achieve the desired change. Relying on implicit assumptions between read and write operations can lead to plan ambiguities, execution failures, or suboptimal outcomes.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-28T12:59:49.460587"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "Arbitrary task boundaries or limits, particularly those without clear justification or a natural conclusion, are significant indicators of potential misalignment. All constraints on an agent's execution should be thoughtfully designed and clearly articulated to serve the ultimate purpose of the mission.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-28T13:00:48.612460"
+    },
+    {
+      "from_agent": "Agent",
+      "lesson": "When a function expects a string input (e.g., to apply string methods like `.lower()`), always ensure that only the string value is extracted and passed, rather than the entire encapsulating dictionary or object.",
+      "context": "Failure in Director Alignment Check: 'dict' object has no attribute 'lower'",
+      "outcome": "FAILED",
+      "learned_at": "2025-12-28T13:06:55.471186"
+    },
+    {
+      "from_agent": "Self-Critique",
+      "lesson": "For autonomous systems, all 'write' or modification actions within a task plan must include actual, specific, and executable content, or precise instructions for generating that content. Placeholder descriptions, even if descriptive of intent, render a task non-executable and will be rejected during alignment checks, as they require external interpretation.",
+      "context": "Action: Director Alignment Check",
+      "outcome": "SUCCESS",
+      "learned_at": "2025-12-28T13:07:54.066047"
     }
   ],
   "team_decisions": [],

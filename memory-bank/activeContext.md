@@ -1,19 +1,19 @@
 # Active Context
 
 ## Current Focus
-initializing the Memory Bank structure to maintain project context and architectural decisions.
+Evolving the Studio OS from a private "Living Lab" into an open-source platform, specifically focusing on the **Agentic Evaluation & Observability Harness** (Phase 1).
 
 ## Recent History
-- **Graph Visualization**: Major refactoring of the graph visualization (`docs/map/graph.html` and `docs/js/graph.js`) to support biological motion, light/dark themes, and improved physics using `d3-force`.
-- **Debugging**: Resolved 404 errors for the graph page and favicon. Fixed `createRadialGradient` errors.
-- **Deployment**: Configured and verified deployment to GitHub Pages.
-- **Site Admin**: Working on the TUI interface in `admin/`.
+- **LLMOps Research**: Processed Part 1 & 2 of the LLMOps Crash Course.
+- **Content Strategy**: Published "LLMOps Deep Dive: From Typing to Directing" with the OSS announcement.
+- **Architectural Shift**: Defined the "Does This Feel Right?" (DTFR) Harness specification using professional MLOps/HF reproducibility standards.
+- **Governance**: Implemented `ROADMAP.md` and `CONTRIBUTING.md` foundations.
 
-## Active Decisions
-- **Memory Bank**: adopting a formatted markdown file structure in `memory-bank/` to store project context.
-- **Graph Tech**: Switched to `d3-force` for the graph physics engine.
+- **OSS Goal**: Evolving the entire Studio OS into a **fully free and open-source platform**.
+- **Integrity Pillar**: Maintaining high craft standards while making code, patterns, and philosophy accessible to all.
+- **Harness Standard**: Developing a free knowledge commons for agent trust, eliminating gates to critical AI observability.
 
 ## Next Steps
-- Complete the initialization of the Memory Bank.
-- Continue to refine the graph visualization if needed.
-- Monitor the deployment of recent changes.
+- Finalize the technical documentation for the DTFR Harness.
+- Initialize the `agent-eval-harness` repository structure.
+- Refine the "Felt-Sense Card" template for specific agent patterns.

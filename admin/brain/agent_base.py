@@ -20,6 +20,7 @@ from admin.brain.context_manager import ContextManager
 from admin.brain.visual_cortex import VisualCortexMixin
 from typing import Dict, Any, Optional, List, Union
 import json
+from admin.brain.mission_state import get_mission_manager
 
 logger = logging.getLogger("BaseAgent")
 
@@ -60,6 +61,22 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         self.enabled_skills = self._load_enabled_skills()
         
         logger.info(f"[{self.name}] Initialized with Active Inference engine")
+        
+    def get_secret(self, key_name: str) -> Optional[str]:
+        """
+        Retrieves a secret from the Sovereignty Vault (SQLite) or falls back to env/config.
+        Implements Environment Parity (Local vs Cloud).
+        """
+        try:
+            manager = get_mission_manager()
+            vault_key = manager.get_api_key(key_name)
+            if vault_key:
+                return vault_key
+        except Exception as e:
+            logger.warning(f"Vault retrieval failed: {e}")
+            
+        # Fallback to config (which pulls from .env)
+        return getattr(config, key_name, os.getenv(key_name))
         
     def _load_profile(self) -> Dict[str, Any]:
         """Reads PROFILE.md frontmatter and content."""

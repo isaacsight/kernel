@@ -3,7 +3,7 @@ import TitanViz from '../components/TitanViz';
 import {
     ArrowLeft, Database, Search, Shield, Zap,
     Activity, Info, ChevronRight, Terminal, Settings,
-    Box, Layers, Share2, Cpu, Clock, HardDrive
+    Box, Layers, Cpu, Clock, HardDrive
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -70,8 +70,8 @@ export default function TitanDB() {
                                 document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }}
                             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeSection === item.id
-                                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                                    : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
+                                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                                : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
                                 }`}
                         >
                             {item.icon}
@@ -321,8 +321,8 @@ function ArchitectureBlock({ icon, title, description, configTitle, configConten
                     <button
                         onClick={onToggle}
                         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${isOpen
-                                ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/20'
-                                : 'bg-white/5 border-white/10 text-slate-500 hover:text-slate-200 hover:border-white/20'
+                            ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/20'
+                            : 'bg-white/5 border-white/10 text-slate-500 hover:text-slate-200 hover:border-white/20'
                             }`}
                     >
                         {isOpen ? 'Sync Config' : 'View Tuneables'}

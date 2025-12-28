@@ -14,3 +14,6 @@ class AgentAction(BaseModel):
     agent_name: str
     action: str
     parameters: dict = {}
+class VaultInput(BaseModel):
+    key_name: str
+    key_value: str

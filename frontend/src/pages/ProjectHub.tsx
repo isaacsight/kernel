@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Database, TrendingUp, Network, MonitorDot, Server, ArrowRight, Zap, Code } from 'lucide-react';
-import AgentCouncil from '../components/AgentCouncil';
+import { Database, MonitorDot, ArrowRight, Zap, Code, Brain } from 'lucide-react';
 
 interface Project {
     id: string;
@@ -25,83 +24,69 @@ const projects: Project[] = [
         color: '#3b82f6'
     },
     {
-        id: 'quantframe',
-        title: 'QuantFrame Engine',
-        description: 'Ultra-low latency crypto trading engine implementing LMAX Disruptor patterns.',
-        icon: TrendingUp,
-        tech: ['C++', 'Disruptor', 'WS'],
-        status: 'Planned',
-        path: '/projects/quantframe',
-        color: '#ec4899'
+        id: 'alchemist',
+        title: 'High-Output Alchemist',
+        description: 'Agentic content repurposing engine for 1→N distribution and viral growth automation.',
+        icon: Zap,
+        tech: ['n8n', 'OpenAI', 'DTFR'],
+        status: 'Live',
+        path: '/projects/alchemist',
+        color: '#f59e0b'
     },
     {
-        id: 'neuromesh',
-        title: 'NeuroMesh',
-        description: 'Federated learning infrastructure for privacy-preserving model training.',
-        icon: Network,
-        tech: ['PyTorch', 'Wasm', 'P2P'],
-        status: 'Planned',
-        path: '/projects/neuromesh',
-        color: '#a855f7'
-    },
-    {
-        id: 'omini',
-        title: 'Omini DevOps',
-        description: 'Agent-driven infrastructure management and automated cloud scaling.',
+        id: 'studio-os',
+        title: 'Studio OS v3.0',
+        description: 'Autonomous directing layer for multi-agent orchestration and mission telemetry.',
         icon: MonitorDot,
-        tech: ['Agents', 'IaC', 'LLMs'],
-        status: 'Planned',
-        path: '/projects/omini',
+        tech: ['Sovereign', 'Telemetry', 'React'],
+        status: 'Live',
+        path: '/chat',
         color: '#06b6d4'
-    },
-    {
-        id: 'wasmcloud',
-        title: 'WasmCloud Edge',
-        description: 'Serverless compute platform leveraging WebAssembly sandboxing on edge nodes.',
-        icon: Server,
-        tech: ['Wasm', 'Rust', 'Edge'],
-        status: 'Planned',
-        path: '/projects/wasmcloud',
-        color: '#10b981'
     }
 ];
 
-export default function ProjectHub() {
+const insights = [
+    { topic: "Collective Knowledge", detail: "When self-improvement becomes self-rejection. System audit pending." },
+    { topic: "Viral Protocol", detail: "The High-Output Alchemist is active. 1→N content repurposing at 85% efficiency." },
+    { topic: "Core Philosophy", detail: "Directing, not Typing. Shifting human bandwidth to architectural oversight." }
+];
+
+export default function SovereignManifest() {
     return (
         <div className="hub-container p-8 max-w-[1280px] mx-auto space-y-20 pb-32">
 
-            {/* Grounded Hero: Clear Purpose */}
+            {/* Sovereign Hero */}
             <header className="hero-section space-y-8 pt-10 border-b border-white/5 pb-16">
                 <div className="space-y-4">
                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] leading-none">
                         <Zap size={12} className="text-secondary" />
-                        Engineering Labs
+                        Sovereign Intelligence Lab
                     </div>
                     <h1 className="text-5xl md:text-6xl font-black text-slate-100 tracking-tight">
-                        High-performance systems & <br /> AI infrastructure.
+                        Directing, <br /> not Typing.
                     </h1>
                     <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
-                        A lab focused on building the technical substrate for autonomous agents and distributed data systems.
+                        An integrated development and content pipeline designed to bridge the gap between autonomous execution and human-felt quality.
                     </p>
                 </div>
 
                 <div className="flex items-center gap-4">
                     <Link to="/chat" className="btn-primary">
-                        Open Studio
+                        Enter Studio
                     </Link>
                     <button
-                        onClick={() => document.getElementById('labs-grid')?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => document.getElementById('manifest-grid')?.scrollIntoView({ behavior: 'smooth' })}
                         className="btn-secondary"
                     >
-                        View Lab Index
+                        View Manifest
                     </button>
                 </div>
             </header>
 
-            {/* Labs Grid: Primary Centerpiece */}
-            <section id="labs-grid" className="space-y-12">
+            {/* Active Substrates */}
+            <section id="manifest-grid" className="space-y-12">
                 <div className="space-y-1">
-                    <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">Active Projects</h2>
+                    <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">Active Substrates</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,16 +96,48 @@ export default function ProjectHub() {
                 </div>
             </section>
 
-            {/* AI Council: Supporting Role */}
+            {/* Recent Intelligence: Surfacing the "New Information" */}
             <section className="pt-20 border-t border-white/5 space-y-12">
                 <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                        <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">The Council</h2>
-                        <p className="text-slate-400 text-xs font-medium">Autonomous monitoring and kernel agents.</p>
+                        <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">Sovereign Insights</h2>
+                        <p className="text-slate-400 text-xs font-medium">Latent signals from the collective knowledge graph.</p>
                     </div>
                 </div>
 
-                <AgentCouncil />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {insights.map((insight, idx) => (
+                        <div key={idx} className="glass-panel p-6 rounded-3xl bg-slate-900/10 border-white/5">
+                            <div className="flex items-center gap-3 mb-4">
+                                <Brain size={16} className="text-primary" />
+                                <h3 className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{insight.topic}</h3>
+                            </div>
+                            <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                                {insight.detail}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Active Swarm Status */}
+            <section className="pt-20 border-t border-white/5 space-y-12 text-center pb-20">
+                <div className="space-y-1">
+                    <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">Swarm Status</h2>
+                    <p className="text-slate-400 text-xs font-medium uppercase tracking-[0.1em]">System Oversight: Nominal</p>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-8">
+                    {['Antigravity', 'Alchemist', 'Architect', 'Operator', 'Librarian'].map((agent) => (
+                        <div key={agent} className="flex flex-col items-center gap-2">
+                            <div className="w-12 h-12 rounded-full border border-white/5 bg-white/5 flex items-center justify-center relative">
+                                <div className="absolute inset-0 rounded-full border border-secondary/20 animate-ping"></div>
+                                <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                            </div>
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{agent}</span>
+                        </div>
+                    ))}
+                </div>
             </section>
         </div>
     );

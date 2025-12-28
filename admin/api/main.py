@@ -16,7 +16,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from admin import core
 from admin.heartbeat import heartbeat
-from admin.api.models import Post, AgentAction
+from admin.api.models import Post, AgentAction, VaultInput
+from admin.brain.mission_state import get_mission_manager
 
 # WebSocket Manager for real-time agentic signals
 class ConnectionManager:
@@ -306,6 +307,87 @@ async def get_evolution_state():
             return {"status": "error", "message": "Failed to read state file"}
     else:
         return {"status": "offline", "message": "Evolution loop not running"}
+
+@app.get("/api/mission/status")
+async def get_mission_status():
+    """
+    Returns the real-time state of the active mission for Mission Control.
+    """
+    try:
+        manager = get_mission_manager()
+        return manager.get_state()
+    except Exception as e:
+        logger.error(f"Error fetching mission status: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/vault/status")
+async def get_vault_status():
+    """
+    Checks which API keys are configured in the vault.
+    """
+    try:
+        manager = get_mission_manager()
+        keys = ["GEMINI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "STRIPE_API_KEY"]
+        status = {}
+        for k in keys:
+            status[k] = manager.get_api_key(k) is not None
+        return status
+    except Exception as e:
+        logger.error(f"Error checking vault status: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/vault/save")
+async def save_to_vault(input: VaultInput):
+    """
+    Securely saves an API key to the vault.
+    """
+    try:
+        manager = get_mission_manager()
+        manager.save_api_key(input.key_name, input.key_value)
+        return {"status": "success", "message": f"Key '{input.key_name}' saved."}
+    except Exception as e:
+        logger.error(f"Error saving to vault: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/mission/report")
+async def get_mission_report():
+    """
+    Generates a static Markdown report of the last mission.
+    """
+    try:
+        manager = get_mission_manager()
+        state = manager.get_state()
+        if not state or not state.get("mission"):
+            return {"status": "error", "message": "No active mission to report."}
+        
+        report = f"""# DOE Framework: Mission QA Report
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+## Mission Directive
+> {state['mission']}
+
+## Status: {state['status'].upper()}
+- **Started**: {state['started_at']}
+- **Finished**: {state['updated_at']}
+- **Alignment Score**: {state['alignment'] or 'N/A'}/100
+
+## Execution Timeline
+"""
+        for step in state['steps']:
+            report += f"### {step['stage'].replace('_', ' ').title()}\n"
+            report += f"- **Status**: {step['status']}\n"
+            if "reason" in step:
+                report += f"- **Reasoning**: {step['reason']}\n"
+            if "directive" in step:
+                report += f"- **Directive**: {step['directive']}\n"
+            report += "\n"
+
+        report += f"## Final Result\n{state['result'] or 'No result recorded.'}\n"
+        
+        return {"report": report}
+    except Exception as e:
+        logger.error(f"Error generating report: {e}")
+        return {"status": "error", "message": str(e)}
 
 
 @app.post("/api/intake")

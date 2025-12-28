@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import sitePrompts from '../data/site_prompts.json'; // Import Prompts
 
 import NeuralLink from './NeuralLink';
+import MissionControl from './MissionControl';
+import VaultIngest from './VaultIngest';
 
 const apiBase = `http://${window.location.hostname}:8000`;
 
@@ -43,6 +45,32 @@ const Dashboard = () => {
     const messagesEndRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [activeCategory, setActiveCategory] = useState(0); // Cognitive Load Balancer State
+    const [mission, setMission] = useState(null);
+    const [agents, setAgents] = useState([]);
+    const [leftView, setLeftView] = useState("mission"); // "mission" or "vault"
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [missionRes, agentsRes] = await Promise.all([
+                    axios.get(`${apiBase}/api/mission/status`),
+                    axios.get(`${apiBase}/api/mission/status`) // Temporarily same endpoint if needed, but we wanted status
+                ]);
+                // Re-fetch mission status specifically
+                const m = await axios.get(`${apiBase}/api/mission/status`);
+                setMission(m.data);
+
+                const a = await axios.get(`${apiBase}/api/agents/status`);
+                setAgents(a.data.agents || []);
+            } catch (err) {
+                console.error("Failed to fetch dashboard data", err);
+            }
+        };
+
+        fetchData();
+        const interval = setInterval(fetchData, 5000); // 5s pulse
+        return () => clearInterval(interval);
+    }, []);
 
     // Initial Logs
     const [logs] = useState([
@@ -118,24 +146,29 @@ const Dashboard = () => {
                     {/* LEFT COLUMN (Desktop) / TOP (Mobile): Mission & Events */}
                     <div className="md:w-[45%] md:border-r border-white/5 flex flex-col md:overflow-hidden">
 
-                        {/* MISSION CARD */}
+                        {/* VIEW TOGGLE */}
+                        <div className="flex border-b border-white/5 bg-black/20">
+                            <button
+                                onClick={() => setLeftView("mission")}
+                                className={`flex-1 py-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all ${leftView === 'mission' ? 'text-[#00D6A3] bg-[#00D6A3]/5 border-b border-[#00D6A3]' : 'text-white/20 hover:text-white/40'}`}
+                            >
+                                Mission Feed
+                            </button>
+                            <button
+                                onClick={() => setLeftView("vault")}
+                                className={`flex-1 py-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all ${leftView === 'vault' ? 'text-amber-400 bg-amber-400/5 border-b border-amber-400' : 'text-white/20 hover:text-white/40'}`}
+                            >
+                                Sovereignty Vault
+                            </button>
+                        </div>
+
+                        {/* LEFT COLUMN CONTENT */}
                         <div className="p-4 md:p-6 border-b border-white/5 bg-white/[0.01]">
-                            <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] flex items-center gap-2">
-                                    <Shield size={10} />
-                                    MISSION_UPLINK
-                                </h3>
-                                <button onClick={() => setMissionExpanded(!missionExpanded)} className="md:hidden text-white/20">
-                                    <ChevronDown size={14} className={`transition-transform ${missionExpanded ? 'rotate-180' : ''}`} />
-                                </button>
-                            </div>
-                            <div className={`text-sm md:text-md font-medium text-white/80 leading-relaxed ${missionExpanded ? '' : 'line-clamp-2 md:line-clamp-none'}`}>
-                                Close the trust gap with sovereign, deterministic AI orchestration. Studio OS gives operators a live control surface over multi-agent systems.
-                            </div>
-                            <div className="flex gap-4 mt-3">
-                                <span className="text-[9px] font-mono text-[#00D6A3] bg-[#00D6A3]/10 px-1.5 py-0.5 rounded border border-[#00D6A3]/20">UPLINK: SECURE</span>
-                                <span className="text-[9px] font-mono text-white/30 px-1.5 py-0.5">LATENCY: STABLE</span>
-                            </div>
+                            {leftView === 'mission' ? (
+                                <MissionControl mission={mission} />
+                            ) : (
+                                <VaultIngest />
+                            )}
                         </div>
 
                         {/* DESKTOP: NEURAL LINK FEED / MOBILE: CARD LIST */}

@@ -40,19 +40,19 @@ body {
 
 /* Glassmorphism System */
 .glass-panel {
-    background: rgba(10, 10, 15, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    background: rgba(10, 10, 15, 0.2);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .glass-panel:hover {
-    background: rgba(15, 15, 20, 0.5);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(15, 15, 20, 0.3);
+    border-color: rgba(255, 255, 255, 0.06);
 }
 
 .glass-gradient-border {
@@ -134,8 +134,8 @@ body {
 .gradient-text {
     background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
     background-size: 200% auto;
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: flow 5s linear infinite;
 }

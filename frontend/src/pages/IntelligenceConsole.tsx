@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Eye, TrendingUp, TrendingDown, Minus, Brain, List, Activity, ChevronDown, CheckCircle2, AlertCircle, RefreshCw, Filter } from 'lucide-react';
+import { Eye, TrendingUp, TrendingDown, Minus, Brain, List, Activity, ChevronDown, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface VisitorStat {
     slug: string;
@@ -92,8 +92,8 @@ export default function IntelligenceConsole() {
                                 key={range}
                                 onClick={() => setTimeRange(range)}
                                 className={`px-5 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${timeRange === range
-                                        ? 'bg-secondary text-white shadow-lg'
-                                        : 'text-slate-500 hover:text-slate-300'
+                                    ? 'bg-secondary text-white shadow-lg'
+                                    : 'text-slate-500 hover:text-slate-300'
                                     }`}
                             >
                                 {range}
@@ -336,8 +336,8 @@ function MetricCard({ icon, label, value, trend, trendDirection, subtext, color 
                     {icon}
                 </div>
                 <div className={`flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded leading-none ${trendDirection === 'up' ? 'text-emerald-500 bg-emerald-500/10' :
-                        trendDirection === 'down' ? 'text-rose-500 bg-rose-500/10' :
-                            'text-slate-500 bg-white/5'
+                    trendDirection === 'down' ? 'text-rose-500 bg-rose-500/10' :
+                        'text-slate-500 bg-white/5'
                     }`}>
                     {trendDirection === 'up' && <TrendingUp size={10} />}
                     {trendDirection === 'down' && <TrendingDown size={10} />}

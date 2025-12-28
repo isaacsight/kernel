@@ -24,15 +24,15 @@ A dev tool for the agentic era. It ingests your codebase, documentation, and tea
 
 ---
 
-## 3. **Agentic OS Bootcamp**
-A 4-week intensive where engineers and product leads **build** their own Studio OS under our direction. Using real-world projects as the backdrop, participants leave with a running, production-ready OS, not just theoretical knowledge.
-**The Push**: This creates a community of AI-native engineering leads who are qualified to deploy and govern agentic systems at scale.
+## 3. **Agentic OS Bootcamp (Open Curriculum)**
+A self-paced, fully free intensive where engineers and product leads **build** their own Studio OS. We provide the curriculum, the patterns, and the "felt-quality" benchmarks. Participants leave with a running, production-ready OS, powered by our open codebase.
+**The Push**: This builds a global community of AI-native engineering leads qualified to deploy and govern agentic systems at scale.
 
 ---
 
-## 4. **Frontier Team as a Service**
-Don’t just take advice—**embed** a Frontier Team. We run a specialized pod (Architect, Librarian, and Operator agents) inside your Slack or GitHub for 30 days, delivering real-world decisions and code directly into your flow.
-**The Push**: A productized service where you rent our agents and our judgment, not just our time. We keep the IP, you get the outcomes.
+## 4. **Frontier Team Blueprints**
+Don’t just take advice—**deploy** a Frontier Team. We provide the specialized blueprints for Architect, Librarian, and Operator agents that you can run inside your own GitHub or Slack.
+**The Push**: We open-source the "Judgment Patterns" of our internal agents, allowing you to run a specialized pod in your own environment for free.
 
 ---
 
