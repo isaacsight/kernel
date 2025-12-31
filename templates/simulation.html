@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="mb-12">
+        <h1 class="text-4xl font-bold mb-4 text-white">The Studio OS Simulation</h1>
+        <p class="text-xl text-zinc-400">Studio OS is an AI-native operating system for running a solo founder’s entire
+            business as a deterministic simulation.</p>
+    </div>
+
+    <!-- Architecture -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Architecture</h2>
+        <div class="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800 mb-6 font-mono text-sm text-green-400">
+            Browser Agents → Orchestrator → Simulation Core → Integrations
+        </div>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
+            <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
+            <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
+            <li><strong>Resources:</strong> External APIs and data sources (GitHub, Stripe, Email).</li>
+        </ul>
+    </div>
+
+    <!-- Components -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Components</h2>
+        <ul class="space-y-4 text-zinc-300">
+            <li>
+                <span class="text-white font-semibold">Frontend:</span>
+                Static Site Generation (SSG) + Vanilla JS. Visualizes repository state.
+            </li>
+            <li>
+                <span class="text-white font-semibold">Backend:</span>
+                Python (CORE), Make-based orchestration. Flat-file database (JSON/MD).
+            </li>
+            <li>
+                <span class="text-white font-semibold">AI Layer:</span>
+                Gemini 1.5 Pro / Flash. Structured Output schemas.
+            </li>
+            <li>
+                <span class="text-white font-semibold">Infrastructure:</span>
+                Local-first execution. GitHub Pages for hosting.
+            </li>
+        </ul>
+    </div>
+
+    <!-- Capabilities -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">What it can do today</h2>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li>Spin up a simulated "business day" and execute routine checks.</li>
+            <li>Call external APIs to fetch real-world state (GitHub issues, etc.).</li>
+            <li>Evaluate decision traces using specific branding and quality gates.</li>
+            <li>Generate static artifacts (Decision Logs, Build Notes) automatically.</li>
+        </ul>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Roadmap</h2>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li><strong>Neural Handshake:</strong> Standardized protocol for agent-to-agent task handoff.</li>
+            <li><strong>Knowledge Graph:</strong> Transitioning from flat-files to a graph-based memory.</li>
+            <li><strong>Visualizers:</strong> React-based interactive views for complex "Runs".</li>
+            <li><strong>Gateway Interface:</strong> Unified CLI for starting/stopping simulation loops.</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

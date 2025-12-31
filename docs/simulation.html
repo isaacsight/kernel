@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Studio OS Simulation</title>
-    <meta name="description" content="A real-time, deterministic simulation of the Studio OS architecture. 2026 Engineering Thesis in motion.">
+    <title>Studio OS Simulation</title>
+    <meta name="description" content="Studio OS Simulation Build Sheet">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="The Studio OS Simulation">
-    <meta property="og:description" content="A real-time, deterministic simulation of the Studio OS architecture. 2026 Engineering Thesis in motion.">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://www.doesthisfeelright.com/posts/simulation.html">
+    <meta property="og:title" content="Studio OS Simulation">
+    <meta property="og:description" content="Studio OS Simulation Build Sheet">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/simulation.html">
     <meta property="og:image" content="{{ og_image }}">
 
     <!-- PWA / Mobile Experience -->
@@ -27,24 +27,25 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://www.doesthisfeelright.com/posts/simulation.html">
-    <meta name="twitter:title" content="The Studio OS Simulation">
-    <meta name="twitter:description" content="A real-time, deterministic simulation of the Studio OS architecture. 2026 Engineering Thesis in motion.">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/simulation.html">
+    <meta name="twitter:title" content="Studio OS Simulation">
+    <meta name="twitter:description" content="Studio OS Simulation Build Sheet">
     <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
 
     <!-- TikTok Verification -->
     <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.doesthisfeelright.com/posts/simulation.html">
+    <link rel="canonical" href="https://www.doesthisfeelright.com/simulation.html">
 
     <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "The Studio OS Simulation", "image": ["https://isaacsight.com/static/images/og-default.jpg"], "datePublished": "2025-12-27", "dateModified": "2025-12-27", "author": [{"@type": "Person", "name": "Isaac Hernandez", "url": "https://www.doesthisfeelright.com"}]}</script>
+    
 
     <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="./feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="feed.xml">
 
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/copilot.css">
 </head>
 
 <body>
@@ -56,7 +57,7 @@
         <aside class="sidebar">
             <div class="sidebar-content">
                 <div class="sidebar-top">
-                    <a href="./index.html" class="sidebar-logo" aria-label="Home">
+                    <a href="index.html" class="sidebar-logo" aria-label="Home">
                         <div class="logo-icon">
                             <!-- New Logo: Gateway "D" -->
                             <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
@@ -68,220 +69,94 @@
                     </a>
 
 
-                </div> <!-- Navigation Items -->
-                <nav class="sidebar-nav-items">
-                    <a href="./index.html" class="sidebar-item" data-tooltip="Home">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Studio</span>
-                    </a>
+                    <nav class="sidebar-nav-items">
+                        <a href="index.html" class="sidebar-item" data-tooltip="Home">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Home</span>
+                        </a>
 
-                    <a href="./archive.html" class="sidebar-item" data-tooltip="Archive">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Archive</span>
-                    </a>
+                        <a href="experiments.html" class="sidebar-item" data-tooltip="Build Log">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Build</span>
+                        </a>
 
-                    <a href="./studio-snapshot.html" class="sidebar-item" data-tooltip="Snapshot">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                <line x1="8" y1="21" x2="16" y2="21"></line>
-                                <line x1="12" y1="17" x2="12" y2="21"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Snapshot</span>
-                    </a>
+                        <a href="archive.html" class="sidebar-item" data-tooltip="Essays">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Essays</span>
+                        </a>
 
-                    <a href="./products.html" class="sidebar-item" data-tooltip="Products">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path
-                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                </path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Products</span>
-                    </a>
+                        <a href="about.html" class="sidebar-item" data-tooltip="About">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                            </div>
+                            <span class="label">About</span>
+                        </a>
 
-                    <a href="./extensions.html" class="sidebar-item" data-tooltip="Copilot">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <path d="M9 22V12h6v10"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Copilot</span>
-                    </a>
+                        <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
+                            target="_blank" rel="noopener">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Subscribe</span>
+                        </a>
+                    </nav>
 
-                    <a href="./decision-log.html" class="sidebar-item" data-tooltip="Decisions">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Log</span>
-                    </a>
+                    <div class="sidebar-spacer"></div>
 
-                    <a href="./research-roadmap.html" class="sidebar-item" data-tooltip="Research">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                            </svg>
-                        </div>
-                        <span class="label">Research</span>
-                    </a>
-
-                    <a href="./tags/pattern.html" class="sidebar-item" data-tooltip="Patterns">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                                <path d="M2 17l10 5 10-5"></path>
-                                <path d="M2 12l10 5 10-5"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Patterns</span>
-                    </a>
-
-                    <a href="./recommendation-engine.html" class="sidebar-item" data-tooltip="Find">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Find</span>
-                    </a>
-
-                    <a href="./agentic-systems-engineering.html" class="sidebar-item" data-tooltip="Discipline">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Discipline</span>
-                    </a>
-
-                    <a href="./architecture.html" class="sidebar-item" data-tooltip="Architecture">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 22h20L12 2z"></path>
-                                <path d="M2 22h20"></path>
-                                <path d="M12 2v20"></path>
-                                <path d="M2 12h20"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Structure</span>
-                    </a>
-
-                    <a href="./brand.html" class="sidebar-item" data-tooltip="Brand">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                                <path d="M2 2l7.586 7.586"></path>
-                                <circle cx="11" cy="11" r="2"></circle>
-                            </svg>
-                        </div>
-                        <span class="label">Brand</span>
-                    </a>
-
-                    <a href="./about.html" class="sidebar-item" data-tooltip="About">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <span class="label">About</span>
-                    </a>
-
-                    <a href="https://github.com/isaachernandez/blog-design" class="sidebar-item"
-                        data-tooltip="Open Source" target="_blank">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                </path>
-                            </svg>
-                        </div>
-                        <span class="label">Open Source</span>
-                    </a>
-
-                    <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
-                        target="_blank">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                </path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Subscribe</span>
-                    </a>
-
-                </nav>
-
-                <div class="sidebar-spacer"></div>
-
-                <div class="sidebar-bottom">
+                    <div class="sidebar-bottom">
+                    </div>
                 </div>
-            </div>
 
-            <script>
-                // Active state logic
-                document.addEventListener('DOMContentLoaded', () => {
-                    const currentPath = window.location.pathname;
-                    const navLinks = document.querySelectorAll('.sidebar-item');
-                    navLinks.forEach(link => {
-                        const href = link.getAttribute('href');
-                        if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== './index.html'))) {
-                            link.classList.add('active');
-                        }
+                <script>
+                    // Active state logic
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const currentPath = window.location.pathname;
+                        const navLinks = document.querySelectorAll('.sidebar-item');
+                        navLinks.forEach(link => {
+                            const href = link.getAttribute('href');
+                            if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== 'index.html'))) {
+                                link.classList.add('active');
+                            }
+                        });
                     });
-                });
-            </script>
+                </script>
         </aside>
 
         <header class="mobile-header">
             <div class="header-inner">
                 <!-- Module 1: Logo -->
-                <a href="./index.html" class="header-module logo-module">
+                <a href="index.html" class="header-module logo-module">
                     <div class="logo-container">
                         <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -312,314 +187,75 @@
         </header>
 
         <main id="main-content">
-            <article class="brand-hub reveal-stagger">
-    <!-- Hero Section with Aurora -->
-    <header class="brand-hero zen-hero"
-        style="height: 40vh; display: flex; align-items: center; justify-content: center; background: var(--bg-primary);">
-        <div class="brand-hero-content reveal" style="text-align: center;">
-            <h1 class="brand-title" style="font-weight: 200; letter-spacing: 0.2em; font-size: 5rem;">ZEN</h1>
-            <p class="brand-subtitle reveal-stagger"
-                style="transition-delay: 200ms; opacity: 0.6; letter-spacing: 0.1em;">Minimalist Design System</p>
-        </div>
-    </header>
-
-    <nav class="brand-nav glass-panel" style="border-radius: 0; border-left: none; border-right: none;">
-        <a href="#logo">Identity</a>
-        <a href="#colors">Chromatics</a>
-        <a href="#typography">Typography</a>
-        <a href="#aimage">AImage</a>
-        <a href="#voice">Voice</a>
-    </nav>
-
-    <div class="brand-container">
-        <!-- Logo Section -->
-        <section id="logo" class="brand-section reveal">
-            <div class="section-header">
-                <h2>01. Identity</h2>
-                <p>The Zen "D". A mon-style crest representing the intersection of digital logic and biological spirit.
-                </p>
-            </div>
-
-            <div class="logo-grid">
-                <div class="logo-card dark glass-panel">
-                    <div class="logo-display">
-                        <img src="/promo_brand_hub/official_zen_mon.png" alt="Zen Icon"
-                            class="brand-logo-img magnetic-wrap" style="width: 120px; height: 120px;">
-                    </div>
-                    <div class="logo-label">The Zen Mon</div>
-                </div>
-                <div class="logo-card outline glass-panel">
-                    <div class="logo-display">
-                        <div class="logo-grid-lines"></div>
-                        <svg viewBox="0 0 24 24" fill="none" class="brand-logo-svg" stroke="currentColor"
-                            stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;">
-                            <path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
-                            <circle cx="12" cy="12" r="2" />
-                        </svg>
-                    </div>
-                    <div class="logo-label">Construction</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Color Section -->
-        <section id="colors" class="brand-section reveal">
-            <div class="section-header">
-                <h2>02. Chromatics</h2>
-                <p>Deep Space Slate backgrounds with Studio Green accents. High contrast, low eye fatigue. Optimized for
-                    flow states.</p>
-            </div>
-
-            <div class="color-group">
-                <h3>Backgrounds</h3>
-                <div class="swatch-grid">
-                    <div class="swatch glass-panel" data-hex="#020202">
-                        <div class="swatch-color" style="background: #020202; border: 1px solid #333;"></div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Void Black</span>
-                            <span class="swatch-hex">#020202</span>
-                            <span class="swatch-var">--bg-primary</span>
-                        </div>
-                    </div>
-                    <div class="swatch glass-panel" data-hex="#050505">
-                        <div class="swatch-color" style="background: #050505; border: 1px solid #333;"></div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Panel Grey</span>
-                            <span class="swatch-hex">#050505</span>
-                            <span class="swatch-var">--bg-secondary</span>
-                        </div>
-                    </div>
-                    <div class="swatch glass-panel" data-hex="#0A0A0A">
-                        <div class="swatch-color" style="background: #0A0A0A; border: 1px solid #333;"></div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Input Grey</span>
-                            <span class="swatch-hex">#0A0A0A</span>
-                            <span class="swatch-var">--bg-tertiary</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="color-group">
-                <h3>Signals</h3>
-                <div class="swatch-grid">
-                    <div class="swatch glass-panel" data-hex="#66B56E">
-                        <div class="swatch-color"
-                            style="background: #66B56E; box-shadow: 0 0 20px rgba(102, 181, 110, 0.4);"></div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Studio Green</span>
-                            <span class="swatch-hex">#66B56E</span>
-                            <span class="swatch-var">--accent-primary</span>
-                        </div>
-                    </div>
-                    <div class="swatch glass-panel" data-hex="#7BC583">
-                        <div class="swatch-color" style="background: #7BC583;"></div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Green Hover</span>
-                            <span class="swatch-hex">#7BC583</span>
-                            <span class="swatch-var">--accent-hover</span>
-                        </div>
-                    </div>
-                    <div class="swatch glass-panel" data-hex="rgba(102, 181, 110, 0.08)">
-                        <div class="swatch-color"
-                            style="background: rgba(102, 181, 110, 0.08); border: 1px solid rgba(102, 181, 110, 0.3);">
-                        </div>
-                        <div class="swatch-info">
-                            <span class="swatch-name">Green Subtle</span>
-                            <span class="swatch-hex">10% Opacity</span>
-                            <span class="swatch-var">--accent-subtle</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Typography Section -->
-        <section id="typography" class="brand-section reveal">
-            <div class="section-header">
-                <h2>03. Typography</h2>
-                <p>Swiss-style clarity (Inter) meets engineering precision (JetBrains Mono).</p>
-            </div>
-
-            <div class="type-specimen glass-panel">
-                <div class="type-header">
-                    <span class="font-name">Inter</span>
-                    <span class="font-usage">Display / Body</span>
-                </div>
-                <div class="type-scale">
-                    <div class="type-row">
-                        <span class="type-label">H1 / 60px</span>
-                        <h1 class="type-example" style="font-weight: 800; letter-spacing: -0.04em;">The Studio OS</h1>
-                    </div>
-                    <div class="type-row">
-                        <span class="type-label">H2 / 48px</span>
-                        <h2 class="type-example" style="font-weight: 700; letter-spacing: -0.03em;">Agentic Systems</h2>
-                    </div>
-                    <div class="type-row">
-                        <span class="type-label">H3 / 30px</span>
-                        <h3 class="type-example" style="font-weight: 600;">Engineering & Design</h3>
-                    </div>
-                    <div class="type-row">
-                        <span class="type-label">Body / 16px</span>
-                        <p class="type-example" style="max-width: 600px; line-height: 1.6;">Does This Feel Right? is a
-                            small frontier studio that runs on its own operating system first. It is a laboratory for
-                            Agentic Systems Engineering.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="type-specimen mono glass-panel">
-                <div class="type-header">
-                    <span class="font-name" style="font-family: var(--font-mono);">JetBrains Mono</span>
-                    <span class="font-usage">Code / Data</span>
-                </div>
-                <div class="type-scale">
-                    <div class="type-row">
-                        <span class="type-label">Code</span>
-                        <pre class="type-example"><code>def build_system(self):
-    return "Optimized"</code></pre>
-                    </div>
-                    <div class="type-row">
-                        <span class="type-label">Meta</span>
-                        <span class="type-example"
-                            style="font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary);">v1.0.4
-                            // 2025-12-19</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Imagery Section -->
-        <section id="aimage" class="brand-section reveal">
-            <div class="section-header">
-                <h2>04. AI Imagery</h2>
-                <p>Synthesis is a core tenet of the studio. We use agentic prompts to generate high-fidelity assets that
-                    maintain the brand's minimalist aesthetic.</p>
-            </div>
-
-            <div class="logo-grid">
-                <div class="logo-card glass-panel" style="background: rgba(102, 181, 110, 0.03);">
-                    <div class="logo-display">
-                        <div class="icon-wrap" style="color: var(--accent-primary);">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                style="width: 48px; height: 48px;">
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                                <path
-                                    d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
-                                    stroke-opacity="0.3" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="logo-label">Imagen 4 Synthesis</div>
-                </div>
-                <div class="logo-card glass-panel" style="background: rgba(102, 181, 110, 0.03);">
-                    <div class="logo-display">
-                        <div class="icon-wrap" style="color: var(--accent-primary);">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                style="width: 48px; height: 48px;">
-                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-                                <line x1="7" y1="2" x2="7" y2="22" />
-                                <line x1="17" y1="2" x2="17" y2="22" />
-                                <line x1="2" y1="12" x2="22" y2="12" />
-                                <line x1="2" y1="7" x2="7" y2="7" />
-                                <line x1="2" y1="17" x2="7" y2="17" />
-                                <line x1="17" y1="17" x2="22" y2="17" />
-                                <line x1="17" y1="7" x2="22" y2="7" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="logo-label">Veo 3 Motion</div>
-                </div>
-            </div>
-
-            <div class="glass-panel"
-                style="padding: 2rem; margin-top: 2rem; text-align: center; border: 1px dashed var(--accent-primary);">
-                <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Asset Generator</h3>
-                <p style="margin-bottom: 2rem; opacity: 0.7;">Access the OpenJourney studio to generate brand-aligned
-                    imagery and motion assets.</p>
-                <a href="http://localhost:3000" class="btn-primary" style="display: inline-block;">Launch AImage
-                    Studio</a>
-            </div>
-        </section>
-
-        <!-- Voice Section -->
-        <section id="voice" class="brand-section reveal">
-            <div class="section-header">
-                <h2>05. Voice & Tone</h2>
-                <ul class="voice-list" style="margin-top: 1rem;">
-                    <li class="do">High-Resolution</li>
-                    <li class="do">Inquisitive</li>
-                    <li class="do">Transparent</li>
-                </ul>
-            </div>
-
-            <div class="voice-grid">
-                <div class="voice-card glass-panel" style="border-top: 4px solid #fff;">
-                    <div class="voice-icon float-1">
-                        <!-- Compass/Structure Icon -->
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                            style="width: 48px; height: 48px;">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 2a15 15 0 0 0 .5 20" />
-                            <path d="M2 12h20" />
-                            <path d="M12 2v20" />
-                            <path d="M4.93 4.93l14.14 14.14" />
-                        </svg>
-                    </div>
-                    <h3>The Engineer</h3>
-                    <p>Precise, systematic, authoritative. Speaks in protocols and axioms.</p>
-                    <div class="lexicon-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;">
-                        <span class="badge badge--muted">Orchestration</span>
-                        <span class="badge badge--muted">Telemetry</span>
-                        <span class="badge badge--muted">Forkable</span>
-                    </div>
-                </div>
-                <div class="voice-card glass-panel" style="border-top: 4px solid var(--accent-primary);">
-                    <div class="voice-icon float-2">
-                        <!-- Eye/Vision Icon -->
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                            style="width: 48px; height: 48px;">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                            <circle cx="12" cy="12" r="3" />
-                            <path d="M12 9a3 3 0 0 1 3 3" style="opacity: 0.5;" />
-                        </svg>
-                    </div>
-                    <h3>The Philosopher</h3>
-                    <p>Introspective, vulnerable, questioning. Speaks in feelings and truths.</p>
-                    <div class="lexicon-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;">
-                        <span class="badge badge--muted">Grief</span>
-                        <span class="badge badge--muted">Connection</span>
-                        <span class="badge badge--muted">The Veil</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="brand-footer"
-            style="padding: 4rem 0; text-align: center; border-top: 1px solid var(--border-subtle); margin-top: 4rem;">
-            <p style="opacity: 0.5;">Built by Antigravity // <a href="/">Return to Studio</a></p>
-        </footer>
-
+            
+<section class="max-w-3xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="mb-12">
+        <h1 class="text-4xl font-bold mb-4 text-white">The Studio OS Simulation</h1>
+        <p class="text-xl text-zinc-400">Studio OS is an AI-native operating system for running a solo founder’s entire
+            business as a deterministic simulation.</p>
     </div>
-</article>
 
-<script>
-    // Copy to Clipboard with Animation
-    document.querySelectorAll('.swatch').forEach(swatch => {
-        swatch.addEventListener('click', () => {
-            const hex = swatch.getAttribute('data-hex');
-            navigator.clipboard.writeText(hex);
+    <!-- Architecture -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Architecture</h2>
+        <div class="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800 mb-6 font-mono text-sm text-green-400">
+            Browser Agents → Orchestrator → Simulation Core → Integrations
+        </div>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
+            <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
+            <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
+            <li><strong>Resources:</strong> External APIs and data sources (GitHub, Stripe, Email).</li>
+        </ul>
+    </div>
 
-            const original = swatch.querySelector('.swatch-hex').innerText;
-            swatch.querySelector('.swatch-hex').innerText = "Copied!";
-            swatch.style.transform = "scale(0.95)";
-            setTimeout(() => {
-                swatch.style.transform = "scale(1)";
-                swatch.querySelector('.swatch-hex').innerText = original;
-            }, 800);
-        });
-    });
-</script>
+    <!-- Components -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Components</h2>
+        <ul class="space-y-4 text-zinc-300">
+            <li>
+                <span class="text-white font-semibold">Frontend:</span>
+                Static Site Generation (SSG) + Vanilla JS. Visualizes repository state.
+            </li>
+            <li>
+                <span class="text-white font-semibold">Backend:</span>
+                Python (CORE), Make-based orchestration. Flat-file database (JSON/MD).
+            </li>
+            <li>
+                <span class="text-white font-semibold">AI Layer:</span>
+                Gemini 1.5 Pro / Flash. Structured Output schemas.
+            </li>
+            <li>
+                <span class="text-white font-semibold">Infrastructure:</span>
+                Local-first execution. GitHub Pages for hosting.
+            </li>
+        </ul>
+    </div>
+
+    <!-- Capabilities -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">What it can do today</h2>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li>Spin up a simulated "business day" and execute routine checks.</li>
+            <li>Call external APIs to fetch real-world state (GitHub issues, etc.).</li>
+            <li>Evaluate decision traces using specific branding and quality gates.</li>
+            <li>Generate static artifacts (Decision Logs, Build Notes) automatically.</li>
+        </ul>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-white border-b border-zinc-800 pb-2">Roadmap</h2>
+        <ul class="list-disc list-inside space-y-2 text-zinc-300">
+            <li><strong>Neural Handshake:</strong> Standardized protocol for agent-to-agent task handoff.</li>
+            <li><strong>Knowledge Graph:</strong> Transitioning from flat-files to a graph-based memory.</li>
+            <li><strong>Visualizers:</strong> React-based interactive views for complex "Runs".</li>
+            <li><strong>Gateway Interface:</strong> Unified CLI for starting/stopping simulation loops.</li>
+        </ul>
+    </div>
+</section>
+
         </main>
     </div>
 
@@ -637,41 +273,8 @@
             </button>
         </div>
         <nav class="drawer-nav">
-            <a href="./index.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                </div>
-                <span>Studio</span>
-            </a>
-            <a href="./studio-snapshot.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                </div>
-                <span>Snapshot</span>
-            </a>
-            <a href="./products.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                        </path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                </div>
-                <span>Products</span>
-            </a>
-            <a href="./extensions.html" class="drawer-link">
+            <div class="drawer-section-label">Operate</div>
+            <a href="extensions.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -680,9 +283,9 @@
                         <path d="M9 22V12h6v10"></path>
                     </svg>
                 </div>
-                <span>Copilot</span>
+                <span>Extensions</span>
             </a>
-            <a href="./decision-log.html" class="drawer-link">
+            <a href="decision-log.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -695,49 +298,22 @@
                 </div>
                 <span>Log</span>
             </a>
-            <a href="./research-roadmap.html" class="drawer-link">
+
+            <div class="drawer-section-label">Build</div>
+            <a href="products.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
                     </svg>
                 </div>
-                <span>Research</span>
+                <span>Products</span>
             </a>
-            <a href="./tags/pattern.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5"></path>
-                        <path d="M2 12l10 5 10-5"></path>
-                    </svg>
-                </div>
-                <span>Patterns</span>
-            </a>
-            <a href="./recommendation-engine.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </div>
-                <span>Find</span>
-            </a>
-            <a href="./agentic-systems-engineering.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5"></path>
-                        <path d="M2 12l10 5 10-5"></path>
-                    </svg>
-                </div>
-                <span>Discipline</span>
-            </a>
-            <a href="./architecture.html" class="drawer-link">
+            <a href="architecture.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -749,19 +325,35 @@
                 </div>
                 <span>Structure</span>
             </a>
-            <a href="./brand.html" class="drawer-link">
+
+            <div class="drawer-section-label">Learn</div>
+            <a href="archive.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                        <path d="M2 2l7.586 7.586"></path>
-                        <circle cx="11" cy="11" r="2"></circle>
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                 </div>
-                <span>Brand</span>
+                <span>Archive</span>
             </a>
-            <a href="./about.html" class="drawer-link">
+            <a href="agentic-systems-engineering.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <span>Discipline</span>
+            </a>
+
+            <div class="drawer-section-label">Account</div>
+            <a href="about.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -771,7 +363,7 @@
                 </div>
                 <span>About</span>
             </a>
-            <a href="https://doesthisfeelright.substack.com" class="drawer-link" target="_blank">
+            <a href="https://doesthisfeelright.substack.com" class="drawer-link" target="_blank" rel="noopener">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -808,13 +400,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- App Scripts -->
-    <script src="./js/config.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
     <!-- auth.js and bookmarks.js removed -->
-    <script src="./js/reading-progress.js"></script>
-    <script src="./js/share.js"></script>
-    <script src="./js/search.js"></script>
-    <script src="./js/support.js"></script>
+    <script src="js/reading-progress.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/support.js"></script>
 
     <footer class="site-footer">
         <div class="footer-grid">
@@ -828,12 +420,13 @@
             <div class="footer-col">
                 <h4>Explore</h4>
                 <div class="nav-links">
-                    <a href="./index.html" class="nav-link">Home</a>
-                    <a href="./about.html" class="nav-link">About</a>
-                    <a href="./collections.html" class="nav-link">Collections</a>
-                    <a href="https://github.com/isaachernandez/blog-design" class="nav-link" target="_blank">Open
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="collections.html" class="nav-link">Collections</a>
+                    <a href="https://github.com/isaacsight/does-this-feel-right-" class="nav-link" target="_blank"
+                        rel="noopener">Open
                         Source</a>
-                    <a href="./feed.xml" class="nav-link">RSS Feed</a>
+                    <a href="feed.xml" class="nav-link">RSS Feed</a>
                 </div>
             </div>
 
@@ -842,7 +435,8 @@
                 <h4>Support</h4>
                 <ul class="footer-links">
                     <li><a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a></li>
-                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                    <li><a href="https://buymeacoffee.com/doesthisfeelright" target="_blank" rel="noopener"
+                            id="footer-support-btn">Buy me a coffee</a></li>
                 </ul>
             </div>
         </div>
@@ -863,7 +457,7 @@
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
         <div class="mobile-nav-items">
-            <a href="./index.html" class="mobile-nav-item">
+            <a href="index.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -880,7 +474,7 @@
                 </svg>
                 <span>Search</span>
             </button>
-            <a href="./decision-log.html" class="mobile-nav-item">
+            <a href="decision-log.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -891,7 +485,7 @@
                 </svg>
                 <span>Log</span>
             </a>
-            <a href="./brand.html" class="mobile-nav-item">
+            <a href="brand.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <path d="M12 19l7-7 3 3-7 7-3-3z"></path>

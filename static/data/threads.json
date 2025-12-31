@@ -1,0 +1,21 @@
+[
+    {
+        "id": "thread-001",
+        "title": "Contextual Agency & Calm UX",
+        "intent": "Research",
+        "status": "Active",
+        "started_at": "2025-12-30",
+        "experiments": [
+            "exp-004-comet-mapping",
+            "exp-005-calm-ux-proto"
+        ],
+        "decisions": [
+            "dec-2025-12-30-comet-alignment"
+        ],
+        "summary_id": "sum-001",
+        "next_steps": [
+            "Prototype minimal status indicators",
+            "Define 'Context Pack' metadata schema"
+        ]
+    }
+]

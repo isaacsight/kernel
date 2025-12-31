@@ -1600,6 +1600,250 @@
         "source": "content_heartbeat"
       },
       "created_at": "2025-12-27T15:22:18.241465"
+    },
+    {
+      "entry_id": "entry_1767031438_67",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Perplexity",
+        "url": "https://www.perplexity.ai/account/api/billing",
+        "description": "Perplexity is a free AI-powered answer engine that provides accurate, trusted, and real-time answers to any question.",
+        "h1": "",
+        "wordCount": 1,
+        "bodyText": "",
+        "timestamp": 1767031438432,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T18:03:58.496228"
+    },
+    {
+      "entry_id": "entry_1767031503_68",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.perplexity.ai/account/purchases",
+        "depth": 0,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-29T18:05:03.709153"
+    },
+    {
+      "entry_id": "entry_1767031673_69",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Rate Limits and Usage Tiers - Perplexity",
+        "url": "https://docs.perplexity.ai/guides/usage-tiers#tier-0",
+        "description": "",
+        "h1": "Rate Limits and Usage Tiers",
+        "wordCount": 257,
+        "bodyText": "We follow the usage tier system below to set rate limits. You can check your usage tier by going to your API settings page.\n\u200b\nUsage Tiers\nTier\tCredit Purchase (all time)\nTier 0\t-\nTier 1\t$50\nTier 2\t$250\nTier 3\t$500\nTier 4\t$1000\nTier 5\t$5000\nThe tiers are based on cumulative purchases on a given account\n\u200b\nRate Limits and Features\nTier 0\nTier 1\nTier 2\nTier 3\nTier 4\nTier 5\nModel\tRequests per minute (RPM)\tFeatures\nsonar-deep-research\t5\trelated questions, structured outputs\nsonar-reasoning-pro\t50\timages, related questions, search domain filter, structured outputs\nsonar-pro\t50\timages, related questions, search domain filter, structured outputs\nsonar\t50\timages, related questions, search domain filter, structured outputs\nPOST /async/chat/completions\t5\tasync chat completions\nGET /async/chat/completions\t3000\tasync chat completions status\nGET /async/chat/completions/{request_id}\t6000\tasync chat completion results\nRate Limit forsonar-deep-research increases as you move up usage tiers",
+        "timestamp": 1767031673871,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T18:07:53.952981"
+    },
+    {
+      "entry_id": "entry_1767031732_70",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "Perplexity",
+        "url": "https://www.perplexity.ai/account/api/keys",
+        "description": "Perplexity is a free AI-powered answer engine that provides accurate, trusted, and real-time answers to any question.",
+        "h1": "",
+        "wordCount": 1,
+        "bodyText": "",
+        "timestamp": 1767031732327,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T18:08:52.387333"
+    },
+    {
+      "entry_id": "entry_1767031777_71",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.perplexity.ai/account/details",
+        "depth": 0,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-29T18:09:37.935406"
+    },
+    {
+      "entry_id": "entry_1767032073_72",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "https://www.perplexity.ai/account/api/keys",
+        "depth": 0,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-29T18:14:33.503678"
+    },
+    {
+      "entry_id": "entry_1767034784_73",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "",
+        "url": "http://localhost:8000/",
+        "description": "",
+        "h1": "",
+        "wordCount": 5,
+        "bodyText": "{\"message\":\"Studio OS API is running\",\"ui_url\":\"http://localhost:5173\",\"sovereign_chat\":\"http://localhost:5173/chat\"}",
+        "timestamp": 1767034784498,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T18:59:44.588097"
+    },
+    {
+      "entry_id": "entry_1767035288_74",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "http://localhost:8000/",
+        "depth": 0,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-29T19:08:08.940690"
+    },
+    {
+      "entry_id": "entry_1767035322_75",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "GitHub - isaacsight/does-this-feel-right-",
+        "url": "https://github.com/isaacsight/does-this-feel-right-",
+        "description": "Contribute to isaacsight/does-this-feel-right- development by creating an account on GitHub.",
+        "h1": "Search code, repositories, users, issues, pull requests...",
+        "wordCount": 1766,
+        "bodyText": "Does This Feel Right?\n\nA modern, static blog built with Python featuring AI-powered content generation, terminal-based admin interface, and automated deployment.\n\n  \n\n\ud83c\udf10 Live Site: doesthisfeelright.com\n\nFeatures\n\ud83d\udcdd Static Site Generation: Custom Python build system for blazing-fast sites\n\ud83e\udd16 AI Content Generation: Integrated Gemini, OpenAI, and Anthropic APIs\n\ud83d\udcbb TUI Admin Dashboard: Beautiful terminal interface with Textual\n\ud83d\udd12 Security First: Automated security scanning and secrets management\n\u2705 Tested: Comprehensive test suite with >80% coverage\n\ud83d\ude80 Automated Deployment: GitHub Actions CI/CD to GitHub Pages\n\ud83c\udfa8 SEO Optimized: JSON-LD, sitemaps, RSS feeds, and meta tags\n\ud83c\udfdb\ufe0f Studio OS Control Center: Agentic council driven by a unified doctrine and sovereign rules.\n\ud83d\udd13 Open Source: Built as an open source platform for the community.\nOpen Source\n\nThis project is an open source platform. We welcome contributions from the community! Whether you want to fix a bug, suggest a feature, or improve the documentation, please check out our Contributing Guidelines.\n\nLicensed under the MIT License.\n\nSystem Architecture\n\nThe \"IanSight\" System operates as a dual-layer architecture: a Public Presence (FastAPI) and a Private Studio (Flask Admin).\n\nView Live System Architecture\n\nLoading\nTech Stack\n\nCore:\n\nPython 3.9+\nCustom markdown-to-HTML converter\nFrontmatter-based content management\n\nAI Integration:\n\nGoogle Gemini API\nOpenAI GPT\nAnthropic Claude\n\nAdmin Interface:\n\nTextual (Terminal UI)\nSupabase (optional backend)\n\nQuality & Security:\n\npytest (testing)\nBlack (formatting)\nRuff (linting)\nBandit (security scanning)\npre-commit hooks\nQuick Start\nPrerequisites\nPython 3.9 or later\nGit\nAPI keys for AI providers (Gemini recommended)\nSetup\n# Clone the repository\ngit clone https://github.com/isaachernandez/blog-design.git\ncd blog-design\n\n# Run automated setup\nbash scripts/setup_dev.sh\n\n# Activate virtual environment\nsource .venv/bin/activate\n\n# Edit .env and add your API keys\nnano .env\nBuild & Run\n# Build the static site\npython build.py\n\n# Serve locally\npython -m http.server 8000 --directory docs\n# Visit http://localhost:8000\n\n78: # Or run the admin TUI\n79: python3 admin/tui.py\n80: ```\n81:\n82: ### Run n8n locally\n83: ```bash\n84: ./admin/start_n8n.sh\n85: ```\n86:\n87: ### Test n8n startup\n88: ```bash\n89: ./admin/test_n8n.sh\n90: ```\n\n\n## Development Workflow\n\n### 1. Setup Development Environment\n\n```bash\n# One-time setup\nbash scripts/setup_dev.sh\nsource .venv/bin/activate\n2. Make Changes\n\nEdit files, create content, modify code...\n\n3. Run Quality Checks\n# Auto-format code\nblack .\n\n# Lint code\nruff check . --fix\n\n# Type checking\nmypy build.py admin/*.py\n\n# Run tests\npytest\n\n# Or use the script\nbash scripts/run_tests.sh\n4. Security Scan\n# Run comprehensive security checks\nbash scripts/security_scan.sh\n5. Commit\n\nPre-commit hooks will automatically run formatting, linting, and security checks:\n\ngit add .\ngit commit -m \"Your commit message\"\ngit push\nTesting\n# Run all tests\npytest\n\n# With coverage report\npytest --cov=. --cov-report=html\n\n# Run specific test file\npytest tests/test_build.py\n\n# Or use the convenience script\nbash scripts/run_tests.sh\nProject Structure\nblog-design/\n\u251c\u2500\u2500 admin/                 # TUI admin application\n\u2502   \u251c\u2500\u2500 core.py           # Core admin functionality\n\u2502   \u2514\u2500\u2500 tui.py            # Textual UI\n\u251c\u2500\u2500 content/              # Markdown blog posts\n\u251c\u2500\u2500 templates/            # HTML templates\n\u251c\u2500\u2500 static/               # CSS, JS, images\n\u251c\u2500\u2500 docs/                 # Built site (output)\n\u251c\u2500\u2500 tests/                # Test suite\n\u251c\u2500\u2500 scripts/              # Automation scripts\n\u251c\u2500\u2500 build.py              # Static site generator\n\u251c\u2500\u2500 requirements.txt      # Production dependencies\n\u251c\u2500\u2500 requirements-dev.txt  # Development dependencies\n\u251c\u2500\u2500 pyproject.toml        # Tool configuration\n\u2514\u2500\u2500 .pre-commit-config.yaml  # Pre-commit hooks\n\nCreating Content\nVia TUI (Recommended)\npython3 admin/tui.py\n# Press 'n' for new post\n# Press 'g' for AI-generated post\n# Press 'p' to publish via Git\nManual Creation\n\nCreate a markdown file in content/:\n\n---\ntitle: My New Post\ndate: 2024-01-01\ncategory: Technology\ntags: python, ai, web\nexcerpt: A brief description\nread_time: 5 min read\n---\n\nYour content here...\n\nThen rebuild:\n\npython build.py\nStudio OS: The Living Lab\n\nThis workspace is configured as a Living Studio OS. Agents operate under a strict Sovereign Doctrine defined in .agent/rules/.\n\n\ud83c\udfdb\ufe0f Agent Council\nGlobal Rules: Engraved in .agent/rules/global-rules.md. Defines authorship, ethics, and \"feels right\" heuristics.\nPerception Critic: Audits visual fidelity and brand alignment.\nSocial Swarm: Orchestrates high-velocity content distribution.\n\ud83e\uddea Research & Development\nArtifacts: Every agent run generates reasoning traces and verifiable plans.\nModel Routing:\nStrategy: Gemini 3 Pro\nVelocity: Gemini 3 Flash\nQA: Automated testing via the Antigravity Chrome Extension.\nAI-Assisted Development\n\nThis project is optimized for use with AI coding tools:\n\nWith Cursor\n# Open projec",
+        "timestamp": 1767035322004,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T19:08:42.006793"
+    },
+    {
+      "entry_id": "entry_1767035368_76",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "title": "",
+        "url": "http://localhost:8000/",
+        "description": "",
+        "h1": "Studio OS",
+        "wordCount": 123,
+        "bodyText": "Studio OS\n\nA premium agentic operating system and open-source stack for building autonomous tools.\n\nFOR: AI ENGINEERS & FOUNDERS\n|\nVALUE IN 10M: REFERENCE ARCHITECTURES, TARGETED PROMPTS, OR A FORKABLE STACK.\nAGENT \u00b7 STUDIO OS\nMode: Research\nSource\nScanner Mode:\nACTIVE\nYour autonomous laboratory partner, part of the Studio OS ecosystem.\nAnswer\nLinks\nImages\n\nI am the DTFR Answer Engine. Ask me anything research-heavy or system-related.\n\n\u2191\nPOWERED BY THE STUDIO OS STACK \u00b7 V1.2.4\nSTART HERE\nLearn\n\nMaster the theory of agentic systems and explore the studio archive.\n\nStudio Archive\nThe Invisible Architect\nBuild\n\nDeep dive into reference architectures and fork the SDK.\n\nSystem Architecture\nGitHub Repo\nConnect\n\nJoin the lab, read the roadmap, and track live system decisions.\n\nAbout Isaac\nSubstack",
+        "timestamp": 1767035368441,
+        "source": "content_heartbeat"
+      },
+      "created_at": "2025-12-29T19:09:28.478050"
+    },
+    {
+      "entry_id": "entry_1767035406_77",
+      "user_id": "anon_abc123",
+      "type": "browser_context",
+      "classification": {
+        "pattern": "observation",
+        "confidence": 1.0
+      },
+      "state": {
+        "felt_right": true,
+        "reviewed": true
+      },
+      "context": {
+        "event_type": "reading_depth",
+        "url": "http://localhost:8000/",
+        "depth": 100,
+        "source": "content_observer"
+      },
+      "created_at": "2025-12-29T19:10:06.843615"
     }
   ],
   "pattern_counts": {

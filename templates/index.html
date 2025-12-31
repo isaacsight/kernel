@@ -1,181 +1,121 @@
-<!-- Studio Layout with Orientation Layer -->
-<h1 class="sr-only">Does This Feel Right?</h1>
+{% extends "base.html" %}
 
-<!-- ORIENTATION BLOCK (Sovereign Lab Entry) -->
-<section class="orientation-block">
-    <div class="orientation-content">
-        <p class="orientation-eyebrow">Sovereign Intelligence Lab</p>
-        <h1 class="orientation-headline">Directing, not Typing.</h1>
-        <p class="orientation-statement">
-            An integrated development and content pipeline designed to bridge the gap between autonomous execution and
-            human-felt quality.
-        </p>
-        <div class="orientation-actions">
-            <a href="https://doesthisfeelright.com/chat" class="btn-primary">Enter Studio</a>
-            <a href="archive.html" class="btn-secondary">View Manifest</a>
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Header / Status -->
+    <!-- Desktop/Mobile Top Nav -->
+    <div class="dashboard-top-nav flex items-center justify-between mb-8">
+        <div class="brand-info">
+            <h1 class="text-2xl font-bold">Studio OS</h1>
+            <p class="text-sm text-zinc-500">v2.0.0-beta • System Online</p>
         </div>
+        <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
+            class="badge badge--link hover:bg-zinc-800 transition-colors py-2 px-4 rounded-full border border-zinc-800 flex items-center gap-2"
+            rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="w-4 h-4">
+                <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+            </svg>
+            <span class="font-mono text-xs">GitHub Repository</span>
+        </a>
     </div>
-</section>
 
-<!-- ENTRY PATHS (3 Routes) -->
-<section class="entry-paths-section">
-    <div class="entry-paths-grid">
-
-        <!-- Path 1: Learn -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5"></path>
-                    <path d="M2 12l10 5 10-5"></path>
-                </svg>
+    <div class="dashboard-grid">
+        <!-- The Studio OS Simulation Manifest -->
+        <section class="dashboard-card full-width mb-12">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">The Simulation</h2>
             </div>
-            <h3>I want to learn</h3>
-            <p>Essays, patterns, and research on building AI-native systems.</p>
-            <div class="entry-path-links">
-                <a href="#essays">Essays</a>
-                <a href="tags/pattern.html">Patterns</a>
-                <a href="research-roadmap.html">Research</a>
-            </div>
-        </div>
+            <p class="text-lg text-zinc-400">Studio OS is an AI-native operating system for running a solo founder’s
+                entire business as a deterministic simulation.</p>
 
-        <!-- Path 2: Build -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                    </path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-            </div>
-            <h3>I want to build</h3>
-            <p>Architecture, extensions, and the Studio OS reference implementation.</p>
-            <div class="entry-path-links">
-                <a href="products.html">Products</a>
-                <a href="architecture.html">Architecture</a>
-                <a href="extensions.html">Extensions</a>
-            </div>
-        </div>
-
-        <!-- Path 3: Engage -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            </div>
-            <h3>I want to work with you</h3>
-            <p>Advisory for founders building AI-native products and teams.</p>
-            <div class="entry-path-links">
-                <a href="about.html">About</a>
-                <a href="is-this-for-you.html">Is this for you?</a>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- VALUE EXTRACTION (What You Can Steal) -->
-<section class="value-block">
-    <h2 class="value-header">What you can steal</h2>
-    <div class="value-grid">
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="tags/pattern.html">Studio Patterns</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="the-frontier-team.html">Agent Configurations</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="architecture.html">System Architectures</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="decision-log.html">Decision Frameworks</a>
-        </div>
-    </div>
-</section>
-
-<!-- STUDIO ANCHOR (Canonical Sentence) -->
-<div class="studio-anchor">
-    <p><em>The Studio is a system that turns research into shipped artifacts through agents, patterns, and decision
-            logs.</em></p>
-</div>
-
-<!-- THE FRONTIER (Research Horizons) -->
-<section class="frontier-section">
-    <div class="section-header">
-        <h2 class="section-label">Frontier Horizons</h2>
-        <p class="section-desc">The truly unexplored frontiers sitting at the intersection of agentic AI.</p>
-    </div>
-    <div class="frontier-grid">
-        {{ frontier_set }}
-    </div>
-    <div class="frontier-footer" style="margin-top: 2rem; text-align: center;">
-        <a href="posts/frontiers-of-agentic-ai.html" class="btn-secondary">Read the Full Frontier Notes</a>
-    </div>
-</section>
-
-<div class="magazine-layout">
-
-    <!-- Canon Section (Curated) -->
-    <section class="start-here-section" id="canon">
-        <div class="section-header">
-            <h2 class="section-label">Studio Patterns & Canon</h2>
-            <p class="section-desc">Foundational patterns and thinking that define the Doctrine.</p>
-        </div>
-        <div class="starter-grid">
-            {{ starter_set }}
-        </div>
-    </section>
-
-    <div class="content-wrapper">
-        <!-- Main Feed (Curated) -->
-        <main class="main-feed" id="essays">
-
-            <div class="feed-header">
-                <h2>Featured Essays</h2>
-                <a href="archive.html" class="view-all-link">View Full Archive →</a>
-            </div>
-
-            <div class="posts-container">
-                {{ recent_posts }}
-            </div>
-        </main>
-
-        <!-- Sidebar (Simplified) -->
-        <aside class="blog-sidebar">
-
-            <!-- Snapshot Widget -->
-            <div class="sidebar-widget snapshot-widget">
-                <h3>Studio Status</h3>
-                <p><strong>Focus:</strong> Closing the Loop</p>
-                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-                    Active Agents: 3<br>
-                    Shipping: Weekly
+            <!-- Architecture -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Architecture</h3>
+                <div class="bg-zinc-900/50 p-4 rounded border border-zinc-800 mb-4 font-mono text-xs text-green-400">
+                    Browser Agents → Orchestrator → Simulation Core → Integrations
                 </div>
-                <a href="studio-snapshot.html" class="text-link" style="margin-top: 0.75rem; display: block;">Full
-                    Snapshot →</a>
-            </div>
-
-            <!-- Collections Widget -->
-            <div class="sidebar-widget collections-widget">
-                <h3>Systems</h3>
-                <ul class="collection-list">
-                    <li><a href="tags/pattern.html" class="collection-link"><span class="name">Patterns</span></a></li>
-                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems
-                                Architecture</span></a></li>
-                    <li><a href="tags/building.html" class="collection-link"><span class="name">Building in
-                                Public</span></a></li>
+                <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                    <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
+                    <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
+                    <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
+                    <li><strong>Resources:</strong> External APIs and data sources (GitHub, Stripe, Email).</li>
                 </ul>
             </div>
 
-        </aside>
-    </div>
+            <!-- Components -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Components</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-zinc-300">
+                    <div>
+                        <span class="text-white font-semibold">Frontend:</span>
+                        SSG + Vanilla JS. Visualizes repository state.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">Backend:</span>
+                        Python CORE, Make orchestration. Flat-file JSON/MD.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">AI Layer:</span>
+                        Gemini 1.5 Pro / Flash. Structured Output schemas.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">Infrastructure:</span>
+                        Local-first execution. GitHub Pages hosting.
+                    </div>
+                </div>
+            </div>
 
+            <!-- Roadmap & Capabilities -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">What it can do today
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                        <li>Spin up a simulated "business day".</li>
+                        <li>Call external APIs (GitHub, etc.).</li>
+                        <li>Evaluate decision traces via quality gates.</li>
+                        <li>Generate static artifacts automatically.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Roadmap</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                        <li><strong>Neural Handshake:</strong> Agent task handoff.</li>
+                        <li><strong>Knowledge Graph:</strong> Transition to graph memory.</li>
+                        <li><strong>Visualizers:</strong> React-based interactive views.</li>
+                        <li><strong>Gateway Interface:</strong> Unified CLI for loops.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Feeds -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width">
+            <!-- Latest Build Updates -->
+            <section class="dashboard-card">
+                <h2 class="text-2xl font-bold mb-6">Latest Build Updates</h2>
+                <div class="run-stream">
+                    {{ build_log_feed }}
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Build Log →</a>
+                </div>
+            </section>
+
+            <!-- Latest Essays -->
+            <section class="dashboard-card">
+                <h2 class="text-2xl font-bold mb-6">Latest Essays</h2>
+                <div class="run-stream">
+                    {{ essays_feed }}
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="archive.html" class="text-sm text-zinc-500 hover:text-white">View All Essays →</a>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
+{% endblock %}

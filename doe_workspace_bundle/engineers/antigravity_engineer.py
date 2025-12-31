@@ -1,7 +1,7 @@
 """
 Antigravity Engineer - Core Kernel & Intelligence Engineer
 
-The central orchestrator of the Studio OS agent swarm. Responsible for 
+The central orchestrator of the Studio OS agent swarm. Responsible for
 high-level reasoning, system coordination, and automated research & development.
 Inspired by the Antigravity VS Code extension architecture.
 
@@ -12,7 +12,7 @@ import sys
 import logging
 import asyncio
 import subprocess
-from typing import Dict, Any, List, Optional
+from typing import Any, Optional
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -33,9 +33,10 @@ logger = logging.getLogger("AntigravityEngineer")
 # These are defined as functions that will be passed to Gemini
 # ============================================================================
 
+
 def read_file_tool(path: str) -> dict:
     """Read the contents of a file at the given path.
-    
+
     Args:
         path: The absolute or relative path to the file
     """
@@ -44,7 +45,7 @@ def read_file_tool(path: str) -> dict:
 
 def write_file_tool(path: str, content: str) -> dict:
     """Write content to a file. Creates the file if it doesn't exist.
-    
+
     Args:
         path: The path to the file
         content: The content to write to the file
@@ -54,7 +55,7 @@ def write_file_tool(path: str, content: str) -> dict:
 
 def list_directory_tool(path: str) -> dict:
     """List the contents of a directory.
-    
+
     Args:
         path: The path to the directory
     """
@@ -63,7 +64,7 @@ def list_directory_tool(path: str) -> dict:
 
 def run_command_tool(command: str, cwd: str = None) -> dict:
     """Execute a shell command and return the output.
-    
+
     Args:
         command: The shell command to execute
         cwd: Optional working directory for the command
@@ -73,7 +74,7 @@ def run_command_tool(command: str, cwd: str = None) -> dict:
 
 def search_codebase_tool(pattern: str, path: str = None) -> dict:
     """Search for a pattern in the codebase using grep.
-    
+
     Args:
         pattern: The search pattern (regex supported)
         path: Directory to search in (defaults to project root)
@@ -83,7 +84,7 @@ def search_codebase_tool(pattern: str, path: str = None) -> dict:
 
 def task_complete_tool(summary: str) -> dict:
     """Signal that the task is complete and provide a summary.
-    
+
     Args:
         summary: A summary of what was accomplished
     """
@@ -97,20 +98,20 @@ TOOL_FUNCTIONS = [
     list_directory_tool,
     run_command_tool,
     search_codebase_tool,
-    task_complete_tool
+    task_complete_tool,
 ]
 
 
 class AntigravityEngineer(BaseAgent):
     """
     Core Kernel Agent and Intelligence Engineer.
-    
-    Acts as the orchestrator of the Studio OS swarm, using Gemini function 
+
+    Acts as the orchestrator of the Studio OS swarm, using Gemini function
     calling to execute multi-step coding, research, and system tasks.
     """
-    
+
     MAX_ITERATIONS = 20  # Safety limit on execution loops
-    
+
     def __init__(self):
         try:
             super().__init__(agent_id="antigravity")
@@ -121,242 +122,376 @@ class AntigravityEngineer(BaseAgent):
             self.system_prompt = "You are an autonomous coding agent."
             self.enabled_skills = []
             logger.warning("[AntigravityEngineer] Profile not found, using fallback.")
-        
-        self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+        self.project_root = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        )
         self._configure_gemini()
-        
+
     def _configure_gemini(self):
         """Configure the Gemini SDK with API key."""
         if not genai:
             logger.error("[AntigravityEngineer] google-generativeai not installed")
             self.model = None
             return
-            
+
         api_key = self.get_secret("GEMINI_API_KEY")
         if not api_key:
             logger.error("[AntigravityEngineer] GEMINI_API_KEY not configured")
             self.model = None
             return
-            
+
         genai.configure(api_key=api_key)
-        
+
         # Use gemini-1.5-flash for speed and cost efficiency
-        model_name = getattr(config, 'GEMINI_MODEL', 'gemini-1.5-flash')
-        
+        model_name = getattr(config, "GEMINI_MODEL", "gemini-1.5-flash")
+
         try:
             self.model = genai.GenerativeModel(
                 model_name=model_name,
                 tools=TOOL_FUNCTIONS,
-                system_instruction=self.get_system_prompt() if hasattr(self, 'get_system_prompt') else self.system_prompt
+                system_instruction=self.get_system_prompt()
+                if hasattr(self, "get_system_prompt")
+                else self.system_prompt,
             )
             logger.info(f"[{self.name}] Configured with {model_name}")
         except Exception as e:
             logger.error(f"[AntigravityEngineer] Failed to configure model: {e}")
             self.model = None
-    
+
     # ========================================================================
     # Tool Implementations
     # ========================================================================
-    
+
     def _resolve_path(self, path: str) -> str:
         """Resolve relative paths to absolute paths."""
         if os.path.isabs(path):
             return path
         return os.path.join(self.project_root, path)
-    
-    def _read_file(self, path: str) -> Dict[str, Any]:
+
+    def _read_file(self, path: str) -> dict[str, Any]:
         """Read contents of a file."""
         full_path = self._resolve_path(path)
         try:
-            with open(full_path, 'r', encoding='utf-8') as f:
+            with open(full_path, "r", encoding="utf-8") as f:
                 content = f.read()
             return {"success": True, "content": content, "path": full_path}
         except FileNotFoundError:
             return {"success": False, "error": f"File not found: {full_path}"}
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
-    def _write_file(self, path: str, content: str) -> Dict[str, Any]:
+
+    def _write_file(self, path: str, content: str) -> dict[str, Any]:
         """Write content to a file."""
         full_path = self._resolve_path(path)
         try:
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
-            with open(full_path, 'w', encoding='utf-8') as f:
+            with open(full_path, "w", encoding="utf-8") as f:
                 f.write(content)
             logger.info(f"[{self.name}] Wrote to {full_path}")
             return {"success": True, "path": full_path, "bytes_written": len(content)}
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
-    def _list_directory(self, path: str) -> Dict[str, Any]:
+
+    def _list_directory(self, path: str) -> dict[str, Any]:
         """List contents of a directory."""
         full_path = self._resolve_path(path)
         try:
             entries = []
             for entry in os.listdir(full_path):
                 entry_path = os.path.join(full_path, entry)
-                entries.append({
-                    "name": entry,
-                    "type": "directory" if os.path.isdir(entry_path) else "file"
-                })
+                entries.append(
+                    {"name": entry, "type": "directory" if os.path.isdir(entry_path) else "file"}
+                )
             return {"success": True, "path": full_path, "entries": entries}
         except FileNotFoundError:
             return {"success": False, "error": f"Directory not found: {full_path}"}
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
-    def _run_command(self, command: str, cwd: Optional[str] = None) -> Dict[str, Any]:
-        """Execute a shell command."""
+
+    def _run_command(self, command: str, cwd: Optional[str] = None) -> dict[str, Any]:
+        """Execute a shell command with strict guardrails."""
         work_dir = self._resolve_path(cwd) if cwd else self.project_root
-        
-        # Safety check - block dangerous commands
-        dangerous_patterns = ['rm -rf /', 'rm -rf ~', '> /dev/sda', 'mkfs', ':(){:|:&};:']
+
+        # 🟢 GUARDRAIL 1: Directory Allowlist
+        allowed_prefixes = [
+            os.path.join(self.project_root, "doe_workspace_bundle"),
+            os.path.join(self.project_root, "admin"),
+            os.path.join(self.project_root, "scripts"),
+            os.path.join(self.project_root, "core"),
+        ]
+
+        if not any(work_dir.startswith(p) for p in allowed_prefixes):
+            if work_dir != self.project_root:
+                return {
+                    "success": False,
+                    "error": f"Working directory {work_dir} is outside the allowlist.",
+                }
+
+        # 🔴 GUARDRAIL 2: Dangerous Patterns
+        dangerous_patterns = [
+            "rm -rf /",
+            "rm -rf ~",
+            "> /dev/sda",
+            "mkfs",
+            ":(){:|:&};:",
+            "sudo",
+            "chmod -R 777",
+            "chown",
+            "curl | bash",
+            "wget | bash",
+        ]
         if any(pattern in command for pattern in dangerous_patterns):
-            return {"success": False, "error": "Command blocked for safety reasons"}
-        
+            logger.warning(f"[{self.name}] BLOCKED DANGEROUS COMMAND: {command}")
+            return {"success": False, "error": "Command blocked for safety reasons."}
+
         try:
             result = subprocess.run(
-                command,
-                shell=True,
-                cwd=work_dir,
-                capture_output=True,
-                text=True,
-                timeout=60  # 60 second timeout
+                command, shell=True, cwd=work_dir, capture_output=True, text=True, timeout=60
             )
             return {
                 "success": result.returncode == 0,
-                "stdout": result.stdout[:5000],  # Limit output size
+                "stdout": result.stdout[:5000],
                 "stderr": result.stderr[:2000],
-                "exit_code": result.returncode
+                "exit_code": result.returncode,
             }
         except subprocess.TimeoutExpired:
             return {"success": False, "error": "Command timed out after 60 seconds"}
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
-    def _search_codebase(self, pattern: str, path: Optional[str] = None) -> Dict[str, Any]:
+
+    async def execute_plan(self, plan: Any) -> list[Any]:
+        """
+        Executes a formalized DTFRPlan with step-by-step reporting.
+        """
+        from core.dtfr_schemas import DTFRPlan, ExecutionResult
+        import time
+
+        if not isinstance(plan, DTFRPlan):
+            # Attempt to cast if it's a dict
+            if isinstance(plan, dict):
+                plan = DTFRPlan(**plan)
+            else:
+                raise ValueError("plan must be a DTFRPlan instance or compatible dict")
+
+        results = []
+        logger.info(f"[{self.name}] Executing Plan: {plan.mission}")
+
+        for step in plan.steps:
+            logger.info(f"[{self.name}] Step {step.id}: {step.rationale}")
+            start_time = time.time()
+
+            try:
+                # Execute tool via internal dispatcher
+                # Map 'tool_name' and 'arguments' to internal methods
+                output = self._execute_tool(step.tool_name, step.arguments)
+                status = "success" if output.get("success") else "failure"
+                error = output.get("error")
+            except Exception as e:
+                status = "failure"
+                error = str(e)
+                output = {"success": False, "error": error}
+
+            res = ExecutionResult(
+                step_id=step.id,
+                tool_name=step.tool_name,
+                input=step.arguments,
+                output=output,
+                status=status,
+                error=error,
+                duration=time.time() - start_time,
+            )
+            results.append(res)
+
+            if status == "failure":
+                logger.error(f"[{self.name}] Plan execution halted at step {step.id}: {error}")
+                break
+
+        return results
+
+    def _search_codebase(self, pattern: str, path: Optional[str] = None) -> dict[str, Any]:
         """Search for a pattern in the codebase."""
         search_path = self._resolve_path(path) if path else self.project_root
         try:
             result = subprocess.run(
-                ["grep", "-rn", "--include=*.py", "--include=*.js", "--include=*.ts", 
-                 "--include=*.html", "--include=*.css", "--include=*.md", pattern, search_path],
+                [
+                    "grep",
+                    "-rn",
+                    "--include=*.py",
+                    "--include=*.js",
+                    "--include=*.ts",
+                    "--include=*.html",
+                    "--include=*.css",
+                    "--include=*.md",
+                    pattern,
+                    search_path,
+                ],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
-            matches = result.stdout.strip().split('\n')[:20]  # Limit to 20 matches
+            matches = result.stdout.strip().split("\n")[:20]  # Limit to 20 matches
             return {
                 "success": True,
                 "matches": [m for m in matches if m],
-                "count": len([m for m in matches if m])
+                "count": len([m for m in matches if m]),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
-    def _execute_tool(self, tool_name: str, args: Dict[str, Any]) -> Dict[str, Any]:
+
+    def _multi_replace(self, path: str, replacements: list[dict[str, Any]]) -> dict[str, Any]:
+        """Performs multiple replacements in a file."""
+        full_path = self._resolve_path(path)
+        try:
+            with open(full_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            for r in replacements:
+                target = r.get("target")
+                replacement = r.get("replacement")
+                if target and replacement:
+                    content = content.replace(target, replacement)
+
+            with open(full_path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+            return {"success": True, "path": full_path, "replacements_applied": len(replacements)}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def _find_files(self, pattern: str, path: Optional[str] = None) -> dict[str, Any]:
+        """Finds files matching a pattern."""
+        search_path = self._resolve_path(path) if path else self.project_root
+        try:
+            result = subprocess.run(
+                ["find", search_path, "-name", pattern],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            files = result.stdout.strip().split("\n")[:50]
+            return {"success": True, "files": [f for f in files if f]}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def _execute_tool(self, tool_name: str, args: dict[str, Any]) -> dict[str, Any]:
         """Execute a tool by name with given arguments."""
         tool_map = {
             "read_file": lambda: self._read_file(args.get("path", "")),
             "write_file": lambda: self._write_file(args.get("path", ""), args.get("content", "")),
             "list_directory": lambda: self._list_directory(args.get("path", ".")),
             "run_command": lambda: self._run_command(args.get("command", ""), args.get("cwd")),
-            "search_codebase": lambda: self._search_codebase(args.get("pattern", ""), args.get("path")),
-            "task_complete": lambda: {"success": True, "complete": True, "summary": args.get("summary", "Task complete")}
+            "search_codebase": lambda: self._search_codebase(
+                args.get("pattern", ""), args.get("path")
+            ),
+            "multi_replace": lambda: self._multi_replace(
+                args.get("path", ""), args.get("replacements", [])
+            ),
+            "find_files": lambda: self._find_files(args.get("pattern", ""), args.get("path")),
+            "task_complete": lambda: {
+                "success": True,
+                "complete": True,
+                "summary": args.get("summary", "Task complete"),
+            },
         }
-        
+
         executor = tool_map.get(tool_name)
         if not executor:
             return {"success": False, "error": f"Unknown tool: {tool_name}"}
-        
+
         return executor()
-    
+
     # ========================================================================
     # Main Execution Loop
     # ========================================================================
-    
+
     async def execute(self, task: str) -> str:
         """
         Execute a coding task using the agentic loop.
-        
+
         Args:
             task: Natural language description of what to accomplish
-            
+
         Returns:
             Summary of what was done
         """
         if not self.model:
             return "Error: Gemini model not configured. Check GEMINI_API_KEY."
-        
+
         logger.info(f"[{self.name}] Starting task: {task[:100]}...")
-        
+
         # Start a chat with the task
         chat = self.model.start_chat()
-        
+
         try:
             response = chat.send_message(f"Execute this task: {task}")
         except Exception as e:
             return f"Error starting task: {e}"
-        
+
         iterations = 0
-        
+
         while iterations < self.MAX_ITERATIONS:
             iterations += 1
-            
+
             # Check if model wants to call a function
             if not response.candidates:
                 return "No response from model"
-            
+
             candidate = response.candidates[0]
-            
+
             # Check for function calls
             if candidate.content.parts:
                 for part in candidate.content.parts:
-                    if hasattr(part, 'function_call') and part.function_call:
+                    if hasattr(part, "function_call") and part.function_call:
                         fc = part.function_call
                         tool_name = fc.name
                         args = dict(fc.args) if fc.args else {}
-                        
+
                         logger.info(f"[{self.name}] Calling tool: {tool_name}")
-                        
+
                         # Execute the tool
                         result = self._execute_tool(tool_name, args)
-                        
+
                         # Check if task is complete
                         if result.get("complete"):
                             logger.info(f"[{self.name}] Task complete!")
                             return result.get("summary", "Task completed successfully")
-                        
+
                         # Send result back to model
                         try:
                             response = chat.send_message(
                                 genai.protos.Content(
-                                    parts=[genai.protos.Part(
-                                        function_response=genai.protos.FunctionResponse(
-                                            name=tool_name,
-                                            response={"result": result}
+                                    parts=[
+                                        genai.protos.Part(
+                                            function_response=genai.protos.FunctionResponse(
+                                                name=tool_name, response={"result": result}
+                                            )
                                         )
-                                    )]
+                                    ]
                                 )
                             )
                         except Exception as e:
                             return f"Error sending tool result: {e}"
-                        
+
                         break  # Process one tool at a time
-                    
-                    elif hasattr(part, 'text') and part.text:
+
+                    elif hasattr(part, "text") and part.text:
                         # Model provided a text response - might be done
                         text = part.text
-                        if "complete" in text.lower() or "finished" in text.lower() or "done" in text.lower():
+                        if (
+                            "complete" in text.lower()
+                            or "finished" in text.lower()
+                            or "done" in text.lower()
+                        ):
                             return text
                         # Otherwise keep going
                         break
             else:
                 # No parts, might be done
                 break
-        
+
         return f"Task execution stopped after {iterations} iterations"
-    
+
     def run(self, input_text: str) -> str:
         """Synchronous entry point."""
         return asyncio.run(self.execute(input_text))
@@ -368,9 +503,9 @@ class AntigravityEngineer(BaseAgent):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    
+
     agent = AntigravityEngineer()
-    
+
     # Simple test
     result = agent.run("List the files in the scripts directory")
     print(f"Result: {result}")

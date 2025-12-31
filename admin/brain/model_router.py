@@ -1,15 +1,13 @@
-"""
-Model Router - Intelligent Model Selection
-
-Inspired by GitHub Spark's model selection feature.
-Routes tasks to the optimal AI model based on task type, cost, and availability.
-"""
-
-import os
+import asyncio
+import json
 import logging
-from typing import Dict, List, Optional, Any
+import os
+import sys
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import requests
 
 logger = logging.getLogger("ModelRouter")
 
@@ -47,17 +45,17 @@ class ModelRouter:
         # Model registry with capabilities and costs
         self.models = {
             # Cloud models
-            "gemini-3.0-pro": {
+            "models/gemini-2.5-flash-latest": {
                 "provider": "google",
                 "type": "cloud",
-                "strengths": [TaskType.ANALYSIS, TaskType.CODE_GENERATION, TaskType.CREATIVE_WRITING],
-                "cost_tier": "high",
-                "speed": "medium",
-                "quality": "highest",
-                "context_window": 2000000,
+                "strengths": [TaskType.ANALYSIS, TaskType.CODE_GENERATION, TaskType.FAST_SIMPLE],
+                "cost_tier": "low",
+                "speed": "fast",
+                "quality": "high",
+                "context_window": 1000000,
                 "available": self._check_gemini_available()
             },
-            "gemini-1.5-pro": {
+            "models/gemini-1.5-pro": {
                 "provider": "google",
                 "type": "cloud",
                 "strengths": [TaskType.CREATIVE_WRITING, TaskType.ANALYSIS, TaskType.CHAT],
@@ -67,23 +65,13 @@ class ModelRouter:
                 "context_window": 1000000,
                 "available": self._check_gemini_available()
             },
-            "gemini-1.5-flash": {
+            "models/gemini-1.5-flash": {
                 "provider": "google",
                 "type": "cloud",
                 "strengths": [TaskType.FAST_SIMPLE, TaskType.SUMMARIZATION, TaskType.CHAT],
                 "cost_tier": "low",
                 "speed": "fast",
                 "quality": "medium",
-                "context_window": 1000000,
-                "available": self._check_gemini_available()
-            },
-            "gemini-3.0-flash": {
-                "provider": "google",
-                "type": "cloud",
-                "strengths": [TaskType.FAST_SIMPLE, TaskType.SUMMARIZATION, TaskType.CHAT, TaskType.ANALYSIS, TaskType.CODE_GENERATION],
-                "cost_tier": "low",
-                "speed": "fast",
-                "quality": "high",
                 "context_window": 1000000,
                 "available": self._check_gemini_available()
             },
@@ -220,7 +208,7 @@ class ModelRouter:
                 "context_window": 32000,
                 "available": self._check_hf_available()
             },
-            # Studio Node Models (Remote)
+            # Cognitive Node Models (Remote)
             "qwen-2.5-72b": {
                 "provider": "remote",
                 "type": "remote",
@@ -241,6 +229,37 @@ class ModelRouter:
                 "quality": "high",
                 "context_window": 128000,
                 "available": self._check_codex_available()
+            },
+            # Perplexity models
+            "sonar": {
+                "provider": "perplexity",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CHAT, TaskType.FAST_SIMPLE],
+                "cost_tier": "low",
+                "speed": "fast",
+                "quality": "medium",
+                "context_window": 127000,
+                "available": self._check_perplexity_available()
+            },
+            "sonar-pro": {
+                "provider": "perplexity",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CHAT, TaskType.CREATIVE_WRITING],
+                "cost_tier": "medium",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 200000,
+                "available": self._check_perplexity_available()
+            },
+            "sonar-reasoning": {
+                "provider": "perplexity",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CHAT],
+                "cost_tier": "high",
+                "speed": "slow",
+                "quality": "highest",
+                "context_window": 127000,
+                "available": self._check_perplexity_available()
             }
         }
         
@@ -250,9 +269,9 @@ class ModelRouter:
         self.task_preferences = {
             TaskType.CREATIVE_WRITING: ["gpt-5.2-pro", "gemini-3.0-flash", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
             TaskType.CODE_GENERATION: ["gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
-            TaskType.CHAT: ["gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.ANALYSIS: ["sonar-pro", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["sonar", "gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["sonar-pro", "gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
             TaskType.FAST_SIMPLE: ["gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
             TaskType.VISUAL_REASONING: ["gemini-1.5-pro", "gpt-4o", "gemini-3.0-flash"]
@@ -279,6 +298,10 @@ class ModelRouter:
         """Check if OpenAI API is configured."""
         return bool(os.environ.get("OPENAI_API_KEY"))
     
+    def _check_perplexity_available(self) -> bool:
+        """Check if Perplexity API is configured."""
+        return bool(os.environ.get("PERPLEXITY_API_KEY"))
+    
     def _check_ollama_available(self) -> bool:
         """Check if Ollama is available (local or remote)."""
         import socket
@@ -294,7 +317,7 @@ class ModelRouter:
         except:
             pass
         
-        # Check remote Studio Node (only if we are the Controller)
+        # Check remote Cognitive Node (only if we are the Controller)
         if self.env == Environment.CONTROLLER:
             node_url = os.environ.get("STUDIO_NODE_URL")
             if node_url:
@@ -311,8 +334,8 @@ class ModelRouter:
         """Check if Hugging Face API is configured."""
         return bool(os.environ.get("HF_TOKEN"))
 
-    def _check_studio_node_available(self) -> bool:
-        """Check if the remote Studio Node is available."""
+    def _check_cognitive_node_available(self) -> bool:
+        """Check if the remote Cognitive Node is available."""
         # Only relevant if we are the Controller
         if self.env != Environment.CONTROLLER:
             return False
@@ -370,7 +393,14 @@ class ModelRouter:
             f"Tokens: {input_tokens}in/{output_tokens}out | "
             f"Est. Cost: ${cost:.6f}"
         )
-        # TODO: Persist to 'usage_stats' table in MemoryStore
+        # Persist to 'usage_stats' table in MemoryStore (Conceptual for now as per TODO)
+        try:
+            from admin.brain.memory_store import get_memory_store
+            memory = get_memory_store()
+            # Placeholder for record_usage method if it exists or should be added
+            # memory.record_usage(model=model, input_tokens=input_tokens, output_tokens=output_tokens, task=task.value, cost=cost)
+        except Exception as e:
+            logger.error(f"[{self.name}] Failed to persist usage stats: {e}")
 
     def estimate_tokens(self, text: str) -> int:
         """Rough estimation of tokens (char/4)."""
@@ -543,9 +573,12 @@ class ModelRouter:
         for name in ["mistral", "codestral", "llama3.2", "deepseek-coder", "nomic-embed-text", "hermes3"]:
             self.models[name]["available"] = ollama_available
         
-        self.models["qwen-2.5-72b"]["available"] = self._check_studio_node_available()
+        self.models["qwen-2.5-72b"]["available"] = self._check_cognitive_node_available()
         self.models["mistral-7b-instruct"]["available"] = self._check_hf_available()
         self.models["codex-exec"]["available"] = self._check_codex_available()
+        self.models["sonar"]["available"] = self._check_perplexity_available()
+        self.models["sonar-pro"]["available"] = self._check_perplexity_available()
+        self.models["sonar-reasoning"]["available"] = self._check_perplexity_available()
         
         logger.info(f"[{self.name}] Refreshed model availability")
     
@@ -578,6 +611,93 @@ class ModelRouter:
         constraints = {"prefer_local": True}
         
         return self.select_model(task_type, constraints)
+
+    async def get_completion(self, task_type: TaskType, prompt: str, system_prompt: str = "", **kwargs) -> dict:
+        """
+        Executes a completion call via the selected model/provider.
+        """
+        selection = self.select_model(task_type)
+        model_name = selection.get("selected")
+        provider = selection.get("provider")
+
+        if not model_name:
+            return {"error": "No model selected", "text": ""}
+
+        logger.info(f"[{self.name}] Executing via {model_name} ({provider})")
+
+        # Fallback loop: if selected model fails, try alternatives
+        models_to_try = [model_name] + selection.get("alternatives", [])
+        
+        last_error = None
+        for current_model in models_to_try:
+            current_provider = self.models[current_model]["provider"]
+            try:
+                res_text = await self._execute_call(current_model, current_provider, prompt, system_prompt, **kwargs)
+                if res_text:
+                    return {"selected": current_model, "text": res_text, "provider": current_provider}
+            except Exception as e:
+                logger.warning(f"[{self.name}] Model {current_model} failed: {e}")
+                last_error = e
+        
+        return {"error": f"All models failed. Last error: {last_error}", "text": ""}
+
+    async def _execute_call(self, model: str, provider: str, prompt: str, system_prompt: str, **kwargs) -> str:
+        """Internal router call to specific providers."""
+        if provider == "google":
+            import google.generativeai as genai
+            from admin.config import config
+            genai.configure(api_key=config.GEMINI_API_KEY)
+            m = genai.GenerativeModel(model)
+            full_prompt = f"{system_prompt}\n\n{prompt}"
+            response = await asyncio.to_thread(m.generate_content, full_prompt)
+            return response.text if response and hasattr(response, 'text') else ""
+
+        elif provider == "ollama":
+            payload = {
+                "model": model,
+                "prompt": f"{system_prompt}\n\n{prompt}",
+                "stream": False,
+                "options": {"temperature": kwargs.get("temperature", 0.7)}
+            }
+            response = await asyncio.to_thread(
+                requests.post, "http://localhost:11434/api/generate", json=payload, timeout=kwargs.get("timeout", 10)
+            )
+            if response.status_code == 200:
+                return response.json().get("response", "")
+
+        elif provider == "openai":
+            from openai import OpenAI
+            from admin.config import config
+            client = OpenAI(api_key=config.OPENAI_API_KEY)
+            response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=kwargs.get("temperature", 0.7)
+            )
+            return response.choices[0].message.content
+
+        elif provider == "remote":
+            from admin.config import config
+            base_url = config.STUDIO_NODE_URL.rstrip("/")
+            payload = {
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
+                "stream": False
+            }
+            response = await asyncio.to_thread(
+                requests.post, f"{base_url}/v1/chat/completions", json=payload, timeout=20
+            )
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"]
+        
+        return ""
 
 
 # Singleton instance

@@ -1,0 +1,40 @@
+[
+    {
+        "id": "does-this-feel-right-pr-42",
+        "project_id": "does-this-feel-right",
+        "type": "pull_request",
+        "github_ref": {
+            "pr_number": 42,
+            "branch": "feature/os-status-bar"
+        },
+        "title": "Add global OS status bar and Research Brief intake wiring",
+        "summary": "Implements a global status strip (Mode, Scanner, Version) and connects the Research Brief Intake to the workspace prototype.",
+        "status": "in_progress",
+        "metrics": {
+            "checks_status": "passing",
+            "tests_passed": 128,
+            "coverage_delta": 0.012
+        },
+        "started_at": "2025-12-28T18:00:00Z",
+        "ended_at": null
+    },
+    {
+        "id": "does-this-feel-right-pr-41",
+        "project_id": "does-this-feel-right",
+        "type": "pull_request",
+        "github_ref": {
+            "pr_number": 41,
+            "branch": "refactor/click-interactions"
+        },
+        "title": "Refactor Click Interactions for Mobile",
+        "summary": "Unified touch/click handlers for the 3D studio view.",
+        "status": "merged",
+        "metrics": {
+            "checks_status": "passing",
+            "tests_passed": 120,
+            "coverage_delta": 0.0
+        },
+        "started_at": "2025-12-27T10:00:00Z",
+        "ended_at": "2025-12-28T09:00:00Z"
+    }
+]

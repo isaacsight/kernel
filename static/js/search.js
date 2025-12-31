@@ -73,6 +73,21 @@ const Search = {
                 return;
             }
 
+            // Smart routing: Detect if query is conversational vs keyword search
+            const isConversational = /^(what|how|why|when|where|who|can|should|tell me|explain|describe)/i.test(query) ||
+                query.includes('?') ||
+                query.split(' ').length > 5;
+
+            if (isConversational && window.dtfrCopilot) {
+                // Close search overlay and open Copilot
+                searchOverlay.style.display = 'none';
+                document.body.style.overflow = '';
+                window.dtfrCopilot.openWithQuery(query);
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+                return;
+            }
+
             if (!Search.index) {
                 return;
             }

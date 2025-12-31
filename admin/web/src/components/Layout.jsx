@@ -9,6 +9,7 @@ const Layout = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navItems = [
+        { id: 'sovereign', icon: MessageSquare, path: '/chat', label: 'The Sovereign' },
         { id: 'cockpit', icon: Activity, path: '/neurallink', label: 'Neural Link' },
         { id: 'galaxy', icon: Network, path: '/galaxy', label: 'Neural Web' },
         { id: 'legacy', icon: LayoutGrid, path: '/legacy-dashboard', label: 'Monitoring' },

@@ -23,8 +23,8 @@ const ChatInterface = () => {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             // Use port 8001 directly for debugging if proxy fails, 
             // but let's try the proxied version first with better logging.
-            const wsUrl = `${protocol}//${window.location.host}/ws/client`;
-            console.log('Connecting to WebSocket:', wsUrl);
+            const wsUrl = `${protocol}//${window.location.host}/ws/chat`;
+            console.log('Connecting to Sovereign WebSocket:', wsUrl);
 
             const socket = new WebSocket(wsUrl);
             ws.current = socket;
@@ -39,47 +39,55 @@ const ChatInterface = () => {
                 try {
                     const data = JSON.parse(event.data);
 
-                    if (data.type === 'response_done') {
-                        setLoading(false);
-                        return;
-                    }
-
-                    if (data.type === 'reasoning_chunk') {
-                        const content = data.content;
+                    if (data.type === 'status') {
                         setMessages(prev => {
                             const lastMsg = prev[prev.length - 1];
                             if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
                                 return [
                                     ...prev.slice(0, -1),
-                                    {
-                                        ...lastMsg,
-                                        reasoning: (lastMsg.reasoning || '') + content
-                                    }
+                                    { ...lastMsg, status: data.content }
                                 ];
                             } else {
-                                return [...prev, { role: 'assistant', content: '', reasoning: content, isStreaming: true }];
+                                return [...prev, { role: 'assistant', content: '', status: data.content, isStreaming: true }];
                             }
                         });
                         return;
                     }
 
-                    if (data.type === 'response_chunk' || data.type === 'assistant_response' || data.type === 'user_message') {
-                        const content = data.content;
-                        const role = (data.type === 'user_message') ? 'user' : 'assistant';
-
-                        if (data.type === 'user_message' && data.source === 'web') return;
-
+                    if (data.type === 'thought') {
                         setMessages(prev => {
                             const lastMsg = prev[prev.length - 1];
-                            if (lastMsg && lastMsg.role === role && lastMsg.isStreaming) {
+                            if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
                                 return [
                                     ...prev.slice(0, -1),
-                                    { ...lastMsg, content: lastMsg.content + content }
+                                    { ...lastMsg, reasoning: (lastMsg.reasoning || '') + data.content + '\n' }
                                 ];
                             } else {
-                                return [...prev, { role, content, isStreaming: role === 'assistant' }];
+                                return [...prev, { role: 'assistant', content: '', reasoning: data.content, isStreaming: true }];
                             }
                         });
+                        return;
+                    }
+
+                    if (data.type === 'result') {
+                        setMessages(prev => {
+                            const lastMsg = prev[prev.length - 1];
+                            if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
+                                return [
+                                    ...prev.slice(0, -1),
+                                    { ...lastMsg, content: data.content, isStreaming: false }
+                                ];
+                            } else {
+                                return [...prev, { role: 'assistant', content: data.content, isStreaming: false }];
+                            }
+                        });
+                        setLoading(false);
+                        return;
+                    }
+
+                    if (data.type === 'done') {
+                        setLoading(false);
+                        return;
                     }
                 } catch (e) {
                     const text = event.data;
@@ -161,9 +169,9 @@ const ChatInterface = () => {
                                 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-white/10 group hover:border-primary/40 transition-colors shadow-2xl shadow-primary/5">
                                     <Sparkles size={32} className="text-white/20 group-hover:text-primary transition-colors duration-500" />
                                 </div>
-                                <h1 className="text-4xl font-semibold tracking-tight text-white mb-4">Hi Isaac</h1>
+                                <h1 className="text-4xl font-semibold tracking-tight text-white mb-4">The Sovereign</h1>
                                 <p className="text-white/60 text-lg font-medium max-w-sm">
-                                    Studio OS is ready to build, analyze, and deploy agentic systems.
+                                    Direct communication channel with Studio OS Collective Intelligence.
                                 </p>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-12 w-full">
@@ -209,7 +217,7 @@ const ChatInterface = () => {
                                         </div>
                                         <div className="flex-1 space-y-2">
                                             <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
-                                                {msg.role === 'assistant' ? 'Studio AI' : 'Isaac'}
+                                                {msg.role === 'assistant' ? 'The Sovereign' : 'Isaac'}
                                             </div>
 
                                             {msg.reasoning && (
@@ -219,8 +227,8 @@ const ChatInterface = () => {
                                                     className="text-[14px] leading-relaxed text-white/50 border-l-2 border-white/10 pl-4 py-2 my-4 bg-white/[0.02] rounded-r-lg italic"
                                                 >
                                                     <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold mb-2 opacity-40">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500/50 animate-pulse" />
-                                                        Socratic Mirror Reasoning
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-primary/50 animate-pulse" />
+                                                        Recursive Reasoning: Pass {msg.pass || 'Trace'}
                                                     </div>
                                                     {msg.reasoning}
                                                 </motion.div>

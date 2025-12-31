@@ -1,303 +1,104 @@
-# Does This Feel Right?
+# Studio OS: The Open Source Model
 
-A modern, static blog built with Python featuring AI-powered content generation, terminal-based admin interface, and automated deployment.
-
-[![Build Status](https://github.com/isaachernandez/blog-design/workflows/Build%20and%20Deploy/badge.svg)](https://github.com/isaachernandez/blog-design/actions)
-[![Security Scan](https://github.com/isaachernandez/blog-design/workflows/Security%20Scan/badge.svg)](https://github.com/isaachernandez/blog-design/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://github.com/isaacsight/does-this-feel-right-/workflows/Build%20and%20Deploy/badge.svg)](https://github.com/isaacsight/does-this-feel-right-/actions)
 
-🌐 **Live Site**: [doesthisfeelright.com](https://www.doesthisfeelright.com)
+> **This entire site is an open-source, forkable "model" that anyone can clone, adapt, and extend.**
 
-## Features
+**Studio OS** is more than a static site generator—it is a reference implementation of an **Agentic System** designed for high-leverage creative work. It includes the architecture, patterns, and workflows needed to run your own "Sovereign Studio".
 
-- 📝 **Static Site Generation**: Custom Python build system for blazing-fast sites
-- 🤖 **AI Content Generation**: Integrated Gemini, OpenAI, and Anthropic APIs
-- 💻 **TUI Admin Dashboard**: Beautiful terminal interface with Textual
-- 🔒 **Security First**: Automated security scanning and secrets management
-- ✅ **Tested**: Comprehensive test suite with >80% coverage
-- 🚀 **Automated Deployment**: GitHub Actions CI/CD to GitHub Pages
-- 🎨 **SEO Optimized**: JSON-LD, sitemaps, RSS feeds, and meta tags
-- 🏛️ **Studio OS Control Center**: Agentic council driven by a unified doctrine and sovereign rules.
-- 🔓 **Open Source**: Built as an open source platform for the community.
+Use this repository as a base for your own studio, lab, or personal agentic platform.
 
-## Open Source
+🌐 **Live Reference**: [doesthisfeelright.com](https://www.doesthisfeelright.com)
 
-This project is an open source platform. We welcome contributions from the community! Whether you want to fix a bug, suggest a feature, or improve the documentation, please check out our [Contributing Guidelines](CONTRIBUTING.md).
+---
 
-Licensed under the [MIT License](LICENSE).
+## 📂 Project Structure
 
+This repository acts as a monorepo for your studio's brain and body.
 
+- **`/site`**: The reference implementation (this blog). A Python-based static site generator optimized for AI content pipelines.
+- **`/patterns`**: Reusable agentic patterns (e.g., "The Alchemist" for content repurposing, "The Architect" for system design).
+- **`/agents`**: The "Staff" of your studio. Python-based agents that operate on your content and code.
+- **`/workflows`**: Operational loops (e.g., n8n blueprints, GitHub Actions) that tie everything together.
 
-## System Architecture
+*(Note: Some of these folders are currently virtual or integrated into `admin/` and `content/` in this reference implementation, but the pattern stands.)*
 
-The "IanSight" System operates as a dual-layer architecture: a **Public Presence** (FastAPI) and a **Private Studio** (Flask Admin).
+## 🚀 How to Fork This Studio
 
-[View Live System Architecture](https://www.doesthisfeelright.com/architecture.html)
+You can spin up your own instance of Studio OS in minutes.
 
-```mermaid
-graph TD
-    subgraph public_zone ["Public Zone (Port 8000)"]
-        Server["FastAPI Server"] --> Docs["Static Site"]
-        Server --> FrontEnd["Frontend SPA"]
-        Server --> WS_Chat["WebSocket (Chat)"]
-    end
-
-    subgraph studio_zone ["Studio Zone (Admin Port 5001)"]
-        AdminApp["Flask Admin App"] --> AdminCore["Admin Core"]
-        Builder["Build Script"] --> Architect
-        AdminCore --> Brain["Brain State"]
-        
-        subgraph agents ["Engineers (Agents)"]
-            Architect
-            Alchemist["Alchemist (Content)"]
-            Broadcaster["Broadcaster (Social)"]
-            Guardian["Guardian (Safety)"]
-        end
-    end
+### 1. Clone & Rename
+```bash
+git clone https://github.com/isaacsight/does-this-feel-right-.git my-studio-os
+cd my-studio-os
 ```
 
-## Tech Stack
-
-
-**Core:**
-- Python 3.9+
-- Custom markdown-to-HTML converter
-- Frontmatter-based content management
-
-**AI Integration:**
-- Google Gemini API
-- OpenAI GPT
-- Anthropic Claude
-
-**Admin Interface:**
-- Textual (Terminal UI)
-- Supabase (optional backend)
-
-**Quality & Security:**
-- pytest (testing)
-- Black (formatting)
-- Ruff (linting)
-- Bandit (security scanning)
-- pre-commit hooks
-
-## Quick Start
-
-### Prerequisites
-
-- Python 3.9 or later
-- Git
-- API keys for AI providers (Gemini recommended)
-
-### Setup
-
+### 2. Configure Your Keys
+Copy the example environment file and add your LLM keys (Gemini, OpenAI, Anthropic).
 ```bash
-# Clone the repository
-git clone https://github.com/isaachernandez/blog-design.git
-cd blog-design
-
-# Run automated setup
-bash scripts/setup_dev.sh
-
-# Activate virtual environment
-source .venv/bin/activate
-
-# Edit .env and add your API keys
+cp .env.example .env
 nano .env
 ```
 
-### Build & Run
-
+### 3. Run the Reference Implementation
+Build the site locally to see how the pieces fit together.
 ```bash
-# Build the static site
-python build.py
-
-# Serve locally
-python -m http.server 8000 --directory docs
-# Visit http://localhost:8000
-
-78: # Or run the admin TUI
-79: python3 admin/tui.py
-80: ```
-81:
-82: ### Run n8n locally
-83: ```bash
-84: ./admin/start_n8n.sh
-85: ```
-86:
-87: ### Test n8n startup
-88: ```bash
-89: ./admin/test_n8n.sh
-90: ```
-
-
-## Development Workflow
-
-### 1. Setup Development Environment
-
-```bash
-# One-time setup
+# Setup dependencies
 bash scripts/setup_dev.sh
 source .venv/bin/activate
-```
 
-### 2. Make Changes
-
-Edit files, create content, modify code...
-
-### 3. Run Quality Checks
-
-```bash
-# Auto-format code
-black .
-
-# Lint code
-ruff check . --fix
-
-# Type checking
-mypy build.py admin/*.py
-
-# Run tests
-pytest
-
-# Or use the script
-bash scripts/run_tests.sh
-```
-
-### 4. Security Scan
-
-```bash
-# Run comprehensive security checks
-bash scripts/security_scan.sh
-```
-
-### 5. Commit
-
-Pre-commit hooks will automatically run formatting, linting, and security checks:
-
-```bash
-git add .
-git commit -m "Your commit message"
-git push
-```
-
-## Testing
-
-```bash
-# Run all tests
-pytest
-
-# With coverage report
-pytest --cov=. --cov-report=html
-
-# Run specific test file
-pytest tests/test_build.py
-
-# Or use the convenience script
-bash scripts/run_tests.sh
-```
-
-## Project Structure
-
-```
-blog-design/
-├── admin/                 # TUI admin application
-│   ├── core.py           # Core admin functionality
-│   └── tui.py            # Textual UI
-├── content/              # Markdown blog posts
-├── templates/            # HTML templates
-├── static/               # CSS, JS, images
-├── docs/                 # Built site (output)
-├── tests/                # Test suite
-├── scripts/              # Automation scripts
-├── build.py              # Static site generator
-├── requirements.txt      # Production dependencies
-├── requirements-dev.txt  # Development dependencies
-├── pyproject.toml        # Tool configuration
-└── .pre-commit-config.yaml  # Pre-commit hooks
-```
-
-## Creating Content
-
-### Via TUI (Recommended)
-
-```bash
-python3 admin/tui.py
-# Press 'n' for new post
-# Press 'g' for AI-generated post
-# Press 'p' to publish via Git
-```
-
-### Manual Creation
-
-Create a markdown file in `content/`:
-
-```markdown
----
-title: My New Post
-date: 2024-01-01
-category: Technology
-tags: python, ai, web
-excerpt: A brief description
-read_time: 5 min read
----
-
-Your content here...
-```
-
-Then rebuild:
-
-```bash
+# Build and Serve
 python build.py
+python -m http.server 8000 --directory docs
 ```
 
-## Studio OS: The Living Lab
+### 4. Deploy
+This site is designed to run on **Cloudflare Pages** or **GitHub Pages**.
+- **Build Command**: `python build.py`
+- **Output Directory**: `docs`
 
-This workspace is configured as a **Living Studio OS**. Agents operate under a strict **Sovereign Doctrine** defined in `.agent/rules/`.
+## 🛠️ The "Model" Features
 
-### 🏛️ Agent Council
-- **Global Rules**: Engraved in `.agent/rules/global-rules.md`. Defines authorship, ethics, and "feels right" heuristics.
-- **Perception Critic**: Audits visual fidelity and brand alignment.
-- **Social Swarm**: Orchestrates high-velocity content distribution.
+### 1. The Sovereign Doctrine
+Agents in this system don't just "execute"; they follow a [Doctrine](.agent/rules/global-rules.md). This ensures all generated code and content feels like *you*.
 
-### 🧪 Research & Development
-- **Artifacts**: Every agent run generates reasoning traces and verifiable plans.
-- **Model Routing**: 
-    - **Strategy**: Gemini 3 Pro
-    - **Velocity**: Gemini 3 Flash
-- **QA**: Automated testing via the Antigravity Chrome Extension.
+### 2. The Living Lab
+This isn't just a blog; it's a living system.
+- **Agent Council**: `admin/engineers/` contains the code for your virtual staff.
+- **Decision Logs**: Automated tracking of architectural decisions.
+- **Snapshotting**: The system maintains a "Studio Snapshot" to understand its own state.
 
-## AI-Assisted Development
+### 3. Open Patterns
+We explicitly mark patterns as "Stealable". Look for the **Studio Patterns** tag to find reusable architectures for:
+- 🧪 **Research**: Automated deep dives.
+- 🎨 **Design**: CSS-in-Python systems.
+- 📡 **Distribution**: "Alchemist" pipelines for viral repurposing.
 
-This project is optimized for use with AI coding tools:
+## 🤝 Contributing & License
 
-### With Cursor
+**License**: MIT. You are free to copy, fork, remix, and commercialize this OS.
 
+We welcome contributions! If you develop a new agent pattern or workflow, PR it back to the `/patterns` directory.
+
+---
+
+## Technical Details
+
+### Tech Stack
+- **Core**: Python 3.9+
+- **Static Gen**: Custom Python builder (Zero-dependency philosophy)
+- **Admin**: Textual (TUI)
+- **AI**: Google Gemini Pro (Primary), OpenAI, Anthropic
+
+### Development Actions
 ```bash
-# Open project in Cursor
-cursor .
+# Run Tests
+pytest
 
-# Use Cmd+K to chat with AI about code
-# Ask it to help implement features, fix bugs, or refactor
+# Format & Lint
+black . && ruff check . --fix
+
+# Scan Security
+bandit -r .
 ```
-
-### With Aider
-
-```bash
-  # Use the existing Aider workflow
-# See .agent/workflows/aider-quick-start.md
-
-aider build.py admin/core.py
-# Chat with AI to make changes
-```
-
-**Best Practices:**
-- Provide clear, specific instructions
-- Reference the 2025 dev guide in artifacts
-- Ask AI to follow the style in `pyproject.toml`
-- Request tests for new features
-
-## Deployment
-- Direct link to read
-- Beautiful minimal design
-
-Last updated: 2025-11-21

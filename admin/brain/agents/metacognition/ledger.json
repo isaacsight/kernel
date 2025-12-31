@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2025-12-23T10:06:45.342513",
+  "last_updated": "2025-12-30T10:33:19.468972",
   "case_studies": [
     {
       "timestamp": "2025-12-23T10:06:45.342507",
@@ -10,6 +10,81 @@
       "success": true,
       "metadata": {
         "mode": "validation"
+      }
+    },
+    {
+      "timestamp": "2025-12-28T23:25:52.514035",
+      "agent": "dtfr_loop",
+      "outcome": "COMPLETED",
+      "reasoning": "[MOCK CRITIQUE] 1. The proposal lacks specific implementation details. 2. The cost of redundancy may exceed budget.",
+      "success": true,
+      "metadata": {
+        "mission": "Mock Mission (Synthesized)",
+        "task": "Research the 'Trust vs. Correctness' thesis in agentic systems and write a 3-sentence summary to 'thesis_summary.md'.",
+        "steps_count": 1,
+        "execution_time": 0.001416921615600586
+      }
+    },
+    {
+      "timestamp": "2025-12-28T23:27:31.959713",
+      "agent": "dtfr_loop",
+      "outcome": "COMPLETED",
+      "reasoning": "[MOCK CRITIQUE] 1. The proposal lacks specific implementation details. 2. The cost of redundancy may exceed budget.",
+      "success": true,
+      "metadata": {
+        "mission": "Mock Mission (Synthesized)",
+        "task": "Research the 'Trust vs. Correctness' thesis in agentic systems and write a 3-sentence summary to 'thesis_summary.md'.",
+        "steps_count": 1,
+        "execution_time": 0.0005249977111816406
+      }
+    },
+    {
+      "timestamp": "2025-12-28T23:31:34.975790",
+      "agent": "dtfr_loop",
+      "outcome": "COMPLETED",
+      "reasoning": "[MOCK CRITIQUE] 1. The proposal lacks specific implementation details. 2. The cost of redundancy may exceed budget.",
+      "success": true,
+      "metadata": {
+        "mission": "Mock Mission (Synthesized)",
+        "task": "Research the 'Trust vs. Correctness' thesis in agentic systems and write a 3-sentence summary to 'thesis_summary.md'.",
+        "steps_count": 1,
+        "execution_time": 0.0007748603820800781
+      }
+    },
+    {
+      "timestamp": "2025-12-28T23:37:41.049744",
+      "agent": "dtfr_loop",
+      "outcome": "COMPLETED",
+      "reasoning": "[MOCK CRITIQUE] 1. The proposal lacks specific implementation details. 2. The cost of redundancy may exceed budget.",
+      "success": true,
+      "metadata": {
+        "mission": "Mock Mission (Synthesized)",
+        "task": "Research the 'Trust vs. Correctness' thesis in agentic systems and write a 3-sentence summary to 'thesis_summary.md'.",
+        "steps_count": 1,
+        "execution_time": 0.000659942626953125
+      }
+    },
+    {
+      "timestamp": "2025-12-28T23:40:13.205331",
+      "agent": "dtfr_loop",
+      "outcome": "COMPLETED",
+      "reasoning": "[MOCK CRITIQUE] 1. The proposal lacks specific implementation details. 2. The cost of redundancy may exceed budget.",
+      "success": true,
+      "metadata": {
+        "mission": "Mock Mission (Synthesized)",
+        "task": "Research the 'Trust vs. Correctness' thesis in agentic systems and write a 3-sentence summary to 'thesis_summary.md'.",
+        "steps_count": 1,
+        "execution_time": 0.0009989738464355469
+      }
+    },
+    {
+      "timestamp": "2025-12-30T10:33:19.468961",
+      "agent": "The Sovereign",
+      "outcome": "Research Session: Should we adopt a 'Cognitive Governance' model for the DTFR Research IDE?",
+      "reasoning": "Persistent session saved to manager.",
+      "success": true,
+      "metadata": {
+        "session_id": "session_20251230_103319"
       }
     }
   ],

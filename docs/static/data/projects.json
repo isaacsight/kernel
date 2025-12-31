@@ -1,0 +1,31 @@
+[
+    {
+        "id": "does-this-feel-right",
+        "name": "Does This Feel Right?",
+        "description": "DTFR Cognitive OS – reference architectures and a forkable stack for agentic systems.",
+        "github_repo": "isaacsight/does-this-feel-right-",
+        "status": "Active",
+        "context_pack": {
+            "active_thread": "thread-001",
+            "related_docs": [
+                "admin/doctrine.md"
+            ]
+        },
+        "tech_stack": [
+            "Python",
+            "HTML/CSS",
+            "Digital Ocean"
+        ],
+        "tags": [
+            "agentic-systems",
+            "cognitive-os"
+        ],
+        "default_branch": "main",
+        "milestones": [
+            1,
+            2
+        ],
+        "created_at": "2025-01-10T00:00:00Z",
+        "updated_at": "2025-12-30T19:59:00Z"
+    }
+]

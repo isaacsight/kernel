@@ -67,6 +67,9 @@
     --container-lg: 1024px;
     --container-xl: 1400px;
 
+    /* Mobile Polish Check */
+    --container-fluid: 92%;
+
     /* Radius - Softened Industrial */
     --radius-sm: 8px;
     --radius-md: 16px;
@@ -152,10 +155,66 @@ body {
     0%,
     100% {
         box-shadow: 0 0 0 rgba(102, 181, 110, 0);
+        opacity: 1;
     }
 
     50% {
-        box-shadow: 0 0 20px rgba(102, 181, 110, 0.3);
+        box-shadow: 0 0 10px rgba(102, 181, 110, 0.3);
+        opacity: 0.8;
+    }
+}
+
+.status-pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.status-pulse.green {
+    background-color: var(--accent-primary);
+    box-shadow: 0 0 5px rgba(102, 181, 110, 0.4);
+}
+
+.status-pulse.blue {
+    background-color: #60A5FA;
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.4);
+    animation-name: pulse-glow-blue;
+}
+
+.status-pulse.yellow {
+    background-color: #FBBF24;
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.4);
+    animation-name: pulse-glow-yellow;
+}
+
+@keyframes pulse-glow-blue {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(96, 165, 250, 0);
+        opacity: 1;
+    }
+
+    50% {
+        box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse-glow-yellow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(251, 191, 36, 0);
+        opacity: 1;
+    }
+
+    50% {
+        box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        opacity: 0.8;
     }
 }
 
@@ -673,9 +732,155 @@ a:hover {
 .sidebar-nav-items {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
     align-items: center;
+}
+
+.nav-section-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-tertiary);
+    margin: 12px 0 4px 0;
+    font-weight: 800;
+    opacity: 0.4;
+    user-select: none;
+}
+
+/* Research Request Panel Styles */
+.research-request-container {
+    max-width: var(--container-md);
+    margin: var(--space-8) auto;
+    padding: var(--space-6);
+}
+
+.panel-header {
+    margin-bottom: var(--space-4);
+    text-align: left;
+}
+
+.panel-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-2);
+}
+
+.panel-title {
+    font-size: var(--text-2xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.panel-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.research-form-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-emphasis);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.research-form-card:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: var(--accent-glow);
+}
+
+.form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-3);
+}
+
+.textarea-wrapper {
+    position: relative;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.research-textarea {
+    width: 100%;
+    min-height: 120px;
+    background: transparent;
+    border: none;
+    color: var(--text-pure);
+    padding: var(--space-4);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    resize: vertical;
+    outline: none;
+}
+
+.textarea-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-glass);
+}
+
+.btn-primary-launch {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    border: none;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary-launch:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.panel-footer-links {
+    margin-top: var(--space-4);
+    display: flex;
+    gap: var(--space-4);
+}
+
+.footer-link-secondary {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.footer-link-secondary:hover {
+    color: var(--text-primary);
+}
+
+.nav-section-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    margin: 16px 0 4px 0;
+    font-weight: 700;
+    opacity: 0.6;
 }
 
 .sidebar-item {
@@ -4502,6 +4707,7 @@ body.brand-page::-webkit-scrollbar-thumb {
     border-radius: 5px;
     border: 2px solid var(--bg-primary);
 }
+
 /* ============================================
    FRONT-END FRONTIERS (Research Horizons)
    ============================================ */

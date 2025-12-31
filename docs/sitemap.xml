@@ -26,6 +26,13 @@
         </url>
         
         <url>
+            <loc>https://www.doesthisfeelright.com/posts/2026-autonomous-compiler.html</loc>
+            <lastmod>2025-12-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+        
+        <url>
             <loc>https://www.doesthisfeelright.com/posts/2025-12-28-ai-llmops-crash-course-part-2.html</loc>
             <lastmod>2025-12-28</lastmod>
             <changefreq>monthly</changefreq>
@@ -75,7 +82,7 @@
         </url>
         
         <url>
-            <loc>https://www.doesthisfeelright.com/posts/studio-os-whitepaper.html</loc>
+            <loc>https://www.doesthisfeelright.com/posts/cognitive-os-whitepaper.html</loc>
             <lastmod>2025-12-25</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>

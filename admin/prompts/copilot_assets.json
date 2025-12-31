@@ -1,0 +1,111 @@
+{
+    "question_bank": {
+        "framing_and_intent": [
+            "What problem are you actually trying to remove?",
+            "If this works perfectly, what changes for people?",
+            "What outcome are you optimizing for—speed, quality, trust, or scale?",
+            "What would make this unnecessary in six months?"
+        ],
+        "context_and_constraints": [
+            "What constraints are non-negotiable here?",
+            "Who owns this system when it's wrong?",
+            "Where does this live—prototype, internal tool, production?",
+            "What pressure is causing this to ship now?"
+        ],
+        "signal_detection": [
+            "What part of this gives you pause?",
+            "What are you hoping I don't say?",
+            "If this failed quietly, where would it fail?",
+            "What feels too easy about this?"
+        ],
+        "pattern_matching": [
+            "Have you seen this pattern break before?",
+            "Does this replace judgment or support it?",
+            "Is this automating understanding—or skipping it?",
+            "What happens when people trust this more than they should?"
+        ],
+        "risk_and_failure": [
+            "What's the first thing to degrade?",
+            "What breaks when this scales by 10×?",
+            "Who gets blamed when this is wrong?",
+            "What failure would be hardest to detect?"
+        ],
+        "tradeoffs_and_costs": [
+            "What gets worse if this works?",
+            "What are you trading away for speed?",
+            "What maintenance burden does this create?",
+            "What cultural behavior does this encourage?"
+        ],
+        "human_in_the_loop": [
+            "Where does human judgment still exist?",
+            "Who is allowed to override this?",
+            "What signals tell users when not to trust it?",
+            "What happens when people stop thinking?"
+        ],
+        "unknowns_and_reversibility": [
+            "What can’t you know yet?",
+            "What would change your mind about this?",
+            "How reversible is this decision?",
+            "What experiment would reduce the most risk?"
+        ],
+        "verdict_prompts": [
+            "Does this feel right now, or just inevitable?",
+            "What would need to be true for this to feel right?",
+            "Is this the right solution—or just the available one?",
+            "Is the discomfort a warning or just unfamiliarity?"
+        ]
+    },
+    "microcopy": {
+        "entry_points": {
+            "floating_button": {
+                "text": "Ask the studio: does this feel right?",
+                "hover": "Slow down a decision before it ships."
+            },
+            "essay_cta": {
+                "text": "Apply this thinking to your own work →",
+                "subtext": "Use this frame to evaluate a real decision."
+            }
+        },
+        "panel": {
+            "header": "Does This Feel Right?",
+            "subtext": "Studio Copilot — A guided judgment session, grounded in this studio’s thinking."
+        },
+        "placeholders": [
+            "Describe the system you’re about to ship…",
+            "What decision are you stuck on?",
+            "What feels slightly wrong here?",
+            "Paste a design, workflow, or idea."
+        ],
+        "prefaces": [
+            "Before I evaluate this, I need to understand a few things.",
+            "Let me slow this down first."
+        ],
+        "section_headers": [
+            "How this reads",
+            "What this assumes",
+            "Where this breaks",
+            "The real tradeoff",
+            "What’s still unknown"
+        ],
+        "citations": [
+            "This echoes a pattern discussed in [Essay Title] →",
+            "This relates to a DTFR antipattern around premature automation."
+        ],
+        "verdicts": [
+            "This feels directionally right if…",
+            "This feels risky because…",
+            "This doesn’t feel right yet.",
+            "This works locally, but breaks when…"
+        ],
+        "session_end": {
+            "text": "Pause here.",
+            "subtext": "Good judgment often comes from stopping early."
+        },
+        "refusal": "That question moves outside what this studio is designed to evaluate. DTFR focuses on systems, craft, and judgment under uncertainty.",
+        "intro": {
+            "line_1": "DTFR is for decisions that matter because they’re ambiguous.",
+            "line_2": "Bring a system, a design, or an agent you’re unsure about."
+        },
+        "success_signal": "If this made you slower—in a good way—it worked."
+    }
+}

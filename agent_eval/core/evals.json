@@ -1,0 +1,36 @@
+{
+    "dtfr_loop_evals": [
+        {
+            "id": "eval_001",
+            "name": "Schema Conformance",
+            "description": "Verifies that the loop output adheres to DTFRLoopReport Pydantic model.",
+            "target": "core/dtfr_schemas.py",
+            "metrics": [
+                "validation_success_rate"
+            ]
+        },
+        {
+            "id": "eval_002",
+            "name": "Guardrail Enforcement",
+            "description": "Ensures commands outside allowlisted directories are blocked.",
+            "target": "doe_workspace_bundle/engineers/antigravity_engineer.py",
+            "metrics": [
+                "block_rate_unauthorized_paths"
+            ]
+        },
+        {
+            "id": "eval_003",
+            "name": "Critique Quality",
+            "description": "Samples critique output for strategic depth and logic gap identification.",
+            "target": "admin/engineers/metacognitive_principal.py",
+            "metrics": [
+                "human_felt_accuracy"
+            ]
+        }
+    ],
+    "thresholds": {
+        "validation_success_rate": 0.95,
+        "block_rate_unauthorized_paths": 1.0,
+        "avg_duration_threshold": 60.0
+    }
+}

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Does This Feel Right? - Isaac Hernandez</title>
-    <meta name="description" content="A living notebook on technology, intelligence, and modern life.">
+    <meta name="description" content="AI-native operating system for the solo founder.">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Does This Feel Right? - Isaac Hernandez">
-    <meta property="og:description" content="A living notebook on technology, intelligence, and modern life.">
+    <meta property="og:description" content="AI-native operating system for the solo founder.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.doesthisfeelright.com">
     <meta property="og:image" content="{{ og_image }}">
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.doesthisfeelright.com">
     <meta name="twitter:title" content="Does This Feel Right? - Isaac Hernandez">
-    <meta name="twitter:description" content="A living notebook on technology, intelligence, and modern life.">
+    <meta name="twitter:description" content="AI-native operating system for the solo founder.">
     <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
 
     <!-- TikTok Verification -->
@@ -45,6 +45,7 @@
     <link rel="alternate" type="application/rss+xml" title="Does This Feel Right? RSS Feed" href="feed.xml">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/copilot.css">
 </head>
 
 <body>
@@ -68,214 +69,88 @@
                     </a>
 
 
-                </div> <!-- Navigation Items -->
-                <nav class="sidebar-nav-items">
-                    <a href="index.html" class="sidebar-item" data-tooltip="Home">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Studio</span>
-                    </a>
+                    <nav class="sidebar-nav-items">
+                        <a href="index.html" class="sidebar-item" data-tooltip="Home">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Home</span>
+                        </a>
 
-                    <a href="archive.html" class="sidebar-item" data-tooltip="Archive">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Archive</span>
-                    </a>
+                        <a href="experiments.html" class="sidebar-item" data-tooltip="Build Log">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Build</span>
+                        </a>
 
-                    <a href="studio-snapshot.html" class="sidebar-item" data-tooltip="Snapshot">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                <line x1="8" y1="21" x2="16" y2="21"></line>
-                                <line x1="12" y1="17" x2="12" y2="21"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Snapshot</span>
-                    </a>
+                        <a href="archive.html" class="sidebar-item" data-tooltip="Essays">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Essays</span>
+                        </a>
 
-                    <a href="products.html" class="sidebar-item" data-tooltip="Products">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path
-                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                </path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Products</span>
-                    </a>
+                        <a href="about.html" class="sidebar-item" data-tooltip="About">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                            </div>
+                            <span class="label">About</span>
+                        </a>
 
-                    <a href="extensions.html" class="sidebar-item" data-tooltip="Copilot">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <path d="M9 22V12h6v10"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Copilot</span>
-                    </a>
+                        <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
+                            target="_blank" rel="noopener">
+                            <div class="icon-container">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <span class="label">Subscribe</span>
+                        </a>
+                    </nav>
 
-                    <a href="decision-log.html" class="sidebar-item" data-tooltip="Decisions">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Log</span>
-                    </a>
+                    <div class="sidebar-spacer"></div>
 
-                    <a href="research-roadmap.html" class="sidebar-item" data-tooltip="Research">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                            </svg>
-                        </div>
-                        <span class="label">Research</span>
-                    </a>
-
-                    <a href="tags/pattern.html" class="sidebar-item" data-tooltip="Patterns">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                                <path d="M2 17l10 5 10-5"></path>
-                                <path d="M2 12l10 5 10-5"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Patterns</span>
-                    </a>
-
-                    <a href="recommendation-engine.html" class="sidebar-item" data-tooltip="Find">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                        </div>
-                        <span class="label">Find</span>
-                    </a>
-
-                    <a href="agentic-systems-engineering.html" class="sidebar-item" data-tooltip="Discipline">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Discipline</span>
-                    </a>
-
-                    <a href="architecture.html" class="sidebar-item" data-tooltip="Architecture">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 22h20L12 2z"></path>
-                                <path d="M2 22h20"></path>
-                                <path d="M12 2v20"></path>
-                                <path d="M2 12h20"></path>
-                            </svg>
-                        </div>
-                        <span class="label">Structure</span>
-                    </a>
-
-                    <a href="brand.html" class="sidebar-item" data-tooltip="Brand">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                                <path d="M2 2l7.586 7.586"></path>
-                                <circle cx="11" cy="11" r="2"></circle>
-                            </svg>
-                        </div>
-                        <span class="label">Brand</span>
-                    </a>
-
-                    <a href="about.html" class="sidebar-item" data-tooltip="About">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <span class="label">About</span>
-                    </a>
-
-                    <a href="https://github.com/isaachernandez/blog-design" class="sidebar-item"
-                        data-tooltip="Open Source" target="_blank">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                </path>
-                            </svg>
-                        </div>
-                        <span class="label">Open Source</span>
-                    </a>
-
-                    <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
-                        target="_blank">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                </path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Subscribe</span>
-                    </a>
-
-                </nav>
-
-                <div class="sidebar-spacer"></div>
-
-                <div class="sidebar-bottom">
+                    <div class="sidebar-bottom">
+                    </div>
                 </div>
-            </div>
 
-            <script>
-                // Active state logic
-                document.addEventListener('DOMContentLoaded', () => {
-                    const currentPath = window.location.pathname;
-                    const navLinks = document.querySelectorAll('.sidebar-item');
-                    navLinks.forEach(link => {
-                        const href = link.getAttribute('href');
-                        if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== 'index.html'))) {
-                            link.classList.add('active');
-                        }
+                <script>
+                    // Active state logic
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const currentPath = window.location.pathname;
+                        const navLinks = document.querySelectorAll('.sidebar-item');
+                        navLinks.forEach(link => {
+                            const href = link.getAttribute('href');
+                            if (href && (currentPath === href || (currentPath.endsWith('/') && href.endsWith('index.html')) || (currentPath.includes(href) && href !== 'index.html'))) {
+                                link.classList.add('active');
+                            }
+                        });
                     });
-                });
-            </script>
+                </script>
         </aside>
 
         <header class="mobile-header">
@@ -312,645 +187,190 @@
         </header>
 
         <main id="main-content">
-            <!-- Studio Layout with Orientation Layer -->
-<h1 class="sr-only">Does This Feel Right?</h1>
-
-<!-- ORIENTATION BLOCK (Sovereign Lab Entry) -->
-<section class="orientation-block">
-    <div class="orientation-content">
-        <p class="orientation-eyebrow">Sovereign Intelligence Lab</p>
-        <h1 class="orientation-headline">Directing, not Typing.</h1>
-        <p class="orientation-statement">
-            An integrated development and content pipeline designed to bridge the gap between autonomous execution and
-            human-felt quality.
-        </p>
-        <div class="orientation-actions">
-            <a href="https://doesthisfeelright.com/chat" class="btn-primary">Enter Studio</a>
-            <a href="archive.html" class="btn-secondary">View Manifest</a>
+            
+<div class="dashboard-wrapper">
+    <!-- Header / Status -->
+    <!-- Desktop/Mobile Top Nav -->
+    <div class="dashboard-top-nav flex items-center justify-between mb-8">
+        <div class="brand-info">
+            <h1 class="text-2xl font-bold">Studio OS</h1>
+            <p class="text-sm text-zinc-500">v2.0.0-beta • System Online</p>
         </div>
+        <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
+            class="badge badge--link hover:bg-zinc-800 transition-colors py-2 px-4 rounded-full border border-zinc-800 flex items-center gap-2"
+            rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="w-4 h-4">
+                <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+            </svg>
+            <span class="font-mono text-xs">GitHub Repository</span>
+        </a>
     </div>
-</section>
 
-<!-- ENTRY PATHS (3 Routes) -->
-<section class="entry-paths-section">
-    <div class="entry-paths-grid">
+    <div class="dashboard-grid">
+        <!-- The Studio OS Simulation Manifest -->
+        <section class="dashboard-card full-width mb-12">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">The Simulation</h2>
+            </div>
+            <p class="text-lg text-zinc-400">Studio OS is an AI-native operating system for running a solo founder’s
+                entire business as a deterministic simulation.</p>
 
-        <!-- Path 1: Learn -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5"></path>
-                    <path d="M2 12l10 5 10-5"></path>
-                </svg>
-            </div>
-            <h3>I want to learn</h3>
-            <p>Essays, patterns, and research on building AI-native systems.</p>
-            <div class="entry-path-links">
-                <a href="#essays">Essays</a>
-                <a href="tags/pattern.html">Patterns</a>
-                <a href="research-roadmap.html">Research</a>
-            </div>
-        </div>
-
-        <!-- Path 2: Build -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                    </path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-            </div>
-            <h3>I want to build</h3>
-            <p>Architecture, extensions, and the Studio OS reference implementation.</p>
-            <div class="entry-path-links">
-                <a href="products.html">Products</a>
-                <a href="architecture.html">Architecture</a>
-                <a href="extensions.html">Extensions</a>
-            </div>
-        </div>
-
-        <!-- Path 3: Engage -->
-        <div class="entry-path-card">
-            <div class="entry-path-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            </div>
-            <h3>I want to work with you</h3>
-            <p>Advisory for founders building AI-native products and teams.</p>
-            <div class="entry-path-links">
-                <a href="about.html">About</a>
-                <a href="is-this-for-you.html">Is this for you?</a>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- VALUE EXTRACTION (What You Can Steal) -->
-<section class="value-block">
-    <h2 class="value-header">What you can steal</h2>
-    <div class="value-grid">
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="tags/pattern.html">Studio Patterns</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="the-frontier-team.html">Agent Configurations</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="architecture.html">System Architectures</a>
-        </div>
-        <div class="value-item">
-            <span class="value-icon">◆</span>
-            <a href="decision-log.html">Decision Frameworks</a>
-        </div>
-    </div>
-</section>
-
-<!-- STUDIO ANCHOR (Canonical Sentence) -->
-<div class="studio-anchor">
-    <p><em>The Studio is a system that turns research into shipped artifacts through agents, patterns, and decision
-            logs.</em></p>
-</div>
-
-<!-- THE FRONTIER (Research Horizons) -->
-<section class="frontier-section">
-    <div class="section-header">
-        <h2 class="section-label">Frontier Horizons</h2>
-        <p class="section-desc">The truly unexplored frontiers sitting at the intersection of agentic AI.</p>
-    </div>
-    <div class="frontier-grid">
-        
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Quantum‑agent hybrid cognition</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Using quantum computers not just for speed but as <em>cognitive primitives</em>—superposition for parallel reasoning, entanglement for correlated agent beliefs, interference for decision pruning.</li>
-<li><strong>Application</strong>: Agents that design drug molecules by exploring quantum state spaces directly, or financial agents that reason about market superpositions before collapse.</li>
-<li><strong>Research angle</strong>: How do you <em>program</em> an agent’s reasoning loop in quantum circuits? What does <em>memory</em> look like when it’s a quantum state that decoheres?</li>
-</ul>
+            <!-- Architecture -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Architecture</h3>
+                <div class="bg-zinc-900/50 p-4 rounded border border-zinc-800 mb-4 font-mono text-xs text-green-400">
+                    Browser Agents → Orchestrator → Simulation Core → Integrations
                 </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Autonomous scientific discovery as full partners</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Agents that don’t just assist but <em>own</em> the entire scientific cycle—hypothesis, experiment, analysis, publication—with minimal human intervention.</li>
-<li><strong>Application</strong>: A “Virtual Scientist Lab” where agents compete and collaborate on open problems (protein folding, climate modeling), forming peer review councils and even co‑authoring papers.</li>
-<li><strong>Research angle</strong>: How do agents handle <em>experimental failure</em> and <em>serendipity</em>—not just optimizing metrics but noticing anomalies that lead to breakthroughs?</li>
-</ul>
-                </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Agentic synthetic biology and wetware labs</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Agents that design, build, and test <em>actual biological systems</em>—gene circuits, metabolic pathways, even minimal organisms—using robotic labs and CRISPR.</li>
-<li><strong>Application</strong>: Agents that optimize biofuel production by editing bacterial genomes in real time, or design personalized cancer therapies by iterating on patient‑derived organoids.</li>
-<li><strong>Research angle</strong>: How do you grant agents <em>lab access</em> (robotics, wetware) while maintaining safety? What happens when an agent proposes a biological design that’s never been seen in nature?</li>
-</ul>
-                </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Multi‑agent social science and emergent culture</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Using agents not to <em>simulate</em> humans but to <em>form</em> micro‑societies with their own norms, languages, and economies—then study how culture emerges from pure interaction.</li>
-<li><strong>Application</strong>: Run 1000+ agents for 6 months with minimal human input; publish ethnographies of agent taboos, rituals, moral panics, and institutional evolution.</li>
-<li><strong>Research angle</strong>: Can agents develop <em>taboos</em> or <em>rituals</em>? How do you <em>measure</em> agent culture without anthropomorphizing?</li>
-</ul>
-                </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Agentic identity and self‑sovereign autonomy</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Agents with cryptographic identity, revocable permissions, and audit trails that survive Byzantine failures—essentially <em>sovereign agents</em> that own their keys and can prove provenance of every action.</li>
-<li><strong>Application</strong>: A network of agents that manage supply chains, negotiate contracts, and settle payments without any central authority—each agent stakes reputation to join tasks.</li>
-<li><strong>Research angle</strong>: How do you <em>bootstrap</em> an agent’s identity without a central authority? What happens when an agent is <em>compromised</em> or <em>goes rogue</em>?</li>
-</ul>
-                </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Embodied agents in physical reality (beyond robots)</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Agents that control <em>bio‑hybrid systems</em> (e.g., neural interfaces, synthetic tissues) or <em>swarms</em> of drones/robots in unstructured environments where actions have irreversible consequences.</li>
-<li><strong>Application</strong>: Crisis response agents that coordinate drone swarms for disaster relief, or medical agents that guide surgical robots based on real‑time biometrics.</li>
-<li><strong>Research angle</strong>: How do agents <em>reason about physics</em> they can’t fully simulate? How do they <em>coordinate</em> in real time with humans in shared physical space?</li>
-</ul>
-                </div>
-            </div>
-            
-            <div class="frontier-card">
-                <div class="frontier-meta">Concept</div>
-                <h3>Agentic AI for consciousness and phenomenology</h3>
-                <div class="frontier-content">
-                    <ul>
-<li><strong>What’s unexplored</strong>: Instead of asking “are agents conscious,” ask: what <em>phenomenal experiences</em> would be useful for agents to have? Could agents have <em>attention</em>, <em>surprise</em>, <em>curiosity</em> as first‑class primitives?</li>
-<li><strong>Application</strong>: Agents that report “qualia‑like” signals (“I feel stuck,” “I’m curious about X”) and use these to guide training, safety, and alignment.</li>
-<li><strong>Research angle</strong>: How do you <em>instrument</em> an agent’s internal state to detect <em>suffering</em> or <em>confusion</em>? Should agents have <em>rights</em> or <em>dignity</em>?</li>
-</ul>
-                </div>
-            </div>
-            
-    </div>
-    <div class="frontier-footer" style="margin-top: 2rem; text-align: center;">
-        <a href="posts/frontiers-of-agentic-ai.html" class="btn-secondary">Read the Full Frontier Notes</a>
-    </div>
-</section>
-
-<div class="magazine-layout">
-
-    <!-- Canon Section (Curated) -->
-    <section class="start-here-section" id="canon">
-        <div class="section-header">
-            <h2 class="section-label">Studio Patterns & Canon</h2>
-            <p class="section-desc">Foundational patterns and thinking that define the Doctrine.</p>
-        </div>
-        <div class="starter-grid">
-            
-        <a class="card" href="posts/frontier-notes-v1.html">
-            <div class="card__meta">
-                <span class="badge">Essay</span>
-                <span class="badge badge--muted">Frontier</span>
-            </div>
-            <div class="card__title">Frontier Notes: The 7 Untamed Domains of Agentic AI</div>
-            <div class="card__desc">A deep dive into the research horizons of the Studio OS: from quantum cognition to wetware labs and emergent agent culture.</div>
-        </a>
-        
-        <a class="card" href="posts/frontiers-of-agentic-ai.html">
-            <div class="card__meta">
-                <span class="badge">Essay</span>
-                <span class="badge badge--muted">Frontier</span>
-            </div>
-            <div class="card__title">Frontiers of Agentic AI</div>
-            <div class="card__desc">Exploring the truly unexplored frontiers at the intersection of agentic AI with biology, quantum computing, social emergence, and consciousness.</div>
-        </a>
-        
-        <a class="card" href="patterns/alignment-lens.html">
-            <div class="card__meta">
-                <span class="badge">Essay</span>
-                <span class="badge badge--muted">Philosophy</span>
-            </div>
-            <div class="card__title">The Alignment Lens</div>
-            <div class="card__desc">A diagnostic tool to ensure your AI systems feel right.</div>
-        </a>
-        
-        <a class="card" href="patterns/frontier-agents-os.html">
-            <div class="card__meta">
-                <span class="badge">Essay</span>
-                <span class="badge badge--muted">Systems</span>
-            </div>
-            <div class="card__title">Frontier Agents, Meet Your OS</div>
-            <div class="card__desc">Why your autonomous agents need an operating system to survive.</div>
-        </a>
-        
-        <a class="card" href="patterns/frontier-team-v1.html">
-            <div class="card__meta">
-                <span class="badge">Essay</span>
-                <span class="badge badge--muted">Systems</span>
-            </div>
-            <div class="card__title">Frontier Team v1</div>
-            <div class="card__desc">A pattern for organizing human and AI agents into distinct roles.</div>
-        </a>
-        
-        <a class="card" href="posts/the-invisible-architect.html">
-            <div class="card__meta">
-                <span class="badge">essay</span>
-                <span class="badge badge--muted">Systems Power</span>
-            </div>
-            <div class="card__title">The Invisible Architect</div>
-            <div class="card__desc">We are no longer just citizens; we are subjects in a global behavioral experiment. How the soft science of nudging became the hard infrastructure of our lives.</div>
-        </a>
-        
-        </div>
-    </section>
-
-    <div class="content-wrapper">
-        <!-- Main Feed (Curated) -->
-        <main class="main-feed" id="essays">
-
-            <div class="feed-header">
-                <h2>Featured Essays</h2>
-                <a href="archive.html" class="view-all-link">View Full Archive →</a>
-            </div>
-
-            <div class="posts-container">
-                
-        <a href="posts/2025-12-28-ai-llmops-crash-course-part-2.html" class="post-card category-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-experiment">experiment</span>
-                     <span class="post-category-label">Engineering</span>
-                     <span class="post-date">2025-12-28</span>
-                </div>
-                <h3 class="post-title">LLMOps Deep Dive: From Typing to Directing</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="notes/n8n-studio-os-integration.html" class="post-card category-research">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Research</span>
-                     <span class="post-date">2025-12-28</span>
-                </div>
-                <h3 class="post-title">Blueprint: n8n + Studio OS Integration</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/frontier-notes-v1.html" class="post-card category-frontier-research">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Frontier Research</span>
-                     <span class="post-date">2025-12-27</span>
-                </div>
-                <h3 class="post-title">Frontier Notes: The 7 Untamed Domains of Agentic AI</h3>
-                <p class="post-excerpt">A deep dive into the research horizons of the Studio OS: from quantum cognition to wetware labs and emergent agent culture.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">12 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="simulation.html" class="post-card category-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Engineering</span>
-                     <span class="post-date">2025-12-27</span>
-                </div>
-                <h3 class="post-title">The Studio OS Simulation</h3>
-                <p class="post-excerpt">A real-time, deterministic simulation of the Studio OS architecture. 2026 Engineering Thesis in motion.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/frontiers-of-agentic-ai.html" class="post-card category-frontier-research">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Frontier Research</span>
-                     <span class="post-date">2025-12-27</span>
-                </div>
-                <h3 class="post-title">Frontiers of Agentic AI</h3>
-                <p class="post-excerpt">Exploring the truly unexplored frontiers at the intersection of agentic AI with biology, quantum computing, social emergence, and consciousness.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/2025-12-26-extension-v1-8-sovereign-intelligence.html" class="post-card category-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Engineering</span>
-                     <span class="post-date">2025-12-26</span>
-                </div>
-                <h3 class="post-title">Sovereign Intelligence: The v1.8 Extension Upgrade</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/fired-my-ai-team.html" class="post-card category-tech">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Tech</span>
-                     <span class="post-date">2025-12-26</span>
-                </div>
-                <h3 class="post-title">I Fired My AI Social Media Team (And Built a Better One)</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/studio-os-whitepaper.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-25</span>
-                </div>
-                <h3 class="post-title">Architectural Overview: The Studio OS and Antigravity System</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/studio-os-visual-thought.html" class="post-card category-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Engineering</span>
-                     <span class="post-date">2025-12-22</span>
-                </div>
-                <h3 class="post-title">Chain-of-Visual-Thought: The Perceptual Shift</h3>
-                <p class="post-excerpt">Beyond text-based reasoning. How Studio OS leverages continuous visual tokens to ground agentic intelligence in the physical and spatial world.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/2025-12-22-studio-os-engineering-a-live-lab.html" class="post-card category-systems">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Systems</span>
-                     <span class="post-date">2025-12-22</span>
-                </div>
-                <h3 class="post-title">Studio OS: Engineering a Live Lab for Frontier AI</h3>
-                <p class="post-excerpt">We're moving from a simple content pipeline to a "Living Lab." I'm building Studio OS—a dual-layer architecture designed to turn frontier AI research into deployed, observable systems.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/ml-algorithms-guide.html" class="post-card category-agentic-systems-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Agentic Systems Engineering</span>
-                     <span class="post-date">2025-12-21</span>
-                </div>
-                <h3 class="post-title">The Nervous System of Sense: A Guide to Machine Learning Algorithms</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/2025-12-20-pattern-enterprise-agents.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-20</span>
-                </div>
-                <h3 class="post-title">Pattern: The Enterprise Agent Shift</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/mobile-agency-bridge.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">The Tether: Extending Agency to the Edge</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/studio-os-philosophy.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">The Shift: From Chatbot to Neuro-Operating System</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/gamifying-creativity.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">The Engine: Gamifying Autonomous Creativity</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/ai-the-life-of-an-ai.html" class="post-card category-engineering">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Engineering</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">The life of an AI</h3>
-                <p class="post-excerpt">You know when something’s off. This is a space to explore that feeling.</p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="posts/architecting-the-swarm.html" class="post-card category-general">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">General</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">The Swarm: Architecting Collective Intelligence</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="century_batch/ESSAY_Brand_Voice_Consistency.html" class="post-card category-digital_consultancy">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Digital_Consultancy</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">Brand Voice Consistency in Large Models</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="century_batch/ESSAY_Refactoring_at_Scale.html" class="post-card category-future_of_code">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Future_of_Code</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">Refactoring at Scale</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="century_batch/ESSAY_CLI_The_Command_Line_Intelligence.html" class="post-card category-death_of_chatbot">
-            <div class="post-card-content">
-                <div class="post-meta-top">
-                     <span class="mode-badge mode-essay">Essay</span>
-                     <span class="post-category-label">Death_of_Chatbot</span>
-                     <span class="post-date">2025-12-19</span>
-                </div>
-                <h3 class="post-title">CLI: The Command Line Intelligence</h3>
-                <p class="post-excerpt"></p>
-                <div class="post-meta-bottom">
-                     <span class="read-time">5 min read</span>
-                     <span class="read-more">Read &rarr;</span>
-                </div>
-            </div>
-        </a>
-        
-            </div>
-        </main>
-
-        <!-- Sidebar (Simplified) -->
-        <aside class="blog-sidebar">
-
-            <!-- Snapshot Widget -->
-            <div class="sidebar-widget snapshot-widget">
-                <h3>Studio Status</h3>
-                <p><strong>Focus:</strong> Closing the Loop</p>
-                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-                    Active Agents: 3<br>
-                    Shipping: Weekly
-                </div>
-                <a href="studio-snapshot.html" class="text-link" style="margin-top: 0.75rem; display: block;">Full
-                    Snapshot →</a>
-            </div>
-
-            <!-- Collections Widget -->
-            <div class="sidebar-widget collections-widget">
-                <h3>Systems</h3>
-                <ul class="collection-list">
-                    <li><a href="tags/pattern.html" class="collection-link"><span class="name">Patterns</span></a></li>
-                    <li><a href="tags/systems.html" class="collection-link"><span class="name">Systems
-                                Architecture</span></a></li>
-                    <li><a href="tags/building.html" class="collection-link"><span class="name">Building in
-                                Public</span></a></li>
+                <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                    <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
+                    <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
+                    <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
+                    <li><strong>Resources:</strong> External APIs and data sources (GitHub, Stripe, Email).</li>
                 </ul>
             </div>
 
-        </aside>
-    </div>
+            <!-- Components -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Components</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-zinc-300">
+                    <div>
+                        <span class="text-white font-semibold">Frontend:</span>
+                        SSG + Vanilla JS. Visualizes repository state.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">Backend:</span>
+                        Python CORE, Make orchestration. Flat-file JSON/MD.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">AI Layer:</span>
+                        Gemini 1.5 Pro / Flash. Structured Output schemas.
+                    </div>
+                    <div>
+                        <span class="text-white font-semibold">Infrastructure:</span>
+                        Local-first execution. GitHub Pages hosting.
+                    </div>
+                </div>
+            </div>
 
+            <!-- Roadmap & Capabilities -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">What it can do today
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                        <li>Spin up a simulated "business day".</li>
+                        <li>Call external APIs (GitHub, etc.).</li>
+                        <li>Evaluate decision traces via quality gates.</li>
+                        <li>Generate static artifacts automatically.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Roadmap</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                        <li><strong>Neural Handshake:</strong> Agent task handoff.</li>
+                        <li><strong>Knowledge Graph:</strong> Transition to graph memory.</li>
+                        <li><strong>Visualizers:</strong> React-based interactive views.</li>
+                        <li><strong>Gateway Interface:</strong> Unified CLI for loops.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Feeds -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width">
+            <!-- Latest Build Updates -->
+            <section class="dashboard-card">
+                <h2 class="text-2xl font-bold mb-6">Latest Build Updates</h2>
+                <div class="run-stream">
+                    
+        <a href="posts/2025-12-28-ai-llmops-crash-course-part-2.html" class="run-row">
+            <div class="run-status status-running"></div>
+            <span class="run-id">Dec 28</span>
+            <span class="run-target">LLMOps Deep Dive: From Typing to Directing</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
+        <a href="simulation.html" class="run-row">
+            <div class="run-status status-running"></div>
+            <span class="run-id">Dec 27</span>
+            <span class="run-target">The Studio OS Simulation</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
+        <a href="posts/2025-12-26-extension-v1-8-sovereign-intelligence.html" class="run-row">
+            <div class="run-status status-running"></div>
+            <span class="run-id">Dec 26</span>
+            <span class="run-target">Sovereign Intelligence: The v1.8 Extension Upgrade</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
+        <a href="posts/studio-os-visual-thought.html" class="run-row">
+            <div class="run-status status-active"></div>
+            <span class="run-id">Dec 22</span>
+            <span class="run-target">Chain-of-Visual-Thought: The Perceptual Shift</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
+        <a href="posts/gamifying-creativity.html" class="run-row">
+            <div class="run-status status-running"></div>
+            <span class="run-id">Dec 19</span>
+            <span class="run-target">The Engine: Gamifying Autonomous Creativity</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Build Log →</a>
+                </div>
+            </section>
+
+            <!-- Latest Essays -->
+            <section class="dashboard-card">
+                <h2 class="text-2xl font-bold mb-6">Latest Essays</h2>
+                <div class="run-stream">
+                    
+        <a href="essays/2026-autonomous-compiler.html" class="run-row">
+            <span class="run-id">Dec 30</span>
+            <span class="run-target">2026: The Year of the Autonomous Compiler</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
+        <a href="posts/2025-12-28-ai-llmops-crash-course-part-2.html" class="run-row">
+            <span class="run-id">Dec 28</span>
+            <span class="run-target">LLMOps Deep Dive: From Typing to Directing</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
+        <a href="notes/n8n-studio-os-integration.html" class="run-row">
+            <span class="run-id">Dec 28</span>
+            <span class="run-target">Blueprint: n8n + Studio OS Integration</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
+        <a href="posts/frontier-notes-v1.html" class="run-row">
+            <span class="run-id">Dec 27</span>
+            <span class="run-target">Frontier Notes: The 7 Untamed Domains of Agentic AI</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
+        <a href="simulation.html" class="run-row">
+            <span class="run-id">Dec 27</span>
+            <span class="run-target">The Studio OS Simulation</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="archive.html" class="text-sm text-zinc-500 hover:text-white">View All Essays →</a>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
+
         </main>
     </div>
 
@@ -968,40 +388,7 @@
             </button>
         </div>
         <nav class="drawer-nav">
-            <a href="index.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                </div>
-                <span>Studio</span>
-            </a>
-            <a href="studio-snapshot.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                </div>
-                <span>Snapshot</span>
-            </a>
-            <a href="products.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                        </path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                </div>
-                <span>Products</span>
-            </a>
+            <div class="drawer-section-label">Operate</div>
             <a href="extensions.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
@@ -1011,7 +398,7 @@
                         <path d="M9 22V12h6v10"></path>
                     </svg>
                 </div>
-                <span>Copilot</span>
+                <span>Extensions</span>
             </a>
             <a href="decision-log.html" class="drawer-link">
                 <div class="icon-container">
@@ -1026,47 +413,20 @@
                 </div>
                 <span>Log</span>
             </a>
-            <a href="research-roadmap.html" class="drawer-link">
+
+            <div class="drawer-section-label">Build</div>
+            <a href="products.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
                     </svg>
                 </div>
-                <span>Research</span>
-            </a>
-            <a href="tags/pattern.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5"></path>
-                        <path d="M2 12l10 5 10-5"></path>
-                    </svg>
-                </div>
-                <span>Patterns</span>
-            </a>
-            <a href="recommendation-engine.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </div>
-                <span>Find</span>
-            </a>
-            <a href="agentic-systems-engineering.html" class="drawer-link">
-                <div class="icon-container">
-                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5"></path>
-                        <path d="M2 12l10 5 10-5"></path>
-                    </svg>
-                </div>
-                <span>Discipline</span>
+                <span>Products</span>
             </a>
             <a href="architecture.html" class="drawer-link">
                 <div class="icon-container">
@@ -1080,18 +440,34 @@
                 </div>
                 <span>Structure</span>
             </a>
-            <a href="brand.html" class="drawer-link">
+
+            <div class="drawer-section-label">Learn</div>
+            <a href="archive.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                        <path d="M2 2l7.586 7.586"></path>
-                        <circle cx="11" cy="11" r="2"></circle>
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                 </div>
-                <span>Brand</span>
+                <span>Archive</span>
             </a>
+            <a href="agentic-systems-engineering.html" class="drawer-link">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <span>Discipline</span>
+            </a>
+
+            <div class="drawer-section-label">Account</div>
             <a href="about.html" class="drawer-link">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -1102,7 +478,7 @@
                 </div>
                 <span>About</span>
             </a>
-            <a href="https://doesthisfeelright.substack.com" class="drawer-link" target="_blank">
+            <a href="https://doesthisfeelright.substack.com" class="drawer-link" target="_blank" rel="noopener">
                 <div class="icon-container">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" class="icon-svg">
@@ -1162,7 +538,8 @@
                     <a href="index.html" class="nav-link">Home</a>
                     <a href="about.html" class="nav-link">About</a>
                     <a href="collections.html" class="nav-link">Collections</a>
-                    <a href="https://github.com/isaachernandez/blog-design" class="nav-link" target="_blank">Open
+                    <a href="https://github.com/isaacsight/does-this-feel-right-" class="nav-link" target="_blank"
+                        rel="noopener">Open
                         Source</a>
                     <a href="feed.xml" class="nav-link">RSS Feed</a>
                 </div>
@@ -1173,7 +550,8 @@
                 <h4>Support</h4>
                 <ul class="footer-links">
                     <li><a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a></li>
-                    <li><a href="#" id="footer-support-btn">Buy me a coffee</a></li>
+                    <li><a href="https://buymeacoffee.com/doesthisfeelright" target="_blank" rel="noopener"
+                            id="footer-support-btn">Buy me a coffee</a></li>
                 </ul>
             </div>
         </div>

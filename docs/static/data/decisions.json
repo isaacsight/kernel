@@ -1,0 +1,58 @@
+[
+    {
+        "id": "dec-2025-12-29-no-chat-ui",
+        "project_id": "does-this-feel-right",
+        "experiment_id": "does-this-feel-right-pr-42",
+        "sources": {
+            "pull_requests": [
+                42
+            ],
+            "issues": [
+                134
+            ],
+            "discussions": []
+        },
+        "question": "Should the DTFR OS expose any chat or copilot UI?",
+        "options_considered": [
+            "Keep a traditional chat bar on the homepage",
+            "Move chat into a secondary workspace view",
+            "Remove chat entirely and expose only runs, specs, and logs"
+        ],
+        "rationale": "To differentiate DTFR from generic AI chat tools and to reinforce the OS metaphor, the interface should be structured around Projects, Experiments, and Decisions instead of conversations.",
+        "outcome": "Remove all chat/co-pilot UI; use forms and dashboards only.",
+        "impact": {
+            "areas": [
+                "product-direction",
+                "ux",
+                "positioning"
+            ],
+            "notes": "Clarifies DTFR as a system compiler and research OS over GitHub repos."
+        },
+        "decided_at": "2025-12-29T21:30:00Z"
+    },
+    {
+        "id": "dec-2025-12-30-github-os-pivot",
+        "project_id": "does-this-feel-right",
+        "experiment_id": null,
+        "sources": {
+            "issues": [
+                140
+            ]
+        },
+        "question": "How do we frame the site identity?",
+        "options_considered": [
+            "AI Dashboard",
+            "GitHub OS / System Compiler"
+        ],
+        "rationale": "The 'Dashboard' metaphor is too generic. 'GitHub OS' leverages the existing code patterns as the primary interface.",
+        "outcome": "Pivot to GitHub OS.",
+        "impact": {
+            "areas": [
+                "branding",
+                "navigation"
+            ],
+            "notes": "Renamed Studio to Workspace, added Architecture and Decision Log sections."
+        },
+        "decided_at": "2025-12-30T11:00:00Z"
+    }
+]

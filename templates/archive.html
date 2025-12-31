@@ -4,12 +4,19 @@
     <div class="content-wrapper full-width">
         <main class="main-feed">
             <div class="feed-header">
-                <h2>The Archive</h2>
+                <h2>Essays</h2>
                 {{ filters }}
             </div>
 
             <div class="posts-container">
                 {{ recent_posts }}
+            </div>
+
+            <div class="decision-log-section mt-16">
+                <h2 class="text-2xl font-bold mb-8 border-b border-zinc-800 pb-2">Cognitive Ledger: Decision Log</h2>
+                <div class="decision-grid space-y-6">
+                    {{ decision_log_grid }}
+                </div>
             </div>
         </main>
     </div>
