@@ -6,8 +6,8 @@
     <!-- Desktop/Mobile Top Nav -->
     <div class="dashboard-top-nav flex items-center justify-between mb-8">
         <div class="brand-info">
-            <h1 class="text-2xl font-bold">Studio OS</h1>
-            <p class="text-sm text-zinc-500">v2.0.0-beta • System Online</p>
+            <h1 class="text-2xl font-bold">System Compiler</h1>
+            <p class="text-sm text-zinc-500">v2.1.0-alpha • Native Runtime</p>
         </div>
         <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
             class="badge badge--link hover:bg-zinc-800 transition-colors py-2 px-4 rounded-full border border-zinc-800 flex items-center gap-2"
@@ -26,23 +26,22 @@
         <!-- The Studio OS Simulation Manifest -->
         <section class="dashboard-card full-width mb-12 border-none bg-transparent pt-0">
             <div class="mb-12">
-                <h2 class="text-5xl font-bold text-green-500 mb-6">The Simulation</h2>
-                <p class="text-xl text-zinc-400 max-w-3xl">Studio OS is an AI-native operating system for running a solo
-                    founder’s
-                    entire business as a deterministic simulation.</p>
+                <h2 class="text-5xl font-bold text-green-500 mb-6">The Compiler</h2>
+                <p class="text-xl text-zinc-400 max-w-3xl">This environment compiles raw human intent into deterministic
+                    engineering history. A native system for the sovereign builder.</p>
             </div>
 
             <!-- Architecture -->
             <div class="mb-12">
-                <h3 class="text-3xl font-bold text-green-500 mb-8">Architecture</h3>
+                <h3 class="text-3xl font-bold text-green-500 mb-8">Specification</h3>
                 <div class="font-mono text-sm text-zinc-400 mb-6">
-                    Browser Agents → Orchestrator → Simulation Core → Integrations
+                    Inquiry → Specification → Compilation → Execution History
                 </div>
                 <ul class="list-disc list-outside ml-6 space-y-2 text-lg text-zinc-300">
+                    <li><strong>Specs:</strong> Immutable definitions of desired system states and agent behaviors.</li>
                     <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
-                    <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
-                    <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
-                    <li><strong>Resources:</strong> External APIs and data sources (GitHub, Stripe, Email).</li>
+                    <li><strong>Patterns:</strong> Reusable cognitive structures and verified workflow templates.</li>
+                    <li><strong>Logs:</strong> Distributed reasoning traces and system-wide state changes.</li>
                 </ul>
             </div>
 
@@ -64,20 +63,21 @@
 
         <!-- Activity Feeds -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width">
-            <!-- Latest Build Updates -->
+            <!-- Latest Runs -->
             <section class="dashboard-card">
-                <h2 class="text-2xl font-bold mb-6">Latest Build Updates</h2>
+                <h2 class="text-2xl font-bold mb-6">Latest Runs</h2>
                 <div class="run-stream">
                     {{ build_log_feed }}
                 </div>
                 <div class="mt-4 text-right">
-                    <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Build Log →</a>
+                    <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Execution
+                        History →</a>
                 </div>
             </section>
 
-            <!-- Latest Essays -->
+            <!-- Dynamic Trails -->
             <section class="dashboard-card">
-                <h2 class="text-2xl font-bold mb-6">Latest Essays</h2>
+                <h2 class="text-2xl font-bold mb-6">Dynamic Trails</h2>
                 <div class="run-stream">
                     {{ essays_feed }}
                 </div>
