@@ -211,20 +211,21 @@
 
     <div class="dashboard-grid">
         <!-- The Studio OS Simulation Manifest -->
-        <section class="dashboard-card full-width mb-12">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold mb-4">The Simulation</h2>
+        <section class="dashboard-card full-width mb-12 border-none bg-transparent pt-0">
+            <div class="mb-12">
+                <h2 class="text-5xl font-bold text-green-500 mb-6">The Simulation</h2>
+                <p class="text-xl text-zinc-400 max-w-3xl">Studio OS is an AI-native operating system for running a solo
+                    founder’s
+                    entire business as a deterministic simulation.</p>
             </div>
-            <p class="text-lg text-zinc-400">Studio OS is an AI-native operating system for running a solo founder’s
-                entire business as a deterministic simulation.</p>
 
             <!-- Architecture -->
-            <div class="mb-10">
-                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Architecture</h3>
-                <div class="bg-zinc-900/50 p-4 rounded border border-zinc-800 mb-4 font-mono text-xs text-green-400">
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold text-green-500 mb-8">Architecture</h3>
+                <div class="font-mono text-sm text-zinc-400 mb-6">
                     Browser Agents → Orchestrator → Simulation Core → Integrations
                 </div>
-                <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                <ul class="list-disc list-outside ml-6 space-y-2 text-lg text-zinc-300">
                     <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
                     <li><strong>Worlds:</strong> Isolated state containers for simulation contexts.</li>
                     <li><strong>Agents:</strong> specialized AI workers with distinct permissions and tools.</li>
@@ -233,48 +234,17 @@
             </div>
 
             <!-- Components -->
-            <div class="mb-10">
-                <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Components</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-zinc-300">
-                    <div>
-                        <span class="text-white font-semibold">Frontend:</span>
-                        SSG + Vanilla JS. Visualizes repository state.
-                    </div>
-                    <div>
-                        <span class="text-white font-semibold">Backend:</span>
-                        Python CORE, Make orchestration. Flat-file JSON/MD.
-                    </div>
-                    <div>
-                        <span class="text-white font-semibold">AI Layer:</span>
-                        Gemini 1.5 Pro / Flash. Structured Output schemas.
-                    </div>
-                    <div>
-                        <span class="text-white font-semibold">Infrastructure:</span>
-                        Local-first execution. GitHub Pages hosting.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Roadmap & Capabilities -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">What it can do today
-                    </h3>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
-                        <li>Spin up a simulated "business day".</li>
-                        <li>Call external APIs (GitHub, etc.).</li>
-                        <li>Evaluate decision traces via quality gates.</li>
-                        <li>Generate static artifacts automatically.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-4 text-white border-b border-zinc-800 pb-2">Roadmap</h3>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-zinc-300">
-                        <li><strong>Neural Handshake:</strong> Agent task handoff.</li>
-                        <li><strong>Knowledge Graph:</strong> Transition to graph memory.</li>
-                        <li><strong>Visualizers:</strong> React-based interactive views.</li>
-                        <li><strong>Gateway Interface:</strong> Unified CLI for loops.</li>
-                    </ul>
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold text-green-500 mb-8">Components</h3>
+                <div class="space-y-4 text-lg text-zinc-300">
+                    <p><span class="text-white font-semibold">Frontend:</span> SSG + Vanilla JS. Visualizes repository
+                        state.</p>
+                    <p><span class="text-white font-semibold">Backend:</span> Python CORE, Make orchestration. Flat-file
+                        JSON/MD.</p>
+                    <p><span class="text-white font-semibold">AI Layer:</span> Gemini 1.5 Pro / Flash. Structured Output
+                        schemas.</p>
+                    <p><span class="text-white font-semibold">Infrastructure:</span> Local-first execution. GitHub Pages
+                        hosting.</p>
                 </div>
             </div>
         </section>
