@@ -86,6 +86,34 @@
                 </div>
             </section>
         </div>
+
+        <!-- Visitor Notes Section -->
+        <section class="dashboard-card full-width notes-section mt-12">
+            <h2 class="text-2xl font-bold mb-6">
+                <span class="status-pulse green"></span>
+                Visitor Notes
+            </h2>
+            <p class="text-zinc-400 mb-6">Leave a note — it will appear here instantly.</p>
+
+            <!-- Note Form -->
+            <form id="note-form" class="note-form mb-8">
+                <div class="note-form-row">
+                    <input type="text" id="note-name" placeholder="Name (optional)" maxlength="50"
+                        class="note-input note-input-name">
+                    <textarea id="note-message" placeholder="Write something..." maxlength="280" rows="2" required
+                        class="note-input note-input-message"></textarea>
+                </div>
+                <div class="note-form-footer">
+                    <span class="note-char-count text-zinc-500 text-sm"></span>
+                    <button type="submit" class="note-submit-btn">Leave a Note</button>
+                </div>
+            </form>
+
+            <!-- Notes Display -->
+            <div id="notes-list" class="notes-list">
+                <p class="note-empty">Loading notes...</p>
+            </div>
+        </section>
     </div>
 </div>
 {% endblock %}

@@ -8,6 +8,116 @@
     <language>en-us</language>
     
         <item>
+            <title>Anatomy of an Answer Engine: Learning from Perplexity Discover</title>
+            <link>https://www.doesthisfeelright.com/posts/2026-01-01-anatomy-of-an-answer-engine.html</link>
+            <guid>https://www.doesthisfeelright.com/posts/2026-01-01-anatomy-of-an-answer-engine.html</guid>
+            <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[<h1>Anatomy of an Answer Engine: Learning from Perplexity Discover</h1>
+<p>The rise of <strong>Answer Engines</strong> represents a fundamental shift in how we interact with information. Unlike traditional search, which returns a list of links, answer engines synthesize knowledge in real-time, cite their sources, and present durable, SEO-indexable content.</p>
+<p><strong>Perplexity Discover</strong> is the purest expression of this paradigm. While there is no public documentation of its exact codebase, the architectural patterns are inferable—and replicable.</p>
+<p>---</p>
+<h2>The Shift: From Search to Synthesis</h2>
+<p>Traditional search engines are <strong>retrieval systems</strong>. You ask, they fetch.</p>
+<p>Answer engines are <strong>synthesis systems</strong>. They retrieve, reason, and compose.</p>
+<p>This is not a minor distinction. It represents a shift from:</p>
+<ul>
+<li><strong>Linking</strong> → <strong>Answering</strong></li>
+<li><strong>10 blue links</strong> → <strong>1 cited narrative</strong></li>
+<li><strong>User-directed navigation</strong> → <strong>AI-directed composition</strong></li>
+</ul>
+<p>The value proposition is clear: <em>why click through 10 pages when an AI can read them for you?</em></p>
+<p>---</p>
+<h2>The Architecture Stack</h2>
+<p>Based on public research and observable behavior, Perplexity Discover (and answer engines like it) rely on a multi-layer architecture:</p>
+<h3>Layer 1: Hybrid Retrieval</h3>
+<p>The foundation is a <strong>hybrid retrieval engine</strong> combining:</p>
+<ul>
+<li><strong>Dense retrieval</strong>: Vector embeddings for semantic search</li>
+<li><strong>Sparse retrieval</strong>: Traditional keyword matching (BM25)</li>
+<li><strong>Distributed indexes</strong>: Sharded for scale and speed</li>
+</ul>
+<p>This isn't just "RAG." It's RAG with redundancy—multiple search strategies fused to maximize recall before the synthesis stage.</p>
+<h3>Layer 2: Multi-Stage RAG Pipeline</h3>
+<p>The retrieved context passes through a <strong>multi-stage pipeline</strong>:</p>
+<p>1. <strong>Context Fusion</strong>: Merge and deduplicate retrieved passages 2. <strong>Draft Generation</strong>: LLM drafts a longform, narrative answer 3. <strong>Citation Selection</strong>: Post-hoc extraction of source links from the context 4. <strong>Related Generation</strong>: Produce follow-up questions or related topics</p>
+<blockquote>[!TIP]</blockquote>
+<blockquote>Citation enforcement is critical. Without it, you have a chatbot. With it, you have a research tool.</blockquote>
+<h3>Layer 3: Multi-Model Orchestration</h3>
+<p>Modern answer engines don't rely on a single LLM. They route queries across models based on:</p>
+<ul>
+<li><strong>Complexity</strong>: Simple factual queries → fast, cheap models</li>
+<li><strong>Depth</strong>: Nuanced reasoning → frontier models (Claude Opus, GPT-4)</li>
+<li><strong>Cost-sensitivity</strong>: Production volume → distilled or quantized variants</li>
+</ul>
+<p>This is the same strategy Perplexity uses across its broader stack—model routing as a first-class architectural concern.</p>
+<h3>Layer 4: The Answer Surface</h3>
+<p>The final layer converts RAG outputs into <strong>durable, indexable pages</strong>:</p>
+<ul>
+<li>SEO-optimized metadata (titles, descriptions, structured data)</li>
+<li>Citation links embedded inline</li>
+<li>Related questions for continued exploration</li>
+<li>(Optionally) Affiliate or commercial links for monetization</li>
+</ul>
+<p>This is what separates Discover from a chat interface. The output is a <strong>web page</strong>, not a conversation turn.</p>
+<p>---</p>
+<h2>The Patterns Worth Stealing</h2>
+<p>If you're building your own answer engine, here are the replicable ideas:</p>
+<h3>1. Citation Enforcement at Generation Time</h3>
+<p>Don't ask the model to "include sources." Build a pipeline that:</p>
+<ul>
+<li>Passes explicit source metadata into the prompt</li>
+<li>Post-processes to verify every claim has a linked citation</li>
+<li>Rejects or rewrites passages that lack grounding</li>
+</ul>
+<h3>2. Pre-Generation vs. On-Demand</h3>
+<p>Discover appears to <strong>pre-generate</strong> popular pages, caching results for SEO and latency. Your architecture should support both:</p>
+<ul>
+<li><strong>On-demand synthesis</strong> for fresh queries</li>
+<li><strong>Pre-computed pages</strong> for high-traffic topics</li>
+</ul>
+<h3>3. Light Editorial Control</h3>
+<p>Not everything should be fully automated. The best answer surfaces have a layer of:</p>
+<ul>
+<li>Editorial review for high-stakes topics</li>
+<li>Human-in-the-loop flagging for quality issues</li>
+<li>Commercial link curation for monetization</li>
+</ul>
+<p>---</p>
+<h2>The DTFR Implementation</h2>
+<p>This is exactly what we're building with the <strong>DTFR Cognitive OS</strong>.</p>
+<p>Our stack mirrors these patterns:</p>
+<ul>
+<li>`dtfr/search/` — Hybrid retrieval with provider abstraction</li>
+<li>`dtfr/answer_engine.py` — Multi-stage synthesis with citation enforcement</li>
+<li>`dtfr/router_adapter.py` — Multi-model routing (Gemini, Claude, OpenAI)</li>
+<li>Python SSG — Durable, SEO-indexable output as static pages</li>
+</ul>
+<p>The goal isn't to clone Perplexity. It's to apply the same architectural discipline to <strong>sovereign AI infrastructure</strong>—systems you own, audit, and control.</p>
+<p>---</p>
+<h2>What We Don't Know</h2>
+<p>Let's be honest about the limits:</p>
+<ul>
+<li>We don't know Perplexity's exact tech stack (Next.js? Go? Unknown)</li>
+<li>We don't know their internal service boundaries</li>
+<li>We can't clone their scale without significant investment</li>
+</ul>
+<p>What we <em>can</em> do is apply the patterns. The architecture is more important than the implementation.</p>
+<p>---</p>
+<h2>The Takeaway</h2>
+<p>Answer engines are the next evolution of search. The patterns are known:</p>
+<ul>
+<li>Hybrid retrieval for robust recall</li>
+<li>Multi-stage RAG for quality synthesis</li>
+<li>Citation enforcement for trust</li>
+<li>Static output for SEO and durability</li>
+</ul>
+<p>The question isn't whether to build one. It's whether you want to own yours—or rent someone else's.</p>
+<p>---</p>
+<p><em>This essay is part of the DTFR engineering log series. The full Perplexity Discover architecture notes are available in <a href="/PERPLEXITY_DISCOVER_CODEBASE.md">PERPLEXITY_DISCOVER_CODEBASE.md</a>.</em></p>]]></content:encoded>
+        </item>
+        
+        <item>
             <title>2026: The Year of the Autonomous Compiler</title>
             <link>https://www.doesthisfeelright.com/posts/2026-autonomous-compiler.html</link>
             <guid>https://www.doesthisfeelright.com/posts/2026-autonomous-compiler.html</guid>
@@ -6409,37 +6519,6 @@ Now, the application logic is simple:
 <h3>Why This Matters</h3>
 <p>This flexibility allows CodeLens to: 1.  <strong>Optimize for Cost</strong>: Use Gemini Flash for simple explanations. 2.  <strong>Optimize for Quality</strong>: Use Claude 3.5 Sonnet for complex refactoring. 3.  <strong>Fallback</strong>: If one API goes down, the user can switch to the other.</p>
 <p>Building for model independence is a key step in creating professional-grade AI tools.</p>]]></content:encoded>
-        </item>
-        
-        <item>
-            <title>Refactoring for AI: From Script to Package</title>
-            <link>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</link>
-            <guid>https://www.doesthisfeelright.com/posts/refactoring-codelens-architecture.html</guid>
-            <pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate>
-            <description><![CDATA[]]></description>
-            <content:encoded><![CDATA[<p>When building AI applications, it's easy to start with a single `app.py` script. It's fast, simple, and gets the job done. But as your application grows—adding new models, complex UI logic, and configuration management—that single file becomes a bottleneck.</p>
-<p>Today, I refactored <strong>CodeLens</strong>, my AI code review agent, from a monolithic script into a modular Python package. Here is why and how I did it.</p>
-<h3>The Problem with "The Script"</h3>
-<p>My `codelens_app.py` was doing too much: 1.  <strong>UI Logic</strong>: Handling `customtkinter` windows and events. 2.  <strong>Business Logic</strong>: Managing file I/O and diffs. 3.  <strong>AI Integration</strong>: Calling Anthropic and Google Gemini APIs. 4.  <strong>Configuration</strong>: Loading API keys from JSON.</p>
-<p>This made it hard to test, hard to read, and impossible to extend without breaking something.</p>
-<h3>The Solution: Modular Architecture</h3>
-<p>I split the application into a structured package:</p>
-<pre><code>
-codelens/
-├── __init__.py
-├── config.py          # Configuration management
-├── ai_providers.py    # AI model integration
-├── gui.py             # UI components
-└── utils/
-    └── logger.py      # ML interaction logging
-### Key Benefits
-
-1.  <strong>Separation of Concerns</strong>: The `gui.py` module doesn't know <em>how</em> the AI works; it just asks for a provider and sends a prompt.
-2.  <strong>Swappable Components</strong>: I can now add a new AI provider (like OpenAI or a local Llama model) by simply adding a class to `ai_providers.py`, without touching the UI code.
-3.  <strong>Scalability</strong>: We can now add unit tests for each module independently.
-
-This refactor lays the groundwork for more advanced features like automated evaluation and complex agentic workflows.
-</code></pre>]]></content:encoded>
         </item>
         
 </channel>

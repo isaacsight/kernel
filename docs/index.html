@@ -255,6 +255,13 @@
                 <h2 class="text-2xl font-bold mb-6">Latest Runs</h2>
                 <div class="run-stream">
                     
+        <a href="posts/2026-01-01-anatomy-of-an-answer-engine.html" class="run-row">
+            <div class="run-status status-running"></div>
+            <span class="run-id">Jan 01</span>
+            <span class="run-target">Anatomy of an Answer Engine: Learning from Perplexity Discover</span>
+            <span class="run-link">View Log →</span>
+        </a>
+        
         <a href="posts/2025-12-28-ai-llmops-crash-course-part-2.html" class="run-row">
             <div class="run-status status-running"></div>
             <span class="run-id">Dec 28</span>
@@ -283,13 +290,6 @@
             <span class="run-link">View Log →</span>
         </a>
         
-        <a href="posts/gamifying-creativity.html" class="run-row">
-            <div class="run-status status-running"></div>
-            <span class="run-id">Dec 19</span>
-            <span class="run-target">The Engine: Gamifying Autonomous Creativity</span>
-            <span class="run-link">View Log →</span>
-        </a>
-        
                 </div>
                 <div class="mt-4 text-right">
                     <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Execution
@@ -302,6 +302,12 @@
                 <h2 class="text-2xl font-bold mb-6">Dynamic Trails</h2>
                 <div class="run-stream">
                     
+        <a href="posts/2026-01-01-anatomy-of-an-answer-engine.html" class="run-row">
+            <span class="run-id">Jan 01</span>
+            <span class="run-target">Anatomy of an Answer Engine: Learning from Perplexity Discover</span>
+            <span class="run-link">Read →</span>
+        </a>
+        
         <a href="essays/2026-autonomous-compiler.html" class="run-row">
             <span class="run-id">Dec 30</span>
             <span class="run-target">2026: The Year of the Autonomous Compiler</span>
@@ -326,18 +332,40 @@
             <span class="run-link">Read →</span>
         </a>
         
-        <a href="simulation.html" class="run-row">
-            <span class="run-id">Dec 27</span>
-            <span class="run-target">The Studio OS Simulation</span>
-            <span class="run-link">Read →</span>
-        </a>
-        
                 </div>
                 <div class="mt-4 text-right">
                     <a href="archive.html" class="text-sm text-zinc-500 hover:text-white">View All Essays →</a>
                 </div>
             </section>
         </div>
+
+        <!-- Visitor Notes Section -->
+        <section class="dashboard-card full-width notes-section mt-12">
+            <h2 class="text-2xl font-bold mb-6">
+                <span class="status-pulse green"></span>
+                Visitor Notes
+            </h2>
+            <p class="text-zinc-400 mb-6">Leave a note — it will appear here instantly.</p>
+
+            <!-- Note Form -->
+            <form id="note-form" class="note-form mb-8">
+                <div class="note-form-row">
+                    <input type="text" id="note-name" placeholder="Name (optional)" maxlength="50"
+                        class="note-input note-input-name">
+                    <textarea id="note-message" placeholder="Write something..." maxlength="280" rows="2" required
+                        class="note-input note-input-message"></textarea>
+                </div>
+                <div class="note-form-footer">
+                    <span class="note-char-count text-zinc-500 text-sm"></span>
+                    <button type="submit" class="note-submit-btn">Leave a Note</button>
+                </div>
+            </form>
+
+            <!-- Notes Display -->
+            <div id="notes-list" class="notes-list">
+                <p class="note-empty">Loading notes...</p>
+            </div>
+        </section>
     </div>
 </div>
 
@@ -492,6 +520,7 @@
     <script src="js/share.js"></script>
     <script src="js/search.js"></script>
     <script src="js/support.js"></script>
+    <script src="js/notes.js"></script>
 
     <footer class="site-footer">
         <div class="footer-grid">

@@ -4823,3 +4823,150 @@ body.brand-page::-webkit-scrollbar-thumb {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   VISITOR NOTES SECTION
+   Landing page guestbook / notes feature
+   ============================================ */
+
+.notes-section {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-8);
+}
+
+/* Note Form */
+.note-form {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-emphasis);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.note-form:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: var(--accent-glow);
+}
+
+.note-form-row {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+@media (max-width: 768px) {
+    .note-form-row {
+        flex-direction: column;
+    }
+}
+
+.note-input {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    transition: border-color 0.2s ease, background 0.2s ease;
+    resize: none;
+}
+
+.note-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+}
+
+.note-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.note-input-name {
+    flex: 0 0 180px;
+}
+
+.note-input-message {
+    flex: 1;
+    min-height: 60px;
+}
+
+.note-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-submit-btn {
+    background: var(--accent-primary);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-5);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.note-submit-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.note-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Notes List */
+.notes-list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.note-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+    animation: fadeInUp 0.3s ease;
+}
+
+.note-card:hover {
+    border-color: var(--border-emphasis);
+}
+
+.note-message {
+    color: var(--text-secondary);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    margin-bottom: var(--space-3);
+    word-wrap: break-word;
+}
+
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+.note-author {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.note-empty,
+.note-error {
+    text-align: center;
+    padding: var(--space-6);
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+.note-error {
+    color: #ef4444;
+}
