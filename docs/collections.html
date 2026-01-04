@@ -23,7 +23,7 @@
     <link rel="apple-touch-icon" href="/static/images/icon-192.png">
     <link rel="icon" type="image/png" href="/static/images/icon-192.png">
     <link rel="shortcut icon" href="/static/images/icon-192.png">
-    <meta name="theme-color" content="#0d0d0d">
+    <meta name="theme-color" content="#0a0a0a">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -46,9 +46,11 @@
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/copilot.css">
+    <link rel="stylesheet" href="css/tokens.css">
 </head>
 
 <body>
+    <dtfr-status></dtfr-status>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <div class="container">
         <!-- Desktop Sidebar (Visible on Desktop) -->
@@ -156,7 +158,7 @@
         <header class="mobile-header">
             <div class="header-inner">
                 <!-- Module 1: Logo -->
-                <a href="index.html" class="header-module logo-module">
+                <a href="index.html" class="header-module logo-module" aria-label="Home">
                     <div class="logo-container">
                         <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -199,7 +201,7 @@
         <div class="collections-header">
             <div class="archive-header-flex">
     <div class="collections-grid">
-    <div class="collection-group"><h3>Pillars</h3><ul class="collection-list"><li><a href="pillars/culture.html" class="collection-item"><span class="name">Culture</span></a></li><li><a href="pillars/execution.html" class="collection-item"><span class="name">Execution</span></a></li><li><a href="pillars/frontier.html" class="collection-item"><span class="name">Frontier</span></a></li><li><a href="pillars/philosophy.html" class="collection-item"><span class="name">Philosophy</span></a></li><li><a href="pillars/strategy.html" class="collection-item"><span class="name">Strategy</span></a></li><li><a href="pillars/structure.html" class="collection-item"><span class="name">Structure</span></a></li><li><a href="pillars/systems.html" class="collection-item"><span class="name">Systems</span></a></li><li><a href="pillars/technology.html" class="collection-item"><span class="name">Technology</span></a></li><li><a href="pillars/being-seen.html" class="collection-item"><span class="name">being-seen</span></a></li><li><a href="pillars/systems-power.html" class="collection-item"><span class="name">systems-power</span></a></li><li><a href="pillars/true.html" class="collection-item"><span class="name">true</span></a></li></ul></div><div class="collection-group"><h3>Topics</h3><ul class="collection-list">
+    <div class="collection-group"><h3>Pillars</h3><ul class="collection-list"><li><a href="pillars/culture.html" class="collection-item"><span class="name">Culture</span></a></li><li><a href="pillars/execution.html" class="collection-item"><span class="name">Execution</span></a></li><li><a href="pillars/frontier.html" class="collection-item"><span class="name">Frontier</span></a></li><li><a href="pillars/philosophy.html" class="collection-item"><span class="name">Philosophy</span></a></li><li><a href="pillars/strategy.html" class="collection-item"><span class="name">Strategy</span></a></li><li><a href="pillars/structure.html" class="collection-item"><span class="name">Structure</span></a></li><li><a href="pillars/systems.html" class="collection-item"><span class="name">Systems</span></a></li><li><a href="pillars/technology.html" class="collection-item"><span class="name">Technology</span></a></li><li><a href="pillars/being-seen.html" class="collection-item"><span class="name">being-seen</span></a></li><li><a href="pillars/engineering.html" class="collection-item"><span class="name">engineering</span></a></li><li><a href="pillars/systems-power.html" class="collection-item"><span class="name">systems-power</span></a></li><li><a href="pillars/true.html" class="collection-item"><span class="name">true</span></a></li></ul></div><div class="collection-group"><h3>Topics</h3><ul class="collection-list">
             <li>
                 <a href="tags/reflection.html" class="collection-item">
                     <span class="name">reflection</span>
@@ -313,6 +315,13 @@
             </li>
         
             <li>
+                <a href="tags/architecture.html" class="collection-item">
+                    <span class="name">architecture</span>
+                    <span class="count">5</span>
+                </a>
+            </li>
+        
+            <li>
                 <a href="tags/studio-os.html" class="collection-item">
                     <span class="name">Studio OS</span>
                     <span class="count">5</span>
@@ -363,13 +372,6 @@
         
             <li>
                 <a href="tags/architecture.html" class="collection-item">
-                    <span class="name">architecture</span>
-                    <span class="count">4</span>
-                </a>
-            </li>
-        
-            <li>
-                <a href="tags/architecture.html" class="collection-item">
                     <span class="name">Architecture</span>
                     <span class="count">4</span>
                 </a>
@@ -414,6 +416,13 @@
                 <a href="tags/technology.html" class="collection-item">
                     <span class="name">Technology</span>
                     <span class="count">4</span>
+                </a>
+            </li>
+        
+            <li>
+                <a href="tags/engineering.html" class="collection-item">
+                    <span class="name">engineering</span>
+                    <span class="count">3</span>
                 </a>
             </li>
         
@@ -710,8 +719,7 @@
                 </svg>
                 <span>Studio</span>
             </a>
-            <button class="mobile-nav-item search-trigger"
-                style="background:none; border:none; padding:0; cursor:pointer;">
+            <button class="mobile-nav-item search-trigger">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -740,8 +748,7 @@
                 </svg>
                 <span>Specs</span>
             </a>
-            <button class="mobile-nav-item mobile-menu-trigger"
-                style="background:none; border:none; padding:0; cursor:pointer;">
+            <button class="mobile-nav-item mobile-menu-trigger">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -752,6 +759,8 @@
             </button>
         </div>
     </nav>
+    <!-- DTFR Module System -->
+    <script type="module" src="js/dtfr.js"></script>
 
 </body>
 
