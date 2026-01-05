@@ -49,6 +49,11 @@ class DTFRMetrics {
             this.track('intent_submission', { intentLength: data.intent.length });
         });
 
+        // Intelligence Integration: Simulated Reasoning Pipeline
+        DTFR.bus.on('command:submit', (data) => {
+            this._runReasoningCycle(data.query);
+        });
+
         // Listen for validation results
         DTFR.bus.on('monitor:unhealthy', (data) => {
             this.track('system_unhealthy', { issueCount: data.issues.length });
@@ -64,6 +69,37 @@ class DTFRMetrics {
         this._startLiveTelemetry();
 
         console.log('[DTFR Metrics] Initialized');
+    }
+
+    async _runReasoningCycle(query) {
+        // Stage 1: Rewrite
+        DTFR.bus.emit('system:process-stage', {
+            stage: 'rewrite',
+            message: 'Expanding intent for architectural depth...'
+        });
+        await new Promise(r => setTimeout(r, 1200));
+
+        // Stage 2: Search
+        DTFR.bus.emit('system:process-stage', {
+            stage: 'search',
+            message: 'Executing parallel retrieval (PPX + Web)...'
+        });
+        await new Promise(r => setTimeout(r, 2000));
+
+        // Stage 3: Synthesis
+        DTFR.bus.emit('system:process-stage', {
+            stage: 'synthesis',
+            message: 'Aggregating evidence set and cross-checking...'
+        });
+        await new Promise(r => setTimeout(r, 1500));
+
+        // Stage 4: Finalization
+        DTFR.bus.emit('system:process-stage', {
+            stage: 'finalization',
+            message: 'Finalizing specification & provenance seal.'
+        });
+
+        this.track('reasoning_complete', { queryLength: query.length });
     }
 
     _startLiveTelemetry() {

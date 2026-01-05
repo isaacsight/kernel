@@ -85,6 +85,37 @@ class ModelRouter:
                 "context_window": 200000,
                 "available": self._check_anthropic_available()
             },
+            # Claude 4 Models (2025) - Replacing Perplexity for synthesis
+            "claude-haiku-4.5": {
+                "provider": "anthropic",
+                "type": "cloud",
+                "strengths": [TaskType.FAST_SIMPLE, TaskType.CHAT, TaskType.SUMMARIZATION],
+                "cost_tier": "low",
+                "speed": "fast",
+                "quality": "high",
+                "context_window": 200000,
+                "available": self._check_anthropic_available()
+            },
+            "claude-sonnet-4": {
+                "provider": "anthropic",
+                "type": "cloud",
+                "strengths": [TaskType.CODE_GENERATION, TaskType.ANALYSIS, TaskType.CREATIVE_WRITING],
+                "cost_tier": "medium",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 200000,
+                "available": self._check_anthropic_available()
+            },
+            "claude-opus-4.5": {
+                "provider": "anthropic",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.CODE_GENERATION, TaskType.CREATIVE_WRITING],
+                "cost_tier": "high",
+                "speed": "medium",
+                "quality": "highest",
+                "context_window": 200000,
+                "available": self._check_anthropic_available()
+            },
             "gpt-4o": {
                 "provider": "openai",
                 "type": "cloud",
@@ -266,14 +297,15 @@ class ModelRouter:
         # Task to model preferences (ordered by preference)
         # Hermes3 prioritized for creative/chat/analysis per Nous Research practices
         # Qwen 2.5 72B is now the heavy hitter for deep work
+        # Task preferences: Claude 4 models prioritized for synthesis/analysis (replacing Perplexity)
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["gpt-5.2-pro", "gemini-3.0-flash", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
-            TaskType.CODE_GENERATION: ["gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["sonar-pro", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["sonar", "gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
-            TaskType.CHAT: ["sonar-pro", "gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.CREATIVE_WRITING: ["claude-opus-4.5", "gpt-5.2-pro", "gemini-3.0-flash", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CODE_GENERATION: ["claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
+            TaskType.ANALYSIS: ["claude-opus-4.5", "claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["claude-haiku-4.5", "gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
-            TaskType.FAST_SIMPLE: ["gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
+            TaskType.FAST_SIMPLE: ["claude-haiku-4.5", "gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
             TaskType.VISUAL_REASONING: ["gemini-1.5-pro", "gpt-4o", "gemini-3.0-flash"]
         }
         
@@ -563,6 +595,9 @@ class ModelRouter:
         self.models["gemini-1.5-flash"]["available"] = self._check_gemini_available()
         self.models["gemini-3.0-flash"]["available"] = self._check_gemini_available()
         self.models["claude-3.5-sonnet"]["available"] = self._check_anthropic_available()
+        self.models["claude-haiku-4.5"]["available"] = self._check_anthropic_available()
+        self.models["claude-sonnet-4"]["available"] = self._check_anthropic_available()
+        self.models["claude-opus-4.5"]["available"] = self._check_anthropic_available()
         self.models["gpt-4o"]["available"] = self._check_openai_available()
         self.models["gpt-4o-mini"]["available"] = self._check_openai_available()
         self.models["gpt-5.2-instant"]["available"] = self._check_openai_available()

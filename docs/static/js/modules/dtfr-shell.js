@@ -77,10 +77,28 @@ class DTFRShell extends HTMLElement {
       if (data.changes.includes('mode')) this._setMode(data.next.mode, true);
     });
 
+    // Adaptive Mode Transitions
+    DTFR.bus.on('command:submit', (data) => {
+      this._handleCommandIntent(data.query);
+    });
+
     window.addEventListener('hashchange', this._handleHashChange.bind(this));
     this.render();
     this._composeModules();
     DTFR.bus.emit('shell:mounted', { mode: this._mode });
+  }
+
+  _handleCommandIntent(query) {
+    const q = query.toLowerCase();
+    if (q.includes('research') || q.includes('search') || q.includes('find')) {
+      this._setMode('run');
+    } else if (q.includes('spec') || q.includes('define') || q.includes('draft')) {
+      this._setMode('spec');
+    } else if (q.includes('pattern') || q.includes('learn') || q.includes('evolve')) {
+      this._setMode('pattern');
+    } else if (q.includes('log') || q.includes('reason') || q.includes('trace')) {
+      this._setMode('log');
+    }
   }
 
   disconnectedCallback() {

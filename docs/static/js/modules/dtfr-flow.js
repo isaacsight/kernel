@@ -8,23 +8,50 @@
  */
 
 class DTFRFlow extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this._steps = [
-            { index: '01', title: 'Capture', desc: 'Natural language specification capture.', sub: 'Inquiry' },
-            { index: '02', title: 'Compile', desc: 'Recursive reasoning and stack generation.', sub: 'Reasoning' },
-            { index: '03', title: 'Execute', desc: 'Deterministic engineering operations.', sub: 'Operation' },
-            { index: '04', title: 'Verify', desc: 'Outcome validation and ledger entry.', sub: 'Verification' }
-        ];
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this._steps = [
+      { id: 'rewrite', index: '01', title: 'Rewrite', desc: 'Query expansion and intent distillation.', sub: 'Cognition' },
+      { id: 'search', index: '02', title: 'Search', desc: 'Parallel retrieval via Perplexity & Web.', sub: 'Retrieval' },
+      { id: 'synthesis', index: '03', title: 'Synthesis', desc: 'Evidence aggregation and cross-check.', sub: 'Analysis' },
+      { id: 'finalization', index: '04', title: 'Finalization', desc: 'Final compile and provenance seal.', sub: 'Outcome' }
+    ];
+    this._activeStep = null;
+  }
 
-    connectedCallback() {
+  connectedCallback() {
+    this.render();
+    this._setupBusListeners();
+
+    DTFR.bus.emit('module:mounted', {
+      tagName: 'dtfr-flow',
+      duration: 0,
+      element: this
+    });
+  }
+
+  disconnectedCallback() {
+    if (this._unsubscribe) this._unsubscribe();
+  }
+
+  _setupBusListeners() {
+    this._unsubscribe = DTFR.bus.on('system:process-stage', (data) => {
+      if (data && data.stage) {
+        this._activeStep = data.stage;
         this.render();
-    }
+      }
+    });
 
-    render() {
-        this.shadowRoot.innerHTML = `
+    // Listen for intent submission to reset
+    DTFR.bus.on('console:intent-submitted', () => {
+      this._activeStep = 'rewrite';
+      this.render();
+    });
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
       <style>
         :host {
           display: block;
@@ -45,6 +72,14 @@ class DTFRFlow extends HTMLElement {
           border-right: 1px solid var(--color-border);
           position: relative;
           transition: all var(--duration-base) var(--ease-gentle);
+          opacity: 0.5;
+          filter: grayscale(1);
+        }
+
+        .flow-node.active {
+          opacity: 1;
+          filter: grayscale(0);
+          background: var(--color-ai-ambient);
         }
 
         .flow-node:last-child {
@@ -58,6 +93,10 @@ class DTFRFlow extends HTMLElement {
           text-transform: uppercase;
           letter-spacing: 0.1em;
           margin-bottom: var(--space-sm);
+        }
+
+        .active .flow-index {
+          color: var(--color-ai-active);
         }
 
         .flow-title {
@@ -76,11 +115,7 @@ class DTFRFlow extends HTMLElement {
           line-height: 1.5;
         }
 
-        .flow-node:hover {
-          background: var(--color-ai-ambient);
-        }
-
-        .flow-node:hover::after {
+        .flow-node.active::after {
           content: '';
           position: absolute;
           bottom: 0;
@@ -91,6 +126,16 @@ class DTFRFlow extends HTMLElement {
             transparent 0%, 
             var(--color-ai-active) 50%, 
             transparent 100%);
+          opacity: 1;
+          animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+
+        .flow-node:hover {
           opacity: 1;
         }
 
@@ -113,7 +158,7 @@ class DTFRFlow extends HTMLElement {
       
       <div class="compiler-flow">
         ${this._steps.map(step => `
-          <div class="flow-node">
+          <div class="flow-node ${this._activeStep === step.id ? 'active' : ''}">
             <div class="flow-index">${step.index} / ${step.sub}</div>
             <h3 class="flow-title">${step.title}</h3>
             <p class="flow-description">${step.desc}</p>
@@ -121,17 +166,17 @@ class DTFRFlow extends HTMLElement {
         `).join('')}
       </div>
     `;
-    }
+  }
 }
 
 if (typeof DTFR !== 'undefined') {
-    DTFR.registry.register('dtfr-flow', DTFRFlow, {
-        priority: 'instructive',
-        version: '2.1.0-alpha',
-        description: 'v2.1 Multi-stage process visualization'
-    });
+  DTFR.registry.register('dtfr-flow', DTFRFlow, {
+    priority: 'instructive',
+    version: '2.2.0-beta',
+    description: 'v2.2 Intelligence-aligned process flow'
+  });
 } else {
-    customElements.define('dtfr-flow', DTFRFlow);
+  customElements.define('dtfr-flow', DTFRFlow);
 }
 
 export { DTFRFlow };

@@ -6,94 +6,63 @@
     <!-- Desktop/Mobile Top Nav -->
     <div class="dashboard-top-nav flex items-center justify-between mb-8">
         <div class="brand-info">
-            <h1 class="text-2xl font-bold">System Compiler</h1>
-            <p class="text-sm text-zinc-500">v2.1.0-alpha • Native Runtime</p>
+            <h1 class="text-2xl font-bold" style="color: var(--color-void);">System Compiler</h1>
+            <p class="text-sm" style="color: var(--color-slate);">v2.1.0-alpha • Native Runtime</p>
         </div>
         <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
-            class="badge badge--link hover:bg-zinc-800 transition-colors py-2 px-4 rounded-full border border-zinc-800 flex items-center gap-2"
-            rel="noopener">
+            class="badge badge--link py-2 px-4 rounded-full border flex items-center gap-2"
+            style="border-color: var(--color-border); color: var(--color-slate);" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" class="w-4 h-4">
                 <path
                     d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
                 </path>
             </svg>
-            <span class="font-mono text-xs">GitHub Repository</span>
+            <span class="font-mono text-xs">REPOSTITORY_TRACE</span>
         </a>
     </div>
 
     <div class="dashboard-grid">
-        <!-- The Studio OS Simulation Manifest -->
-        <section class="dashboard-card full-width mb-12 border-none bg-transparent pt-0">
-            <div class="mb-12">
-                <h2 class="text-5xl font-bold text-green-500 mb-6">The Compiler</h2>
-                <p class="text-xl text-zinc-400 max-w-3xl">This environment compiles raw human intent into deterministic
-                    engineering history. A native system for the sovereign builder.</p>
-            </div>
+        <!-- DTFR Hero Section -->
+        <section class="mb-12 full-width">
+            <dtfr-hero data-variant="default"></dtfr-hero>
+        </section>
 
-            <!-- Architecture -->
-            <div class="mb-12">
-                <h3 class="text-3xl font-bold text-green-500 mb-8">Specification</h3>
-                <div class="font-mono text-sm text-zinc-400 mb-6">
-                    Inquiry → Specification → Compilation → Execution History
-                </div>
-                <ul class="list-disc list-outside ml-6 space-y-2 text-lg text-zinc-300">
-                    <li><strong>Specs:</strong> Immutable definitions of desired system states and agent behaviors.</li>
-                    <li><strong>Runs:</strong> Discrete, reproducible execution units of business logic.</li>
-                    <li><strong>Patterns:</strong> Reusable cognitive structures and verified workflow templates.</li>
-                    <li><strong>Logs:</strong> Distributed reasoning traces and system-wide state changes.</li>
-                </ul>
-            </div>
-
-            <!-- Components -->
-            <div class="mb-12">
-                <h3 class="text-3xl font-bold text-green-500 mb-8">Components</h3>
-                <div class="space-y-4 text-lg text-zinc-300">
-                    <p><span class="text-white font-semibold">Frontend:</span> SSG + Vanilla JS. Visualizes repository
-                        state.</p>
-                    <p><span class="text-white font-semibold">Backend:</span> Python CORE, Make orchestration. Flat-file
-                        JSON/MD.</p>
-                    <p><span class="text-white font-semibold">AI Layer:</span> Gemini 1.5 Pro / Flash. Structured Output
-                        schemas.</p>
-                    <p><span class="text-white font-semibold">Infrastructure:</span> Local-first execution. GitHub Pages
-                        hosting.</p>
-                </div>
+        <!-- Builder Cockpit (Phase 4) -->
+        <section class="dashboard-card full-width mb-12"
+            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
+            <h2 class="text-3xl font-bold mb-8"
+                style="font-family: var(--font-display); font-style: italic; color: var(--color-void);">Inquiry Cockpit
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <dtfr-console></dtfr-console>
+                <dtfr-stack data-editable="true"></dtfr-stack>
             </div>
         </section>
 
-        <!-- Activity Feeds -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width">
+        <!-- Activity Feeds (Phase 3) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width mb-12">
             <!-- Latest Runs -->
-            <section class="dashboard-card">
-                <h2 class="text-2xl font-bold mb-6">Latest Runs</h2>
-                <div class="run-stream">
-                    {{ build_log_feed }}
-                </div>
-                <div class="mt-4 text-right">
-                    <a href="experiments.html" class="text-sm text-zinc-500 hover:text-white">View Full Execution
-                        History →</a>
-                </div>
-            </section>
+            <dtfr-feed data-type="runs"></dtfr-feed>
 
             <!-- Dynamic Trails -->
-            <section class="dashboard-card">
-                <h2 class="text-2xl font-bold mb-6">Dynamic Trails</h2>
-                <div class="run-stream">
-                    {{ essays_feed }}
-                </div>
-                <div class="mt-4 text-right">
-                    <a href="archive.html" class="text-sm text-zinc-500 hover:text-white">View All Essays →</a>
-                </div>
-            </section>
+            <dtfr-feed data-type="patterns"></dtfr-feed>
         </div>
 
+        <!-- Decision Log (Phase 3) -->
+        <section class="full-width mb-12">
+            <dtfr-feed data-type="log" data-limit="3"></dtfr-feed>
+        </section>
+
+
         <!-- Visitor Notes Section -->
-        <section class="dashboard-card full-width notes-section mt-12">
-            <h2 class="text-2xl font-bold mb-6">
-                <span class="status-pulse green"></span>
-                Visitor Notes
+        <section class="dashboard-card full-width notes-section mt-12"
+            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
+            <h2 class="text-2xl font-bold mb-6" style="color: var(--color-void);">
+                <span class="status-pulse ai"></span>
+                Visitor Ledger
             </h2>
-            <p class="text-zinc-400 mb-6">Leave a note — it will appear here instantly.</p>
+            <p style="color: var(--color-slate);" class="mb-6">Record a trace — persistent context for the system.</p>
 
             <!-- Note Form -->
             <form id="note-form" class="note-form mb-8">

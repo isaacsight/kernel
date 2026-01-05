@@ -53,11 +53,43 @@ class DTFRStack extends HTMLElement {
 
     this._editable = this.getAttribute('data-editable') === 'true';
     this.render();
+    this._setupBusListeners();
 
     DTFR.bus.emit('module:mounted', {
       tagName: 'dtfr-stack',
       duration: 0,
       element: this
+    });
+  }
+
+  disconnectedCallback() {
+    if (this._unsubscribe) this._unsubscribe();
+  }
+
+  _setupBusListeners() {
+    this._unsubscribe = DTFR.bus.on('console:stack-generated', (data) => {
+      if (data && data.stack) {
+        this._operations = data.stack.map(op => ({
+          ...op,
+          sig: op.sig || 'antigravity.0x' + Math.random().toString(16).substr(2, 4),
+          id: op.id || 'EX-' + Math.floor(Math.random() * 9000 + 1000)
+        }));
+        this.render();
+      }
+    });
+
+    DTFR.bus.on('stack:execute', () => {
+      this._operations = this._operations.map(op => {
+        if (op.status === 'pending' || op.status === 'running') {
+          return { ...op, status: 'complete' };
+        }
+        return op;
+      });
+      this.render();
+
+      setTimeout(() => {
+        DTFR.bus.emit('stack:complete', { operations: this._operations });
+      }, 1500);
     });
   }
 
@@ -89,7 +121,7 @@ class DTFRStack extends HTMLElement {
     const id = op.id || `EX-${Math.floor(Math.random() * 9000 + 1000)}`;
 
     return `
-      <div class="operation ${status.class}">
+      <div class="operation ${status.class}" title="Click to view trace for ${id}">
         <div class="op-sidebar">
           <div class="op-icon" style="--op-color: ${type.color}">
             ${status.class === 'complete' ? '✓' : ''}
@@ -159,6 +191,12 @@ class DTFRStack extends HTMLElement {
         .operation {
           display: flex;
           gap: var(--space-4);
+          cursor: pointer;
+          transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .operation:hover {
+            transform: translateX(4px);
         }
 
         .op-sidebar {
@@ -278,11 +316,12 @@ class DTFRStack extends HTMLElement {
           font-size: var(--text-xs);
           text-transform: uppercase;
           cursor: pointer;
-          transition: opacity 0.2s;
+          transition: all 0.2s;
         }
 
         .action-btn:hover {
-          opacity: 0.8;
+          background: var(--color-ai-active);
+          color: var(--color-void);
         }
 
         .action-btn.secondary {
@@ -295,7 +334,7 @@ class DTFRStack extends HTMLElement {
       <div class="stack-container">
         <header class="stack-header">
           <h3 class="stack-title">Execution Chain</h3>
-          <div class="stack-meta">V2.1_CORE // ${this._operations.length} NODES</div>
+          <div class="stack-meta">V2.2_INTEL // ${this._operations.length} NODES</div>
         </header>
         
         <div class="operations">
@@ -322,8 +361,8 @@ class DTFRStack extends HTMLElement {
 if (typeof DTFR !== 'undefined') {
   DTFR.registry.register('dtfr-stack', DTFRStack, {
     priority: 'instructive',
-    version: '2.1.0',
-    description: 'v2.1 Provenance-First Execution Stack'
+    version: '2.2.0-beta',
+    description: 'v2.2 Trace-ready Execution Stack'
   });
 } else {
   customElements.define('dtfr-stack', DTFRStack);

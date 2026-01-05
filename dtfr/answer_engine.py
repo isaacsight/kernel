@@ -4,6 +4,8 @@ from dtfr.search.aggregator import EvidenceAggregator
 from dtfr.search.citations import assign_source_ids
 from dtfr.search.related import make_related_questions
 from dtfr.search.crosscheck import cross_check
+from dtfr.search.sanitizer import sanitize_query, sanitize_for_prompt, is_suspicious
+from dtfr.ledger_writer import log_answer_result
 import logging
 
 logger = logging.getLogger("AnswerEngine")
@@ -91,10 +93,15 @@ class AnswerEngine:
         """
         Structured research loop yielding states for the UI.
         """
-        # 1. Retrieval Phase
-        yield {"type": "thought", "content": f"Searching for {query}..."}
+        # 0. Input Sanitization (Security)
+        safe_query = sanitize_query(query)
+        if is_suspicious(query):
+            logger.warning(f"Suspicious query detected, sanitized: {query[:100]}...")
 
-        sources = self.aggregator.collect(query, mode)
+        # 1. Retrieval Phase
+        yield {"type": "thought", "content": f"Searching for {safe_query}..."}
+
+        sources = self.aggregator.collect(safe_query, mode)
         grounded = len(sources) > 0
 
         sources_panel = assign_source_ids(sources)
@@ -123,7 +130,9 @@ class AnswerEngine:
         async for chunk in self.router.complete_stream_async(
             model=model,
             system=SYNTHESIS_SYSTEM,
-            user=synthesis_user_prompt(query=query, mode=mode, sources_compact=compact),
+            user=synthesis_user_prompt(
+                query=sanitize_for_prompt(safe_query), mode=mode, sources_compact=compact
+            ),
             temperature=0.2 if mode in ("research", "academic") else 0.3,
         ):
             full_answer += chunk
@@ -140,11 +149,26 @@ class AnswerEngine:
         yield {"type": "badges", "content": badges}
 
         # Cross-check loop (async)
+        cross_notes = []
         if self.presets[mode].cross_check and grounded:
             yield {"type": "thought", "content": "Verifying factual claims..."}
             verifier_model = self.router.pick(task="verify", mode=mode)
-            notes = await cross_check(self.router, verifier_model, full_answer, compact)
-            if notes:
-                yield {"type": "notes", "content": notes}
+            cross_notes = await cross_check(self.router, verifier_model, full_answer, compact)
+            if cross_notes:
+                yield {"type": "notes", "content": cross_notes}
+
+        # 4. Observability: Log to ledger
+        try:
+            activity_id = log_answer_result(
+                inquiry=safe_query,
+                mode=mode,
+                sources=sources_panel,
+                answer=full_answer,
+                notes=cross_notes if cross_notes else None,
+                grounded=grounded,
+            )
+            logger.info(f"Logged answer to ledger: {activity_id}")
+        except Exception as e:
+            logger.warning(f"Failed to log to ledger: {e}")
 
         yield {"type": "done", "full_content": full_answer}

@@ -8,68 +8,97 @@
  */
 
 class DTFRCommandBar extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this._status = 'Ready';
-        this._history = [];
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this._status = 'Ready';
+    this._history = [];
+    this._isProcessing = false;
+  }
 
-    connectedCallback() {
-        this.render();
-        this._setupEventListeners();
-    }
+  connectedCallback() {
+    this.render();
+    this._setupEventListeners();
+    this._setupBusListeners();
 
-    _setupEventListeners() {
-        const input = this.shadowRoot.querySelector('.command-input');
-        const container = this.shadowRoot.querySelector('.command-bar');
+    DTFR.bus.emit('module:mounted', {
+      tagName: 'dtfr-command-bar',
+      duration: 0,
+      element: this
+    });
+  }
 
-        input.addEventListener('focus', () => {
-            container.classList.add('focused');
-            this._status = 'Listening...';
-            this._updateStatus();
-        });
+  disconnectedCallback() {
+    if (this._unsubscribe) this._unsubscribe();
+  }
 
-        input.addEventListener('blur', () => {
-            container.classList.remove('focused');
-            this._status = 'Ready';
-            this._updateStatus();
-        });
-
-        input.addEventListener('keydown', async (e) => {
-            if (e.key === 'Enter') {
-                const query = input.value.trim();
-                if (query) {
-                    await this._processQuery(query);
-                    input.value = '';
-                }
-            }
-        });
-    }
-
-    async _processQuery(query) {
-        this._status = 'Processing...';
+  _setupBusListeners() {
+    this._unsubscribe = DTFR.bus.on('system:process-stage', (data) => {
+      if (data && data.message) {
+        this._status = data.message;
         this._updateStatus();
-        this.shadowRoot.querySelector('.command-bar').classList.add('active');
+      }
+      if (data && data.stage === 'finalization') {
+        setTimeout(() => {
+          this._isProcessing = false;
+          this._status = 'Ready';
+          this._updateStatus();
+          this.shadowRoot.querySelector('.command-bar').classList.remove('active');
+        }, 1000);
+      }
+    });
+  }
 
-        // Emit for system processing
-        DTFR.bus.emit('command:submit', { query, timestamp: Date.now() });
+  _setupEventListeners() {
+    const input = this.shadowRoot.querySelector('.command-input');
+    const container = this.shadowRoot.querySelector('.command-bar');
 
-        // Simulate processing
-        await new Promise(r => setTimeout(r, 1200));
+    input.addEventListener('focus', () => {
+      container.classList.add('focused');
+      if (!this._isProcessing) {
+        this._status = 'Listening...';
+        this._updateStatus();
+      }
+    });
 
+    input.addEventListener('blur', () => {
+      container.classList.remove('focused');
+      if (!this._isProcessing) {
         this._status = 'Ready';
         this._updateStatus();
-        this.shadowRoot.querySelector('.command-bar').classList.remove('active');
-    }
+      }
+    });
 
-    _updateStatus() {
-        const statusEl = this.shadowRoot.querySelector('.command-status');
-        if (statusEl) statusEl.textContent = this._status;
-    }
+    input.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const query = input.value.trim();
+        if (query && !this._isProcessing) {
+          await this._processQuery(query);
+          input.value = '';
+        }
+      }
+    });
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  async _processQuery(query) {
+    this._isProcessing = true;
+    this._status = 'Initializing...';
+    this._updateStatus();
+    this.shadowRoot.querySelector('.command-bar').classList.add('active');
+
+    // Emit for system processing
+    DTFR.bus.emit('command:submit', { query, timestamp: Date.now() });
+
+    // This component now relies on system:process-stage events to update status
+  }
+
+  _updateStatus() {
+    const statusEl = this.shadowRoot.querySelector('.command-status');
+    if (statusEl) statusEl.textContent = this._status;
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
       <style>
         :host {
           display: block;
@@ -105,12 +134,13 @@ class DTFRCommandBar extends HTMLElement {
           width: 100%;
           height: 2px;
           background: linear-gradient(90deg, transparent, var(--color-ai-active), transparent);
+          background-size: 200% 100%;
           animation: slide 2s infinite linear;
         }
 
         @keyframes slide {
-          from { background-position: -200% 0; }
-          to { background-position: 200% 0; }
+          from { background-position: 200% 0; }
+          to { background-position: -200% 0; }
         }
 
         .command-prompt {
@@ -142,29 +172,33 @@ class DTFRCommandBar extends HTMLElement {
           color: var(--color-mist);
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          min-width: 80px;
+          min-width: 120px;
           text-align: right;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       </style>
       
       <div class="command-bar">
         <div class="command-prompt">$</div>
         <input type="text" class="command-input" 
-               placeholder="Ask anything about the system...">
+               placeholder="Ask anything about the system..."
+               autofocus>
         <div class="command-status">${this._status}</div>
       </div>
     `;
-    }
+  }
 }
 
 if (typeof DTFR !== 'undefined') {
-    DTFR.registry.register('dtfr-command-bar', DTFRCommandBar, {
-        priority: 'instructive',
-        version: '2.1.0-alpha',
-        description: 'v2.1 Natural Language Command Interface'
-    });
+  DTFR.registry.register('dtfr-command-bar', DTFRCommandBar, {
+    priority: 'instructive',
+    version: '2.2.0-beta',
+    description: 'v2.2 Trace-ready Command Interface'
+  });
 } else {
-    customElements.define('dtfr-command-bar', DTFRCommandBar);
+  customElements.define('dtfr-command-bar', DTFRCommandBar);
 }
 
 export { DTFRCommandBar };
