@@ -4963,3 +4963,27 @@ body.brand-page::-webkit-scrollbar-thumb {
 .note-error {
     color: #ef4444;
 }
+/* --- CRITICAL: SIDEBAR LAYOUT ABOLUTE FIX --- */
+
+/* 1. Mobile Default: Sidebar Hidden */
+.sidebar {
+    display: none !important;
+}
+
+.main-content {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+}
+
+/* 2. Desktop (>= 1025px): Sidebar Visible, Content Pushed Right */
+@media (min-width: 1025px) {
+    .sidebar {
+        display: flex !important;
+    }
+
+    .main-content {
+        margin-left: calc(var(--sidebar-width) + 40px) !important;
+        max-width: calc(100% - (var(--sidebar-width) + 40px)) !important;
+        padding-right: 40px !important;
+    }
+}
