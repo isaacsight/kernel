@@ -1,19 +1,13 @@
-"""
-Web Scout - Real-Time Web Research and Fact Checking
-
-Inspired by Replit's Web Search feature.
-Enables agents to access current information from the web.
-"""
-
-import os
+import asyncio
 import json
 import logging
+import os
 import requests
 from datetime import datetime
 from typing import Dict, List, Optional, Any
+
 from admin.infrastructure.perplexity import PerplexityClient
-from urllib.parse import quote_plus
-import asyncio
+from admin.brain.system_prompts import SystemPrompts
 
 logger = logging.getLogger("WebScout")
 
@@ -25,25 +19,57 @@ except ImportError:
     TIKTOK_AVAILABLE = False
 
 
+class ActiveInferenceMindset:
+    """
+    Tracks belief state and surprise for the search agent.
+    """
+
+    def __init__(self):
+        self.belief_state = {}  # query_hash -> {expected_count: int, confidence: float}
+        self.surprise_threshold = 0.6
+
+    def observe(self, query: str, results: List[Dict]) -> Dict[str, Any]:
+        query_hash = str(hash(query) % 100000)
+        prior = self.belief_state.get(query_hash, {"expected_count": 5, "confidence": 0.5})
+
+        actual_count = len(results)
+        surprise = abs(actual_count - prior["expected_count"]) / max(prior["expected_count"], 1)
+
+        # Update belief state (Bayesian lite)
+        self.belief_state[query_hash] = {
+            "expected_count": int((prior["expected_count"] + actual_count) / 2),
+            "confidence": min(
+                1.0,
+                prior["confidence"] + 0.1
+                if surprise < self.surprise_threshold
+                else prior["confidence"] - 0.1,
+            ),
+        }
+
+        return {
+            "surprise": surprise,
+            "confidence": self.belief_state[query_hash]["confidence"],
+            "high_surprise": surprise > self.surprise_threshold,
+        }
+
+
 class WebScout:
     """
     The Web Scout (Research Intelligence)
 
     Mission: Provide real-time web research capabilities to the agent team.
-
-    Inspired by Replit's Web Search feature that overcomes knowledge cutoffs.
-
-    Responsibilities:
-    - Search the web for current information
-    - Fact-check claims in content
-    - Research trending topics
-    - Find relevant documentation and APIs
+    Upgraded with Antigravity Sovereign Principles:
+    - Active Inference: Models internal uncertainty and surprise.
+    - Kinetic Prompts: Self-instruments research depth.
+    - Alchemist Transmutation: Resilient, multi-provider failover.
     """
 
     def __init__(self):
         self.name = "The Web Scout"
         self.role = "Research Intelligence"
         self.emoji = "🌐"
+        self.mindset = ActiveInferenceMindset()
+        self.prompts = SystemPrompts()
 
         # API configurations
         self.serper_key = os.environ.get("SERPER_API_KEY")
@@ -82,51 +108,83 @@ class WebScout:
 
     def search(self, query: str, num_results: int = 5, search_type: str = "search") -> List[Dict]:
         """
-        Search the web for information.
-
-        Args:
-            query: Search query
-            num_results: Number of results to return
-            search_type: "search", "news", or "images"
-
-        Returns: List of search results
+        Search the web using a Sovereign Active Inference loop.
         """
+        # 1. Kinetic Prompt Injection (Metacognition)
+        query = self._inject_kinetic_prompts(query)
+
         cache_key = f"{query}:{search_type}"
 
-        # Check cache first
+        # 2. Epistemic Action (Check Cache)
         if cache_key in self.cache["searches"]:
             cached = self.cache["searches"][cache_key]
-            # Use cache if less than 1 hour old
             cached_time = datetime.fromisoformat(cached["timestamp"])
             if (datetime.now() - cached_time).seconds < 3600:
+                logger.info(f"[{self.name}] Cache Hit (Pragmatic Exploitation): {query[:30]}...")
                 return cached["results"]
 
-        results = []
+        # 3. Alchemist Transmutation (Resilient Execution)
+        results = self._apply_resilience(query, num_results, search_type)
 
-        if self.ppx_client.api_key:
-            results = self._search_perplexity(query, num_results)
+        # 4. Active Inference Observation (Belief Update)
+        observation = self.mindset.observe(query, results)
 
-        # Try Serper API (Google Search)
-        elif self.serper_key:
-            results = self._search_serper(query, num_results, search_type)
-
-        # Fallback to Brave API
-        elif self.brave_key:
-            results = self._search_brave(query, num_results)
-
-        # Fallback to DuckDuckGo (no API key needed)
-        else:
-            results = self._search_duckduckgo(query, num_results)
+        if observation["high_surprise"]:
+            logger.warning(
+                f"[{self.name}] HIGH SURPRISE (Surprise: {observation['surprise']:.2f}). Uncertainty high."
+            )
 
         # Cache results
         self.cache["searches"][cache_key] = {
             "results": results,
             "timestamp": datetime.now().isoformat(),
+            "confidence": observation["confidence"],
         }
         self._save_cache()
 
-        logger.info(f"[{self.name}] Found {len(results)} results for '{query}'")
+        logger.info(
+            f"[{self.name}] Search Complete. Results: {len(results)}. Confidence: {observation['confidence']:.2f}"
+        )
         return results
+
+    def _inject_kinetic_prompts(self, query: str) -> str:
+        """Injects deep research protocols if the query is technical."""
+        technical_keywords = [
+            "architecture",
+            "api",
+            "implementation",
+            "security",
+            "optimization",
+            "sovereign",
+        ]
+        if any(k in query.lower() for k in technical_keywords):
+            logger.info(f"[{self.name}] Injecting Deep Research Protocol.")
+            return f"{self.prompts.get_deep_research_protocol_prompt() if hasattr(self.prompts, 'get_deep_research_protocol_prompt') else 'Conduct a first-principles deep audit.'} Query: {query}"
+        return query
+
+    def _apply_resilience(self, query: str, num: int, search_type: str) -> List[Dict]:
+        """Alchemist Transmutation: Multi-provider failover logic."""
+        providers = [
+            ("Perplexity", lambda: self._search_perplexity(query, num)),
+            (
+                "Serper",
+                lambda: self._search_serper(query, num, search_type) if self.serper_key else [],
+            ),
+            ("Brave", lambda: self._search_brave(query, num) if self.brave_key else []),
+            ("DuckDuckGo", lambda: self._search_duckduckgo(query, num)),
+        ]
+
+        for name, provider_func in providers:
+            try:
+                results = provider_func()
+                if results:
+                    return results
+            except Exception as e:
+                logger.warning(
+                    f"[{self.name}] {name} provider failed: {e}. Transmuting to next provider..."
+                )
+
+        return []
 
     def _search_serper(self, query: str, num: int, search_type: str) -> List[Dict]:
         """Search using Serper (Google) API."""

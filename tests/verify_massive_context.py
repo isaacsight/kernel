@@ -18,17 +18,29 @@ async def test_deep_research_mode():
     print(f"Query: {query}")
     print(f"Mode: {mode}")
 
-    async for step in engine.generate(query, mode=mode):
-        if step["type"] == "thought":
-            print(f"💭 {step['content']}")
-        elif step["type"] == "sources":
-            print(f"📚 Found {len(step['content'])} sources (including Full System Context).")
-        elif step["type"] == "chunk":
-            # Print first few chars to verify synthesis
-            print(f"✍️ Chunk received (len: {len(step['content'])})")
-        elif step["type"] == "done":
-            print("\n✅ Deep Research Synthesis Complete.")
-            print(f"Full Length: {len(step['full_content'])} characters.")
+    async def run_gen():
+        async for step in engine.generate(query, mode=mode):
+            if step["type"] == "thought":
+                print(f"💭 {step['content']}")
+            elif step["type"] == "sources":
+                print(f"📚 Found {len(step['content'])} sources.")
+            elif step["type"] == "chunk":
+                # Print first few chars to verify synthesis
+                print(f"✍️ Received chunk (len: {len(step['content'])})")
+            elif step["type"] == "done":
+                print("\n✅ Deep Research Synthesis Complete.")
+                print(f"Final Content Length: {len(step['full_content'])} characters.")
+
+    try:
+        # Wrap the whole generation to detect stuck retrieval/synthesis
+        # Use asyncio.wait_for for Python 3.9 compatibility
+        await asyncio.wait_for(run_gen(), timeout=60)
+    except asyncio.TimeoutError:
+        print(
+            "\n❌ CRITICAL: Verification timed out after 60 seconds. System may still be hanging."
+        )
+    except Exception as e:
+        print(f"\n❌ ERROR: {e}")
 
 
 if __name__ == "__main__":

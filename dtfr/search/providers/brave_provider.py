@@ -1,4 +1,3 @@
-import requests
 from dtfr.schemas import Source
 from dtfr.search.providers.base import SearchProvider
 
@@ -9,9 +8,11 @@ class BraveProvider(SearchProvider):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def search(self, query: str, k: int) -> list[Source]:
+    async def search(self, query: str, k: int) -> list[Source]:
         if not self.api_key:
             return []
+
+        import httpx
 
         url = "https://api.search.brave.com/res/v1/web/search"
         headers = {
@@ -21,9 +22,10 @@ class BraveProvider(SearchProvider):
         params = {"q": query, "count": min(max(k, 1), 20)}
 
         try:
-            r = requests.get(url, headers=headers, params=params, timeout=15)
-            r.raise_for_status()
-            j = r.json()
+            async with httpx.AsyncClient() as client:
+                r = await client.get(url, headers=headers, params=params, timeout=15)
+                r.raise_for_status()
+                j = r.json()
         except Exception:
             return []
 

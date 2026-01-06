@@ -17,12 +17,12 @@ class PerplexityProvider(SearchProvider):
         self.client = client
         self.model = model
 
-    def search(self, query: str, k: int) -> list[Source]:
+    async def search(self, query: str, k: int) -> list[Source]:
         # Ask for more than needed then truncate after dedup/rerank
         want = max(k, 10)
 
-        # Using the existing PerplexityClient.chat_completion (synchronous)
-        resp = self.client.chat_completion(
+        # Using the existing PerplexityClient.chat_completion_async
+        resp = await self.client.chat_completion_async(
             model=self.model,
             messages=[{"role": "user", "content": PPLX_RETRIEVAL_PROMPT.format(query=query)}],
             temperature=0.2,

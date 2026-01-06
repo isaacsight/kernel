@@ -320,7 +320,7 @@ class ModelRouter:
     
     def _check_gemini_available(self) -> bool:
         """Check if Gemini API is configured."""
-        return bool(os.environ.get("GEMINI_API_KEY"))
+        return bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
     
     def _check_anthropic_available(self) -> bool:
         """Check if Anthropic API is configured."""
@@ -337,12 +337,11 @@ class ModelRouter:
     def _check_ollama_available(self) -> bool:
         """Check if Ollama is available (local or remote)."""
         import socket
-        
         # Check local Ollama
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex(('localhost', 11434))
+            result = sock.connect_ex(('127.0.0.1', 11434))
             sock.close()
             if result == 0:
                 return True
@@ -355,7 +354,8 @@ class ModelRouter:
             if node_url:
                 try:
                     import requests
-                    response = requests.get(f"{node_url}/health", timeout=2)
+                    # Use a short connect timeout and a short read timeout
+                    response = requests.get(f"{node_url}/health", timeout=(1, 2))
                     return response.status_code == 200
                 except:
                     pass
@@ -373,21 +373,9 @@ class ModelRouter:
             return False
             
         node_url = os.environ.get("STUDIO_NODE_URL")
-        # Hardcode the known IP if env var is missing/default, based on recent success
-        if not node_url:
-            node_url = "http://100.98.193.42:8080" # WebUI port, or use 52415 for direct API if needed.
-            # However, looking at alchemist.py, it expects an /api/endpoint.
-            # The WebUI usually proxies /api/ requests. 
-            # Or we can check the backend port directly if we are on the same tailscale network.
-            # Let's assume the env var is set or we should set it. 
-            # For this check, we'll try a simple ping or health check if possible.
-            # But wait, alchemist uses /api/generate.
-            pass
-
         if node_url:
             try:
                 import requests
-                # Try a lightweight endpoint. OpenWebUI usually has /health or /api/v1/models
                 response = requests.get(f"{node_url}/health", timeout=2)
                 return response.status_code == 200
             except:
@@ -398,7 +386,7 @@ class ModelRouter:
         """Check if Codex CLI is installed and accessible."""
         import subprocess
         try:
-            subprocess.run(["codex", "--version"], capture_output=True, check=True)
+            subprocess.run(["codex", "--version"], capture_output=True, check=True, timeout=1)
             return True
         except:
             return False
@@ -492,7 +480,21 @@ class ModelRouter:
             # Calculate score
             score = 100  # Base score
             
-            # Preference adjustments
+            # 0. Performance Bonus (Differentiable Routing)
+            try:
+                from admin.brain.memory_store import get_memory_store
+                memory = get_memory_store()
+                perf = memory.get_model_performance(model_name, task_type.value)
+                if perf:
+                    # Boost score based on historical success (0.0 to 1.0)
+                    score += int(perf.get("avg_success", 0) * 50)
+                    # Penalize latency (simplified: -5 for every 2s)
+                    score -= int(perf.get("avg_latency", 0) / 2 * 5)
+            except Exception as e:
+                # Fail soft if memory check fails
+                pass
+            
+            # 1. Preference adjustments
             if constraints.get("prefer_local") and model["type"] == "local":
                 score += 30
             
@@ -667,8 +669,18 @@ class ModelRouter:
         for current_model in models_to_try:
             current_provider = self.models[current_model]["provider"]
             try:
+                start_time = datetime.now()
                 res_text = await self._execute_call(current_model, current_provider, prompt, system_prompt, **kwargs)
+                duration = (datetime.now() - start_time).total_seconds()
+                
                 if res_text:
+                    # Log successful outcome
+                    try:
+                        from admin.brain.memory_store import get_memory_store
+                        memory = get_memory_store()
+                        memory.log_model_outcome(current_model, task_type.value, 1.0, duration)
+                    except:
+                        pass
                     return {"selected": current_model, "text": res_text, "provider": current_provider}
             except Exception as e:
                 logger.warning(f"[{self.name}] Model {current_model} failed: {e}")

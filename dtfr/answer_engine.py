@@ -101,7 +101,7 @@ class AnswerEngine:
         # 1. Retrieval Phase
         yield {"type": "thought", "content": f"Searching for {safe_query}..."}
 
-        sources = self.aggregator.collect(safe_query, mode)
+        sources = await self.aggregator.collect(safe_query, mode)
         grounded = len(sources) > 0
 
         sources_panel = assign_source_ids(sources)

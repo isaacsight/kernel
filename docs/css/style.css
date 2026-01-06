@@ -35,6 +35,9 @@
 
     /* Typography Measures */
     --measure-body: var(--measure-optimal);
+
+    /* Layout Dimensions */
+    --sidebar-width: 280px;
 }
 
 body {
@@ -591,6 +594,18 @@ a:hover {
     padding: 0;
 }
 
+@media (min-width: 1025px) {
+    .main-content {
+        margin-left: calc(var(--sidebar-width) + 40px);
+        max-width: calc(100% - (var(--sidebar-width) + 40px));
+        padding-right: 40px;
+    }
+
+    .sidebar {
+        display: flex;
+    }
+}
+
 /* Sidebar Navigation (Liquid Glass Style) */
 .sidebar {
     position: fixed;
@@ -604,7 +619,7 @@ a:hover {
     border: 1px solid var(--material-glass-border-dark);
     border-radius: var(--radius-concentric-outer);
     z-index: 1000;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     padding: 20px 0;

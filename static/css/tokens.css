@@ -66,7 +66,12 @@
     --color-system-separator: rgba(0, 0, 0, 0.1);
     --color-system-tint: var(--color-ai);
 
-    /* === Typography — v2.1 AI-Native === */
+    /* === Accessibility Benchmarks (WCAG 2.1 AA) === */
+    --contrast-aa-normal: 4.5;
+    --contrast-aa-large: 3.0;
+    --contrast-aaa-normal: 7.0;
+
+    /* === Typography — v2.1 AI-Native (Sovereign Edition) === */
     --font-display: 'Instrument Serif', Georgia, serif;
     --font-interface: 'Inter', system-ui, sans-serif;
     --font-code: 'JetBrains Mono', monospace;
@@ -83,8 +88,6 @@
     --text-2xl: clamp(1.73rem, 1.52rem + 1.03vw, 2.2rem);
     --text-3xl: clamp(2.07rem, 1.8rem + 1.37vw, 2.75rem);
     --text-4xl: clamp(2.49rem, 2.12rem + 1.83vw, 3.43rem);
-    --text-5xl: 3.5rem;
-    /* Page Titles */
 
     /* === Font Weights === */
     --font-normal: 400;
@@ -92,38 +95,38 @@
     --font-semibold: 600;
     --font-bold: 700;
 
-    /* === Line Heights === */
+    /* === Leading (Strict Mathematical Ratios) === */
     --leading-none: 1;
-    --leading-tight: 1.35;
-    --leading-snug: 1.5;
-    --leading-normal: 1.75;
-    --leading-relaxed: 2;
+    --leading-tight: 1.2;
+    /* Titles / Short Columns */
+    --leading-snug: 1.3;
+    /* Subtitles */
+    --leading-normal: 1.5;
+    /* Optimized for long-form reading (0.001% rule) */
+    --leading-relaxed: 1.625;
+    /* Expansive / High-breathability */
 
-    /* === Letter Spacing === */
-    --tracking-tight: -0.02em;
-    --tracking-normal: 0.01em;
-    --tracking-wide: 0.05em;
-    --tracking-wider: 0.1em;
+    /* === Measures (Reading Comfort) === */
+    --measure-optimal: 70ch;
+    /* 60-80 character sweet spot */
+    --measure-tight: 45ch;
 
-    /* === Spacing — Fibonacci-Based System === */
-    --space-unit: 4px;
-    --space-xs: 8px;
-    /* 2 × unit */
-    --space-sm: 12px;
-    /* 3 × unit */
-    --space-md: 20px;
-    /* 5 × unit */
-    --space-lg: 32px;
-    /* 8 × unit */
-    --space-xl: 52px;
-    /* 13 × unit */
-    --space-2xl: 84px;
-    /* 21 × unit */
+    /* === Spacing — Strict 8-Point Grid System === */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+    --space-7: 56px;
+    --space-8: 64px;
+    --space-9: 72px;
+    --space-10: 80px;
 
-    --ma-tight: var(--space-sm);
-    --ma-normal: var(--space-md);
-    --ma-relaxed: var(--space-lg);
-    --ma-expansive: var(--space-xl);
+    --ma-tight: var(--space-1);
+    --ma-normal: var(--space-2);
+    --ma-relaxed: var(--space-4);
+    --ma-expansive: var(--space-8);
 
     /* === Layout === */
     --max-width-sm: 640px;
@@ -131,37 +134,38 @@
     --max-width-lg: 1024px;
     --max-width-xl: 1280px;
     --max-width-2xl: 1400px;
+    --max-width-measure: var(--measure-optimal);
 
     --grid-columns: 4;
-    --grid-gap: var(--ma-relaxed);
-    --gutter: var(--space-6);
-    --gutter-mobile: var(--space-4);
+    --grid-gap: var(--space-4);
+    --gutter: var(--space-4);
+    --gutter-mobile: var(--space-2);
 
-    /* === Border Radius — Liquid Glass Shape System === */
+    /* === Border Radius — Precision Shapes === */
     --radius-none: 0;
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
-    --radius-2xl: 1.5rem;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
     --radius-full: 9999px;
 
     /* Apple-inspired Liquid Glass Shapes */
     --radius-fixed: 12px;
     --radius-capsule: 9999px;
     --radius-concentric-outer: 24px;
-    --radius-concentric-inner: calc(var(--radius-concentric-outer) - var(--space-md));
+    --radius-concentric-inner: calc(var(--radius-concentric-outer) - var(--space-2));
 
-    /* === Liquid Glass Materials === */
-    --glass-blur-small: blur(10px);
-    --glass-blur-medium: blur(20px);
-    --glass-blur-large: blur(30px);
+    /* === Liquid Glass Materials (v2.2 0.001% Edition) === */
+    --glass-blur-small: blur(8px);
+    --glass-blur-medium: blur(16px);
+    --glass-blur-large: blur(32px);
 
-    /* Functional Layers */
-    --material-glass-bg: rgba(255, 255, 255, 0.7);
-    --material-glass-bg-dark: rgba(10, 10, 10, 0.75);
-    --material-glass-border: rgba(255, 255, 255, 0.2);
-    --material-glass-border-dark: rgba(255, 255, 255, 0.08);
+    /* Functional Layers with 0.001% opacity precision */
+    --material-glass-bg: rgba(255, 255, 255, 0.72);
+    --material-glass-bg-dark: rgba(10, 10, 10, 0.78);
+    --material-glass-border: rgba(255, 255, 255, 0.24);
+    --material-glass-border-dark: rgba(255, 255, 255, 0.12);
 
     --material-functional: var(--material-glass-bg);
     --material-functional-layer: var(--material-glass-bg);

@@ -140,6 +140,16 @@ class DTFRFeed extends HTMLElement {
         }));
         break;
 
+      case 'log':
+        filtered = posts.slice(0, this._limit).map(p => ({
+          id: 'LOG-' + p.slug.substring(0, 4).toUpperCase(),
+          decision: p.title || 'Untitled Decision',
+          reasoning: p.tldr || p.excerpt || p.subtitle || 'System reasoning trace unavailable.',
+          date: p.date,
+          link: p.output_rel_path
+        }));
+        break;
+
       default:
         // Recent items for other feeds
         filtered = posts.slice(0, this._limit).map(p => ({

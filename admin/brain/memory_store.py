@@ -91,6 +91,18 @@ class MemoryStore:
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+        # Model performance (Differentiable Routing)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS model_performance (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                model_name TEXT NOT NULL,
+                task_type TEXT NOT NULL,
+                success_score REAL,
+                latency REAL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
         
         # Insights table (learned patterns)
         cursor.execute("""
