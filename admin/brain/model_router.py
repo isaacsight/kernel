@@ -248,7 +248,7 @@ class ModelRouter:
                 "speed": "medium",
                 "quality": "high",
                 "context_window": 32000,
-                "available": self._check_studio_node_available()
+                "available": self._check_cognitive_node_available()
             },
             # OpenAI Codex CLI (Local Exec)
             "codex-exec": {
@@ -299,14 +299,14 @@ class ModelRouter:
         # Qwen 2.5 72B is now the heavy hitter for deep work
         # Task preferences: Claude 4 models prioritized for synthesis/analysis (replacing Perplexity)
         self.task_preferences = {
-            TaskType.CREATIVE_WRITING: ["claude-opus-4.5", "gpt-5.2-pro", "gemini-3.0-flash", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
-            TaskType.CODE_GENERATION: ["claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
-            TaskType.ANALYSIS: ["claude-opus-4.5", "claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
-            TaskType.SUMMARIZATION: ["claude-haiku-4.5", "gemini-3.0-flash", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
-            TaskType.CHAT: ["claude-sonnet-4", "gemini-3.0-flash", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
+            TaskType.CREATIVE_WRITING: ["claude-opus-4.5", "gpt-5.2-pro", "gemini-2.0-pro-exp-02-05", "qwen-2.5-72b", "hermes3", "gemini-1.5-pro", "claude-3.5-sonnet", "mistral", "gpt-4o"],
+            TaskType.CODE_GENERATION: ["claude-sonnet-4", "gemini-2.0-pro-exp-02-05", "gpt-5.2-thinking", "qwen-2.5-72b", "claude-3.5-sonnet", "codestral", "deepseek-coder", "gpt-4o"],
+            TaskType.ANALYSIS: ["claude-opus-4.5", "claude-sonnet-4", "gemini-2.0-pro-exp-02-05", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "claude-3.5-sonnet", "gpt-4o", "gemini-1.5-pro", "mistral"],
+            TaskType.SUMMARIZATION: ["claude-haiku-4.5", "gemini-2.0-flash-exp", "gpt-5.2-instant", "gemini-1.5-flash", "gpt-4o-mini", "qwen-2.5-72b", "hermes3", "mistral"],
+            TaskType.CHAT: ["claude-sonnet-4", "gemini-2.0-flash-exp", "gpt-5.2-pro", "gpt-5.2-thinking", "qwen-2.5-72b", "hermes3", "gemini-1.5-flash", "llama3.2", "mistral", "gpt-4o-mini"],
             TaskType.EMBEDDING: ["nomic-embed-text", "gemini-1.5-pro"],
-            TaskType.FAST_SIMPLE: ["claude-haiku-4.5", "gemini-3.0-flash", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
-            TaskType.VISUAL_REASONING: ["gemini-1.5-pro", "gpt-4o", "gemini-3.0-flash"]
+            TaskType.FAST_SIMPLE: ["claude-haiku-4.5", "gemini-2.0-flash-exp", "gpt-5.2-instant", "llama3.2", "gemini-1.5-flash", "gpt-4o-mini"],
+            TaskType.VISUAL_REASONING: ["gemini-1.5-pro", "gpt-4o", "gemini-2.0-flash-exp"]
         }
         
         logger.info(f"[{self.name}] Initialized with {len(self.models)} models")

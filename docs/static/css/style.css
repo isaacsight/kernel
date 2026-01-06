@@ -643,15 +643,18 @@ a:hover {
     padding: 0;
 }
 
-/* Sidebar Navigation (New Comet Style) */
+/* Sidebar Navigation (Liquid Glass Style) */
 .sidebar {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
+    top: var(--space-md);
+    left: var(--space-md);
+    height: calc(100vh - (var(--space-md) * 2));
     width: var(--sidebar-width);
-    background: var(--bg-secondary);
-    border-right: 1px solid var(--border-subtle);
+    background: var(--material-glass-bg-dark);
+    -webkit-backdrop-filter: var(--glass-blur-large);
+    backdrop-filter: var(--glass-blur-large);
+    border: 1px solid var(--material-glass-border-dark);
+    border-radius: var(--radius-concentric-outer);
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -659,6 +662,7 @@ a:hover {
     padding: 20px 0;
     overflow-y: auto;
     overflow-x: hidden;
+    box-shadow: var(--shadow-lg);
 }
 
 /* Custom scrollbar for sidebar */
@@ -735,6 +739,12 @@ a:hover {
     gap: 8px;
     width: 100%;
     align-items: center;
+    padding: 0 12px;
+}
+
+.sidebar-item {
+    border-radius: var(--radius-concentric-inner);
+    transition: all var(--duration-base) var(--ease-gentle);
 }
 
 .nav-section-label {
@@ -1013,8 +1023,10 @@ a:hover {
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background: var(--bg-secondary);
-        border-bottom: 1px solid var(--border-subtle);
+        background: var(--material-glass-bg-dark);
+        -webkit-backdrop-filter: var(--glass-blur-medium);
+        backdrop-filter: var(--glass-blur-medium);
+        border-bottom: 1px solid var(--material-glass-border-dark);
         position: sticky;
         top: 0;
         z-index: 1000;
@@ -1093,7 +1105,8 @@ a:hover {
 
 /* Main Content Area */
 #main-content {
-    margin-left: var(--sidebar-width);
+    margin-left: calc(var(--sidebar-width) + (var(--space-md) * 2));
+    padding-top: var(--space-md);
     min-height: 100vh;
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     padding-left: var(--space-6);
@@ -1140,14 +1153,18 @@ a:hover {
 .btn-primary {
     background: var(--accent-primary);
     color: #000;
-    font-weight: 600;
-    padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius-md);
+    font-weight: 700;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-capsule);
     border: none;
-    font-size: var(--text-base);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
     cursor: pointer;
-    transition: all 200ms ease;
-    display: inline-block;
+    transition: all var(--duration-base) var(--ease-gentle);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary:hover {
@@ -1160,14 +1177,18 @@ a:hover {
 .btn-secondary {
     background: transparent;
     color: var(--text-primary);
-    font-weight: 600;
-    padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius-md);
+    font-weight: 700;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-capsule);
     border: 1px solid var(--border-emphasis);
-    font-size: var(--text-base);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
     cursor: pointer;
-    transition: all 200ms ease;
-    display: inline-block;
+    transition: all var(--duration-base) var(--ease-gentle);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-secondary:hover {
@@ -1907,28 +1928,33 @@ td {
     color: var(--text-primary);
 }
 
-/* Search Overlay */
+/* Search Overlay (Liquid Glass) */
 .search-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-primary);
-    backdrop-filter: blur(10px);
+    inset: 0;
+    background: var(--material-glass-bg-dark);
+    -webkit-backdrop-filter: var(--glass-blur-large);
+    backdrop-filter: var(--glass-blur-large);
     z-index: 10000;
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 15vh;
+    justify-content: center;
+    padding: var(--space-6);
     opacity: 0;
-    transition: opacity 0.2s ease;
-    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.search-overlay.from-source {
+    transform-origin: var(--origin-x) var(--origin-y);
 }
 
 .search-overlay[style*="display: flex"] {
     opacity: 1;
+}
+
+.search-overlay[style*="display: flex"].from-source {
+    animation: spring-in-full 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 .search-container {
@@ -2885,30 +2911,30 @@ body.menu-open {
     overflow: hidden;
 }
 
-/* Mobile Drawer (New) */
+/* Mobile Drawer (Liquid Glass) */
 .mobile-drawer {
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    top: 12px;
+    left: 12px;
+    bottom: 12px;
     width: 280px;
-    height: 100vh;
-    height: 100dvh;
-    /* Dynamic viewport height for mobile browsers */
-    max-height: -webkit-fill-available;
-    /* iOS Safari fix */
-    background: var(--bg-secondary);
+    background: var(--material-glass-bg-dark);
+    -webkit-backdrop-filter: var(--glass-blur-large);
+    backdrop-filter: var(--glass-blur-large);
+    border: 1px solid var(--material-glass-border-dark);
+    border-radius: var(--radius-concentric-outer);
     z-index: 2000;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    border-right: 1px solid var(--border-emphasis);
+    transform: translateX(calc(-100% - 24px));
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
     padding: var(--space-6);
     padding-bottom: 0;
-    /* Remove bottom padding, let nav handle it */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Drawer itself doesn't scroll */
+}
+
+.mobile-drawer.from-source {
+    transform-origin: var(--origin-x) var(--origin-y);
 }
 
 .mobile-drawer.active {
@@ -4016,10 +4042,10 @@ body:has(.ceo-layout) .site-footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(5, 5, 5, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid var(--border-glass);
+    background: var(--material-glass-bg-dark);
+    -webkit-backdrop-filter: var(--glass-blur-medium);
+    backdrop-filter: var(--glass-blur-medium);
+    border-top: 1px solid var(--material-glass-border-dark);
     z-index: 1000;
     padding: 0 16px;
     padding-bottom: env(safe-area-inset-bottom);
@@ -4120,6 +4146,7 @@ body:has(.ceo-layout) .site-footer {
     margin-bottom: 1rem;
     background: linear-gradient(to right, #fff, #666);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -4618,6 +4645,7 @@ body:has(.ceo-layout) .site-footer {
     line-height: 0.85;
     background: linear-gradient(180deg, #fff 0%, #aaa 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 80px rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;

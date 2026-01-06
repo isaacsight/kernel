@@ -44,6 +44,14 @@ const Search = {
             searchToggles.forEach(toggle => {
                 toggle.addEventListener('click', (e) => {
                     e.preventDefault();
+
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2;
+                    searchOverlay.style.setProperty('--origin-x', `${x}px`);
+                    searchOverlay.style.setProperty('--origin-y', `${y}px`);
+                    searchOverlay.classList.add('from-source');
+
                     searchOverlay.style.display = 'flex';
                     searchInput.focus();
                     document.body.style.overflow = 'hidden'; // Prevent scrolling

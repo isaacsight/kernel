@@ -239,8 +239,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const drawerClose = document.getElementById('close-drawer');
     const drawerLinks = document.querySelectorAll('.drawer-nav a');
 
-    function openDrawer() {
+    function openDrawer(event) {
         if (drawer && drawerOverlay) {
+            if (event) {
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                drawer.style.setProperty('--origin-x', `${x}px`);
+                drawer.style.setProperty('--origin-y', `${y}px`);
+                drawer.classList.add('from-source');
+            }
             drawerOverlay.classList.add('active');
             drawer.classList.add('active');
             document.body.style.overflow = 'hidden'; // Lock scroll
@@ -259,12 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (menuBtns.length > 0) {
         menuBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
                 const isOpen = drawer.classList.contains('active');
                 if (isOpen) {
                     closeDrawer();
                 } else {
-                    openDrawer();
+                    openDrawer(e);
                 }
             });
         });

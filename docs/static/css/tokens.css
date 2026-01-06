@@ -60,6 +60,12 @@
     --color-warning: #f59e0b;
     --color-error: #ef4444;
 
+    /* Semantic Roles for Glass Overlays */
+    --color-system-fill: rgba(0, 0, 0, 0.05);
+    --color-system-background: var(--color-canvas);
+    --color-system-separator: rgba(0, 0, 0, 0.1);
+    --color-system-tint: var(--color-ai);
+
     /* === Typography — v2.1 AI-Native === */
     --font-display: 'Instrument Serif', Georgia, serif;
     --font-interface: 'Inter', system-ui, sans-serif;
@@ -131,7 +137,7 @@
     --gutter: var(--space-6);
     --gutter-mobile: var(--space-4);
 
-    /* === Border Radius === */
+    /* === Border Radius — Liquid Glass Shape System === */
     --radius-none: 0;
     --radius-sm: 0.25rem;
     --radius-md: 0.5rem;
@@ -139,6 +145,27 @@
     --radius-xl: 1rem;
     --radius-2xl: 1.5rem;
     --radius-full: 9999px;
+
+    /* Apple-inspired Liquid Glass Shapes */
+    --radius-fixed: 12px;
+    --radius-capsule: 9999px;
+    --radius-concentric-outer: 24px;
+    --radius-concentric-inner: calc(var(--radius-concentric-outer) - var(--space-md));
+
+    /* === Liquid Glass Materials === */
+    --glass-blur-small: blur(10px);
+    --glass-blur-medium: blur(20px);
+    --glass-blur-large: blur(30px);
+
+    /* Functional Layers */
+    --material-glass-bg: rgba(255, 255, 255, 0.7);
+    --material-glass-bg-dark: rgba(10, 10, 10, 0.75);
+    --material-glass-border: rgba(255, 255, 255, 0.2);
+    --material-glass-border-dark: rgba(255, 255, 255, 0.08);
+
+    --material-functional: var(--material-glass-bg);
+    --material-functional-layer: var(--material-glass-bg);
+    --material-blur: var(--glass-blur-medium);
 
     /* === Shadow System — Minimal Elevation === */
     --shadow-ambient: 0 0 0 1px rgba(0, 0, 0, 0.02);
@@ -279,22 +306,23 @@ html {
 
 /* === Glass Card (Shoji Screen) === */
 .glass-card {
-    background: var(--glass-background);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-xl);
+    background: var(--material-glass-bg);
+    backdrop-filter: var(--glass-blur-medium);
+    -webkit-backdrop-filter: var(--glass-blur-medium);
+    border: 1px solid var(--material-glass-border);
+    border-radius: var(--radius-fixed);
 }
 
 /* === Pattern Card (Kintsugi Style) === */
 .pattern_card {
-    background: var(--color-canvas);
+    background: var(--color-system-background);
     border-left: 2px solid var(--color-ai);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-fixed);
     padding: var(--ma-normal);
     transition: all var(--duration-base) var(--ease-gentle);
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--color-system-separator);
 }
 
 .pattern-card::before {

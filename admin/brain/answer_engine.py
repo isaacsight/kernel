@@ -33,7 +33,8 @@ class AnswerEngine:
         
         # 2. Retrieval
         yield {"type": "thought", "content": "Gathering evidence from web and DTFR library..."}
-        evidence = await self.grounding.process(query, mode)
+        bypass_rag = mode == "deep_research"
+        evidence = await self.grounding.process(query, mode, bypass_rag=bypass_rag)
         
         # 3. Sources Panel
         if evidence.get("sources"):
@@ -44,7 +45,6 @@ class AnswerEngine:
 
         # 4. Synthesis Stream
         full_response = ""
-        # Construct synthesis prompt using the blueprint
         system_prompt = self._get_synthesis_prompt(mode)
         
         # Construct messages for synthesis
@@ -53,22 +53,43 @@ class AnswerEngine:
             messages.extend(history)
             
         # Add context and query
-        full_input = f"CONTEXT:\n{context}\n\nQUERY: {query}"
+        context_to_use = evidence.get("full_text", context)
+        full_input = f"CONTEXT:\n{context_to_use}\n\nQUERY: {query}"
         messages.append({"role": "user", "content": full_input})
 
-        # Use Perplexity for synthesis as it manages citations best
-        try:
-            async for chunk in self.grounding.ppx.chat_completion_stream_async(
-                model="sonar-pro" if mode in ["research", "academic"] else "sonar",
-                messages=messages
-            ):
-                text = self.grounding.ppx.extract_text(chunk)
-                if text:
-                    full_response += text
-                    yield {"type": "chunk", "content": text}
-        except Exception as e:
-            logger.error(f"Synthesis failed: {e}")
-            yield {"type": "chunk", "content": f"Research interrupted: {str(e)}"}
+        # Use Massive Context Model if bypass is active
+        if evidence.get("bypass_active"):
+            yield {"type": "thought", "content": "Applying Massive Context Synthesis (Gemini 1.5 Pro)..."}
+            try:
+                # We use the router to get the completion from Gemini
+                selection = self.router.get_completion(
+                    TaskType.ANALYSIS, 
+                    prompt=full_input, 
+                    system_prompt=system_prompt,
+                    # Ensure we pick a model with at least 1M context
+                    constraints={"min_context": 1000000}
+                )
+                res = await selection
+                if "text" in res:
+                    full_response = res["text"]
+                    yield {"type": "chunk", "content": full_response}
+            except Exception as e:
+                logger.error(f"Massive Context Synthesis failed: {e}")
+                yield {"type": "chunk", "content": f"Deep Research interrupted: {str(e)}"}
+        else:
+            # Standard Perplexity path
+            try:
+                async for chunk in self.grounding.ppx.chat_completion_stream_async(
+                    model="sonar-pro" if mode in ["research", "academic"] else "sonar",
+                    messages=messages
+                ):
+                    text = self.grounding.ppx.extract_text(chunk)
+                    if text:
+                        full_response += text
+                        yield {"type": "chunk", "content": text}
+            except Exception as e:
+                logger.error(f"Synthesis failed: {e}")
+                yield {"type": "chunk", "content": f"Research interrupted: {str(e)}"}
 
         # 5. DTFR Verdict Layer (The Studio Difference)
         if full_response:

@@ -7,12 +7,15 @@ from admin.brain.query_rewrite import QueryRewriter
 from admin.brain.websearch import WebSearchClient
 from admin.brain.evidence_aggregator import EvidenceAggregator
 
+from admin.brain.full_context_retriever import FullContextRetriever
+
 logger = logging.getLogger("GroundingEngine")
 
 class GroundingEngine:
     """
     Orchestrates the Meta-Retrieval loop: 
     Mode -> Rewrite -> Parallel Retrieval (PPX + Web) -> Aggregate -> Compile.
+    Supports 'Large-Context Bypassing' for deep research.
     """
     
     def __init__(
@@ -20,17 +23,38 @@ class GroundingEngine:
         ppx_client: PerplexityClient, 
         rewriter: Optional[QueryRewriter] = None,
         web_client: Optional[WebSearchClient] = None,
-        aggregator: Optional[EvidenceAggregator] = None
+        aggregator: Optional[EvidenceAggregator] = None,
+        base_path: str = "."
     ):
         self.ppx = ppx_client
         self.rewriter = rewriter or QueryRewriter()
         self.web = web_client or WebSearchClient()
         self.aggregator = aggregator or EvidenceAggregator()
+        self.full_retriever = FullContextRetriever(base_path)
         
-    async def process(self, query: str, mode: str = "search") -> Dict[str, Any]:
+    async def process(self, query: str, mode: str = "search", bypass_rag: bool = False) -> Dict[str, Any]:
         """
         Runs the grounding pipeline and returns a compiled evidence set.
+        If bypass_rag is True, injects massive system context directly.
         """
+        if bypass_rag or mode == "deep_research":
+            # Large-Context Bypassing: Feed the entire system context
+            system_docs = self.full_retriever.get_system_context()
+            evidence_set = [{
+                "url": "local://system_context",
+                "title": "DTFR System Context (Full)",
+                "publisher": "Local System",
+                "provider": "full_context_retriever",
+                "snippet": "Full documentation and source code for admin/brain, admin/engineers, and dtfr logic."
+            }]
+            return {
+                "query": query,
+                "mode": mode,
+                "sources": evidence_set,
+                "full_text": system_docs,
+                "bypass_active": True
+            }
+
         # 1. Rewrite Query (unless Search mode, where we can just use the original)
         search_queries = [query]
         if mode in ["research", "academic"]:
