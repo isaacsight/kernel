@@ -600,10 +600,6 @@ a:hover {
         max-width: calc(100% - (var(--sidebar-width) + 40px));
         padding-right: 40px;
     }
-
-    .sidebar {
-        display: flex;
-    }
 }
 
 /* Sidebar Navigation (Liquid Glass Style) */
@@ -626,6 +622,12 @@ a:hover {
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 1025px) {
+    .sidebar {
+        display: flex;
+    }
 }
 
 /* Custom scrollbar for sidebar */
