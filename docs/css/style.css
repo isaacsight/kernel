@@ -1,110 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
+@import url('tokens.css');
 
 :root {
-    /* Studio OS Design System - High Fidelity Dashboard */
+    /* Studio OS Design System - High Fidelity Dashboard (Sovereign Edition) */
 
     /* Colors - Deep Space Slate */
-    --bg-primary: #020202;
+    --bg-primary: var(--color-void);
     --bg-secondary: #050505;
     --bg-tertiary: #0A0A0A;
-    --bg-glass: rgba(10, 10, 10, 0.7);
+    --bg-glass: var(--material-glass-bg-dark);
 
     /* Text - Studio Green Harmony */
     --text-primary: #66B56E;
-    /* Studio Green Branding */
-    --text-secondary: #C9CEC9;
-    /* Soft Functional Grey */
-    --text-tertiary: #8A908C;
-    /* Muted Meta Text */
-    --text-pure: #FFFFFF;
+    --text-secondary: var(--color-mist);
+    --text-tertiary: var(--color-slate);
+    --text-pure: var(--color-canvas);
 
     /* Accents & Signals */
-    --accent-primary: #66B56E;
+    --accent-primary: var(--color-ai);
     --accent-hover: #7BC583;
     --accent-subtle: rgba(102, 181, 110, 0.08);
     --accent-glow: 0 0 25px rgba(102, 181, 110, 0.2);
 
-    /* Borders & Divisions */
-    --border: transparent;
-    --border-emphasis: #1F1F1F;
-    --border-subtle: rgba(255, 255, 255, 0.04);
-    --border-glass: rgba(255, 255, 255, 0.08);
+    /* Spacing - Re-mapped to 8-Point Grid */
+    --space-1: var(--space-1);
+    --space-2: var(--space-2);
+    --space-3: var(--space-3);
+    --space-4: var(--space-4);
+    --space-5: var(--space-5);
+    --space-6: var(--space-6);
+    --space-7: var(--space-7);
+    --space-8: var(--space-8);
+    --space-9: var(--space-9);
+    --space-10: var(--space-10);
 
-    /* Typography - Precision Sans */
-    --font-display: 'Inter', -apple-system, sans-serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-    /* Type Scale - Dashboard Optimized */
-    --text-6xl: 72px;
-    --text-5xl: 60px;
-    --text-4xl: 48px;
-    --text-3xl: 36px;
-    --text-2xl: 30px;
-    --text-xl: 24px;
-    --text-lg: 20px;
-    --text-base: 16px;
-    --text-sm: 14px;
-    --text-xs: 12px;
-
-    /* Spacing - Geometric */
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 24px;
-    --space-6: 32px;
-    --space-7: 48px;
-    --space-8: 64px;
-    --space-9: 96px;
-    --space-10: 128px;
-
-    /* Layout Units */
-    --sidebar-width: 72px;
-    --container-sm: 640px;
-    --container-md: 800px;
-    --container-lg: 1024px;
-    --container-xl: 1400px;
-
-    /* Mobile Polish Check */
-    --container-fluid: 92%;
-
-    /* Radius - Softened Industrial */
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Screen Reader Only */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    /* Typography Measures */
+    --measure-body: var(--measure-optimal);
 }
 
 body {
-    font-family: var(--font-body);
+    font-family: var(--font-interface);
     background-color: var(--bg-primary);
     color: var(--text-secondary);
-    /* Body text color aligned with guide */
-    line-height: 1.6;
+    line-height: var(--leading-normal);
+    /* 1.5 ratio from 0.001% rule */
     font-size: var(--text-base);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+}
+
+article,
+p {
+    max-width: var(--measure-body);
+    /* Enforce 60-80 characters */
 }
 
 /* Animations */

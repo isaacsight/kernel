@@ -39,25 +39,7 @@ const FEED_TYPES = {
   }
 };
 
-const MOCK_DATA = {
-  runs: [
-    { id: 'EX-9012', title: 'DTFR Loop Verification', status: 'verified', date: '2026-01-04' },
-    { id: 'EX-9014', title: 'AI-Native Refactor', status: 'compiling', date: '2026-01-04' },
-    { id: 'EX-8890', title: 'Web Component Bridge', status: 'verified', date: '2026-01-03' }
-  ],
-  patterns: [
-    { id: 'P-01', title: 'Procedural Modular Synthesis', category: 'RESEARCH', date: '2026-01-04' },
-    { id: 'P-02', title: 'AI-Native UX Principles', category: 'GUIDE', date: '2026-01-04' }
-  ],
-  log: [
-    { id: 'L-01', decision: 'Adopted v2.1 Design Canon', reasoning: 'Optimizes for intent-to-execution latency', date: '2026-01-04' },
-    { id: 'L-02', decision: 'Removed seasonal decoration', reasoning: 'Prioritizing functional honesty', date: '2026-01-04' }
-  ],
-  github: [
-    { id: 'C-a8f2', type: 'COMMIT', message: 'refactor: tokens.css to v2.1', branch: 'main', date: '2026-01-04' },
-    { id: 'P-33', type: 'PR', message: 'feat: Transparent Compiler Console', status: 'merged', date: '2026-01-04' }
-  ]
-};
+const MOCK_DATA = {}; // Deprecated: Data now fetched from /posts.json
 
 class DTFRFeed extends HTMLElement {
   constructor() {
@@ -110,8 +92,66 @@ class DTFRFeed extends HTMLElement {
     }
   }
 
-  _loadData() {
-    this._items = (MOCK_DATA[this._type] || []).slice(0, this._limit);
+  async _loadData() {
+    try {
+      const response = await fetch('/posts.json');
+      const posts = await response.json();
+
+      this._processPosts(posts);
+      this.render();
+    } catch (e) {
+      console.error('[DTFR] Feed load error:', e);
+      // Fallback to empty
+      this._items = [];
+      this.render();
+    }
+  }
+
+  _processPosts(posts) {
+    // Filter and map based on type
+    let filtered = [];
+
+    switch (this._type) {
+      case 'runs':
+        // Experiment modes or announcements
+        filtered = posts.filter(p =>
+          (p.mode && ['experiment', 'announcement', 'execution'].includes(p.mode.toLowerCase())) ||
+          (p.status && ['verified', 'compiling', 'active'].includes(p.status.toLowerCase()))
+        ).map(p => ({
+          id: p.slug.substring(0, 8).toUpperCase(),
+          title: p.title,
+          status: p.mode || 'active',
+          date: p.date,
+          link: p.output_rel_path
+        }));
+        break;
+
+      case 'patterns':
+        // Research category or pillar items
+        filtered = posts.filter(p =>
+          (p.category === 'Research' || p.pillar === 'true' || p.pillar === true) &&
+          !p.mode?.includes('experiment')
+        ).map(p => ({
+          id: 'PAT-' + p.slug.substring(0, 4).toUpperCase(),
+          title: p.title,
+          category: p.category || 'PATTERN',
+          date: p.date,
+          link: p.output_rel_path
+        }));
+        break;
+
+      default:
+        // Recent items for other feeds
+        filtered = posts.slice(0, this._limit).map(p => ({
+          id: p.slug.substring(0, 8),
+          title: p.title,
+          status: 'indexed',
+          date: p.date,
+          link: p.output_rel_path
+        }));
+    }
+
+    this._items = filtered.slice(0, this._limit);
   }
 
   _formatDate(dateStr) {
@@ -328,16 +368,16 @@ class DTFRFeed extends HTMLElement {
         <div class="doc-items">
           ${this._items.length > 0
         ? this._items.map(item => `
-              <div class="doc-entry">
+              <a href="${item.link || '#'}" class="doc-entry" style="text-decoration: none; color: inherit; display: grid;">
                 <div class="doc-meta">
                   <div class="doc-date">${item.date}</div>
                   <div class="doc-type">${this._type === 'runs' ? item.status : this._type}</div>
                 </div>
                 <div class="doc-content">
                   <h3>${this._type === 'log' ? item.decision : item.title || item.message}</h3>
-                  <p class="doc-excerpt">${item.reasoning || 'System execution results and provenance trace summary...'}</p>
+                  <p class="doc-excerpt">${item.reasoning || item.subtitle || 'System execution results and provenance trace summary...'}</p>
                 </div>
-              </div>
+              </a>
             `).join('')
         : `<div class="empty-state">${feedConfig.emptyMessage}</div>`
       }

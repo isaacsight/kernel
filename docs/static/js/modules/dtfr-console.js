@@ -54,44 +54,77 @@ class DTFRConsole extends HTMLElement {
 
   async _processIntent(intent) {
     this._isProcessing = true;
-    this._addHistory('user', intent);
+    this._addLine('user', intent);
     this.render();
 
-    DTFR.bus.emit('console:intent-submitted', { intent });
+    try {
+      const response = await fetch('/api/mission', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: intent, mode: 'research' })
+      });
 
-    // Technical feedback instead of chatty ghost
-    this._addHistory('system', 'Parsing intent metadata...');
-    this.render();
+      if (!response.ok) throw new Error('Mission failed to initialize');
 
-    await new Promise(resolve => setTimeout(resolve, 800));
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
 
-    this._addHistory('system', 'Compiling operation stack...', 'active');
-    this.render();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
 
-    // Mock response
-    const mockStack = [
-      { type: 'research', status: 'complete', detail: `Extracting ${intent} patterns` },
-      { type: 'spec', status: 'running', detail: 'Drafting system specification' },
-      { type: 'scaffold', status: 'pending', detail: 'Awaiting gate approval' }
-    ];
+        for (const line of lines) {
+          if (line.trim().startsWith('data: ')) {
+            try {
+              const eventInfo = line.trim().substring(6);
+              const event = JSON.parse(eventInfo);
+              this._handleMissionEvent(event);
+            } catch (e) {
+              console.error('[Console] Failed to parse event:', e);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      this._addLine('system', `[CRITICAL ERROR] ${err.message}`);
+    } finally {
+      this._isProcessing = false;
+      this.render();
+    }
+  }
 
-    DTFR.bus.emit('console:stack-generated', { stack: mockStack });
-
-    this._addHistory('system', 'Stack generation complete. Awaiting execution.');
-    this._isProcessing = false;
+  _handleMissionEvent(event) {
+    switch (event.type) {
+      case 'reframe':
+        this._addLine('system', `Problem Reframed: ${event.reframed}`, 'reframe');
+        break;
+      case 'thought':
+        this._addLine('system', event.content, 'active');
+        break;
+      case 'plan':
+        this._addLine('system', `Mission Objective: ${event.content.mission_id}`, 'plan');
+        event.content.tasks?.forEach(t => {
+          this._addLine('system', `> Sub-Agent ${t.agent}: ${t.objective}`, 'task');
+        });
+        break;
+      case 'done':
+        this._addLine('system', 'Mission sequence complete. Signal integrity optimized.', 'done');
+        break;
+    }
     this.render();
   }
 
-  _addHistory(role, text, type = '') {
+  _addLine(role, text, type = '') {
     this._history.push({
       role,
       text,
       type,
       timestamp: new Date().toISOString().split('T')[1].split('.')[0] + 'Z'
     });
-    if (this._history.length > 30) this._history.shift();
+    if (this._history.length > 50) this._history.shift();
   }
 
   render() {
@@ -103,94 +136,119 @@ class DTFRConsole extends HTMLElement {
         }
 
         .console-container {
-          background: var(--color-ink);
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-sm);
+          background: var(--material-glass-bg-dark);
+          backdrop-filter: var(--glass-blur-medium);
+          -webkit-backdrop-filter: var(--glass-blur-medium);
+          border: 1px solid var(--material-glass-border-dark);
+          border-radius: var(--radius-lg);
           display: flex;
           flex-direction: column;
-          height: 440px;
+          height: 480px; /* 60 * 8 */
           overflow: hidden;
-          box-shadow: var(--shadow-xl);
+          box-shadow: var(--shadow-lg);
           position: relative;
         }
 
         .console-header {
-          background: var(--color-ink);
-          padding: var(--space-3) var(--space-4);
+          padding: var(--space-2) var(--space-3);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          border-bottom: 1px solid var(--color-border);
+          border-bottom: 1px solid var(--material-glass-border-dark);
           z-index: 5;
         }
 
         .console-title {
-          font-size: 10px;
-          color: var(--color-slate);
+          font-size: var(--text-xs);
+          color: var(--color-mist);
           text-transform: uppercase;
-          letter-spacing: 0.2em;
-          font-weight: 700;
+          letter-spacing: var(--tracking-wider);
+          font-weight: var(--font-bold);
         }
 
         .console-status {
           display: flex;
           align-items: center;
-          gap: 8px;
-          font-size: 10px;
+          gap: var(--space-1);
+          font-size: var(--text-xs);
           color: ${this._isProcessing ? 'var(--color-ai)' : 'var(--color-mist)'};
-          letter-spacing: 0.1em;
         }
 
         .status-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
+          width: 8px; /* Strict 8pt unit division */
+          height: 8px;
+          border-radius: var(--radius-full);
           background: currentColor;
-          box-shadow: ${this._isProcessing ? '0 0 10px var(--color-ai-glow)' : 'none'};
+          box-shadow: ${this._isProcessing ? '0 0 12px var(--color-ai-glow)' : 'none'};
+          transition: all var(--duration-base) var(--ease-gentle);
         }
 
         .console-output {
           flex: 1;
-          padding: var(--space-6) var(--space-4);
+          padding: var(--space-4) var(--space-3);
           overflow-y: auto;
           display: flex;
           flex-direction: column;
-          gap: var(--space-1);
+          gap: 4px; /* Half unit for high-density log */
           scrollbar-width: thin;
-          scrollbar-color: var(--color-border) transparent;
+          scrollbar-color: var(--material-glass-border-dark) transparent;
           z-index: 5;
         }
 
         .line {
           display: flex;
-          gap: var(--space-4);
+          gap: var(--space-3);
           font-size: 13px;
-          line-height: 1.6;
+          line-height: var(--leading-tight);
           opacity: 0;
-          animation: line-fade-in 0.2s ease-out forwards;
+          animation: line-fade-in var(--duration-fast) var(--ease-out) forwards;
         }
 
         @keyframes line-fade-in {
-          from { opacity: 0; transform: translateY(2px); }
+          from { opacity: 0; transform: translateY(4px); }
           to { opacity: 1; transform: translateY(0); }
         }
 
         .line-role {
           flex-shrink: 0;
-          color: var(--color-mist);
-          width: 60px;
+          color: var(--color-slate);
+          width: 80px;
           font-size: 10px;
-          opacity: 0.5;
+          font-weight: var(--font-medium);
         }
 
         .line-text {
           color: var(--color-canvas);
           word-break: break-word;
+          max-width: var(--measure-tight); /* High density measure */
         }
 
-        .line.user .line-text { color: var(--color-canvas); }
+        .line.user .line-text { color: var(--color-canvas); font-weight: var(--font-medium); }
         .line.system .line-text { color: var(--color-ai); }
-        .line.system.active .line-text { animation: pulse 2s infinite; }
+        .line.system.active .line-text { animation: pulse var(--duration-slow) infinite; }
+
+        /* Mission Specific Styling */
+        .line.reframe .line-text { 
+           color: var(--color-accent-blue, #60A5FA); 
+           font-style: italic; 
+           border-left: 2px solid currentColor;
+           padding-left: var(--space-2);
+        }
+        .line.plan .line-text { 
+           color: var(--color-accent-yellow, #FBBF24); 
+           font-weight: var(--font-bold);
+           text-transform: uppercase;
+           letter-spacing: 0.05em;
+        }
+        .line.task .line-text { 
+           color: var(--color-slate); 
+           font-size: 11px;
+           opacity: 0.8;
+        }
+        .line.done .line-text { 
+           color: var(--color-ai);
+           text-shadow: 0 0 10px var(--color-ai-glow);
+        }
         
         @keyframes pulse {
           0%, 100% { opacity: 1; }
@@ -198,21 +256,21 @@ class DTFRConsole extends HTMLElement {
         }
 
         .console-input-area {
-          padding: var(--space-4);
-          background: var(--color-ink);
-          border-top: 1px solid var(--color-border);
+          padding: var(--space-2) var(--space-3);
+          background: rgba(0,0,0,0.2);
+          border-top: 1px solid var(--material-glass-border-dark);
           z-index: 5;
         }
 
         .console-form {
           display: flex;
-          gap: var(--space-3);
+          gap: var(--space-2);
           align-items: center;
         }
 
         .prompt {
           color: var(--color-ai);
-          font-weight: bold;
+          font-weight: var(--font-bold);
         }
 
         .console-input {
@@ -220,7 +278,7 @@ class DTFRConsole extends HTMLElement {
           background: transparent;
           border: none;
           color: var(--color-canvas);
-          font-family: inherit;
+          font-family: var(--font-mono);
           font-size: 13px;
           outline: none;
           padding: 0;

@@ -15,8 +15,8 @@
 const HERO_VARIANTS = {
   default: {
     title: 'The System Compiler',
-    subtitle: 'Translating human intent into deterministic engineering history.',
-    tagline: 'Sovereign intelligence for the modern builder.'
+    subtitle: 'Phase 1: Open Source. Translating human intent into verifiable audit trails.',
+    tagline: 'OSS NATIVE RUNTIME ACTIVE'
   },
   spec: {
     title: 'Inquiry Specification',

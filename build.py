@@ -498,6 +498,7 @@ def build():
                     "products",
                     "start",
                     "strategy",
+                    "dtfr-harness",
                 ]:
                     # Top level pages
                     out_rel_path = clean_slug + ".html"

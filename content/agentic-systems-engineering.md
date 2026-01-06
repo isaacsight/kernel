@@ -36,10 +36,10 @@ ASE models how AI-native teams structure roles, rituals, and metrics.
 - **Efficiency Metrics**: Moving beyond vanity stats to measure the true leverage of the agentic layer.
 
 ### 4. AI Governance
-ASE ensures alignment, safety, and verifiability in agentic systems.
-- **Immutable Logging**: Documenting every agent decision on-chain or in verifiable logs.
-- **Alignment Monitoring**: Detecting when agent behavior drifts from the core studio vision.
-- **Auditability**: Making the internal "thought process" of a complex agentic system legible to human auditors.
+ASE ensures alignment, safety, and verifiability in agentic systems. This is the home of the **[DTFR Evaluation Harness](/dtfr-harness.html)**.
+- **Felt-Sense Evaluation**: Moving beyond binary pass/fail to record how an agentic action "feels" against human standards.
+- **Immutable Logging**: Documenting every agent decision in verifiable logs.
+- **Alignment Monitoring**: Detecting when agent behavior drifts from core studio values using the *Felt Right Index*.
 
 ---
 

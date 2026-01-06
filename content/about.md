@@ -7,7 +7,7 @@ excerpt: "A small frontier studio that runs on its own operating system first."
 image: static/images/isaac-profile.jpg
 ---
 
-Does This Feel Right? is a small frontier studio that runs on its own operating system first. It is a laboratory for **Agentic Systems Engineering**—the discipline of building the **opinionated OS layer** for hybrid human-AI teams—and invites other builders to watch, copy, or commission that system, not generic services.[[1]](https://www.doesthisfeelright.com)
+Does This Feel Right? is an open-source frontier studio that runs on its own operating system first. It is a laboratory for **Agentic Systems Engineering**—the discipline of building the **opinionated OS layer** for hybrid human-AI teams—and invites other builders to watch, fork, and contribute to a new standard for agentic trust and observability.
 
 <div class="profile-block">
     <div class="profile-image-wrapper">
@@ -18,8 +18,9 @@ Does This Feel Right? is a small frontier studio that runs on its own operating 
 
 ## What this studio is
 
-This is not an agency or a content brand. It is an engineering lab focused on **Agentic Systems Engineering** (or AI-Native Organization Design). We build and orchestrate agents, workflows, and guardrails as first-class software concerns.[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)
-The primary product is the [Studio OS Protocol](/products.html)—a forkable, verifiable specification for agentic governance that makes one human or team unusually effective.[[3]](https://www.doesthisfeelright.com/posts/research-roadmap.html)[[4]](https://www.doesthisfeelright.com/posts/the-frontier-team.html)[[2]](https://www.doesthisfeelright.com/posts/studio-os.html)
+This is not an agency or a content brand. It is an engineering lab focused on **Agentic Systems Engineering** (or AI-Native Organization Design). We build and orchestrate agents, workflows, and guardrails as first-class software concerns.
+
+Our primary mission is the **Agentic Evaluation & Observability Harness** ([DTFR Harness](/dtfr-harness.html)). We believe the biggest bottleneck to agentic adoption isn't model intelligence, but the lack of a verifiable, "human-felt" trust standard.
 
 The giants—OpenAI, Anthropic (Claude), Google (Gemini), Perplexity, and others—provide foundation models, tools, and ecosystems. At the same time, enterprise platforms like Kore.ai and UiPath offer heavy, six-figure orchestration for the Fortune 2000.
 
