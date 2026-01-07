@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Database, MonitorDot, ArrowRight, Zap, Code, Brain } from 'lucide-react';
+import { Grid, Column, Tile, Tag, Stack } from '@carbon/react';
 
 interface Project {
     id: string;
@@ -88,45 +89,51 @@ export default function SovereignManifest() {
 
             {/* Active Substrates */}
             <section id="manifest-grid" style={{ marginBottom: 'var(--space-20)' }}>
-                <h2 className="heading-4" style={{ marginBottom: 'var(--space-6)', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--text-tertiary)' }}>
-                    Active Substrates
-                </h2>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Grid narrow>
+                    <Column lg={16} md={8} sm={4}>
+                        <h2 className="heading-4" style={{ marginBottom: 'var(--space-6)', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--text-tertiary)' }}>
+                            Active Substrates
+                        </h2>
+                    </Column>
                     {projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
+                        <Column lg={5} md={4} sm={4} key={project.id}>
+                            <ProjectCard project={project} />
+                        </Column>
                     ))}
-                </div>
+                </Grid>
             </section>
 
-            {/* Recent Intelligence: Surfacing the "New Information" */}
+            {/* Recent Intelligence */}
             <section style={{ paddingTop: 'var(--space-20)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', marginBottom: 'var(--space-20)' }}>
-                <div className="flex justify-between items-center" style={{ marginBottom: 'var(--space-8)' }}>
-                    <div>
-                        <h2 className="heading-4" style={{ marginBottom: 'var(--space-2)', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--text-tertiary)' }}>
-                            Sovereign Insights
-                        </h2>
-                        <p className="caption" style={{ color: 'var(--text-secondary)' }}>
-                            Latent signals from the collective knowledge graph.
-                        </p>
-                    </div>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6">
-                    {insights.map((insight, idx) => (
-                        <div key={idx} className="card glass-panel">
-                            <div className="flex items-center gap-3" style={{ marginBottom: 'var(--space-4)' }}>
-                                <Brain size={16} style={{ color: 'var(--color-primary-500)' }} />
-                                <h3 className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-primary)' }}>
-                                    {insight.topic}
-                                </h3>
-                            </div>
-                            <p className="body-small" style={{ color: 'var(--text-secondary)' }}>
-                                {insight.detail}
+                <Grid narrow>
+                    <Column lg={16} md={8} sm={4}>
+                        <div style={{ marginBottom: 'var(--space-8)' }}>
+                            <h2 className="heading-4" style={{ marginBottom: 'var(--space-2)', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--text-tertiary)' }}>
+                                Sovereign Insights
+                            </h2>
+                            <p className="caption" style={{ color: 'var(--text-secondary)' }}>
+                                Latent signals from the collective knowledge graph.
                             </p>
                         </div>
+                    </Column>
+                    {insights.map((insight, idx) => (
+                        <Column lg={5} md={4} sm={4} key={idx}>
+                            <div className="dtfr-glass" style={{ padding: '24px', height: '100%' }}>
+                                <Stack gap={4}>
+                                    <div className="flex items-center gap-3">
+                                        <Brain size={16} style={{ color: 'var(--color-primary-500)' }} />
+                                        <h3 className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-primary)' }}>
+                                            {insight.topic}
+                                        </h3>
+                                    </div>
+                                    <p className="body-small" style={{ color: 'var(--text-secondary)' }}>
+                                        {insight.detail}
+                                    </p>
+                                </Stack>
+                            </div>
+                        </Column>
                     ))}
-                </div>
+                </Grid>
             </section>
 
             {/* Active Swarm Status */}
@@ -154,59 +161,55 @@ export default function SovereignManifest() {
 
 function ProjectCard({ project }: { project: Project }) {
     const Icon = project.icon;
-    const statusBadge = project.status === 'Live' ? 'success' : project.status === 'In Progress' ? 'primary' : 'neutral';
+    const tagType = project.status === 'Live' ? 'green' : project.status === 'In Progress' ? 'blue' : 'cool-gray';
 
     return (
-        <div className="card card--elevated glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div className="card__header">
-                <div className="flex justify-between items-start">
-                    <div
-                        style={{
-                            padding: 'var(--space-3)',
-                            borderRadius: 'var(--radius-lg)',
-                            border: '1px solid',
-                            backgroundColor: `${project.color}10`,
-                            borderColor: `${project.color}20`,
-                            color: project.color
-                        }}
-                    >
-                        <Icon size={20} />
+        <Link to={project.path} className="project-card-link" style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
+            <Tile
+                className="dtfr-glass"
+                style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '24px', cursor: 'pointer' }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', marginBottom: '24px' }}>
+                    <div style={{
+                        padding: '12px',
+                        borderRadius: '6px',
+                        backgroundColor: `${project.color}15`,
+                        color: project.color,
+                        border: '1px solid currentColor'
+                    }}>
+                        <Icon size={24} />
                     </div>
-                    <span className={`badge badge--${statusBadge}`}>
+                    <Tag type={tagType} size="sm">
                         {project.status}
-                    </span>
-                </div>
-                <h3 className="card__title" style={{ marginTop: 'var(--space-4)' }}>
-                    {project.title}
-                </h3>
-                <p className="card__subtitle">
-                    {project.description}
-                </p>
-            </div>
-
-            <div style={{ marginTop: 'auto' }}>
-                <div className="flex gap-2" style={{ flexWrap: 'wrap', marginBottom: 'var(--space-4)' }}>
-                    {project.tech.map((t) => (
-                        <span key={t} className="badge badge--neutral" style={{ fontSize: '9px' }}>
-                            {t}
-                        </span>
-                    ))}
+                    </Tag>
                 </div>
 
-                <div className="card__footer">
-                    <Link
-                        to={project.path}
-                        className="button button--outline button--sm"
-                        style={{ width: '100%', justifyContent: 'space-between' }}
-                    >
+                <Stack gap={4}>
+                    <h3 className="heading-4" style={{ color: 'var(--text-primary)' }}>
+                        {project.title}
+                    </h3>
+                    <p className="body-small" style={{ color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                        {project.description}
+                    </p>
+                </Stack>
+
+                <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
+                    <div className="flex gap-2" style={{ flexWrap: 'wrap', marginBottom: '16px' }}>
+                        {project.tech.map((t) => (
+                            <Tag key={t} type="gray" size="sm" className="cds--tag--filter">
+                                {t}
+                            </Tag>
+                        ))}
+                    </div>
+                    <div className="flex items-center justify-between" style={{ color: 'var(--color-primary-500)', fontSize: '13px', fontWeight: 600 }}>
                         <span className="flex items-center gap-2">
                             <Code size={14} />
-                            Inspect
+                            Inspect Substrate
                         </span>
                         <ArrowRight size={14} />
-                    </Link>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </Tile>
+        </Link>
     );
 }

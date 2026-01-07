@@ -42,7 +42,7 @@ const GlobalHeader = () => {
                         </HeaderMenuItem>
                     </HeaderNavigation>
 
-                    <div className="dtfr-header-tags" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingRight: '16px' }}>
+                    <div className="dtfr-header-tags">
                         <Tag type="blue" size="sm" title="Version">v2.1.0-alpha</Tag>
                         <Tag type="cool-gray" size="sm" className="dtfr-hide-mobile">OSS Native Runtime</Tag>
                         <Tag type="purple" size="sm" className="dtfr-hide-tab">Phase 1: HARNESS</Tag>

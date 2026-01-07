@@ -34,13 +34,13 @@ h6 {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
-    border-radius: 8px !important; // Standardizing from rounded-xl to 8px
+    border-radius: 6px !important; // Unified radius
 }
 
 .dtfr-terminal-input .cds--text-input {
     font-family: var(--font-mono) !important;
     background-color: rgba(24, 24, 27, 0.8) !important;
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     border: 1px solid var(--glass-border) !important;
 }
 
@@ -48,7 +48,31 @@ h6 {
 .cds--btn,
 .cds--header,
 .cds--tag {
-    border-radius: 4px !important;
+    border-radius: 4px !important; // Buttons/Tags remain slightly sharper for industrial feel
+}
+
+/* Applying Glassmorphism to Shell Components */
+.cds--header {
+    background: var(--glass-background) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.cds--btn--primary {
+    border-radius: 6px !important;
+    background-color: var(--color-ai-active) !important;
+
+    &:hover {
+        background-color: var(--color-primary-600) !important;
+    }
+}
+
+.cds--btn--outline {
+    border-radius: 6px !important;
+    border: 1px solid var(--glass-border) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-primary) !important;
 }
 
 /* Visibility Utilities */
