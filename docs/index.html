@@ -198,6 +198,32 @@
     </div>
 
     <div class="dashboard-grid">
+        <!-- Design System Showcase -->
+        <section class="full-width mb-12" style="padding: var(--space-8); background: rgba(255,255,255,0.02); border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center justify-between" style="margin-bottom: var(--space-6);">
+                <div>
+                    <h2 class="heading-3" style="margin-bottom: var(--space-2);">Design System Active</h2>
+                    <p class="body-small" style="color: var(--text-secondary);">Production-ready components now available</p>
+                </div>
+                <span class="badge badge--success">Live</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+                <button class="button button--primary">Primary Button</button>
+                <button class="button button--secondary">Secondary Button</button>
+                <button class="button button--outline">Outline Button</button>
+                <a href="static/design-system/examples.html" class="button button--ghost">View Examples →</a>
+            </div>
+
+            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                <span class="badge badge--primary">Primary</span>
+                <span class="badge badge--success">Success</span>
+                <span class="badge badge--warning">Warning</span>
+                <span class="badge badge--error">Error</span>
+                <span class="badge badge--neutral">Neutral</span>
+            </div>
+        </section>
+
         <!-- DTFR Hero Section -->
         <section class="mb-12 full-width">
             <dtfr-hero data-variant="default"></dtfr-hero>
