@@ -46,9 +46,8 @@
 
     <link rel="stylesheet" href="static/design-system/design-tokens.css">
     <link rel="stylesheet" href="static/design-system/components.css">
+    <link rel="stylesheet" href="css/ui-enhancements.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/copilot.css">
-    <link rel="stylesheet" href="css/tokens.css">
 </head>
 
 <body>
@@ -177,19 +176,19 @@
     <!-- Desktop/Mobile Top Nav -->
     <div class="dashboard-grid">
         <!-- Hero Section - Clear Value Proposition -->
-        <section class="full-width" style="text-align: center; padding: var(--space-16) var(--space-8); margin-bottom: var(--space-16);">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <span class="badge badge--success" style="margin-bottom: var(--space-4);">Now Open Source</span>
+        <section class="hero-section full-width">
+            <div class="hero-content">
+                <span class="badge badge--success hero-badge">Now Open Source</span>
 
-                <h1 class="heading-1" style="font-size: 3rem; line-height: 1.1; margin-bottom: var(--space-6); background: linear-gradient(135deg, #66B56E, #7BC583); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                <h1 class="hero-title">
                     Build AI Agents That Actually Ship
                 </h1>
 
-                <p class="body-large" style="color: var(--text-secondary); margin-bottom: var(--space-8); max-width: 600px; margin-left: auto; margin-right: auto;">
+                <p class="hero-subtitle">
                     Your AI-native development studio. From idea to deployed agent in minutes, not months. Multi-agent orchestration with human oversight.
                 </p>
 
-                <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-4);">
+                <div class="hero-cta-group">
                     <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank" class="button button--primary button--lg" rel="noopener">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
@@ -201,62 +200,56 @@
                     </a>
                 </div>
 
-                <p class="caption" style="color: var(--text-tertiary);">
+                <p class="hero-meta">
                     Open source • MIT Licensed • 100+ agents ready to deploy
                 </p>
             </div>
         </section>
 
         <!-- Feature Cards - What It Does -->
-        <section class="full-width" style="margin-bottom: var(--space-16);">
-            <h2 class="heading-3" style="text-align: center; margin-bottom: var(--space-8);">What You Can Build</h2>
+        <section class="features-section full-width">
+            <h2 class="section-title">What You Can Build</h2>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6);">
+            <div class="features-grid">
                 <div class="card">
-                    <div class="card__header">
-                        <span class="badge badge--primary" style="margin-bottom: var(--space-3);">Agent Swarms</span>
-                        <h3 class="card__title">Multi-Agent Orchestration</h3>
-                        <p class="card__subtitle">Deploy teams of specialized agents that collaborate to solve complex tasks. Built-in coordination and handoff protocols.</p>
-                    </div>
+                    <span class="badge badge--primary card-badge">Agent Swarms</span>
+                    <h3 class="card__title">Multi-Agent Orchestration</h3>
+                    <p class="card__subtitle">Deploy teams of specialized agents that collaborate to solve complex tasks. Built-in coordination and handoff protocols.</p>
                 </div>
 
                 <div class="card">
-                    <div class="card__header">
-                        <span class="badge badge--success" style="margin-bottom: var(--space-3);">Automation</span>
-                        <h3 class="card__title">Content Pipeline</h3>
-                        <p class="card__subtitle">1→N content repurposing. Write once, distribute everywhere. Automated scheduling and optimization.</p>
-                    </div>
+                    <span class="badge badge--success card-badge">Automation</span>
+                    <h3 class="card__title">Content Pipeline</h3>
+                    <p class="card__subtitle">1→N content repurposing. Write once, distribute everywhere. Automated scheduling and optimization.</p>
                 </div>
 
                 <div class="card">
-                    <div class="card__header">
-                        <span class="badge badge--warning" style="margin-bottom: var(--space-3);">Intelligence</span>
-                        <h3 class="card__title">Knowledge Graphs</h3>
-                        <p class="card__subtitle">Build collective intelligence across your agent swarm. Pattern extraction and decision history tracking.</p>
-                    </div>
+                    <span class="badge badge--warning card-badge">Intelligence</span>
+                    <h3 class="card__title">Knowledge Graphs</h3>
+                    <p class="card__subtitle">Build collective intelligence across your agent swarm. Pattern extraction and decision history tracking.</p>
                 </div>
             </div>
         </section>
 
         <!-- Quick Stats -->
-        <section class="full-width" style="margin-bottom: var(--space-16);">
-            <div class="card" style="background: rgba(102, 181, 110, 0.05); border-color: rgba(102, 181, 110, 0.2);">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-6); text-align: center; padding: var(--space-6);">
-                    <div>
-                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">100+</div>
-                        <p class="caption" style="color: var(--text-secondary);">Specialized Agents</p>
+        <section class="stats-section full-width">
+            <div class="stats-card card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">100+</div>
+                        <p class="stat-label">Specialized Agents</p>
                     </div>
-                    <div>
-                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">Open</div>
-                        <p class="caption" style="color: var(--text-secondary);">Source & MIT Licensed</p>
+                    <div class="stat-item">
+                        <div class="stat-value">Open</div>
+                        <p class="stat-label">Source & MIT Licensed</p>
                     </div>
-                    <div>
-                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">Real-time</div>
-                        <p class="caption" style="color: var(--text-secondary);">WebSocket Streaming</p>
+                    <div class="stat-item">
+                        <div class="stat-value">Real-time</div>
+                        <p class="stat-label">WebSocket Streaming</p>
                     </div>
-                    <div>
-                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">DTFR</div>
-                        <p class="caption" style="color: var(--text-secondary);">Human-in-the-Loop</p>
+                    <div class="stat-item">
+                        <div class="stat-value">DTFR</div>
+                        <p class="stat-label">Human-in-the-Loop</p>
                     </div>
                 </div>
             </div>
@@ -532,17 +525,16 @@
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
-                <span>Studio</span>
+                <span>Home</span>
             </a>
-            <button class="mobile-nav-item search-trigger">
+            <a href="experiments.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                 </svg>
-                <span>Search</span>
-            </button>
-            <a href="decision-log.html" class="mobile-nav-item">
+                <span>Examples</span>
+            </a>
+            <a href="archive.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -551,17 +543,14 @@
                     <line x1="16" y1="17" x2="8" y2="17"></line>
                     <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
-                <span>Log</span>
+                <span>Writing</span>
             </a>
-            <a href="brand.html" class="mobile-nav-item">
+            <a href="https://github.com/isaacsight/does-this-feel-right-" class="mobile-nav-item" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
-                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                    <path d="M2 2l7.586 7.586"></path>
-                    <circle cx="11" cy="11" r="2"></circle>
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                 </svg>
-                <span>Specs</span>
+                <span>GitHub</span>
             </a>
             <button class="mobile-nav-item mobile-menu-trigger">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -570,7 +559,7 @@
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
-                <span>Menu</span>
+                <span>More</span>
             </button>
         </div>
     </nav>
