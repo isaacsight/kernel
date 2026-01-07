@@ -28,6 +28,7 @@ const MODULES_TO_LOAD = [
     '/static/js/modules/dtfr-feed.js',
     '/static/js/modules/dtfr-stack.js',
     '/static/js/modules/dtfr-console.js',
+    '/static/js/modules/dtfr-design-scout.js',
     '/static/js/modules/dtfr-status.js',
     '/static/js/metrics.js'
 ];

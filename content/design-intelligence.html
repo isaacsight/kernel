@@ -1,0 +1,48 @@
+---
+title: "Design Intelligence"
+description: "Mining the best UI patterns from across the mobbin ecosystem."
+is_html_source: true
+---
+<div class="dashboard-wrapper">
+    <!-- Header -->
+    <div class="dashboard-top-nav flex items-center justify-between mb-8">
+        <div class="brand-info">
+            <h1 class="text-2xl font-bold" style="color: var(--color-void);">Design Intelligence</h1>
+            <p class="text-sm" style="color: var(--color-slate);">Extraction Node • Active Scouting • Phase 1
+            </p>
+        </div>
+        <div class="badge badge--success py-2 px-4 rounded-full border flex items-center gap-2"
+            style="border-color: var(--color-border); color: var(--color-success);">
+            <span class="status-pulse ai"></span>
+            <span class="font-mono text-xs uppercase">Live Stream Active</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-grid">
+        <!-- Scout Component -->
+        <section class="full-width mb-12">
+            <dtfr-design-scout></dtfr-design-scout>
+        </section>
+
+        <!-- Technical Specs / About the Scout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width mb-12">
+            <div class="dashboard-card" style="padding: var(--space-8); border: 1px solid var(--color-border);">
+                <h3 class="text-xl font-bold mb-4">The Logic</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--color-slate);">
+                    The Design Scout uses Playwright-based autonomous agents to crawl top-tier app repositories.
+                    It identifies recurring UI patterns, atomic components, and user flows, synchronizing
+                    them directly into our local intelligence graph.
+                </p>
+            </div>
+            <div class="dashboard-card" style="padding: var(--space-8); border: 1px solid var(--color-border);">
+                <h3 class="text-xl font-bold mb-4">Current Focus</h3>
+                <ul class="text-sm space-y-2" style="color: var(--color-slate);">
+                    <li>• iOS 18 Design Language Integration</li>
+                    <li>• Glassmorphic Navigation Patterns</li>
+                    <li>• Multi-modal Interaction Affordances</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
