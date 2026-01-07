@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio OS: The AI-Powered Creative Operating System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: #a0a0a0;
+            font-weight: 300;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            color: #667eea;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+        }
+
+        .card p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+
+        .architecture {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .architecture h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .layer {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .layer:hover {
+            background: rgba(102, 126, 234, 0.15);
+            transform: translateX(10px);
+        }
+
+        .layer h4 {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-path {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(118, 75, 162, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(118, 75, 162, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #764ba2;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .agent-showcase {
+            margin-bottom: 3rem;
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .agent-tag {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .agent-tag:hover {
+            background: rgba(102, 126, 234, 0.25);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .timeline {
+            margin: 3rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+
+        .timeline-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-content h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .agent-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Studio OS</h1>
+            <p class="tagline">The Open-Source Operating System for AI-Powered Creative Studios</p>
+            <span class="hero-badge">🚀 Live at doesthisfeelright.com</span>
+        </header>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">70+</span>
+                <span class="stat-label">AI Agents</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Open Source</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">3</span>
+                <span class="stat-label">AI Models</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">MIT</span>
+                <span class="stat-label">License</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">🏭</div>
+                <h3>Fork Your Own Studio</h3>
+                <p>Clone the entire system and run your own AI-augmented creative operation with content generation, social media, research, and design.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🧩</div>
+                <h3>Extract Patterns</h3>
+                <p>Study 70+ agent implementations and integrate specific patterns into your existing systems. Learn from production code.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🏗️</div>
+                <h3>Build on the Framework</h3>
+                <p>Use Studio OS as the foundation for your own agentic application with evaluation harness and orchestration built-in.</p>
+            </div>
+        </div>
+
+        <div class="architecture">
+            <h2>System Architecture</h2>
+
+            <div class="layer">
+                <h4>🧠 The Intelligence Layer</h4>
+                <div class="layer-path">/admin/brain/</div>
+                <p>Model routing, memory systems, knowledge graphs, mission orchestration, and collective intelligence that powers the entire swarm.</p>
+            </div>
+
+            <div class="layer">
+                <h4>🤖 The Agent Swarm</h4>
+                <div class="layer-path">/admin/engineers/</div>
+                <p>70+ specialized agents including The Alchemist (content), The Architect (systems), The Librarian (knowledge), and dozens of creative, business, and engineering specialists.</p>
+            </div>
+
+            <div class="layer">
+                <h4>🔍 The Answer Engine</h4>
+                <div class="layer-path">/dtfr/</div>
+                <p>Intent parsing, multi-model answer synthesis, decision tracking, and design intelligence integration.</p>
+            </div>
+
+            <div class="layer">
+                <h4>🌐 The Web Presence</h4>
+                <div class="layer-path">/docs/ & /mobile/</div>
+                <p>Custom Python static site generator, Carbon Design System UI, and React mobile app with Capacitor.</p>
+            </div>
+        </div>
+
+        <div class="agent-showcase">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #ffffff;">Featured Agents</h2>
+            <div class="agent-grid">
+                <div class="agent-tag">🧪 The Alchemist</div>
+                <div class="agent-tag">🏛️ The Architect</div>
+                <div class="agent-tag">📚 The Librarian</div>
+                <div class="agent-tag">🛡️ The Guardian</div>
+                <div class="agent-tag">🎨 Designer</div>
+                <div class="agent-tag">🎬 Video Editor</div>
+                <div class="agent-tag">🎙️ Voice Actor</div>
+                <div class="agent-tag">📡 Broadcaster</div>
+                <div class="agent-tag">📱 Social Engine</div>
+                <div class="agent-tag">📊 Data Analyst</div>
+                <div class="agent-tag">💰 Revenue Agent</div>
+                <div class="agent-tag">🔬 Lab Scientist</div>
+                <div class="agent-tag">🎯 Marketing</div>
+                <div class="agent-tag">🔐 Security</div>
+                <div class="agent-tag">⚙️ Infrastructure</div>
+                <div class="agent-tag">🤝 Community</div>
+            </div>
+        </div>
+
+        <div class="architecture">
+            <h2>The "Does This Feel Right?" Philosophy</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #b0b0b0;">
+                Traditional AI metrics measure accuracy, speed, and cost. But they miss something crucial: <strong style="color: #667eea;">Does this output actually feel right?</strong>
+            </p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">✨</div>
+                    <h3>Felt Quality Metrics</h3>
+                    <p>Beyond technical correctness to human judgment and collaborative practice.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Trust Scoring</h3>
+                    <p>Measure reliability and quality over time, not just single-point accuracy.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Audit Trails</h3>
+                    <p>Human-in-the-loop traces for regulatory compliance and transparency.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">2026 Roadmap</h2>
+
+            <div class="timeline-item">
+                <div class="timeline-marker">Q1</div>
+                <div class="timeline-content">
+                    <h4>The Evaluation Foundation</h4>
+                    <p>Release DTFR evaluation harness, formalize agent patterns library, publish reference architecture docs.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker">Q2</div>
+                <div class="timeline-content">
+                    <h4>Composable Kits</h4>
+                    <p>Launch dtfr-eval-harness, dtfr-agent-patterns, and dtfr-ux-agent packages with LangChain/CrewAI integration.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker">H2</div>
+                <div class="timeline-content">
+                    <h4>The Evolutionary Marketplace</h4>
+                    <p>Community pattern repository, custom studio deployment tools, and enterprise fork support.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta">
+            <h2>Ready to Build Your Sovereign Studio?</h2>
+            <p style="color: #b0b0b0; max-width: 600px; margin: 0 auto;">
+                Fork the complete system, extract proven patterns, or build on the framework. MIT licensed. No restrictions.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/isaacsight/does-this-feel-right-" class="btn btn-primary">View on GitHub</a>
+                <a href="https://www.doesthisfeelright.com" class="btn btn-secondary">See it Live</a>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 3rem; padding: 2rem; color: #666;">
+            <p>Studio OS · Open Source · MIT License · Built with the Sovereign Laboratory Constitution</p>
+        </footer>
+    </div>
+</body>
+</html>
