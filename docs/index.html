@@ -83,17 +83,17 @@
                         <span class="label">Home</span>
                     </a>
 
-                    <a href="experiments.html" class="sidebar-item" data-tooltip="Execution Logs">
+                    <a href="experiments.html" class="sidebar-item" data-tooltip="See Live Examples">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                             </svg>
                         </div>
-                        <span class="label">Runs</span>
+                        <span class="label">Examples</span>
                     </a>
 
-                    <a href="archive.html" class="sidebar-item" data-tooltip="Design Patterns">
+                    <a href="archive.html" class="sidebar-item" data-tooltip="Writing & Thoughts">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -104,10 +104,20 @@
                                 <polyline points="10 9 9 9 8 9"></polyline>
                             </svg>
                         </div>
-                        <span class="label">Patterns</span>
+                        <span class="label">Writing</span>
                     </a>
 
-                    <a href="about.html" class="sidebar-item" data-tooltip="About">
+                    <a href="https://github.com/isaacsight/does-this-feel-right-" class="sidebar-item" data-tooltip="View Source Code" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            </svg>
+                        </div>
+                        <span class="label">GitHub</span>
+                    </a>
+
+                    <a href="about.html" class="sidebar-item" data-tooltip="About This Project">
                         <div class="icon-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
@@ -117,19 +127,6 @@
                             </svg>
                         </div>
                         <span class="label">About</span>
-                    </a>
-
-                    <a href="https://doesthisfeelright.substack.com" class="sidebar-item" data-tooltip="Subscribe"
-                        target="_blank" rel="noopener">
-                        <div class="icon-container">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                </path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </div>
-                        <span class="label">Subscribe</span>
                     </a>
                 </nav>
 
@@ -178,49 +175,90 @@
 <div class="dashboard-wrapper">
     <!-- Header / Status -->
     <!-- Desktop/Mobile Top Nav -->
-    <div class="dashboard-top-nav flex items-center justify-between mb-8">
-        <div class="brand-info">
-            <h1 class="text-2xl font-bold" style="color: var(--color-void);">System Compiler</h1>
-            <p class="text-sm" style="color: var(--color-slate);">v2.1.0-alpha • OSS Native Runtime • Phase 1: HARNESS
-            </p>
-        </div>
-        <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
-            class="badge badge--link py-2 px-4 rounded-full border flex items-center gap-2"
-            style="border-color: var(--color-border); color: var(--color-slate);" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="w-4 h-4">
-                <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                </path>
-            </svg>
-            <span class="font-mono text-xs">REPOSTITORY_TRACE</span>
-        </a>
-    </div>
-
     <div class="dashboard-grid">
-        <!-- Design System Showcase -->
-        <section class="full-width mb-12" style="padding: var(--space-8); background: rgba(255,255,255,0.02); border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.05);">
-            <div class="flex items-center justify-between" style="margin-bottom: var(--space-6);">
-                <div>
-                    <h2 class="heading-3" style="margin-bottom: var(--space-2);">Design System Active</h2>
-                    <p class="body-small" style="color: var(--text-secondary);">Production-ready components now available</p>
+        <!-- Hero Section - Clear Value Proposition -->
+        <section class="full-width" style="text-align: center; padding: var(--space-16) var(--space-8); margin-bottom: var(--space-16);">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <span class="badge badge--success" style="margin-bottom: var(--space-4);">Now Open Source</span>
+
+                <h1 class="heading-1" style="font-size: 3rem; line-height: 1.1; margin-bottom: var(--space-6); background: linear-gradient(135deg, #66B56E, #7BC583); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Build AI Agents That Actually Ship
+                </h1>
+
+                <p class="body-large" style="color: var(--text-secondary); margin-bottom: var(--space-8); max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Your AI-native development studio. From idea to deployed agent in minutes, not months. Multi-agent orchestration with human oversight.
+                </p>
+
+                <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-4);">
+                    <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank" class="button button--primary button--lg" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        View on GitHub
+                    </a>
+                    <a href="experiments.html" class="button button--outline button--lg">
+                        See It In Action →
+                    </a>
                 </div>
-                <span class="badge badge--success">Live</span>
-            </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
-                <button class="button button--primary">Primary Button</button>
-                <button class="button button--secondary">Secondary Button</button>
-                <button class="button button--outline">Outline Button</button>
-                <a href="static/design-system/examples.html" class="button button--ghost">View Examples →</a>
+                <p class="caption" style="color: var(--text-tertiary);">
+                    Open source • MIT Licensed • 100+ agents ready to deploy
+                </p>
             </div>
+        </section>
 
-            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                <span class="badge badge--primary">Primary</span>
-                <span class="badge badge--success">Success</span>
-                <span class="badge badge--warning">Warning</span>
-                <span class="badge badge--error">Error</span>
-                <span class="badge badge--neutral">Neutral</span>
+        <!-- Feature Cards - What It Does -->
+        <section class="full-width" style="margin-bottom: var(--space-16);">
+            <h2 class="heading-3" style="text-align: center; margin-bottom: var(--space-8);">What You Can Build</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6);">
+                <div class="card">
+                    <div class="card__header">
+                        <span class="badge badge--primary" style="margin-bottom: var(--space-3);">Agent Swarms</span>
+                        <h3 class="card__title">Multi-Agent Orchestration</h3>
+                        <p class="card__subtitle">Deploy teams of specialized agents that collaborate to solve complex tasks. Built-in coordination and handoff protocols.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <span class="badge badge--success" style="margin-bottom: var(--space-3);">Automation</span>
+                        <h3 class="card__title">Content Pipeline</h3>
+                        <p class="card__subtitle">1→N content repurposing. Write once, distribute everywhere. Automated scheduling and optimization.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <span class="badge badge--warning" style="margin-bottom: var(--space-3);">Intelligence</span>
+                        <h3 class="card__title">Knowledge Graphs</h3>
+                        <p class="card__subtitle">Build collective intelligence across your agent swarm. Pattern extraction and decision history tracking.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="full-width" style="margin-bottom: var(--space-16);">
+            <div class="card" style="background: rgba(102, 181, 110, 0.05); border-color: rgba(102, 181, 110, 0.2);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-6); text-align: center; padding: var(--space-6);">
+                    <div>
+                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">100+</div>
+                        <p class="caption" style="color: var(--text-secondary);">Specialized Agents</p>
+                    </div>
+                    <div>
+                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">Open</div>
+                        <p class="caption" style="color: var(--text-secondary);">Source & MIT Licensed</p>
+                    </div>
+                    <div>
+                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">Real-time</div>
+                        <p class="caption" style="color: var(--text-secondary);">WebSocket Streaming</p>
+                    </div>
+                    <div>
+                        <div class="heading-2" style="color: #66B56E; margin-bottom: var(--space-2);">DTFR</div>
+                        <p class="caption" style="color: var(--text-secondary);">Human-in-the-Loop</p>
+                    </div>
+                </div>
             </div>
         </section>
 
