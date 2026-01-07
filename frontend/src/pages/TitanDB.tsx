@@ -1,11 +1,13 @@
 import { useState, type ReactNode } from 'react';
-import TitanViz from '../components/TitanViz';
+import { Link } from 'react-router-dom';
 import {
     ArrowLeft, Database, Search, Shield, Zap,
     Activity, Info, ChevronRight, Terminal, Settings,
     Box, Layers, Cpu, Clock, HardDrive
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import TitanViz from '../components/TitanViz';
+import { Grid, Column } from '@carbon/react';
+import MetricTile from '../components/layout/MetricTile';
 
 export default function TitanDB() {
     const [activeSection, setActiveSection] = useState('overview');
@@ -50,13 +52,21 @@ export default function TitanDB() {
                     </div>
                 </div>
 
-                {/* HUD Summary Row: Moved critical metrics to top */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <HudStat icon={<HardDrive size={16} />} label="Usage" value="1.2TB / 85%" progress={85} />
-                    <HudStat icon={<Clock size={16} />} label="Uptime" value="1,248H 12M" subValue="99.998%" />
-                    <HudStat icon={<Activity size={16} />} label="In-Flight" value="2,482 RPS" subValue="Latency: 12ms" />
-                    <HudStat icon={<Cpu size={16} />} label="Active Nodes" value="5/5 Operational" subValue="Consensus: Quorum" />
-                </div>
+                {/* HUD Summary Row: Carbon Grid + MetricTiles */}
+                <Grid narrow>
+                    <Column sm={2} md={2} lg={4}>
+                        <MetricTile icon={<HardDrive size={16} />} label="Usage" value="1.2TB / 85%" progress={85} />
+                    </Column>
+                    <Column sm={2} md={2} lg={4}>
+                        <MetricTile icon={<Clock size={16} />} label="Uptime" value="1,248H 12M" subValue="99.998%" />
+                    </Column>
+                    <Column sm={2} md={2} lg={4}>
+                        <MetricTile icon={<Activity size={16} />} label="In-Flight" value="2,482 RPS" subValue="Latency: 12ms" />
+                    </Column>
+                    <Column sm={2} md={2} lg={4}>
+                        <MetricTile icon={<Cpu size={16} />} label="Active Nodes" value="5/5 Operational" subValue="Consensus: Quorum" />
+                    </Column>
+                </Grid>
             </header>
 
             {/* Local Navigation Component (Sticky) */}
@@ -273,30 +283,6 @@ metric = "cosine_similarity"`}
     );
 }
 
-function HudStat({ icon, label, value, subValue, progress }: { icon: ReactNode, label: string, value: string, subValue?: string, progress?: number }) {
-    return (
-        <div className="glass-panel p-5 rounded-2xl bg-slate-900/40 border-white/5 group hover:bg-slate-900/60 transition-all">
-            <div className="flex justify-between items-start mb-3">
-                <div className="p-2 bg-blue-500/10 rounded-xl text-blue-500 border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors">
-                    {icon}
-                </div>
-                {progress !== undefined && (
-                    <span className="text-[10px] font-black text-blue-500">{progress}%</span>
-                )}
-            </div>
-            <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">{label}</span>
-            <span className="text-lg font-black text-slate-200 block tracking-tight uppercase">{value}</span>
-            {subValue && (
-                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">{subValue}</span>
-            )}
-            {progress !== undefined && (
-                <div className="h-0.5 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${progress}%` }}></div>
-                </div>
-            )}
-        </div>
-    );
-}
 
 function ArchitectureBlock({ icon, title, description, configTitle, configContent, isOpen, onToggle }: {
     icon: ReactNode,

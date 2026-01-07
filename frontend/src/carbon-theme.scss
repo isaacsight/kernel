@@ -1,0 +1,44 @@
+// Fallback to pre-compiled CSS if Sass mixins are problematic in this environment
+@import '@carbon/styles/css/styles.css';
+@import '../../static/css/tokens.css';
+
+:root {
+    /* Override Carbon variables with custom tokens where appropriate */
+    --cds-background: var(--color-void);
+    --cds-ui-background: var(--color-ink);
+    --cds-interactive-01: var(--color-primary);
+    --cds-link-01: var(--color-primary);
+
+    /* Applying user's typography */
+    --cds-body-long-01-font-family: var(--font-interface);
+    --cds-label-01-font-family: var(--font-interface);
+    --cds-code-01-font-family: var(--font-code);
+}
+
+body {
+    background-color: var(--color-void);
+    font-family: var(--font-interface);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+}
+
+.dtfr-glass {
+    background: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+.dtfr-terminal-input .cds--text-input {
+    font-family: var(--font-mono) !important;
+    background-color: rgba(24, 24, 27, 0.8) !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--glass-border) !important;
+}
