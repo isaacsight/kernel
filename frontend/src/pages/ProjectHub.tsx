@@ -68,7 +68,7 @@ export default function SovereignManifest() {
                         Directing, <br /> not Typing.
                     </h1>
                     <p className="body-large" style={{ color: 'var(--text-secondary)', maxWidth: '42rem' }}>
-                        An integrated development and content pipeline designed to bridge the gap between autonomous execution and human-felt quality.
+                        I build production operating systems for human-AI teams. A unified infrastructure for the next generation of agentic development and creative output.
                     </p>
                 </div>
 

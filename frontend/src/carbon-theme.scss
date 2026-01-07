@@ -34,6 +34,7 @@ h6 {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
+    border-radius: 8px !important; // Standardizing from rounded-xl to 8px
 }
 
 .dtfr-terminal-input .cds--text-input {
@@ -41,4 +42,38 @@ h6 {
     background-color: rgba(24, 24, 27, 0.8) !important;
     border-radius: 8px !important;
     border: 1px solid var(--glass-border) !important;
+}
+
+/* Geometric Standardization for Carbon */
+.cds--btn,
+.cds--header,
+.cds--tag {
+    border-radius: 4px !important;
+}
+
+/* Visibility Utilities */
+.dtfr-hide-mobile {
+    @media (max-width: 671px) {
+        display: none !important;
+    }
+}
+
+.dtfr-hide-tab {
+    @media (max-width: 1056px) {
+        display: none !important;
+    }
+}
+
+/* Contrast Refinement */
+.cds--tag--blue {
+    background-color: rgba(15, 98, 254, 0.2) !important;
+    color: #8bb3ff !important; // Brighter for contrast
+}
+
+/* Header Refinement */
+.dtfr-header-tags {
+    @media (max-width: 800px) {
+        gap: 4px !important;
+        padding-right: 8px !important;
+    }
 }

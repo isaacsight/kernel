@@ -42,11 +42,11 @@ const GlobalHeader = () => {
                         </HeaderMenuItem>
                     </HeaderNavigation>
 
-                    <div className="cds--header__global" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingRight: '16px' }}>
+                    <div className="dtfr-header-tags" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingRight: '16px' }}>
                         <Tag type="blue" size="sm" title="Version">v2.1.0-alpha</Tag>
-                        <Tag type="cool-gray" size="sm">OSS Native Runtime</Tag>
-                        <Tag type="purple" size="sm">Phase 1: HARNESS</Tag>
-                        <Tag type="green" size="sm" renderIcon={TerminalIcon}>LIVE</Tag>
+                        <Tag type="cool-gray" size="sm" className="dtfr-hide-mobile">OSS Native Runtime</Tag>
+                        <Tag type="purple" size="sm" className="dtfr-hide-tab">Phase 1: HARNESS</Tag>
+                        <Tag type="green" size="sm" renderIcon={TerminalIcon} className="dtfr-hide-mobile">LIVE</Tag>
                     </div>
 
                     <HeaderGlobalBar>

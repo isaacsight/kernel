@@ -35,7 +35,10 @@ function StudioChat() {
   // Fetch FRI
   const fetchFRI = async () => {
     try {
-      const resp = await fetch(`http://${window.location.hostname}:8000/api/studio/fri`);
+      const isProd = window.location.hostname !== 'localhost';
+      const apiBase = isProd ? '' : ':8000'; // Assume proxy in prod or same-origin
+      const protocol = window.location.protocol;
+      const resp = await fetch(`${protocol}//${window.location.hostname}${apiBase}/api/studio/fri`);
       const data = await resp.json();
       setFri(data);
     } catch (e) {
@@ -67,7 +70,10 @@ function StudioChat() {
   // WebSocket Connection
   useEffect(() => {
     const host = window.location.hostname;
-    const wsUrl = `ws://${host}:8000/ws/chat`;
+    const isProd = host !== 'localhost';
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const port = isProd ? '' : ':8000';
+    const wsUrl = `${protocol}//${host}${port}/ws/chat`;
 
     function connect() {
       setIsConnecting(true);
