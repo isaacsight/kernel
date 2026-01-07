@@ -1,7 +1,8 @@
 import asyncio
 import logging
+import os
 import time
-from typing import List, Optional, Any
+from typing import List, Optional, Callable, Awaitable
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -22,13 +23,18 @@ class DTFRLoopManager:
         self.principal = MetacognitivePrincipal()
         self.kernel = AntigravityEngineer()
 
-    async def run(self, prompt: str, on_step: Optional[Any] = None) -> DTFRLoopReport:
+    async def run(
+        self,
+        prompt: str,
+        on_step: Optional[Callable[[str, str, dict], Awaitable[None]]] = None
+    ) -> DTFRLoopReport:
         """
         Runs the full loop: Planning → Execution → Critique.
 
         Args:
             prompt: Task description.
-            on_step: Optional async callable for real-time updates: on_step(step_id, status, data)
+            on_step: Optional async callable for real-time updates.
+                     Signature: async def on_step(step_id: str, status: str, data: dict) -> None
         """
         logger.info(f"[DTFRLoopManager] Initiating loop for task: {prompt}")
 
@@ -116,8 +122,10 @@ class DTFRLoopManager:
                     "execution_time": sum(a.duration for a in report.actions),
                 },
             )
+        except (ImportError, AttributeError) as e:
+            logger.debug(f"Cognitive ledger not available: {e}")
         except Exception as e:
-            logger.error(f"Failed to record cognitive case study: {e}")
+            logger.error(f"Failed to record cognitive case study: {e}", exc_info=True)
 
     def _log_to_decision_ledger(self, report: DTFRLoopReport):
         """
@@ -138,7 +146,8 @@ class DTFRLoopManager:
             log_dir = "logs/decisions"
             os.makedirs(log_dir, exist_ok=True)
             log_file = os.path.join(log_dir, f"loop_{int(time.time())}.md")
-            with open(log_file, "w") as f:
+
+            with open(log_file, "w", encoding="utf-8") as f:
                 f.write(f"# DTFR Loop Report: {report.plan.mission}\n\n")
                 f.write(f"**Status**: {report.status}\n\n")
                 f.write(f"## Plan\n{report.plan.model_dump_json(indent=2)}\n\n")
@@ -162,8 +171,7 @@ class DTFRLoopManager:
                 rf.write(entry)
             logger.info(f"[DTFRLoopManager] Appended to {root_log}")
 
+        except OSError as e:
+            logger.error(f"Failed to write decision log files: {e}", exc_info=True)
         except Exception as e:
-            logger.error(f"Failed to log decision: {e}")
-
-
-import os  # Added for os.makedirs
+            logger.error(f"Failed to log decision: {e}", exc_info=True)

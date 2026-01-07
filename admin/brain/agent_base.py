@@ -11,6 +11,10 @@ It handles:
 import os
 import yaml
 import logging
+import json
+from datetime import datetime
+from typing import Dict, Any, Optional, List, Union
+
 from admin.brain.skills import SkillLoader
 from admin.config import config
 from admin.brain.memory_store import get_memory_store
@@ -18,8 +22,6 @@ from admin.brain.active_inference import ActiveInferenceMixin
 from admin.brain.system_prompts import SystemPrompts
 from admin.brain.context_manager import ContextManager
 from admin.brain.visual_cortex import VisualCortexMixin
-from typing import Dict, Any, Optional, List, Union
-import json
 from admin.brain.mission_state import get_mission_manager
 
 logger = logging.getLogger("BaseAgent")
@@ -40,7 +42,11 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         try:
             from admin.brain.model_router import get_model_router
             self.model_router = get_model_router()
-        except:
+        except ImportError as e:
+            logger.warning(f"[{agent_id}] Model router unavailable: {e}")
+            self.model_router = None
+        except Exception as e:
+            logger.error(f"[{agent_id}] Failed to initialize model router: {e}")
             self.model_router = None
             
         # Initialize Mixins
@@ -214,9 +220,19 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
             return ""
 
     
-    def run(self, input_text: str):
-        """Standard execution entry point."""
-        # This would connect to the ModelRouter eventually.
+    def run(self, input_text: str) -> str:
+        """
+        Standard execution entry point.
+
+        Args:
+            input_text: The user's input prompt
+
+        Returns:
+            The agent's response text
+
+        Raises:
+            NotImplementedError: Subclasses must implement this method
+        """
         raise NotImplementedError("Subclasses must implement run() or connect to ModelRouter.")
 
     def socratic_debug_loop(self, error: Exception, context: str) -> str:

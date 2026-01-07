@@ -345,8 +345,10 @@ class ModelRouter:
             sock.close()
             if result == 0:
                 return True
-        except:
-            pass
+        except (OSError, socket.error) as e:
+            logger.debug(f"Local Ollama not available: {e}")
+        except Exception as e:
+            logger.warning(f"Unexpected error checking local Ollama: {e}")
         
         # Check remote Cognitive Node (only if we are the Controller)
         if self.env == Environment.CONTROLLER:
@@ -357,9 +359,11 @@ class ModelRouter:
                     # Use a short connect timeout and a short read timeout
                     response = requests.get(f"{node_url}/health", timeout=(1, 2))
                     return response.status_code == 200
-                except:
-                    pass
-        
+                except requests.exceptions.RequestException as e:
+                    logger.debug(f"Remote Ollama node unavailable at {node_url}: {e}")
+                except Exception as e:
+                    logger.warning(f"Unexpected error checking remote Ollama: {e}")
+
         return False
     
     def _check_hf_available(self) -> bool:
@@ -371,15 +375,17 @@ class ModelRouter:
         # Only relevant if we are the Controller
         if self.env != Environment.CONTROLLER:
             return False
-            
+
         node_url = os.environ.get("STUDIO_NODE_URL")
         if node_url:
             try:
                 import requests
                 response = requests.get(f"{node_url}/health", timeout=2)
                 return response.status_code == 200
-            except:
-                pass
+            except requests.exceptions.RequestException as e:
+                logger.debug(f"Cognitive Node unavailable at {node_url}: {e}")
+            except Exception as e:
+                logger.warning(f"Unexpected error checking Cognitive Node: {e}")
         return False
     
     def _check_codex_available(self) -> bool:
@@ -388,7 +394,11 @@ class ModelRouter:
         try:
             subprocess.run(["codex", "--version"], capture_output=True, check=True, timeout=1)
             return True
-        except:
+        except (subprocess.TimeoutExpired, subprocess.CalledProcessError, FileNotFoundError) as e:
+            logger.debug(f"Codex CLI not available: {e}")
+            return False
+        except Exception as e:
+            logger.warning(f"Unexpected error checking Codex CLI: {e}")
             return False
     
     
@@ -419,6 +429,8 @@ class ModelRouter:
             memory = get_memory_store()
             # Placeholder for record_usage method if it exists or should be added
             # memory.record_usage(model=model, input_tokens=input_tokens, output_tokens=output_tokens, task=task.value, cost=cost)
+        except (ImportError, AttributeError) as e:
+            logger.debug(f"[{self.name}] Usage persistence not available: {e}")
         except Exception as e:
             logger.error(f"[{self.name}] Failed to persist usage stats: {e}")
 
@@ -490,9 +502,11 @@ class ModelRouter:
                     score += int(perf.get("avg_success", 0) * 50)
                     # Penalize latency (simplified: -5 for every 2s)
                     score -= int(perf.get("avg_latency", 0) / 2 * 5)
+            except (ImportError, AttributeError) as e:
+                # Fail soft if memory check fails - method may not exist yet
+                logger.debug(f"Performance metrics unavailable for {model_name}: {e}")
             except Exception as e:
-                # Fail soft if memory check fails
-                pass
+                logger.warning(f"Unexpected error checking model performance for {model_name}: {e}")
             
             # 1. Preference adjustments
             if constraints.get("prefer_local") and model["type"] == "local":
@@ -679,8 +693,10 @@ class ModelRouter:
                         from admin.brain.memory_store import get_memory_store
                         memory = get_memory_store()
                         memory.log_model_outcome(current_model, task_type.value, 1.0, duration)
-                    except:
-                        pass
+                    except (ImportError, AttributeError) as e:
+                        logger.debug(f"Model outcome logging not available: {e}")
+                    except Exception as e:
+                        logger.warning(f"Failed to log model outcome: {e}")
                     return {"selected": current_model, "text": res_text, "provider": current_provider}
             except Exception as e:
                 logger.warning(f"[{self.name}] Model {current_model} failed: {e}")
