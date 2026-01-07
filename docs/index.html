@@ -54,6 +54,25 @@
     <dtfr-status></dtfr-status>
     <a href="#main-content" class="skip-link">Skip to content</a>
 
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav" id="sticky-nav">
+        <div class="sticky-nav-content">
+            <a href="index.html" class="sticky-nav-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <path d="M4 4h8a8 8 0 0 1 0 16H4V4z" />
+                    <circle cx="12" cy="12" r="2" />
+                </svg>
+                DTFR
+            </a>
+            <div class="sticky-nav-links">
+                <a href="experiments.html" class="sticky-nav-link">Examples</a>
+                <a href="archive.html" class="sticky-nav-link">Writing</a>
+                <a href="about.html" class="sticky-nav-link">About</a>
+                <a href="https://github.com/isaacsight/does-this-feel-right-" class="sticky-nav-cta" target="_blank" rel="noopener">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
     <!-- Desktop Sidebar (Liquid Glass) -->
     <aside class="sidebar">
         <div class="sidebar-content">
@@ -255,36 +274,39 @@
             </div>
         </section>
 
-        <!-- DTFR Hero Section -->
-        <section class="mb-12 full-width">
-            <dtfr-hero data-variant="default"></dtfr-hero>
-        </section>
+        <!-- Secondary Content - Below the Fold -->
+        <div class="section-below-fold">
 
-        <!-- Builder Cockpit (Phase 4) -->
-        <section class="dashboard-card full-width mb-12"
-            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
-            <h2 class="text-3xl font-bold mb-8"
-                style="font-family: var(--font-display); font-style: italic; color: var(--color-void);">Inquiry Cockpit
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <dtfr-console></dtfr-console>
-                <dtfr-stack data-editable="true"></dtfr-stack>
+            <!-- DTFR Hero Section -->
+            <section class="mb-12 full-width">
+                <dtfr-hero data-variant="default"></dtfr-hero>
+            </section>
+
+            <!-- Builder Cockpit (Phase 4) -->
+            <section class="dashboard-card full-width mb-12">
+                <h2 class="text-3xl font-bold mb-8"
+                    style="font-family: var(--font-display); font-style: italic; color: var(--color-void);">Inquiry Cockpit
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <dtfr-console></dtfr-console>
+                    <dtfr-stack data-editable="true"></dtfr-stack>
+                </div>
+            </section>
+
+            <!-- Activity Feeds (Phase 3) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width mb-12">
+                <!-- Latest Runs -->
+                <dtfr-feed data-type="runs"></dtfr-feed>
+
+                <!-- Dynamic Trails -->
+                <dtfr-feed data-type="patterns"></dtfr-feed>
             </div>
-        </section>
 
-        <!-- Activity Feeds (Phase 3) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width mb-12">
-            <!-- Latest Runs -->
-            <dtfr-feed data-type="runs"></dtfr-feed>
-
-            <!-- Dynamic Trails -->
-            <dtfr-feed data-type="patterns"></dtfr-feed>
+            <!-- Decision Log (Phase 3) -->
+            <section class="full-width mb-12">
+                <dtfr-feed data-type="log" data-limit="3"></dtfr-feed>
+            </section>
         </div>
-
-        <!-- Decision Log (Phase 3) -->
-        <section class="full-width mb-12">
-            <dtfr-feed data-type="log" data-limit="3"></dtfr-feed>
-        </section>
 
 
         <!-- Visitor Notes Section -->
@@ -565,6 +587,43 @@
     </nav>
     <!-- DTFR Module System -->
     <script type="module" src="js/dtfr.js"></script>
+
+    <!-- Sticky Nav Control -->
+    <script>
+        (function() {
+            const stickyNav = document.getElementById('sticky-nav');
+            const heroSection = document.querySelector('.hero-section');
+            let lastScrollY = window.scrollY;
+            let ticking = false;
+
+            function updateNav() {
+                const scrollY = window.scrollY;
+                const heroBottom = heroSection ? heroSection.offsetHeight : 600;
+
+                // Show sticky nav after scrolling past hero
+                if (scrollY > heroBottom) {
+                    stickyNav.classList.add('visible');
+                } else {
+                    stickyNav.classList.remove('visible');
+                }
+
+                lastScrollY = scrollY;
+                ticking = false;
+            }
+
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateNav);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', requestTick, { passive: true });
+
+            // Initial check
+            updateNav();
+        })();
+    </script>
 
 </body>
 

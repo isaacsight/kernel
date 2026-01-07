@@ -190,10 +190,10 @@
   --bg-elevated: var(--color-gray-50);
   --bg-overlay: rgba(0, 0, 0, 0.5);
 
-  /* Text */
+  /* Text - WCAG AA Compliant (4.5:1 minimum) */
   --text-primary: var(--color-gray-50);
-  --text-secondary: var(--color-gray-400);
-  --text-tertiary: var(--color-gray-500);
+  --text-secondary: var(--color-gray-300);
+  --text-tertiary: var(--color-gray-400);
   --text-disabled: var(--color-gray-600);
   --text-inverse: var(--color-gray-950);
 

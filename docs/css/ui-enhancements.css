@@ -7,8 +7,8 @@
 
 .hero-section {
   text-align: center;
-  padding: var(--space-20) var(--space-8);
-  margin-bottom: var(--space-16);
+  padding: var(--space-24) var(--space-8);
+  margin-bottom: var(--space-24);
 }
 
 .hero-content {
@@ -34,10 +34,10 @@
 }
 
 .hero-subtitle {
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   color: var(--text-secondary);
-  margin-bottom: var(--space-8);
-  max-width: 600px;
+  margin-bottom: var(--space-10);
+  max-width: 640px;
   margin-left: auto;
   margin-right: auto;
   line-height: var(--leading-relaxed);
@@ -91,15 +91,16 @@
 /* ==================== FEATURES SECTION ==================== */
 
 .features-section {
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-32);
 }
 
 .section-title {
-  font-size: var(--text-3xl);
+  font-size: var(--text-4xl);
   font-weight: var(--font-bold);
   text-align: center;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-12);
   color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
 }
 
 .features-grid {
@@ -139,7 +140,7 @@
 /* ==================== STATS SECTION ==================== */
 
 .stats-section {
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-32);
 }
 
 .stats-card {
@@ -194,6 +195,87 @@
   }
 }
 
+/* ==================== STICKY NAVIGATION ==================== */
+
+.sticky-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-primary);
+  padding: var(--space-4) var(--space-8);
+  z-index: var(--z-sticky);
+  transform: translateY(-100%);
+  transition: transform var(--transition-base);
+}
+
+.sticky-nav.visible {
+  transform: translateY(0);
+}
+
+.sticky-nav-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.sticky-nav-logo {
+  font-weight: var(--font-bold);
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sticky-nav-links {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.sticky-nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  transition: color var(--transition-base);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.sticky-nav-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.sticky-nav-cta {
+  background: var(--interactive-default);
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+  transition: all var(--transition-base);
+}
+
+.sticky-nav-cta:hover {
+  background: var(--interactive-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+  .sticky-nav-links {
+    display: none;
+  }
+}
+
 /* ==================== INTERACTION STATES ==================== */
 
 /* Button enhancements */
@@ -201,6 +283,7 @@
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
+  font-weight: var(--font-semibold);
 }
 
 .button::before {
@@ -230,14 +313,25 @@
   transform: scale(0.98);
 }
 
+.button--primary {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  font-weight: var(--font-bold);
+}
+
 .button--primary:hover {
   background-color: var(--interactive-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.button--outline {
+  font-weight: var(--font-medium);
 }
 
 .button--outline:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--border-focus);
+  transform: translateY(-1px);
 }
 
 /* Card link effect */
@@ -417,6 +511,31 @@ a.card:focus {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ==================== SECTION VISIBILITY CONTROL ==================== */
+
+/* Hide secondary sections by default for cleaner fold */
+.section-below-fold {
+  margin-top: var(--space-32);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--border-secondary);
+}
+
+/* Visitor notes section - reduce prominence */
+.notes-section {
+  margin-top: var(--space-32);
+  opacity: 0.9;
+}
+
+/* Coffee button - reduce visual weight */
+[data-name="BMC-Widget"] {
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+}
+
+[data-name="BMC-Widget"]:hover {
+  opacity: 1;
 }
 
 /* ==================== UTILITIES ==================== */
