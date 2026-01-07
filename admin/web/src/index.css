@@ -6,6 +6,7 @@
 
 @layer base {
   :root {
+    /* Design System Integration - Sovereign Lab Palette */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --primary: 126 35% 55%;
@@ -21,11 +22,23 @@
     --input: 0 0% 12%;
     --ring: 126 35% 55%;
     --radius: 0.75rem;
+
+    /* Override design system colors for Studio OS branding */
+    --color-primary-500: #66B56E;
+    --color-primary-600: #5aa562;
+    --color-primary-700: #4d9556;
+  }
+
+  /* Dark theme enhancements */
+  [data-theme="dark"] {
+    --bg-primary: #000000;
+    --bg-secondary: rgba(17, 17, 17, 0.8);
+    --bg-tertiary: rgba(30, 30, 30, 0.6);
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: var(--font-sans), 'Inter', -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.01em;
     background-image: radial-gradient(circle at top, #111 0%, #000 100%);
