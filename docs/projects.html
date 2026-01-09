@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Does This Feel Right? - Isaac Hernandez</title>
-    <meta name="description" content="AI-native operating system for the solo founder.">
+    <title>AI Research Tools - Does This Feel Right?</title>
+    <meta name="description" content="Experimental interfaces and debuggers for Large Language Models.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Does This Feel Right? - Isaac Hernandez">
-    <meta property="og:description" content="AI-native operating system for the solo founder.">
+    <meta property="og:title" content="AI Research Tools - Does This Feel Right?">
+    <meta property="og:description" content="Experimental interfaces and debuggers for Large Language Models.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.doesthisfeelright.com">
+    <meta property="og:url" content="https://www.doesthisfeelright.com/projects.html">
     <meta property="og:image" content="{{ og_image }}">
 
     <!-- PWA / Mobile Experience -->
@@ -27,16 +27,16 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://www.doesthisfeelright.com">
-    <meta name="twitter:title" content="Does This Feel Right? - Isaac Hernandez">
-    <meta name="twitter:description" content="AI-native operating system for the solo founder.">
+    <meta name="twitter:url" content="https://www.doesthisfeelright.com/projects.html">
+    <meta name="twitter:title" content="AI Research Tools - Does This Feel Right?">
+    <meta name="twitter:description" content="Experimental interfaces and debuggers for Large Language Models.">
     <meta name="twitter:image" content="https://isaacsight.com/static/images/og-default.jpg">
 
     <!-- TikTok Verification -->
     <meta name="tiktok-developers-site-verification" content="GtkjxnGmEQ3LdZ4tT9MlSDD3s7MGKYbC">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.doesthisfeelright.com">
+    <link rel="canonical" href="https://www.doesthisfeelright.com/projects.html">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -185,113 +185,380 @@
     </header>
 
     <main id="main-content" class="main-content">
-        
-<div class="dashboard-wrapper">
-    <!-- Header / Status -->
-    <!-- Desktop/Mobile Top Nav -->
-    <div class="dashboard-top-nav flex items-center justify-between mb-8">
-        <div class="brand-info">
-            <h1 class="text-2xl font-bold" style="color: var(--color-void);">System Compiler</h1>
-            <p class="text-sm" style="color: var(--color-slate);">v2.1.0-alpha • OSS Native Runtime • Phase 1: HARNESS
-            </p>
+        <div class="research-terminal">
+    <div class="terminal-header">
+        <div class="header-status">
+            <span class="status-indicator"></span>
+            <span class="mono">SYSTEM_ONLINE</span>
+            <span class="mono separator">|</span>
+            <span class="mono">REGION: US-WEST-4</span>
+            <span class="mono separator">|</span>
+            <span class="mono">LATENCY: 12ms</span>
         </div>
-        <a href="https://github.com/isaacsight/does-this-feel-right-" target="_blank"
-            class="badge badge--link py-2 px-4 rounded-full border flex items-center gap-2"
-            style="border-color: var(--color-border); color: var(--color-slate);" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="w-4 h-4">
-                <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                </path>
-            </svg>
-            <span class="font-mono text-xs">REPOSTITORY_TRACE</span>
-        </a>
+        <div class="header-title">
+            <h1>DTFR Cognitive OS <span class="version">v2.0.0-beta</span></h1>
+            <p>A premium research orchestration engine for the post-AI era.</p>
+        </div>
     </div>
 
-    <div class="dashboard-grid">
-        <!-- DTFR Hero Section -->
-        <section class="mb-12 full-width">
-            <dtfr-hero data-variant="default"></dtfr-hero>
-        </section>
-
-        <!-- Builder Cockpit (Phase 4) -->
-        <section class="dashboard-card full-width mb-12"
-            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
-            <h2 class="text-3xl font-bold mb-8"
-                style="font-family: var(--font-display); font-style: italic; color: var(--color-void);">Inquiry Cockpit
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <dtfr-console></dtfr-console>
-                <dtfr-stack data-editable="true"></dtfr-stack>
-            </div>
-        </section>
-
-        <!-- Activity Feeds (Phase 3) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 full-width mb-12">
-            <!-- Latest Runs -->
-            <dtfr-feed data-type="runs"></dtfr-feed>
-
-            <!-- Dynamic Trails -->
-            <dtfr-feed data-type="patterns"></dtfr-feed>
-        </div>
-
-        <!-- Decision Log (Phase 3) -->
-        <section class="full-width mb-12">
-            <dtfr-feed data-type="log" data-limit="3"></dtfr-feed>
-        </section>
-
-
-        <!-- Design Intelligence (Phase 2) -->
-        <section class="dashboard-card full-width mb-12"
-            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold"
-                    style="font-family: var(--font-display); font-style: italic; color: var(--color-void);">Design
-                    Intelligence
-                </h2>
-                <a href="design-intelligence.html"
-                    class="badge badge--link py-2 px-4 rounded-full border border-zinc-200">EXPLORE_PATTERNS →</a>
-            </div>
-            <p class="text-sm mb-8" style="color: var(--color-slate); max-width: 600px;">
-                Automated design pattern mining. Real-time extraction of UI components and flows from top-tier apps via
-                the Mobbin ecosystem.
-            </p>
-            <div class="grid grid-cols-1 gap-8">
-                <dtfr-design-scout></dtfr-design-scout>
-            </div>
-        </section>
-
-        <!-- Visitor Notes Section -->
-        <section class="dashboard-card full-width notes-section mt-12"
-            style="border-top: 1px solid var(--color-border); padding-top: var(--space-8);">
-            <h2 class="text-2xl font-bold mb-6" style="color: var(--color-void);">
-                <span class="status-pulse ai"></span>
-                Visitor Ledger
-            </h2>
-            <p style="color: var(--color-slate);" class="mb-6">Record a trace — persistent context for the system.</p>
-
-            <!-- Note Form -->
-            <form id="note-form" class="note-form mb-8">
-                <div class="note-form-row">
-                    <input type="text" id="note-name" placeholder="Name (optional)" maxlength="50"
-                        class="note-input note-input-name">
-                    <textarea id="note-message" placeholder="Write something..." maxlength="280" rows="2" required
-                        class="note-input note-input-message"></textarea>
-                </div>
-                <div class="note-form-footer">
-                    <span class="note-char-count text-zinc-500 text-sm"></span>
-                    <button type="submit" class="note-submit-btn">Leave a Note</button>
-                </div>
-            </form>
-
-            <!-- Notes Display -->
-            <div id="notes-list" class="notes-list">
-                <p class="note-empty">Loading notes...</p>
-            </div>
-        </section>
+    <div class="research-grid">
+        <a href="projects/does-this-feel-right.html" class="research-card"><div class="card-status-bar"><span class="mono text-xs">ID: does-this-feel-right</span><span class="status-badge live">ACTIVE</span></div><div class="card-body"><div class="tech-icon"><svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg></div><h3>Does This Feel Right?</h3><p>DTFR Cognitive OS – reference architectures and a forkable stack for agentic systems.</p></div><div class="card-footer"><span class="mono text-xs text-zinc-500">vmain</span><span class="action-text">VIEW PROJECT &rarr;</span></div></a>
     </div>
 </div>
+d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21
+16z">
+</path>
+</svg>
+</div>
+<h3>DTFR Stack</h3>
+<p>The open-source foundation for AI-native systems. Standardizes the BaseAgent interface and sovereign
+    audit decorators.</p>
+</div>
+<div class="card-footer">
+    <span class="mono text-xs text-zinc-500">ABSTRACTION / DECORATORS / SDK</span>
+    <span class="action-text">FETCH STACK &rarr;</span>
+</div>
+</a>
 
+
+
+
+
+<!-- Project 3: Meta-Analysis -->
+<a href="meta.html" class="research-card">
+    <div class="card-status-bar">
+        <span class="mono text-xs">ID: META-03</span>
+        <span class="status-badge live">Documented</span>
+    </div>
+    <div class="card-body">
+        <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+        </div>
+        <h3>The Recursive Platform</h3>
+        <p>Self-referential analysis of this research suite's architecture. Includes screenshots of the visual
+            system and static-dynamic hybrid engine.</p>
+    </div>
+    <div class="card-footer">
+        <span class="mono text-xs text-zinc-500">SSG / TAILWIND / PYTHON</span>
+        <span class="action-text">VIEW ANALYSIS &rarr;</span>
+    </div>
+</a>
+
+<!-- Project 4: Deep Reasoning Swarm -->
+<a href="posts/studio-os-deep-reasoning.html" class="research-card">
+    <div class="card-status-bar">
+        <span class="mono text-xs">ID: QWEN-72B</span>
+        <span class="status-badge live">LIVE</span>
+    </div>
+    <div class="card-body">
+        <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" class="icon-svg" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                <path d="M12 16v-4"></path>
+                <path d="M12 8h.01"></path>
+            </svg>
+        </div>
+        <h3>Deep Reasoning Agent</h3>
+        <p>Hybrid local/remote agent swarm connected to Qwen 2.5 72B. Features Chain-of-Thought "Deep Mode" for
+            nuanced content generation.</p>
+    </div>
+    <div class="card-footer">
+        <span class="mono text-xs text-zinc-500">PYTHON / API / CHAIN-OF-THOUGHT</span>
+        <span class="action-text">VIEW SPECS &rarr;</span>
+    </div>
+</a>
+
+
+</div>
+
+</div>
+
+<div class="back-link-container">
+    <a href="index.html" class="back-link mono text-xs">&lt; SYSTEM_EXIT</a>
+</div>
+</div>
+
+<style>
+    :root {
+        --research-bg: #0a0a0a;
+        --research-card-bg: #111;
+        --research-border: #222;
+        --research-border-hover: #444;
+        --research-accent: #3b82f6;
+        /* Blue for "Science" */
+        --research-text: #eee;
+        --research-text-muted: #888;
+        --mono-font: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
+    }
+
+    body {
+        background-color: var(--research-bg) !important;
+        /* Force dark mode for this page */
+    }
+
+    .research-terminal {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 0 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+        color: var(--research-text);
+    }
+
+    .mono {
+        font-family: var(--mono-font);
+        letter-spacing: -0.03em;
+    }
+
+    .terminal-header {
+        margin-bottom: 60px;
+        border-bottom: 1px solid var(--research-border);
+        padding-bottom: 40px;
+    }
+
+    .header-status {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.75rem;
+        color: var(--research-text-muted);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        background-color: #10b981;
+        /* Green */
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    .separator {
+        color: var(--research-border);
+    }
+
+    .header-title h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0 0 10px 0;
+        color: white;
+    }
+
+    .header-title .version {
+        font-size: 0.9rem;
+        font-family: var(--mono-font);
+        font-weight: 400;
+        color: var(--research-text-muted);
+        background: var(--research-border);
+        padding: 4px 8px;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 12px;
+    }
+
+    .header-title p {
+        font-size: 1.2rem;
+        color: var(--research-text-muted);
+        margin: 0;
+        max-width: 600px;
+    }
+
+    .research-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-bottom: 60px;
+    }
+
+    .research-card {
+        background: var(--research-card-bg);
+        border: 1px solid var(--research-border);
+        border-radius: 6px;
+        /* Sharper corners */
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .research-card:hover {
+        border-color: var(--research-border-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .research-card::before {
+        /* Tech line effect on hover */
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--research-accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.2s ease;
+    }
+
+    .research-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .card-status-bar {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--research-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--research-text-muted);
+    }
+
+    .status-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-badge.live {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-badge.beta {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    .card-body {
+        padding: 24px 20px;
+        flex-grow: 1;
+    }
+
+    .tech-icon {
+        margin-bottom: 20px;
+        color: var(--research-text);
+        opacity: 0.8;
+    }
+
+    .tech-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .research-card h3 {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        letter-spacing: -0.01em;
+    }
+
+    .research-card p {
+        color: var(--research-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .card-footer {
+        padding: 16px 20px;
+        border-top: 1px solid var(--research-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .action-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--research-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Back link */
+    .back-link-container {
+        text-align: left;
+    }
+
+    .back-link {
+        color: var(--research-text-muted);
+        text-decoration: none;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+        opacity: 1;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Mobile Polish */
+    @media (max-width: 768px) {
+        .research-terminal {
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .terminal-header {
+            margin-bottom: 30px;
+            padding-bottom: 24px;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            line-height: 1.1;
+        }
+
+        .header-status {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+        }
+
+        .research-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .header-title p {
+            font-size: 1rem;
+        }
+    }
+</style>
     </main>
 
 
