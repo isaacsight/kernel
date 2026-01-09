@@ -1,9 +1,0 @@
-[
-    {
-        "id": "sum-001",
-        "source_type": "Thread",
-        "source_id": "thread-001",
-        "generated_at": "2025-12-30T13:20:00Z",
-        "content": "This research thread explores the integration of 'Comet' browser principles (contextual agency, low cognitive load) into the DTFR OS. Key focus areas include defining a 'Second Brain' data structure using threads and implementing 'Calm UX' patterns to reduce dashboard noise. Initial alignment confirms that treating the OS as a teammate rather than a tool requires keeping intent and state visible but unobtrusive."
-    }
-]
