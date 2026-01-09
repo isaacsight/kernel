@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GlobalHeader from './components/layout/GlobalHeader';
+import WayHeader from './components/layout/WayHeader';
+import WayHomepage from './pages/WayHomepage';
+import PhilosophyPage from './pages/PhilosophyPage';
 import ProjectHub from './pages/ProjectHub';
 import TitanDB from './pages/TitanDB';
 import ProjectPlaceholder from './pages/ProjectPlaceholder';
@@ -11,15 +13,26 @@ import Shell from './components/layout/Shell';
 
 import { Theme } from '@carbon/react';
 
+/**
+ * The Way of Code Application
+ *
+ * Rebuilt through the vision of vibe coding and wu wei.
+ * Every route flows naturally. Every component breathes.
+ */
 function App() {
   return (
-    <Theme theme="g100">
+    <Theme theme="white">
       <Router>
         <div className="app-container">
-          <GlobalHeader />
+          <WayHeader />
           <main>
             <Routes>
-              <Route path="/" element={
+              {/* The Way Pages - Contemplative */}
+              <Route path="/" element={<WayHomepage />} />
+              <Route path="/philosophy" element={<PhilosophyPage />} />
+
+              {/* Legacy Pages - Coexisting with The Way */}
+              <Route path="/projects" element={
                 <Shell mode="bento">
                   <ProjectHub />
                 </Shell>
@@ -49,11 +62,9 @@ function App() {
                   <ProjectPlaceholder />
                 </Shell>
               } />
-              <Route path="*" element={
-                <Shell mode="bento">
-                  <ProjectHub />
-                </Shell>
-              } />
+
+              {/* Fallback */}
+              <Route path="*" element={<WayHomepage />} />
             </Routes>
           </main>
         </div>
