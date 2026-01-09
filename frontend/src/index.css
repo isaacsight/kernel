@@ -1,5 +1,11 @@
+/**
+ * The Way of Code Integration
+ * Import The Way of Code design tokens for contemplative interfaces
+ */
+@import './styles/way-of-code-tokens.css';
+
 :root {
-    /* Sentient Lab Palette */
+    /* Legacy Sentient Lab Palette - Coexisting with The Way */
     --bg-dark: #050507;
     --bg-gradient: radial-gradient(circle at top right, #0d0d14, #050507);
     --primary: #8b5cf6;
