@@ -1,0 +1,170 @@
+.intelligence-console {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.console-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem;
+}
+
+.console-header h1 {
+    font-size: 24px;
+    font-family: var(--font-display);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.console-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.console-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.status-indicator {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: var(--font-code);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-indicator.nominal {
+    background: rgba(0, 128, 0, 0.1);
+    color: green;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.console-section {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.console-section h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    text-align: left;
+    font-family: var(--font-code);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #999;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.data-table td {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}
+
+.data-table .font-code {
+    font-family: var(--font-code);
+}
+
+.data-table .text-right {
+    text-align: right;
+}
+
+.data-table .capitalize {
+    text-transform: capitalize;
+}
+
+.data-table .text-small {
+    font-size: 12px;
+}
+
+.split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .split-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.insight-card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.insight-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.insight-header h4 {
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.insight-body {
+    padding: 1rem;
+    padding-top: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}

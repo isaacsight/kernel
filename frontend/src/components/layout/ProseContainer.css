@@ -1,0 +1,11 @@
+.prose-container {
+    max-width: var(--max-width-prose);
+    margin: 0 auto;
+    padding: 0 var(--padding-horizontal);
+}
+
+@media (max-width: 768px) {
+    .prose-container {
+        padding: 0 var(--padding-horizontal-mobile);
+    }
+}

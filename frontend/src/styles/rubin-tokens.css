@@ -1,0 +1,22 @@
+:root {
+    /* Colors */
+    --rubin-ivory: #FAF9F6;
+    --rubin-slate: #1F1E1D;
+    --rubin-text: rgba(0, 0, 0, 0.85);
+    --rubin-cyan: #44A6E4;
+    --rubin-clay: #D97757;
+
+    /* Typography */
+    --font-display: 'EB Garamond', Georgia, serif;
+    --font-body: 'EB Garamond', Georgia, serif;
+    --font-code: 'Courier Prime', monospace;
+
+    --font-size-base: 22px;
+    --line-height-base: 1.5;
+
+    /* Spacing */
+    --padding-horizontal: 100px;
+    --padding-horizontal-mobile: 32px;
+    --max-width-prose: 65ch;
+    --max-width-container: 1440px;
+}

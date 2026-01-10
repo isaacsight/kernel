@@ -1,0 +1,70 @@
+/* Essays Index */
+.page-header {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.intro-text {
+    font-family: var(--font-code);
+    color: #666;
+    margin-top: 1rem;
+}
+
+.essay-entry {
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.essay-meta {
+    font-family: var(--font-code);
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 0.5rem;
+}
+
+.essay-title {
+    font-size: 36px;
+    margin-bottom: 0.5rem;
+}
+
+.essay-subtitle {
+    color: #666;
+    font-style: italic;
+}
+
+/* Essay Detail */
+.essay-nav {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-family: var(--font-code);
+    font-size: 14px;
+}
+
+.entry-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.entry-date {
+    font-family: var(--font-code);
+    font-size: 14px;
+    color: #999;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.markdown-content {
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+.markdown-content p {
+    margin-bottom: 1.5em;
+}
+
+.markdown-content h2 {
+    font-size: 28px;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}

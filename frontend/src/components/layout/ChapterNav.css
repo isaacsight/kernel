@@ -1,0 +1,57 @@
+.chapter-nav {
+    position: fixed;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.chapter-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.chapter-link {
+    font-family: var(--font-code);
+    font-size: 14px;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    text-decoration: none;
+    display: block;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    padding: 8px 0;
+    transition: opacity 0.3s ease;
+}
+
+.chapter-link:hover,
+.chapter-link.active {
+    opacity: 1;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .chapter-nav {
+        left: 0;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        transform: none;
+        background: var(--rubin-ivory);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 16px 0;
+    }
+
+    .chapter-list {
+        flex-direction: row;
+        justify-content: center;
+        gap: 48px;
+    }
+
+    .chapter-link {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+}

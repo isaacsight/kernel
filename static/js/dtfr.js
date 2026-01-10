@@ -14,23 +14,27 @@
 // Dynamic Module Loading
 // ============================================================================
 
+// Determine the base path dynamically based on where dtfr.js is loaded from
+const currentScript = document.currentScript?.src || import.meta.url;
+const basePath = currentScript.includes('/static/js/') ? '/static/js' : '/js';
+
 const MODULES_TO_LOAD = [
-    '/static/js/core.js',
-    '/static/js/generation/engine.js',
-    '/static/js/router.js',
-    '/static/js/modules/dtfr-monitor.js',
-    '/static/js/modules/dtfr-shell.js',
-    '/static/js/modules/dtfr-hero.js',
-    '/static/js/modules/dtfr-command-bar.js',
-    '/static/js/modules/dtfr-graph.js',
-    '/static/js/modules/dtfr-flow.js',
-    '/static/js/modules/dtfr-context-panel.js',
-    '/static/js/modules/dtfr-feed.js',
-    '/static/js/modules/dtfr-stack.js',
-    '/static/js/modules/dtfr-console.js',
-    '/static/js/modules/dtfr-design-scout.js',
-    '/static/js/modules/dtfr-status.js',
-    '/static/js/metrics.js'
+    `${basePath}/core.js`,
+    `${basePath}/generation/engine.js`,
+    `${basePath}/router.js`,
+    `${basePath}/modules/dtfr-monitor.js`,
+    `${basePath}/modules/dtfr-shell.js`,
+    `${basePath}/modules/dtfr-hero.js`,
+    `${basePath}/modules/dtfr-command-bar.js`,
+    `${basePath}/modules/dtfr-graph.js`,
+    `${basePath}/modules/dtfr-flow.js`,
+    `${basePath}/modules/dtfr-context-panel.js`,
+    `${basePath}/modules/dtfr-feed.js`,
+    `${basePath}/modules/dtfr-stack.js`,
+    `${basePath}/modules/dtfr-console.js`,
+    `${basePath}/modules/dtfr-design-scout.js`,
+    `${basePath}/modules/dtfr-status.js`,
+    `${basePath}/metrics.js`
 ];
 
 // ============================================================================

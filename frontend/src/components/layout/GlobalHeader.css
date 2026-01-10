@@ -1,0 +1,27 @@
+.global-header {
+    position: fixed;
+    top: 32px;
+    right: 32px;
+    z-index: 100;
+}
+
+.site-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: var(--rubin-slate);
+}
+
+.site-title:hover {
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .global-header {
+        top: 16px;
+        right: 16px;
+    }
+}
