@@ -9,12 +9,13 @@
 
 body {
     background-color: var(--rubin-ivory);
-    color: var(--rubin-text);
+    color: var(--rubin-text-primary);
     font-family: var(--font-body);
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
 }
 
 h1,

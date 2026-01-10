@@ -67,4 +67,6 @@
 .metric-progress-bar {
     height: 100%;
     background: var(--rubin-cyan);
+    transition: width 0.3s ease;
+    width: var(--progress-width, 0%);
 }

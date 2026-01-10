@@ -1,57 +1,66 @@
-.chapter-nav {
+.chapter-spine {
     position: fixed;
-    left: 32px;
+    right: 2rem;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
     z-index: 100;
+    mix-blend-mode: multiply;
 }
 
-.chapter-list {
+.spine-header {
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    color: var(--rubin-text-muted);
+    margin-bottom: 1rem;
+}
+
+.spine-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 0.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
 }
 
-.chapter-link {
+/* Hide scrollbar for Chrome, Safari and Opera */
+.spine-list::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.spine-list {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.spine-link {
     font-family: var(--font-code);
-    font-size: 14px;
-    color: var(--rubin-slate);
-    opacity: 0.4;
-    text-decoration: none;
-    display: block;
-    writing-mode: vertical-lr;
-    transform: rotate(180deg);
-    padding: 8px 0;
-    transition: opacity 0.3s ease;
+    font-size: 0.8rem;
+    color: var(--rubin-text-muted);
+    opacity: 0.5;
+    transition: all 0.2s ease;
 }
 
-.chapter-link:hover,
-.chapter-link.active {
+.spine-link:hover {
     opacity: 1;
+    color: var(--rubin-text-primary);
     text-decoration: none;
 }
 
-@media (max-width: 768px) {
-    .chapter-nav {
-        left: 0;
-        bottom: 0;
-        top: auto;
-        width: 100%;
-        transform: none;
-        background: var(--rubin-ivory);
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
-        padding: 16px 0;
-    }
-
-    .chapter-list {
-        flex-direction: row;
-        justify-content: center;
-        gap: 48px;
-    }
-
-    .chapter-link {
-        writing-mode: horizontal-tb;
-        transform: none;
+@media (max-width: 1200px) {
+    .chapter-spine {
+        display: none;
+        /* Hide for smaller screens to keep it minimal */
     }
 }

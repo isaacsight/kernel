@@ -1,29 +1,25 @@
-import { NavLink } from 'react-router-dom';
 import './ChapterNav.css';
 
-const chapters = [
-    { path: '/', label: '00', title: 'Index' },
-    { path: '/essays', label: '01', title: 'Essays' },
-    { path: '/about', label: '02', title: 'About' },
-];
+const chapters = Array.from({ length: 81 }, (_, i) => ({
+    id: i + 1,
+    label: (i + 1).toString().padStart(2, '0')
+}));
 
 export default function ChapterNav() {
     return (
-        <nav className="chapter-nav">
-            <ul className="chapter-list">
+        <nav className="chapter-spine">
+            <div className="spine-header">WOC</div>
+            <ul className="spine-list">
                 {chapters.map((chapter) => (
-                    <li key={chapter.path} className="chapter-item">
-                        <NavLink
-                            to={chapter.path}
-                            className={({ isActive }) =>
-                                `chapter-link ${isActive ? 'active' : ''}`
-                            }
-                            title={chapter.title}
-                        >
+                    <li key={chapter.id} className="spine-item">
+                        <a href={`#chapter-${chapter.id}`} className="spine-link">
                             {chapter.label}
-                        </NavLink>
+                        </a>
                     </li>
                 ))}
+                <li className="spine-item">
+                    <a href="#chapter-ps" className="spine-link">PS</a>
+                </li>
             </ul>
         </nav>
     );

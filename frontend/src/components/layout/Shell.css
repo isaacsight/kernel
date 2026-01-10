@@ -1,12 +1,25 @@
-.shell-container {
+.shell {
     min-height: 100vh;
-    width: 100%;
-    padding-bottom: 80px;
-    /* Space for bottom nav on mobile */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10vh 0;
+    /* Generous vertical whitespace */
+    transition: background-color 0.5s ease;
 }
 
-@media (min-width: 769px) {
-    .shell-container {
-        padding-bottom: 0;
+.shell main {
+    width: 100%;
+    max-width: var(--max-width-container);
+    padding: 0 var(--padding-horizontal);
+}
+
+@media (max-width: 768px) {
+    .shell {
+        padding: 5vh 0;
+    }
+
+    .shell main {
+        padding: 0 var(--padding-horizontal-mobile);
     }
 }

@@ -1,54 +1,29 @@
-.hero-section {
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.landing-page {
+    width: 100%;
+}
+
+.chapters-container {
+    padding: 10vh 0;
+}
+
+.woc-footer {
+    margin-top: 20vh;
+    padding: 10vh 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     text-align: center;
-    padding: 0 2rem;
-}
-
-.hero-title {
-    font-size: clamp(3rem, 10vw, 8rem);
-    letter-spacing: 0.15em;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-}
-
-.hero-subtitle {
-    font-family: var(--font-code);
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--rubin-slate);
-    opacity: 0.6;
-}
-
-.landing-intro p {
-    font-size: 24px;
-    margin-bottom: 1.5rem;
-}
-
-.essay-list-simple {
-    list-style: none;
-    margin-top: 2rem;
-}
-
-.essay-list-simple li {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 1rem 0;
-    align-items: baseline;
-}
-
-.essay-list-simple a {
     font-family: var(--font-display);
-    font-size: 24px;
 }
 
-.essay-list-simple .date {
-    font-family: var(--font-code);
-    font-size: 14px;
-    color: #999;
+.footer-links a {
+    font-size: 1.2rem;
+    color: var(--rubin-text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rubin-text-primary);
+    padding-bottom: 0.2rem;
+}
+
+.footer-note {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--rubin-text-muted);
 }

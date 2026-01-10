@@ -48,7 +48,7 @@ const MetricTile: React.FC<MetricTileProps> = ({
                 <div className="metric-progress-container">
                     <div
                         className="metric-progress-bar"
-                        style={{ width: `${Math.min(100, progress)}%` } as React.CSSProperties}
+                        style={{ "--progress-width": `${Math.min(100, progress)}%` } as React.CSSProperties}
                     />
                 </div>
             )}

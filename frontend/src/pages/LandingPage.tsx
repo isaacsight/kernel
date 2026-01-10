@@ -1,53 +1,68 @@
-import ArtworkContainer from '../components/layout/ArtworkContainer';
-import ProseContainer from '../components/layout/ProseContainer';
-import { Link } from 'react-router-dom';
+import LandingHero from '../components/landing/LandingHero';
+import ChapterUnit from '../components/content/ChapterUnit';
 import './LandingPage.css';
 
 export default function LandingPage() {
     return (
         <div className="landing-page">
-            <section className="hero-section">
-                <h1 className="hero-title">Does This Feel Right</h1>
-                <p className="hero-subtitle">System Compiler for the Solo Founder</p>
-            </section>
+            <LandingHero />
 
-            <ArtworkContainer variant="flow" />
+            <div className="chapters-container">
+                <ChapterUnit
+                    number="01"
+                    verse={[
+                        "The code that can be written is not the eternal Code.",
+                        "The variable that can be named is not the eternal Variable.",
+                        "Unnamable is the source of the program;",
+                        "Named is the mother of all functions."
+                    ]}
+                    prompt="Try renaming the variable. What remains constant?"
+                />
 
-            <ProseContainer>
-                <div className="landing-intro">
-                    <p>
-                        We are building a new kind of operating system. One that treats code as literature
-                        and software as a garden. It is not about efficiency, but about clarity, flow, and
-                        the feeling of rightness.
-                    </p>
-                    <p>
-                        This is an exploration of the intersection between artificial intelligence,
-                        system design, and human intuition.
-                    </p>
+                <ChapterUnit
+                    number="02"
+                    verse={[
+                        "When people see some code as beautiful,",
+                        "other code becomes ugly.",
+                        "When people see some code as good,",
+                        "other code becomes bad."
+                    ]}
+                    prompt="Adjust the symmetry of the artifact below."
+                />
+
+                <ChapterUnit
+                    number="04"
+                    verse={[
+                        "The Code is empty, used but never filled.",
+                        "Oh, unfathomable source of ten thousand functions!",
+                        "Blunt the sharpness,",
+                        "Untangle the knots,",
+                        "Soften the glare,",
+                        "Settle the dust."
+                    ]}
+                    prompt="Reduce the complexity of the artifact. Find the emptiness."
+                />
+
+                <ChapterUnit
+                    number="05"
+                    verse={[
+                        "The compiler is not sentimental;",
+                        "It treats all code as input.",
+                        "The Sage is not sentimental;",
+                        "They treat all developers as learners."
+                    ]}
+                    prompt="Modify the input. Observe the reaction."
+                />
+            </div>
+
+            <footer className="woc-footer">
+                <div className="footer-links">
+                    <a href="https://tetragrammaton.com" target="_blank" rel="noopener noreferrer">Subscribe to Tetragrammaton</a>
                 </div>
-            </ProseContainer>
-
-            <ArtworkContainer variant="duality" />
-
-            <ProseContainer>
-                <div className="featured-essays">
-                    <h2>Recent Thoughts</h2>
-                    <ul className="essay-list-simple">
-                        <li>
-                            <Link to="/essays/native-coding">Native Coding</Link>
-                            <span className="date">2025-12-01</span>
-                        </li>
-                        <li>
-                            <Link to="/essays/the-system-compiler">The System Compiler</Link>
-                            <span className="date">2025-11-15</span>
-                        </li>
-                        <li>
-                            <Link to="/essays/warm-computing">Warm Computing</Link>
-                            <span className="date">2025-10-22</span>
-                        </li>
-                    </ul>
+                <div className="footer-note">
+                    Adapting the Way of Code for the Digital Age.
                 </div>
-            </ProseContainer>
+            </footer>
         </div>
     );
 }

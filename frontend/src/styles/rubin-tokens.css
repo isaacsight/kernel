@@ -1,8 +1,11 @@
 :root {
     /* Colors */
-    --rubin-ivory: #FAF9F6;
+    --rubin-ivory: #F0EEE6;
+    /* Warm parchment */
     --rubin-slate: #1F1E1D;
-    --rubin-text: rgba(0, 0, 0, 0.85);
+    --rubin-text-primary: #222222;
+    --rubin-text-secondary: #333333;
+    --rubin-text-muted: #666666;
     --rubin-cyan: #44A6E4;
     --rubin-clay: #D97757;
 
@@ -12,7 +15,9 @@
     --font-code: 'Courier Prime', monospace;
 
     --font-size-base: 22px;
-    --line-height-base: 1.5;
+    --line-height-base: 1.7;
+    /* Increased for poetic feel */
+    --letter-spacing-display: -0.01em;
 
     /* Spacing */
     --padding-horizontal: 100px;

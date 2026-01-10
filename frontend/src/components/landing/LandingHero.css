@@ -1,0 +1,59 @@
+.landing-hero {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20vh;
+}
+
+.hero-content {
+    max-width: var(--max-width-prose);
+}
+
+.hero-title {
+    font-size: 84px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--rubin-text-primary);
+}
+
+.hero-subtitle {
+    font-family: var(--font-code);
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rubin-text-muted);
+    margin-bottom: 2rem;
+}
+
+.hero-attribution {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--rubin-text-secondary);
+    margin-bottom: 4rem;
+}
+
+.hero-quote {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    line-height: 1.6;
+    color: var(--rubin-text-primary);
+    position: relative;
+    padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 48px;
+        letter-spacing: 0.15em;
+    }
+
+    .hero-quote {
+        font-size: 1.4rem;
+    }
+}

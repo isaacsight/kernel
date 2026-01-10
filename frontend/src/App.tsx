@@ -22,20 +22,20 @@ function App() {
         <ChapterNav />
         <Routes>
           {/* New Routes */}
-          <Route path="/" element={<Shell variant="full"><LandingPage /></Shell>} />
-          <Route path="/essays" element={<Shell variant="prose"><EssaysPage /></Shell>} />
-          <Route path="/essays/:slug" element={<Shell variant="article"><EssayDetail /></Shell>} />
-          <Route path="/about" element={<Shell variant="prose"><AboutPage /></Shell>} />
+          <Route path="/" element={<Shell><LandingPage /></Shell>} />
+          <Route path="/essays" element={<Shell><EssaysPage /></Shell>} />
+          <Route path="/essays/:slug" element={<Shell><EssayDetail /></Shell>} />
+          <Route path="/about" element={<Shell><AboutPage /></Shell>} />
 
           {/* Legacy Routes - Wrapped in Shell for consistency */}
-          <Route path="/chat" element={<Shell variant="full"><StudioChat /></Shell>} />
-          <Route path="/intelligence" element={<Shell variant="full"><IntelligenceConsole /></Shell>} />
-          <Route path="/clients" element={<Shell variant="full"><ClientPortal /></Shell>} />
-          <Route path="/projects/titan" element={<Shell variant="full"><TitanDB /></Shell>} />
-          <Route path="/projects/:id" element={<Shell variant="full"><ProjectPlaceholder /></Shell>} />
+          <Route path="/chat" element={<Shell><StudioChat /></Shell>} />
+          <Route path="/intelligence" element={<Shell><IntelligenceConsole /></Shell>} />
+          <Route path="/clients" element={<Shell><ClientPortal /></Shell>} />
+          <Route path="/projects/titan" element={<Shell><TitanDB /></Shell>} />
+          <Route path="/projects/:id" element={<Shell><ProjectPlaceholder /></Shell>} />
 
           {/* Fallback */}
-          <Route path="*" element={<Shell variant="full"><LandingPage /></Shell>} />
+          <Route path="*" element={<Shell><LandingPage /></Shell>} />
         </Routes>
       </div>
     </Router>
