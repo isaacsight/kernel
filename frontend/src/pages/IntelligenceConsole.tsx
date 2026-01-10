@@ -37,7 +37,7 @@ interface IntelligenceData {
         total_posts: number;
         avg_word_count: number;
     };
-    agents: Record<string, unknown>[];
+    agents: Array<Record<string, unknown>>;
     research: ResearchInsight[];
     rigor: {
         views_24h: number;
