@@ -1,0 +1,208 @@
+.projects-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10vh var(--padding-horizontal);
+}
+
+.projects-header {
+    text-align: center;
+    margin-bottom: 10vh;
+}
+
+.page-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--rubin-text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.page-description {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: var(--rubin-text-secondary);
+    max-width: 50ch;
+    margin: 0 auto 2.5rem;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    color: var(--rubin-text-primary);
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--rubin-text-primary);
+    transition: all 0.3s ease;
+}
+
+.github-link:hover {
+    background: var(--rubin-text-primary);
+    color: var(--rubin-ivory);
+}
+
+/* Projects List */
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.project-item {
+    padding-bottom: 6rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.project-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-year {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    color: var(--rubin-text-muted);
+}
+
+.project-status {
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 2px;
+}
+
+.status-active {
+    background: rgba(34, 139, 34, 0.1);
+    color: #228B22;
+}
+
+.status-maintained {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--rubin-text-muted);
+}
+
+.status-archived {
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--rubin-text-muted);
+    opacity: 0.7;
+}
+
+.project-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    color: var(--rubin-text-muted);
+}
+
+.project-item .project-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.project-subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--rubin-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.project-item .project-description {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--rubin-text-secondary);
+    margin-bottom: 2rem;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.tag {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--rubin-text-muted);
+}
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    color: var(--rubin-text-primary);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.project-link:hover {
+    border-color: var(--rubin-text-primary);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .projects-page {
+        padding: 8vh var(--padding-horizontal-mobile);
+    }
+
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .project-links {
+        flex-direction: column;
+    }
+
+    .project-link {
+        justify-content: center;
+    }
+}

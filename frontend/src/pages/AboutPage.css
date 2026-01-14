@@ -1,8 +1,131 @@
-.about-content {
-    margin-top: 4rem;
+.about-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 10vh var(--padding-horizontal);
 }
 
+.about-header {
+    margin-bottom: 6vh;
+}
+
+.about-header .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--rubin-text-primary);
+}
+
+/* Intro Section */
 .about-intro {
+    margin-bottom: 8vh;
+    padding-bottom: 6vh;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.intro-text {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--rubin-text-primary);
+}
+
+/* Body Sections */
+.about-body {
+    margin-bottom: 8vh;
+}
+
+.about-section {
+    margin-bottom: 5vh;
+}
+
+.about-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
     margin-bottom: 1.5rem;
-    font-size: 1.1em;
+    letter-spacing: -0.01em;
+}
+
+.about-section p {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--rubin-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
+.about-section em {
+    font-style: italic;
+    color: var(--rubin-text-primary);
+}
+
+/* Connect Section */
+.about-connect {
+    padding-top: 6vh;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.about-connect h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
+    margin-bottom: 1rem;
+}
+
+.about-connect > p {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--rubin-text-secondary);
+    margin-bottom: 2rem;
+}
+
+.connect-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.connect-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    color: var(--rubin-text-primary);
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.connect-link:hover {
+    border-color: var(--rubin-text-primary);
+    background: var(--rubin-text-primary);
+    color: var(--rubin-ivory);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .about-page {
+        padding: 8vh var(--padding-horizontal-mobile);
+    }
+
+    .intro-text {
+        font-size: 1.3rem;
+    }
+
+    .connect-links {
+        flex-direction: column;
+    }
+
+    .connect-link {
+        justify-content: center;
+    }
 }
