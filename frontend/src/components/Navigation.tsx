@@ -24,7 +24,7 @@ export default function Navigation() {
                         About
                     </Link>
                     <a
-                        href="https://github.com/isaachernandez"
+                        href="https://github.com/isaacsight"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="nav-link nav-external"

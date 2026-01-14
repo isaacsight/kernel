@@ -22,7 +22,7 @@ const allProjects: Project[] = [
         tags: ["Python", "FastAPI", "React", "PostgreSQL", "Multi-Agent", "pgvector"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaachernandez/sovereign-lab"
+        link: "https://github.com/isaacsight/sovereign-lab"
     },
     {
         title: "Director",
@@ -31,7 +31,7 @@ const allProjects: Project[] = [
         tags: ["Python", "CapCut API", "TikTok API", "Automation"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaachernandez/director"
+        link: "https://github.com/isaacsight/director"
     },
     {
         title: "Does This Feel Right",
@@ -40,7 +40,7 @@ const allProjects: Project[] = [
         tags: ["React 19", "TypeScript", "Vite", "Design Systems", "CSS"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaachernandez/blog-design",
+        link: "https://github.com/isaacsight/blog-design",
         demo: "https://doesthisfeelright.com"
     },
     {
@@ -50,7 +50,7 @@ const allProjects: Project[] = [
         tags: ["Python", "Playwright", "BeautifulSoup4", "Supabase"],
         year: "2024",
         status: "maintained",
-        link: "https://github.com/isaachernandez/mobbin-scout"
+        link: "https://github.com/isaacsight/mobbin-scout"
     },
     {
         title: "Titan DB",
@@ -59,7 +59,7 @@ const allProjects: Project[] = [
         tags: ["React", "TypeScript", "D3.js", "PostgreSQL"],
         year: "2023",
         status: "maintained",
-        link: "https://github.com/isaachernandez/titan-db"
+        link: "https://github.com/isaacsight/titan-db"
     },
     {
         title: "Answer Engine",
@@ -68,7 +68,7 @@ const allProjects: Project[] = [
         tags: ["Python", "pgvector", "OpenAI", "FastAPI"],
         year: "2023",
         status: "maintained",
-        link: "https://github.com/isaachernandez/answer-engine"
+        link: "https://github.com/isaacsight/answer-engine"
     }
 ];
 
@@ -88,7 +88,7 @@ export default function ProjectsPage() {
                     Each one represents a different way of thinking about software.
                 </p>
                 <a
-                    href="https://github.com/isaachernandez"
+                    href="https://github.com/isaacsight"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="github-link"

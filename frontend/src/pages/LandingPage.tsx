@@ -19,19 +19,19 @@ const featuredProjects: Project[] = [
         description: "A cognitive architecture for building permanent thinking systems. Multi-agent swarm with 46+ specialized modules for design intelligence, answer engines, and memory management.",
         tags: ["Python", "FastAPI", "React", "Multi-Agent"],
         featured: true,
-        link: "https://github.com/isaachernandez/sovereign-lab"
+        link: "https://github.com/isaacsight/sovereign-lab"
     },
     {
         title: "Director",
         description: "Automated video pipeline orchestrating CapCut, TikTok, and content distribution. Systems thinking applied to content creation.",
         tags: ["Python", "Automation", "API Integration"],
-        link: "https://github.com/isaachernandez/director"
+        link: "https://github.com/isaacsight/director"
     },
     {
         title: "Does This Feel Right",
         description: "This portfolio itself—a contemplative design system exploring literary minimalism in digital interfaces. Built with React 19 and the Rubin aesthetic.",
         tags: ["React", "TypeScript", "Design Systems"],
-        link: "https://github.com/isaachernandez/blog-design"
+        link: "https://github.com/isaacsight/blog-design"
     }
 ];
 
@@ -134,7 +134,7 @@ export default function LandingPage() {
                         Building tools that feel right.
                     </p>
                     <div className="footer-links">
-                        <a href="https://github.com/isaachernandez" target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/isaacsight" target="_blank" rel="noopener noreferrer">
                             GitHub
                         </a>
                         <span className="footer-divider">·</span>

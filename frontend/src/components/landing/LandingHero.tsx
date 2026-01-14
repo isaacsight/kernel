@@ -16,7 +16,7 @@ export default function LandingHero() {
 
                 <div className="hero-links">
                     <a
-                        href="https://github.com/isaachernandez"
+                        href="https://github.com/isaacsight"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hero-link"

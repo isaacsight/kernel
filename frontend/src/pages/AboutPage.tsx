@@ -77,7 +77,7 @@ export default function AboutPage() {
                 <p>I'm always interested in thoughtful conversations about systems, design, and craft.</p>
                 <div className="connect-links">
                     <a
-                        href="https://github.com/isaachernandez"
+                        href="https://github.com/isaacsight"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="connect-link"
