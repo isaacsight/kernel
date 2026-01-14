@@ -40,7 +40,7 @@ const allProjects: Project[] = [
         tags: ["React 19", "TypeScript", "Vite", "Design Systems", "CSS"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaacsight/blog-design",
+        link: "https://github.com/isaacsight/does-this-feel-right-",
         demo: "https://doesthisfeelright.com"
     },
     {

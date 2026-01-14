@@ -31,7 +31,7 @@ const featuredProjects: Project[] = [
         title: "Does This Feel Right",
         description: "This portfolio itself—a contemplative design system exploring literary minimalism in digital interfaces. Built with React 19 and the Rubin aesthetic.",
         tags: ["React", "TypeScript", "Design Systems"],
-        link: "https://github.com/isaacsight/blog-design"
+        link: "https://github.com/isaacsight/does-this-feel-right-"
     }
 ];
 
