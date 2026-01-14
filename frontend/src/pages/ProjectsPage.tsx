@@ -1,4 +1,4 @@
-import { Github, ExternalLink, Star, GitFork, Calendar } from 'lucide-react';
+import { Github, Calendar } from 'lucide-react';
 import './ProjectsPage.css';
 
 interface Project {
@@ -6,10 +6,6 @@ interface Project {
     description: string;
     longDescription?: string;
     tags: string[];
-    stars?: number;
-    forks?: number;
-    link: string;
-    demo?: string;
     year: string;
     status: 'active' | 'maintained' | 'archived';
 }
@@ -22,7 +18,6 @@ const allProjects: Project[] = [
         tags: ["Python", "FastAPI", "React", "PostgreSQL", "Multi-Agent", "pgvector"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaacsight/sovereign-lab"
     },
     {
         title: "Director",
@@ -31,7 +26,6 @@ const allProjects: Project[] = [
         tags: ["Python", "CapCut API", "TikTok API", "Automation"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaacsight/director"
     },
     {
         title: "Does This Feel Right",
@@ -40,8 +34,6 @@ const allProjects: Project[] = [
         tags: ["React 19", "TypeScript", "Vite", "Design Systems", "CSS"],
         year: "2024",
         status: "active",
-        link: "https://github.com/isaacsight/does-this-feel-right-",
-        demo: "https://doesthisfeelright.com"
     },
     {
         title: "Mobbin Scout",
@@ -50,7 +42,6 @@ const allProjects: Project[] = [
         tags: ["Python", "Playwright", "BeautifulSoup4", "Supabase"],
         year: "2024",
         status: "maintained",
-        link: "https://github.com/isaacsight/mobbin-scout"
     },
     {
         title: "Titan DB",
@@ -59,7 +50,6 @@ const allProjects: Project[] = [
         tags: ["React", "TypeScript", "D3.js", "PostgreSQL"],
         year: "2023",
         status: "maintained",
-        link: "https://github.com/isaacsight/titan-db"
     },
     {
         title: "Answer Engine",
@@ -68,7 +58,6 @@ const allProjects: Project[] = [
         tags: ["Python", "pgvector", "OpenAI", "FastAPI"],
         year: "2023",
         status: "maintained",
-        link: "https://github.com/isaacsight/answer-engine"
     }
 ];
 
@@ -111,20 +100,6 @@ export default function ProjectsPage() {
                                     {statusLabels[project.status]}
                                 </span>
                             </div>
-                            <div className="project-stats">
-                                {project.stars && (
-                                    <span className="stat">
-                                        <Star size={14} />
-                                        {project.stars}
-                                    </span>
-                                )}
-                                {project.forks && (
-                                    <span className="stat">
-                                        <GitFork size={14} />
-                                        {project.forks}
-                                    </span>
-                                )}
-                            </div>
                         </div>
 
                         <h2 className="project-title">{project.title}</h2>
@@ -135,29 +110,6 @@ export default function ProjectsPage() {
                             {project.tags.map((tag, i) => (
                                 <span key={i} className="tag">{tag}</span>
                             ))}
-                        </div>
-
-                        <div className="project-links">
-                            <a
-                                href={project.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                <Github size={16} />
-                                <span>Source</span>
-                            </a>
-                            {project.demo && (
-                                <a
-                                    href={project.demo}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="project-link"
-                                >
-                                    <ExternalLink size={16} />
-                                    <span>Live Demo</span>
-                                </a>
-                            )}
                         </div>
                     </article>
                 ))}
