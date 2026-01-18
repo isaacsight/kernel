@@ -13,6 +13,14 @@ Use this repository as a base for your own studio, lab, or personal agentic plat
 
 ---
 
+## 📚 Guides
+
+- **[Quick Start](QUICK_START.md)**: 5-minute setup and project overview.
+- **[Onboarding Guide](ONBOARDING.md)**: **For new engineers** - setup, architecture, and agentic workflows.
+- **[Development Guide](DEVELOPMENT.md)**: Deep dive into tech stack, tools, and testing.
+
+---
+
 ## 📂 Project Structure
 
 This repository acts as a monorepo for your studio's brain and body.
