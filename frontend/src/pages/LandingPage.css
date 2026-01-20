@@ -1,25 +1,56 @@
+/* ===========================================
+   LANDING PAGE - With Motion Design
+   =========================================== */
+
 .landing-page {
     width: 100%;
 }
 
-/* Featured Section */
-.featured-section {
-    padding: 10vh 0 15vh;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
+/* ===========================================
+   SECTION HEADER - Animated
+   =========================================== */
 
 .section-header {
     text-align: center;
     margin-bottom: 8vh;
+
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-header.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .section-number {
     font-family: var(--font-code);
     font-size: 0.85rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     color: var(--rubin-text-muted);
     display: block;
     margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Animated underline for section number */
+.section-number::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 24px;
+    height: 1px;
+    background: var(--rubin-text-muted);
+    transform: translateX(-50%) scaleX(0);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+.section-header.revealed .section-number::after {
+    transform: translateX(-50%) scaleX(1);
 }
 
 .section-title {
@@ -40,7 +71,19 @@
     line-height: 1.6;
 }
 
-/* Projects Grid */
+/* ===========================================
+   FEATURED SECTION
+   =========================================== */
+
+.featured-section {
+    padding: 12vh 0 15vh;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ===========================================
+   PROJECTS GRID - Enhanced Cards
+   =========================================== */
+
 .projects-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -56,19 +99,62 @@
     background: transparent;
     border: 1px solid rgba(0, 0, 0, 0.08);
     text-decoration: none;
-    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
+}
+
+.project-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Enhanced hover effect */
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(68, 166, 228, 0.02) 0%,
+        transparent 50%,
+        rgba(217, 119, 87, 0.02) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
 }
 
 .project-card:hover {
     border-color: var(--rubin-text-primary);
-    transform: translateY(-2px);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.15);
+}
+
+.project-card:hover::before {
+    opacity: 1;
 }
 
 .project-card.featured {
     border-width: 2px;
-    border-color: rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
+.project-card.featured:hover {
+    border-color: var(--rubin-clay);
+}
+
+/* Project meta */
 .project-meta {
     display: flex;
     align-items: center;
@@ -79,19 +165,16 @@
 .project-index {
     font-family: var(--font-code);
     font-size: 0.8rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     color: var(--rubin-text-muted);
+    transition: color 0.3s ease;
 }
 
-.project-stat {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-family: var(--font-code);
-    font-size: 0.8rem;
-    color: var(--rubin-text-muted);
+.project-card:hover .project-index {
+    color: var(--rubin-clay);
 }
 
+/* Project title */
 .project-title {
     font-family: var(--font-display);
     font-size: 1.6rem;
@@ -99,8 +182,14 @@
     color: var(--rubin-text-primary);
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: color 0.3s ease;
 }
 
+.project-card:hover .project-title {
+    color: var(--rubin-text-primary);
+}
+
+/* Project description */
 .project-description {
     font-family: var(--font-display);
     font-size: 1.1rem;
@@ -108,6 +197,10 @@
     color: var(--rubin-text-secondary);
     margin-bottom: 1.5rem;
 }
+
+/* ===========================================
+   PROJECT TAGS - Interactive
+   =========================================== */
 
 .project-tags {
     display: flex;
@@ -119,20 +212,43 @@
     font-family: var(--font-code);
     font-size: 0.75rem;
     letter-spacing: 0.05em;
-    padding: 0.4rem 0.8rem;
+    padding: 0.45rem 0.9rem;
     background: rgba(0, 0, 0, 0.03);
     color: var(--rubin-text-muted);
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.project-tag:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--rubin-text-primary);
+    transform: translateY(-2px);
+}
+
+/* ===========================================
+   CTA SECTION
+   =========================================== */
 
 .section-cta {
     text-align: center;
-    margin-top: 5vh;
+    margin-top: 6vh;
+
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-cta.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .cta-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     font-family: var(--font-code);
     font-size: 0.9rem;
     letter-spacing: 0.05em;
@@ -140,15 +256,53 @@
     text-decoration: none;
     padding: 1rem 2rem;
     border: 1px solid var(--rubin-text-primary);
-    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fill animation */
+.cta-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--rubin-text-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+}
+
+.cta-link:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 .cta-link:hover {
-    background: var(--rubin-text-primary);
     color: var(--rubin-ivory);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.2);
 }
 
-/* Philosophy Section */
+.cta-link:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.cta-link svg {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-link:hover svg {
+    transform: translateX(4px);
+}
+
+/* ===========================================
+   PHILOSOPHY SECTION
+   =========================================== */
+
 .philosophy-section {
     padding: 15vh 0;
     background: rgba(0, 0, 0, 0.02);
@@ -163,6 +317,19 @@
     padding: 0 var(--padding-horizontal);
 }
 
+.philosophy-item {
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.philosophy-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .philosophy-item h3 {
     font-family: var(--font-display);
     font-size: 1.3rem;
@@ -170,6 +337,26 @@
     color: var(--rubin-text-primary);
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    position: relative;
+    display: inline-block;
+}
+
+/* Underline reveal on scroll */
+.philosophy-item h3::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--rubin-clay);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.philosophy-item.revealed h3::after {
+    transform: scaleX(1);
 }
 
 .philosophy-item p {
@@ -179,10 +366,24 @@
     color: var(--rubin-text-secondary);
 }
 
-/* Footer */
+/* ===========================================
+   FOOTER - Animated
+   =========================================== */
+
 .landing-footer {
     padding: 10vh 0;
     border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.landing-footer.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .footer-content {
@@ -206,21 +407,46 @@
     font-size: 0.9rem;
 }
 
-.footer-links a {
+.footer-link {
     color: var(--rubin-text-primary);
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
 }
 
-.footer-links a:hover {
-    opacity: 0.6;
+/* Underline animation */
+.footer-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--rubin-text-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.footer-link:hover {
+    color: var(--rubin-text-primary);
+    opacity: 1;
 }
 
 .footer-divider {
     color: var(--rubin-text-muted);
 }
 
-/* Mobile */
+/* ===========================================
+   MOBILE RESPONSIVE
+   =========================================== */
+
 @media (max-width: 768px) {
     .projects-grid {
         padding: 0 var(--padding-horizontal-mobile);
@@ -237,5 +463,41 @@
 
     .philosophy-section {
         padding: 10vh 0;
+    }
+
+    .featured-section {
+        padding: 8vh 0 12vh;
+    }
+}
+
+/* ===========================================
+   REDUCED MOTION
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .section-header,
+    .project-card,
+    .section-cta,
+    .philosophy-item,
+    .landing-footer {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .section-number::after,
+    .philosophy-item h3::after {
+        transform: scaleX(1);
+        transition: none;
+    }
+
+    .cta-link::before,
+    .project-card::before {
+        display: none;
+    }
+
+    .project-card:hover,
+    .cta-link:hover {
+        transform: none;
     }
 }

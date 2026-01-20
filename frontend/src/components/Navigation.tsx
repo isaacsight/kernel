@@ -1,27 +1,47 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import './Navigation.css';
 
 export default function Navigation() {
     const location = useLocation();
     const isActive = (path: string) => location.pathname === path;
+    const [scrolled, setScrolled] = useState(false);
+
+    // Track scroll for nav background change
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <nav className="nav-container">
+        <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
             <div className="nav-content">
                 <Link to="/" className="nav-logo">
-                    Isaac Hernandez
+                    <span className="nav-logo-text">Isaac Hernandez</span>
                 </Link>
+
                 <div className="nav-links">
                     <Link
                         to="/projects"
                         className={`nav-link ${isActive('/projects') ? 'active' : ''}`}
                     >
-                        Projects
+                        <span className="nav-link-text">Projects</span>
                     </Link>
                     <Link
                         to="/about"
                         className={`nav-link ${isActive('/about') ? 'active' : ''}`}
                     >
-                        About
+                        <span className="nav-link-text">About</span>
+                    </Link>
+                    <Link
+                        to="/forge"
+                        className={`nav-link ${isActive('/forge') ? 'active' : ''}`}
+                    >
+                        <span className="nav-link-text">The Forge</span>
                     </Link>
                     <a
                         href="https://github.com/isaacsight"
@@ -29,7 +49,8 @@ export default function Navigation() {
                         rel="noopener noreferrer"
                         className="nav-link nav-external"
                     >
-                        GitHub
+                        <span className="nav-link-text">GitHub</span>
+                        <span className="nav-external-icon">↗</span>
                     </a>
                 </div>
             </div>

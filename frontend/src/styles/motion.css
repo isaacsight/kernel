@@ -1,0 +1,538 @@
+/* ===========================================
+   MOTION DESIGN SYSTEM
+   Contemplative animations for the Rubin aesthetic
+   =========================================== */
+
+/* ===========================================
+   DESIGN TOKENS - MOTION
+   =========================================== */
+
+:root {
+    /* Timing Functions - Spring-based for organic feel */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Durations - Contemplative, not rushed */
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 400ms;
+    --duration-slow: 600ms;
+    --duration-slower: 800ms;
+    --duration-dramatic: 1200ms;
+
+    /* Delays for staggering */
+    --stagger-fast: 50ms;
+    --stagger-normal: 100ms;
+    --stagger-slow: 150ms;
+}
+
+/* ===========================================
+   KEYFRAME ANIMATIONS
+   =========================================== */
+
+/* Fade in from below - primary entrance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade in with scale - for emphasis */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Fade in with blur - literary reveal */
+@keyframes fadeInBlur {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+/* Simple fade */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Text reveal - letter by letter feel */
+@keyframes revealText {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Underline draw */
+@keyframes drawUnderline {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+    to {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+/* Gentle float - ambient motion */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* Pulse glow - subtle attention */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(68, 166, 228, 0);
+    }
+    50% {
+        box-shadow: 0 0 20px 2px rgba(68, 166, 228, 0.15);
+    }
+}
+
+/* Shimmer - loading state */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Breathe - subtle scale */
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* ===========================================
+   ANIMATION UTILITY CLASSES
+   =========================================== */
+
+/* Base animate class - set up for animation */
+.animate {
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.animate.in-view {
+    animation-fill-mode: both;
+}
+
+/* Entrance animations */
+.animate-fade-in-up.in-view {
+    animation: fadeInUp var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-fade-in-scale.in-view {
+    animation: fadeInScale var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-fade-in-blur.in-view {
+    animation: fadeInBlur var(--duration-slower) var(--ease-out-expo);
+}
+
+.animate-fade-in.in-view {
+    animation: fadeIn var(--duration-normal) var(--ease-gentle);
+}
+
+.animate-slide-left.in-view {
+    animation: slideInLeft var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-slide-right.in-view {
+    animation: slideInRight var(--duration-slow) var(--ease-out-expo);
+}
+
+/* Stagger delays */
+.stagger-1 { animation-delay: calc(var(--stagger-normal) * 1); }
+.stagger-2 { animation-delay: calc(var(--stagger-normal) * 2); }
+.stagger-3 { animation-delay: calc(var(--stagger-normal) * 3); }
+.stagger-4 { animation-delay: calc(var(--stagger-normal) * 4); }
+.stagger-5 { animation-delay: calc(var(--stagger-normal) * 5); }
+.stagger-6 { animation-delay: calc(var(--stagger-normal) * 6); }
+.stagger-7 { animation-delay: calc(var(--stagger-normal) * 7); }
+.stagger-8 { animation-delay: calc(var(--stagger-normal) * 8); }
+
+/* Custom delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-800 { animation-delay: 800ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* ===========================================
+   HOVER TRANSITIONS
+   =========================================== */
+
+/* Lift effect - cards */
+.hover-lift {
+    transition: transform var(--duration-normal) var(--ease-out-expo),
+                box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* Glow effect - buttons */
+.hover-glow {
+    transition: box-shadow var(--duration-normal) var(--ease-gentle),
+                background-color var(--duration-normal) var(--ease-gentle);
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px -5px rgba(68, 166, 228, 0.3);
+}
+
+/* Scale effect - icons, tags */
+.hover-scale {
+    transition: transform var(--duration-fast) var(--ease-spring);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Underline reveal effect */
+.hover-underline {
+    position: relative;
+}
+
+.hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.hover-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Color shift effect */
+.hover-color {
+    transition: color var(--duration-fast) var(--ease-gentle),
+                border-color var(--duration-fast) var(--ease-gentle);
+}
+
+/* Letter spacing effect - nav links */
+.hover-expand {
+    transition: letter-spacing var(--duration-normal) var(--ease-out-expo),
+                color var(--duration-fast) var(--ease-gentle);
+}
+
+.hover-expand:hover {
+    letter-spacing: 0.12em;
+}
+
+/* ===========================================
+   BUTTON INTERACTIONS
+   =========================================== */
+
+.btn-interactive {
+    position: relative;
+    transition: transform var(--duration-fast) var(--ease-spring),
+                box-shadow var(--duration-fast) var(--ease-gentle),
+                background-color var(--duration-fast) var(--ease-gentle),
+                color var(--duration-fast) var(--ease-gentle);
+}
+
+.btn-interactive:hover {
+    transform: translateY(-2px);
+}
+
+.btn-interactive:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Fill effect button */
+.btn-fill {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--rubin-text-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-normal) var(--ease-out-expo);
+    z-index: -1;
+}
+
+.btn-fill:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.btn-fill:hover {
+    color: var(--rubin-ivory);
+}
+
+/* ===========================================
+   CARD INTERACTIONS
+   =========================================== */
+
+.card-interactive {
+    transition: transform var(--duration-normal) var(--ease-out-expo),
+                box-shadow var(--duration-normal) var(--ease-out-expo),
+                border-color var(--duration-normal) var(--ease-gentle);
+}
+
+.card-interactive:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.12);
+    border-color: var(--rubin-text-primary);
+}
+
+/* Card with glow border */
+.card-glow {
+    position: relative;
+}
+
+.card-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(68, 166, 228, 0.1) 50%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-gentle);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.card-glow:hover::before {
+    opacity: 1;
+}
+
+/* ===========================================
+   TAG INTERACTIONS
+   =========================================== */
+
+.tag-interactive {
+    transition: background-color var(--duration-fast) var(--ease-gentle),
+                color var(--duration-fast) var(--ease-gentle),
+                transform var(--duration-fast) var(--ease-spring);
+}
+
+.tag-interactive:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--rubin-text-primary);
+    transform: translateY(-1px);
+}
+
+/* ===========================================
+   PAGE TRANSITIONS
+   =========================================== */
+
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--duration-slow) var(--ease-out-expo),
+                transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.page-transition-exit {
+    opacity: 1;
+}
+
+.page-transition-exit-active {
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-gentle);
+}
+
+/* ===========================================
+   SCROLL REVEAL STATES
+   =========================================== */
+
+/* Hidden state before reveal */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity var(--duration-slow) var(--ease-out-expo),
+                transform var(--duration-slow) var(--ease-out-expo);
+}
+
+[data-reveal="left"] {
+    transform: translateX(-30px);
+}
+
+[data-reveal="right"] {
+    transform: translateX(30px);
+}
+
+[data-reveal="scale"] {
+    transform: scale(0.95);
+}
+
+[data-reveal="blur"] {
+    filter: blur(10px);
+    transform: translateY(15px);
+    transition: opacity var(--duration-slow) var(--ease-out-expo),
+                transform var(--duration-slow) var(--ease-out-expo),
+                filter var(--duration-slow) var(--ease-out-expo);
+}
+
+/* Revealed state */
+[data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+    filter: blur(0);
+}
+
+/* ===========================================
+   LOADING STATES
+   =========================================== */
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.04) 0%,
+        rgba(0, 0, 0, 0.08) 50%,
+        rgba(0, 0, 0, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+/* ===========================================
+   AMBIENT MOTION (Reduced motion safe)
+   =========================================== */
+
+.ambient-float {
+    animation: gentleFloat 4s var(--ease-in-out-quart) infinite;
+}
+
+.ambient-breathe {
+    animation: breathe 6s var(--ease-in-out-quart) infinite;
+}
+
+/* ===========================================
+   ACCESSIBILITY - REDUCED MOTION
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+
+    .animate {
+        opacity: 1;
+    }
+}
+
+/* ===========================================
+   PERFORMANCE HINTS
+   =========================================== */
+
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}

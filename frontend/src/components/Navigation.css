@@ -1,0 +1,197 @@
+/* ===========================================
+   NAVIGATION - Enhanced with Motion
+   =========================================== */
+
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(240, 238, 230, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    transition: background-color 0.4s ease,
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
+}
+
+.nav-container.scrolled {
+    background: rgba(240, 238, 230, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-content {
+    max-width: var(--max-width-container);
+    margin: 0 auto;
+    padding: 1.25rem var(--padding-horizontal);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===========================================
+   LOGO
+   =========================================== */
+
+.nav-logo {
+    text-decoration: none;
+    position: relative;
+}
+
+.nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
+    letter-spacing: -0.01em;
+    transition: opacity 0.3s ease;
+}
+
+.nav-logo:hover .nav-logo-text {
+    opacity: 0.7;
+}
+
+/* ===========================================
+   NAV LINKS
+   =========================================== */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    position: relative;
+    text-decoration: none;
+    padding: 0.25rem 0;
+}
+
+.nav-link-text {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--rubin-text-muted);
+    text-transform: uppercase;
+    transition: color 0.3s ease,
+                letter-spacing 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Underline animation */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--rubin-text-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover .nav-link-text {
+    color: var(--rubin-text-primary);
+    letter-spacing: 0.12em;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Active state */
+.nav-link.active .nav-link-text {
+    color: var(--rubin-text-primary);
+}
+
+.nav-link.active::after {
+    transform: scaleX(1);
+    background: var(--rubin-clay);
+}
+
+/* ===========================================
+   EXTERNAL LINK
+   =========================================== */
+
+.nav-external {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.nav-external-icon {
+    font-size: 0.7rem;
+    color: var(--rubin-text-muted);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.3s ease;
+}
+
+.nav-external:hover .nav-external-icon {
+    color: var(--rubin-text-primary);
+    transform: translate(2px, -2px);
+}
+
+/* ===========================================
+   MOBILE RESPONSIVE
+   =========================================== */
+
+@media (max-width: 768px) {
+    .nav-content {
+        padding: 1rem var(--padding-horizontal-mobile);
+    }
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .nav-link-text {
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    .nav-link:hover .nav-link-text {
+        letter-spacing: 0.08em;
+    }
+
+    /* Hide "The Forge" on mobile */
+    .nav-link:nth-child(3) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .nav-logo-text {
+        font-size: 1rem;
+    }
+}
+
+/* ===========================================
+   REDUCED MOTION
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-container {
+        transition: none;
+    }
+
+    .nav-link::after {
+        transition: none;
+    }
+
+    .nav-link-text {
+        transition: color 0.15s ease;
+    }
+
+    .nav-link:hover .nav-link-text {
+        letter-spacing: 0.08em;
+    }
+}

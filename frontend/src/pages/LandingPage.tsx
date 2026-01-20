@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import LandingHero from '../components/landing/LandingHero';
+import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import './LandingPage.css';
 
 interface Project {
@@ -29,13 +30,47 @@ const featuredProjects: Project[] = [
     }
 ];
 
+const philosophyItems = [
+    {
+        title: "Systems over Features",
+        description: "Every project is an opportunity to build something that compounds. Not just solving the immediate problem, but creating frameworks that make future problems easier."
+    },
+    {
+        title: "Craft over Speed",
+        description: "Code is read more than it's written. I optimize for clarity, for the developer six months from now who needs to understand why something was built this way."
+    },
+    {
+        title: "Feel over Function",
+        description: "The best interfaces disappear. They don't demand attention—they create space for the work that matters. Does this feel right? That's the question."
+    }
+];
+
 export default function LandingPage() {
+    // Scroll reveal for section headers
+    const { ref: featuredHeaderRef, isRevealed: featuredHeaderVisible } = useScrollReveal();
+    const { ref: philosophyHeaderRef, isRevealed: philosophyHeaderVisible } = useScrollReveal();
+
+    // Staggered reveal for project cards
+    const { containerRef: projectsContainerRef, revealedItems: projectsRevealed } =
+        useStaggeredReveal(featuredProjects.length, { staggerDelay: 150 });
+
+    // Staggered reveal for philosophy items
+    const { containerRef: philosophyContainerRef, revealedItems: philosophyRevealed } =
+        useStaggeredReveal(philosophyItems.length, { staggerDelay: 120 });
+
+    // Footer reveal
+    const { ref: footerRef, isRevealed: footerVisible } = useScrollReveal();
+    const { ref: ctaRef, isRevealed: ctaVisible } = useScrollReveal();
+
     return (
         <div className="landing-page">
             <LandingHero />
 
             <section className="featured-section">
-                <div className="section-header">
+                <div
+                    ref={featuredHeaderRef}
+                    className={`section-header ${featuredHeaderVisible ? 'revealed' : ''}`}
+                >
                     <span className="section-number">01</span>
                     <h2 className="section-title">Selected Work</h2>
                     <p className="section-description">
@@ -43,11 +78,11 @@ export default function LandingPage() {
                     </p>
                 </div>
 
-                <div className="projects-grid">
+                <div ref={projectsContainerRef} className="projects-grid">
                     {featuredProjects.map((project, index) => (
-                        <div
+                        <article
                             key={index}
-                            className={`project-card ${project.featured ? 'featured' : ''}`}
+                            className={`project-card card-interactive ${project.featured ? 'featured' : ''} ${projectsRevealed[index] ? 'revealed' : ''}`}
                         >
                             <div className="project-meta">
                                 <span className="project-index">
@@ -58,15 +93,18 @@ export default function LandingPage() {
                             <p className="project-description">{project.description}</p>
                             <div className="project-tags">
                                 {project.tags.map((tag, i) => (
-                                    <span key={i} className="project-tag">{tag}</span>
+                                    <span key={i} className="project-tag tag-interactive">{tag}</span>
                                 ))}
                             </div>
-                        </div>
+                        </article>
                     ))}
                 </div>
 
-                <div className="section-cta">
-                    <Link to="/projects" className="cta-link">
+                <div
+                    ref={ctaRef}
+                    className={`section-cta ${ctaVisible ? 'revealed' : ''}`}
+                >
+                    <Link to="/projects" className="cta-link btn-interactive">
                         <span>View all projects</span>
                         <ArrowRight size={18} />
                     </Link>
@@ -74,54 +112,53 @@ export default function LandingPage() {
             </section>
 
             <section className="philosophy-section">
-                <div className="section-header">
+                <div
+                    ref={philosophyHeaderRef}
+                    className={`section-header ${philosophyHeaderVisible ? 'revealed' : ''}`}
+                >
                     <span className="section-number">02</span>
                     <h2 className="section-title">The Way I Work</h2>
                 </div>
 
-                <div className="philosophy-grid">
-                    <div className="philosophy-item">
-                        <h3>Systems over Features</h3>
-                        <p>
-                            Every project is an opportunity to build something that compounds.
-                            Not just solving the immediate problem, but creating frameworks
-                            that make future problems easier.
-                        </p>
-                    </div>
-                    <div className="philosophy-item">
-                        <h3>Craft over Speed</h3>
-                        <p>
-                            Code is read more than it's written. I optimize for clarity,
-                            for the developer six months from now who needs to understand
-                            why something was built this way.
-                        </p>
-                    </div>
-                    <div className="philosophy-item">
-                        <h3>Feel over Function</h3>
-                        <p>
-                            The best interfaces disappear. They don't demand attention—they
-                            create space for the work that matters. Does this feel right?
-                            That's the question.
-                        </p>
-                    </div>
+                <div ref={philosophyContainerRef} className="philosophy-grid">
+                    {philosophyItems.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`philosophy-item ${philosophyRevealed[index] ? 'revealed' : ''}`}
+                        >
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 
-            <footer className="landing-footer">
+            <footer
+                ref={footerRef}
+                className={`landing-footer ${footerVisible ? 'revealed' : ''}`}
+            >
                 <div className="footer-content">
                     <p className="footer-tagline">
                         Building tools that feel right.
                     </p>
                     <div className="footer-links">
-                        <a href="https://github.com/isaacsight" target="_blank" rel="noopener noreferrer">
+                        <a
+                            href="https://github.com/isaacsight"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="footer-link hover-underline"
+                        >
                             GitHub
                         </a>
                         <span className="footer-divider">·</span>
-                        <a href="mailto:hello@doesthisfeelright.com">
+                        <a
+                            href="mailto:hello@doesthisfeelright.com"
+                            className="footer-link hover-underline"
+                        >
                             Contact
                         </a>
                         <span className="footer-divider">·</span>
-                        <Link to="/about">
+                        <Link to="/about" className="footer-link hover-underline">
                             About
                         </Link>
                     </div>
