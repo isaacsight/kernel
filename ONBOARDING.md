@@ -64,4 +64,12 @@ pytest
 2. **Review [DESIGN_AESTHETIC.md](DESIGN_AESTHETIC.md)** to understand the Rubin design tokens.
 3. **Check [AGENTS.md](AGENTS.md)** to see the current roster of autonomous collaborators.
 
+### 6. Signal Your Arrival
+Once your environment is ready, run the onboarding validator. This will verify your setup and alert the core kernel (and Isaac) that you are officially active.
+
+```bash
+python3 scripts/onboarding_validator.py
+```
+
+---
 **Signed by Antigravity Kernel**

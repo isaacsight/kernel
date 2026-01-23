@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-season="winter">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTFR Module System Demo</title>
+
+    <!-- Design System Tokens -->
+    <link rel="stylesheet" href="/static/css/tokens.css">
+
+    <!-- Google Fonts for Japanese-Latin Hybrid -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600&family=Noto+Serif+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            padding: var(--space-24, 3rem);
+            max-width: var(--max-width-2xl, 1400px);
+            margin: 0 auto;
+        }
+
+        .demo-section {
+            margin-bottom: var(--space-32, 4rem);
+        }
+
+        .demo-section h2 {
+            font-family: var(--font-serif, 'Crimson Text', serif);
+            font-size: var(--text-2xl, 1.5rem);
+            color: var(--color-season-accent);
+            margin-bottom: var(--space-16, 1rem);
+            padding-bottom: var(--space-8, 0.5rem);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-16, 1rem);
+        }
+
+        .debug-info {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            background: var(--glass-background);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-12);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: var(--space-16, 1rem);
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <section class="demo-section">
+            <h2>Hero Module (Seasonal)</h2>
+            <dtfr-hero data-variant="default"></dtfr-hero>
+        </section>
+
+        <section class="demo-section">
+            <h2>Hero Variants</h2>
+            <div class="demo-grid">
+                <dtfr-hero data-variant="learn"></dtfr-hero>
+                <dtfr-hero data-variant="builder"></dtfr-hero>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Feed Modules</h2>
+            <div class="demo-grid">
+                <dtfr-feed data-type="runs"></dtfr-feed>
+                <dtfr-feed data-type="patterns"></dtfr-feed>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Operation Stack</h2>
+            <div class="demo-grid">
+                <dtfr-stack data-editable="true"></dtfr-stack>
+                <dtfr-feed data-type="log"></dtfr-feed>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Mode Shell (Full System)</h2>
+            <dtfr-shell mode="learn"></dtfr-shell>
+        </section>
+    </div>
+
+    <div class="debug-info" id="debug-info">
+        Loading DTFR...
+    </div>
+
+    <!-- DTFR Module System -->
+    <script type="module" src="/static/js/dtfr.js"></script>
+
+    <script type="module">
+        window.addEventListener('dtfr:ready', (e) => {
+            const info = document.getElementById('debug-info');
+            if (info && window.DTFR) {
+                info.innerHTML = `
+          DTFR v${DTFR.version} | 
+          Season: ${document.documentElement.dataset.season} | 
+          Mode: ${DTFR.context?.get('mode') || 'learn'} | 
+          Seed: ${DTFR.context?.get('seed') || '-'}
+        `;
+            }
+        });
+
+        // Enable debug mode
+        localStorage.setItem('dtfr-debug', 'true');
+    </script>
+</body>
+
+</html>

@@ -32,16 +32,22 @@ export default function Navigation() {
                         <span className="nav-link-text">Projects</span>
                     </Link>
                     <Link
+                        to="/essays"
+                        className={`nav-link ${isActive('/essays') ? 'active' : ''}`}
+                    >
+                        <span className="nav-link-text">Essays</span>
+                    </Link>
+                    <Link
+                        to="/consulting"
+                        className={`nav-link ${isActive('/consulting') ? 'active' : ''}`}
+                    >
+                        <span className="nav-link-text">Consulting</span>
+                    </Link>
+                    <Link
                         to="/about"
                         className={`nav-link ${isActive('/about') ? 'active' : ''}`}
                     >
                         <span className="nav-link-text">About</span>
-                    </Link>
-                    <Link
-                        to="/forge"
-                        className={`nav-link ${isActive('/forge') ? 'active' : ''}`}
-                    >
-                        <span className="nav-link-text">The Forge</span>
                     </Link>
                     <a
                         href="https://github.com/isaacsight"

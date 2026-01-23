@@ -1,0 +1,631 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WARCRAFT ENGINE - Authentic WC3 Visual Style
+   Based on WARCRAFT3_STYLE_GUIDE.md
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* === WC3 COLOR TOKENS === */
+.warcraft-engine {
+  /* Faction Colors */
+  --human-primary: #1E3A8A;
+  --human-secondary: #C0C0C0;
+  --human-accent: #D4AF37;
+
+  --orc-primary: #991B1B;
+  --orc-secondary: #1F2937;
+  --orc-accent: #F5F5DC;
+
+  --undead-primary: #581C87;
+  --undead-secondary: #84CC16;
+  --undead-accent: #FAFAF9;
+
+  --nightelf-primary: #4C1D95;
+  --nightelf-secondary: #0F766E;
+  --nightelf-accent: #E5E7EB;
+
+  /* Claude (Human-inspired) */
+  --claude-primary: #3B82F6;
+  --claude-secondary: #60A5FA;
+  --claude-dark: #1E3A8A;
+
+  /* Gemini (Night Elf-inspired) */
+  --gemini-primary: #A855F7;
+  --gemini-secondary: #C084FC;
+  --gemini-dark: #4C1D95;
+
+  /* UI Chrome */
+  --gold-light: #FFD700;
+  --gold-medium: #D4AF37;
+  --gold-dark: #B8860B;
+  --bronze: #CD7F32;
+  --steel: #71797E;
+  --iron: #48494B;
+
+  /* Backgrounds */
+  --bg-parchment: #F5F5DC;
+  --bg-parchment-dark: #D4C89A;
+  --bg-leather: #1C1917;
+  --bg-leather-light: #292524;
+  --bg-stone: #4B5563;
+  --bg-void: #0F0F0F;
+
+  /* Text */
+  --text-gold: #FFD700;
+  --text-light: #F5F5DC;
+  --text-body: #D4D4D4;
+  --text-muted: #9CA3AF;
+  --text-mana: #60A5FA;
+  --text-health: #22C55E;
+  --text-damage: #EF4444;
+
+  /* Shadows */
+  --shadow-text: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  --shadow-text-sm: 1px 1px 0 #000;
+  --shadow-box: 4px 4px 8px rgba(0,0,0,0.6);
+  --shadow-glow-gold: 0 0 10px var(--gold-light);
+}
+
+/* === MAIN CONTAINER === */
+.warcraft-engine {
+  min-height: 100vh;
+  background: var(--bg-leather);
+  color: var(--text-body);
+  display: flex;
+  flex-direction: column;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  overflow: hidden;
+}
+
+/* Parchment texture background */
+.warcraft-engine::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(88, 28, 135, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === HEADER HUD === */
+.wc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: linear-gradient(180deg, var(--bg-leather-light) 0%, var(--bg-leather) 100%);
+  border-bottom: 4px ridge var(--gold-medium);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+  position: relative;
+  z-index: 10;
+}
+
+.wc-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wc-logo {
+  font-size: 32px;
+  filter: drop-shadow(0 0 4px var(--gold-light));
+}
+
+.wc-title h1 {
+  font-family: "Cinzel", "Trajan Pro", serif;
+  font-size: 24px;
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.wc-subtitle {
+  font-family: "Palatino Linotype", serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Resources */
+.wc-resources {
+  display: flex;
+  gap: 24px;
+}
+
+.wc-resource {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, rgba(75, 85, 99, 0.4) 0%, rgba(31, 41, 55, 0.6) 100%);
+  border: 2px solid var(--iron);
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.wc-resource--gold { border-color: var(--gold-dark); }
+.wc-resource--lumber { border-color: #8B4513; }
+.wc-resource--supply { border-color: var(--steel); }
+
+.wc-resource-icon {
+  font-size: 18px;
+}
+
+.wc-resource-value {
+  font-family: "Friz Quadrata", "Cinzel", serif;
+  font-size: 16px;
+  color: var(--text-gold);
+  font-weight: bold;
+  text-shadow: var(--shadow-text-sm);
+  min-width: 40px;
+}
+
+.wc-resource-label {
+  font-family: "Palatino Linotype", serif;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Control Buttons */
+.wc-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.wc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(180deg, #4B5563 0%, #374151 50%, #1F2937 100%);
+  border: 3px ridge var(--gold-dark);
+  border-radius: 4px;
+  color: var(--text-gold);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow:
+    inset 2px 2px 4px rgba(255,255,255,0.1),
+    inset -2px -2px 4px rgba(0,0,0,0.3),
+    var(--shadow-box);
+}
+
+.wc-btn:hover {
+  background: linear-gradient(180deg, #6B7280 0%, #4B5563 50%, #374151 100%);
+  box-shadow:
+    inset 2px 2px 4px rgba(255,255,255,0.2),
+    var(--shadow-box),
+    var(--shadow-glow-gold);
+}
+
+.wc-btn:active,
+.wc-btn.active {
+  background: linear-gradient(180deg, #1F2937 0%, #374151 50%, #4B5563 100%);
+  box-shadow:
+    inset -2px -2px 4px rgba(255,255,255,0.1),
+    inset 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+/* === MAIN GAME AREA === */
+.wc-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* Game Viewport */
+.wc-viewport {
+  position: relative;
+  background: #1a1a2e;
+  border: 6px ridge var(--gold-medium);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,0.5),
+    0 0 20px rgba(0,0,0,0.8);
+}
+
+.wc-viewport canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: crosshair;
+}
+
+.wc-paused-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.wc-paused-overlay span {
+  font-family: "Cinzel", serif;
+  font-size: 48px;
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text), 0 0 20px rgba(255, 215, 0, 0.5);
+  letter-spacing: 0.2em;
+}
+
+/* === SIDEBAR PANELS === */
+.wc-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.wc-panel {
+  background: var(--bg-leather);
+  border: 4px ridge var(--gold-medium);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 20px rgba(0,0,0,0.4),
+    var(--shadow-box);
+}
+
+/* Corner decorations */
+.wc-panel::before,
+.wc-panel::after {
+  content: "◆";
+  position: absolute;
+  color: var(--gold-medium);
+  font-size: 12px;
+  text-shadow: 0 0 4px var(--gold-light);
+}
+
+.wc-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 0;
+  background: linear-gradient(180deg, var(--bg-leather-light) 0%, var(--bg-leather) 100%);
+  border-bottom: 2px solid var(--gold-dark);
+  font-family: "Cinzel", "Trajan Pro", serif;
+  font-size: 12px;
+  color: var(--text-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: var(--shadow-text-sm);
+}
+
+/* Minimap Panel */
+.wc-minimap-panel {
+  position: relative;
+}
+
+.wc-minimap-panel canvas {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+/* Selection Panel */
+.wc-selection-panel {
+  min-height: 120px;
+}
+
+.wc-unit-info,
+.wc-building-info {
+  padding: 12px;
+}
+
+.wc-unit-info {
+  display: flex;
+  gap: 12px;
+}
+
+.wc-unit-portrait {
+  flex-shrink: 0;
+}
+
+.wc-portrait-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-leather-light), var(--bg-void));
+  border: 3px ridge var(--gold-dark);
+  border-radius: 4px;
+  font-family: "Cinzel", serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text-sm);
+}
+
+.wc-portrait-icon[data-faction="claude"] {
+  background: linear-gradient(135deg, var(--claude-dark), #1e3a6e);
+  color: var(--claude-secondary);
+}
+
+.wc-portrait-icon[data-faction="gemini"] {
+  background: linear-gradient(135deg, var(--gemini-dark), #3d1a5c);
+  color: var(--gemini-secondary);
+}
+
+.wc-portrait-icon[data-faction="creep"] {
+  background: linear-gradient(135deg, #4a1a1a, #2d0f0f);
+  color: #EF4444;
+}
+
+.wc-unit-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.wc-unit-name {
+  font-family: "Cinzel", serif;
+  font-size: 14px;
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text-sm);
+  margin-bottom: 4px;
+}
+
+.wc-unit-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-body);
+  margin-bottom: 4px;
+}
+
+.wc-unit-state {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wc-building-name {
+  font-family: "Cinzel", serif;
+  font-size: 14px;
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text-sm);
+  margin-bottom: 8px;
+}
+
+.wc-building-hp,
+.wc-building-progress,
+.wc-building-queue {
+  font-size: 11px;
+  color: var(--text-body);
+  margin-bottom: 4px;
+}
+
+.wc-no-selection {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Action Panel */
+.wc-action-panel {
+  flex: 1;
+  min-height: 0;
+}
+
+.wc-action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 8px;
+}
+
+.wc-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background: linear-gradient(180deg, #4B5563 0%, #374151 50%, #1F2937 100%);
+  border: 2px ridge var(--gold-dark);
+  border-radius: 4px;
+  color: var(--text-gold);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow:
+    inset 1px 1px 2px rgba(255,255,255,0.1),
+    inset -1px -1px 2px rgba(0,0,0,0.3);
+}
+
+.wc-action-btn:hover {
+  background: linear-gradient(180deg, #6B7280 0%, #4B5563 50%, #374151 100%);
+  box-shadow:
+    inset 1px 1px 2px rgba(255,255,255,0.2),
+    0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.wc-action-btn:active {
+  background: linear-gradient(180deg, #1F2937 0%, #374151 50%, #4B5563 100%);
+}
+
+.wc-action-icon {
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: var(--shadow-text-sm);
+}
+
+.wc-action-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+.wc-no-actions {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 16px;
+}
+
+/* Log Panel */
+.wc-log-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wc-log-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  font-size: 10px;
+}
+
+.wc-log-entry {
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  border-radius: 2px;
+  color: var(--text-body);
+}
+
+.wc-log-info { background: rgba(96, 165, 250, 0.1); }
+.wc-log-success { background: rgba(74, 222, 128, 0.1); color: #4ADE80; }
+.wc-log-warning { background: rgba(251, 191, 36, 0.1); color: #FBBF24; }
+.wc-log-action { background: rgba(168, 85, 247, 0.1); color: #C084FC; }
+
+/* === FOOTER === */
+.wc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  background: var(--bg-leather);
+  border-top: 3px ridge var(--gold-dark);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.wc-footer-left,
+.wc-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wc-footer-center {
+  font-family: "Palatino Linotype", serif;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.wc-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #22C55E;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22C55E;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 4px #22C55E; }
+  50% { box-shadow: 0 0 12px #22C55E; }
+}
+
+/* === SCROLLBAR STYLING === */
+.wc-log-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.wc-log-list::-webkit-scrollbar-track {
+  background: var(--bg-void);
+  border-radius: 4px;
+}
+
+.wc-log-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-dark), var(--bronze));
+  border-radius: 4px;
+  border: 1px solid var(--gold-dark);
+}
+
+.wc-log-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--gold-medium), var(--gold-dark));
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .wc-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+
+  .wc-sidebar {
+    flex-direction: row;
+    max-height: 200px;
+  }
+
+  .wc-panel {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .wc-minimap-panel {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wc-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .wc-resources {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .wc-sidebar {
+    flex-direction: column;
+    max-height: none;
+  }
+
+  .wc-footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .wc-footer-center {
+    display: none;
+  }
+}
+
+/* === CRT SCANLINES (Optional Retro Effect) === */
+.warcraft-engine.crt-mode .wc-viewport::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03),
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}

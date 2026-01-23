@@ -1,0 +1,106 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "motion": {
+    "$description": "Sovereign Laboratory OS Motion System",
+    "duration": {
+      "instant": { "$value": "0ms", "$type": "duration" },
+      "fast": { "$value": "150ms", "$type": "duration", "$description": "Micro-interactions, hovers" },
+      "normal": { "$value": "250ms", "$type": "duration", "$description": "Standard transitions" },
+      "slow": { "$value": "400ms", "$type": "duration", "$description": "Page transitions, modals" },
+      "slower": { "$value": "600ms", "$type": "duration", "$description": "Complex animations" },
+      "slowest": { "$value": "1000ms", "$type": "duration", "$description": "Background effects" }
+    },
+    "easing": {
+      "linear": { "$value": "linear", "$type": "cubicBezier" },
+      "default": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier", "$description": "Standard ease-in-out" },
+      "in": { "$value": "cubic-bezier(0.4, 0, 1, 1)", "$type": "cubicBezier", "$description": "Accelerate" },
+      "out": { "$value": "cubic-bezier(0, 0, 0.2, 1)", "$type": "cubicBezier", "$description": "Decelerate" },
+      "in-out": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" },
+      "bounce": { "$value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)", "$type": "cubicBezier", "$description": "Playful overshoot" },
+      "spring": { "$value": "cubic-bezier(0.175, 0.885, 0.32, 1.275)", "$type": "cubicBezier", "$description": "Natural spring motion" }
+    }
+  },
+  "transition": {
+    "$description": "Pre-composed transition presets",
+    "colors": {
+      "$value": "color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "transition"
+    },
+    "opacity": {
+      "$value": "opacity 150ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "transition"
+    },
+    "transform": {
+      "$value": "transform 250ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "transition"
+    },
+    "all": {
+      "$value": "all 250ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "transition"
+    },
+    "none": {
+      "$value": "none",
+      "$type": "transition"
+    }
+  },
+  "animation": {
+    "$description": "Named animation keyframe references",
+    "fadeIn": {
+      "$value": "fadeIn 250ms cubic-bezier(0, 0, 0.2, 1) forwards",
+      "$type": "animation"
+    },
+    "fadeOut": {
+      "$value": "fadeOut 150ms cubic-bezier(0.4, 0, 1, 1) forwards",
+      "$type": "animation"
+    },
+    "fadeUp": {
+      "$value": "fadeUp 400ms cubic-bezier(0, 0, 0.2, 1) forwards",
+      "$type": "animation",
+      "$description": "Entry animation with upward motion"
+    },
+    "fadeDown": {
+      "$value": "fadeDown 400ms cubic-bezier(0, 0, 0.2, 1) forwards",
+      "$type": "animation"
+    },
+    "scaleIn": {
+      "$value": "scaleIn 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
+      "$type": "animation"
+    },
+    "slideInRight": {
+      "$value": "slideInRight 300ms cubic-bezier(0, 0, 0.2, 1) forwards",
+      "$type": "animation"
+    },
+    "slideInLeft": {
+      "$value": "slideInLeft 300ms cubic-bezier(0, 0, 0.2, 1) forwards",
+      "$type": "animation"
+    },
+    "float": {
+      "$value": "float 3000ms ease-in-out infinite",
+      "$type": "animation",
+      "$description": "Subtle idle floating motion"
+    },
+    "pulse": {
+      "$value": "pulse 2000ms cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      "$type": "animation"
+    },
+    "pulseGlow": {
+      "$value": "pulseGlow 2000ms cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      "$type": "animation",
+      "$description": "Attention-grabbing glow pulse"
+    },
+    "spin": {
+      "$value": "spin 1000ms linear infinite",
+      "$type": "animation"
+    },
+    "bounce": {
+      "$value": "bounce 1000ms infinite",
+      "$type": "animation"
+    }
+  },
+  "stagger": {
+    "$description": "Stagger delay multipliers for list animations",
+    "fast": { "$value": "30ms", "$type": "duration" },
+    "normal": { "$value": "50ms", "$type": "duration" },
+    "slow": { "$value": "100ms", "$type": "duration" }
+  }
+}

@@ -33,20 +33,30 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Literary Theme (Rubin) -->
   <link
     href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Courier+Prime:wght@400;700&display=swap"
+    rel="stylesheet">
+  <!-- RTS/Arcade Theme -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap"
     rel="stylesheet">
 
   <!-- SPA Routing for GitHub Pages -->
   <script type="text/javascript">
+    // Handle SPA redirects from 404.html
     (function (l) {
-      if (l.search[1] === '/') {
-        var decoded = l.search.slice(1).split('&').map(function (s) {
-          return s.replace(/~and~/g, '&')
-        }).join('?');
-        window.history.replaceState(null, null,
-          l.pathname.slice(0, -1) + decoded + l.hash
-        );
+      if (l.search) {
+        var params = new URLSearchParams(l.search);
+        var path = params.get('p');
+        if (path) {
+          var decoded = path.replace(/~and~/g, '&');
+          var query = params.get('q');
+          if (query) {
+            decoded += '?' + query.replace(/~and~/g, '&');
+          }
+          window.history.replaceState(null, null, decoded + l.hash);
+        }
       }
     }(window.location))
   </script>

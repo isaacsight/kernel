@@ -267,6 +267,35 @@ async def publish_git():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/system/site/build")
+async def build_site():
+    """
+    Triggers a manual build of the static site.
+    """
+    try:
+        core.build_site()
+        return {"status": "success", "message": "Site build completed."}
+    except Exception as e:
+        logger.error(f"Site build failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/system/site/publish")
+async def publish_site():
+    """
+    Triggers a build and then a git publish.
+    """
+    try:
+        # 1. Build
+        core.build_site()
+        # 2. Publish
+        msg = core.publish_git()
+        return {"status": "success", "message": f"Site built and published. {msg}"}
+    except Exception as e:
+        logger.error(f"Site publish failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/agents/audit")
 async def audit_content(action: AgentAction):
     """

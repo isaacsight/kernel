@@ -17,6 +17,8 @@ const Consulting = lazy(() => import('./components/Consulting'));
 const CognitiveCockpit = lazy(() => import('./components/CognitiveCockpit'));
 const NeuralLinkDashboard = lazy(() => import('./components/NeuralLinkDashboard'));
 const StudioSimulation = lazy(() => import('./components/StudioSimulation'));
+const Publisher = lazy(() => import('./components/Publisher'));
+
 
 const LoadingScreen = () => (
   <div className="h-screen w-full bg-[#020202] flex flex-col items-center justify-center font-mono p-12">
@@ -67,6 +69,7 @@ function App() {
               <Route path="/consulting" element={<Consulting />} />
               <Route path="/neurallink" element={<NeuralLinkDashboard />} />
               <Route path="/simulation" element={<StudioSimulation />} />
+              <Route path="/publish" element={<Publisher />} />
               {/* Moved CognitiveCockpit to root */}
             </Routes>
           </Suspense>

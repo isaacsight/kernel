@@ -55,6 +55,16 @@ class ModelRouter:
                 "context_window": 1000000,
                 "available": self._check_gemini_available()
             },
+            "models/gemini-3-pro": {
+                "provider": "google",
+                "type": "cloud",
+                "strengths": [TaskType.ANALYSIS, TaskType.VISUAL_REASONING, TaskType.CHAT],
+                "cost_tier": "medium",
+                "speed": "medium",
+                "quality": "high",
+                "context_window": 2000000,
+                "available": self._check_gemini_available()
+            },
             "models/gemini-1.5-pro": {
                 "provider": "google",
                 "type": "cloud",
@@ -115,6 +125,16 @@ class ModelRouter:
                 "quality": "highest",
                 "context_window": 200000,
                 "available": self._check_anthropic_available()
+            },
+            "gpt-5.2-pro": {
+                "provider": "openai",
+                "type": "cloud",
+                "strengths": [TaskType.CODE_GENERATION, TaskType.ANALYSIS, TaskType.CREATIVE_WRITING],
+                "cost_tier": "high",
+                "speed": "medium",
+                "quality": "highest",
+                "context_window": 500000,
+                "available": self._check_openai_available()
             },
             "gpt-4o": {
                 "provider": "openai",
@@ -662,6 +682,19 @@ class ModelRouter:
         constraints = {"prefer_local": True}
         
         return self.select_model(task_type, constraints)
+
+    def run(self, agent_id: str, prompt: str, system_prompt: str = "", context: str = "", task_type: TaskType = TaskType.CHAT) -> str:
+        """
+        Synchronous wrapper for get_completion.
+        """
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+        result = loop.run_until_complete(self.get_completion(task_type, prompt, system_prompt=system_prompt, context=context))
+        return result.get("text", "")
 
     async def get_completion(self, task_type: TaskType, prompt: str, system_prompt: str = "", **kwargs) -> dict:
         """

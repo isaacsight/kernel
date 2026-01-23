@@ -23,8 +23,11 @@ from admin.brain.system_prompts import SystemPrompts
 from admin.brain.context_manager import ContextManager
 from admin.brain.visual_cortex import VisualCortexMixin
 from admin.brain.mission_state import get_mission_manager
+from admin.brain.structured_logging import get_logger, StructuredLogger
+from admin.brain.residue_protocol import save_residue
+from admin.brain.hardware_bridge import get_hardware_bridge
 
-logger = logging.getLogger("BaseAgent")
+# logger = logging.getLogger("BaseAgent") # Replaced by StructuredLogger
 
 class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
     def __init__(self, agent_id: str):
@@ -35,6 +38,7 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
             agent_id: The folder name in admin/brain/agents/ (e.g., 'alchemist')
         """
         self.agent_id = agent_id
+        self.logger = get_logger(agent_id) # Using StructuredLogger instance
         self.brain_path = os.path.join(config.BRAIN_DIR, 'agents', agent_id)
         
         # Initialize Active Inference substrate
@@ -43,10 +47,10 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
             from admin.brain.model_router import get_model_router
             self.model_router = get_model_router()
         except ImportError as e:
-            logger.warning(f"[{agent_id}] Model router unavailable: {e}")
+            self.logger.warning(f"[{agent_id}] Model router unavailable: {e}")
             self.model_router = None
         except Exception as e:
-            logger.error(f"[{agent_id}] Failed to initialize model router: {e}")
+            self.logger.error(f"[{agent_id}] Failed to initialize model router: {e}")
             self.model_router = None
             
         # Initialize Mixins
@@ -66,7 +70,7 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         self.skill_loader = SkillLoader(config.SKILLS_DIR) # Load all available definitions
         self.enabled_skills = self._load_enabled_skills()
         
-        logger.info(f"[{self.name}] Initialized with Active Inference engine")
+        self.logger.info(f"[{self.name}] Initialized with Active Inference engine")
         
     def get_secret(self, key_name: str) -> Optional[str]:
         """
@@ -79,7 +83,7 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
             if vault_key:
                 return vault_key
         except Exception as e:
-            logger.warning(f"Vault retrieval failed: {e}")
+            self.logger.warning(f"Vault retrieval failed: {e}")
             
         # Fallback to config (which pulls from .env)
         return getattr(config, key_name, os.getenv(key_name))
@@ -132,7 +136,7 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
                     # We could inject full instructions here, or depend on the 'generic' knowledge 
                     # from the SkillLoader if we want. For now, let's keep it lightweight.
                 else:
-                    logger.warning(f"[{self.name}] Configured skill '{skill_name}' not found in registry.")
+                    self.logger.warning(f"[{self.name}] Configured skill '{skill_name}' not found in registry.")
                     
             prompt += "\n" + self.skill_loader.get_system_prompt_additions()
 
@@ -146,11 +150,11 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
                 from admin.brain.context_manager import ContextManager
                 ctx = ContextManager()
                 prompt += "\n\n" + ctx.get_global_context()
-                logger.info(f"[{self.name}] Dynamic Context Injected (Triggered by content)")
+                self.logger.info(f"[{self.name}] Dynamic Context Injected (Triggered by content)")
             except Exception as e:
-                logger.warning(f"Failed to load global context: {e}")
+                self.logger.warning(f"Failed to load global context: {e}")
         else:
-            logger.info(f"[{self.name}] Dynamic Context Skipped (Optimization)")
+            self.logger.info(f"[{self.name}] Dynamic Context Skipped (Optimization)")
             
         return prompt
 
@@ -165,7 +169,7 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         # 2. Evaluate actions via EFE
         best_action = self.select_action_via_efe(potential_actions)
         
-        logger.info(f"[{self.name}] Active Inference decided: {best_action.get('type')} (EFE: {best_action.get('efe', 0):.2f})")
+        self.logger.info(f"[{self.name}] Active Inference decided: {best_action.get('type')} (EFE: {best_action.get('efe', 0):.2f})")
         return best_action
 
     def get_metacognitive_prompt(self, prompt_type: str, **kwargs) -> str:
@@ -216,31 +220,41 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         elif prompt_type == 'cognitive_gap_analysis':
             return SystemPrompts.get_cognitive_gap_analysis_prompt()
         else:
-            logger.warning(f"[{self.name}] Unknown metacognitive prompt type: {prompt_type}")
+            self.logger.warning(f"[{self.name}] Unknown metacognitive prompt type: {prompt_type}")
             return ""
 
     
     def run(self, input_text: str) -> str:
         """
-        Standard execution entry point.
-
-        Args:
-            input_text: The user's input prompt
-
-        Returns:
-            The agent's response text
-
-        Raises:
-            NotImplementedError: Subclasses must implement this method
+        Standard execution entry point with trace and hardware signals.
         """
-        raise NotImplementedError("Subclasses must implement run() or connect to ModelRouter.")
+        bridge = get_hardware_bridge()
+        with self.logger.trace_context(agent_id=self.agent_id):
+            self.logger.info(f"[{self.name}] Starting execution loop", extra={"input_length": len(input_text)})
+            bridge.signal_agent_state(self.agent_id, "executing", {"input": input_text[:50]})
+            
+            try:
+                # This would typically call the model router or specialized logic
+                if not self.model_router:
+                    raise RuntimeError("Model router not initialized")
+                
+                system_prompt = self.get_system_prompt(input_text)
+                response = self.model_router.run(self.agent_id, input_text, system_prompt=system_prompt)
+                
+                self.logger.info(f"[{self.name}] Execution complete")
+                bridge.signal_agent_state(self.agent_id, "idle")
+                return response
+            except Exception as e:
+                bridge.alert_socratic_repair(self.agent_id, str(e))
+                return self.socratic_debug_loop(e, input_text)
 
     def socratic_debug_loop(self, error: Exception, context: str) -> str:
         """
         Implementation of Prompt #94: Socratic Debugging.
         When an error occurs, ask 'What hypothesis led to this error?'
         """
-        logger.error(f"[{self.name}] Entering Socratic Debug Loop due to: {error}")
+        self.logger.error(f"[{self.name}] Entering Socratic Debug Loop", extra={"error": str(error)})
+        get_hardware_bridge().alert_socratic_repair(self.agent_id, str(error))
         
         # 1. Formulate the Socratic Question
         socratic_prompt = (
@@ -252,10 +266,13 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
             "Output your reflection and the NEXT corrective action."
         )
         
-        # 2. In a real system, we would feed this back to the model:
-        # return self.model_router.run(self.agent_id, socratic_prompt)
+        # 2. Feed back to the model for self-correction
+        if self.model_router:
+            self.logger.info(f"[{self.name}] Requesting Socratic repair from model")
+            repair_response = self.model_router.run(self.agent_id, socratic_prompt, context=context)
+            return repair_response
         
-        return f"[Socratic Repair] Agent reflected on error '{error}' and formulated new hypothesis."
+        return f"[Socratic Failure] Agent could not repair error: {error}"
 
     def simulate_outcome(self, action: str, hypothesis: str) -> str:
         """
@@ -307,5 +324,24 @@ class BaseAgent(ActiveInferenceMixin, VisualCortexMixin):
         with open(filepath, 'w') as f:
             json.dump(state, f, indent=2)
             
-        logger.info(f"[{self.name}] State snapshot saved to {filepath}")
-        return filepath
+    def post_run_residue(self, summary: str, decisions: List[str] = None, artifacts: List[str] = None):
+        """
+        Implementation of Prompt #12: Conversation Compounding.
+        Automatically saves cognitive residue after an agent run.
+        """
+        data = {
+            "summary": summary,
+            "decisions": decisions or [],
+            "artifacts": artifacts or [],
+            "reflections": "Automated residue generation after successful run."
+        }
+        
+        try:
+            from admin.brain.structured_logging import get_current_mission_id
+            mission_id = get_current_mission_id() or "active_session"
+            filepath = save_residue(self.agent_id, data, mission_id=mission_id)
+            self.logger.info(f"[{self.name}] Cognitive residue saved", extra={"path": filepath})
+            return filepath
+        except Exception as e:
+            self.logger.warning(f"Failed to generate residue: {e}")
+            return None

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "typography": {
+    "$description": "Sovereign Laboratory OS Typography System",
+    "fontFamily": {
+      "arcade": {
+        "display": { "$value": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", "$type": "fontFamily" },
+        "body": { "$value": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", "$type": "fontFamily" },
+        "mono": { "$value": "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace", "$type": "fontFamily" }
+      },
+      "rubin": {
+        "display": { "$value": "'EB Garamond', 'Crimson Pro', Georgia, 'Times New Roman', serif", "$type": "fontFamily" },
+        "body": { "$value": "'EB Garamond', 'Crimson Pro', Georgia, 'Times New Roman', serif", "$type": "fontFamily" },
+        "mono": { "$value": "'Courier Prime', 'JetBrains Mono', 'Courier New', Courier, monospace", "$type": "fontFamily" }
+      }
+    },
+    "fontSize": {
+      "6xl": { "$value": "72px", "$type": "dimension", "$description": "Display titles" },
+      "5xl": { "$value": "60px", "$type": "dimension", "$description": "h1" },
+      "4xl": { "$value": "48px", "$type": "dimension", "$description": "h2" },
+      "3xl": { "$value": "36px", "$type": "dimension", "$description": "h3" },
+      "2xl": { "$value": "30px", "$type": "dimension", "$description": "h4" },
+      "xl": { "$value": "24px", "$type": "dimension", "$description": "Large body" },
+      "lg": { "$value": "20px", "$type": "dimension", "$description": "Body large" },
+      "base": { "$value": "16px", "$type": "dimension", "$description": "Default" },
+      "sm": { "$value": "14px", "$type": "dimension", "$description": "Small" },
+      "xs": { "$value": "12px", "$type": "dimension", "$description": "Micro" }
+    },
+    "fontSizeRubin": {
+      "$description": "Rubin mode uses slightly larger base sizes for readability",
+      "2xl": { "$value": "32.4px", "$type": "dimension" },
+      "xl": { "$value": "28px", "$type": "dimension" },
+      "lg": { "$value": "22px", "$type": "dimension" },
+      "base": { "$value": "22px", "$type": "dimension" },
+      "sm": { "$value": "18px", "$type": "dimension" },
+      "xs": { "$value": "14px", "$type": "dimension" }
+    },
+    "fontWeight": {
+      "light": { "$value": "300", "$type": "fontWeight" },
+      "normal": { "$value": "400", "$type": "fontWeight" },
+      "medium": { "$value": "500", "$type": "fontWeight" },
+      "semibold": { "$value": "600", "$type": "fontWeight" },
+      "bold": { "$value": "700", "$type": "fontWeight" }
+    },
+    "lineHeight": {
+      "none": { "$value": "1", "$type": "number" },
+      "tight": { "$value": "1.25", "$type": "number" },
+      "snug": { "$value": "1.375", "$type": "number" },
+      "normal": { "$value": "1.5", "$type": "number" },
+      "relaxed": { "$value": "1.625", "$type": "number" },
+      "loose": { "$value": "2", "$type": "number" }
+    },
+    "letterSpacing": {
+      "tighter": { "$value": "-0.05em", "$type": "dimension" },
+      "tight": { "$value": "-0.02em", "$type": "dimension" },
+      "normal": { "$value": "0", "$type": "dimension" },
+      "wide": { "$value": "0.02em", "$type": "dimension" },
+      "wider": { "$value": "0.05em", "$type": "dimension" },
+      "widest": { "$value": "0.1em", "$type": "dimension" },
+      "ultra": { "$value": "0.4em", "$type": "dimension", "$description": "Rubin display headings signature" }
+    }
+  },
+  "textStyle": {
+    "$description": "Composite text styles for common use cases",
+    "arcade": {
+      "h1": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.arcade.display}",
+          "fontSize": "{typography.fontSize.5xl}",
+          "fontWeight": "{typography.fontWeight.bold}",
+          "lineHeight": "{typography.lineHeight.tight}",
+          "letterSpacing": "{typography.letterSpacing.tight}"
+        },
+        "$type": "typography"
+      },
+      "h2": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.arcade.display}",
+          "fontSize": "{typography.fontSize.4xl}",
+          "fontWeight": "{typography.fontWeight.semibold}",
+          "lineHeight": "{typography.lineHeight.tight}",
+          "letterSpacing": "{typography.letterSpacing.tight}"
+        },
+        "$type": "typography"
+      },
+      "body": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.arcade.body}",
+          "fontSize": "{typography.fontSize.base}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.normal}",
+          "letterSpacing": "{typography.letterSpacing.normal}"
+        },
+        "$type": "typography"
+      },
+      "code": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.arcade.mono}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.relaxed}",
+          "letterSpacing": "{typography.letterSpacing.normal}"
+        },
+        "$type": "typography"
+      }
+    },
+    "rubin": {
+      "display": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.rubin.display}",
+          "fontSize": "{typography.fontSize.6xl}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.none}",
+          "letterSpacing": "{typography.letterSpacing.ultra}"
+        },
+        "$type": "typography",
+        "$description": "Monumental ultra-tracked display headings"
+      },
+      "h1": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.rubin.display}",
+          "fontSize": "{typography.fontSize.5xl}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.tight}",
+          "letterSpacing": "{typography.letterSpacing.wide}"
+        },
+        "$type": "typography"
+      },
+      "body": {
+        "$value": {
+          "fontFamily": "{typography.fontFamily.rubin.body}",
+          "fontSize": "{typography.fontSizeRubin.base}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.normal}",
+          "letterSpacing": "{typography.letterSpacing.wide}"
+        },
+        "$type": "typography"
+      }
+    }
+  }
+}

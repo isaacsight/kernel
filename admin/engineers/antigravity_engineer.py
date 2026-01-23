@@ -214,10 +214,27 @@ class AntigravityEngineer(BaseAgent):
         """Execute a shell command."""
         work_dir = self._resolve_path(cwd) if cwd else self.project_root
 
-        # Safety check - block dangerous commands
-        dangerous_patterns = ["rm -rf /", "rm -rf ~", "> /dev/sda", "mkfs", ":(){:|:&};:"]
+        # Safety check - block dangerous commands and shell injection
+        dangerous_patterns = [
+            "rm -rf /",
+            "rm -rf ~",
+            "> /dev/",
+            "mkfs",
+            ":(){:|:&};:",
+            "chmod -R 777",
+            "chown",
+            "curl | bash",
+            "wget | bash",
+        ]
         if any(pattern in command for pattern in dangerous_patterns):
-            return {"success": False, "error": "Command blocked for safety reasons"}
+            return {"success": False, "error": f"Command blocked for safety reasons: '{command}'"}
+
+        # Prevent shell injection via path traversal or command chaining
+        forbidden_chars = [";", "&&", "||", "`", "$(", "|"]
+        # Allow pipe and redirect if they seem intentional for grep/sort etc, but be careful
+        # For now, let's be strict for agents
+        if any(char in command for char in forbidden_chars if char not in ["|", ">"]):
+            return {"success": False, "error": "Potential shell injection detected"}
 
         try:
             result = subprocess.run(

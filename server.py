@@ -14,12 +14,17 @@ from admin.brain.memory_store import get_memory_store
 from admin.engineers.frontier_team import FrontierTeam
 from admin.engineers.metacognitive_principal import MetacognitivePrincipal
 from admin.engineers.revenue_agent import get_revenue_agent
+from admin.engineers.market_analyst import MarketAnalyst
 from core.loop_manager import DTFRLoopManager
 
 # Initialize unified Frontier Team and Memory
 frontier_team = FrontierTeam()
 memory = get_memory_store()
 sovereign = MetacognitivePrincipal()
+market_analyst = MarketAnalyst()
+
+import admin.core as core
+from admin.api.models import Post
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -107,6 +112,57 @@ async def terms():
 @app.get("/privacy")
 async def privacy():
     return FileResponse("static/privacy.html")
+
+
+@app.get("/posts")
+async def get_posts():
+    try:
+        posts = core.get_posts()
+        # Sort by date descending
+        posts.sort(key=lambda x: str(x.get("date", "")), reverse=True)
+        return posts
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/posts")
+async def save_post(post: Post):
+    try:
+        filename = core.save_post(
+            post.filename, post.title, post.date, post.category, post.tags, post.content
+        )
+        return {"message": "Post saved successfully", "filename": filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/system/site/build")
+async def build_site():
+    """
+    Triggers a manual build of the static site.
+    """
+    try:
+        core.build_site()
+        return {"status": "success", "message": "Site build completed."}
+    except Exception as e:
+        logger.error(f"Site build failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/system/site/publish")
+async def publish_site():
+    """
+    Triggers a build and then a git publish.
+    """
+    try:
+        # 1. Build
+        core.build_site()
+        # 2. Publish
+        msg = core.publish_git()
+        return {"status": "success", "message": f"Site built and published. {msg}"}
+    except Exception as e:
+        logger.error(f"Site publish failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/tiktokHbV7mqFxkaukcOO1ZN0JhqfuMu6zjo58.txt")
@@ -434,6 +490,32 @@ async def run_dtfr_loop(data: dict):
         return {"status": "success", "report": report.dict()}
     except Exception as e:
         logger.error(f"DTFR loop failed: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+@app.get("/api/forge")
+async def get_forge_data():
+    """
+    Returns real-time data for The Alchemist's Forge (Trading Engine).
+    """
+    try:
+        metrics = market_analyst.calculate_active_inference()
+        percepts = market_analyst.get_market_percepts()
+        repairs = market_analyst.perform_socratic_repair()
+
+        return {
+            "status": "success",
+            "metrics": {
+                "expected_free_energy": metrics["expected_free_energy"],
+                "model_precision": metrics["model_precision"],
+                "perceptual_surprise": metrics["perceptual_surprise"],
+                "active_policy_weight": 65,  # Current hardcoded policy
+            },
+            "percepts": percepts,
+            "repairs": repairs,
+        }
+    except Exception as e:
+        logger.error(f"Forge API failed: {e}")
         return {"status": "error", "message": str(e)}
 
 

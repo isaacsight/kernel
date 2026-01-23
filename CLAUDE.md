@@ -149,5 +149,151 @@ Inspired by Rick Rubin's adaptation of Lao Tzu, we prioritize:
 
 See `DESIGN_AESTHETIC.md` for full design token specification.
 
+## IX. AI CLI TOOLS & MODEL CAPABILITIES
+
+### Claude Code CLI (Anthropic)
+
+**Installation**: `npm install -g @anthropic-ai/claude-code`
+
+#### Built-in Slash Commands
+| Command | Description |
+|---------|-------------|
+| `/help` | View all available commands |
+| `/clear` | Clear conversation context |
+| `/permissions` | View and update tool permissions |
+| `/output-style` | Configure response formatting |
+| `/privacy-settings` | Control data sharing preferences |
+| `/rewind` | Time travel through code changes |
+| `/review` | Request code review of current changes |
+| `/todos` | List all TODO items Claude is tracking |
+| `/doctor` | Run health checks on installation |
+| `/add-dir` | Add additional working directories |
+| `/compact` | Summarize and compress conversation |
+| `/cost` | Show token usage and costs |
+| `/init` | Initialize CLAUDE.md in project |
+| `/memory` | Edit CLAUDE.md memories |
+| `/mcp` | Manage MCP server connections |
+| `/vim` | Toggle vim keybindings |
+
+#### Built-in Tools
+- **Read/Write/Edit**: File operations with full codebase access
+- **Bash**: Shell command execution with sandboxing
+- **Glob/Grep**: Fast pattern matching and code search
+- **WebFetch/WebSearch**: Internet access for documentation and research
+- **Task**: Spawn sub-agents (Explore, Plan, Bash specialists)
+- **TodoWrite**: Task tracking and management
+- **NotebookEdit**: Jupyter notebook manipulation
+
+#### Advanced Features
+- **MCP Integration**: Connect to external tools via Model Context Protocol
+- **Custom Slash Commands**: Create `.claude/commands/*.md` files
+- **Hooks**: Shell commands triggered by events (tool calls, prompts)
+- **Headless Mode**: `-p` flag for CI/CD and automation
+- **Plugins**: Installable extensions from Anthropic marketplace
+- **Extended Thinking**: Deep reasoning mode for complex problems
+
+### Claude Models (Anthropic)
+
+| Model | Best For | Context | SWE-bench |
+|-------|----------|---------|-----------|
+| **Opus 4.5** | Complex agentic tasks, long-running workflows | 200K | 72.5% |
+| **Sonnet 4.5** | Balanced coding/reasoning, daily use | 200K | 72.7% |
+| **Haiku 3.5** | Fast, lightweight tasks | 200K | — |
+
+#### Key Capabilities
+- **Hybrid Reasoning**: Instant responses + extended thinking mode
+- **Tool Use During Thinking**: Alternate between reasoning and tool calls
+- **Parallel Tool Execution**: Multiple tools simultaneously
+- **Computer Use**: GUI interaction and browser control
+- **Vision**: Image and screenshot analysis
+- **Code Generation**: State-of-the-art on coding benchmarks
+- **Long-Context**: Native 200K token window
+- **Training Data**: Up to March 2025
+
+---
+
+### Gemini CLI (Google)
+
+**Installation**: `npm install -g @anthropic-ai/gemini-cli` (or via Google's package)
+
+#### Slash Commands
+| Command | Description |
+|---------|-------------|
+| `/help` | View all available commands |
+| `/chat` | Save/resume conversation history |
+| `/clear` | Clear terminal and session history |
+| `/copy` | Copy last output to clipboard |
+| `/mcp` | Manage MCP server connections |
+| `/settings` | Open settings editor |
+| `/bug` | Report issues directly from CLI |
+| `/tools` | List available tools |
+| `/memory` | View conversation memory |
+| `/stats` | Show session statistics |
+
+#### Built-in Tools
+- **Google Search Grounding**: Live web search integration
+- **File Operations**: Read, write, edit files
+- **Shell Commands**: Terminal execution with interactive support
+- **Web Fetching**: Retrieve and process web content
+- **Code Execution**: Run code snippets in sandbox
+
+#### Advanced Features
+- **1M Token Context**: Massive context window (2M coming)
+- **MCP Integration**: Extend with custom tools and servers
+- **Checkpointing**: Save and resume conversation states
+- **Token Caching**: Optimize repeated queries
+- **Interactive Commands**: Run vim, top, git rebase -i natively
+- **GEMINI.md Context**: Project-level instructions (like CLAUDE.md)
+- **ReAct Loop**: Reason-and-act agent architecture
+
+### Gemini Models (Google)
+
+| Model | Best For | Context | SWE-bench |
+|-------|----------|---------|-----------|
+| **3 Pro** | Flagship reasoning and coding | 1M+ | — |
+| **3 Deep Think** | Complex multi-step problems | 1M+ | — |
+| **2.5 Pro** | Balanced performance | 1M (2M soon) | 63.8% |
+| **2.5 Flash** | Fast, cost-effective tasks | 1M | — |
+
+#### Key Capabilities
+- **Native Multimodality**: Text, audio, images, video, code
+- **Thinking Model**: Built-in reasoning before responding
+- **Deep Think Mode**: Enhanced hypothesis exploration (32K thinking budget)
+- **Thought Summaries**: Auditable reasoning traces for enterprise
+- **Native Audio Output**: Conversational voice responses
+- **Computer Use**: Project Mariner browser/desktop control
+- **WebDev Arena #1**: Top-ranked for web app generation
+- **Math/Science**: 86.7% AIME 2025, 84% GPQA Diamond
+
+---
+
+### Comparison Matrix
+
+| Feature | Claude Code | Gemini CLI |
+|---------|-------------|------------|
+| **Context Window** | 200K tokens | 1M+ tokens |
+| **MCP Support** | ✓ | ✓ |
+| **Custom Commands** | `.claude/commands/` | Custom commands |
+| **Project Context** | CLAUDE.md | GEMINI.md |
+| **Headless/CI Mode** | `-p` flag | Supported |
+| **Interactive Shell** | Sandboxed | Full interactive (vim, etc.) |
+| **Sub-agents** | Task tool spawns agents | ReAct loop |
+| **Plugin Marketplace** | ✓ (Dec 2025) | MCP servers |
+| **Open Source** | Partial | Apache 2.0 |
+
+### When to Use Each
+
+**Choose Claude Code when:**
+- Deep code refactoring and multi-file changes
+- Complex debugging requiring tool chaining
+- Projects with extensive CLAUDE.md configurations
+- Need for hybrid instant/extended thinking
+
+**Choose Gemini CLI when:**
+- Working with massive codebases (1M+ context)
+- Need interactive terminal commands (vim, etc.)
+- Heavy reliance on Google Search grounding
+- Open-source transparency is priority
+
 ---
 *Signed by Antigravity Kernel & Federated Agents*

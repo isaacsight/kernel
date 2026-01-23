@@ -1,0 +1,116 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "$description": "Sovereign Laboratory OS Color System",
+    "primitive": {
+      "$description": "Raw color values - platform agnostic",
+      "green": {
+        "400": { "$value": "#8CD494", "$type": "color" },
+        "500": { "$value": "#66B56E", "$type": "color", "$description": "Studio Green - Primary brand color" },
+        "600": { "$value": "#7BC583", "$type": "color" },
+        "700": { "$value": "#4A9152", "$type": "color" }
+      },
+      "slate": {
+        "900": { "$value": "#020202", "$type": "color", "$description": "Deep void - primary background" },
+        "800": { "$value": "#050505", "$type": "color", "$description": "Secondary background" },
+        "700": { "$value": "#0A0A0A", "$type": "color", "$description": "Tertiary/input background" },
+        "600": { "$value": "#1A1A1A", "$type": "color" },
+        "500": { "$value": "#2A2A2A", "$type": "color" }
+      },
+      "gray": {
+        "100": { "$value": "#F5F5F5", "$type": "color" },
+        "200": { "$value": "#E5E5E5", "$type": "color" },
+        "300": { "$value": "#D4D4D4", "$type": "color" },
+        "400": { "$value": "#A3A3A3", "$type": "color" },
+        "500": { "$value": "#8A908C", "$type": "color", "$description": "Tertiary text" },
+        "600": { "$value": "#6B7280", "$type": "color" },
+        "700": { "$value": "#5E5D59", "$type": "color" }
+      },
+      "ivory": {
+        "50": { "$value": "#FFFDF8", "$type": "color" },
+        "100": { "$value": "#FAF9F6", "$type": "color", "$description": "Warm ivory - Rubin primary bg" },
+        "200": { "$value": "#F0EEE6", "$type": "color", "$description": "Rubin secondary bg" },
+        "300": { "$value": "#E8E6DC", "$type": "color", "$description": "Rubin tertiary/borders" }
+      },
+      "blue": {
+        "400": { "$value": "#60A5FA", "$type": "color" },
+        "500": { "$value": "#5080F8", "$type": "color", "$description": "CPS Blue - Claude faction" },
+        "600": { "$value": "#3060D0", "$type": "color" },
+        "700": { "$value": "#2040A8", "$type": "color" }
+      },
+      "purple": {
+        "400": { "$value": "#A78BFA", "$type": "color" },
+        "500": { "$value": "#9060C8", "$type": "color", "$description": "Neo Geo Purple - Gemini faction" },
+        "600": { "$value": "#6840A0", "$type": "color" },
+        "700": { "$value": "#482878", "$type": "color" }
+      },
+      "cyan": {
+        "400": { "$value": "#22D3EE", "$type": "color" },
+        "500": { "$value": "#44A6E4", "$type": "color", "$description": "Rubin link color" },
+        "600": { "$value": "#0891B2", "$type": "color" }
+      },
+      "clay": {
+        "400": { "$value": "#E8927A", "$type": "color" },
+        "500": { "$value": "#D97757", "$type": "color", "$description": "Warm clay - Rubin CTA accent" },
+        "600": { "$value": "#C45A3A", "$type": "color" }
+      },
+      "energy": {
+        "white": { "$value": "#F8F8F8", "$type": "color" },
+        "yellow": { "$value": "#F8E850", "$type": "color" },
+        "orange": { "$value": "#F8A030", "$type": "color" },
+        "red": { "$value": "#D05020", "$type": "color" }
+      },
+      "metal-slug": {
+        "green-1": { "$value": "#789858", "$type": "color", "$description": "Metal Slug Green - Systems" },
+        "green-2": { "$value": "#587040", "$type": "color" },
+        "green-3": { "$value": "#384828", "$type": "color" }
+      }
+    },
+    "semantic": {
+      "$description": "Purpose-driven color assignments",
+      "arcade": {
+        "$description": "Arcade mode (default) - dark theme",
+        "background": {
+          "primary": { "$value": "{color.primitive.slate.900}", "$type": "color" },
+          "secondary": { "$value": "{color.primitive.slate.800}", "$type": "color" },
+          "tertiary": { "$value": "{color.primitive.slate.700}", "$type": "color" }
+        },
+        "text": {
+          "primary": { "$value": "{color.primitive.green.500}", "$type": "color" },
+          "secondary": { "$value": "#C9CEC9", "$type": "color" },
+          "tertiary": { "$value": "{color.primitive.gray.500}", "$type": "color" },
+          "pure": { "$value": "#FFFFFF", "$type": "color" }
+        },
+        "accent": {
+          "primary": { "$value": "{color.primitive.green.500}", "$type": "color" },
+          "hover": { "$value": "{color.primitive.green.600}", "$type": "color" },
+          "subtle": { "$value": "rgba(102, 181, 110, 0.08)", "$type": "color" }
+        },
+        "faction": {
+          "claude": { "$value": "{color.primitive.blue.500}", "$type": "color" },
+          "gemini": { "$value": "{color.primitive.purple.500}", "$type": "color" },
+          "system": { "$value": "{color.primitive.metal-slug.green-1}", "$type": "color" }
+        }
+      },
+      "rubin": {
+        "$description": "Rubin mode - light literary theme",
+        "background": {
+          "primary": { "$value": "{color.primitive.ivory.100}", "$type": "color" },
+          "secondary": { "$value": "{color.primitive.ivory.200}", "$type": "color" },
+          "tertiary": { "$value": "{color.primitive.ivory.300}", "$type": "color" }
+        },
+        "text": {
+          "primary": { "$value": "#1F1E1D", "$type": "color" },
+          "secondary": { "$value": "rgba(0, 0, 0, 0.85)", "$type": "color" },
+          "tertiary": { "$value": "{color.primitive.gray.700}", "$type": "color" },
+          "muted": { "$value": "#87867F", "$type": "color" }
+        },
+        "accent": {
+          "primary": { "$value": "{color.primitive.cyan.500}", "$type": "color" },
+          "warm": { "$value": "{color.primitive.clay.500}", "$type": "color" },
+          "cool": { "$value": "#5E7EDF", "$type": "color" }
+        }
+      }
+    }
+  }
+}

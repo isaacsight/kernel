@@ -1,472 +1,455 @@
 /* ===========================================
-   LANDING PAGE - With Motion Design
+   LANDING PAGE - Minimal Micro Information Design
    =========================================== */
 
-.landing-page {
-    width: 100%;
-}
-
-/* ===========================================
-   SECTION HEADER - Animated
-   =========================================== */
-
-.section-header {
-    text-align: center;
-    margin-bottom: 8vh;
-
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.section-header.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.section-number {
-    font-family: var(--font-code);
-    font-size: 0.85rem;
-    letter-spacing: 0.25em;
-    color: var(--rubin-text-muted);
-    display: block;
-    margin-bottom: 1rem;
-    position: relative;
-}
-
-/* Animated underline for section number */
-.section-number::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 50%;
-    width: 24px;
-    height: 1px;
-    background: var(--rubin-text-muted);
-    transform: translateX(-50%) scaleX(0);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
-}
-
-.section-header.revealed .section-number::after {
-    transform: translateX(-50%) scaleX(1);
-}
-
-.section-title {
-    font-family: var(--font-display);
-    font-size: clamp(32px, 5vw, 48px);
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: var(--rubin-text-primary);
-    margin-bottom: 1rem;
-}
-
-.section-description {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    color: var(--rubin-text-secondary);
-    max-width: 50ch;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-/* ===========================================
-   FEATURED SECTION
-   =========================================== */
-
-.featured-section {
-    padding: 12vh 0 15vh;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-/* ===========================================
-   PROJECTS GRID - Enhanced Cards
-   =========================================== */
-
-.projects-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+.landing-minimal {
+    min-height: 100vh;
+    padding: 0 var(--padding-horizontal);
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 var(--padding-horizontal);
 }
 
-.project-card {
-    display: block;
-    padding: 3rem;
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
+/* ===========================================
+   HERO - Minimal
+   =========================================== */
 
-    /* Animation setup */
+.hero-minimal {
+    padding: 15vh 0 8vh;
+    text-align: center;
+}
+
+.hero-name {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.4s ease,
-                box-shadow 0.4s ease;
+    transform: translateY(20px);
+    transition: all 0.6s var(--ease-out-expo);
 }
 
-.project-card.revealed {
+.hero-name.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Enhanced hover effect */
-.project-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        135deg,
-        rgba(68, 166, 228, 0.02) 0%,
-        transparent 50%,
-        rgba(217, 119, 87, 0.02) 100%
-    );
+.hero-name h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--rubin-text-primary);
+    margin: 0;
+}
+
+.hero-role {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--rubin-text-muted);
+    margin-top: 1rem;
     opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
+    transform: translateY(15px);
+    transition: all 0.6s var(--ease-out-expo);
 }
 
-.project-card:hover {
-    border-color: var(--rubin-text-primary);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.15);
-}
-
-.project-card:hover::before {
+.hero-role.visible {
     opacity: 1;
+    transform: translateY(0);
 }
 
-.project-card.featured {
-    border-width: 2px;
-    border-color: rgba(0, 0, 0, 0.12);
+.hero-tagline {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--rubin-text-secondary);
+    margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.6s var(--ease-out-expo);
 }
 
-.project-card.featured:hover {
-    border-color: var(--rubin-clay);
+.hero-tagline.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Project meta */
-.project-meta {
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.6s var(--ease-out-expo);
+}
+
+.hero-actions.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.action-icon {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    color: var(--rubin-text-primary);
+    transition: all 0.3s var(--ease-out-expo);
 }
 
-.project-index {
+.action-icon:hover {
+    border-color: var(--rubin-text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===========================================
+   STATS STRIP - Micro Info
+   =========================================== */
+
+.stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s var(--ease-out-expo);
+}
+
+.stats-strip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-icon {
+    color: var(--rubin-clay);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
     font-family: var(--font-code);
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rubin-text-muted);
+}
+
+/* ===========================================
+   ACCOMPLISHMENTS GRID
+   =========================================== */
+
+.accomplishments {
+    padding: 6vh 0;
+}
+
+.accomplishments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.accomplishment-card {
+    display: block;
+    padding: 1.75rem;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s var(--ease-out-expo);
+}
+
+.accomplishment-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.accomplishment-card:hover {
+    border-color: var(--rubin-text-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.card-icon {
     color: var(--rubin-text-muted);
     transition: color 0.3s ease;
 }
 
-.project-card:hover .project-index {
+.accomplishment-card:hover .card-icon {
     color: var(--rubin-clay);
 }
 
-/* Project title */
-.project-title {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--rubin-text-primary);
-    margin-bottom: 1rem;
-    letter-spacing: -0.01em;
-    transition: color 0.3s ease;
+.card-spark {
+    color: var(--rubin-ivory-dark);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s var(--ease-out-expo);
 }
 
-.project-card:hover .project-title {
-    color: var(--rubin-text-primary);
+.accomplishment-card:hover .card-spark {
+    opacity: 1;
+    color: var(--rubin-ochre);
+    transform: scale(1);
 }
 
-/* Project description */
-.project-description {
+.card-title {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    line-height: 1.7;
-    color: var(--rubin-text-secondary);
-    margin-bottom: 1.5rem;
+    font-weight: 400;
+    color: var(--rubin-text-primary);
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.01em;
 }
 
-/* ===========================================
-   PROJECT TAGS - Interactive
-   =========================================== */
+.card-subtitle {
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rubin-clay);
+}
 
-.project-tags {
+.card-desc {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--rubin-text-secondary);
+    margin: 0.75rem 0;
+}
+
+.card-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.35rem;
+    margin-top: 1rem;
 }
 
-.project-tag {
+.card-tag {
     font-family: var(--font-code);
-    font-size: 0.75rem;
+    font-size: 0.6rem;
     letter-spacing: 0.05em;
-    padding: 0.45rem 0.9rem;
+    padding: 0.25rem 0.5rem;
     background: rgba(0, 0, 0, 0.03);
     color: var(--rubin-text-muted);
     border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.project-tag:hover {
-    background: rgba(0, 0, 0, 0.08);
-    color: var(--rubin-text-primary);
-    transform: translateY(-2px);
 }
 
 /* ===========================================
-   CTA SECTION
+   TECH STACK
    =========================================== */
 
-.section-cta {
-    text-align: center;
-    margin-top: 6vh;
-
-    /* Animation setup */
+.tech-stack {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(15px);
+    transition: all 0.6s var(--ease-out-expo);
 }
 
-.section-cta.revealed {
+.tech-stack.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-.cta-link {
-    display: inline-flex;
+.tech-label {
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rubin-text-muted);
+}
+
+.tech-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--rubin-text-muted);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+    transition: all 0.3s var(--ease-out-expo);
+    cursor: default;
+}
+
+.tech-item:hover {
+    color: var(--rubin-text-primary);
+    border-color: var(--rubin-text-primary);
+    transform: translateY(-2px);
+}
+
+/* ===========================================
+   QUICK LINKS
+   =========================================== */
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 4vh 0 6vh;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s var(--ease-out-expo);
+}
+
+.quick-links.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.quick-link {
+    display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    color: var(--rubin-text-primary);
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     text-decoration: none;
-    padding: 1rem 2rem;
-    border: 1px solid var(--rubin-text-primary);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--rubin-text-primary);
+    transition: all 0.3s var(--ease-out-expo);
 }
 
-/* Fill animation */
-.cta-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--rubin-text-primary);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: -1;
-}
-
-.cta-link:hover::before {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-.cta-link:hover {
-    color: var(--rubin-ivory);
+.quick-link:hover {
+    border-color: var(--rubin-text-primary);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.1);
 }
 
-.cta-link:active {
-    transform: translateY(0) scale(0.98);
-}
-
-.cta-link svg {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cta-link:hover svg {
-    transform: translateX(4px);
-}
-
-/* ===========================================
-   PHILOSOPHY SECTION
-   =========================================== */
-
-.philosophy-section {
-    padding: 15vh 0;
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.philosophy-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 4rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 var(--padding-horizontal);
-}
-
-.philosophy-item {
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.philosophy-item.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.philosophy-item h3 {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: var(--rubin-text-primary);
-    margin-bottom: 1rem;
-    letter-spacing: -0.01em;
-    position: relative;
-    display: inline-block;
-}
-
-/* Underline reveal on scroll */
-.philosophy-item h3::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--rubin-clay);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
-}
-
-.philosophy-item.revealed h3::after {
-    transform: scaleX(1);
-}
-
-.philosophy-item p {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: var(--rubin-text-secondary);
-}
-
-/* ===========================================
-   FOOTER - Animated
-   =========================================== */
-
-.landing-footer {
-    padding: 10vh 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-
-    /* Animation setup */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.landing-footer.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.footer-content {
-    text-align: center;
-}
-
-.footer-tagline {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.3rem;
-    color: var(--rubin-text-secondary);
-    margin-bottom: 2rem;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-}
-
-.footer-link {
-    color: var(--rubin-text-primary);
-    text-decoration: none;
-    position: relative;
-    padding-bottom: 2px;
+.quick-link svg:first-child {
+    color: var(--rubin-text-muted);
     transition: color 0.3s ease;
 }
 
-/* Underline animation */
-.footer-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--rubin-text-primary);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.quick-link:hover svg:first-child {
+    color: var(--rubin-clay);
 }
 
-.footer-link:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
+.quick-label {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    flex: 1;
 }
 
-.footer-link:hover {
-    color: var(--rubin-text-primary);
+.quick-count {
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    color: var(--rubin-text-muted);
+    background: rgba(0, 0, 0, 0.04);
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+}
+
+.quick-arrow {
+    color: var(--rubin-text-muted);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.3s var(--ease-out-expo);
+}
+
+.quick-link:hover .quick-arrow {
     opacity: 1;
+    transform: translateX(0);
 }
 
-.footer-divider {
+/* ===========================================
+   FOOTER - Minimal
+   =========================================== */
+
+.footer-minimal {
+    text-align: center;
+    padding: 4vh 0 8vh;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.footer-minimal p {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
     color: var(--rubin-text-muted);
 }
 
 /* ===========================================
-   MOBILE RESPONSIVE
+   RESPONSIVE
    =========================================== */
 
 @media (max-width: 768px) {
-    .projects-grid {
+    .landing-minimal {
         padding: 0 var(--padding-horizontal-mobile);
     }
 
-    .project-card {
-        padding: 2rem;
+    .hero-minimal {
+        padding: 10vh 0 6vh;
     }
 
-    .philosophy-grid {
-        padding: 0 var(--padding-horizontal-mobile);
-        gap: 3rem;
+    .stats-strip {
+        gap: 1.5rem;
+        flex-wrap: wrap;
     }
 
-    .philosophy-section {
-        padding: 10vh 0;
+    .stat-value {
+        font-size: 1.25rem;
     }
 
-    .featured-section {
-        padding: 8vh 0 12vh;
+    .accomplishments-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tech-stack {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-strip {
+        gap: 1rem;
+    }
+
+    .stat-item {
+        min-width: 70px;
     }
 }
 
@@ -475,29 +458,23 @@
    =========================================== */
 
 @media (prefers-reduced-motion: reduce) {
-    .section-header,
-    .project-card,
-    .section-cta,
-    .philosophy-item,
-    .landing-footer {
+    .hero-name,
+    .hero-role,
+    .hero-tagline,
+    .hero-actions,
+    .stats-strip,
+    .accomplishment-card,
+    .tech-stack,
+    .quick-links {
         opacity: 1;
         transform: none;
         transition: none;
     }
 
-    .section-number::after,
-    .philosophy-item h3::after {
-        transform: scaleX(1);
-        transition: none;
-    }
-
-    .cta-link::before,
-    .project-card::before {
-        display: none;
-    }
-
-    .project-card:hover,
-    .cta-link:hover {
+    .accomplishment-card:hover,
+    .quick-link:hover,
+    .action-icon:hover,
+    .tech-item:hover {
         transform: none;
     }
 }

@@ -1,0 +1,126 @@
+{
+    "intents": [
+        {
+            "id": "learn",
+            "keywords": [
+                "learn",
+                "research",
+                "reading",
+                "start",
+                "essays",
+                "pattern",
+                "understand"
+            ],
+            "response": "Here are the foundational essays and patterns for the Studio.",
+            "links": [
+                {
+                    "title": "The Invisible Architect",
+                    "url": "posts/the-invisible-architect.html",
+                    "desc": "How to design agentic systems."
+                },
+                {
+                    "title": "Studio Patterns",
+                    "url": "tags/pattern.html",
+                    "desc": "Reusable architectures."
+                },
+                {
+                    "title": "Research Roadmap",
+                    "url": "research-roadmap.html",
+                    "desc": "Current frontiers."
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "keywords": [
+                "build",
+                "code",
+                "dev",
+                "repo",
+                "fork",
+                "source",
+                "architecture",
+                "github"
+            ],
+            "response": "Ready to build? Here is the reference implementation and architecture.",
+            "links": [
+                {
+                    "title": "System Architecture",
+                    "url": "architecture.html",
+                    "desc": "The Agentic Stack."
+                },
+                {
+                    "title": "Fork logic on GitHub",
+                    "url": "https://github.com/isaacsight/does-this-feel-right-",
+                    "desc": "Clone the Studio OS."
+                },
+                {
+                    "title": "Studio OS SDK",
+                    "url": "projects.html",
+                    "desc": "Tools and Extensions."
+                }
+            ]
+        },
+        {
+            "id": "work",
+            "keywords": [
+                "work",
+                "hire",
+                "consulting",
+                "help",
+                "contact",
+                "partner"
+            ],
+            "response": "We help founders build agentic systems.",
+            "links": [
+                {
+                    "title": "About & Services",
+                    "url": "about.html",
+                    "desc": "How we work."
+                },
+                {
+                    "title": "Is this for you?",
+                    "url": "is-this-for-you.html",
+                    "desc": "Client fit."
+                }
+            ]
+        },
+        {
+            "id": "meta",
+            "keywords": [
+                "status",
+                "agent",
+                "snapshot",
+                "alive",
+                "health",
+                "metrics"
+            ],
+            "response": "The Studio is a living system. Here is the current heartbeat.",
+            "links": [
+                {
+                    "title": "Studio Snapshot",
+                    "url": "studio-snapshot.html",
+                    "desc": "Real-time state."
+                },
+                {
+                    "title": "Decision Log",
+                    "url": "decision-log.html",
+                    "desc": "Architectural history."
+                }
+            ]
+        }
+    ],
+    "default_response": "I can help you <span class='cmd-link' data-cmd='learn'>Learn</span>, <span class='cmd-link' data-cmd='build'>Build</span>, or <span class='cmd-link' data-cmd='work'>Connect</span>. What is your goal?",
+    "fallback_links": [
+        {
+            "title": "View Full Archive",
+            "url": "collections.html",
+            "desc": "Browse all content."
+        },
+        {
+            "title": "About",
+            "url": "about.html",
+            "desc": "The philosophy."
+        }
+    ]
+}

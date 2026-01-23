@@ -1,0 +1,321 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SOVEREIGN LABORATORY RTS DESIGN TOKENS
+   Inspired by: Warcraft 3, Neo Geo, Capcom CPS-2
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════════
+     FACTION: ANTHROPIC DOMINION (Claude) - Human Alliance Inspired
+     ═══════════════════════════════════════════════════════════════════════ */
+  --claude-primary: #1E3A8A;
+  --claude-secondary: #3B82F6;
+  --claude-accent: #D4AF37;
+  --claude-light: #DBEAFE;
+  --claude-dark: #1E40AF;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     FACTION: DEEPMIND COLLECTIVE (Gemini) - Night Elf Inspired
+     ═══════════════════════════════════════════════════════════════════════ */
+  --gemini-primary: #581C87;
+  --gemini-secondary: #A855F7;
+  --gemini-accent: #14B8A6;
+  --gemini-light: #F3E8FF;
+  --gemini-dark: #3B0764;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     FACTION: KERNEL COMMANDER (Neutral/Player)
+     ═══════════════════════════════════════════════════════════════════════ */
+  --commander-primary: #B8860B;
+  --commander-secondary: #FFD700;
+  --commander-accent: #F59E0B;
+  --commander-dark: #78350F;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     UI CHROME - Warcraft 3 Gold Trim
+     ═══════════════════════════════════════════════════════════════════════ */
+  --gold-lightest: #FFF8DC;
+  --gold-light: #FFD700;
+  --gold-medium: #D4AF37;
+  --gold-dark: #B8860B;
+  --gold-darkest: #8B6914;
+
+  --bronze-light: #CD7F32;
+  --bronze-medium: #A0522D;
+  --bronze-dark: #8B4513;
+
+  --steel-light: #B8C4CE;
+  --steel-medium: #71797E;
+  --steel-dark: #48494B;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     BACKGROUNDS - Dark Fantasy
+     ═══════════════════════════════════════════════════════════════════════ */
+  --bg-void: #0A0A0F;
+  --bg-dark: #12121A;
+  --bg-panel: #1A1A24;
+  --bg-elevated: #22222E;
+  --bg-hover: #2A2A38;
+
+  --bg-parchment: #F5F5DC;
+  --bg-parchment-dark: #D4C89A;
+  --bg-leather: #1C1917;
+  --bg-stone: #374151;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     TEXT COLORS
+     ═══════════════════════════════════════════════════════════════════════ */
+  --text-gold: #FFD700;
+  --text-light: #F5F5DC;
+  --text-body: #D4D4D8;
+  --text-muted: #9CA3AF;
+  --text-dim: #6B7280;
+
+  /* Resource Colors */
+  --text-mana: #60A5FA;
+  --text-health: #EF4444;
+  --text-energy: #FBBF24;
+  --text-nature: #4ADE80;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     METAL SLUG / NEO GEO PALETTE
+     ═══════════════════════════════════════════════════════════════════════ */
+  --ms-green-1: #789858;
+  --ms-green-2: #587040;
+  --ms-green-3: #384828;
+
+  --ms-skin-1: #F8D8B0;
+  --ms-skin-2: #E0B888;
+  --ms-skin-3: #C09060;
+
+  --ms-explosion-1: #F8F8F8;
+  --ms-explosion-2: #F8E850;
+  --ms-explosion-3: #F8A030;
+  --ms-explosion-4: #D05020;
+  --ms-explosion-5: #801810;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     STREET FIGHTER / CPS-2 PALETTE
+     ═══════════════════════════════════════════════════════════════════════ */
+  --sf-blue-1: #5080F8;
+  --sf-blue-2: #3060D0;
+  --sf-blue-3: #2040A8;
+
+  --sf-red-1: #F83030;
+  --sf-red-2: #C82020;
+  --sf-red-3: #981818;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     TYPOGRAPHY
+     ═══════════════════════════════════════════════════════════════════════ */
+  --font-display: 'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-body: 'Crimson Pro', 'Palatino Linotype', Georgia, serif;
+  --font-ui: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier Prime', monospace;
+  --font-pixel: 'Press Start 2P', monospace;
+
+  /* Font Sizes - RTS Scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     SPACING
+     ═══════════════════════════════════════════════════════════════════════ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     BORDERS - WC3 Style
+     ═══════════════════════════════════════════════════════════════════════ */
+  --border-gold: 3px ridge var(--gold-medium);
+  --border-gold-thick: 5px ridge var(--gold-medium);
+  --border-steel: 2px solid var(--steel-medium);
+  --border-dark: 2px solid var(--bg-void);
+  --border-glow: 0 0 10px var(--gold-light);
+  --border-pixel: 2px solid #000;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     SHADOWS
+     ═══════════════════════════════════════════════════════════════════════ */
+  --shadow-text: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  --shadow-text-sm: 1px 1px 0 #000;
+  --shadow-box: 4px 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-box-lg: 8px 8px 24px rgba(0, 0, 0, 0.8);
+  --shadow-inset: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  --shadow-glow-gold: 0 0 20px rgba(255, 215, 0, 0.3);
+  --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+  --shadow-glow-purple: 0 0 20px rgba(168, 85, 247, 0.3);
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     TRANSITIONS
+     ═══════════════════════════════════════════════════════════════════════ */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     Z-INDEX LAYERS
+     ═══════════════════════════════════════════════════════════════════════ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     CRT / ARCADE EFFECTS
+     ═══════════════════════════════════════════════════════════════════════ */
+  --crt-glow: 0 0 10px rgba(255, 255, 255, 0.15), 0 0 30px rgba(100, 200, 255, 0.1);
+  --scanline-opacity: 0.08;
+  --pixel-grid-opacity: 0.03;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CRT SCANLINE EFFECT
+   ═══════════════════════════════════════════════════════════════════════════ */
+.crt-effect {
+  position: relative;
+}
+
+.crt-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, var(--scanline-opacity)),
+    rgba(0, 0, 0, var(--scanline-opacity)) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIXEL ART RENDERING
+   ═══════════════════════════════════════════════════════════════════════════ */
+.pixel-perfect {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GOLD TEXT STYLING
+   ═══════════════════════════════════════════════════════════════════════════ */
+.text-gold {
+  color: var(--text-gold);
+  text-shadow: var(--shadow-text);
+}
+
+.text-gold-glow {
+  color: var(--text-gold);
+  text-shadow:
+    var(--shadow-text),
+    0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FACTION GLOW EFFECTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.glow-claude {
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.glow-gemini {
+  box-shadow: var(--shadow-glow-purple);
+}
+
+.glow-commander {
+  box-shadow: var(--shadow-glow-gold);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 5px var(--gold-medium); }
+  50% { box-shadow: 0 0 20px var(--gold-light), 0 0 30px var(--gold-medium); }
+}
+
+@keyframes pulse-blue {
+  0%, 100% { box-shadow: 0 0 5px var(--claude-secondary); }
+  50% { box-shadow: 0 0 20px var(--claude-secondary), 0 0 30px var(--claude-primary); }
+}
+
+@keyframes pulse-purple {
+  0%, 100% { box-shadow: 0 0 5px var(--gemini-secondary); }
+  50% { box-shadow: 0 0 20px var(--gemini-secondary), 0 0 30px var(--gemini-primary); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.98; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes energy-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.animate-pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
+.animate-pulse-blue { animation: pulse-blue 2s ease-in-out infinite; }
+.animate-pulse-purple { animation: pulse-purple 2s ease-in-out infinite; }
+.animate-flicker { animation: flicker 0.1s infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+.font-ui { font-family: var(--font-ui); }
+.font-mono { font-family: var(--font-mono); }
+.font-pixel { font-family: var(--font-pixel); }
+
+.uppercase { text-transform: uppercase; }
+.tracking-wide { letter-spacing: 0.05em; }
+.tracking-wider { letter-spacing: 0.1em; }
+.tracking-widest { letter-spacing: 0.2em; }

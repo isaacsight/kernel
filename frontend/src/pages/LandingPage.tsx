@@ -1,168 +1,181 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import LandingHero from '../components/landing/LandingHero';
-import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
+import {
+    Brain,
+    Code2,
+    Layers,
+    Gamepad2,
+    FileText,
+    Cpu,
+    Sparkles,
+    ArrowRight,
+    Github,
+    Mail,
+    Zap,
+    Database,
+    Globe,
+    Terminal,
+    Palette,
+    Bot
+} from 'lucide-react';
+import { useScrollReveal, useStaggeredReveal, useHeroEntrance } from '../hooks/useScrollReveal';
 import './LandingPage.css';
 
-interface Project {
-    title: string;
-    description: string;
-    tags: string[];
-    featured?: boolean;
-}
-
-const featuredProjects: Project[] = [
-    {
-        title: "Sovereign Laboratory OS",
-        description: "A cognitive architecture for building permanent thinking systems. Multi-agent swarm with 46+ specialized modules for design intelligence, answer engines, and memory management.",
-        tags: ["Python", "FastAPI", "React", "Multi-Agent"],
-        featured: true,
-    },
-    {
-        title: "Director",
-        description: "Automated video pipeline orchestrating CapCut, TikTok, and content distribution. Systems thinking applied to content creation.",
-        tags: ["Python", "Automation", "API Integration"],
-    },
-    {
-        title: "Does This Feel Right",
-        description: "This portfolio itself—a contemplative design system exploring literary minimalism in digital interfaces. Built with React 19 and the Rubin aesthetic.",
-        tags: ["React", "TypeScript", "Design Systems"],
-    }
+// Micro stats
+const stats = [
+    { value: '46+', label: 'AI Agents', icon: Brain },
+    { value: '81', label: 'Chapters', icon: FileText },
+    { value: '1M+', label: 'Context Tokens', icon: Database },
+    { value: '∞', label: 'Ideas', icon: Sparkles },
 ];
 
-const philosophyItems = [
+// Core accomplishments
+const accomplishments = [
     {
-        title: "Systems over Features",
-        description: "Every project is an opportunity to build something that compounds. Not just solving the immediate problem, but creating frameworks that make future problems easier."
+        icon: Brain,
+        title: 'Sovereign Laboratory OS',
+        subtitle: 'Cognitive Architecture',
+        description: 'Multi-agent swarm orchestration system',
+        tags: ['Python', 'FastAPI', 'React'],
+        link: '/projects'
     },
     {
-        title: "Craft over Speed",
-        description: "Code is read more than it's written. I optimize for clarity, for the developer six months from now who needs to understand why something was built this way."
+        icon: Gamepad2,
+        title: 'Codex Wars',
+        subtitle: 'RTS Game Engine',
+        description: 'Claude vs Gemini faction warfare',
+        tags: ['TypeScript', 'Canvas', 'Game Dev'],
+        link: '/warcraft'
     },
     {
-        title: "Feel over Function",
-        description: "The best interfaces disappear. They don't demand attention—they create space for the work that matters. Does this feel right? That's the question."
-    }
+        icon: Palette,
+        title: 'Rubin Design System',
+        subtitle: 'Literary Minimalism',
+        description: 'Contemplative UI tokens & components',
+        tags: ['CSS', 'Design Tokens', 'React'],
+        link: '/about'
+    },
+    {
+        icon: Terminal,
+        title: 'AI CLI Skills',
+        subtitle: 'Claude + Gemini',
+        description: 'Custom skills for AI coding assistants',
+        tags: ['Markdown', 'Prompting', 'MCP'],
+        link: '/essays'
+    },
+];
+
+// Quick links
+const quickLinks = [
+    { icon: FileText, label: 'Essays', path: '/essays', count: 8 },
+    { icon: Cpu, label: 'Projects', path: '/projects', count: 3 },
+    { icon: Gamepad2, label: 'Play RTS', path: '/warcraft' },
+    { icon: Globe, label: 'Consulting', path: '/consulting' },
+];
+
+// Tech stack icons
+const techStack = [
+    { icon: Code2, label: 'TypeScript' },
+    { icon: Bot, label: 'AI/ML' },
+    { icon: Layers, label: 'React' },
+    { icon: Database, label: 'PostgreSQL' },
+    { icon: Terminal, label: 'Python' },
+    { icon: Zap, label: 'FastAPI' },
 ];
 
 export default function LandingPage() {
-    // Scroll reveal for section headers
-    const { ref: featuredHeaderRef, isRevealed: featuredHeaderVisible } = useScrollReveal();
-    const { ref: philosophyHeaderRef, isRevealed: philosophyHeaderVisible } = useScrollReveal();
-
-    // Staggered reveal for project cards
-    const { containerRef: projectsContainerRef, revealedItems: projectsRevealed } =
-        useStaggeredReveal(featuredProjects.length, { staggerDelay: 150 });
-
-    // Staggered reveal for philosophy items
-    const { containerRef: philosophyContainerRef, revealedItems: philosophyRevealed } =
-        useStaggeredReveal(philosophyItems.length, { staggerDelay: 120 });
-
-    // Footer reveal
-    const { ref: footerRef, isRevealed: footerVisible } = useScrollReveal();
-    const { ref: ctaRef, isRevealed: ctaVisible } = useScrollReveal();
+    const heroVisible = useHeroEntrance(4, 100);
+    const { ref: statsRef, isRevealed: statsVisible } = useScrollReveal();
+    const { containerRef: cardsRef, revealedItems: cardsVisible } = useStaggeredReveal(accomplishments.length, { staggerDelay: 100 });
+    const { ref: linksRef, isRevealed: linksVisible } = useScrollReveal();
+    const { ref: techRef, isRevealed: techVisible } = useScrollReveal();
 
     return (
-        <div className="landing-page">
-            <LandingHero />
-
-            <section className="featured-section">
-                <div
-                    ref={featuredHeaderRef}
-                    className={`section-header ${featuredHeaderVisible ? 'revealed' : ''}`}
-                >
-                    <span className="section-number">01</span>
-                    <h2 className="section-title">Selected Work</h2>
-                    <p className="section-description">
-                        Projects that represent how I think about systems, interfaces, and craft.
-                    </p>
+        <div className="landing-minimal">
+            {/* Hero - Name + Role */}
+            <header className="hero-minimal">
+                <div className={`hero-name ${heroVisible[0] ? 'visible' : ''}`}>
+                    <h1>Isaac Hernandez</h1>
                 </div>
+                <p className={`hero-role ${heroVisible[1] ? 'visible' : ''}`}>
+                    Software Engineer · System Designer · AI Architect
+                </p>
+                <p className={`hero-tagline ${heroVisible[2] ? 'visible' : ''}`}>
+                    Building tools that think.
+                </p>
+                <div className={`hero-actions ${heroVisible[3] ? 'visible' : ''}`}>
+                    <a href="https://github.com/isaacsight" target="_blank" rel="noopener noreferrer" className="action-icon">
+                        <Github size={20} />
+                    </a>
+                    <a href="mailto:isaacsight@gmail.com" className="action-icon">
+                        <Mail size={20} />
+                    </a>
+                </div>
+            </header>
 
-                <div ref={projectsContainerRef} className="projects-grid">
-                    {featuredProjects.map((project, index) => (
-                        <article
-                            key={index}
-                            className={`project-card card-interactive ${project.featured ? 'featured' : ''} ${projectsRevealed[index] ? 'revealed' : ''}`}
+            {/* Stats Strip */}
+            <section ref={statsRef} className={`stats-strip ${statsVisible ? 'visible' : ''}`}>
+                {stats.map((stat, i) => (
+                    <div key={i} className="stat-item">
+                        <stat.icon size={16} className="stat-icon" />
+                        <span className="stat-value">{stat.value}</span>
+                        <span className="stat-label">{stat.label}</span>
+                    </div>
+                ))}
+            </section>
+
+            {/* Accomplishments Grid */}
+            <section className="accomplishments">
+                <div ref={cardsRef} className="accomplishments-grid">
+                    {accomplishments.map((item, i) => (
+                        <Link
+                            key={i}
+                            to={item.link}
+                            className={`accomplishment-card ${cardsVisible[i] ? 'visible' : ''}`}
                         >
-                            <div className="project-meta">
-                                <span className="project-index">
-                                    {(index + 1).toString().padStart(2, '0')}
-                                </span>
+                            <div className="card-header">
+                                <item.icon size={24} className="card-icon" />
+                                <Zap size={14} className="card-spark" />
                             </div>
-                            <h3 className="project-title">{project.title}</h3>
-                            <p className="project-description">{project.description}</p>
-                            <div className="project-tags">
-                                {project.tags.map((tag, i) => (
-                                    <span key={i} className="project-tag tag-interactive">{tag}</span>
+                            <h3 className="card-title">{item.title}</h3>
+                            <span className="card-subtitle">{item.subtitle}</span>
+                            <p className="card-desc">{item.description}</p>
+                            <div className="card-tags">
+                                {item.tags.map((tag, j) => (
+                                    <span key={j} className="card-tag">{tag}</span>
                                 ))}
                             </div>
-                        </article>
+                        </Link>
                     ))}
-                </div>
-
-                <div
-                    ref={ctaRef}
-                    className={`section-cta ${ctaVisible ? 'revealed' : ''}`}
-                >
-                    <Link to="/projects" className="cta-link btn-interactive">
-                        <span>View all projects</span>
-                        <ArrowRight size={18} />
-                    </Link>
                 </div>
             </section>
 
-            <section className="philosophy-section">
-                <div
-                    ref={philosophyHeaderRef}
-                    className={`section-header ${philosophyHeaderVisible ? 'revealed' : ''}`}
-                >
-                    <span className="section-number">02</span>
-                    <h2 className="section-title">The Way I Work</h2>
-                </div>
-
-                <div ref={philosophyContainerRef} className="philosophy-grid">
-                    {philosophyItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`philosophy-item ${philosophyRevealed[index] ? 'revealed' : ''}`}
-                        >
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
+            {/* Tech Stack */}
+            <section ref={techRef} className={`tech-stack ${techVisible ? 'visible' : ''}`}>
+                <span className="tech-label">Stack</span>
+                <div className="tech-icons">
+                    {techStack.map((tech, i) => (
+                        <div key={i} className="tech-item" title={tech.label}>
+                            <tech.icon size={18} />
                         </div>
                     ))}
                 </div>
             </section>
 
-            <footer
-                ref={footerRef}
-                className={`landing-footer ${footerVisible ? 'revealed' : ''}`}
-            >
-                <div className="footer-content">
-                    <p className="footer-tagline">
-                        Building tools that feel right.
-                    </p>
-                    <div className="footer-links">
-                        <a
-                            href="https://github.com/isaacsight"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="footer-link hover-underline"
-                        >
-                            GitHub
-                        </a>
-                        <span className="footer-divider">·</span>
-                        <a
-                            href="mailto:hello@doesthisfeelright.com"
-                            className="footer-link hover-underline"
-                        >
-                            Contact
-                        </a>
-                        <span className="footer-divider">·</span>
-                        <Link to="/about" className="footer-link hover-underline">
-                            About
-                        </Link>
-                    </div>
-                </div>
+            {/* Quick Links */}
+            <section ref={linksRef} className={`quick-links ${linksVisible ? 'visible' : ''}`}>
+                {quickLinks.map((link, i) => (
+                    <Link key={i} to={link.path} className="quick-link">
+                        <link.icon size={18} />
+                        <span className="quick-label">{link.label}</span>
+                        {link.count && <span className="quick-count">{link.count}</span>}
+                        <ArrowRight size={14} className="quick-arrow" />
+                    </Link>
+                ))}
+            </section>
+
+            {/* Footer */}
+            <footer className="footer-minimal">
+                <p>Building in public · 2025–2026</p>
             </footer>
         </div>
     );
