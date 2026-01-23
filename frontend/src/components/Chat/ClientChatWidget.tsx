@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, User, Bot, Mail, X, Moon, Sun, Minimize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { VoiceInputButton } from './VoiceInputButton';
 
 interface Message {
     type: 'user' | 'assistant' | 'status';
@@ -142,6 +143,31 @@ export default function ClientChatWidget() {
             sendMessage();
         }
     };
+
+    // Voice input handlers
+    const handleVoiceTranscript = useCallback((text: string) => {
+        setInput(text);
+    }, []);
+
+    const handleVoiceComplete = useCallback((text: string) => {
+        if (text.trim() && ws.current) {
+            // Auto-send when voice input completes
+            const payload = {
+                text: text.trim(),
+                images: selectedImage ? [selectedImage] : []
+            };
+
+            const displayContent = selectedImage
+                ? `![Uploaded Image](${selectedImage})\n\n${text.trim()}`
+                : text.trim();
+
+            setMessages(prev => [...prev, { type: 'user', content: displayContent, timestamp: Date.now() }]);
+            ws.current.send(JSON.stringify(payload));
+            setInput('');
+            setSelectedImage(null);
+            setIsTyping(true);
+        }
+    }, [selectedImage]);
 
     // File Handling
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -399,6 +425,13 @@ export default function ClientChatWidget() {
                     <span style={{ fontSize: '1.2rem', transform: 'rotate(45deg)', display: 'block' }}>📎</span>
                 </button>
 
+                <VoiceInputButton
+                    onTranscript={handleVoiceTranscript}
+                    onComplete={handleVoiceComplete}
+                    isDark={isDark}
+                    disabled={!isConnected}
+                />
+
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -557,6 +590,9 @@ export default function ClientChatWidget() {
                     .btn-text { display: none; }
                     .client-chat-widget { height: 100vh; border-radius: 0; border: none; }
                     .floating-bubble { bottom: 10px; right: 10px; }
+                    .chat-input-area { gap: 0.5rem; padding: 0.75rem; }
+                    .chat-input-area textarea { font-size: 16px; } /* Prevent iOS zoom */
+                    .attach-btn { width: 44px; height: 44px; }
                 }
 
                 /* Modal Styles - Adapted for Theme */
