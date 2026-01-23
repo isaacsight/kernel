@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro-Information Design Moodboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #FAF9F6;
+      --ink: #1A1A1A;
+      --ink-light: #4A4A4A;
+      --ink-muted: #8A8A8A;
+      --accent-sage: #7D8B75;
+      --accent-rust: #A65D47;
+      --accent-slate: #5A6570;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'EB Garamond', Georgia, serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 12px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    .header {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+    }
+
+    .header .tagline {
+      font-size: 24px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink-light);
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    .card--wide {
+      grid-column: span 2;
+    }
+
+    .card--tall {
+      grid-row: span 2;
+    }
+
+    .card__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Typography Specimen */
+    .type-specimen {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .type-specimen .xxs { font-size: 9px; color: var(--ink-muted); }
+    .type-specimen .xs { font-size: 10px; color: var(--ink-light); }
+    .type-specimen .sm { font-size: 11px; }
+    .type-specimen .base { font-size: 12px; }
+    .type-specimen .md { font-size: 14px; }
+    .type-specimen .lg { font-size: 16px; font-weight: 500; }
+
+    /* Color Swatches */
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .swatch {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .swatch__name {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .swatch--paper { background: var(--paper); }
+    .swatch--ink { background: var(--ink); color: white; }
+    .swatch--ink-light { background: var(--ink-light); color: white; }
+    .swatch--ink-muted { background: var(--ink-muted); color: white; }
+    .swatch--sage { background: var(--accent-sage); color: white; }
+    .swatch--rust { background: var(--accent-rust); color: white; }
+    .swatch--slate { background: var(--accent-slate); color: white; }
+    .swatch--border { background: white; border: 2px solid var(--border-strong); }
+    .swatch--highlight { background: rgba(0,0,0,0.03); }
+
+    /* Dense Table */
+    .dense-table {
+      width: 100%;
+      font-size: 10px;
+      border-collapse: collapse;
+    }
+
+    .dense-table th {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-align: left;
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    .dense-table td {
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dense-table .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+    }
+
+    /* Metadata Block */
+    .meta-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 10px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .meta-item__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .meta-item__value {
+      font-weight: 500;
+    }
+
+    /* Badges */
+    .badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.02);
+    }
+
+    .badge--sage { color: var(--accent-sage); border-color: var(--accent-sage); }
+    .badge--rust { color: var(--accent-rust); border-color: var(--accent-rust); }
+    .badge--slate { color: var(--accent-slate); border-color: var(--accent-slate); }
+
+    /* Navigation */
+    .nav-demo {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+    }
+
+    .nav-demo a {
+      display: block;
+      padding: 6px 0;
+      color: var(--ink-light);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-demo a:hover {
+      color: var(--ink);
+    }
+
+    .nav-demo a.active {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* Footnote Demo */
+    .footnote-demo p {
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .footnote-demo sup {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      color: var(--accent-slate);
+      margin-left: 1px;
+    }
+
+    .footnotes-list {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 9px;
+      color: var(--ink-light);
+      line-height: 1.5;
+    }
+
+    .footnotes-list li {
+      margin-bottom: 4px;
+      margin-left: 16px;
+    }
+
+    /* Spacing Demo */
+    .spacing-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spacing-demo .bar {
+      height: 8px;
+      background: var(--accent-slate);
+      opacity: 0.3;
+    }
+
+    .spacing-demo .bar-2 { width: 4px; }
+    .spacing-demo .bar-4 { width: 8px; }
+    .spacing-demo .bar-6 { width: 16px; }
+    .spacing-demo .bar-8 { width: 24px; }
+    .spacing-demo .bar-10 { width: 32px; }
+    .spacing-demo .bar-12 { width: 48px; }
+
+    /* Principles */
+    .principles {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .principle {
+      padding-left: 12px;
+      border-left: 2px solid var(--border);
+    }
+
+    .principle__title {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .principle__text {
+      font-size: 11px;
+      font-style: italic;
+      color: var(--ink-light);
+    }
+
+    /* Density Comparison */
+    .density-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .density-block {
+      padding: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .density-block--compact {
+      font-size: 10px;
+      line-height: 1.4;
+      padding: 8px;
+    }
+
+    .density-block--default {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .density-block--reading {
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 16px;
+    }
+
+    .density-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    /* Quote */
+    .quote {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+
+    .quote blockquote {
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-light);
+      margin-bottom: 12px;
+    }
+
+    .quote cite {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-style: normal;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* Footer */
+    .footer {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="board">
+    <header class="header">
+      <h1>Micro-Information Design System</h1>
+      <p class="tagline">"Design for people who read the footnotes."</p>
+    </header>
+
+    <!-- Typography -->
+    <div class="card card--tall">
+      <div class="card__label">Typography Scale</div>
+      <div class="type-specimen">
+        <div class="xxs">9px — Footnotes, timestamps, legal</div>
+        <div class="xs">10px — Metadata, captions, labels</div>
+        <div class="sm">11px — Secondary information</div>
+        <div class="base">12px — Body text (dense layouts)</div>
+        <div class="md">14px — Primary content</div>
+        <div class="lg">16px — Section titles</div>
+      </div>
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+        <div class="card__label" style="border: none; padding: 0; margin-bottom: 8px;">Hierarchy Rule</div>
+        <p style="font-size: 10px; color: var(--ink-light);">Weight and color do the work.<br>Not dramatic size jumps.</p>
+      </div>
+    </div>
+
+    <!-- Colors -->
+    <div class="card">
+      <div class="card__label">Color Palette</div>
+      <div class="swatches">
+        <div class="swatch swatch--paper"><span class="swatch__name">Paper</span></div>
+        <div class="swatch swatch--ink"><span class="swatch__name">Ink</span></div>
+        <div class="swatch swatch--ink-light"><span class="swatch__name">Light</span></div>
+        <div class="swatch swatch--ink-muted"><span class="swatch__name">Muted</span></div>
+        <div class="swatch swatch--sage"><span class="swatch__name">Sage</span></div>
+        <div class="swatch swatch--rust"><span class="swatch__name">Rust</span></div>
+        <div class="swatch swatch--slate"><span class="swatch__name">Slate</span></div>
+        <div class="swatch swatch--border"><span class="swatch__name">Border</span></div>
+        <div class="swatch swatch--highlight"><span class="swatch__name">Highlight</span></div>
+      </div>
+    </div>
+
+    <!-- Spacing -->
+    <div class="card">
+      <div class="card__label">Spacing Scale</div>
+      <div class="spacing-demo">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-2"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">2px</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-4"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">4px</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-6"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">8px</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-8"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">16px</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-10"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">24px</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="bar bar-12"></div>
+          <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-muted);">48px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dense Table -->
+    <div class="card card--wide">
+      <div class="card__label">Dense Data Table</div>
+      <table class="dense-table">
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Size</th>
+            <th>Weight</th>
+            <th>Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Title</td>
+            <td class="mono">16px</td>
+            <td class="mono">500</td>
+            <td>Section headers</td>
+          </tr>
+          <tr>
+            <td>Body</td>
+            <td class="mono">12px</td>
+            <td class="mono">400</td>
+            <td>Primary content</td>
+          </tr>
+          <tr>
+            <td>Meta</td>
+            <td class="mono">9px</td>
+            <td class="mono">500</td>
+            <td>Labels, timestamps</td>
+          </tr>
+          <tr>
+            <td>Footnote</td>
+            <td class="mono">9px</td>
+            <td class="mono">400</td>
+            <td>References, notes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Navigation -->
+    <div class="card">
+      <div class="card__label">Navigation</div>
+      <nav class="nav-demo">
+        <a href="#" class="active">Overview</a>
+        <a href="#">Typography</a>
+        <a href="#">Color</a>
+        <a href="#">Components</a>
+        <a href="#">Motion</a>
+      </nav>
+      <p style="margin-top: 12px; font-size: 9px; color: var(--ink-muted);">Text-first. Sidebars over top navs. Always visible.</p>
+    </div>
+
+    <!-- Badges -->
+    <div class="card">
+      <div class="card__label">Badges & Tags</div>
+      <div class="badges">
+        <span class="badge">Default</span>
+        <span class="badge badge--sage">Sage</span>
+        <span class="badge badge--rust">Rust</span>
+        <span class="badge badge--slate">Slate</span>
+      </div>
+      <p style="margin-top: 12px; font-size: 9px; color: var(--ink-muted);">Minimal. Semantic color only.</p>
+    </div>
+
+    <!-- Metadata -->
+    <div class="card">
+      <div class="card__label">Metadata Block</div>
+      <div class="meta-block">
+        <div class="meta-item">
+          <span class="meta-item__label">Version</span>
+          <span class="meta-item__value">1.0.0</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-item__label">Updated</span>
+          <span class="meta-item__value">Jan 23, 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-item__label">Status</span>
+          <span class="meta-item__value">Active</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-item__label">Author</span>
+          <span class="meta-item__value">Isaac H.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footnotes -->
+    <div class="card card--wide">
+      <div class="card__label">Footnotes System</div>
+      <div class="footnote-demo">
+        <p>Micro-information design compresses meaning<sup>1</sup> into the smallest possible footprint while maintaining clarity. It rewards attention<sup>2</sup> rather than demanding it.</p>
+        <ol class="footnotes-list">
+          <li>Compression without loss of fidelity is the mark of expertise.</li>
+          <li>The difference between "demanding" and "rewarding" attention is the difference between advertising and craft.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Principles -->
+    <div class="card">
+      <div class="card__label">Core Principles</div>
+      <div class="principles">
+        <div class="principle">
+          <div class="principle__title">Clarity</div>
+          <div class="principle__text">"Everything visible, nothing loud."</div>
+        </div>
+        <div class="principle">
+          <div class="principle__title">Density</div>
+          <div class="principle__text">"Information earns its space."</div>
+        </div>
+        <div class="principle">
+          <div class="principle__title">Restraint</div>
+          <div class="principle__text">"One accent per view."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Density Modes -->
+    <div class="card card--wide">
+      <div class="card__label">Density Modes</div>
+      <div class="density-demo">
+        <div class="density-block density-block--compact">
+          <div class="density-label">Compact</div>
+          Dense information display for power users who want maximum data per viewport.
+        </div>
+        <div class="density-block density-block--default">
+          <div class="density-label">Default</div>
+          Balanced density for everyday use. Comfortable scanning with good readability.
+        </div>
+        <div class="density-block density-block--reading">
+          <div class="density-label">Reading</div>
+          Expanded for long-form content. Generous line height and spacing.
+        </div>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="quote">
+      <blockquote>"The details are not the details. They make the design."</blockquote>
+      <cite>Charles Eames</cite>
+    </div>
+
+    <footer class="footer">
+      Micro-Information Design System v1.0 · Sovereign Laboratory · 2026
+    </footer>
+  </div>
+</body>
+</html>

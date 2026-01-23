@@ -1,0 +1,448 @@
+/**
+ * Micro-Information Design System
+ * "Dense, Quiet, Intentional"
+ *
+ * For people who read the footnotes.
+ */
+
+/* ============================================
+   MICRO-INFO TOKENS
+   ============================================ */
+
+:root {
+  /* === TYPOGRAPHY === */
+  --mi-font-primary: 'EB Garamond', Georgia, serif;
+  --mi-font-secondary: 'Inter', -apple-system, sans-serif;
+  --mi-font-mono: 'JetBrains Mono', 'Courier Prime', monospace;
+
+  /* Type Scale (Compressed) */
+  --mi-text-xxs: 9px;
+  --mi-text-xs: 10px;
+  --mi-text-sm: 11px;
+  --mi-text-base: 12px;
+  --mi-text-md: 14px;
+  --mi-text-lg: 16px;
+  --mi-text-xl: 18px;
+  --mi-text-2xl: 24px;
+
+  /* Line Heights */
+  --mi-leading-tight: 1.3;
+  --mi-leading-normal: 1.5;
+  --mi-leading-relaxed: 1.65;
+
+  /* Letter Spacing */
+  --mi-tracking-tight: -0.01em;
+  --mi-tracking-normal: 0.005em;
+  --mi-tracking-wide: 0.02em;
+  --mi-tracking-ultra: 0.15em;
+
+  /* === COLORS === */
+  --mi-paper: #FAF9F6;
+  --mi-paper-cool: #F5F5F5;
+  --mi-ink: #1A1A1A;
+  --mi-ink-light: #4A4A4A;
+  --mi-ink-muted: #8A8A8A;
+
+  /* Semantic Accents */
+  --mi-accent-sage: #7D8B75;
+  --mi-accent-rust: #A65D47;
+  --mi-accent-slate: #5A6570;
+  --mi-accent-oxblood: #6B2D2D;
+
+  /* Functional */
+  --mi-border: rgba(0, 0, 0, 0.08);
+  --mi-border-strong: rgba(0, 0, 0, 0.15);
+  --mi-highlight: rgba(0, 0, 0, 0.03);
+
+  /* === SPACING (Compressed) === */
+  --mi-space-1: 2px;
+  --mi-space-2: 4px;
+  --mi-space-3: 6px;
+  --mi-space-4: 8px;
+  --mi-space-5: 12px;
+  --mi-space-6: 16px;
+  --mi-space-8: 24px;
+  --mi-space-10: 32px;
+  --mi-space-12: 48px;
+
+  /* === LAYOUT === */
+  --mi-col-narrow: 280px;
+  --mi-col-medium: 480px;
+  --mi-col-wide: 640px;
+  --mi-gutter: 24px;
+  --mi-margin: 48px;
+
+  /* === ICONS === */
+  --mi-icon-xs: 10px;
+  --mi-icon-sm: 12px;
+  --mi-icon-md: 14px;
+  --mi-icon-lg: 16px;
+
+  /* === MOTION === */
+  --mi-duration-fast: 150ms;
+  --mi-duration-normal: 250ms;
+  --mi-duration-slow: 400ms;
+  --mi-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --mi-ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+.mi-surface {
+  background: var(--mi-paper);
+  color: var(--mi-ink);
+  font-family: var(--mi-font-primary);
+  font-size: var(--mi-text-base);
+  line-height: var(--mi-leading-normal);
+  letter-spacing: var(--mi-tracking-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper texture overlay */
+.mi-paper-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.015;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.mi-title {
+  font-size: var(--mi-text-lg);
+  font-weight: 500;
+  letter-spacing: var(--mi-tracking-tight);
+  line-height: var(--mi-leading-tight);
+}
+
+.mi-subtitle {
+  font-size: var(--mi-text-md);
+  font-weight: 400;
+  color: var(--mi-ink-light);
+}
+
+.mi-body {
+  font-size: var(--mi-text-base);
+  line-height: var(--mi-leading-normal);
+}
+
+.mi-small {
+  font-size: var(--mi-text-sm);
+  line-height: var(--mi-leading-relaxed);
+}
+
+.mi-meta {
+  font-family: var(--mi-font-secondary);
+  font-size: var(--mi-text-xxs);
+  font-weight: 500;
+  letter-spacing: var(--mi-tracking-wide);
+  text-transform: uppercase;
+  color: var(--mi-ink-muted);
+}
+
+.mi-mono {
+  font-family: var(--mi-font-mono);
+  font-size: var(--mi-text-xs);
+  letter-spacing: 0;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.mi-layout {
+  display: grid;
+  grid-template-columns: var(--mi-col-narrow) var(--mi-col-medium);
+  gap: var(--mi-gutter);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--mi-margin);
+}
+
+.mi-layout-single {
+  max-width: var(--mi-col-wide);
+  margin: 0 auto;
+  padding: var(--mi-margin);
+}
+
+.mi-sidebar {
+  font-size: var(--mi-text-xs);
+}
+
+.mi-content {
+  max-width: 65ch;
+}
+
+/* ============================================
+   COMPONENTS
+   ============================================ */
+
+/* --- Data Table --- */
+.mi-table {
+  width: 100%;
+  font-size: var(--mi-text-xs);
+  border-collapse: collapse;
+}
+
+.mi-table th {
+  font-family: var(--mi-font-secondary);
+  font-size: var(--mi-text-xxs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--mi-tracking-wide);
+  color: var(--mi-ink-muted);
+  text-align: left;
+  padding: var(--mi-space-2) var(--mi-space-3);
+  border-bottom: 1px solid var(--mi-border-strong);
+}
+
+.mi-table td {
+  padding: var(--mi-space-2) var(--mi-space-3);
+  border-bottom: 1px solid var(--mi-border);
+  vertical-align: top;
+}
+
+.mi-table tr:hover {
+  background: var(--mi-highlight);
+}
+
+/* --- Badge --- */
+.mi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mi-space-1);
+  font-family: var(--mi-font-secondary);
+  font-size: var(--mi-text-xxs);
+  font-weight: 500;
+  letter-spacing: var(--mi-tracking-wide);
+  text-transform: uppercase;
+  padding: var(--mi-space-1) var(--mi-space-2);
+  background: var(--mi-highlight);
+  border: 1px solid var(--mi-border);
+  border-radius: 2px;
+}
+
+.mi-badge--sage { color: var(--mi-accent-sage); border-color: var(--mi-accent-sage); }
+.mi-badge--rust { color: var(--mi-accent-rust); border-color: var(--mi-accent-rust); }
+.mi-badge--slate { color: var(--mi-accent-slate); border-color: var(--mi-accent-slate); }
+
+/* --- Label-Value Pairs --- */
+.mi-kv {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--mi-space-2) 0;
+  border-bottom: 1px solid var(--mi-border);
+  font-size: var(--mi-text-xs);
+}
+
+.mi-kv__label {
+  color: var(--mi-ink-muted);
+}
+
+.mi-kv__value {
+  font-weight: 500;
+  text-align: right;
+}
+
+/* --- Callout --- */
+.mi-callout {
+  font-size: var(--mi-text-xs);
+  padding: var(--mi-space-3);
+  background: var(--mi-highlight);
+  border-left: 2px solid var(--mi-border-strong);
+  margin: var(--mi-space-5) 0;
+}
+
+/* --- Divider --- */
+.mi-divider {
+  height: 1px;
+  background: var(--mi-border);
+  margin: var(--mi-space-6) 0;
+}
+
+.mi-divider--strong {
+  background: var(--mi-border-strong);
+}
+
+/* ============================================
+   FOOTNOTES
+   ============================================ */
+
+.mi-footnotes {
+  counter-reset: footnote;
+}
+
+.mi-footnote-ref {
+  counter-increment: footnote;
+  cursor: pointer;
+}
+
+.mi-footnote-ref::after {
+  content: counter(footnote);
+  font-family: var(--mi-font-secondary);
+  font-size: 8px;
+  font-weight: 500;
+  vertical-align: super;
+  margin-left: 1px;
+  color: var(--mi-accent-slate);
+}
+
+.mi-footnote-list {
+  margin-top: var(--mi-space-8);
+  padding-top: var(--mi-space-4);
+  border-top: 1px solid var(--mi-border);
+  font-size: var(--mi-text-xxs);
+  line-height: var(--mi-leading-relaxed);
+  color: var(--mi-ink-light);
+}
+
+.mi-footnote-list li {
+  margin-bottom: var(--mi-space-2);
+  padding-left: var(--mi-space-4);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.mi-nav {
+  font-family: var(--mi-font-secondary);
+  font-size: var(--mi-text-xs);
+}
+
+.mi-nav__item {
+  display: block;
+  padding: var(--mi-space-2) 0;
+  color: var(--mi-ink-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--mi-duration-fast) var(--mi-ease);
+}
+
+.mi-nav__item:hover {
+  color: var(--mi-ink);
+}
+
+.mi-nav__item--active {
+  color: var(--mi-ink);
+  font-weight: 500;
+}
+
+.mi-breadcrumb {
+  font-size: var(--mi-text-xxs);
+  color: var(--mi-ink-muted);
+}
+
+.mi-breadcrumb span::after {
+  content: ' / ';
+  opacity: 0.5;
+}
+
+.mi-breadcrumb span:last-child::after {
+  content: '';
+}
+
+/* ============================================
+   ICONS
+   ============================================ */
+
+.mi-icon {
+  width: var(--mi-icon-sm);
+  height: var(--mi-icon-sm);
+  stroke-width: 1;
+  stroke: currentColor;
+  fill: none;
+  opacity: 0.6;
+}
+
+.mi-icon--xs { width: var(--mi-icon-xs); height: var(--mi-icon-xs); }
+.mi-icon--md { width: var(--mi-icon-md); height: var(--mi-icon-md); }
+.mi-icon--lg { width: var(--mi-icon-lg); height: var(--mi-icon-lg); }
+
+/* ============================================
+   MOTION
+   ============================================ */
+
+.mi-fade {
+  animation: miFade var(--mi-duration-slow) var(--mi-ease-out);
+}
+
+@keyframes miFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mi-hover {
+  transition: opacity var(--mi-duration-fast) var(--mi-ease);
+}
+
+.mi-hover:hover {
+  opacity: 0.7;
+}
+
+/* ============================================
+   DENSITY MODES
+   ============================================ */
+
+/* Compact Mode */
+.mi-density-compact {
+  --mi-text-base: 11px;
+  --mi-text-md: 12px;
+  --mi-space-4: 6px;
+  --mi-space-5: 10px;
+}
+
+/* Reading Mode */
+.mi-density-reading {
+  --mi-text-base: 14px;
+  --mi-text-md: 16px;
+  --mi-leading-normal: 1.6;
+  --mi-space-5: 16px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.mi-uppercase {
+  text-transform: uppercase;
+  letter-spacing: var(--mi-tracking-wide);
+}
+
+.mi-muted {
+  color: var(--mi-ink-muted);
+}
+
+.mi-accent {
+  color: var(--mi-accent-slate);
+}
+
+.mi-border-bottom {
+  border-bottom: 1px solid var(--mi-border);
+}
+
+.mi-mt-1 { margin-top: var(--mi-space-1); }
+.mi-mt-2 { margin-top: var(--mi-space-2); }
+.mi-mt-4 { margin-top: var(--mi-space-4); }
+.mi-mt-6 { margin-top: var(--mi-space-6); }
+.mi-mt-8 { margin-top: var(--mi-space-8); }
+
+.mi-mb-1 { margin-bottom: var(--mi-space-1); }
+.mi-mb-2 { margin-bottom: var(--mi-space-2); }
+.mi-mb-4 { margin-bottom: var(--mi-space-4); }
+.mi-mb-6 { margin-bottom: var(--mi-space-6); }
+.mi-mb-8 { margin-bottom: var(--mi-space-8); }
