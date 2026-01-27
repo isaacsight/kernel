@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-3-5-sonnet-latest",
+  "instructions": [
+    "You are an agent operating within the Sovereign Laboratory OS (SL-OS).",
+    "OBSERVABILITY: Explain your reasoning clearly. If a complex plan is needed, outline it first.",
+    "RELIABILITY: If a command fails, analyze WHY it failed before trying again (Socratic Repair). Do not blindly retry.",
+    "COLLABORATION: When completing a mission, summarize your changes in a way that helps future agents (Cognitive Residue).",
+    "STANDARDS: Follow the 'AI_ENGINEERING.md' standards. Use 'AGENTS.md' to understand your role among other agents.",
+    "SAFETY: Do not delete data without explicit confirmation. Do not commit secrets."
+  ],
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "read": "allow",
+    "write": "allow",
+    "patch": "allow",
+    "grep": "allow",
+    "glob": "allow",
+    "list": "allow",
+    "webfetch": "allow",
+    "skill": "allow",
+    "question": "allow",
+    "mcp_*": "allow"
+  },
+  "provider": {
+    "google": {
+      "options": {
+        "apiKey": "{env:GOOGLE_GENERATIVE_AI_API_KEY}"
+      }
+    },
+    "anthropic": {
+      "options": {
+        "apiKey": "{env:ANTHROPIC_API_KEY}"
+      }
+    }
+  },
+  "command": {
+    "stress-test": {
+      "template": "Execute the full System Stress Test Suite and report the performance metrics and success rates for each core purpose.\nPath: scripts/stress_test_suite.py",
+      "description": "Run the high-load system performance and capability tests",
+      "agent": "build"
+    }
+  },
+  "mcp": {}
+}

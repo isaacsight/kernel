@@ -266,6 +266,23 @@ aider build.py
 > /commit "Added type hints to build.py"
 ```
 
+### Using OpenCode
+
+Open-source AI coding agent integration (Terminal-based).
+
+```bash
+# 1. Install (One-time)
+./scripts/install_opencode.sh
+
+# 2. Run
+opencode
+```
+
+**Configuration:**
+- Managed via `admin/config/opencode.jsonc`.
+- Automatically linked to your user config during installation.
+
+
 ### AI Prompting Tips
 
 **Good Prompts:**

@@ -49,6 +49,18 @@ export default function Navigation() {
                     >
                         <span className="nav-link-text">About</span>
                     </Link>
+                    <Link
+                        to="/forge"
+                        className={`nav-link ${isActive('/forge') ? 'active' : ''}`}
+                    >
+                        The Forge
+                    </Link>
+                    <Link
+                        to="/publish"
+                        className={`nav-link ${isActive('/publish') ? 'active' : ''}`}
+                    >
+                        Control
+                    </Link>
                     <a
                         href="https://github.com/isaacsight"
                         target="_blank"

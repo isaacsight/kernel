@@ -9,9 +9,9 @@ import EssaysPage from './pages/EssaysPage';
 import ConsultingPage from './pages/ConsultingPage';
 import CommandCenter from './pages/CommandCenter';
 import CodexPage from './pages/CodexPage';
-import Battlefield from './pages/Battlefield';
-import WarcraftEngine from './pages/WarcraftEngine';
 import AlchemistForge from './pages/AlchemistForge';
+import PublisherPage from './pages/PublisherPage';
+import FishingGame from './pages/FishingGame';
 
 // Layout wrapper that conditionally shows navigation
 function AppLayout() {
@@ -48,11 +48,10 @@ function App() {
                 <Route path="/command" element={<CommandCenter />} />
                 <Route path="/rts" element={<CommandCenter />} />
                 <Route path="/codex" element={<CodexPage />} />
-                <Route path="/battle" element={<Battlefield />} />
-                <Route path="/battlefield" element={<Battlefield />} />
-                <Route path="/warcraft" element={<WarcraftEngine />} />
-                <Route path="/rts-engine" element={<WarcraftEngine />} />
                 <Route path="/forge" element={<AlchemistForge />} />
+                <Route path="/publish" element={<PublisherPage />} />
+                <Route path="/fishing" element={<FishingGame />} />
+                <Route path="/fish" element={<FishingGame />} />
                 <Route path="/*" element={<AppLayout />} />
             </Routes>
         </Router>

@@ -26,7 +26,9 @@ from admin.brain.agent_base import BaseAgent
 from admin.config import config
 from admin.schemas import DTFRPlan, DTFRStep, ExecutionResult
 
-logger = logging.getLogger("AntigravityEngineer")
+from admin.brain.neural_link import NeuralLink
+
+# logger = logging.getLogger("AntigravityEngineer") # Removed in favor of self.logger
 
 
 # ============================================================================
@@ -92,6 +94,15 @@ def task_complete_tool(summary: str) -> dict:
     pass
 
 
+def dispatch_opencode_tool(instruction: str) -> dict:
+    """Dispatch a task to the OpenCode agent for terminal execution.
+
+    Args:
+        instruction: The task instruction to send to OpenCode
+    """
+    pass
+
+
 # Tool list for Gemini
 TOOL_FUNCTIONS = [
     read_file_tool,
@@ -100,6 +111,7 @@ TOOL_FUNCTIONS = [
     run_command_tool,
     search_codebase_tool,
     task_complete_tool,
+    dispatch_opencode_tool,
 ]
 
 
@@ -112,6 +124,21 @@ class AntigravityEngineer(BaseAgent):
     """
 
     MAX_ITERATIONS = 20  # Safety limit on execution loops
+
+    # Safety check - block dangerous commands and shell injection
+    DANGEROUS_PATTERNS = [
+        "rm -rf /",
+        "rm -rf ~",
+        "> /dev/",
+        "mkfs",
+        ":(){:|:&};:",
+        "chmod -R 777",
+        "chown",
+        "curl | bash",
+        "wget | bash",
+    ]
+
+    FORBIDDEN_CHARS = [";", "&&", "||", "`", "$(", "|"]
 
     def __init__(self):
         try:
@@ -127,6 +154,10 @@ class AntigravityEngineer(BaseAgent):
         self.project_root = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         )
+
+        # Initialize the Synaptic Bridge
+        self.neural_link = NeuralLink(agent_id="antigravity_link")
+
         self._configure_gemini()
 
     def _configure_gemini(self):
@@ -138,7 +169,7 @@ class AntigravityEngineer(BaseAgent):
 
         api_key = self.get_secret("GEMINI_API_KEY")
         if not api_key:
-            logger.error("[AntigravityEngineer] GEMINI_API_KEY not configured")
+            self.logger.error("[AntigravityEngineer] GEMINI_API_KEY not configured")
             self.model = None
             return
 
@@ -155,7 +186,7 @@ class AntigravityEngineer(BaseAgent):
                 if hasattr(self, "get_system_prompt")
                 else self.system_prompt,
             )
-            logger.info(f"[{self.name}] Configured with {model_name}")
+            self.logger.info(f"[{self.name}] Configured with {model_name}")
         except Exception as e:
             logger.error(f"[AntigravityEngineer] Failed to configure model: {e}")
             self.model = None
@@ -189,7 +220,7 @@ class AntigravityEngineer(BaseAgent):
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
             with open(full_path, "w", encoding="utf-8") as f:
                 f.write(content)
-            logger.info(f"[{self.name}] Wrote to {full_path}")
+            self.logger.info(f"[{self.name}] Wrote to {full_path}")
             return {"success": True, "path": full_path, "bytes_written": len(content)}
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -215,25 +246,13 @@ class AntigravityEngineer(BaseAgent):
         work_dir = self._resolve_path(cwd) if cwd else self.project_root
 
         # Safety check - block dangerous commands and shell injection
-        dangerous_patterns = [
-            "rm -rf /",
-            "rm -rf ~",
-            "> /dev/",
-            "mkfs",
-            ":(){:|:&};:",
-            "chmod -R 777",
-            "chown",
-            "curl | bash",
-            "wget | bash",
-        ]
-        if any(pattern in command for pattern in dangerous_patterns):
+        if any(pattern in command for pattern in self.DANGEROUS_PATTERNS):
             return {"success": False, "error": f"Command blocked for safety reasons: '{command}'"}
 
         # Prevent shell injection via path traversal or command chaining
-        forbidden_chars = [";", "&&", "||", "`", "$(", "|"]
         # Allow pipe and redirect if they seem intentional for grep/sort etc, but be careful
         # For now, let's be strict for agents
-        if any(char in command for char in forbidden_chars if char not in ["|", ">"]):
+        if any(char in command for char in self.FORBIDDEN_CHARS if char not in ["|", ">"]):
             return {"success": False, "error": "Potential shell injection detected"}
 
         try:
@@ -286,28 +305,53 @@ class AntigravityEngineer(BaseAgent):
         except Exception as e:
             return {"success": False, "error": str(e)}
 
+    def _dispatch_to_open_code(self, instruction: str) -> Dict[str, Any]:
+        """Dispatch a task to the OpenCode agent via Neural Link."""
+        return self.neural_link.transmit(target="opencode", signal=instruction)
+
     def _execute_tool(self, tool_name: str, args: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a tool by name with given arguments."""
+        # Method dispatch table
         tool_map = {
-            "read_file": lambda: self._read_file(args.get("path", "")),
-            "write_file": lambda: self._write_file(args.get("path", ""), args.get("content", "")),
-            "list_directory": lambda: self._list_directory(args.get("path", ".")),
-            "run_command": lambda: self._run_command(args.get("command", ""), args.get("cwd")),
-            "search_codebase": lambda: self._search_codebase(
-                args.get("pattern", ""), args.get("path")
-            ),
-            "task_complete": lambda: {
+            "read_file": self._read_file,
+            "write_file": self._write_file,
+            "list_directory": self._list_directory,
+            "run_command": self._run_command,
+            "search_codebase": self._search_codebase,
+            # New Neural Path
+            "dispatch_opencode": lambda: self._dispatch_to_open_code(args.get("instruction", "")),
+        }
+
+        if tool_name == "task_complete":
+            return {
                 "success": True,
                 "complete": True,
                 "summary": args.get("summary", "Task complete"),
-            },
-        }
+            }
 
         executor = tool_map.get(tool_name)
         if not executor:
             return {"success": False, "error": f"Unknown tool: {tool_name}"}
 
-        return executor()
+        # Map args based on tool signature or pass kwargs if standardized
+        try:
+            if tool_name == "read_file":
+                return executor(args.get("path", ""))
+            elif tool_name == "write_file":
+                return executor(args.get("path", ""), args.get("content", ""))
+            elif tool_name == "list_directory":
+                return executor(args.get("path", "."))
+            elif tool_name == "run_command":
+                return executor(args.get("command", ""), args.get("cwd"))
+            elif tool_name == "search_codebase":
+                return executor(args.get("pattern", ""), args.get("path"))
+            elif tool_name == "dispatch_opencode":
+                return executor(args.get("instruction", ""))
+            else:
+                return {"success": False, "error": f"Tool {tool_name} not implemented in dispatch"}
+        except Exception as e:
+            logger.error(f"Tool execution failed: {e}")
+            return {"success": False, "error": str(e)}
 
     # ========================================================================
     # Main Execution Loop
@@ -326,7 +370,7 @@ class AntigravityEngineer(BaseAgent):
         if not self.model:
             return "Error: Gemini model not configured. Check GEMINI_API_KEY."
 
-        logger.info(f"[{self.name}] Starting task: {task[:100]}...")
+        self.logger.info(f"[{self.name}] Starting task: {task[:100]}...")
 
         # Start a chat with the task
         chat = self.model.start_chat()
@@ -356,14 +400,14 @@ class AntigravityEngineer(BaseAgent):
                         tool_name = fc.name
                         args = dict(fc.args) if fc.args else {}
 
-                        logger.info(f"[{self.name}] Calling tool: {tool_name}")
+                        self.logger.info(f"[{self.name}] Calling tool: {tool_name}")
 
                         # Execute the tool
                         result = self._execute_tool(tool_name, args)
 
                         # Check if task is complete
                         if result.get("complete"):
-                            logger.info(f"[{self.name}] Task complete!")
+                            self.logger.info(f"[{self.name}] Task complete!")
                             return result.get("summary", "Task completed successfully")
 
                         # Send result back to model
@@ -406,10 +450,10 @@ class AntigravityEngineer(BaseAgent):
         Executes a formalized DTFRPlan and captures the trajectory.
         """
         results = []
-        logger.info(f"[{self.name}] Executing structured plan: {plan.mission}")
+        self.logger.info(f"[{self.name}] Executing structured plan: {plan.mission}")
 
         for step in plan.steps:
-            logger.info(f"[{self.name}] Step {step.id}: {step.action} on {step.target}")
+            self.logger.info(f"[{self.name}] Step {step.id}: {step.action} on {step.target}")
 
             try:
                 # Map structured step to internal tools
@@ -459,12 +503,12 @@ class AntigravityEngineer(BaseAgent):
                 )
 
                 if status == "error":
-                    logger.warning(f"[{self.name}] Step {step.id} failed: {res.get('error')}")
+                    self.logger.warning(f"[{self.name}] Step {step.id} failed: {res.get('error')}")
                     # In a real scenario, we might want to stop or ask for correction
                     # For now, we continue or stop based on plan logic (depended on)
 
             except Exception as e:
-                logger.error(f"[{self.name}] Exception during step {step.id}: {e}")
+                self.logger.error(f"[{self.name}] Exception during step {step.id}: {e}")
                 results.append(
                     ExecutionResult(
                         step_id=step.id,
