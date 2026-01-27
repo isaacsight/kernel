@@ -342,6 +342,7 @@ def build():
     post_template = read_file(os.path.join(TEMPLATE_DIR, "post.html"))
     index_template = read_file(os.path.join(TEMPLATE_DIR, "index.html"))
     brand_template = read_file(os.path.join(TEMPLATE_DIR, "brand.html"))
+    studio_template = read_file(os.path.join(TEMPLATE_DIR, "studio.html"))
 
     # 3b. Load Intelligence Context (Reasoning Engine)
     # We read studio-snapshot.md early to get the "Reasoning State"
@@ -1414,19 +1415,14 @@ def build():
     index_content = index_content.replace("{{ build_log_feed }}", build_log_html)
     index_content = index_content.replace("{{ essays_feed }}", essays_feed_html)
 
-    # C. Render Full Page
-    full_home_page = base_template.replace("{{ content }}", index_content)
+    # C. Render Full Page (Raw for new landing page)
+    full_home_page = index_html
+    # Apply standard replacements for things like {{ root }} if they exist, but user wants raw
+    full_home_page = full_home_page.replace("{{ root }}", "")
     full_home_page = full_home_page.replace(
-        "{{ title }}", "Does This Feel Right? - Isaac Hernandez"
-    )
-    full_home_page = full_home_page.replace(
-        "{{ description }}", "AI-native operating system for the solo founder."
+        "{{ title }}", "Isaac Hernandez — Does This Feel Right?"
     )
     full_home_page = full_home_page.replace("{{ url }}", BASE_URL)
-    full_home_page = full_home_page.replace("{{ image }}", DEFAULT_IMAGE)
-    full_home_page = full_home_page.replace("{{ og_type }}", "website")
-    full_home_page = full_home_page.replace("{{ json_ld }}", "")
-    full_home_page = full_home_page.replace("{{ root }}", "")
 
     # D. Generate Frontiers Set
     frontiers_file = os.path.join(CONTENT_DIR, "frontiers-of-agentic-ai.md")
@@ -1477,8 +1473,37 @@ def build():
         "{{ description }}", "A living notebook on technology, intelligence, and modern life."
     )
     full_home_page = full_home_page.replace("{{ url }}", BASE_URL)
-
     write_file(os.path.join(OUTPUT_DIR, "index.html"), full_home_page)
+
+    # Generate Studio Page
+    print("Step 7c: Generating Studio Page...")
+    if "{% block content %}" in studio_template and "{% endblock %}" in studio_template:
+        studio_content = studio_template.split("{% block content %}")[1].split("{% endblock %}")[0]
+    else:
+        studio_content = studio_template
+
+    # Inject feeds into studio content
+    studio_content = studio_content.replace("{{ build_log_feed }}", build_log_html)
+    studio_content = studio_content.replace("{{ essays_feed }}", essays_feed_html)
+
+    full_studio_page = base_template.replace("{{ content }}", studio_content)
+    # Fix placeholders (mimic homepage replacements but for studio)
+    full_studio_page = full_studio_page.replace("{{ build_log_feed }}", build_log_html)
+    full_studio_page = full_studio_page.replace("{{ essays_feed }}", essays_feed_html)
+    full_studio_page = full_studio_page.replace("{{ frontier_set }}", frontier_set_html)
+    full_studio_page = full_studio_page.replace("{{ starter_set }}", starter_set_html)
+    full_studio_page = full_studio_page.replace("{{ starter_set_nav }}", starter_set_nav_html)
+    full_studio_page = full_studio_page.replace("{{ root }}", "")
+    full_studio_page = full_studio_page.replace("{{ image }}", DEFAULT_IMAGE)
+    full_studio_page = full_studio_page.replace("{{ og_type }}", "website")
+    full_studio_page = full_studio_page.replace("{{ json_ld }}", "")
+    full_studio_page = full_studio_page.replace("{{ title }}", "Studio - Does This Feel Right?")
+    full_studio_page = full_studio_page.replace(
+        "{{ description }}", "Deep work and systems dashboard."
+    )
+    full_studio_page = full_studio_page.replace("{{ url }}", f"{BASE_URL}/studio.html")
+
+    write_file(os.path.join(OUTPUT_DIR, "studio.html"), full_studio_page)
 
     # Generate Archive Page
     print("Step 7b: Generating Archive Page...")
