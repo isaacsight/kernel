@@ -1,16 +1,31 @@
+# ===================
+# OS Generated Files
+# ===================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
+# ===================
 # Python
+# ===================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+*.pyo
+*.pyd
 
 # Virtual Environments
 .venv/
 venv/
 ENV/
 env/
+.env
 
 # Build & Distribution
 build/
@@ -19,30 +34,79 @@ dist/
 .eggs/
 *.egg
 
-# IDEs
+# ===================
+# Caches
+# ===================
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.cache/
+*.cache/
+.aider*
+
+# Chrome/Browser Dev Profiles
+.chrome_dev_profile/
+
+# ===================
+# IDEs & Editors
+# ===================
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Temp files
+# ===================
+# Logs & Debug
+# ===================
 *.log
-.env
-.aider*
-admin/brain/kokoro_models/
-admin/brain/kokoro_models/*.onnx
+logs/
+debug_*.png
+
+# ===================
+# Temp & Backup Files
+# ===================
+*.bak
+*.bak.*
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ===================
+# Cookies & Secrets
+# ===================
+cookies.txt
+cookies_netscape.txt
+*_cookies.json
+*.secrets
+.secrets.baseline
+
+# ===================
+# Node.js
+# ===================
 node_modules/
 .turbo/
+.next/
+*.tsbuildinfo
 
-# Sensitive / Runtime files
-admin/cookies.txt
-admin/sora_cookies.txt
+# ===================
+# Project Specific
+# ===================
+# Electron Artifacts
+admin/web/dist_electron/
+*.dmg
+
+# Model files
+admin/brain/kokoro_models/
+admin/brain/kokoro_models/*.onnx
+
+# Runtime databases
 admin/brain/studio_memory.db
 admin/brain/*.json
 !admin/brain/mock_comments.json
 !admin/brain/achievements.json
 
-
-# Electron Artifacts
-admin/web/dist_electron/
-*.dmg
+# Sensitive files
+admin/cookies.txt
+admin/sora_cookies.txt
