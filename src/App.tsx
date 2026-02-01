@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play, Pause, Send, MessageCircle } from 'lucide-react'
+import { Play, Pause, Send, MessageCircle, Image, X } from 'lucide-react'
 import { useKernel } from './hooks/useKernel'
 import { KERNEL_AGENTS, getAgent } from './agents'
+import { MediaRenderer } from './components/MediaRenderer'
+import { fileToBase64 } from './engine/GeminiClient'
+import type { MediaAttachment } from './types'
 
 const TOPIC_SUGGESTIONS = [
   'The future of human-AI collaboration',
@@ -26,7 +29,9 @@ export default function App() {
   const [input, setInput] = useState('')
   const [showTopicInput, setShowTopicInput] = useState(true)
   const [customTopic, setCustomTopic] = useState(swarm.topic)
+  const [pendingMedia, setPendingMedia] = useState<MediaAttachment[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -49,9 +54,38 @@ export default function App() {
   }
 
   const handleInject = () => {
-    if (!input.trim()) return
-    injectMessage(input)
+    if (!input.trim() && pendingMedia.length === 0) return
+    injectMessage(input, pendingMedia.length > 0 ? pendingMedia : undefined)
     setInput('')
+    setPendingMedia([])
+  }
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    for (const file of Array.from(files)) {
+      if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+        const base64 = await fileToBase64(file)
+        const url = URL.createObjectURL(file)
+
+        setPendingMedia(prev => [...prev, {
+          type: file.type.startsWith('image/') ? 'image' : 'video',
+          url,
+          mimeType: file.type,
+          base64
+        }])
+      }
+    }
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const removeMedia = (index: number) => {
+    setPendingMedia(prev => prev.filter((_, i) => i !== index))
   }
 
   const getAgentColor = (agentId: string) => {
@@ -220,10 +254,7 @@ export default function App() {
                     </div>
                     <div className="pl-11">
                       <div className={`text-xl leading-relaxed ${m.agentId !== 'human' ? 'italic' : ''}`}>
-                        {m.content}
-                        {m.isStreaming && (
-                          <span className="inline-block w-2 h-5 bg-[--rubin-slate] ml-1 animate-pulse" />
-                        )}
+                        <MediaRenderer content={m.content} isStreaming={m.isStreaming} attachments={m.media} />
                       </div>
                     </div>
                   </motion.div>
@@ -244,7 +275,50 @@ export default function App() {
 
             {/* Input for injecting thoughts */}
             <footer className="p-6 bg-[--rubin-ivory] border-t border-[--rubin-ivory-dark]">
+              {/* Media preview */}
+              {pendingMedia.length > 0 && (
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  {pendingMedia.map((media, index) => (
+                    <div key={index} className="relative">
+                      {media.type === 'image' ? (
+                        <img
+                          src={media.url}
+                          alt="Upload preview"
+                          className="h-20 w-20 object-cover rounded-lg"
+                        />
+                      ) : (
+                        <video
+                          src={media.url}
+                          className="h-20 w-20 object-cover rounded-lg"
+                        />
+                      )}
+                      <button
+                        onClick={() => removeMedia(index)}
+                        className="absolute -top-2 -right-2 p-1 bg-[--rubin-slate] text-[--rubin-ivory] rounded-full"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/*,video/*"
+                  multiple
+                  className="hidden"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-3 rounded-full bg-[--rubin-ivory-med] hover:bg-[--rubin-ivory-dark] transition-colors"
+                  title="Upload image or video"
+                >
+                  <Image size={18} />
+                </button>
                 <input
                   type="text"
                   value={input}
@@ -260,14 +334,14 @@ export default function App() {
                 />
                 <button
                   onClick={handleInject}
-                  disabled={!input.trim()}
+                  disabled={!input.trim() && pendingMedia.length === 0}
                   className="p-3 rounded-full bg-[--rubin-slate] text-[--rubin-ivory] disabled:opacity-30 transition-opacity"
                 >
                   <Send size={18} />
                 </button>
               </div>
               <div className="mono text-[10px] opacity-30 mt-2 text-center">
-                Press Enter to inject your thought into the agent discussion
+                Upload images/videos for agents to analyze, or press Enter to inject text
               </div>
             </footer>
           </>

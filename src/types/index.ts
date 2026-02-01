@@ -7,6 +7,13 @@ export interface Agent {
   color: string;
 }
 
+export interface MediaAttachment {
+  type: 'image' | 'video';
+  url: string;
+  mimeType: string;
+  base64?: string;
+}
+
 export interface Message {
   id: string;
   agentId: string;
@@ -14,6 +21,7 @@ export interface Message {
   content: string;
   timestamp: Date;
   isStreaming?: boolean;
+  media?: MediaAttachment[];
 }
 
 export interface SwarmState {

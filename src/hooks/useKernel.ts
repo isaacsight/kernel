@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Message, SwarmState } from '../types';
+import type { Message, SwarmState, MediaAttachment } from '../types';
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
 import { generateAgentResponse } from '../engine/GeminiClient';
 
@@ -15,7 +15,7 @@ interface KernelStore {
   startSwarm: (topic: string) => void;
   stopSwarm: () => void;
   triggerNextTurn: () => Promise<void>;
-  injectMessage: (content: string) => void;
+  injectMessage: (content: string, media?: MediaAttachment[]) => void;
   setTopic: (topic: string) => void;
 }
 
@@ -141,13 +141,14 @@ export const useKernel = create<KernelStore>((set, get) => ({
     }
   },
 
-  injectMessage: (content) => {
+  injectMessage: (content, media) => {
     const message: Message = {
       id: Date.now().toString(),
       agentId: 'human',
       agentName: 'Isaac',
       content,
-      timestamp: new Date()
+      timestamp: new Date(),
+      media
     };
 
     set((state) => ({
