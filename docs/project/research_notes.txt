@@ -1,7 +1,0 @@
-Notes for prompt: hello
-
-Search Results: [{'title': 'Best Practices for AI', 'url': 'https://google.com', 'snippet': 'AI development requires robust testing.'}]
-
-Response: Based on my research regarding 'hello', I found key insights. (Note: Windows Studio Node at 192.168.1.57 was unreachable, so using local fallback logic).
-
-Key findings include utilization of robust testing workflows.

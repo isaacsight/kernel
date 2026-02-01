@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">MobileTemplate</string>
-    <string name="title_activity_main">MobileTemplate</string>
-    <string name="package_name">com.mobile.template</string>
-    <string name="custom_url_scheme">com.mobile.template</string>
-</resources>

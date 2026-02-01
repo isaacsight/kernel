@@ -1,5 +1,0 @@
-skills:
-  - name: "get_transcript"
-    description: "Retrieves the transcript of a YouTube video given its URL."
-    params:
-      url: "The full YouTube video URL."
