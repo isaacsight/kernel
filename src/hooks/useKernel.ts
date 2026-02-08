@@ -1,13 +1,15 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Message, SwarmState, MediaAttachment } from '../types';
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
-import { generateAgentResponse } from '../engine/GeminiClient';
+import { generateResponse, setProvider as setRouterProvider, type Provider } from '../engine/ProviderRouter';
 
 interface KernelStore {
   messages: Message[];
   swarm: SwarmState;
   isGenerating: boolean;
   streamingContent: string;
+  provider: Provider;
 
   // Actions
   addMessage: (message: Message) => void;
@@ -17,142 +19,185 @@ interface KernelStore {
   triggerNextTurn: () => Promise<void>;
   injectMessage: (content: string, media?: MediaAttachment[]) => void;
   setTopic: (topic: string) => void;
+  clearMessages: () => void;
+  setProvider: (provider: Provider) => void;
 }
 
-export const useKernel = create<KernelStore>((set, get) => ({
-  messages: [],
-  swarm: {
-    isActive: false,
-    currentSpeaker: null,
-    topic: 'The future of human-AI collaboration',
-    turnCount: 0
-  },
-  isGenerating: false,
-  streamingContent: '',
-
-  addMessage: (message) => set((state) => ({
-    messages: [...state.messages, message]
-  })),
-
-  updateStreamingContent: (content) => set({ streamingContent: content }),
-
-  startSwarm: (topic) => {
-    set({
+export const useKernel = create<KernelStore>()(
+  persist(
+    (set, get) => ({
+      messages: [],
       swarm: {
-        isActive: true,
-        currentSpeaker: KERNEL_AGENTS[0].id,
-        topic,
+        isActive: false,
+        currentSpeaker: null,
+        topic: 'The future of human-AI collaboration',
         turnCount: 0
       },
-      messages: []
-    });
+      isGenerating: false,
+      streamingContent: '',
+      provider: 'gemini' as Provider,
 
-    // Start the first turn
-    get().triggerNextTurn();
-  },
+      addMessage: (message) => set((state) => ({
+        messages: [...state.messages, message]
+      })),
 
-  stopSwarm: () => set((state) => ({
-    swarm: { ...state.swarm, isActive: false }
-  })),
+      updateStreamingContent: (content) => set({ streamingContent: content }),
 
-  setTopic: (topic) => set((state) => ({
-    swarm: { ...state.swarm, topic }
-  })),
+      startSwarm: (topic) => {
+        set({
+          swarm: {
+            isActive: true,
+            currentSpeaker: KERNEL_AGENTS[0].id,
+            topic,
+            turnCount: 0
+          },
+          messages: []
+        });
 
-  triggerNextTurn: async () => {
-    const { swarm, messages, isGenerating } = get();
+        // Start the first turn
+        get().triggerNextTurn();
+      },
 
-    if (!swarm.isActive || isGenerating) return;
+      stopSwarm: () => set((state) => ({
+        swarm: { ...state.swarm, isActive: false }
+      })),
 
-    const currentAgent = KERNEL_AGENTS.find(a => a.id === swarm.currentSpeaker) || KERNEL_AGENTS[0];
+      setTopic: (topic) => set((state) => ({
+        swarm: { ...state.swarm, topic }
+      })),
 
-    set({ isGenerating: true, streamingContent: '' });
+      clearMessages: () => set({
+        messages: [],
+        swarm: {
+          isActive: false,
+          currentSpeaker: null,
+          topic: 'The future of human-AI collaboration',
+          turnCount: 0
+        }
+      }),
 
-    const messageId = Date.now().toString();
+      triggerNextTurn: async () => {
+        const { swarm, messages, isGenerating } = get();
 
-    // Add placeholder message
-    const placeholderMessage: Message = {
-      id: messageId,
-      agentId: currentAgent.id,
-      agentName: currentAgent.name,
-      content: '',
-      timestamp: new Date(),
-      isStreaming: true
-    };
+        if (!swarm.isActive || isGenerating) return;
 
-    set((state) => ({
-      messages: [...state.messages, placeholderMessage]
-    }));
+        const currentAgent = KERNEL_AGENTS.find(a => a.id === swarm.currentSpeaker) || KERNEL_AGENTS[0];
 
-    try {
-      const response = await generateAgentResponse(
-        currentAgent,
-        messages,
-        swarm.topic,
-        (streamedText) => {
-          // Update the message content as it streams
+        set({ isGenerating: true, streamingContent: '' });
+
+        const messageId = Date.now().toString();
+
+        // Add placeholder message
+        const placeholderMessage: Message = {
+          id: messageId,
+          agentId: currentAgent.id,
+          agentName: currentAgent.name,
+          content: '',
+          timestamp: new Date(),
+          isStreaming: true
+        };
+
+        set((state) => ({
+          messages: [...state.messages, placeholderMessage]
+        }));
+
+        try {
+          const response = await generateResponse(
+            currentAgent,
+            messages,
+            swarm.topic,
+            (streamedText) => {
+              // Update the message content as it streams
+              set((state) => ({
+                messages: state.messages.map(m =>
+                  m.id === messageId
+                    ? { ...m, content: streamedText }
+                    : m
+                ),
+                streamingContent: streamedText
+              }));
+            }
+          );
+
+          // Finalize the message
           set((state) => ({
             messages: state.messages.map(m =>
               m.id === messageId
-                ? { ...m, content: streamedText }
+                ? { ...m, content: response, isStreaming: false }
                 : m
             ),
-            streamingContent: streamedText
+            streamingContent: '',
+            isGenerating: false,
+            swarm: {
+              ...state.swarm,
+              currentSpeaker: getNextAgent(currentAgent.id).id,
+              turnCount: state.swarm.turnCount + 1
+            }
+          }));
+
+          // Schedule next turn if still active
+          const { swarm: updatedSwarm } = get();
+          if (updatedSwarm.isActive) {
+            // Random delay between 2-4 seconds for contemplative pacing
+            const delay = 2000 + Math.random() * 2000;
+            setTimeout(() => {
+              const { swarm: currentSwarm } = get();
+              if (currentSwarm.isActive) {
+                get().triggerNextTurn();
+              }
+            }, delay);
+          }
+        } catch (error) {
+          console.error('Error generating response:', error);
+          set({ isGenerating: false });
+
+          // Remove failed message
+          set((state) => ({
+            messages: state.messages.filter(m => m.id !== messageId)
           }));
         }
-      );
+      },
 
-      // Finalize the message
-      set((state) => ({
-        messages: state.messages.map(m =>
-          m.id === messageId
-            ? { ...m, content: response, isStreaming: false }
-            : m
-        ),
-        streamingContent: '',
-        isGenerating: false,
-        swarm: {
-          ...state.swarm,
-          currentSpeaker: getNextAgent(currentAgent.id).id,
-          turnCount: state.swarm.turnCount + 1
-        }
-      }));
+      injectMessage: (content, media) => {
+        const message: Message = {
+          id: Date.now().toString(),
+          agentId: 'human',
+          agentName: 'Isaac',
+          content,
+          timestamp: new Date(),
+          media
+        };
 
-      // Schedule next turn if still active
-      const { swarm: updatedSwarm } = get();
-      if (updatedSwarm.isActive) {
-        // Random delay between 2-4 seconds for contemplative pacing
-        const delay = 2000 + Math.random() * 2000;
-        setTimeout(() => {
-          const { swarm: currentSwarm } = get();
-          if (currentSwarm.isActive) {
-            get().triggerNextTurn();
-          }
-        }, delay);
+        set((state) => ({
+          messages: [...state.messages, message]
+        }));
+      },
+
+      setProvider: (provider) => {
+        setRouterProvider(provider);
+        set({ provider });
       }
-    } catch (error) {
-      console.error('Error generating response:', error);
-      set({ isGenerating: false });
-
-      // Remove failed message
-      set((state) => ({
-        messages: state.messages.filter(m => m.id !== messageId)
-      }));
+    }),
+    {
+      name: 'sovereign-kernel',
+      partialize: (state) => ({
+        messages: state.messages,
+        swarm: { ...state.swarm, isActive: false },
+        provider: state.provider,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Rehydrate Date objects from JSON strings
+          state.messages = state.messages.map(m => ({
+            ...m,
+            timestamp: new Date(m.timestamp),
+          }));
+          // Sync provider to router module
+          if (state.provider) {
+            setRouterProvider(state.provider);
+          }
+        }
+      },
     }
-  },
-
-  injectMessage: (content, media) => {
-    const message: Message = {
-      id: Date.now().toString(),
-      agentId: 'human',
-      agentName: 'Isaac',
-      content,
-      timestamp: new Date(),
-      media
-    };
-
-    set((state) => ({
-      messages: [...state.messages, message]
-    }));
-  }
-}));
+  )
+);

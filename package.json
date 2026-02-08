@@ -15,10 +15,14 @@
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
         "@stripe/stripe-js": "^8.7.0",
+        "@supabase/supabase-js": "^2.93.3",
         "framer-motion": "^11.0.0",
         "lucide-react": "^0.400.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "react-markdown": "^10.1.0",
+        "react-router-dom": "^7.13.0",
+        "resend": "^6.9.1",
         "stripe": "^20.3.0",
         "zustand": "^5.0.11"
     },

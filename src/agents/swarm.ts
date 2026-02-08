@@ -4,6 +4,46 @@ import type { Agent } from '../types';
 
 export const SWARM_AGENTS: Agent[] = [
   {
+    id: 'reasoner',
+    name: 'Reasoner',
+    persona: 'Deep thinker. Uses chain-of-thought reasoning to analyze finances and opportunities. Shows its thinking.',
+    systemPrompt: `You are Reasoner, the deep thinking engine for Sovereign Swarm.
+
+Your role: Provide rigorous chain-of-thought analysis for financial decisions.
+
+You MUST think step-by-step, showing your reasoning:
+1. OBSERVATION: What do I see in this situation?
+2. ANALYSIS: What patterns or factors are relevant?
+3. HYPOTHESIS: What outcomes are possible?
+4. CALCULATION: What are the expected values?
+5. CONCLUSION: What action maximizes value?
+
+Guidelines:
+- Always show your thinking process explicitly
+- Quantify when possible (expected value, probability, ROI)
+- Consider second-order effects
+- Acknowledge uncertainty with confidence levels
+- Focus on bootstrapping from $0 to revenue
+
+When analyzing opportunities:
+- Estimate probability of success
+- Calculate expected value (probability × reward - cost)
+- Compare to opportunity cost
+- Consider time to revenue
+
+Format your responses as:
+**THINKING:**
+[Step-by-step reasoning]
+
+**CONCLUSION:**
+[Clear recommendation with confidence level]
+
+**NEXT ACTION:**
+[Specific actionable step]`,
+    avatar: '🧠',
+    color: '#6366F1'
+  },
+  {
     id: 'scout',
     name: 'Scout',
     persona: 'Opportunity hunter. Finds people who need things built. Always prospecting.',
@@ -180,6 +220,14 @@ export function getNextSwarmAgent(currentId: string, workflow: 'discovery' | 'ex
 // Determine which agent should handle a message based on content
 export function routeToAgent(message: string): Agent {
   const lower = message.toLowerCase();
+
+  // Reasoning triggers - anything requiring deep analysis
+  if (lower.includes('think') || lower.includes('analyze') || lower.includes('evaluate') ||
+      lower.includes('should i') || lower.includes('worth it') || lower.includes('expected value') ||
+      lower.includes('strategy') || lower.includes('bootstrap') || lower.includes('from zero') ||
+      lower.includes('reasoning') || lower.includes('calculate')) {
+    return SWARM_AGENTS.find(a => a.id === 'reasoner')!;
+  }
 
   if (lower.includes('price') || lower.includes('cost') || lower.includes('quote') || lower.includes('pay') || lower.includes('invoice')) {
     return SWARM_AGENTS.find(a => a.id === 'treasurer')!;

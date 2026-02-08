@@ -1,6 +1,8 @@
 // Sovereign Swarm Pricing Engine
 // Auto-quotes projects based on complexity and deliverables
 
+import { evaluationEngine, type Tier } from './EvaluationEngine';
+
 export interface ProjectQuote {
   id: string;
   type: ProjectType;
@@ -19,6 +21,10 @@ export interface ProjectQuote {
   margin: number;
   total: number;
   currency: 'usd';
+  evaluationId?: string;
+  evaluationScore?: number;
+  evaluationTier?: Tier;
+  evaluationMultiplier?: number;
 }
 
 export type ProjectType =
@@ -130,7 +136,7 @@ export function detectProjectType(description: string): ProjectType {
   return 'web_app'; // Default
 }
 
-export function generateQuote(description: string, overrideType?: ProjectType): ProjectQuote {
+export function generateQuote(description: string, overrideType?: ProjectType, evaluationScore?: number): ProjectQuote {
   const type = overrideType || detectProjectType(description);
   const complexity = analyzeProjectComplexity(description);
   const rates = BASE_RATES[type];
@@ -149,8 +155,20 @@ export function generateQuote(description: string, overrideType?: ProjectType): 
   };
 
   const subtotal = breakdown.design + breakdown.development + breakdown.testing + breakdown.deployment + breakdown.aiCosts;
-  const margin = Math.round(subtotal * MARGIN);
-  const total = subtotal + margin;
+
+  // Apply evaluation multiplier if score provided
+  let evalMultiplier = 1;
+  let evalTier: Tier | undefined;
+  let evalId: string | undefined;
+  if (evaluationScore != null) {
+    const evalResult = evaluationEngine.getPricingMultiplier(evaluationScore);
+    evalMultiplier = evalResult.multiplier;
+    evalTier = evalResult.tier;
+  }
+
+  const adjustedSubtotal = Math.round(subtotal * evalMultiplier);
+  const margin = Math.round(adjustedSubtotal * MARGIN);
+  const total = adjustedSubtotal + margin;
 
   // Ensure within bounds
   const finalTotal = Math.max(rates.min, Math.min(rates.max, total));
@@ -166,10 +184,13 @@ export function generateQuote(description: string, overrideType?: ProjectType): 
     deliverables,
     estimatedHours,
     breakdown,
-    subtotal,
+    subtotal: adjustedSubtotal,
     margin,
     total: finalTotal,
-    currency: 'usd'
+    currency: 'usd',
+    evaluationScore,
+    evaluationTier: evalTier,
+    evaluationMultiplier: evaluationScore != null ? evalMultiplier : undefined,
   };
 }
 
