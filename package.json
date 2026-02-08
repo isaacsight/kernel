@@ -11,7 +11,7 @@
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },
-    "homepage": "https://doesthisfeelright.com",
+    "homepage": "https://isaacsight.github.io/does-this-feel-right-",
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
         "@stripe/stripe-js": "^8.7.0",
