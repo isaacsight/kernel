@@ -9,6 +9,7 @@ legacy/
 # Non-site files (experiments, docs, scripts)
 *.pdf
 *.py
+!agent/*.py
 *.sh
 memory/
 test_write.txt
