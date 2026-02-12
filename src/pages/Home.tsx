@@ -5,6 +5,7 @@ import { evaluationEngine, type Evaluation, type EntityType } from '../engine/Ev
 import { EvaluationResults } from '../components/EvaluationResults'
 import { DeepAnalysis } from '../components/DeepAnalysis'
 import { ProjectInquiry } from '../components/ProjectInquiry'
+import { AssistantBrief } from '../components/AssistantBrief'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -203,6 +204,9 @@ export function Home() {
               style={{ marginTop: '3rem' }}
             >
               <EvaluationResults evaluation={evaluation} />
+
+              {/* Assistant Triage */}
+              <AssistantBrief evaluation={evaluation} />
 
               {/* Deep Analysis CTA */}
               {!showDeepAnalysis && (
