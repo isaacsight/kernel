@@ -311,9 +311,21 @@ export function Home() {
           >
             Read the Writing &rarr;
           </Link>
-          <span className="mono" style={{ fontSize: '0.6rem', opacity: 0.3 }}>
+          <Link
+            to="/dash"
+            className="mono"
+            style={{
+              fontSize: '0.55rem',
+              color: 'var(--rubin-slate)',
+              textDecoration: 'none',
+              opacity: 0.15,
+              transition: 'opacity var(--duration-fast)',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.5'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '0.15'}
+          >
             Antigravity Kernel
-          </span>
+          </Link>
         </motion.div>
       </div>
     </div>
