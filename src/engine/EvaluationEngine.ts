@@ -569,7 +569,8 @@ Evaluate this entity across all 6 categories.`;
 
     try {
       const response = await generateCompletion(prompt, systemPrompt, modelId);
-      const data = JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || response);
+      const jsonMatch = response.match(/\{[\s\S]*\}/)?.[0];
+      const data = JSON.parse(jsonMatch || '{}');
 
       const categoryScores: CategoryScore[] = ALL_CATEGORIES.map(cat => {
         const match = data.categoryScores.find((s: any) => s.category === cat);
@@ -716,7 +717,7 @@ Evaluate this entity across all 6 categories.`;
 
     // Resolve calibration prediction
     const pred = this.state.predictions.find(
-      p => p.source === 'evaluation' && p.description.includes(evaluation.entityDescription.slice(0, 40))
+      p => p.source === 'evaluation' && evaluation.entityDescription && p.description.includes(evaluation.entityDescription.slice(0, 40))
     );
     if (pred) {
       pred.actualOutcome = outcome.success ? 1 : 0;
@@ -1059,8 +1060,8 @@ Evaluate this entity across all 6 categories.`;
     const avgLoss = losingTrades.length > 0 ? Math.abs(losingTrades.reduce((s, t) => s + t.pnl, 0) / losingTrades.length) : 0;
     const profitFactor = avgLoss > 0 ? (avgWin * winningTrades.length) / (avgLoss * losingTrades.length) : winningTrades.length > 0 ? Infinity : 0;
 
-    const returns = equityCurve.map((p, i) => i === 0 ? 0 : (p.equity - equityCurve[i - 1].equity) / equityCurve[i - 1].equity);
-    const meanReturn = returns.reduce((s, r) => s + r, 0) / returns.length;
+    const returns = equityCurve.map((p, i) => i === 0 ? 0 : equityCurve[i - 1].equity > 0 ? (p.equity - equityCurve[i - 1].equity) / equityCurve[i - 1].equity : 0);
+    const meanReturn = returns.length > 0 ? returns.reduce((s, r) => s + r, 0) / returns.length : 0;
     const stdReturn = Math.sqrt(returns.reduce((s, r) => s + (r - meanReturn) ** 2, 0) / returns.length);
     const periodsPerYear = returns.length / Math.max(0.01, durationYears);
     const sharpeRatio = stdReturn > 0 ? (meanReturn * Math.sqrt(periodsPerYear)) / stdReturn : 0;
@@ -1089,11 +1090,13 @@ Evaluate this entity across all 6 categories.`;
   }
 
   private sma(data: PricePoint[], endIndex: number, period: number): number {
+    if (period <= 0) return 0;
     let sum = 0;
-    for (let i = endIndex - period + 1; i <= endIndex; i++) {
+    const start = Math.max(0, endIndex - period + 1);
+    for (let i = start; i <= endIndex; i++) {
       sum += data[i].close;
     }
-    return sum / period;
+    return sum / (endIndex - start + 1);
   }
 
   compareStrategies(
@@ -1101,7 +1104,8 @@ Evaluate this entity across all 6 categories.`;
     symbol: string,
     strategies: Partial<StrategyConfig>[],
     initialCapital: number = 10000
-  ): { results: BacktestResult[]; best: BacktestResult; ranking: { name: string; sharpe: number; return: number; drawdown: number }[] } {
+  ): { results: BacktestResult[]; best: BacktestResult | undefined; ranking: { name: string; sharpe: number; return: number; drawdown: number }[] } {
+    if (strategies.length === 0) return { results: [], best: undefined, ranking: [] };
     const results = strategies.map(s => this.backtest(priceData, symbol, s, initialCapital));
     results.sort((a, b) => b.sharpeRatio - a.sharpeRatio);
     return {

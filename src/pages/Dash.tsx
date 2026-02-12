@@ -37,9 +37,16 @@ export function Dash() {
       const raw = localStorage.getItem('project_inquiries')
       if (raw) {
         const parsed: Inquiry[] = JSON.parse(raw)
-        setInquiries(parsed.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()))
+        setInquiries(parsed
+          .filter(inq => inq.timestamp)
+          .sort((a, b) => {
+            const ta = new Date(a.timestamp).getTime() || 0
+            const tb = new Date(b.timestamp).getTime() || 0
+            return tb - ta
+          })
+        )
       }
-    } catch { /* empty */ }
+    } catch { /* corrupted localStorage — ignore */ }
     setSchedule(assistantManager.getSchedule())
   }, [])
 
