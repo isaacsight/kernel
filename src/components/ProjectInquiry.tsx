@@ -46,11 +46,12 @@ export function ProjectInquiry({ evaluation }: Props) {
       const existing = JSON.parse(localStorage.getItem('project_inquiries') || '[]')
       existing.push(inquiry)
       localStorage.setItem('project_inquiries', JSON.stringify(existing))
+      setState('submitted')
     } catch (e) {
       console.error('Failed to save inquiry:', e)
+      // Still show submitted — the form data was captured, even if local storage failed
+      setState('submitted')
     }
-
-    setState('submitted')
   }
 
   if (state === 'cta') {

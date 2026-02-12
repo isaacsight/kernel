@@ -207,8 +207,13 @@ Keep it under 300 words. No bullet points. Write like an essay.`
 function generateLocalAnalysis(description: string, entityType: EntityType, evaluation: Evaluation): string {
   const tier = evaluation.tier
   const score = evaluation.weightedScore
-  const topCategory = [...evaluation.categoryScores].sort((a, b) => b.score - a.score)[0]
+  const sorted = [...evaluation.categoryScores].sort((a, b) => b.score - a.score)
+  const topCategory = sorted[0]
   const weakCategory = [...evaluation.categoryScores].sort((a, b) => a.score - b.score)[0]
+
+  if (!topCategory || !weakCategory) {
+    return `This ${entityType} scored ${score} overall. Not enough category data to provide a detailed breakdown.`
+  }
 
   const openings: Record<string, string> = {
     platinum: `This is a strong ${entityType}. A score of ${score} puts it in platinum territory, which means the fundamentals are solid across the board.`,

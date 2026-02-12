@@ -216,7 +216,8 @@ class AssistantManager {
       const inquiries = JSON.parse(localStorage.getItem('project_inquiries') || '[]')
       const today = new Date().toISOString().split('T')[0]
       const lastBrief = this.state.lastBriefDate
-      return inquiries.filter((i: { timestamp: string }) => {
+      return inquiries.filter((i: { timestamp?: string }) => {
+        if (!i.timestamp) return false
         const date = i.timestamp.split('T')[0]
         return lastBrief ? date > lastBrief : date === today
       }).length
