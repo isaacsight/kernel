@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import type { Evaluation } from '../engine/EvaluationEngine'
 import { generateQuote, type ProjectQuote } from '../engine/PricingEngine'
+import { submitInquiry } from '../engine/InquiryService'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -9,7 +10,7 @@ interface Props {
   evaluation: Evaluation
 }
 
-type InquiryState = 'cta' | 'form' | 'quote' | 'submitted'
+type InquiryState = 'cta' | 'quote' | 'submitting' | 'submitted'
 
 export function ProjectInquiry({ evaluation }: Props) {
   const [state, setState] = useState<InquiryState>('cta')
@@ -17,6 +18,7 @@ export function ProjectInquiry({ evaluation }: Props) {
   const [email, setEmail] = useState('')
   const [details, setDetails] = useState('')
   const [quote, setQuote] = useState<ProjectQuote | null>(null)
+  const [submitError, setSubmitError] = useState(false)
 
   const handleGenerateQuote = () => {
     const q = generateQuote(evaluation.entityDescription, undefined, evaluation.weightedScore)
@@ -26,32 +28,28 @@ export function ProjectInquiry({ evaluation }: Props) {
 
   const handleSubmit = async () => {
     if (!email.trim()) return
+    setState('submitting')
+    setSubmitError(false)
 
-    // In production, this would send to your backend (Resend, Supabase, etc.)
-    // For now, store in localStorage as a lead
-    const inquiry = {
-      id: `inquiry_${Date.now()}`,
+    const result = await submitInquiry({
       name: name.trim(),
       email: email.trim(),
       details: details.trim(),
-      evaluationId: evaluation.id,
+      description: evaluation.entityDescription,
       evaluationScore: evaluation.weightedScore,
       evaluationTier: evaluation.tier,
-      description: evaluation.entityDescription,
-      quote: quote ? { total: quote.total, type: quote.type, complexity: quote.complexity } : null,
-      timestamp: new Date().toISOString(),
+      quote,
+    })
+
+    if (result?.checkoutUrl) {
+      // Redirect to Stripe hosted checkout
+      window.location.href = result.checkoutUrl
+      return
     }
 
-    try {
-      const existing = JSON.parse(localStorage.getItem('project_inquiries') || '[]')
-      existing.push(inquiry)
-      localStorage.setItem('project_inquiries', JSON.stringify(existing))
-      setState('submitted')
-    } catch (e) {
-      console.error('Failed to save inquiry:', e)
-      // Still show submitted — the form data was captured, even if local storage failed
-      setState('submitted')
-    }
+    // Fallback: show confirmation if checkout creation failed
+    setState('submitted')
+    if (!result) setSubmitError(true)
   }
 
   if (state === 'cta') {
@@ -107,7 +105,7 @@ export function ProjectInquiry({ evaluation }: Props) {
     )
   }
 
-  if (state === 'quote' && quote) {
+  if ((state === 'quote' || state === 'submitting') && quote) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -202,7 +200,7 @@ export function ProjectInquiry({ evaluation }: Props) {
             marginBottom: '1rem',
             opacity: 0.7,
           }}>
-            Interested? Leave your details and I'll be in touch.
+            Interested? Leave your details and proceed to payment.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -263,24 +261,24 @@ export function ProjectInquiry({ evaluation }: Props) {
             />
             <button
               onClick={handleSubmit}
-              disabled={!email.trim()}
+              disabled={!email.trim() || state === 'submitting'}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.7rem',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 padding: '0.7rem 2rem',
-                background: email.trim() ? 'var(--rubin-slate)' : 'var(--rubin-ivory-dark)',
-                color: email.trim() ? 'var(--rubin-ivory)' : 'var(--rubin-slate)',
+                background: email.trim() && state !== 'submitting' ? 'var(--rubin-slate)' : 'var(--rubin-ivory-dark)',
+                color: email.trim() && state !== 'submitting' ? 'var(--rubin-ivory)' : 'var(--rubin-slate)',
                 border: 'none',
                 borderRadius: 'var(--radius-full)',
-                cursor: email.trim() ? 'pointer' : 'default',
+                cursor: email.trim() && state !== 'submitting' ? 'pointer' : 'default',
                 transition: 'all var(--duration-normal) var(--ease-out)',
-                opacity: email.trim() ? 1 : 0.4,
+                opacity: email.trim() && state !== 'submitting' ? 1 : 0.4,
                 alignSelf: 'flex-start',
               }}
             >
-              Send Inquiry
+              {state === 'submitting' ? 'Preparing Checkout...' : 'Proceed to Payment'}
             </button>
           </div>
         </div>
@@ -315,7 +313,9 @@ export function ProjectInquiry({ evaluation }: Props) {
           opacity: 0.5,
           lineHeight: 1.6,
         }}>
-          I'll review your project and be in touch soon. In the meantime, check out the writing.
+          {submitError
+            ? 'There was an issue creating checkout. I\'ll review your project and be in touch with payment details.'
+            : 'I\'ll review your project and be in touch soon.'}
         </p>
       </motion.div>
     )
