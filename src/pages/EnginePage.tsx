@@ -71,9 +71,6 @@ function LoginGate() {
           <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
             Continue with Google
           </button>
-          <button className="ka-gate-social-btn ka-gate-social-apple" onClick={() => signInWithProvider('apple')}>
-            Continue with Apple
-          </button>
           <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
             Continue with GitHub
           </button>
