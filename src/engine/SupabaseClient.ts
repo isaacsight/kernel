@@ -187,6 +187,32 @@ export async function initializeDatabase() {
   return true;
 }
 
+// Subscriptions (billing)
+export interface DBSubscription {
+  id: string;
+  user_id: string;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  status: 'active' | 'canceled' | 'past_due' | 'inactive';
+  current_period_end: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getMySubscription(): Promise<DBSubscription | null> {
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching subscription:', error);
+    return null;
+  }
+  return data;
+}
+
 // Real-time subscriptions
 export function subscribeToProjects(callback: (project: DBProject) => void) {
   return supabase
