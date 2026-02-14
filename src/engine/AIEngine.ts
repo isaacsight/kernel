@@ -328,6 +328,10 @@ export function createEngine(): {
   injectHumanMessage: (content: string) => void;
   addBelief: (content: string, confidence: number) => void;
   challengeBelief: (beliefId: string) => void;
+  removeBelief: (beliefId: string) => void;
+  setConviction: (value: number, reason: string) => void;
+  overrideNextAgent: (agent: Agent | null) => void;
+  pruneReflections: (minQuality: number) => number;
   stop: () => void;
   reset: () => void;
 } {
@@ -354,6 +358,7 @@ export function createEngine(): {
 
   const listeners: Set<EngineListener> = new Set();
   let aborted = false;
+  let agentOverride: Agent | null = null;
 
   // ── Event System ────────────────────────────────────────
 
@@ -638,6 +643,13 @@ export function createEngine(): {
     perception: Perception,
     attention: AttentionState,
   ): { agent: Agent; reason: string; confidence: number } {
+    // Check for manual agent override
+    if (agentOverride) {
+      const overridden = agentOverride;
+      agentOverride = null; // consume the override
+      return { agent: overridden, reason: `Manual override → ${overridden.name}`, confidence: 1 };
+    }
+
     const { intent, urgency, complexity } = perception;
     const perf = state.lasting.agentPerformance;
 
@@ -1303,6 +1315,31 @@ export function createEngine(): {
     injectHumanMessage,
     addBelief: (content: string, confidence: number) => formBelief(content, confidence, 'stated'),
     challengeBelief: challengeBeliefById,
+    removeBelief: (beliefId: string) => {
+      state.worldModel.beliefs = state.worldModel.beliefs.filter(b => b.id !== beliefId);
+      saveWorldModel(state.worldModel);
+    },
+    setConviction: (value: number, reason: string) => {
+      const from = state.worldModel.convictions.overall;
+      const clamped = Math.max(0, Math.min(1, value));
+      state.worldModel.convictions = {
+        overall: clamped,
+        trend: clamped > from ? 'rising' : clamped < from ? 'falling' : 'stable',
+        lastShift: Date.now(),
+      };
+      emit({ type: 'conviction_shifted', from, to: clamped, reason, timestamp: Date.now() });
+      saveWorldModel(state.worldModel);
+    },
+    overrideNextAgent: (agent: Agent | null) => {
+      agentOverride = agent;
+    },
+    pruneReflections: (minQuality: number) => {
+      const before = state.lasting.reflections.length;
+      state.lasting.reflections = state.lasting.reflections.filter(r => r.quality >= minQuality);
+      const removed = before - state.lasting.reflections.length;
+      if (removed > 0) saveLastingMemory(state.lasting);
+      return removed;
+    },
     stop,
     reset,
   };
