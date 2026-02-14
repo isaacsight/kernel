@@ -1,0 +1,213 @@
+// Supabase Edge Function: stripe-webhook
+// Verifies Stripe webhook signatures and upserts subscription status.
+//
+// Deploy: npx supabase functions deploy stripe-webhook --project-ref eoxxpyixdieprsxlpwcs
+// Secrets: STRIPE_WEBHOOK_SECRET, SUPABASE_SERVICE_ROLE_KEY
+
+import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST',
+  'Access-Control-Allow-Headers': 'content-type, stripe-signature',
+}
+
+// HMAC-SHA256 signature verification (Deno-compatible, no Stripe SDK needed)
+async function verifyStripeSignature(
+  payload: string,
+  sigHeader: string,
+  secret: string,
+): Promise<boolean> {
+  const parts = sigHeader.split(',').reduce((acc, part) => {
+    const [key, value] = part.split('=')
+    if (key === 't') acc.timestamp = value
+    if (key === 'v1') acc.signatures.push(value)
+    return acc
+  }, { timestamp: '', signatures: [] as string[] })
+
+  if (!parts.timestamp || parts.signatures.length === 0) return false
+
+  // Reject timestamps older than 5 minutes
+  const age = Math.floor(Date.now() / 1000) - parseInt(parts.timestamp, 10)
+  if (age > 300) return false
+
+  const signedPayload = `${parts.timestamp}.${payload}`
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  )
+  const signatureBytes = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload))
+  const expectedSig = Array.from(new Uint8Array(signatureBytes))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+
+  return parts.signatures.some(sig => sig === expectedSig)
+}
+
+serve(async (req: Request) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: CORS_HEADERS })
+  }
+
+  const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')
+  if (!webhookSecret) {
+    console.error('Missing STRIPE_WEBHOOK_SECRET')
+    return new Response('Server misconfigured', { status: 500 })
+  }
+
+  const signature = req.headers.get('stripe-signature')
+  if (!signature) {
+    return new Response('Missing stripe-signature header', { status: 400 })
+  }
+
+  const body = await req.text()
+
+  const valid = await verifyStripeSignature(body, signature, webhookSecret)
+  if (!valid) {
+    console.error('Invalid Stripe signature')
+    return new Response('Invalid signature', { status: 400 })
+  }
+
+  const event = JSON.parse(body)
+  console.log(`Stripe event: ${event.type} (${event.id})`)
+
+  // Supabase admin client (bypasses RLS)
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  const supabase = createClient(supabaseUrl, serviceRoleKey)
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object
+        const userId = session.client_reference_id
+        if (!userId) {
+          console.error('No client_reference_id on checkout session')
+          break
+        }
+
+        const { error } = await supabase.from('subscriptions').upsert({
+          user_id: userId,
+          stripe_customer_id: session.customer,
+          stripe_subscription_id: session.subscription,
+          status: 'active',
+          current_period_end: null, // Will be set by invoice.paid
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' })
+
+        if (error) console.error('Upsert error (checkout.session.completed):', error)
+        else console.log(`Subscription activated for user ${userId}`)
+        break
+      }
+
+      case 'invoice.paid': {
+        const invoice = event.data.object
+        const subId = invoice.subscription
+        if (!subId) break
+
+        // Try to get user_id from subscription metadata
+        const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
+        let userId: string | null = null
+
+        if (stripeKey) {
+          const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subId}`, {
+            headers: { Authorization: `Bearer ${stripeKey}` },
+          })
+          if (subRes.ok) {
+            const sub = await subRes.json()
+            userId = sub.metadata?.supabase_user_id || null
+          }
+        }
+
+        if (userId) {
+          const { error } = await supabase.from('subscriptions').upsert({
+            user_id: userId,
+            stripe_customer_id: invoice.customer,
+            stripe_subscription_id: subId,
+            status: 'active',
+            current_period_end: new Date(invoice.lines?.data?.[0]?.period?.end * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'user_id' })
+
+          if (error) console.error('Upsert error (invoice.paid):', error)
+        } else {
+          // Fallback: update by stripe_subscription_id
+          const { error } = await supabase.from('subscriptions')
+            .update({
+              status: 'active',
+              current_period_end: new Date(invoice.lines?.data?.[0]?.period?.end * 1000).toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('stripe_subscription_id', subId)
+
+          if (error) console.error('Update error (invoice.paid fallback):', error)
+        }
+        break
+      }
+
+      case 'customer.subscription.updated': {
+        const sub = event.data.object
+        const userId = sub.metadata?.supabase_user_id
+        const status = sub.cancel_at_period_end ? 'canceled' : sub.status === 'active' ? 'active' : 'past_due'
+
+        if (userId) {
+          const { error } = await supabase.from('subscriptions').upsert({
+            user_id: userId,
+            stripe_customer_id: sub.customer,
+            stripe_subscription_id: sub.id,
+            status,
+            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'user_id' })
+
+          if (error) console.error('Upsert error (subscription.updated):', error)
+        } else {
+          const { error } = await supabase.from('subscriptions')
+            .update({
+              status,
+              current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('stripe_subscription_id', sub.id)
+
+          if (error) console.error('Update error (subscription.updated fallback):', error)
+        }
+        break
+      }
+
+      case 'customer.subscription.deleted': {
+        const sub = event.data.object
+        const userId = sub.metadata?.supabase_user_id
+
+        if (userId) {
+          const { error } = await supabase.from('subscriptions')
+            .update({ status: 'canceled', updated_at: new Date().toISOString() })
+            .eq('user_id', userId)
+
+          if (error) console.error('Update error (subscription.deleted):', error)
+        } else {
+          const { error } = await supabase.from('subscriptions')
+            .update({ status: 'canceled', updated_at: new Date().toISOString() })
+            .eq('stripe_subscription_id', sub.id)
+
+          if (error) console.error('Update error (subscription.deleted fallback):', error)
+        }
+        break
+      }
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`)
+    }
+  } catch (err) {
+    console.error('Webhook handler error:', err)
+    return new Response('Webhook handler error', { status: 500 })
+  }
+
+  return new Response(JSON.stringify({ received: true }), {
+    headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+  })
+})
