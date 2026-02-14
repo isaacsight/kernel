@@ -2,12 +2,25 @@
 //  The Antigravity Kernel — A Unified AI Engine
 // ═══════════════════════════════════════════════════════════════
 //
-//  Architecture: Perceive → Think → Decide → Act → Reflect
+//  This is not a wrapper around an API. It is a cognitive
+//  architecture. The engine perceives, attends, believes,
+//  reasons, decides, acts, and reflects. It maintains a world
+//  model — a running theory of what's true and what matters.
+//  It tracks conviction — how sure it is, and whether that
+//  surety is earned. It has an aesthetic sense — a preference
+//  for brevity, for elegance, for the right word at the
+//  right moment.
 //
-//  This engine unifies the scattered intelligence modules
-//  (reasoning, agents, providers, memory) into a single
-//  cognitive loop. It is the substrate upon which the
-//  Sovereign AI platform thinks.
+//  Architecture:
+//
+//    Perceive → Attend → Think → Decide → Act → Reflect
+//        ↑                                        │
+//        └──────────── World Model ───────────────┘
+//
+//  Memory (three geological strata):
+//    Ephemeral — vanishes after each cognitive cycle
+//    Working   — persists for the session
+//    Lasting   — survives across sessions
 //
 // ═══════════════════════════════════════════════════════════════
 
@@ -20,33 +33,94 @@ import type { Agent, Message } from '../types';
 // ─── Cognitive Phase ────────────────────────────────────────
 
 export type CognitivePhase =
-  | 'idle'        // Resting state — awaiting stimulus
-  | 'perceiving'  // Processing input, extracting intent
+  | 'idle'        // Resting — awaiting stimulus
+  | 'perceiving'  // Processing input, extracting signal
+  | 'attending'   // Deciding what matters most right now
   | 'thinking'    // Reasoning through the problem
   | 'deciding'    // Selecting agent and strategy
   | 'acting'      // Generating response
-  | 'reflecting'; // Evaluating output quality
+  | 'reflecting'; // Evaluating output, updating world model
 
 // ─── Intent Classification ──────────────────────────────────
 
+export type IntentType = 'discuss' | 'reason' | 'build' | 'evaluate' | 'converse';
+export type ReasoningDomain = 'financial' | 'technical' | 'strategic' | 'general';
+
 export type Intent =
   | { type: 'discuss'; topic: string }
-  | { type: 'reason'; question: string; domain: 'financial' | 'technical' | 'strategic' | 'general' }
+  | { type: 'reason'; question: string; domain: ReasoningDomain }
   | { type: 'build'; description: string }
   | { type: 'evaluate'; opportunity: string }
   | { type: 'converse'; message: string };
 
+// ─── Perception ─────────────────────────────────────────────
+//
+//  Perception is more than classification. It extracts the
+//  signal from noise: what kind of thing is this, how urgent,
+//  how complex, what emotional register, what does the human
+//  actually need (not just what they said).
+
+export interface Perception {
+  intent: Intent;
+  urgency: number;          // 0 (contemplative) → 1 (immediate)
+  complexity: number;       // 0 (trivial) → 1 (deeply layered)
+  sentiment: number;        // -1 (frustrated/negative) → 1 (excited/positive)
+  impliedNeed: string;      // what the human actually needs (often unstated)
+  keyEntities: string[];    // important nouns/concepts extracted
+  isQuestion: boolean;
+  isFollowUp: boolean;      // does this build on prior conversation?
+}
+
+// ─── Attention ──────────────────────────────────────────────
+//
+//  Not everything matters equally. Attention assigns salience
+//  weights to what the engine should focus on right now.
+
+export interface AttentionState {
+  primaryFocus: string;              // the one thing that matters most
+  salience: Record<string, number>;  // concept → weight (0-1)
+  distractions: string[];            // things to deliberately ignore
+  depth: 'surface' | 'moderate' | 'deep';  // how deep to go
+}
+
+// ─── World Model ────────────────────────────────────────────
+//
+//  The engine's running theory of what's true. Beliefs can
+//  be strong or weak, confirmed or uncertain. The world model
+//  is what makes the engine coherent across turns — it
+//  remembers not just what was said, but what it believes.
+
+export interface Belief {
+  id: string;
+  content: string;            // what the engine believes
+  confidence: number;         // 0-1 how sure
+  source: 'inferred' | 'stated' | 'observed' | 'reflected';
+  formedAt: number;           // timestamp
+  challengedCount: number;    // how many times this has been questioned
+  reinforcedCount: number;    // how many times this has been confirmed
+}
+
+export interface WorldModel {
+  beliefs: Belief[];
+  convictions: {
+    overall: number;          // 0-1: how sure the engine is about its worldview
+    trend: 'rising' | 'stable' | 'falling';
+    lastShift: number;        // timestamp of last significant change
+  };
+  situationSummary: string;   // one-sentence: what's happening right now
+  userModel: {
+    apparentGoal: string;     // what the human seems to be trying to do
+    communicationStyle: 'terse' | 'conversational' | 'detailed' | 'unknown';
+    expertise: 'beginner' | 'intermediate' | 'expert' | 'unknown';
+  };
+}
+
 // ─── Memory Layers ──────────────────────────────────────────
-//
-//  Three tiers, like geological strata:
-//  - Ephemeral: vanishes after each cognitive cycle
-//  - Working: persists for the session
-//  - Lasting: survives across sessions (localStorage)
-//
 
 export interface EphemeralMemory {
   currentInput: string;
-  parsedIntent: Intent | null;
+  perception: Perception | null;
+  attention: AttentionState | null;
   activeAgent: Agent | null;
   thinkingSteps: ThinkingStep[];
   startedAt: number;
@@ -56,20 +130,28 @@ export interface WorkingMemory {
   conversationHistory: Message[];
   topic: string;
   turnCount: number;
-  agentSequence: string[];     // which agents have spoken, in order
-  emotionalTone: number;       // -1 (critical) to 1 (affirming)
-  coherenceScore: number;      // how well the conversation flows (0-1)
+  agentSequence: string[];
+  emotionalTone: number;       // running average: -1 → 1
+  coherenceScore: number;      // 0-1: how well the conversation flows
+  threadSummary: string;       // compressed summary of conversation so far
+  unresolvedQuestions: string[];
 }
 
 export interface LastingMemory {
   totalInteractions: number;
-  preferredAgents: Record<string, number>;  // agent id → selection count
+  preferredAgents: Record<string, number>;
   topicHistory: string[];
   reflections: Reflection[];
   feedbackRatio: { positive: number; negative: number };
+  agentPerformance: Record<string, { uses: number; avgQuality: number }>;
+  patternNotes: string[];      // engine's own notes about what works
 }
 
 // ─── Reflection ─────────────────────────────────────────────
+//
+//  Reflection is the engine looking in a mirror. It assesses
+//  not just "did it work" but "was it right" — the difference
+//  between functional correctness and aesthetic quality.
 
 export interface Reflection {
   timestamp: number;
@@ -78,8 +160,17 @@ export interface Reflection {
   output: string;
   agentUsed: string;
   durationMs: number;
-  quality: number;  // 0-1 self-assessed
+  quality: number;             // 0-1 composite score
+  scores: {
+    substance: number;         // did it say something real?
+    coherence: number;         // does it flow from what came before?
+    relevance: number;         // does it address the actual need?
+    brevity: number;           // is it tight, or bloated?
+    craft: number;             // aesthetic quality — rhythm, word choice
+  };
   lesson: string;
+  worldModelUpdate: string | null;  // did this change what the engine believes?
+  convictionDelta: number;          // +/- change to overall conviction
 }
 
 // ─── Engine State ───────────────────────────────────────────
@@ -89,6 +180,7 @@ export interface EngineState {
   ephemeral: EphemeralMemory;
   working: WorkingMemory;
   lasting: LastingMemory;
+  worldModel: WorldModel;
   isOnline: boolean;
   cycleCount: number;
 }
@@ -97,18 +189,25 @@ export interface EngineState {
 
 export type EngineEvent =
   | { type: 'phase_changed'; phase: CognitivePhase; timestamp: number }
+  | { type: 'perception_complete'; perception: Perception; timestamp: number }
+  | { type: 'attention_set'; attention: AttentionState; timestamp: number }
   | { type: 'intent_parsed'; intent: Intent; timestamp: number }
+  | { type: 'belief_formed'; belief: Belief; timestamp: number }
+  | { type: 'belief_updated'; belief: Belief; delta: number; timestamp: number }
+  | { type: 'conviction_shifted'; from: number; to: number; reason: string; timestamp: number }
   | { type: 'agent_selected'; agent: Agent; reason: string; timestamp: number }
   | { type: 'thinking_step'; step: ThinkingStep; timestamp: number }
   | { type: 'response_chunk'; text: string; timestamp: number }
   | { type: 'cycle_complete'; reflection: Reflection; timestamp: number }
+  | { type: 'world_model_updated'; summary: string; timestamp: number }
   | { type: 'error'; message: string; timestamp: number };
 
 export type EngineListener = (event: EngineEvent) => void;
 
-// ─── The Engine ─────────────────────────────────────────────
+// ─── Storage ────────────────────────────────────────────────
 
 const LASTING_MEMORY_KEY = 'antigravity-kernel-memory';
+const WORLD_MODEL_KEY = 'antigravity-kernel-world';
 
 function loadLastingMemory(): LastingMemory {
   if (typeof window === 'undefined') return createEmptyLastingMemory();
@@ -124,9 +223,24 @@ function saveLastingMemory(memory: LastingMemory): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(LASTING_MEMORY_KEY, JSON.stringify(memory));
+  } catch { /* degrade gracefully */ }
+}
+
+function loadWorldModel(): WorldModel {
+  if (typeof window === 'undefined') return createEmptyWorldModel();
+  try {
+    const saved = localStorage.getItem(WORLD_MODEL_KEY);
+    return saved ? JSON.parse(saved) : createEmptyWorldModel();
   } catch {
-    // Storage full or unavailable — degrade gracefully
+    return createEmptyWorldModel();
   }
+}
+
+function saveWorldModel(model: WorldModel): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(WORLD_MODEL_KEY, JSON.stringify(model));
+  } catch { /* degrade gracefully */ }
 }
 
 function createEmptyLastingMemory(): LastingMemory {
@@ -136,18 +250,75 @@ function createEmptyLastingMemory(): LastingMemory {
     topicHistory: [],
     reflections: [],
     feedbackRatio: { positive: 0, negative: 0 },
+    agentPerformance: {},
+    patternNotes: [],
+  };
+}
+
+function createEmptyWorldModel(): WorldModel {
+  return {
+    beliefs: [],
+    convictions: { overall: 0.5, trend: 'stable', lastShift: Date.now() },
+    situationSummary: 'Awaiting first interaction.',
+    userModel: {
+      apparentGoal: 'unknown',
+      communicationStyle: 'unknown',
+      expertise: 'unknown',
+    },
   };
 }
 
 function createEmptyEphemeral(): EphemeralMemory {
   return {
     currentInput: '',
-    parsedIntent: null,
+    perception: null,
+    attention: null,
     activeAgent: null,
     thinkingSteps: [],
     startedAt: 0,
   };
 }
+
+// ─── Text Analysis Utilities ────────────────────────────────
+//
+//  These are the engine's senses — how it reads signal
+//  from raw text without calling an external API.
+
+const URGENCY_SIGNALS = [
+  'asap', 'urgent', 'now', 'immediately', 'quick', 'hurry',
+  'deadline', 'emergency', 'critical', 'blocked', 'stuck',
+];
+
+const COMPLEXITY_SIGNALS = [
+  'architecture', 'system', 'design', 'tradeoff', 'integrate',
+  'scale', 'distributed', 'optimize', 'refactor', 'migration',
+  'strategy', 'framework', 'paradigm', 'philosophy',
+];
+
+const NEGATIVE_SIGNALS = [
+  'frustrated', 'broken', 'wrong', 'bad', 'hate', 'terrible',
+  'confused', 'lost', "can't", "doesn't work", 'failing', 'error',
+];
+
+const POSITIVE_SIGNALS = [
+  'great', 'love', 'excited', 'amazing', 'perfect', 'beautiful',
+  'elegant', 'clean', 'brilliant', 'inspired', 'thank',
+];
+
+function countSignals(text: string, signals: string[]): number {
+  const lower = text.toLowerCase();
+  return signals.filter(s => lower.includes(s)).length;
+}
+
+function extractKeyEntities(text: string): string[] {
+  // Extract capitalized words and quoted phrases as key entities
+  const quoted = text.match(/"([^"]+)"|'([^']+)'/g)?.map(q => q.replace(/['"]/g, '')) || [];
+  const capitalized = text.match(/\b[A-Z][a-z]{2,}\b/g) || [];
+  const unique = [...new Set([...quoted, ...capitalized])];
+  return unique.slice(0, 5); // max 5 entities
+}
+
+// ─── The Engine ─────────────────────────────────────────────
 
 export function createEngine(): {
   getState: () => EngineState;
@@ -155,6 +326,8 @@ export function createEngine(): {
   perceive: (input: string) => Promise<void>;
   runDiscussion: (topic: string) => Promise<void>;
   injectHumanMessage: (content: string) => void;
+  addBelief: (content: string, confidence: number) => void;
+  challengeBelief: (beliefId: string) => void;
   stop: () => void;
   reset: () => void;
 } {
@@ -170,8 +343,11 @@ export function createEngine(): {
       agentSequence: [],
       emotionalTone: 0,
       coherenceScore: 1,
+      threadSummary: '',
+      unresolvedQuestions: [],
     },
     lasting: loadLastingMemory(),
+    worldModel: loadWorldModel(),
     isOnline: true,
     cycleCount: 0,
   };
@@ -183,11 +359,7 @@ export function createEngine(): {
 
   function emit(event: EngineEvent): void {
     for (const listener of listeners) {
-      try {
-        listener(event);
-      } catch {
-        // Listener errors should never crash the engine
-      }
+      try { listener(event); } catch { /* never crash the engine */ }
     }
   }
 
@@ -196,57 +368,124 @@ export function createEngine(): {
     emit({ type: 'phase_changed', phase, timestamp: Date.now() });
   }
 
-  // ── Phase 1: Perceive ───────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Phase 1: PERCEIVE
+  // ═══════════════════════════════════════════════════════
   //
-  //  Parse raw input into structured intent.
-  //  The engine understands *what kind of thing*
-  //  is being asked before it thinks about it.
+  //  Raw input → structured understanding.
+  //  The engine extracts:
+  //    - Intent: what kind of thing is being asked
+  //    - Urgency: how fast does this need an answer
+  //    - Complexity: how deep does the engine need to go
+  //    - Sentiment: what emotional register is the human in
+  //    - Implied need: what do they actually need (unstated)
+  //    - Key entities: important concepts to focus on
 
-  function parseIntent(input: string): Intent {
+  function perceiveInput(input: string): Perception {
     const lower = input.toLowerCase();
+    const words = input.split(/\s+/);
+    const wordCount = words.length;
 
-    // Reasoning triggers
+    // ── Intent Classification ──
+    const intent = classifyIntent(input, lower);
+
+    // ── Urgency (0-1) ──
+    const urgencyHits = countSignals(input, URGENCY_SIGNALS);
+    const hasQuestionMark = input.includes('?');
+    const isShort = wordCount < 8;
+    const urgency = Math.min(1, (urgencyHits * 0.3) + (isShort ? 0.1 : 0) + (hasQuestionMark ? 0.05 : 0));
+
+    // ── Complexity (0-1) ──
+    const complexityHits = countSignals(input, COMPLEXITY_SIGNALS);
+    const hasMultipleSentences = (input.match(/[.!?]+/g)?.length || 0) > 1;
+    const isLong = wordCount > 30;
+    const complexity = Math.min(1,
+      (complexityHits * 0.2) +
+      (hasMultipleSentences ? 0.15 : 0) +
+      (isLong ? 0.2 : 0) +
+      (intent.type === 'reason' ? 0.3 : 0) +
+      (intent.type === 'evaluate' ? 0.2 : 0)
+    );
+
+    // ── Sentiment (-1 to 1) ──
+    const negHits = countSignals(input, NEGATIVE_SIGNALS);
+    const posHits = countSignals(input, POSITIVE_SIGNALS);
+    const sentiment = Math.max(-1, Math.min(1, (posHits - negHits) * 0.3));
+
+    // ── Implied Need ──
+    const impliedNeed = inferNeed(intent, urgency, complexity, sentiment);
+
+    // ── Key Entities ──
+    const keyEntities = extractKeyEntities(input);
+
+    // ── Is Follow-Up? ──
+    const isFollowUp =
+      lower.startsWith('and ') ||
+      lower.startsWith('also ') ||
+      lower.startsWith('but ') ||
+      lower.startsWith('what about') ||
+      lower.startsWith('how about') ||
+      state.working.conversationHistory.length > 0;
+
+    return {
+      intent,
+      urgency,
+      complexity,
+      sentiment,
+      impliedNeed,
+      keyEntities,
+      isQuestion: hasQuestionMark || lower.startsWith('how') || lower.startsWith('what') || lower.startsWith('why') || lower.startsWith('should'),
+      isFollowUp,
+    };
+  }
+
+  function classifyIntent(input: string, lower: string): Intent {
+    // Reasoning triggers — need deep thought
     if (
       lower.includes('think about') || lower.includes('analyze') ||
       lower.includes('evaluate') || lower.includes('should i') ||
       lower.includes('worth it') || lower.includes('expected value') ||
       lower.includes('strategy') || lower.includes('calculate') ||
-      lower.includes('reason through')
+      lower.includes('reason through') || lower.includes('what if')
     ) {
-      const domain = lower.includes('money') || lower.includes('revenue') || lower.includes('cost')
-        ? 'financial' as const
-        : lower.includes('code') || lower.includes('build') || lower.includes('architecture')
-        ? 'technical' as const
-        : lower.includes('plan') || lower.includes('approach') || lower.includes('strategy')
-        ? 'strategic' as const
-        : 'general' as const;
+      const domain: ReasoningDomain =
+        lower.includes('money') || lower.includes('revenue') || lower.includes('cost') || lower.includes('profit')
+          ? 'financial'
+          : lower.includes('code') || lower.includes('build') || lower.includes('architecture') || lower.includes('system')
+          ? 'technical'
+          : lower.includes('plan') || lower.includes('approach') || lower.includes('strategy') || lower.includes('decision')
+          ? 'strategic'
+          : 'general';
 
       return { type: 'reason', question: input, domain };
     }
 
-    // Build triggers
+    // Build triggers — need construction
     if (
       lower.includes('build') || lower.includes('create') ||
-      lower.includes('implement') || lower.includes('make me')
+      lower.includes('implement') || lower.includes('make me') ||
+      lower.includes('write a') || lower.includes('generate')
     ) {
       return { type: 'build', description: input };
     }
 
-    // Evaluation triggers
+    // Evaluation triggers — need assessment
     if (
       lower.includes('opportunity') || lower.includes('evaluate this') ||
-      lower.includes('is this worth') || lower.includes('should we pursue')
+      lower.includes('is this worth') || lower.includes('should we pursue') ||
+      lower.includes('viable') || lower.includes('feasible')
     ) {
       return { type: 'evaluate', opportunity: input };
     }
 
-    // Discussion triggers
+    // Discussion triggers — need multi-perspective exploration
     if (
       lower.includes('discuss') || lower.includes('what do you think about') ||
-      lower.includes("let's talk about") || lower.includes('debate')
+      lower.includes("let's talk about") || lower.includes('debate') ||
+      lower.includes('perspectives on') || lower.includes('opinions on')
     ) {
       const topic = input
-        .replace(/discuss|what do you think about|let's talk about|debate/gi, '')
+        .replace(/discuss|what do you think about|let's talk about|debate|perspectives on|opinions on/gi, '')
         .trim() || input;
       return { type: 'discuss', topic };
     }
@@ -255,23 +494,125 @@ export function createEngine(): {
     return { type: 'converse', message: input };
   }
 
-  // ── Phase 2: Think ──────────────────────────────────────
-  //
-  //  Engage the reasoning engine for complex queries.
-  //  Simpler intents skip this phase.
-
-  async function think(intent: Intent): Promise<ReasoningResult | null> {
-    if (intent.type !== 'reason' && intent.type !== 'evaluate') {
-      return null;
+  function inferNeed(
+    intent: Intent,
+    urgency: number,
+    complexity: number,
+    sentiment: number,
+  ): string {
+    if (sentiment < -0.3) {
+      return 'Reassurance and a clear path forward';
+    }
+    if (urgency > 0.6) {
+      return 'A fast, decisive answer';
+    }
+    if (complexity > 0.6) {
+      return 'Deep analysis with visible reasoning';
     }
 
+    switch (intent.type) {
+      case 'discuss': return 'Multiple perspectives to think with';
+      case 'reason': return 'Rigorous thinking made visible';
+      case 'build': return 'A concrete plan or artifact';
+      case 'evaluate': return 'An honest assessment with numbers';
+      case 'converse': return 'A thoughtful, human response';
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Phase 2: ATTEND
+  // ═══════════════════════════════════════════════════════
+  //
+  //  Not everything matters equally. Attention selects what
+  //  the engine should focus on, and what it should ignore.
+  //  This prevents the engine from being pulled in every
+  //  direction at once.
+
+  function attend(perception: Perception): AttentionState {
+    const { intent, complexity, keyEntities, isFollowUp } = perception;
+
+    // Primary focus = the core of what's being asked
+    const primaryFocus = intent.type === 'discuss'
+      ? intent.topic
+      : intent.type === 'reason'
+      ? intent.question
+      : intent.type === 'build'
+      ? intent.description
+      : intent.type === 'evaluate'
+      ? intent.opportunity
+      : intent.message;
+
+    // Build salience map from entities + conversation context
+    const salience: Record<string, number> = {};
+    keyEntities.forEach((entity, i) => {
+      salience[entity] = 1 - (i * 0.15); // first entity = most salient
+    });
+
+    // Boost salience of things mentioned in recent conversation
+    if (isFollowUp) {
+      const recentMessages = state.working.conversationHistory.slice(-3);
+      for (const msg of recentMessages) {
+        for (const entity of keyEntities) {
+          if (msg.content.toLowerCase().includes(entity.toLowerCase())) {
+            salience[entity] = Math.min(1, (salience[entity] || 0) + 0.2);
+          }
+        }
+      }
+    }
+
+    // Depth depends on complexity and intent
+    const depth: AttentionState['depth'] =
+      complexity > 0.6 || intent.type === 'reason' ? 'deep' :
+      complexity > 0.3 || intent.type === 'evaluate' ? 'moderate' :
+      'surface';
+
+    // Distractions = things that might pull attention away
+    const distractions: string[] = [];
+    if (state.working.unresolvedQuestions.length > 2) {
+      distractions.push('accumulated unresolved questions');
+    }
+
+    return { primaryFocus, salience, distractions, depth };
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Phase 3: THINK
+  // ═══════════════════════════════════════════════════════
+  //
+  //  Engage the reasoning engine for complex queries.
+  //  Informed by attention (what to focus on) and world
+  //  model (what we already believe). Simpler intents
+  //  skip this phase entirely.
+
+  async function think(
+    perception: Perception,
+    attention: AttentionState,
+  ): Promise<ReasoningResult | null> {
+    if (perception.intent.type !== 'reason' && perception.intent.type !== 'evaluate') {
+      return null;
+    }
+    if (attention.depth === 'surface') {
+      return null; // not worth deep thought
+    }
+
+    const intent = perception.intent;
     const question = intent.type === 'reason' ? intent.question : intent.opportunity;
     const domain = intent.type === 'reason' ? intent.domain : 'financial';
 
-    try {
-      const result = await reason(question, undefined, domain);
+    // Enrich the question with world model context
+    const beliefContext = state.worldModel.beliefs
+      .filter(b => b.confidence > 0.6)
+      .slice(-3)
+      .map(b => b.content)
+      .join('; ');
 
-      // Emit each thinking step for the UI
+    const enrichedContext = beliefContext
+      ? `Current understanding: ${beliefContext}`
+      : undefined;
+
+    try {
+      const result = await reason(question, enrichedContext, domain);
+
       for (const step of result.thinking) {
         emit({ type: 'thinking_step', step, timestamp: Date.now() });
         state.ephemeral.thinkingSteps.push(step);
@@ -283,72 +624,126 @@ export function createEngine(): {
     }
   }
 
-  // ── Phase 3: Decide ─────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Phase 4: DECIDE
+  // ═══════════════════════════════════════════════════════
   //
-  //  Select the right agent to handle the response.
-  //  Uses intent, conversation history, and lasting memory
-  //  to make the best choice.
+  //  Select the right agent, informed by:
+  //    - Intent (what kind of thing is being asked)
+  //    - Attention (what matters)
+  //    - World model (what we believe about the user)
+  //    - Lasting memory (what's worked before)
 
-  function selectAgent(intent: Intent): { agent: Agent; reason: string } {
+  function selectAgent(
+    perception: Perception,
+    attention: AttentionState,
+  ): { agent: Agent; reason: string; confidence: number } {
+    const { intent, urgency, complexity } = perception;
+    const perf = state.lasting.agentPerformance;
+
     switch (intent.type) {
       case 'discuss': {
-        // For discussions, rotate through kernel agents
         const lastAgentId = state.working.agentSequence[state.working.agentSequence.length - 1];
-        const agent = lastAgentId
-          ? getNextAgent(lastAgentId)
-          : KERNEL_AGENTS[0];
-        return { agent, reason: 'Discussion rotation — next voice in sequence' };
+        const agent = lastAgentId ? getNextAgent(lastAgentId) : KERNEL_AGENTS[0];
+        return { agent, reason: 'Discussion rotation — next voice', confidence: 0.9 };
       }
 
-      case 'reason':
+      case 'reason': {
+        const reasoner = SWARM_AGENTS.find(a => a.id === 'reasoner')!;
+        const reasonerPerf = perf['reasoner'];
+        const confidence = reasonerPerf ? Math.min(0.95, 0.7 + reasonerPerf.avgQuality * 0.25) : 0.7;
         return {
-          agent: SWARM_AGENTS.find(a => a.id === 'reasoner') || SWARM_AGENTS[0],
-          reason: `Deep ${intent.domain} reasoning required`,
+          agent: reasoner,
+          reason: `Deep ${intent.domain} reasoning (depth: ${attention.depth})`,
+          confidence,
         };
+      }
 
-      case 'build':
+      case 'build': {
+        // If urgent, go straight to builder. If complex, start with architect.
+        if (urgency > 0.6 && complexity < 0.5) {
+          return {
+            agent: SWARM_AGENTS.find(a => a.id === 'builder')!,
+            reason: 'Urgent + simple — routing direct to Builder',
+            confidence: 0.75,
+          };
+        }
         return {
-          agent: SWARM_AGENTS.find(a => a.id === 'architect') || SWARM_AGENTS[0],
-          reason: 'Build request — routing to Architect for scoping',
+          agent: SWARM_AGENTS.find(a => a.id === 'architect')!,
+          reason: 'Build request — Architect scopes first',
+          confidence: 0.85,
         };
+      }
 
-      case 'evaluate':
+      case 'evaluate': {
         return {
-          agent: SWARM_AGENTS.find(a => a.id === 'scout') || SWARM_AGENTS[0],
+          agent: SWARM_AGENTS.find(a => a.id === 'scout')!,
           reason: 'Opportunity evaluation — Scout assesses viability',
+          confidence: 0.8,
         };
+      }
 
       case 'converse': {
-        // Route based on message content using the swarm router
         const routed = routeToAgent(intent.message);
-        return { agent: routed, reason: `Content-based routing to ${routed.name}` };
+
+        // Check if this agent has historically performed well
+        const agentPerf = perf[routed.id];
+        const confidence = agentPerf
+          ? Math.min(0.9, 0.5 + agentPerf.avgQuality * 0.4)
+          : 0.6;
+
+        return {
+          agent: routed,
+          reason: `Content-routed to ${routed.name}`,
+          confidence,
+        };
       }
     }
   }
 
-  // ── Phase 4: Act ────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Phase 5: ACT
+  // ═══════════════════════════════════════════════════════
   //
-  //  Generate the actual response through the selected
-  //  agent and provider. Streams chunks back via events.
+  //  Generate the response. The agent speaks, shaped by
+  //  everything the engine has perceived, attended to,
+  //  thought about, and decided.
 
   async function act(
     agent: Agent,
-    intent: Intent,
-    reasoning: ReasoningResult | null
+    perception: Perception,
+    attention: AttentionState,
+    reasoning: ReasoningResult | null,
   ): Promise<string> {
-    const contextSuffix = reasoning
-      ? `\n\n[Reasoning completed with ${reasoning.confidence * 100}% confidence: ${reasoning.conclusion}]`
+    const contextParts: string[] = [];
+
+    // Add reasoning conclusion if available
+    if (reasoning) {
+      contextParts.push(
+        `[Reasoning (${(reasoning.confidence * 100).toFixed(0)}% confidence): ${reasoning.conclusion}]`
+      );
+    }
+
+    // Add attention focus
+    if (attention.depth !== 'surface') {
+      contextParts.push(`[Focus: ${attention.primaryFocus}]`);
+    }
+
+    // Add user model context if known
+    if (state.worldModel.userModel.apparentGoal !== 'unknown') {
+      contextParts.push(`[User goal: ${state.worldModel.userModel.apparentGoal}]`);
+    }
+
+    const contextSuffix = contextParts.length > 0
+      ? '\n\n' + contextParts.join('\n')
       : '';
 
-    const topic = intent.type === 'discuss'
-      ? intent.topic
-      : intent.type === 'reason'
-      ? intent.question
-      : intent.type === 'build'
-      ? intent.description
-      : intent.type === 'evaluate'
-      ? intent.opportunity
-      : intent.message;
+    const topic =
+      perception.intent.type === 'discuss' ? perception.intent.topic :
+      perception.intent.type === 'reason' ? perception.intent.question :
+      perception.intent.type === 'build' ? perception.intent.description :
+      perception.intent.type === 'evaluate' ? perception.intent.opportunity :
+      perception.intent.message;
 
     let accumulated = '';
     const response = await generateResponse(
@@ -364,94 +759,327 @@ export function createEngine(): {
     return response || accumulated;
   }
 
-  // ── Phase 5: Reflect ────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Phase 6: REFLECT
+  // ═══════════════════════════════════════════════════════
   //
-  //  After acting, the engine evaluates its own output.
-  //  This is how it learns over time.
+  //  The engine looks at what it just produced and asks:
+  //  - Was this good? (substance, coherence, relevance)
+  //  - Was this beautiful? (brevity, craft)
+  //  - What should I believe differently now?
+  //  - How confident am I?
+  //
+  //  Reflection feeds back into the world model and
+  //  lasting memory, closing the loop.
 
   function reflect(
     input: string,
     output: string,
     agent: Agent,
-    durationMs: number
+    perception: Perception,
+    durationMs: number,
   ): Reflection {
-    // Simple heuristics for self-assessment
+    const words = output.split(/\s+/).length;
+    const sentences = (output.match(/[.!?]+/g) || []).length || 1;
+    const avgSentenceLength = words / sentences;
+
+    // ── Substance (0-1) ──
+    // Does it say something real, or is it filler?
     const hasSubstance = output.length > 50;
-    const isCoherent = !output.includes('Error') && !output.includes('Unable to');
-    const isRelevant = output.toLowerCase().includes(
-      input.toLowerCase().split(' ')[0] || ''
+    const hasSpecifics = /\d/.test(output) || output.includes('"') || output.includes('because');
+    const notBoilerplate = !output.includes('I can help') && !output.includes('Here is');
+    const substance = (
+      (hasSubstance ? 0.4 : 0) +
+      (hasSpecifics ? 0.35 : 0) +
+      (notBoilerplate ? 0.25 : 0)
+    );
+
+    // ── Coherence (0-1) ──
+    // Does it flow from what came before?
+    const noErrors = !output.includes('Error') && !output.includes('Unable to');
+    const lastMessage = state.working.conversationHistory[state.working.conversationHistory.length - 2];
+    const buildsOnPrior = lastMessage
+      ? output.toLowerCase().split(' ').some(w =>
+          w.length > 4 && lastMessage.content.toLowerCase().includes(w)
+        )
+      : true;
+    const coherence = (noErrors ? 0.5 : 0) + (buildsOnPrior ? 0.5 : 0);
+
+    // ── Relevance (0-1) ──
+    // Does it address the actual need?
+    const inputWords = input.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+    const outputLower = output.toLowerCase();
+    const relevantWords = inputWords.filter(w => outputLower.includes(w)).length;
+    const relevance = inputWords.length > 0
+      ? Math.min(1, relevantWords / Math.min(inputWords.length, 5))
+      : 0.5;
+
+    // ── Brevity (0-1) ──
+    // Is it tight? The best responses say a lot in little.
+    // Sweet spot: 2-4 sentences for discussion, more for reasoning.
+    const isReasoning = perception.intent.type === 'reason' || perception.intent.type === 'evaluate';
+    const idealSentences = isReasoning ? 8 : 3;
+    const sentenceRatio = sentences / idealSentences;
+    const brevity = sentenceRatio <= 1
+      ? 0.6 + (sentenceRatio * 0.4)  // under ideal = good
+      : Math.max(0, 1 - (sentenceRatio - 1) * 0.3); // over ideal = penalty
+    const brevityFinal = Math.min(1, brevity * (avgSentenceLength < 25 ? 1 : 0.7));
+
+    // ── Craft (0-1) ──
+    // Aesthetic quality. Does it read well?
+    const hasVariedPunctuation = /[;:—–]/.test(output);
+    const noRepetition = new Set(output.toLowerCase().split(/\s+/)).size / words > 0.6;
+    const notGeneric = !output.includes('In conclusion') && !output.includes('Overall');
+    const craft = (
+      (hasVariedPunctuation ? 0.3 : 0) +
+      (noRepetition ? 0.4 : 0) +
+      (notGeneric ? 0.3 : 0)
     );
 
     const quality = (
-      (hasSubstance ? 0.4 : 0) +
-      (isCoherent ? 0.4 : 0) +
-      (isRelevant ? 0.2 : 0)
+      substance * 0.25 +
+      coherence * 0.25 +
+      relevance * 0.2 +
+      brevity * 0.15 +
+      craft * 0.15
     );
 
-    const lesson = quality > 0.7
-      ? `${agent.name} handled this well. Similar inputs should route here.`
-      : quality > 0.4
-      ? `Adequate response from ${agent.name}. Consider deeper reasoning next time.`
-      : `Poor response quality. Re-evaluate agent selection for this intent type.`;
+    // ── Conviction Delta ──
+    const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0;
+
+    // ── Lesson ──
+    const lesson =
+      quality > 0.75
+        ? `Strong cycle. ${agent.name}'s voice fits this intent well.`
+        : quality > 0.5
+        ? substance < 0.5
+          ? `${agent.name} responded but lacked specifics. Push for concrete details.`
+          : brevity < 0.4
+          ? `Too verbose. ${agent.name} should be more concise for ${perception.intent.type} intents.`
+          : `Adequate. The coherence could improve — build more on prior context.`
+        : `Weak cycle. ${
+            coherence < 0.3 ? 'Lost thread of conversation.' :
+            relevance < 0.3 ? 'Missed the actual question.' :
+            `${agent.name} may not be the right voice for this.`
+          }`;
+
+    // ── World Model Update ──
+    let worldModelUpdate: string | null = null;
+    if (perception.isQuestion && quality > 0.6) {
+      worldModelUpdate = `User asks ${perception.intent.type} questions — prefers ${perception.complexity > 0.5 ? 'depth' : 'directness'}.`;
+    }
 
     return {
       timestamp: Date.now(),
       phase: 'reflecting',
       input,
-      output: output.slice(0, 200),
+      output: output.slice(0, 300),
       agentUsed: agent.id,
       durationMs,
       quality,
+      scores: {
+        substance,
+        coherence,
+        relevance,
+        brevity: brevityFinal,
+        craft,
+      },
       lesson,
+      worldModelUpdate,
+      convictionDelta,
     };
   }
 
-  // ── The Cognitive Loop ──────────────────────────────────
-  //
-  //  The full cycle: perceive → think → decide → act → reflect.
-  //  Each phase emits events that the UI can observe.
+  // ═══════════════════════════════════════════════════════
+  //  WORLD MODEL OPERATIONS
+  // ═══════════════════════════════════════════════════════
 
-  async function perceive(input: string): Promise<void> {
+  function formBelief(content: string, confidence: number, source: Belief['source']): Belief {
+    const belief: Belief = {
+      id: `belief_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      content,
+      confidence,
+      source,
+      formedAt: Date.now(),
+      challengedCount: 0,
+      reinforcedCount: 0,
+    };
+
+    // Check if a similar belief already exists
+    const existing = state.worldModel.beliefs.find(b =>
+      b.content.toLowerCase().includes(content.toLowerCase().slice(0, 20)) ||
+      content.toLowerCase().includes(b.content.toLowerCase().slice(0, 20))
+    );
+
+    if (existing) {
+      // Reinforce existing belief
+      existing.confidence = Math.min(1, existing.confidence + 0.1);
+      existing.reinforcedCount++;
+      emit({ type: 'belief_updated', belief: existing, delta: 0.1, timestamp: Date.now() });
+      return existing;
+    }
+
+    // Add new belief (keep last 20)
+    state.worldModel.beliefs = [
+      ...state.worldModel.beliefs.slice(-19),
+      belief,
+    ];
+    emit({ type: 'belief_formed', belief, timestamp: Date.now() });
+    return belief;
+  }
+
+  function challengeBeliefById(beliefId: string): void {
+    const belief = state.worldModel.beliefs.find(b => b.id === beliefId);
+    if (!belief) return;
+
+    belief.confidence = Math.max(0, belief.confidence - 0.15);
+    belief.challengedCount++;
+
+    emit({ type: 'belief_updated', belief, delta: -0.15, timestamp: Date.now() });
+
+    // If challenged too many times, discard
+    if (belief.confidence < 0.1) {
+      state.worldModel.beliefs = state.worldModel.beliefs.filter(b => b.id !== beliefId);
+    }
+  }
+
+  function shiftConviction(delta: number, reason: string): void {
+    const from = state.worldModel.convictions.overall;
+    const to = Math.max(0, Math.min(1, from + delta));
+    const isSignificant = Math.abs(delta) > 0.02;
+
+    state.worldModel.convictions = {
+      overall: to,
+      trend: delta > 0.01 ? 'rising' : delta < -0.01 ? 'falling' : 'stable',
+      lastShift: isSignificant ? Date.now() : state.worldModel.convictions.lastShift,
+    };
+
+    if (isSignificant) {
+      emit({ type: 'conviction_shifted', from, to, reason, timestamp: Date.now() });
+    }
+  }
+
+  function updateWorldModel(reflection: Reflection, perception: Perception): void {
+    // Update conviction
+    shiftConviction(reflection.convictionDelta, reflection.lesson);
+
+    // Update situation summary
+    state.worldModel.situationSummary = state.working.topic
+      ? `In discussion about "${state.working.topic}". Turn ${state.working.turnCount}.`
+      : `Processing ${perception.intent.type} request.`;
+
+    // Update user model based on patterns
+    const history = state.working.conversationHistory.filter(m => m.agentId === 'human');
+    if (history.length >= 2) {
+      const avgLength = history.reduce((sum, m) => sum + m.content.length, 0) / history.length;
+      state.worldModel.userModel.communicationStyle =
+        avgLength < 30 ? 'terse' :
+        avgLength < 100 ? 'conversational' :
+        'detailed';
+    }
+
+    // Form beliefs from reflection insights
+    if (reflection.worldModelUpdate) {
+      formBelief(reflection.worldModelUpdate, 0.6, 'reflected');
+    }
+
+    // Track unresolved questions
+    if (perception.isQuestion && reflection.scores.relevance < 0.4) {
+      state.working.unresolvedQuestions = [
+        ...state.working.unresolvedQuestions.slice(-4),
+        state.ephemeral.currentInput,
+      ];
+    }
+
+    // Update agent performance
+    const agentId = reflection.agentUsed;
+    const existing = state.lasting.agentPerformance[agentId] || { uses: 0, avgQuality: 0 };
+    const newAvg = (existing.avgQuality * existing.uses + reflection.quality) / (existing.uses + 1);
+    state.lasting.agentPerformance[agentId] = {
+      uses: existing.uses + 1,
+      avgQuality: newAvg,
+    };
+
+    // Generate thread summary periodically
+    if (state.working.turnCount % 5 === 0 && state.working.conversationHistory.length > 0) {
+      const recent = state.working.conversationHistory.slice(-5);
+      const speakers = [...new Set(recent.map(m => m.agentName))].join(', ');
+      state.working.threadSummary = `${speakers} discussed "${state.working.topic}" over ${state.working.turnCount} turns.`;
+    }
+
+    // Save
+    saveWorldModel(state.worldModel);
+    saveLastingMemory(state.lasting);
+
+    emit({
+      type: 'world_model_updated',
+      summary: state.worldModel.situationSummary,
+      timestamp: Date.now(),
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  THE COGNITIVE LOOP
+  // ═══════════════════════════════════════════════════════
+  //
+  //  The full cycle, now with attention and world model:
+  //
+  //  perceive → attend → think → decide → act → reflect
+  //      ↑                                        │
+  //      └──────── world model updated ───────────┘
+
+  async function cognitiveLoop(input: string): Promise<void> {
     if (aborted) return;
+    aborted = false;
     const cycleStart = Date.now();
 
-    // Reset ephemeral memory for new cycle
+    // Reset ephemeral
     state.ephemeral = {
       ...createEmptyEphemeral(),
       currentInput: input,
       startedAt: cycleStart,
     };
 
-    // ── Perceive ──
+    // ── 1. Perceive ──
     setPhase('perceiving');
-    const intent = parseIntent(input);
-    state.ephemeral.parsedIntent = intent;
-    emit({ type: 'intent_parsed', intent, timestamp: Date.now() });
+    const perception = perceiveInput(input);
+    state.ephemeral.perception = perception;
+    emit({ type: 'perception_complete', perception, timestamp: Date.now() });
+    emit({ type: 'intent_parsed', intent: perception.intent, timestamp: Date.now() });
 
     if (aborted) return;
 
-    // ── Think ──
+    // ── 2. Attend ──
+    setPhase('attending');
+    const attention = attend(perception);
+    state.ephemeral.attention = attention;
+    emit({ type: 'attention_set', attention, timestamp: Date.now() });
+
+    if (aborted) return;
+
+    // ── 3. Think ──
     setPhase('thinking');
-    const reasoning = await think(intent);
+    const reasoning = await think(perception, attention);
 
     if (aborted) return;
 
-    // ── Decide ──
+    // ── 4. Decide ──
     setPhase('deciding');
-    const { agent, reason: selectionReason } = selectAgent(intent);
+    const { agent, reason: selectionReason, confidence } = selectAgent(perception, attention);
     state.ephemeral.activeAgent = agent;
-    emit({ type: 'agent_selected', agent, reason: selectionReason, timestamp: Date.now() });
+    emit({ type: 'agent_selected', agent, reason: `${selectionReason} (${(confidence * 100).toFixed(0)}% confident)`, timestamp: Date.now() });
 
     if (aborted) return;
 
-    // ── Act ──
+    // ── 5. Act ──
     setPhase('acting');
     let response: string;
     try {
-      response = await act(agent, intent, reasoning);
+      response = await act(agent, perception, attention, reasoning);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error during generation';
       emit({ type: 'error', message, timestamp: Date.now() });
+      shiftConviction(-0.05, 'Generation error');
       setPhase('idle');
       return;
     }
@@ -470,61 +1098,80 @@ export function createEngine(): {
     state.working.turnCount++;
     state.working.agentSequence.push(agent.id);
 
-    // ── Reflect ──
+    // Update emotional tone (running average)
+    state.working.emotionalTone =
+      state.working.emotionalTone * 0.7 + perception.sentiment * 0.3;
+
+    // ── 6. Reflect ──
     setPhase('reflecting');
     const durationMs = Date.now() - cycleStart;
-    const reflection = reflect(input, response, agent, durationMs);
+    const reflection = reflect(input, response, agent, perception, durationMs);
 
     // Update lasting memory
     state.lasting.totalInteractions++;
     state.lasting.preferredAgents[agent.id] =
       (state.lasting.preferredAgents[agent.id] || 0) + 1;
     state.lasting.reflections = [
-      ...state.lasting.reflections.slice(-49), // Keep last 50
+      ...state.lasting.reflections.slice(-49),
       reflection,
     ];
-    saveLastingMemory(state.lasting);
+
+    // Add pattern note for significant learnings
+    if (reflection.quality < 0.3 || reflection.quality > 0.85) {
+      state.lasting.patternNotes = [
+        ...state.lasting.patternNotes.slice(-19),
+        `[${new Date().toLocaleDateString()}] ${reflection.lesson}`,
+      ];
+    }
+
+    // Update world model
+    updateWorldModel(reflection, perception);
 
     state.cycleCount++;
     emit({ type: 'cycle_complete', reflection, timestamp: Date.now() });
 
-    // Return to idle
     setPhase('idle');
   }
 
   // ── Discussion Mode ─────────────────────────────────────
-  //
-  //  Continuous multi-agent discussion. Each agent takes
-  //  a turn, with contemplative pauses between.
 
   async function runDiscussion(topic: string): Promise<void> {
     aborted = false;
     state.working.topic = topic;
 
     if (!state.lasting.topicHistory.includes(topic)) {
-      state.lasting.topicHistory = [
-        ...state.lasting.topicHistory.slice(-19),
-        topic,
-      ];
+      state.lasting.topicHistory = [...state.lasting.topicHistory.slice(-19), topic];
       saveLastingMemory(state.lasting);
     }
 
-    // First agent starts
+    // Form a belief about this discussion
+    formBelief(`Currently exploring: "${topic}"`, 0.8, 'observed');
+
     let currentAgent = KERNEL_AGENTS[0];
 
     while (!aborted) {
       const cycleStart = Date.now();
 
-      setPhase('deciding');
+      setPhase('attending');
+      const attention: AttentionState = {
+        primaryFocus: topic,
+        salience: { [topic]: 1 },
+        distractions: [],
+        depth: 'moderate',
+      };
       state.ephemeral = {
         ...createEmptyEphemeral(),
         activeAgent: currentAgent,
+        attention,
         startedAt: cycleStart,
       };
+      emit({ type: 'attention_set', attention, timestamp: Date.now() });
+
+      setPhase('deciding');
       emit({
         type: 'agent_selected',
         agent: currentAgent,
-        reason: 'Discussion turn',
+        reason: `Discussion turn — ${currentAgent.name} speaks`,
         timestamp: Date.now(),
       });
 
@@ -540,7 +1187,8 @@ export function createEngine(): {
           }
         );
       } catch {
-        emit({ type: 'error', message: 'Generation failed, pausing discussion', timestamp: Date.now() });
+        emit({ type: 'error', message: 'Generation failed', timestamp: Date.now() });
+        shiftConviction(-0.03, 'Discussion generation error');
         break;
       }
 
@@ -558,20 +1206,28 @@ export function createEngine(): {
       state.working.agentSequence.push(currentAgent.id);
 
       setPhase('reflecting');
-      const reflection = reflect(topic, response, currentAgent, Date.now() - cycleStart);
+      const perception: Perception = {
+        intent: { type: 'discuss', topic },
+        urgency: 0,
+        complexity: 0.5,
+        sentiment: 0,
+        impliedNeed: 'Multiple perspectives',
+        keyEntities: extractKeyEntities(response),
+        isQuestion: false,
+        isFollowUp: true,
+      };
+      const reflection = reflect(topic, response, currentAgent, perception, Date.now() - cycleStart);
+      updateWorldModel(reflection, perception);
       emit({ type: 'cycle_complete', reflection, timestamp: Date.now() });
 
       state.cycleCount++;
-
-      // Advance to next agent
       currentAgent = getNextAgent(currentAgent.id);
 
-      // Contemplative pause (2-4 seconds)
+      // Contemplative pause
       setPhase('idle');
       await new Promise<void>((resolve) => {
         const delay = 2000 + Math.random() * 2000;
         const timeout = setTimeout(resolve, delay);
-        // Allow abort during pause
         const check = setInterval(() => {
           if (aborted) {
             clearTimeout(timeout);
@@ -596,6 +1252,12 @@ export function createEngine(): {
       timestamp: new Date(),
     };
     state.working.conversationHistory.push(message);
+
+    // Update user model from human messages
+    const style = content.length < 30 ? 'terse'
+      : content.length < 100 ? 'conversational'
+      : 'detailed';
+    state.worldModel.userModel.communicationStyle = style as typeof state.worldModel.userModel.communicationStyle;
   }
 
   // ── Control ─────────────────────────────────────────────
@@ -617,8 +1279,11 @@ export function createEngine(): {
         agentSequence: [],
         emotionalTone: 0,
         coherenceScore: 1,
+        threadSummary: '',
+        unresolvedQuestions: [],
       },
-      lasting: state.lasting, // Preserve lasting memory across resets
+      lasting: state.lasting,
+      worldModel: state.worldModel,
       isOnline: true,
       cycleCount: 0,
     };
@@ -633,17 +1298,17 @@ export function createEngine(): {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    perceive,
+    perceive: cognitiveLoop,
     runDiscussion,
     injectHumanMessage,
+    addBelief: (content: string, confidence: number) => formBelief(content, confidence, 'stated'),
+    challengeBelief: challengeBeliefById,
     stop,
     reset,
   };
 }
 
 // ── Singleton ─────────────────────────────────────────────
-//
-//  The engine is a singleton. There is one kernel.
 
 let _engine: ReturnType<typeof createEngine> | null = null;
 
