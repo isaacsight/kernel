@@ -571,6 +571,307 @@ h1, h2, h3, h4 {
     margin-top: 8px;
 }
 
+/* Conviction Meter (header) */
+.engine-conviction {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.engine-conviction-bar {
+    width: 60px;
+    height: 3px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.engine-conviction-fill {
+    height: 100%;
+    background: var(--rubin-accent);
+    border-radius: var(--radius-full);
+}
+
+/* Perception Card */
+.engine-perception-card,
+.engine-attention-card {
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    background: var(--rubin-ivory-med);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--rubin-accent);
+}
+
+.engine-perception-title {
+    font-size: 0.6rem;
+    opacity: 0.5;
+    margin-bottom: 10px;
+}
+
+.engine-perception-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+.engine-perception-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.engine-perception-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    opacity: 0.4;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.engine-perception-value {
+    font-size: 0.9rem;
+}
+
+.engine-perception-value.italic {
+    font-style: italic;
+}
+
+/* Attention Card */
+.engine-attention-card {
+    border-left-color: #7B68EE;
+}
+
+.engine-attention-focus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.engine-salience-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.engine-salience-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.engine-salience-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.engine-salience-bar > div {
+    height: 100%;
+    background: #7B68EE;
+    border-radius: var(--radius-full);
+}
+
+/* Reflection Scores */
+.engine-reflection-scores {
+    margin-bottom: 10px;
+}
+
+.engine-score-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.engine-score-label {
+    font-size: 0.55rem;
+    opacity: 0.4;
+    min-width: 70px;
+}
+
+.engine-score-value {
+    font-size: 0.55rem;
+    opacity: 0.4;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* World Model Page */
+.engine-world-section {
+    margin-bottom: 36px;
+}
+
+.engine-world-label {
+    font-size: 0.65rem;
+    opacity: 0.4;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.engine-world-empty {
+    font-style: italic;
+    opacity: 0.4;
+    font-size: 0.9rem;
+    padding: 16px 0;
+}
+
+/* Conviction Large */
+.engine-conviction-large {
+    margin-bottom: 12px;
+}
+
+.engine-conviction-large-bar {
+    height: 6px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.engine-conviction-large-fill {
+    height: 100%;
+    background: var(--rubin-accent);
+    border-radius: var(--radius-full);
+}
+
+.engine-conviction-large-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    opacity: 0.5;
+}
+
+.engine-conviction-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Beliefs */
+.engine-beliefs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.engine-belief-card {
+    padding: 14px 16px;
+    background: var(--rubin-ivory-med);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--rubin-ivory-dark);
+}
+
+.engine-belief-content {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.engine-belief-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.6rem;
+    opacity: 0.5;
+}
+
+.engine-belief-confidence {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 140px;
+}
+
+.engine-belief-confidence-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.engine-belief-confidence-bar > div {
+    height: 100%;
+    background: var(--rubin-accent);
+    border-radius: var(--radius-full);
+}
+
+.engine-belief-challenge {
+    padding: 4px;
+    background: transparent;
+    border: none;
+    opacity: 0.3;
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.engine-belief-challenge:hover { opacity: 1; }
+
+.engine-belief-add {
+    display: flex;
+    gap: 8px;
+}
+
+/* Agent Performance */
+.engine-agent-perf {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.engine-agent-perf-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.engine-agent-perf-name {
+    font-size: 0.85rem;
+    min-width: 80px;
+}
+
+.engine-agent-perf-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.engine-agent-perf-bar > div {
+    height: 100%;
+    background: var(--rubin-accent);
+    border-radius: var(--radius-full);
+}
+
+.engine-agent-perf-stat {
+    font-size: 0.55rem;
+    opacity: 0.4;
+    min-width: 80px;
+    text-align: right;
+}
+
+/* Pattern Notes */
+.engine-pattern-note {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    font-style: italic;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rubin-ivory-dark);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     body {

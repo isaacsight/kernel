@@ -1,6 +1,7 @@
 // React hook for the Antigravity Kernel AI Engine
 //
-// Exposes the engine's cognitive loop, memory layers, and events
+// Exposes the engine's full cognitive state — phases, memory layers,
+// world model, beliefs, conviction, attention, and reflection scores —
 // as reactive state that components can observe and render.
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -10,32 +11,52 @@ import {
   type EngineEvent,
   type CognitivePhase,
   type Reflection,
+  type Perception,
+  type AttentionState,
+  type Belief,
+  type WorldModel,
 } from '../engine/AIEngine';
 import type { Message } from '../types';
 
 export interface AIEngineHook {
-  // State
+  // ── Phase & Status ──
   phase: CognitivePhase;
+  isRunning: boolean;
+  cycleCount: number;
+
+  // ── Conversation ──
   messages: Message[];
   topic: string;
   turnCount: number;
-  cycleCount: number;
-  isRunning: boolean;
+  streamingText: string;
 
-  // Memory
+  // ── Perception (current cycle) ──
+  perception: Perception | null;
+  attention: AttentionState | null;
+
+  // ── World Model ──
+  worldModel: WorldModel;
+  beliefs: Belief[];
+  conviction: number;
+  convictionTrend: 'rising' | 'stable' | 'falling';
+
+  // ── Memory ──
   totalInteractions: number;
   reflections: Reflection[];
   topicHistory: string[];
+  patternNotes: string[];
+  agentPerformance: Record<string, { uses: number; avgQuality: number }>;
 
-  // Live events
+  // ── Live Events ──
   lastEvent: EngineEvent | null;
   thinkingSteps: EngineEvent[];
-  streamingText: string;
 
-  // Actions
+  // ── Actions ──
   perceive: (input: string) => Promise<void>;
   startDiscussion: (topic: string) => Promise<void>;
   injectMessage: (content: string) => void;
+  addBelief: (content: string, confidence: number) => void;
+  challengeBelief: (beliefId: string) => void;
   stop: () => void;
   reset: () => void;
 }
@@ -50,7 +71,6 @@ export function useAIEngine(): AIEngineHook {
 
   useEffect(() => {
     const unsubscribe = engine.subscribe((event: EngineEvent) => {
-      // Update state snapshot on every event
       setEngineState(engine.getState());
       setLastEvent(event);
 
@@ -79,25 +99,29 @@ export function useAIEngine(): AIEngineHook {
   const perceive = useCallback(async (input: string) => {
     if (isRunning.current) return;
     isRunning.current = true;
-    try {
-      await engine.perceive(input);
-    } finally {
-      isRunning.current = false;
-    }
+    try { await engine.perceive(input); }
+    finally { isRunning.current = false; }
   }, [engine]);
 
   const startDiscussion = useCallback(async (topic: string) => {
     if (isRunning.current) return;
     isRunning.current = true;
-    try {
-      await engine.runDiscussion(topic);
-    } finally {
-      isRunning.current = false;
-    }
+    try { await engine.runDiscussion(topic); }
+    finally { isRunning.current = false; }
   }, [engine]);
 
   const injectMessage = useCallback((content: string) => {
     engine.injectHumanMessage(content);
+    setEngineState(engine.getState());
+  }, [engine]);
+
+  const addBelief = useCallback((content: string, confidence: number) => {
+    engine.addBelief(content, confidence);
+    setEngineState(engine.getState());
+  }, [engine]);
+
+  const challengeBelief = useCallback((beliefId: string) => {
+    engine.challengeBelief(beliefId);
     setEngineState(engine.getState());
   }, [engine]);
 
@@ -117,23 +141,36 @@ export function useAIEngine(): AIEngineHook {
 
   return {
     phase: engineState.phase,
+    isRunning: engineState.phase !== 'idle',
+    cycleCount: engineState.cycleCount,
+
     messages: engineState.working.conversationHistory,
     topic: engineState.working.topic,
     turnCount: engineState.working.turnCount,
-    cycleCount: engineState.cycleCount,
-    isRunning: engineState.phase !== 'idle',
+    streamingText,
+
+    perception: engineState.ephemeral.perception,
+    attention: engineState.ephemeral.attention,
+
+    worldModel: engineState.worldModel,
+    beliefs: engineState.worldModel.beliefs,
+    conviction: engineState.worldModel.convictions.overall,
+    convictionTrend: engineState.worldModel.convictions.trend,
 
     totalInteractions: engineState.lasting.totalInteractions,
     reflections: engineState.lasting.reflections,
     topicHistory: engineState.lasting.topicHistory,
+    patternNotes: engineState.lasting.patternNotes,
+    agentPerformance: engineState.lasting.agentPerformance,
 
     lastEvent,
     thinkingSteps,
-    streamingText,
 
     perceive,
     startDiscussion,
     injectMessage,
+    addBelief,
+    challengeBelief,
     stop,
     reset,
   };
