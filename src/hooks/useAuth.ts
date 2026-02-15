@@ -49,17 +49,32 @@ export function useAuth(): AuthState {
     return active;
   }, [isAdmin]);
 
+  // Clean up auth error params from URL (e.g. after failed OAuth redirect)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('error')) {
+      console.warn('Auth error in URL:', params.get('error'), params.get('error_description'));
+      // Remove error params, keep the hash
+      window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+    }
+  }, []);
+
   // Initialize auth state
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setUser(s?.user ?? null);
-      if (s?.user) {
-        checkSubscription().finally(() => setIsLoading(false));
-      } else {
+    supabase.auth.getSession()
+      .then(({ data: { session: s } }) => {
+        setSession(s);
+        setUser(s?.user ?? null);
+        if (s?.user) {
+          checkSubscription().finally(() => setIsLoading(false));
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Auth session error:', err);
         setIsLoading(false);
-      }
-    });
+      });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
