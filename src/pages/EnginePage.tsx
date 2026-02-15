@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send } from 'lucide-react'
-import { getEngine, type EngineState, type EngineEvent, type CognitivePhase } from '../engine/AIEngine'
+import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat } from '../engine/ClaudeClient'
 import { KERNEL_AGENT, KERNEL_TOPICS } from '../agents/kernel'
 import { useAuthContext } from '../providers/AuthProvider'
@@ -323,44 +323,6 @@ function serializeState(s: EngineState): string {
   return parts.join('\n')
 }
 
-// ─── Phase Bar ──────────────────────────────────────────
-
-const PHASES: CognitivePhase[] = ['perceiving', 'attending', 'thinking', 'deciding', 'acting', 'reflecting']
-
-function PhaseBar({ phase }: { phase: CognitivePhase }) {
-  return (
-    <div className="ka-phase-bar">
-      {PHASES.map(p => (
-        <div key={p} className={`ka-phase-pip ${phase === p ? 'ka-phase-pip--active' : ''}`}>
-          <span className="ka-phase-pip-dot" />
-          <span className="ka-phase-pip-label">{p}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ─── Conviction Strip ───────────────────────────────────
-
-function ConvictionStrip({ value, trend }: { value: number; trend: string }) {
-  return (
-    <div className="ka-conviction-strip">
-      <span className="ka-conviction-label">conviction</span>
-      <div className="ka-conviction-track">
-        <motion.div
-          className="ka-conviction-fill"
-          animate={{ width: `${value * 100}%` }}
-          transition={{ duration: 0.4 }}
-        />
-      </div>
-      <span className="ka-conviction-pct">{(value * 100).toFixed(0)}%</span>
-      <span className="ka-conviction-arrow">
-        {trend === 'rising' ? '↗' : trend === 'falling' ? '↘' : '→'}
-      </span>
-    </div>
-  )
-}
-
 // ─── Event Feed (compact) ───────────────────────────────
 
 function EventFeed({ events }: { events: EngineEvent[] }) {
@@ -479,8 +441,6 @@ function EngineChat() {
     sendMessage(input)
   }
 
-  const { phase, worldModel } = engineState
-
   return (
     <div className="ka-page">
       {/* ── Status Strip ── */}
@@ -488,13 +448,8 @@ function EngineChat() {
         <div className="ka-header-left">
           <span className="ka-logo">K</span>
           <span className="ka-title">Kernel Agent</span>
-          <span className="ka-phase-label">{phase}</span>
         </div>
-        <ConvictionStrip value={worldModel.convictions.overall} trend={worldModel.convictions.trend} />
       </header>
-
-      {/* ── Phase Pipeline ── */}
-      <PhaseBar phase={phase} />
 
       {/* ── Chat Area ── */}
       <div className="ka-chat" ref={scrollRef}>

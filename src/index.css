@@ -1205,95 +1205,6 @@ h1, h2, h3, h4 {
     opacity: 0.8;
 }
 
-.ka-phase-label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    opacity: 0.4;
-    text-transform: lowercase;
-}
-
-/* Conviction strip */
-.ka-conviction-strip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.ka-conviction-label {
-    font-family: var(--font-mono);
-    font-size: 0.5rem;
-    opacity: 0.3;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.ka-conviction-track {
-    width: 80px;
-    height: 2px;
-    background: var(--rubin-ivory-dark);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-}
-
-.ka-conviction-fill {
-    height: 100%;
-    background: #6366F1;
-    border-radius: var(--radius-full);
-}
-
-.ka-conviction-pct {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    opacity: 0.5;
-    min-width: 24px;
-}
-
-.ka-conviction-arrow {
-    font-size: 0.7rem;
-    opacity: 0.4;
-}
-
-/* Phase bar */
-.ka-phase-bar {
-    display: flex;
-    gap: 2px;
-    padding: 6px 24px;
-    border-bottom: 1px solid var(--rubin-ivory-dark);
-    background: var(--rubin-ivory-med);
-    flex-shrink: 0;
-}
-
-.ka-phase-pip {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: var(--radius-full);
-    font-family: var(--font-mono);
-    font-size: 0.5rem;
-    letter-spacing: 0.04em;
-    text-transform: lowercase;
-    opacity: 0.25;
-    transition: all var(--duration-normal) var(--ease-out);
-}
-
-.ka-phase-pip--active {
-    opacity: 1;
-    background: rgba(99, 102, 241, 0.1);
-    color: #6366F1;
-}
-
-.ka-phase-pip-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: currentColor;
-}
-
-.ka-phase-pip--active .ka-phase-pip-dot {
-    animation: kernel-phase-pulse 1.5s ease-in-out infinite;
-}
-
 /* Chat area */
 .ka-chat {
     flex: 1;
@@ -1557,11 +1468,9 @@ h1, h2, h3, h4 {
 /* Mobile */
 @media (max-width: 768px) {
     .ka-header { padding: 10px 16px; }
-    .ka-phase-bar { padding: 6px 16px; overflow-x: auto; }
     .ka-chat { padding: 20px 16px; }
     .ka-input-bar { padding: 12px 16px; }
     .ka-empty-title { font-size: 1.5rem; }
-    .ka-conviction-track { width: 50px; }
     .ka-msg { max-width: 100%; }
 }
 
