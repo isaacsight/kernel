@@ -126,16 +126,29 @@ serve(async (req: Request) => {
       ]
     }
 
-    const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+    const anthropicHeaders = {
+      'Content-Type': 'application/json',
+      'x-api-key': anthropicKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'pdfs-2024-09-25',
+    }
+
+    let anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'pdfs-2024-09-25',
-      },
+      headers: anthropicHeaders,
       body: JSON.stringify(body),
     })
+
+    // Fallback: if haiku hits rate limit, retry with sonnet
+    if (anthropicResponse.status === 429 && body.model === MODEL_MAP.haiku) {
+      console.log('Haiku rate-limited, falling back to sonnet')
+      body.model = MODEL_MAP.sonnet
+      anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: anthropicHeaders,
+        body: JSON.stringify(body),
+      })
+    }
 
     if (!anthropicResponse.ok) {
       const errText = await anthropicResponse.text()

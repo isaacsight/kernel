@@ -60,25 +60,40 @@ serve(async (req: Request) => {
       )
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const anthropicHeaders = {
+      'Content-Type': 'application/json',
+      'x-api-key': anthropicKey,
+      'anthropic-version': '2023-06-01',
+    }
+
+    const searchBody = {
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens,
+      tools: [
+        { type: 'web_search_20250305', name: 'web_search', max_uses: 3 }
+      ],
+      system: 'You are a web research assistant. Search the web for the user\'s query. Return factual, sourced information with URLs when available. Be concise and cite your sources.',
+      messages: [
+        { role: 'user', content: query },
+      ],
+    }
+
+    let response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens,
-        tools: [
-          { type: 'web_search_20250305', name: 'web_search', max_uses: 3 }
-        ],
-        system: 'You are a web research assistant. Search the web for the user\'s query. Return factual, sourced information with URLs when available. Be concise and cite your sources.',
-        messages: [
-          { role: 'user', content: query },
-        ],
-      }),
+      headers: anthropicHeaders,
+      body: JSON.stringify(searchBody),
     })
+
+    // Fallback: if haiku hits rate limit, retry with sonnet
+    if (response.status === 429) {
+      console.log('Haiku rate-limited, falling back to sonnet')
+      searchBody.model = 'claude-sonnet-4-5-20250929'
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: anthropicHeaders,
+        body: JSON.stringify(searchBody),
+      })
+    }
 
     if (!response.ok) {
       const errText = await response.text()
