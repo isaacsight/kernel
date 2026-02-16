@@ -111,9 +111,34 @@ Agents:
 Respond with ONLY valid JSON:
 {"agentId": "kernel", "confidence": 0.9}`
 
+// ─── Attachment helpers ─────────────────────────────────────
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+const TEXT_EXTENSIONS = ['.txt', '.md', '.csv', '.json', '.js', '.ts', '.py', '.html', '.css', '.xml', '.yaml', '.yml', '.log', '.sh', '.sql', '.env']
+const PDF_TYPE = 'application/pdf'
+
+async function downloadAttachment(url: string): Promise<Buffer> {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to download: ${res.status}`)
+  return Buffer.from(await res.arrayBuffer())
+}
+
+function isTextFile(filename: string): boolean {
+  const ext = '.' + filename.split('.').pop()?.toLowerCase()
+  return TEXT_EXTENSIONS.includes(ext)
+}
+
+function isImageType(contentType: string): boolean {
+  return IMAGE_TYPES.some(t => contentType.startsWith(t))
+}
+
+interface ContentBlock {
+  type: string
+  [key: string]: unknown
+}
+
 // ─── Claude proxy calls (using service key for auth) ─────────
 async function callClaude(
-  messages: { role: string; content: string }[],
+  messages: { role: string; content: string | ContentBlock[] }[],
   system: string,
   model: 'sonnet' | 'haiku' = 'sonnet',
   maxTokens = 1024
@@ -215,10 +240,30 @@ async function getChannelHistory(channelId: string, limit = 20): Promise<{ role:
     return []
   }
 
-  return (data || []).map(m => ({
+  const raw = (data || []).map(m => ({
     role: m.agent_id === 'user' ? 'user' : 'assistant',
     content: m.content,
   }))
+
+  // Enforce strict alternating roles — Claude API requires user/assistant alternation.
+  // If two consecutive messages have the same role, merge them.
+  return sanitizeMessages(raw)
+}
+
+/** Enforce alternating user/assistant roles by merging consecutive same-role messages */
+function sanitizeMessages(messages: { role: string; content: string }[]): { role: string; content: string }[] {
+  if (messages.length === 0) return []
+  const result: { role: string; content: string }[] = [messages[0]]
+  for (let i = 1; i < messages.length; i++) {
+    const prev = result[result.length - 1]
+    if (messages[i].role === prev.role) {
+      // Merge consecutive same-role messages
+      prev.content = prev.content + '\n\n' + messages[i].content
+    } else {
+      result.push({ ...messages[i] })
+    }
+  }
+  return result
 }
 
 async function getUserMemory(discordUserId: string): Promise<string> {
@@ -496,7 +541,9 @@ client.on('messageCreate', async (msg: Message) => {
       .replace(new RegExp(`<@!?${client.user!.id}>`, 'g'), '')
       .trim()
 
-    if (!content) {
+    const attachments = [...msg.attachments.values()]
+
+    if (!content && attachments.length === 0) {
       await msg.reply("Hey! Say something and I'll think about it.")
       return
     }
@@ -511,27 +558,85 @@ client.on('messageCreate', async (msg: Message) => {
       return
     }
 
+    // Get conversation history BEFORE saving current message (prevents duplicate)
+    const history = await getChannelHistory(channelId, 10)
+
+    // ── Process attachments (images, text files, PDFs) ──
+    const contentBlocks: ContentBlock[] = []
+    let textPrefix = ''
+
+    for (const att of attachments) {
+      try {
+        const ct = att.contentType || ''
+        const name = att.name || 'file'
+
+        if (isImageType(ct)) {
+          // Image → base64 for Claude vision
+          const buf = await downloadAttachment(att.url)
+          contentBlocks.push({
+            type: 'image',
+            source: {
+              type: 'base64',
+              media_type: ct.split(';')[0],
+              data: buf.toString('base64'),
+            },
+          })
+          console.log(`[Attach] Image: ${name} (${(buf.length / 1024).toFixed(0)}KB)`)
+        } else if (ct === PDF_TYPE) {
+          // PDF → base64 document
+          const buf = await downloadAttachment(att.url)
+          contentBlocks.push({
+            type: 'document',
+            source: {
+              type: 'base64',
+              media_type: 'application/pdf',
+              data: buf.toString('base64'),
+            },
+          })
+          console.log(`[Attach] PDF: ${name} (${(buf.length / 1024).toFixed(0)}KB)`)
+        } else if (isTextFile(name)) {
+          // Text file → read as UTF-8 and inline
+          const buf = await downloadAttachment(att.url)
+          const text = buf.toString('utf-8')
+          textPrefix += `[File: ${name}]\n${text}\n\n`
+          console.log(`[Attach] Text: ${name} (${text.length} chars)`)
+        } else {
+          textPrefix += `[Attached: ${name} (${ct || 'unknown type'})]\n`
+        }
+      } catch (err) {
+        console.warn(`[Attach] Failed to process ${att.name}:`, err)
+        textPrefix += `[Failed to read: ${att.name}]\n`
+      }
+    }
+
+    // Build the user content — multimodal if we have image/PDF blocks
+    const textContent = (textPrefix + content).trim() || `[Attached: ${attachments.map(a => a.name).join(', ')}]`
+    let userContent: string | ContentBlock[]
+    if (contentBlocks.length > 0) {
+      contentBlocks.push({ type: 'text', text: textContent })
+      userContent = contentBlocks
+    } else {
+      userContent = textContent
+    }
+
     const userMsgId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
 
-    // Save user message to Supabase (no user_id — Discord users aren't in auth.users)
+    // Save user message text to Supabase (no base64 in DB)
     await saveMessage({
       id: userMsgId,
       channel_id: channelId,
       agent_id: 'user',
-      content,
+      content: textContent,
     })
-
-    // Get conversation history (limited to reduce token usage)
-    const history = await getChannelHistory(channelId, 10)
 
     // Build context for classification
     const recentCtx = history
       .slice(-3)
-      .map(m => `${m.role === 'user' ? 'User' : 'Kernel'}: ${m.content.slice(0, 150)}`)
+      .map(m => `${m.role === 'user' ? 'User' : 'Kernel'}: ${(typeof m.content === 'string' ? m.content : '').slice(0, 150)}`)
       .join('\n')
 
     // Classify intent → pick specialist
-    const agentId = await classifyIntent(content, recentCtx)
+    const agentId = await classifyIntent(textContent, recentCtx)
     const specialist = SPECIALISTS[agentId] || SPECIALISTS.kernel
 
     // Refresh typing (classification takes a moment)
@@ -545,14 +650,25 @@ client.on('messageCreate', async (msg: Message) => {
 
     const systemPrompt = `${specialist.prompt}${memory}${collective}`
 
-    // Build message history for Claude (keep short to stay under rate limits)
-    const claudeMessages = [
+    // Build message history for Claude — history is already sanitized (alternating roles),
+    // append current user message at the end (may be multimodal)
+    const claudeMessages: { role: string; content: string | ContentBlock[] }[] = [
       ...history.slice(-5),
-      { role: 'user', content },
+      { role: 'user', content: userContent },
     ]
 
-    // Call Claude (use haiku for Discord to stay under per-model rate limits)
-    const response = await callClaude(claudeMessages, systemPrompt, 'haiku', 1024)
+    // Final safety: ensure roles alternate (only for text history, current msg stays intact)
+    const historyPart = sanitizeMessages(history.slice(-5))
+    const safeMsgs: { role: string; content: string | ContentBlock[] }[] = [
+      ...historyPart,
+      { role: 'user', content: userContent },
+    ]
+
+    // Use sonnet for vision (image/PDF), haiku for text-only
+    const useModel = contentBlocks.length > 0 ? 'sonnet' : 'haiku'
+
+    // Call Claude
+    const response = await callClaude(safeMsgs, systemPrompt, useModel as 'sonnet' | 'haiku', 1024)
 
     // Save kernel response
     const kernelMsgId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`

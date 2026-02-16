@@ -11,6 +11,7 @@ import { classifyIntent, buildRecentContext } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
 import { planTask, executeTask, type TaskPlan, type TaskProgress } from '../engine/TaskPlanner'
+import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   saveMessage,
@@ -695,6 +696,8 @@ function EngineChat() {
   const [researchProgress, setResearchProgress] = useState<ResearchProgress | null>(null)
   // Task progress
   const [taskProgress, setTaskProgress] = useState<TaskProgress | null>(null)
+  // Swarm progress
+  const [swarmProgress, setSwarmProgress] = useState<SwarmProgress | null>(null)
   // Collective intelligence
   const [collectiveInsights, setCollectiveInsights] = useState<DBCollectiveInsight[]>([])
   // Per-message copy feedback
@@ -1110,6 +1113,7 @@ function EngineChat() {
     setAttachedFiles([])
     setResearchProgress(null)
     setTaskProgress(null)
+    setSwarmProgress(null)
 
     // ── Phase 1: Classify intent via AgentRouter ──
     const recentCtx = buildRecentContext(
@@ -1145,7 +1149,12 @@ function EngineChat() {
         const ext = '.' + file.name.split('.').pop()?.toLowerCase()
 
         if (TEXT_EXTENSIONS.includes(ext)) {
-          const text = await readFileAsText(file)
+          let text = await readFileAsText(file)
+          // Truncate large text files to prevent exceeding edge function body limits
+          const MAX_TEXT_CHARS = 30000
+          if (text.length > MAX_TEXT_CHARS) {
+            text = text.slice(0, MAX_TEXT_CHARS) + `\n\n[... truncated — file was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_TEXT_CHARS / 1000).toFixed(0)}K]`
+          }
           textPrefix += `[File: ${file.name}]\n${text}\n\n`
         } else if (isImageFile(file)) {
           const data = await fileToBase64(file)
@@ -1206,15 +1215,25 @@ function EngineChat() {
     }])
     latestKernelContentRef.current = ''
 
-    // Build claude messages — filter empty content
-    const historyMessages = messages
+    // Build claude messages — filter empty content and enforce alternating roles
+    const rawHistory = messages
       .filter(m => m.content.trim() !== '')
       .map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
         content: m.content,
       }))
+    // Enforce strict alternating user/assistant — merge consecutive same-role messages
+    const sanitized: { role: 'user' | 'assistant'; content: string }[] = []
+    for (const m of rawHistory) {
+      const prev = sanitized[sanitized.length - 1]
+      if (prev && m.role === prev.role) {
+        prev.content = prev.content + '\n\n' + m.content
+      } else {
+        sanitized.push({ ...m })
+      }
+    }
     const claudeMessages: { role: string; content: string | ContentBlock[] }[] = [
-      ...historyMessages,
+      ...sanitized,
       { role: 'user', content: userContent },
     ]
 
@@ -1236,6 +1255,23 @@ function EngineChat() {
           updateKernelMsg
         )
         setTaskProgress(null)
+      }
+      // ── Phase 5: Swarm collaboration ──
+      else if (classification.needsSwarm) {
+        const history = messages
+          .filter(m => m.content.trim())
+          .map(m => ({
+            role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
+            content: m.content,
+          }))
+        await runSwarm(
+          trimmed,
+          memoryText,
+          history,
+          (progress) => setSwarmProgress(progress),
+          updateKernelMsg
+        )
+        setSwarmProgress(null)
       }
       // ── Phase 2: Deep research ──
       else if (classification.needsResearch) {
@@ -1325,11 +1361,13 @@ function EngineChat() {
         setDailyMsgCount(err.limit)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {
-        const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
+        let errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
+        if (errMsg === 'Failed to fetch') errMsg = 'Connection failed — the file may be too large. Try a smaller file or paste the text directly.'
         setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
       }
       setResearchProgress(null)
       setTaskProgress(null)
+      setSwarmProgress(null)
     } finally {
       setIsStreaming(false)
       setIsThinking(false)
@@ -1458,6 +1496,30 @@ function EngineChat() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Swarm progress indicator */}
+        {swarmProgress && swarmProgress.phase !== 'complete' && (
+          <div className="ka-swarm-status">
+            <div className="ka-swarm-phase">
+              {swarmProgress.phase === 'selecting' && 'Assembling agents...'}
+              {swarmProgress.phase === 'collaborating' && 'Agents collaborating'}
+              {swarmProgress.phase === 'synthesizing' && 'Synthesizing perspectives...'}
+            </div>
+            {swarmProgress.agents.length > 0 && (
+              <div className="ka-swarm-agents">
+                {swarmProgress.agents.map(agent => (
+                  <span
+                    key={agent.id}
+                    className={`ka-swarm-agent ka-swarm-agent--${agent.status}`}
+                  >
+                    <span className="ka-swarm-agent-icon">{agent.icon}</span>
+                    <span className="ka-swarm-agent-name">{agent.name}</span>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
