@@ -5,6 +5,16 @@ declare module '*.md?raw' {
   export default content
 }
 
+// Web Speech API types
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList
+}
+
+interface Window {
+  SpeechRecognition: typeof SpeechRecognition
+  webkitSpeechRecognition: typeof SpeechRecognition
+}
+
 interface ImportMetaEnv {
   readonly VITE_GEMINI_API_KEY: string
   readonly VITE_GEMINI_MODEL_PRO: string

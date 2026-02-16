@@ -196,13 +196,28 @@ export async function getChannelMessages(channelId: string, limit = 50) {
 // Conversations
 export async function createConversation(userId: string, title = 'New Conversation'): Promise<DBConversation | null> {
   const id = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  // Verify session is active before attempting insert (RLS requires auth.uid())
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    console.error('[createConversation] No active session — RLS will block insert');
+    // Try refreshing the session
+    const { data: { session: refreshed } } = await supabase.auth.refreshSession();
+    if (!refreshed) {
+      console.error('[createConversation] Session refresh failed');
+      return null;
+    }
+  }
+
   const { data, error } = await supabase
     .from('conversations')
     .insert({ id, user_id: userId, title })
     .select()
     .single();
 
-  if (error) console.error('Error creating conversation:', error);
+  if (error) {
+    console.error('[createConversation] Error:', error.code, error.message, error.details);
+  }
   return data;
 }
 
