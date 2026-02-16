@@ -47,15 +47,17 @@ export async function deepResearch(
   }
   onProgress({ ...progress })
 
-  // Step 1: Plan search queries
-  const plan = await claudeJSON<ResearchPlan>(
-    `Research question: ${question}`,
-    { system: PLAN_SYSTEM, model: 'haiku', max_tokens: 300 }
-  )
-
-  const queries = (plan.queries || []).slice(0, 5)
-  if (queries.length === 0) {
-    queries.push(question)
+  // Step 1: Plan search queries (fall back to raw question if planning fails)
+  let queries: string[]
+  try {
+    const plan = await claudeJSON<ResearchPlan>(
+      `Research question: ${question}`,
+      { system: PLAN_SYSTEM, model: 'haiku', max_tokens: 300 }
+    )
+    queries = (plan.queries || []).slice(0, 5)
+    if (queries.length === 0) queries = [question]
+  } catch {
+    queries = [question]
   }
 
   progress.phase = 'searching'
