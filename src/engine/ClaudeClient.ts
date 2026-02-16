@@ -1,6 +1,8 @@
 // ClaudeClient — Unified frontend client for all Claude API calls.
 // All requests route through the claude-proxy edge function.
 
+import { getAccessToken } from './SupabaseClient'
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
 const PROXY_URL = `${SUPABASE_URL}/functions/v1/claude-proxy`
@@ -17,14 +19,16 @@ interface ClaudeOpts {
   model?: Model
   max_tokens?: number
   web_search?: boolean
+  signal?: AbortSignal
 }
 
 async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?: ClaudeOpts) {
+  const token = await getAccessToken()
   const res = await fetch(PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Authorization: `Bearer ${token}`,
       apikey: SUPABASE_KEY,
     },
     body: JSON.stringify({
@@ -68,11 +72,12 @@ export async function claudeStream(
   onChunk: (text: string) => void,
   opts?: ClaudeOpts
 ): Promise<string> {
+  const token = await getAccessToken()
   const res = await fetch(PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Authorization: `Bearer ${token}`,
       apikey: SUPABASE_KEY,
     },
     body: JSON.stringify({
@@ -128,11 +133,12 @@ export async function claudeStreamChat(
   onChunk: (text: string) => void,
   opts?: ClaudeOpts
 ): Promise<string> {
+  const token = await getAccessToken()
   const res = await fetch(PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Authorization: `Bearer ${token}`,
       apikey: SUPABASE_KEY,
     },
     body: JSON.stringify({
@@ -143,6 +149,7 @@ export async function claudeStreamChat(
       messages,
       web_search: opts?.web_search ?? false,
     }),
+    signal: opts?.signal,
   })
 
   if (!res.ok) {
@@ -156,27 +163,31 @@ export async function claudeStreamChat(
   const decoder = new TextDecoder()
   let fullText = ''
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
 
-    const chunk = decoder.decode(value, { stream: true })
-    const lines = chunk.split('\n')
-    for (const line of lines) {
-      if (!line.startsWith('data: ')) continue
-      const data = line.slice(6)
-      if (data === '[DONE]') continue
+      const chunk = decoder.decode(value, { stream: true })
+      const lines = chunk.split('\n')
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue
+        const data = line.slice(6)
+        if (data === '[DONE]') continue
 
-      try {
-        const event = JSON.parse(data)
-        if (event.type === 'content_block_delta' && event.delta?.text) {
-          fullText += event.delta.text
-          onChunk(fullText)
+        try {
+          const event = JSON.parse(data)
+          if (event.type === 'content_block_delta' && event.delta?.text) {
+            fullText += event.delta.text
+            onChunk(fullText)
+          }
+        } catch {
+          // skip non-JSON lines
         }
-      } catch {
-        // skip non-JSON lines
       }
     }
+  } finally {
+    reader.releaseLock()
   }
 
   return fullText

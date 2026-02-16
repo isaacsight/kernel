@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Direction 4: Minimal favicon/app icon — Abstract kernel seed -->
+  <!-- Outer ring — the shell -->
+  <circle cx="32" cy="32" r="28" stroke="#1F1E1D" stroke-width="1.2" fill="none"/>
+  <!-- Inner seed — the kernel -->
+  <ellipse cx="32" cy="32" rx="8" ry="12" fill="#1F1E1D"/>
+  <!-- Spark — antigravity, rising -->
+  <line x1="32" y1="16" x2="32" y2="8" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

@@ -43,6 +43,24 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: verify JWT ────────────────────────────────
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const authClient = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token)
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -56,7 +74,8 @@ serve(async (req: Request) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey)
     const payload = (await req.json()) as InsightPayload
-    const { conversationId, messages, evaluationResult, email } = payload
+    const { conversationId, messages, evaluationResult } = payload
+    const email = user.email // Use email from JWT, not from body
 
     if (!conversationId || !messages?.length) {
       return new Response(

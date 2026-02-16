@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" fill="none">
+  <!-- Direction 5: Dark mode variant — for dark backgrounds -->
+
+  <!-- Circle mark -->
+  <circle cx="60" cy="60" r="48" fill="#1F1E1D" stroke="#FAF9F6" stroke-width="1.2"/>
+  <text x="60" y="76" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="52" font-weight="400" fill="#FAF9F6" letter-spacing="-1">K</text>
+  <circle cx="60" cy="96" r="1.8" fill="#6366F1"/>
+
+  <!-- Wordmark -->
+  <text x="136" y="68" font-family="EB Garamond, Georgia, serif" font-style="italic" font-size="42" font-weight="400" fill="#FAF9F6" letter-spacing="3">kernel</text>
+
+</svg>

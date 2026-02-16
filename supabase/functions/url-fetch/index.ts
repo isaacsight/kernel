@@ -4,6 +4,7 @@
 // Deploy: npx supabase functions deploy url-fetch --project-ref eoxxpyixdieprsxlpwcs
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -12,6 +13,21 @@ const CORS_HEADERS = {
 }
 
 const MAX_CONTENT_LENGTH = 12000
+
+// Block private/internal IPs to prevent SSRF
+const BLOCKED_HOSTS = [
+  /^localhost$/i,
+  /^127\./,
+  /^10\./,
+  /^172\.(1[6-9]|2\d|3[01])\./,
+  /^192\.168\./,
+  /^0\./,
+  /^169\.254\./,
+  /^\[::1\]/,
+  /^\[fc/i,
+  /^\[fd/i,
+  /^\[fe80/i,
+]
 
 function htmlToText(html: string): string {
   // Extract Open Graph / meta tags first (useful for social media)
@@ -66,10 +82,50 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: verify JWT ────────────────────────────────
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     const { url } = await req.json()
     if (!url || typeof url !== 'string') {
       return new Response(
         JSON.stringify({ error: 'url is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // ── SSRF protection: block private/internal IPs ─────
+    try {
+      const parsed = new URL(url)
+      if (BLOCKED_HOSTS.some(re => re.test(parsed.hostname))) {
+        return new Response(
+          JSON.stringify({ error: 'URL points to a blocked host' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        return new Response(
+          JSON.stringify({ error: 'Only HTTP/HTTPS URLs are allowed' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid URL' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }

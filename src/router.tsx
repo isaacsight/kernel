@@ -1,10 +1,26 @@
+import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate, useRouteError } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { EnginePage } from './pages/EnginePage'
 
+// Lazy-load admin page — only loaded when navigating to /admin
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
+
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
+}
+
+function LazyAdmin() {
+  return (
+    <Suspense fallback={
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>
+        Loading dashboard...
+      </div>
+    }>
+      <AdminPage />
+    </Suspense>
+  )
 }
 
 function RootErrorPage() {
@@ -29,6 +45,7 @@ export const router = createHashRouter([
     errorElement: <RootErrorPage />,
     children: [
       { index: true, element: withErrorBoundary(<EnginePage />) },
+      { path: 'admin', element: withErrorBoundary(<LazyAdmin />) },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },

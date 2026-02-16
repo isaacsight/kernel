@@ -6,6 +6,7 @@
 // Secrets: STRIPE_SECRET_KEY
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -14,8 +15,6 @@ const CORS_HEADERS = {
 }
 
 interface CheckoutPayload {
-  email: string
-  user_id?: string
   mode?: 'subscription' | 'payment'
   price_id?: string
   success_url: string
@@ -28,6 +27,28 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: verify JWT ────────────────────────────────
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // Derive email and user_id from verified JWT — never trust the client body
+    const email = user.email!
+    const user_id = user.id
+
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
     if (!stripeKey) {
       return new Response(
@@ -37,29 +58,20 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as CheckoutPayload
-    const { email, user_id, mode = 'subscription', price_id, success_url, cancel_url } = payload
-
-    if (!email?.trim()) {
-      return new Response(
-        JSON.stringify({ error: 'email is required' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      )
-    }
+    const { mode = 'subscription', price_id, success_url, cancel_url } = payload
 
     // Build Stripe Checkout Session params
     const params = new URLSearchParams()
-    params.set('customer_email', email.trim())
+    params.set('customer_email', email)
     params.set('mode', mode)
     params.set('success_url', success_url)
     params.set('cancel_url', cancel_url)
 
-    // Link Stripe checkout to Supabase user
-    if (user_id) {
-      params.set('client_reference_id', user_id)
-      params.set('metadata[supabase_user_id]', user_id)
-      if (mode === 'subscription') {
-        params.set('subscription_data[metadata][supabase_user_id]', user_id)
-      }
+    // Link Stripe checkout to Supabase user (from verified JWT)
+    params.set('client_reference_id', user_id)
+    params.set('metadata[supabase_user_id]', user_id)
+    if (mode === 'subscription') {
+      params.set('subscription_data[metadata][supabase_user_id]', user_id)
     }
 
     if (price_id) {
@@ -71,7 +83,7 @@ serve(async (req: Request) => {
       params.set('line_items[0][price_data][currency]', 'usd')
       params.set('line_items[0][price_data][unit_amount]', '2000')
       params.set('line_items[0][price_data][product_data][name]', 'Kernel Agent — Pro')
-      params.set('line_items[0][price_data][product_data][description]', 'Full access to the Antigravity Kernel. Chat, observe, and control the cognitive engine.')
+      params.set('line_items[0][price_data][product_data][description]', 'Full access to Kernel. Chat, observe, and control the cognitive engine.')
       if (mode === 'subscription') {
         params.set('line_items[0][price_data][recurring][interval]', 'month')
       }

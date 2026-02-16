@@ -5,6 +5,7 @@
 // Secrets: ANTHROPIC_API_KEY
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -32,6 +33,63 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: verify JWT ────────────────────────────────
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabase = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // ── Rate limit: check daily message count ───────────
+    const FREE_DAILY_LIMIT = 10
+    const PRO_DAILY_LIMIT = 150
+    const isAdmin = user.app_metadata?.is_admin === true
+
+    if (!isAdmin) {
+      const adminClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
+      const { data: sub } = await adminClient
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle()
+
+      const dailyLimit = sub ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+
+      const { count } = await adminClient
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .gte('created_at', today.toISOString())
+
+      if ((count ?? 0) >= dailyLimit) {
+        const resetTime = new Date(today)
+        resetTime.setDate(resetTime.getDate() + 1)
+        return new Response(
+          JSON.stringify({
+            error: sub ? 'Daily message limit reached' : 'Free daily limit reached. Subscribe for 150 messages/day.',
+            limit: dailyLimit,
+            resets_at: resetTime.toISOString(),
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
       return new Response(

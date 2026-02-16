@@ -414,6 +414,14 @@ export async function upsertUserMemory(
   if (error) console.error('Error upserting user memory:', error);
 }
 
+// ─── Auth Token Helper ───────────────────────────────────
+// Returns the current user's JWT access token for authenticating edge function calls.
+// Falls back to the anon key if no session exists (should not happen for gated routes).
+export async function getAccessToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.access_token || supabaseKey
+}
+
 // Real-time subscriptions
 export function subscribeToProjects(callback: (project: DBProject) => void) {
   return supabase
