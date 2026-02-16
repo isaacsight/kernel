@@ -1088,7 +1088,8 @@ function EngineChat() {
       console.log('[sendMessage] createConversation result:', conv)
       if (!conv) {
         console.error('[sendMessage] Failed to create conversation — RLS may be blocking the insert')
-        setToast('Failed to start conversation. Please try signing out and back in.')
+        setToast('Session expired. Signing you out — please sign back in.')
+        signOut()
         return
       }
       convId = conv.id

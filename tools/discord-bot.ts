@@ -118,21 +118,44 @@ async function callClaude(
   model: 'sonnet' | 'haiku' = 'sonnet',
   maxTokens = 1024
 ): Promise<string> {
-  const res = await fetch(PROXY_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${SERVICE_KEY}`,
-      apikey: SERVICE_KEY,
-    },
-    body: JSON.stringify({
-      mode: 'text',
-      model,
-      system,
-      max_tokens: maxTokens,
-      messages,
-    }),
-  })
+  const doCall = async (m: string) => {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${SERVICE_KEY}`,
+        apikey: SERVICE_KEY,
+      },
+      body: JSON.stringify({
+        mode: 'text',
+        model: m,
+        system,
+        max_tokens: maxTokens,
+        messages,
+      }),
+    })
+    return res
+  }
+
+  let res = await doCall(model)
+
+  // Rate limit: try the other model, then wait and retry once
+  if (res.status === 429) {
+    const fallback = model === 'sonnet' ? 'haiku' : 'sonnet'
+    console.warn(`[Claude] ${model} rate-limited, trying ${fallback}`)
+    res = await doCall(fallback)
+  }
+  if (res.status === 429) {
+    const body = await res.json().catch(() => ({ retry_after: 30 }))
+    const wait = Math.min(body.retry_after || 30, 60)
+    console.warn(`[Claude] Both models rate-limited, waiting ${wait}s...`)
+    await new Promise(r => setTimeout(r, wait * 1000))
+    res = await doCall('haiku') // haiku uses fewer tokens
+  }
+
+  if (res.status === 429) {
+    throw new Error('RATE_LIMITED')
+  }
 
   if (!res.ok) {
     const err = await res.text()
@@ -410,7 +433,7 @@ const client = new Client({
   partials: [Partials.Channel], // Needed for DMs
 })
 
-client.once('ready', async () => {
+client.once('clientReady', async () => {
   console.log('─────────────────────────────────────────')
   console.log(`  KERNEL DISCORD BOT`)
   console.log(`  Logged in as ${client.user?.tag}`)
@@ -498,8 +521,8 @@ client.on('messageCreate', async (msg: Message) => {
       content,
     })
 
-    // Get conversation history
-    const history = await getChannelHistory(channelId, 20)
+    // Get conversation history (limited to reduce token usage)
+    const history = await getChannelHistory(channelId, 10)
 
     // Build context for classification
     const recentCtx = history
@@ -522,14 +545,14 @@ client.on('messageCreate', async (msg: Message) => {
 
     const systemPrompt = `${specialist.prompt}${memory}${collective}`
 
-    // Build message history for Claude
+    // Build message history for Claude (keep short to stay under rate limits)
     const claudeMessages = [
-      ...history.slice(-10), // Last 10 messages for context
+      ...history.slice(-5),
       { role: 'user', content },
     ]
 
-    // Call Claude
-    const response = await callClaude(claudeMessages, systemPrompt, 'sonnet', 1024)
+    // Call Claude (use haiku for Discord to stay under per-model rate limits)
+    const response = await callClaude(claudeMessages, systemPrompt, 'haiku', 1024)
 
     // Save kernel response
     const kernelMsgId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
@@ -566,10 +589,14 @@ client.on('messageCreate', async (msg: Message) => {
     // Response signal + collective insight on every response
     saveResponseSignal(channelId, content).catch(() => {})
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('[Bot] Error handling message:', err)
     try {
-      await msg.reply("Something went wrong on my end. Give me a second and try again.")
+      if (err?.message === 'RATE_LIMITED') {
+        await msg.reply("I'm getting a lot of traffic right now. Give me a minute and try again.")
+      } else {
+        await msg.reply("Something went wrong on my end. Give me a second and try again.")
+      }
     } catch {
       // Can't even reply — connection issue
     }
