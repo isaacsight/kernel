@@ -1,5 +1,5 @@
 #!/usr/bin/env npx tsx
-// Kernel Extended Tools MCP Server — additional utilities for Claude Code
+// Kernel Tools MCP Server — dev workflow utilities for Claude Code
 // Provides: notify, stripe, deploy_status, design_lint, diff_review, seo, debate, journal, agent_create, codemod
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
@@ -561,8 +561,31 @@ server.tool(
         preview: z.boolean().optional().describe('Preview changes without applying. Default: true'),
     },
     async ({ action, pattern, replacement, file_glob, preview }) => {
-        const glob = file_glob ?? 'src/**/*.{ts,tsx}'
         const dryRun = preview !== false
+
+        // Safe file discovery — uses fixed command, no user input
+        function findSourceFiles(): string[] {
+            const raw = safeExec(`find src/ -name "*.ts" -o -name "*.tsx"`)
+            return raw.split('\n').filter(f => f.trim() && !f.includes('node_modules'))
+        }
+
+        // Safe regex search across files using Node.js (no shell injection)
+        function searchFiles(regex: RegExp, files: string[]): { file: string; line: number; text: string }[] {
+            const results: { file: string; line: number; text: string }[] = []
+            for (const f of files) {
+                const absPath = join(PROJECT_ROOT, f)
+                if (!existsSync(absPath)) continue
+                const lines = readFileSync(absPath, 'utf-8').split('\n')
+                lines.forEach((ln, i) => {
+                    regex.lastIndex = 0
+                    if (regex.test(ln)) {
+                        results.push({ file: f, line: i + 1, text: ln.trim() })
+                    }
+                })
+                if (results.length >= 100) break
+            }
+            return results
+        }
 
         try {
             if (action === 'find_replace') {
@@ -570,27 +593,43 @@ server.tool(
                     return { content: [{ type: 'text' as const, text: 'Replacement string required for find_replace' }], isError: true }
                 }
 
-                // Find matches first
-                const matches = safeExec(`grep -rn "${pattern}" --include="*.ts" --include="*.tsx" src/ | head -30`)
+                let regex: RegExp
+                try { regex = new RegExp(pattern, 'g') } catch (e) {
+                    return { content: [{ type: 'text' as const, text: `Invalid regex: ${pattern}` }], isError: true }
+                }
 
-                if (!matches) {
+                const files = findSourceFiles()
+                const matches = searchFiles(regex, files)
+
+                if (matches.length === 0) {
                     return { content: [{ type: 'text' as const, text: `No matches found for pattern: ${pattern}` }] }
                 }
 
+                const matchText = matches.slice(0, 30).map(m => `${m.file}:${m.line}: ${m.text}`).join('\n')
+
                 if (dryRun) {
                     return {
-                        content: [
-                            {
-                                type: 'text' as const,
-                                text: `🔍 Preview (dry run):\n\nPattern: ${pattern}\nReplacement: ${replacement}\nMatches:\n${matches}\n\nRe-run with preview=false to apply.`,
-                            },
-                        ],
+                        content: [{
+                            type: 'text' as const,
+                            text: `🔍 Preview (dry run):\n\nPattern: ${pattern}\nReplacement: ${replacement}\n${matches.length} match(es):\n${matchText}\n\nRe-run with preview=false to apply.`,
+                        }],
                     }
                 }
 
-                // Apply
-                const result = safeExec(`find src/ -name "*.ts" -o -name "*.tsx" | xargs sed -i '' 's/${pattern}/${replacement}/g'`)
-                return { content: [{ type: 'text' as const, text: `✅ Applied find/replace.\n\nBefore:\n${matches}\n\n${result}` }] }
+                // Apply using Node.js fs (safe — no shell)
+                const modified: string[] = []
+                for (const f of files) {
+                    const absPath = join(PROJECT_ROOT, f)
+                    if (!existsSync(absPath)) continue
+                    const content = readFileSync(absPath, 'utf-8')
+                    regex.lastIndex = 0
+                    const newContent = content.replace(regex, replacement)
+                    if (newContent !== content) {
+                        writeFileSync(absPath, newContent)
+                        modified.push(f)
+                    }
+                }
+                return { content: [{ type: 'text' as const, text: `✅ Applied find/replace to ${modified.length} file(s).\n\nModified:\n${modified.join('\n')}` }] }
             }
 
             if (action === 'rename_symbol') {
@@ -598,30 +637,49 @@ server.tool(
                     return { content: [{ type: 'text' as const, text: 'Replacement name required for rename_symbol' }], isError: true }
                 }
 
-                const matches = safeExec(`grep -rn "\\b${pattern}\\b" --include="*.ts" --include="*.tsx" src/ | head -30`)
+                let regex: RegExp
+                try { regex = new RegExp(`\\b${pattern}\\b`, 'g') } catch (e) {
+                    return { content: [{ type: 'text' as const, text: `Invalid symbol name: ${pattern}` }], isError: true }
+                }
+
+                const files = findSourceFiles()
+                const matches = searchFiles(regex, files)
+                const matchText = matches.slice(0, 30).map(m => `${m.file}:${m.line}: ${m.text}`).join('\n')
 
                 if (dryRun) {
                     return {
-                        content: [
-                            {
-                                type: 'text' as const,
-                                text: `🔍 Preview (dry run):\n\nRename: ${pattern} → ${replacement}\nMatches:\n${matches}\n\nRe-run with preview=false to apply.`,
-                            },
-                        ],
+                        content: [{
+                            type: 'text' as const,
+                            text: `🔍 Preview (dry run):\n\nRename: ${pattern} → ${replacement}\n${matches.length} match(es):\n${matchText}\n\nRe-run with preview=false to apply.`,
+                        }],
                     }
                 }
 
-                const result = safeExec(`find src/ -name "*.ts" -o -name "*.tsx" | xargs sed -i '' 's/\\b${pattern}\\b/${replacement}/g'`)
-                return { content: [{ type: 'text' as const, text: `✅ Renamed ${pattern} → ${replacement}\n${result}` }] }
+                const modified: string[] = []
+                for (const f of files) {
+                    const absPath = join(PROJECT_ROOT, f)
+                    if (!existsSync(absPath)) continue
+                    const content = readFileSync(absPath, 'utf-8')
+                    regex.lastIndex = 0
+                    const newContent = content.replace(regex, replacement)
+                    if (newContent !== content) {
+                        writeFileSync(absPath, newContent)
+                        modified.push(f)
+                    }
+                }
+                return { content: [{ type: 'text' as const, text: `✅ Renamed ${pattern} → ${replacement} in ${modified.length} file(s).\n\nModified:\n${modified.join('\n')}` }] }
             }
 
             if (action === 'ai_refactor') {
-                // Use Claude to suggest refactoring
-                const files = safeExec(`find src/ -name "*.ts" -o -name "*.tsx" | head -20`)
-                const relevantCode = safeExec(`grep -rn "${pattern}" --include="*.ts" --include="*.tsx" src/ | head -20`)
+                const files = findSourceFiles()
+                let regex: RegExp
+                try { regex = new RegExp(pattern, 'g') } catch { regex = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g') }
+                const matches = searchFiles(regex, files)
+                const matchText = matches.slice(0, 20).map(m => `${m.file}:${m.line}: ${m.text}`).join('\n')
+                const fileList = files.slice(0, 20).join('\n')
 
                 const suggestion = await callProxy(
-                    `I need to refactor this TypeScript/React codebase. The task: "${pattern}"\n\nRelevant matches:\n${relevantCode}\n\nFiles in project:\n${files}\n\nProvide specific, actionable refactoring steps with code examples.`,
+                    `I need to refactor this TypeScript/React codebase. The task: "${pattern}"\n\nRelevant matches:\n${matchText}\n\nFiles in project:\n${fileList}\n\nProvide specific, actionable refactoring steps with code examples.`,
                     {
                         system: 'You are a senior TypeScript/React refactoring specialist. Be specific with file paths and code changes.',
                         model: 'sonnet',
