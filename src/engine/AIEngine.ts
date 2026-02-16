@@ -214,6 +214,7 @@ export type EngineEvent =
   | { type: 'response_chunk'; text: string; timestamp: number }
   | { type: 'cycle_complete'; reflection: Reflection; timestamp: number }
   | { type: 'world_model_updated'; summary: string; timestamp: number }
+  | { type: 'discussion_stopped'; reason: string; turns: number; timestamp: number }
   | { type: 'error'; message: string; timestamp: number };
 
 export type EngineListener = (event: EngineEvent) => void;
@@ -222,6 +223,12 @@ export type EngineListener = (event: EngineEvent) => void;
 
 const LASTING_MEMORY_KEY = 'antigravity-kernel-memory';
 const WORLD_MODEL_KEY = 'antigravity-kernel-world';
+
+// ─── Discussion Guardrails ───────────────────────────────
+
+const DISCUSSION_MAX_TURNS = 10;
+const DISCUSSION_MIN_QUALITY = 0.3;
+const DISCUSSION_QUALITY_WINDOW = 3;
 
 function loadLastingMemory(): LastingMemory {
   if (typeof window === 'undefined') return createEmptyLastingMemory();
@@ -346,6 +353,8 @@ export function createEngine(): {
   setConviction: (value: number, reason: string) => void;
   overrideNextAgent: (agent: Agent | null) => void;
   pruneReflections: (minQuality: number) => number;
+  setUserId: (userId: string | null) => void;
+  loadFromSupabase: () => Promise<void>;
   stop: () => void;
   reset: () => void;
 } {
@@ -373,6 +382,38 @@ export function createEngine(): {
   const listeners: Set<EngineListener> = new Set();
   let aborted = false;
   let agentOverride: Agent | null = null;
+
+  // ── Supabase Sync State ────────────────────────────────
+
+  let currentUserId: string | null = null;
+  let supabaseVersion = 0;
+  let syncTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function scheduleSyncToSupabase(): void {
+    if (!currentUserId) return;
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(async () => {
+      if (!currentUserId) return;
+      try {
+        const { syncEngineState } = await import('./SupabaseClient');
+        const newVersion = await syncEngineState(
+          currentUserId,
+          state.worldModel as unknown as Record<string, unknown>,
+          state.lasting as unknown as Record<string, unknown>,
+          supabaseVersion
+        );
+        supabaseVersion = newVersion;
+      } catch (err) {
+        console.warn('[Engine] Supabase sync failed:', err);
+      }
+    }, 7000);
+  }
+
+  function persistState(): void {
+    saveWorldModel(state.worldModel);
+    saveLastingMemory(state.lasting);
+    scheduleSyncToSupabase();
+  }
 
   // ── Event System ────────────────────────────────────────
 
@@ -1010,9 +1051,8 @@ export function createEngine(): {
       state.working.threadSummary = `${speakers} discussed "${state.working.topic}" over ${state.working.turnCount} turns.`;
     }
 
-    // Save
-    saveWorldModel(state.worldModel);
-    saveLastingMemory(state.lasting);
+    // Save (dual-write: localStorage + async Supabase)
+    persistState();
 
     emit({
       type: 'world_model_updated',
@@ -1144,15 +1184,28 @@ export function createEngine(): {
 
     if (!state.lasting.topicHistory.includes(topic)) {
       state.lasting.topicHistory = [...state.lasting.topicHistory.slice(-19), topic];
-      saveLastingMemory(state.lasting);
+      persistState();
     }
 
     // Form a belief about this discussion
     formBelief(`Currently exploring: "${topic}"`, 0.8, 'observed');
 
     let currentAgent = KERNEL_AGENTS[0];
+    let discussionTurns = 0;
+    const discussionReflections: Reflection[] = [];
 
     while (!aborted) {
+      // ── Guardrail: max turns ──
+      if (discussionTurns >= DISCUSSION_MAX_TURNS) {
+        emit({
+          type: 'discussion_stopped',
+          reason: `Reached maximum of ${DISCUSSION_MAX_TURNS} turns`,
+          turns: discussionTurns,
+          timestamp: Date.now(),
+        });
+        break;
+      }
+
       const cycleStart = Date.now();
 
       setPhase('attending');
@@ -1229,6 +1282,25 @@ export function createEngine(): {
       const reflection = reflect(topic, response, currentAgent, perception, Date.now() - cycleStart);
       updateWorldModel(reflection, perception);
       emit({ type: 'cycle_complete', reflection, timestamp: Date.now() });
+
+      // Track quality for degradation check
+      discussionReflections.push(reflection);
+      discussionTurns++;
+
+      // ── Guardrail: quality degradation ──
+      if (discussionReflections.length >= DISCUSSION_QUALITY_WINDOW) {
+        const recentWindow = discussionReflections.slice(-DISCUSSION_QUALITY_WINDOW);
+        const avgQuality = recentWindow.reduce((sum, r) => sum + r.quality, 0) / recentWindow.length;
+        if (avgQuality < DISCUSSION_MIN_QUALITY) {
+          emit({
+            type: 'discussion_stopped',
+            reason: `Quality degraded (avg ${(avgQuality * 100).toFixed(0)}% over last ${DISCUSSION_QUALITY_WINDOW} turns)`,
+            turns: discussionTurns,
+            timestamp: Date.now(),
+          });
+          break;
+        }
+      }
 
       state.cycleCount++;
       currentAgent = getNextAgent(currentAgent.id);
@@ -1315,7 +1387,7 @@ export function createEngine(): {
     challengeBelief: challengeBeliefById,
     removeBelief: (beliefId: string) => {
       state.worldModel.beliefs = state.worldModel.beliefs.filter(b => b.id !== beliefId);
-      saveWorldModel(state.worldModel);
+      persistState();
     },
     setConviction: (value: number, reason: string) => {
       const from = state.worldModel.convictions.overall;
@@ -1326,7 +1398,7 @@ export function createEngine(): {
         lastShift: Date.now(),
       };
       emit({ type: 'conviction_shifted', from, to: clamped, reason, timestamp: Date.now() });
-      saveWorldModel(state.worldModel);
+      persistState();
     },
     overrideNextAgent: (agent: Agent | null) => {
       agentOverride = agent;
@@ -1335,8 +1407,41 @@ export function createEngine(): {
       const before = state.lasting.reflections.length;
       state.lasting.reflections = state.lasting.reflections.filter(r => r.quality >= minQuality);
       const removed = before - state.lasting.reflections.length;
-      if (removed > 0) saveLastingMemory(state.lasting);
+      if (removed > 0) persistState();
       return removed;
+    },
+    setUserId: (userId: string | null) => {
+      currentUserId = userId;
+      if (!userId && syncTimer) {
+        clearTimeout(syncTimer);
+        syncTimer = null;
+      }
+    },
+    loadFromSupabase: async () => {
+      if (!currentUserId) return;
+      try {
+        const { getEngineState } = await import('./SupabaseClient');
+        const remote = await getEngineState(currentUserId);
+        if (!remote) {
+          console.log('[Engine] No remote state found, will seed on next persist');
+          return;
+        }
+        supabaseVersion = remote.version;
+        const remoteMemory = remote.lasting_memory as unknown as LastingMemory;
+        // Use higher totalInteractions as the "winner"
+        if (remoteMemory.totalInteractions > state.lasting.totalInteractions) {
+          state.lasting = remoteMemory;
+          state.worldModel = remote.world_model as unknown as WorldModel;
+          // Sync back to localStorage
+          saveLastingMemory(state.lasting);
+          saveWorldModel(state.worldModel);
+          console.log('[Engine] State loaded from Supabase (remote had more interactions)');
+        } else {
+          console.log('[Engine] Local state newer, will overwrite remote on next persist');
+        }
+      } catch (err) {
+        console.warn('[Engine] Failed to load from Supabase:', err);
+      }
     },
     stop,
     reset,

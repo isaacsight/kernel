@@ -429,6 +429,50 @@ export async function upsertUserMemory(
   if (error) console.error('Error upserting user memory:', error);
 }
 
+// ─── Engine State (world model + lasting memory) ─────────
+
+export interface DBEngineState {
+  user_id: string;
+  world_model: Record<string, unknown>;
+  lasting_memory: Record<string, unknown>;
+  version: number;
+  updated_at: string;
+}
+
+export async function getEngineState(userId: string): Promise<DBEngineState | null> {
+  const { data, error } = await supabase
+    .from('user_engine_state')
+    .select('*')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) console.error('Error fetching engine state:', error);
+  return data;
+}
+
+export async function syncEngineState(
+  userId: string,
+  worldModel: Record<string, unknown>,
+  lastingMemory: Record<string, unknown>,
+  knownVersion: number
+): Promise<number> {
+  const newVersion = knownVersion + 1;
+  const { error } = await supabase
+    .from('user_engine_state')
+    .upsert({
+      user_id: userId,
+      world_model: worldModel,
+      lasting_memory: lastingMemory,
+      version: newVersion,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) {
+    console.error('Error syncing engine state:', error);
+    return knownVersion; // return old version on failure
+  }
+  return newVersion;
+}
+
 // ─── Auth Token Helper ───────────────────────────────────
 // Returns the current user's JWT access token for authenticating edge function calls.
 // Falls back to the anon key if no session exists (should not happen for gated routes).

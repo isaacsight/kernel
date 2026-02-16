@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical } from 'lucide-react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
@@ -116,6 +116,7 @@ function EngineChat() {
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   const [isThinking, setIsThinking] = useState(false)
+  const [thinkingAgent, setThinkingAgent] = useState<string | null>(null)
   const [attachedFiles, setAttachedFiles] = useState<File[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -157,15 +158,29 @@ function EngineChat() {
   const [editingContent, setEditingContent] = useState('')
   // Toast
   const [toast, setToast] = useState<string | null>(null)
+  // Header menu
+  const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
+  const headerMenuRef = useRef<HTMLDivElement>(null)
+  // Scroll tracking
+  const [isNearBottom, setIsNearBottom] = useState(true)
+  const [showScrollBtn, setShowScrollBtn] = useState(false)
   // Voice input
   const [isListening, setIsListening] = useState(false)
   const recognitionRef = useRef<any>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   // Clean up active stream on unmount
   useEffect(() => {
     return () => { streamAbortRef.current?.abort() }
   }, [])
+
+  // Sync engine state with Supabase on auth
+  useEffect(() => {
+    if (!user) return
+    engine.setUserId(user.id)
+    engine.loadFromSupabase()
+    return () => { engine.setUserId(null) }
+  }, [user, engine])
 
   const activeConversation = conversations.find(c => c.id === activeConversationId)
 
@@ -181,6 +196,18 @@ function EngineChat() {
     const t = setTimeout(() => setToast(null), 2500)
     return () => clearTimeout(t)
   }, [toast])
+
+  // Close header menu on outside click
+  useEffect(() => {
+    if (!headerMenuOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (headerMenuRef.current && !headerMenuRef.current.contains(e.target as Node)) {
+        setHeaderMenuOpen(false)
+      }
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
+  }, [headerMenuOpen])
 
   // Voice input
   const toggleVoice = useCallback(() => {
@@ -307,10 +334,25 @@ function EngineChat() {
     })
   }, [engine])
 
-  // Auto-scroll
+  // Track scroll position
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
-  }, [messages])
+    const el = scrollRef.current
+    if (!el) return
+    const onScroll = () => {
+      const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80
+      setIsNearBottom(nearBottom)
+      setShowScrollBtn(!nearBottom && messages.length > 0)
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [messages.length])
+
+  // Auto-scroll only when near bottom
+  useEffect(() => {
+    if (isNearBottom) {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+    }
+  }, [messages, isNearBottom])
 
   // Auto-title: truncate first message to ~50 chars at word boundary
   function generateTitle(content: string): string {
@@ -321,7 +363,11 @@ function EngineChat() {
   }
 
   // Switch conversation
+  const [msgsLoading, setMsgsLoading] = useState(false)
   const switchConversation = useCallback(async (convId: string) => {
+    setMsgsLoading(true)
+    setActiveConversationId(convId)
+    setMessages([])
     const dbMessages = await getChannelMessages(convId)
     const chatMessages: ChatMessage[] = dbMessages.map(m => ({
       id: m.id,
@@ -330,7 +376,7 @@ function EngineChat() {
       timestamp: new Date(m.created_at).getTime(),
     }))
     setMessages(chatMessages)
-    setActiveConversationId(convId)
+    setMsgsLoading(false)
   }, [])
 
   // New chat
@@ -538,6 +584,7 @@ function EngineChat() {
     setIsStreaming(true)
     setIsThinking(true)
     setInput('')
+    if (inputRef.current) inputRef.current.style.height = 'auto'
     setAttachedFiles([])
     setResearchProgress(null)
     setTaskProgress(null)
@@ -552,6 +599,7 @@ function EngineChat() {
     )
     const classification = await classifyIntent(trimmed, recentCtx)
     const specialist = getSpecialist(classification.agentId)
+    setThinkingAgent(specialist.name)
 
     // Fetch URL content if message contains links
     let urlContext = ''
@@ -662,7 +710,7 @@ function EngineChat() {
     ]
 
     const updateKernelMsg = (text: string) => {
-      if (isThinking) setIsThinking(false)
+      if (isThinking) { setIsThinking(false); setThinkingAgent(null) }
       latestKernelContentRef.current = text
       setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text } : m))
     }
@@ -786,7 +834,7 @@ function EngineChat() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent | React.KeyboardEvent) => {
     e.preventDefault()
     sendMessage(input)
   }
@@ -820,28 +868,43 @@ function EngineChat() {
           </span>
         </div>
         <div className="ka-header-right">
-          {messages.length > 0 && (
-            <>
-              <button className="ka-header-icon-btn" onClick={handleExportConversation} aria-label="Export conversation">
-                <FileDown size={16} />
-              </button>
-              <button className="ka-header-icon-btn" onClick={handleShare} aria-label="Share conversation">
-                <Share2 size={16} />
-              </button>
-              <button className="ka-copy-btn" onClick={handleCopy} aria-label="Copy conversation">
-                {copied ? <Check size={16} /> : <Copy size={16} />}
-              </button>
-            </>
-          )}
           <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
             {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
-          <button className="ka-header-icon-btn" onClick={handleManageSubscription} disabled={portalLoading} aria-label="Manage subscription">
-            <Settings size={16} className={portalLoading ? 'ka-spin' : ''} />
-          </button>
-          <button className="ka-header-icon-btn" onClick={signOut} aria-label="Sign out">
-            <LogOut size={16} />
-          </button>
+          <div className="ka-header-menu-wrap" ref={headerMenuRef}>
+            <button className="ka-header-icon-btn" onClick={() => setHeaderMenuOpen(!headerMenuOpen)} aria-label="More options">
+              <EllipsisVertical size={16} />
+            </button>
+            {headerMenuOpen && (
+              <div className="ka-header-menu">
+                {messages.length > 0 && (
+                  <>
+                    <button className="ka-header-menu-item" onClick={() => { handleCopy(); setHeaderMenuOpen(false) }}>
+                      {copied ? <Check size={14} /> : <Copy size={14} />}
+                      Copy conversation
+                    </button>
+                    <button className="ka-header-menu-item" onClick={() => { handleExportConversation(); setHeaderMenuOpen(false) }}>
+                      <FileDown size={14} />
+                      Export as Markdown
+                    </button>
+                    <button className="ka-header-menu-item" onClick={() => { handleShare(); setHeaderMenuOpen(false) }}>
+                      <Share2 size={14} />
+                      Share
+                    </button>
+                    <div className="ka-header-menu-divider" />
+                  </>
+                )}
+                <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
+                  <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />
+                  Manage subscription
+                </button>
+                <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { signOut(); setHeaderMenuOpen(false) }}>
+                  <LogOut size={14} />
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
       {portalError && (
@@ -853,7 +916,17 @@ function EngineChat() {
 
       {/* Chat Area */}
       <div className="ka-chat" ref={scrollRef}>
-        {messages.length === 0 && (
+        {msgsLoading && (
+          <div className="ka-skeleton-wrap">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className={`ka-skeleton-msg ${i % 2 === 0 ? 'ka-skeleton-msg--right' : ''}`}>
+                <div className="ka-skeleton-line ka-skeleton-line--long" />
+                {i % 2 !== 0 && <div className="ka-skeleton-line ka-skeleton-line--short" />}
+              </div>
+            ))}
+          </div>
+        )}
+        {messages.length === 0 && !msgsLoading && (
           <motion.div
             className="ka-empty"
             initial={{ opacity: 0, y: 20 }}
@@ -931,17 +1004,34 @@ function EngineChat() {
           </div>
         )}
 
-        {isThinking && (
-          <motion.div
-            className="ka-thinking"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-          >
-            <span className="ka-thinking-dot" />
-            <span className="ka-thinking-text">Kernel is thinking...</span>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {isThinking && (
+            <motion.div
+              className="ka-thinking"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+            >
+              <div className="ka-thinking-dots">
+                <span /><span /><span />
+              </div>
+              <div className="ka-thinking-info">
+                {thinkingAgent ? (
+                  <motion.span
+                    key={thinkingAgent}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="ka-thinking-text"
+                  >
+                    {thinkingAgent} is working...
+                  </motion.span>
+                ) : (
+                  <span className="ka-thinking-text">Routing to specialist...</span>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence initial={false}>
           {messages.map(msg => (
@@ -1051,15 +1141,37 @@ function EngineChat() {
         <EventFeed events={events} />
       </div>
 
+      {/* Scroll to bottom */}
+      <AnimatePresence>
+        {showScrollBtn && (
+          <motion.button
+            className="ka-scroll-btn"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => {
+              scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+            }}
+            aria-label="Scroll to bottom"
+          >
+            <ChevronDown size={18} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Input */}
       {attachedFiles.length > 0 && (
         <div className="ka-file-chips">
           {attachedFiles.map((f, i) => (
-            <span key={i} className="ka-file-chip">
-              {f.name}
-              <button type="button" className="ka-file-chip-x" onClick={() => removeFile(i)}>
-                <X size={12} />
-              </button>
+            <span key={i} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}`}>
+              <Paperclip size={12} />
+              <span className="ka-file-chip-name">{f.name}</span>
+              <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>
+              {!isStreaming && (
+                <button type="button" className="ka-file-chip-x" onClick={() => removeFile(i)}>
+                  <X size={12} />
+                </button>
+              )}
             </span>
           ))}
         </div>
@@ -1098,14 +1210,26 @@ function EngineChat() {
         <label htmlFor="ka-file-input" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label="Attach file">
           <Paperclip size={18} />
         </label>
-        <input
+        <textarea
           ref={inputRef}
-          type="text"
           className="ka-input"
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={e => {
+            setInput(e.target.value)
+            // Auto-resize
+            const el = e.target
+            el.style.height = 'auto'
+            el.style.height = Math.min(el.scrollHeight, 200) + 'px'
+          }}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              handleSubmit(e)
+            }
+          }}
           placeholder="Talk to the Kernel..."
           disabled={isStreaming}
+          rows={1}
         />
         <button
           type="button"
@@ -1116,13 +1240,32 @@ function EngineChat() {
         >
           {isListening ? <MicOff size={18} /> : <Mic size={18} />}
         </button>
-        <button
-          type="submit"
-          className="ka-send"
-          disabled={(!input.trim() && attachedFiles.length === 0) || isStreaming}
-        >
-          <Send size={18} />
-        </button>
+        {isStreaming ? (
+          <button
+            type="button"
+            className="ka-stop"
+            onClick={() => {
+              streamAbortRef.current?.abort()
+              streamAbortRef.current = null
+              setIsStreaming(false)
+              setIsThinking(false)
+              setResearchProgress(null)
+              setTaskProgress(null)
+              setSwarmProgress(null)
+            }}
+            aria-label="Stop generating"
+          >
+            <Square size={16} />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="ka-send"
+            disabled={!input.trim() && attachedFiles.length === 0}
+          >
+            <Send size={18} />
+          </button>
+        )}
       </form>
 
       <AnimatePresence>
