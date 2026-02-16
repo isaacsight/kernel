@@ -168,7 +168,6 @@ export function LoginGate() {
               <button
                 className="ka-gate-admin-toggle"
                 onClick={() => setIsSignUp(!isSignUp)}
-                style={{ marginBottom: 8 }}
               >
                 {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
               </button>

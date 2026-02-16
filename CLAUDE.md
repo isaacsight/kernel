@@ -140,6 +140,36 @@ Required env vars (see `.env.example`):
 - **Hash router**: App uses `createHashRouter` — all routes are `/#/path`.
 - **CSS**: No Tailwind. All styles in `src/index.css` using vanilla CSS + custom properties.
 
-## VIII. LEGACY
+## VIII. EXTENDED CONTEXT (Read On Demand)
+
+### Modular Rules (`.claude/rules/`)
+
+- `components.md` — Rubin design system, TypeScript standards (loads for `src/components/`, `src/pages/`)
+- `backend.md` — Edge function, MCP server rules (loads for `supabase/`, `tools/`)
+- `engine.md` — AI engine, agent routing rules (loads for `src/engine/`, `src/agents/`)
+- `security.md` — Security guardrails (always loaded)
+- `testing.md` — Vitest conventions (always loaded)
+
+### Sub-Agents (`.claude/agents/`)
+
+- `reviewer.md` — Code review specialist
+- `debugger.md` — Systematic debugging protocol
+- `documenter.md` — Documentation writer (JSDoc, README, changelog)
+- `architect.md` — Architecture advisor
+- `deployer.md` — Deployment specialist
+
+### Session Memory
+
+- `SCRATCHPAD.md` — Persistent context between sessions (auto-loaded at start)
+- Before ending a session, update SCRATCHPAD.md with accomplishments and pending work
+
+### Hooks (`.claude/hooks/`)
+
+- `session-start.js` — Injects date, SCRATCHPAD, git status at session start
+- `session-stop.js` — Logs session timestamps
+- `guard-commands.js` — Blocks dangerous shell commands
+- `log-prompt.js` — Logs all prompts for analysis
+
+## IX. LEGACY
 
 Ancient intelligence and archived experiments live in `/legacy`.
