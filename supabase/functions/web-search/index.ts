@@ -1,9 +1,8 @@
 // Supabase Edge Function: web-search
-// Searches the web via Perplexity's online models and returns grounded results.
-// The Kernel Agent calls this before Claude to get live web context.
+// Searches the web via Claude's built-in web_search tool and returns grounded results.
 //
 // Deploy: npx supabase functions deploy web-search --project-ref eoxxpyixdieprsxlpwcs
-// Secrets needed: PERPLEXITY_API_KEY
+// Secrets: ANTHROPIC_API_KEY
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -43,10 +42,10 @@ serve(async (req: Request) => {
       )
     }
 
-    const perplexityKey = Deno.env.get('PERPLEXITY_API_KEY')
-    if (!perplexityKey) {
+    const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
+    if (!anthropicKey) {
       return new Response(
-        JSON.stringify({ error: 'Missing PERPLEXITY_API_KEY' }),
+        JSON.stringify({ error: 'Missing ANTHROPIC_API_KEY' }),
         { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
@@ -61,42 +60,52 @@ serve(async (req: Request) => {
       )
     }
 
-    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${perplexityKey}`,
         'Content-Type': 'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'sonar',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a web research assistant. Return factual, sourced information with URLs when available. Be concise and cite your sources. Focus on the most recent and relevant results.',
-          },
-          {
-            role: 'user',
-            content: query,
-          },
-        ],
+        model: 'claude-haiku-4-5-20251001',
         max_tokens,
-        temperature: 0.1,
-        return_citations: true,
+        tools: [
+          { type: 'web_search_20250305', name: 'web_search', max_uses: 3 }
+        ],
+        system: 'You are a web research assistant. Search the web for the user\'s query. Return factual, sourced information with URLs when available. Be concise and cite your sources.',
+        messages: [
+          { role: 'user', content: query },
+        ],
       }),
     })
 
     if (!response.ok) {
       const errText = await response.text()
-      console.error('Perplexity API error:', response.status, errText)
+      console.error('Anthropic API error:', response.status, errText)
       return new Response(
-        JSON.stringify({ error: 'Search API error', details: errText }),
+        JSON.stringify({ error: 'Claude API error', details: errText }),
         { status: response.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
 
     const data = await response.json()
-    const text = data.choices?.[0]?.message?.content || ''
-    const citations = data.citations || []
+
+    // Extract text and citations from Claude's response
+    const textBlocks = data.content?.filter((c: { type: string }) => c.type === 'text') || []
+    const text = textBlocks.map((c: { text: string }) => c.text).join('')
+
+    // Extract URLs from web_search_tool_result blocks
+    const citations: string[] = []
+    for (const block of data.content || []) {
+      if (block.type === 'web_search_tool_result' && block.content) {
+        for (const result of block.content) {
+          if (result.type === 'web_search_result' && result.url) {
+            citations.push(result.url)
+          }
+        }
+      }
+    }
 
     return new Response(
       JSON.stringify({ text, citations }),

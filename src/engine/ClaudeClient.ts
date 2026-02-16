@@ -48,6 +48,7 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       system: opts?.system,
       max_tokens: opts?.max_tokens ?? 4096,
       messages: [{ role: 'user', content: prompt }],
+      web_search: opts?.web_search ?? false,
     }),
   })
 
