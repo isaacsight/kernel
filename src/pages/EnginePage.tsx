@@ -110,7 +110,7 @@ function LoginGate() {
         <button className="landing-cta" onClick={() => setShowAuth(true)}>
           Get Started — Free
         </button>
-        <p className="landing-hint">10 messages/day free. 150/day with Pro.</p>
+        <p className="landing-hint">Unlimited messages. Free to start.</p>
       </motion.section>
 
       {/* Features */}
@@ -148,7 +148,7 @@ function LoginGate() {
           <h3>Free</h3>
           <p className="landing-plan-price">$0</p>
           <ul>
-            <li>10 messages per day</li>
+            <li>Unlimited messages</li>
             <li>All specialist agents</li>
             <li>Conversation memory</li>
             <li>Web search</li>
@@ -158,7 +158,7 @@ function LoginGate() {
           <h3>Pro</h3>
           <p className="landing-plan-price">$20<span>/mo</span></p>
           <ul>
-            <li>150 messages per day</li>
+            <li>Unlimited messages</li>
             <li>Deep research mode</li>
             <li>Multi-step tasks</li>
             <li>Priority response</li>
@@ -339,7 +339,7 @@ function SubscriptionGate() {
           <div className="ka-gate-feature">Conversational AI with web search</div>
           <div className="ka-gate-feature">Real-time cognitive engine observability</div>
           <div className="ka-gate-feature">Belief and conviction management</div>
-          <div className="ka-gate-feature">150 messages per day</div>
+          <div className="ka-gate-feature">Unlimited messages</div>
         </div>
 
         <button
