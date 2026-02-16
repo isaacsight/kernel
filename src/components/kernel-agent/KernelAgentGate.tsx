@@ -59,7 +59,7 @@ export function KernelAgentGate() {
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conversational engine analysis</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Real-time belief management</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conviction steering</div>
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> 150 messages per day</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Unlimited messages</div>
           </div>
           <button className="kernel-gate-submit" onClick={handleSubscribe} disabled={loading} style={{ width: '100%' }}>
             {loading ? 'Loading...' : 'Subscribe — $20/mo'}
