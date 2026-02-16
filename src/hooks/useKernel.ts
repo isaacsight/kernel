@@ -2,14 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Message, SwarmState, MediaAttachment } from '../types';
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
-import { generateResponse, setProvider as setRouterProvider, type Provider } from '../engine/ProviderRouter';
+import { claudeStreamChat } from '../engine/ClaudeClient';
 
 interface KernelStore {
   messages: Message[];
   swarm: SwarmState;
   isGenerating: boolean;
   streamingContent: string;
-  provider: Provider;
 
   // Actions
   addMessage: (message: Message) => void;
@@ -20,7 +19,6 @@ interface KernelStore {
   injectMessage: (content: string, media?: MediaAttachment[]) => void;
   setTopic: (topic: string) => void;
   clearMessages: () => void;
-  setProvider: (provider: Provider) => void;
 }
 
 export const useKernel = create<KernelStore>()(
@@ -35,7 +33,6 @@ export const useKernel = create<KernelStore>()(
       },
       isGenerating: false,
       streamingContent: '',
-      provider: 'gemini' as Provider,
 
       addMessage: (message) => set((state) => ({
         messages: [...state.messages, message]
@@ -102,10 +99,20 @@ export const useKernel = create<KernelStore>()(
         }));
 
         try {
-          const response = await generateResponse(
-            currentAgent,
-            messages,
-            swarm.topic,
+          // Build Claude messages from conversation history
+          const claudeMessages: { role: string; content: string }[] = messages
+            .slice(-10)
+            .map(m => ({
+              role: m.agentId === 'human' ? 'user' : 'assistant',
+              content: `${m.agentName}: ${m.content}`,
+            }));
+          claudeMessages.push({
+            role: 'user',
+            content: `CURRENT TOPIC: "${swarm.topic}"\n\nNow respond as ${currentAgent.name}. Remember: 2-3 sentences max, build on what others said, reference them by name.`,
+          });
+
+          const response = await claudeStreamChat(
+            claudeMessages,
             (streamedText) => {
               // Update the message content as it streams
               set((state) => ({
@@ -116,7 +123,8 @@ export const useKernel = create<KernelStore>()(
                 ),
                 streamingContent: streamedText
               }));
-            }
+            },
+            { system: currentAgent.systemPrompt, model: 'sonnet', max_tokens: 512 }
           );
 
           // Finalize the message
@@ -173,17 +181,12 @@ export const useKernel = create<KernelStore>()(
         }));
       },
 
-      setProvider: (provider) => {
-        setRouterProvider(provider);
-        set({ provider });
-      }
     }),
     {
       name: 'sovereign-kernel',
       partialize: (state) => ({
         messages: state.messages,
         swarm: { ...state.swarm, isActive: false },
-        provider: state.provider,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
@@ -192,10 +195,6 @@ export const useKernel = create<KernelStore>()(
             ...m,
             timestamp: new Date(m.timestamp),
           }));
-          // Sync provider to router module
-          if (state.provider) {
-            setRouterProvider(state.provider);
-          }
         }
       },
     }

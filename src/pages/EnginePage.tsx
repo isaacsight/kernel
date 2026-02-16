@@ -1,16 +1,15 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, ClipboardCopy, FileDown, Mic, MicOff } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff } from 'lucide-react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, type ContentBlock } from '../engine/ClaudeClient'
-import { fileToBase64 } from '../engine/GeminiClient'
-import { KERNEL_AGENT, KERNEL_TOPICS } from '../agents/kernel'
-import { getSpecialist, type Specialist } from '../agents/specialists'
+import { fileToBase64 } from '../engine/fileUtils'
+import { KERNEL_TOPICS } from '../agents/kernel'
+import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
-import { planTask, executeTask, type TaskPlan, type TaskProgress } from '../engine/TaskPlanner'
+import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
@@ -18,7 +17,6 @@ import {
   getChannelMessages,
   createConversation,
   getUserConversations,
-  updateConversationTitle,
   touchConversation,
   deleteConversation,
   getUserRecentMessages,
@@ -35,332 +33,13 @@ import {
 } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { OnboardingFlow } from '../components/OnboardingFlow'
-
-// ─── Config ─────────────────────────────────────────────
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
-const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
-const URL_FETCH_ENDPOINT = `${SUPABASE_URL}/functions/v1/url-fetch`
-
-const LINK_REGEX = /https?:\/\/[^\s)<>]+(?:\([^\s)<>]*\))?[^\s)<>,."'!?\]]*(?=[.,!?\]]*(?:\s|$))|https?:\/\/[^\s)<>]+/g
-
-async function fetchUrlContent(url: string): Promise<string> {
-  try {
-    const token = await getAccessToken()
-    const res = await fetch(URL_FETCH_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        apikey: SUPABASE_KEY,
-      },
-      body: JSON.stringify({ url }),
-    })
-    if (!res.ok) return ''
-    const { text } = await res.json()
-    return text || ''
-  } catch {
-    return ''
-  }
-}
-
-// ─── Login Gate ─────────────────────────────────────────
-
-function LoginGate() {
-  const { signInWithProvider, signInWithEmail, signUpWithEmail } = useAuthContext()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [showAuth, setShowAuth] = useState(false)
-
-  const handleEmailAuth = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim() || !password.trim()) return
-    setLoading(true)
-    setError('')
-    try {
-      const result = isSignUp
-        ? await signUpWithEmail(email.trim(), password)
-        : await signInWithEmail(email.trim(), password)
-      if (result.error) setError(result.error)
-    } catch {
-      setError('Authentication failed. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="landing">
-      {/* Hero */}
-      <motion.section
-        className="landing-hero"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-        <h1 className="landing-title">kernel</h1>
-        <p className="landing-subtitle">
-          A personal AI that learns who you are, remembers what matters,
-          and gets better with every conversation.
-        </p>
-        <button className="landing-cta" onClick={() => setShowAuth(true)}>
-          Get Started — Free
-        </button>
-        <p className="landing-hint">Unlimited messages. Free to start.</p>
-      </motion.section>
-
-      {/* Features */}
-      <motion.section
-        className="landing-features"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <div className="landing-feature">
-          <div className="landing-feature-icon">K</div>
-          <h3>It Learns You</h3>
-          <p>Kernel builds a memory of your interests, goals, and style. Every conversation makes the next one better.</p>
-        </div>
-        <div className="landing-feature">
-          <div className="landing-feature-icon">R</div>
-          <h3>Specialist Agents</h3>
-          <p>Your messages route to the right mind — researcher, coder, writer, or analyst. The Kernel decides who handles what.</p>
-        </div>
-        <div className="landing-feature">
-          <div className="landing-feature-icon">W</div>
-          <h3>Web Search Built In</h3>
-          <p>Real-time information, not stale training data. Kernel searches the web and cites sources naturally.</p>
-        </div>
-      </motion.section>
-
-      {/* Pricing */}
-      <motion.section
-        className="landing-pricing"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
-        <div className="landing-plan">
-          <h3>Free</h3>
-          <p className="landing-plan-price">$0</p>
-          <ul>
-            <li>Unlimited messages</li>
-            <li>All specialist agents</li>
-            <li>Conversation memory</li>
-            <li>Web search</li>
-          </ul>
-        </div>
-        <div className="landing-plan landing-plan-pro">
-          <h3>Pro</h3>
-          <p className="landing-plan-price">$20<span>/mo</span></p>
-          <ul>
-            <li>Unlimited messages</li>
-            <li>Deep research mode</li>
-            <li>Multi-step tasks</li>
-            <li>Priority response</li>
-          </ul>
-          <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
-            Start Free, Upgrade Anytime
-          </button>
-        </div>
-      </motion.section>
-
-      {/* Auth Modal */}
-      <AnimatePresence>
-        {showAuth && (
-          <motion.div
-            className="landing-auth-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={(e) => { if (e.target === e.currentTarget) setShowAuth(false) }}
-          >
-            <motion.div
-              className="ka-gate-card"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.3 }}
-            >
-              <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-              <h1 className="ka-gate-title">{isSignUp ? 'Create your Kernel' : 'Welcome back'}</h1>
-
-              <div className="ka-gate-social">
-                <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
-                  Continue with Google
-                </button>
-                <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
-                  Continue with GitHub
-                </button>
-                <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
-                  Continue with X
-                </button>
-              </div>
-
-              <div className="ka-gate-divider"><span>or</span></div>
-
-              <form className="ka-gate-form" onSubmit={handleEmailAuth}>
-                <input
-                  type="email"
-                  className="ka-gate-input"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                />
-                <input
-                  type="password"
-                  className="ka-gate-input"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="ka-gate-submit"
-                  disabled={loading || !email.trim() || !password.trim()}
-                >
-                  {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
-                </button>
-              </form>
-
-              <button
-                className="ka-gate-admin-toggle"
-                onClick={() => setIsSignUp(!isSignUp)}
-                style={{ marginBottom: 8 }}
-              >
-                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-              </button>
-
-              {error && <p className="ka-gate-error">{error}</p>}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-// ─── Subscription Gate ──────────────────────────────────
-
-function SubscriptionGate() {
-  const { user, refreshSubscription, signOut } = useAuthContext()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [polling, setPolling] = useState(false)
-
-  // After Stripe redirect, poll for webhook completion
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.hash.split('?')[1] || '')
-    if (params.get('checkout') === 'complete') {
-      setPolling(true)
-      let attempts = 0
-      const interval = setInterval(async () => {
-        attempts++
-        const active = await refreshSubscription()
-        if (active || attempts >= 15) {
-          clearInterval(interval)
-          setPolling(false)
-          // Clean up URL
-          window.location.hash = '#/'
-        }
-      }, 2000)
-      return () => clearInterval(interval)
-    }
-  }, [refreshSubscription])
-
-  const handleSubscribe = async () => {
-    if (!user?.email) return
-    setLoading(true)
-    setError('')
-    try {
-      const token = await getAccessToken()
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          apikey: SUPABASE_KEY,
-        },
-        body: JSON.stringify({
-          mode: 'subscription',
-          price_id: PRICE_ID,
-          success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
-          cancel_url: window.location.href,
-        }),
-      })
-      if (!res.ok) throw new Error('Failed to create checkout')
-      const { url } = await res.json()
-      if (url) window.location.href = url
-    } catch {
-      setError('Unable to start checkout. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (polling) {
-    return (
-      <div className="ka-gate">
-        <motion.div
-          className="ka-gate-card"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <div className="ka-gate-icon">K</div>
-          <h1 className="ka-gate-title">Activating...</h1>
-          <p className="ka-gate-subtitle">Confirming your subscription. This usually takes a few seconds.</p>
-        </motion.div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="ka-gate">
-      <motion.div
-        className="ka-gate-card"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="ka-gate-icon">K</div>
-        <h1 className="ka-gate-title">Subscribe to Kernel</h1>
-        <p className="ka-gate-subtitle">
-          Signed in as {user?.email}. Subscribe to access the Antigravity Kernel.
-        </p>
-        <p className="ka-gate-price">$20<span>/month</span></p>
-
-        <div className="ka-gate-features">
-          <div className="ka-gate-feature">Conversational AI with web search</div>
-          <div className="ka-gate-feature">Real-time cognitive engine observability</div>
-          <div className="ka-gate-feature">Belief and conviction management</div>
-          <div className="ka-gate-feature">Unlimited messages</div>
-        </div>
-
-        <button
-          className="ka-gate-submit"
-          onClick={handleSubscribe}
-          disabled={loading}
-          style={{ width: '100%', marginBottom: 16 }}
-        >
-          {loading ? 'Loading...' : 'Subscribe — $20/mo'}
-        </button>
-
-        {error && <p className="ka-gate-error">{error}</p>}
-
-        <button className="ka-gate-admin-toggle" onClick={signOut}>
-          Sign out
-        </button>
-      </motion.div>
-    </div>
-  )
-}
+import { LoginGate } from '../components/LoginGate'
+import { MessageContent, Linkify } from '../components/MessageContent'
+import {
+  TEXT_EXTENSIONS, ACCEPTED_FILES, LINK_REGEX,
+  getMediaType, isImageFile, isPdfFile, readFileAsText,
+  downloadFile, serializeState, EventFeed, fetchUrlContent,
+} from '../components/ChatHelpers'
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -376,244 +55,15 @@ interface ChatMessage {
   agentName?: string
 }
 
-const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md'
+// ─── Config ─────────────────────────────────────────────
 
-const EXT_TO_MIME: Record<string, string> = {
-  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
-  '.gif': 'image/gif', '.webp': 'image/webp', '.pdf': 'application/pdf',
-}
-
-function getMediaType(file: File): string {
-  if (file.type) return file.type
-  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
-  return EXT_TO_MIME[ext] || 'application/octet-stream'
-}
-
-function isImageFile(file: File): boolean {
-  if (file.type && file.type.startsWith('image/')) return true
-  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
-  return IMAGE_EXTENSIONS.includes(ext)
-}
-
-function isPdfFile(file: File): boolean {
-  if (file.type === 'application/pdf') return true
-  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
-  return ext === '.pdf'
-}
-
-function readFileAsText(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsText(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = reject
-  })
-}
-
-// ─── Engine State Serializer ────────────────────────────
-
-function serializeState(s: EngineState): string {
-  const parts: string[] = [
-    `## Engine State Snapshot`,
-    `Phase: ${s.phase}`,
-    `Cycles: ${s.cycleCount} | Turns: ${s.working.turnCount}`,
-    `Topic: ${s.working.topic || '(none)'}`,
-    `Conviction: ${(s.worldModel.convictions.overall * 100).toFixed(1)}% (${s.worldModel.convictions.trend})`,
-  ]
-
-  if (s.worldModel.beliefs.length > 0) {
-    parts.push(`\n## Beliefs (${s.worldModel.beliefs.length})`)
-    for (const b of s.worldModel.beliefs) {
-      parts.push(`- [${(b.confidence * 100).toFixed(0)}%] ${b.content} (${b.source})`)
-    }
-  }
-
-  if (s.ephemeral.perception) {
-    const p = s.ephemeral.perception
-    parts.push(`\n## Perception: ${p.intent.type} | urgency ${(p.urgency * 100).toFixed(0)}% | complexity ${(p.complexity * 100).toFixed(0)}%`)
-    parts.push(`Implied need: ${p.impliedNeed}`)
-  }
-
-  if (s.ephemeral.attention) {
-    parts.push(`\n## Attention: ${s.ephemeral.attention.primaryFocus} (${s.ephemeral.attention.depth})`)
-  }
-
-  if (s.ephemeral.activeAgent) {
-    parts.push(`\n## Active Agent: ${s.ephemeral.activeAgent.name}`)
-  }
-
-  const recent = s.lasting.reflections.slice(-2)
-  if (recent.length > 0) {
-    parts.push(`\n## Recent Reflections`)
-    for (const r of recent) {
-      parts.push(`- Quality ${(r.quality * 100).toFixed(0)}% (${r.agentUsed}): ${r.lesson}`)
-    }
-  }
-
-  const perf = Object.entries(s.lasting.agentPerformance)
-  if (perf.length > 0) {
-    parts.push(`\n## Agent Performance`)
-    for (const [id, p] of perf) {
-      parts.push(`- ${id}: ${(p.avgQuality * 100).toFixed(0)}% avg, ${p.uses} uses`)
-    }
-  }
-
-  parts.push(`\n## User Model: goal=${s.worldModel.userModel.apparentGoal}, style=${s.worldModel.userModel.communicationStyle}`)
-  parts.push(`Situation: ${s.worldModel.situationSummary}`)
-
-  return parts.join('\n')
-}
-
-// ─── Event Feed (compact) ───────────────────────────────
-
-function EventFeed({ events }: { events: EngineEvent[] }) {
-  if (events.length === 0) return null
-  return (
-    <div className="ka-events">
-      {[...events].reverse().slice(0, 5).map((e, i) => (
-        <div key={i} className="ka-event">
-          <span className="ka-event-time">
-            {new Date(e.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-          </span>
-          <span className="ka-event-type">{e.type.replace(/_/g, ' ')}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ─── File export helper ──────────────────────────────────
-
-const LANG_EXT: Record<string, string> = {
-  python: '.py', py: '.py', javascript: '.js', js: '.js', typescript: '.ts', ts: '.ts',
-  html: '.html', css: '.css', csv: '.csv', json: '.json', sql: '.sql',
-  bash: '.sh', sh: '.sh', markdown: '.md', md: '.md', yaml: '.yml', yml: '.yml',
-  xml: '.xml', java: '.java', rust: '.rs', go: '.go', c: '.c', cpp: '.cpp',
-  ruby: '.rb', php: '.php', swift: '.swift', kotlin: '.kt', r: '.r',
-}
-
-function downloadFile(content: string, filename: string) {
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
-// ─── Linkify helper ─────────────────────────────────────
-
-const URL_REGEX = /(https?:\/\/[^\s)<>]+(?:\([^\s)<>]*\))?[^\s)<>,."']*)/g
-
-function Linkify({ text }: { text: string }) {
-  const parts = text.split(URL_REGEX)
-  return (
-    <>
-      {parts.map((part, i) =>
-        /^https?:\/\//.test(part) ? (
-          <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="ka-msg-link">
-            {part}
-          </a>
-        ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </>
-  )
-}
-
-// ─── Code Block with copy + download ─────────────────────
-
-function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; ext: string; filename: string }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-  return (
-    <div className="ka-code-block">
-      <div className="ka-code-header">
-        <span className="ka-code-lang">{lang}</span>
-        <div className="ka-code-actions">
-          <button className="ka-code-copy" onClick={handleCopy} aria-label="Copy code">
-            {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
-            {copied ? 'Copied' : 'Copy'}
-          </button>
-          <button
-            className="ka-code-download"
-            onClick={() => downloadFile(code, filename)}
-            aria-label={`Download as ${filename}`}
-          >
-            <Download size={13} />
-            {ext}
-          </button>
-        </div>
-      </div>
-      <pre className="ka-code-pre"><code>{code}</code></pre>
-    </div>
-  )
-}
-
-// ─── Message Content (markdown + code blocks) ────────────
-
-const CODE_BLOCK_REGEX = /```(\w*)\n([\s\S]*?)```/g
-
-function MessageContent({ text }: { text: string }) {
-  const parts: React.ReactNode[] = []
-  let lastIndex = 0
-  let blockIndex = 0
-
-  // Reset regex state
-  CODE_BLOCK_REGEX.lastIndex = 0
-
-  let match
-  while ((match = CODE_BLOCK_REGEX.exec(text)) !== null) {
-    // Markdown text before code block
-    if (match.index > lastIndex) {
-      const before = text.slice(lastIndex, match.index)
-      parts.push(
-        <ReactMarkdown key={`t${blockIndex}`} components={{
-          a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
-          code: ({ children }) => <code className="ka-inline-code">{children}</code>,
-        }}>{before}</ReactMarkdown>
-      )
-    }
-
-    const lang = match[1] || 'text'
-    const code = match[2]
-    const ext = LANG_EXT[lang.toLowerCase()] || '.txt'
-    const filename = `kernel-export${ext}`
-
-    parts.push(
-      <CodeBlock key={`c${blockIndex}`} lang={lang} code={code} ext={ext} filename={filename} />
-    )
-
-    lastIndex = match.index + match[0].length
-    blockIndex++
-  }
-
-  // Remaining text after last code block
-  if (lastIndex < text.length) {
-    const remaining = text.slice(lastIndex)
-    parts.push(
-      <ReactMarkdown key={`t${blockIndex}`} components={{
-        a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
-        code: ({ children }) => <code className="ka-inline-code">{children}</code>,
-      }}>{remaining}</ReactMarkdown>
-    )
-  }
-
-  return <>{parts}</>
-}
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
 
 // ─── Main Page ──────────────────────────────────────────
 
 export function EnginePage() {
-  const { user, isLoading, isAuthenticated, isSubscribed } = useAuthContext()
+  const { user, isLoading, isAuthenticated } = useAuthContext()
 
   if (isLoading) {
     return (
@@ -633,8 +83,6 @@ export function EnginePage() {
   if (!isAuthenticated) {
     return <LoginGate />
   }
-
-  // Free users can chat with daily limits — no subscription gate
 
   // Show onboarding for first-time users
   const onboardingKey = `kernel-onboarded-${user?.id || 'anon'}`
@@ -814,7 +262,6 @@ function EngineChat() {
     if (!user) return
     getUserMemory(user.id).then(async (mem) => {
       if (mem && mem.profile) {
-        // Check if profile has actual learned content (not just empty arrays)
         const p = mem.profile as Record<string, unknown>
         const hasContent = Object.values(p).some(v =>
           (Array.isArray(v) && v.length > 0) || (typeof v === 'string' && v.length > 0)
@@ -825,7 +272,6 @@ function EngineChat() {
           return
         }
       }
-      // No meaningful profile: bootstrap from recent messages
       const msgs = await getUserRecentMessages(user.id, 40)
       if (msgs.length >= 2) {
         const recentMsgs = msgs.map(m => ({
@@ -834,7 +280,6 @@ function EngineChat() {
         }))
         try {
           const profile = await extractMemory(recentMsgs)
-          // Only persist if extraction produced real content
           const hasData = profile.interests.length > 0 || profile.goals.length > 0 ||
             profile.facts.length > 0 || profile.communication_style.length > 0
           if (hasData) {
@@ -897,13 +342,11 @@ function EngineChat() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      // Cmd+K — new chat
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
         handleNewChat()
         inputRef.current?.focus()
       }
-      // Esc — close drawer
       if (e.key === 'Escape' && isDrawerOpen) {
         setIsDrawerOpen(false)
       }
@@ -951,12 +394,10 @@ function EngineChat() {
     if (!newContent.trim()) return
     setEditingMsgId(null)
     setEditingContent('')
-    // Remove this message and all after it
     setMessages(prev => {
       const idx = prev.findIndex(m => m.id === msgId)
       return idx >= 0 ? prev.slice(0, idx) : prev
     })
-    // Resend with new content
     await sendMessage(newContent.trim())
   }, [])
 
@@ -1002,13 +443,9 @@ function EngineChat() {
   // Thumbs feedback on a kernel message
   const handleFeedback = useCallback(async (msg: ChatMessage, quality: 'helpful' | 'poor') => {
     if (!msg.signalId || msg.feedback) return
-    // Update local state
     setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, feedback: quality } : m))
-    // Persist quality rating
     updateSignalQuality(msg.signalId, quality)
-    // If helpful, strengthen the collective insight for this topic
     if (quality === 'helpful' && msg.signalId) {
-      // Find the preceding user message to extract topic
       const idx = messages.findIndex(m => m.id === msg.id)
       const userMsg = idx > 0 ? messages[idx - 1] : null
       if (userMsg && userMsg.role === 'user') {
@@ -1018,7 +455,7 @@ function EngineChat() {
     }
   }, [messages])
 
-  // Open Stripe billing portal to manage/cancel subscription
+  // Open Stripe billing portal
   const [portalError, setPortalError] = useState('')
   const [portalLoading, setPortalLoading] = useState(false)
   const handleManageSubscription = useCallback(async () => {
@@ -1030,7 +467,6 @@ function EngineChat() {
     setPortalError('')
     setPortalLoading(true)
     try {
-      // Edge function handles everything: JWT → user → DB lookup → Stripe customer → portal
       const token = await getAccessToken()
       const res = await fetch(`${SUPABASE_URL}/functions/v1/create-portal`, {
         method: 'POST',
@@ -1068,25 +504,18 @@ function EngineChat() {
   }
 
   const sendMessage = async (content: string) => {
-    console.log('[sendMessage] called, content:', content?.slice(0, 50), 'isStreaming:', isStreaming, 'attachedFiles:', attachedFiles.length)
     if (isStreaming || (!content.trim() && attachedFiles.length === 0)) return
-
-    // Rate limits disabled for launch — all users unlimited
 
     const trimmed = content.trim()
     const filesToSend = [...attachedFiles]
     const userId = user!.id
-    console.log('[sendMessage] userId:', userId, 'activeConversationId:', activeConversationId)
 
     // Lazy-create conversation on first message
     let convId = activeConversationId
     if (!convId) {
       const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
-      console.log('[sendMessage] creating conversation, title:', title)
       const conv = await createConversation(userId, title)
-      console.log('[sendMessage] createConversation result:', conv)
       if (!conv) {
-        console.error('[sendMessage] Failed to create conversation — RLS may be blocking the insert')
         setToast('Session expired. Signing you out — please sign back in.')
         signOut()
         return
@@ -1095,7 +524,6 @@ function EngineChat() {
       setActiveConversationId(convId)
     }
 
-    // Build attachment metadata for display
     const attachmentMeta = filesToSend.map(f => ({ name: f.name, type: f.type }))
 
     const userMsgId = `user_${Date.now()}`
@@ -1115,7 +543,7 @@ function EngineChat() {
     setTaskProgress(null)
     setSwarmProgress(null)
 
-    // ── Phase 1: Classify intent via AgentRouter ──
+    // Classify intent via AgentRouter
     const recentCtx = buildRecentContext(
       messages.filter(m => m.content.trim()).map(m => ({
         role: m.role === 'kernel' ? 'assistant' : 'user',
@@ -1150,7 +578,6 @@ function EngineChat() {
 
         if (TEXT_EXTENSIONS.includes(ext)) {
           let text = await readFileAsText(file)
-          // Truncate large text files to prevent exceeding edge function body limits
           const MAX_TEXT_CHARS = 30000
           if (text.length > MAX_TEXT_CHARS) {
             text = text.slice(0, MAX_TEXT_CHARS) + `\n\n[... truncated — file was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_TEXT_CHARS / 1000).toFixed(0)}K]`
@@ -1171,13 +598,12 @@ function EngineChat() {
         }
       }
 
-      // Always include a text block — Claude requires non-empty content
       const finalText = (urlContext + textPrefix + trimmed).trim() || `[Attached: ${filesToSend.map(f => f.name).join(', ')}]`
       blocks.push({ type: 'text', text: finalText })
       userContent = blocks
     }
 
-    // Persist user message (text only, no base64 in DB)
+    // Persist user message
     saveMessage({
       id: userMsgId,
       channel_id: convId,
@@ -1186,7 +612,6 @@ function EngineChat() {
       user_id: userId,
     })
 
-    // Increment daily count for rate limiting
     if (!isPro) {
       const newCount = dailyMsgCount + 1
       setDailyMsgCount(newCount)
@@ -1215,14 +640,13 @@ function EngineChat() {
     }])
     latestKernelContentRef.current = ''
 
-    // Build claude messages — filter empty content and enforce alternating roles
+    // Build claude messages
     const rawHistory = messages
       .filter(m => m.content.trim() !== '')
       .map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
         content: m.content,
       }))
-    // Enforce strict alternating user/assistant — merge consecutive same-role messages
     const sanitized: { role: 'user' | 'assistant'; content: string }[] = []
     for (const m of rawHistory) {
       const prev = sanitized[sanitized.length - 1]
@@ -1244,7 +668,6 @@ function EngineChat() {
     }
 
     try {
-      // ── Phase 4: Multi-step tasks ──
       if (classification.isMultiStep) {
         const plan = await planTask(trimmed)
         setTaskProgress({ plan, currentStep: 0 })
@@ -1255,9 +678,7 @@ function EngineChat() {
           updateKernelMsg
         )
         setTaskProgress(null)
-      }
-      // ── Phase 5: Swarm collaboration ──
-      else if (classification.needsSwarm) {
+      } else if (classification.needsSwarm) {
         const history = messages
           .filter(m => m.content.trim())
           .map(m => ({
@@ -1272,9 +693,7 @@ function EngineChat() {
           updateKernelMsg
         )
         setSwarmProgress(null)
-      }
-      // ── Phase 2: Deep research ──
-      else if (classification.needsResearch) {
+      } else if (classification.needsResearch) {
         await deepResearch(
           trimmed,
           memoryText,
@@ -1282,9 +701,7 @@ function EngineChat() {
           updateKernelMsg
         )
         setResearchProgress(null)
-      }
-      // ── Standard specialist response ──
-      else {
+      } else {
         const abortController = new AbortController()
         streamAbortRef.current = abortController
         await claudeStreamChat(
@@ -1301,7 +718,7 @@ function EngineChat() {
         streamAbortRef.current = null
       }
 
-      // Persist kernel response on stream complete
+      // Persist kernel response
       const finalContent = latestKernelContentRef.current
       if (finalContent) {
         saveMessage({
@@ -1312,7 +729,6 @@ function EngineChat() {
           user_id: userId,
         })
 
-        // Save response signal for collective intelligence
         const signalId = `sig_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
         const topic = trimmed.slice(0, 60).trim()
         saveResponseSignal({
@@ -1322,20 +738,17 @@ function EngineChat() {
           topic,
           response_quality: 'neutral',
         })
-        // Auto-strengthen collective insight for this topic
         if (topic.length > 3) {
           upsertCollectiveInsight(topic)
         }
-        // Attach signalId to the message for later feedback
         setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, signalId } : m))
       }
       touchConversation(convId)
       loadConversations()
 
-      // ── Phase 3: Background memory extraction every 3 messages ──
+      // Background memory extraction every 3 messages
       messageCountRef.current++
       if (messageCountRef.current % 3 === 0) {
-        // Use current messages from state setter to avoid stale closure
         setMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
@@ -1352,7 +765,7 @@ function EngineChat() {
               console.log('[Memory] Profile updated, msg count:', messageCountRef.current)
             }).catch((err) => console.warn('[Memory] Periodic extraction failed:', err))
           }
-          return currentMsgs // Don't modify state
+          return currentMsgs
         })
       }
     } catch (err) {
@@ -1380,7 +793,7 @@ function EngineChat() {
 
   return (
     <div className="ka-page">
-      {/* ── Conversation Drawer ── */}
+      {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -1395,7 +808,7 @@ function EngineChat() {
         isLoading={convsLoading}
       />
 
-      {/* ── Header ── */}
+      {/* Header */}
       <header className="ka-header">
         <div className="ka-header-left">
           <button className="ka-menu-btn" onClick={() => setIsDrawerOpen(true)} aria-label="Conversations">
@@ -1438,9 +851,8 @@ function EngineChat() {
         </div>
       )}
 
-      {/* ── Chat Area ── */}
+      {/* Chat Area */}
       <div className="ka-chat" ref={scrollRef}>
-        {/* Empty state */}
         {messages.length === 0 && (
           <motion.div
             className="ka-empty"
@@ -1466,7 +878,6 @@ function EngineChat() {
           </motion.div>
         )}
 
-        {/* Research progress indicator */}
         {researchProgress && researchProgress.phase !== 'complete' && (
           <div className="ka-research-status">
             <span className="ka-research-dot" />
@@ -1480,7 +891,6 @@ function EngineChat() {
           </div>
         )}
 
-        {/* Task progress indicator */}
         {taskProgress && (
           <div className="ka-task-progress">
             <div className="ka-task-goal">{taskProgress.plan.goal}</div>
@@ -1498,7 +908,6 @@ function EngineChat() {
           </div>
         )}
 
-        {/* Swarm progress indicator */}
         {swarmProgress && swarmProgress.phase !== 'complete' && (
           <div className="ka-swarm-status">
             <div className="ka-swarm-phase">
@@ -1522,7 +931,6 @@ function EngineChat() {
           </div>
         )}
 
-        {/* Thinking indicator */}
         {isThinking && (
           <motion.div
             className="ka-thinking"
@@ -1535,7 +943,6 @@ function EngineChat() {
           </motion.div>
         )}
 
-        {/* Messages */}
         <AnimatePresence initial={false}>
           {messages.map(msg => (
             <motion.div
@@ -1584,7 +991,6 @@ function EngineChat() {
                     </span>
                   )}
                 </div>
-                {/* Edit button for user messages */}
                 {msg.role === 'user' && msg.content && !isStreaming && editingMsgId !== msg.id && (
                   <div className="ka-msg-actions">
                     <button
@@ -1596,7 +1002,6 @@ function EngineChat() {
                     </button>
                   </div>
                 )}
-                {/* Per-message actions: copy + download + thumbs (kernel messages only, after content loads) */}
                 {msg.role === 'kernel' && msg.content && (
                   <div className="ka-msg-actions">
                     <button
@@ -1643,11 +1048,10 @@ function EngineChat() {
           ))}
         </AnimatePresence>
 
-        {/* Live event feed between messages */}
         <EventFeed events={events} />
       </div>
 
-      {/* ── Input ── */}
+      {/* Input */}
       {attachedFiles.length > 0 && (
         <div className="ka-file-chips">
           {attachedFiles.map((f, i) => (
@@ -1660,7 +1064,6 @@ function EngineChat() {
           ))}
         </div>
       )}
-      {/* Rate limit banner for free users */}
       {rateLimited && !isPro && (
         <div className="ka-rate-limit">
           <p>You've used {dailyMsgCount}/{FREE_DAILY_LIMIT} free messages today. Resets in {(() => {
@@ -1677,7 +1080,6 @@ function EngineChat() {
           </button>
         </div>
       )}
-      {/* Message count indicator for free users */}
       {!isPro && !rateLimited && dailyMsgCount > FREE_DAILY_LIMIT * 0.5 && (
         <div className="ka-msg-count-hint">
           {FREE_DAILY_LIMIT - dailyMsgCount} messages remaining today
@@ -1723,7 +1125,6 @@ function EngineChat() {
         </button>
       </form>
 
-      {/* Toast */}
       <AnimatePresence>
         {toast && (
           <motion.div

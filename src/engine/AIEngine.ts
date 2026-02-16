@@ -26,7 +26,7 @@
 
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
 import { SWARM_AGENTS, routeToAgent } from '../agents/swarm';
-import { generateResponse } from './ProviderRouter';
+import { claudeStreamChat } from './ClaudeClient';
 import type { Agent, Message } from '../types';
 
 // Inlined from deleted ReasoningEngine (was Gemini-based, no longer used)
@@ -740,15 +740,23 @@ export function createEngine(): {
       perception.intent.type === 'evaluate' ? perception.intent.opportunity :
       perception.intent.message;
 
+    // Build Claude messages from conversation history
+    const claudeMessages: { role: string; content: string }[] = state.working.conversationHistory
+      .slice(-10)
+      .map(m => ({
+        role: m.agentId === 'human' ? 'user' : 'assistant',
+        content: `${m.agentName}: ${m.content}`,
+      }));
+    claudeMessages.push({ role: 'user', content: topic + contextSuffix });
+
     let accumulated = '';
-    const response = await generateResponse(
-      agent,
-      state.working.conversationHistory,
-      topic + contextSuffix,
+    const response = await claudeStreamChat(
+      claudeMessages,
       (chunk) => {
         accumulated = chunk;
         emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
-      }
+      },
+      { system: agent.systemPrompt, model: 'sonnet', max_tokens: 512 }
     );
 
     return response || accumulated;
@@ -1173,13 +1181,20 @@ export function createEngine(): {
       setPhase('acting');
       let response: string;
       try {
-        response = await generateResponse(
-          currentAgent,
-          state.working.conversationHistory,
-          topic,
+        const discMessages: { role: string; content: string }[] = state.working.conversationHistory
+          .slice(-10)
+          .map(m => ({
+            role: m.agentId === 'human' ? 'user' : 'assistant',
+            content: `${m.agentName}: ${m.content}`,
+          }));
+        discMessages.push({ role: 'user', content: `CURRENT TOPIC: "${topic}"\n\nNow respond as ${currentAgent.name}. Remember: 2-3 sentences max, build on what others said, reference them by name.` });
+
+        response = await claudeStreamChat(
+          discMessages,
           (chunk) => {
             emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
-          }
+          },
+          { system: currentAgent.systemPrompt, model: 'sonnet', max_tokens: 512 }
         );
       } catch {
         emit({ type: 'error', message: 'Generation failed', timestamp: Date.now() });

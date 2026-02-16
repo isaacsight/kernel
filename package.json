@@ -15,7 +15,6 @@
     },
     "homepage": "https://isaacsight.github.io/does-this-feel-right-",
     "dependencies": {
-        "@google/generative-ai": "^0.24.1",
         "@sentry/react": "^10.38.0",
         "@supabase/supabase-js": "^2.93.3",
         "framer-motion": "^11.0.0",
