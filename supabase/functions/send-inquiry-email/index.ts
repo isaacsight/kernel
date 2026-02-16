@@ -8,6 +8,22 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 
 const RESEND_API = 'https://api.resend.com/emails'
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+// Escape HTML to prevent injection in email templates
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 interface InquiryPayload {
   inquiry: {
     id: string
@@ -25,15 +41,8 @@ interface InquiryPayload {
 }
 
 serve(async (req: Request) => {
-  // CORS headers for browser requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-      },
-    })
+    return new Response('ok', { headers: CORS_HEADERS })
   }
 
   try {
@@ -43,14 +52,37 @@ serve(async (req: Request) => {
     if (!resendKey || !notifyEmail) {
       return new Response(
         JSON.stringify({ error: 'Missing RESEND_API_KEY or NOTIFY_EMAIL' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
+        { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
 
     const { inquiry, paymentLink } = (await req.json()) as InquiryPayload
 
-    const quoteInfo = inquiry.quote_total
-      ? `$${inquiry.quote_total.toLocaleString()} (${inquiry.quote_type} / ${inquiry.quote_complexity})`
+    // Validate email format
+    if (!inquiry?.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inquiry.email)) {
+      return new Response(
+        JSON.stringify({ error: 'Valid email is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // Sanitize all user-provided fields before HTML interpolation
+    const safe = {
+      name: escapeHtml(inquiry.name || ''),
+      email: escapeHtml(inquiry.email),
+      details: escapeHtml(inquiry.details || ''),
+      description: escapeHtml(inquiry.description || ''),
+      id: escapeHtml(inquiry.id || ''),
+      evaluation_score: Number(inquiry.evaluation_score) || 0,
+      evaluation_tier: escapeHtml(String(inquiry.evaluation_tier || '')),
+      quote_total: inquiry.quote_total ? Number(inquiry.quote_total) : null,
+      quote_type: escapeHtml(String(inquiry.quote_type || '')),
+      quote_complexity: escapeHtml(String(inquiry.quote_complexity || '')),
+    }
+    const safePaymentLink = paymentLink ? escapeHtml(paymentLink) : null
+
+    const quoteInfo = safe.quote_total
+      ? `$${safe.quote_total.toLocaleString()} (${safe.quote_type} / ${safe.quote_complexity})`
       : 'No quote generated'
 
     // 1. Send notification to YOU
@@ -61,38 +93,38 @@ serve(async (req: Request) => {
         Authorization: `Bearer ${resendKey}`,
       },
       body: JSON.stringify({
-        from: 'Antigravity Engine <notifications@yourdomain.com>',
+        from: 'Kernel <notifications@yourdomain.com>',
         to: [notifyEmail],
-        subject: `New Inquiry: ${inquiry.name || 'Anonymous'} — ${quoteInfo}`,
+        subject: `New Inquiry: ${safe.name || 'Anonymous'} — ${quoteInfo}`,
         html: `
           <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 2rem; color: #1F1E1D;">
             <h2 style="font-weight: 400; margin-bottom: 0.5rem;">New Project Inquiry</h2>
             <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1rem 0;" />
 
             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-              <tr><td style="padding: 0.5rem 0; opacity: 0.5; width: 120px;">Name</td><td>${inquiry.name || '—'}</td></tr>
-              <tr><td style="padding: 0.5rem 0; opacity: 0.5;">Email</td><td><a href="mailto:${inquiry.email}">${inquiry.email}</a></td></tr>
+              <tr><td style="padding: 0.5rem 0; opacity: 0.5; width: 120px;">Name</td><td>${safe.name || '—'}</td></tr>
+              <tr><td style="padding: 0.5rem 0; opacity: 0.5;">Email</td><td>${safe.email}</td></tr>
               <tr><td style="padding: 0.5rem 0; opacity: 0.5;">Quote</td><td>${quoteInfo}</td></tr>
-              <tr><td style="padding: 0.5rem 0; opacity: 0.5;">Score</td><td>${inquiry.evaluation_score}/100 (${inquiry.evaluation_tier})</td></tr>
+              <tr><td style="padding: 0.5rem 0; opacity: 0.5;">Score</td><td>${safe.evaluation_score}/100 (${safe.evaluation_tier})</td></tr>
             </table>
 
             <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1rem 0;" />
 
             <p style="font-size: 14px; opacity: 0.7;"><strong>Description:</strong></p>
-            <p style="font-size: 14px; line-height: 1.6;">${inquiry.description}</p>
+            <p style="font-size: 14px; line-height: 1.6;">${safe.description}</p>
 
-            ${inquiry.details ? `
+            ${safe.details ? `
               <p style="font-size: 14px; opacity: 0.7; margin-top: 1rem;"><strong>Additional Details:</strong></p>
-              <p style="font-size: 14px; line-height: 1.6;">${inquiry.details}</p>
+              <p style="font-size: 14px; line-height: 1.6;">${safe.details}</p>
             ` : ''}
 
-            ${paymentLink ? `
+            ${safePaymentLink ? `
               <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1rem 0;" />
-              <p style="font-size: 13px; opacity: 0.5;">Payment link sent to client: <a href="${paymentLink}">${paymentLink}</a></p>
+              <p style="font-size: 13px; opacity: 0.5;">Payment link sent to client: ${safePaymentLink}</p>
             ` : ''}
 
             <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1.5rem 0;" />
-            <p style="font-size: 11px; opacity: 0.3; font-family: monospace;">inquiry_id: ${inquiry.id}</p>
+            <p style="font-size: 11px; opacity: 0.3; font-family: monospace;">inquiry_id: ${safe.id}</p>
           </div>
         `,
       }),
@@ -111,33 +143,33 @@ serve(async (req: Request) => {
         Authorization: `Bearer ${resendKey}`,
       },
       body: JSON.stringify({
-        from: 'Antigravity Engine <hello@yourdomain.com>',
-        to: [inquiry.email],
+        from: 'Kernel <hello@yourdomain.com>',
+        to: [inquiry.email], // Use raw email for Resend recipient (not HTML context)
         subject: 'Your project inquiry has been received',
         html: `
           <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 2rem; color: #1F1E1D;">
-            <h2 style="font-weight: 400;">Got it${inquiry.name ? `, ${inquiry.name}` : ''}.</h2>
+            <h2 style="font-weight: 400;">Got it${safe.name ? `, ${safe.name}` : ''}.</h2>
             <p style="font-size: 15px; line-height: 1.7; opacity: 0.7;">
               Your project inquiry has been received. I'll review it and get back to you shortly.
             </p>
 
-            ${inquiry.quote_total ? `
+            ${safe.quote_total ? `
               <div style="background: #FAF9F6; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                 <p style="font-size: 13px; opacity: 0.5; margin: 0 0 0.5rem; font-family: monospace;">PROJECT ESTIMATE</p>
-                <p style="font-size: 28px; margin: 0; font-weight: 400;">$${inquiry.quote_total.toLocaleString()}</p>
-                <p style="font-size: 13px; opacity: 0.5; margin: 0.25rem 0 0;">${inquiry.quote_type} / ${inquiry.quote_complexity}</p>
+                <p style="font-size: 28px; margin: 0; font-weight: 400;">$${safe.quote_total.toLocaleString()}</p>
+                <p style="font-size: 13px; opacity: 0.5; margin: 0.25rem 0 0;">${safe.quote_type} / ${safe.quote_complexity}</p>
               </div>
             ` : ''}
 
-            ${paymentLink ? `
+            ${safePaymentLink ? `
               <p style="font-size: 15px; line-height: 1.7;">
                 Ready to move forward?
-                <a href="${paymentLink}" style="color: #1F1E1D; font-weight: 600;">Secure your spot with a deposit &rarr;</a>
+                <a href="${safePaymentLink}" style="color: #1F1E1D; font-weight: 600;">Secure your spot with a deposit &rarr;</a>
               </p>
             ` : ''}
 
             <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 2rem 0 1rem;" />
-            <p style="font-size: 12px; opacity: 0.3; font-family: monospace;">Antigravity Engine</p>
+            <p style="font-size: 12px; opacity: 0.3; font-family: monospace;">Kernel</p>
           </div>
         `,
       }),
@@ -150,24 +182,13 @@ serve(async (req: Request) => {
 
     return new Response(
       JSON.stringify({ success: true }),
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      }
+      { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   } catch (error) {
     console.error('Edge function error:', error)
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      }
+      { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
 })

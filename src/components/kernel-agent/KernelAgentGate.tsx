@@ -1,20 +1,18 @@
 import { useState } from 'react';
 import { useAuthContext } from '../../providers/AuthProvider';
+import { getAccessToken } from '../../engine/SupabaseClient';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co';
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || '';
 const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || '';
 
 export function KernelAgentGate() {
-  const { user, isAuthenticated, signInWithProvider, signInWithEmail, signUpWithEmail, activateAdmin, refreshSubscription } = useAuthContext();
+  const { user, isAuthenticated, signInWithProvider, signInWithEmail, signUpWithEmail, refreshSubscription } = useAuthContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [adminPass, setAdminPass] = useState('');
-  const [adminError, setAdminError] = useState('');
 
   // If authenticated but not subscribed, show subscribe gate
   if (isAuthenticated && user) {
@@ -23,16 +21,15 @@ export function KernelAgentGate() {
       setLoading(true);
       setError('');
       try {
+        const token = await getAccessToken();
         const res = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${SUPABASE_KEY}`,
+            Authorization: `Bearer ${token}`,
             apikey: SUPABASE_KEY,
           },
           body: JSON.stringify({
-            email: user.email,
-            user_id: user.id,
             mode: 'subscription',
             price_id: PRICE_ID,
             success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
@@ -62,7 +59,7 @@ export function KernelAgentGate() {
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conversational engine analysis</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Real-time belief management</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conviction steering</div>
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Agent override controls</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> 150 messages per day</div>
           </div>
           <button className="kernel-gate-submit" onClick={handleSubscribe} disabled={loading} style={{ width: '100%' }}>
             {loading ? 'Loading...' : 'Subscribe — $20/mo'}
@@ -91,16 +88,6 @@ export function KernelAgentGate() {
       setError('Authentication failed.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAdmin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAdminError('');
-    const success = await activateAdmin(adminPass);
-    if (!success) {
-      setAdminError('Invalid passphrase');
-      setAdminPass('');
     }
   };
 
@@ -136,16 +123,6 @@ export function KernelAgentGate() {
         {error && <p className="kernel-gate-error">{error}</p>}
 
         <p className="kernel-gate-free">The Observer tab is free.</p>
-
-        {!showAdmin ? (
-          <button className="kernel-gate-admin-toggle" onClick={() => setShowAdmin(true)}>Admin</button>
-        ) : (
-          <form className="kernel-gate-admin" onSubmit={handleAdmin}>
-            <input type="password" className="kernel-gate-input" value={adminPass} onChange={e => setAdminPass(e.target.value)} placeholder="Passphrase" autoFocus />
-            <button type="submit" className="kernel-gate-admin-btn" disabled={!adminPass}>Unlock</button>
-            {adminError && <p className="kernel-gate-error">{adminError}</p>}
-          </form>
-        )}
       </div>
     </div>
   );

@@ -50,7 +50,8 @@ export async function extractMemory(
       `Analyze this conversation and extract user profile:\n\n${conversation}`,
       { system: EXTRACT_SYSTEM, model: 'haiku', max_tokens: 500 }
     )
-  } catch {
+  } catch (err) {
+    console.warn('[MemoryAgent] extractMemory failed:', err)
     return emptyProfile()
   }
 }

@@ -1,11 +1,37 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
+import posthog from 'posthog-js'
 import { router } from './router'
 import { AuthProvider } from './providers/AuthProvider'
 import { KernelAgentProvider } from './components/kernel-agent'
 import { supabase } from './engine/SupabaseClient'
 import './index.css'
+
+// ─── Analytics (Posthog) ────────────────────────────────────────
+const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || ''
+if (POSTHOG_KEY) {
+  posthog.init(POSTHOG_KEY, {
+    api_host: 'https://us.i.posthog.com',
+    autocapture: true,
+    capture_pageview: true,
+    persistence: 'localStorage',
+  })
+}
+
+// ─── Error Monitoring (Sentry) ──────────────────────────────────
+const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || ''
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+    ],
+    tracesSampleRate: 0.1,
+    environment: import.meta.env.MODE,
+  })
+}
 
 // ─── Intercept OAuth tokens BEFORE the hash router loads ────────
 // Supabase implicit flow puts tokens in the hash fragment:

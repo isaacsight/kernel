@@ -57,6 +57,24 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: verify JWT ────────────────────────────────
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const authClient = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token)
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
       return new Response(
@@ -66,7 +84,8 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as ChatPayload
-    const { messages, conversationId, email } = payload
+    const { messages, conversationId } = payload
+    const email = user.email // Use email from JWT, not from body
 
     if (!messages?.length || !conversationId) {
       return new Response(
