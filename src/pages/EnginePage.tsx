@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, ClipboardCopy, FileDown } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, ClipboardCopy, FileDown, Mic, MicOff } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/GeminiClient'
 import { KERNEL_AGENT, KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, type Specialist } from '../agents/specialists'
@@ -706,6 +706,9 @@ function EngineChat() {
   const [editingContent, setEditingContent] = useState('')
   // Toast
   const [toast, setToast] = useState<string | null>(null)
+  // Voice input
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef<any>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Clean up active stream on unmount
@@ -727,6 +730,51 @@ function EngineChat() {
     const t = setTimeout(() => setToast(null), 2500)
     return () => clearTimeout(t)
   }, [toast])
+
+  // Voice input
+  const toggleVoice = useCallback(() => {
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      setToast('Speech recognition not supported in this browser')
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.lang = 'en-US'
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let transcript = ''
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      setInput(transcript)
+    }
+
+    recognition.onerror = () => {
+      setIsListening(false)
+    }
+
+    recognition.onend = () => {
+      setIsListening(false)
+    }
+
+    recognitionRef.current = recognition
+    recognition.start()
+    setIsListening(true)
+  }, [isListening])
+
+  // Clean up speech recognition on unmount
+  useEffect(() => {
+    return () => { recognitionRef.current?.stop() }
+  }, [])
 
   // Load daily message count for rate limiting
   useEffect(() => {
@@ -1017,6 +1065,7 @@ function EngineChat() {
   }
 
   const sendMessage = async (content: string) => {
+    console.log('[sendMessage] called, content:', content?.slice(0, 50), 'isStreaming:', isStreaming, 'attachedFiles:', attachedFiles.length)
     if (isStreaming || (!content.trim() && attachedFiles.length === 0)) return
 
     // Rate limit check for free users
@@ -1028,13 +1077,20 @@ function EngineChat() {
     const trimmed = content.trim()
     const filesToSend = [...attachedFiles]
     const userId = user!.id
+    console.log('[sendMessage] userId:', userId, 'activeConversationId:', activeConversationId)
 
     // Lazy-create conversation on first message
     let convId = activeConversationId
     if (!convId) {
       const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
+      console.log('[sendMessage] creating conversation, title:', title)
       const conv = await createConversation(userId, title)
-      if (!conv) return
+      console.log('[sendMessage] createConversation result:', conv)
+      if (!conv) {
+        console.error('[sendMessage] Failed to create conversation — RLS may be blocking the insert')
+        setToast('Failed to start conversation. Please try signing out and back in.')
+        return
+      }
       convId = conv.id
       setActiveConversationId(convId)
     }
@@ -1267,8 +1323,14 @@ function EngineChat() {
         })
       }
     } catch (err) {
-      const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
-      setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
+      if (err instanceof RateLimitError) {
+        setRateLimited(true)
+        setDailyMsgCount(err.limit)
+        setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else {
+        const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
+        setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
+      }
       setResearchProgress(null)
       setTaskProgress(null)
     } finally {
@@ -1585,6 +1647,15 @@ function EngineChat() {
           placeholder="Talk to the Kernel..."
           disabled={isStreaming}
         />
+        <button
+          type="button"
+          className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`}
+          onClick={toggleVoice}
+          disabled={isStreaming}
+          aria-label={isListening ? 'Stop listening' : 'Voice input'}
+        >
+          {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+        </button>
         <button
           type="submit"
           className="ka-send"

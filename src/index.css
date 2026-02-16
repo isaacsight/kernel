@@ -1492,6 +1492,33 @@ h1, h2, h3, h4 {
 .ka-send:hover { opacity: 0.85; }
 .ka-send:disabled { opacity: 0.25; cursor: default; }
 
+.ka-voice-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--rubin-text-secondary, #888);
+    border: 1px solid var(--rubin-border, rgba(0,0,0,0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+.ka-voice-btn:hover { color: var(--rubin-text, #1F1E1D); border-color: var(--rubin-text, #1F1E1D); }
+.ka-voice-btn:disabled { opacity: 0.25; cursor: default; }
+.ka-voice-btn--active {
+    background: #EF4444;
+    color: #fff;
+    border-color: #EF4444;
+    animation: ka-pulse 1.5s ease-in-out infinite;
+}
+@keyframes ka-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
 /* Search indicator */
 .ka-search-indicator {
     display: flex;

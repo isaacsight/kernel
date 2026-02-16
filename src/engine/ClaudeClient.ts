@@ -7,6 +7,17 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdiepr
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
 const PROXY_URL = `${SUPABASE_URL}/functions/v1/claude-proxy`
 
+export class RateLimitError extends Error {
+  limit: number
+  resetsAt: string
+  constructor(message: string, limit: number, resetsAt: string) {
+    super(message)
+    this.name = 'RateLimitError'
+    this.limit = limit
+    this.resetsAt = resetsAt
+  }
+}
+
 type Model = 'sonnet' | 'haiku'
 
 export type ContentBlock =
@@ -42,6 +53,12 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 429) {
+      try {
+        const body = JSON.parse(err)
+        throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
+      } catch (e) { if (e instanceof RateLimitError) throw e }
+    }
     throw new Error(`Claude proxy error (${res.status}): ${err}`)
   }
   return res
@@ -154,6 +171,12 @@ export async function claudeStreamChat(
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 429) {
+      try {
+        const body = JSON.parse(err)
+        throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
+      } catch (e) { if (e instanceof RateLimitError) throw e }
+    }
     throw new Error(`Claude stream error (${res.status}): ${err}`)
   }
 
