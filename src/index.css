@@ -1708,6 +1708,146 @@ h1, h2, h3, h4 {
 .ka-code-pre::-webkit-scrollbar-track { background: transparent; }
 .ka-code-pre::-webkit-scrollbar-thumb { background: var(--rubin-ivory-dark); }
 
+/* ── Agent Badges ─────────────────────────────────────────── */
+
+.ka-msg-avatar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.ka-agent-badge {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* ── Research Status ─────────────────────────────────────── */
+
+.ka-research-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--rubin-slate);
+    opacity: 0.7;
+}
+
+.ka-research-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0EA5E9;
+    animation: ka-research-pulse 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes ka-research-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.ka-research-phase {
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.ka-research-detail {
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 260px;
+}
+
+/* ── Task Progress ───────────────────────────────────────── */
+
+.ka-task-progress {
+    padding: 12px 20px;
+    margin: 0 20px 8px;
+    background: var(--rubin-ivory-med);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+}
+
+.ka-task-goal {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 8px;
+}
+
+.ka-task-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ka-task-step {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-task-step--pending {
+    opacity: 0.35;
+}
+
+.ka-task-step--running {
+    opacity: 1;
+}
+
+.ka-task-step--done {
+    opacity: 0.6;
+}
+
+.ka-task-step--error {
+    opacity: 0.6;
+    color: #DC2626;
+}
+
+.ka-task-step-icon {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+}
+
+.ka-task-step--running .ka-task-step-icon {
+    color: #6366F1;
+    animation: ka-research-pulse 1.5s ease-in-out infinite;
+}
+
+.ka-task-step--done .ka-task-step-icon {
+    color: #22C55E;
+}
+
+.ka-task-step-agent {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.ka-task-step-desc {
+    font-family: var(--font-serif);
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     .ka-header { padding: 10px 16px; }
@@ -1719,6 +1859,9 @@ h1, h2, h3, h4 {
 
     /* Always show actions on mobile (no hover) */
     .ka-msg-actions { opacity: 1; }
+
+    .ka-research-detail { max-width: 180px; }
+    .ka-task-progress { margin: 0 16px 8px; }
 }
 
 
