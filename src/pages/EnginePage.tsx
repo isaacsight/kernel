@@ -5,6 +5,11 @@ import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngin
 import { claudeStreamChat, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/GeminiClient'
 import { KERNEL_AGENT, KERNEL_TOPICS } from '../agents/kernel'
+import { getSpecialist, type Specialist } from '../agents/specialists'
+import { classifyIntent, buildRecentContext } from '../engine/AgentRouter'
+import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
+import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { planTask, executeTask, type TaskPlan, type TaskProgress } from '../engine/TaskPlanner'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   saveMessage,
@@ -19,6 +24,8 @@ import {
   updateSignalQuality,
   getCollectiveInsights,
   upsertCollectiveInsight,
+  getUserMemory,
+  upsertUserMemory,
   type DBConversation,
   type DBCollectiveInsight,
 } from '../engine/SupabaseClient'
@@ -310,6 +317,8 @@ interface ChatMessage {
   signalId?: string
   feedback?: 'helpful' | 'poor'
   attachments?: { name: string; type: string }[]
+  agentId?: string
+  agentName?: string
 }
 
 const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
@@ -568,8 +577,13 @@ function EngineChat() {
 
   // Track the latest kernel response content for persistence
   const latestKernelContentRef = useRef<string>('')
-  // Prior conversation history for user memory
-  const [userHistory, setUserHistory] = useState<string>('')
+  // Structured user memory (replaces raw userHistory)
+  const [userMemory, setUserMemory] = useState<UserMemoryProfile>(emptyProfile())
+  const messageCountRef = useRef(0)
+  // Research progress
+  const [researchProgress, setResearchProgress] = useState<ResearchProgress | null>(null)
+  // Task progress
+  const [taskProgress, setTaskProgress] = useState<TaskProgress | null>(null)
   // Collective intelligence
   const [collectiveInsights, setCollectiveInsights] = useState<DBCollectiveInsight[]>([])
   // Per-message copy feedback
@@ -588,16 +602,26 @@ function EngineChat() {
     loadConversations()
   }, [loadConversations])
 
-  // Load cross-conversation memory
+  // Load structured user memory (or fall back to raw messages for first-time users)
   useEffect(() => {
     if (!user) return
-    getUserRecentMessages(user.id, 40).then(msgs => {
-      if (msgs.length === 0) return
-      const summary = msgs.map(m => {
-        const who = m.agent_id === 'user' ? 'User' : 'Kernel'
-        return `${who}: ${m.content}`
-      }).join('\n')
-      setUserHistory(summary)
+    getUserMemory(user.id).then(async (mem) => {
+      if (mem && mem.profile && Object.keys(mem.profile).length > 0) {
+        setUserMemory(mem.profile as unknown as UserMemoryProfile)
+        messageCountRef.current = mem.message_count
+      } else {
+        // First time: bootstrap from recent messages
+        const msgs = await getUserRecentMessages(user.id, 40)
+        if (msgs.length > 0) {
+          const recentMsgs = msgs.map(m => ({
+            role: m.agent_id === 'user' ? 'user' : 'assistant',
+            content: m.content,
+          }))
+          const profile = await extractMemory(recentMsgs)
+          setUserMemory(profile)
+          upsertUserMemory(user.id, profile as unknown as Record<string, unknown>, msgs.length)
+        }
+      }
     })
   }, [user])
 
@@ -777,6 +801,18 @@ function EngineChat() {
     setIsStreaming(true)
     setInput('')
     setAttachedFiles([])
+    setResearchProgress(null)
+    setTaskProgress(null)
+
+    // ── Phase 1: Classify intent via AgentRouter ──
+    const recentCtx = buildRecentContext(
+      messages.filter(m => m.content.trim()).map(m => ({
+        role: m.role === 'kernel' ? 'assistant' : 'user',
+        content: m.content,
+      }))
+    )
+    const classification = await classifyIntent(trimmed, recentCtx)
+    const specialist = getSpecialist(classification.agentId)
 
     // Fetch URL content if message contains links
     let urlContext = ''
@@ -834,20 +870,29 @@ function EngineChat() {
       user_id: userId,
     })
 
+    // Build system prompt with specialist + memory
     const snapshot = serializeState(engine.getState())
-    const memoryBlock = userHistory
-      ? `\n\n---\n\n## User Memory (previous conversations)\nYou have spoken with this user before. Use this history to personalize your responses, remember their interests, and build on prior topics. Do not repeat yourself.\n\n${userHistory}`
+    const memoryText = formatMemoryForPrompt(userMemory)
+    const memoryBlock = memoryText
+      ? `\n\n---\n\n## User Memory\nYou know this about the user. Use it naturally — don't announce it.\n\n${memoryText}`
       : ''
     const collectiveBlock = collectiveInsights.length > 0
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
-    const systemPrompt = `${KERNEL_AGENT.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${collectiveBlock}`
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${collectiveBlock}`
 
     const kernelId = `kernel_${Date.now()}`
-    setMessages(prev => [...prev, { id: kernelId, role: 'kernel', content: '', timestamp: Date.now() }])
+    setMessages(prev => [...prev, {
+      id: kernelId,
+      role: 'kernel',
+      content: '',
+      timestamp: Date.now(),
+      agentId: specialist.id,
+      agentName: specialist.name,
+    }])
     latestKernelContentRef.current = ''
 
-    // Build claude messages — filter empty content, history is plain text, current uses content blocks
+    // Build claude messages — filter empty content
     const historyMessages = messages
       .filter(m => m.content.trim() !== '')
       .map(m => ({
@@ -859,15 +904,47 @@ function EngineChat() {
       { role: 'user', content: userContent },
     ]
 
+    const updateKernelMsg = (text: string) => {
+      latestKernelContentRef.current = text
+      setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text } : m))
+    }
+
     try {
-      await claudeStreamChat(
-        claudeMessages,
-        (fullText) => {
-          latestKernelContentRef.current = fullText
-          setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: fullText } : m))
-        },
-        { system: systemPrompt, model: 'sonnet', max_tokens: 1024, web_search: true }
-      )
+      // ── Phase 4: Multi-step tasks ──
+      if (classification.isMultiStep) {
+        const plan = await planTask(trimmed)
+        setTaskProgress({ plan, currentStep: 0 })
+        await executeTask(
+          plan,
+          memoryText,
+          (progress) => setTaskProgress(progress),
+          updateKernelMsg
+        )
+        setTaskProgress(null)
+      }
+      // ── Phase 2: Deep research ──
+      else if (classification.needsResearch) {
+        await deepResearch(
+          trimmed,
+          memoryText,
+          (progress) => setResearchProgress(progress),
+          updateKernelMsg
+        )
+        setResearchProgress(null)
+      }
+      // ── Standard specialist response ──
+      else {
+        await claudeStreamChat(
+          claudeMessages,
+          updateKernelMsg,
+          {
+            system: systemPrompt,
+            model: 'sonnet',
+            max_tokens: 1024,
+            web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
+          }
+        )
+      }
 
       // Persist kernel response on stream complete
       const finalContent = latestKernelContentRef.current
@@ -875,7 +952,7 @@ function EngineChat() {
         saveMessage({
           id: kernelId,
           channel_id: convId,
-          agent_id: 'kernel',
+          agent_id: specialist.id,
           content: finalContent,
           user_id: userId,
         })
@@ -895,18 +972,28 @@ function EngineChat() {
       }
       touchConversation(convId)
       loadConversations()
-      // Refresh user memory so next message has latest context
-      getUserRecentMessages(userId, 40).then(msgs => {
-        if (msgs.length === 0) return
-        const summary = msgs.map(m => {
-          const who = m.agent_id === 'user' ? 'User' : 'Kernel'
-          return `${who}: ${m.content}`
-        }).join('\n')
-        setUserHistory(summary)
-      })
+
+      // ── Phase 3: Background memory extraction every 5 messages ──
+      messageCountRef.current++
+      if (messageCountRef.current % 5 === 0) {
+        // Non-blocking: extract + merge memory after response completes
+        const recentMsgs = messages
+          .slice(-10)
+          .filter(m => m.content.trim())
+          .map(m => ({ role: m.role === 'kernel' ? 'assistant' : 'user', content: m.content }))
+        if (recentMsgs.length > 0) {
+          extractMemory(recentMsgs).then(async (newProfile) => {
+            const merged = await mergeMemory(userMemory, newProfile)
+            setUserMemory(merged)
+            upsertUserMemory(userId, merged as unknown as Record<string, unknown>, messageCountRef.current)
+          }).catch(() => { /* non-blocking */ })
+        }
+      }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
       setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
+      setResearchProgress(null)
+      setTaskProgress(null)
     } finally {
       setIsStreaming(false)
     }
@@ -990,6 +1077,38 @@ function EngineChat() {
           </motion.div>
         )}
 
+        {/* Research progress indicator */}
+        {researchProgress && researchProgress.phase !== 'complete' && (
+          <div className="ka-research-status">
+            <span className="ka-research-dot" />
+            <span className="ka-research-phase">{researchProgress.phase}</span>
+            {researchProgress.phase === 'searching' && (
+              <span className="ka-research-detail">
+                {researchProgress.completedQueries}/{researchProgress.totalQueries}
+                {researchProgress.currentQuery && ` — ${researchProgress.currentQuery}`}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Task progress indicator */}
+        {taskProgress && (
+          <div className="ka-task-progress">
+            <div className="ka-task-goal">{taskProgress.plan.goal}</div>
+            <div className="ka-task-steps">
+              {taskProgress.plan.steps.map(step => (
+                <div key={step.id} className={`ka-task-step ka-task-step--${step.status}`}>
+                  <span className="ka-task-step-icon">
+                    {step.status === 'done' ? '\u2713' : step.status === 'running' ? '\u25CF' : step.status === 'error' ? '\u2717' : '\u25CB'}
+                  </span>
+                  <span className="ka-task-step-agent">{getSpecialist(step.agentId).name}</span>
+                  <span className="ka-task-step-desc">{step.description}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Messages */}
         <AnimatePresence initial={false}>
           {messages.map(msg => (
@@ -1001,7 +1120,14 @@ function EngineChat() {
               transition={{ duration: 0.2 }}
             >
               {msg.role === 'kernel' && (
-                <div className="ka-msg-avatar">K</div>
+                <div className="ka-msg-avatar-col">
+                  <div className="ka-msg-avatar">{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
+                  {msg.agentName && msg.agentName !== 'Kernel' && (
+                    <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>
+                      {msg.agentName}
+                    </span>
+                  )}
+                </div>
               )}
               <div className="ka-msg-col">
                 <div className="ka-msg-bubble">

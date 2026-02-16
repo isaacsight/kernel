@@ -378,6 +378,42 @@ export async function upsertCollectiveInsight(
   }
 }
 
+// ─── User Memory ────────────────────────────────────────
+
+export interface DBUserMemory {
+  user_id: string;
+  profile: Record<string, unknown>;
+  message_count: number;
+  updated_at: string;
+}
+
+export async function getUserMemory(userId: string): Promise<DBUserMemory | null> {
+  const { data, error } = await supabase
+    .from('user_memory')
+    .select('*')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) console.error('Error fetching user memory:', error);
+  return data;
+}
+
+export async function upsertUserMemory(
+  userId: string,
+  profile: Record<string, unknown>,
+  messageCount: number
+) {
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert({
+      user_id: userId,
+      profile,
+      message_count: messageCount,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) console.error('Error upserting user memory:', error);
+}
+
 // Real-time subscriptions
 export function subscribeToProjects(callback: (project: DBProject) => void) {
   return supabase
