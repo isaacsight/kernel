@@ -101,6 +101,71 @@ serve(async (req: Request) => {
 
         if (error) console.error('Upsert error (checkout.session.completed):', error)
         else console.log(`Subscription activated for user ${userId}`)
+
+        // Send welcome email
+        const customerEmail = session.customer_details?.email || session.customer_email
+        if (customerEmail) {
+          const resendKey = Deno.env.get('RESEND_API_KEY')
+          if (resendKey) {
+            try {
+              const emailRes = await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${resendKey}`,
+                },
+                body: JSON.stringify({
+                  from: 'Antigravity Kernel <notifications@yourdomain.com>',
+                  to: [customerEmail],
+                  subject: 'Welcome to the Antigravity Kernel',
+                  html: `
+                    <div style="font-family: Georgia, 'EB Garamond', serif; max-width: 600px; margin: 0 auto; padding: 2.5rem; color: #1F1E1D; background: #FAF9F6;">
+                      <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="width: 56px; height: 56px; background: #7B8CDE; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 600;">K</div>
+                      </div>
+
+                      <h1 style="font-weight: 400; font-size: 28px; text-align: center; margin-bottom: 0.5rem;">Welcome to the Kernel.</h1>
+                      <p style="text-align: center; font-size: 15px; opacity: 0.6; margin-bottom: 2rem;">Your subscription is now active.</p>
+
+                      <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1.5rem 0;" />
+
+                      <p style="font-size: 15px; line-height: 1.8;">
+                        You now have full access to the Antigravity Kernel — a personal AI that remembers you, thinks with you, and gets better over time.
+                      </p>
+
+                      <div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #e5e5e0;">
+                        <p style="font-size: 13px; opacity: 0.5; margin: 0 0 0.75rem; font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.05em;">What you can do</p>
+                        <p style="font-size: 14px; line-height: 1.8; margin: 0;">
+                          &bull; Conversational AI with web search<br/>
+                          &bull; Upload images, PDFs, and documents<br/>
+                          &bull; Export code, text, and files<br/>
+                          &bull; Persistent memory across conversations<br/>
+                          &bull; Real-time cognitive engine observability
+                        </p>
+                      </div>
+
+                      <div style="text-align: center; margin: 2rem 0;">
+                        <a href="https://isaacsight.github.io/does-this-feel-right-/" style="display: inline-block; padding: 12px 32px; background: #1F1E1D; color: #FAF9F6; text-decoration: none; border-radius: 6px; font-size: 14px; font-family: 'Courier New', monospace;">Open the Kernel &rarr;</a>
+                      </div>
+
+                      <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 2rem 0 1rem;" />
+                      <p style="font-size: 11px; opacity: 0.3; font-family: 'Courier New', monospace; text-align: center;">Antigravity Kernel &mdash; A cognitive architecture by Isaac Hernandez</p>
+                    </div>
+                  `,
+                }),
+              })
+              if (!emailRes.ok) {
+                const err = await emailRes.text()
+                console.error('Welcome email failed:', err)
+              } else {
+                console.log(`Welcome email sent to ${customerEmail}`)
+              }
+            } catch (emailErr) {
+              console.error('Welcome email error:', emailErr)
+            }
+          }
+        }
+
         break
       }
 

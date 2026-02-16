@@ -1,0 +1,114 @@
+// Supabase Edge Function: url-fetch
+// Fetches a URL and returns extracted text content.
+//
+// Deploy: npx supabase functions deploy url-fetch --project-ref eoxxpyixdieprsxlpwcs
+
+import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+const MAX_CONTENT_LENGTH = 12000
+
+function htmlToText(html: string): string {
+  // Extract Open Graph / meta tags first (useful for social media)
+  const ogTitle = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]*)"/) ||
+                  html.match(/<meta[^>]*content="([^"]*)"[^>]*property="og:title"/)
+  const ogDesc = html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]*)"/) ||
+                 html.match(/<meta[^>]*content="([^"]*)"[^>]*property="og:description"/)
+  const title = html.match(/<title[^>]*>([^<]*)<\/title>/i)
+
+  let meta = ''
+  if (ogTitle?.[1] || title?.[1]) meta += `Title: ${ogTitle?.[1] || title?.[1]}\n`
+  if (ogDesc?.[1]) meta += `Description: ${ogDesc?.[1]}\n`
+
+  // Remove script, style, nav, header, footer tags and their content
+  let text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+    .replace(/<header[\s\S]*?<\/header>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+
+  // Convert common block elements to newlines
+  text = text.replace(/<\/(p|div|h[1-6]|li|tr|br\s*\/?)>/gi, '\n')
+  text = text.replace(/<br\s*\/?>/gi, '\n')
+
+  // Strip remaining HTML tags
+  text = text.replace(/<[^>]+>/g, ' ')
+
+  // Decode common HTML entities
+  text = text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/')
+
+  // Clean up whitespace
+  text = text.replace(/[ \t]+/g, ' ')
+  text = text.replace(/\n\s*\n/g, '\n\n')
+  text = text.trim()
+
+  const result = meta ? `${meta}\n---\n${text}` : text
+  return result.slice(0, MAX_CONTENT_LENGTH)
+}
+
+serve(async (req: Request) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: CORS_HEADERS })
+  }
+
+  try {
+    const { url } = await req.json()
+    if (!url || typeof url !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'url is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; KernelBot/1.0)',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+      redirect: 'follow',
+    })
+
+    if (!response.ok) {
+      return new Response(
+        JSON.stringify({ error: `Failed to fetch URL (${response.status})`, text: '' }),
+        { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const contentType = response.headers.get('content-type') || ''
+    const raw = await response.text()
+
+    let text: string
+    if (contentType.includes('text/html') || contentType.includes('application/xhtml')) {
+      text = htmlToText(raw)
+    } else {
+      // Plain text, JSON, XML, etc. — return as-is (trimmed)
+      text = raw.slice(0, MAX_CONTENT_LENGTH)
+    }
+
+    return new Response(
+      JSON.stringify({ text, url }),
+      { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  } catch (error) {
+    console.error('url-fetch error:', error)
+    return new Response(
+      JSON.stringify({ error: 'Failed to fetch URL', text: '' }),
+      { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  }
+})

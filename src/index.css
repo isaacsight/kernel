@@ -41,7 +41,10 @@ body {
     font-size: 22px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 h1, h2, h3, h4 {
@@ -1164,7 +1167,9 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     background: var(--rubin-ivory);
+    overflow: hidden;
 }
 
 /* Header */
@@ -1208,7 +1213,9 @@ h1, h2, h3, h4 {
 /* Chat area */
 .ka-chat {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 32px 24px;
     display: flex;
     flex-direction: column;
@@ -1345,6 +1352,21 @@ h1, h2, h3, h4 {
     word-break: break-word;
 }
 
+.ka-msg-link {
+    color: #6366F1;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-msg-link:hover {
+    opacity: 0.7;
+}
+
+.ka-msg--user .ka-msg-link {
+    color: #C7D2FE;
+}
+
 /* Typing indicator */
 .ka-typing {
     display: inline-flex;
@@ -1465,13 +1487,238 @@ h1, h2, h3, h4 {
     to { transform: rotate(360deg); }
 }
 
+/* Message column wrapper (bubble + actions) */
+.ka-msg-col {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+}
+
+.ka-msg--user .ka-msg-col {
+    max-width: 75%;
+    align-items: flex-end;
+}
+
+/* Per-message action buttons */
+.ka-msg-actions {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0 0 4px;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-msg:hover .ka-msg-actions {
+    opacity: 1;
+}
+
+.ka-msg-action-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-msg-action-btn:hover {
+    opacity: 1;
+    border-color: var(--rubin-ivory-dark);
+    background: var(--rubin-ivory-med);
+}
+
+.ka-msg-action-btn--up:hover {
+    color: #16A34A;
+    border-color: #16A34A;
+}
+
+.ka-msg-action-btn--down:hover {
+    color: #DC2626;
+    border-color: #DC2626;
+}
+
+.ka-msg-feedback-done {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: #6366F1;
+    opacity: 0.6;
+}
+
+/* Hidden file input (offscreen, not display:none for iOS compat) */
+.ka-attach-input {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+}
+
+/* Attach button (label triggers file input via htmlFor) */
+.ka-attach-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--rubin-ivory-dark);
+    color: var(--rubin-slate);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+
+.ka-attach-btn:hover {
+    opacity: 1;
+    border-color: #6366F1;
+    color: #6366F1;
+}
+
+.ka-attach-btn--disabled { opacity: 0.2; cursor: default; pointer-events: none; }
+
+/* File chips above input bar */
+.ka-file-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 24px 0;
+    background: var(--rubin-ivory);
+}
+
+.ka-file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--rubin-ivory-med);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+    color: var(--rubin-slate);
+}
+
+.ka-file-chip-x {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-file-chip-x:hover { opacity: 1; color: #DC2626; }
+
+/* Message attachment badges */
+.ka-msg-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.ka-msg-attachment {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.04em;
+    color: #6366F1;
+}
+
+.ka-msg--user .ka-msg-attachment {
+    background: rgba(255, 255, 255, 0.15);
+    color: #C7D2FE;
+}
+
+/* Code blocks in kernel messages */
+.ka-code-block {
+    margin: 10px 0;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.ka-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: var(--rubin-ivory-dark);
+}
+
+.ka-code-lang {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.ka-code-download {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: var(--rubin-ivory);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: #6366F1;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-code-download:hover {
+    background: #6366F1;
+    color: #fff;
+    border-color: #6366F1;
+}
+
+.ka-code-pre {
+    padding: 12px;
+    margin: 0;
+    overflow-x: auto;
+    background: var(--rubin-ivory);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: pre;
+    color: var(--rubin-slate);
+}
+
+.ka-code-pre::-webkit-scrollbar { height: 2px; }
+.ka-code-pre::-webkit-scrollbar-track { background: transparent; }
+.ka-code-pre::-webkit-scrollbar-thumb { background: var(--rubin-ivory-dark); }
+
 /* Mobile */
 @media (max-width: 768px) {
     .ka-header { padding: 10px 16px; }
     .ka-chat { padding: 20px 16px; }
     .ka-input-bar { padding: 12px 16px; }
+    .ka-file-chips { padding: 8px 16px 0; }
     .ka-empty-title { font-size: 1.5rem; }
     .ka-msg { max-width: 100%; }
+
+    /* Always show actions on mobile (no hover) */
+    .ka-msg-actions { opacity: 1; }
 }
 
 
@@ -2572,4 +2819,269 @@ h1, h2, h3, h4 {
         border-top: 1px solid var(--rubin-ivory-dark);
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   Conversation Drawer
+   ═══════════════════════════════════════════════════════════ */
+
+.conv-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 30, 29, 0.15);
+    z-index: 999;
+}
+
+.conv-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    z-index: 1000;
+    background: var(--rubin-ivory);
+    border-right: 1px solid var(--rubin-ivory-dark);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 8px 0 32px rgba(31, 30, 29, 0.08);
+}
+
+.conv-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rubin-ivory-dark);
+}
+
+.conv-drawer-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.conv-drawer-close {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.4;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.conv-drawer-close:hover { opacity: 1; }
+
+.conv-new-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 16px;
+    padding: 10px 16px;
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.conv-new-btn:hover { opacity: 0.85; }
+
+.conv-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px;
+}
+
+.conv-list::-webkit-scrollbar { width: 2px; }
+.conv-list::-webkit-scrollbar-track { background: transparent; }
+.conv-list::-webkit-scrollbar-thumb { background: var(--rubin-ivory-dark); }
+
+.conv-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.conv-item:hover {
+    background: var(--rubin-ivory-med);
+}
+
+.conv-item--active {
+    border-left-color: #6366F1;
+    background: var(--rubin-ivory-med);
+}
+
+.conv-item-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.conv-item-title {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conv-item-time {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    opacity: 0.4;
+    letter-spacing: 0.04em;
+}
+
+.conv-item-delete {
+    background: transparent;
+    border: none;
+    opacity: 0;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    color: var(--rubin-slate);
+    transition: opacity var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.conv-item:hover .conv-item-delete { opacity: 0.4; }
+.conv-item-delete:hover { opacity: 1 !important; color: #DC2626; }
+
+.conv-empty {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-style: italic;
+    opacity: 0.35;
+    padding: 32px 16px;
+}
+
+/* ─── Header Buttons ─────────────────────────────────────── */
+
+.ka-menu-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    border-radius: var(--radius-full);
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-menu-btn:hover { opacity: 1; }
+
+.ka-copy-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    color: var(--rubin-slate);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-copy-btn:hover {
+    opacity: 1;
+    border-color: #6366F1;
+    color: #6366F1;
+}
+
+.ka-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ka-header-icon-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    color: var(--rubin-slate);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-header-icon-btn:hover {
+    opacity: 1;
+    border-color: var(--rubin-ivory-dark);
+}
+
+.ka-portal-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 24px;
+    background: #FEF2F2;
+    border-bottom: 1px solid #FECACA;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #DC2626;
+}
+
+.ka-portal-error button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #DC2626;
+    cursor: pointer;
+    opacity: 0.6;
+    padding: 0 4px;
+}
+
+.ka-portal-error button:hover { opacity: 1; }
+
+@keyframes ka-spin { to { transform: rotate(360deg); } }
+.ka-spin { animation: ka-spin 1s linear infinite; }
+
+/* ─── Conversation Drawer Mobile ─────────────────────────── */
+
+@media (max-width: 768px) {
+    .conv-drawer {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 85vh;
+        border-right: none;
+        border-top: 1px solid var(--rubin-ivory-dark);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .conv-item-delete { opacity: 0.3; }
 }

@@ -21,7 +21,7 @@ interface ProxyPayload {
   mode: 'json' | 'text' | 'stream'
   model?: 'sonnet' | 'haiku'
   system?: string
-  messages: { role: string; content: string }[]
+  messages: { role: string; content: string | unknown[] }[]
   max_tokens?: number
   web_search?: boolean
 }
@@ -74,6 +74,7 @@ serve(async (req: Request) => {
         'Content-Type': 'application/json',
         'x-api-key': anthropicKey,
         'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'pdfs-2024-09-25',
       },
       body: JSON.stringify(body),
     })

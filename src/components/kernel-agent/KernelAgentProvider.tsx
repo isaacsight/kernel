@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 import { useKernelAgent, type KernelAgentState } from '../../hooks/useKernelAgent';
-import { KernelAgentPill } from './KernelAgentPill';
 import { KernelAgentDrawer } from './KernelAgentDrawer';
 
 const KernelAgentContext = createContext<KernelAgentState | null>(null);
@@ -17,7 +16,6 @@ export function KernelAgentProvider({ children }: { children: React.ReactNode })
   return (
     <KernelAgentContext.Provider value={state}>
       {children}
-      <KernelAgentPill />
       <KernelAgentDrawer />
     </KernelAgentContext.Provider>
   );

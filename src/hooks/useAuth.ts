@@ -49,34 +49,83 @@ export function useAuth(): AuthState {
     return active;
   }, [isAdmin]);
 
-  // Clean up auth error params from URL (e.g. after failed OAuth redirect)
+  // Initialize auth — handle PKCE callback + existing session
   useEffect(() => {
+    let mounted = true;
     const params = new URLSearchParams(window.location.search);
-    if (params.has('error')) {
-      console.warn('Auth error in URL:', params.get('error'), params.get('error_description'));
-      // Remove error params, keep the hash
+    const hasCode = params.has('code');
+    const hasError = params.has('error');
+
+    // Log for debugging
+    console.log('[Auth] init — code:', hasCode, 'error:', hasError, 'url:', window.location.href);
+
+    // Clean error params
+    if (hasError) {
+      console.warn('[Auth] OAuth error:', params.get('error'), params.get('error_description'));
       window.history.replaceState({}, '', window.location.pathname + window.location.hash);
     }
-  }, []);
 
-  // Initialize auth state
-  useEffect(() => {
-    supabase.auth.getSession()
-      .then(({ data: { session: s } }) => {
-        setSession(s);
-        setUser(s?.user ?? null);
-        if (s?.user) {
-          checkSubscription().finally(() => setIsLoading(false));
-        } else {
+    // If there's a PKCE code, let the Supabase client handle the exchange
+    // automatically via _initialize(), then getSession() will return the result.
+    // We just need to clean up the URL after.
+    if (hasCode) {
+      console.log('[Auth] PKCE code detected, exchanging...');
+      supabase.auth.exchangeCodeForSession(params.get('code')!)
+        .then(({ data, error }) => {
+          if (!mounted) return;
+          if (error) {
+            console.error('[Auth] Code exchange failed:', error.message);
+            // Fall through to getSession which may pick up auto-exchanged session
+          } else {
+            console.log('[Auth] Code exchange success, user:', data.session?.user?.email);
+            setSession(data.session);
+            setUser(data.session.user);
+            checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
+          }
+          // Clean ?code= from URL
+          window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+        })
+        .catch(() => {
+          // Auto-exchange may have already handled it, try getSession
+          if (!mounted) return;
+          console.log('[Auth] Exchange threw, trying getSession fallback...');
+          supabase.auth.getSession().then(({ data: { session: s } }) => {
+            if (!mounted) return;
+            setSession(s);
+            setUser(s?.user ?? null);
+            if (s?.user) {
+              checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
+            } else {
+              setIsLoading(false);
+            }
+          });
+          window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+        });
+    } else {
+      // Normal load — check for existing session
+      supabase.auth.getSession()
+        .then(({ data: { session: s } }) => {
+          if (!mounted) return;
+          console.log('[Auth] getSession:', s?.user?.email ?? 'no session');
+          setSession(s);
+          setUser(s?.user ?? null);
+          if (s?.user) {
+            checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
+          } else {
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          if (!mounted) return;
+          console.error('[Auth] getSession error:', err);
           setIsLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.error('Auth session error:', err);
-        setIsLoading(false);
-      });
+        });
+    }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+    // Listen for auth state changes (handles token refresh, sign out, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, s) => {
+      if (!mounted) return;
+      console.log('[Auth] onAuthStateChange:', event, s?.user?.email ?? 'no user');
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
@@ -84,13 +133,18 @@ export function useAuth(): AuthState {
       } else {
         setIsSubscribed(false);
       }
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [checkSubscription]);
 
   const signInWithProvider = useCallback(async (provider: Provider) => {
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    console.log('[Auth] signInWithOAuth:', provider, 'redirectTo:', redirectTo);
     await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo },

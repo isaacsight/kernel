@@ -5,6 +5,8 @@ dist
 .DS_Store
 legacy/
 *.log
+.mcp.json
+supabase/.temp/
 
 # Non-site files (experiments, docs, scripts)
 *.pdf
