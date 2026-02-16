@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, getMySubscription } from '../engine/SupabaseClient';
 import type { User, Session, Provider } from '@supabase/supabase-js';
 
@@ -31,13 +31,17 @@ export function useAuth(): AuthState {
 
   const isAdmin = checkIsAdmin(user);
 
+  // Use ref so checkSubscription stays stable (avoids re-triggering the auth effect)
+  const userRef = useRef(user);
+  userRef.current = user;
+
   const checkSubscription = useCallback(async (): Promise<boolean> => {
-    if (checkIsAdmin(user)) return true;
+    if (checkIsAdmin(userRef.current)) return true;
     const sub = await getMySubscription();
     const active = sub?.status === 'active';
     setIsSubscribed(active);
     return active;
-  }, [user]);
+  }, []);
 
   // Initialize auth — handle PKCE callback + existing session
   useEffect(() => {
@@ -107,7 +111,8 @@ export function useAuth(): AuthState {
       if (!mounted) return;
       console.log('[Auth] onAuthStateChange:', event, s?.user?.email ?? 'no user');
       setSession(s);
-      setUser(s?.user ?? null);
+      // Only update user if ID changed (prevents infinite re-render from new object refs)
+      setUser(prev => prev?.id === s?.user?.id ? prev : (s?.user ?? null));
       if (s?.user) {
         checkSubscription();
       } else {
