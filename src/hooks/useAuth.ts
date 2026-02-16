@@ -143,7 +143,14 @@ export function useAuth(): AuthState {
 
   const signOut = useCallback(async () => {
     setIsSubscribed(false);
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.warn('[Auth] signOut error (clearing state anyway):', err);
+    }
+    // Always clear state even if signOut throws (stale session edge case)
+    setUser(null);
+    setSession(null);
   }, []);
 
   const refreshSubscription = useCallback(async (): Promise<boolean> => {

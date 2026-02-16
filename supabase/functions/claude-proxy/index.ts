@@ -44,9 +44,10 @@ serve(async (req: Request) => {
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
 
-    // Allow service role key for server-to-server calls (e.g. Discord bot)
-    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    const isServiceCall = serviceKey && token === serviceKey
+    // Allow service role key or bot secret for server-to-server calls (e.g. Discord bot)
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    const botSecret = Deno.env.get('BOT_API_SECRET')
+    const isServiceCall = (serviceRoleKey && token === serviceRoleKey) || (botSecret && token === botSecret)
 
     let user: { id: string; app_metadata?: Record<string, unknown> } | null = null
 
@@ -65,43 +66,9 @@ serve(async (req: Request) => {
       user = authUser
     }
 
-    // ── Rate limit: check daily message count ───────────
-    const FREE_DAILY_LIMIT = 10
-    const PRO_DAILY_LIMIT = 150
-    const isAdmin = user.app_metadata?.is_admin === true
-
-    if (!isAdmin) {
-      const adminClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
-      const { data: sub } = await adminClient
-        .from('subscriptions')
-        .select('status')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .maybeSingle()
-
-      const dailyLimit = sub ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-
-      const { count } = await adminClient
-        .from('messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .gte('created_at', today.toISOString())
-
-      if ((count ?? 0) >= dailyLimit) {
-        const resetTime = new Date(today)
-        resetTime.setDate(resetTime.getDate() + 1)
-        return new Response(
-          JSON.stringify({
-            error: sub ? 'Daily message limit reached' : 'Free daily limit reached. Subscribe for 150 messages/day.',
-            limit: dailyLimit,
-            resets_at: resetTime.toISOString(),
-          }),
-          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-    }
+    // ── Rate limit: disabled for launch — all users unlimited ───
+    // Subscribers are tracked for future tiering, but no limits enforced.
+    // Revenue covers API costs via subscription pricing.
 
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
@@ -152,15 +119,14 @@ serve(async (req: Request) => {
       body: JSON.stringify(body),
     })
 
-    // Fallback: if haiku hits rate limit, retry with sonnet
-    if (anthropicResponse.status === 429 && body.model === MODEL_MAP.haiku) {
-      console.log('Haiku rate-limited, falling back to sonnet')
-      body.model = MODEL_MAP.sonnet
-      anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: anthropicHeaders,
-        body: JSON.stringify(body),
-      })
+    // If rate-limited, return a clean 429 with retry info
+    if (anthropicResponse.status === 429) {
+      const retryAfter = anthropicResponse.headers.get('retry-after') || '60'
+      console.warn('Anthropic rate-limited:', resolvedModel, 'retry-after:', retryAfter)
+      return new Response(
+        JSON.stringify({ error: 'rate_limited', retry_after: parseInt(retryAfter), model: model }),
+        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': retryAfter, ...CORS_HEADERS } }
+      )
     }
 
     if (!anthropicResponse.ok) {
