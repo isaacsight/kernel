@@ -7,6 +7,11 @@ const PROXY_URL = `${SUPABASE_URL}/functions/v1/claude-proxy`
 
 type Model = 'sonnet' | 'haiku'
 
+export type ContentBlock =
+  | { type: 'text'; text: string }
+  | { type: 'image'; source: { type: 'base64'; media_type: string; data: string } }
+  | { type: 'document'; source: { type: 'base64'; media_type: string; data: string } }
+
 interface ClaudeOpts {
   system?: string
   model?: Model
@@ -119,7 +124,7 @@ export async function claudeStream(
 
 /** Multi-turn streaming — for chat interfaces that need conversation history */
 export async function claudeStreamChat(
-  messages: { role: string; content: string }[],
+  messages: { role: string; content: string | ContentBlock[] }[],
   onChunk: (text: string) => void,
   opts?: ClaudeOpts
 ): Promise<string> {
