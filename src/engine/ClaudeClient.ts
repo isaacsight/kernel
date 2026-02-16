@@ -58,7 +58,10 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       try {
         const body = JSON.parse(err)
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
-      } catch (e) { if (e instanceof RateLimitError) throw e }
+      } catch (e) {
+        if (e instanceof RateLimitError) throw e
+        // JSON parse failed — fall through to generic error
+      }
     }
     throw new Error(`Claude proxy error (${res.status}): ${err}`)
   }
@@ -176,7 +179,10 @@ export async function claudeStreamChat(
       try {
         const body = JSON.parse(err)
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
-      } catch (e) { if (e instanceof RateLimitError) throw e }
+      } catch (e) {
+        if (e instanceof RateLimitError) throw e
+        // JSON parse failed — fall through to generic error
+      }
     }
     throw new Error(`Claude stream error (${res.status}): ${err}`)
   }
