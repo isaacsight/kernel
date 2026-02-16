@@ -49,3 +49,7 @@ src/engine/WebSearch.ts
 src/engine/Zero*.ts
 src/engine/Zero*.py
 src/engine/test_eval.ts
+
+# Local dev/debug scripts
+tools/test-*.ts
+tools/check-site.ts

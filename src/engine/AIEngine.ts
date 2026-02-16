@@ -27,8 +27,22 @@
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
 import { SWARM_AGENTS, routeToAgent } from '../agents/swarm';
 import { generateResponse } from './ProviderRouter';
-import { reason, type ThinkingStep, type ReasoningResult } from './ReasoningEngine';
 import type { Agent, Message } from '../types';
+
+// Inlined from deleted ReasoningEngine (was Gemini-based, no longer used)
+export interface ThinkingStep {
+  step: number;
+  thought: string;
+  type: 'observation' | 'analysis' | 'hypothesis' | 'calculation' | 'conclusion';
+}
+
+export interface ReasoningResult {
+  thinking: ThinkingStep[];
+  conclusion: string;
+  confidence: number;
+  reasoning_time_ms: number;
+  action?: { type: string; params: Record<string, unknown> };
+}
 
 // ─── Cognitive Phase ────────────────────────────────────────
 
@@ -590,43 +604,12 @@ export function createEngine(): {
   //  skip this phase entirely.
 
   async function think(
-    perception: Perception,
-    attention: AttentionState,
+    _perception: Perception,
+    _attention: AttentionState,
   ): Promise<ReasoningResult | null> {
-    if (perception.intent.type !== 'reason' && perception.intent.type !== 'evaluate') {
-      return null;
-    }
-    if (attention.depth === 'surface') {
-      return null; // not worth deep thought
-    }
-
-    const intent = perception.intent;
-    const question = intent.type === 'reason' ? intent.question : intent.opportunity;
-    const domain = intent.type === 'reason' ? intent.domain : 'financial';
-
-    // Enrich the question with world model context
-    const beliefContext = state.worldModel.beliefs
-      .filter(b => b.confidence > 0.6)
-      .slice(-3)
-      .map(b => b.content)
-      .join('; ');
-
-    const enrichedContext = beliefContext
-      ? `Current understanding: ${beliefContext}`
-      : undefined;
-
-    try {
-      const result = await reason(question, enrichedContext, domain);
-
-      for (const step of result.thinking) {
-        emit({ type: 'thinking_step', step, timestamp: Date.now() });
-        state.ephemeral.thinkingSteps.push(step);
-      }
-
-      return result;
-    } catch {
-      return null;
-    }
+    // Reasoning engine removed (was Gemini-based). Returns null — the
+    // act() phase handles responses fine without a separate reasoning step.
+    return null;
   }
 
   // ═══════════════════════════════════════════════════════

@@ -1361,8 +1361,7 @@ function EngineChat() {
         setDailyMsgCount(err.limit)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {
-        let errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
-        if (errMsg === 'Failed to fetch') errMsg = 'Connection failed — the file may be too large. Try a smaller file or paste the text directly.'
+        const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
         setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
       }
       setResearchProgress(null)
