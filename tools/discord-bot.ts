@@ -231,11 +231,12 @@ async function saveMessage(msg: {
 }
 
 async function getChannelHistory(channelId: string, limit = 20): Promise<{ role: string; content: string }[]> {
+  // Fetch most recent messages (descending), then reverse to chronological order
   const { data, error } = await supabase
     .from('messages')
     .select('agent_id, content')
     .eq('channel_id', channelId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .limit(limit)
 
   if (error) {
@@ -243,7 +244,7 @@ async function getChannelHistory(channelId: string, limit = 20): Promise<{ role:
     return []
   }
 
-  const raw = (data || []).map(m => ({
+  const raw = (data || []).reverse().map(m => ({
     role: m.agent_id === 'user' ? 'user' : 'assistant',
     content: m.content,
   }))
