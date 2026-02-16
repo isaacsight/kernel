@@ -19,8 +19,8 @@ dotenv.config({ path: resolve(__dirname, '..', '.env') })
 const DISCORD_TOKEN = process.env.DISCORD_BOT_TOKEN
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || ''
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_KEY || ''
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ''
 const PROXY_URL = `${SUPABASE_URL}/functions/v1/claude-proxy`
-const ANON_KEY = process.env.VITE_SUPABASE_KEY || ''
 
 if (!DISCORD_TOKEN) {
   console.error('Missing DISCORD_BOT_TOKEN in .env')
@@ -28,6 +28,10 @@ if (!DISCORD_TOKEN) {
 }
 if (!SUPABASE_URL) {
   console.error('Missing VITE_SUPABASE_URL in .env')
+  process.exit(1)
+}
+if (!SERVICE_KEY) {
+  console.error('Missing SUPABASE_SERVICE_KEY in .env (needed for proxy auth)')
   process.exit(1)
 }
 
@@ -107,7 +111,7 @@ Agents:
 Respond with ONLY valid JSON:
 {"agentId": "kernel", "confidence": 0.9}`
 
-// ─── Claude proxy calls ──────────────────────────────────────
+// ─── Claude proxy calls (using service key for auth) ─────────
 async function callClaude(
   messages: { role: string; content: string }[],
   system: string,
@@ -118,8 +122,8 @@ async function callClaude(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${ANON_KEY}`,
-      apikey: ANON_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      apikey: SERVICE_KEY,
     },
     body: JSON.stringify({
       mode: 'text',

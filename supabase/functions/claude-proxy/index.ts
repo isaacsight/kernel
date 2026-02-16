@@ -33,7 +33,7 @@ serve(async (req: Request) => {
   }
 
   try {
-    // ── Auth: verify JWT ────────────────────────────────
+    // ── Auth: verify JWT or service key ─────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
       return new Response(
@@ -43,13 +43,26 @@ serve(async (req: Request) => {
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabase = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!)
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      )
+
+    // Allow service role key for server-to-server calls (e.g. Discord bot)
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    const isServiceCall = serviceKey && token === serviceKey
+
+    let user: { id: string; app_metadata?: Record<string, unknown> } | null = null
+
+    if (isServiceCall) {
+      // Service calls bypass user auth — use a synthetic user identity
+      user = { id: 'service-bot', app_metadata: { is_admin: true } }
+    } else {
+      const supabase = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!)
+      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(token)
+      if (authError || !authUser) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized' }),
+          { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+      user = authUser
     }
 
     // ── Rate limit: check daily message count ───────────
