@@ -656,7 +656,7 @@ export function EnginePage() {
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
-const FREE_DAILY_LIMIT = 10
+const FREE_DAILY_LIMIT = 999999 // No limit for launch — charge to cover
 
 function EngineChat() {
   const { user, session, isAdmin, isSubscribed, signOut } = useAuthContext()
@@ -1068,11 +1068,7 @@ function EngineChat() {
     console.log('[sendMessage] called, content:', content?.slice(0, 50), 'isStreaming:', isStreaming, 'attachedFiles:', attachedFiles.length)
     if (isStreaming || (!content.trim() && attachedFiles.length === 0)) return
 
-    // Rate limit check for free users
-    if (!isPro && dailyMsgCount >= FREE_DAILY_LIMIT) {
-      setRateLimited(true)
-      return
-    }
+    // Rate limits disabled for launch — all users unlimited
 
     const trimmed = content.trim()
     const filesToSend = [...attachedFiles]
