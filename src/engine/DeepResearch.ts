@@ -64,37 +64,33 @@ export async function deepResearch(
   progress.totalQueries = queries.length
   onProgress({ ...progress })
 
-  // Step 2: Execute searches sequentially (each uses web_search)
-  for (const query of queries) {
-    progress.currentQuery = query
-    onProgress({ ...progress })
+  // Step 2: Execute searches in parallel (each uses web_search)
+  progress.findings = new Array(queries.length).fill('')
+  onProgress({ ...progress })
 
+  await Promise.allSettled(queries.map(async (query, i) => {
+    let finding = ''
     try {
-      // Use claudeStreamChat with web_search enabled for real search results
-      let finding = ''
       await claudeStreamChat(
         [{ role: 'user', content: query }],
         (text) => { finding = text },
         { system: SEARCH_SYSTEM, model: 'haiku', max_tokens: 800, web_search: true }
       )
-
-      if (finding) {
-        progress.findings.push(`**Query: ${query}**\n${finding}`)
-      }
+      progress.findings[i] = finding ? `**Query: ${query}**\n${finding}` : ''
     } catch {
-      progress.findings.push(`**Query: ${query}**\nSearch failed for this query.`)
+      progress.findings[i] = `**Query: ${query}**\nSearch failed for this query.`
     }
-
     progress.completedQueries++
+    progress.currentQuery = query
     onProgress({ ...progress })
-  }
+  }))
 
   // Step 3: Synthesize findings into final response
   progress.phase = 'synthesizing'
   progress.currentQuery = undefined
   onProgress({ ...progress })
 
-  const findingsText = progress.findings.join('\n\n---\n\n')
+  const findingsText = progress.findings.filter(Boolean).join('\n\n---\n\n')
   const synthesisContext = userContext
     ? `User context: ${userContext}\n\n`
     : ''

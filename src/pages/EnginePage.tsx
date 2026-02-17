@@ -108,7 +108,7 @@ const FREE_MSG_LIMIT = 10
 const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
 
 function EngineChat() {
-  const { user, session, isAdmin, isSubscribed, signOut } = useAuthContext()
+  const { user, session, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
   const engine = getEngine()
   const [engineState, setEngineState] = useState<EngineState>(engine.getState())
   const [events, setEvents] = useState<EngineEvent[]>([])
@@ -187,6 +187,29 @@ function EngineChat() {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light')
     localStorage.setItem('kernel-dark-mode', String(darkMode))
   }, [darkMode])
+
+  // Post-checkout: detect ?checkout=complete and poll for Pro status
+  useEffect(() => {
+    const hash = window.location.hash
+    if (!hash.includes('checkout=complete')) return
+    let attempts = 0
+    const maxAttempts = 15
+    const poll = setInterval(async () => {
+      attempts++
+      const isPro = await refreshSubscription()
+      if (isPro || attempts >= maxAttempts) {
+        clearInterval(poll)
+        if (isPro) {
+          setShowUpgradeWall(false)
+          setToast('Welcome to Kernel Pro!')
+        }
+        // Clean URL hash
+        const cleanHash = hash.replace(/[?&]checkout=complete/, '').replace(/\?$/, '')
+        window.location.hash = cleanHash || '#/'
+      }
+    }, 2000)
+    return () => clearInterval(poll)
+  }, [refreshSubscription])
 
   // Toast auto-dismiss
   useEffect(() => {
@@ -1283,6 +1306,22 @@ function EngineChat() {
                 Cancel
               </button>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Free-tier message counter hint */}
+      <AnimatePresence>
+        {!isPro && messageCountRef.current >= 7 && messageCountRef.current < FREE_MSG_LIMIT && !showUpgradeWall && (
+          <motion.div
+            className="ka-msg-hint"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {FREE_MSG_LIMIT - messageCountRef.current === 1
+              ? 'Last free message'
+              : `${FREE_MSG_LIMIT - messageCountRef.current} messages remaining`}
           </motion.div>
         )}
       </AnimatePresence>

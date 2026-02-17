@@ -1608,6 +1608,16 @@ h1, h2, h3, h4 {
     border-bottom-color: #333;
 }
 
+.ka-msg-hint {
+    text-align: center;
+    font-family: var(--rubin-mono);
+    font-size: 12px;
+    color: #B45309;
+    padding: 4px 0;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+}
+
 .ka-input-bar {
     display: flex;
     gap: 10px;
@@ -4530,6 +4540,10 @@ h1, h2, h3, h4 {
 [data-theme="dark"] .ka-input {
     background: #242424;
     color: #E8E6DC;
+}
+
+[data-theme="dark"] .ka-msg-hint {
+    color: #FBBF24;
 }
 
 [data-theme="dark"] .ka-input-bar {

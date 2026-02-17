@@ -217,11 +217,26 @@ export function getNextSwarmAgent(currentId: string, workflow: 'discovery' | 'ex
   return SWARM_AGENTS.find(a => a.id === sequence[nextIndex]) || SWARM_AGENTS[0];
 }
 
+// Map AgentRouter classification → swarm agent
+const ROUTER_TO_SWARM: Record<string, string> = {
+  analyst: 'reasoner',
+  coder: 'architect',
+  researcher: 'scout',
+  writer: 'builder',
+  kernel: 'operator',
+}
+
 // Determine which agent should handle a message based on content
-export function routeToAgent(message: string): Agent {
+export function routeToAgent(message: string, routerResult?: { agentId: string; confidence: number }): Agent {
+  // If AgentRouter has already classified with good confidence, derive from it
+  if (routerResult && routerResult.confidence >= 0.5) {
+    const swarmId = ROUTER_TO_SWARM[routerResult.agentId] || 'operator'
+    return SWARM_AGENTS.find(a => a.id === swarmId) || SWARM_AGENTS.find(a => a.id === 'operator')!
+  }
+
+  // Keyword fallback
   const lower = message.toLowerCase();
 
-  // Reasoning triggers - anything requiring deep analysis
   if (lower.includes('think') || lower.includes('analyze') || lower.includes('evaluate') ||
       lower.includes('should i') || lower.includes('worth it') || lower.includes('expected value') ||
       lower.includes('strategy') || lower.includes('bootstrap') || lower.includes('from zero') ||
@@ -245,6 +260,5 @@ export function routeToAgent(message: string): Agent {
     return SWARM_AGENTS.find(a => a.id === 'critic')!;
   }
 
-  // Default to operator
   return SWARM_AGENTS.find(a => a.id === 'operator')!;
 }
