@@ -3981,15 +3981,15 @@ h1, h2, h3, h4 {
   inset: 0;
   z-index: 200;
   background: rgba(0, 0, 0, 0.4);
+  /* Desktop: flex-center the sheet child */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ka-kg-sheet {
-  position: fixed;
+  position: relative;
   z-index: 201;
-  /* Desktop: centered modal */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
   max-width: 480px;
   max-height: 80vh;
@@ -4011,12 +4011,10 @@ h1, h2, h3, h4 {
 
 /* Mobile bottom sheet: override positioning */
 @media (max-width: 768px) {
+  .ka-kg-overlay {
+    align-items: flex-end;
+  }
   .ka-kg-sheet {
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transform: none;
     max-width: 100%;
     max-height: 85vh;
     padding: 0;
