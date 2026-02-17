@@ -48,7 +48,7 @@ serve(async (req: Request) => {
         // Look up user email
         const { data: userData } = await supabase.auth.admin.getUserById(user_id)
         if (userData?.user?.email) {
-          await fetch('https://api.resend.com/emails', {
+          const emailRes = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
               Authorization: `Bearer ${resendKey}`,
@@ -61,18 +61,25 @@ serve(async (req: Request) => {
               text: body || title,
             }),
           })
+          if (!emailRes.ok) {
+            const errText = await emailRes.text().catch(() => 'unknown')
+            console.error(`Resend email failed (${emailRes.status}):`, errText)
+          }
         }
       }
     } else if (channel === 'discord') {
       const webhookUrl = Deno.env.get('DISCORD_WEBHOOK_URL')
       if (webhookUrl) {
-        await fetch(webhookUrl, {
+        const discordRes = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             content: `**${title}**\n${body || ''}`,
           }),
         })
+        if (!discordRes.ok) {
+          console.error(`Discord webhook failed (${discordRes.status})`)
+        }
       }
     }
 

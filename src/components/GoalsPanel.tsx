@@ -15,9 +15,10 @@ import type { UserGoal, GoalMilestone } from '../engine/GoalTracker'
 interface GoalsPanelProps {
   userId: string
   onClose: () => void
+  onToast: (msg: string) => void
 }
 
-export function GoalsPanel({ userId, onClose }: GoalsPanelProps) {
+export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
   const [goals, setGoals] = useState<UserGoal[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -41,49 +42,66 @@ export function GoalsPanel({ userId, onClose }: GoalsPanelProps) {
 
   const handleAddGoal = async () => {
     if (!formTitle.trim()) return
-    await upsertUserGoal({
-      user_id: userId,
-      title: formTitle.trim(),
-      description: formDesc.trim(),
-      category: formCategory,
-      status: 'active',
-      priority: formPriority,
-      target_date: formTargetDate || null,
-      milestones: [],
-      progress_notes: [],
-      check_in_frequency: formFrequency,
-      last_check_in_at: null,
-    })
-    setFormTitle('')
-    setFormDesc('')
-    setFormCategory('general')
-    setFormPriority('medium')
-    setFormTargetDate('')
-    setShowForm(false)
-    loadGoals()
+    try {
+      await upsertUserGoal({
+        user_id: userId,
+        title: formTitle.trim(),
+        description: formDesc.trim(),
+        category: formCategory,
+        status: 'active',
+        priority: formPriority,
+        target_date: formTargetDate || null,
+        milestones: [],
+        progress_notes: [],
+        check_in_frequency: formFrequency,
+        last_check_in_at: null,
+      })
+      setFormTitle('')
+      setFormDesc('')
+      setFormCategory('general')
+      setFormPriority('medium')
+      setFormTargetDate('')
+      setShowForm(false)
+      loadGoals()
+    } catch {
+      onToast('Failed to add goal')
+    }
   }
 
   const toggleMilestone = async (goal: UserGoal, milestoneId: string) => {
-    const updated = {
-      ...goal,
-      milestones: goal.milestones.map(m =>
-        m.id === milestoneId
-          ? { ...m, completed: !m.completed, completed_at: !m.completed ? new Date().toISOString() : undefined }
-          : m
-      ),
+    try {
+      const updated = {
+        ...goal,
+        milestones: goal.milestones.map(m =>
+          m.id === milestoneId
+            ? { ...m, completed: !m.completed, completed_at: !m.completed ? new Date().toISOString() : undefined }
+            : m
+        ),
+      }
+      await upsertUserGoal(updated)
+      loadGoals()
+    } catch {
+      onToast('Failed to update milestone')
     }
-    await upsertUserGoal(updated)
-    loadGoals()
   }
 
   const handleComplete = async (goal: UserGoal) => {
-    await upsertUserGoal({ ...goal, status: 'completed' })
-    loadGoals()
+    try {
+      await upsertUserGoal({ ...goal, status: 'completed' })
+      loadGoals()
+    } catch {
+      onToast('Failed to complete goal')
+    }
   }
 
   const handleDelete = async (goalId: string) => {
-    await deleteUserGoal(goalId)
-    loadGoals()
+    if (!window.confirm('Delete this goal? This cannot be undone.')) return
+    try {
+      await deleteUserGoal(goalId)
+      loadGoals()
+    } catch {
+      onToast('Failed to delete goal')
+    }
   }
 
   const activeGoals = goals.filter(g => g.status === 'active')

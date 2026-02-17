@@ -2192,12 +2192,25 @@ h1, h2, h3, h4 {
     align-items: center;
     gap: 6px;
 }
-.ka-wf-step-grip {
-    cursor: grab;
-    opacity: 0.3;
+.ka-wf-step-reorder {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.ka-wf-step-move {
+    background: none;
+    border: 1px solid rgba(100, 100, 100, 0.12);
+    border-radius: 3px;
+    padding: 0 2px;
+    cursor: pointer;
+    opacity: 0.5;
     display: flex;
     align-items: center;
+    color: var(--rubin-slate);
+    transition: opacity var(--duration-fast);
 }
+.ka-wf-step-move:hover:not(:disabled) { opacity: 1; }
+.ka-wf-step-move:disabled { opacity: 0.15; cursor: default; }
 .ka-wf-step-num {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -6639,4 +6652,40 @@ h1, h2, h3, h4 {
 
 [data-theme="dark"] .admin-action-btn--danger:hover {
     background: #2a1010;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile Polish — Panel Forms & Notification Dropdown
+   ═══════════════════════════════════════════════════════════ */
+
+/* Fix 10: NotificationBell dropdown — full-width on mobile */
+@media (max-width: 768px) {
+    .ka-notif-dropdown {
+        position: fixed;
+        top: 48px;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-height: 60vh;
+        z-index: 200;
+    }
+}
+
+/* Fix 11: Panel form containers — scroll with keyboard open */
+@media (max-width: 768px) {
+    .ka-goal-form,
+    .ka-sched-form,
+    .ka-wf-builder {
+        max-height: 50vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Timezone hint label */
+.ka-sched-tz-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    opacity: 0.5;
+    margin-left: 4px;
 }

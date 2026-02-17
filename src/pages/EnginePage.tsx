@@ -207,6 +207,16 @@ function EngineChat() {
   const [userGoals, setUserGoals] = useState<UserGoal[]>([])
   const userGoalsRef = useRef<UserGoal[]>([])
   userGoalsRef.current = userGoals
+  // Close all panels before opening a new one
+  const closeAllPanels = useCallback(() => {
+    setShowKGPanel(false)
+    setShowStatsPanel(false)
+    setShowGoalsPanel(false)
+    setShowWorkflowsPanel(false)
+    setShowScheduledPanel(false)
+    setShowBriefingPanel(false)
+  }, [])
+
   // Header menu
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
   const headerMenuRef = useRef<HTMLDivElement>(null)
@@ -1149,7 +1159,7 @@ function EngineChat() {
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
-              <GoalsPanel userId={user.id} onClose={() => setShowGoalsPanel(false)} />
+              <GoalsPanel userId={user.id} onClose={() => setShowGoalsPanel(false)} onToast={showToast} />
             </motion.div>
           </motion.div>
         )}
@@ -1185,6 +1195,7 @@ function EngineChat() {
               <WorkflowsPanel
                 userId={user.id}
                 onClose={() => setShowWorkflowsPanel(false)}
+                onToast={showToast}
                 onRunWorkflow={(proc) => {
                   setShowWorkflowsPanel(false)
                   sendMessage(`Run workflow: ${proc.name}`)
@@ -1222,7 +1233,7 @@ function EngineChat() {
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
-              <ScheduledTasksPanel userId={user.id} onClose={() => setShowScheduledPanel(false)} />
+              <ScheduledTasksPanel userId={user.id} onClose={() => setShowScheduledPanel(false)} onToast={showToast} />
             </motion.div>
           </motion.div>
         )}
@@ -1323,27 +1334,27 @@ function EngineChat() {
                     <div className="ka-header-menu-divider" />
                   </>
                 )}
-                <button className="ka-header-menu-item" onClick={() => { setShowGoalsPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowGoalsPanel(true); setHeaderMenuOpen(false) }}>
                   <Target size={14} />
                   Goals
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { setShowWorkflowsPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowWorkflowsPanel(true); setHeaderMenuOpen(false) }}>
                   <Zap size={14} />
                   Workflows
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { setShowScheduledPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowScheduledPanel(true); setHeaderMenuOpen(false) }}>
                   <Clock size={14} />
                   Scheduled tasks
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { setShowBriefingPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowBriefingPanel(true); setHeaderMenuOpen(false) }}>
                   <Newspaper size={14} />
                   Daily briefing
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { setShowKGPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowKGPanel(true); setHeaderMenuOpen(false) }}>
                   <Brain size={14} />
                   What Kernel knows
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { setShowStatsPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowStatsPanel(true); setHeaderMenuOpen(false) }}>
                   <BarChart3 size={14} />
                   Your stats
                 </button>

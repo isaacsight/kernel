@@ -35,7 +35,12 @@ export function FilePreview({ file, onRemove, disabled }: FilePreviewProps) {
     <div className="ka-file-preview">
       <div className="ka-file-preview-thumb">
         {preview ? (
-          <img src={preview} alt={file.name} className="ka-file-preview-img" />
+          <img
+            src={preview}
+            alt={file.name}
+            className="ka-file-preview-img"
+            onError={() => setPreview(null)}
+          />
         ) : (
           <div className="ka-file-preview-icon">{icon}</div>
         )}

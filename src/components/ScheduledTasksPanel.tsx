@@ -10,6 +10,7 @@ import { calculateNextRunAt, type ScheduledTask, type TaskSchedule } from '../en
 interface ScheduledTasksPanelProps {
   userId: string
   onClose: () => void
+  onToast: (msg: string) => void
 }
 
 const SCHEDULE_PRESETS: { label: string; schedule: TaskSchedule }[] = [
@@ -26,7 +27,7 @@ const TASK_TYPES = [
   { id: 'goal_checkin', label: 'Goal Check-in' },
 ]
 
-export function ScheduledTasksPanel({ userId, onClose }: ScheduledTasksPanelProps) {
+export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasksPanelProps) {
   const [tasks, setTasks] = useState<ScheduledTask[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -37,6 +38,13 @@ export function ScheduledTasksPanel({ userId, onClose }: ScheduledTasksPanelProp
   const [formScheduleIdx, setFormScheduleIdx] = useState(0)
   const [formTime, setFormTime] = useState('09:00')
   const [formChannel, setFormChannel] = useState<'in_app' | 'email' | 'discord'>('in_app')
+
+  // Force re-render every 60s to keep relative times fresh
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(() => setTick(t => t + 1), 60_000)
+    return () => clearInterval(interval)
+  }, [])
 
   const loadTasks = useCallback(async () => {
     const { data, error } = await supabase
@@ -53,36 +61,51 @@ export function ScheduledTasksPanel({ userId, onClose }: ScheduledTasksPanelProp
 
   const handleAdd = async () => {
     if (!formTitle.trim()) return
-    const schedule = { ...SCHEDULE_PRESETS[formScheduleIdx].schedule, time: formTime }
-    const nextRun = calculateNextRunAt(schedule)
+    try {
+      const schedule = { ...SCHEDULE_PRESETS[formScheduleIdx].schedule, time: formTime }
+      const nextRun = calculateNextRunAt(schedule)
 
-    const { error } = await supabase
-      .from('scheduled_tasks')
-      .insert({
-        user_id: userId,
-        title: formTitle.trim(),
-        task_type: formType,
-        schedule,
-        next_run_at: nextRun.toISOString(),
-        notification_channel: formChannel,
-      })
-    if (error) console.error('Error creating scheduled task:', error)
-    setFormTitle('')
-    setShowForm(false)
-    loadTasks()
+      const { error } = await supabase
+        .from('scheduled_tasks')
+        .insert({
+          user_id: userId,
+          title: formTitle.trim(),
+          task_type: formType,
+          schedule,
+          next_run_at: nextRun.toISOString(),
+          notification_channel: formChannel,
+        })
+      if (error) throw error
+      setFormTitle('')
+      setShowForm(false)
+      loadTasks()
+    } catch {
+      onToast('Failed to create scheduled task')
+    }
   }
 
   const handleToggle = async (task: ScheduledTask) => {
-    await supabase
-      .from('scheduled_tasks')
-      .update({ is_active: !task.is_active, updated_at: new Date().toISOString() })
-      .eq('id', task.id)
-    loadTasks()
+    try {
+      const { error } = await supabase
+        .from('scheduled_tasks')
+        .update({ is_active: !task.is_active, updated_at: new Date().toISOString() })
+        .eq('id', task.id)
+      if (error) throw error
+      loadTasks()
+    } catch {
+      onToast('Failed to update task')
+    }
   }
 
   const handleDelete = async (id: string) => {
-    await supabase.from('scheduled_tasks').delete().eq('id', id)
-    loadTasks()
+    if (!window.confirm('Delete this scheduled task?')) return
+    try {
+      const { error } = await supabase.from('scheduled_tasks').delete().eq('id', id)
+      if (error) throw error
+      loadTasks()
+    } catch {
+      onToast('Failed to delete task')
+    }
   }
 
   const formatNextRun = (dateStr: string) => {
@@ -182,6 +205,9 @@ export function ScheduledTasksPanel({ userId, onClose }: ScheduledTasksPanelProp
               value={formTime}
               onChange={e => setFormTime(e.target.value)}
             />
+            <span className="ka-sched-tz-hint">
+              {Intl.DateTimeFormat().resolvedOptions().timeZone.split('/').pop()?.replace(/_/g, ' ')}
+            </span>
           </div>
           <div className="ka-sched-form-btns">
             <button className="ka-sched-form-submit" onClick={handleAdd} disabled={!formTitle.trim()}>Schedule</button>
