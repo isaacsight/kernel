@@ -1,7 +1,7 @@
 // SwarmOrchestrator — Multi-agent parallel collaboration
 // Select agents → Parallel contributions (haiku) → Synthesize (sonnet, streamed)
 
-import { claudeText, claudeJSON, claudeStreamChat } from './ClaudeClient'
+import { getProvider } from './providers/registry'
 import { SPECIALISTS } from '../agents/specialists'
 import { SWARM_AGENTS } from '../agents/swarm'
 
@@ -80,11 +80,11 @@ async function selectAgents(
   recentContext: string
 ): Promise<{ agents: SwarmAgent[]; focus: string }> {
   try {
-    const result = await claudeJSON<{ agents: string[]; focus: string }>(
+    const result = await getProvider().json<{ agents: string[]; focus: string }>(
       recentContext
         ? `Recent conversation:\n${recentContext}\n\nUser message: ${message}`
         : `User message: ${message}`,
-      { system: SELECT_SYSTEM, model: 'haiku', max_tokens: 200 }
+      { system: SELECT_SYSTEM, tier: 'fast', max_tokens: 200 }
     )
 
     const ids = (result.agents || []).slice(0, 4)
@@ -123,11 +123,11 @@ async function getContributions(
           ? `${agent.systemPrompt}\n\n---\n\nUser context:\n${userMemoryContext}`
           : agent.systemPrompt
 
-        const contribution = await claudeText(
+        const contribution = await getProvider().text(
           `${message}\n\nProvide your focused perspective in 2-3 concise paragraphs. Be specific and actionable.`,
           {
             system,
-            model: 'haiku',
+            tier: 'fast',
             max_tokens: 600,
             web_search: agent.id === 'researcher',
           }
@@ -216,7 +216,7 @@ export async function runSwarm(
 
   const synthSystem = `${SYNTH_SYSTEM}\n\nSynthesis focus: ${focus}`
 
-  const result = await claudeStreamChat(
+  const result = await getProvider().streamChat(
     [
       {
         role: 'user',
@@ -224,7 +224,7 @@ export async function runSwarm(
       },
     ],
     onStream,
-    { system: synthSystem, model: 'sonnet', max_tokens: 2048 }
+    { system: synthSystem, tier: 'strong', max_tokens: 2048 }
   )
 
   progress.phase = 'complete'

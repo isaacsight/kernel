@@ -16,7 +16,7 @@
 
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
 import { SWARM_AGENTS, routeToAgent } from '../agents/swarm';
-import { claudeStreamChat } from './ClaudeClient';
+import { getProvider } from './providers/registry';
 import { perceiveInput as _perceiveInput } from './perception';
 import { attend as _attend } from './attention';
 import { reflect as _reflect } from './reflection';
@@ -348,13 +348,13 @@ export function createEngine(): {
     claudeMessages.push({ role: 'user', content: topic + contextSuffix });
 
     let accumulated = '';
-    const response = await claudeStreamChat(
+    const response = await getProvider().streamChat(
       claudeMessages,
       (chunk) => {
         accumulated = chunk;
         emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
       },
-      { system: agent.systemPrompt, model: 'sonnet', max_tokens: 512 }
+      { system: agent.systemPrompt, tier: 'strong', max_tokens: 512 }
     );
 
     return response || accumulated;
@@ -643,12 +643,12 @@ export function createEngine(): {
           }));
         discMessages.push({ role: 'user', content: `CURRENT TOPIC: "${topic}"\n\nNow respond as ${currentAgent.name}. Remember: 2-3 sentences max, build on what others said, reference them by name.` });
 
-        response = await claudeStreamChat(
+        response = await getProvider().streamChat(
           discMessages,
           (chunk) => {
             emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
           },
-          { system: currentAgent.systemPrompt, model: 'sonnet', max_tokens: 512 }
+          { system: currentAgent.systemPrompt, tier: 'strong', max_tokens: 512 }
         );
       } catch {
         emit({ type: 'error', message: 'Generation failed', timestamp: Date.now() });

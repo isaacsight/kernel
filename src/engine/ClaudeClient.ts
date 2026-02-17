@@ -31,10 +31,11 @@ export class FreeLimitError extends Error {
 
 type Model = 'sonnet' | 'haiku'
 
-export type ContentBlock =
-  | { type: 'text'; text: string }
-  | { type: 'image'; source: { type: 'base64'; media_type: string; data: string } }
-  | { type: 'document'; source: { type: 'base64'; media_type: string; data: string } }
+// Re-export ContentBlock from provider types for backward compat
+export type { ContentBlock } from './providers/types'
+
+// Import for local use
+import type { ContentBlock } from './providers/types'
 
 interface ClaudeOpts {
   system?: string

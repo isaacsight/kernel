@@ -1,5 +1,5 @@
 // AgentRouter — Haiku-based intent classifier for specialist routing
-import { claudeJSON } from './ClaudeClient'
+import { getProvider } from './providers/registry'
 
 export interface ClassificationResult {
   agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst'
@@ -35,9 +35,9 @@ export async function classifyIntent(
       ? `Recent conversation:\n${recentContext}\n\nNew message to classify:\n${message}`
       : `Message to classify:\n${message}`
 
-    const result = await claudeJSON<ClassificationResult>(prompt, {
+    const result = await getProvider().json<ClassificationResult>(prompt, {
       system: CLASSIFICATION_SYSTEM,
-      model: 'haiku',
+      tier: 'fast',
       max_tokens: 150,
     })
 
