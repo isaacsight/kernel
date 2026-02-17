@@ -25,6 +25,7 @@ export type ModelTier = 'fast' | 'strong'
 export interface LLMOpts {
     system?: string
     tier?: ModelTier     // default: 'strong'
+    model?: string       // explicit model override (e.g. 'gpt-4-turbo', 'llama3.2')
     max_tokens?: number
     web_search?: boolean
     signal?: AbortSignal
