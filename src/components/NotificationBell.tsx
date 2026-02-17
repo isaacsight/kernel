@@ -1,0 +1,111 @@
+// ─── NotificationBell ────────────────────────────────────
+//
+// Header icon with unread count and notification dropdown.
+
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { Bell, Check } from 'lucide-react'
+import { supabase } from '../engine/SupabaseClient'
+import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
+
+interface NotificationBellProps {
+  userId: string
+}
+
+export function NotificationBell({ userId }: NotificationBellProps) {
+  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Load notifications
+  useEffect(() => {
+    supabase
+      .from('notifications')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        const notifs = (data || []) as Notification[]
+        setNotifications(notifs)
+        setUnreadCount(notifs.filter(n => !n.read).length)
+      })
+  }, [userId])
+
+  // Subscribe to real-time new notifications
+  useEffect(() => {
+    return subscribeToNotifications(userId, (notif) => {
+      setNotifications(prev => [notif, ...prev].slice(0, 20))
+      setUnreadCount(prev => prev + 1)
+    })
+  }, [userId])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!isOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
+  }, [isOpen])
+
+  const markAllRead = useCallback(async () => {
+    const unreadIds = notifications.filter(n => !n.read).map(n => n.id)
+    if (unreadIds.length === 0) return
+    await supabase
+      .from('notifications')
+      .update({ read: true })
+      .in('id', unreadIds)
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+    setUnreadCount(0)
+  }, [notifications])
+
+  return (
+    <div className="ka-notif-wrap" ref={dropdownRef}>
+      <button
+        className="ka-header-icon-btn ka-notif-btn"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Notifications"
+      >
+        <Bell size={16} />
+        {unreadCount > 0 && (
+          <span className="ka-notif-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+        )}
+      </button>
+
+      {isOpen && (
+        <div className="ka-notif-dropdown">
+          <div className="ka-notif-dropdown-header">
+            <span>Notifications</span>
+            {unreadCount > 0 && (
+              <button className="ka-notif-mark-read" onClick={markAllRead}>
+                <Check size={12} /> Mark all read
+              </button>
+            )}
+          </div>
+          {notifications.length === 0 ? (
+            <div className="ka-notif-empty">No notifications yet</div>
+          ) : (
+            <div className="ka-notif-list">
+              {notifications.map(n => (
+                <div
+                  key={n.id}
+                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}`}
+                >
+                  <div className="ka-notif-item-title">{n.title}</div>
+                  {n.body && <div className="ka-notif-item-body">{n.body}</div>}
+                  <div className="ka-notif-item-time">
+                    {new Date(n.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
