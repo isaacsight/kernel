@@ -18,6 +18,17 @@ export class RateLimitError extends Error {
   }
 }
 
+export class FreeLimitError extends Error {
+  limit: number
+  used: number
+  constructor(limit: number, used: number) {
+    super(`Free limit reached: ${used}/${limit} messages used`)
+    this.name = 'FreeLimitError'
+    this.limit = limit
+    this.used = used
+  }
+}
+
 type Model = 'sonnet' | 'haiku'
 
 export type ContentBlock =
@@ -54,13 +65,22 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 403) {
+      try {
+        const body = JSON.parse(err)
+        if (body.error === 'free_limit_reached') {
+          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+        }
+      } catch (e) {
+        if (e instanceof FreeLimitError) throw e
+      }
+    }
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
         if (e instanceof RateLimitError) throw e
-        // JSON parse failed — fall through to generic error
       }
     }
     throw new Error(`Claude proxy error (${res.status}): ${err}`)
@@ -112,6 +132,16 @@ export async function claudeStream(
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 403) {
+      try {
+        const body = JSON.parse(err)
+        if (body.error === 'free_limit_reached') {
+          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+        }
+      } catch (e) {
+        if (e instanceof FreeLimitError) throw e
+      }
+    }
     throw new Error(`Claude stream error (${res.status}): ${err}`)
   }
 
@@ -175,13 +205,22 @@ export async function claudeStreamChat(
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 403) {
+      try {
+        const body = JSON.parse(err)
+        if (body.error === 'free_limit_reached') {
+          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+        }
+      } catch (e) {
+        if (e instanceof FreeLimitError) throw e
+      }
+    }
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
         if (e instanceof RateLimitError) throw e
-        // JSON parse failed — fall through to generic error
       }
     }
     throw new Error(`Claude stream error (${res.status}): ${err}`)

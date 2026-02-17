@@ -66,9 +66,26 @@ serve(async (req: Request) => {
       user = authUser
     }
 
-    // ── Rate limit: disabled for launch — all users unlimited ───
-    // Subscribers are tracked for future tiering, but no limits enforced.
-    // Revenue covers API costs via subscription pricing.
+    // ── Free-tier limit: 10 messages for non-subscribers ───
+    const isAdmin = !!user.app_metadata?.is_admin
+    if (!isServiceCall && !isAdmin) {
+      const svc = createClient(supabaseUrl, serviceRoleKey!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      const [{ data: mem }, { data: sub }] = await Promise.all([
+        svc.from('user_memory').select('message_count').eq('user_id', user.id).maybeSingle(),
+        svc.from('subscriptions').select('status').eq('user_id', user.id).eq('status', 'active').maybeSingle(),
+      ])
+      if (!sub) {
+        const used = mem?.message_count ?? 0
+        if (used >= 10) {
+          return new Response(
+            JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+            { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+      }
+    }
 
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
