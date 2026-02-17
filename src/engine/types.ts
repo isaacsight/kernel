@@ -5,28 +5,12 @@
 
 import type { Agent, Message } from '../types'
 
-// Inlined from deleted ReasoningEngine (was Gemini-based, no longer used)
-export interface ThinkingStep {
-  step: number;
-  thought: string;
-  type: 'observation' | 'analysis' | 'hypothesis' | 'calculation' | 'conclusion';
-}
-
-export interface ReasoningResult {
-  thinking: ThinkingStep[];
-  conclusion: string;
-  confidence: number;
-  reasoning_time_ms: number;
-  action?: { type: string; params: Record<string, unknown> };
-}
-
 // ─── Cognitive Phase ────────────────────────────────────────
 
 export type CognitivePhase =
   | 'idle'        // Resting — awaiting stimulus
   | 'perceiving'  // Processing input, extracting signal
   | 'attending'   // Deciding what matters most right now
-  | 'thinking'    // Reasoning through the problem
   | 'deciding'    // Selecting agent and strategy
   | 'acting'      // Generating response
   | 'reflecting'; // Evaluating output, updating world model
@@ -99,7 +83,6 @@ export interface EphemeralMemory {
   perception: Perception | null;
   attention: AttentionState | null;
   activeAgent: Agent | null;
-  thinkingSteps: ThinkingStep[];
   startedAt: number;
 }
 
@@ -169,7 +152,6 @@ export type EngineEvent =
   | { type: 'belief_updated'; belief: Belief; delta: number; timestamp: number }
   | { type: 'conviction_shifted'; from: number; to: number; reason: string; timestamp: number }
   | { type: 'agent_selected'; agent: Agent; reason: string; timestamp: number }
-  | { type: 'thinking_step'; step: ThinkingStep; timestamp: number }
   | { type: 'response_chunk'; text: string; timestamp: number }
   | { type: 'cycle_complete'; reflection: Reflection; timestamp: number }
   | { type: 'world_model_updated'; summary: string; timestamp: number }

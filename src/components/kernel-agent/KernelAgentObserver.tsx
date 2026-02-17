@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import type { CognitivePhase } from '../../engine/AIEngine';
 
-const PHASES: CognitivePhase[] = ['perceiving', 'attending', 'thinking', 'deciding', 'acting', 'reflecting'];
+const PHASES: CognitivePhase[] = ['perceiving', 'attending', 'deciding', 'acting', 'reflecting'];
 
 function Section({ title, defaultOpen = true, children }: {
   title: string;

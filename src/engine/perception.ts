@@ -18,13 +18,14 @@ import {
 export function perceiveInput(
   input: string,
   conversationHistory: { content: string }[],
+  routerResult?: ClassificationResult,
 ): Perception {
   const lower = input.toLowerCase()
   const words = input.split(/\s+/)
   const wordCount = words.length
 
   // ── Intent Classification ──
-  const intent = classifyIntent(input, lower)
+  const intent = classifyIntent(input, lower, routerResult)
 
   // ── Urgency (0-1) ──
   const urgencyHits = countSignals(input, URGENCY_SIGNALS)

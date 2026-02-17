@@ -7,6 +7,15 @@
 
 import type { Perception, Reflection } from './types'
 import type { Agent, Message } from '../types'
+import { getProvider } from './providers/registry'
+
+interface AIScores {
+  substance: number
+  coherence: number
+  relevance: number
+  brevity: number
+  craft: number
+}
 
 export function reflect(
   input: string,
@@ -118,5 +127,69 @@ export function reflect(
     lesson,
     worldModelUpdate,
     convictionDelta,
+  }
+}
+
+// ─── AI-Enhanced Reflection ──────────────────────────────────
+//
+// For high-complexity queries (complexity > 0.6), calls Haiku to
+// score the response. Blends AI score (60%) with heuristic (40%).
+// Falls back to pure heuristic on failure.
+
+export async function reflectWithAI(
+  input: string,
+  output: string,
+  agent: Agent,
+  perception: Perception,
+  durationMs: number,
+  conversationHistory: Message[],
+): Promise<Reflection> {
+  // Always compute heuristic baseline
+  const heuristic = reflect(input, output, agent, perception, durationMs, conversationHistory)
+
+  // Only enhance with AI for complex queries
+  if (perception.complexity <= 0.6) return heuristic
+
+  try {
+    const aiScores = await getProvider().json<AIScores>(
+      `Rate this AI response on a 0-1 scale for: substance, coherence, relevance, brevity, craft.\nInput: ${input.slice(0, 200)}\nResponse: ${output.slice(0, 500)}\nReturn JSON: { "substance": 0.0, "coherence": 0.0, "relevance": 0.0, "brevity": 0.0, "craft": 0.0 }`,
+      { tier: 'fast', max_tokens: 100 }
+    )
+
+    // Validate AI scores
+    const keys: (keyof AIScores)[] = ['substance', 'coherence', 'relevance', 'brevity', 'craft']
+    const valid = keys.every(k =>
+      typeof aiScores[k] === 'number' && aiScores[k] >= 0 && aiScores[k] <= 1
+    )
+    if (!valid) return heuristic
+
+    // Blend: 60% AI, 40% heuristic
+    const blended = {
+      substance: aiScores.substance * 0.6 + heuristic.scores.substance * 0.4,
+      coherence: aiScores.coherence * 0.6 + heuristic.scores.coherence * 0.4,
+      relevance: aiScores.relevance * 0.6 + heuristic.scores.relevance * 0.4,
+      brevity: aiScores.brevity * 0.6 + heuristic.scores.brevity * 0.4,
+      craft: aiScores.craft * 0.6 + heuristic.scores.craft * 0.4,
+    }
+
+    const quality = (
+      blended.substance * 0.25 +
+      blended.coherence * 0.25 +
+      blended.relevance * 0.2 +
+      blended.brevity * 0.15 +
+      blended.craft * 0.15
+    )
+
+    const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0
+
+    return {
+      ...heuristic,
+      quality,
+      scores: blended,
+      convictionDelta,
+    }
+  } catch {
+    // Fall back to heuristic on any failure
+    return heuristic
   }
 }
