@@ -675,3 +675,83 @@ export function subscribeToOpportunities(callback: (opp: DBOpportunity) => void)
       (payload) => callback(payload.new as DBOpportunity))
     .subscribe();
 }
+
+// ─── User Stats ──────────────────────────────────────────
+
+export interface UserStats {
+  totalConversations: number
+  totalMessages: number
+  joinedAt: string | null
+  agentBreakdown: { agent_id: string; count: number }[]
+  feedbackStats: { helpful: number; poor: number; neutral: number }
+  kgEntityCount: number
+  kgRelationCount: number
+  topEntities: { name: string; entity_type: string; mention_count: number }[]
+  conversationsPerDay: { date: string; count: number }[]
+}
+
+export async function getUserStats(userId: string): Promise<UserStats> {
+  const [
+    convRes,
+    msgRes,
+    agentRes,
+    signalRes,
+    kgEntRes,
+    kgRelRes,
+    topEntRes,
+    dailyRes,
+  ] = await Promise.all([
+    supabase.from('conversations').select('id', { count: 'exact', head: true }).eq('user_id', userId),
+    supabase.from('messages').select('id', { count: 'exact', head: true }).eq('user_id', userId),
+    supabase.from('messages').select('agent_id').eq('user_id', userId).neq('agent_id', 'user'),
+    supabase.from('response_signals').select('response_quality').eq('user_id', userId),
+    supabase.from('knowledge_graph_entities').select('id', { count: 'exact', head: true }).eq('user_id', userId),
+    supabase.from('knowledge_graph_relations').select('id', { count: 'exact', head: true }).eq('user_id', userId),
+    supabase.from('knowledge_graph_entities').select('name, entity_type, mention_count').eq('user_id', userId).order('mention_count', { ascending: false }).limit(8),
+    supabase.from('conversations').select('created_at').eq('user_id', userId).order('created_at', { ascending: true }),
+  ])
+
+  // Aggregate agent breakdown
+  const agentCounts = new Map<string, number>()
+  for (const row of (agentRes.data || [])) {
+    const id = row.agent_id || 'kernel'
+    agentCounts.set(id, (agentCounts.get(id) || 0) + 1)
+  }
+  const agentBreakdown = [...agentCounts.entries()]
+    .map(([agent_id, count]) => ({ agent_id, count }))
+    .sort((a, b) => b.count - a.count)
+
+  // Feedback stats
+  const signals = signalRes.data || []
+  const feedbackStats = { helpful: 0, poor: 0, neutral: 0 }
+  for (const s of signals) {
+    if (s.response_quality === 'helpful') feedbackStats.helpful++
+    else if (s.response_quality === 'poor') feedbackStats.poor++
+    else feedbackStats.neutral++
+  }
+
+  // Conversations per day (last 30 days)
+  const convsByDay = new Map<string, number>()
+  for (const c of (dailyRes.data || [])) {
+    const day = c.created_at.slice(0, 10)
+    convsByDay.set(day, (convsByDay.get(day) || 0) + 1)
+  }
+  const conversationsPerDay = [...convsByDay.entries()]
+    .map(([date, count]) => ({ date, count }))
+    .slice(-30)
+
+  // Get joined_at from auth (via conversations earliest or message)
+  const firstConv = dailyRes.data?.[0]?.created_at || null
+
+  return {
+    totalConversations: convRes.count || 0,
+    totalMessages: msgRes.count || 0,
+    joinedAt: firstConv,
+    agentBreakdown,
+    feedbackStats,
+    kgEntityCount: kgEntRes.count || 0,
+    kgRelationCount: kgRelRes.count || 0,
+    topEntities: (topEntRes.data || []) as { name: string; entity_type: string; mention_count: number }[],
+    conversationsPerDay,
+  }
+}

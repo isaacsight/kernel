@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3 } from 'lucide-react'
+import KGPanel from '../components/kernel-agent/KGPanel'
+import StatsPanel from '../components/kernel-agent/StatsPanel'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
@@ -9,6 +11,7 @@ import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
 import { useAuthContext } from '../providers/AuthProvider'
@@ -26,6 +29,10 @@ import {
   upsertCollectiveInsight,
   getUserMemory,
   upsertUserMemory,
+  getKGEntities,
+  getKGRelations,
+  upsertKGEntity,
+  upsertKGRelation,
   getAccessToken,
   supabase,
   type DBConversation,
@@ -91,9 +98,23 @@ export function EnginePage() {
     return (
       <OnboardingFlow
         userName={user?.email || undefined}
-        onComplete={() => {
+        onComplete={(interests) => {
           localStorage.setItem(onboardingKey, 'true')
           setOnboarded(true)
+          // Seed KG with selected interests
+          if (interests && interests.length > 0 && user?.id) {
+            for (const interest of interests) {
+              upsertKGEntity({
+                user_id: user.id,
+                name: interest.charAt(0).toUpperCase() + interest.slice(1),
+                entity_type: 'preference',
+                properties: { source: 'onboarding' },
+                confidence: 0.7,
+                source: 'stated',
+                mention_count: 1,
+              })
+            }
+          }
         }}
       />
     )
@@ -137,6 +158,11 @@ function EngineChat() {
   const userMemoryRef = useRef<UserMemoryProfile>(userMemory)
   userMemoryRef.current = userMemory
   const messageCountRef = useRef(0)
+  // Knowledge Graph state
+  const [kgEntities, setKGEntities] = useState<KGEntity[]>([])
+  const [kgRelations, setKGRelations] = useState<KGRelation[]>([])
+  const kgEntitiesRef = useRef<KGEntity[]>([])
+  kgEntitiesRef.current = kgEntities
   // Abort controller for active stream — cleaned up on unmount
   const streamAbortRef = useRef<AbortController | null>(null)
   // Research progress
@@ -156,6 +182,10 @@ function EngineChat() {
   const [editingContent, setEditingContent] = useState('')
   // Toast
   const [toast, setToast] = useState<string | null>(null)
+  // KG panel
+  const [showKGPanel, setShowKGPanel] = useState(false)
+  // Stats panel
+  const [showStatsPanel, setShowStatsPanel] = useState(false)
   // Header menu
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
   const headerMenuRef = useRef<HTMLDivElement>(null)
@@ -353,6 +383,17 @@ function EngineChat() {
         }
       }
     }).catch(err => console.warn('[Memory] Failed to load user memory:', err))
+  }, [user])
+
+  // Load Knowledge Graph on mount
+  useEffect(() => {
+    if (!user) return
+    Promise.all([getKGEntities(user.id), getKGRelations(user.id)])
+      .then(([entities, relations]) => {
+        setKGEntities(entities)
+        setKGRelations(relations)
+      })
+      .catch(err => console.warn('[KG] Failed to load knowledge graph:', err))
   }, [user])
 
   // Load collective insights on mount
@@ -721,10 +762,14 @@ function EngineChat() {
     const memoryBlock = memoryText
       ? `\n\n---\n\n## User Memory\nYou know this about the user. Use it naturally — don't announce it.\n\n${memoryText}`
       : ''
+    const kgText = formatGraphForPrompt(kgEntities, kgRelations)
+    const kgBlock = kgText
+      ? `\n\n## Knowledge Graph\nStructured facts and relationships you've learned:\n\n${kgText}`
+      : ''
     const collectiveBlock = collectiveInsights.length > 0
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${collectiveBlock}`
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${kgBlock}${collectiveBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -843,7 +888,7 @@ function EngineChat() {
       touchConversation(convId)
       loadConversations()
 
-      // Background memory extraction every 3 messages
+      // Background memory + KG extraction every 3 messages
       messageCountRef.current++
       if (messageCountRef.current % 3 === 0) {
         setMessages(currentMsgs => {
@@ -852,6 +897,7 @@ function EngineChat() {
             .filter(m => m.content.trim())
             .map(m => ({ role: m.role === 'kernel' ? 'assistant' : 'user', content: m.content }))
           if (recentMsgs.length > 0) {
+            // Memory extraction
             extractMemory(recentMsgs).then(async (newProfile) => {
               const hasData = newProfile.interests.length > 0 || newProfile.goals.length > 0 ||
                 newProfile.facts.length > 0 || newProfile.communication_style.length > 0
@@ -861,6 +907,24 @@ function EngineChat() {
               await upsertUserMemory(userId, merged as unknown as Record<string, unknown>, messageCountRef.current)
               console.log('[Memory] Profile updated, msg count:', messageCountRef.current)
             }).catch((err) => console.warn('[Memory] Periodic extraction failed:', err))
+
+            // KG extraction (parallel, independent)
+            const kgMessages = currentMsgs.slice(-10).filter(m => m.content.trim()).map(m => ({
+              id: m.id,
+              agentId: m.role === 'user' ? 'human' : (m.agentId || 'kernel'),
+              agentName: m.role === 'user' ? 'User' : (m.agentName || 'Kernel'),
+              content: m.content,
+              timestamp: new Date(m.timestamp),
+            }))
+            extractEntities(kgMessages, kgEntitiesRef.current.map(e => e.name)).then(async (extraction) => {
+              if (extraction.entities.length === 0 && extraction.relations.length === 0) return
+              await mergeExtraction(userId, extraction, kgEntitiesRef.current, upsertKGEntity, upsertKGRelation)
+              // Refresh KG state
+              const [entities, relations] = await Promise.all([getKGEntities(userId), getKGRelations(userId)])
+              setKGEntities(entities)
+              setKGRelations(relations)
+              console.log('[KG] Graph updated:', entities.length, 'entities,', relations.length, 'relations')
+            }).catch((err) => console.warn('[KG] Extraction failed:', err))
           }
           return currentMsgs
         })
@@ -889,8 +953,110 @@ function EngineChat() {
     sendMessage(input)
   }
 
+  // Edge swipe to open conversation drawer (left edge, 30px zone)
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null)
+  useEffect(() => {
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      if (touch.clientX < 30 && !isDrawerOpen) {
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY }
+      }
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (!touchStartRef.current) return
+      const touch = e.touches[0]
+      const dx = touch.clientX - touchStartRef.current.x
+      const dy = Math.abs(touch.clientY - touchStartRef.current.y)
+      // Must be a horizontal swipe (dx > 60px, mostly horizontal)
+      if (dx > 60 && dy < 50) {
+        setIsDrawerOpen(true)
+        touchStartRef.current = null
+      }
+    }
+    const onTouchEnd = () => { touchStartRef.current = null }
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true })
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
+    document.addEventListener('touchend', onTouchEnd, { passive: true })
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart)
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [isDrawerOpen])
+
   return (
     <div className="ka-page">
+      {/* Knowledge Graph Panel (bottom sheet on mobile, overlay on desktop) */}
+      <AnimatePresence>
+        {showKGPanel && (
+          <>
+            <motion.div
+              className="ka-kg-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowKGPanel(false)}
+            />
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowKGPanel(false)
+                }
+              }}
+            >
+              <div className="ka-kg-drag-handle" />
+              <KGPanel
+                entities={kgEntities}
+                relations={kgRelations}
+                onClose={() => setShowKGPanel(false)}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Stats Panel */}
+      <AnimatePresence>
+        {showStatsPanel && user && (
+          <>
+            <motion.div
+              className="ka-kg-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowStatsPanel(false)}
+            />
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowStatsPanel(false)
+                }
+              }}
+            >
+              <div className="ka-kg-drag-handle" />
+              <StatsPanel userId={user.id} onClose={() => setShowStatsPanel(false)} />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
@@ -946,6 +1112,14 @@ function EngineChat() {
                     <div className="ka-header-menu-divider" />
                   </>
                 )}
+                <button className="ka-header-menu-item" onClick={() => { setShowKGPanel(true); setHeaderMenuOpen(false) }}>
+                  <Brain size={14} />
+                  What Kernel knows
+                </button>
+                <button className="ka-header-menu-item" onClick={() => { setShowStatsPanel(true); setHeaderMenuOpen(false) }}>
+                  <BarChart3 size={14} />
+                  Your stats
+                </button>
                 {!isAdmin && isSubscribed && (
                   <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
                     <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />

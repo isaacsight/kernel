@@ -6,6 +6,7 @@ dist
 legacy/
 *.log
 .mcp.json
+.playwright-mcp/
 supabase/.temp/
 
 # Non-site files (experiments, docs, scripts)
