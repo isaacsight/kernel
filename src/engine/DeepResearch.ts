@@ -1,7 +1,7 @@
 // DeepResearch — Multi-turn research orchestrator
 // Plan (haiku) → Search (haiku + web_search) → Synthesize (sonnet, streamed)
 
-import { claudeJSON, claudeStreamChat } from './ClaudeClient'
+import { getProvider } from './providers/registry'
 
 export interface ResearchProgress {
   phase: 'planning' | 'searching' | 'synthesizing' | 'complete'
@@ -50,9 +50,9 @@ export async function deepResearch(
   // Step 1: Plan search queries (fall back to raw question if planning fails)
   let queries: string[]
   try {
-    const plan = await claudeJSON<ResearchPlan>(
+    const plan = await getProvider().json<ResearchPlan>(
       `Research question: ${question}`,
-      { system: PLAN_SYSTEM, model: 'haiku', max_tokens: 300 }
+      { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 300 }
     )
     queries = (plan.queries || []).slice(0, 5)
     if (queries.length === 0) queries = [question]
@@ -71,10 +71,10 @@ export async function deepResearch(
   await Promise.allSettled(queries.map(async (query, i) => {
     let finding = ''
     try {
-      await claudeStreamChat(
+      await getProvider().streamChat(
         [{ role: 'user', content: query }],
         (text) => { finding = text },
-        { system: SEARCH_SYSTEM, model: 'haiku', max_tokens: 800, web_search: true }
+        { system: SEARCH_SYSTEM, tier: 'fast', max_tokens: 800, web_search: true }
       )
       progress.findings[i] = finding ? `**Query: ${query}**\n${finding}` : ''
     } catch {
@@ -95,7 +95,7 @@ export async function deepResearch(
     ? `User context: ${userContext}\n\n`
     : ''
 
-  const result = await claudeStreamChat(
+  const result = await getProvider().streamChat(
     [
       {
         role: 'user',
@@ -103,7 +103,7 @@ export async function deepResearch(
       },
     ],
     onStream,
-    { system: SYNTHESIZE_SYSTEM, model: 'sonnet', max_tokens: 2048 }
+    { system: SYNTHESIZE_SYSTEM, tier: 'strong', max_tokens: 2048 }
   )
 
   progress.phase = 'complete'

@@ -1,7 +1,7 @@
 // TaskPlanner — Multi-step task decomposition and execution
 // Planning (haiku) → Sequential execution → Final synthesis (sonnet, streamed)
 
-import { claudeJSON, claudeText, claudeStreamChat } from './ClaudeClient'
+import { getProvider } from './providers/registry'
 import { getSpecialist } from '../agents/specialists'
 
 export interface TaskStep {
@@ -42,9 +42,9 @@ Respond with ONLY valid JSON:
 
 export async function planTask(request: string): Promise<TaskPlan> {
   try {
-    const raw = await claudeJSON<{ goal: string; steps: { id: number; description: string; agentId: string }[] }>(
+    const raw = await getProvider().json<{ goal: string; steps: { id: number; description: string; agentId: string }[] }>(
       `Break this request into steps:\n\n${request}`,
-      { system: PLAN_SYSTEM, model: 'haiku', max_tokens: 500 }
+      { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 500 }
     )
 
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
@@ -96,17 +96,17 @@ export async function executeTask(
     try {
       if (isLast) {
         // Final step: stream to UI
-        const result = await claudeStreamChat(
+        const result = await getProvider().streamChat(
           [{ role: 'user', content: stepPrompt }],
           onStream,
-          { system: systemPrompt, model: 'sonnet', max_tokens: 2048, web_search: step.agentId === 'researcher' }
+          { system: systemPrompt, tier: 'strong', max_tokens: 2048, web_search: step.agentId === 'researcher' }
         )
         step.result = result
       } else {
         // Intermediate steps: non-streaming
-        const result = await claudeText(stepPrompt, {
+        const result = await getProvider().text(stepPrompt, {
           system: systemPrompt,
-          model: 'haiku',
+          tier: 'fast',
           max_tokens: 1024,
           web_search: step.agentId === 'researcher',
         })

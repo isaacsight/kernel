@@ -271,8 +271,14 @@ function sanitizeMessages(messages: { role: string; content: string }[]): { role
 }
 
 async function getUserMemory(discordUserId: string): Promise<string> {
-  // Use in-memory profile cache for Discord users
-  const p = discordProfiles.get(discordUserId) as any
+  // Load from Supabase discord_user_memory table (persistent across restarts)
+  const { data } = await supabase
+    .from('discord_user_memory')
+    .select('profile')
+    .eq('discord_id', discordUserId)
+    .maybeSingle()
+
+  const p = data?.profile as any
   if (!p) return ''
   const sections: string[] = []
   if (p.facts?.length) sections.push(`**About them:** ${p.facts.join('. ')}`)
@@ -331,9 +337,6 @@ const TOPIC_SYSTEM = `Extract the main topic of this conversation in 2-5 words. 
 const userMsgCounts = new Map<string, number>()
 const MEMORY_EXTRACT_INTERVAL = 3 // Extract memory every N messages
 
-// In-memory profile cache for Discord users (can't store in user_memory — UUID column)
-const discordProfiles = new Map<string, any>()
-
 async function extractAndSaveMemory(discordUserId: string, channelId: string) {
   try {
     // Get recent messages for this channel
@@ -370,8 +373,14 @@ async function extractAndSaveMemory(discordUserId: string, channelId: string) {
 
     if (!hasContent) return
 
-    // Merge with existing in-memory profile
-    const existing = discordProfiles.get(discordUserId)
+    // Load existing profile from Supabase
+    const { data: existingRow } = await supabase
+      .from('discord_user_memory')
+      .select('profile, message_count')
+      .eq('discord_id', discordUserId)
+      .maybeSingle()
+
+    const existing = existingRow?.profile as any
     let finalProfile = newProfile
 
     if (existing && Object.keys(existing).length > 0) {
@@ -389,11 +398,94 @@ async function extractAndSaveMemory(discordUserId: string, channelId: string) {
       }
     }
 
-    discordProfiles.set(discordUserId, finalProfile)
-    console.log(`[Memory] Updated Discord profile for ${discordUserId}`)
+    // Persist to Supabase (survives bot restarts)
+    const msgCount = (existingRow?.message_count || 0) + MEMORY_EXTRACT_INTERVAL
+    await supabase.from('discord_user_memory').upsert({
+      discord_id: discordUserId,
+      profile: finalProfile,
+      message_count: msgCount,
+      updated_at: new Date().toISOString(),
+    })
+
+    console.log(`[Memory] Updated Discord profile for ${discordUserId} in Supabase`)
   } catch (err) {
     console.warn('[Memory] Extraction failed:', err)
   }
+}
+
+// ─── Discord ↔ Web User Linking ──────────────────────────────
+
+async function getLinkedUserId(discordId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('discord_user_links')
+    .select('user_id')
+    .eq('discord_id', discordId)
+    .maybeSingle()
+  return data?.user_id || null
+}
+
+async function linkDiscordUser(discordId: string, discordUsername: string, supabaseUserId: string): Promise<boolean> {
+  // Verify the Supabase user exists
+  const { data: user } = await supabase.auth.admin.getUserById(supabaseUserId)
+  if (!user?.user) return false
+
+  const { error } = await supabase.from('discord_user_links').upsert({
+    discord_id: discordId,
+    user_id: supabaseUserId,
+    discord_username: discordUsername,
+    linked_at: new Date().toISOString(),
+  })
+
+  if (error) {
+    console.error('[Link] Error linking Discord user:', error.message)
+    return false
+  }
+  return true
+}
+
+// ─── Conversation Management ─────────────────────────────────
+// Track active conversation IDs per Discord channel
+const channelConversations = new Map<string, string>()
+
+async function getOrCreateConversation(
+  discordChannelId: string,
+  linkedUserId: string | null,
+  firstMessage: string
+): Promise<string> {
+  // Check in-memory cache first
+  const cached = channelConversations.get(discordChannelId)
+  if (cached) return cached
+
+  const channelId = `discord_${discordChannelId}`
+
+  // Check if we have recent messages for this channel → reuse that conversation
+  const { data: recentMsg } = await supabase
+    .from('messages')
+    .select('channel_id')
+    .eq('channel_id', channelId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (recentMsg) {
+    channelConversations.set(discordChannelId, channelId)
+    return channelId
+  }
+
+  // If user is linked, create a conversation record so it shows in web app
+  if (linkedUserId) {
+    const convId = `discord_${discordChannelId}`
+    const title = firstMessage.slice(0, 80) || 'Discord conversation'
+    await supabase.from('conversations').upsert({
+      id: convId,
+      user_id: linkedUserId,
+      title: `[Discord] ${title}`,
+      updated_at: new Date().toISOString(),
+    })
+  }
+
+  channelConversations.set(discordChannelId, channelId)
+  return channelId
 }
 
 async function saveResponseSignal(channelId: string, content: string) {
@@ -552,8 +644,39 @@ client.on('messageCreate', async (msg: Message) => {
       return
     }
 
-    const channelId = `discord_${msg.channelId}`
     const discordUserId = `discord_${msg.author.id}`
+
+    // Handle !link command
+    if (content.startsWith('!link ')) {
+      const supabaseUserId = content.slice(6).trim()
+      if (!supabaseUserId || supabaseUserId.length < 10) {
+        await msg.reply('Usage: `!link <your-user-id>` — find your user ID in the Kernel web app settings.')
+        return
+      }
+      const linked = await linkDiscordUser(
+        `discord_${msg.author.id}`,
+        msg.author.tag,
+        supabaseUserId
+      )
+      if (linked) {
+        await msg.reply('Linked! Your Discord conversations will now appear in the web app.')
+      } else {
+        await msg.reply('Link failed — make sure your user ID is correct. Find it in the Kernel web app settings.')
+      }
+      return
+    }
+
+    if (content === '!unlink') {
+      await supabase.from('discord_user_links').delete().eq('discord_id', discordUserId)
+      await msg.reply('Unlinked. Your Discord conversations will no longer sync to the web app.')
+      return
+    }
+
+    // Look up linked Supabase user
+    const linkedUserId = await getLinkedUserId(discordUserId)
+
+    // Get or create conversation record
+    const channelId = await getOrCreateConversation(msg.channelId, linkedUserId, content)
 
     // Rate limit check
     const { allowed, remaining } = checkDiscordRateLimit(discordUserId)
@@ -631,7 +754,15 @@ client.on('messageCreate', async (msg: Message) => {
       channel_id: channelId,
       agent_id: 'user',
       content: textContent,
+      user_id: linkedUserId || undefined,
     })
+
+    // Touch conversation timestamp for linked users (keeps it fresh in web drawer)
+    if (linkedUserId) {
+      await supabase.from('conversations')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('id', channelId)
+    }
 
     // Build context for classification
     const recentCtx = history
@@ -678,6 +809,7 @@ client.on('messageCreate', async (msg: Message) => {
       channel_id: channelId,
       agent_id: agentId,
       content: response,
+      user_id: linkedUserId || undefined,
     })
 
     // Send response (split if needed for Discord's 2000 char limit)
