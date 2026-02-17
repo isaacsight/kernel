@@ -164,7 +164,7 @@ export async function getTotalRevenue(): Promise<number> {
 }
 
 // Messages (for conversation persistence)
-export async function saveMessage(msg: Omit<DBMessage, 'created_at'>) {
+export async function saveMessage(msg: Omit<DBMessage, 'created_at'> & { attachments?: { name: string; type: string }[] }) {
   const { error } = await supabase.from('messages').insert(msg);
   if (error) console.error('Error saving message:', error);
 }
@@ -308,6 +308,111 @@ export async function getMySubscription(): Promise<DBSubscription | null> {
     return null;
   }
   return data;
+}
+
+// ─── User Goals ─────────────────────────────────────────
+
+import type { UserGoal } from './GoalTracker'
+
+export async function getUserGoals(userId: string): Promise<UserGoal[]> {
+  const { data, error } = await supabase
+    .from('user_goals')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) console.error('Error fetching user goals:', error);
+  return (data || []) as UserGoal[];
+}
+
+export async function upsertUserGoal(goal: UserGoal): Promise<UserGoal | null> {
+  if (goal.id) {
+    const { data, error } = await supabase
+      .from('user_goals')
+      .update({
+        title: goal.title,
+        description: goal.description,
+        category: goal.category,
+        status: goal.status,
+        priority: goal.priority,
+        target_date: goal.target_date,
+        milestones: goal.milestones,
+        progress_notes: goal.progress_notes,
+        check_in_frequency: goal.check_in_frequency,
+        last_check_in_at: goal.last_check_in_at,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', goal.id)
+      .select()
+      .single();
+
+    if (error) console.error('Error updating goal:', error);
+    return data as UserGoal | null;
+  }
+
+  const { data, error } = await supabase
+    .from('user_goals')
+    .insert({
+      user_id: goal.user_id,
+      title: goal.title,
+      description: goal.description,
+      category: goal.category,
+      status: goal.status,
+      priority: goal.priority,
+      target_date: goal.target_date,
+      milestones: goal.milestones,
+      progress_notes: goal.progress_notes,
+      check_in_frequency: goal.check_in_frequency,
+    })
+    .select()
+    .single();
+
+  if (error) console.error('Error creating goal:', error);
+  return data as UserGoal | null;
+}
+
+export async function deleteUserGoal(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('user_goals')
+    .delete()
+    .eq('id', id);
+  if (error) console.error('Error deleting goal:', error);
+}
+
+// ─── Shared Conversations ───────────────────────────────
+
+export async function createSharedConversation(params: {
+  conversationId: string;
+  userId: string;
+  title: string;
+  messages: { role: string; content: string; agentName?: string; timestamp: number }[];
+  expiresAt: string | null;
+}): Promise<string | null> {
+  const id = Math.random().toString(36).substring(2, 10);
+  const { error } = await supabase
+    .from('shared_conversations')
+    .insert({
+      id,
+      conversation_id: params.conversationId,
+      user_id: params.userId,
+      title: params.title,
+      messages: params.messages,
+      expires_at: params.expiresAt,
+    });
+
+  if (error) {
+    console.error('Error creating shared conversation:', error);
+    return null;
+  }
+  return id;
+}
+
+export async function deleteSharedConversation(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('shared_conversations')
+    .delete()
+    .eq('id', id);
+  if (error) console.error('Error deleting shared conversation:', error);
 }
 
 // ─── Collective Intelligence ────────────────────────────
@@ -649,6 +754,51 @@ export async function incrementProcedureExecution(id: string): Promise<void> {
       })
       .eq('id', id);
   }
+}
+
+// ─── Workflow Runs ───────────────────────────────────────
+
+export interface DBWorkflowRun {
+  id: string;
+  procedure_id: string;
+  user_id: string;
+  status: 'running' | 'completed' | 'failed';
+  input: string;
+  output: string;
+  step_results: unknown[];
+  duration_ms: number;
+  created_at: string;
+}
+
+export async function getWorkflowRuns(procedureId: string, limit = 5): Promise<DBWorkflowRun[]> {
+  const { data, error } = await supabase
+    .from('workflow_runs')
+    .select('*')
+    .eq('procedure_id', procedureId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) console.error('Error fetching workflow runs:', error);
+  return (data || []) as DBWorkflowRun[];
+}
+
+export async function saveWorkflowRun(run: Omit<DBWorkflowRun, 'id' | 'created_at'>): Promise<DBWorkflowRun | null> {
+  const { data, error } = await supabase
+    .from('workflow_runs')
+    .insert(run)
+    .select()
+    .single();
+
+  if (error) console.error('Error saving workflow run:', error);
+  return data as DBWorkflowRun | null;
+}
+
+export async function updateWorkflowRun(id: string, updates: Partial<DBWorkflowRun>): Promise<void> {
+  const { error } = await supabase
+    .from('workflow_runs')
+    .update(updates)
+    .eq('id', id);
+  if (error) console.error('Error updating workflow run:', error);
 }
 
 // ─── Auth Token Helper ───────────────────────────────────

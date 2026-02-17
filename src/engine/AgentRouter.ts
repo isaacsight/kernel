@@ -28,12 +28,14 @@ Respond with ONLY valid JSON, no other text:
 
 export async function classifyIntent(
   message: string,
-  recentContext: string
+  recentContext: string,
+  hasAttachments?: boolean,
 ): Promise<ClassificationResult> {
   try {
+    const attachmentNote = hasAttachments ? '\n\n[User has attached files for analysis]' : ''
     const prompt = recentContext
-      ? `Recent conversation:\n${recentContext}\n\nNew message to classify:\n${message}`
-      : `Message to classify:\n${message}`
+      ? `Recent conversation:\n${recentContext}\n\nNew message to classify:\n${message}${attachmentNote}`
+      : `Message to classify:\n${message}${attachmentNote}`
 
     const result = await getProvider().json<ClassificationResult>(prompt, {
       system: CLASSIFICATION_SYSTEM,

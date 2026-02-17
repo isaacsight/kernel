@@ -30,6 +30,31 @@ export function isPdfFile(file: File): boolean {
   return ext === '.pdf'
 }
 
+// ─── File size validation ─────────────────────────────────
+
+interface FileSizeLimit {
+  images: number  // bytes
+  pdfs: number    // bytes
+  text: number    // bytes
+}
+
+const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024 }
+const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024 }
+
+export function validateFileSize(file: File, isPro: boolean): string | null {
+  const limits = isPro ? PRO_LIMITS : FREE_LIMITS
+  if (isImageFile(file) && file.size > limits.images) {
+    return `Image too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.images / 1048576).toFixed(0)}MB.`
+  }
+  if (isPdfFile(file) && file.size > limits.pdfs) {
+    return `PDF too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.pdfs / 1048576).toFixed(0)}MB.`
+  }
+  if (file.size > limits.text) {
+    return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.text / 1048576).toFixed(0)}MB.`
+  }
+  return null
+}
+
 export function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()

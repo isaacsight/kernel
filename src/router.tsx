@@ -6,6 +6,10 @@ import { EnginePage } from './pages/EnginePage'
 
 // Lazy-load admin page — only loaded when navigating to /admin
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
+// Lazy-load shared conversation page — public, no auth required
+const SharedConversationPage = lazy(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
+// Lazy-load briefing page
+const BriefingPage = lazy(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -46,6 +50,16 @@ export const router = createHashRouter([
     children: [
       { index: true, element: withErrorBoundary(<EnginePage />) },
       { path: 'admin', element: withErrorBoundary(<LazyAdmin />) },
+      { path: 'briefing/:id', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <BriefingPage />
+        </Suspense>
+      ) },
+      { path: 'shared/:id', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <SharedConversationPage />
+        </Suspense>
+      ) },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },

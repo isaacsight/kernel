@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3 } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper } from 'lucide-react'
 import KGPanel from '../components/kernel-agent/KGPanel'
 import StatsPanel from '../components/kernel-agent/StatsPanel'
+import { GoalsPanel } from '../components/GoalsPanel'
+import { WorkflowsPanel } from '../components/WorkflowsPanel'
+import { ScheduledTasksPanel } from '../components/ScheduledTasksPanel'
+import { BriefingPanel } from '../components/BriefingPanel'
+import { NotificationBell } from '../components/NotificationBell'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
@@ -14,6 +19,7 @@ import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type U
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
+import { getGoalCheckInPrompt, extractGoalProgress, type UserGoal } from '../engine/GoalTracker'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   saveMessage,
@@ -34,10 +40,13 @@ import {
   upsertKGEntity,
   upsertKGRelation,
   getAccessToken,
+  getUserGoals,
+  upsertUserGoal,
   supabase,
   type DBConversation,
   type DBCollectiveInsight,
 } from '../engine/SupabaseClient'
+import { ShareModal } from '../components/ShareModal'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { OnboardingFlow } from '../components/OnboardingFlow'
 import { LoginGate } from '../components/LoginGate'
@@ -46,6 +55,7 @@ import {
   TEXT_EXTENSIONS, ACCEPTED_FILES, LINK_REGEX,
   getMediaType, isImageFile, isPdfFile, readFileAsText,
   downloadFile, serializeState, EventFeed, fetchUrlContent,
+  validateFileSize,
 } from '../components/ChatHelpers'
 
 // ─── Types ──────────────────────────────────────────────
@@ -186,9 +196,22 @@ function EngineChat() {
   const [showKGPanel, setShowKGPanel] = useState(false)
   // Stats panel
   const [showStatsPanel, setShowStatsPanel] = useState(false)
+  // Goals panel + state
+  const [showGoalsPanel, setShowGoalsPanel] = useState(false)
+  // Workflows panel
+  const [showWorkflowsPanel, setShowWorkflowsPanel] = useState(false)
+  // Scheduled tasks panel
+  const [showScheduledPanel, setShowScheduledPanel] = useState(false)
+  // Briefing panel
+  const [showBriefingPanel, setShowBriefingPanel] = useState(false)
+  const [userGoals, setUserGoals] = useState<UserGoal[]>([])
+  const userGoalsRef = useRef<UserGoal[]>([])
+  userGoalsRef.current = userGoals
   // Header menu
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
   const headerMenuRef = useRef<HTMLDivElement>(null)
+  // Share modal
+  const [showShareModal, setShowShareModal] = useState(false)
   // Scroll tracking
   const [isNearBottom, setIsNearBottom] = useState(true)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -394,6 +417,12 @@ function EngineChat() {
         setKGRelations(relations)
       })
       .catch(err => console.warn('[KG] Failed to load knowledge graph:', err))
+  }, [user])
+
+  // Load user goals on mount
+  useEffect(() => {
+    if (!user) return
+    getUserGoals(user.id).then(setUserGoals).catch(err => console.warn('[Goals] Failed to load:', err))
   }, [user])
 
   // Load collective insights on mount
@@ -636,7 +665,17 @@ function EngineChat() {
     const files = e.target.files
     if (!files || files.length === 0) return
     const newFiles = Array.from(files)
+    // Validate file sizes
+    for (const file of newFiles) {
+      const error = validateFileSize(file, isPro)
+      if (error) {
+        setToast(error)
+        e.target.value = ''
+        return
+      }
+    }
     setAttachedFiles(prev => [...prev, ...newFiles])
+    e.target.value = ''
   }
 
   const removeFile = (index: number) => {
@@ -691,7 +730,7 @@ function EngineChat() {
         content: m.content,
       }))
     )
-    const classification = await classifyIntent(trimmed, recentCtx)
+    const classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0)
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
 
@@ -745,13 +784,14 @@ function EngineChat() {
       userContent = blocks
     }
 
-    // Persist user message
+    // Persist user message (with attachment metadata if present)
     saveMessage({
       id: userMsgId,
       channel_id: convId,
       agent_id: 'user',
       content: trimmed,
       user_id: userId,
+      attachments: attachmentMeta.length > 0 ? attachmentMeta : undefined,
     })
 
     // Free limit is enforced server-side via claude-proxy
@@ -769,7 +809,8 @@ function EngineChat() {
     const collectiveBlock = collectiveInsights.length > 0
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${kgBlock}${collectiveBlock}`
+    const goalBlock = getGoalCheckInPrompt(userGoalsRef.current)
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${kgBlock}${goalBlock}${collectiveBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -907,6 +948,30 @@ function EngineChat() {
               await upsertUserMemory(userId, merged as unknown as Record<string, unknown>, messageCountRef.current)
               console.log('[Memory] Profile updated, msg count:', messageCountRef.current)
             }).catch((err) => console.warn('[Memory] Periodic extraction failed:', err))
+
+            // Goal progress extraction (parallel, independent)
+            const activeGoals = userGoalsRef.current.filter(g => g.status === 'active')
+            if (activeGoals.length > 0) {
+              const lastUserMsg = recentMsgs.filter(m => m.role === 'user').pop()
+              if (lastUserMsg) {
+                extractGoalProgress(lastUserMsg.content, activeGoals).then(async (progress) => {
+                  if (!progress) return
+                  const goal = activeGoals.find(g => g.title === progress.goalTitle)
+                  if (!goal) return
+                  const updatedGoal: UserGoal = {
+                    ...goal,
+                    progress_notes: [...goal.progress_notes, { content: progress.note, timestamp: new Date().toISOString(), source: 'auto' }],
+                    last_check_in_at: new Date().toISOString(),
+                    milestones: progress.milestoneCompleted
+                      ? goal.milestones.map(m => m.title === progress.milestoneCompleted ? { ...m, completed: true, completed_at: new Date().toISOString() } : m)
+                      : goal.milestones,
+                  }
+                  await upsertUserGoal(updatedGoal)
+                  setUserGoals(prev => prev.map(g => g.id === goal.id ? updatedGoal : g))
+                  console.log('[Goals] Progress detected for:', goal.title)
+                }).catch(err => console.warn('[Goals] Extraction failed:', err))
+              }
+            }
 
             // KG extraction (parallel, independent)
             const kgMessages = currentMsgs.slice(-10).filter(m => m.content.trim()).map(m => ({
@@ -1057,6 +1122,151 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      {/* Goals Panel */}
+      <AnimatePresence>
+        {showGoalsPanel && user && (
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowGoalsPanel(false)}
+          >
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowGoalsPanel(false)
+                }
+              }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <div className="ka-kg-drag-handle" />
+              <GoalsPanel userId={user.id} onClose={() => setShowGoalsPanel(false)} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Workflows Panel */}
+      <AnimatePresence>
+        {showWorkflowsPanel && user && (
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowWorkflowsPanel(false)}
+          >
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowWorkflowsPanel(false)
+                }
+              }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <div className="ka-kg-drag-handle" />
+              <WorkflowsPanel
+                userId={user.id}
+                onClose={() => setShowWorkflowsPanel(false)}
+                onRunWorkflow={(proc) => {
+                  setShowWorkflowsPanel(false)
+                  sendMessage(`Run workflow: ${proc.name}`)
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Scheduled Tasks Panel */}
+      <AnimatePresence>
+        {showScheduledPanel && user && (
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowScheduledPanel(false)}
+          >
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowScheduledPanel(false)
+                }
+              }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <div className="ka-kg-drag-handle" />
+              <ScheduledTasksPanel userId={user.id} onClose={() => setShowScheduledPanel(false)} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Briefing Panel */}
+      <AnimatePresence>
+        {showBriefingPanel && user && (
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowBriefingPanel(false)}
+          >
+            <motion.div
+              className="ka-kg-sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 300) {
+                  setShowBriefingPanel(false)
+                }
+              }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <div className="ka-kg-drag-handle" />
+              <BriefingPanel
+                userId={user.id}
+                userMemory={userMemory}
+                kgEntities={kgEntities}
+                onClose={() => setShowBriefingPanel(false)}
+                onToast={showToast}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
@@ -1090,6 +1300,7 @@ function EngineChat() {
           {!isAdmin && isSubscribed && (
             <span className="ka-pro-badge"><Crown size={12} /> Pro</span>
           )}
+          {user && <NotificationBell userId={user.id} />}
           <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
             {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -1101,7 +1312,7 @@ function EngineChat() {
               <div className="ka-header-menu">
                 {messages.length > 0 && (
                   <>
-                    <button className="ka-header-menu-item" onClick={() => { handleShare(); setHeaderMenuOpen(false) }}>
+                    <button className="ka-header-menu-item" onClick={() => { setShowShareModal(true); setHeaderMenuOpen(false) }}>
                       <Share2 size={14} />
                       Share conversation
                     </button>
@@ -1112,6 +1323,22 @@ function EngineChat() {
                     <div className="ka-header-menu-divider" />
                   </>
                 )}
+                <button className="ka-header-menu-item" onClick={() => { setShowGoalsPanel(true); setHeaderMenuOpen(false) }}>
+                  <Target size={14} />
+                  Goals
+                </button>
+                <button className="ka-header-menu-item" onClick={() => { setShowWorkflowsPanel(true); setHeaderMenuOpen(false) }}>
+                  <Zap size={14} />
+                  Workflows
+                </button>
+                <button className="ka-header-menu-item" onClick={() => { setShowScheduledPanel(true); setHeaderMenuOpen(false) }}>
+                  <Clock size={14} />
+                  Scheduled tasks
+                </button>
+                <button className="ka-header-menu-item" onClick={() => { setShowBriefingPanel(true); setHeaderMenuOpen(false) }}>
+                  <Newspaper size={14} />
+                  Daily briefing
+                </button>
                 <button className="ka-header-menu-item" onClick={() => { setShowKGPanel(true); setHeaderMenuOpen(false) }}>
                   <Brain size={14} />
                   What Kernel knows
@@ -1459,6 +1686,25 @@ function EngineChat() {
               </button>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Share Modal */}
+      <AnimatePresence>
+        {showShareModal && activeConversationId && user && (
+          <ShareModal
+            conversationId={activeConversationId}
+            conversationTitle={activeConversation?.title || 'Kernel Conversation'}
+            messages={messages.map(m => ({
+              role: m.role,
+              content: m.content,
+              agentName: m.agentName,
+              timestamp: m.timestamp,
+            }))}
+            userId={user.id}
+            onClose={() => setShowShareModal(false)}
+            onToast={showToast}
+          />
         )}
       </AnimatePresence>
 

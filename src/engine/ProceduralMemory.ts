@@ -146,17 +146,24 @@ export async function executeProcedure(
   context: string,
   onStep: (step: number, description: string) => void,
   onStream: (text: string) => void,
+  pipelineContext?: string,
 ): Promise<string> {
-  const stepDescriptions = procedure.steps.map(s => s.description).join('\n')
+  const stepDescriptions = procedure.steps.map((s, i) => `${i + 1}. [${s.agentId}] ${s.description}`).join('\n')
 
   onStep(0, procedure.steps[0]?.description || 'Starting...')
+
+  const pipelineNote = pipelineContext
+    ? `\n\nPrevious step outputs:\n${pipelineContext}`
+    : ''
+
+  const startTime = Date.now()
 
   // Execute as a single guided prompt (steps inform the agent's approach)
   const result = await getProvider().streamChat(
     [
       {
         role: 'user',
-        content: `Execute this workflow: "${procedure.name}"\n\nSteps:\n${stepDescriptions}\n\nContext: ${context}\n\nExecute each step and provide the result.`,
+        content: `Execute this workflow: "${procedure.name}"\n\nSteps:\n${stepDescriptions}\n\nContext: ${context}${pipelineNote}\n\nExecute each step in order, using the appropriate specialist perspective for each. Provide the complete result.`,
       },
     ],
     (text) => {
