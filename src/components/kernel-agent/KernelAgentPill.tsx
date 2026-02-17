@@ -5,7 +5,6 @@ const PHASE_LABELS: Record<string, string> = {
   idle: 'idle',
   perceiving: 'perceiving',
   attending: 'attending',
-  thinking: 'thinking',
   deciding: 'deciding',
   acting: 'acting',
   reflecting: 'reflecting',

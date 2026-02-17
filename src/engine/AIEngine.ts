@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 //
 //  Architecture:
-//    Perceive → Attend → Think → Decide → Act → Reflect
+//    Perceive → Attend → Decide → Act → Reflect
 //        ↑                                        │
 //        └──────────── World Model ───────────────┘
 //
@@ -14,19 +14,18 @@
 //
 // ═══════════════════════════════════════════════════════════════
 
-import { KERNEL_AGENTS, getNextAgent } from '../agents';
-import { SWARM_AGENTS, routeToAgent } from '../agents/swarm';
 import { getProvider } from './providers/registry';
 import { perceiveInput as _perceiveInput } from './perception';
 import { attend as _attend } from './attention';
-import { reflect as _reflect } from './reflection';
-import { extractKeyEntities } from './textAnalysis';
+import { reflect as _reflect, reflectWithAI as _reflectWithAI } from './reflection';
+import { classifyIntent as routerClassify, buildRecentContext } from './AgentRouter';
+import { selectAgent } from './AgentSelection';
+import { formBelief, challengeBeliefById, shiftConviction, updateWorldModel } from './WorldModel';
+import { runDiscussion as _runDiscussion } from './DiscussionMode';
 import type { Agent, Message } from '../types';
 
 // Re-export all types for backward compatibility
 export type {
-  ThinkingStep,
-  ReasoningResult,
   CognitivePhase,
   IntentType,
   ReasoningDomain,
@@ -50,10 +49,8 @@ import type {
   WorldModel,
   LastingMemory,
   EphemeralMemory,
-  AttentionState,
   Perception,
-  Reflection,
-  ReasoningResult,
+  AttentionState,
   EngineState,
   EngineEvent,
   EngineListener,
@@ -63,12 +60,6 @@ import type {
 
 const LASTING_MEMORY_KEY = 'antigravity-kernel-memory';
 const WORLD_MODEL_KEY = 'antigravity-kernel-world';
-
-// ─── Discussion Guardrails ───────────────────────────────
-
-const DISCUSSION_MAX_TURNS = 10;
-const DISCUSSION_MIN_QUALITY = 0.3;
-const DISCUSSION_QUALITY_WINDOW = 3;
 
 function loadLastingMemory(): LastingMemory {
   if (typeof window === 'undefined') return createEmptyLastingMemory();
@@ -135,7 +126,6 @@ function createEmptyEphemeral(): EphemeralMemory {
     perception: null,
     attention: null,
     activeAgent: null,
-    thinkingSteps: [],
     startedAt: 0,
   };
 }
@@ -230,79 +220,6 @@ export function createEngine(): {
   }
 
   // ═══════════════════════════════════════════════════════
-  //  Phase 4: DECIDE — Select agent
-  // ═══════════════════════════════════════════════════════
-
-  function selectAgent(
-    perception: Perception,
-    attention: AttentionState,
-  ): { agent: Agent; reason: string; confidence: number } {
-    if (agentOverride) {
-      const overridden = agentOverride;
-      agentOverride = null;
-      return { agent: overridden, reason: `Manual override → ${overridden.name}`, confidence: 1 };
-    }
-
-    const { intent, urgency, complexity } = perception;
-    const perf = state.lasting.agentPerformance;
-
-    switch (intent.type) {
-      case 'discuss': {
-        const lastAgentId = state.working.agentSequence[state.working.agentSequence.length - 1];
-        const agent = lastAgentId ? getNextAgent(lastAgentId) : KERNEL_AGENTS[0];
-        return { agent, reason: 'Discussion rotation — next voice', confidence: 0.9 };
-      }
-
-      case 'reason': {
-        const reasoner = SWARM_AGENTS.find(a => a.id === 'reasoner')!;
-        const reasonerPerf = perf['reasoner'];
-        const confidence = reasonerPerf ? Math.min(0.95, 0.7 + reasonerPerf.avgQuality * 0.25) : 0.7;
-        return {
-          agent: reasoner,
-          reason: `Deep ${intent.domain} reasoning (depth: ${attention.depth})`,
-          confidence,
-        };
-      }
-
-      case 'build': {
-        if (urgency > 0.6 && complexity < 0.5) {
-          return {
-            agent: SWARM_AGENTS.find(a => a.id === 'builder')!,
-            reason: 'Urgent + simple — routing direct to Builder',
-            confidence: 0.75,
-          };
-        }
-        return {
-          agent: SWARM_AGENTS.find(a => a.id === 'architect')!,
-          reason: 'Build request — Architect scopes first',
-          confidence: 0.85,
-        };
-      }
-
-      case 'evaluate': {
-        return {
-          agent: SWARM_AGENTS.find(a => a.id === 'scout')!,
-          reason: 'Opportunity evaluation — Scout assesses viability',
-          confidence: 0.8,
-        };
-      }
-
-      case 'converse': {
-        const routed = routeToAgent(intent.message);
-        const agentPerf = perf[routed.id];
-        const confidence = agentPerf
-          ? Math.min(0.9, 0.5 + agentPerf.avgQuality * 0.4)
-          : 0.6;
-        return {
-          agent: routed,
-          reason: `Content-routed to ${routed.name}`,
-          confidence,
-        };
-      }
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════
   //  Phase 5: ACT — Generate response
   // ═══════════════════════════════════════════════════════
 
@@ -310,15 +227,8 @@ export function createEngine(): {
     agent: Agent,
     perception: Perception,
     attention: AttentionState,
-    reasoning: ReasoningResult | null,
   ): Promise<string> {
     const contextParts: string[] = [];
-
-    if (reasoning) {
-      contextParts.push(
-        `[Reasoning (${(reasoning.confidence * 100).toFixed(0)}% confidence): ${reasoning.conclusion}]`
-      );
-    }
 
     if (attention.depth !== 'surface') {
       contextParts.push(`[Focus: ${attention.primaryFocus}]`);
@@ -361,121 +271,6 @@ export function createEngine(): {
   }
 
   // ═══════════════════════════════════════════════════════
-  //  WORLD MODEL OPERATIONS
-  // ═══════════════════════════════════════════════════════
-
-  function formBelief(content: string, confidence: number, source: Belief['source']): Belief {
-    const belief: Belief = {
-      id: `belief_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      content,
-      confidence,
-      source,
-      formedAt: Date.now(),
-      challengedCount: 0,
-      reinforcedCount: 0,
-    };
-
-    const existing = state.worldModel.beliefs.find(b =>
-      b.content.toLowerCase().includes(content.toLowerCase().slice(0, 20)) ||
-      content.toLowerCase().includes(b.content.toLowerCase().slice(0, 20))
-    );
-
-    if (existing) {
-      existing.confidence = Math.min(1, existing.confidence + 0.1);
-      existing.reinforcedCount++;
-      emit({ type: 'belief_updated', belief: existing, delta: 0.1, timestamp: Date.now() });
-      return existing;
-    }
-
-    state.worldModel.beliefs = [
-      ...state.worldModel.beliefs.slice(-19),
-      belief,
-    ];
-    emit({ type: 'belief_formed', belief, timestamp: Date.now() });
-    return belief;
-  }
-
-  function challengeBeliefById(beliefId: string): void {
-    const belief = state.worldModel.beliefs.find(b => b.id === beliefId);
-    if (!belief) return;
-
-    belief.confidence = Math.max(0, belief.confidence - 0.15);
-    belief.challengedCount++;
-
-    emit({ type: 'belief_updated', belief, delta: -0.15, timestamp: Date.now() });
-
-    if (belief.confidence < 0.1) {
-      state.worldModel.beliefs = state.worldModel.beliefs.filter(b => b.id !== beliefId);
-    }
-  }
-
-  function shiftConviction(delta: number, reason: string): void {
-    const from = state.worldModel.convictions.overall;
-    const to = Math.max(0, Math.min(1, from + delta));
-    const isSignificant = Math.abs(delta) > 0.02;
-
-    state.worldModel.convictions = {
-      overall: to,
-      trend: delta > 0.01 ? 'rising' : delta < -0.01 ? 'falling' : 'stable',
-      lastShift: isSignificant ? Date.now() : state.worldModel.convictions.lastShift,
-    };
-
-    if (isSignificant) {
-      emit({ type: 'conviction_shifted', from, to, reason, timestamp: Date.now() });
-    }
-  }
-
-  function updateWorldModel(reflection: Reflection, perception: Perception): void {
-    shiftConviction(reflection.convictionDelta, reflection.lesson);
-
-    state.worldModel.situationSummary = state.working.topic
-      ? `In discussion about "${state.working.topic}". Turn ${state.working.turnCount}.`
-      : `Processing ${perception.intent.type} request.`;
-
-    const history = state.working.conversationHistory.filter(m => m.agentId === 'human');
-    if (history.length >= 2) {
-      const avgLength = history.reduce((sum, m) => sum + m.content.length, 0) / history.length;
-      state.worldModel.userModel.communicationStyle =
-        avgLength < 30 ? 'terse' :
-        avgLength < 100 ? 'conversational' :
-        'detailed';
-    }
-
-    if (reflection.worldModelUpdate) {
-      formBelief(reflection.worldModelUpdate, 0.6, 'reflected');
-    }
-
-    if (perception.isQuestion && reflection.scores.relevance < 0.4) {
-      state.working.unresolvedQuestions = [
-        ...state.working.unresolvedQuestions.slice(-4),
-        state.ephemeral.currentInput,
-      ];
-    }
-
-    const agentId = reflection.agentUsed;
-    const existing = state.lasting.agentPerformance[agentId] || { uses: 0, avgQuality: 0 };
-    const newAvg = (existing.avgQuality * existing.uses + reflection.quality) / (existing.uses + 1);
-    state.lasting.agentPerformance[agentId] = {
-      uses: existing.uses + 1,
-      avgQuality: newAvg,
-    };
-
-    if (state.working.turnCount % 5 === 0 && state.working.conversationHistory.length > 0) {
-      const recent = state.working.conversationHistory.slice(-5);
-      const speakers = [...new Set(recent.map(m => m.agentName))].join(', ');
-      state.working.threadSummary = `${speakers} discussed "${state.working.topic}" over ${state.working.turnCount} turns.`;
-    }
-
-    persistState();
-
-    emit({
-      type: 'world_model_updated',
-      summary: state.worldModel.situationSummary,
-      timestamp: Date.now(),
-    });
-  }
-
-  // ═══════════════════════════════════════════════════════
   //  THE COGNITIVE LOOP
   // ═══════════════════════════════════════════════════════
 
@@ -490,9 +285,21 @@ export function createEngine(): {
       startedAt: cycleStart,
     };
 
+    // ── 0. Route (Haiku classification) ──
+    const recentCtx = buildRecentContext(
+      state.working.conversationHistory.map(m => ({
+        role: m.agentId === 'human' ? 'user' : 'assistant',
+        content: m.content,
+      }))
+    );
+    let routerResult = undefined;
+    try {
+      routerResult = await routerClassify(input, recentCtx);
+    } catch { /* keyword fallback if router fails */ }
+
     // ── 1. Perceive ──
     setPhase('perceiving');
-    const perception = _perceiveInput(input, state.working.conversationHistory);
+    const perception = _perceiveInput(input, state.working.conversationHistory, routerResult);
     state.ephemeral.perception = perception;
     emit({ type: 'perception_complete', perception, timestamp: Date.now() });
     emit({ type: 'intent_parsed', intent: perception.intent, timestamp: Date.now() });
@@ -507,29 +314,31 @@ export function createEngine(): {
 
     if (aborted) return;
 
-    // ── 3. Think ──
-    setPhase('thinking');
-    const reasoning: ReasoningResult | null = null; // Reasoning engine removed (was Gemini-based)
-
-    if (aborted) return;
-
-    // ── 4. Decide ──
+    // ── 3. Decide ──
     setPhase('deciding');
-    const { agent, reason: selectionReason, confidence } = selectAgent(perception, attention);
+    const selection = selectAgent(
+      perception,
+      attention,
+      agentOverride,
+      state.lasting.agentPerformance,
+      state.working.agentSequence,
+    );
+    if (selection.consumedOverride) agentOverride = null;
+    const { agent, reason: selectionReason, confidence } = selection;
     state.ephemeral.activeAgent = agent;
     emit({ type: 'agent_selected', agent, reason: `${selectionReason} (${(confidence * 100).toFixed(0)}% confident)`, timestamp: Date.now() });
 
     if (aborted) return;
 
-    // ── 5. Act ──
+    // ── 4. Act ──
     setPhase('acting');
     let response: string;
     try {
-      response = await act(agent, perception, attention, reasoning);
+      response = await act(agent, perception, attention);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error during generation';
       emit({ type: 'error', message, timestamp: Date.now() });
-      shiftConviction(-0.05, 'Generation error');
+      shiftConviction(state.worldModel, emit, -0.05, 'Generation error');
       setPhase('idle');
       return;
     }
@@ -551,10 +360,15 @@ export function createEngine(): {
     state.working.emotionalTone =
       state.working.emotionalTone * 0.7 + perception.sentiment * 0.3;
 
-    // ── 6. Reflect ──
+    // ── 5. Reflect ──
     setPhase('reflecting');
     const durationMs = Date.now() - cycleStart;
-    const reflection = _reflect(input, response, agent, perception, durationMs, state.working.conversationHistory);
+    let reflection;
+    try {
+      reflection = await _reflectWithAI(input, response, agent, perception, durationMs, state.working.conversationHistory);
+    } catch {
+      reflection = _reflect(input, response, agent, perception, durationMs, state.working.conversationHistory);
+    }
 
     state.lasting.totalInteractions++;
     state.lasting.preferredAgents[agent.id] =
@@ -571,152 +385,10 @@ export function createEngine(): {
       ];
     }
 
-    updateWorldModel(reflection, perception);
+    updateWorldModel(state, emit, persistState, reflection, perception);
 
     state.cycleCount++;
     emit({ type: 'cycle_complete', reflection, timestamp: Date.now() });
-
-    setPhase('idle');
-  }
-
-  // ── Discussion Mode ─────────────────────────────────────
-
-  async function runDiscussion(topic: string): Promise<void> {
-    aborted = false;
-    state.working.topic = topic;
-
-    if (!state.lasting.topicHistory.includes(topic)) {
-      state.lasting.topicHistory = [...state.lasting.topicHistory.slice(-19), topic];
-      persistState();
-    }
-
-    formBelief(`Currently exploring: "${topic}"`, 0.8, 'observed');
-
-    let currentAgent = KERNEL_AGENTS[0];
-    let discussionTurns = 0;
-    const discussionReflections: Reflection[] = [];
-
-    while (!aborted) {
-      if (discussionTurns >= DISCUSSION_MAX_TURNS) {
-        emit({
-          type: 'discussion_stopped',
-          reason: `Reached maximum of ${DISCUSSION_MAX_TURNS} turns`,
-          turns: discussionTurns,
-          timestamp: Date.now(),
-        });
-        break;
-      }
-
-      const cycleStart = Date.now();
-
-      setPhase('attending');
-      const attention: AttentionState = {
-        primaryFocus: topic,
-        salience: { [topic]: 1 },
-        distractions: [],
-        depth: 'moderate',
-      };
-      state.ephemeral = {
-        ...createEmptyEphemeral(),
-        activeAgent: currentAgent,
-        attention,
-        startedAt: cycleStart,
-      };
-      emit({ type: 'attention_set', attention, timestamp: Date.now() });
-
-      setPhase('deciding');
-      emit({
-        type: 'agent_selected',
-        agent: currentAgent,
-        reason: `Discussion turn — ${currentAgent.name} speaks`,
-        timestamp: Date.now(),
-      });
-
-      setPhase('acting');
-      let response: string;
-      try {
-        const discMessages: { role: string; content: string }[] = state.working.conversationHistory
-          .slice(-10)
-          .map(m => ({
-            role: m.agentId === 'human' ? 'user' : 'assistant',
-            content: `${m.agentName}: ${m.content}`,
-          }));
-        discMessages.push({ role: 'user', content: `CURRENT TOPIC: "${topic}"\n\nNow respond as ${currentAgent.name}. Remember: 2-3 sentences max, build on what others said, reference them by name.` });
-
-        response = await getProvider().streamChat(
-          discMessages,
-          (chunk) => {
-            emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
-          },
-          { system: currentAgent.systemPrompt, tier: 'strong', max_tokens: 512 }
-        );
-      } catch {
-        emit({ type: 'error', message: 'Generation failed', timestamp: Date.now() });
-        shiftConviction(-0.03, 'Discussion generation error');
-        break;
-      }
-
-      if (aborted) break;
-
-      const message: Message = {
-        id: `disc_${Date.now()}`,
-        agentId: currentAgent.id,
-        agentName: currentAgent.name,
-        content: response,
-        timestamp: new Date(),
-      };
-      state.working.conversationHistory.push(message);
-      state.working.turnCount++;
-      state.working.agentSequence.push(currentAgent.id);
-
-      setPhase('reflecting');
-      const perception: Perception = {
-        intent: { type: 'discuss', topic },
-        urgency: 0,
-        complexity: 0.5,
-        sentiment: 0,
-        impliedNeed: 'Multiple perspectives',
-        keyEntities: extractKeyEntities(response),
-        isQuestion: false,
-        isFollowUp: true,
-      };
-      const reflection = _reflect(topic, response, currentAgent, perception, Date.now() - cycleStart, state.working.conversationHistory);
-      updateWorldModel(reflection, perception);
-      emit({ type: 'cycle_complete', reflection, timestamp: Date.now() });
-
-      discussionReflections.push(reflection);
-      discussionTurns++;
-
-      if (discussionReflections.length >= DISCUSSION_QUALITY_WINDOW) {
-        const recentWindow = discussionReflections.slice(-DISCUSSION_QUALITY_WINDOW);
-        const avgQuality = recentWindow.reduce((sum, r) => sum + r.quality, 0) / recentWindow.length;
-        if (avgQuality < DISCUSSION_MIN_QUALITY) {
-          emit({
-            type: 'discussion_stopped',
-            reason: `Quality degraded (avg ${(avgQuality * 100).toFixed(0)}% over last ${DISCUSSION_QUALITY_WINDOW} turns)`,
-            turns: discussionTurns,
-            timestamp: Date.now(),
-          });
-          break;
-        }
-      }
-
-      state.cycleCount++;
-      currentAgent = getNextAgent(currentAgent.id);
-
-      setPhase('idle');
-      await new Promise<void>((resolve) => {
-        const delay = 2000 + Math.random() * 2000;
-        const timeout = setTimeout(resolve, delay);
-        const check = setInterval(() => {
-          if (aborted) {
-            clearTimeout(timeout);
-            clearInterval(check);
-            resolve();
-          }
-        }, 100);
-      });
-    }
 
     setPhase('idle');
   }
@@ -778,10 +450,22 @@ export function createEngine(): {
       return () => listeners.delete(listener);
     },
     perceive: cognitiveLoop,
-    runDiscussion,
+    runDiscussion: (topic: string) => {
+      aborted = false;
+      return _runDiscussion(topic, {
+        getState: () => state,
+        setState: (patch) => { state = { ...state, ...patch }; },
+        setEphemeral: (eph) => { state.ephemeral = eph; },
+        emit,
+        setPhase,
+        persistState,
+        isAborted: () => aborted,
+        createEmptyEphemeral,
+      });
+    },
     injectHumanMessage,
-    addBelief: (content: string, confidence: number) => formBelief(content, confidence, 'stated'),
-    challengeBelief: challengeBeliefById,
+    addBelief: (content: string, confidence: number) => formBelief(state.worldModel, emit, content, confidence, 'stated'),
+    challengeBelief: (beliefId: string) => challengeBeliefById(state.worldModel, emit, beliefId),
     removeBelief: (beliefId: string) => {
       state.worldModel.beliefs = state.worldModel.beliefs.filter(b => b.id !== beliefId);
       persistState();
