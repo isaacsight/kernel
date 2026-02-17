@@ -29,6 +29,7 @@ export interface LLMOpts {
     max_tokens?: number
     web_search?: boolean
     signal?: AbortSignal
+    tools?: Record<string, unknown>[]  // tool schemas for providers that support native tool use
 }
 
 // ─── Chat Message ─────────────────────────────────────────────
