@@ -3,10 +3,13 @@
 // ═══════════════════════════════════════════════════════════════
 //
 //  Default: Anthropic. Call setProvider() to switch at runtime.
-//  Future: wire this to a settings panel or environment variable.
 
 import type { LLMProvider } from './types'
 import { AnthropicProvider } from './anthropic'
+import { OpenAIProvider } from './openai'
+import { GeminiProvider } from './gemini'
+import { OllamaProvider } from './ollama'
+import { NvidiaProvider } from './nvidia'
 
 // ─── Singleton ────────────────────────────────────────────────
 
@@ -25,23 +28,26 @@ export function setProvider(provider: LLMProvider): void {
 
 // ─── Factory ──────────────────────────────────────────────────
 
-export type ProviderName = 'anthropic' // | 'openai' | 'gemini' | 'ollama'
+export type ProviderName = 'anthropic' | 'openai' | 'gemini' | 'ollama' | 'nvidia'
 
 /** Create a provider by name */
-export function createProvider(name: ProviderName): LLMProvider {
+export function createProvider(name: ProviderName, config?: { baseUrl?: string }): LLMProvider {
     switch (name) {
         case 'anthropic':
             return new AnthropicProvider()
-        // Future providers:
-        // case 'openai':   return new OpenAIProvider()
-        // case 'gemini':   return new GeminiProvider()
-        // case 'ollama':   return new OllamaProvider()
+        case 'openai':
+            return new OpenAIProvider()
+        case 'gemini':
+            return new GeminiProvider()
+        case 'ollama':
+            return new OllamaProvider(config?.baseUrl)
+        case 'nvidia':
+            return new NvidiaProvider()
         default:
             throw new Error(`Unknown provider: ${name}`)
     }
 }
 
 // ─── Re-exports ───────────────────────────────────────────────
-// Re-export types so consumers only need one import
 
 export type { LLMProvider, LLMOpts, ChatMessage, ModelTier, ContentBlock } from './types'
