@@ -3934,6 +3934,13 @@ h1, h2, h3, h4 {
     opacity: 0.4;
     cursor: default;
 }
+.ka-header-menu-item--upgrade {
+    color: #6366F1;
+    font-weight: 600;
+}
+.ka-header-menu-item--upgrade:hover {
+    background: rgba(99, 102, 241, 0.08);
+}
 .ka-header-menu-item--danger {
     color: #DC2626;
 }

@@ -1120,12 +1120,19 @@ function EngineChat() {
                   <BarChart3 size={14} />
                   Your stats
                 </button>
+                {!isPro && (
+                  <button className="ka-header-menu-item ka-header-menu-item--upgrade" onClick={() => { handleUpgrade(); setHeaderMenuOpen(false) }}>
+                    <Crown size={14} />
+                    Upgrade to Pro
+                  </button>
+                )}
                 {!isAdmin && isSubscribed && (
                   <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
                     <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />
                     Manage subscription
                   </button>
                 )}
+                <div className="ka-header-menu-divider" />
                 <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { signOut(); setHeaderMenuOpen(false) }}>
                   <LogOut size={14} />
                   Sign out
