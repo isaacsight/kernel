@@ -987,17 +987,16 @@ function EngineChat() {
 
   return (
     <div className="ka-page">
-      {/* Knowledge Graph Panel (bottom sheet on mobile, overlay on desktop) */}
+      {/* Knowledge Graph Panel (bottom sheet on mobile, centered modal on desktop) */}
       <AnimatePresence>
         {showKGPanel && (
-          <>
-            <motion.div
-              className="ka-kg-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowKGPanel(false)}
-            />
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowKGPanel(false)}
+          >
             <motion.div
               className="ka-kg-sheet"
               initial={{ y: '100%' }}
@@ -1012,6 +1011,7 @@ function EngineChat() {
                   setShowKGPanel(false)
                 }
               }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
               <KGPanel
@@ -1020,21 +1020,20 @@ function EngineChat() {
                 onClose={() => setShowKGPanel(false)}
               />
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* Stats Panel */}
       <AnimatePresence>
         {showStatsPanel && user && (
-          <>
-            <motion.div
-              className="ka-kg-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowStatsPanel(false)}
-            />
+          <motion.div
+            className="ka-kg-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowStatsPanel(false)}
+          >
             <motion.div
               className="ka-kg-sheet"
               initial={{ y: '100%' }}
@@ -1049,11 +1048,12 @@ function EngineChat() {
                   setShowStatsPanel(false)
                 }
               }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
               <StatsPanel userId={user.id} onClose={() => setShowStatsPanel(false)} />
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
 
