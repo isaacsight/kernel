@@ -156,6 +156,10 @@ export type EngineEvent =
   | { type: 'cycle_complete'; reflection: Reflection; timestamp: number }
   | { type: 'world_model_updated'; summary: string; timestamp: number }
   | { type: 'discussion_stopped'; reason: string; turns: number; timestamp: number }
+  | { type: 'approval_needed'; toolName: string; args: Record<string, unknown>; description: string; requestId: string; timestamp: number }
+  | { type: 'approval_resolved'; requestId: string; approved: boolean; timestamp: number }
+  | { type: 'procedure_detected'; name: string; triggerPhrase: string; timestamp: number }
+  | { type: 'procedure_matched'; name: string; timestamp: number }
   | { type: 'error'; message: string; timestamp: number };
 
 export type EngineListener = (event: EngineEvent) => void;

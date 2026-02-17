@@ -541,7 +541,17 @@ function EngineChat() {
         },
         body: JSON.stringify({ return_url: window.location.href }),
       })
-      const data = await res.json()
+      // Handle non-JSON responses (e.g. HTML error pages, empty bodies)
+      let data: Record<string, string> = {}
+      const contentType = res.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        try { data = await res.json() } catch { /* empty JSON body */ }
+      } else {
+        const text = await res.text()
+        console.error('Portal non-JSON response:', res.status, text)
+        setPortalError(`Portal error (${res.status})`)
+        return
+      }
       if (!res.ok) {
         console.error('Portal error:', res.status, data)
         setPortalError(data?.error || data?.message || data?.msg || `Portal error (${res.status})`)
@@ -550,11 +560,11 @@ function EngineChat() {
       if (data.url) window.location.href = data.url
     } catch (err) {
       console.error('Manage subscription error:', err)
-      setPortalError('Could not connect to billing portal. Please try again.')
+      setPortalError(`Billing portal error: ${err instanceof Error ? err.message : 'Please try again.'}`)
     } finally {
       setPortalLoading(false)
     }
-  }, [user, session, portalLoading])
+  }, [user, portalLoading])
 
   // Delete account
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -1004,11 +1014,14 @@ function EngineChat() {
           <div className="ka-research-status">
             <span className="ka-research-dot" />
             <span className="ka-research-phase">{researchProgress.phase}</span>
-            {researchProgress.phase === 'searching' && (
+            {(researchProgress.phase === 'searching' || researchProgress.phase === 'reformulating') && (
               <span className="ka-research-detail">
                 {researchProgress.completedQueries}/{researchProgress.totalQueries}
                 {researchProgress.currentQuery && ` — ${researchProgress.currentQuery}`}
               </span>
+            )}
+            {researchProgress.confidence !== undefined && researchProgress.phase === 'synthesizing' && researchProgress.confidence < 0.5 && (
+              <span className="ka-research-detail">low confidence</span>
             )}
           </div>
         )}

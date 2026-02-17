@@ -22,7 +22,10 @@ import { classifyIntent as routerClassify, buildRecentContext } from './AgentRou
 import { selectAgent } from './AgentSelection';
 import { formBelief, challengeBeliefById, shiftConviction, updateWorldModel } from './WorldModel';
 import { runDiscussion as _runDiscussion } from './DiscussionMode';
+import { getToolsForAgent, getToolCount } from './tools/registry';
+import { runToolLoop } from './tools/executor';
 import type { Agent, Message } from '../types';
+import type { ToolLoopCallbacks } from './tools/executor';
 
 // Re-export all types for backward compatibility
 export type {
@@ -146,6 +149,7 @@ export function createEngine(): {
   pruneReflections: (minQuality: number) => number;
   setUserId: (userId: string | null) => void;
   loadFromSupabase: () => Promise<void>;
+  setToolCallbacks: (callbacks: ToolLoopCallbacks) => void;
   stop: () => void;
   reset: () => void;
 } {
@@ -223,6 +227,9 @@ export function createEngine(): {
   //  Phase 5: ACT — Generate response
   // ═══════════════════════════════════════════════════════
 
+  // Tool loop callbacks — can be set externally for HITL gates
+  let toolCallbacks: ToolLoopCallbacks = {};
+
   async function act(
     agent: Agent,
     perception: Perception,
@@ -257,6 +264,25 @@ export function createEngine(): {
       }));
     claudeMessages.push({ role: 'user', content: topic + contextSuffix });
 
+    const llmOpts = { system: agent.systemPrompt, tier: 'strong' as const, max_tokens: 512 };
+
+    // Use tool loop if tools are available for this agent
+    const agentTools = getToolCount() > 0 ? getToolsForAgent(agent.id) : [];
+
+    if (agentTools.length > 0) {
+      const callbacks: ToolLoopCallbacks = {
+        onChunk: (chunk) => {
+          emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
+        },
+        onToolCall: toolCallbacks.onToolCall,
+        onApprovalNeeded: toolCallbacks.onApprovalNeeded,
+      };
+
+      const result = await runToolLoop(claudeMessages, agentTools, callbacks, llmOpts);
+      return result.text;
+    }
+
+    // Fallback: direct streaming (no tools)
     let accumulated = '';
     const response = await getProvider().streamChat(
       claudeMessages,
@@ -264,7 +290,7 @@ export function createEngine(): {
         accumulated = chunk;
         emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() });
       },
-      { system: agent.systemPrompt, tier: 'strong', max_tokens: 512 }
+      llmOpts
     );
 
     return response || accumulated;
@@ -497,6 +523,9 @@ export function createEngine(): {
         clearTimeout(syncTimer);
         syncTimer = null;
       }
+    },
+    setToolCallbacks: (callbacks: ToolLoopCallbacks) => {
+      toolCallbacks = callbacks;
     },
     loadFromSupabase: async () => {
       if (!currentUserId) return;

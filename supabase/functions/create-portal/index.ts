@@ -10,7 +10,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
@@ -26,27 +26,39 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: CORS_HEADERS })
   }
 
+  console.log('create-portal invoked:', req.method)
+
   try {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
-    if (!stripeKey) return jsonResponse({ error: 'Missing STRIPE_SECRET_KEY' }, 500)
+    if (!stripeKey) {
+      console.error('STRIPE_SECRET_KEY not set')
+      return jsonResponse({ error: 'Billing not configured' }, 500)
+    }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
-    const { return_url } = await req.json()
+    let body: Record<string, string> = {}
+    try { body = await req.json() } catch { /* empty body ok */ }
+    const return_url = body.return_url
 
     // ── Step 1: Identify user from JWT ──────────────────────
     const authHeader = req.headers.get('authorization') || ''
     const token = authHeader.replace('Bearer ', '')
 
-    // Create a client with the user's JWT to identify them
-    const userClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') || serviceRoleKey, {
+    if (!token || token.length < 20) {
+      console.error('Missing or invalid auth token')
+      return jsonResponse({ error: 'Missing authorization' }, 401)
+    }
+
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY') || serviceRoleKey
+    const userClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: `Bearer ${token}` } },
     })
     const { data: { user }, error: userError } = await userClient.auth.getUser(token)
 
     if (userError || !user) {
-      console.error('Auth error:', userError?.message)
+      console.error('Auth error:', userError?.message || 'No user returned')
       return jsonResponse({ error: 'Not authenticated' }, 401)
     }
 
@@ -136,10 +148,44 @@ serve(async (req: Request) => {
 
     if (!customerId) {
       console.error('All strategies failed for user', user.id, userEmail)
-      return jsonResponse({ error: `No Stripe customer found for ${userEmail}` }, 404)
+      return jsonResponse({ error: `No Stripe customer found for ${userEmail}. Contact support.` }, 404)
     }
 
-    // ── Step 3: Create Billing Portal session ──────────────
+    console.log('Creating portal session for customer:', customerId)
+
+    // ── Step 3: Ensure Billing Portal configuration exists ──
+    // Stripe requires at least one portal configuration before sessions can be created.
+    const configCheck = await fetch('https://api.stripe.com/v1/billing_portal/configurations?limit=1', {
+      headers: { Authorization: `Bearer ${stripeKey}` },
+    })
+    if (configCheck.ok) {
+      const configs = await configCheck.json()
+      if (!configs.data || configs.data.length === 0) {
+        console.log('No portal configuration found — creating default')
+        const configParams = new URLSearchParams()
+        configParams.set('business_profile[headline]', 'Manage your Kernel subscription')
+        configParams.set('features[subscription_cancel][enabled]', 'true')
+        configParams.set('features[subscription_cancel][mode]', 'at_period_end')
+        configParams.set('features[payment_method_update][enabled]', 'true')
+        configParams.set('features[invoice_history][enabled]', 'true')
+        const configRes = await fetch('https://api.stripe.com/v1/billing_portal/configurations', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${stripeKey}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: configParams.toString(),
+        })
+        if (!configRes.ok) {
+          const err = await configRes.text()
+          console.error('Failed to create portal config:', configRes.status, err)
+        } else {
+          console.log('Portal configuration created successfully')
+        }
+      }
+    }
+
+    // ── Step 4: Create Billing Portal session ──────────────
     const portalParams = new URLSearchParams()
     portalParams.set('customer', customerId)
     portalParams.set('return_url', return_url || 'https://isaacsight.github.io/does-this-feel-right-/')
@@ -154,15 +200,21 @@ serve(async (req: Request) => {
     })
 
     if (!portalRes.ok) {
-      const errText = await portalRes.text()
-      console.error('Stripe portal error:', portalRes.status, errText)
-      return jsonResponse({ error: 'Failed to create portal session' }, portalRes.status)
+      const errBody = await portalRes.text()
+      console.error('Stripe portal error:', portalRes.status, errBody)
+      let detail = 'Failed to create portal session'
+      try {
+        const parsed = JSON.parse(errBody)
+        if (parsed?.error?.message) detail = parsed.error.message
+      } catch { /* use default */ }
+      return jsonResponse({ error: detail }, portalRes.status)
     }
 
     const portal = await portalRes.json()
+    console.log('Portal session created:', portal.url ? 'success' : 'no url')
     return jsonResponse({ url: portal.url })
   } catch (error) {
     console.error('create-portal error:', error)
-    return jsonResponse({ error: 'Internal server error' }, 500)
+    return jsonResponse({ error: `Server error: ${error instanceof Error ? error.message : 'Unknown'}` }, 500)
   }
 })

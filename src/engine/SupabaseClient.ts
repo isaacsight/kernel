@@ -473,6 +473,184 @@ export async function syncEngineState(
   return newVersion;
 }
 
+// ─── Knowledge Graph ─────────────────────────────────────
+
+import type { KGEntity, KGRelation } from './KnowledgeGraph'
+
+export async function getKGEntities(userId: string): Promise<KGEntity[]> {
+  const { data, error } = await supabase
+    .from('knowledge_graph_entities')
+    .select('*')
+    .eq('user_id', userId)
+    .order('mention_count', { ascending: false })
+    .limit(100);
+
+  if (error) console.error('Error fetching KG entities:', error);
+  return (data || []) as KGEntity[];
+}
+
+export async function getKGRelations(userId: string): Promise<KGRelation[]> {
+  const { data, error } = await supabase
+    .from('knowledge_graph_relations')
+    .select('*')
+    .eq('user_id', userId)
+    .limit(200);
+
+  if (error) console.error('Error fetching KG relations:', error);
+  return (data || []) as KGRelation[];
+}
+
+export async function upsertKGEntity(
+  entity: Omit<KGEntity, 'id'> & { id?: string }
+): Promise<KGEntity | null> {
+  if (entity.id) {
+    // Update existing
+    const { data, error } = await supabase
+      .from('knowledge_graph_entities')
+      .update({
+        mention_count: entity.mention_count,
+        confidence: entity.confidence,
+        last_seen_at: new Date().toISOString(),
+        properties: entity.properties,
+      })
+      .eq('id', entity.id)
+      .select()
+      .single();
+
+    if (error) console.error('Error updating KG entity:', error);
+    return data as KGEntity | null;
+  } else {
+    // Insert new
+    const { data, error } = await supabase
+      .from('knowledge_graph_entities')
+      .insert({
+        user_id: entity.user_id,
+        name: entity.name,
+        entity_type: entity.entity_type,
+        properties: entity.properties,
+        confidence: entity.confidence,
+        source: entity.source,
+        mention_count: entity.mention_count,
+      })
+      .select()
+      .single();
+
+    if (error) console.error('Error inserting KG entity:', error);
+    return data as KGEntity | null;
+  }
+}
+
+export async function upsertKGRelation(relation: Omit<KGRelation, 'id'>): Promise<KGRelation | null> {
+  // Check if relation already exists
+  const { data: existing } = await supabase
+    .from('knowledge_graph_relations')
+    .select('id, confidence')
+    .eq('source_id', relation.source_id)
+    .eq('target_id', relation.target_id)
+    .eq('relation_type', relation.relation_type)
+    .maybeSingle();
+
+  if (existing) {
+    const { data, error } = await supabase
+      .from('knowledge_graph_relations')
+      .update({
+        confidence: Math.min(1, Math.max(existing.confidence, relation.confidence)),
+        properties: relation.properties,
+      })
+      .eq('id', existing.id)
+      .select()
+      .single();
+
+    if (error) console.error('Error updating KG relation:', error);
+    return data as KGRelation | null;
+  }
+
+  const { data, error } = await supabase
+    .from('knowledge_graph_relations')
+    .insert(relation)
+    .select()
+    .single();
+
+  if (error) console.error('Error inserting KG relation:', error);
+  return data as KGRelation | null;
+}
+
+// ─── Procedural Memory ──────────────────────────────────
+
+import type { Procedure } from './ProceduralMemory'
+
+export async function getUserProcedures(userId: string): Promise<Procedure[]> {
+  const { data, error } = await supabase
+    .from('procedures')
+    .select('*')
+    .eq('user_id', userId)
+    .order('times_executed', { ascending: false });
+
+  if (error) console.error('Error fetching procedures:', error);
+  return (data || []) as Procedure[];
+}
+
+export async function upsertProcedure(procedure: Procedure): Promise<Procedure | null> {
+  if (procedure.id) {
+    const { data, error } = await supabase
+      .from('procedures')
+      .update({
+        name: procedure.name,
+        trigger_phrase: procedure.trigger_phrase,
+        steps: procedure.steps,
+        times_executed: procedure.times_executed,
+        last_executed_at: procedure.last_executed_at,
+      })
+      .eq('id', procedure.id)
+      .select()
+      .single();
+
+    if (error) console.error('Error updating procedure:', error);
+    return data as Procedure | null;
+  }
+
+  const { data, error } = await supabase
+    .from('procedures')
+    .insert({
+      user_id: procedure.user_id,
+      name: procedure.name,
+      trigger_phrase: procedure.trigger_phrase,
+      steps: procedure.steps,
+      source: procedure.source,
+    })
+    .select()
+    .single();
+
+  if (error) console.error('Error inserting procedure:', error);
+  return data as Procedure | null;
+}
+
+export async function deleteProcedure(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('procedures')
+    .delete()
+    .eq('id', id);
+  if (error) console.error('Error deleting procedure:', error);
+}
+
+export async function incrementProcedureExecution(id: string): Promise<void> {
+  const { data: current } = await supabase
+    .from('procedures')
+    .select('times_executed')
+    .eq('id', id)
+    .single();
+
+  if (current) {
+    await supabase
+      .from('procedures')
+      .update({
+        times_executed: (current.times_executed || 0) + 1,
+        last_executed_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+  }
+}
+
 // ─── Auth Token Helper ───────────────────────────────────
 // Returns the current user's JWT access token for authenticating edge function calls.
 // Falls back to the anon key if no session exists (should not happen for gated routes).
