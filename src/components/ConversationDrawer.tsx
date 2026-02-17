@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Plus, Trash2, X, Search, Pencil, Check } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
@@ -101,6 +101,17 @@ export function ConversationDrawer({
       )
     : conversations
 
+  // Swipe-to-close: drag left to dismiss
+  const dragX = useMotionValue(0)
+  const overlayOpacity = useTransform(dragX, [-320, 0], [0, 1])
+
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    // Close if dragged more than 80px left or velocity is high
+    if (info.offset.x < -80 || info.velocity.x < -300) {
+      onClose()
+    }
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -111,6 +122,7 @@ export function ConversationDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
+            style={{ opacity: overlayOpacity }}
             onClick={onClose}
           />
           <motion.aside
@@ -119,6 +131,11 @@ export function ConversationDrawer({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            drag="x"
+            dragConstraints={{ left: -320, right: 0 }}
+            dragElastic={0.1}
+            onDragEnd={handleDragEnd}
+            style={{ x: dragX }}
           >
             <div className="conv-drawer-header">
               <span className="conv-drawer-title">Conversations ({conversations.length})</span>

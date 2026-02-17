@@ -114,6 +114,43 @@ export function formatGraphForPrompt(
   return lines.join('\n')
 }
 
+// ─── Memory Decay ───────────────────────────────────────────
+
+const DECAY_DAYS = 30
+const DECAY_AMOUNT = 0.1
+const MIN_CONFIDENCE = 0.1
+
+export function applyDecay(entities: KGEntity[]): KGEntity[] {
+  const now = Date.now()
+  const decayed: KGEntity[] = []
+
+  for (const entity of entities) {
+    // Skip entities with no last_seen (shouldn't happen but defensive)
+    if (!entity.properties?.last_seen_at && !('last_seen_at' in entity)) {
+      decayed.push(entity)
+      continue
+    }
+
+    // Use properties or top-level field (Supabase returns top-level)
+    const lastSeen = (entity as unknown as Record<string, string>).last_seen_at
+    if (!lastSeen) {
+      decayed.push(entity)
+      continue
+    }
+
+    const daysSince = (now - new Date(lastSeen).getTime()) / (1000 * 60 * 60 * 24)
+    if (daysSince > DECAY_DAYS) {
+      const decayRounds = Math.floor(daysSince / DECAY_DAYS)
+      const newConfidence = Math.max(MIN_CONFIDENCE, entity.confidence - (DECAY_AMOUNT * decayRounds))
+      decayed.push({ ...entity, confidence: newConfidence })
+    } else {
+      decayed.push(entity)
+    }
+  }
+
+  return decayed
+}
+
 // ─── Fuzzy Matching ─────────────────────────────────────────
 
 export function findMatchingEntity(
