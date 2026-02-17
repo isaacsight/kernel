@@ -74,6 +74,7 @@ export function perceiveInput(
     keyEntities,
     isQuestion: hasQuestionMark || lower.startsWith('how') || lower.startsWith('what') || lower.startsWith('why') || lower.startsWith('should'),
     isFollowUp,
+    routerClassification: routerResult,
   }
 }
 

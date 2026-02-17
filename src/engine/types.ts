@@ -38,6 +38,13 @@ export interface Perception {
   keyEntities: string[];    // important nouns/concepts extracted
   isQuestion: boolean;
   isFollowUp: boolean;      // does this build on prior conversation?
+  routerClassification?: {  // AgentRouter result — single source of truth for routing
+    agentId: string;
+    confidence: number;
+    needsResearch: boolean;
+    isMultiStep: boolean;
+    needsSwarm: boolean;
+  };
 }
 
 // ─── Attention ──────────────────────────────────────────────

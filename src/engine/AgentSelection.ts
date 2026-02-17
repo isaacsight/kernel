@@ -31,9 +31,22 @@ export function selectAgent(
     };
   }
 
-  const { intent, urgency, complexity } = perception;
+  const { intent, urgency, complexity, routerClassification } = perception;
   const perf = agentPerformance;
 
+  // When AgentRouter classified with high confidence, use it as primary routing
+  // This ensures Observer and Chat use the same routing logic
+  if (routerClassification && routerClassification.confidence >= 0.7) {
+    const routed = routeToAgent(intent.type === 'converse' ? intent.message : '', routerClassification);
+    return {
+      agent: routed,
+      reason: `AgentRouter → ${routed.name} (${(routerClassification.confidence * 100).toFixed(0)}%)`,
+      confidence: routerClassification.confidence,
+      consumedOverride: false,
+    };
+  }
+
+  // Fallback to intent-based routing when AgentRouter is absent or low-confidence
   switch (intent.type) {
     case 'discuss': {
       const lastAgentId = agentSequence[agentSequence.length - 1];
@@ -80,7 +93,7 @@ export function selectAgent(
     }
 
     case 'converse': {
-      const routed = routeToAgent(intent.message);
+      const routed = routeToAgent(intent.message, routerClassification);
       const agentPerf = perf[routed.id];
       const confidence = agentPerf
         ? Math.min(0.9, 0.5 + agentPerf.avgQuality * 0.4)

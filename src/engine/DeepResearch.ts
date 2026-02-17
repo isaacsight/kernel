@@ -147,47 +147,51 @@ export async function deepResearch(
   progress.totalQueries = queries.length
   onProgress({ ...progress })
 
-  // Step 2: Execute searches in parallel
+  // Steps 2+3: Execute searches and grade in parallel
+  // Each finding is graded immediately as its search completes,
+  // overlapping the two phases instead of running them sequentially
   progress.findings = new Array(queries.length).fill('')
   onProgress({ ...progress })
 
+  let allGaps: string[] = []
+  let totalScore = 0
+  let gradeCount = 0
+  const gradePromises: Promise<void>[] = []
+
   await Promise.allSettled(queries.map(async (query, i) => {
-    progress.findings[i] = await executeSearch(query)
+    const finding = await executeSearch(query)
+    progress.findings[i] = finding
     progress.completedQueries++
     progress.currentQuery = query
     onProgress({ ...progress })
+
+    // Start grading immediately — don't wait for other searches
+    if (finding) {
+      const gradePromise = gradeRelevance(
+        finding.split('\n')[0].replace('**Query: ', '').replace('**', ''),
+        finding,
+        question
+      ).then(grade => {
+        totalScore += grade.score
+        gradeCount++
+        if (grade.score < 0.4) {
+          allGaps.push(...grade.gaps)
+        }
+      }).catch(() => {
+        // Grade failure — use neutral score
+        totalScore += 0.5
+        gradeCount++
+      })
+      gradePromises.push(gradePromise)
+    }
   }))
 
-  // Step 3: Grade relevance
+  // Wait for any remaining grades (most will already be done)
   progress.phase = 'grading'
   progress.currentQuery = undefined
   onProgress({ ...progress })
 
-  const nonEmptyFindings = progress.findings.filter(Boolean)
-  let allGaps: string[] = []
-  let totalScore = 0
-  let gradeCount = 0
-
-  // Grade each finding in parallel
-  const grades = await Promise.allSettled(
-    nonEmptyFindings.map(finding =>
-      gradeRelevance(
-        finding.split('\n')[0].replace('**Query: ', '').replace('**', ''),
-        finding,
-        question
-      )
-    )
-  )
-
-  for (const grade of grades) {
-    if (grade.status === 'fulfilled') {
-      totalScore += grade.value.score
-      gradeCount++
-      if (grade.value.score < 0.4) {
-        allGaps.push(...grade.value.gaps)
-      }
-    }
-  }
+  await Promise.allSettled(gradePromises)
 
   const avgScore = gradeCount > 0 ? totalScore / gradeCount : 0.5
 
@@ -196,7 +200,7 @@ export async function deepResearch(
     progress.phase = 'reformulating'
     onProgress({ ...progress })
 
-    const followUpQueries = await reformulateQueries(question, allGaps, nonEmptyFindings)
+    const followUpQueries = await reformulateQueries(question, allGaps, progress.findings.filter(Boolean))
 
     if (followUpQueries.length > 0) {
       progress.totalQueries += followUpQueries.length
