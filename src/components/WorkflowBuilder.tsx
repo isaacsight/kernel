@@ -4,7 +4,7 @@
 // Each step: description + agent picker. Drag to reorder.
 
 import { useState } from 'react'
-import { Plus, Trash2, GripVertical } from 'lucide-react'
+import { Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
 import type { ProcedureStep, Procedure } from '../engine/ProceduralMemory'
 import { getSpecialist } from '../agents/specialists'
 
@@ -91,8 +91,23 @@ export function WorkflowBuilder({ userId, onSave, onCancel }: WorkflowBuilderPro
       <div className="ka-wf-steps">
         {steps.map((step, i) => (
           <div key={i} className="ka-wf-step">
-            <div className="ka-wf-step-grip" onPointerDown={() => {}}>
-              <GripVertical size={14} />
+            <div className="ka-wf-step-reorder">
+              <button
+                className="ka-wf-step-move"
+                onClick={() => moveStep(i, i - 1)}
+                disabled={i === 0}
+                aria-label="Move up"
+              >
+                <ChevronUp size={12} />
+              </button>
+              <button
+                className="ka-wf-step-move"
+                onClick={() => moveStep(i, i + 1)}
+                disabled={i === steps.length - 1}
+                aria-label="Move down"
+              >
+                <ChevronDown size={12} />
+              </button>
             </div>
             <span className="ka-wf-step-num">{i + 1}</span>
             <input

@@ -55,12 +55,8 @@ serve(async (req: Request) => {
       })
     }
 
-    // Increment view count (fire and forget)
-    supabase
-      .from('shared_conversations')
-      .update({ view_count: (data.view_count || 0) + 1 })
-      .eq('id', id)
-      .then(() => {})
+    // Atomic view count increment via RPC
+    await supabase.rpc('increment_shared_view_count', { share_id: id })
 
     return new Response(JSON.stringify({
       id: data.id,

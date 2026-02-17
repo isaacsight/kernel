@@ -25,10 +25,11 @@ interface WorkflowRun {
 interface WorkflowsPanelProps {
   userId: string
   onClose: () => void
+  onToast: (msg: string) => void
   onRunWorkflow: (procedure: Procedure) => void
 }
 
-export function WorkflowsPanel({ userId, onClose, onRunWorkflow }: WorkflowsPanelProps) {
+export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: WorkflowsPanelProps) {
   const [procedures, setProcedures] = useState<Procedure[]>([])
   const [runs, setRuns] = useState<Map<string, WorkflowRun[]>>(new Map())
   const [loading, setLoading] = useState(true)
@@ -52,18 +53,27 @@ export function WorkflowsPanel({ userId, onClose, onRunWorkflow }: WorkflowsPane
   useEffect(() => { loadData() }, [loadData])
 
   const handleSave = async (proc: Omit<Procedure, 'id' | 'times_executed' | 'last_executed_at'>) => {
-    await upsertProcedure({
-      ...proc,
-      times_executed: 0,
-      source: proc.source,
-    })
-    setShowBuilder(false)
-    loadData()
+    try {
+      await upsertProcedure({
+        ...proc,
+        times_executed: 0,
+        source: proc.source,
+      })
+      setShowBuilder(false)
+      loadData()
+    } catch {
+      onToast('Failed to save workflow')
+    }
   }
 
   const handleDelete = async (id: string) => {
-    await deleteProcedure(id)
-    loadData()
+    if (!window.confirm('Delete this workflow? This cannot be undone.')) return
+    try {
+      await deleteProcedure(id)
+      loadData()
+    } catch {
+      onToast('Failed to delete workflow')
+    }
   }
 
   const handleToggle = async (proc: Procedure) => {

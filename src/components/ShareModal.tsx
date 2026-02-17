@@ -66,7 +66,19 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
 
   const handleCopy = useCallback(async () => {
     if (!shareUrl) return
-    await navigator.clipboard.writeText(shareUrl)
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+    } catch {
+      // Fallback for non-HTTPS or restricted contexts
+      const textArea = document.createElement('textarea')
+      textArea.value = shareUrl
+      textArea.style.position = 'fixed'
+      textArea.style.opacity = '0'
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+    }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }, [shareUrl])
