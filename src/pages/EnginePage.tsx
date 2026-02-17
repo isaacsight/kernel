@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield } from 'lucide-react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist } from '../agents/specialists'
@@ -67,14 +67,13 @@ export function EnginePage() {
 
   if (isLoading) {
     return (
-      <div className="ka-gate">
+      <div className="ka-loading-splash">
         <motion.div
-          className="ka-gate-card"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <div className="ka-gate-icon">K</div>
-          <h1 className="ka-gate-title">Loading...</h1>
+          <img className="ka-loading-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
         </motion.div>
       </div>
     )
@@ -105,7 +104,8 @@ export function EnginePage() {
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
-const FREE_DAILY_LIMIT = 999999 // No limit for launch — charge to cover
+const FREE_MSG_LIMIT = 10
+const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
 
 function EngineChat() {
   const { user, session, isAdmin, isSubscribed, signOut } = useAuthContext()
@@ -125,11 +125,9 @@ function EngineChat() {
   const [conversations, setConversations] = useState<DBConversation[]>([])
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  // Daily message limit tracking
-  const [dailyMsgCount, setDailyMsgCount] = useState(0)
-  const [rateLimited, setRateLimited] = useState(false)
+  // Free-tier upgrade wall
+  const [showUpgradeWall, setShowUpgradeWall] = useState(false)
+  const [upgradeLoading, setUpgradeLoading] = useState(false)
   const isPro = isSubscribed || isAdmin
 
   // Track the latest kernel response content for persistence
@@ -254,22 +252,35 @@ function EngineChat() {
     return () => { recognitionRef.current?.stop() }
   }, [])
 
-  // Load daily message count for rate limiting
-  useEffect(() => {
-    if (!user || isPro) return
-    const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
-    supabase
-      .from('messages')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('agent_id', 'user')
-      .gte('created_at', `${today}T00:00:00Z`)
-      .then(({ count }) => {
-        const c = count ?? 0
-        setDailyMsgCount(c)
-        if (c >= FREE_DAILY_LIMIT) setRateLimited(true)
-      }, () => {}) // Ignore query errors
-  }, [user, isPro])
+  // Upgrade to Pro via Stripe checkout
+  const handleUpgrade = useCallback(async () => {
+    if (!user?.email || upgradeLoading) return
+    setUpgradeLoading(true)
+    try {
+      const token = await getAccessToken()
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_KEY,
+        },
+        body: JSON.stringify({
+          mode: 'subscription',
+          price_id: PRICE_ID,
+          success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
+          cancel_url: window.location.href,
+        }),
+      })
+      if (!res.ok) throw new Error('Failed to create checkout')
+      const { url } = await res.json()
+      if (url) window.location.href = url
+    } catch {
+      setToast('Unable to start checkout. Please try again.')
+    } finally {
+      setUpgradeLoading(false)
+    }
+  }, [user, upgradeLoading])
 
   // Load conversations + user history on mount
   const [convsLoading, setConvsLoading] = useState(true)
@@ -411,20 +422,6 @@ function EngineChat() {
     await loadConversations()
   }, [activeConversationId, loadConversations])
 
-  // Copy conversation to clipboard
-  const handleCopy = useCallback(async () => {
-    const text = messages
-      .map(m => {
-        const who = m.role === 'user' ? 'You' : 'Kernel'
-        const time = new Date(m.timestamp).toLocaleString()
-        return `${who} [${time}]\n${m.content}`
-      })
-      .join('\n\n---\n\n')
-    await navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }, [messages])
-
   // Copy a single message
   const handleCopyMessage = useCallback(async (msgId: string, content: string) => {
     await navigator.clipboard.writeText(content)
@@ -447,21 +444,23 @@ function EngineChat() {
     await sendMessage(newContent.trim())
   }, [])
 
-  // Share conversation
+  // Share conversation (plain text for share sheet / clipboard)
   const handleShare = useCallback(async () => {
     if (!activeConversationId || messages.length === 0) return
+    const title = activeConversation?.title || 'Kernel Conversation'
     const text = messages
-      .map(m => `**${m.role === 'user' ? 'You' : 'Kernel'}**: ${m.content}`)
+      .map(m => `${m.role === 'user' ? 'You' : 'Kernel'}: ${m.content}`)
       .join('\n\n')
     try {
       if (navigator.share) {
-        await navigator.share({ title: activeConversation?.title || 'Kernel Conversation', text })
+        await navigator.share({ title, text })
       } else {
         await navigator.clipboard.writeText(text)
         showToast('Conversation copied to clipboard')
       }
-    } catch {
-      // User cancelled share
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') return // user cancelled
+      showToast('Could not share — try Export instead')
     }
   }, [activeConversationId, messages, activeConversation, showToast])
 
@@ -506,10 +505,6 @@ function EngineChat() {
   const [portalLoading, setPortalLoading] = useState(false)
   const handleManageSubscription = useCallback(async () => {
     if (!user?.email || portalLoading) return
-    if (isAdmin) {
-      setPortalError('Admin accounts don\'t have a Stripe subscription to manage.')
-      return
-    }
     setPortalError('')
     setPortalLoading(true)
     try {
@@ -536,7 +531,32 @@ function EngineChat() {
     } finally {
       setPortalLoading(false)
     }
-  }, [user, session, isAdmin, portalLoading])
+  }, [user, session, portalLoading])
+
+  // Delete account
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const handleDeleteAccount = useCallback(async () => {
+    if (!user || deleteLoading) return
+    setDeleteLoading(true)
+    try {
+      const token = await getAccessToken()
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_KEY,
+        },
+      })
+      if (!res.ok) throw new Error('Delete failed')
+      await signOut()
+    } catch {
+      setToast('Failed to delete account. Please try again.')
+      setDeleteLoading(false)
+      setShowDeleteConfirm(false)
+    }
+  }, [user, deleteLoading, signOut])
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -660,11 +680,7 @@ function EngineChat() {
       user_id: userId,
     })
 
-    if (!isPro) {
-      const newCount = dailyMsgCount + 1
-      setDailyMsgCount(newCount)
-      if (newCount >= FREE_DAILY_LIMIT) setRateLimited(true)
-    }
+    // Free limit is enforced server-side via claude-proxy
 
     // Build system prompt with specialist + memory
     const snapshot = serializeState(engine.getState())
@@ -817,9 +833,10 @@ function EngineChat() {
         })
       }
     } catch (err) {
-      if (err instanceof RateLimitError) {
-        setRateLimited(true)
-        setDailyMsgCount(err.limit)
+      if (err instanceof FreeLimitError) {
+        setShowUpgradeWall(true)
+        setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof RateLimitError) {
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {
         const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
@@ -868,6 +885,12 @@ function EngineChat() {
           </span>
         </div>
         <div className="ka-header-right">
+          {isAdmin && (
+            <span className="ka-admin-badge"><Shield size={12} /> Admin</span>
+          )}
+          {!isAdmin && isSubscribed && (
+            <span className="ka-pro-badge"><Crown size={12} /> Pro</span>
+          )}
           <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
             {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -879,28 +902,31 @@ function EngineChat() {
               <div className="ka-header-menu">
                 {messages.length > 0 && (
                   <>
-                    <button className="ka-header-menu-item" onClick={() => { handleCopy(); setHeaderMenuOpen(false) }}>
-                      {copied ? <Check size={14} /> : <Copy size={14} />}
-                      Copy conversation
+                    <button className="ka-header-menu-item" onClick={() => { handleShare(); setHeaderMenuOpen(false) }}>
+                      <Share2 size={14} />
+                      Share conversation
                     </button>
                     <button className="ka-header-menu-item" onClick={() => { handleExportConversation(); setHeaderMenuOpen(false) }}>
                       <FileDown size={14} />
                       Export as Markdown
                     </button>
-                    <button className="ka-header-menu-item" onClick={() => { handleShare(); setHeaderMenuOpen(false) }}>
-                      <Share2 size={14} />
-                      Share
-                    </button>
                     <div className="ka-header-menu-divider" />
                   </>
                 )}
-                <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
-                  <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />
-                  Manage subscription
-                </button>
+                {!isAdmin && isSubscribed && (
+                  <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
+                    <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />
+                    Manage subscription
+                  </button>
+                )}
                 <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { signOut(); setHeaderMenuOpen(false) }}>
                   <LogOut size={14} />
                   Sign out
+                </button>
+                <div className="ka-header-menu-divider" />
+                <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { setShowDeleteConfirm(true); setHeaderMenuOpen(false) }}>
+                  <Trash2 size={14} />
+                  Delete account
                 </button>
               </div>
             )}
@@ -1103,7 +1129,7 @@ function EngineChat() {
                     </button>
                     <button
                       className="ka-msg-action-btn"
-                      onClick={() => downloadFile(msg.content, 'kernel-response.md')}
+                      onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)}
                       aria-label="Download response"
                     >
                       <Download size={14} />
@@ -1176,27 +1202,91 @@ function EngineChat() {
           ))}
         </div>
       )}
-      {rateLimited && !isPro && (
-        <div className="ka-rate-limit">
-          <p>You've used {dailyMsgCount}/{FREE_DAILY_LIMIT} free messages today. Resets in {(() => {
-            const now = new Date()
-            const midnight = new Date(now)
-            midnight.setUTCHours(24, 0, 0, 0)
-            const hours = Math.ceil((midnight.getTime() - now.getTime()) / 3600000)
-            return hours === 1 ? '1 hour' : `${hours} hours`
-          })()}.</p>
-          <button className="ka-rate-limit-btn" onClick={() => {
-            window.location.hash = '#/?upgrade=true'
-          }}>
-            Upgrade to Pro — 150 messages/day
-          </button>
-        </div>
-      )}
-      {!isPro && !rateLimited && dailyMsgCount > FREE_DAILY_LIMIT * 0.5 && (
-        <div className="ka-msg-count-hint">
-          {FREE_DAILY_LIMIT - dailyMsgCount} messages remaining today
-        </div>
-      )}
+      {/* Upgrade Wall Modal */}
+      <AnimatePresence>
+        {showUpgradeWall && (
+          <motion.div
+            className="ka-upgrade-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="ka-upgrade-modal"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            >
+              <div className="ka-upgrade-icon">K</div>
+              <h2 className="ka-upgrade-title">You've used your {FREE_MSG_LIMIT} free messages</h2>
+              <p className="ka-upgrade-subtitle">Upgrade to Kernel Pro to keep the conversation going.</p>
+              <ul className="ka-upgrade-features">
+                <li>Unlimited messages</li>
+                <li>Deep research mode</li>
+                <li>Multi-agent collaboration</li>
+                <li>Multi-step task planning</li>
+                <li>Persistent memory across sessions</li>
+              </ul>
+              <button
+                className="ka-upgrade-btn"
+                onClick={handleUpgrade}
+                disabled={upgradeLoading}
+              >
+                {upgradeLoading ? 'Opening checkout...' : 'Upgrade to Pro \u2014 $20/mo'}
+              </button>
+              <button
+                className="ka-upgrade-dismiss"
+                onClick={() => setShowUpgradeWall(false)}
+              >
+                Maybe later
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Account Confirmation */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <motion.div
+            className="ka-upgrade-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="ka-upgrade-modal"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            >
+              <div className="ka-upgrade-icon" style={{ background: '#DC2626' }}>
+                <Trash2 size={22} />
+              </div>
+              <h2 className="ka-upgrade-title">Delete your account?</h2>
+              <p className="ka-upgrade-subtitle">
+                This permanently deletes all your data: conversations, memory, and preferences. This cannot be undone.
+                {isSubscribed && ' Your subscription will also be cancelled.'}
+              </p>
+              <button
+                className="ka-upgrade-btn"
+                style={{ background: '#DC2626' }}
+                onClick={handleDeleteAccount}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Deleting...' : 'Yes, delete my account'}
+              </button>
+              <button
+                className="ka-upgrade-dismiss"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <form className="ka-input-bar" onSubmit={handleSubmit}>
         <input
           id="ka-file-input"
