@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, Home } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, Home, MessageCircle } from 'lucide-react'
 import { BottomTabBar, type TabId } from '../components/BottomTabBar'
 import { MoreMenu, type MoreAction } from '../components/MoreMenu'
 import KGPanel from '../components/kernel-agent/KGPanel'
@@ -48,6 +49,7 @@ import {
   type DBConversation,
   type DBCollectiveInsight,
 } from '../engine/SupabaseClient'
+import { briefingToGoalDescription } from '../utils/briefingHelpers'
 import { ShareModal } from '../components/ShareModal'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { OnboardingFlow } from '../components/OnboardingFlow'
@@ -142,6 +144,7 @@ const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
 
 function EngineChat() {
   const { user, session, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
+  const navigate = useNavigate()
   const engine = getEngine()
   const [engineState, setEngineState] = useState<EngineState>(engine.getState())
   const [events, setEvents] = useState<EngineEvent[]>([])
@@ -165,6 +168,8 @@ function EngineChat() {
 
   // Track the latest kernel response content for persistence
   const latestKernelContentRef = useRef<string>('')
+  // Ref to always hold the latest sendMessage (avoids stale closures in effects)
+  const sendMessageRef = useRef<(content: string) => Promise<void>>(async () => {})
   // Structured user memory (replaces raw userHistory)
   const [userMemory, setUserMemory] = useState<UserMemoryProfile>(emptyProfile())
   const userMemoryRef = useRef<UserMemoryProfile>(userMemory)
@@ -212,6 +217,8 @@ function EngineChat() {
   // Bottom tab bar state (mobile)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
+  // Today's briefing for home screen card
+  const [todayBriefing, setTodayBriefing] = useState<{ id: string; title: string; content: string } | null>(null)
   // Close all panels before opening a new one
   const closeAllPanels = useCallback(() => {
     setShowKGPanel(false)
@@ -489,6 +496,31 @@ function EngineChat() {
   useEffect(() => {
     getCollectiveInsights(10).then(setCollectiveInsights).catch(() => {})
   }, [])
+
+  // Load today's briefing for home screen card
+  useEffect(() => {
+    if (!user) return
+    const loadTodayBriefing = async () => {
+      try {
+        const midnight = new Date()
+        midnight.setHours(0, 0, 0, 0)
+        const { data } = await supabase
+          .from('briefings')
+          .select('id, title, content')
+          .eq('user_id', user.id)
+          .gte('created_at', midnight.toISOString())
+          .order('created_at', { ascending: false })
+          .limit(1)
+        if (data && data.length > 0) {
+          const b = data[0]
+          if (!b.content.startsWith('Unable to generate briefing')) {
+            setTodayBriefing({ id: b.id, title: b.title, content: b.content })
+          }
+        }
+      } catch { /* no briefing today */ }
+    }
+    loadTodayBriefing()
+  }, [user])
 
   // Subscribe to engine events
   useEffect(() => {
@@ -1112,6 +1144,9 @@ function EngineChat() {
     }
   }
 
+  // Keep ref in sync so effects always call the latest sendMessage
+  sendMessageRef.current = sendMessage
+
   const handleSubmit = (e: React.FormEvent | React.KeyboardEvent) => {
     e.preventDefault()
     sendMessage(input)
@@ -1148,6 +1183,52 @@ function EngineChat() {
       document.removeEventListener('touchend', onTouchEnd)
     }
   }, [isDrawerOpen])
+
+  // Handle briefing → chat navigation (from BriefingPage "Go deeper" pills via sessionStorage)
+  useEffect(() => {
+    const raw = sessionStorage.getItem('kernel-briefing-context')
+    if (!raw) return
+    sessionStorage.removeItem('kernel-briefing-context')
+    try {
+      const { title, section, content } = JSON.parse(raw) as { title: string; section: string; content: string }
+      handleNewChat()
+      const msg = `I just read the "${section}" section of my briefing "${title}". Here's the content:\n\n${content}\n\nLet's go deeper on this.`
+      // Use ref to always call the latest sendMessage (avoids stale closure on mount)
+      setTimeout(() => sendMessageRef.current(msg), 300)
+    } catch { /* invalid JSON, ignore */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Briefing panel → Chat callback
+  const handleBriefingGoDeeper = useCallback((title: string, content: string) => {
+    setShowBriefingPanel(false)
+    setActiveTab('home')
+    handleNewChat()
+    const msg = `I just read my briefing "${title}". Here's a summary:\n\n${content.slice(0, 800)}\n\nLet's discuss this.`
+    setTimeout(() => sendMessage(msg), 100)
+  }, [handleNewChat])
+
+  // Briefing panel → Goal callback
+  const handleBriefingAddGoal = useCallback(async (title: string, description: string) => {
+    if (!user) return
+    const goal: UserGoal = {
+      user_id: user.id,
+      title,
+      description,
+      category: 'briefing',
+      status: 'active',
+      priority: 'medium',
+      target_date: null,
+      milestones: [],
+      progress_notes: [],
+      check_in_frequency: 'weekly',
+      last_check_in_at: null,
+    }
+    await upsertUserGoal(goal)
+    const goals = await getUserGoals(user.id)
+    setUserGoals(goals)
+    showToast('Goal added from briefing')
+  }, [user, showToast])
 
   return (
     <div className="ka-page">
@@ -1361,6 +1442,8 @@ function EngineChat() {
                 kgEntities={kgEntities}
                 onClose={() => { setShowBriefingPanel(false); setActiveTab('home') }}
                 onToast={showToast}
+                onGoDeeper={handleBriefingGoDeeper}
+                onAddGoal={handleBriefingAddGoal}
               />
             </motion.div>
           </motion.div>
@@ -1508,6 +1591,32 @@ function EngineChat() {
             <p className="ka-empty-subtitle">
               A personal AI that remembers you, thinks with you, and gets better over time.
             </p>
+            {todayBriefing && (
+              <div className="ka-home-briefing-card">
+                <div className="ka-home-briefing-info">
+                  <Newspaper size={16} className="ka-home-briefing-icon" />
+                  <div className="ka-home-briefing-text">
+                    <span className="ka-home-briefing-label">Today's briefing</span>
+                    <span className="ka-home-briefing-title">{todayBriefing.title}</span>
+                  </div>
+                </div>
+                <div className="ka-home-briefing-actions">
+                  <button
+                    className="ka-home-briefing-btn"
+                    onClick={() => { closeOtherPanels('briefings'); setShowBriefingPanel(true); setActiveTab('briefings') }}
+                  >
+                    Read
+                  </button>
+                  <button
+                    className="ka-home-briefing-btn ka-home-briefing-btn--discuss"
+                    onClick={() => handleBriefingGoDeeper(todayBriefing.title, todayBriefing.content)}
+                  >
+                    <MessageCircle size={12} />
+                    Discuss
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="ka-topics">
               {KERNEL_TOPICS.map(t => (
                 <button

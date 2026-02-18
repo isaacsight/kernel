@@ -145,7 +145,7 @@ serve(async (req: Request) => {
                       </div>
 
                       <div style="text-align: center; margin: 2rem 0;">
-                        <a href="https://isaacsight.github.io/does-this-feel-right-/" style="display: inline-block; padding: 12px 32px; background: #1F1E1D; color: #FAF9F6; text-decoration: none; border-radius: 6px; font-size: 14px; font-family: 'Courier New', monospace;">Open the Kernel &rarr;</a>
+                        <a href="https://kernel.chat/" style="display: inline-block; padding: 12px 32px; background: #1F1E1D; color: #FAF9F6; text-decoration: none; border-radius: 6px; font-size: 14px; font-family: 'Courier New', monospace;">Open the Kernel &rarr;</a>
                       </div>
 
                       <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 2rem 0 1rem;" />

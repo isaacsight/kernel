@@ -4,10 +4,13 @@
 // Rubin typography, literary feel. TOC with section anchors.
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Share2, Check, List, Clock } from 'lucide-react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, Share2, Check, List, Clock, AlertCircle, MessageCircle, Target } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
+import { upsertUserGoal } from '../engine/SupabaseClient'
+import type { UserGoal } from '../engine/GoalTracker'
 import { MessageContent } from '../components/MessageContent'
+import { splitSections, briefingToGoalDescription } from '../utils/briefingHelpers'
 
 interface BriefingData {
   id: string
@@ -25,6 +28,12 @@ interface TocEntry {
 
 function stripMarkdown(text: string): string {
   return text.replace(/\*\*(.+?)\*\*/g, '$1').replace(/__(.+?)__/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/_(.+?)_/g, '$1')
+}
+
+function toTitleCase(str: string): string {
+  return str.replace(/\b\w+/g, w =>
+    w.length <= 2 ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1).toLowerCase()
+  )
 }
 
 function slugify(text: string): string {
@@ -55,10 +64,12 @@ function extractToc(content: string): TocEntry[] {
 
 export function BriefingPage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const [briefing, setBriefing] = useState<BriefingData | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
   const [tocOpen, setTocOpen] = useState(false)
+  const [goalSaved, setGoalSaved] = useState(false)
 
   // Override body fixed positioning so the page can scroll naturally
   useEffect(() => {
@@ -86,6 +97,40 @@ export function BriefingPage() {
 
   const toc = useMemo(() => briefing ? extractToc(briefing.content) : [], [briefing])
   const readingTime = useMemo(() => briefing ? estimateReadingTime(briefing.content) : 0, [briefing])
+  const sections = useMemo(() => briefing ? splitSections(briefing.content) : [], [briefing])
+
+  const handleGoDeeper = useCallback((sectionHeading: string, sectionBody: string) => {
+    if (!briefing) return
+    // Use sessionStorage to pass context across route change (more reliable than router state with hash router)
+    sessionStorage.setItem('kernel-briefing-context', JSON.stringify({
+      title: briefing.title,
+      section: sectionHeading,
+      content: sectionBody,
+    }))
+    navigate('/')
+  }, [briefing, navigate])
+
+  const handleSaveAsGoal = useCallback(async () => {
+    if (!briefing || goalSaved) return
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    const goal: UserGoal = {
+      user_id: user.id,
+      title: `Follow up: ${briefing.title}`,
+      description: briefingToGoalDescription(briefing.title, briefing.content),
+      category: 'briefing',
+      status: 'active',
+      priority: 'medium',
+      target_date: null,
+      milestones: [],
+      progress_notes: [],
+      check_in_frequency: 'weekly',
+      last_check_in_at: null,
+    }
+    await upsertUserGoal(goal)
+    setGoalSaved(true)
+    setTimeout(() => setGoalSaved(false), 3000)
+  }, [briefing, goalSaved])
 
   // Inject IDs into rendered h2 elements after MessageContent renders
   useEffect(() => {
@@ -150,6 +195,28 @@ export function BriefingPage() {
     )
   }
 
+  const isFailed = briefing.content.startsWith('Unable to generate briefing')
+
+  if (isFailed) {
+    return (
+      <div className="ka-briefing-page">
+        <div className="ka-briefing-nav">
+          <Link to="/" className="ka-briefing-back">
+            <ArrowLeft size={16} /> Back
+          </Link>
+        </div>
+        <div className="ka-briefing-error">
+          <AlertCircle size={32} />
+          <h1>This briefing couldn't be generated</h1>
+          <p>The research step didn't return enough data to create a useful summary. You can generate a new briefing from the panel.</p>
+          <Link to="/" className="ka-briefing-back">
+            <ArrowLeft size={16} /> Back to Kernel
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="ka-briefing-page">
       <div className="ka-briefing-nav">
@@ -169,7 +236,7 @@ export function BriefingPage() {
           <button
             className="ka-briefing-share-btn"
             onClick={handleShare}
-            aria-label="Copy briefing text"
+            aria-label={copied ? 'Copied to clipboard' : 'Share briefing'}
           >
             {copied ? <Check size={16} /> : <Share2 size={16} />}
             {copied ? 'Copied' : 'Share'}
@@ -188,7 +255,7 @@ export function BriefingPage() {
             </time>
             <span className="ka-briefing-reading-time">
               <Clock size={12} />
-              {readingTime} min read
+              {readingTime} min read &middot; {briefing.content.trim().split(/\s+/).length} words
             </span>
           </div>
           {briefing.topics.length > 0 && (
@@ -196,7 +263,7 @@ export function BriefingPage() {
               <div className="ka-briefing-topics-label">Topics covered</div>
               <div className="ka-briefing-topics">
                 {briefing.topics.map(t => (
-                  <span key={t} className="ka-brief-topic">{t}</span>
+                  <span key={t} className="ka-brief-topic">{toTitleCase(t)}</span>
                 ))}
               </div>
             </div>
@@ -223,21 +290,47 @@ export function BriefingPage() {
         )}
 
         <div className="ka-briefing-body">
-          <MessageContent text={briefing.content} />
+          {sections.length > 0 ? (
+            sections.map((section, i) => (
+              <div key={i} className="ka-briefing-section">
+                <MessageContent text={`## ${section.heading}\n\n${section.body}`} />
+                <button
+                  className="ka-briefing-go-deeper"
+                  onClick={() => handleGoDeeper(section.heading, section.body)}
+                >
+                  <MessageCircle size={12} />
+                  Go deeper
+                </button>
+              </div>
+            ))
+          ) : (
+            <MessageContent text={briefing.content} />
+          )}
         </div>
 
-        {briefing.sources.length > 0 && (
+        {briefing.sources.filter(s => s.url).length > 0 && (
           <footer className="ka-briefing-sources">
             <h2>Sources</h2>
             <ul>
-              {briefing.sources.map((s, i) => (
+              {briefing.sources.filter(s => s.url).map((s, i) => (
                 <li key={i}>
-                  {s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a> : s.title}
+                  <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a>
                 </li>
               ))}
             </ul>
           </footer>
         )}
+
+        <div className="ka-briefing-footer-actions">
+          <button
+            className="ka-briefing-save-goal-btn"
+            onClick={handleSaveAsGoal}
+            disabled={goalSaved}
+          >
+            <Target size={14} />
+            {goalSaved ? 'Goal saved!' : 'Save takeaways as goal'}
+          </button>
+        </div>
       </article>
     </div>
   )

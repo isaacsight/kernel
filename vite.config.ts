@@ -34,8 +34,8 @@ export default defineConfig({
                 background_color: '#FAF9F6',
                 display: 'standalone',
                 orientation: 'portrait',
-                start_url: '/does-this-feel-right-/',
-                scope: '/does-this-feel-right-/',
+                start_url: '/',
+                scope: '/',
                 icons: [
                     { src: 'logo-mark-192.png', sizes: '192x192', type: 'image/png' },
                     { src: 'logo-mark-512.png', sizes: '512x512', type: 'image/png' },
@@ -44,7 +44,7 @@ export default defineConfig({
             },
         }),
     ],
-    base: '/does-this-feel-right-/',
+    base: '/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
