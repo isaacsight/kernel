@@ -2,7 +2,7 @@
 import { getProvider } from './providers/registry'
 
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist'
   confidence: number
   needsResearch: boolean
   isMultiStep: boolean
@@ -17,6 +17,10 @@ Agents:
 - coder: Programming, debugging, code generation, technical implementation, algorithms, APIs, databases
 - writer: Content creation, editing, copywriting, emails, blog posts, social media, creative writing, naming
 - analyst: Data analysis, strategic thinking, evaluation, comparisons, decision-making, business strategy, pros/cons
+- aesthete: UI/UX design, CSS, animations, visual style, typography, "make it look better", "does this look good"
+- guardian: Security, reliability, testing, "is this safe", "check for bugs", "integrity", performance audits
+- curator: User history, identity, memories, "remember when", "how have I changed", "what are my goals"
+- strategist: High-level market strategy, ROI, economic risk, "is this a good business move", competition analysis
 
 Also determine:
 - needsResearch: true if the question requires multi-step web research (not just a simple search). Examples: "research AI regulation in the EU", "deep dive into...", "comprehensive analysis of..."
@@ -44,7 +48,7 @@ export async function classifyIntent(
     })
 
     // Validate the result
-    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
+    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist']
     if (!validAgents.includes(result.agentId)) {
       return { agentId: 'kernel', confidence: 0, needsResearch: false, isMultiStep: false, needsSwarm: false }
     }

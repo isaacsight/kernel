@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, LogOut, Settings, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, Home } from 'lucide-react'
+import { BottomTabBar, type TabId } from '../components/BottomTabBar'
+import { MoreMenu, type MoreAction } from '../components/MoreMenu'
 import KGPanel from '../components/kernel-agent/KGPanel'
 import StatsPanel from '../components/kernel-agent/StatsPanel'
 import { GoalsPanel } from '../components/GoalsPanel'
@@ -207,6 +209,9 @@ function EngineChat() {
   const [userGoals, setUserGoals] = useState<UserGoal[]>([])
   const userGoalsRef = useRef<UserGoal[]>([])
   userGoalsRef.current = userGoals
+  // Bottom tab bar state (mobile)
+  const [activeTab, setActiveTab] = useState<TabId>('home')
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
   // Close all panels before opening a new one
   const closeAllPanels = useCallback(() => {
     setShowKGPanel(false)
@@ -215,7 +220,52 @@ function EngineChat() {
     setShowWorkflowsPanel(false)
     setShowScheduledPanel(false)
     setShowBriefingPanel(false)
+    setActiveTab('home')
+    setShowMoreMenu(false)
   }, [])
+
+  // Close all panels except the one we're about to open
+  const closeOtherPanels = useCallback((except?: string) => {
+    if (except !== 'kg') setShowKGPanel(false)
+    if (except !== 'stats') setShowStatsPanel(false)
+    if (except !== 'goals') setShowGoalsPanel(false)
+    if (except !== 'workflows') setShowWorkflowsPanel(false)
+    if (except !== 'scheduled') setShowScheduledPanel(false)
+    if (except !== 'briefings') setShowBriefingPanel(false)
+    if (except !== 'drawer') setIsDrawerOpen(false)
+    if (except !== 'more') setShowMoreMenu(false)
+  }, [])
+
+  // Handle bottom tab bar navigation
+  const handleTabChange = useCallback((tab: TabId) => {
+    // Toggle: tapping active tab closes it
+    if (tab === activeTab && tab !== 'home') {
+      closeAllPanels()
+      return
+    }
+    setActiveTab(tab)
+    switch (tab) {
+      case 'home':
+        closeOtherPanels()
+        break
+      case 'chats':
+        closeOtherPanels('drawer')
+        setIsDrawerOpen(true)
+        break
+      case 'goals':
+        closeOtherPanels('goals')
+        setShowGoalsPanel(true)
+        break
+      case 'briefings':
+        closeOtherPanels('briefings')
+        setShowBriefingPanel(true)
+        break
+      case 'more':
+        closeOtherPanels('more')
+        setShowMoreMenu(true)
+        break
+    }
+  }, [activeTab, closeAllPanels, closeOtherPanels])
 
   // Header menu
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -507,13 +557,14 @@ function EngineChat() {
         handleNewChat()
         inputRef.current?.focus()
       }
-      if (e.key === 'Escape' && isDrawerOpen) {
-        setIsDrawerOpen(false)
+      if (e.key === 'Escape') {
+        if (showMoreMenu) { setShowMoreMenu(false); setActiveTab('home') }
+        if (isDrawerOpen) setIsDrawerOpen(false)
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [isDrawerOpen, handleNewChat])
+  }, [isDrawerOpen, showMoreMenu, handleNewChat])
 
   // Delete conversation
   const handleDeleteConversation = useCallback(async (convId: string) => {
@@ -646,8 +697,46 @@ function EngineChat() {
     }
   }, [user, portalLoading])
 
-  // Delete account
+  // Delete account (state declared early so handleMoreAction can reference setShowDeleteConfirm)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  // Handle "More" menu actions
+  const handleMoreAction = useCallback((action: MoreAction) => {
+    setShowMoreMenu(false)
+    setActiveTab('home')
+    switch (action) {
+      case 'workflows':
+        closeOtherPanels('workflows')
+        setShowWorkflowsPanel(true)
+        break
+      case 'scheduled':
+        closeOtherPanels('scheduled')
+        setShowScheduledPanel(true)
+        break
+      case 'knowledge':
+        closeOtherPanels('kg')
+        setShowKGPanel(true)
+        break
+      case 'stats':
+        closeOtherPanels('stats')
+        setShowStatsPanel(true)
+        break
+      case 'upgrade':
+        handleUpgrade()
+        break
+      case 'manage-subscription':
+        handleManageSubscription()
+        break
+      case 'sign-out':
+        signOut()
+        break
+      case 'delete-account':
+        setShowDeleteConfirm(true)
+        break
+    }
+  }, [closeOtherPanels, handleUpgrade, handleManageSubscription, signOut])
+
+  // Delete account
   const [deleteLoading, setDeleteLoading] = useState(false)
   const handleDeleteAccount = useCallback(async () => {
     if (!user || deleteLoading) return
@@ -1070,7 +1159,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowKGPanel(false)}
+            onClick={() => { setShowKGPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1083,7 +1172,7 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowKGPanel(false)
+                  setShowKGPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -1092,7 +1181,7 @@ function EngineChat() {
               <KGPanel
                 entities={kgEntities}
                 relations={kgRelations}
-                onClose={() => setShowKGPanel(false)}
+                onClose={() => { setShowKGPanel(false); setActiveTab('home') }}
               />
             </motion.div>
           </motion.div>
@@ -1107,7 +1196,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowStatsPanel(false)}
+            onClick={() => { setShowStatsPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1120,13 +1209,13 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowStatsPanel(false)
+                  setShowStatsPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
-              <StatsPanel userId={user.id} onClose={() => setShowStatsPanel(false)} />
+              <StatsPanel userId={user.id} onClose={() => { setShowStatsPanel(false); setActiveTab('home') }} />
             </motion.div>
           </motion.div>
         )}
@@ -1140,7 +1229,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowGoalsPanel(false)}
+            onClick={() => { setShowGoalsPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1153,13 +1242,13 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowGoalsPanel(false)
+                  setShowGoalsPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
-              <GoalsPanel userId={user.id} onClose={() => setShowGoalsPanel(false)} onToast={showToast} />
+              <GoalsPanel userId={user.id} onClose={() => { setShowGoalsPanel(false); setActiveTab('home') }} onToast={showToast} />
             </motion.div>
           </motion.div>
         )}
@@ -1173,7 +1262,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowWorkflowsPanel(false)}
+            onClick={() => { setShowWorkflowsPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1186,7 +1275,7 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowWorkflowsPanel(false)
+                  setShowWorkflowsPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -1194,7 +1283,7 @@ function EngineChat() {
               <div className="ka-kg-drag-handle" />
               <WorkflowsPanel
                 userId={user.id}
-                onClose={() => setShowWorkflowsPanel(false)}
+                onClose={() => { setShowWorkflowsPanel(false); setActiveTab('home') }}
                 onToast={showToast}
                 onRunWorkflow={(proc) => {
                   setShowWorkflowsPanel(false)
@@ -1214,7 +1303,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowScheduledPanel(false)}
+            onClick={() => { setShowScheduledPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1227,13 +1316,13 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowScheduledPanel(false)
+                  setShowScheduledPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="ka-kg-drag-handle" />
-              <ScheduledTasksPanel userId={user.id} onClose={() => setShowScheduledPanel(false)} onToast={showToast} />
+              <ScheduledTasksPanel userId={user.id} onClose={() => { setShowScheduledPanel(false); setActiveTab('home') }} onToast={showToast} />
             </motion.div>
           </motion.div>
         )}
@@ -1247,7 +1336,7 @@ function EngineChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowBriefingPanel(false)}
+            onClick={() => { setShowBriefingPanel(false); setActiveTab('home') }}
           >
             <motion.div
               className="ka-kg-sheet"
@@ -1260,7 +1349,7 @@ function EngineChat() {
               dragElastic={0.2}
               onDragEnd={(_, info) => {
                 if (info.offset.y > 100 || info.velocity.y > 300) {
-                  setShowBriefingPanel(false)
+                  setShowBriefingPanel(false); setActiveTab('home')
                 }
               }}
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -1270,7 +1359,7 @@ function EngineChat() {
                 userId={user.id}
                 userMemory={userMemory}
                 kgEntities={kgEntities}
-                onClose={() => setShowBriefingPanel(false)}
+                onClose={() => { setShowBriefingPanel(false); setActiveTab('home') }}
                 onToast={showToast}
               />
             </motion.div>
@@ -1281,7 +1370,7 @@ function EngineChat() {
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={() => { setIsDrawerOpen(false); setActiveTab('home') }}
         conversations={conversations}
         activeId={activeConversationId}
         onSelect={switchConversation}
@@ -1299,10 +1388,12 @@ function EngineChat() {
           <button className="ka-menu-btn" onClick={() => setIsDrawerOpen(true)} aria-label="Conversations">
             <Menu size={18} />
           </button>
-          <img className="ka-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-          <span className="ka-title">
-            {activeConversation ? activeConversation.title : 'Kernel Agent'}
-          </span>
+          <button className="ka-home-btn" onClick={() => { closeAllPanels(); handleNewChat() }} aria-label="New chat">
+            <img className="ka-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
+            <span className="ka-title">
+              {activeConversation ? activeConversation.title : 'Kernel Agent'}
+            </span>
+          </button>
         </div>
         <div className="ka-header-right">
           {isAdmin && (
@@ -1323,6 +1414,7 @@ function EngineChat() {
               <div className="ka-header-menu">
                 {messages.length > 0 && (
                   <>
+                    <div className="ka-header-menu-label">Conversation</div>
                     <button className="ka-header-menu-item" onClick={() => { setShowShareModal(true); setHeaderMenuOpen(false) }}>
                       <Share2 size={14} />
                       Share conversation
@@ -1331,52 +1423,53 @@ function EngineChat() {
                       <FileDown size={14} />
                       Export as Markdown
                     </button>
-                    <div className="ka-header-menu-divider" />
                   </>
                 )}
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowGoalsPanel(true); setHeaderMenuOpen(false) }}>
+                <div className="ka-header-menu-divider ka-menu-tabbed" />
+                <div className="ka-header-menu-label ka-menu-tabbed">Features</div>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowGoalsPanel(true); setHeaderMenuOpen(false) }}>
                   <Target size={14} />
                   Goals
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowWorkflowsPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowWorkflowsPanel(true); setHeaderMenuOpen(false) }}>
                   <Zap size={14} />
                   Workflows
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowScheduledPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowScheduledPanel(true); setHeaderMenuOpen(false) }}>
                   <Clock size={14} />
                   Scheduled tasks
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowBriefingPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowBriefingPanel(true); setHeaderMenuOpen(false) }}>
                   <Newspaper size={14} />
                   Daily briefing
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowKGPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowKGPanel(true); setHeaderMenuOpen(false) }}>
                   <Brain size={14} />
                   What Kernel knows
                 </button>
-                <button className="ka-header-menu-item" onClick={() => { closeAllPanels(); setShowStatsPanel(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { closeAllPanels(); setShowStatsPanel(true); setHeaderMenuOpen(false) }}>
                   <BarChart3 size={14} />
                   Your stats
                 </button>
+                <div className="ka-header-menu-divider" />
+                <div className="ka-header-menu-label ka-menu-tabbed">Account</div>
                 {!isPro && (
-                  <button className="ka-header-menu-item ka-header-menu-item--upgrade" onClick={() => { handleUpgrade(); setHeaderMenuOpen(false) }}>
+                  <button className="ka-header-menu-item ka-header-menu-item--upgrade ka-menu-tabbed" onClick={() => { handleUpgrade(); setHeaderMenuOpen(false) }}>
                     <Crown size={14} />
                     Upgrade to Pro
                   </button>
                 )}
                 {!isAdmin && isSubscribed && (
-                  <button className="ka-header-menu-item" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { handleManageSubscription(); setHeaderMenuOpen(false) }} disabled={portalLoading}>
                     <Settings size={14} className={portalLoading ? 'ka-spin' : ''} />
                     Manage subscription
                   </button>
                 )}
-                <div className="ka-header-menu-divider" />
-                <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { signOut(); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { signOut(); setHeaderMenuOpen(false) }}>
                   <LogOut size={14} />
                   Sign out
                 </button>
-                <div className="ka-header-menu-divider" />
-                <button className="ka-header-menu-item ka-header-menu-item--danger" onClick={() => { setShowDeleteConfirm(true); setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-header-menu-item--danger ka-menu-tabbed" onClick={() => { setShowDeleteConfirm(true); setHeaderMenuOpen(false) }}>
                   <Trash2 size={14} />
                   Delete account
                 </button>
@@ -1847,6 +1940,22 @@ function EngineChat() {
           </button>
         )}
       </form>
+
+      {/* Bottom Tab Bar (mobile only — hidden on desktop via CSS) */}
+      <BottomTabBar activeTab={activeTab} onTabChange={handleTabChange} />
+
+      {/* More Menu (bottom sheet from tab bar) */}
+      <AnimatePresence>
+        {showMoreMenu && (
+          <MoreMenu
+            isOpen={showMoreMenu}
+            onClose={() => { setShowMoreMenu(false); setActiveTab('home') }}
+            onSelect={handleMoreAction}
+            isPro={isPro}
+            isAdmin={isAdmin}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {toast && (
