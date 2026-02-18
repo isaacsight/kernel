@@ -388,7 +388,7 @@ export async function createSharedConversation(params: {
   messages: { role: string; content: string; agentName?: string; timestamp: number }[];
   expiresAt: string | null;
 }): Promise<string | null> {
-  const id = Math.random().toString(36).substring(2, 10);
+  const id = crypto.randomUUID();
   const { error } = await supabase
     .from('shared_conversations')
     .insert({
@@ -413,6 +413,26 @@ export async function deleteSharedConversation(id: string): Promise<void> {
     .delete()
     .eq('id', id);
   if (error) console.error('Error deleting shared conversation:', error);
+}
+
+export async function getSharedConversation(conversationId: string): Promise<{
+  id: string;
+  expires_at: string | null;
+  created_at: string;
+} | null> {
+  const { data, error } = await supabase
+    .from('shared_conversations')
+    .select('id, expires_at, created_at')
+    .eq('conversation_id', conversationId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching shared conversation:', error);
+    return null;
+  }
+  return data;
 }
 
 // ─── Collective Intelligence ────────────────────────────

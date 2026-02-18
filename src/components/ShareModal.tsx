@@ -1,12 +1,13 @@
 // ─── ShareModal ──────────────────────────────────────────
 //
 // Modal for sharing a conversation via public link.
-// Copy-to-clipboard, optional expiry picker.
+// Shows existing link if one exists, with copy & revoke options.
+// Otherwise shows create form with expiry picker.
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Link, Copy, Check, X, Clock } from 'lucide-react'
-import { createSharedConversation } from '../engine/SupabaseClient'
+import { Link, Copy, Check, X, Clock, Trash2 } from 'lucide-react'
+import { createSharedConversation, getSharedConversation, deleteSharedConversation } from '../engine/SupabaseClient'
 
 interface ShareModalProps {
   conversationId: string
@@ -29,6 +30,26 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
   const [isCreating, setIsCreating] = useState(false)
   const [copied, setCopied] = useState(false)
   const [expiryDays, setExpiryDays] = useState<number | null>(null)
+  const [isExisting, setIsExisting] = useState(false)
+  const [isRevoking, setIsRevoking] = useState(false)
+  const [existingId, setExistingId] = useState<string | null>(null)
+  const [checking, setChecking] = useState(true)
+
+  // Check for existing shared link on mount
+  useEffect(() => {
+    let cancelled = false
+    getSharedConversation(conversationId).then(existing => {
+      if (cancelled) return
+      if (existing) {
+        const url = `${window.location.origin}${window.location.pathname}#/shared/${existing.id}`
+        setShareUrl(url)
+        setExistingId(existing.id)
+        setIsExisting(true)
+      }
+      setChecking(false)
+    })
+    return () => { cancelled = true }
+  }, [conversationId])
 
   const handleCreate = useCallback(async () => {
     if (isCreating) return
@@ -54,6 +75,8 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       if (shareId) {
         const url = `${window.location.origin}${window.location.pathname}#/shared/${shareId}`
         setShareUrl(url)
+        setExistingId(shareId)
+        setIsExisting(true)
       } else {
         onToast('Failed to create share link')
       }
@@ -63,6 +86,22 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       setIsCreating(false)
     }
   }, [conversationId, userId, conversationTitle, messages, expiryDays, isCreating, onToast])
+
+  const handleRevoke = useCallback(async () => {
+    if (!existingId || isRevoking) return
+    setIsRevoking(true)
+    try {
+      await deleteSharedConversation(existingId)
+      setShareUrl(null)
+      setExistingId(null)
+      setIsExisting(false)
+      onToast('Share link revoked')
+    } catch {
+      onToast('Failed to revoke link')
+    } finally {
+      setIsRevoking(false)
+    }
+  }, [existingId, isRevoking, onToast])
 
   const handleCopy = useCallback(async () => {
     if (!shareUrl) return
@@ -108,7 +147,41 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
           </button>
         </div>
 
-        {!shareUrl ? (
+        {checking ? (
+          <p className="ka-share-desc">Checking for existing link...</p>
+        ) : shareUrl ? (
+          <>
+            {isExisting && (
+              <p className="ka-share-desc ka-share-desc--existing">
+                This conversation already has a public link.
+              </p>
+            )}
+            <div className="ka-share-url-wrap">
+              <input
+                aria-label="Shareable conversation link"
+                value={shareUrl}
+                readOnly
+                onClick={e => (e.target as HTMLInputElement).select()}
+              />
+              <button className="ka-share-copy-btn" onClick={handleCopy}>
+                {copied ? <Check size={20} /> : <Copy size={20} />}
+              </button>
+            </div>
+            <div className="ka-share-actions">
+              <p className="ka-share-desc">
+                Anyone with this link can view this conversation.
+              </p>
+              <button
+                className="ka-share-revoke-btn"
+                onClick={handleRevoke}
+                disabled={isRevoking}
+              >
+                <Trash2 size={14} />
+                {isRevoking ? 'Revoking...' : 'Revoke link'}
+              </button>
+            </div>
+          </>
+        ) : (
           <>
             <p className="ka-share-desc">
               Create a public link anyone can view. No login required.
@@ -135,23 +208,6 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
             >
               {isCreating ? 'Creating...' : 'Create share link'}
             </button>
-          </>
-        ) : (
-          <>
-            <div className="ka-share-url-wrap">
-              <input
-                className="ka-share-url-input"
-                value={shareUrl}
-                readOnly
-                onClick={e => (e.target as HTMLInputElement).select()}
-              />
-              <button className="ka-share-copy-btn" onClick={handleCopy}>
-                {copied ? <Check size={16} /> : <Copy size={16} />}
-              </button>
-            </div>
-            <p className="ka-share-desc">
-              {expiryDays ? `Link expires in ${expiryDays} day${expiryDays > 1 ? 's' : ''}.` : 'Link never expires.'}
-            </p>
           </>
         )}
       </motion.div>

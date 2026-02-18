@@ -2,8 +2,8 @@
 //
 // Bottom-sheet panel showing today's briefing, history, and generate button.
 
-import { useState, useEffect, useCallback } from 'react'
-import { X, Newspaper, RefreshCw, ExternalLink } from 'lucide-react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { X, Newspaper, RefreshCw, Sparkles, Check, Clock, ArrowRight } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { generateBriefing, type Briefing } from '../engine/BriefingGenerator'
 import { MessageContent } from './MessageContent'
@@ -16,6 +16,26 @@ interface BriefingPanelProps {
   kgEntities: KGEntity[]
   onClose: () => void
   onToast: (msg: string) => void
+}
+
+const GEN_PHASES = [
+  { key: 'planning', label: 'Planning' },
+  { key: 'searching', label: 'Researching' },
+  { key: 'synthesizing', label: 'Writing' },
+]
+
+function estimateReadingTime(text: string): number {
+  const words = text.trim().split(/\s+/).length
+  return Math.max(1, Math.round(words / 220))
+}
+
+function formatTabLabel(dateStr: string): string {
+  const d = new Date(dateStr)
+  const month = d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+  const hour = d.getHours()
+  const period = hour < 12 ? 'AM' : 'PM'
+  const h = hour % 12 || 12
+  return `${month} · ${h}${period}`
 }
 
 export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast }: BriefingPanelProps) {
@@ -79,6 +99,10 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
   }, [selectedIdx, briefings])
 
   const current = briefings[selectedIdx]
+  const readingTime = useMemo(() => current ? estimateReadingTime(current.content) : 0, [current])
+
+  // Determine completed phases for progress indicator
+  const currentPhaseIdx = GEN_PHASES.findIndex(p => p.key === genPhase)
 
   return (
     <div className="ka-brief-panel">
@@ -92,9 +116,10 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
             className="ka-brief-gen-btn"
             onClick={handleGenerate}
             disabled={generating}
+            title="Generate a new briefing based on your interests and recent activity"
           >
             <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
-            {generating ? genPhase || 'Generating...' : 'Generate now'}
+            {generating ? 'Generating...' : 'New briefing'}
           </button>
           <button className="ka-brief-close" onClick={onClose} aria-label="Close">
             <X size={18} />
@@ -102,11 +127,37 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
         </div>
       </div>
 
+      {/* Generation progress indicator */}
+      {generating && (
+        <div className="ka-brief-progress">
+          {GEN_PHASES.map((phase, i) => {
+            const isComplete = i < currentPhaseIdx
+            const isActive = i === currentPhaseIdx
+            return (
+              <div
+                key={phase.key}
+                className={`ka-brief-progress-step${isActive ? ' ka-brief-progress-step--active' : ''}${isComplete ? ' ka-brief-progress-step--done' : ''}`}
+              >
+                <span className="ka-brief-progress-icon">
+                  {isComplete ? <Check size={12} /> : (i + 1)}
+                </span>
+                <span className="ka-brief-progress-label">{phase.label}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {loading ? (
         <div className="ka-brief-loading">Loading briefings...</div>
-      ) : briefings.length === 0 ? (
+      ) : briefings.length === 0 && !generating ? (
         <div className="ka-brief-empty">
-          <p>No briefings yet. Generate one to get a personalized news summary based on your interests.</p>
+          <Sparkles size={28} className="ka-brief-empty-icon" />
+          <h3 className="ka-brief-empty-title">Your daily briefing</h3>
+          <p>Get a personalized news and insights summary tailored to your interests and goals.</p>
+          <button className="ka-brief-empty-cta" onClick={handleGenerate}>
+            Generate your first briefing
+          </button>
         </div>
       ) : (
         <>
@@ -118,7 +169,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                   className={`ka-brief-tab${i === selectedIdx ? ' ka-brief-tab--active' : ''}`}
                   onClick={() => setSelectedIdx(i)}
                 >
-                  {new Date(b.created_at!).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                  {formatTabLabel(b.created_at!)}
                 </button>
               ))}
             </div>
@@ -127,11 +178,20 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
           {current && (
             <div className="ka-brief-content">
               <h3 className="ka-brief-content-title">{current.title}</h3>
+              <div className="ka-brief-meta">
+                <Clock size={12} />
+                <span>{readingTime} min read</span>
+                <span className="ka-brief-meta-sep">&middot;</span>
+                <span>{current.content.trim().split(/\s+/).length} words</span>
+              </div>
               {current.topics.length > 0 && (
-                <div className="ka-brief-topics">
-                  {current.topics.map(t => (
-                    <span key={t} className="ka-brief-topic">{t}</span>
-                  ))}
+                <div className="ka-brief-topics-section">
+                  <div className="ka-brief-topics-label">Topics covered</div>
+                  <div className="ka-brief-topics">
+                    {current.topics.map(t => (
+                      <span key={t} className="ka-brief-topic">{t}</span>
+                    ))}
+                  </div>
                 </div>
               )}
               <div className="ka-brief-body">
@@ -139,9 +199,9 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
               </div>
               <a
                 href={`${import.meta.env.BASE_URL}#/briefing/${current.id}`}
-                className="ka-brief-fullpage-link"
+                className="ka-brief-fullpage-btn"
               >
-                <ExternalLink size={12} /> Read full page
+                Read full briefing <ArrowRight size={14} />
               </a>
             </div>
           )}

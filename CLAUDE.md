@@ -170,6 +170,67 @@ Required env vars (see `.env.example`):
 - `guard-commands.js` — Blocks dangerous shell commands
 - `log-prompt.js` — Logs all prompts for analysis
 
-## IX. LEGACY
+## IX. AGENT TEAM
+
+### Overview
+
+An autonomous team of 6 specialist agents that can test, review, secure, optimize, and ship the platform. Agents have persistent memory, coordinate via handoffs, and can propose new tools.
+
+### Agents (`.claude/agents/`)
+
+| Agent | File | Role |
+|-------|------|------|
+| QA | `qa.md` | Build verification, screenshot regression, bug reports |
+| Designer | `designer.md` | Rubin design system enforcement, a11y, dark mode |
+| Performance | `performance.md` | Bundle budgets, dependency audit, latency monitoring |
+| Security | `security.md` | Vulnerability scanning, secrets detection, auth verification |
+| DevOps | `devops.md` | Deploy pipeline, health checks, rollback procedures |
+| Product | `product.md` | UX evaluation, feature discovery, mobile-first testing |
+
+### Slash Commands
+
+| Command | What it does |
+|---------|-------------|
+| `/qa` | Full QA pass — type check, build, screenshots, regression comparison |
+| `/design-check` | Audit CSS/components against Rubin design system |
+| `/perf` | Performance audit — bundle size, deps, build time, endpoint latency |
+| `/security-audit` | Full security scan — npm audit, secrets, RLS, edge function auth |
+| `/ship` | Gated deploy pipeline: security → QA → design → perf → deploy → verify |
+| `/team` | Run all 6 agents, synthesize unified report |
+| `/retro` | Review accumulated knowledge, prune stale entries, identify tool gaps |
+
+### Memory Architecture
+
+Persistent memory lives in `.claude/agents/memory/`:
+- One file per agent (`qa.md`, `designer.md`, etc.)
+- `shared-knowledge.md` — cross-agent insights
+- `tool-effectiveness.md` — tool usage tracking
+- All entries are timestamped and categorized by section
+- Agents read memory before work, write findings after
+
+### MCP Server (`tools/kernel-agents-mcp.ts`)
+
+8 coordination tools registered as `kernel-agents`:
+
+| Tool | Purpose |
+|------|---------|
+| `agent_memory_read` | Read an agent's persistent memory |
+| `agent_memory_write` | Append timestamped entry to agent memory |
+| `agent_memory_search` | Search across all memory files |
+| `team_status` | Summary of all agent memory states |
+| `team_handoff` | Structured handoff between agents |
+| `team_report` | Synthesize findings across all agents |
+| `create_tool` | Stage a new tool for human review |
+| `tool_effectiveness` | Log tool usage outcomes |
+
+### Tool Creation Pipeline
+
+Agents can propose new tools when they identify capability gaps:
+1. Agent calls `create_tool` with implementation + rationale
+2. Tool is written to `tools/generated/{name}.ts` with `PENDING_REVIEW` status
+3. `tools/generated/manifest.json` tracks all proposed tools
+4. Human reviews and promotes to an existing MCP server, or rejects
+
+## X. LEGACY
 
 Ancient intelligence and archived experiments live in `/legacy`.
