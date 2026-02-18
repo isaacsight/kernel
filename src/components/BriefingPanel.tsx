@@ -3,11 +3,12 @@
 // Bottom-sheet panel showing today's briefing, history, and generate button.
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, Newspaper, RefreshCw, Sparkles, Check, Clock, ArrowRight } from 'lucide-react'
+import { X, Newspaper, RefreshCw, Sparkles, Check, Clock, ArrowRight, AlertCircle, Trash2, MessageCircle, Target } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { generateBriefing, type Briefing } from '../engine/BriefingGenerator'
 import { MessageContent } from './MessageContent'
 import type { UserMemoryProfile } from '../engine/MemoryAgent'
+import { briefingToGoalDescription } from '../utils/briefingHelpers'
 import type { KGEntity } from '../engine/KnowledgeGraph'
 
 interface BriefingPanelProps {
@@ -16,6 +17,8 @@ interface BriefingPanelProps {
   kgEntities: KGEntity[]
   onClose: () => void
   onToast: (msg: string) => void
+  onGoDeeper?: (title: string, content: string) => void
+  onAddGoal?: (title: string, description: string) => void
 }
 
 const GEN_PHASES = [
@@ -29,16 +32,39 @@ function estimateReadingTime(text: string): number {
   return Math.max(1, Math.round(words / 220))
 }
 
+/** Truncate markdown content to approximately N words, breaking at paragraph boundaries */
+function truncateContent(text: string, maxWords: number): { truncated: string; isTruncated: boolean } {
+  const words = text.trim().split(/\s+/)
+  if (words.length <= maxWords) return { truncated: text, isTruncated: false }
+  // Find paragraph break near maxWords
+  const partial = words.slice(0, maxWords).join(' ')
+  const lastParagraph = partial.lastIndexOf('\n\n')
+  const cutoff = lastParagraph > partial.length * 0.5 ? partial.slice(0, lastParagraph) : partial
+  return { truncated: cutoff + '...', isTruncated: true }
+}
+
 function formatTabLabel(dateStr: string): string {
   const d = new Date(dateStr)
   const month = d.toLocaleDateString([], { month: 'short', day: 'numeric' })
   const hour = d.getHours()
+  const min = d.getMinutes()
   const period = hour < 12 ? 'AM' : 'PM'
   const h = hour % 12 || 12
-  return `${month} · ${h}${period}`
+  const minStr = min > 0 ? `:${min.toString().padStart(2, '0')}` : ''
+  return `${month} · ${h}${minStr}${period}`
 }
 
-export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast }: BriefingPanelProps) {
+function toTitleCase(str: string): string {
+  return str.replace(/\b\w+/g, w =>
+    w.length <= 2 ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1).toLowerCase()
+  )
+}
+
+function isBriefingFailed(b: Briefing): boolean {
+  return b.content.startsWith('Unable to generate briefing')
+}
+
+export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast, onGoDeeper, onAddGoal }: BriefingPanelProps) {
   const [briefings, setBriefings] = useState<Briefing[]>([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
@@ -86,6 +112,13 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
     }
   }
 
+  const handleDelete = async (briefingId: string) => {
+    await supabase.from('briefings').delete().eq('id', briefingId)
+    await loadBriefings()
+    setSelectedIdx(0)
+    onToast('Briefing removed')
+  }
+
   // Mark as read when viewing
   useEffect(() => {
     const b = briefings[selectedIdx]
@@ -100,6 +133,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
 
   const current = briefings[selectedIdx]
   const readingTime = useMemo(() => current ? estimateReadingTime(current.content) : 0, [current])
+  const preview = useMemo(() => current ? truncateContent(current.content, 120) : null, [current])
 
   // Determine completed phases for progress indicator
   const currentPhaseIdx = GEN_PHASES.findIndex(p => p.key === genPhase)
@@ -166,16 +200,35 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
               {briefings.map((b, i) => (
                 <button
                   key={b.id}
-                  className={`ka-brief-tab${i === selectedIdx ? ' ka-brief-tab--active' : ''}`}
+                  className={`ka-brief-tab${i === selectedIdx ? ' ka-brief-tab--active' : ''}${isBriefingFailed(b) ? ' ka-brief-tab--failed' : ''}`}
                   onClick={() => setSelectedIdx(i)}
                 >
                   {formatTabLabel(b.created_at!)}
+                  {isBriefingFailed(b) && <AlertCircle size={10} />}
                 </button>
               ))}
             </div>
           )}
 
-          {current && (
+          {current && isBriefingFailed(current) ? (
+            <div className="ka-brief-content ka-brief-content--failed">
+              <div className="ka-brief-failed">
+                <AlertCircle size={24} />
+                <h3>This briefing couldn't be generated</h3>
+                <p>The research step didn't return enough data to create a useful summary. This can happen if the search service was temporarily unavailable.</p>
+                <div className="ka-brief-failed-actions">
+                  <button className="ka-brief-retry-btn" onClick={handleGenerate} disabled={generating}>
+                    <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
+                    {generating ? 'Generating...' : 'Try again'}
+                  </button>
+                  <button className="ka-brief-delete-btn" onClick={() => current.id && handleDelete(current.id)}>
+                    <Trash2 size={14} />
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : current && (
             <div className="ka-brief-content">
               <h3 className="ka-brief-content-title">{current.title}</h3>
               <div className="ka-brief-meta">
@@ -189,20 +242,43 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                   <div className="ka-brief-topics-label">Topics covered</div>
                   <div className="ka-brief-topics">
                     {current.topics.map(t => (
-                      <span key={t} className="ka-brief-topic">{t}</span>
+                      <span key={t} className="ka-brief-topic">{toTitleCase(t)}</span>
                     ))}
                   </div>
                 </div>
               )}
-              <div className="ka-brief-body">
-                <MessageContent text={current.content} />
+              <div className={`ka-brief-body${preview?.isTruncated ? ' ka-brief-body--faded' : ''}`}>
+                <MessageContent text={preview?.truncated || current.content} />
               </div>
               <a
                 href={`${import.meta.env.BASE_URL}#/briefing/${current.id}`}
                 className="ka-brief-fullpage-btn"
               >
-                Read full briefing <ArrowRight size={14} />
+                {preview?.isTruncated ? 'Continue reading' : 'Read full briefing'} <ArrowRight size={14} />
               </a>
+              <div className="ka-brief-actions">
+                {onGoDeeper && (
+                  <button
+                    className="ka-brief-action-btn"
+                    onClick={() => onGoDeeper(current.title, current.content)}
+                  >
+                    <MessageCircle size={14} />
+                    Go deeper in chat
+                  </button>
+                )}
+                {onAddGoal && (
+                  <button
+                    className="ka-brief-action-btn"
+                    onClick={() => onAddGoal(
+                      `Follow up: ${current.title}`,
+                      briefingToGoalDescription(current.title, current.content),
+                    )}
+                  >
+                    <Target size={14} />
+                    Save takeaways as goal
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </>

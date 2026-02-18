@@ -135,9 +135,9 @@ export async function generateBriefing(
   if (findings.length === 0) {
     return {
       user_id: userId,
-      title: `Morning Briefing — ${new Date().toLocaleDateString()}`,
+      title: `Morning Briefing — ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`,
       content: 'Unable to generate briefing at this time. Please try again later.',
-      topics,
+      topics: [],
       sources: [],
       read_at: null,
     }
@@ -159,12 +159,13 @@ export async function generateBriefing(
 
   const title = `Morning Briefing — ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`
 
+  // Don't expose raw search queries as sources — only include entries with actual URLs
   return {
     user_id: userId,
     title,
     content,
     topics,
-    sources: queries.map(q => ({ title: q })),
+    sources: [],
     read_at: null,
   }
 }

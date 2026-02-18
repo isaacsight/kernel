@@ -1,8 +1,9 @@
 {
-  "name": "Sovereign Chat",
-  "short_name": "Sovereign",
-  "description": "Sovereign AI Group Chat Platform",
-  "start_url": "/does-this-feel-right-/",
+  "name": "Kernel",
+  "short_name": "Kernel",
+  "description": "A personal AI that learns who you are and gets better with every conversation.",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#FAF9F6",
   "theme_color": "#1F1E1D",

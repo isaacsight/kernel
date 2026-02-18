@@ -188,7 +188,7 @@ serve(async (req: Request) => {
     // ── Step 4: Create Billing Portal session ──────────────
     const portalParams = new URLSearchParams()
     portalParams.set('customer', customerId)
-    portalParams.set('return_url', return_url || 'https://isaacsight.github.io/does-this-feel-right-/')
+    portalParams.set('return_url', return_url || 'https://kernel.chat/')
 
     const portalRes = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
       method: 'POST',

@@ -14,7 +14,7 @@
         "monitor": "npx tsx tools/kernel-monitor.ts",
         "discord": "npx tsx tools/discord-bot.ts"
     },
-    "homepage": "https://isaacsight.github.io/does-this-feel-right-",
+    "homepage": "https://kernel.chat",
     "dependencies": {
         "@sentry/react": "^10.38.0",
         "@supabase/supabase-js": "^2.93.3",
