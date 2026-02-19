@@ -601,6 +601,7 @@ export async function syncEngineState(
 // ─── Knowledge Graph ─────────────────────────────────────
 
 import type { KGEntity, KGRelation } from './KnowledgeGraph'
+import { applyDecay } from './KnowledgeGraph'
 
 export async function getKGEntities(userId: string): Promise<KGEntity[]> {
   const { data, error } = await supabase
@@ -611,7 +612,7 @@ export async function getKGEntities(userId: string): Promise<KGEntity[]> {
     .limit(100);
 
   if (error) console.error('Error fetching KG entities:', error);
-  return (data || []) as KGEntity[];
+  return applyDecay((data || []) as KGEntity[]);
 }
 
 export async function getKGRelations(userId: string): Promise<KGRelation[]> {
