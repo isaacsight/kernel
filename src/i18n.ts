@@ -3,9 +3,9 @@ import { initReactI18next } from 'react-i18next'
 import HttpBackend from 'i18next-http-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-const RTL_LANGUAGES = ['ar']
+const RTL_LANGUAGES = ['ar', 'fa', 'he', 'ur', 'ckb']
 
-const SUPPORTED = ['en','es','fr','de','pt','it','nl','ru','zh','zh-TW','ja','ko','ar','hi','tr','pl','sv','no','da','fi']
+const SUPPORTED = ['en', 'es', 'fr', 'de', 'pt', 'it', 'nl', 'ru', 'zh', 'zh-TW', 'ja', 'ko', 'ar', 'hi', 'tr', 'pl', 'sv', 'no', 'da', 'fi', 'fa', 'he', 'ur', 'ckb']
 
 i18n
   .use(HttpBackend)

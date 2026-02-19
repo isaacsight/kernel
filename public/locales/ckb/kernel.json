@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "ڕێڕەوی قۆناغەکان",
+        "phases": {
+            "perceiving": "درک پێکردن",
+            "attending": "سەرنجدان",
+            "deciding": "بڕیاردان",
+            "acting": "جوڵە کردن",
+            "reflecting": "بیرکردنەوە"
+        },
+        "perception": "درک کردن",
+        "intent": "مەبەست",
+        "urgency": "پەلە",
+        "complexity": "ئاڵۆزی",
+        "sentiment": "هەست",
+        "impliedNeed": "پێویستی ناڕاستەوخۆ",
+        "noActivePerception": "هیچ درک کردنێکی چالاک نییە",
+        "attention": "سەرنج",
+        "focus": "تەرکیز",
+        "depth": "قووڵی",
+        "noActiveAttention": "هیچ سەرنجدانێکی چالاک نییە",
+        "conviction": "سوور بوون",
+        "trend": {
+            "rising": "بەرزبوونەوە",
+            "falling": "دابەزین",
+            "stable": "جێگیر"
+        },
+        "beliefs": "بڕواکان ({{count}})",
+        "noBeliefsFormed": "هیچ بڕوایەک دروست نەبووە",
+        "eventFeed": "زانیارییەکان",
+        "noEventsYet": "هیچ شتێک نییە هێشتا",
+        "lastReflection": "دواهەمین بیرکردنەوە",
+        "noReflectionsYet": "هیچ بیرکردنەوەیەک نییە هێشتا"
+    },
+    "controls": {
+        "engine": "بزوێنەر",
+        "stop": "وەستان",
+        "reset": "ڕێکخستنەوە",
+        "agentOverride": "سەرپەرشتیکردنی بریکار",
+        "overrideNext": "سەرپەرشتی داهاتوو",
+        "conviction": "سوور بوون",
+        "beliefs": "بڕواکان",
+        "newBeliefPlaceholder": "بڕوای نوێ...",
+        "challenge": "ئاڵنگاری",
+        "reflections": "بیرکردنەوەکان",
+        "pruneLabel": "پاککردنەوەی بێ کوالێتی:",
+        "prune": "پاککردنەوە",
+        "pruneResult": "{{count}} بیرکردنەوە سڕایەوە",
+        "agentPerformance": "ئاستی بریکار",
+        "noPerformanceData": "هیچ زانیارییەکی ئاست نییە هێشتا"
+    },
+    "chat": {
+        "emptyTitle": "لە kernel.chat بپرسە",
+        "emptySubtitle": "ئەو هەموو ئەوە دەبینێت کە بزوێنەر دەیکات.",
+        "placeholder": "لە Kernel بپرسە..."
+    },
+    "pill": {
+        "openKernel": "کردنەوەی kernel.chat",
+        "phases": {
+            "idle": "کار ناکات",
+            "perceiving": "درک دەکات",
+            "attending": "سەرنج دەدات",
+            "deciding": "بڕیار دەدات",
+            "acting": "جوڵە دەکات",
+            "reflecting": "بیردەکاتەوە"
+        }
+    }
+}

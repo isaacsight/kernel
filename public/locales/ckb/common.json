@@ -1,0 +1,48 @@
+{
+    "close": "داخستن",
+    "cancel": "پاشگەزبوونەوە",
+    "delete": "سڕینەوە",
+    "save": "پاشکەوتکردن",
+    "retry": "دووبارە هەوڵبدەرەوە",
+    "loading": "باردەکرێت...",
+    "submit": "ناردن",
+    "add": "زیادکردن",
+    "remove": "لابردن",
+    "complete": "تەواو بوو",
+    "run": "ئەنجامدان",
+    "or": "یان",
+    "features": "تایبەتمەندییەکان",
+    "account": "هەژمار",
+    "conversation": "گفتوگۆ",
+    "errorGeneric": "هەڵەیەک ڕوویدا. تکایە دووبارە هەوڵبدەرەوە.",
+    "aria": {
+        "close": "داخستن",
+        "notifications": "ئاگادارکردنەوەکان",
+        "toggleDarkMode": "گۆڕینی دۆخی تاریک",
+        "scrollToBottom": "چوون بۆ کۆتایی",
+        "conversations": "گفتوگۆکان",
+        "newChat": "چاتی نوێ",
+        "moreOptions": "بژاردەی زیاتر",
+        "attachFile": "هاوپێچ کردنی فایل",
+        "editMessage": "دەستکاری نامە",
+        "copyMessage": "کۆپی کردنی نامە",
+        "downloadResponse": "داگرتنی وەڵام",
+        "helpful": "بەسوودە",
+        "notHelpful": "بەسوود نییە",
+        "stopListening": "وەستان لە بیستن",
+        "voiceInput": "وەرگرتنی دەنگ",
+        "stopGenerating": "وەستان لە دروستکردن",
+        "shareableLink": "لینکی گفتوگۆی شیاوی هاوبەشکردن"
+    },
+    "time": {
+        "overdue": "دواکەوتووە",
+        "minutesShort": "دوای {{count}} خولەک",
+        "hoursShort": "دوای {{count}} کاتژمێر"
+    },
+    "notifications": {
+        "title": "ئاگادارکردنەوەکان",
+        "markAllRead": "نیشانەکردنی هەموو وەک خوێنراوە",
+        "empty": "هێشتا هیچ ئاگادارکردنەوەیەکت نییە"
+    },
+    "language": "زمان"
+}

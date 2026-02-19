@@ -23,6 +23,10 @@ const LANGUAGES = [
   { code: 'no', name: 'Norsk' },
   { code: 'da', name: 'Dansk' },
   { code: 'fi', name: 'Suomi' },
+  { code: 'fa', name: 'فارسی' },
+  { code: 'he', name: 'עברית' },
+  { code: 'ur', name: 'اردو' },
+  { code: 'ckb', name: 'کوردی سۆرانی' },
 ]
 
 export type MoreAction =

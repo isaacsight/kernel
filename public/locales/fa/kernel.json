@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "خط لوله فازها",
+        "phases": {
+            "perceiving": "درک کردن",
+            "attending": "توجه کردن",
+            "deciding": "تصمیم‌گیری",
+            "acting": "عمل کردن",
+            "reflecting": "بازتاب"
+        },
+        "perception": "ادراک",
+        "intent": "قصد",
+        "urgency": "فوریت",
+        "complexity": "پیچیدگی",
+        "sentiment": "احساس",
+        "impliedNeed": "نیاز ضمنی",
+        "noActivePerception": "ادراک فعالی وجود ندارد",
+        "attention": "توجه",
+        "focus": "تمرکز",
+        "depth": "عمق",
+        "noActiveAttention": "توجه فعالی وجود ندارد",
+        "conviction": "قاطعیت",
+        "trend": {
+            "rising": "در حال افزایش",
+            "falling": "در حال کاهش",
+            "stable": "پایدار"
+        },
+        "beliefs": "باورها ({{count}})",
+        "noBeliefsFormed": "باوری شکل نگرفته است",
+        "eventFeed": "فید رویدادها",
+        "noEventsYet": "هنوز رویدادی ثبت نشده است",
+        "lastReflection": "آخرین بازتاب",
+        "noReflectionsYet": "هنوز بازتابی ثبت نشده است"
+    },
+    "controls": {
+        "engine": "موتور",
+        "stop": "توقف",
+        "reset": "بازنشانی",
+        "agentOverride": "جایگزینی عامل",
+        "overrideNext": "جایگزینی بعدی",
+        "conviction": "قاطعیت",
+        "beliefs": "باورها",
+        "newBeliefPlaceholder": "باور جدید...",
+        "challenge": "به چالش کشیدن",
+        "reflections": "بازتاب‌ها",
+        "pruneLabel": "هرس زیر کیفیت:",
+        "prune": "هرس کردن",
+        "pruneResult": "{{count}} بازتاب حذف شد",
+        "agentPerformance": "عملکرد عامل",
+        "noPerformanceData": "هنوز داده‌ای از عملکرد در دسترس نیست"
+    },
+    "chat": {
+        "emptyTitle": "از kernel.chat بپرسید",
+        "emptySubtitle": "هر آنچه موتور می‌بیند را می‌بیند.",
+        "placeholder": "از Kernel بپرسید..."
+    },
+    "pill": {
+        "openKernel": "باز کردن kernel.chat",
+        "phases": {
+            "idle": "بیکار",
+            "perceiving": "در حال درک",
+            "attending": "در حال توجه",
+            "deciding": "در حال تصمیم‌گیری",
+            "acting": "در حال عمل",
+            "reflecting": "در حال بازتاب"
+        }
+    }
+}

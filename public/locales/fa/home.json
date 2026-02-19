@@ -1,0 +1,61 @@
+{
+    "tagline": "یک هوش مصنوعی شخصی که شما را به خاطر می‌سپارد، با شما فکر می‌کند و به مرور زمان بهتر می‌شود.",
+    "placeholder": "با kernel.chat صحبت کنید...",
+    "welcomeToPro": "به Kernel Pro خوش آمدید!",
+    "menu": {
+        "shareConversation": "اشتراک‌گذاری گفتگو",
+        "exportMarkdown": "خروجی به صورت Markdown",
+        "goals": "اهداف",
+        "workflows": "گردش‌کارها",
+        "scheduledTasks": "وظایف زمان‌بندی شده",
+        "dailyBriefing": "گزارش روزانه",
+        "whatKernelKnows": "آنچه Kernel می‌داند",
+        "yourStats": "آمار شما",
+        "upgradeToPro": "ارتقا به Pro",
+        "manageSubscription": "مدیریت اشتراک",
+        "signOut": "خروج",
+        "deleteAccount": "حذف حساب کاربری"
+    },
+    "admin": "مدیر",
+    "pro": "Pro",
+    "briefing": {
+        "todaysBriefing": "گزارش امروز",
+        "read": "خواندن",
+        "discuss": "گفتگو"
+    },
+    "upgrade": {
+        "title": "شما از {{limit}} پیام رایگان خود استفاده کرده‌اید",
+        "subtitle": "برای ادامه گفتگو به Kernel Pro ارتقا دهید.",
+        "features": {
+            "unlimitedMessages": "پیام نامحدود",
+            "deepResearch": "حالت تحقیق عمیق",
+            "multiAgent": "همکاری چند عاملی",
+            "multiStep": "برنامه‌ریزی وظایف چند مرحله‌ای",
+            "persistentMemory": "حافظه پایدار در طول جلسات"
+        },
+        "button": "ارتقا به Pro - ۲۰ دلار در ماه",
+        "buttonLoading": "در حال باز کردن پرداخت...",
+        "maybeLater": "شاید بعداً"
+    },
+    "deleteConfirm": {
+        "title": "حذف حساب کاربری شما؟",
+        "subtitle": "این کار تمام داده‌های شما را برای همیشه حذف می‌کند: گفتگوها، حافظه و تنظیمات. این عمل قابل بازگشت نیست.",
+        "subtitleWithSub": " اشتراک شما نیز لغو خواهد شد.",
+        "confirm": "بله، حساب من را حذف کن",
+        "confirming": "در حال حذف..."
+    },
+    "status": {
+        "assemblingAgents": "در حال فراخوانی عوامل...",
+        "agentsCollaborating": "عوامل در حال همکاری",
+        "synthesizingPerspectives": "در حال ترکیب دیدگاه‌ها...",
+        "routingToSpecialist": "هدایت به متخصص...",
+        "isWorking": "{{agent}} در حال کار است...",
+        "lowConfidence": "اطمینان پایین"
+    },
+    "feedback": {
+        "save": "ذخیره",
+        "cancel": "لغو"
+    },
+    "messagesRemaining": "{{count}} پیام باقی‌مانده",
+    "lastFreeMessage": "آخرین پیام رایگان"
+}
