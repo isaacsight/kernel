@@ -61,22 +61,23 @@ export function useMessageActions(
 
   const handleShare = useCallback(async () => {
     if (!activeConversationId || messages.length === 0) return
-    const title = activeConversation?.title || 'Kernel Conversation'
-    const text = messages
-      .map(m => `${m.role === 'user' ? 'You' : 'Kernel'}: ${m.content}`)
-      .join('\n\n')
+    // Open the ShareModal which handles public link creation
+    setShowShareModal(true)
+  }, [activeConversationId, messages])
+
+  const handleNativeShare = useCallback(async (url: string, title: string) => {
     try {
       if (navigator.share) {
-        await navigator.share({ title, text })
+        await navigator.share({ title, url })
       } else {
-        await navigator.clipboard.writeText(text)
-        showToast('Conversation copied to clipboard')
+        await navigator.clipboard.writeText(url)
+        showToast('Link copied to clipboard')
       }
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') return
-      showToast('Could not share — try Export instead')
+      showToast('Could not share — link copied instead')
     }
-  }, [activeConversationId, messages, activeConversation, showToast])
+  }, [showToast])
 
   const handleExportConversation = useCallback(() => {
     if (messages.length === 0) return
@@ -104,7 +105,7 @@ export function useMessageActions(
     editingContent, setEditingContent,
     showShareModal, setShowShareModal,
     handleCopyMessage, handleEditMessage, handleFeedback,
-    handleShare, handleExportConversation,
+    handleShare, handleNativeShare, handleExportConversation,
     downloadFile,
   }
 }

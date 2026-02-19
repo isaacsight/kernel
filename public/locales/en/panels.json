@@ -148,6 +148,11 @@
     "days30": "30 days",
     "createLink": "Create share link",
     "creating": "Creating...",
+    "shareableLink": "Shareable link",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "copiedAnnounce": "Link copied to clipboard",
+    "shareVia": "Share via...",
     "errors": {
       "createFailed": "Failed to create share link",
       "revokeFailed": "Failed to revoke link"

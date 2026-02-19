@@ -627,6 +627,7 @@ function EngineChat() {
             userId={user.id}
             onClose={() => msgActions.setShowShareModal(false)}
             onToast={showToast}
+            onNativeShare={msgActions.handleNativeShare}
           />
         )}
       </AnimatePresence>

@@ -3,10 +3,10 @@
 // Read-only public view of a shared conversation.
 // No login required. "Try Kernel" CTA at bottom.
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { MessageSquare } from 'lucide-react'
+import { MessageSquare, Share2 } from 'lucide-react'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { getSpecialist } from '../agents/specialists'
 
@@ -34,6 +34,20 @@ export function SharedConversationPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const handleSharePage = useCallback(async () => {
+    const url = window.location.href
+    const title = data?.title || 'Kernel Conversation'
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url })
+      } else {
+        await navigator.clipboard.writeText(url)
+      }
+    } catch {
+      // user cancelled or not supported
+    }
+  }, [data])
+
   // Override body fixed positioning so the page can scroll naturally
   useEffect(() => {
     document.body.classList.add('ka-scrollable-page')
@@ -44,6 +58,9 @@ export function SharedConversationPage() {
     if (!id) return
     fetch(`${SUPABASE_URL}/functions/v1/shared-conversation?id=${encodeURIComponent(id)}`)
       .then(async res => {
+        if (res.status === 429) {
+          throw new Error('Too many requests. Please wait a moment and try again.')
+        }
         if (!res.ok) {
           const body = await res.json().catch(() => ({ error: 'Not found' }))
           throw new Error(body.error || 'Not found')
@@ -89,6 +106,9 @@ export function SharedConversationPage() {
             {new Date(data.created_at).toLocaleDateString()} &middot; {data.messages.length} message{data.messages.length !== 1 ? 's' : ''} &middot; {data.view_count} view{data.view_count !== 1 ? 's' : ''}
           </span>
         </div>
+        <button className="ka-shared-new-chat" onClick={handleSharePage} title="Share this conversation" style={{ marginRight: 8 }}>
+          <Share2 size={18} />
+        </button>
         <a href={`${BASE}#/`} className="ka-shared-new-chat" title="Start a new conversation">
           <MessageSquare size={18} />
         </a>
