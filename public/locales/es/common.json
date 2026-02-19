@@ -1,0 +1,48 @@
+{
+  "close": "Cerrar",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "save": "Guardar",
+  "retry": "Intentar de nuevo",
+  "loading": "Cargando...",
+  "submit": "Enviar",
+  "add": "Agregar",
+  "remove": "Eliminar",
+  "complete": "Completar",
+  "run": "Ejecutar",
+  "or": "o",
+  "features": "Funciones",
+  "account": "Cuenta",
+  "conversation": "Conversación",
+  "errorGeneric": "Algo salió mal. Por favor, inténtalo de nuevo.",
+  "aria": {
+    "close": "Cerrar",
+    "notifications": "Notificaciones",
+    "toggleDarkMode": "Alternar modo oscuro",
+    "scrollToBottom": "Desplazar al final",
+    "conversations": "Conversaciones",
+    "newChat": "Nuevo chat",
+    "moreOptions": "Más opciones",
+    "attachFile": "Adjuntar archivo",
+    "editMessage": "Editar mensaje",
+    "copyMessage": "Copiar mensaje",
+    "downloadResponse": "Descargar respuesta",
+    "helpful": "Útil",
+    "notHelpful": "No útil",
+    "stopListening": "Dejar de escuchar",
+    "voiceInput": "Entrada de voz",
+    "stopGenerating": "Detener generación",
+    "shareableLink": "Enlace para compartir la conversación"
+  },
+  "time": {
+    "overdue": "vencido",
+    "minutesShort": "en {{count}}m",
+    "hoursShort": "en {{count}}h"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leído",
+    "empty": "Aún no hay notificaciones"
+  },
+  "language": "Idioma"
+}

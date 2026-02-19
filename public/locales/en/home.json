@@ -1,0 +1,61 @@
+{
+  "tagline": "A personal AI that remembers you, thinks with you, and gets better over time.",
+  "placeholder": "Talk to kernel.chat...",
+  "welcomeToPro": "Welcome to Kernel Pro!",
+  "menu": {
+    "shareConversation": "Share conversation",
+    "exportMarkdown": "Export as Markdown",
+    "goals": "Goals",
+    "workflows": "Workflows",
+    "scheduledTasks": "Scheduled tasks",
+    "dailyBriefing": "Daily briefing",
+    "whatKernelKnows": "What Kernel knows",
+    "yourStats": "Your stats",
+    "upgradeToPro": "Upgrade to Pro",
+    "manageSubscription": "Manage subscription",
+    "signOut": "Sign out",
+    "deleteAccount": "Delete account"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Today's briefing",
+    "read": "Read",
+    "discuss": "Discuss"
+  },
+  "upgrade": {
+    "title": "You've used your {{limit}} free messages",
+    "subtitle": "Upgrade to Kernel Pro to keep the conversation going.",
+    "features": {
+      "unlimitedMessages": "Unlimited messages",
+      "deepResearch": "Deep research mode",
+      "multiAgent": "Multi-agent collaboration",
+      "multiStep": "Multi-step task planning",
+      "persistentMemory": "Persistent memory across sessions"
+    },
+    "button": "Upgrade to Pro \u2014 $20/mo",
+    "buttonLoading": "Opening checkout...",
+    "maybeLater": "Maybe later"
+  },
+  "deleteConfirm": {
+    "title": "Delete your account?",
+    "subtitle": "This permanently deletes all your data: conversations, memory, and preferences. This cannot be undone.",
+    "subtitleWithSub": " Your subscription will also be cancelled.",
+    "confirm": "Yes, delete my account",
+    "confirming": "Deleting..."
+  },
+  "status": {
+    "assemblingAgents": "Assembling agents...",
+    "agentsCollaborating": "Agents collaborating",
+    "synthesizingPerspectives": "Synthesizing perspectives...",
+    "routingToSpecialist": "Routing to specialist...",
+    "isWorking": "{{agent}} is working...",
+    "lowConfidence": "low confidence"
+  },
+  "feedback": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "messagesRemaining": "{{count}} messages remaining",
+  "lastFreeMessage": "Last free message"
+}

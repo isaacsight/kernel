@@ -1,0 +1,61 @@
+{
+  "tagline": "Osobisty AI, który Cię pamięta, myśli razem z Tobą i staje się lepszy z czasem.",
+  "placeholder": "Porozmawiaj z kernel.chat...",
+  "welcomeToPro": "Witaj w Kernel Pro!",
+  "menu": {
+    "shareConversation": "Udostępnij rozmowę",
+    "exportMarkdown": "Eksportuj jako Markdown",
+    "goals": "Cele",
+    "workflows": "Przepływy pracy",
+    "scheduledTasks": "Zaplanowane zadania",
+    "dailyBriefing": "Codzienny briefing",
+    "whatKernelKnows": "Co Kernel wie",
+    "yourStats": "Twoje statystyki",
+    "upgradeToPro": "Uaktualnij do Pro",
+    "manageSubscription": "Zarządzaj subskrypcją",
+    "signOut": "Wyloguj się",
+    "deleteAccount": "Usuń konto"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Dzisiejszy briefing",
+    "read": "Czytaj",
+    "discuss": "Dyskutuj"
+  },
+  "upgrade": {
+    "title": "Wykorzystałeś swoje {{limit}} darmowych wiadomości",
+    "subtitle": "Uaktualnij do Kernel Pro, aby kontynuować rozmowę.",
+    "features": {
+      "unlimitedMessages": "Nieograniczone wiadomości",
+      "deepResearch": "Tryb głębokiego badania",
+      "multiAgent": "Współpraca wielu agentów",
+      "multiStep": "Wieloetapowe planowanie zadań",
+      "persistentMemory": "Trwała pamięć między sesjami"
+    },
+    "button": "Uaktualnij do Pro — $20/mo",
+    "buttonLoading": "Otwieranie płatności...",
+    "maybeLater": "Może później"
+  },
+  "deleteConfirm": {
+    "title": "Usunąć konto?",
+    "subtitle": "To trwale usunie wszystkie Twoje dane: rozmowy, pamięć i preferencje. Tej operacji nie można cofnąć.",
+    "subtitleWithSub": " Twoja subskrypcja również zostanie anulowana.",
+    "confirm": "Tak, usuń moje konto",
+    "confirming": "Usuwanie..."
+  },
+  "status": {
+    "assemblingAgents": "Zbieranie agentów...",
+    "agentsCollaborating": "Agenci współpracują",
+    "synthesizingPerspectives": "Synteza perspektyw...",
+    "routingToSpecialist": "Przekierowywanie do specjalisty...",
+    "isWorking": "{{agent}} pracuje...",
+    "lowConfidence": "niskie zaufanie"
+  },
+  "feedback": {
+    "save": "Zapisz",
+    "cancel": "Anuluj"
+  },
+  "messagesRemaining": "Pozostało {{count}} wiadomości",
+  "lastFreeMessage": "Ostatnia darmowa wiadomość"
+}

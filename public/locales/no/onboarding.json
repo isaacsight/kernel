@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Velkommen til Kernel",
+    "titleUser": "Velkommen, {{name}}",
+    "subtitle": "Din suverene AI, bygget for deg.",
+    "body": "Kernel er en AI-motor som lærer hvem du er, husker det som betyr noe for deg, og blir bedre med hver samtale."
+  },
+  "step1": {
+    "title": "Den lærer deg",
+    "subtitle": "Hukommelse som vokser.",
+    "body": "Mens du snakker, bygger Kernel en kunnskapsgraf av dine interesser, mål og relasjoner. Hver samtale gjør den neste bedre."
+  },
+  "step2": {
+    "title": "Spesialistagenter",
+    "subtitle": "Riktig ekspert for jobben.",
+    "body": "Meldingene dine rutes til spesialistagenter — en forsker for dype spørsmål, en koder for teknisk arbeid, en skribent for kreative oppgaver."
+  },
+  "step3": {
+    "title": "Hva interesserer deg?",
+    "subtitle": "Velg noen for å hjelpe Kernel å bli kjent med deg."
+  },
+  "step4": {
+    "title": "Klar til å begynne",
+    "subtitle": "Start gratis, oppgrader når som helst."
+  },
+  "interests": {
+    "tech": "Teknologi",
+    "business": "Næringsliv",
+    "creative": "Kreativ skriving",
+    "science": "Vitenskap",
+    "health": "Helse og trening",
+    "finance": "Finans",
+    "design": "Design",
+    "coding": "Programmering",
+    "music": "Musikk",
+    "philosophy": "Filosofi",
+    "travel": "Reise",
+    "education": "Utdanning"
+  },
+  "tiers": {
+    "free": "Gratis",
+    "freeFeature1": "10 meldinger",
+    "freeFeature2": "Grunnleggende agenter",
+    "freeFeature3": "Hukommelse",
+    "pro": "Pro",
+    "proFeature1": "Ubegrensede meldinger",
+    "proFeature2": "Dyp forskning",
+    "proFeature3": "Multi-agent svermer",
+    "proFeature4": "Kunnskapsgraf"
+  },
+  "continue": "Fortsett",
+  "skip": "Hopp over",
+  "begin": "Begynn",
+  "skipIntro": "Hopp over intro"
+}

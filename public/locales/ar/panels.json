@@ -1,0 +1,159 @@
+{
+    "goals": {
+        "title": "الأهداف",
+        "emptyTitle": "حدد هدفك الأول",
+        "emptyDesc": "تتبع ما يهمك — يقوم Kernel بمتابعة تقدمك تلقائياً.",
+        "createGoal": "إنشاء هدف",
+        "addGoal": "إضافة هدف",
+        "completed": "مكتمل ({{count}})",
+        "target": "المستهدف: {{date}}",
+        "priority": {
+            "low": "منخفض",
+            "medium": "متوسط",
+            "high": "مرتفع"
+        },
+        "frequency": {
+            "daily": "متابعة يومية",
+            "weekly": "أسبوعياً",
+            "biweekly": "كل أسبوعين",
+            "monthly": "شهرياً"
+        },
+        "errors": {
+            "addFailed": "فشل إضافة الهدف",
+            "updateFailed": "فشل تحديث المرحلة",
+            "completeFailed": "فشل إكمال الهدف",
+            "deleteFailed": "فشل حذف الهدف"
+        },
+        "deleteConfirm": "حذف هذا الهدف؟ لا يمكن التراجع عن هذا الإجراء."
+    },
+    "workflows": {
+        "title": "سير العمل",
+        "loading": "جاري تحميل سير العمل...",
+        "emptyTitle": "أنشئ سير العمل الأول الخاص بك",
+        "emptyDesc": "أتمت المهام متعددة الخطوات — يقوم Kernel بتشغيلها تماماً كما صممتها.",
+        "newWorkflow": "سير عمل جديد",
+        "createWorkflow": "إنشاء سير عمل",
+        "runCount_one": "تم التشغيل {{count}} مرة",
+        "runCount_other": "تم التشغيل {{count}} مرات",
+        "errors": {
+            "saveFailed": "فشل حفظ سير العمل",
+            "deleteFailed": "فشل حذف سير العمل"
+        },
+        "deleteConfirm": "حذف سير العمل هذا؟ لا يمكن التراجع عن هذا الإجراء."
+    },
+    "scheduled": {
+        "title": "المهام المجدولة",
+        "loading": "جاري تحميل المهام...",
+        "emptyTitle": "جدول مهمتك الأولى",
+        "emptyDesc": "اضبطها وانسَها — يقوم Kernel بتشغيل المهام وفقاً لجدولك.",
+        "createTask": "إنشاء مهمة",
+        "schedule": "جدولة",
+        "taskTypes": {
+            "reminder": "تذكير",
+            "workflow": "تشغيل سير عمل",
+            "briefing": "إحاطة يومية",
+            "goalCheckin": "متابعة الهدف"
+        },
+        "presets": {
+            "daily": "يومياً",
+            "weekdays": "أيام الأسبوع",
+            "weekly": "أسبوعياً (الاثنين)",
+            "once": "مرة واحدة"
+        },
+        "channels": {
+            "inApp": "داخل التطبيق",
+            "email": "البريد الإلكتروني",
+            "discord": "ديسكورد"
+        },
+        "errors": {
+            "createFailed": "فشل إنشاء المهمة المجدولة",
+            "updateFailed": "فشل تحديث المهمة",
+            "deleteFailed": "فشل حذف المهمة"
+        },
+        "deleteConfirm": "حذف هذه المهمة المجدولة؟"
+    },
+    "briefings": {
+        "title": "الإحاطات",
+        "generateTooltip": "توليد إحاطة جديدة بناءً على اهتماماتك ونشاطك الأخير",
+        "generating": "جاري التوليد...",
+        "newBriefing": "إحاطة جديدة",
+        "phases": {
+            "planning": "التخطيط",
+            "researching": "البحث",
+            "writing": "الكتابة"
+        },
+        "loading": "جاري تحميل الإحاطات...",
+        "emptyTitle": "إحاطتك اليومية",
+        "emptyDesc": "احصل على ملخص مخصص للأخبار والرؤى المصمم خصيصاً لاهتماماتك وأهدافك.",
+        "generateFirst": "توليد إحاطتك الأولى",
+        "errorTitle": "تعذر توليد هذه الإحاطة",
+        "errorDesc": "خطوة البحث لم تُعد بيانات كافية لإنشاء ملخص مفيد. يمكن أن يحدث هذا إذا كانت خدمة البحث غير متاحة مؤقتاً.",
+        "readTime": "قراءة في {{count}} دقائق",
+        "wordCount": "{{count}} كلمة",
+        "topicsCovered": "المواضيع التي تمت تغطيتها",
+        "continueReading": "مواصلة القراءة",
+        "readFull": "قراءة الإحاطة كاملة",
+        "goDeeper": "تعمق أكثر في الدردشة",
+        "saveAsGoal": "حفظ النقاط المستفادة كهدف",
+        "errors": {
+            "generateFailed": "فشل توليد الإحاطة"
+        },
+        "toast": {
+            "generated": "تم توليد الإحاطة",
+            "removed": "تمت إزالة الإحاطة"
+        }
+    },
+    "stats": {
+        "title": "إحصائياتك",
+        "loading": "جاري التحميل...",
+        "loadError": "تعذر تحميل الإحصائيات.",
+        "messages": "الرسائل",
+        "conversations": "المحادثات",
+        "entities": "الكيانات",
+        "helpful": "مفيد",
+        "agentUsage": "استخدام الوكيل",
+        "topTopics": "أبرز المواضيع",
+        "activity": "النشاط",
+        "memberSince": "عضو منذ {{date}}"
+    },
+    "kg": {
+        "title": "ما يعرفه Kernel",
+        "emptyTitle": "Kernel لم يتعلم أي شيء بعد.",
+        "emptyHint": "استمر في الدردشة — حيث يلتقط الأشخاص والمشاريع والمفاهيم التي تذكرها.",
+        "entitiesCount": "{{count}} كيانات",
+        "connectionsCount": "{{count}} اتصالات",
+        "confident": "واثق بنسبة {{value}}%",
+        "mentioned": "ذُكر {{count}} مرات",
+        "types": {
+            "person": "الأشخاص",
+            "company": "الشركات",
+            "project": "المشاريع",
+            "concept": "المفاهيم",
+            "preference": "التفضيلات",
+            "location": "المواقع"
+        }
+    },
+    "share": {
+        "title": "مشاركة المحادثة",
+        "checking": "جاري التحقق من وجود رابط حالي...",
+        "existingLink": "هذه المحادثة لها رابط عام بالفعل.",
+        "anyoneCanView": "يمكن لأي شخص لديه هذا الرابط عرض هذه المحادثة.",
+        "revokeLink": "إلغاء الرابط",
+        "revoking": "جاري الإلغاء...",
+        "createDesc": "أنشئ رابطاً عاماً يمكن لأي شخص عرضه. لا يتطلب تسجيل الدخول.",
+        "linkExpires": "تنتهي صلاحية الرابط:",
+        "never": "أبداً",
+        "hours24": "24 ساعة",
+        "days7": "7 أيام",
+        "days30": "30 يوماً",
+        "createLink": "إنشاء رابط مشاركة",
+        "creating": "جاري الإنشاء...",
+        "errors": {
+            "createFailed": "فشل إنشاء رابط المشاركة",
+            "revokeFailed": "فشل إلغاء الرابط"
+        },
+        "toast": {
+            "revoked": "تم إلغاء رابط المشاركة"
+        }
+    }
+}

@@ -1,0 +1,159 @@
+{
+    "goals": {
+        "title": "Obiettivi",
+        "emptyTitle": "Imposta il tuo primo obiettivo",
+        "emptyDesc": "Traccia ciò che conta: Kernel controlla i tuoi progressi automaticamente.",
+        "createGoal": "Crea Obiettivo",
+        "addGoal": "Aggiungi Obiettivo",
+        "completed": "Completati ({{count}})",
+        "target": "Target: {{date}}",
+        "priority": {
+            "low": "Bassa",
+            "medium": "Media",
+            "high": "Alta"
+        },
+        "frequency": {
+            "daily": "Check-in giornaliero",
+            "weekly": "Settimanale",
+            "biweekly": "Bisettimanale",
+            "monthly": "Mensile"
+        },
+        "errors": {
+            "addFailed": "Impossibile aggiungere l'obiettivo",
+            "updateFailed": "Impossibile aggiornare la tappa",
+            "completeFailed": "Impossibile completare l'obiettivo",
+            "deleteFailed": "Impossibile eliminare l'obiettivo"
+        },
+        "deleteConfirm": "Eliminare questo obiettivo? L'azione non è reversibile."
+    },
+    "workflows": {
+        "title": "Workflow",
+        "loading": "Caricamento workflow...",
+        "emptyTitle": "Costruisci il tuo primo workflow",
+        "emptyDesc": "Automatizza compiti multi-step: Kernel li esegue esattamente come li progetti.",
+        "newWorkflow": "Nuovo Workflow",
+        "createWorkflow": "Crea Workflow",
+        "runCount_one": "Eseguito {{count}} volta",
+        "runCount_other": "Eseguito {{count}} volte",
+        "errors": {
+            "saveFailed": "Impossibile salvare il workflow",
+            "deleteFailed": "Impossibile eliminare il workflow"
+        },
+        "deleteConfirm": "Eliminare questo workflow? L'azione non è reversibile."
+    },
+    "scheduled": {
+        "title": "Attività Pianificate",
+        "loading": "Caricamento attività...",
+        "emptyTitle": "Pianifica la tua prima attività",
+        "emptyDesc": "Impostala e dimenticala: Kernel esegue le attività secondo il tuo programma.",
+        "createTask": "Crea Attività",
+        "schedule": "Pianifica",
+        "taskTypes": {
+            "reminder": "Promemoria",
+            "workflow": "Esegui Workflow",
+            "briefing": "Briefing Giornaliero",
+            "goalCheckin": "Check-in Obiettivo"
+        },
+        "presets": {
+            "daily": "Giornaliero",
+            "weekdays": "Giorni feriali",
+            "weekly": "Settimanale (Lun)",
+            "once": "Una volta"
+        },
+        "channels": {
+            "inApp": "In-app",
+            "email": "Email",
+            "discord": "Discord"
+        },
+        "errors": {
+            "createFailed": "Impossibile creare l'attività pianificata",
+            "updateFailed": "Impossibile aggiornare l'attività",
+            "deleteFailed": "Impossibile eliminare l'attività"
+        },
+        "deleteConfirm": "Eliminare questa attività pianificata?"
+    },
+    "briefings": {
+        "title": "Briefing",
+        "generateTooltip": "Genera un nuovo briefing basato sui tuoi interessi e sulle attività recenti",
+        "generating": "Generazione...",
+        "newBriefing": "Nuovo briefing",
+        "phases": {
+            "planning": "Pianificazione",
+            "researching": "Ricerca",
+            "writing": "Scrittura"
+        },
+        "loading": "Caricamento briefing...",
+        "emptyTitle": "Il tuo briefing giornaliero",
+        "emptyDesc": "Ricevi un riepilogo personalizzato di notizie e approfondimenti su misura per i tuoi interessi e obiettivi.",
+        "generateFirst": "Genera il tuo primo briefing",
+        "errorTitle": "Impossibile generare questo briefing",
+        "errorDesc": "La fase di ricerca non ha restituito dati sufficienti per creare un riepilogo utile. Ciò può accadere se il servizio di ricerca era temporaneamente non disponibile.",
+        "readTime": "{{count}} min di lettura",
+        "wordCount": "{{count}} parole",
+        "topicsCovered": "Argomenti trattati",
+        "continueReading": "Continua a leggere",
+        "readFull": "Leggi il briefing completo",
+        "goDeeper": "Approfondisci in chat",
+        "saveAsGoal": "Salva i punti chiave come obiettivo",
+        "errors": {
+            "generateFailed": "Impossibile generare il briefing"
+        },
+        "toast": {
+            "generated": "Briefing generato",
+            "removed": "Briefing rimosso"
+        }
+    },
+    "stats": {
+        "title": "Le tue Statistiche",
+        "loading": "Caricamento...",
+        "loadError": "Impossibile caricare le statistiche.",
+        "messages": "Messaggi",
+        "conversations": "Conversazioni",
+        "entities": "Entità",
+        "helpful": "Utili",
+        "agentUsage": "Utilizzo Agente",
+        "topTopics": "Argomenti principali",
+        "activity": "Attività",
+        "memberSince": "Membro dal {{date}}"
+    },
+    "kg": {
+        "title": "Cosa sa il Kernel",
+        "emptyTitle": "Il Kernel non ha ancora imparato nulla.",
+        "emptyHint": "Continua a chattare: apprenderà persone, progetti e concetti che menzioni.",
+        "entitiesCount": "{{count}} entità",
+        "connectionsCount": "{{count}} connessioni",
+        "confident": "Sicuro al {{value}}%",
+        "mentioned": "menzionato {{count}}x",
+        "types": {
+            "person": "Persone",
+            "company": "Aziende",
+            "project": "Progetti",
+            "concept": "Concetti",
+            "preference": "Preferenze",
+            "location": "Luoghi"
+        }
+    },
+    "share": {
+        "title": "Condividi conversazione",
+        "checking": "Verifica link esistente...",
+        "existingLink": "Questa conversazione ha già un link pubblico.",
+        "anyoneCanView": "Chiunque abbia questo link può visualizzare questa conversazione.",
+        "revokeLink": "Revoca link",
+        "revoking": "Revoca...",
+        "createDesc": "Crea un link pubblico visibile a chiunque. Nessun login richiesto.",
+        "linkExpires": "Scadenza link:",
+        "never": "Mai",
+        "hours24": "24 ore",
+        "days7": "7 giorni",
+        "days30": "30 giorni",
+        "createLink": "Crea link di condivisione",
+        "creating": "Creazione...",
+        "errors": {
+            "createFailed": "Impossibile creare il link di condivisione",
+            "revokeFailed": "Impossibile revocare il link"
+        },
+        "toast": {
+            "revoked": "Link di condivisione revocato"
+        }
+    }
+}

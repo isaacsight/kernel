@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Welcome to Kernel",
+    "titleUser": "Welcome, {{name}}",
+    "subtitle": "Your sovereign AI, built for you.",
+    "body": "Kernel is an AI engine that learns who you are, remembers what matters to you, and gets better with every conversation."
+  },
+  "step1": {
+    "title": "It Learns You",
+    "subtitle": "Memory that compounds.",
+    "body": "As you talk, Kernel builds a knowledge graph of your interests, goals, and relationships. Every conversation makes the next one better."
+  },
+  "step2": {
+    "title": "Specialist Agents",
+    "subtitle": "The right mind for the job.",
+    "body": "Your messages are routed to specialist agents \u2014 a researcher for deep questions, a coder for technical work, a writer for creative tasks."
+  },
+  "step3": {
+    "title": "What interests you?",
+    "subtitle": "Pick a few to help Kernel get to know you."
+  },
+  "step4": {
+    "title": "Ready to go",
+    "subtitle": "Start free, upgrade anytime."
+  },
+  "interests": {
+    "tech": "Technology",
+    "business": "Business",
+    "creative": "Creative Writing",
+    "science": "Science",
+    "health": "Health & Fitness",
+    "finance": "Finance",
+    "design": "Design",
+    "coding": "Coding",
+    "music": "Music",
+    "philosophy": "Philosophy",
+    "travel": "Travel",
+    "education": "Education"
+  },
+  "tiers": {
+    "free": "Free",
+    "freeFeature1": "10 messages",
+    "freeFeature2": "Basic agents",
+    "freeFeature3": "Memory",
+    "pro": "Pro",
+    "proFeature1": "Unlimited messages",
+    "proFeature2": "Deep research",
+    "proFeature3": "Multi-agent swarms",
+    "proFeature4": "Knowledge graph"
+  },
+  "continue": "Continue",
+  "skip": "Skip",
+  "begin": "Begin",
+  "skipIntro": "Skip intro"
+}

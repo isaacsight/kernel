@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Kernel에 오신 것을 환영합니다",
+    "titleUser": "환영합니다, {{name}}",
+    "subtitle": "당신을 위해 만들어진 주권 AI.",
+    "body": "Kernel은 당신이 누구인지 배우고, 중요한 것을 기억하며, 대화할수록 더 나아지는 AI 엔진입니다."
+  },
+  "step1": {
+    "title": "당신을 배웁니다",
+    "subtitle": "축적되는 메모리.",
+    "body": "대화를 하면서 Kernel은 당신의 관심사, 목표, 관계의 지식 그래프를 구축합니다. 모든 대화가 다음을 더 좋게 만듭니다."
+  },
+  "step2": {
+    "title": "전문 에이전트",
+    "subtitle": "적합한 전문가에게.",
+    "body": "메시지는 전문 에이전트에게 라우팅됩니다 — 심층 질문에는 연구원, 기술적 작업에는 코더, 창작 작업에는 작가."
+  },
+  "step3": {
+    "title": "어떤 것에 관심이 있나요?",
+    "subtitle": "몇 가지를 선택하여 Kernel이 당신을 알아갈 수 있도록 도와주세요."
+  },
+  "step4": {
+    "title": "준비 완료",
+    "subtitle": "무료로 시작, 언제든 업그레이드."
+  },
+  "interests": {
+    "tech": "기술",
+    "business": "비즈니스",
+    "creative": "창작 글쓰기",
+    "science": "과학",
+    "health": "건강 및 피트니스",
+    "finance": "금융",
+    "design": "디자인",
+    "coding": "코딩",
+    "music": "음악",
+    "philosophy": "철학",
+    "travel": "여행",
+    "education": "교육"
+  },
+  "tiers": {
+    "free": "무료",
+    "freeFeature1": "10개 메시지",
+    "freeFeature2": "기본 에이전트",
+    "freeFeature3": "메모리",
+    "pro": "Pro",
+    "proFeature1": "무제한 메시지",
+    "proFeature2": "딥 리서치",
+    "proFeature3": "멀티 에이전트 스웜",
+    "proFeature4": "지식 그래프"
+  },
+  "continue": "계속",
+  "skip": "건너뛰기",
+  "begin": "시작",
+  "skipIntro": "소개 건너뛰기"
+}

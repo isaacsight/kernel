@@ -1,0 +1,68 @@
+{
+  "observer": {
+    "phasePipeline": "Phase Pipeline",
+    "phases": {
+      "perceiving": "perceiving",
+      "attending": "attending",
+      "deciding": "deciding",
+      "acting": "acting",
+      "reflecting": "reflecting"
+    },
+    "perception": "Perception",
+    "intent": "Intent",
+    "urgency": "Urgency",
+    "complexity": "Complexity",
+    "sentiment": "Sentiment",
+    "impliedNeed": "Implied Need",
+    "noActivePerception": "No active perception",
+    "attention": "Attention",
+    "focus": "Focus",
+    "depth": "Depth",
+    "noActiveAttention": "No active attention",
+    "conviction": "Conviction",
+    "trend": {
+      "rising": "rising",
+      "falling": "falling",
+      "stable": "stable"
+    },
+    "beliefs": "Beliefs ({{count}})",
+    "noBeliefsFormed": "No beliefs formed",
+    "eventFeed": "Event Feed",
+    "noEventsYet": "No events yet",
+    "lastReflection": "Last Reflection",
+    "noReflectionsYet": "No reflections yet"
+  },
+  "controls": {
+    "engine": "Engine",
+    "stop": "Stop",
+    "reset": "Reset",
+    "agentOverride": "Agent Override",
+    "overrideNext": "Override Next",
+    "conviction": "Conviction",
+    "beliefs": "Beliefs",
+    "newBeliefPlaceholder": "New belief...",
+    "challenge": "Challenge",
+    "reflections": "Reflections",
+    "pruneLabel": "Prune below quality:",
+    "prune": "Prune",
+    "pruneResult": "Removed {{count}} reflection(s)",
+    "agentPerformance": "Agent Performance",
+    "noPerformanceData": "No performance data yet"
+  },
+  "chat": {
+    "emptyTitle": "Ask kernel.chat",
+    "emptySubtitle": "It sees everything the engine sees.",
+    "placeholder": "Ask the Kernel..."
+  },
+  "pill": {
+    "openKernel": "Open kernel.chat",
+    "phases": {
+      "idle": "idle",
+      "perceiving": "perceiving",
+      "attending": "attending",
+      "deciding": "deciding",
+      "acting": "acting",
+      "reflecting": "reflecting"
+    }
+  }
+}

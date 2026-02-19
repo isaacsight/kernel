@@ -1,0 +1,61 @@
+{
+  "tagline": "En personlig AI der husker dig, tænker med dig og bliver bedre over tid.",
+  "placeholder": "Tal med kernel.chat...",
+  "welcomeToPro": "Velkommen til Kernel Pro!",
+  "menu": {
+    "shareConversation": "Del samtale",
+    "exportMarkdown": "Eksportér som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbejdsgange",
+    "scheduledTasks": "Planlagte opgaver",
+    "dailyBriefing": "Daglig briefing",
+    "whatKernelKnows": "Hvad Kernel ved",
+    "yourStats": "Din statistik",
+    "upgradeToPro": "Opgrader til Pro",
+    "manageSubscription": "Administrer abonnement",
+    "signOut": "Log ud",
+    "deleteAccount": "Slet konto"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Dagens briefing",
+    "read": "Læs",
+    "discuss": "Diskutér"
+  },
+  "upgrade": {
+    "title": "Du har brugt dine {{limit}} gratis beskeder",
+    "subtitle": "Opgrader til Kernel Pro for at fortsætte samtalen.",
+    "features": {
+      "unlimitedMessages": "Ubegrænsede beskeder",
+      "deepResearch": "Dyb forskningstilstand",
+      "multiAgent": "Flerfagligt agentsamarbejde",
+      "multiStep": "Flertrinsopgaveplanlægning",
+      "persistentMemory": "Vedvarende hukommelse mellem sessioner"
+    },
+    "button": "Opgrader til Pro — $20/mo",
+    "buttonLoading": "Åbner kassen...",
+    "maybeLater": "Måske senere"
+  },
+  "deleteConfirm": {
+    "title": "Slet din konto?",
+    "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og præferencer. Dette kan ikke fortrydes.",
+    "subtitleWithSub": " Dit abonnement vil også blive annulleret.",
+    "confirm": "Ja, slet min konto",
+    "confirming": "Sletter..."
+  },
+  "status": {
+    "assemblingAgents": "Samler agenter...",
+    "agentsCollaborating": "Agenter samarbejder",
+    "synthesizingPerspectives": "Syntetiserer perspektiver...",
+    "routingToSpecialist": "Dirigerer til specialist...",
+    "isWorking": "{{agent}} arbejder...",
+    "lowConfidence": "lav tillid"
+  },
+  "feedback": {
+    "save": "Gem",
+    "cancel": "Annuller"
+  },
+  "messagesRemaining": "{{count}} beskeder tilbage",
+  "lastFreeMessage": "Sidste gratis besked"
+}

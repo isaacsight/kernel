@@ -1,0 +1,48 @@
+{
+  "close": "Close",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "save": "Save",
+  "retry": "Try again",
+  "loading": "Loading...",
+  "submit": "Submit",
+  "add": "Add",
+  "remove": "Remove",
+  "complete": "Complete",
+  "run": "Run",
+  "or": "or",
+  "features": "Features",
+  "account": "Account",
+  "conversation": "Conversation",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "aria": {
+    "close": "Close",
+    "notifications": "Notifications",
+    "toggleDarkMode": "Toggle dark mode",
+    "scrollToBottom": "Scroll to bottom",
+    "conversations": "Conversations",
+    "newChat": "New chat",
+    "moreOptions": "More options",
+    "attachFile": "Attach file",
+    "editMessage": "Edit message",
+    "copyMessage": "Copy message",
+    "downloadResponse": "Download response",
+    "helpful": "Helpful",
+    "notHelpful": "Not helpful",
+    "stopListening": "Stop listening",
+    "voiceInput": "Voice input",
+    "stopGenerating": "Stop generating",
+    "shareableLink": "Shareable conversation link"
+  },
+  "time": {
+    "overdue": "overdue",
+    "minutesShort": "in {{count}}m",
+    "hoursShort": "in {{count}}h"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications yet"
+  },
+  "language": "Language"
+}

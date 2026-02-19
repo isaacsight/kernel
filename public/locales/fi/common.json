@@ -1,0 +1,48 @@
+{
+  "close": "Sulje",
+  "cancel": "Peruuta",
+  "delete": "Poista",
+  "save": "Tallenna",
+  "retry": "Yritä uudelleen",
+  "loading": "Ladataan...",
+  "submit": "Lähetä",
+  "add": "Lisää",
+  "remove": "Poista",
+  "complete": "Valmis",
+  "run": "Suorita",
+  "or": "tai",
+  "features": "Ominaisuudet",
+  "account": "Tili",
+  "conversation": "Keskustelu",
+  "errorGeneric": "Jokin meni pieleen. Yritä uudelleen.",
+  "aria": {
+    "close": "Sulje",
+    "notifications": "Ilmoitukset",
+    "toggleDarkMode": "Vaihda tumma tila",
+    "scrollToBottom": "Vieritä alas",
+    "conversations": "Keskustelut",
+    "newChat": "Uusi keskustelu",
+    "moreOptions": "Lisää vaihtoehtoja",
+    "attachFile": "Liitä tiedosto",
+    "editMessage": "Muokkaa viestiä",
+    "copyMessage": "Kopioi viesti",
+    "downloadResponse": "Lataa vastaus",
+    "helpful": "Hyödyllinen",
+    "notHelpful": "Ei hyödyllinen",
+    "stopListening": "Lopeta kuuntelu",
+    "voiceInput": "Äänisyöte",
+    "stopGenerating": "Lopeta luonti",
+    "shareableLink": "Jaettava keskustelulinkki"
+  },
+  "time": {
+    "overdue": "myöhässä",
+    "minutesShort": "{{count}}m päästä",
+    "hoursShort": "{{count}}t päästä"
+  },
+  "notifications": {
+    "title": "Ilmoitukset",
+    "markAllRead": "Merkitse kaikki luetuiksi",
+    "empty": "Ei ilmoituksia vielä"
+  },
+  "language": "Kieli"
+}

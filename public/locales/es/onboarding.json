@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Bienvenido a Kernel",
+    "titleUser": "Bienvenido, {{name}}",
+    "subtitle": "Tu IA soberana, construida para ti.",
+    "body": "Kernel es un motor de IA que aprende quién eres, recuerda lo que te importa y mejora con cada conversación."
+  },
+  "step1": {
+    "title": "Te Aprende",
+    "subtitle": "Memoria que se acumula.",
+    "body": "Mientras hablas, Kernel construye un grafo de conocimiento de tus intereses, objetivos y relaciones. Cada conversación mejora la siguiente."
+  },
+  "step2": {
+    "title": "Agentes Especialistas",
+    "subtitle": "La mente correcta para el trabajo.",
+    "body": "Tus mensajes se dirigen a agentes especialistas — un investigador para preguntas profundas, un programador para trabajo técnico, un escritor para tareas creativas."
+  },
+  "step3": {
+    "title": "¿Qué te interesa?",
+    "subtitle": "Elige algunos para ayudar a Kernel a conocerte."
+  },
+  "step4": {
+    "title": "Listo para empezar",
+    "subtitle": "Empieza gratis, mejora cuando quieras."
+  },
+  "interests": {
+    "tech": "Tecnología",
+    "business": "Negocios",
+    "creative": "Escritura Creativa",
+    "science": "Ciencia",
+    "health": "Salud y Fitness",
+    "finance": "Finanzas",
+    "design": "Diseño",
+    "coding": "Programación",
+    "music": "Música",
+    "philosophy": "Filosofía",
+    "travel": "Viajes",
+    "education": "Educación"
+  },
+  "tiers": {
+    "free": "Gratis",
+    "freeFeature1": "10 mensajes",
+    "freeFeature2": "Agentes básicos",
+    "freeFeature3": "Memoria",
+    "pro": "Pro",
+    "proFeature1": "Mensajes ilimitados",
+    "proFeature2": "Investigación profunda",
+    "proFeature3": "Enjambres multi-agente",
+    "proFeature4": "Grafo de conocimiento"
+  },
+  "continue": "Continuar",
+  "skip": "Omitir",
+  "begin": "Comenzar",
+  "skipIntro": "Saltar introducción"
+}

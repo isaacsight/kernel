@@ -1,0 +1,159 @@
+{
+    "goals": {
+        "title": "Doelen",
+        "emptyTitle": "Stel je eerste doel in",
+        "emptyDesc": "Houd bij wat belangrijk is — Kernel controleert automatisch je voortgang.",
+        "createGoal": "Doel maken",
+        "addGoal": "Doel toevoegen",
+        "completed": "Voltooid ({{count}})",
+        "target": "Doel: {{date}}",
+        "priority": {
+            "low": "Laag",
+            "medium": "Gemiddeld",
+            "high": "Hoog"
+        },
+        "frequency": {
+            "daily": "Dagelijkse check-in",
+            "weekly": "Wekelijks",
+            "biweekly": "Tweewekelijks",
+            "monthly": "Maandelijks"
+        },
+        "errors": {
+            "addFailed": "Doel toevoegen mislukt",
+            "updateFailed": "Mijlpaal bijwerken mislukt",
+            "completeFailed": "Doel voltooien mislukt",
+            "deleteFailed": "Doel verwijderen mislukt"
+        },
+        "deleteConfirm": "Dit doel verwijderen? Dit kan niet ongedaan worden gemaakt."
+    },
+    "workflows": {
+        "title": "Workflows",
+        "loading": "Workflows laden...",
+        "emptyTitle": "Bouw je eerste workflow",
+        "emptyDesc": "Automatiseer taken met meerdere stappen — Kernel voert ze precies uit zoals jij ze ontwerpt.",
+        "newWorkflow": "Nieuwe workflow",
+        "createWorkflow": "Workflow maken",
+        "runCount_one": "{{count}} keer uitgevoerd",
+        "runCount_other": "{{count}} keer uitgevoerd",
+        "errors": {
+            "saveFailed": "Workflow opslaan mislukt",
+            "deleteFailed": "Workflow verwijderen mislukt"
+        },
+        "deleteConfirm": "Deze workflow verwijderen? Dit kan niet ongedaan worden gemaakt."
+    },
+    "scheduled": {
+        "title": "Geplande taken",
+        "loading": "Taken laden...",
+        "emptyTitle": "Plan je eerste taak",
+        "emptyDesc": "Stel het in en vergeet het — Kernel voert taken uit volgens jouw schema.",
+        "createTask": "Taak maken",
+        "schedule": "Plannen",
+        "taskTypes": {
+            "reminder": "Herinnering",
+            "workflow": "Workflow uitvoeren",
+            "briefing": "Dagelijkse briefing",
+            "goalCheckin": "Doel check-in"
+        },
+        "presets": {
+            "daily": "Dagelijks",
+            "weekdays": "Weekdagen",
+            "weekly": "Wekelijks (ma)",
+            "once": "Eenmalig"
+        },
+        "channels": {
+            "inApp": "In-app",
+            "email": "E-mail",
+            "discord": "Discord"
+        },
+        "errors": {
+            "createFailed": "Geplande taak maken mislukt",
+            "updateFailed": "Taak bijwerken mislukt",
+            "deleteFailed": "Taak verwijderen mislukt"
+        },
+        "deleteConfirm": "Deze geplande taak verwijderen?"
+    },
+    "briefings": {
+        "title": "Briefings",
+        "generateTooltip": "Genereer een nieuwe briefing op basis van je interesses en recente activiteit",
+        "generating": "Genereren...",
+        "newBriefing": "Nieuwe briefing",
+        "phases": {
+            "planning": "Plannen",
+            "researching": "Onderzoeken",
+            "writing": "Schrijven"
+        },
+        "loading": "Briefings laden...",
+        "emptyTitle": "Je dagelijkse briefing",
+        "emptyDesc": "Ontvang een gepersonaliseerde samenvatting van nieuws en inzichten, afgestemd op jouw interesses en doelen.",
+        "generateFirst": "Genereer je eerste briefing",
+        "errorTitle": "Deze briefing kon niet worden gegenereerd",
+        "errorDesc": "De onderzoeksstap leverde niet genoeg gegevens op om een nuttige samenvatting te maken. Dit kan gebeuren als de zoekservice tijdelijk niet beschikbaar was.",
+        "readTime": "{{count}} min. leestijd",
+        "wordCount": "{{count}} woorden",
+        "topicsCovered": "Behandelde onderwerpen",
+        "continueReading": "Verder lezen",
+        "readFull": "Lees volledige briefing",
+        "goDeeper": "Dieper op ingaan in chat",
+        "saveAsGoal": "Opslaan als doel",
+        "errors": {
+            "generateFailed": "Briefing genereren mislukt"
+        },
+        "toast": {
+            "generated": "Briefing gegenereerd",
+            "removed": "Briefing verwijderd"
+        }
+    },
+    "stats": {
+        "title": "Jouw statistieken",
+        "loading": "Laden...",
+        "loadError": "Kan statistieken niet laden.",
+        "messages": "Berichten",
+        "conversations": "Gesprekken",
+        "entities": "Entiteiten",
+        "helpful": "Nuttig",
+        "agentUsage": "Agent gebruik",
+        "topTopics": "Top onderwerpen",
+        "activity": "Activiteit",
+        "memberSince": "Lid sinds {{date}}"
+    },
+    "kg": {
+        "title": "Wat Kernel weet",
+        "emptyTitle": "Kernel heeft nog niets geleerd.",
+        "emptyHint": "Blijf chatten — het pikt mensen, projecten en concepten op die je noemt.",
+        "entitiesCount": "{{count}} entiteiten",
+        "connectionsCount": "{{count}} verbindingen",
+        "confident": "{{value}}% zeker",
+        "mentioned": "{{count}}x genoemd",
+        "types": {
+            "person": "Mensen",
+            "company": "Bedrijven",
+            "project": "Projecten",
+            "concept": "Concepten",
+            "preference": "Voorkeuren",
+            "location": "Locaties"
+        }
+    },
+    "share": {
+        "title": "Gesprek delen",
+        "checking": "Controleren op bestaande link...",
+        "existingLink": "Dit gesprek heeft al een openbare link.",
+        "anyoneCanView": "Iedereen met deze link kan dit gesprek bekijken.",
+        "revokeLink": "Link intrekken",
+        "revoking": "Intrekken...",
+        "createDesc": "Maak een openbare link die voor iedereen zichtbaar is. Geen login vereist.",
+        "linkExpires": "Link verloopt op:",
+        "never": "Nooit",
+        "hours24": "24 uur",
+        "days7": "7 dagen",
+        "days30": "30 dagen",
+        "createLink": "Deellink maken",
+        "creating": "Maken...",
+        "errors": {
+            "createFailed": "Deellink maken mislukt",
+            "revokeFailed": "Link intrekken mislukt"
+        },
+        "toast": {
+            "revoked": "Deellink ingetrokken"
+        }
+    }
+}

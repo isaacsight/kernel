@@ -1,0 +1,51 @@
+{
+  "observer": {
+    "phasePipeline": "Fasepipeline",
+    "phases": { "perceiving": "oppfatter", "attending": "behandler", "deciding": "beslutter", "acting": "handler", "reflecting": "reflekterer" },
+    "perception": "Persepsjon",
+    "intent": "Intensjon",
+    "urgency": "Hastegrad",
+    "complexity": "Kompleksitet",
+    "sentiment": "Sentiment",
+    "impliedNeed": "Underforstått behov",
+    "noActivePerception": "Ingen aktiv persepsjon",
+    "attention": "Oppmerksomhet",
+    "focus": "Fokus",
+    "depth": "Dybde",
+    "noActiveAttention": "Ingen aktiv oppmerksomhet",
+    "conviction": "Overbevisning",
+    "trend": { "rising": "stigende", "falling": "synkende", "stable": "stabil" },
+    "beliefs": "Overbevisninger ({{count}})",
+    "noBeliefsFormed": "Ingen overbevisninger dannet",
+    "eventFeed": "Hendelsesstrøm",
+    "noEventsYet": "Ingen hendelser ennå",
+    "lastReflection": "Siste refleksjon",
+    "noReflectionsYet": "Ingen refleksjoner ennå"
+  },
+  "controls": {
+    "engine": "Motor",
+    "stop": "Stopp",
+    "reset": "Tilbakestill",
+    "agentOverride": "Agentoverstyring",
+    "overrideNext": "Overstyr neste",
+    "conviction": "Overbevisning",
+    "beliefs": "Overbevisninger",
+    "newBeliefPlaceholder": "Ny overbevisning...",
+    "challenge": "Utfordr",
+    "reflections": "Refleksjoner",
+    "pruneLabel": "Fjern under kvalitet:",
+    "prune": "Fjern",
+    "pruneResult": "Fjernet {{count}} refleksjon(er)",
+    "agentPerformance": "Agentytelse",
+    "noPerformanceData": "Ingen ytelsesdata ennå"
+  },
+  "chat": {
+    "emptyTitle": "Spør kernel.chat",
+    "emptySubtitle": "Den ser alt motoren ser.",
+    "placeholder": "Spør Kernel..."
+  },
+  "pill": {
+    "openKernel": "Åpne kernel.chat",
+    "phases": { "idle": "inaktiv", "perceiving": "oppfatter", "attending": "behandler", "deciding": "beslutter", "acting": "handler", "reflecting": "reflekterer" }
+  }
+}

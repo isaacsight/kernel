@@ -1,0 +1,48 @@
+{
+  "close": "閉じる",
+  "cancel": "キャンセル",
+  "delete": "削除",
+  "save": "保存",
+  "retry": "再試行",
+  "loading": "読み込み中...",
+  "submit": "送信",
+  "add": "追加",
+  "remove": "削除",
+  "complete": "完了",
+  "run": "実行",
+  "or": "または",
+  "features": "機能",
+  "account": "アカウント",
+  "conversation": "会話",
+  "errorGeneric": "エラーが発生しました。もう一度お試しください。",
+  "aria": {
+    "close": "閉じる",
+    "notifications": "通知",
+    "toggleDarkMode": "ダークモード切替",
+    "scrollToBottom": "一番下へスクロール",
+    "conversations": "会話",
+    "newChat": "新しいチャット",
+    "moreOptions": "その他のオプション",
+    "attachFile": "ファイルを添付",
+    "editMessage": "メッセージを編集",
+    "copyMessage": "メッセージをコピー",
+    "downloadResponse": "回答をダウンロード",
+    "helpful": "役に立った",
+    "notHelpful": "役に立たなかった",
+    "stopListening": "聞き取りを停止",
+    "voiceInput": "音声入力",
+    "stopGenerating": "生成を停止",
+    "shareableLink": "共有可能な会話リンク"
+  },
+  "time": {
+    "overdue": "期限超過",
+    "minutesShort": "{{count}}分後",
+    "hoursShort": "{{count}}時間後"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "すべて既読にする",
+    "empty": "通知はまだありません"
+  },
+  "language": "言語"
+}

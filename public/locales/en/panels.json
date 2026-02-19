@@ -1,0 +1,159 @@
+{
+  "goals": {
+    "title": "Goals",
+    "emptyTitle": "Set Your First Goal",
+    "emptyDesc": "Track what matters \u2014 Kernel checks in on your progress automatically.",
+    "createGoal": "Create Goal",
+    "addGoal": "Add Goal",
+    "completed": "Completed ({{count}})",
+    "target": "Target: {{date}}",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "frequency": {
+      "daily": "Daily check-in",
+      "weekly": "Weekly",
+      "biweekly": "Biweekly",
+      "monthly": "Monthly"
+    },
+    "errors": {
+      "addFailed": "Failed to add goal",
+      "updateFailed": "Failed to update milestone",
+      "completeFailed": "Failed to complete goal",
+      "deleteFailed": "Failed to delete goal"
+    },
+    "deleteConfirm": "Delete this goal? This cannot be undone."
+  },
+  "workflows": {
+    "title": "Workflows",
+    "loading": "Loading workflows...",
+    "emptyTitle": "Build Your First Workflow",
+    "emptyDesc": "Automate multi-step tasks \u2014 Kernel runs them exactly as you design.",
+    "newWorkflow": "New Workflow",
+    "createWorkflow": "Create Workflow",
+    "runCount_one": "Run {{count}} time",
+    "runCount_other": "Run {{count}} times",
+    "errors": {
+      "saveFailed": "Failed to save workflow",
+      "deleteFailed": "Failed to delete workflow"
+    },
+    "deleteConfirm": "Delete this workflow? This cannot be undone."
+  },
+  "scheduled": {
+    "title": "Scheduled Tasks",
+    "loading": "Loading tasks...",
+    "emptyTitle": "Schedule Your First Task",
+    "emptyDesc": "Set it and forget it \u2014 Kernel runs tasks on your schedule.",
+    "createTask": "Create Task",
+    "schedule": "Schedule",
+    "taskTypes": {
+      "reminder": "Reminder",
+      "workflow": "Run Workflow",
+      "briefing": "Daily Briefing",
+      "goalCheckin": "Goal Check-in"
+    },
+    "presets": {
+      "daily": "Daily",
+      "weekdays": "Weekdays",
+      "weekly": "Weekly (Mon)",
+      "once": "Once"
+    },
+    "channels": {
+      "inApp": "In-app",
+      "email": "Email",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Failed to create scheduled task",
+      "updateFailed": "Failed to update task",
+      "deleteFailed": "Failed to delete task"
+    },
+    "deleteConfirm": "Delete this scheduled task?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Generate a new briefing based on your interests and recent activity",
+    "generating": "Generating...",
+    "newBriefing": "New briefing",
+    "phases": {
+      "planning": "Planning",
+      "researching": "Researching",
+      "writing": "Writing"
+    },
+    "loading": "Loading briefings...",
+    "emptyTitle": "Your daily briefing",
+    "emptyDesc": "Get a personalized news and insights summary tailored to your interests and goals.",
+    "generateFirst": "Generate your first briefing",
+    "errorTitle": "This briefing couldn't be generated",
+    "errorDesc": "The research step didn't return enough data to create a useful summary. This can happen if the search service was temporarily unavailable.",
+    "readTime": "{{count}} min read",
+    "wordCount": "{{count}} words",
+    "topicsCovered": "Topics covered",
+    "continueReading": "Continue reading",
+    "readFull": "Read full briefing",
+    "goDeeper": "Go deeper in chat",
+    "saveAsGoal": "Save takeaways as goal",
+    "errors": {
+      "generateFailed": "Failed to generate briefing"
+    },
+    "toast": {
+      "generated": "Briefing generated",
+      "removed": "Briefing removed"
+    }
+  },
+  "stats": {
+    "title": "Your Stats",
+    "loading": "Loading...",
+    "loadError": "Could not load stats.",
+    "messages": "Messages",
+    "conversations": "Conversations",
+    "entities": "Entities",
+    "helpful": "Helpful",
+    "agentUsage": "Agent Usage",
+    "topTopics": "Top Topics",
+    "activity": "Activity",
+    "memberSince": "Member since {{date}}"
+  },
+  "kg": {
+    "title": "What Kernel Knows",
+    "emptyTitle": "Kernel hasn't learned anything yet.",
+    "emptyHint": "Keep chatting \u2014 it picks up on people, projects, and concepts you mention.",
+    "entitiesCount": "{{count}} entities",
+    "connectionsCount": "{{count}} connections",
+    "confident": "{{value}}% confident",
+    "mentioned": "{{count}}x mentioned",
+    "types": {
+      "person": "People",
+      "company": "Companies",
+      "project": "Projects",
+      "concept": "Concepts",
+      "preference": "Preferences",
+      "location": "Locations"
+    }
+  },
+  "share": {
+    "title": "Share conversation",
+    "checking": "Checking for existing link...",
+    "existingLink": "This conversation already has a public link.",
+    "anyoneCanView": "Anyone with this link can view this conversation.",
+    "revokeLink": "Revoke link",
+    "revoking": "Revoking...",
+    "createDesc": "Create a public link anyone can view. No login required.",
+    "linkExpires": "Link expires:",
+    "never": "Never",
+    "hours24": "24 hours",
+    "days7": "7 days",
+    "days30": "30 days",
+    "createLink": "Create share link",
+    "creating": "Creating...",
+    "errors": {
+      "createFailed": "Failed to create share link",
+      "revokeFailed": "Failed to revoke link"
+    },
+    "toast": {
+      "revoked": "Share link revoked"
+    }
+  }
+}

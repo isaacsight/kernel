@@ -1,0 +1,48 @@
+{
+  "close": "Lukk",
+  "cancel": "Avbryt",
+  "delete": "Slett",
+  "save": "Lagre",
+  "retry": "Prøv igjen",
+  "loading": "Laster...",
+  "submit": "Send inn",
+  "add": "Legg til",
+  "remove": "Fjern",
+  "complete": "Fullfør",
+  "run": "Kjør",
+  "or": "eller",
+  "features": "Funksjoner",
+  "account": "Konto",
+  "conversation": "Samtale",
+  "errorGeneric": "Noe gikk galt. Vennligst prøv igjen.",
+  "aria": {
+    "close": "Lukk",
+    "notifications": "Varsler",
+    "toggleDarkMode": "Bytt mørk modus",
+    "scrollToBottom": "Rull til bunnen",
+    "conversations": "Samtaler",
+    "newChat": "Ny samtale",
+    "moreOptions": "Flere alternativer",
+    "attachFile": "Legg ved fil",
+    "editMessage": "Rediger melding",
+    "copyMessage": "Kopier melding",
+    "downloadResponse": "Last ned svar",
+    "helpful": "Nyttig",
+    "notHelpful": "Ikke nyttig",
+    "stopListening": "Slutt å lytte",
+    "voiceInput": "Stemmeinndata",
+    "stopGenerating": "Stopp generering",
+    "shareableLink": "Delbar samtalelenke"
+  },
+  "time": {
+    "overdue": "forfalt",
+    "minutesShort": "om {{count}}m",
+    "hoursShort": "om {{count}}t"
+  },
+  "notifications": {
+    "title": "Varsler",
+    "markAllRead": "Merk alle som lest",
+    "empty": "Ingen varsler ennå"
+  },
+  "language": "Språk"
+}
