@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye } from 'lucide-react'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { MoreMenu } from '../components/MoreMenu'
 import KGPanel from '../components/kernel-agent/KGPanel'
@@ -10,6 +10,7 @@ import { GoalsPanel } from '../components/GoalsPanel'
 import { WorkflowsPanel } from '../components/WorkflowsPanel'
 import { ScheduledTasksPanel } from '../components/ScheduledTasksPanel'
 import { BriefingPanel } from '../components/BriefingPanel'
+import { InsightsPanel } from '../components/InsightsPanel'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist } from '../agents/specialists'
@@ -298,6 +299,20 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {panels.showInsightsPanel && user && (
+          <BottomSheet onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}>
+            <InsightsPanel
+              engineState={chatEngine.engineState}
+              userMemory={chatEngine.userMemory}
+              onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
+              onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
+              onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}
+            />
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
@@ -369,6 +384,9 @@ function EngineChat() {
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowStatsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <BarChart3 size={14} /> {t('menu.yourStats')}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <Eye size={14} /> {t('menu.insights')}
                 </button>
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>

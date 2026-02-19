@@ -133,6 +133,49 @@
             "location": "Platser"
         }
     },
+    "insights": {
+        "title": "Insikter",
+        "sections": {
+            "world": "Du",
+            "beliefs": "Övertygelser",
+            "memory": "Minne",
+            "reflections": "Kvalitet",
+            "agents": "Agenter"
+        },
+        "howISeeYou": "Hur jag ser dig",
+        "apparentGoal": "Tydligt mål",
+        "situation": "Nuvarande situation",
+        "conviction": "Övertygelse",
+        "whatIBelieve": "Vad jag tror",
+        "noBeliefsYet": "Inga övertygelser ännu. Fortsätt chatta — jag lär mig vad som är viktigt för dig.",
+        "challengeBelief": "Ifrågasätt denna övertygelse",
+        "dismissBelief": "Avfärda denna övertygelse",
+        "myMemory": "Mitt minne av dig",
+        "noMemoryYet": "Inget minne ännu. Jag lär mig om dig när vi pratar.",
+        "commStyle": "Kommunikationsstil",
+        "memory": {
+            "interests": "Intressen",
+            "goals": "Mål",
+            "facts": "Om dig",
+            "preferences": "Preferenser"
+        },
+        "performance": "Hur jag presterar",
+        "noReflectionsYet": "Inga reflektioner ännu. Jag börjar spåra kvalitet efter några konversationer.",
+        "avgQuality": "snitt kvalitet (senaste 20)",
+        "dims": {
+            "substance": "Substans",
+            "coherence": "Koherens",
+            "relevance": "Relevans",
+            "brevity": "Korthet",
+            "craft": "Hantverk"
+        },
+        "recentLessons": "Senaste lärdomar",
+        "patternNotes": "Mönsteranteckningar",
+        "agentPerformance": "Agentprestanda",
+        "noAgentDataYet": "Ingen agentdata ännu.",
+        "quality": "Kvalitet",
+        "usage": "Användning"
+    },
     "share": {
         "title": "Dela konversation",
         "checking": "Kollar efter befintlig länk...",

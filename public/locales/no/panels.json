@@ -82,6 +82,49 @@
     "mentioned": "{{count}}x nevnt",
     "types": { "person": "Personer", "company": "Selskaper", "project": "Prosjekter", "concept": "Konsepter", "preference": "Preferanser", "location": "Steder" }
   },
+  "insights": {
+    "title": "Innsikt",
+    "sections": {
+      "world": "Deg",
+      "beliefs": "Overbevisninger",
+      "memory": "Hukommelse",
+      "reflections": "Kvalitet",
+      "agents": "Agenter"
+    },
+    "howISeeYou": "Hvordan jeg ser deg",
+    "apparentGoal": "Tilsynelatende mål",
+    "situation": "Nåværende situasjon",
+    "conviction": "Overbevisning",
+    "whatIBelieve": "Hva jeg tror",
+    "noBeliefsYet": "Ingen overbevisninger ennå. Fortsett å snakke — jeg lærer hva som er viktig for deg.",
+    "challengeBelief": "Utfordre denne overbevisningen",
+    "dismissBelief": "Avvis denne overbevisningen",
+    "myMemory": "Mitt minne om deg",
+    "noMemoryYet": "Ingen hukommelse ennå. Jeg lærer om deg mens vi snakker.",
+    "commStyle": "Kommunikasjonsstil",
+    "memory": {
+      "interests": "Interesser",
+      "goals": "Mål",
+      "facts": "Om deg",
+      "preferences": "Preferanser"
+    },
+    "performance": "Hvordan jeg presterer",
+    "noReflectionsYet": "Ingen refleksjoner ennå. Jeg begynner å spore kvalitet etter noen samtaler.",
+    "avgQuality": "snitt kvalitet (siste 20)",
+    "dims": {
+      "substance": "Substans",
+      "coherence": "Sammenheng",
+      "relevance": "Relevans",
+      "brevity": "Korthet",
+      "craft": "Håndverk"
+    },
+    "recentLessons": "Nylige lærdommer",
+    "patternNotes": "Mønsternotater",
+    "agentPerformance": "Agentytelse",
+    "noAgentDataYet": "Ingen agentdata ennå.",
+    "quality": "Kvalitet",
+    "usage": "Bruk"
+  },
   "share": {
     "title": "Del samtale",
     "checking": "Sjekker etter eksisterende lenke...",

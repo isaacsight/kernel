@@ -133,6 +133,49 @@
             "location": "Luoghi"
         }
     },
+    "insights": {
+        "title": "Approfondimenti",
+        "sections": {
+            "world": "Tu",
+            "beliefs": "Convinzioni",
+            "memory": "Memoria",
+            "reflections": "Qualità",
+            "agents": "Agenti"
+        },
+        "howISeeYou": "Come ti vedo",
+        "apparentGoal": "Obiettivo apparente",
+        "situation": "Situazione attuale",
+        "conviction": "Convinzione",
+        "whatIBelieve": "Ciò che credo",
+        "noBeliefsYet": "Nessuna convinzione formata ancora. Continua a chattare — imparerò cosa conta per te.",
+        "challengeBelief": "Metti in discussione questa convinzione",
+        "dismissBelief": "Ignora questa convinzione",
+        "myMemory": "La mia memoria di te",
+        "noMemoryYet": "Nessuna memoria ancora. Imparo di te mentre parliamo.",
+        "commStyle": "Stile di comunicazione",
+        "memory": {
+            "interests": "Interessi",
+            "goals": "Obiettivi",
+            "facts": "Su di te",
+            "preferences": "Preferenze"
+        },
+        "performance": "Le mie prestazioni",
+        "noReflectionsYet": "Nessuna riflessione ancora. Inizierò a valutare la qualità dopo qualche conversazione.",
+        "avgQuality": "qualità media (ultime 20)",
+        "dims": {
+            "substance": "Sostanza",
+            "coherence": "Coerenza",
+            "relevance": "Pertinenza",
+            "brevity": "Brevità",
+            "craft": "Mestiere"
+        },
+        "recentLessons": "Lezioni recenti",
+        "patternNotes": "Note sui pattern",
+        "agentPerformance": "Prestazioni degli agenti",
+        "noAgentDataYet": "Nessun dato sugli agenti ancora.",
+        "quality": "Qualità",
+        "usage": "Utilizzo"
+    },
     "share": {
         "title": "Condividi conversazione",
         "checking": "Verifica link esistente...",

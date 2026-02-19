@@ -3171,6 +3171,315 @@ h4 {
     border-color: #333;
 }
 
+/* ─── Insights Panel ───────────────────────────────────── */
+.ka-insights-panel {
+    padding: 1.25rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.ka-insights-tabs {
+    display: flex;
+    gap: 0.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.ka-insights-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.65rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm, 6px);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: var(--rubin-slate, #1F1E1D);
+    opacity: 0.55;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+.ka-insights-tab:hover { opacity: 0.8; background: rgba(0,0,0,0.03); }
+.ka-insights-tab--active {
+    opacity: 1;
+    background: rgba(0,0,0,0.06);
+    font-weight: 600;
+}
+.ka-insights-content { min-height: 200px; }
+.ka-insights-section { display: flex; flex-direction: column; gap: 0.85rem; }
+.ka-insights-section-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--rubin-slate, #1F1E1D);
+}
+.ka-insights-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.ka-insights-field-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+}
+.ka-insights-field-value {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+.ka-insights-field-value--mono {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+}
+.ka-insights-badges {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+.ka-insights-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm, 6px);
+    background: rgba(0,0,0,0.05);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    text-transform: capitalize;
+}
+.ka-insights-conviction {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.ka-insights-gauge {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.ka-insights-gauge-fill {
+    height: 100%;
+    background: var(--rubin-vignette, cornflowerblue);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+.ka-insights-conviction-value {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    opacity: 0.7;
+    min-width: 3.5rem;
+    text-align: right;
+}
+/* Beliefs */
+.ka-insights-beliefs { display: flex; flex-direction: column; gap: 0.65rem; }
+.ka-insights-belief {
+    padding: 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+.ka-insights-belief-content {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+}
+.ka-insights-belief-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+.ka-insights-belief-bar {
+    width: 60px;
+    height: 4px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.ka-insights-belief-bar-fill {
+    height: 100%;
+    background: var(--rubin-vignette, cornflowerblue);
+    border-radius: 2px;
+}
+.ka-insights-belief-badge {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    opacity: 0.45;
+    letter-spacing: 0.04em;
+}
+.ka-insights-belief-stat {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    opacity: 0.4;
+}
+.ka-insights-belief-actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+}
+.ka-insights-belief-action {
+    border: none;
+    background: transparent;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    opacity: 0.4;
+    cursor: pointer;
+    padding: 0.15rem 0.3rem;
+    border-radius: 3px;
+    transition: all 0.15s ease;
+}
+.ka-insights-belief-action:hover { opacity: 0.8; background: rgba(0,0,0,0.05); }
+.ka-insights-belief-action--danger:hover { color: #DC2626; }
+/* Memory section */
+.ka-insights-memory-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.ka-insights-memory-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+}
+.ka-insights-memory-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+.ka-insights-memory-list li { margin-bottom: 0.15rem; }
+.ka-insights-empty {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    opacity: 0.45;
+    text-align: center;
+    padding: 2rem 0;
+}
+/* Reflections/Quality */
+.ka-insights-quality-score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+.ka-insights-quality-number {
+    font-family: 'EB Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--rubin-vignette, cornflowerblue);
+}
+.ka-insights-quality-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    opacity: 0.45;
+}
+.ka-insights-dimensions { display: flex; flex-direction: column; gap: 0.4rem; }
+.ka-insights-dim {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.ka-insights-dim-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    width: 5.5rem;
+    opacity: 0.6;
+    text-transform: capitalize;
+}
+.ka-insights-dim-bar {
+    flex: 1;
+    height: 5px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.ka-insights-dim-bar-fill {
+    height: 100%;
+    background: var(--rubin-vignette, cornflowerblue);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+.ka-insights-dim-bar-fill--quality { background: var(--rubin-vignette, cornflowerblue); }
+.ka-insights-dim-bar-fill--usage { background: #22C55E; }
+.ka-insights-dim-value {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    opacity: 0.5;
+    min-width: 1.8rem;
+    text-align: right;
+}
+/* Lessons */
+.ka-insights-expand-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: none;
+    background: transparent;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    opacity: 0.55;
+    cursor: pointer;
+    padding: 0.25rem 0;
+}
+.ka-insights-expand-btn:hover { opacity: 0.8; }
+.ka-insights-lessons-list {
+    margin: 0.3rem 0 0;
+    padding-left: 1.1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+.ka-insights-lessons-list li { margin-bottom: 0.2rem; opacity: 0.75; }
+/* Agent performance */
+.ka-insights-agents { display: flex; flex-direction: column; gap: 0.65rem; }
+.ka-insights-agent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.ka-insights-agent-name {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.ka-insights-agent-bars { display: flex; flex-direction: column; gap: 0.2rem; }
+.ka-insights-agent-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.ka-insights-agent-bar-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem;
+    opacity: 0.4;
+    width: 3.5rem;
+}
+/* Dark mode */
+[data-theme="dark"] .ka-insights-tab { color: var(--rubin-ivory, #FAF9F6); }
+[data-theme="dark"] .ka-insights-tab:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .ka-insights-tab--active { background: rgba(255,255,255,0.1); }
+[data-theme="dark"] .ka-insights-section-title { color: var(--rubin-ivory, #FAF9F6); }
+[data-theme="dark"] .ka-insights-badge { background: rgba(255,255,255,0.08); }
+[data-theme="dark"] .ka-insights-gauge { background: rgba(255,255,255,0.08); }
+[data-theme="dark"] .ka-insights-belief { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.06); }
+[data-theme="dark"] .ka-insights-belief-action:hover { background: rgba(255,255,255,0.08); }
+[data-theme="dark"] .ka-insights-dim-bar { background: rgba(255,255,255,0.08); }
+[data-theme="dark"] .ka-insights-belief-bar { background: rgba(255,255,255,0.08); }
+
 /* ─── Briefing Panel ───────────────────────────────────── */
 .ka-brief-panel {
     padding: 20px 16px;

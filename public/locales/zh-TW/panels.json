@@ -82,6 +82,49 @@
     "mentioned": "提及 {{count}} 次",
     "types": { "person": "人物", "company": "公司", "project": "專案", "concept": "概念", "preference": "偏好", "location": "地點" }
   },
+  "insights": {
+    "title": "洞察",
+    "sections": {
+      "world": "你",
+      "beliefs": "信念",
+      "memory": "記憶",
+      "reflections": "品質",
+      "agents": "代理"
+    },
+    "howISeeYou": "我眼中的你",
+    "apparentGoal": "可能的目標",
+    "situation": "目前狀況",
+    "conviction": "確信度",
+    "whatIBelieve": "我的看法",
+    "noBeliefsYet": "尚未形成任何看法。繼續聊天吧——我會了解什麼對你重要。",
+    "challengeBelief": "質疑這個看法",
+    "dismissBelief": "忽略這個看法",
+    "myMemory": "我對你的記憶",
+    "noMemoryYet": "還沒有記憶。隨著我們的對話，我會了解你。",
+    "commStyle": "溝通風格",
+    "memory": {
+      "interests": "興趣",
+      "goals": "目標",
+      "facts": "關於你",
+      "preferences": "偏好"
+    },
+    "performance": "我的表現",
+    "noReflectionsYet": "尚無反思。幾次對話後，我會開始追蹤品質。",
+    "avgQuality": "平均品質（最近 20 則）",
+    "dims": {
+      "substance": "深度",
+      "coherence": "連貫性",
+      "relevance": "相關性",
+      "brevity": "簡潔度",
+      "craft": "表達力"
+    },
+    "recentLessons": "近期經驗",
+    "patternNotes": "模式紀錄",
+    "agentPerformance": "代理表現",
+    "noAgentDataYet": "尚無代理資料。",
+    "quality": "品質",
+    "usage": "使用狀況"
+  },
   "share": {
     "title": "分享對話",
     "checking": "正在檢查現有連結...",

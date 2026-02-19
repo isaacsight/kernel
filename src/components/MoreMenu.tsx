@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Zap, Clock, Brain, BarChart3, Crown, Settings, LogOut, Trash2, Globe } from 'lucide-react'
+import { Zap, Clock, Brain, BarChart3, Eye, Crown, Settings, LogOut, Trash2, Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const LANGUAGES = [
@@ -34,6 +34,7 @@ export type MoreAction =
   | 'scheduled'
   | 'knowledge'
   | 'stats'
+  | 'insights'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -52,6 +53,7 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: Clock },
   { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: Brain },
   { id: 'stats', labelKey: 'menu.yourStats', icon: BarChart3 },
+  { id: 'insights', labelKey: 'menu.insights', icon: Eye },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [

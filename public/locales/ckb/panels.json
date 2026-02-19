@@ -133,6 +133,49 @@
             "location": "شوێنەکان"
         }
     },
+    "insights": {
+        "title": "بینینەکان",
+        "sections": {
+            "world": "تۆ",
+            "beliefs": "باوەڕەکان",
+            "memory": "بیرگە",
+            "reflections": "کوالیتی",
+            "agents": "بریکارەکان"
+        },
+        "howISeeYou": "چۆن تۆ دەبینم",
+        "apparentGoal": "ئامانجی دیار",
+        "situation": "دۆخی ئێستا",
+        "conviction": "بڕوا",
+        "whatIBelieve": "ئەوەی باوەڕم پێیەتی",
+        "noBeliefsYet": "هێشتا هیچ باوەڕێک دانەنراوە. بەردەوامبە لە قسەکردن — فێر دەبم چی بۆ تۆ گرنگە.",
+        "challengeBelief": "ئەم باوەڕە بەرپرس بکە",
+        "dismissBelief": "ئەم باوەڕە لابدە",
+        "myMemory": "بیرگەی من لەسەر تۆ",
+        "noMemoryYet": "هێشتا بیرگەم نییە. لە کاتی قسەکردندا لەسەر تۆ فێر دەبم.",
+        "commStyle": "شێوازی پەیوەندی",
+        "memory": {
+            "interests": "ئارەزووەکان",
+            "goals": "ئامانجەکان",
+            "facts": "لەسەر تۆ",
+            "preferences": "هەڵبژاردەکان"
+        },
+        "performance": "ئاستی ئەدای من",
+        "noReflectionsYet": "هێشتا هیچ تێبینییەک نییە. دوای چەند گفتوگۆ دەست دەکەم بە شوێنکەوتنی کوالیتی.",
+        "avgQuality": "تێکڕای کوالیتی (دوایین 20)",
+        "dims": {
+            "substance": "ناوەڕۆک",
+            "coherence": "پێکەوەبەستراوی",
+            "relevance": "پەیوەندیداری",
+            "brevity": "کورتی",
+            "craft": "پیشەسازی"
+        },
+        "recentLessons": "وانەکانی دواییتر",
+        "patternNotes": "تێبینییەکانی نەخشە",
+        "agentPerformance": "ئەدای بریکارەکان",
+        "noAgentDataYet": "هێشتا داتای بریکار نییە.",
+        "quality": "کوالیتی",
+        "usage": "بەکارهێنان"
+    },
     "share": {
         "title": "هاوبەشکردنی گفتوگۆ",
         "checking": "پشکنین بۆ لینکی هەبوو...",

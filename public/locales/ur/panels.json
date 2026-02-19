@@ -133,6 +133,49 @@
             "location": "مقامات"
         }
     },
+    "insights": {
+        "title": "بصیرت",
+        "sections": {
+            "world": "آپ",
+            "beliefs": "عقائد",
+            "memory": "یادداشت",
+            "reflections": "معیار",
+            "agents": "ایجنٹس"
+        },
+        "howISeeYou": "میں آپ کو کیسے دیکھتا ہوں",
+        "apparentGoal": "ظاہری مقصد",
+        "situation": "موجودہ صورتحال",
+        "conviction": "یقین",
+        "whatIBelieve": "میرے عقائد",
+        "noBeliefsYet": "ابھی تک کوئی عقیدہ نہیں بنا۔ بات چیت جاری رکھیں — میں سیکھوں گا کہ آپ کے لیے کیا اہم ہے۔",
+        "challengeBelief": "اس عقیدے کو چیلنج کریں",
+        "dismissBelief": "اس عقیدے کو خارج کریں",
+        "myMemory": "آپ کے بارے میں میری یادداشت",
+        "noMemoryYet": "ابھی تک کوئی یادداشت نہیں۔ بات چیت کے دوران میں آپ کے بارے میں سیکھتا ہوں۔",
+        "commStyle": "بات چیت کا انداز",
+        "memory": {
+            "interests": "دلچسپیاں",
+            "goals": "اہداف",
+            "facts": "آپ کے بارے میں",
+            "preferences": "ترجیحات"
+        },
+        "performance": "میری کارکردگی",
+        "noReflectionsYet": "ابھی تک کوئی مشاہدات نہیں۔ چند گفتگو کے بعد معیار کی پیمائش شروع کروں گا۔",
+        "avgQuality": "اوسط معیار (آخری 20)",
+        "dims": {
+            "substance": "مواد",
+            "coherence": "ربط",
+            "relevance": "مطابقت",
+            "brevity": "اختصار",
+            "craft": "فن"
+        },
+        "recentLessons": "حالیہ اسباق",
+        "patternNotes": "نمونے کے نوٹس",
+        "agentPerformance": "ایجنٹس کی کارکردگی",
+        "noAgentDataYet": "ابھی تک ایجنٹ کا کوئی ڈیٹا نہیں۔",
+        "quality": "معیار",
+        "usage": "استعمال"
+    },
     "share": {
         "title": "گفتگو شیئر کریں",
         "checking": "موجودہ لنک چیک ہو رہا ہے...",

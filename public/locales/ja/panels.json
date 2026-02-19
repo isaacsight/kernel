@@ -82,6 +82,49 @@
     "mentioned": "{{count}} 回言及",
     "types": { "person": "人物", "company": "企業", "project": "プロジェクト", "concept": "コンセプト", "preference": "嗜好", "location": "場所" }
   },
+  "insights": {
+    "title": "インサイト",
+    "sections": {
+      "world": "あなた",
+      "beliefs": "信念",
+      "memory": "記憶",
+      "reflections": "品質",
+      "agents": "エージェント"
+    },
+    "howISeeYou": "私から見たあなた",
+    "apparentGoal": "推定される目標",
+    "situation": "現在の状況",
+    "conviction": "確信度",
+    "whatIBelieve": "私の見解",
+    "noBeliefsYet": "まだ見解はありません。会話を続けてください — あなたにとって大切なことを学びます。",
+    "challengeBelief": "この見解に異議を唱える",
+    "dismissBelief": "この見解を却下する",
+    "myMemory": "あなたについての記憶",
+    "noMemoryYet": "まだ記憶がありません。会話を通じてあなたについて学んでいきます。",
+    "commStyle": "コミュニケーションスタイル",
+    "memory": {
+      "interests": "興味",
+      "goals": "目標",
+      "facts": "あなたについて",
+      "preferences": "嗜好"
+    },
+    "performance": "パフォーマンス",
+    "noReflectionsYet": "まだ振り返りがありません。数回の会話の後、品質の追跡を開始します。",
+    "avgQuality": "平均品質（直近 20 件）",
+    "dims": {
+      "substance": "内容の深さ",
+      "coherence": "一貫性",
+      "relevance": "関連性",
+      "brevity": "簡潔さ",
+      "craft": "表現力"
+    },
+    "recentLessons": "最近の学び",
+    "patternNotes": "パターンメモ",
+    "agentPerformance": "エージェントのパフォーマンス",
+    "noAgentDataYet": "エージェントデータがまだありません。",
+    "quality": "品質",
+    "usage": "使用状況"
+  },
   "share": {
     "title": "会話を共有",
     "checking": "既存のリンクを確認中...",

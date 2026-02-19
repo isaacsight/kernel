@@ -133,6 +133,49 @@
             "location": "地点"
         }
     },
+    "insights": {
+        "title": "洞察",
+        "sections": {
+            "world": "你",
+            "beliefs": "信念",
+            "memory": "记忆",
+            "reflections": "质量",
+            "agents": "代理"
+        },
+        "howISeeYou": "我眼中的你",
+        "apparentGoal": "可能的目标",
+        "situation": "当前状况",
+        "conviction": "确信度",
+        "whatIBelieve": "我的看法",
+        "noBeliefsYet": "还没有形成任何看法。继续聊天吧——我会了解什么对你重要。",
+        "challengeBelief": "质疑这个看法",
+        "dismissBelief": "忽略这个看法",
+        "myMemory": "我对你的记忆",
+        "noMemoryYet": "还没有记忆。随着我们的交谈，我会了解你。",
+        "commStyle": "沟通风格",
+        "memory": {
+            "interests": "兴趣",
+            "goals": "目标",
+            "facts": "关于你",
+            "preferences": "偏好"
+        },
+        "performance": "我的表现",
+        "noReflectionsYet": "还没有反思。几次对话后，我会开始追踪质量。",
+        "avgQuality": "平均质量（最近 20 条）",
+        "dims": {
+            "substance": "深度",
+            "coherence": "连贯性",
+            "relevance": "相关性",
+            "brevity": "简洁度",
+            "craft": "表达力"
+        },
+        "recentLessons": "最近的经验",
+        "patternNotes": "模式记录",
+        "agentPerformance": "代理表现",
+        "noAgentDataYet": "暂无代理数据。",
+        "quality": "质量",
+        "usage": "使用情况"
+    },
     "share": {
         "title": "分享对话",
         "checking": "正在检查现有链接...",

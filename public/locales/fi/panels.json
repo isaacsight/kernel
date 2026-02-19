@@ -82,6 +82,49 @@
     "mentioned": "{{count}}x mainittu",
     "types": { "person": "Ihmiset", "company": "Yritykset", "project": "Projektit", "concept": "Käsitteet", "preference": "Mieltymykset", "location": "Sijainnit" }
   },
+  "insights": {
+    "title": "Näkemykset",
+    "sections": {
+      "world": "Sinä",
+      "beliefs": "Uskomukset",
+      "memory": "Muisti",
+      "reflections": "Laatu",
+      "agents": "Agentit"
+    },
+    "howISeeYou": "Miten näen sinut",
+    "apparentGoal": "Näennäinen tavoite",
+    "situation": "Nykyinen tilanne",
+    "conviction": "Vakaumus",
+    "whatIBelieve": "Mitä uskon",
+    "noBeliefsYet": "Ei vielä uskomuksia. Jatka keskustelua — opin, mikä sinulle on tärkeää.",
+    "challengeBelief": "Haasta tämä uskomus",
+    "dismissBelief": "Hylkää tämä uskomus",
+    "myMemory": "Muistoni sinusta",
+    "noMemoryYet": "Ei vielä muistoja. Opin sinusta keskustellessamme.",
+    "commStyle": "Viestintätyyli",
+    "memory": {
+      "interests": "Kiinnostuksen kohteet",
+      "goals": "Tavoitteet",
+      "facts": "Tietoa sinusta",
+      "preferences": "Mieltymykset"
+    },
+    "performance": "Miten suoriudun",
+    "noReflectionsYet": "Ei vielä havaintoja. Alan seurata laatua muutaman keskustelun jälkeen.",
+    "avgQuality": "keskimääräinen laatu (viimeiset 20)",
+    "dims": {
+      "substance": "Sisältö",
+      "coherence": "Johdonmukaisuus",
+      "relevance": "Osuvuus",
+      "brevity": "Tiiviys",
+      "craft": "Taituruus"
+    },
+    "recentLessons": "Viimeaikaiset opit",
+    "patternNotes": "Kaavahuomiot",
+    "agentPerformance": "Agenttien suorituskyky",
+    "noAgentDataYet": "Ei vielä agenttitietoja.",
+    "quality": "Laatu",
+    "usage": "Käyttö"
+  },
   "share": {
     "title": "Jaa keskustelu",
     "checking": "Tarkistetaan olemassa olevaa linkkiä...",

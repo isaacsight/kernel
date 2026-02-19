@@ -133,6 +133,49 @@
             "location": "Locaties"
         }
     },
+    "insights": {
+        "title": "Inzichten",
+        "sections": {
+            "world": "Jij",
+            "beliefs": "Overtuigingen",
+            "memory": "Geheugen",
+            "reflections": "Kwaliteit",
+            "agents": "Agenten"
+        },
+        "howISeeYou": "Hoe ik jou zie",
+        "apparentGoal": "Zichtbaar doel",
+        "situation": "Huidige situatie",
+        "conviction": "Overtuiging",
+        "whatIBelieve": "Wat ik geloof",
+        "noBeliefsYet": "Nog geen overtuigingen gevormd. Blijf chatten — ik leer wat belangrijk voor je is.",
+        "challengeBelief": "Daag deze overtuiging uit",
+        "dismissBelief": "Verwerp deze overtuiging",
+        "myMemory": "Mijn herinnering aan jou",
+        "noMemoryYet": "Nog geen geheugen. Ik leer je kennen terwijl we praten.",
+        "commStyle": "Communicatiestijl",
+        "memory": {
+            "interests": "Interesses",
+            "goals": "Doelen",
+            "facts": "Over jou",
+            "preferences": "Voorkeuren"
+        },
+        "performance": "Hoe ik presteer",
+        "noReflectionsYet": "Nog geen reflecties. Ik begin de kwaliteit te beoordelen na een paar gesprekken.",
+        "avgQuality": "gem. kwaliteit (laatste 20)",
+        "dims": {
+            "substance": "Inhoud",
+            "coherence": "Samenhang",
+            "relevance": "Relevantie",
+            "brevity": "Bondigheid",
+            "craft": "Vakmanschap"
+        },
+        "recentLessons": "Recente lessen",
+        "patternNotes": "Patroonnotities",
+        "agentPerformance": "Agentprestaties",
+        "noAgentDataYet": "Nog geen agentgegevens.",
+        "quality": "Kwaliteit",
+        "usage": "Gebruik"
+    },
     "share": {
         "title": "Gesprek delen",
         "checking": "Controleren op bestaande link...",

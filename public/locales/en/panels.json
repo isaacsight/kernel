@@ -133,6 +133,49 @@
       "location": "Locations"
     }
   },
+  "insights": {
+    "title": "Insights",
+    "sections": {
+      "world": "You",
+      "beliefs": "Beliefs",
+      "memory": "Memory",
+      "reflections": "Quality",
+      "agents": "Agents"
+    },
+    "howISeeYou": "How I See You",
+    "apparentGoal": "Apparent goal",
+    "situation": "Current situation",
+    "conviction": "Conviction",
+    "whatIBelieve": "What I Believe",
+    "noBeliefsYet": "No beliefs formed yet. Keep chatting — I'll learn what matters to you.",
+    "challengeBelief": "Challenge this belief",
+    "dismissBelief": "Dismiss this belief",
+    "myMemory": "My Memory of You",
+    "noMemoryYet": "No memory yet. I learn about you as we talk.",
+    "commStyle": "Communication style",
+    "memory": {
+      "interests": "Interests",
+      "goals": "Goals",
+      "facts": "About you",
+      "preferences": "Preferences"
+    },
+    "performance": "How I'm Performing",
+    "noReflectionsYet": "No reflections yet. I'll start tracking quality after a few conversations.",
+    "avgQuality": "avg quality (last 20)",
+    "dims": {
+      "substance": "Substance",
+      "coherence": "Coherence",
+      "relevance": "Relevance",
+      "brevity": "Brevity",
+      "craft": "Craft"
+    },
+    "recentLessons": "Recent lessons",
+    "patternNotes": "Pattern notes",
+    "agentPerformance": "Agent Performance",
+    "noAgentDataYet": "No agent data yet.",
+    "quality": "Quality",
+    "usage": "Usage"
+  },
   "share": {
     "title": "Share conversation",
     "checking": "Checking for existing link...",
