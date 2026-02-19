@@ -1,0 +1,61 @@
+{
+  "tagline": "Un'IA personale che ti ricorda, pensa con te e migliora nel tempo.",
+  "placeholder": "Parla con kernel.chat...",
+  "welcomeToPro": "Benvenuto in Kernel Pro!",
+  "menu": {
+    "shareConversation": "Condividi conversazione",
+    "exportMarkdown": "Esporta come Markdown",
+    "goals": "Obiettivi",
+    "workflows": "Workflow",
+    "scheduledTasks": "Attivit\u00e0 programmate",
+    "dailyBriefing": "Briefing giornaliero",
+    "whatKernelKnows": "Cosa sa Kernel",
+    "yourStats": "Le tue statistiche",
+    "upgradeToPro": "Passa a Pro",
+    "manageSubscription": "Gestisci abbonamento",
+    "signOut": "Esci",
+    "deleteAccount": "Elimina account"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Briefing di oggi",
+    "read": "Leggi",
+    "discuss": "Discuti"
+  },
+  "upgrade": {
+    "title": "Hai utilizzato i tuoi {{limit}} messaggi gratuiti",
+    "subtitle": "Passa a Kernel Pro per continuare la conversazione.",
+    "features": {
+      "unlimitedMessages": "Messaggi illimitati",
+      "deepResearch": "Modalit\u00e0 ricerca approfondita",
+      "multiAgent": "Collaborazione multi-agente",
+      "multiStep": "Pianificazione attivit\u00e0 multi-fase",
+      "persistentMemory": "Memoria persistente tra le sessioni"
+    },
+    "button": "Passa a Pro \u2014 $20/mo",
+    "buttonLoading": "Apertura checkout...",
+    "maybeLater": "Forse pi\u00f9 tardi"
+  },
+  "deleteConfirm": {
+    "title": "Eliminare il tuo account?",
+    "subtitle": "Questo elimina permanentemente tutti i tuoi dati: conversazioni, memoria e preferenze. Non pu\u00f2 essere annullato.",
+    "subtitleWithSub": " Anche il tuo abbonamento verr\u00e0 annullato.",
+    "confirm": "S\u00ec, elimina il mio account",
+    "confirming": "Eliminazione..."
+  },
+  "status": {
+    "assemblingAgents": "Assemblaggio agenti...",
+    "agentsCollaborating": "Agenti in collaborazione",
+    "synthesizingPerspectives": "Sintesi delle prospettive...",
+    "routingToSpecialist": "Instradamento allo specialista...",
+    "isWorking": "{{agent}} sta lavorando...",
+    "lowConfidence": "bassa confidenza"
+  },
+  "feedback": {
+    "save": "Salva",
+    "cancel": "Annulla"
+  },
+  "messagesRemaining": "{{count}} messaggi rimanenti",
+  "lastFreeMessage": "Ultimo messaggio gratuito"
+}

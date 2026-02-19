@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Tervetuloa Kerneliin",
+    "titleUser": "Tervetuloa, {{name}}",
+    "subtitle": "Oma suvereenin tekoälysi, rakennettu sinulle.",
+    "body": "Kernel on tekoälymoottori, joka oppii kuka olet, muistaa mikä on sinulle tärkeää, ja paranee jokaisen keskustelun myötä."
+  },
+  "step1": {
+    "title": "Se oppii sinut",
+    "subtitle": "Muisti, joka kasvaa.",
+    "body": "Keskustellessasi Kernel rakentaa tietograafin kiinnostuksen kohteistasi, tavoitteistasi ja suhteistasi. Jokainen keskustelu tekee seuraavasta paremman."
+  },
+  "step2": {
+    "title": "Erikoisagentit",
+    "subtitle": "Oikea asiantuntija tehtävään.",
+    "body": "Viestisi ohjataan erikoisagenteille — tutkija syviin kysymyksiin, koodari tekniseen työhön, kirjoittaja luoviin tehtäviin."
+  },
+  "step3": {
+    "title": "Mikä kiinnostaa sinua?",
+    "subtitle": "Valitse muutama auttaaksesi Kerneliä tutustumaan sinuun."
+  },
+  "step4": {
+    "title": "Valmis aloittamaan",
+    "subtitle": "Aloita ilmaiseksi, päivitä milloin tahansa."
+  },
+  "interests": {
+    "tech": "Teknologia",
+    "business": "Liiketoiminta",
+    "creative": "Luova kirjoittaminen",
+    "science": "Tiede",
+    "health": "Terveys ja kuntoilu",
+    "finance": "Rahoitus",
+    "design": "Design",
+    "coding": "Ohjelmointi",
+    "music": "Musiikki",
+    "philosophy": "Filosofia",
+    "travel": "Matkailu",
+    "education": "Koulutus"
+  },
+  "tiers": {
+    "free": "Ilmainen",
+    "freeFeature1": "10 viestiä",
+    "freeFeature2": "Perusagentit",
+    "freeFeature3": "Muisti",
+    "pro": "Pro",
+    "proFeature1": "Rajattomat viestit",
+    "proFeature2": "Syvä tutkimus",
+    "proFeature3": "Moniagenttiparveilut",
+    "proFeature4": "Tietograafi"
+  },
+  "continue": "Jatka",
+  "skip": "Ohita",
+  "begin": "Aloita",
+  "skipIntro": "Ohita esittely"
+}

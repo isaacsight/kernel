@@ -1,0 +1,48 @@
+{
+  "close": "Luk",
+  "cancel": "Annuller",
+  "delete": "Slet",
+  "save": "Gem",
+  "retry": "Prøv igen",
+  "loading": "Indlæser...",
+  "submit": "Indsend",
+  "add": "Tilføj",
+  "remove": "Fjern",
+  "complete": "Fuldfør",
+  "run": "Kør",
+  "or": "eller",
+  "features": "Funktioner",
+  "account": "Konto",
+  "conversation": "Samtale",
+  "errorGeneric": "Noget gik galt. Prøv venligst igen.",
+  "aria": {
+    "close": "Luk",
+    "notifications": "Notifikationer",
+    "toggleDarkMode": "Skift mørk tilstand",
+    "scrollToBottom": "Rul til bunden",
+    "conversations": "Samtaler",
+    "newChat": "Ny samtale",
+    "moreOptions": "Flere muligheder",
+    "attachFile": "Vedhæft fil",
+    "editMessage": "Rediger besked",
+    "copyMessage": "Kopier besked",
+    "downloadResponse": "Download svar",
+    "helpful": "Nyttig",
+    "notHelpful": "Ikke nyttig",
+    "stopListening": "Stop lytning",
+    "voiceInput": "Stemmeindtastning",
+    "stopGenerating": "Stop generering",
+    "shareableLink": "Delbart samtalelink"
+  },
+  "time": {
+    "overdue": "forsinket",
+    "minutesShort": "om {{count}}m",
+    "hoursShort": "om {{count}}t"
+  },
+  "notifications": {
+    "title": "Notifikationer",
+    "markAllRead": "Markér alle som læst",
+    "empty": "Ingen notifikationer endnu"
+  },
+  "language": "Sprog"
+}

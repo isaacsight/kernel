@@ -1,0 +1,55 @@
+{
+    "step0": {
+        "title": "欢迎使用 Kernel",
+        "titleUser": "欢迎，{{name}}",
+        "subtitle": "您的主权 AI，专为您打造。",
+        "body": "Kernel 是一个 AI 引擎，它会学习您的身份，记住重要的事情，并随着每次对话变得更好。"
+    },
+    "step1": {
+        "title": "它会学习您的习惯",
+        "subtitle": "不断复利增长的记忆。",
+        "body": "在您交谈时，Kernel 会构建一个关于您的兴趣、目标和关系的知识图谱。每一次对话都让下一次变得更好。"
+    },
+    "step2": {
+        "title": "专家代理",
+        "subtitle": "各展其长的智能。",
+        "body": "您的消息会被路由到专家代理 —— 研究员负责深度问题，程序员负责技术工作，作家负责创意任务。"
+    },
+    "step3": {
+        "title": "您对什么感兴趣？",
+        "subtitle": "选择几项来帮助 Kernel 了解您。"
+    },
+    "step4": {
+        "title": "准备好了",
+        "subtitle": "免费开始，随时升级。"
+    },
+    "interests": {
+        "tech": "科技",
+        "business": "商业",
+        "creative": "创意写作",
+        "science": "科学",
+        "health": "健康健身",
+        "finance": "金融",
+        "design": "设计",
+        "coding": "编程",
+        "music": "音乐",
+        "philosophy": "哲学",
+        "travel": "旅行",
+        "education": "教育"
+    },
+    "tiers": {
+        "free": "免费版",
+        "freeFeature1": "10 条消息",
+        "freeFeature2": "基础代理",
+        "freeFeature3": "个人记忆",
+        "pro": "专业版",
+        "proFeature1": "无限消息",
+        "proFeature2": "深度研究",
+        "proFeature3": "多代理群协作",
+        "proFeature4": "完整知识图谱"
+    },
+    "continue": "继续",
+    "skip": "跳过",
+    "begin": "开始",
+    "skipIntro": "跳过介绍"
+}

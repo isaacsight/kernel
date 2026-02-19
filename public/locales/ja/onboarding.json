@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Kernel へようこそ",
+    "titleUser": "ようこそ、{{name}}",
+    "subtitle": "あなたのためのソブリン AI。",
+    "body": "Kernel はあなたが誰かを学び、大切なことを覚え、会話するたびに賢くなる AI エンジンです。"
+  },
+  "step1": {
+    "title": "あなたを学ぶ",
+    "subtitle": "蓄積されるメモリ。",
+    "body": "会話を重ねるたびに、Kernel はあなたの興味、目標、人間関係のナレッジグラフを構築します。すべての会話が次をより良くします。"
+  },
+  "step2": {
+    "title": "スペシャリストエージェント",
+    "subtitle": "最適な専門家を。",
+    "body": "メッセージはスペシャリストエージェントにルーティングされます — 深い質問にはリサーチャー、技術的な作業にはコーダー、クリエイティブなタスクにはライター。"
+  },
+  "step3": {
+    "title": "興味のあることは？",
+    "subtitle": "いくつか選んで Kernel に自分を知ってもらいましょう。"
+  },
+  "step4": {
+    "title": "準備完了",
+    "subtitle": "無料で始めて、いつでもアップグレード。"
+  },
+  "interests": {
+    "tech": "テクノロジー",
+    "business": "ビジネス",
+    "creative": "クリエイティブライティング",
+    "science": "科学",
+    "health": "健康・フィットネス",
+    "finance": "金融",
+    "design": "デザイン",
+    "coding": "プログラミング",
+    "music": "音楽",
+    "philosophy": "哲学",
+    "travel": "旅行",
+    "education": "教育"
+  },
+  "tiers": {
+    "free": "無料",
+    "freeFeature1": "10 メッセージ",
+    "freeFeature2": "基本エージェント",
+    "freeFeature3": "メモリ",
+    "pro": "Pro",
+    "proFeature1": "無制限メッセージ",
+    "proFeature2": "ディープリサーチ",
+    "proFeature3": "マルチエージェントスウォーム",
+    "proFeature4": "ナレッジグラフ"
+  },
+  "continue": "続ける",
+  "skip": "スキップ",
+  "begin": "始める",
+  "skipIntro": "イントロをスキップ"
+}

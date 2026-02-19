@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "خط أنابيب المراحل",
+        "phases": {
+            "perceiving": "الإدراك",
+            "attending": "الانتباه",
+            "deciding": "القرار",
+            "acting": "التنفيذ",
+            "reflecting": "التفكير"
+        },
+        "perception": "الإدراك",
+        "intent": "القصد",
+        "urgency": "الاستعجال",
+        "complexity": "التعقيد",
+        "sentiment": "المشاعر",
+        "impliedNeed": "الحاجة الضمنية",
+        "noActivePerception": "لا يوجد إدراك نشط",
+        "attention": "الانتباه",
+        "focus": "التركيز",
+        "depth": "العمق",
+        "noActiveAttention": "لا يوجد انتباه نشط",
+        "conviction": "القناعة",
+        "trend": {
+            "rising": "ارتفاع",
+            "falling": "انخفاض",
+            "stable": "استقرار"
+        },
+        "beliefs": "المعتقدات ({{count}})",
+        "noBeliefsFormed": "لم يتم تكوين معتقدات",
+        "eventFeed": "تغذية الأحداث",
+        "noEventsYet": "لا توجد أحداث بعد",
+        "lastReflection": "آخر تفكير",
+        "noReflectionsYet": "لا توجد تفكيرات بعد"
+    },
+    "controls": {
+        "engine": "المحرك",
+        "stop": "إيقاف",
+        "reset": "إعادة ضبط",
+        "agentOverride": "تجاوز الوكيل",
+        "overrideNext": "التالي التجاوز",
+        "conviction": "القناعة",
+        "beliefs": "المعتقدات",
+        "newBeliefPlaceholder": "معتقد جديد...",
+        "challenge": "تحدي",
+        "reflections": "التفكيرات",
+        "pruneLabel": "التقليم دون الجودة:",
+        "prune": "تقليم",
+        "pruneResult": "تمت إزالة {{count}} من التفكيرات",
+        "agentPerformance": "أداء الوكيل",
+        "noPerformanceData": "لا توجد بيانات أداء بعد"
+    },
+    "chat": {
+        "emptyTitle": "اسأل kernel.chat",
+        "emptySubtitle": "إنه يرى كل ما يراه المحرك.",
+        "placeholder": "اسأل Kernel..."
+    },
+    "pill": {
+        "openKernel": "فتح kernel.chat",
+        "phases": {
+            "idle": "خامل",
+            "perceiving": "يدرك",
+            "attending": "ينتبه",
+            "deciding": "يقرر",
+            "acting": "ينفذ",
+            "reflecting": "يفكر"
+        }
+    }
+}

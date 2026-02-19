@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Willkommen bei Kernel",
+    "titleUser": "Willkommen, {{name}}",
+    "subtitle": "Deine souveräne KI, gebaut für dich.",
+    "body": "Kernel ist ein KI-Motor, der lernt wer du bist, sich merkt was dir wichtig ist und mit jeder Konversation besser wird."
+  },
+  "step1": {
+    "title": "Sie Lernt Dich",
+    "subtitle": "Gedächtnis, das sich aufbaut.",
+    "body": "Während du sprichst, baut Kernel einen Wissensgraphen deiner Interessen, Ziele und Beziehungen auf. Jede Konversation macht die nächste besser."
+  },
+  "step2": {
+    "title": "Spezialisten-Agenten",
+    "subtitle": "Der richtige Kopf für die Aufgabe.",
+    "body": "Deine Nachrichten werden an Spezialisten-Agenten weitergeleitet — ein Forscher für tiefgehende Fragen, ein Programmierer für technische Arbeit, ein Autor für kreative Aufgaben."
+  },
+  "step3": {
+    "title": "Was interessiert dich?",
+    "subtitle": "Wähle einige aus, damit Kernel dich kennenlernen kann."
+  },
+  "step4": {
+    "title": "Bereit zum Start",
+    "subtitle": "Kostenlos starten, jederzeit upgraden."
+  },
+  "interests": {
+    "tech": "Technologie",
+    "business": "Wirtschaft",
+    "creative": "Kreatives Schreiben",
+    "science": "Wissenschaft",
+    "health": "Gesundheit & Fitness",
+    "finance": "Finanzen",
+    "design": "Design",
+    "coding": "Programmierung",
+    "music": "Musik",
+    "philosophy": "Philosophie",
+    "travel": "Reisen",
+    "education": "Bildung"
+  },
+  "tiers": {
+    "free": "Kostenlos",
+    "freeFeature1": "10 Nachrichten",
+    "freeFeature2": "Basis-Agenten",
+    "freeFeature3": "Gedächtnis",
+    "pro": "Pro",
+    "proFeature1": "Unbegrenzte Nachrichten",
+    "proFeature2": "Tiefenrecherche",
+    "proFeature3": "Multi-Agenten-Schwärme",
+    "proFeature4": "Wissensgraph"
+  },
+  "continue": "Weiter",
+  "skip": "Überspringen",
+  "begin": "Beginnen",
+  "skipIntro": "Einführung überspringen"
+}

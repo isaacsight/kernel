@@ -1,0 +1,48 @@
+{
+  "close": "Schließen",
+  "cancel": "Abbrechen",
+  "delete": "Löschen",
+  "save": "Speichern",
+  "retry": "Erneut versuchen",
+  "loading": "Laden...",
+  "submit": "Absenden",
+  "add": "Hinzufügen",
+  "remove": "Entfernen",
+  "complete": "Abschließen",
+  "run": "Ausführen",
+  "or": "oder",
+  "features": "Funktionen",
+  "account": "Konto",
+  "conversation": "Konversation",
+  "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+  "aria": {
+    "close": "Schließen",
+    "notifications": "Benachrichtigungen",
+    "toggleDarkMode": "Dunkelmodus umschalten",
+    "scrollToBottom": "Nach unten scrollen",
+    "conversations": "Konversationen",
+    "newChat": "Neuer Chat",
+    "moreOptions": "Weitere Optionen",
+    "attachFile": "Datei anhängen",
+    "editMessage": "Nachricht bearbeiten",
+    "copyMessage": "Nachricht kopieren",
+    "downloadResponse": "Antwort herunterladen",
+    "helpful": "Hilfreich",
+    "notHelpful": "Nicht hilfreich",
+    "stopListening": "Zuhören beenden",
+    "voiceInput": "Spracheingabe",
+    "stopGenerating": "Generierung stoppen",
+    "shareableLink": "Teilbarer Konversationslink"
+  },
+  "time": {
+    "overdue": "überfällig",
+    "minutesShort": "in {{count}}m",
+    "hoursShort": "in {{count}}h"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "markAllRead": "Alle als gelesen markieren",
+    "empty": "Noch keine Benachrichtigungen"
+  },
+  "language": "Sprache"
+}

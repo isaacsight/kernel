@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "Pipeline de Fases",
+        "phases": {
+            "perceiving": "percebendo",
+            "attending": "atentando",
+            "deciding": "decidindo",
+            "acting": "agindo",
+            "reflecting": "refletindo"
+        },
+        "perception": "Percepção",
+        "intent": "Intento",
+        "urgency": "Urgência",
+        "complexity": "Complexidade",
+        "sentiment": "Sentimento",
+        "impliedNeed": "Necessidade Implícita",
+        "noActivePerception": "Nenhuma percepção ativa",
+        "attention": "Atenção",
+        "focus": "Foco",
+        "depth": "Profundidade",
+        "noActiveAttention": "Nenhuma atenção ativa",
+        "conviction": "Convicção",
+        "trend": {
+            "rising": "subindo",
+            "falling": "caindo",
+            "stable": "estável"
+        },
+        "beliefs": "Crenças ({{count}})",
+        "noBeliefsFormed": "Nenhuma crença formada",
+        "eventFeed": "Feed de Eventos",
+        "noEventsYet": "Ainda não há eventos",
+        "lastReflection": "Última Reflexão",
+        "noReflectionsYet": "Ainda não há reflexões"
+    },
+    "controls": {
+        "engine": "Motor",
+        "stop": "Parar",
+        "reset": "Resetar",
+        "agentOverride": "Sobreposição de Agente",
+        "overrideNext": "Sobrepor Próximo",
+        "conviction": "Convicção",
+        "beliefs": "Crenças",
+        "newBeliefPlaceholder": "Nova crença...",
+        "challenge": "Desafiar",
+        "reflections": "Reflexões",
+        "pruneLabel": "Podar abaixo de qualidade:",
+        "prune": "Podar",
+        "pruneResult": "Removidas {{count}} reflexões",
+        "agentPerformance": "Desempenho do Agente",
+        "noPerformanceData": "Ainda não há dados de desempenho"
+    },
+    "chat": {
+        "emptyTitle": "Pergunte ao kernel.chat",
+        "emptySubtitle": "Ele vê tudo o que o motor vê.",
+        "placeholder": "Pergunte ao Kernel..."
+    },
+    "pill": {
+        "openKernel": "Abrir kernel.chat",
+        "phases": {
+            "idle": "ocioso",
+            "perceiving": "percebendo",
+            "attending": "atentando",
+            "deciding": "decidindo",
+            "acting": "agindo",
+            "reflecting": "refletindo"
+        }
+    }
+}

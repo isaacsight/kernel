@@ -1,0 +1,55 @@
+{
+  "step0": {
+    "title": "Witaj w Kernel",
+    "titleUser": "Witaj, {{name}}",
+    "subtitle": "Twoje suwerenne AI, stworzone dla Ciebie.",
+    "body": "Kernel to silnik AI, który uczy się, kim jesteś, pamięta co dla Ciebie ważne i staje się lepszy z każdą rozmową."
+  },
+  "step1": {
+    "title": "Uczy się Ciebie",
+    "subtitle": "Pamięć, która rośnie.",
+    "body": "W miarę rozmów Kernel buduje graf wiedzy o Twoich zainteresowaniach, celach i relacjach. Każda rozmowa sprawia, że następna jest lepsza."
+  },
+  "step2": {
+    "title": "Agenci specjaliści",
+    "subtitle": "Właściwy umysł do zadania.",
+    "body": "Twoje wiadomości trafiają do agentów specjalistów — badacz do głębokich pytań, programista do pracy technicznej, pisarz do zadań kreatywnych."
+  },
+  "step3": {
+    "title": "Co Cię interesuje?",
+    "subtitle": "Wybierz kilka, aby pomóc Kernel Cię poznać."
+  },
+  "step4": {
+    "title": "Gotowe",
+    "subtitle": "Zacznij za darmo, uaktualnij kiedy chcesz."
+  },
+  "interests": {
+    "tech": "Technologia",
+    "business": "Biznes",
+    "creative": "Pisanie kreatywne",
+    "science": "Nauka",
+    "health": "Zdrowie i fitness",
+    "finance": "Finanse",
+    "design": "Projektowanie",
+    "coding": "Programowanie",
+    "music": "Muzyka",
+    "philosophy": "Filozofia",
+    "travel": "Podróże",
+    "education": "Edukacja"
+  },
+  "tiers": {
+    "free": "Darmowy",
+    "freeFeature1": "10 wiadomości",
+    "freeFeature2": "Podstawowi agenci",
+    "freeFeature3": "Pamięć",
+    "pro": "Pro",
+    "proFeature1": "Nieograniczone wiadomości",
+    "proFeature2": "Głębokie badania",
+    "proFeature3": "Roje wielu agentów",
+    "proFeature4": "Graf wiedzy"
+  },
+  "continue": "Kontynuuj",
+  "skip": "Pomiń",
+  "begin": "Rozpocznij",
+  "skipIntro": "Pomiń wprowadzenie"
+}

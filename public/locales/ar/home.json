@@ -1,0 +1,61 @@
+{
+    "tagline": "ذكاء اصطناعي شخصي يتذكرك، ويفكر معك، ويتحسن بمرور الوقت.",
+    "placeholder": "تحدث إلى kernel.chat...",
+    "welcomeToPro": "مرحبًا بك في Kernel Pro!",
+    "menu": {
+        "shareConversation": "مشاركة المحادثة",
+        "exportMarkdown": "تصدير كـ Markdown",
+        "goals": "الأهداف",
+        "workflows": "سير العمل",
+        "scheduledTasks": "المهام المجدولة",
+        "dailyBriefing": "الإحاطة اليومية",
+        "whatKernelKnows": "ما يعرفه Kernel",
+        "yourStats": "إحصائياتك",
+        "upgradeToPro": "الترقية إلى Pro",
+        "manageSubscription": "إدارة الاشتراك",
+        "signOut": "تسجيل الخروج",
+        "deleteAccount": "حذف الحساب"
+    },
+    "admin": "مسؤول",
+    "pro": "Pro",
+    "briefing": {
+        "todaysBriefing": "إحاطة اليوم",
+        "read": "قراءة",
+        "discuss": "نقاش"
+    },
+    "upgrade": {
+        "title": "لقد استنفدت {{limit}} رسائل مجانية",
+        "subtitle": "قم بالترقية إلى Kernel Pro لمواصلة المحادثة.",
+        "features": {
+            "unlimitedMessages": "رسائل غير محدودة",
+            "deepResearch": "وضع البحث العميق",
+            "multiAgent": "تعاون الوكلاء المتعددين",
+            "multiStep": "تخطيط مهام متعددة الخطوات",
+            "persistentMemory": "ذاكرة مستمرة عبر الجلسات"
+        },
+        "button": "ترقية إلى Pro — 20$/شهرياً",
+        "buttonLoading": "جاري فتح الدفع...",
+        "maybeLater": "ربما لاحقاً"
+    },
+    "deleteConfirm": {
+        "title": "حذف حسابك؟",
+        "subtitle": "هذا سيؤدي إلى حذف جميع بياناتك نهائياً: المحادثات والذاكرة والتفضيلات. لا يمكن التراجع عن هذا الإجراء.",
+        "subtitleWithSub": " سيتم إلغاء اشتراكك أيضاً.",
+        "confirm": "نعم، احذف حسابي",
+        "confirming": "جاري الحذف..."
+    },
+    "status": {
+        "assemblingAgents": "جاري تجميع الوكلاء...",
+        "agentsCollaborating": "الوكلاء يتعاونون",
+        "synthesizingPerspectives": "توليف الرؤى...",
+        "routingToSpecialist": "التوجيه إلى أخصائي...",
+        "isWorking": "{{agent}} يعمل...",
+        "lowConfidence": "ثقة منخفضة"
+    },
+    "feedback": {
+        "save": "حفظ",
+        "cancel": "إلغاء"
+    },
+    "messagesRemaining": "تبقت {{count}} رسائل",
+    "lastFreeMessage": "آخر رسالة مجانية"
+}

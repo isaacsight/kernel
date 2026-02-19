@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "Fas-pipeline",
+        "phases": {
+            "perceiving": "uppfattar",
+            "attending": "uppmärksammar",
+            "deciding": "beslutar",
+            "acting": "agerar",
+            "reflecting": "reflekterar"
+        },
+        "perception": "Uppfattning",
+        "intent": "Avsikt",
+        "urgency": "Brådska",
+        "complexity": "Komplexitet",
+        "sentiment": "Sentiment",
+        "impliedNeed": "Underförstått behov",
+        "noActivePerception": "Ingen aktiv uppfattning",
+        "attention": "Uppmärksamhet",
+        "focus": "Fokus",
+        "depth": "Djup",
+        "noActiveAttention": "Ingen aktiv uppmärksamhet",
+        "conviction": "Övertygelse",
+        "trend": {
+            "rising": "stigande",
+            "falling": "fallande",
+            "stable": "stabil"
+        },
+        "beliefs": "Övertygelser ({{count}})",
+        "noBeliefsFormed": "Inga övertygelser formade",
+        "eventFeed": "Händelseflöde",
+        "noEventsYet": "Inga händelser än",
+        "lastReflection": "Senaste reflektion",
+        "noReflectionsYet": "Inga reflektioner än"
+    },
+    "controls": {
+        "engine": "Motor",
+        "stop": "Stoppa",
+        "reset": "Återställ",
+        "agentOverride": "Agent-åsidosättning",
+        "overrideNext": "Åsidosätt nästa",
+        "conviction": "Övertygelse",
+        "beliefs": "Övertygelser",
+        "newBeliefPlaceholder": "Ny övertygelse...",
+        "challenge": "Utmana",
+        "reflections": "Reflektioner",
+        "pruneLabel": "Rensa under kvalitet:",
+        "prune": "Rensa",
+        "pruneResult": "Tog bort {{count}} reflektion(er)",
+        "agentPerformance": "Agent-prestanda",
+        "noPerformanceData": "Ingen prestandadata än"
+    },
+    "chat": {
+        "emptyTitle": "Fråga kernel.chat",
+        "emptySubtitle": "Den ser allt som motorn ser.",
+        "placeholder": "Fråga Kernel..."
+    },
+    "pill": {
+        "openKernel": "Öppna kernel.chat",
+        "phases": {
+            "idle": "vilar",
+            "perceiving": "uppfattar",
+            "attending": "uppmärksammar",
+            "deciding": "beslutar",
+            "acting": "agerar",
+            "reflecting": "reflekterar"
+        }
+    }
+}

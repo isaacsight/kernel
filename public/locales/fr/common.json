@@ -1,0 +1,48 @@
+{
+  "close": "Fermer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "save": "Enregistrer",
+  "retry": "Réessayer",
+  "loading": "Chargement...",
+  "submit": "Soumettre",
+  "add": "Ajouter",
+  "remove": "Retirer",
+  "complete": "Terminer",
+  "run": "Exécuter",
+  "or": "ou",
+  "features": "Fonctionnalités",
+  "account": "Compte",
+  "conversation": "Conversation",
+  "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+  "aria": {
+    "close": "Fermer",
+    "notifications": "Notifications",
+    "toggleDarkMode": "Basculer le mode sombre",
+    "scrollToBottom": "Défiler vers le bas",
+    "conversations": "Conversations",
+    "newChat": "Nouveau chat",
+    "moreOptions": "Plus d'options",
+    "attachFile": "Joindre un fichier",
+    "editMessage": "Modifier le message",
+    "copyMessage": "Copier le message",
+    "downloadResponse": "Télécharger la réponse",
+    "helpful": "Utile",
+    "notHelpful": "Pas utile",
+    "stopListening": "Arrêter l'écoute",
+    "voiceInput": "Entrée vocale",
+    "stopGenerating": "Arrêter la génération",
+    "shareableLink": "Lien de partage de conversation"
+  },
+  "time": {
+    "overdue": "en retard",
+    "minutesShort": "dans {{count}}m",
+    "hoursShort": "dans {{count}}h"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "empty": "Aucune notification pour le moment"
+  },
+  "language": "Langue"
+}

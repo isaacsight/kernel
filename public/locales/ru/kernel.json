@@ -1,0 +1,68 @@
+{
+    "observer": {
+        "phasePipeline": "Конвейер фаз",
+        "phases": {
+            "perceiving": "восприятие",
+            "attending": "внимание",
+            "deciding": "принятие решения",
+            "acting": "действие",
+            "reflecting": "рефлексия"
+        },
+        "perception": "Восприятие",
+        "intent": "Намерение",
+        "urgency": "Срочность",
+        "complexity": "Сложность",
+        "sentiment": "Настроение",
+        "impliedNeed": "Скрытая потребность",
+        "noActivePerception": "Нет активного восприятия",
+        "attention": "Внимание",
+        "focus": "Фокус",
+        "depth": "Глубина",
+        "noActiveAttention": "Нет активного внимания",
+        "conviction": "Убежденность",
+        "trend": {
+            "rising": "растет",
+            "falling": "падает",
+            "stable": "стабильно"
+        },
+        "beliefs": "Убеждения ({{count}})",
+        "noBeliefsFormed": "Убеждения не сформированы",
+        "eventFeed": "Лента событий",
+        "noEventsYet": "Событий пока нет",
+        "lastReflection": "Последняя рефлексия",
+        "noReflectionsYet": "Рефлексий пока нет"
+    },
+    "controls": {
+        "engine": "Движок",
+        "stop": "Стоп",
+        "reset": "Сброс",
+        "agentOverride": "Перехват агента",
+        "overrideNext": "Перехватить следующий",
+        "conviction": "Убежденность",
+        "beliefs": "Убеждения",
+        "newBeliefPlaceholder": "Новое убеждение...",
+        "challenge": "Оспорить",
+        "reflections": "Рефлексии",
+        "pruneLabel": "Очистить ниже качества:",
+        "prune": "Очистить",
+        "pruneResult": "Удалено {{count}} рефлексий",
+        "agentPerformance": "Производительность агента",
+        "noPerformanceData": "Данных о производительности пока нет"
+    },
+    "chat": {
+        "emptyTitle": "Спросите kernel.chat",
+        "emptySubtitle": "Он видит всё то же, что и движок.",
+        "placeholder": "Спросить Kernel..."
+    },
+    "pill": {
+        "openKernel": "Открыть kernel.chat",
+        "phases": {
+            "idle": "ожидание",
+            "perceiving": "восприятие",
+            "attending": "внимание",
+            "deciding": "решение",
+            "acting": "действие",
+            "reflecting": "рефлексия"
+        }
+    }
+}

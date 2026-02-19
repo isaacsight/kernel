@@ -1,0 +1,61 @@
+{
+  "tagline": "Eine persönliche KI, die sich an dich erinnert, mit dir denkt und mit der Zeit besser wird.",
+  "placeholder": "Sprich mit kernel.chat...",
+  "welcomeToPro": "Willkommen bei Kernel Pro!",
+  "menu": {
+    "shareConversation": "Konversation teilen",
+    "exportMarkdown": "Als Markdown exportieren",
+    "goals": "Ziele",
+    "workflows": "Arbeitsabläufe",
+    "scheduledTasks": "Geplante Aufgaben",
+    "dailyBriefing": "Tägliches Briefing",
+    "whatKernelKnows": "Was Kernel weiß",
+    "yourStats": "Deine Statistiken",
+    "upgradeToPro": "Auf Pro upgraden",
+    "manageSubscription": "Abonnement verwalten",
+    "signOut": "Abmelden",
+    "deleteAccount": "Konto löschen"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Heutiges Briefing",
+    "read": "Lesen",
+    "discuss": "Besprechen"
+  },
+  "upgrade": {
+    "title": "Du hast deine {{limit}} kostenlosen Nachrichten verbraucht",
+    "subtitle": "Upgrade auf Kernel Pro, um weiterzureden.",
+    "features": {
+      "unlimitedMessages": "Unbegrenzte Nachrichten",
+      "deepResearch": "Tiefenrecherche-Modus",
+      "multiAgent": "Multi-Agenten-Zusammenarbeit",
+      "multiStep": "Mehrstufige Aufgabenplanung",
+      "persistentMemory": "Dauerhafter Speicher über Sitzungen hinweg"
+    },
+    "button": "Auf Pro upgraden — $20/mo",
+    "buttonLoading": "Kasse wird geöffnet...",
+    "maybeLater": "Vielleicht später"
+  },
+  "deleteConfirm": {
+    "title": "Konto löschen?",
+    "subtitle": "Dies löscht dauerhaft alle deine Daten: Konversationen, Erinnerungen und Einstellungen. Dies kann nicht rückgängig gemacht werden.",
+    "subtitleWithSub": " Dein Abonnement wird ebenfalls gekündigt.",
+    "confirm": "Ja, mein Konto löschen",
+    "confirming": "Wird gelöscht..."
+  },
+  "status": {
+    "assemblingAgents": "Agenten werden zusammengestellt...",
+    "agentsCollaborating": "Agenten arbeiten zusammen",
+    "synthesizingPerspectives": "Perspektiven werden synthetisiert...",
+    "routingToSpecialist": "Weiterleitung an Spezialisten...",
+    "isWorking": "{{agent}} arbeitet...",
+    "lowConfidence": "geringe Zuversicht"
+  },
+  "feedback": {
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "messagesRemaining": "{{count}} Nachrichten übrig",
+  "lastFreeMessage": "Letzte kostenlose Nachricht"
+}

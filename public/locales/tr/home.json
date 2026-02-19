@@ -1,0 +1,61 @@
+{
+  "tagline": "Sizi hatırlayan, sizinle düşünen ve zamanla daha iyi olan kişisel bir AI.",
+  "placeholder": "kernel.chat ile konuşun...",
+  "welcomeToPro": "Kernel Pro'ya hoş geldiniz!",
+  "menu": {
+    "shareConversation": "Konuşmayı paylaş",
+    "exportMarkdown": "Markdown olarak dışa aktar",
+    "goals": "Hedefler",
+    "workflows": "İş akışları",
+    "scheduledTasks": "Zamanlanmış görevler",
+    "dailyBriefing": "Günlük brifing",
+    "whatKernelKnows": "Kernel ne biliyor",
+    "yourStats": "İstatistikleriniz",
+    "upgradeToPro": "Pro'ya yükselt",
+    "manageSubscription": "Aboneliği yönet",
+    "signOut": "Çıkış yap",
+    "deleteAccount": "Hesabı sil"
+  },
+  "admin": "Yönetici",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Bugünün brifingi",
+    "read": "Oku",
+    "discuss": "Tartış"
+  },
+  "upgrade": {
+    "title": "{{limit}} ücretsiz mesajınızı kullandınız",
+    "subtitle": "Konuşmaya devam etmek için Kernel Pro'ya yükseltin.",
+    "features": {
+      "unlimitedMessages": "Sınırsız mesaj",
+      "deepResearch": "Derin araştırma modu",
+      "multiAgent": "Çoklu ajan işbirliği",
+      "multiStep": "Çok adımlı görev planlaması",
+      "persistentMemory": "Oturumlar arası kalıcı bellek"
+    },
+    "button": "Pro'ya yükselt — $20/mo",
+    "buttonLoading": "Ödeme açılıyor...",
+    "maybeLater": "Belki sonra"
+  },
+  "deleteConfirm": {
+    "title": "Hesabınızı silin mi?",
+    "subtitle": "Bu, tüm verilerinizi kalıcı olarak siler: konuşmalar, bellek ve tercihler. Bu geri alınamaz.",
+    "subtitleWithSub": " Aboneliğiniz de iptal edilecektir.",
+    "confirm": "Evet, hesabımı sil",
+    "confirming": "Siliniyor..."
+  },
+  "status": {
+    "assemblingAgents": "Ajanlar toplanıyor...",
+    "agentsCollaborating": "Ajanlar işbirliği yapıyor",
+    "synthesizingPerspectives": "Bakış açıları sentezleniyor...",
+    "routingToSpecialist": "Uzmana yönlendiriliyor...",
+    "isWorking": "{{agent}} çalışıyor...",
+    "lowConfidence": "düşük güven"
+  },
+  "feedback": {
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "messagesRemaining": "{{count}} mesaj kaldı",
+  "lastFreeMessage": "Son ücretsiz mesaj"
+}

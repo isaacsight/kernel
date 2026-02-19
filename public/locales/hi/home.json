@@ -1,0 +1,61 @@
+{
+  "tagline": "एक व्यक्तिगत AI जो आपको याद रखता है, आपके साथ सोचता है, और समय के साथ बेहतर होता जाता है।",
+  "placeholder": "kernel.chat से बात करें...",
+  "welcomeToPro": "Kernel Pro में आपका स्वागत है!",
+  "menu": {
+    "shareConversation": "बातचीत साझा करें",
+    "exportMarkdown": "Markdown के रूप में निर्यात करें",
+    "goals": "लक्ष्य",
+    "workflows": "वर्कफ़्लो",
+    "scheduledTasks": "अनुसूचित कार्य",
+    "dailyBriefing": "दैनिक ब्रीफिंग",
+    "whatKernelKnows": "Kernel क्या जानता है",
+    "yourStats": "आपके आँकड़े",
+    "upgradeToPro": "Pro में अपग्रेड करें",
+    "manageSubscription": "सदस्यता प्रबंधित करें",
+    "signOut": "साइन आउट करें",
+    "deleteAccount": "खाता हटाएं"
+  },
+  "admin": "एडमिन",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "आज की ब्रीफिंग",
+    "read": "पढ़ें",
+    "discuss": "चर्चा करें"
+  },
+  "upgrade": {
+    "title": "आपने अपने {{limit}} मुफ्त संदेश उपयोग कर लिए हैं",
+    "subtitle": "बातचीत जारी रखने के लिए Kernel Pro में अपग्रेड करें।",
+    "features": {
+      "unlimitedMessages": "असीमित संदेश",
+      "deepResearch": "गहन शोध मोड",
+      "multiAgent": "मल्टी-एजेंट सहयोग",
+      "multiStep": "मल्टी-स्टेप कार्य योजना",
+      "persistentMemory": "सत्रों में स्थायी मेमोरी"
+    },
+    "button": "Pro में अपग्रेड करें — $20/mo",
+    "buttonLoading": "चेकआउट खोल रहा है...",
+    "maybeLater": "शायद बाद में"
+  },
+  "deleteConfirm": {
+    "title": "अपना खाता हटाएं?",
+    "subtitle": "यह आपका सारा डेटा स्थायी रूप से हटा देगा: बातचीत, मेमोरी, और प्राथमिकताएं। इसे पूर्ववत नहीं किया जा सकता।",
+    "subtitleWithSub": " आपकी सदस्यता भी रद्द कर दी जाएगी।",
+    "confirm": "हां, मेरा खाता हटाएं",
+    "confirming": "हटा रहा है..."
+  },
+  "status": {
+    "assemblingAgents": "एजेंट्स को एकत्रित कर रहा है...",
+    "agentsCollaborating": "एजेंट्स सहयोग कर रहे हैं",
+    "synthesizingPerspectives": "दृष्टिकोणों का संश्लेषण कर रहा है...",
+    "routingToSpecialist": "विशेषज्ञ को रूट कर रहा है...",
+    "isWorking": "{{agent}} काम कर रहा है...",
+    "lowConfidence": "कम विश्वास"
+  },
+  "feedback": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें"
+  },
+  "messagesRemaining": "{{count}} संदेश शेष",
+  "lastFreeMessage": "अंतिम मुफ्त संदेश"
+}

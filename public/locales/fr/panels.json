@@ -1,0 +1,159 @@
+{
+  "goals": {
+    "title": "Objectifs",
+    "emptyTitle": "Définissez Votre Premier Objectif",
+    "emptyDesc": "Suivez ce qui compte — Kernel vérifie votre progression automatiquement.",
+    "createGoal": "Créer un Objectif",
+    "addGoal": "Ajouter un Objectif",
+    "completed": "Terminés ({{count}})",
+    "target": "Cible : {{date}}",
+    "priority": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Haute"
+    },
+    "frequency": {
+      "daily": "Vérification quotidienne",
+      "weekly": "Hebdomadaire",
+      "biweekly": "Bimensuel",
+      "monthly": "Mensuel"
+    },
+    "errors": {
+      "addFailed": "Impossible d'ajouter l'objectif",
+      "updateFailed": "Impossible de mettre à jour le jalon",
+      "completeFailed": "Impossible de terminer l'objectif",
+      "deleteFailed": "Impossible de supprimer l'objectif"
+    },
+    "deleteConfirm": "Supprimer cet objectif ? Cette action est irréversible."
+  },
+  "workflows": {
+    "title": "Flux de Travail",
+    "loading": "Chargement des flux de travail...",
+    "emptyTitle": "Créez Votre Premier Flux de Travail",
+    "emptyDesc": "Automatisez les tâches en plusieurs étapes — Kernel les exécute exactement comme vous les concevez.",
+    "newWorkflow": "Nouveau Flux de Travail",
+    "createWorkflow": "Créer un Flux de Travail",
+    "runCount_one": "Exécuté {{count}} fois",
+    "runCount_other": "Exécuté {{count}} fois",
+    "errors": {
+      "saveFailed": "Impossible d'enregistrer le flux de travail",
+      "deleteFailed": "Impossible de supprimer le flux de travail"
+    },
+    "deleteConfirm": "Supprimer ce flux de travail ? Cette action est irréversible."
+  },
+  "scheduled": {
+    "title": "Tâches Planifiées",
+    "loading": "Chargement des tâches...",
+    "emptyTitle": "Planifiez Votre Première Tâche",
+    "emptyDesc": "Configurez et oubliez — Kernel exécute les tâches selon votre planning.",
+    "createTask": "Créer une Tâche",
+    "schedule": "Planifier",
+    "taskTypes": {
+      "reminder": "Rappel",
+      "workflow": "Exécuter un Flux de Travail",
+      "briefing": "Briefing Quotidien",
+      "goalCheckin": "Vérification d'Objectif"
+    },
+    "presets": {
+      "daily": "Quotidien",
+      "weekdays": "Jours ouvrables",
+      "weekly": "Hebdomadaire (Lun)",
+      "once": "Une fois"
+    },
+    "channels": {
+      "inApp": "Dans l'appli",
+      "email": "E-mail",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Impossible de créer la tâche planifiée",
+      "updateFailed": "Impossible de mettre à jour la tâche",
+      "deleteFailed": "Impossible de supprimer la tâche"
+    },
+    "deleteConfirm": "Supprimer cette tâche planifiée ?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Générer un nouveau briefing basé sur vos intérêts et votre activité récente",
+    "generating": "Génération...",
+    "newBriefing": "Nouveau briefing",
+    "phases": {
+      "planning": "Planification",
+      "researching": "Recherche",
+      "writing": "Rédaction"
+    },
+    "loading": "Chargement des briefings...",
+    "emptyTitle": "Votre briefing quotidien",
+    "emptyDesc": "Recevez un résumé personnalisé d'actualités et d'analyses adapté à vos intérêts et objectifs.",
+    "generateFirst": "Générez votre premier briefing",
+    "errorTitle": "Ce briefing n'a pas pu être généré",
+    "errorDesc": "L'étape de recherche n'a pas retourné assez de données pour créer un résumé utile. Cela peut arriver si le service de recherche était temporairement indisponible.",
+    "readTime": "{{count}} min de lecture",
+    "wordCount": "{{count}} mots",
+    "topicsCovered": "Sujets couverts",
+    "continueReading": "Continuer la lecture",
+    "readFull": "Lire le briefing complet",
+    "goDeeper": "Approfondir dans le chat",
+    "saveAsGoal": "Enregistrer les points clés comme objectif",
+    "errors": {
+      "generateFailed": "Impossible de générer le briefing"
+    },
+    "toast": {
+      "generated": "Briefing généré",
+      "removed": "Briefing supprimé"
+    }
+  },
+  "stats": {
+    "title": "Vos Statistiques",
+    "loading": "Chargement...",
+    "loadError": "Impossible de charger les statistiques.",
+    "messages": "Messages",
+    "conversations": "Conversations",
+    "entities": "Entités",
+    "helpful": "Utile",
+    "agentUsage": "Utilisation des Agents",
+    "topTopics": "Sujets Principaux",
+    "activity": "Activité",
+    "memberSince": "Membre depuis {{date}}"
+  },
+  "kg": {
+    "title": "Ce que Kernel Sait",
+    "emptyTitle": "Kernel n'a encore rien appris.",
+    "emptyHint": "Continuez à discuter — il repère les personnes, projets et concepts que vous mentionnez.",
+    "entitiesCount": "{{count}} entités",
+    "connectionsCount": "{{count}} connexions",
+    "confident": "{{value}}% de confiance",
+    "mentioned": "{{count}}x mentionné",
+    "types": {
+      "person": "Personnes",
+      "company": "Entreprises",
+      "project": "Projets",
+      "concept": "Concepts",
+      "preference": "Préférences",
+      "location": "Lieux"
+    }
+  },
+  "share": {
+    "title": "Partager la conversation",
+    "checking": "Vérification du lien existant...",
+    "existingLink": "Cette conversation a déjà un lien public.",
+    "anyoneCanView": "Toute personne disposant de ce lien peut voir cette conversation.",
+    "revokeLink": "Révoquer le lien",
+    "revoking": "Révocation...",
+    "createDesc": "Créez un lien public que tout le monde peut consulter. Aucune connexion requise.",
+    "linkExpires": "Le lien expire :",
+    "never": "Jamais",
+    "hours24": "24 heures",
+    "days7": "7 jours",
+    "days30": "30 jours",
+    "createLink": "Créer un lien de partage",
+    "creating": "Création...",
+    "errors": {
+      "createFailed": "Impossible de créer le lien de partage",
+      "revokeFailed": "Impossible de révoquer le lien"
+    },
+    "toast": {
+      "revoked": "Lien de partage révoqué"
+    }
+  }
+}

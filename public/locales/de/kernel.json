@@ -1,0 +1,68 @@
+{
+  "observer": {
+    "phasePipeline": "Phasen-Pipeline",
+    "phases": {
+      "perceiving": "wahrnehmend",
+      "attending": "aufmerksam",
+      "deciding": "entscheidend",
+      "acting": "handelnd",
+      "reflecting": "reflektierend"
+    },
+    "perception": "Wahrnehmung",
+    "intent": "Absicht",
+    "urgency": "Dringlichkeit",
+    "complexity": "Komplexität",
+    "sentiment": "Stimmung",
+    "impliedNeed": "Impliziertes Bedürfnis",
+    "noActivePerception": "Keine aktive Wahrnehmung",
+    "attention": "Aufmerksamkeit",
+    "focus": "Fokus",
+    "depth": "Tiefe",
+    "noActiveAttention": "Keine aktive Aufmerksamkeit",
+    "conviction": "Überzeugung",
+    "trend": {
+      "rising": "steigend",
+      "falling": "fallend",
+      "stable": "stabil"
+    },
+    "beliefs": "Überzeugungen ({{count}})",
+    "noBeliefsFormed": "Keine Überzeugungen gebildet",
+    "eventFeed": "Ereignis-Feed",
+    "noEventsYet": "Noch keine Ereignisse",
+    "lastReflection": "Letzte Reflexion",
+    "noReflectionsYet": "Noch keine Reflexionen"
+  },
+  "controls": {
+    "engine": "Motor",
+    "stop": "Stoppen",
+    "reset": "Zurücksetzen",
+    "agentOverride": "Agenten-Überschreibung",
+    "overrideNext": "Nächsten Überschreiben",
+    "conviction": "Überzeugung",
+    "beliefs": "Überzeugungen",
+    "newBeliefPlaceholder": "Neue Überzeugung...",
+    "challenge": "Anfechten",
+    "reflections": "Reflexionen",
+    "pruneLabel": "Unter Qualität entfernen:",
+    "prune": "Bereinigen",
+    "pruneResult": "{{count}} Reflexion(en) entfernt",
+    "agentPerformance": "Agentenleistung",
+    "noPerformanceData": "Noch keine Leistungsdaten"
+  },
+  "chat": {
+    "emptyTitle": "Frage kernel.chat",
+    "emptySubtitle": "Es sieht alles, was der Motor sieht.",
+    "placeholder": "Frage den Kernel..."
+  },
+  "pill": {
+    "openKernel": "kernel.chat öffnen",
+    "phases": {
+      "idle": "inaktiv",
+      "perceiving": "wahrnehmend",
+      "attending": "aufmerksam",
+      "deciding": "entscheidend",
+      "acting": "handelnd",
+      "reflecting": "reflektierend"
+    }
+  }
+}

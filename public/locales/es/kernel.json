@@ -1,0 +1,68 @@
+{
+  "observer": {
+    "phasePipeline": "Pipeline de Fases",
+    "phases": {
+      "perceiving": "percibiendo",
+      "attending": "atendiendo",
+      "deciding": "decidiendo",
+      "acting": "actuando",
+      "reflecting": "reflexionando"
+    },
+    "perception": "Percepción",
+    "intent": "Intención",
+    "urgency": "Urgencia",
+    "complexity": "Complejidad",
+    "sentiment": "Sentimiento",
+    "impliedNeed": "Necesidad Implícita",
+    "noActivePerception": "Sin percepción activa",
+    "attention": "Atención",
+    "focus": "Enfoque",
+    "depth": "Profundidad",
+    "noActiveAttention": "Sin atención activa",
+    "conviction": "Convicción",
+    "trend": {
+      "rising": "subiendo",
+      "falling": "bajando",
+      "stable": "estable"
+    },
+    "beliefs": "Creencias ({{count}})",
+    "noBeliefsFormed": "Ninguna creencia formada",
+    "eventFeed": "Flujo de Eventos",
+    "noEventsYet": "Aún no hay eventos",
+    "lastReflection": "Última Reflexión",
+    "noReflectionsYet": "Aún no hay reflexiones"
+  },
+  "controls": {
+    "engine": "Motor",
+    "stop": "Detener",
+    "reset": "Reiniciar",
+    "agentOverride": "Anulación de Agente",
+    "overrideNext": "Anular Siguiente",
+    "conviction": "Convicción",
+    "beliefs": "Creencias",
+    "newBeliefPlaceholder": "Nueva creencia...",
+    "challenge": "Desafiar",
+    "reflections": "Reflexiones",
+    "pruneLabel": "Podar por debajo de calidad:",
+    "prune": "Podar",
+    "pruneResult": "Se eliminaron {{count}} reflexión(es)",
+    "agentPerformance": "Rendimiento de Agentes",
+    "noPerformanceData": "Aún no hay datos de rendimiento"
+  },
+  "chat": {
+    "emptyTitle": "Pregunta a kernel.chat",
+    "emptySubtitle": "Ve todo lo que el motor ve.",
+    "placeholder": "Pregunta al Kernel..."
+  },
+  "pill": {
+    "openKernel": "Abrir kernel.chat",
+    "phases": {
+      "idle": "inactivo",
+      "perceiving": "percibiendo",
+      "attending": "atendiendo",
+      "deciding": "decidiendo",
+      "acting": "actuando",
+      "reflecting": "reflexionando"
+    }
+  }
+}

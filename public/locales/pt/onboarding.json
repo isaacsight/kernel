@@ -1,0 +1,55 @@
+{
+    "step0": {
+        "title": "Bem-vindo ao Kernel",
+        "titleUser": "Bem-vindo, {{name}}",
+        "subtitle": "Sua IA soberana, construída para você.",
+        "body": "Kernel é um motor de IA que aprende quem você é, lembra do que importa e fica melhor a cada conversa."
+    },
+    "step1": {
+        "title": "Ele Aprende com Você",
+        "subtitle": "Memória que se acumula.",
+        "body": "Enquanto você fala, o Kernel constrói um grafo de conhecimento de seus interesses, objetivos e relacionamentos. Cada conversa torna a próxima melhor."
+    },
+    "step2": {
+        "title": "Agentes Especialistas",
+        "subtitle": "A mente certa para o trabalho.",
+        "body": "Suas mensagens são roteadas para agentes especialistas — um pesquisador para perguntas profundas, um programador para trabalho técnico, um escritor para tarefas criativas."
+    },
+    "step3": {
+        "title": "O que te interessa?",
+        "subtitle": "Escolha alguns para ajudar o Kernel a te conhecer."
+    },
+    "step4": {
+        "title": "Pronto para começar",
+        "subtitle": "Comece grátis, atualize a qualquer momento."
+    },
+    "interests": {
+        "tech": "Tecnologia",
+        "business": "Negócios",
+        "creative": "Escrita Criativa",
+        "science": "Ciência",
+        "health": "Saúde e Bem-estar",
+        "finance": "Finanças",
+        "design": "Design",
+        "coding": "Programação",
+        "music": "Música",
+        "philosophy": "Filosofia",
+        "travel": "Viagem",
+        "education": "Educação"
+    },
+    "tiers": {
+        "free": "Grátis",
+        "freeFeature1": "10 mensagens",
+        "freeFeature2": "Agentes básicos",
+        "freeFeature3": "Memória",
+        "pro": "Pro",
+        "proFeature1": "Mensagens ilimitadas",
+        "proFeature2": "Pesquisa profunda",
+        "proFeature3": "Enxames multi-agentes",
+        "proFeature4": "Grafo de conhecimento"
+    },
+    "continue": "Continuar",
+    "skip": "Pular",
+    "begin": "Começar",
+    "skipIntro": "Pular introdução"
+}
