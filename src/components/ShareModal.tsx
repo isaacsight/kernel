@@ -8,13 +8,16 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Link, Copy, Check, X, Clock, Trash2, Share2 } from 'lucide-react'
-import { createSharedConversation, getSharedConversation, deleteSharedConversation } from '../engine/SupabaseClient'
+import { createSharedConversation, getSharedConversation, deleteSharedConversation, getShareCountToday } from '../engine/SupabaseClient'
+
+const FREE_SHARE_LIMIT = 3
 
 interface ShareModalProps {
   conversationId: string
   conversationTitle: string
   messages: { role: string; content: string; agentName?: string; timestamp: number }[]
   userId: string
+  isPro: boolean
   onClose: () => void
   onToast: (msg: string) => void
   onNativeShare?: (url: string, title: string) => void
@@ -27,7 +30,7 @@ const EXPIRY_OPTIONS = [
   { labelKey: 'share.days30', value: 30 },
 ]
 
-export function ShareModal({ conversationId, conversationTitle, messages, userId, onClose, onToast, onNativeShare }: ShareModalProps) {
+export function ShareModal({ conversationId, conversationTitle, messages, userId, isPro, onClose, onToast, onNativeShare }: ShareModalProps) {
   const { t } = useTranslation('panels')
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
@@ -37,6 +40,8 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
   const [isRevoking, setIsRevoking] = useState(false)
   const [existingId, setExistingId] = useState<string | null>(null)
   const [checking, setChecking] = useState(true)
+  const [sharesToday, setSharestoday] = useState(0)
+  const [limitReached, setLimitReached] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
   const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share
 
@@ -58,10 +63,13 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onClose, shareUrl, checking])
 
-  // Check for existing shared link on mount
+  // Check for existing shared link and daily share count on mount
   useEffect(() => {
     let cancelled = false
-    getSharedConversation(conversationId).then(existing => {
+    Promise.all([
+      getSharedConversation(conversationId),
+      isPro ? Promise.resolve(0) : getShareCountToday(userId),
+    ]).then(([existing, count]) => {
       if (cancelled) return
       if (existing) {
         const url = `${window.location.origin}${window.location.pathname}#/shared/${existing.id}`
@@ -69,10 +77,14 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
         setExistingId(existing.id)
         setIsExisting(true)
       }
+      if (!isPro) {
+        setSharestoday(count)
+        setLimitReached(count >= FREE_SHARE_LIMIT && !existing)
+      }
       setChecking(false)
     })
     return () => { cancelled = true }
-  }, [conversationId])
+  }, [conversationId, userId, isPro])
 
   const handleCreate = useCallback(async () => {
     if (isCreating) return
@@ -221,11 +233,25 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
               </button>
             </div>
           </>
+        ) : limitReached ? (
+          <>
+            <p className="ka-share-desc">
+              {t('share.limitReached', { limit: FREE_SHARE_LIMIT })}
+            </p>
+            <p className="ka-share-desc" style={{ opacity: 0.5, fontSize: '0.8rem' }}>
+              {t('share.limitHint', { used: sharesToday, limit: FREE_SHARE_LIMIT })}
+            </p>
+          </>
         ) : (
           <>
             <p className="ka-share-desc">
               {t('share.createDesc')}
             </p>
+            {!isPro && (
+              <p className="ka-share-desc" style={{ opacity: 0.5, fontSize: '0.8rem' }}>
+                {t('share.dailyCount', { used: sharesToday, limit: FREE_SHARE_LIMIT })}
+              </p>
+            )}
             <div className="ka-share-expiry">
               <Clock size={14} />
               <span>{t('share.linkExpires')}</span>
