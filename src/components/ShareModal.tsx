@@ -4,10 +4,10 @@
 // Shows existing link if one exists, with copy & revoke options.
 // Otherwise shows create form with expiry picker.
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Link, Copy, Check, X, Clock, Trash2 } from 'lucide-react'
+import { Link, Copy, Check, X, Clock, Trash2, Share2 } from 'lucide-react'
 import { createSharedConversation, getSharedConversation, deleteSharedConversation } from '../engine/SupabaseClient'
 
 interface ShareModalProps {
@@ -17,6 +17,7 @@ interface ShareModalProps {
   userId: string
   onClose: () => void
   onToast: (msg: string) => void
+  onNativeShare?: (url: string, title: string) => void
 }
 
 const EXPIRY_OPTIONS = [
@@ -26,7 +27,7 @@ const EXPIRY_OPTIONS = [
   { labelKey: 'share.days30', value: 30 },
 ]
 
-export function ShareModal({ conversationId, conversationTitle, messages, userId, onClose, onToast }: ShareModalProps) {
+export function ShareModal({ conversationId, conversationTitle, messages, userId, onClose, onToast, onNativeShare }: ShareModalProps) {
   const { t } = useTranslation('panels')
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
@@ -36,6 +37,26 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
   const [isRevoking, setIsRevoking] = useState(false)
   const [existingId, setExistingId] = useState<string | null>(null)
   const [checking, setChecking] = useState(true)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share
+
+  // Focus trap: keep focus within modal
+  useEffect(() => {
+    const modal = modalRef.current
+    if (!modal) return
+    const focusable = modal.querySelectorAll<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])')
+    if (focusable.length > 0) focusable[0].focus()
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key !== 'Tab' || focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [onClose, shareUrl, checking])
 
   // Check for existing shared link on mount
   useEffect(() => {
@@ -124,6 +145,12 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
     setTimeout(() => setCopied(false), 2000)
   }, [shareUrl])
 
+  const handleNativeShare = useCallback(() => {
+    if (shareUrl && onNativeShare) {
+      onNativeShare(shareUrl, conversationTitle)
+    }
+  }, [shareUrl, onNativeShare, conversationTitle])
+
   return (
     <motion.div
       className="ka-upgrade-overlay"
@@ -133,14 +160,18 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       onClick={onClose}
     >
       <motion.div
+        ref={modalRef}
         className="ka-share-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="share-modal-title"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="ka-share-header">
-          <h2 className="ka-share-title">
+          <h2 id="share-modal-title" className="ka-share-title">
             <Link size={18} />
             {t('share.title')}
           </h2>
@@ -165,10 +196,16 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
                 readOnly
                 onClick={e => (e.target as HTMLInputElement).select()}
               />
-              <button className="ka-share-copy-btn" onClick={handleCopy}>
+              <button className="ka-share-copy-btn" onClick={handleCopy} aria-label={copied ? t('share.copied') : t('share.copyLink')}>
                 {copied ? <Check size={20} /> : <Copy size={20} />}
               </button>
+              {canNativeShare && onNativeShare && (
+                <button className="ka-share-copy-btn" onClick={handleNativeShare} aria-label={t('share.shareVia')}>
+                  <Share2 size={20} />
+                </button>
+              )}
             </div>
+            <span className="ka-sr-only" aria-live="polite">{copied ? t('share.copiedAnnounce') : ''}</span>
             <div className="ka-share-actions">
               <p className="ka-share-desc">
                 {t('share.anyoneCanView')}
@@ -177,6 +214,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
                 className="ka-share-revoke-btn"
                 onClick={handleRevoke}
                 disabled={isRevoking}
+                aria-label={t('share.revokeLink')}
               >
                 <Trash2 size={14} />
                 {isRevoking ? t('share.revoking') : t('share.revokeLink')}

@@ -55,6 +55,19 @@ body.ka-scrollable-page {
     height: auto;
 }
 
+/* Screen-reader only — visually hidden but announced */
+.ka-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 h1,
 h2,
 h3,
@@ -4128,6 +4141,11 @@ h4 {
 [data-theme="dark"] .ka-shared-page {
     background: #0f0f0f;
     color: #e8e6e3;
+}
+
+[data-theme="dark"] .ka-shared-header {
+    background: #0f0f0f;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="dark"] .ka-shared-footer {
