@@ -625,6 +625,7 @@ function EngineChat() {
             conversationTitle={convs.activeConversation?.title || 'Kernel Conversation'}
             messages={messages.map(m => ({ role: m.role, content: m.content, agentName: m.agentName, timestamp: m.timestamp }))}
             userId={user.id}
+            isPro={isPro}
             onClose={() => msgActions.setShowShareModal(false)}
             onToast={showToast}
             onNativeShare={msgActions.handleNativeShare}

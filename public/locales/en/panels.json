@@ -153,6 +153,9 @@
     "copied": "Copied",
     "copiedAnnounce": "Link copied to clipboard",
     "shareVia": "Share via...",
+    "limitReached": "You've reached your daily limit of {{limit}} shared links. Upgrade to Pro for unlimited sharing.",
+    "limitHint": "{{used}}/{{limit}} links used today",
+    "dailyCount": "{{used}}/{{limit}} free shares used today",
     "errors": {
       "createFailed": "Failed to create share link",
       "revokeFailed": "Failed to revoke link"
