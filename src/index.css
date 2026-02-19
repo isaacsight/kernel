@@ -8586,6 +8586,13 @@ h4 {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
+
+    /* Clear bottom tab bar for all panel content */
+    .ka-goals-panel,
+    .ka-wf-panel,
+    .ka-sched-panel {
+        padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+    }
 }
 
 /* Timezone hint label */
