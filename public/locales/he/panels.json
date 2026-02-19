@@ -133,6 +133,49 @@
             "location": "מיקומים"
         }
     },
+    "insights": {
+        "title": "תובנות",
+        "sections": {
+            "world": "אתה",
+            "beliefs": "אמונות",
+            "memory": "זיכרון",
+            "reflections": "איכות",
+            "agents": "סוכנים"
+        },
+        "howISeeYou": "איך אני רואה אותך",
+        "apparentGoal": "מטרה נראית לעין",
+        "situation": "מצב נוכחי",
+        "conviction": "שכנוע",
+        "whatIBelieve": "מה אני מאמין",
+        "noBeliefsYet": "אין אמונות עדיין. המשך לשוחח — אלמד מה חשוב לך.",
+        "challengeBelief": "אתגר אמונה זו",
+        "dismissBelief": "דחה אמונה זו",
+        "myMemory": "הזיכרון שלי עליך",
+        "noMemoryYet": "אין זיכרון עדיין. אני לומד עליך תוך כדי שיחה.",
+        "commStyle": "סגנון תקשורת",
+        "memory": {
+            "interests": "תחומי עניין",
+            "goals": "יעדים",
+            "facts": "עליך",
+            "preferences": "העדפות"
+        },
+        "performance": "איך אני מתפקד",
+        "noReflectionsYet": "אין תובנות עדיין. אתחיל לעקוב אחר האיכות לאחר כמה שיחות.",
+        "avgQuality": "איכות ממוצעת (20 אחרונות)",
+        "dims": {
+            "substance": "תוכן",
+            "coherence": "קוהרנטיות",
+            "relevance": "רלוונטיות",
+            "brevity": "תמציתיות",
+            "craft": "מלאכה"
+        },
+        "recentLessons": "לקחים אחרונים",
+        "patternNotes": "הערות דפוס",
+        "agentPerformance": "ביצועי סוכנים",
+        "noAgentDataYet": "אין נתוני סוכנים עדיין.",
+        "quality": "איכות",
+        "usage": "שימוש"
+    },
     "share": {
         "title": "שתף שיחה",
         "checking": "בודק קישור קיים...",

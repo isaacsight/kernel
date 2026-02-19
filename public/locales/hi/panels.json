@@ -82,6 +82,49 @@
     "mentioned": "{{count}} बार उल्लेखित",
     "types": { "person": "लोग", "company": "कंपनियां", "project": "परियोजनाएं", "concept": "अवधारणाएं", "preference": "प्राथमिकताएं", "location": "स्थान" }
   },
+  "insights": {
+    "title": "अंतर्दृष्टि",
+    "sections": {
+      "world": "आप",
+      "beliefs": "विश्वास",
+      "memory": "स्मृति",
+      "reflections": "गुणवत्ता",
+      "agents": "एजेंट्स"
+    },
+    "howISeeYou": "मैं आपको कैसे देखता हूं",
+    "apparentGoal": "स्पष्ट लक्ष्य",
+    "situation": "वर्तमान स्थिति",
+    "conviction": "दृढ़ विश्वास",
+    "whatIBelieve": "मैं क्या मानता हूं",
+    "noBeliefsYet": "अभी तक कोई विश्वास नहीं बना है। बात करते रहें — मैं सीखूंगा कि आपके लिए क्या मायने रखता है।",
+    "challengeBelief": "इस विश्वास को चुनौती दें",
+    "dismissBelief": "इस विश्वास को खारिज करें",
+    "myMemory": "आपकी मेरी स्मृति",
+    "noMemoryYet": "अभी कोई स्मृति नहीं। जैसे-जैसे हम बात करेंगे, मैं आपके बारे में सीखूंगा।",
+    "commStyle": "संवाद शैली",
+    "memory": {
+      "interests": "रुचियां",
+      "goals": "लक्ष्य",
+      "facts": "आपके बारे में",
+      "preferences": "प्राथमिकताएं"
+    },
+    "performance": "मेरा प्रदर्शन",
+    "noReflectionsYet": "अभी तक कोई चिंतन नहीं। कुछ बातचीत के बाद मैं गुणवत्ता ट्रैक करना शुरू करूंगा।",
+    "avgQuality": "औसत गुणवत्ता (पिछले 20)",
+    "dims": {
+      "substance": "सार",
+      "coherence": "सुसंगतता",
+      "relevance": "प्रासंगिकता",
+      "brevity": "संक्षिप्तता",
+      "craft": "शिल्प"
+    },
+    "recentLessons": "हाल के सबक",
+    "patternNotes": "पैटर्न नोट्स",
+    "agentPerformance": "एजेंट प्रदर्शन",
+    "noAgentDataYet": "अभी कोई एजेंट डेटा नहीं।",
+    "quality": "गुणवत्ता",
+    "usage": "उपयोग"
+  },
   "share": {
     "title": "बातचीत साझा करें",
     "checking": "मौजूदा लिंक की जांच कर रहा है...",

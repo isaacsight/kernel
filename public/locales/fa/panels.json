@@ -133,6 +133,49 @@
             "location": "مکان‌ها"
         }
     },
+    "insights": {
+        "title": "بینش‌ها",
+        "sections": {
+            "world": "شما",
+            "beliefs": "باورها",
+            "memory": "حافظه",
+            "reflections": "کیفیت",
+            "agents": "عوامل"
+        },
+        "howISeeYou": "دید من از شما",
+        "apparentGoal": "هدف آشکار",
+        "situation": "وضعیت فعلی",
+        "conviction": "اعتقاد",
+        "whatIBelieve": "آنچه باور دارم",
+        "noBeliefsYet": "هنوز باوری شکل نگرفته است. به گفتگو ادامه دهید — یاد می‌گیرم چه چیزی برایتان مهم است.",
+        "challengeBelief": "به چالش کشیدن این باور",
+        "dismissBelief": "رد کردن این باور",
+        "myMemory": "خاطرات من از شما",
+        "noMemoryYet": "هنوز خاطره‌ای ندارم. در طول گفتگو شما را می‌شناسم.",
+        "commStyle": "سبک ارتباطی",
+        "memory": {
+            "interests": "علایق",
+            "goals": "اهداف",
+            "facts": "درباره شما",
+            "preferences": "ترجیحات"
+        },
+        "performance": "عملکرد من",
+        "noReflectionsYet": "هنوز بازتابی وجود ندارد. پس از چند گفتگو شروع به پیگیری کیفیت می‌کنم.",
+        "avgQuality": "میانگین کیفیت (۲۰ مورد اخیر)",
+        "dims": {
+            "substance": "محتوا",
+            "coherence": "انسجام",
+            "relevance": "مرتبط بودن",
+            "brevity": "اختصار",
+            "craft": "مهارت"
+        },
+        "recentLessons": "درس‌های اخیر",
+        "patternNotes": "یادداشت‌های الگو",
+        "agentPerformance": "عملکرد عوامل",
+        "noAgentDataYet": "هنوز داده‌ای از عوامل موجود نیست.",
+        "quality": "کیفیت",
+        "usage": "میزان استفاده"
+    },
     "share": {
         "title": "اشتراک‌گذاری گفتگو",
         "checking": "در حال بررسی لینک موجود...",

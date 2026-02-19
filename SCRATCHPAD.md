@@ -4,80 +4,114 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-18)
+## Current Session (2026-02-19)
 
 ### Accomplished This Session
 
-#### 1. Empty State CTAs (3 panels)
-Replaced generic empty state text in GoalsPanel, WorkflowsPanel, ScheduledTasksPanel with structured empty states:
-- Icon (48px, 0.35 opacity) + title (serif 1.15rem) + description (mono 0.78rem) + CTA button
-- Shared `.ka-empty-state` CSS class system with dark mode support
-- CTA buttons open the corresponding form (goal form, workflow builder, task form)
+#### 1. Discord Bot Feature Parity (`tools/discord-bot.ts`)
 
-#### 2. Hover States & Visual Indicators (CSS)
-- `.ka-goal-card-header:hover` — subtle bg highlight with border-radius
-- `.ka-brief-tab:hover:not(.active)` — bg highlight for non-active tabs
-- `.ka-wf-card-delete:hover` — red bg highlight
-- `.conv-item:hover` / `.conv-item--active` — strengthened from `var(--rubin-ivory-med)` to `rgba()` with dark mode variants
-- Dark mode variants for all new hover states
+**Enhanced Classification**
+- `classifyIntent()` now returns full `ClassificationResult` object: `{ agentId, confidence, needsResearch, needsSwarm, isMultiStep }`
+- Classification system prompt updated to match web app's AgentRouter (9 agents → 5 for Discord, but full routing flags)
+- `callClaude()` now accepts `options?: { web_search?: boolean }` parameter
 
-#### 3. Unified Intent Classification
-- `perception.ts:classifyIntent()` — trimmed 70-line keyword switch to 10-line minimal fallback; AgentRouter is single source of truth
-- `swarm.ts:routeToAgent()` — trimmed 25-line keyword block to 10-line minimal fallback
-- Removed unused `ReasoningDomain` import from perception.ts
-- Updated perception.test.ts: replaced `reason` intent tests with `evaluate` + added AgentRouter integration tests
-- All 145 tests pass
+**Pro Feature Gating**
+- `getUserSubscription()` — checks `subscriptions` table for linked Discord users
+- Research/swarm/tasks gated behind Pro; free users get standard chat + web search for researcher
 
-#### 4. SCRATCHPAD Cleanup
-- Removed completed backlog items (cron, think(), split AIEngine)
-- Updated backlog to reflect current state
+**Deep Research Pipeline** (`discordDeepResearch()`)
+- Plan → parallel search (web_search: true) → grade relevance → synthesize (sonnet)
+- Same multi-step pattern as web app's `DeepResearch.ts`
+
+**Swarm Orchestration** (`discordRunSwarm()`)
+- Select 2-4 agents (haiku) → parallel contributions → synthesize (sonnet)
+- 7-agent pool: kernel, researcher, coder, writer, analyst, reasoner, critic
+
+**Multi-Step Tasks** (`discordPlanAndExecute()`)
+- Plan decomposition (haiku) → sequential execution → final synthesis (sonnet)
+- Each step routed to appropriate specialist
+
+**Knowledge Graph Extraction** (`extractAndSaveKG()`)
+- Runs every 3 messages for linked users (piggybacks on memory extraction interval)
+- Extracts entities + relations → upserts to `knowledge_graph_entities` and `knowledge_graph_relations`
+- Data appears in web app KG panel for linked users
+
+**Goal Commands**
+- `!goal add <title>` — create goal
+- `!goal list` — show active goals with progress/priority
+- `!goal done <id>` — complete a goal
+- `!goal check` — AI-powered check-in conversation
+
+**Briefing Command** (`!briefing`)
+- Generates personalized briefing using user memory + KG entities
+- Web search enabled for current events
+
+**Share Command** (`!share`)
+- Creates entry in `shared_conversations` table
+- Returns `kernel.chat/#/shared/{id}` link
+
+**Help Command** (`!help`)
+- Lists all available commands
+
+**Updated Message Flow**
+```
+classify → check Pro → route (research/swarm/tasks/standard) → respond → background (memory + KG)
+```
+
+#### 2. Intelligence Transparency Panel (`src/components/InsightsPanel.tsx`)
+
+New bottom-sheet panel with 5 tabbed sections:
+
+1. **"How I See You"** (World Model) — apparent goal, communication style badge, expertise badge, situation summary, conviction gauge with trend arrow
+2. **"What I Believe"** (Beliefs) — sorted by confidence, confidence bars, source badges, challenge/reinforced counts, challenge & dismiss actions
+3. **"My Memory"** (Profile) — interests, goals, facts, preferences from MemoryAgent, communication style badge
+4. **"How I'm Performing"** (Reflections) — average quality score (big number), 5-dimension bars (substance/coherence/relevance/brevity/craft), expandable recent lessons, pattern notes
+5. **"Agent Performance"** — ranked by quality, dual bars (quality vs usage)
+
+**Integration:**
+- `usePanelManager.ts` — added `showInsightsPanel` state + `'insights'` action routing
+- `MoreMenu.tsx` — added `'insights'` to `MoreAction` type + Eye icon menu item
+- `EnginePage.tsx` — wired InsightsPanel in BottomSheet, added to header kebab menu
+- `src/index.css` — full InsightsPanel CSS with dark mode variants
+- `public/locales/en/panels.json` — 40+ translation keys for all sections
+- `public/locales/en/home.json` — added `menu.insights` key
+
+**Props:** receives `engineState`, `userMemory`, `onChallengeBelief`, `onRemoveBelief`, `onClose`
+**Engine interaction:** challenge/remove beliefs via `engine.challengeBelief()` / `engine.removeBelief()`
+
+#### Verification
+- `npx tsc --noEmit` — clean
+- `npm run build` — builds successfully
+- `npx vitest run` — all 145 tests pass
 
 ---
+
+## Previous Session (2026-02-18)
+
+### Accomplished
+- Empty State CTAs (3 panels), Hover States, Unified Intent Classification, SCRATCHPAD Cleanup
 
 ## Previous Session (2026-02-17, afternoon)
 
 ### Accomplished
-- **Mobile UX Polish** — CSS fixes for touch targets, spacing, opacity, line-height (deployed)
-- **Panel Overlay + Empty State Fixes** — darker scrim, improved empty state opacity (deployed)
-- **Playwright Config** — switched to headed mode
-- **Site Audit via Playwright** — partial walkthrough, all clean after fixes
-
-### Navigation & Feature Discovery Overhaul (PENDING)
-
-UX audit identified **7 major navigation issues**:
-
-1. **Hidden Menu System** — Features buried in kebab menu
-2. **No Clear Way Back to Home** — Header text not clickable
-3. **Unclear Feature Discovery** — Features split across hamburger/kebab
-4. ~~**Empty State Confusion**~~ — **DONE** (this session)
-5. ~~**Inconsistent Visual Feedback**~~ — **DONE** (this session, hover states)
-6. **Briefing Navigation Issues** — Already solved (BriefingPage has TOC)
-7. ~~**Hard to See What's Interactive**~~ — **DONE** (this session, hover states)
-
-**Remaining navigation work:**
-1. Bottom tab bar with main features (Conversations, Goals, Workflows, Briefings, Stats)
-2. Clickable header logo/text as home button
-3. Onboarding tooltips for first-time feature encounters
-
----
+- Mobile UX Polish, Panel Overlay + Empty State Fixes, Playwright Config, Site Audit
 
 ## Previous Session (2026-02-17, morning)
 
 ### Accomplished
 - Implemented all 6 Sticky Features (Document Analysis, Shared Conversations, Goal Tracking, Workflows, Recurring Tasks, Daily Briefings)
-- 6 migrations (011-016), 3 edge functions, 29 files changed
 
 ---
 
 ## Ongoing Backlog
 
-- **P1: ~~Unify intent classification~~** — **DONE** (AgentRouter is single source of truth)
 - **P2: Haiku-based reflection scorer** — for high-complexity queries
 - **P3: Add test suite** — perception, attention, reflect are pure functions (perception now has 19 tests)
+- **P4: Locale translations** — InsightsPanel keys added for English only; needs 23 other locales
 
 ## Key Decisions Made
 
-- Bottom-sheet pattern for all panels (Goals, Workflows, Scheduled, Briefings)
+- Bottom-sheet pattern for all panels (Goals, Workflows, Scheduled, Briefings, Insights)
 - Haiku-based progress extraction for goals (every 3 messages)
 - BriefingGenerator reuses DeepResearch pipeline
 - Real-time notifications via Supabase realtime subscription
@@ -85,3 +119,5 @@ UX audit identified **7 major navigation issues**:
 - Write-through pattern: localStorage fast, Supabase durable backup
 - Dynamic import of SupabaseClient in AIEngine (avoids circular deps)
 - AgentRouter (Haiku API) is single source of truth for intent classification; keyword matching is minimal fallback only
+- Discord bot uses direct `callClaude()` (service key), not `getProvider()` (browser-only)
+- InsightsPanel receives engineState as prop from useChatEngine (no extra subscription needed)

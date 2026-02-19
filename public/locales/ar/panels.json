@@ -133,6 +133,49 @@
             "location": "المواقع"
         }
     },
+    "insights": {
+        "title": "الرؤى",
+        "sections": {
+            "world": "أنت",
+            "beliefs": "المعتقدات",
+            "memory": "الذاكرة",
+            "reflections": "الجودة",
+            "agents": "الوكلاء"
+        },
+        "howISeeYou": "كيف أراك",
+        "apparentGoal": "الهدف المحتمل",
+        "situation": "الوضع الحالي",
+        "conviction": "درجة الاقتناع",
+        "whatIBelieve": "ما أعتقده",
+        "noBeliefsYet": "لم تتشكل أي معتقدات بعد. استمر في الدردشة — سأتعلم ما يهمك.",
+        "challengeBelief": "تحدي هذا المعتقد",
+        "dismissBelief": "تجاهل هذا المعتقد",
+        "myMemory": "ذاكرتي عنك",
+        "noMemoryYet": "لا توجد ذاكرة بعد. سأتعرف عليك من خلال محادثاتنا.",
+        "commStyle": "أسلوب التواصل",
+        "memory": {
+            "interests": "الاهتمامات",
+            "goals": "الأهداف",
+            "facts": "عنك",
+            "preferences": "التفضيلات"
+        },
+        "performance": "أدائي",
+        "noReflectionsYet": "لا توجد تأملات بعد. سأبدأ بتتبع الجودة بعد عدة محادثات.",
+        "avgQuality": "متوسط الجودة (آخر 20)",
+        "dims": {
+            "substance": "المضمون",
+            "coherence": "التماسك",
+            "relevance": "الصلة",
+            "brevity": "الإيجاز",
+            "craft": "الحرفية"
+        },
+        "recentLessons": "الدروس الأخيرة",
+        "patternNotes": "ملاحظات الأنماط",
+        "agentPerformance": "أداء الوكلاء",
+        "noAgentDataYet": "لا توجد بيانات وكلاء بعد.",
+        "quality": "الجودة",
+        "usage": "الاستخدام"
+    },
     "share": {
         "title": "مشاركة المحادثة",
         "checking": "جاري التحقق من وجود رابط حالي...",

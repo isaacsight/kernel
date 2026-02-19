@@ -82,6 +82,49 @@
     "mentioned": "{{count}} kez bahsedildi",
     "types": { "person": "Kişiler", "company": "Şirketler", "project": "Projeler", "concept": "Kavramlar", "preference": "Tercihler", "location": "Konumlar" }
   },
+  "insights": {
+    "title": "İçgörüler",
+    "sections": {
+      "world": "Sen",
+      "beliefs": "İnançlar",
+      "memory": "Hafıza",
+      "reflections": "Kalite",
+      "agents": "Ajanlar"
+    },
+    "howISeeYou": "Seni Nasıl Görüyorum",
+    "apparentGoal": "Belirgin hedef",
+    "situation": "Mevcut durum",
+    "conviction": "Kanaat",
+    "whatIBelieve": "Ne Düşünüyorum",
+    "noBeliefsYet": "Henüz oluşmuş bir inanç yok. Sohbet etmeye devam edin — sizin için neyin önemli olduğunu öğreneceğim.",
+    "challengeBelief": "Bu inancı sorgula",
+    "dismissBelief": "Bu inancı reddet",
+    "myMemory": "Sizinle İlgili Hafızam",
+    "noMemoryYet": "Henüz hafıza yok. Konuştukça sizin hakkınızda öğreniyorum.",
+    "commStyle": "İletişim tarzı",
+    "memory": {
+      "interests": "İlgi alanları",
+      "goals": "Hedefler",
+      "facts": "Hakkınızda",
+      "preferences": "Tercihler"
+    },
+    "performance": "Performansım",
+    "noReflectionsYet": "Henüz yansıma yok. Birkaç konuşmadan sonra kaliteyi takip etmeye başlayacağım.",
+    "avgQuality": "ort. kalite (son 20)",
+    "dims": {
+      "substance": "Öz",
+      "coherence": "Tutarlılık",
+      "relevance": "İlgililik",
+      "brevity": "Kısalık",
+      "craft": "Ustalık"
+    },
+    "recentLessons": "Son dersler",
+    "patternNotes": "Örüntü notları",
+    "agentPerformance": "Ajan Performansı",
+    "noAgentDataYet": "Henüz ajan verisi yok.",
+    "quality": "Kalite",
+    "usage": "Kullanım"
+  },
   "share": {
     "title": "Konuşmayı paylaş",
     "checking": "Mevcut bağlantı kontrol ediliyor...",

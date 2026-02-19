@@ -82,6 +82,49 @@
     "mentioned": "{{count}}회 언급",
     "types": { "person": "사람", "company": "회사", "project": "프로젝트", "concept": "개념", "preference": "선호", "location": "장소" }
   },
+  "insights": {
+    "title": "인사이트",
+    "sections": {
+      "world": "당신",
+      "beliefs": "신념",
+      "memory": "기억",
+      "reflections": "품질",
+      "agents": "에이전트"
+    },
+    "howISeeYou": "내가 본 당신",
+    "apparentGoal": "추정 목표",
+    "situation": "현재 상황",
+    "conviction": "확신도",
+    "whatIBelieve": "나의 견해",
+    "noBeliefsYet": "아직 형성된 견해가 없습니다. 대화를 계속하세요 — 무엇이 중요한지 알아가겠습니다.",
+    "challengeBelief": "이 견해에 이의 제기",
+    "dismissBelief": "이 견해 무시",
+    "myMemory": "당신에 대한 나의 기억",
+    "noMemoryYet": "아직 기억이 없습니다. 대화를 나누면서 당신에 대해 알아가겠습니다.",
+    "commStyle": "소통 스타일",
+    "memory": {
+      "interests": "관심사",
+      "goals": "목표",
+      "facts": "당신에 대해",
+      "preferences": "선호"
+    },
+    "performance": "나의 성과",
+    "noReflectionsYet": "아직 성찰이 없습니다. 몇 번의 대화 후 품질 추적을 시작하겠습니다.",
+    "avgQuality": "평균 품질 (최근 20건)",
+    "dims": {
+      "substance": "깊이",
+      "coherence": "일관성",
+      "relevance": "관련성",
+      "brevity": "간결성",
+      "craft": "표현력"
+    },
+    "recentLessons": "최근 교훈",
+    "patternNotes": "패턴 기록",
+    "agentPerformance": "에이전트 성과",
+    "noAgentDataYet": "아직 에이전트 데이터가 없습니다.",
+    "quality": "품질",
+    "usage": "사용량"
+  },
   "share": {
     "title": "대화 공유",
     "checking": "기존 링크 확인 중...",

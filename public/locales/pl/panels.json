@@ -82,6 +82,49 @@
     "mentioned": "Wspomniano {{count}} razy",
     "types": { "person": "Osoby", "company": "Firmy", "project": "Projekty", "concept": "Pojęcia", "preference": "Preferencje", "location": "Lokalizacje" }
   },
+  "insights": {
+    "title": "Spostrzeżenia",
+    "sections": {
+      "world": "Ty",
+      "beliefs": "Przekonania",
+      "memory": "Pamięć",
+      "reflections": "Jakość",
+      "agents": "Agenci"
+    },
+    "howISeeYou": "Jak Cię widzę",
+    "apparentGoal": "Widoczny cel",
+    "situation": "Obecna sytuacja",
+    "conviction": "Przekonanie",
+    "whatIBelieve": "W co wierzę",
+    "noBeliefsYet": "Brak przekonań. Rozmawiaj dalej — dowiem się, co jest dla Ciebie ważne.",
+    "challengeBelief": "Podważ to przekonanie",
+    "dismissBelief": "Odrzuć to przekonanie",
+    "myMemory": "Moja pamięć o Tobie",
+    "noMemoryYet": "Brak pamięci. Uczę się o Tobie w miarę rozmowy.",
+    "commStyle": "Styl komunikacji",
+    "memory": {
+      "interests": "Zainteresowania",
+      "goals": "Cele",
+      "facts": "O Tobie",
+      "preferences": "Preferencje"
+    },
+    "performance": "Jak mi idzie",
+    "noReflectionsYet": "Brak refleksji. Zacznę śledzić jakość po kilku rozmowach.",
+    "avgQuality": "śr. jakość (ostatnie 20)",
+    "dims": {
+      "substance": "Treść",
+      "coherence": "Spójność",
+      "relevance": "Trafność",
+      "brevity": "Zwięzłość",
+      "craft": "Warsztat"
+    },
+    "recentLessons": "Ostatnie lekcje",
+    "patternNotes": "Notatki o wzorcach",
+    "agentPerformance": "Wydajność agentów",
+    "noAgentDataYet": "Brak danych o agentach.",
+    "quality": "Jakość",
+    "usage": "Użycie"
+  },
   "share": {
     "title": "Udostępnij rozmowę",
     "checking": "Sprawdzanie istniejącego linku...",
