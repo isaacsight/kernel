@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import { KERNEL_AGENTS } from '../../agents';
 import { SWARM_AGENTS } from '../../agents/swarm';
@@ -6,6 +7,7 @@ import { SWARM_AGENTS } from '../../agents/swarm';
 const ALL_AGENTS = [...KERNEL_AGENTS, ...SWARM_AGENTS];
 
 export function KernelAgentControls() {
+  const { t } = useTranslation('kernel');
   const {
     engineState,
     stopEngine,
@@ -54,20 +56,20 @@ export function KernelAgentControls() {
     <div className="kernel-controls">
       {/* Engine Controls */}
       <div className="kernel-ctrl-section">
-        <h3 className="kernel-ctrl-title">Engine</h3>
+        <h3 className="kernel-ctrl-title">{t('controls.engine')}</h3>
         <div className="kernel-ctrl-row">
           <button className="kernel-ctrl-btn kernel-ctrl-btn--stop" onClick={stopEngine}>
-            Stop
+            {t('controls.stop')}
           </button>
           <button className="kernel-ctrl-btn kernel-ctrl-btn--reset" onClick={resetEngine}>
-            Reset
+            {t('controls.reset')}
           </button>
         </div>
       </div>
 
       {/* Agent Override */}
       <div className="kernel-ctrl-section">
-        <h3 className="kernel-ctrl-title">Agent Override</h3>
+        <h3 className="kernel-ctrl-title">{t('controls.agentOverride')}</h3>
         <div className="kernel-ctrl-row">
           <select
             className="kernel-ctrl-select"
@@ -79,7 +81,7 @@ export function KernelAgentControls() {
             ))}
           </select>
           <button className="kernel-ctrl-btn" onClick={handleOverride}>
-            Override Next
+            {t('controls.overrideNext')}
           </button>
         </div>
       </div>
@@ -87,7 +89,7 @@ export function KernelAgentControls() {
       {/* Conviction */}
       <div className="kernel-ctrl-section">
         <h3 className="kernel-ctrl-title">
-          Conviction
+          {t('controls.conviction')}
           <span className="kernel-ctrl-value">{(conviction * 100).toFixed(1)}%</span>
         </h3>
         <input
@@ -111,7 +113,7 @@ export function KernelAgentControls() {
 
       {/* Beliefs */}
       <div className="kernel-ctrl-section">
-        <h3 className="kernel-ctrl-title">Beliefs ({worldModel.beliefs.length})</h3>
+        <h3 className="kernel-ctrl-title">{t('controls.beliefs')} ({worldModel.beliefs.length})</h3>
         {worldModel.beliefs.map(b => (
           <div key={b.id} className="kernel-ctrl-belief">
             <span className="kernel-ctrl-belief-text">{b.content}</span>
@@ -119,14 +121,14 @@ export function KernelAgentControls() {
               <button
                 className="kernel-ctrl-btn kernel-ctrl-btn--xs"
                 onClick={() => challengeBelief(b.id)}
-                title="Challenge"
+                title={t('controls.challenge')}
               >
                 ?
               </button>
               <button
                 className="kernel-ctrl-btn kernel-ctrl-btn--xs kernel-ctrl-btn--danger"
                 onClick={() => removeBelief(b.id)}
-                title="Remove"
+                title={t('remove', { ns: 'common' })}
               >
                 &times;
               </button>
@@ -139,7 +141,7 @@ export function KernelAgentControls() {
             className="kernel-ctrl-input"
             value={newBelief}
             onChange={e => setNewBelief(e.target.value)}
-            placeholder="New belief..."
+            placeholder={t('controls.newBeliefPlaceholder')}
           />
           <input
             type="number"
@@ -151,16 +153,16 @@ export function KernelAgentControls() {
             onChange={e => setNewBeliefConf(parseFloat(e.target.value))}
           />
           <button type="submit" className="kernel-ctrl-btn kernel-ctrl-btn--sm" disabled={!newBelief.trim()}>
-            Add
+            {t('add', { ns: 'common' })}
           </button>
         </form>
       </div>
 
       {/* Reflections */}
       <div className="kernel-ctrl-section">
-        <h3 className="kernel-ctrl-title">Reflections ({lasting.reflections.length})</h3>
+        <h3 className="kernel-ctrl-title">{t('controls.reflections')} ({lasting.reflections.length})</h3>
         <div className="kernel-ctrl-row">
-          <span className="kernel-ctrl-label">Prune below quality:</span>
+          <span className="kernel-ctrl-label">{t('controls.pruneLabel')}</span>
           <input
             type="number"
             className="kernel-ctrl-input kernel-ctrl-input--sm"
@@ -171,19 +173,19 @@ export function KernelAgentControls() {
             onChange={e => setPruneThreshold(parseFloat(e.target.value))}
           />
           <button className="kernel-ctrl-btn kernel-ctrl-btn--sm" onClick={handlePrune}>
-            Prune
+            {t('controls.prune')}
           </button>
         </div>
         {pruneResult !== null && (
-          <p className="kernel-ctrl-result">Removed {pruneResult} reflection{pruneResult !== 1 ? 's' : ''}</p>
+          <p className="kernel-ctrl-result">{t('controls.pruneResult', { count: pruneResult })}</p>
         )}
       </div>
 
       {/* Agent Performance */}
       <div className="kernel-ctrl-section">
-        <h3 className="kernel-ctrl-title">Agent Performance</h3>
+        <h3 className="kernel-ctrl-title">{t('controls.agentPerformance')}</h3>
         {perfEntries.length === 0 ? (
-          <p className="kernel-ctrl-empty">No performance data yet</p>
+          <p className="kernel-ctrl-empty">{t('controls.noPerformanceData')}</p>
         ) : (
           <div className="kernel-ctrl-perf">
             {perfEntries.map(([id, perf]) => (

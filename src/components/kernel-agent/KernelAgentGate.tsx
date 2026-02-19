@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../providers/AuthProvider';
 import { getAccessToken } from '../../engine/SupabaseClient';
 
@@ -7,6 +8,7 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || '';
 const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || '';
 
 export function KernelAgentGate() {
+  const { t } = useTranslation('auth');
   const { user, isAuthenticated, signInWithProvider, signInWithEmail, signUpWithEmail, refreshSubscription } = useAuthContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +42,7 @@ export function KernelAgentGate() {
         const { url } = await res.json();
         if (url) window.location.href = url;
       } catch {
-        setError('Unable to start checkout. Please try again.');
+        setError(t('subscription.checkoutError'));
       } finally {
         setLoading(false);
       }
@@ -50,23 +52,23 @@ export function KernelAgentGate() {
       <div className="kernel-gate">
         <div className="kernel-gate-card">
           <div className="kernel-gate-icon">K</div>
-          <h2 className="kernel-gate-title">Subscribe</h2>
-          <p className="kernel-gate-price">$20<span>/month</span></p>
+          <h2 className="kernel-gate-title">{t('kernelGate.subscribe')}</h2>
+          <p className="kernel-gate-price">{t('subscription.price')}<span>{t('subscription.pricePeriod')}</span></p>
           <p className="kernel-gate-desc">
-            Signed in as {user.email}. Subscribe to unlock Chat and Control.
+            {t('kernelGate.signedInAs', { email: user.email })}
           </p>
           <div className="kernel-gate-features">
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conversational engine analysis</div>
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Real-time belief management</div>
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Conviction steering</div>
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> Unlimited messages</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature1')}</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature2')}</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature3')}</div>
+            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature4')}</div>
           </div>
           <button className="kernel-gate-submit" onClick={handleSubscribe} disabled={loading} style={{ width: '100%' }}>
-            {loading ? 'Loading...' : 'Subscribe — $20/mo'}
+            {loading ? t('loading', { ns: 'common' }) : t('kernelGate.button')}
           </button>
           {error && <p className="kernel-gate-error">{error}</p>}
           <button className="kernel-gate-admin-toggle" onClick={() => refreshSubscription()}>
-            Refresh status
+            {t('kernelGate.refreshStatus')}
           </button>
         </div>
       </div>
@@ -85,7 +87,7 @@ export function KernelAgentGate() {
         : await signInWithEmail(email.trim(), password);
       if (result.error) setError(result.error);
     } catch {
-      setError('Authentication failed.');
+      setError(t('kernelGate.authFailed'));
     } finally {
       setLoading(false);
     }
@@ -95,34 +97,34 @@ export function KernelAgentGate() {
     <div className="kernel-gate">
       <div className="kernel-gate-card">
         <div className="kernel-gate-icon">K</div>
-        <h2 className="kernel-gate-title">kernel.chat</h2>
-        <p className="kernel-gate-price">$20<span>/month</span></p>
+        <h2 className="kernel-gate-title">{t('kernelGate.loginTitle')}</h2>
+        <p className="kernel-gate-price">{t('subscription.price')}<span>{t('subscription.pricePeriod')}</span></p>
         <p className="kernel-gate-desc">
-          Sign in to access Chat and Control.
+          {t('kernelGate.loginDesc')}
         </p>
 
         <div className="kernel-gate-social">
-          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('google')}>Continue with Google</button>
-          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('github')}>Continue with GitHub</button>
+          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('google')}>{t('modal.continueGoogle')}</button>
+          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('github')}>{t('modal.continueGitHub')}</button>
         </div>
 
-        <div className="kernel-gate-divider"><span>or</span></div>
+        <div className="kernel-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>
 
         <form className="kernel-gate-form" onSubmit={handleEmailAuth} style={{ flexDirection: 'column', gap: 8 }}>
-          <input type="email" className="kernel-gate-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" required />
-          <input type="password" className="kernel-gate-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
+          <input type="email" className="kernel-gate-input" value={email} onChange={e => setEmail(e.target.value)} placeholder={t('modal.emailPlaceholder')} required />
+          <input type="password" className="kernel-gate-input" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('modal.passwordPlaceholder')} required />
           <button type="submit" className="kernel-gate-submit" disabled={loading || !email.trim() || !password.trim()}>
-            {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
+            {loading ? t('loading', { ns: 'common' }) : isSignUp ? t('modal.createAccount') : t('modal.signIn')}
           </button>
         </form>
 
         <button className="kernel-gate-admin-toggle" onClick={() => setIsSignUp(!isSignUp)}>
-          {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+          {t(isSignUp ? 'modal.toggleSignIn' : 'modal.toggleSignUp')}
         </button>
 
         {error && <p className="kernel-gate-error">{error}</p>}
 
-        <p className="kernel-gate-free">The Observer tab is free.</p>
+        <p className="kernel-gate-free">{t('kernelGate.observerFree')}</p>
       </div>
     </div>
   );

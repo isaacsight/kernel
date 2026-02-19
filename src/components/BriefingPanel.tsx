@@ -3,6 +3,7 @@
 // Bottom-sheet panel showing today's briefing, history, and generate button.
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Newspaper, RefreshCw, Sparkles, Check, Clock, ArrowRight, AlertCircle, Trash2, MessageCircle, Target } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { generateBriefing, type Briefing } from '../engine/BriefingGenerator'
@@ -22,9 +23,9 @@ interface BriefingPanelProps {
 }
 
 const GEN_PHASES = [
-  { key: 'planning', label: 'Planning' },
-  { key: 'searching', label: 'Researching' },
-  { key: 'synthesizing', label: 'Writing' },
+  { key: 'planning', labelKey: 'briefings.phases.planning' },
+  { key: 'searching', labelKey: 'briefings.phases.researching' },
+  { key: 'synthesizing', labelKey: 'briefings.phases.writing' },
 ]
 
 function estimateReadingTime(text: string): number {
@@ -65,6 +66,7 @@ function isBriefingFailed(b: Briefing): boolean {
 }
 
 export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast, onGoDeeper, onAddGoal }: BriefingPanelProps) {
+  const { t } = useTranslation('panels')
   const [briefings, setBriefings] = useState<Briefing[]>([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
@@ -102,10 +104,10 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
       if (error) throw error
       await loadBriefings()
       setSelectedIdx(0)
-      onToast('Briefing generated')
+      onToast(t('briefings.toast.generated'))
     } catch (err) {
       console.error('Briefing generation failed:', err)
-      onToast('Failed to generate briefing')
+      onToast(t('briefings.errors.generateFailed'))
     } finally {
       setGenerating(false)
       setGenPhase('')
@@ -116,7 +118,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
     await supabase.from('briefings').delete().eq('id', briefingId)
     await loadBriefings()
     setSelectedIdx(0)
-    onToast('Briefing removed')
+    onToast(t('briefings.toast.removed'))
   }
 
   // Mark as read when viewing
@@ -143,17 +145,17 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
       <div className="ka-brief-header">
         <h2 className="ka-brief-title">
           <Newspaper size={18} />
-          Briefings
+          {t('briefings.title')}
         </h2>
         <div className="ka-brief-header-actions">
           <button
             className="ka-brief-gen-btn"
             onClick={handleGenerate}
             disabled={generating}
-            title="Generate a new briefing based on your interests and recent activity"
+            title={t('briefings.generateTooltip')}
           >
             <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
-            {generating ? 'Generating...' : 'New briefing'}
+            {generating ? t('briefings.generating') : t('briefings.newBriefing')}
           </button>
           <button className="ka-brief-close" onClick={onClose} aria-label="Close">
             <X size={18} />
@@ -175,7 +177,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 <span className="ka-brief-progress-icon">
                   {isComplete ? <Check size={12} /> : (i + 1)}
                 </span>
-                <span className="ka-brief-progress-label">{phase.label}</span>
+                <span className="ka-brief-progress-label">{t(phase.labelKey)}</span>
               </div>
             )
           })}
@@ -183,14 +185,14 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
       )}
 
       {loading ? (
-        <div className="ka-brief-loading">Loading briefings...</div>
+        <div className="ka-brief-loading">{t('briefings.loading')}</div>
       ) : briefings.length === 0 && !generating ? (
         <div className="ka-brief-empty">
           <Sparkles size={28} className="ka-brief-empty-icon" />
-          <h3 className="ka-brief-empty-title">Your daily briefing</h3>
-          <p>Get a personalized news and insights summary tailored to your interests and goals.</p>
+          <h3 className="ka-brief-empty-title">{t('briefings.emptyTitle')}</h3>
+          <p>{t('briefings.emptyDesc')}</p>
           <button className="ka-brief-empty-cta" onClick={handleGenerate}>
-            Generate your first briefing
+            {t('briefings.generateFirst')}
           </button>
         </div>
       ) : (
@@ -214,16 +216,16 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
             <div className="ka-brief-content ka-brief-content--failed">
               <div className="ka-brief-failed">
                 <AlertCircle size={24} />
-                <h3>This briefing couldn't be generated</h3>
-                <p>The research step didn't return enough data to create a useful summary. This can happen if the search service was temporarily unavailable.</p>
+                <h3>{t('briefings.errorTitle')}</h3>
+                <p>{t('briefings.errorDesc')}</p>
                 <div className="ka-brief-failed-actions">
                   <button className="ka-brief-retry-btn" onClick={handleGenerate} disabled={generating}>
                     <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
-                    {generating ? 'Generating...' : 'Try again'}
+                    {generating ? t('briefings.generating') : t('retry', { ns: 'common' })}
                   </button>
                   <button className="ka-brief-delete-btn" onClick={() => current.id && handleDelete(current.id)}>
                     <Trash2 size={14} />
-                    Remove
+                    {t('remove', { ns: 'common' })}
                   </button>
                 </div>
               </div>
@@ -233,16 +235,16 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
               <h3 className="ka-brief-content-title">{current.title}</h3>
               <div className="ka-brief-meta">
                 <Clock size={12} />
-                <span>{readingTime} min read</span>
+                <span>{t('briefings.readTime', { count: readingTime })}</span>
                 <span className="ka-brief-meta-sep">&middot;</span>
-                <span>{current.content.trim().split(/\s+/).length} words</span>
+                <span>{t('briefings.wordCount', { count: current.content.trim().split(/\s+/).length })}</span>
               </div>
               {current.topics.length > 0 && (
                 <div className="ka-brief-topics-section">
-                  <div className="ka-brief-topics-label">Topics covered</div>
+                  <div className="ka-brief-topics-label">{t('briefings.topicsCovered')}</div>
                   <div className="ka-brief-topics">
-                    {current.topics.map(t => (
-                      <span key={t} className="ka-brief-topic">{toTitleCase(t)}</span>
+                    {current.topics.map(topic => (
+                      <span key={topic} className="ka-brief-topic">{toTitleCase(topic)}</span>
                     ))}
                   </div>
                 </div>
@@ -254,7 +256,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 href={`${import.meta.env.BASE_URL}#/briefing/${current.id}`}
                 className="ka-brief-fullpage-btn"
               >
-                {preview?.isTruncated ? 'Continue reading' : 'Read full briefing'} <ArrowRight size={14} />
+                {preview?.isTruncated ? t('briefings.continueReading') : t('briefings.readFull')} <ArrowRight size={14} />
               </a>
               <div className="ka-brief-actions">
                 {onGoDeeper && (
@@ -263,7 +265,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                     onClick={() => onGoDeeper(current.title, current.content)}
                   >
                     <MessageCircle size={14} />
-                    Go deeper in chat
+                    {t('briefings.goDeeper')}
                   </button>
                 )}
                 {onAddGoal && (
@@ -275,7 +277,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                     )}
                   >
                     <Target size={14} />
-                    Save takeaways as goal
+                    {t('briefings.saveAsGoal')}
                   </button>
                 )}
               </div>

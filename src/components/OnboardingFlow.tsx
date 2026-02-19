@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Sparkles, ArrowRight, MessageSquare, Brain, Users, Crown, Check } from 'lucide-react'
 
 interface OnboardingFlowProps {
@@ -29,6 +30,7 @@ const INTERESTS = [
 const TOTAL_STEPS = 5
 
 export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
+  const { t } = useTranslation('onboarding')
   const [step, setStep] = useState(0)
   const [selectedInterests, setSelectedInterests] = useState<string[]>([])
   const [direction, setDirection] = useState(1) // 1 = forward, -1 = back
@@ -102,12 +104,11 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
             <>
               <div className="onboarding-icon"><Sparkles size={28} /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>
-                {userName ? `Welcome, ${userName.split('@')[0]}` : 'Welcome to Kernel'}
+                {userName ? t('step0.titleUser', { name: userName.split('@')[0] }) : t('step0.title')}
               </h1>
-              <p className="onboarding-subtitle">Your sovereign AI, built for you.</p>
+              <p className="onboarding-subtitle">{t('step0.subtitle')}</p>
               <p className="onboarding-body">
-                Kernel is an AI engine that learns who you are, remembers what matters to you,
-                and gets better with every conversation.
+                {t('step0.body')}
               </p>
             </>
           )}
@@ -116,11 +117,10 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 1 && (
             <>
               <div className="onboarding-icon"><Brain size={28} /></div>
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>It Learns You</h1>
-              <p className="onboarding-subtitle">Memory that compounds.</p>
+              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step1.title')}</h1>
+              <p className="onboarding-subtitle">{t('step1.subtitle')}</p>
               <p className="onboarding-body">
-                As you talk, Kernel builds a knowledge graph of your interests, goals,
-                and relationships. Every conversation makes the next one better.
+                {t('step1.body')}
               </p>
             </>
           )}
@@ -129,11 +129,10 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 2 && (
             <>
               <div className="onboarding-icon"><Users size={28} /></div>
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>Specialist Agents</h1>
-              <p className="onboarding-subtitle">The right mind for the job.</p>
+              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step2.title')}</h1>
+              <p className="onboarding-subtitle">{t('step2.subtitle')}</p>
               <p className="onboarding-body">
-                Your messages are routed to specialist agents — a researcher for deep questions,
-                a coder for technical work, a writer for creative tasks.
+                {t('step2.body')}
               </p>
             </>
           )}
@@ -142,8 +141,8 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 3 && (
             <>
               <div className="onboarding-icon"><MessageSquare size={28} /></div>
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>What interests you?</h1>
-              <p className="onboarding-subtitle">Pick a few to help Kernel get to know you.</p>
+              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step3.title')}</h1>
+              <p className="onboarding-subtitle">{t('step3.subtitle')}</p>
               <div className="onboarding-interests">
                 {INTERESTS.map(interest => (
                   <button
@@ -152,7 +151,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
                     onClick={() => toggleInterest(interest.id)}
                   >
                     <span>{interest.emoji}</span>
-                    <span>{interest.label}</span>
+                    <span>{t(`interests.${interest.id}`)}</span>
                     {selectedInterests.includes(interest.id) && <Check size={14} />}
                   </button>
                 ))}
@@ -164,24 +163,24 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 4 && (
             <>
               <div className="onboarding-icon"><Crown size={28} /></div>
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>Ready to go</h1>
-              <p className="onboarding-subtitle">Start free, upgrade anytime.</p>
+              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step4.title')}</h1>
+              <p className="onboarding-subtitle">{t('step4.subtitle')}</p>
               <div className="onboarding-tiers">
                 <div className="onboarding-tier">
-                  <span className="onboarding-tier-name">Free</span>
+                  <span className="onboarding-tier-name">{t('tiers.free')}</span>
                   <ul className="onboarding-tier-features">
-                    <li>10 messages</li>
-                    <li>Basic agents</li>
-                    <li>Memory</li>
+                    <li>{t('tiers.freeFeature1')}</li>
+                    <li>{t('tiers.freeFeature2')}</li>
+                    <li>{t('tiers.freeFeature3')}</li>
                   </ul>
                 </div>
                 <div className="onboarding-tier onboarding-tier--pro">
-                  <span className="onboarding-tier-name">Pro</span>
+                  <span className="onboarding-tier-name">{t('tiers.pro')}</span>
                   <ul className="onboarding-tier-features">
-                    <li>Unlimited messages</li>
-                    <li>Deep research</li>
-                    <li>Multi-agent swarms</li>
-                    <li>Knowledge graph</li>
+                    <li>{t('tiers.proFeature1')}</li>
+                    <li>{t('tiers.proFeature2')}</li>
+                    <li>{t('tiers.proFeature3')}</li>
+                    <li>{t('tiers.proFeature4')}</li>
                   </ul>
                 </div>
               </div>
@@ -190,7 +189,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
 
           {/* Action */}
           <button className="onboarding-btn" onClick={goNext}>
-            {step === TOTAL_STEPS - 1 ? 'Begin' : step === 3 ? (selectedInterests.length > 0 ? 'Continue' : 'Skip') : 'Continue'}
+            {step === TOTAL_STEPS - 1 ? t('begin') : step === 3 ? (selectedInterests.length > 0 ? t('continue') : t('skip')) : t('continue')}
             <ArrowRight size={16} />
           </button>
 
@@ -200,7 +199,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
               className="onboarding-skip"
               onClick={() => onComplete(selectedInterests.length > 0 ? selectedInterests : undefined)}
             >
-              Skip intro
+              {t('skipIntro')}
             </button>
           )}
         </motion.div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import type { CognitivePhase } from '../../engine/AIEngine';
@@ -36,6 +37,7 @@ function MiniBar({ value, color = '#6366F1' }: { value: number; color?: string }
 }
 
 export function KernelAgentObserver() {
+  const { t } = useTranslation('kernel');
   const { engineState, events } = useKernelAgentContext();
   const { phase, ephemeral, worldModel, lasting } = engineState;
 
@@ -47,57 +49,57 @@ export function KernelAgentObserver() {
   return (
     <div className="kernel-observer">
       {/* Phase Pipeline */}
-      <Section title="Phase Pipeline">
+      <Section title={t('observer.phasePipeline')}>
         <div className="kernel-obs-phases">
           {PHASES.map(p => (
             <div key={p} className={`kernel-obs-phase ${phase === p ? 'kernel-obs-phase--active' : ''}`}>
               <span className="kernel-obs-phase-dot" />
-              <span className="kernel-obs-phase-label">{p}</span>
+              <span className="kernel-obs-phase-label">{t(`observer.phases.${p}`)}</span>
             </div>
           ))}
         </div>
       </Section>
 
       {/* Perception */}
-      <Section title="Perception" defaultOpen={!!perception}>
+      <Section title={t('observer.perception')} defaultOpen={!!perception}>
         {perception ? (
           <div className="kernel-obs-grid">
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Intent</span>
+              <span className="kernel-obs-label">{t('observer.intent')}</span>
               <span className="kernel-obs-value">{perception.intent.type}</span>
             </div>
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Urgency</span>
+              <span className="kernel-obs-label">{t('observer.urgency')}</span>
               <MiniBar value={perception.urgency} />
             </div>
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Complexity</span>
+              <span className="kernel-obs-label">{t('observer.complexity')}</span>
               <MiniBar value={perception.complexity} />
             </div>
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Sentiment</span>
+              <span className="kernel-obs-label">{t('observer.sentiment')}</span>
               <span className="kernel-obs-value">{perception.sentiment > 0 ? '+' : ''}{perception.sentiment.toFixed(2)}</span>
             </div>
             <div className="kernel-obs-item kernel-obs-item--full">
-              <span className="kernel-obs-label">Implied Need</span>
+              <span className="kernel-obs-label">{t('observer.impliedNeed')}</span>
               <span className="kernel-obs-value kernel-obs-value--italic">{perception.impliedNeed}</span>
             </div>
           </div>
         ) : (
-          <p className="kernel-obs-empty">No active perception</p>
+          <p className="kernel-obs-empty">{t('observer.noActivePerception')}</p>
         )}
       </Section>
 
       {/* Attention */}
-      <Section title="Attention" defaultOpen={!!attention}>
+      <Section title={t('observer.attention')} defaultOpen={!!attention}>
         {attention ? (
           <div className="kernel-obs-attention">
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Focus</span>
+              <span className="kernel-obs-label">{t('observer.focus')}</span>
               <span className="kernel-obs-value">{attention.primaryFocus}</span>
             </div>
             <div className="kernel-obs-item">
-              <span className="kernel-obs-label">Depth</span>
+              <span className="kernel-obs-label">{t('observer.depth')}</span>
               <span className={`kernel-obs-badge kernel-obs-badge--${attention.depth}`}>{attention.depth}</span>
             </div>
             {Object.entries(attention.salience).length > 0 && (
@@ -112,12 +114,12 @@ export function KernelAgentObserver() {
             )}
           </div>
         ) : (
-          <p className="kernel-obs-empty">No active attention</p>
+          <p className="kernel-obs-empty">{t('observer.noActiveAttention')}</p>
         )}
       </Section>
 
       {/* Conviction */}
-      <Section title="Conviction">
+      <Section title={t('observer.conviction')}>
         <div className="kernel-obs-conviction">
           <div className="kernel-obs-conviction-bar">
             <motion.div
@@ -130,16 +132,16 @@ export function KernelAgentObserver() {
             <span>{(conviction.overall * 100).toFixed(1)}%</span>
             <span className="kernel-obs-conviction-trend">
               {conviction.trend === 'rising' ? '\u2197' : conviction.trend === 'falling' ? '\u2198' : '\u2192'}
-              {' '}{conviction.trend}
+              {' '}{t(`observer.trend.${conviction.trend}`)}
             </span>
           </div>
         </div>
       </Section>
 
       {/* Beliefs */}
-      <Section title={`Beliefs (${worldModel.beliefs.length})`} defaultOpen={worldModel.beliefs.length > 0}>
+      <Section title={t('observer.beliefs', { count: worldModel.beliefs.length })} defaultOpen={worldModel.beliefs.length > 0}>
         {worldModel.beliefs.length === 0 ? (
-          <p className="kernel-obs-empty">No beliefs formed</p>
+          <p className="kernel-obs-empty">{t('observer.noBeliefsFormed')}</p>
         ) : (
           <div className="kernel-obs-beliefs">
             {worldModel.beliefs.map(b => (
@@ -156,9 +158,9 @@ export function KernelAgentObserver() {
       </Section>
 
       {/* Event Feed */}
-      <Section title="Event Feed" defaultOpen={events.length > 0}>
+      <Section title={t('observer.eventFeed')} defaultOpen={events.length > 0}>
         {events.length === 0 ? (
-          <p className="kernel-obs-empty">No events yet</p>
+          <p className="kernel-obs-empty">{t('observer.noEventsYet')}</p>
         ) : (
           <div className="kernel-obs-events">
             {[...events].reverse().slice(0, 20).map((event, i) => (
@@ -174,7 +176,7 @@ export function KernelAgentObserver() {
       </Section>
 
       {/* Last Reflection */}
-      <Section title="Last Reflection" defaultOpen={!!lastReflection}>
+      <Section title={t('observer.lastReflection')} defaultOpen={!!lastReflection}>
         {lastReflection ? (
           <div className="kernel-obs-reflection">
             <div className="kernel-obs-grid">
@@ -188,7 +190,7 @@ export function KernelAgentObserver() {
             <p className="kernel-obs-reflection-lesson">{lastReflection.lesson}</p>
           </div>
         ) : (
-          <p className="kernel-obs-empty">No reflections yet</p>
+          <p className="kernel-obs-empty">{t('observer.noReflectionsYet')}</p>
         )}
       </Section>
     </div>

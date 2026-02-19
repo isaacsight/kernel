@@ -5,12 +5,16 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 
 const RTL_LANGUAGES = ['ar']
 
+const SUPPORTED = ['en','es','fr','de','pt','it','nl','ru','zh','zh-TW','ja','ko','ar','hi','tr','pl','sv','no','da','fi']
+
 i18n
   .use(HttpBackend)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
+    supportedLngs: SUPPORTED,
+    load: 'currentOnly',
     ns: ['common', 'home', 'auth', 'onboarding', 'panels', 'kernel'],
     defaultNS: 'common',
     backend: {
@@ -20,9 +24,17 @@ i18n
       order: ['localStorage', 'navigator'],
       lookupLocalStorage: 'kernel-language',
       caches: ['localStorage'],
+      convertDetectedLanguage: (lng: string) => {
+        if (SUPPORTED.includes(lng)) return lng
+        const base = lng.split('-')[0]
+        return SUPPORTED.includes(base) ? base : lng
+      },
     },
     interpolation: {
       escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
     },
   })
 

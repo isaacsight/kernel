@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 
 export function LoginGate() {
+  const { t } = useTranslation('auth')
   const { signInWithProvider, signInWithEmail, signUpWithEmail } = useAuthContext()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,7 +24,7 @@ export function LoginGate() {
         : await signInWithEmail(email.trim(), password)
       if (result.error) setError(result.error)
     } catch {
-      setError('Authentication failed. Please try again.')
+      setError(t('modal.error'))
     } finally {
       setLoading(false)
     }
@@ -38,15 +40,14 @@ export function LoginGate() {
         transition={{ duration: 0.8 }}
       >
         <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-        <h1 className="landing-title">kernel</h1>
+        <h1 className="landing-title">{t('login.title')}</h1>
         <p className="landing-subtitle">
-          A personal AI that learns who you are, remembers what matters,
-          and gets better with every conversation.
+          {t('login.subtitle')}
         </p>
         <button className="landing-cta" onClick={() => setShowAuth(true)}>
-          Get Started — Free
+          {t('login.cta')}
         </button>
-        <p className="landing-hint">Unlimited messages. Free to start.</p>
+        <p className="landing-hint">{t('login.hint')}</p>
       </motion.section>
 
       {/* Features */}
@@ -58,18 +59,18 @@ export function LoginGate() {
       >
         <div className="landing-feature">
           <div className="landing-feature-icon">K</div>
-          <h3>It Learns You</h3>
-          <p>Kernel builds a memory of your interests, goals, and style. Every conversation makes the next one better.</p>
+          <h3>{t('login.feature1Title')}</h3>
+          <p>{t('login.feature1Desc')}</p>
         </div>
         <div className="landing-feature">
           <div className="landing-feature-icon">R</div>
-          <h3>Specialist Agents</h3>
-          <p>Your messages route to the right mind — researcher, coder, writer, or analyst. The Kernel decides who handles what.</p>
+          <h3>{t('login.feature2Title')}</h3>
+          <p>{t('login.feature2Desc')}</p>
         </div>
         <div className="landing-feature">
           <div className="landing-feature-icon">W</div>
-          <h3>Web Search Built In</h3>
-          <p>Real-time information, not stale training data. Kernel searches the web and cites sources naturally.</p>
+          <h3>{t('login.feature3Title')}</h3>
+          <p>{t('login.feature3Desc')}</p>
         </div>
       </motion.section>
 
@@ -81,26 +82,26 @@ export function LoginGate() {
         transition={{ duration: 0.6, delay: 0.4 }}
       >
         <div className="landing-plan">
-          <h3>Free</h3>
-          <p className="landing-plan-price">$0</p>
+          <h3>{t('login.freePlan')}</h3>
+          <p className="landing-plan-price">{t('login.freePrice')}</p>
           <ul>
-            <li>Unlimited messages</li>
-            <li>All specialist agents</li>
-            <li>Conversation memory</li>
-            <li>Web search</li>
+            <li>{t('login.freeFeature1')}</li>
+            <li>{t('login.freeFeature2')}</li>
+            <li>{t('login.freeFeature3')}</li>
+            <li>{t('login.freeFeature4')}</li>
           </ul>
         </div>
         <div className="landing-plan landing-plan-pro">
-          <h3>Pro</h3>
-          <p className="landing-plan-price">$20<span>/mo</span></p>
+          <h3>{t('login.proPlan')}</h3>
+          <p className="landing-plan-price">{t('login.proPrice')}<span>{t('login.proPricePeriod')}</span></p>
           <ul>
-            <li>Unlimited messages</li>
-            <li>Deep research mode</li>
-            <li>Multi-step tasks</li>
-            <li>Priority response</li>
+            <li>{t('login.proFeature1')}</li>
+            <li>{t('login.proFeature2')}</li>
+            <li>{t('login.proFeature3')}</li>
+            <li>{t('login.proFeature4')}</li>
           </ul>
           <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
-            Start Free, Upgrade Anytime
+            {t('login.startFree')}
           </button>
         </div>
       </motion.section>
@@ -123,21 +124,21 @@ export function LoginGate() {
               transition={{ duration: 0.3 }}
             >
               <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-              <h1 className="ka-gate-title">{isSignUp ? 'Create your Kernel' : 'Welcome back'}</h1>
+              <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>
 
               <div className="ka-gate-social">
                 <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
-                  Continue with Google
+                  {t('modal.continueGoogle')}
                 </button>
                 <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
-                  Continue with GitHub
+                  {t('modal.continueGitHub')}
                 </button>
                 <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
-                  Continue with X
+                  {t('modal.continueX')}
                 </button>
               </div>
 
-              <div className="ka-gate-divider"><span>or</span></div>
+              <div className="ka-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>
 
               <form className="ka-gate-form" onSubmit={handleEmailAuth}>
                 <input
@@ -145,7 +146,7 @@ export function LoginGate() {
                   className="ka-gate-input"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com"
+                  placeholder={t('modal.emailPlaceholder')}
                   required
                 />
                 <input
@@ -153,7 +154,7 @@ export function LoginGate() {
                   className="ka-gate-input"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder={t('modal.passwordPlaceholder')}
                   required
                 />
                 <button
@@ -161,7 +162,7 @@ export function LoginGate() {
                   className="ka-gate-submit"
                   disabled={loading || !email.trim() || !password.trim()}
                 >
-                  {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
+                  {loading ? t('loading', { ns: 'common' }) : isSignUp ? t('modal.createAccount') : t('modal.signIn')}
                 </button>
               </form>
 
@@ -169,7 +170,7 @@ export function LoginGate() {
                 className="ka-gate-admin-toggle"
                 onClick={() => setIsSignUp(!isSignUp)}
               >
-                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+                {t(isSignUp ? 'modal.toggleSignIn' : 'modal.toggleSignUp')}
               </button>
 
               {error && <p className="ka-gate-error">{error}</p>}

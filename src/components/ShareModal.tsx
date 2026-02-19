@@ -5,6 +5,7 @@
 // Otherwise shows create form with expiry picker.
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Link, Copy, Check, X, Clock, Trash2 } from 'lucide-react'
 import { createSharedConversation, getSharedConversation, deleteSharedConversation } from '../engine/SupabaseClient'
@@ -19,13 +20,14 @@ interface ShareModalProps {
 }
 
 const EXPIRY_OPTIONS = [
-  { label: 'Never', value: null },
-  { label: '24 hours', value: 1 },
-  { label: '7 days', value: 7 },
-  { label: '30 days', value: 30 },
+  { labelKey: 'share.never', value: null },
+  { labelKey: 'share.hours24', value: 1 },
+  { labelKey: 'share.days7', value: 7 },
+  { labelKey: 'share.days30', value: 30 },
 ]
 
 export function ShareModal({ conversationId, conversationTitle, messages, userId, onClose, onToast }: ShareModalProps) {
+  const { t } = useTranslation('panels')
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -78,10 +80,10 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
         setExistingId(shareId)
         setIsExisting(true)
       } else {
-        onToast('Failed to create share link')
+        onToast(t('share.errors.createFailed'))
       }
     } catch {
-      onToast('Failed to create share link')
+      onToast(t('share.errors.createFailed'))
     } finally {
       setIsCreating(false)
     }
@@ -95,9 +97,9 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       setShareUrl(null)
       setExistingId(null)
       setIsExisting(false)
-      onToast('Share link revoked')
+      onToast(t('share.toast.revoked'))
     } catch {
-      onToast('Failed to revoke link')
+      onToast(t('share.errors.revokeFailed'))
     } finally {
       setIsRevoking(false)
     }
@@ -140,25 +142,25 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
         <div className="ka-share-header">
           <h2 className="ka-share-title">
             <Link size={18} />
-            Share conversation
+            {t('share.title')}
           </h2>
-          <button className="ka-share-close" onClick={onClose} aria-label="Close">
+          <button className="ka-share-close" onClick={onClose} aria-label={t('close', { ns: 'common' })}>
             <X size={18} />
           </button>
         </div>
 
         {checking ? (
-          <p className="ka-share-desc">Checking for existing link...</p>
+          <p className="ka-share-desc">{t('share.checking')}</p>
         ) : shareUrl ? (
           <>
             {isExisting && (
               <p className="ka-share-desc ka-share-desc--existing">
-                This conversation already has a public link.
+                {t('share.existingLink')}
               </p>
             )}
             <div className="ka-share-url-wrap">
               <input
-                aria-label="Shareable conversation link"
+                aria-label={t('share.shareableLink')}
                 value={shareUrl}
                 readOnly
                 onClick={e => (e.target as HTMLInputElement).select()}
@@ -169,7 +171,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
             </div>
             <div className="ka-share-actions">
               <p className="ka-share-desc">
-                Anyone with this link can view this conversation.
+                {t('share.anyoneCanView')}
               </p>
               <button
                 className="ka-share-revoke-btn"
@@ -177,26 +179,26 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
                 disabled={isRevoking}
               >
                 <Trash2 size={14} />
-                {isRevoking ? 'Revoking...' : 'Revoke link'}
+                {isRevoking ? t('share.revoking') : t('share.revokeLink')}
               </button>
             </div>
           </>
         ) : (
           <>
             <p className="ka-share-desc">
-              Create a public link anyone can view. No login required.
+              {t('share.createDesc')}
             </p>
             <div className="ka-share-expiry">
               <Clock size={14} />
-              <span>Link expires:</span>
+              <span>{t('share.linkExpires')}</span>
               <div className="ka-share-expiry-options">
                 {EXPIRY_OPTIONS.map(opt => (
                   <button
-                    key={opt.label}
+                    key={opt.labelKey}
                     className={`ka-share-expiry-btn${expiryDays === opt.value ? ' ka-share-expiry-btn--active' : ''}`}
                     onClick={() => setExpiryDays(opt.value)}
                   >
-                    {opt.label}
+                    {t(opt.labelKey)}
                   </button>
                 ))}
               </div>
@@ -206,7 +208,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
               onClick={handleCreate}
               disabled={isCreating}
             >
-              {isCreating ? 'Creating...' : 'Create share link'}
+              {isCreating ? t('share.creating') : t('share.createLink')}
             </button>
           </>
         )}

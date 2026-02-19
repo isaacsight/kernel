@@ -4,6 +4,7 @@
 // run history, and "Create workflow" form.
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Zap, Play, Trash2, Plus, Clock, Workflow } from 'lucide-react'
 import {
   getUserProcedures,
@@ -30,6 +31,7 @@ interface WorkflowsPanelProps {
 }
 
 export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: WorkflowsPanelProps) {
+  const { t } = useTranslation('panels')
   const [procedures, setProcedures] = useState<Procedure[]>([])
   const [runs, setRuns] = useState<Map<string, WorkflowRun[]>>(new Map())
   const [loading, setLoading] = useState(true)
@@ -62,17 +64,17 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
       setShowBuilder(false)
       loadData()
     } catch {
-      onToast('Failed to save workflow')
+      onToast(t('workflows.errors.saveFailed'))
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this workflow? This cannot be undone.')) return
+    if (!window.confirm(t('workflows.deleteConfirm'))) return
     try {
       await deleteProcedure(id)
       loadData()
     } catch {
-      onToast('Failed to delete workflow')
+      onToast(t('workflows.errors.deleteFailed'))
     }
   }
 
@@ -89,7 +91,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
       <div className="ka-wf-header">
         <h2 className="ka-wf-title">
           <Zap size={18} />
-          Workflows
+          {t('workflows.title')}
         </h2>
         <button className="ka-wf-close" onClick={onClose} aria-label="Close">
           <X size={18} />
@@ -97,7 +99,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
       </div>
 
       {loading ? (
-        <div className="ka-wf-loading">Loading workflows...</div>
+        <div className="ka-wf-loading">{t('workflows.loading')}</div>
       ) : showBuilder ? (
         <WorkflowBuilder
           userId={userId}
@@ -110,9 +112,9 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
             {procedures.length === 0 && (
               <div className="ka-empty-state">
                 <Workflow size={48} className="ka-empty-state-icon" />
-                <div className="ka-empty-state-title">Build Your First Workflow</div>
-                <div className="ka-empty-state-desc">Automate multi-step tasks — Kernel runs them exactly as you design.</div>
-                <button className="ka-empty-state-cta" onClick={() => setShowBuilder(true)}>New Workflow</button>
+                <div className="ka-empty-state-title">{t('workflows.emptyTitle')}</div>
+                <div className="ka-empty-state-desc">{t('workflows.emptyDesc')}</div>
+                <button className="ka-empty-state-cta" onClick={() => setShowBuilder(true)}>{t('workflows.newWorkflow')}</button>
               </div>
             )}
 
@@ -133,7 +135,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                         onClick={() => onRunWorkflow(proc)}
                         aria-label="Run workflow"
                       >
-                        <Play size={12} /> Run
+                        <Play size={12} /> {t('run', { ns: 'common' })}
                       </button>
                       <button
                         className="ka-wf-card-delete"
@@ -155,7 +157,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                   {proc.times_executed > 0 && (
                     <div className="ka-wf-card-meta">
                       <Clock size={10} />
-                      Run {proc.times_executed} time{proc.times_executed !== 1 ? 's' : ''}
+                      {t('workflows.runCount', { count: proc.times_executed })}
                       {proc.last_executed_at && ` \u00B7 last ${new Date(proc.last_executed_at).toLocaleDateString()}`}
                     </div>
                   )}
@@ -165,7 +167,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
           </div>
 
           <button className="ka-wf-create-btn" onClick={() => setShowBuilder(true)}>
-            <Plus size={16} /> Create Workflow
+            <Plus size={16} /> {t('workflows.createWorkflow')}
           </button>
         </>
       )}
