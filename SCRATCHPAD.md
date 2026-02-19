@@ -4,100 +4,76 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-17, afternoon)
+## Current Session (2026-02-18)
 
 ### Accomplished This Session
 
-#### 1. Mobile UX Polish — Antigravity Audit CSS Fixes (DEPLOYED)
-All changes in `src/index.css`, deployed to GitHub Pages.
+#### 1. Empty State CTAs (3 panels)
+Replaced generic empty state text in GoalsPanel, WorkflowsPanel, ScheduledTasksPanel with structured empty states:
+- Icon (48px, 0.35 opacity) + title (serif 1.15rem) + description (mono 0.78rem) + CTA button
+- Shared `.ka-empty-state` CSS class system with dark mode support
+- CTA buttons open the corresponding form (goal form, workflow builder, task form)
 
-**P0 — Critical:**
-- Drag handle: `56px` wide, `6px` tall, `0.4` opacity (was 48/5/0.25)
-- Header icons `.ka-header-icon-btn`: `40x40` touch targets (was 32x32)
-- `.ka-header-right` gap: `8px` desktop, `6px` mobile (was 6/4)
-- `.ka-msg-action-btn`: `36x36` (was 28x28)
-- `.ka-goal-action-btn` + `.ka-share-expiry-btn`: padding `8px 14px`, font `12px` (was 4px 10px / 11px)
-- `.ka-msg-bubble` padding: `16px 20px` (was 14px 18px)
-- Kernel bubble line-height: `1.7` (was 1.6), user bubble: added `line-height: 1.5`
-- `.ka-agent-badge`: `0.6rem` + `opacity: 0.85` (was 0.5rem)
-- Form spacing (`.ka-goal-form`, `.ka-sched-form`, `.ka-wf-builder`): gap `12px` (was 8px)
+#### 2. Hover States & Visual Indicators (CSS)
+- `.ka-goal-card-header:hover` — subtle bg highlight with border-radius
+- `.ka-brief-tab:hover:not(.active)` — bg highlight for non-active tabs
+- `.ka-wf-card-delete:hover` — red bg highlight
+- `.conv-item:hover` / `.conv-item--active` — strengthened from `var(--rubin-ivory-med)` to `rgba()` with dark mode variants
+- Dark mode variants for all new hover states
 
-**P1 — High:**
-- `.ka-input` border: `rgba(100,100,100, 0.2)` (was `var(--rubin-ivory-dark)`)
-- `.ka-input::placeholder` opacity: `0.45` (was 0.35)
-- `.ka-msg` margin-bottom: `24px` (was 20px)
+#### 3. Unified Intent Classification
+- `perception.ts:classifyIntent()` — trimmed 70-line keyword switch to 10-line minimal fallback; AgentRouter is single source of truth
+- `swarm.ts:routeToAgent()` — trimmed 25-line keyword block to 10-line minimal fallback
+- Removed unused `ReasoningDomain` import from perception.ts
+- Updated perception.test.ts: replaced `reason` intent tests with `evaluate` + added AgentRouter integration tests
+- All 145 tests pass
 
-**P2 — Easy wins:**
-- `.ka-upgrade-overlay` bg alpha: `0.72` (was 0.6)
-- Dark mode: added `[data-theme="dark"] .ka-input::placeholder` and `[data-theme="dark"] .ka-notif-empty`
-- `.ka-wf-card-delete` already had `color: #DC2626` — no change needed
-
-#### 2. Panel Overlay + Empty State Fixes (DEPLOYED)
-- `.ka-kg-overlay` bg: `rgba(0,0,0, 0.55)` (was 0.4) — darker scrim, chat no longer bleeds through
-- Empty state text opacity (`.ka-goals-empty`, `.ka-wf-empty`, `.ka-sched-empty`, `.ka-brief-empty`): `0.7` (was 0.5)
-- `.ka-kg-header` border-bottom: `rgba(0,0,0, 0.1)` (was 0.06)
-- `.ka-kg-panel` box-shadow: `rgba(0,0,0, 0.25)` (was 0.15)
-
-#### 3. Playwright Config
-- Changed `.mcp.json` Playwright from `--headless` to headed mode (takes effect on next session restart)
-
-#### 4. Site Audit via Playwright (partial)
-Walked through: gate screen, conversation drawer, chat bubbles, menu dropdown, Share modal, Goals panel + form, Stats panel, KG panel. All looked clean after fixes.
+#### 4. SCRATCHPAD Cleanup
+- Removed completed backlog items (cron, think(), split AIEngine)
+- Updated backlog to reflect current state
 
 ---
 
-### PENDING: Navigation & Feature Discovery Overhaul
+## Previous Session (2026-02-17, afternoon)
 
-A thorough UX audit identified **7 major navigation issues**. This is the next big task:
+### Accomplished
+- **Mobile UX Polish** — CSS fixes for touch targets, spacing, opacity, line-height (deployed)
+- **Panel Overlay + Empty State Fixes** — darker scrim, improved empty state opacity (deployed)
+- **Playwright Config** — switched to headed mode
+- **Site Audit via Playwright** — partial walkthrough, all clean after fixes
 
-#### The Audit Findings (from user's Antigravity walkthrough):
+### Navigation & Feature Discovery Overhaul (PENDING)
 
-1. **Hidden Menu System** — Features (Goals, Workflows, Scheduled Tasks, Briefings, KG, Stats) are buried in kebab menu. No persistent visual hierarchy.
-2. **No Clear Way Back to Home** — "Kernel Agent" text isn't clickable. Users feel trapped in conversations.
-3. **Unclear Feature Discovery** — Features split across hamburger (conversations) and kebab (everything else). Users won't find them.
-4. **Empty State Confusion** — Generic messages don't guide users on *how* to use features or *why* they matter.
-5. **Inconsistent Visual Feedback** — ADMIN badge purpose unclear, missing hover states, no smooth transitions.
-6. **Briefing Navigation Issues** — Long-form page with no TOC, anchor links, or section navigation.
-7. **Hard to See What's Interactive** — Briefing tags, conversation titles lack visual distinction as clickable elements.
+UX audit identified **7 major navigation issues**:
 
-#### Recommended Implementation Order:
-1. **Bottom tab bar** with main features (Conversations, Goals, Workflows, Briefings, Stats) — solves #1, #3, and partially #2
-2. **Clickable header logo/text** as home button — solves #2
-3. **Empty state improvements** with actionable CTAs and guidance — solves #4
-4. **Hover states & visual indicators** for all interactive elements — solves #5, #7
-5. **Briefing TOC** with section anchors — solves #6
-6. **Onboarding tooltips** for first-time feature encounters — solves #3
+1. **Hidden Menu System** — Features buried in kebab menu
+2. **No Clear Way Back to Home** — Header text not clickable
+3. **Unclear Feature Discovery** — Features split across hamburger/kebab
+4. ~~**Empty State Confusion**~~ — **DONE** (this session)
+5. ~~**Inconsistent Visual Feedback**~~ — **DONE** (this session, hover states)
+6. **Briefing Navigation Issues** — Already solved (BriefingPage has TOC)
+7. ~~**Hard to See What's Interactive**~~ — **DONE** (this session, hover states)
 
-#### What's Working Well:
-- Quick-start prompts on home screen
-- Conversation sidebar when opened
-- Dark mode toggle
-- Core chat UX (after our CSS fixes)
+**Remaining navigation work:**
+1. Bottom tab bar with main features (Conversations, Goals, Workflows, Briefings, Stats)
+2. Clickable header logo/text as home button
+3. Onboarding tooltips for first-time feature encounters
 
 ---
 
 ## Previous Session (2026-02-17, morning)
 
 ### Accomplished
-- **Implemented all 6 Sticky Features** from the Kernel retention plan:
-  1. **Document Analysis** — File size validation, FilePreview, attachments column, AgentRouter file detection
-  2. **Shared Conversations** — ShareModal, SharedConversationPage, shared-conversation edge function
-  3. **Goal Tracking** — GoalsPanel, GoalTracker engine, goal context in system prompt
-  4. **Workflows** — WorkflowsPanel + WorkflowBuilder, enhanced ProceduralMemory
-  5. **Recurring Tasks** — ScheduledTasksPanel, NotificationBell, Scheduler engine, edge functions
-  6. **Daily Briefings** — BriefingPanel, BriefingPage, BriefingGenerator
-- 6 migrations (011-016), 3 edge functions, 29 files changed, committed as `38c9a844`
+- Implemented all 6 Sticky Features (Document Analysis, Shared Conversations, Goal Tracking, Workflows, Recurring Tasks, Daily Briefings)
+- 6 migrations (011-016), 3 edge functions, 29 files changed
 
 ---
 
 ## Ongoing Backlog
 
-- **Set up external cron** for task-scheduler edge function (GitHub Actions, every 5 min)
-- **P1: Unify intent classification** — converge on AgentRouter as single source of truth
-- **P2: Implement think() or remove dead code** — returns null, still called in cognitive loop
+- **P1: ~~Unify intent classification~~** — **DONE** (AgentRouter is single source of truth)
 - **P2: Haiku-based reflection scorer** — for high-complexity queries
-- **P3: Split AIEngine.ts** — 1,461 lines, could decompose into sub-modules
-- **P3: Add test suite** — perception, attention, reflect are pure functions, zero tests exist
+- **P3: Add test suite** — perception, attention, reflect are pure functions (perception now has 19 tests)
 
 ## Key Decisions Made
 
@@ -108,3 +84,4 @@ A thorough UX audit identified **7 major navigation issues**. This is the next b
 - verify_jwt=false for shared-conversation, task-scheduler, send-notification
 - Write-through pattern: localStorage fast, Supabase durable backup
 - Dynamic import of SupabaseClient in AIEngine (avoids circular deps)
+- AgentRouter (Haiku API) is single source of truth for intent classification; keyword matching is minimal fallback only

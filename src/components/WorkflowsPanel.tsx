@@ -4,7 +4,7 @@
 // run history, and "Create workflow" form.
 
 import { useState, useEffect, useCallback } from 'react'
-import { X, Zap, Play, Trash2, Plus, Clock } from 'lucide-react'
+import { X, Zap, Play, Trash2, Plus, Clock, Workflow } from 'lucide-react'
 import {
   getUserProcedures,
   upsertProcedure,
@@ -108,8 +108,11 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
         <>
           <div className="ka-wf-list">
             {procedures.length === 0 && (
-              <div className="ka-wf-empty">
-                <p>No workflows yet. Create one to automate multi-step tasks.</p>
+              <div className="ka-empty-state">
+                <Workflow size={48} className="ka-empty-state-icon" />
+                <div className="ka-empty-state-title">Build Your First Workflow</div>
+                <div className="ka-empty-state-desc">Automate multi-step tasks — Kernel runs them exactly as you design.</div>
+                <button className="ka-empty-state-cta" onClick={() => setShowBuilder(true)}>New Workflow</button>
               </div>
             )}
 

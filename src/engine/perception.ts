@@ -4,7 +4,7 @@
 // Extracts intent, urgency, complexity, sentiment, implied need,
 // key entities, and whether this is a follow-up.
 
-import type { Intent, IntentType, Perception, ReasoningDomain } from './types'
+import type { Intent, IntentType, Perception } from './types'
 import type { ClassificationResult } from './AgentRouter'
 import {
   countSignals,
@@ -79,7 +79,7 @@ export function perceiveInput(
 }
 
 export function classifyIntent(input: string, lower: string, routerResult?: ClassificationResult): Intent {
-  // If AgentRouter has already classified, map agentId → IntentType
+  // AgentRouter is the single source of truth — map agentId → IntentType
   if (routerResult && routerResult.confidence >= 0.5) {
     const agentToIntent: Record<string, IntentType> = {
       researcher: 'discuss',
@@ -103,51 +103,15 @@ export function classifyIntent(input: string, lower: string, routerResult?: Clas
     }
   }
 
-  // Keyword fallback when no AgentRouter result is available
-  if (
-    lower.includes('think about') || lower.includes('analyze') ||
-    lower.includes('evaluate') || lower.includes('should i') ||
-    lower.includes('worth it') || lower.includes('expected value') ||
-    lower.includes('strategy') || lower.includes('calculate') ||
-    lower.includes('reason through') || lower.includes('what if')
-  ) {
-    const domain: ReasoningDomain =
-      lower.includes('money') || lower.includes('revenue') || lower.includes('cost') || lower.includes('profit')
-        ? 'financial'
-        : lower.includes('code') || lower.includes('build') || lower.includes('architecture') || lower.includes('system')
-        ? 'technical'
-        : lower.includes('plan') || lower.includes('approach') || lower.includes('strategy') || lower.includes('decision')
-        ? 'strategic'
-        : 'general'
-
-    return { type: 'reason', question: input, domain }
-  }
-
-  if (
-    lower.includes('build') || lower.includes('create') ||
-    lower.includes('implement') || lower.includes('make me') ||
-    lower.includes('write a') || lower.includes('generate')
-  ) {
+  // Minimal keyword fallback (only used when AgentRouter API fails)
+  if (lower.includes('build') || lower.includes('create') || lower.includes('implement')) {
     return { type: 'build', description: input }
   }
-
-  if (
-    lower.includes('opportunity') || lower.includes('evaluate this') ||
-    lower.includes('is this worth') || lower.includes('should we pursue') ||
-    lower.includes('viable') || lower.includes('feasible')
-  ) {
+  if (lower.includes('analyze') || lower.includes('evaluate') || lower.includes('should i')) {
     return { type: 'evaluate', opportunity: input }
   }
-
-  if (
-    lower.includes('discuss') || lower.includes('what do you think about') ||
-    lower.includes("let's talk about") || lower.includes('debate') ||
-    lower.includes('perspectives on') || lower.includes('opinions on')
-  ) {
-    const topic = input
-      .replace(/discuss|what do you think about|let's talk about|debate|perspectives on|opinions on/gi, '')
-      .trim() || input
-    return { type: 'discuss', topic }
+  if (lower.includes('discuss') || lower.includes('debate')) {
+    return { type: 'discuss', topic: input }
   }
 
   return { type: 'converse', message: input }

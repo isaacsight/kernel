@@ -522,7 +522,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       } else if (err instanceof RateLimitError) {
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {
-        const errMsg = err instanceof Error ? err.message : 'Failed to reach Kernel Agent'
+        const errMsg = err instanceof Error ? err.message : 'Failed to reach kernel.chat'
         setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
       }
       setResearchProgress(null)

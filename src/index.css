@@ -2117,13 +2117,67 @@ h4 {
     opacity: 1;
 }
 
-.ka-goals-loading,
-.ka-goals-empty {
+.ka-goals-loading {
     text-align: center;
     font-family: var(--font-serif);
     font-size: 0.9rem;
     opacity: 0.7;
     padding: 24px 0;
+}
+
+/* ── Shared Empty State CTA ── */
+.ka-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.ka-empty-state-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.35;
+}
+
+.ka-empty-state-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    opacity: 0.7;
+}
+
+.ka-empty-state-desc {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    opacity: 0.5;
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+.ka-empty-state-cta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 8px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: var(--rubin-slate);
+}
+
+.ka-empty-state-cta:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .ka-empty-state-cta {
+    border-color: rgba(255, 255, 255, 0.15);
+    color: inherit;
+}
+
+[data-theme="dark"] .ka-empty-state-cta:hover {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .ka-goals-list {
@@ -2149,6 +2203,16 @@ h4 {
     justify-content: space-between;
     padding: 10px 12px;
     cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-goal-card-header:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .ka-goal-card-header:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .ka-goal-card-left {
@@ -2419,8 +2483,7 @@ h4 {
     opacity: 1;
 }
 
-.ka-wf-loading,
-.ka-wf-empty {
+.ka-wf-loading {
     text-align: center;
     font-family: var(--font-serif);
     font-size: 0.9rem;
@@ -2496,6 +2559,10 @@ h4 {
 .ka-wf-card-delete {
     color: #DC2626;
     border-color: rgba(220, 38, 38, 0.2);
+}
+
+.ka-wf-card-delete:hover {
+    background: rgba(220, 38, 38, 0.08);
 }
 
 .ka-wf-card-steps {
@@ -2873,8 +2940,7 @@ h4 {
     opacity: 1;
 }
 
-.ka-sched-loading,
-.ka-sched-empty {
+.ka-sched-loading {
     text-align: center;
     font-family: var(--font-serif);
     font-size: 0.9rem;
@@ -3179,6 +3245,15 @@ h4 {
     cursor: pointer;
     color: var(--rubin-slate);
     white-space: nowrap;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-brief-tab:hover:not(.ka-brief-tab--active) {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .ka-brief-tab:hover:not(.ka-brief-tab--active) {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .ka-brief-tab--active {
@@ -6597,12 +6672,20 @@ h4 {
 }
 
 .conv-item:hover {
-    background: var(--rubin-ivory-med);
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .conv-item--active {
     border-left-color: var(--rubin-accent);
-    background: var(--rubin-ivory-med);
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .conv-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .conv-item--active {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .conv-item-content {
