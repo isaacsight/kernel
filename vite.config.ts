@@ -44,7 +44,7 @@ export default defineConfig({
             },
         }),
     ],
-    base: '/',
+    base: '/kernel/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
