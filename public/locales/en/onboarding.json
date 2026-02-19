@@ -2,7 +2,7 @@
   "step0": {
     "title": "Welcome to Kernel",
     "titleUser": "Welcome, {{name}}",
-    "subtitle": "Your sovereign AI, built for you.",
+    "subtitle": "Your personal AI, built for you.",
     "body": "Kernel is an AI engine that learns who you are, remembers what matters to you, and gets better with every conversation."
   },
   "step1": {

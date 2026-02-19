@@ -1,55 +1,55 @@
 {
-    "step0": {
-        "title": "Welkom bij Kernel",
-        "titleUser": "Welkom, {{name}}",
-        "subtitle": "Jouw soevereine AI, voor jou gebouwd.",
-        "body": "Kernel is een AI-motor die leert wie je bent, onthoudt wat belangrijk is en bij elk gesprek beter wordt."
-    },
-    "step1": {
-        "title": "Het leert jou kennen",
-        "subtitle": "Geheugen dat zich opbouwt.",
-        "body": "Terwijl je praat, bouwt Kernel een kennisgrafiek op van je interesses, doelen en relaties. Elk gesprek maakt het volgende beter."
-    },
-    "step2": {
-        "title": "Gespecialiseerde agents",
-        "subtitle": "De juiste geest voor de taak.",
-        "body": "Je berichten worden doorgestuurd naar gespecialiseerde agents — een onderzoeker voor diepe vragen, een programmeur voor technisch werk, een schrijver voor creatieve taken."
-    },
-    "step3": {
-        "title": "Wat interesseert je?",
-        "subtitle": "Kies er een paar om Kernel te helpen je te leren kennen."
-    },
-    "step4": {
-        "title": "Klaar om te gaan",
-        "subtitle": "Begin gratis, upgrade wanneer je wilt."
-    },
-    "interests": {
-        "tech": "Technologie",
-        "business": "Zakelijk",
-        "creative": "Creatief schrijven",
-        "science": "Wetenschap",
-        "health": "Gezondheid & Fitness",
-        "finance": "Financiën",
-        "design": "Design",
-        "coding": "Coderen",
-        "music": "Muziek",
-        "philosophy": "Filosofie",
-        "travel": "Reizen",
-        "education": "Onderwijs"
-    },
-    "tiers": {
-        "free": "Gratis",
-        "freeFeature1": "10 berichten",
-        "freeFeature2": "Basis agents",
-        "freeFeature3": "Geheugen",
-        "pro": "Pro",
-        "proFeature1": "Onbeperkt berichten",
-        "proFeature2": "Diep onderzoek",
-        "proFeature3": "Multi-agent zwermen",
-        "proFeature4": "Kennisgrafiek"
-    },
-    "continue": "Doorgaan",
-    "skip": "Overslaan",
-    "begin": "Beginnen",
-    "skipIntro": "Introductie overslaan"
+  "step0": {
+    "title": "Welkom bij Kernel",
+    "titleUser": "Welkom, {{name}}",
+    "subtitle": "Your personal AI, built for you.",
+    "body": "Kernel is een AI-motor die leert wie je bent, onthoudt wat belangrijk is en bij elk gesprek beter wordt."
+  },
+  "step1": {
+    "title": "Het leert jou kennen",
+    "subtitle": "Geheugen dat zich opbouwt.",
+    "body": "Terwijl je praat, bouwt Kernel een kennisgrafiek op van je interesses, doelen en relaties. Elk gesprek maakt het volgende beter."
+  },
+  "step2": {
+    "title": "Gespecialiseerde agents",
+    "subtitle": "De juiste geest voor de taak.",
+    "body": "Je berichten worden doorgestuurd naar gespecialiseerde agents — een onderzoeker voor diepe vragen, een programmeur voor technisch werk, een schrijver voor creatieve taken."
+  },
+  "step3": {
+    "title": "Wat interesseert je?",
+    "subtitle": "Kies er een paar om Kernel te helpen je te leren kennen."
+  },
+  "step4": {
+    "title": "Klaar om te gaan",
+    "subtitle": "Begin gratis, upgrade wanneer je wilt."
+  },
+  "interests": {
+    "tech": "Technologie",
+    "business": "Zakelijk",
+    "creative": "Creatief schrijven",
+    "science": "Wetenschap",
+    "health": "Gezondheid & Fitness",
+    "finance": "Financiën",
+    "design": "Design",
+    "coding": "Coderen",
+    "music": "Muziek",
+    "philosophy": "Filosofie",
+    "travel": "Reizen",
+    "education": "Onderwijs"
+  },
+  "tiers": {
+    "free": "Gratis",
+    "freeFeature1": "10 berichten",
+    "freeFeature2": "Basis agents",
+    "freeFeature3": "Geheugen",
+    "pro": "Pro",
+    "proFeature1": "Onbeperkt berichten",
+    "proFeature2": "Diep onderzoek",
+    "proFeature3": "Multi-agent zwermen",
+    "proFeature4": "Kennisgrafiek"
+  },
+  "continue": "Doorgaan",
+  "skip": "Overslaan",
+  "begin": "Beginnen",
+  "skipIntro": "Introductie overslaan"
 }

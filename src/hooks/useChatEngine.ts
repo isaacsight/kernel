@@ -58,6 +58,7 @@ interface UseChatEngineParams {
   attachedFiles: File[]
   setAttachedFiles: (files: File[]) => void
   handleNewChat: () => void
+  isPro?: boolean
 }
 
 export function useChatEngine(params: UseChatEngineParams) {
@@ -66,6 +67,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     loadConversations, createConversation, showToast,
     setShowUpgradeWall, signOut,
     attachedFiles, setAttachedFiles, handleNewChat,
+    isPro = false,
   } = params
 
   const engine = getEngine()
@@ -376,7 +378,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     }
 
     try {
-      if (classification.isMultiStep) {
+      if (classification.isMultiStep && isPro) {
         const plan = await planTask(trimmed)
         setTaskProgress({ plan, currentStep: 0 })
         await executeTask(
@@ -386,7 +388,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           updateKernelMsg
         )
         setTaskProgress(null)
-      } else if (classification.needsSwarm) {
+      } else if (classification.needsSwarm && isPro) {
         const history = messages
           .filter(m => m.content.trim())
           .map(m => ({
@@ -401,7 +403,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           updateKernelMsg
         )
         setSwarmProgress(null)
-      } else if (classification.needsResearch) {
+      } else if (classification.needsResearch && isPro) {
         await deepResearch(
           trimmed,
           memoryText,

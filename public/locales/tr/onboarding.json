@@ -2,7 +2,7 @@
   "step0": {
     "title": "Kernel'e Hoş Geldiniz",
     "titleUser": "Hoş geldiniz, {{name}}",
-    "subtitle": "Sizin için tasarlanmış egemen AI'ınız.",
+    "subtitle": "Your personal AI, built for you.",
     "body": "Kernel, kim olduğunuzu öğrenen, sizin için önemli olanı hatırlayan ve her konuşmayla daha iyi olan bir AI motorudur."
   },
   "step1": {

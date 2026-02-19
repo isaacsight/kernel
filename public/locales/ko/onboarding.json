@@ -2,7 +2,7 @@
   "step0": {
     "title": "Kernel에 오신 것을 환영합니다",
     "titleUser": "환영합니다, {{name}}",
-    "subtitle": "당신을 위해 만들어진 주권 AI.",
+    "subtitle": "Your personal AI, built for you.",
     "body": "Kernel은 당신이 누구인지 배우고, 중요한 것을 기억하며, 대화할수록 더 나아지는 AI 엔진입니다."
   },
   "step1": {
