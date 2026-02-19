@@ -2,7 +2,7 @@
   "step0": {
     "title": "Kernel में आपका स्वागत है",
     "titleUser": "स्वागत है, {{name}}",
-    "subtitle": "आपका संप्रभु AI, आपके लिए बनाया गया।",
+    "subtitle": "Your personal AI, built for you.",
     "body": "Kernel एक AI इंजन है जो आपको जानता है, आपके लिए महत्वपूर्ण बातें याद रखता है, और हर बातचीत के साथ बेहतर होता जाता है।"
   },
   "step1": {

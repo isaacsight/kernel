@@ -128,6 +128,7 @@ function EngineChat() {
     attachedFiles: fileAttachments.attachedFiles,
     setAttachedFiles: fileAttachments.setAttachedFiles,
     handleNewChat: convs.handleNewChat,
+    isPro,
   })
 
   const scroll = useScrollTracking(chatEngine.messages.length)

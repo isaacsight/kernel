@@ -2,7 +2,7 @@
   "step0": {
     "title": "Tervetuloa Kerneliin",
     "titleUser": "Tervetuloa, {{name}}",
-    "subtitle": "Oma suvereenin tekoälysi, rakennettu sinulle.",
+    "subtitle": "Your personal AI, built for you.",
     "body": "Kernel on tekoälymoottori, joka oppii kuka olet, muistaa mikä on sinulle tärkeää, ja paranee jokaisen keskustelun myötä."
   },
   "step1": {
