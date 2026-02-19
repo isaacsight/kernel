@@ -224,7 +224,7 @@ export function useKernelAgent(): KernelAgentState {
         { system: systemPrompt, model: 'sonnet', max_tokens: 1024 }
       );
     } catch (error) {
-      const errMsg = error instanceof Error ? error.message : 'Failed to reach Kernel Agent';
+      const errMsg = error instanceof Error ? error.message : 'Failed to reach kernel.chat';
       setMessages(prev =>
         prev.map(m => m.id === kernelMsgId ? { ...m, content: `*${errMsg}*` } : m)
       );

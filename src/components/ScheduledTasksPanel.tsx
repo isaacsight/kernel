@@ -135,8 +135,11 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
       ) : (
         <div className="ka-sched-list">
           {tasks.length === 0 && !showForm && (
-            <div className="ka-sched-empty">
-              <p>No scheduled tasks. Create one to automate reminders, briefings, or workflows.</p>
+            <div className="ka-empty-state">
+              <Clock size={48} className="ka-empty-state-icon" />
+              <div className="ka-empty-state-title">Schedule Your First Task</div>
+              <div className="ka-empty-state-desc">Set it and forget it — Kernel runs tasks on your schedule.</div>
+              <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>Create Task</button>
             </div>
           )}
 

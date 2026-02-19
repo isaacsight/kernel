@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { perceiveInput, classifyIntent, inferNeed } from './perception'
 
 describe('classifyIntent', () => {
-  it('classifies reasoning triggers', () => {
+  it('classifies evaluate triggers via keyword fallback', () => {
     const intent = classifyIntent('Should I invest in crypto?', 'should i invest in crypto?')
-    expect(intent.type).toBe('reason')
+    expect(intent.type).toBe('evaluate')
   })
 
   it('classifies build triggers', () => {
@@ -12,13 +12,13 @@ describe('classifyIntent', () => {
     expect(intent.type).toBe('build')
   })
 
-  it('classifies evaluation triggers', () => {
-    const intent = classifyIntent('Is this opportunity viable?', 'is this opportunity viable?')
+  it('classifies analyze as evaluate in fallback', () => {
+    const intent = classifyIntent('Analyze this code architecture', 'analyze this code architecture')
     expect(intent.type).toBe('evaluate')
   })
 
   it('classifies discussion triggers', () => {
-    const intent = classifyIntent("Let's talk about AI regulation", "let's talk about ai regulation")
+    const intent = classifyIntent("Let's debate AI regulation", "let's debate ai regulation")
     expect(intent.type).toBe('discuss')
   })
 
@@ -27,20 +27,16 @@ describe('classifyIntent', () => {
     expect(intent.type).toBe('converse')
   })
 
-  it('classifies financial reasoning domain', () => {
-    const intent = classifyIntent('Calculate the cost of this', 'calculate the cost of this')
-    expect(intent.type).toBe('reason')
-    if (intent.type === 'reason') {
-      expect(intent.domain).toBe('financial')
-    }
+  it('uses AgentRouter result when available', () => {
+    const routerResult = { agentId: 'researcher' as const, confidence: 0.9, needsResearch: false, isMultiStep: false, needsSwarm: false }
+    const intent = classifyIntent('Tell me about quantum computing', 'tell me about quantum computing', routerResult)
+    expect(intent.type).toBe('discuss')
   })
 
-  it('classifies technical reasoning domain', () => {
-    const intent = classifyIntent('Analyze this code architecture', 'analyze this code architecture')
-    expect(intent.type).toBe('reason')
-    if (intent.type === 'reason') {
-      expect(intent.domain).toBe('technical')
-    }
+  it('falls back to keywords when AgentRouter confidence is low', () => {
+    const routerResult = { agentId: 'kernel' as const, confidence: 0.2, needsResearch: false, isMultiStep: false, needsSwarm: false }
+    const intent = classifyIntent('Build me a website', 'build me a website', routerResult)
+    expect(intent.type).toBe('build')
   })
 })
 

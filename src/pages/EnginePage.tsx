@@ -319,7 +319,7 @@ function EngineChat() {
           <button className="ka-home-btn" onClick={() => { panels.closeAllPanels(); convs.handleNewChat() }} aria-label="New chat">
             <img className="ka-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
             <span className="ka-title">
-              {convs.activeConversation ? convs.activeConversation.title : 'Kernel Agent'}
+              {convs.activeConversation ? convs.activeConversation.title : 'kernel.chat'}
             </span>
           </button>
         </div>
@@ -412,7 +412,7 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-icon">K</div>
-            <h1 className="ka-empty-title">Your Kernel</h1>
+            <h1 className="ka-empty-title">kernel.chat</h1>
             <p className="ka-empty-subtitle">A personal AI that remembers you, thinks with you, and gets better over time.</p>
             {chatEngine.todayBriefing && (
               <div className="ka-home-briefing-card">
@@ -675,7 +675,7 @@ function EngineChat() {
             el.style.height = Math.min(el.scrollHeight, 200) + 'px'
           }}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chatEngine.handleSubmit(e) } }}
-          placeholder="Talk to the Kernel..."
+          placeholder="Talk to kernel.chat..."
           disabled={isStreaming}
           rows={1}
         />

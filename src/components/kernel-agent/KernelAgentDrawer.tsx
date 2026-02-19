@@ -31,7 +31,7 @@ export function KernelAgentDrawer() {
           <div className="kernel-drawer-header">
             <span className="kernel-drawer-title">
               <span className="kernel-drawer-icon">K</span>
-              Kernel Agent
+              kernel.chat
             </span>
             <button className="kernel-drawer-close" onClick={closeDrawer} aria-label="Close">
               &times;

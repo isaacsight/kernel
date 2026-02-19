@@ -282,39 +282,25 @@ const ROUTER_TO_SWARM: Record<string, string> = {
   strategist: 'strategist',
 }
 
-// Determine which agent should handle a message based on content
+// AgentRouter is the single source of truth — map classification → swarm agent
 export function routeToAgent(message: string, routerResult?: { agentId: string; confidence: number }): Agent {
-  // If AgentRouter has already classified with good confidence, derive from it
+  // Primary: derive from AgentRouter classification
   if (routerResult && routerResult.confidence >= 0.5) {
     const swarmId = ROUTER_TO_SWARM[routerResult.agentId] || 'operator'
     return SWARM_AGENTS.find(a => a.id === swarmId) || SWARM_AGENTS.find(a => a.id === 'operator')!
   }
 
-  // Keyword fallback
-  const lower = message.toLowerCase();
-
-  if (lower.includes('think') || lower.includes('analyze') || lower.includes('evaluate') ||
-    lower.includes('should i') || lower.includes('worth it') || lower.includes('expected value') ||
-    lower.includes('strategy') || lower.includes('bootstrap') || lower.includes('from zero') ||
-    lower.includes('reasoning') || lower.includes('calculate')) {
-    return SWARM_AGENTS.find(a => a.id === 'reasoner')!;
+  // Minimal keyword fallback (only used when AgentRouter API fails)
+  const lower = message.toLowerCase()
+  if (lower.includes('analyze') || lower.includes('evaluate') || lower.includes('strategy')) {
+    return SWARM_AGENTS.find(a => a.id === 'reasoner')!
+  }
+  if (lower.includes('build') || lower.includes('create') || lower.includes('develop')) {
+    return SWARM_AGENTS.find(a => a.id === 'architect')!
+  }
+  if (lower.includes('bug') || lower.includes('issue') || lower.includes('not working')) {
+    return SWARM_AGENTS.find(a => a.id === 'critic')!
   }
 
-  if (lower.includes('price') || lower.includes('cost') || lower.includes('quote') || lower.includes('pay') || lower.includes('invoice')) {
-    return SWARM_AGENTS.find(a => a.id === 'treasurer')!;
-  }
-
-  if (lower.includes('build') || lower.includes('create') || lower.includes('make') || lower.includes('develop')) {
-    return SWARM_AGENTS.find(a => a.id === 'architect')!;
-  }
-
-  if (lower.includes('need') || lower.includes('want') || lower.includes('looking for') || lower.includes('help with')) {
-    return SWARM_AGENTS.find(a => a.id === 'scout')!;
-  }
-
-  if (lower.includes('bug') || lower.includes('issue') || lower.includes('problem') || lower.includes('not working')) {
-    return SWARM_AGENTS.find(a => a.id === 'critic')!;
-  }
-
-  return SWARM_AGENTS.find(a => a.id === 'operator')!;
+  return SWARM_AGENTS.find(a => a.id === 'operator')!
 }

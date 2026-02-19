@@ -34,7 +34,7 @@ export function KernelAgentChat() {
       <div className="kernel-chat-messages" ref={scrollRef}>
         {isEmpty && (
           <div className="kernel-chat-empty">
-            <p className="kernel-chat-empty-title">Ask the Kernel Agent</p>
+            <p className="kernel-chat-empty-title">Ask kernel.chat</p>
             <p className="kernel-chat-empty-subtitle">
               It sees everything the engine sees.
             </p>

@@ -124,8 +124,11 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
       ) : (
         <div className="ka-goals-list">
           {activeGoals.length === 0 && !showForm && (
-            <div className="ka-goals-empty">
-              <p>No active goals yet. Set a goal and Kernel will help you track progress.</p>
+            <div className="ka-empty-state">
+              <Target size={48} className="ka-empty-state-icon" />
+              <div className="ka-empty-state-title">Set Your First Goal</div>
+              <div className="ka-empty-state-desc">Track what matters — Kernel checks in on your progress automatically.</div>
+              <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>Create Goal</button>
             </div>
           )}
 

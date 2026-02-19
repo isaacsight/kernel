@@ -95,7 +95,7 @@ export function KernelAgentGate() {
     <div className="kernel-gate">
       <div className="kernel-gate-card">
         <div className="kernel-gate-icon">K</div>
-        <h2 className="kernel-gate-title">Kernel Agent</h2>
+        <h2 className="kernel-gate-title">kernel.chat</h2>
         <p className="kernel-gate-price">$20<span>/month</span></p>
         <p className="kernel-gate-desc">
           Sign in to access Chat and Control.
