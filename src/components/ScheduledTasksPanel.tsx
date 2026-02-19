@@ -3,6 +3,7 @@
 // Bottom-sheet panel for viewing and managing scheduled tasks.
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Clock, Plus, Trash2, Play, Pause } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { calculateNextRunAt, type ScheduledTask, type TaskSchedule } from '../engine/Scheduler'
@@ -13,21 +14,22 @@ interface ScheduledTasksPanelProps {
   onToast: (msg: string) => void
 }
 
-const SCHEDULE_PRESETS: { label: string; schedule: TaskSchedule }[] = [
-  { label: 'Daily', schedule: { type: 'daily', time: '09:00' } },
-  { label: 'Weekdays', schedule: { type: 'weekdays', time: '09:00' } },
-  { label: 'Weekly (Mon)', schedule: { type: 'weekly', time: '09:00', dayOfWeek: 1 } },
-  { label: 'Once', schedule: { type: 'once', time: '09:00' } },
+const SCHEDULE_PRESETS: { labelKey: string; schedule: TaskSchedule }[] = [
+  { labelKey: 'scheduled.presets.daily', schedule: { type: 'daily', time: '09:00' } },
+  { labelKey: 'scheduled.presets.weekdays', schedule: { type: 'weekdays', time: '09:00' } },
+  { labelKey: 'scheduled.presets.weekly', schedule: { type: 'weekly', time: '09:00', dayOfWeek: 1 } },
+  { labelKey: 'scheduled.presets.once', schedule: { type: 'once', time: '09:00' } },
 ]
 
 const TASK_TYPES = [
-  { id: 'reminder', label: 'Reminder' },
-  { id: 'workflow', label: 'Run Workflow' },
-  { id: 'briefing', label: 'Daily Briefing' },
-  { id: 'goal_checkin', label: 'Goal Check-in' },
+  { id: 'reminder', labelKey: 'scheduled.taskTypes.reminder' },
+  { id: 'workflow', labelKey: 'scheduled.taskTypes.workflow' },
+  { id: 'briefing', labelKey: 'scheduled.taskTypes.briefing' },
+  { id: 'goal_checkin', labelKey: 'scheduled.taskTypes.goalCheckin' },
 ]
 
 export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasksPanelProps) {
+  const { t } = useTranslation('panels')
   const [tasks, setTasks] = useState<ScheduledTask[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -80,7 +82,7 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
       setShowForm(false)
       loadTasks()
     } catch {
-      onToast('Failed to create scheduled task')
+      onToast(t('scheduled.errors.createFailed'))
     }
   }
 
@@ -93,18 +95,18 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
       if (error) throw error
       loadTasks()
     } catch {
-      onToast('Failed to update task')
+      onToast(t('scheduled.errors.updateFailed'))
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this scheduled task?')) return
+    if (!window.confirm(t('scheduled.deleteConfirm'))) return
     try {
       const { error } = await supabase.from('scheduled_tasks').delete().eq('id', id)
       if (error) throw error
       loadTasks()
     } catch {
-      onToast('Failed to delete task')
+      onToast(t('scheduled.errors.deleteFailed'))
     }
   }
 
@@ -112,9 +114,9 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
     const d = new Date(dateStr)
     const now = new Date()
     const diffH = (d.getTime() - now.getTime()) / (1000 * 60 * 60)
-    if (diffH < 0) return 'overdue'
-    if (diffH < 1) return `in ${Math.round(diffH * 60)}m`
-    if (diffH < 24) return `in ${Math.round(diffH)}h`
+    if (diffH < 0) return t('time.overdue', { ns: 'common' })
+    if (diffH < 1) return t('time.minutesShort', { count: Math.round(diffH * 60), ns: 'common' })
+    if (diffH < 24) return t('time.hoursShort', { count: Math.round(diffH), ns: 'common' })
     return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
   }
 
@@ -123,7 +125,7 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
       <div className="ka-sched-header">
         <h2 className="ka-sched-title">
           <Clock size={18} />
-          Scheduled Tasks
+          {t('scheduled.title')}
         </h2>
         <button className="ka-sched-close" onClick={onClose} aria-label="Close">
           <X size={18} />
@@ -131,15 +133,15 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
       </div>
 
       {loading ? (
-        <div className="ka-sched-loading">Loading tasks...</div>
+        <div className="ka-sched-loading">{t('scheduled.loading')}</div>
       ) : (
         <div className="ka-sched-list">
           {tasks.length === 0 && !showForm && (
             <div className="ka-empty-state">
               <Clock size={48} className="ka-empty-state-icon" />
-              <div className="ka-empty-state-title">Schedule Your First Task</div>
-              <div className="ka-empty-state-desc">Set it and forget it — Kernel runs tasks on your schedule.</div>
-              <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>Create Task</button>
+              <div className="ka-empty-state-title">{t('scheduled.emptyTitle')}</div>
+              <div className="ka-empty-state-desc">{t('scheduled.emptyDesc')}</div>
+              <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>{t('scheduled.createTask')}</button>
             </div>
           )}
 
@@ -182,23 +184,23 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
           />
           <div className="ka-sched-form-row">
             <select className="ka-sched-form-select" value={formType} onChange={e => setFormType(e.target.value)}>
-              {TASK_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+              {TASK_TYPES.map(tt => <option key={tt.id} value={tt.id}>{t(tt.labelKey)}</option>)}
             </select>
             <select className="ka-sched-form-select" value={formChannel} onChange={e => setFormChannel(e.target.value as 'in_app' | 'email' | 'discord')}>
-              <option value="in_app">In-app</option>
-              <option value="email">Email</option>
-              <option value="discord">Discord</option>
+              <option value="in_app">{t('scheduled.channels.inApp')}</option>
+              <option value="email">{t('scheduled.channels.email')}</option>
+              <option value="discord">{t('scheduled.channels.discord')}</option>
             </select>
           </div>
           <div className="ka-sched-form-row">
             <div className="ka-sched-presets">
               {SCHEDULE_PRESETS.map((p, i) => (
                 <button
-                  key={p.label}
+                  key={p.labelKey}
                   className={`ka-sched-preset${formScheduleIdx === i ? ' ka-sched-preset--active' : ''}`}
                   onClick={() => setFormScheduleIdx(i)}
                 >
-                  {p.label}
+                  {t(p.labelKey)}
                 </button>
               ))}
             </div>
@@ -213,13 +215,13 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
             </span>
           </div>
           <div className="ka-sched-form-btns">
-            <button className="ka-sched-form-submit" onClick={handleAdd} disabled={!formTitle.trim()}>Schedule</button>
-            <button className="ka-sched-form-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button className="ka-sched-form-submit" onClick={handleAdd} disabled={!formTitle.trim()}>{t('scheduled.schedule')}</button>
+            <button className="ka-sched-form-cancel" onClick={() => setShowForm(false)}>{t('cancel', { ns: 'common' })}</button>
           </div>
         </div>
       ) : (
         <button className="ka-sched-create-btn" onClick={() => setShowForm(true)}>
-          <Plus size={16} /> Schedule Task
+          <Plus size={16} /> {t('scheduled.createTask')}
         </button>
       )}
     </div>

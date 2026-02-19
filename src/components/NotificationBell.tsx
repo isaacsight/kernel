@@ -3,6 +3,7 @@
 // Header icon with unread count and notification dropdown.
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Bell, Check } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
@@ -12,6 +13,7 @@ interface NotificationBellProps {
 }
 
 export function NotificationBell({ userId }: NotificationBellProps) {
+  const { t } = useTranslation('common')
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
@@ -68,7 +70,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
       <button
         className="ka-header-icon-btn ka-notif-btn"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Notifications"
+        aria-label={t('aria.notifications')}
       >
         <Bell size={16} />
         {unreadCount > 0 && (
@@ -79,15 +81,15 @@ export function NotificationBell({ userId }: NotificationBellProps) {
       {isOpen && (
         <div className="ka-notif-dropdown">
           <div className="ka-notif-dropdown-header">
-            <span>Notifications</span>
+            <span>{t('notifications.title')}</span>
             {unreadCount > 0 && (
               <button className="ka-notif-mark-read" onClick={markAllRead}>
-                <Check size={12} /> Mark all read
+                <Check size={12} /> {t('notifications.markAllRead')}
               </button>
             )}
           </div>
           {notifications.length === 0 ? (
-            <div className="ka-notif-empty">No notifications yet</div>
+            <div className="ka-notif-empty">{t('notifications.empty')}</div>
           ) : (
             <div className="ka-notif-list">
               {notifications.map(n => (

@@ -8839,3 +8839,101 @@ h4 {
 [data-theme="dark"] .ka-more-menu-divider {
     background: #333;
 }
+
+/* ─── Language Picker ──────────────────────────────────── */
+.ka-more-language-select {
+    position: relative;
+}
+.ka-language-picker {
+    flex: 1;
+    appearance: none;
+    background: var(--rubin-ivory-med, rgba(0,0,0,0.04));
+    border: 1px solid var(--rubin-ivory-dark, rgba(0,0,0,0.08));
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--rubin-slate);
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231F1E1D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+.ka-language-picker:focus {
+    outline: none;
+    border-color: var(--rubin-accent, #6366F1);
+}
+[data-theme="dark"] .ka-language-picker {
+    background-color: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--rubin-ivory);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23FAF9F6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* ─── RTL Support (Arabic) ─────────────────────────────── */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+[dir="rtl"] .ka-header {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-header-left {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-header-right {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-header-menu {
+    right: auto;
+    left: 0;
+}
+[dir="rtl"] .ka-input-bar {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .conv-item {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .conv-item-content {
+    text-align: right;
+}
+[dir="rtl"] .conv-item-delete {
+    right: auto;
+    left: 8px;
+}
+[dir="rtl"] .ka-msg-actions {
+    right: auto;
+    left: 8px;
+}
+[dir="rtl"] .ka-more-menu-item {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+[dir="rtl"] .ka-more-menu-label {
+    text-align: right;
+}
+[dir="rtl"] .ka-goal-card-header {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-brief-tab {
+    direction: rtl;
+}
+[dir="rtl"] .stats-agent-row {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-kg-group-header {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .ka-kg-chevron {
+    transform: scaleX(-1);
+}
+[dir="rtl"] .ka-kg-chevron--open {
+    transform: scaleX(-1) rotate(90deg);
+}
+[dir="rtl"] .ka-language-picker {
+    background-position: left 10px center;
+    padding-left: 28px;
+    padding-right: 12px;
+}

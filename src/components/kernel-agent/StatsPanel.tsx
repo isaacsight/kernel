@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { X, BarChart3, MessageSquare, Brain, Users, TrendingUp } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { getUserStats, type UserStats } from '../../engine/SupabaseClient'
 import { getSpecialist } from '../../agents/specialists'
 
@@ -14,6 +15,7 @@ interface StatsPanelProps {
 }
 
 export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
+  const { t, i18n } = useTranslation('panels')
   const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -28,10 +30,10 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
     return (
       <div className="stats-panel">
         <div className="stats-header">
-          <div className="stats-title"><BarChart3 size={18} /> <span>Your Stats</span></div>
+          <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
           <button className="stats-close" onClick={onClose}><X size={18} /></button>
         </div>
-        <div className="stats-loading">Loading...</div>
+        <div className="stats-loading">{t('stats.loading')}</div>
       </div>
     )
   }
@@ -40,10 +42,10 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
     return (
       <div className="stats-panel">
         <div className="stats-header">
-          <div className="stats-title"><BarChart3 size={18} /> <span>Your Stats</span></div>
+          <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
           <button className="stats-close" onClick={onClose}><X size={18} /></button>
         </div>
-        <div className="stats-loading">Could not load stats.</div>
+        <div className="stats-loading">{t('stats.loadError')}</div>
       </div>
     )
   }
@@ -54,10 +56,12 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
   // Bar chart: find max for scaling
   const maxDaily = Math.max(...stats.conversationsPerDay.map(d => d.count), 1)
 
+  const locale = i18n.language || 'en'
+
   return (
     <div className="stats-panel">
       <div className="stats-header">
-        <div className="stats-title"><BarChart3 size={18} /> <span>Your Stats</span></div>
+        <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
         <button className="stats-close" onClick={onClose}><X size={18} /></button>
       </div>
 
@@ -66,29 +70,29 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
         <div className="stats-metric">
           <MessageSquare size={16} />
           <div className="stats-metric-val">{stats.totalMessages}</div>
-          <div className="stats-metric-label">Messages</div>
+          <div className="stats-metric-label">{t('stats.messages')}</div>
         </div>
         <div className="stats-metric">
           <TrendingUp size={16} />
           <div className="stats-metric-val">{stats.totalConversations}</div>
-          <div className="stats-metric-label">Conversations</div>
+          <div className="stats-metric-label">{t('stats.conversations')}</div>
         </div>
         <div className="stats-metric">
           <Brain size={16} />
           <div className="stats-metric-val">{stats.kgEntityCount}</div>
-          <div className="stats-metric-label">Entities</div>
+          <div className="stats-metric-label">{t('stats.entities')}</div>
         </div>
         <div className="stats-metric">
           <Users size={16} />
           <div className="stats-metric-val">{helpfulPct}%</div>
-          <div className="stats-metric-label">Helpful</div>
+          <div className="stats-metric-label">{t('stats.helpful')}</div>
         </div>
       </div>
 
       {/* Agent Breakdown */}
       {stats.agentBreakdown.length > 0 && (
         <div className="stats-section">
-          <h3 className="stats-section-title">Agent Usage</h3>
+          <h3 className="stats-section-title">{t('stats.agentUsage')}</h3>
           <div className="stats-agents">
             {stats.agentBreakdown.slice(0, 5).map(({ agent_id, count }) => {
               const spec = getSpecialist(agent_id)
@@ -112,7 +116,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
       {/* Top Entities */}
       {stats.topEntities.length > 0 && (
         <div className="stats-section">
-          <h3 className="stats-section-title">Top Topics</h3>
+          <h3 className="stats-section-title">{t('stats.topTopics')}</h3>
           <div className="stats-entities">
             {stats.topEntities.map((e, i) => (
               <span key={i} className="stats-entity-chip">
@@ -127,7 +131,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
       {/* Activity Chart */}
       {stats.conversationsPerDay.length > 1 && (
         <div className="stats-section">
-          <h3 className="stats-section-title">Activity</h3>
+          <h3 className="stats-section-title">{t('stats.activity')}</h3>
           <div className="stats-chart">
             {stats.conversationsPerDay.slice(-14).map((d, i) => (
               <div key={i} className="stats-chart-bar-wrap">
@@ -137,7 +141,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
                   title={`${d.date}: ${d.count}`}
                 />
                 <span className="stats-chart-label">
-                  {new Date(d.date + 'T00:00:00').toLocaleDateString('en', { day: 'numeric' })}
+                  {new Date(d.date + 'T00:00:00').toLocaleDateString(locale, { day: 'numeric' })}
                 </span>
               </div>
             ))}
@@ -148,7 +152,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
       {/* Member since */}
       {stats.joinedAt && (
         <div className="stats-footer">
-          Member since {new Date(stats.joinedAt).toLocaleDateString('en', { month: 'long', year: 'numeric' })}
+          {t('stats.memberSince', { date: new Date(stats.joinedAt).toLocaleDateString(locale, { month: 'long', year: 'numeric' }) })}
         </div>
       )}
     </div>

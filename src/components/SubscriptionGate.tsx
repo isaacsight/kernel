@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { getAccessToken } from '../engine/SupabaseClient'
 
@@ -8,6 +9,7 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
 const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
 
 export function SubscriptionGate() {
+  const { t } = useTranslation('auth')
   const { user, refreshSubscription, signOut } = useAuthContext()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -57,7 +59,7 @@ export function SubscriptionGate() {
       const { url } = await res.json()
       if (url) window.location.href = url
     } catch {
-      setError('Unable to start checkout. Please try again.')
+      setError(t('subscription.checkoutError'))
     } finally {
       setLoading(false)
     }
@@ -72,8 +74,8 @@ export function SubscriptionGate() {
           animate={{ opacity: 1 }}
         >
           <div className="ka-gate-icon">K</div>
-          <h1 className="ka-gate-title">Activating...</h1>
-          <p className="ka-gate-subtitle">Confirming your subscription. This usually takes a few seconds.</p>
+          <h1 className="ka-gate-title">{t('subscription.activating')}</h1>
+          <p className="ka-gate-subtitle">{t('subscription.activatingDesc')}</p>
         </motion.div>
       </div>
     )
@@ -88,17 +90,17 @@ export function SubscriptionGate() {
         transition={{ duration: 0.5 }}
       >
         <div className="ka-gate-icon">K</div>
-        <h1 className="ka-gate-title">Subscribe to Kernel</h1>
+        <h1 className="ka-gate-title">{t('subscription.title')}</h1>
         <p className="ka-gate-subtitle">
-          Signed in as {user?.email}. Subscribe to access the Antigravity Kernel.
+          {t('subscription.signedInAs', { email: user?.email })}
         </p>
-        <p className="ka-gate-price">$20<span>/month</span></p>
+        <p className="ka-gate-price">{t('subscription.price')}<span>{t('subscription.pricePeriod')}</span></p>
 
         <div className="ka-gate-features">
-          <div className="ka-gate-feature">Conversational AI with web search</div>
-          <div className="ka-gate-feature">Real-time cognitive engine observability</div>
-          <div className="ka-gate-feature">Belief and conviction management</div>
-          <div className="ka-gate-feature">Unlimited messages</div>
+          <div className="ka-gate-feature">{t('subscription.feature1')}</div>
+          <div className="ka-gate-feature">{t('subscription.feature2')}</div>
+          <div className="ka-gate-feature">{t('subscription.feature3')}</div>
+          <div className="ka-gate-feature">{t('subscription.feature4')}</div>
         </div>
 
         <button
@@ -107,13 +109,13 @@ export function SubscriptionGate() {
           disabled={loading}
           style={{ width: '100%', marginBottom: 16 }}
         >
-          {loading ? 'Loading...' : 'Subscribe — $20/mo'}
+          {loading ? t('loading', { ns: 'common' }) : t('subscription.button')}
         </button>
 
         {error && <p className="ka-gate-error">{error}</p>}
 
         <button className="ka-gate-admin-toggle" onClick={signOut}>
-          Sign out
+          {t('subscription.signOut')}
         </button>
       </motion.div>
     </div>

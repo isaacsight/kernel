@@ -6,6 +6,7 @@
 
 import { useState } from 'react'
 import { X, Brain, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { KGEntity, KGRelation } from '../../engine/KnowledgeGraph'
 
 interface KGPanelProps {
@@ -14,18 +15,10 @@ interface KGPanelProps {
   onClose: () => void
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  person: 'People',
-  company: 'Companies',
-  project: 'Projects',
-  concept: 'Concepts',
-  preference: 'Preferences',
-  location: 'Locations',
-}
-
 const TYPE_ORDER = ['person', 'company', 'project', 'concept', 'preference', 'location']
 
 export default function KGPanel({ entities, relations, onClose }: KGPanelProps) {
+  const { t } = useTranslation('panels')
   const [expandedType, setExpandedType] = useState<string | null>(null)
 
   // Group entities by type
@@ -52,7 +45,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
       <div className="ka-kg-header">
         <div className="ka-kg-title">
           <Brain size={18} />
-          <span>What Kernel Knows</span>
+          <span>{t('kg.title')}</span>
         </div>
         <button className="ka-kg-close" onClick={onClose}>
           <X size={18} />
@@ -61,19 +54,19 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
 
       {totalEntities === 0 ? (
         <div className="ka-kg-empty">
-          <p>Kernel hasn't learned anything yet.</p>
-          <p className="ka-kg-empty-hint">Keep chatting — it picks up on people, projects, and concepts you mention.</p>
+          <p>{t('kg.emptyTitle')}</p>
+          <p className="ka-kg-empty-hint">{t('kg.emptyHint')}</p>
         </div>
       ) : (
         <>
           <div className="ka-kg-stats">
-            <span>{totalEntities} entities</span>
+            <span>{t('kg.entitiesCount', { count: totalEntities })}</span>
             <span className="ka-kg-dot">&middot;</span>
-            <span>{totalRelations} connections</span>
+            <span>{t('kg.connectionsCount', { count: totalRelations })}</span>
           </div>
 
           <div className="ka-kg-groups">
-            {TYPE_ORDER.filter(t => byType.has(t)).map(type => {
+            {TYPE_ORDER.filter(tp => byType.has(tp)).map(type => {
               const group = byType.get(type)!
               const isExpanded = expandedType === type
               return (
@@ -86,7 +79,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
                       size={14}
                       className={`ka-kg-chevron ${isExpanded ? 'ka-kg-chevron--open' : ''}`}
                     />
-                    <span className="ka-kg-group-label">{TYPE_LABELS[type] || type}</span>
+                    <span className="ka-kg-group-label">{t(`kg.types.${type}`, { defaultValue: type })}</span>
                     <span className="ka-kg-group-count">{group.length}</span>
                   </button>
                   {isExpanded && (
@@ -102,10 +95,10 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
                               <span className="ka-kg-confidence" style={{
                                 opacity: 0.4 + entity.confidence * 0.6,
                               }}>
-                                {(entity.confidence * 100).toFixed(0)}% confident
+                                {t('kg.confident', { value: (entity.confidence * 100).toFixed(0) })}
                               </span>
                               <span className="ka-kg-mentions">
-                                {entity.mention_count}x mentioned
+                                {t('kg.mentioned', { count: entity.mention_count })}
                               </span>
                             </div>
                             {entityRelations.length > 0 && (

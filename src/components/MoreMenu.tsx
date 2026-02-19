@@ -1,5 +1,29 @@
 import { motion } from 'framer-motion'
-import { Zap, Clock, Brain, BarChart3, Crown, Settings, LogOut, Trash2 } from 'lucide-react'
+import { Zap, Clock, Brain, BarChart3, Crown, Settings, LogOut, Trash2, Globe } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+
+const LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'pt', name: 'Português' },
+  { code: 'it', name: 'Italiano' },
+  { code: 'nl', name: 'Nederlands' },
+  { code: 'ru', name: 'Русский' },
+  { code: 'zh', name: '中文(简体)' },
+  { code: 'zh-TW', name: '中文(繁體)' },
+  { code: 'ja', name: '日本語' },
+  { code: 'ko', name: '한국어' },
+  { code: 'ar', name: 'العربية' },
+  { code: 'hi', name: 'हिन्दी' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'pl', name: 'Polski' },
+  { code: 'sv', name: 'Svenska' },
+  { code: 'no', name: 'Norsk' },
+  { code: 'da', name: 'Dansk' },
+  { code: 'fi', name: 'Suomi' },
+]
 
 export type MoreAction =
   | 'workflows'
@@ -13,24 +37,24 @@ export type MoreAction =
 
 interface MoreMenuItem {
   id: MoreAction
-  label: string
+  labelKey: string
   icon: typeof Zap
   danger?: boolean
   condition?: 'not-pro' | 'subscribed' | 'always'
 }
 
 const ITEMS: MoreMenuItem[] = [
-  { id: 'workflows', label: 'Workflows', icon: Zap },
-  { id: 'scheduled', label: 'Scheduled Tasks', icon: Clock },
-  { id: 'knowledge', label: 'What Kernel Knows', icon: Brain },
-  { id: 'stats', label: 'Your Stats', icon: BarChart3 },
+  { id: 'workflows', labelKey: 'menu.workflows', icon: Zap },
+  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: Clock },
+  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: Brain },
+  { id: 'stats', labelKey: 'menu.yourStats', icon: BarChart3 },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
-  { id: 'upgrade', label: 'Upgrade to Pro', icon: Crown, condition: 'not-pro' },
-  { id: 'manage-subscription', label: 'Manage Subscription', icon: Settings, condition: 'subscribed' },
-  { id: 'sign-out', label: 'Sign Out', icon: LogOut },
-  { id: 'delete-account', label: 'Delete Account', icon: Trash2, danger: true },
+  { id: 'upgrade', labelKey: 'menu.upgradeToPro', icon: Crown, condition: 'not-pro' },
+  { id: 'manage-subscription', labelKey: 'menu.manageSubscription', icon: Settings, condition: 'subscribed' },
+  { id: 'sign-out', labelKey: 'menu.signOut', icon: LogOut },
+  { id: 'delete-account', labelKey: 'menu.deleteAccount', icon: Trash2, danger: true },
 ]
 
 interface MoreMenuProps {
@@ -42,6 +66,7 @@ interface MoreMenuProps {
 }
 
 export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenuProps) {
+  const { t, i18n } = useTranslation('home')
   if (!isOpen) return null
 
   const filteredAccount = ACCOUNT_ITEMS.filter(item => {
@@ -74,7 +99,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenu
       >
         <div className="ka-more-drag-handle" />
         <div className="ka-more-menu-items">
-          <div className="ka-more-menu-label">Features</div>
+          <div className="ka-more-menu-label">{t('features', { ns: 'common' })}</div>
           {ITEMS.map(item => {
             const Icon = item.icon
             return (
@@ -84,12 +109,26 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenu
                 onClick={() => { onSelect(item.id); onClose() }}
               >
                 <Icon size={18} />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </button>
             )
           })}
           <div className="ka-more-menu-divider" />
-          <div className="ka-more-menu-label">Account</div>
+          <div className="ka-more-menu-label">{t('language', { ns: 'common' })}</div>
+          <div className="ka-more-menu-item ka-more-language-select">
+            <Globe size={18} />
+            <select
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="ka-language-picker"
+            >
+              {LANGUAGES.map(lang => (
+                <option key={lang.code} value={lang.code}>{lang.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="ka-more-menu-divider" />
+          <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
           {filteredAccount.map(item => {
             const Icon = item.icon
             return (
@@ -99,7 +138,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenu
                 onClick={() => { onSelect(item.id); onClose() }}
               >
                 <Icon size={18} />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </button>
             )
           })}

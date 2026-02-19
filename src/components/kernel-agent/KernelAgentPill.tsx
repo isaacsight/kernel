@@ -1,16 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 
-const PHASE_LABELS: Record<string, string> = {
-  idle: 'idle',
-  perceiving: 'perceiving',
-  attending: 'attending',
-  deciding: 'deciding',
-  acting: 'acting',
-  reflecting: 'reflecting',
-};
-
 export function KernelAgentPill() {
+  const { t } = useTranslation('kernel');
   const { engineState, openDrawer, isOpen } = useKernelAgentContext();
   const { phase, worldModel } = engineState;
   const conviction = worldModel.convictions.overall;
@@ -25,10 +18,10 @@ export function KernelAgentPill() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-      title="Open kernel.chat"
+      title={t('pill.openKernel')}
     >
       <span className="kernel-pill-icon">K</span>
-      <span className="kernel-pill-phase">{PHASE_LABELS[phase] || phase}</span>
+      <span className="kernel-pill-phase">{t(`pill.phases.${phase}`, { defaultValue: phase })}</span>
       <span className="kernel-pill-divider" />
       <span className="kernel-pill-conviction-wrap">
         <span className="kernel-pill-conviction-bar">

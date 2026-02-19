@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import { KERNEL_TOPICS } from '../../agents/kernel';
 
 export function KernelAgentChat() {
+  const { t } = useTranslation('kernel');
   const { messages, isStreaming, sendMessage } = useKernelAgentContext();
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -34,9 +36,9 @@ export function KernelAgentChat() {
       <div className="kernel-chat-messages" ref={scrollRef}>
         {isEmpty && (
           <div className="kernel-chat-empty">
-            <p className="kernel-chat-empty-title">Ask kernel.chat</p>
+            <p className="kernel-chat-empty-title">{t('chat.emptyTitle')}</p>
             <p className="kernel-chat-empty-subtitle">
-              It sees everything the engine sees.
+              {t('chat.emptySubtitle')}
             </p>
             <div className="kernel-chat-topics">
               {KERNEL_TOPICS.map(topic => (
@@ -77,7 +79,7 @@ export function KernelAgentChat() {
           type="text"
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Ask the Kernel..."
+          placeholder={t('chat.placeholder')}
           disabled={isStreaming}
           className="kernel-chat-input-field"
         />
