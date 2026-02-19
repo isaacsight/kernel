@@ -5,6 +5,17 @@
     --rubin-ivory-med: #F0EEE6;
     --rubin-ivory-dark: #E8E6DC;
     --rubin-accent: #8B7355;
+    --rubin-slate-muted: #6B6966;
+    --rubin-text-secondary: #888;
+    --rubin-border: rgba(0, 0, 0, 0.08);
+
+    /* Semantic Colors */
+    --rubin-error: #DC2626;
+    --rubin-error-light: rgba(220, 38, 38, 0.08);
+    --rubin-error-border: rgba(220, 38, 38, 0.2);
+    --rubin-voice-active: #EF4444;
+    --rubin-primary-hover: #4F46E5;
+    --rubin-primary: #6366F1;
 
     /* Fonts */
     --font-serif: "EB Garamond", serif;
@@ -1170,7 +1181,7 @@ h4 {
 }
 
 .ka-gate-submit:hover {
-    background: #4F46E5;
+    background: var(--rubin-primary-hover);
 }
 
 .ka-gate-submit:disabled {
@@ -1181,7 +1192,7 @@ h4 {
 .ka-gate-error {
     font-family: var(--font-mono);
     font-size: 13px;
-    color: #DC2626;
+    color: var(--rubin-error);
     margin: 8px 0;
 }
 
@@ -1942,10 +1953,10 @@ h4 {
     align-items: center;
     gap: 6px;
     padding: 6px 14px;
-    border: 1px solid rgba(220, 38, 38, 0.2);
+    border: 1px solid var(--rubin-error-border);
     border-radius: var(--radius-sm);
     background: none;
-    color: #DC2626;
+    color: var(--rubin-error);
     font-family: var(--font-mono);
     font-size: 12px;
     cursor: pointer;
@@ -1954,7 +1965,7 @@ h4 {
 }
 
 .ka-share-revoke-btn:hover:not(:disabled) {
-    background: rgba(220, 38, 38, 0.06);
+    background: var(--rubin-error-light);
 }
 
 .ka-share-revoke-btn:disabled {
@@ -2254,8 +2265,8 @@ h4 {
 }
 
 .ka-goal-priority--high {
-    background: #FEE2E2;
-    color: #DC2626;
+    background: var(--rubin-error-light);
+    color: var(--rubin-error);
 }
 
 .ka-goal-priority--medium {
@@ -2349,8 +2360,8 @@ h4 {
 }
 
 .ka-goal-action-btn--danger {
-    color: #DC2626;
-    border-color: rgba(220, 38, 38, 0.2);
+    color: var(--rubin-error);
+    border-color: var(--rubin-error-border);
 }
 
 .ka-goal-action-btn:hover {
@@ -2571,12 +2582,12 @@ h4 {
 }
 
 .ka-wf-card-delete {
-    color: #DC2626;
-    border-color: rgba(220, 38, 38, 0.2);
+    color: var(--rubin-error);
+    border-color: var(--rubin-error-border);
 }
 
 .ka-wf-card-delete:hover {
-    background: rgba(220, 38, 38, 0.08);
+    background: var(--rubin-error-light);
 }
 
 .ka-wf-card-steps {
@@ -2734,7 +2745,7 @@ h4 {
     border: none;
     cursor: pointer;
     padding: 4px;
-    color: #DC2626;
+    color: var(--rubin-error);
     opacity: 0.4;
 }
 
@@ -2818,7 +2829,7 @@ h4 {
     height: 16px;
     padding: 0 4px;
     border-radius: 8px;
-    background: #DC2626;
+    background: var(--rubin-error);
     color: white;
     font-family: var(--font-mono);
     font-size: 9px;
@@ -3024,8 +3035,8 @@ h4 {
 }
 
 .ka-sched-card-btn--danger {
-    color: #DC2626;
-    border-color: rgba(220, 38, 38, 0.2);
+    color: var(--rubin-error);
+    border-color: var(--rubin-error-border);
 }
 
 .ka-sched-card-btn:hover {
@@ -3278,20 +3289,20 @@ h4 {
 
 .ka-brief-tab--failed {
     opacity: 0.5;
-    border-color: rgba(220, 38, 38, 0.3);
+    border-color: var(--rubin-error-border);
 }
 
 .ka-brief-tab--failed svg {
-    color: #DC2626;
+    color: var(--rubin-error);
     margin-left: 4px;
     flex-shrink: 0;
 }
 
 .ka-brief-tab--active.ka-brief-tab--failed {
     opacity: 0.8;
-    background: rgba(220, 38, 38, 0.08);
+    background: var(--rubin-error-light);
     color: var(--rubin-slate);
-    border-color: rgba(220, 38, 38, 0.3);
+    border-color: var(--rubin-error-border);
 }
 
 .ka-brief-failed {
@@ -3306,7 +3317,7 @@ h4 {
 }
 
 .ka-brief-failed svg:first-child {
-    color: #DC2626;
+    color: var(--rubin-error);
     opacity: 0.6;
 }
 
@@ -3354,18 +3365,18 @@ h4 {
     gap: 6px;
     padding: 8px 16px;
     border-radius: var(--radius-md);
-    background: rgba(220, 38, 38, 0.08);
-    color: #DC2626;
+    background: var(--rubin-error-light);
+    color: var(--rubin-error);
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    border: 1px solid rgba(220, 38, 38, 0.2);
+    border: 1px solid var(--rubin-error-border);
     cursor: pointer;
     transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-brief-delete-btn:hover {
-    background: rgba(220, 38, 38, 0.15);
-    border-color: rgba(220, 38, 38, 0.35);
+    background: var(--rubin-error-light);
+    border-color: var(--rubin-error-border);
 }
 
 [data-theme="dark"] .ka-brief-failed {
@@ -3373,11 +3384,11 @@ h4 {
 }
 
 [data-theme="dark"] .ka-brief-tab--failed {
-    border-color: rgba(220, 38, 38, 0.25);
+    border-color: var(--rubin-error-border);
 }
 
 [data-theme="dark"] .ka-brief-tab--active.ka-brief-tab--failed {
-    background: rgba(220, 38, 38, 0.12);
+    background: var(--rubin-error-light);
     color: var(--rubin-ivory);
 }
 
@@ -4345,8 +4356,8 @@ h4 {
     height: 40px;
     border-radius: 50%;
     background: transparent;
-    color: var(--rubin-text-secondary, #888);
-    border: 1px solid var(--rubin-border, rgba(0, 0, 0, 0.08));
+    color: var(--rubin-text-secondary);
+    border: 1px solid var(--rubin-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4366,9 +4377,9 @@ h4 {
 }
 
 .ka-voice-btn--active {
-    background: #EF4444;
+    background: var(--rubin-voice-active);
     color: #fff;
-    border-color: #EF4444;
+    border-color: var(--rubin-voice-active);
     animation: ka-pulse 1.5s ease-in-out infinite;
 }
 
@@ -4466,8 +4477,8 @@ h4 {
 }
 
 .ka-msg-action-btn--down:hover {
-    color: #DC2626;
-    border-color: #DC2626;
+    color: var(--rubin-error);
+    border-color: var(--rubin-error);
 }
 
 .ka-msg-feedback-done {
@@ -4584,7 +4595,7 @@ h4 {
 
 .ka-file-chip-x:hover {
     opacity: 1;
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 /* File preview (rich thumbnails) */
@@ -4657,7 +4668,7 @@ h4 {
 
 .ka-file-preview-remove:hover {
     opacity: 1;
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 /* Message attachment badges */
@@ -4877,7 +4888,7 @@ h4 {
 
 .ka-task-step--error {
     opacity: 0.6;
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 .ka-task-step-icon {
@@ -5771,8 +5782,8 @@ h4 {
 }
 
 .kernel-drawer-close {
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: none;
     font-size: 1.2rem;
@@ -6380,12 +6391,12 @@ h4 {
 }
 
 .kernel-ctrl-btn--danger {
-    color: #DC2626;
-    border-color: #DC2626;
+    color: var(--rubin-error);
+    border-color: var(--rubin-error);
 }
 
 .kernel-ctrl-btn--danger:hover {
-    background: #DC2626;
+    background: var(--rubin-error);
     color: #fff;
 }
 
@@ -6702,7 +6713,7 @@ h4 {
 
 .kernel-gate-error {
     font-size: 0.7rem;
-    color: #DC2626;
+    color: var(--rubin-error);
     margin-bottom: 8px;
 }
 
@@ -6999,7 +7010,7 @@ h4 {
 
 .conv-item-delete:hover {
     opacity: 1 !important;
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 .conv-empty {
@@ -7014,8 +7025,8 @@ h4 {
 /* ─── Header Buttons ─────────────────────────────────────── */
 
 .ka-menu-btn {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -7032,8 +7043,8 @@ h4 {
 }
 
 .ka-copy-btn {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: 1px solid var(--rubin-ivory-dark);
     border-radius: var(--radius-full);
@@ -7079,7 +7090,7 @@ h4 {
 }
 
 .ka-admin-badge {
-    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    background: linear-gradient(135deg, var(--rubin-primary), var(--rubin-primary-hover));
 }
 
 .ka-header-icon-btn {
@@ -7171,11 +7182,11 @@ h4 {
 }
 
 .ka-header-menu-item--danger {
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 .ka-header-menu-item--danger:hover {
-    background: rgba(220, 38, 38, 0.06);
+    background: var(--rubin-error-light);
 }
 
 .ka-header-menu-label {
@@ -7204,14 +7215,14 @@ h4 {
     border-bottom: 1px solid #FECACA;
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 .ka-portal-error button {
     background: none;
     border: none;
     font-size: 1rem;
-    color: #DC2626;
+    color: var(--rubin-error);
     cursor: pointer;
     opacity: 0.6;
     padding: 0 4px;
@@ -7536,7 +7547,7 @@ h4 {
 }
 
 .ka-approval-reject {
-    background: #EF4444;
+    background: var(--rubin-voice-active);
     color: white;
 }
 
@@ -9036,7 +9047,7 @@ h4 {
 }
 
 .ka-more-menu-item--danger {
-    color: #DC2626;
+    color: var(--rubin-error);
 }
 
 .ka-more-menu-item--upgrade {
