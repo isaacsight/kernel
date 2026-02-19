@@ -1,7 +1,7 @@
 # Does This Feel Right?
 
 > A literary-minimalist blog on building systems, AI agents, and the craft of making things that feel right.
-> Live at: [doesthisfeelright.com](https://doesthisfeelright.com)
+> Live at: [doesthisfeelright.com](https://kernel.chat)
 
 ---
 
@@ -111,7 +111,7 @@ import path from 'path'
 
 export default defineConfig({
     plugins: [react()],
-    base: '/does-this-feel-right-/',
+    base: '/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
@@ -167,7 +167,7 @@ export default defineConfig({
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },
-    "homepage": "https://isaacsight.github.io/does-this-feel-right-",
+    "homepage": "https://isaacsight.github.io/kernel",
     "dependencies": {
         "framer-motion": "^11.0.0",
         "lucide-react": "^0.400.0",

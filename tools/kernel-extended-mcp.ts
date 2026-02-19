@@ -105,7 +105,7 @@ server.tool(
     },
     async ({ url, name }) => {
         try {
-            const targetUrl = url ?? 'https://isaacsight.github.io/does-this-feel-right-/'
+            const targetUrl = url ?? 'https://kernel.chat'
             const snapName = name ?? 'homepage'
             const snapDir = join(PROJECT_ROOT, '.snapshots')
             if (!existsSync(snapDir)) mkdirSync(snapDir, { recursive: true })
@@ -189,7 +189,7 @@ server.tool(
     {},
     async () => {
         const endpoints = [
-            { name: 'GitHub Pages', url: 'https://isaacsight.github.io/does-this-feel-right-/' },
+            { name: 'GitHub Pages', url: 'https://kernel.chat' },
             { name: 'Supabase API', url: `${SUPABASE_URL}/rest/v1/` },
             { name: 'Claude Proxy', url: `${SUPABASE_URL}/functions/v1/claude-proxy` },
         ]

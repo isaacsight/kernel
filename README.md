@@ -2,7 +2,7 @@
 
 A contemplative AI collaboration platform where specialized agents discuss topics in real-time, with an integrated treasury system, trading dashboard, and blog.
 
-**Live**: [isaacsight.github.io/does-this-feel-right-](https://isaacsight.github.io/does-this-feel-right-)
+**Live**: [kernel.chat](https://kernel.chat)
 
 ## Stack
 
