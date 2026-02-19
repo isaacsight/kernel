@@ -1961,6 +1961,7 @@ h4 {
     margin: 0 auto;
     padding: 0 16px 80px;
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--rubin-ivory);
     color: var(--rubin-slate);
 }
@@ -5023,11 +5024,17 @@ h4 {
     }
 
     .ka-title {
-        max-width: 45vw;
+        max-width: 40vw;
     }
 
     .ka-header-right {
-        gap: 6px;
+        gap: 4px;
+    }
+
+    .ka-admin-badge,
+    .ka-pro-badge {
+        padding: 2px 6px;
+        font-size: 0.55rem;
     }
 
     .ka-research-detail {
@@ -5042,9 +5049,9 @@ h4 {
         margin: 0 16px 8px;
     }
 
-    /* Conversation drawer: full width on mobile */
+    /* Conversation drawer: full width on mobile (use 100% to avoid scrollbar overflow) */
     .conv-drawer {
-        width: 100vw;
+        width: 100%;
     }
 
     /* Always show conv actions on mobile (no hover) */
@@ -5103,6 +5110,251 @@ h4 {
         padding: 32px 24px;
         padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
         max-width: 100%;
+    }
+
+    /* Shared conversation page — mobile */
+    .ka-shared-page {
+        padding: 0 12px 60px;
+    }
+
+    .ka-shared-header {
+        gap: 8px;
+        padding: 0 0 12px;
+    }
+
+    .ka-shared-title {
+        font-size: 1rem;
+    }
+
+    .ka-shared-meta {
+        font-size: 10px;
+    }
+
+    .ka-shared-footer {
+        padding: 32px 16px;
+        margin-top: 24px;
+    }
+
+    .ka-shared-footer p {
+        font-size: 0.85rem;
+    }
+
+    .ka-shared-cta {
+        padding: 12px 28px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Mini smartphone (≤ 390px — iPhone SE, Galaxy S mini, etc.)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 390px) {
+    /* Header: tighter, hide badge text */
+    .ka-header {
+        padding: 8px 10px;
+        padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    }
+
+    .ka-title {
+        max-width: 35vw;
+        font-size: 0.6rem;
+    }
+
+    .ka-header-right {
+        gap: 2px;
+    }
+
+    .ka-header-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .ka-admin-badge,
+    .ka-pro-badge {
+        padding: 2px 5px;
+        font-size: 0.5rem;
+        gap: 2px;
+    }
+
+    .ka-admin-badge svg,
+    .ka-pro-badge svg {
+        width: 10px;
+        height: 10px;
+    }
+
+    /* Chat area: reduce padding */
+    .ka-chat {
+        padding: 12px 10px;
+    }
+
+    /* Messages: tighter layout */
+    .ka-msg {
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .ka-msg-avatar {
+        width: 26px;
+        height: 26px;
+        font-size: 0.55rem;
+    }
+
+    .ka-msg-bubble {
+        padding: 12px 14px;
+    }
+
+    .ka-msg--kernel .ka-msg-bubble {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        max-width: 90%;
+    }
+
+    .ka-msg--user .ka-msg-bubble {
+        font-size: 0.75rem;
+        max-width: 80%;
+    }
+
+    .ka-msg-action-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .ka-agent-badge {
+        font-size: 0.5rem;
+    }
+
+    /* Input bar: compact */
+    .ka-input-bar {
+        padding: 8px 8px;
+        gap: 4px;
+    }
+
+    .ka-input {
+        padding: 10px 12px;
+        min-height: 40px;
+        font-size: 16px;
+    }
+
+    .ka-send {
+        width: 38px;
+        height: 38px;
+    }
+
+    .ka-voice-btn,
+    .ka-attach-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Scroll button: snug above input + tab bar */
+    .ka-scroll-btn {
+        bottom: 120px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .ka-toast {
+        bottom: 115px;
+        font-size: 0.75rem;
+        padding: 8px 14px;
+    }
+
+    /* Tab bar: shorter */
+    .ka-tab-bar {
+        height: 48px;
+    }
+
+    .ka-tab-item svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .ka-tab-label {
+        font-size: 9px;
+    }
+
+    /* Empty state */
+    .ka-empty-title {
+        font-size: 1.25rem;
+    }
+
+    .ka-empty-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+    }
+
+    .ka-empty-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+    }
+
+    .ka-topic {
+        padding: 6px 12px;
+        font-size: 0.6rem;
+    }
+
+    /* Briefing card on home */
+    .ka-home-briefing-card {
+        padding: 10px 12px;
+    }
+
+    /* Share modal */
+    .ka-share-modal {
+        padding: 24px 16px;
+    }
+
+    .ka-share-expiry-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .ka-share-url-input {
+        font-size: 11px;
+        padding: 10px 8px;
+    }
+
+    /* Shared conversation page */
+    .ka-shared-page {
+        padding: 0 10px 48px;
+    }
+
+    .ka-shared-title {
+        font-size: 0.9rem;
+    }
+
+    .ka-shared-messages {
+        gap: 12px;
+    }
+
+    .ka-shared-footer {
+        padding: 24px 12px;
+    }
+
+    /* More menu */
+    .ka-more-menu-item {
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+
+    /* Conversation drawer */
+    .conv-drawer {
+        width: 100%;
+    }
+
+    /* Research/task/swarm status indicators */
+    .ka-research-detail {
+        max-width: 140px;
+        font-size: 0.6rem;
+    }
+
+    .ka-task-progress {
+        margin: 0 10px 6px;
+    }
+
+    .ka-swarm-status {
+        margin: 0 10px 6px;
     }
 }
 
