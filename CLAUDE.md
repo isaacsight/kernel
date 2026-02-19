@@ -136,7 +136,7 @@ Required env vars (see `.env.example`):
 - **Auth 401**: Claude proxy requires valid Supabase JWT. Check `getAccessToken()` in `SupabaseClient.ts`.
 - **CORS**: Edge functions handle CORS headers. If adding new functions, include `Access-Control-Allow-Origin`.
 - **Build fails**: Usually type errors. Run `npx tsc --noEmit` first.
-- **Deploy**: Only `dist/` folder goes to GitHub Pages. Base path is `/does-this-feel-right-/`.
+- **Deploy**: Only `dist/` folder goes to GitHub Pages. Base path is `/`. Custom domain: `kernel.chat`.
 - **Hash router**: App uses `createHashRouter` — all routes are `/#/path`.
 - **CSS**: No Tailwind. All styles in `src/index.css` using vanilla CSS + custom properties.
 

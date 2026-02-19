@@ -681,7 +681,7 @@ client.on('messageCreate', async (msg: Message) => {
     // Rate limit check
     const { allowed, remaining } = checkDiscordRateLimit(discordUserId)
     if (!allowed) {
-      await msg.reply(`You've hit the daily limit (${DISCORD_DAILY_LIMIT} messages). Try again tomorrow, or use the web app at https://isaacsight.github.io/does-this-feel-right-/`)
+      await msg.reply(`You've hit the daily limit (${DISCORD_DAILY_LIMIT} messages). Try again tomorrow, or use the web app at https://kernel.chat`)
       return
     }
 

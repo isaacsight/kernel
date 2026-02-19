@@ -197,7 +197,7 @@ server.tool(
     {},
     async () => {
         try {
-            const siteUrl = 'https://isaacsight.github.io/does-this-feel-right-/'
+            const siteUrl = 'https://kernel.chat'
             const start = Date.now()
             const res = await fetch(siteUrl, { redirect: 'follow' })
             const responseTime = Date.now() - start
@@ -348,7 +348,7 @@ server.tool(
     },
     async ({ url }) => {
         try {
-            const targetUrl = url ?? 'https://isaacsight.github.io/does-this-feel-right-/'
+            const targetUrl = url ?? 'https://kernel.chat'
             const res = await fetch(targetUrl)
             const html = await res.text()
 

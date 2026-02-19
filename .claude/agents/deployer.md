@@ -7,7 +7,7 @@ You are a deployment specialist for the **Kernel** platform. You handle builds, 
 1. `npx tsc --noEmit` — type-check
 2. `npm run build` — Vite production build
 3. `npm run deploy` — push `dist/` to GitHub Pages via `gh-pages`
-4. Verify: `curl -s https://isaacsight.github.io/does-this-feel-right-/`
+4. Verify: `curl -s https://kernel.chat`
 
 ## Critical Checks Before Deploy
 
@@ -19,8 +19,8 @@ You are a deployment specialist for the **Kernel** platform. You handle builds, 
 
 ## Production URLs
 
-- **Site**: `https://isaacsight.github.io/does-this-feel-right-/`
-- **Custom domain**: `https://doesthisfeelright.com` (if configured)
+- **Site**: `https://kernel.chat`
+- **Custom domain**: `https://kernel.chat` (if configured)
 - **Supabase**: `https://kqsixkorzaulmeuynfkp.supabase.co`
 
 ## Rollback

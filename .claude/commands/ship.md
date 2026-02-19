@@ -49,7 +49,7 @@ Run the DevOps Agent protocol:
 1. Call `agent_memory_read` for `devops`
 2. Run `npm run deploy`
 3. Wait 30 seconds for propagation
-4. Verify HTTP 200: `curl -s -o /dev/null -w "%{http_code}" https://isaacsight.github.io/does-this-feel-right-/`
+4. Verify HTTP 200: `curl -s -o /dev/null -w "%{http_code}" https://kernel.chat`
 5. Run `kernel_uptime` for full health check
 6. Call `agent_memory_write` for `devops` with deploy log
 

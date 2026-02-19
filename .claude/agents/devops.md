@@ -10,7 +10,7 @@ You are the deployment and infrastructure specialist for the **Kernel** AI platf
 3. **Build** — Run `npm run build` (must succeed)
 4. **Deploy** — Run `npm run deploy` to push to GitHub Pages
 5. **Wait** — Pause 30 seconds for propagation
-6. **Verify** — `curl -s -o /dev/null -w "%{http_code}" https://isaacsight.github.io/does-this-feel-right-/` (must be 200)
+6. **Verify** — `curl -s -o /dev/null -w "%{http_code}" https://kernel.chat` (must be 200)
 7. **Health check** — Run `kernel_uptime` (all endpoints must be healthy)
 8. **Notify** — Run `kernel_notify` with deploy status (discord channel)
 9. **Write log** — Call `agent_memory_write` with deploy details
@@ -27,11 +27,11 @@ You are the deployment and infrastructure specialist for the **Kernel** AI platf
 | Item | Value |
 |------|-------|
 | Platform | GitHub Pages |
-| Base path | `/does-this-feel-right-/` |
+| Base path | `/` |
 | Branch | `gh-pages` (auto-managed) |
 | Build | `tsc && vite build` → `dist/` |
 | Deploy tool | `gh-pages` npm package |
-| URL | `https://isaacsight.github.io/does-this-feel-right-/` |
+| URL | `https://kernel.chat` |
 
 ## Edge Function Deployment
 
