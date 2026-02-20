@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Plus, Trash2, X, Search, Pencil, Check } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
@@ -17,17 +18,17 @@ interface ConversationDrawerProps {
   isLoading?: boolean
 }
 
-function relativeTime(dateStr: string): string {
+function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
   const now = Date.now()
   const then = new Date(dateStr).getTime()
   const diff = now - then
   const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 1) return t('relativeTime.justNow')
+  if (mins < 60) return t('relativeTime.minutesAgo', { count: mins })
   const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
+  if (hrs < 24) return t('relativeTime.hoursAgo', { count: hrs })
   const days = Math.floor(hrs / 24)
-  if (days < 7) return `${days}d ago`
+  if (days < 7) return t('relativeTime.daysAgo', { count: days })
   return new Date(dateStr).toLocaleDateString()
 }
 
@@ -42,6 +43,7 @@ export function ConversationDrawer({
   onRename,
   isLoading,
 }: ConversationDrawerProps) {
+  const { t } = useTranslation('common')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<{ conv_id: string; content: string }[]>([])
   const [searching, setSearching] = useState(false)
@@ -138,8 +140,8 @@ export function ConversationDrawer({
             style={{ x: dragX }}
           >
             <div className="conv-drawer-header">
-              <span className="conv-drawer-title">Conversations ({conversations.length})</span>
-              <button className="conv-drawer-close" onClick={onClose} aria-label="Close">
+              <span className="conv-drawer-title">{t('conversations.title', { count: conversations.length })}</span>
+              <button className="conv-drawer-close" onClick={onClose} aria-label={t('close')}>
                 <X size={18} />
               </button>
             </div>
@@ -149,7 +151,7 @@ export function ConversationDrawer({
               <input
                 className="conv-search-input"
                 type="text"
-                placeholder="Search conversations..."
+                placeholder={t('conversations.searchPlaceholder')}
                 value={searchQuery}
                 onChange={e => handleSearch(e.target.value)}
               />
@@ -157,7 +159,7 @@ export function ConversationDrawer({
 
             <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
               <Plus size={16} />
-              New Chat
+              {t('conversations.newChat')}
             </button>
 
             <div className="conv-list">
@@ -198,7 +200,7 @@ export function ConversationDrawer({
                     {matchSnippet && !isRenaming && (
                       <span className="conv-item-snippet">{matchSnippet.content.slice(0, 80)}...</span>
                     )}
-                    {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at)}</span>}
+                    {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
                   </div>
                   {!isRenaming && (
                     <div className="conv-item-actions">
@@ -221,10 +223,10 @@ export function ConversationDrawer({
                 </div>
               )})}
               {filteredConversations.length === 0 && searchQuery && (
-                <div className="conv-empty">{searching ? 'Searching...' : 'No matches found'}</div>
+                <div className="conv-empty">{searching ? t('conversations.searching') : t('conversations.noMatches')}</div>
               )}
               {conversations.length === 0 && !searchQuery && (
-                <div className="conv-empty">No conversations yet</div>
+                <div className="conv-empty">{t('conversations.empty')}</div>
               )}
             </div>
           </motion.aside>

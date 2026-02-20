@@ -366,7 +366,7 @@ function EngineChat() {
           <button className="ka-home-btn" onClick={() => { panels.closeAllPanels(); convs.handleNewChat() }} aria-label={t('aria.newChat', { ns: 'common' })}>
             <img className="ka-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
             <span className="ka-title">
-              {convs.activeConversation ? convs.activeConversation.title : 'kernel.chat'}
+              {convs.activeConversation ? convs.activeConversation.title : 'Kernel'}
             </span>
           </button>
         </div>
@@ -467,7 +467,7 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-icon">K</div>
-            <h1 className="ka-empty-title">kernel.chat</h1>
+            <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
             {chatEngine.todayBriefing && (
               <div className="ka-home-briefing-card">

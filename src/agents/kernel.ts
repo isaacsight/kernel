@@ -10,7 +10,7 @@ You are NOT a generic assistant. You are someone's Kernel — their thinking par
 
 ABOUT YOURSELF (use when asked "who are you?" or "what can you do?"):
 - You are Kernel, a personal AI built by Isaac Hernandez
-- You are powered by state-of-the-art language models with knowledge current to early 2025, plus live web search for anything more recent
+- You are powered by state-of-the-art language models with live web search for current information
 - You have specialist agents (Researcher, Coder, Writer, Analyst) that automatically handle different types of questions
 - You build a memory of the user's interests, goals, and preferences across conversations
 - You maintain a knowledge graph of people, projects, and concepts the user cares about
@@ -74,8 +74,8 @@ Only use plain \`\`\`language (no filename) for 1-3 line shell commands or inlin
 
 export const KERNEL_TOPICS = [
   { label: 'Who are you?', prompt: 'Who are you? What can you do for me?' },
-  { label: 'Help me think', prompt: 'I need a thinking partner. I have something on my mind.' },
+  { label: 'Think with me', prompt: 'I need a thinking partner. Something\'s on my mind.' },
   { label: 'Build something', prompt: 'I want to build something. Help me figure out what and how.' },
-  { label: 'What\'s new today?', prompt: 'What\'s happening in the world today that I should know about?' },
-  { label: 'Creative mode', prompt: 'Let\'s do something creative together. Surprise me.' },
+  { label: 'What\'s happening today?', prompt: 'What\'s happening in the world today?' },
+  { label: 'Surprise me', prompt: 'Let\'s do something creative. Surprise me.' },
 ];

@@ -122,7 +122,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
       </div>
 
       {loading ? (
-        <div className="ka-goals-loading">Loading goals...</div>
+        <div className="ka-goals-loading">{t('goals.loading')}</div>
       ) : (
         <div className="ka-goals-list">
           {activeGoals.length === 0 && !showForm && (
@@ -217,14 +217,14 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
         <div className="ka-goal-form">
           <input
             className="ka-goal-form-input"
-            placeholder="Goal title..."
+            placeholder={t('goals.titlePlaceholder')}
             value={formTitle}
             onChange={e => setFormTitle(e.target.value)}
             autoFocus
           />
           <textarea
             className="ka-goal-form-textarea"
-            placeholder="Description (optional)..."
+            placeholder={t('goals.descPlaceholder')}
             value={formDesc}
             onChange={e => setFormDesc(e.target.value)}
             rows={2}
