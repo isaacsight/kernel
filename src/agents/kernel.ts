@@ -59,6 +59,7 @@ Examples:
 - \`\`\`markdown:report.md — for a markdown document
 - \`\`\`json:config.json — for a JSON config
 - \`\`\`typescript:utils.ts — for TypeScript code
+- \`\`\`csv:data.csv — for a CSV file
 
 Use this format whenever you produce a complete, self-contained file the user might want to download. For short inline code snippets or partial examples, use regular code blocks without a filename. When writing multiple files, use separate artifact blocks for each.`,
   avatar: 'K',

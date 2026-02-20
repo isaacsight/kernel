@@ -34,7 +34,7 @@ export function LoginGate() {
 
   const handleResetPassword = async () => {
     if (!email.trim()) {
-      setError('Enter your email address first.')
+      setError(t('modal.enterEmailFirst'))
       return
     }
     setLoading(true)
@@ -202,13 +202,13 @@ export function LoginGate() {
 
               <div className="ka-gate-toggle-section">
                 <span className="ka-gate-toggle-label">
-                  {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+                  {isSignUp ? t('modal.toggleSignInLabel') : t('modal.toggleSignUpLabel')}
                 </span>
                 <button
                   className="ka-gate-toggle-btn"
                   onClick={() => { setIsSignUp(!isSignUp); setError(''); setSuccessMsg('') }}
                 >
-                  {isSignUp ? 'Sign in' : 'Create Account'}
+                  {isSignUp ? t('modal.toggleSignInAction') : t('modal.toggleSignUpAction')}
                 </button>
               </div>
             </motion.div>

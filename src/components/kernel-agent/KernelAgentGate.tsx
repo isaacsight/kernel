@@ -119,7 +119,9 @@ export function KernelAgentGate() {
         </form>
 
         <button className="kernel-gate-admin-toggle" onClick={() => setIsSignUp(!isSignUp)}>
-          {t(isSignUp ? 'modal.toggleSignIn' : 'modal.toggleSignUp')}
+          {isSignUp
+            ? `${t('modal.toggleSignInLabel')} ${t('modal.toggleSignInAction')}`
+            : `${t('modal.toggleSignUpLabel')} ${t('modal.toggleSignUpAction')}`}
         </button>
 
         {error && <p className="kernel-gate-error">{error}</p>}
