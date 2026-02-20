@@ -19,6 +19,7 @@ export interface AuthState {
   signInWithProvider: (provider: Provider) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
+  resetPassword: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   refreshSubscription: () => Promise<boolean>;
 }
@@ -146,6 +147,12 @@ export function useAuth(): AuthState {
     return { error: error?.message ?? null };
   }, []);
 
+  const resetPassword = useCallback(async (email: string) => {
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+    return { error: error?.message ?? null };
+  }, []);
+
   const signOut = useCallback(async () => {
     setIsSubscribed(false);
     try {
@@ -172,6 +179,7 @@ export function useAuth(): AuthState {
     signInWithProvider,
     signInWithEmail,
     signUpWithEmail,
+    resetPassword,
     signOut,
     refreshSubscription,
   };
