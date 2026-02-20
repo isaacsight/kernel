@@ -2,7 +2,7 @@
 import { getProvider } from './providers/registry'
 
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'robot'
   confidence: number
   complexity: number
   needsResearch: boolean
@@ -29,6 +29,7 @@ Agents:
 - guardian: Security, reliability, testing, "is this safe", "check for bugs", "integrity", performance audits
 - curator: User history, identity, memories, "remember when", "how have I changed", "what are my goals"
 - strategist: High-level market strategy, ROI, economic risk, "is this a good business move", competition analysis
+- robot: Robotics, hardware control, sensors, motors, GPIO, I2C, Raspberry Pi, Arduino, servos, LIDAR, "build a robot", "control motors", "read sensors", physical computing, ROS, embedded Linux, actuators, computer vision for robots
 
 Also determine:
 - complexity: 0.0-1.0 score for how intellectually demanding the task is. 0.0-0.2 = trivial (greetings, simple factual). 0.2-0.8 = moderate (most tasks). 0.85-1.0 = very hard (complex multi-step reasoning, intricate code architecture, nuanced philosophical analysis, tasks requiring exceptional depth)
@@ -57,7 +58,7 @@ export async function classifyIntent(
     })
 
     // Validate the result
-    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist']
+    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'robot']
     if (!validAgents.includes(result.agentId)) {
       return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false }
     }

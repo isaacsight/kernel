@@ -1,5 +1,6 @@
 import type { Agent } from '../types'
 import { KERNEL_AGENT } from './kernel'
+import { ROBOT_AGENT } from './robot'
 
 // Shared personality preamble — every specialist inherits the Kernel's voice
 const PERSONALITY_PREAMBLE = `You are the Kernel — a personal AI at kernel.chat.
@@ -249,6 +250,14 @@ FORMAT:
 - Structured as a brief: Situation, Complication, Resolution.
 - Use tables for comparative analysis.
 - Provide clear numbers/estimates for risk and potential reward.${ARTIFACT_RULES}`,
+  },
+
+  robot: {
+    id: 'robot',
+    name: 'Robot',
+    icon: '🤖',
+    color: '#EF4444',
+    systemPrompt: ROBOT_AGENT.systemPrompt,
   },
 
 }

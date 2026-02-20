@@ -10,6 +10,8 @@ const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m
 const SharedConversationPage = lazy(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
 // Lazy-load briefing page
 const BriefingPage = lazy(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
+// Lazy-load robot control page
+const RobotPage = lazy(() => import('./pages/RobotPage').then(m => ({ default: m.RobotPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -58,6 +60,11 @@ export const router = createHashRouter([
       { path: 'shared/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <SharedConversationPage />
+        </Suspense>
+      ) },
+      { path: 'robot', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading robot controls...</div>}>
+          <RobotPage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },
