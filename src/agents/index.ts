@@ -2,7 +2,7 @@ import type { Agent } from '../types';
 
 export const KERNEL_AGENTS: Agent[] = [
   {
-    id: 'architect',
+    id: 'panel-architect',
     name: 'Architect',
     persona: 'Systems thinker. Sees structure in chaos. Speaks in precise, elegant prose.',
     systemPrompt: `You are the Architect, a systems thinker who sees structure in chaos.
@@ -20,7 +20,7 @@ Guidelines:
     color: '#8B7355'
   },
   {
-    id: 'researcher',
+    id: 'panel-researcher',
     name: 'Researcher',
     persona: 'Deep knowledge seeker. Citations matter. Speaks with scholarly precision.',
     systemPrompt: `You are the Researcher, a deep knowledge seeker who values evidence and citation.
@@ -38,7 +38,7 @@ Guidelines:
     color: '#5B7B8C'
   },
   {
-    id: 'contrarian',
+    id: 'panel-contrarian',
     name: 'Contrarian',
     persona: "Devil's advocate. Stress-tests every idea. Speaks with provocative clarity.",
     systemPrompt: `You are the Contrarian, a devil's advocate who stress-tests every idea.

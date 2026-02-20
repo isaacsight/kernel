@@ -85,8 +85,8 @@ export function selectAgent(
 
     case 'evaluate': {
       return {
-        agent: SWARM_AGENTS.find(a => a.id === 'scout')!,
-        reason: 'Opportunity evaluation — Scout assesses viability',
+        agent: SWARM_AGENTS.find(a => a.id === 'critic')!,
+        reason: 'Evaluation — Critic assesses quality and viability',
         confidence: 0.8,
         consumedOverride: false,
       };

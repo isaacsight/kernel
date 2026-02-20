@@ -1,7 +1,52 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Check, ClipboardCopy, Download, FileText, FileCode, FileSpreadsheet, File } from 'lucide-react'
-import { downloadFile, LANG_EXT } from './ChatHelpers'
+import Prism from 'prismjs'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-yaml'
+import 'prismjs/components/prism-markdown'
+import 'prismjs/components/prism-sql'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-rust'
+import 'prismjs/components/prism-go'
+import 'prismjs/components/prism-java'
+import 'prismjs/components/prism-ruby'
+import 'prismjs/components/prism-swift'
+import 'prismjs/components/prism-kotlin'
+import 'prismjs/components/prism-toml'
+import { Check, ClipboardCopy, Download, FileText, FileCode, FileSpreadsheet, File, Eye, Code, PackageOpen } from 'lucide-react'
+import { downloadFile, downloadAllFiles, LANG_EXT, getMimeType } from './ChatHelpers'
+
+// ─── Prism language alias mapping ──────────────────────────
+
+const PRISM_LANG: Record<string, string> = {
+  js: 'javascript', javascript: 'javascript', ts: 'typescript', typescript: 'typescript',
+  tsx: 'tsx', jsx: 'jsx', py: 'python', python: 'python',
+  bash: 'bash', sh: 'bash', shell: 'bash',
+  json: 'json', yaml: 'yaml', yml: 'yaml', toml: 'toml',
+  sql: 'sql', css: 'css', html: 'html', xml: 'markup',
+  markdown: 'markdown', md: 'markdown',
+  rust: 'rust', rs: 'rust', go: 'go', java: 'java',
+  ruby: 'ruby', rb: 'ruby', swift: 'swift', kotlin: 'kotlin', kt: 'kotlin',
+  c: 'c', cpp: 'cpp', 'c++': 'cpp',
+}
+
+function highlightCode(code: string, lang: string): string {
+  const prismLang = PRISM_LANG[lang.toLowerCase()]
+  const grammar = prismLang && Prism.languages[prismLang]
+  if (grammar) {
+    return Prism.highlight(code, grammar, prismLang)
+  }
+  return escapeHtml(code)
+}
+
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
 
 // ─── Linkify helper ─────────────────────────────────────
 
@@ -43,6 +88,7 @@ function getFileIcon(ext: string) {
 
 function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; ext: string; filename: string }) {
   const [copied, setCopied] = useState(false)
+  const highlighted = useMemo(() => highlightCode(code, lang), [code, lang])
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
     setCopied(true)
@@ -67,12 +113,14 @@ function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; 
           </button>
         </div>
       </div>
-      <pre className="ka-code-pre"><code>{code}</code></pre>
+      <pre className="ka-code-pre"><code dangerouslySetInnerHTML={{ __html: highlighted }} /></pre>
     </div>
   )
 }
 
 // ─── File Artifact Card ──────────────────────────────────
+
+const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
 
 function ArtifactCard({ filename, lang, code, ext, title }: {
   filename: string
@@ -83,6 +131,9 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
 }) {
   const [copied, setCopied] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [showPreview, setShowPreview] = useState(false)
+
+  const canPreview = PREVIEWABLE_EXTS.includes(ext)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
@@ -90,7 +141,21 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const lineCount = code.split('\n').length
+  const lines = code.split('\n')
+  const lineCount = lines.length
+  const MAX_PREVIEW_LINES = 500
+  const isTruncated = lineCount > MAX_PREVIEW_LINES
+  const previewCode = isTruncated ? lines.slice(0, MAX_PREVIEW_LINES).join('\n') : code
+  const highlighted = useMemo(() => highlightCode(previewCode, lang), [previewCode, lang])
+
+  // For SVG, wrap in minimal HTML doc for iframe rendering
+  const iframeSrc = useMemo(() => {
+    if (!canPreview) return ''
+    if (ext === '.svg') {
+      return `<!DOCTYPE html><html style="height:100%"><head><style>body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f8f8f6}svg{max-width:100%;height:auto}</style></head><body>${code}</body></html>`
+    }
+    return code
+  }, [code, ext, canPreview])
 
   return (
     <div className="ka-artifact">
@@ -112,13 +177,41 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
           {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
           {copied ? 'Copied' : 'Copy'}
         </button>
+        {canPreview && (
+          <button
+            className={`ka-artifact-action${showPreview ? ' ka-artifact-action--active' : ''}`}
+            onClick={() => { setShowPreview(!showPreview); if (!expanded) setExpanded(true) }}
+            aria-label={showPreview ? 'Show code' : 'Show preview'}
+          >
+            {showPreview ? <Code size={13} /> : <Eye size={13} />}
+            {showPreview ? 'Code' : 'Preview'}
+          </button>
+        )}
         <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`Download ${filename}`}>
           <Download size={13} />
           Download
         </button>
       </div>
       {expanded && (
-        <pre className="ka-code-pre"><code>{code}</code></pre>
+        <>
+          {showPreview && canPreview ? (
+            <div className="ka-artifact-preview">
+              <iframe
+                srcDoc={iframeSrc}
+                sandbox="allow-scripts"
+                title={`Preview of ${filename}`}
+                className="ka-artifact-iframe"
+              />
+            </div>
+          ) : (
+            <pre className="ka-code-pre"><code dangerouslySetInnerHTML={{ __html: highlighted }} /></pre>
+          )}
+          {!showPreview && isTruncated && (
+            <div className="ka-artifact-truncated">
+              Preview truncated at {MAX_PREVIEW_LINES} lines — download for full file
+            </div>
+          )}
+        </>
       )}
     </div>
   )
@@ -133,16 +226,38 @@ export function parseCodeFenceHeader(header: string): { lang: string; filename: 
   // Check for title comment on next line (// Title: ... or # Title: ...)
   let title: string | null = null
 
-  // Try lang:filename format (e.g. python:hello.py) — filename must have extension, reject URLs (://)
-  const colonMatch = header.match(/^(\w+):(?!\/\/)(\S+\.\w+)$/)
+  // Try lang:filename format (e.g. python:hello.py, c++:main.cpp) — filename must have extension, reject URLs (://)
+  const colonMatch = header.match(/^([\w+\-#]+):(?!\/\/)(\S+\.\w+)$/)
   if (colonMatch) {
     return { lang: colonMatch[1], filename: colonMatch[2].trim(), title }
   }
 
-  // Try lang filename format (e.g. python hello.py)
-  const spaceMatch = header.match(/^(\w+)\s+(\S+\.\w+)$/)
+  // Try lang filename format (e.g. python hello.py, c++ main.cpp)
+  const spaceMatch = header.match(/^([\w+\-#]+)\s+(\S+\.\w+)$/)
   if (spaceMatch) {
     return { lang: spaceMatch[1], filename: spaceMatch[2].trim(), title }
+  }
+
+  // Try lang:filename-without-extension — infer extension from language
+  const colonNoExtMatch = header.match(/^([\w+\-#]+):(?!\/\/)(\S+)$/)
+  if (colonNoExtMatch) {
+    const lang = colonNoExtMatch[1]
+    const name = colonNoExtMatch[2].trim()
+    const ext = LANG_EXT[lang.toLowerCase()]
+    if (ext) {
+      return { lang, filename: `${name}${ext}`, title }
+    }
+  }
+
+  // Try lang filename-without-extension (space format)
+  const spaceNoExtMatch = header.match(/^([\w+\-#]+)\s+(\S+)$/)
+  if (spaceNoExtMatch) {
+    const lang = spaceNoExtMatch[1]
+    const name = spaceNoExtMatch[2].trim()
+    const ext = LANG_EXT[lang.toLowerCase()]
+    if (ext) {
+      return { lang, filename: `${name}${ext}`, title }
+    }
   }
 
   return { lang: header, filename: null, title }
@@ -188,6 +303,7 @@ const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
 
 export function MessageContent({ text }: { text: string }) {
   const parts: React.ReactNode[] = []
+  const artifacts: { filename: string; content: string }[] = []
   let lastIndex = 0
   let blockIndex = 0
 
@@ -217,6 +333,7 @@ export function MessageContent({ text }: { text: string }) {
     if (filename) {
       // Render as a file artifact card
       const { title, cleanCode } = extractArtifactTitle(rawCode, lang)
+      artifacts.push({ filename, content: cleanCode })
       parts.push(
         <ArtifactCard
           key={`a${blockIndex}`}
@@ -247,5 +364,19 @@ export function MessageContent({ text }: { text: string }) {
     )
   }
 
-  return <>{parts}</>
+  return (
+    <>
+      {parts}
+      {artifacts.length >= 2 && (
+        <button
+          className="ka-artifact-download-all"
+          onClick={() => downloadAllFiles(artifacts)}
+          aria-label={`Download all ${artifacts.length} files`}
+        >
+          <PackageOpen size={14} />
+          Download all {artifacts.length} files
+        </button>
+      )}
+    </>
+  )
 }
