@@ -50,12 +50,12 @@
     "noPerformanceData": "No performance data yet"
   },
   "chat": {
-    "emptyTitle": "Ask kernel.chat",
+    "emptyTitle": "Ask Kernel",
     "emptySubtitle": "It sees everything the engine sees.",
     "placeholder": "Ask the Kernel..."
   },
   "pill": {
-    "openKernel": "Open kernel.chat",
+    "openKernel": "Open Kernel",
     "phases": {
       "idle": "idle",
       "perceiving": "perceiving",

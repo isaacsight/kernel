@@ -1,12 +1,15 @@
 {
   "goals": {
     "title": "Goals",
-    "emptyTitle": "Set Your First Goal",
+    "emptyTitle": "Set your first goal",
     "emptyDesc": "Track what matters \u2014 Kernel checks in on your progress automatically.",
     "createGoal": "Create Goal",
     "addGoal": "Add Goal",
     "completed": "Completed ({{count}})",
     "target": "Target: {{date}}",
+    "loading": "Loading goals...",
+    "titlePlaceholder": "What are you working toward?",
+    "descPlaceholder": "Add some detail (optional)...",
     "priority": {
       "low": "Low",
       "medium": "Medium",
@@ -19,32 +22,32 @@
       "monthly": "Monthly"
     },
     "errors": {
-      "addFailed": "Failed to add goal",
-      "updateFailed": "Failed to update milestone",
-      "completeFailed": "Failed to complete goal",
-      "deleteFailed": "Failed to delete goal"
+      "addFailed": "Couldn't save that goal. Try again.",
+      "updateFailed": "Couldn't update that milestone. Try again.",
+      "completeFailed": "Couldn't mark that complete. Try again.",
+      "deleteFailed": "Couldn't delete that goal. Try again."
     },
     "deleteConfirm": "Delete this goal? This cannot be undone."
   },
   "workflows": {
     "title": "Workflows",
     "loading": "Loading workflows...",
-    "emptyTitle": "Build Your First Workflow",
+    "emptyTitle": "Build your first workflow",
     "emptyDesc": "Automate multi-step tasks \u2014 Kernel runs them exactly as you design.",
     "newWorkflow": "New Workflow",
     "createWorkflow": "Create Workflow",
     "runCount_one": "Run {{count}} time",
     "runCount_other": "Run {{count}} times",
     "errors": {
-      "saveFailed": "Failed to save workflow",
-      "deleteFailed": "Failed to delete workflow"
+      "saveFailed": "Couldn't save that workflow. Try again.",
+      "deleteFailed": "Couldn't delete that workflow. Try again."
     },
     "deleteConfirm": "Delete this workflow? This cannot be undone."
   },
   "scheduled": {
     "title": "Scheduled Tasks",
     "loading": "Loading tasks...",
-    "emptyTitle": "Schedule Your First Task",
+    "emptyTitle": "Schedule your first task",
     "emptyDesc": "Set it and forget it \u2014 Kernel runs tasks on your schedule.",
     "createTask": "Create Task",
     "schedule": "Schedule",
@@ -66,9 +69,9 @@
       "discord": "Discord"
     },
     "errors": {
-      "createFailed": "Failed to create scheduled task",
-      "updateFailed": "Failed to update task",
-      "deleteFailed": "Failed to delete task"
+      "createFailed": "Couldn't schedule that task. Try again.",
+      "updateFailed": "Couldn't update that task. Try again.",
+      "deleteFailed": "Couldn't remove that task. Try again."
     },
     "deleteConfirm": "Delete this scheduled task?"
   },
@@ -96,7 +99,7 @@
     "goDeeper": "Go deeper in chat",
     "saveAsGoal": "Save takeaways as goal",
     "errors": {
-      "generateFailed": "Failed to generate briefing"
+      "generateFailed": "Couldn't generate your briefing. Try again."
     },
     "toast": {
       "generated": "Briefing generated",
@@ -106,7 +109,7 @@
   "stats": {
     "title": "Your Stats",
     "loading": "Loading...",
-    "loadError": "Could not load stats.",
+    "loadError": "Couldn't load your stats. Try refreshing.",
     "messages": "Messages",
     "conversations": "Conversations",
     "entities": "Entities",
@@ -203,8 +206,8 @@
     "limitHint": "{{used}}/{{limit}} links used today",
     "dailyCount": "{{used}}/{{limit}} free shares used today",
     "errors": {
-      "createFailed": "Failed to create share link",
-      "revokeFailed": "Failed to revoke link"
+      "createFailed": "Couldn't create the share link. Try again.",
+      "revokeFailed": "Couldn't revoke that link. Try again."
     },
     "toast": {
       "revoked": "Share link revoked"

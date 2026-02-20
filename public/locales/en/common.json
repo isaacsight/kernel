@@ -14,7 +14,7 @@
   "features": "Features",
   "account": "Account",
   "conversation": "Conversation",
-  "errorGeneric": "Something went wrong. Please try again.",
+  "errorGeneric": "Something went wrong. Give it another try.",
   "aria": {
     "close": "Close",
     "notifications": "Notifications",
@@ -44,5 +44,31 @@
     "markAllRead": "Mark all read",
     "empty": "No notifications yet"
   },
-  "language": "Language"
+  "conversations": {
+    "title": "Conversations ({{count}})",
+    "searchPlaceholder": "Search conversations...",
+    "newChat": "New Chat",
+    "searching": "Searching...",
+    "noMatches": "No matches found",
+    "empty": "No conversations yet"
+  },
+  "relativeTime": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
+  "language": "Language",
+  "copy": "Copy",
+  "copied": "Copied",
+  "download": "Download",
+  "preview": "Preview",
+  "code": "Code",
+  "downloadAllFiles": "Download all {{count}} files",
+  "previewTruncated": "Preview truncated at {{lines}} lines — download for full file",
+  "line": "{{count}} line",
+  "lines": "{{count}} lines",
+  "errorTitle": "Something went wrong",
+  "errorDefault": "Something broke on our end. Try refreshing.",
+  "tryAgain": "Try again"
 }

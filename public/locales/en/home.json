@@ -1,6 +1,6 @@
 {
-  "tagline": "A personal AI that remembers you, thinks with you, and gets better over time.",
-  "placeholder": "Talk to kernel.chat...",
+  "tagline": "A personal AI that learns who you are, remembers what matters, and gets better with every conversation.",
+  "placeholder": "Talk to Kernel...",
   "welcomeToPro": "Welcome to Kernel Pro!",
   "menu": {
     "shareConversation": "Share conversation",
@@ -26,13 +26,13 @@
   },
   "upgrade": {
     "title": "You've used your {{limit}} free messages",
-    "subtitle": "Upgrade to Kernel Pro to keep the conversation going.",
+    "subtitle": "Upgrade to Pro to keep the conversation going.",
     "features": {
       "unlimitedMessages": "Unlimited messages",
-      "deepResearch": "Deep research mode",
+      "deepResearch": "Deep research",
       "multiAgent": "Multi-agent collaboration",
       "multiStep": "Multi-step task planning",
-      "persistentMemory": "Persistent memory across sessions"
+      "persistentMemory": "Persistent memory"
     },
     "button": "Upgrade to Pro \u2014 $20/mo",
     "buttonLoading": "Opening checkout...",
