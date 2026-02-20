@@ -1,5 +1,5 @@
 // Supabase Edge Function: notify-webhook
-// Sends Discord webhook notifications for new user signups and new subscriptions.
+// Sends Discord webhook notifications for signups, subscriptions, and usage alerts.
 //
 // Deploy: npx supabase functions deploy notify-webhook --project-ref eoxxpyixdieprsxlpwcs
 // Secrets: DISCORD_WEBHOOK_URL
@@ -26,7 +26,14 @@ interface NewSubscriberPayload {
   stripe_customer_id: string
 }
 
-type WebhookPayload = NewUserPayload | NewSubscriberPayload
+interface UsageAlertPayload {
+  event_type: 'usage_alert'
+  email: string
+  daily_cost_usd: string
+  breakdown: string
+}
+
+type WebhookPayload = NewUserPayload | NewSubscriberPayload | UsageAlertPayload
 
 function buildNewUserEmbed(payload: NewUserPayload) {
   return {
@@ -52,6 +59,20 @@ function buildNewSubscriberEmbed(payload: NewSubscriberPayload) {
       { name: 'Stripe Customer', value: payload.stripe_customer_id || 'N/A', inline: false },
     ],
     footer: { text: 'Kernel' },
+    timestamp: new Date().toISOString(),
+  }
+}
+
+function buildUsageAlertEmbed(payload: UsageAlertPayload) {
+  return {
+    title: 'Usage Cost Alert',
+    color: 0xFF5722, // Orange-red for warning
+    fields: [
+      { name: 'User', value: payload.email || 'N/A', inline: true },
+      { name: 'Daily Spend', value: `$${payload.daily_cost_usd}`, inline: true },
+      { name: 'Model Breakdown', value: payload.breakdown ? `\`\`\`\n${payload.breakdown}\n\`\`\`` : 'N/A', inline: false },
+    ],
+    footer: { text: 'Kernel — threshold: $5/day' },
     timestamp: new Date().toISOString(),
   }
 }
@@ -94,6 +115,9 @@ serve(async (req: Request) => {
         break
       case 'new_subscriber':
         embed = buildNewSubscriberEmbed(payload as NewSubscriberPayload)
+        break
+      case 'usage_alert':
+        embed = buildUsageAlertEmbed(payload as UsageAlertPayload)
         break
       default:
         return new Response(

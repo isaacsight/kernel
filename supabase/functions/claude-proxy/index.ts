@@ -1,6 +1,7 @@
 // Supabase Edge Function: claude-proxy (multi-provider)
 // Unified LLM proxy — supports Anthropic, OpenAI, Gemini.
 // All streaming output is normalized to Anthropic SSE format.
+// Tracks token usage per call and alerts on high daily spend.
 //
 // Deploy: npx supabase functions deploy claude-proxy --project-ref eoxxpyixdieprsxlpwcs
 // Secrets: ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, NVIDIA_API_KEY
@@ -39,6 +40,7 @@ const TIER_MODELS: Record<Provider, Record<string, string>> = {
 
 // Legacy model names (backward compat with existing 'sonnet'/'haiku' callers)
 const LEGACY_MODEL_MAP: Record<string, string> = {
+  opus: 'claude-opus-4-6',
   sonnet: 'claude-sonnet-4-5-20250929',
   haiku: 'claude-haiku-4-5-20251001',
 }
@@ -53,6 +55,125 @@ function resolveModel(provider: Provider, tier?: string, model?: string, legacyM
   // Tier-based resolution
   const tierMap = TIER_MODELS[provider]
   return tierMap[tier ?? 'strong'] ?? tierMap.strong
+}
+
+// ─── Pricing per 1M tokens ──────────────────────────────────
+
+const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = {
+  'claude-opus-4-6': { input: 15.00, output: 75.00 },
+  'claude-sonnet-4-5-20250929': { input: 3.00, output: 15.00 },
+  'claude-haiku-4-5-20251001': { input: 0.80, output: 4.00 },
+  'gpt-4o': { input: 2.50, output: 10.00 },
+  'gpt-4o-mini': { input: 0.15, output: 0.60 },
+  'gemini-2.5-pro': { input: 1.25, output: 10.00 },
+  'gemini-2.0-flash': { input: 0.10, output: 0.40 },
+}
+
+const DAILY_COST_ALERT_THRESHOLD = 5.00
+
+function calculateCost(model: string, inputTokens: number, outputTokens: number): number {
+  const pricing = PRICING_PER_M_TOKENS[model]
+  if (!pricing) return 0
+  return (inputTokens * pricing.input + outputTokens * pricing.output) / 1_000_000
+}
+
+// deno-lint-ignore no-explicit-any
+function summarizeUsage(rows: any[]): string {
+  const byModel: Record<string, { input: number; output: number; cost: number; calls: number }> = {}
+  for (const r of rows) {
+    const m = r.model
+    if (!byModel[m]) byModel[m] = { input: 0, output: 0, cost: 0, calls: 0 }
+    byModel[m].input += Number(r.input_tokens)
+    byModel[m].output += Number(r.output_tokens)
+    byModel[m].cost += Number(r.estimated_cost_usd)
+    byModel[m].calls += 1
+  }
+  return Object.entries(byModel)
+    .sort((a, b) => b[1].cost - a[1].cost)
+    .map(([model, d]) => `${model}: ${d.calls} calls, ${d.input}in/${d.output}out, $${d.cost.toFixed(4)}`)
+    .join('\n')
+}
+
+async function logUsageAndCheckThreshold(
+  userId: string,
+  provider: string,
+  model: string,
+  inputTokens: number,
+  outputTokens: number,
+): Promise<void> {
+  if (inputTokens === 0 && outputTokens === 0) return
+
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  const cost = calculateCost(model, inputTokens, outputTokens)
+
+  try {
+    const svc = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
+    await svc.from('usage_logs').insert({
+      user_id: userId,
+      provider,
+      model,
+      input_tokens: inputTokens,
+      output_tokens: outputTokens,
+      estimated_cost_usd: cost,
+    })
+
+    // Check daily aggregate for threshold alert
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    const { data: agg } = await svc
+      .from('usage_logs')
+      .select('estimated_cost_usd, model, input_tokens, output_tokens')
+      .eq('user_id', userId)
+      .gte('created_at', since)
+
+    if (!agg) return
+
+    const usageRows = agg.filter((r: { model: string }) => r.model !== '__alert_sent__')
+    const dailyCost = usageRows.reduce(
+      (sum: number, r: { estimated_cost_usd: number }) => sum + Number(r.estimated_cost_usd), 0,
+    )
+    const alreadyAlerted = agg.some((r: { model: string }) => r.model === '__alert_sent__')
+
+    if (dailyCost >= DAILY_COST_ALERT_THRESHOLD && !alreadyAlerted) {
+      // Insert cooldown marker (1 alert per user per 24h)
+      await svc.from('usage_logs').insert({
+        user_id: userId,
+        provider: 'system',
+        model: '__alert_sent__',
+        input_tokens: 0,
+        output_tokens: 0,
+        estimated_cost_usd: 0,
+      })
+
+      // Look up user email
+      const { data: { user } } = await svc.auth.admin.getUserById(userId)
+      const email = user?.email ?? userId
+
+      // Fire Discord alert via notify-webhook
+      const notifyUrl = `${supabaseUrl}/functions/v1/notify-webhook`
+      await fetch(notifyUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${serviceRoleKey}`,
+        },
+        body: JSON.stringify({
+          event_type: 'usage_alert',
+          email,
+          daily_cost_usd: dailyCost.toFixed(2),
+          breakdown: summarizeUsage(usageRows),
+        }),
+      })
+
+      console.log(`[usage-alert] Sent for ${email}: $${dailyCost.toFixed(2)}/day`)
+    }
+  } catch (err) {
+    // Non-blocking — never fail the user's request
+    console.error('[usage-tracking] Error:', err)
+  }
 }
 
 // ─── Payload type ────────────────────────────────────────────
@@ -77,6 +198,7 @@ async function handleAnthropic(
   payload: ProxyPayload,
   resolvedModel: string,
   isStream: boolean,
+  userId: string | null,
 ): Promise<Response> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
   if (!anthropicKey) {
@@ -125,19 +247,64 @@ async function handleAnthropic(
     )
   }
 
-  // Streaming: Anthropic SSE is already in our normalized format — pipe through
+  // Streaming: passthrough with usage capture from SSE events
   if (isStream) {
-    return new Response(res.body, {
+    const reader = res.body!.getReader()
+    const decoder = new TextDecoder()
+    let inputTokens = 0
+    let outputTokens = 0
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            controller.enqueue(value)
+            // Parse SSE events for usage (message_start has input, message_delta has output)
+            const text = decoder.decode(value, { stream: true })
+            for (const line of text.split('\n')) {
+              if (!line.startsWith('data: ')) continue
+              try {
+                const event = JSON.parse(line.slice(6))
+                if (event.type === 'message_start') {
+                  inputTokens = event.message?.usage?.input_tokens ?? 0
+                }
+                if (event.type === 'message_delta') {
+                  outputTokens = event.usage?.output_tokens ?? 0
+                }
+              } catch { /* non-JSON line */ }
+            }
+          }
+        } finally {
+          reader.releaseLock()
+          controller.close()
+          if (userId) {
+            logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens)
+              .catch(err => console.error('[usage-tracking] Stream error:', err))
+          }
+        }
+      },
+    })
+
+    return new Response(stream, {
       headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', ...CORS_HEADERS },
     })
   }
 
-  // Non-streaming: extract text
+  // Non-streaming: extract text and usage
   const result = await res.json()
   const textContent = result.content
     ?.filter((c: { type: string }) => c.type === 'text')
     .map((c: { text: string }) => c.text)
     .join('') || ''
+
+  if (userId) {
+    const inputTokens = result.usage?.input_tokens ?? 0
+    const outputTokens = result.usage?.output_tokens ?? 0
+    logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens)
+      .catch(err => console.error('[usage-tracking] Error:', err))
+  }
 
   return new Response(
     JSON.stringify({ text: textContent }),
@@ -151,6 +318,7 @@ async function handleOpenAI(
   payload: ProxyPayload,
   resolvedModel: string,
   isStream: boolean,
+  userId: string | null,
 ): Promise<Response> {
   const openaiKey = Deno.env.get('OPENAI_API_KEY')
   if (!openaiKey) {
@@ -174,6 +342,7 @@ async function handleOpenAI(
     messages,
     stream: isStream,
   }
+  if (isStream) body.stream_options = { include_usage: true }
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -201,10 +370,18 @@ async function handleOpenAI(
     )
   }
 
-  // Non-streaming: extract text, return normalized
+  // Non-streaming: extract text and usage
   if (!isStream) {
     const result = await res.json()
     const text = result.choices?.[0]?.message?.content ?? ''
+
+    if (userId) {
+      const inputTokens = result.usage?.prompt_tokens ?? 0
+      const outputTokens = result.usage?.completion_tokens ?? 0
+      logUsageAndCheckThreshold(userId, 'openai', resolvedModel, inputTokens, outputTokens)
+        .catch(err => console.error('[usage-tracking] Error:', err))
+    }
+
     return new Response(
       JSON.stringify({ text }),
       { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
@@ -219,6 +396,9 @@ async function handleOpenAI(
       { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
+
+  let streamInputTokens = 0
+  let streamOutputTokens = 0
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -239,6 +419,11 @@ async function handleOpenAI(
             }
             try {
               const event = JSON.parse(data)
+              // Capture usage from final chunk (stream_options.include_usage)
+              if (event.usage) {
+                streamInputTokens = event.usage.prompt_tokens ?? 0
+                streamOutputTokens = event.usage.completion_tokens ?? 0
+              }
               const delta = event.choices?.[0]?.delta?.content
               if (delta) {
                 const normalized = JSON.stringify({
@@ -255,6 +440,10 @@ async function handleOpenAI(
       } finally {
         reader.releaseLock()
         controller.close()
+        if (userId) {
+          logUsageAndCheckThreshold(userId, 'openai', resolvedModel, streamInputTokens, streamOutputTokens)
+            .catch(err => console.error('[usage-tracking] Stream error:', err))
+        }
       }
     },
   })
@@ -270,6 +459,7 @@ async function handleGemini(
   payload: ProxyPayload,
   resolvedModel: string,
   isStream: boolean,
+  userId: string | null,
 ): Promise<Response> {
   const geminiKey = Deno.env.get('GEMINI_API_KEY')
   if (!geminiKey) {
@@ -332,6 +522,14 @@ async function handleGemini(
     const text = result.candidates?.[0]?.content?.parts
       ?.map((p: { text?: string }) => p.text ?? '')
       .join('') ?? ''
+
+    if (userId) {
+      const inputTokens = result.usageMetadata?.promptTokenCount ?? 0
+      const outputTokens = result.usageMetadata?.candidatesTokenCount ?? 0
+      logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, inputTokens, outputTokens)
+        .catch(err => console.error('[usage-tracking] Error:', err))
+    }
+
     return new Response(
       JSON.stringify({ text }),
       { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
@@ -346,6 +544,9 @@ async function handleGemini(
       { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
+
+  let streamInputTokens = 0
+  let streamOutputTokens = 0
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -363,6 +564,11 @@ async function handleGemini(
             if (data === '[DONE]' || !data) continue
             try {
               const event = JSON.parse(data)
+              // Capture usage (last chunk has totals)
+              if (event.usageMetadata) {
+                streamInputTokens = event.usageMetadata.promptTokenCount ?? 0
+                streamOutputTokens = event.usageMetadata.candidatesTokenCount ?? 0
+              }
               const parts = event.candidates?.[0]?.content?.parts
               if (parts) {
                 for (const part of parts) {
@@ -384,6 +590,10 @@ async function handleGemini(
       } finally {
         reader.releaseLock()
         controller.close()
+        if (userId) {
+          logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, streamInputTokens, streamOutputTokens)
+            .catch(err => console.error('[usage-tracking] Stream error:', err))
+        }
       }
     },
   })
@@ -399,6 +609,7 @@ async function handleNvidia(
   payload: ProxyPayload,
   resolvedModel: string,
   isStream: boolean,
+  userId: string | null,
 ): Promise<Response> {
   const nvidiaKey = Deno.env.get('NVIDIA_API_KEY')
   if (!nvidiaKey) {
@@ -453,6 +664,14 @@ async function handleNvidia(
   if (!isStream) {
     const result = await res.json()
     const text = result.choices?.[0]?.message?.content ?? ''
+
+    if (userId) {
+      const inputTokens = result.usage?.prompt_tokens ?? 0
+      const outputTokens = result.usage?.completion_tokens ?? 0
+      logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, inputTokens, outputTokens)
+        .catch(err => console.error('[usage-tracking] Error:', err))
+    }
+
     return new Response(
       JSON.stringify({ text }),
       { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
@@ -467,6 +686,9 @@ async function handleNvidia(
       { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
+
+  let streamInputTokens = 0
+  let streamOutputTokens = 0
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -487,6 +709,10 @@ async function handleNvidia(
             }
             try {
               const event = JSON.parse(data)
+              if (event.usage) {
+                streamInputTokens = event.usage.prompt_tokens ?? 0
+                streamOutputTokens = event.usage.completion_tokens ?? 0
+              }
               const delta = event.choices?.[0]?.delta?.content
               if (delta) {
                 const normalized = JSON.stringify({
@@ -503,6 +729,10 @@ async function handleNvidia(
       } finally {
         reader.releaseLock()
         controller.close()
+        if (userId) {
+          logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, streamInputTokens, streamOutputTokens)
+            .catch(err => console.error('[usage-tracking] Stream error:', err))
+        }
       }
     },
   })
@@ -600,16 +830,19 @@ serve(async (req: Request) => {
 
     console.log(`[proxy] provider=${provider} model=${resolvedModel} mode=${mode}`)
 
+    // Only track usage for real authenticated users (skip service/bot calls)
+    const trackUserId = isServiceCall ? null : user.id
+
     // ── Dispatch to provider handler ───────────────────────
     switch (provider) {
       case 'anthropic':
-        return handleAnthropic(payload, resolvedModel, isStream)
+        return handleAnthropic(payload, resolvedModel, isStream, trackUserId)
       case 'openai':
-        return handleOpenAI(payload, resolvedModel, isStream)
+        return handleOpenAI(payload, resolvedModel, isStream, trackUserId)
       case 'gemini':
-        return handleGemini(payload, resolvedModel, isStream)
+        return handleGemini(payload, resolvedModel, isStream, trackUserId)
       case 'nvidia':
-        return handleNvidia(payload, resolvedModel, isStream)
+        return handleNvidia(payload, resolvedModel, isStream, trackUserId)
       default:
         return new Response(
           JSON.stringify({ error: `Unknown provider: ${provider}` }),
