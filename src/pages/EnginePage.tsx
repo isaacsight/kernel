@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye } from 'lucide-react'
+import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye, Plus } from 'lucide-react'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { MoreMenu } from '../components/MoreMenu'
 import KGPanel from '../components/kernel-agent/KGPanel'
@@ -33,6 +33,7 @@ import { useMessageActions } from '../hooks/useMessageActions'
 import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
+import { useMiniPhone } from '../hooks/useMiniPhone'
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -237,6 +238,32 @@ function EngineChat() {
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
+
+  const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
+  const [showMiniPopover, setShowMiniPopover] = useState(false)
+  const popoverRef = useRef<HTMLDivElement>(null)
+  const isMini = useMiniPhone()
+
+  // Close popover on click outside
+  useEffect(() => {
+    if (!showMiniPopover) return
+    const handleClickOutside = (e: Event) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setShowMiniPopover(false)
+      }
+    }
+    document.addEventListener('pointerdown', handleClickOutside)
+    return () => document.removeEventListener('pointerdown', handleClickOutside)
+  }, [showMiniPopover])
+
+  const toggleTimestamp = (msgId: string, e: React.MouseEvent) => {
+    // Don't toggle when tapping interactive elements inside the message
+    if ((e.target as HTMLElement).closest('a, button, pre, code, .ka-msg-actions, .ka-artifact, .ka-edit-form')) return
+    setRevealedTimestamps(prev => ({
+      ...prev,
+      [msgId]: !prev[msgId]
+    }))
+  }
 
   // ─── Render ───────────────────────────────────────────
   return (
@@ -546,7 +573,7 @@ function EngineChat() {
                   )}
                 </div>
               )}
-              <div className="ka-msg-col">
+              <div className="ka-msg-col" onClick={(e) => { if (isMini) toggleTimestamp(msg.id, e) }}>
                 <div className="ka-msg-bubble">
                   {msg.attachments && msg.attachments.length > 0 && (
                     <div className="ka-msg-attachments">
@@ -591,6 +618,9 @@ function EngineChat() {
                     )}
                   </div>
                 )}
+                <div className={`ka-msg-time${revealedTimestamps[msg.id] ? ' ka-msg-time--visible' : ''}`}>
+                  {new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -691,9 +721,29 @@ function EngineChat() {
       {/* Input bar */}
       <form className="ka-input-bar" onSubmit={chatEngine.handleSubmit}>
         <input id="ka-file-input" ref={fileAttachments.fileInputRef} type="file" accept={ACCEPTED_FILES} multiple onChange={fileAttachments.handleFileSelect} className="ka-attach-input" />
-        <label htmlFor="ka-file-input" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label={t('aria.attachFile', { ns: 'common' })}>
-          <Paperclip size={18} />
-        </label>
+
+        {isMini ? (
+          <div className="ka-mini-popover-wrap" ref={popoverRef}>
+            <button type="button" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(!showMiniPopover)}>
+              <Plus size={18} />
+            </button>
+            {showMiniPopover && (
+              <div className="ka-mini-popover">
+                <label htmlFor="ka-file-input" className={`ka-mini-popover-item${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(false)}>
+                  <Paperclip size={16} /> <span>{t('aria.attachFile', { ns: 'common' })}</span>
+                </label>
+                <button type="button" className={`ka-mini-popover-item${isListening ? ' ka-voice-btn--active' : ''}`} onClick={() => { toggleVoice(); setShowMiniPopover(false); }}>
+                  {isListening ? <MicOff size={16} /> : <Mic size={16} />} <span>{isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}</span>
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <label htmlFor="ka-file-input" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label={t('aria.attachFile', { ns: 'common' })}>
+            <Paperclip size={18} />
+          </label>
+        )}
+
         <textarea
           ref={chatEngine.inputRef}
           className="ka-input"
@@ -709,9 +759,11 @@ function EngineChat() {
           disabled={isStreaming}
           rows={1}
         />
-        <button type="button" className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`} onClick={toggleVoice} disabled={isStreaming} aria-label={isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}>
-          {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-        </button>
+        {!isMini && (
+          <button type="button" className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`} onClick={toggleVoice} disabled={isStreaming} aria-label={isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}>
+            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+          </button>
+        )}
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><Square size={16} /></button>
         ) : (

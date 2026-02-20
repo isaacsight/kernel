@@ -4,42 +4,50 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-20)
+## Current Session (2026-02-20, evening)
 
 ### Accomplished This Session
 
-#### 1. Feature Discovery Tooltips
-- Created `src/hooks/useFeatureDiscovery.ts` — tracks which features users have opened, persisted in localStorage per user
-- Discoverable features: workflows, scheduled, knowledge, stats, insights
-- Modified `MoreMenu.tsx` — pulsing dot indicators on undiscovered feature items
-- Modified `BottomTabBar.tsx` — dot on "More" tab when undiscovered features exist
-- Modified `EnginePage.tsx` — wired hook, passed props to MoreMenu + BottomTabBar + header kebab menu
-- Added CSS: `.ka-feature-dot` with `ka-dot-pulse` animation
+#### 1. Haiku-based Reflection Scorer (`src/engine/reflection.ts`)
+- Added rubric-based system prompt (`REFLECTION_SYSTEM`) with explicit scoring criteria per dimension
+- Added `INTENT_WEIGHTS` map — context-aware dimension weights per intent type (reason/evaluate/build/discuss/converse)
+- Extracted `computeWeightedQuality()` shared between heuristic and AI-enhanced paths
+- AI prompt now includes intent label and uses system prompt instead of bare one-liner
+- 8 new tests (context-aware weighting, system prompt passing, out-of-range scores, boilerplate detection, world model updates)
 
-#### 2. Discord Bot Fixes (`tools/discord-bot.ts`)
-- Fixed `!goal` command matching: `content === '!goal' || content.startsWith('!goal ')` (bare `!goal` was missed)
-- Fixed `discordPlanAndExecute` fallback: returns accumulated context instead of generic message on final step failure
-- Bot tested live — starts, connects, logs in as Capital-Native AI#7115
+#### 2. Test Suite Expansion
+- New `src/engine/MemoryAgent.test.ts` — 14 tests (emptyProfile, formatMemoryForPrompt sections, mergeMemory fallback/dedup/cap)
+- 8 new reflection tests in `src/engine/reflection.test.ts`
+- **Total: 184 tests across 16 files, all passing**
 
-#### 3. Stripe Webhook Fix (`supabase/functions/stripe-webhook/index.ts`)
-- **Root cause**: `JSON.parse(body)` and `createClient()` were outside try-catch; `new Date(undefined * 1000).toISOString()` threw RangeError on invoices missing period data
-- Added `safeEpochToISO()` helper — returns null instead of crashing on undefined/NaN
-- Moved `JSON.parse(body)` and `createClient()` inside try-catch
-- Added explicit validation for `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` env vars
-- Deployed with `--no-verify-jwt` (Stripe sends webhooks without Supabase JWT)
-- Verified: 400 for missing/invalid signatures (correct), no more 500s
-- User resent both failed `customer.subscription.updated` events from Stripe dashboard — confirmed working
+#### 3. InsightsPanel i18n Fix (`src/components/InsightsPanel.tsx`)
+- Fixed 3 hardcoded English strings (lines 174, 177, 186)
+- `challengedStat`: "{{count}}x challenged" → `t('insights.challengedStat', { count })`
+- `reinforcedStat`: "{{count}}x reinforced" → `t('insights.reinforcedStat', { count })`
+- `challengeAction`: "challenge" → `t('insights.challengeAction')`
+- Added keys to all 24 locale `panels.json` files with proper translations
 
-#### 4. Branch Review: `claude/add-file-artifact-generation-7jvKg`
-- Reviewed file artifact system, auth UX, system prompts, free tier copy, CSS
-- 10 issues found (2 medium, 1 high merge conflict, rest low/info)
-- Key issues: hardcoded English in LoginGate toggle (breaks i18n), branch deletes feature discovery (merge conflict), regex edge cases, duplicated FILE ARTIFACTS prompt in kernel.ts vs specialists.ts
+#### 4. Mini Phone Layout Spec
+- Wrote `specs/mini-phone-layout.md` — comprehensive spec for Gemini to implement
+- Covers: header collapse, chat padding, slim input, 3-tab bar, full-screen panels
+- Mostly CSS-only approach at `@media (max-width: 389px)`
+- Targeting iPhone SE, iPhone Mini, Galaxy S10e
 
 #### Commits
-- `1aa1a007` — feat: Add feature discovery tooltips + fix Discord bot issues
-- `6d1ea8bc` — fix: Harden stripe-webhook against unhandled crashes causing 500s
+- `aaad4817` — feat: Haiku reflection scorer with rubrics, expand tests, i18n fixes
+
+#### Deployed
+- Pushed to `origin/main`, deployed to kernel.chat via `npm run deploy`
 
 ---
+
+## Previous Session (2026-02-20, earlier)
+
+### Accomplished
+- Feature Discovery Tooltips (useFeatureDiscovery hook, pulsing dots on MoreMenu + BottomTabBar)
+- Discord Bot Fixes (!goal command, fallback messages)
+- Stripe Webhook Hardening (safeEpochToISO, try-catch around JSON.parse)
+- Branch Review + Merge of `claude/add-file-artifact-generation-7jvKg` (artifact cards, auth i18n, regex tightening)
 
 ## Previous Session (2026-02-19)
 
@@ -54,24 +62,20 @@
 ### Accomplished
 - Empty State CTAs (3 panels), Hover States, Unified Intent Classification, SCRATCHPAD Cleanup
 
-## Previous Session (2026-02-17, afternoon)
+## Previous Session (2026-02-17)
 
 ### Accomplished
 - Mobile UX Polish, Panel Overlay + Empty State Fixes, Playwright Config, Site Audit
-
-## Previous Session (2026-02-17, morning)
-
-### Accomplished
 - Implemented all 6 Sticky Features (Document Analysis, Shared Conversations, Goal Tracking, Workflows, Recurring Tasks, Daily Briefings)
 
 ---
 
 ## Ongoing Backlog
 
-- **P1: Merge artifact branch** — `claude/add-file-artifact-generation-7jvKg` needs fixes (hardcoded English, merge conflict with feature discovery) before merging
-- **P2: Haiku-based reflection scorer** — for high-complexity queries
-- **P3: Add test suite** — perception, attention, reflect are pure functions (perception now has 19 tests)
-- **P4: Locale translations** — InsightsPanel keys added for English only; needs 23 other locales
+- **P1: Mini phone layout** — spec written at `specs/mini-phone-layout.md`, handed off to Gemini 3
+- **P2: Haiku-based reflection scorer** — DONE (rubrics, context-aware weights, tests)
+- **P3: Test suite** — DONE for now (184 tests). Future: component tests, integration tests
+- **P4: Locale translations** — DONE (all 24 locales complete including InsightsPanel + auth + beliefs)
 
 ## Key Decisions Made
 
@@ -86,3 +90,4 @@
 - Discord bot uses direct `callClaude()` (service key), not `getProvider()` (browser-only)
 - InsightsPanel receives engineState as prop from useChatEngine (no extra subscription needed)
 - Feature discovery persisted per-user in localStorage, dots on MoreMenu + BottomTabBar
+- Reflection scorer: 60/40 AI/heuristic blend, rubric system prompt, intent-aware weights
