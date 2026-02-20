@@ -297,6 +297,55 @@ export function extractArtifactTitle(code: string, lang: string): { title: strin
   return { title: null, cleanCode: code }
 }
 
+// ─── Auto-artifact: promote large code blocks to artifacts ─
+
+const AUTO_ARTIFACT_MIN_LINES = 8
+
+// Infer a descriptive filename from language when the model omits :filename.ext
+const AUTO_FILENAMES: Record<string, string> = {
+  html: 'index.html', htm: 'index.html',
+  css: 'styles.css', scss: 'styles.scss', sass: 'styles.sass', less: 'styles.less',
+  javascript: 'app.js', js: 'app.js',
+  typescript: 'app.ts', ts: 'app.ts',
+  jsx: 'App.jsx', tsx: 'App.tsx',
+  python: 'main.py', py: 'main.py',
+  json: 'data.json', yaml: 'config.yaml', yml: 'config.yaml', toml: 'config.toml',
+  sql: 'query.sql',
+  rust: 'main.rs', rs: 'main.rs',
+  go: 'main.go',
+  java: 'Main.java',
+  ruby: 'main.rb', rb: 'main.rb',
+  swift: 'main.swift',
+  kotlin: 'Main.kt', kt: 'Main.kt',
+  c: 'main.c', cpp: 'main.cpp', 'c++': 'main.cpp',
+  bash: 'script.sh', sh: 'script.sh', shell: 'script.sh',
+  markdown: 'document.md', md: 'document.md',
+  svg: 'image.svg',
+  csv: 'data.csv',
+  xml: 'data.xml',
+}
+
+export function inferFilename(lang: string, usedNames: Set<string>): string | null {
+  const base = AUTO_FILENAMES[lang.toLowerCase()]
+  if (!base) return null
+  // Avoid duplicate filenames — append a number if needed
+  if (!usedNames.has(base)) {
+    usedNames.add(base)
+    return base
+  }
+  const dotIdx = base.lastIndexOf('.')
+  const name = base.slice(0, dotIdx)
+  const ext = base.slice(dotIdx)
+  for (let i = 2; i <= 9; i++) {
+    const candidate = `${name}${i}${ext}`
+    if (!usedNames.has(candidate)) {
+      usedNames.add(candidate)
+      return candidate
+    }
+  }
+  return base
+}
+
 // ─── Message Content (markdown + code blocks + artifacts) ─
 
 const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
@@ -304,6 +353,7 @@ const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
 export function MessageContent({ text }: { text: string }) {
   const parts: React.ReactNode[] = []
   const artifacts: { filename: string; content: string }[] = []
+  const usedFilenames = new Set<string>()
   let lastIndex = 0
   let blockIndex = 0
 
@@ -329,15 +379,23 @@ export function MessageContent({ text }: { text: string }) {
     const rawCode = match[2]
     const { lang, filename } = parseCodeFenceHeader(rawHeader)
     const ext = LANG_EXT[lang.toLowerCase()] || '.txt'
+    const lineCount = rawCode.split('\n').length
 
-    if (filename) {
+    // Auto-promote: if no filename but substantial code, infer filename and render as artifact
+    const autoFilename = !filename && lineCount >= AUTO_ARTIFACT_MIN_LINES
+      ? inferFilename(lang, usedFilenames)
+      : null
+    const resolvedFilename = filename || autoFilename
+
+    if (resolvedFilename) {
+      if (filename) usedFilenames.add(filename)
       // Render as a file artifact card
       const { title, cleanCode } = extractArtifactTitle(rawCode, lang)
-      artifacts.push({ filename, content: cleanCode })
+      artifacts.push({ filename: resolvedFilename, content: cleanCode })
       parts.push(
         <ArtifactCard
           key={`a${blockIndex}`}
-          filename={filename}
+          filename={resolvedFilename}
           lang={lang}
           code={cleanCode}
           ext={ext}
@@ -345,7 +403,7 @@ export function MessageContent({ text }: { text: string }) {
         />
       )
     } else {
-      // Standard code block
+      // Standard code block (short snippets only)
       const defaultFilename = `kernel-export${ext}`
       parts.push(
         <CodeBlock key={`c${blockIndex}`} lang={lang} code={rawCode} ext={ext} filename={defaultFilename} />

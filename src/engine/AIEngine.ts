@@ -263,15 +263,29 @@ export function createEngine(): {
         content: `${m.agentName}: ${m.content}`,
       }));
     // For build/code intents, append artifact format reminder to the user message
-    const isBuildIntent = perception.intent.type === 'build' || agent.id === 'coder';
-    const artifactReminder = isBuildIntent
-      ? '\n\n[Reminder: Use ```language:filename.ext for EVERY file. Each file in its own block.]'
-      : '';
+    const isBuildIntent = perception.intent.type === 'build' || agent.id === 'coder'
+      || agent.id === 'writer' || agent.id === 'aesthete';
+
+    // Extract filenames mentioned in the user's message for explicit ordering
+    let artifactReminder = '';
+    if (isBuildIntent) {
+      const filePattern = /\b([\w-]+\.(?:html?|css|scss|js|jsx|ts|tsx|py|json|yaml|yml|md|sql|csv|svg|xml|toml|rs|go|java|rb|swift|kt|sh|cpp|c|php))\b/gi;
+      const mentionedFiles = [...new Set(topic.match(filePattern) || [])];
+      if (mentionedFiles.length >= 2) {
+        artifactReminder = `\n\n[CRITICAL: You MUST produce ALL ${mentionedFiles.length} files: ${mentionedFiles.join(', ')}. Output them in order, each as a separate \`\`\`language:filename.ext block. Do NOT skip any file. Start with ${mentionedFiles[0]}, then ${mentionedFiles.slice(1).join(', then ')}.]`;
+      } else {
+        artifactReminder = '\n\n[IMPORTANT: Every complete file MUST use ```language:filename.ext format.]';
+      }
+    }
     claudeMessages.push({ role: 'user', content: topic + contextSuffix + artifactReminder });
 
     // Higher token limit for build/code intents that produce file artifacts
     const maxTokens = isBuildIntent ? 8192 : 4096;
-    const llmOpts = { system: agent.systemPrompt, tier: 'strong' as const, max_tokens: maxTokens };
+    // Append artifact compliance suffix to system prompt for build intents
+    const systemPrompt = isBuildIntent
+      ? agent.systemPrompt + '\n\nCRITICAL RULE: When the user asks for N files, you MUST produce ALL N files as separate ```language:filename.ext code blocks. Start each file immediately — minimal explanation between files. Produce files FIRST, explanations AFTER all files.'
+      : agent.systemPrompt;
+    const llmOpts = { system: systemPrompt, tier: 'strong' as const, max_tokens: maxTokens };
 
     // Use tool loop if tools are available for this agent
     const agentTools = getToolCount() > 0 ? getToolsForAgent(agent.id) : [];
