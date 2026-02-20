@@ -57,6 +57,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Override for pages that need natural scrolling (shared convos, briefings) */
@@ -1369,6 +1370,7 @@ h4 {
     padding: 12px 24px;
     border-bottom: 1px solid var(--rubin-ivory-dark);
     flex-shrink: 0;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .ka-header-left {
@@ -4636,6 +4638,7 @@ h4 {
     background: var(--rubin-ivory);
     flex-shrink: 0;
     align-items: flex-end;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .ka-input {
@@ -7348,6 +7351,7 @@ h4 {
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     touch-action: pan-y;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .conv-drawer-header {
@@ -9122,6 +9126,16 @@ h4 {
     --rubin-ivory-med: #242424;
     --rubin-ivory-dark: #333333;
     --rubin-accent: #B8A080;
+    --rubin-slate-muted: #999;
+    --rubin-text-secondary: #777;
+    --rubin-border: rgba(255, 255, 255, 0.08);
+    --rubin-primary-hover: #818CF8;
+    --rubin-error: #EF4444;
+    --rubin-error-light: rgba(239, 68, 68, 0.12);
+    --rubin-error-border: rgba(239, 68, 68, 0.3);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] body {
@@ -9228,6 +9242,54 @@ h4 {
 [data-theme="dark"] .ka-code-download:hover {
     background: var(--rubin-accent);
     border-color: var(--rubin-accent);
+}
+
+/* ── Dark Mode: Gate Auth ─────────────────────────────────── */
+
+[data-theme="dark"] .ka-gate-social-btn {
+    background: #242424;
+    border-color: #444;
+}
+
+[data-theme="dark"] .ka-gate-social-btn:hover {
+    background: #333;
+    border-color: #555;
+}
+
+[data-theme="dark"] .ka-gate-social-apple,
+[data-theme="dark"] .ka-gate-social-twitter {
+    background: #E8E6DC;
+    color: #1A1A1A;
+    border-color: #E8E6DC;
+}
+
+[data-theme="dark"] .ka-gate-social-apple:hover,
+[data-theme="dark"] .ka-gate-social-twitter:hover {
+    background: #fff;
+    border-color: #fff;
+}
+
+[data-theme="dark"] .ka-gate-admin-btn {
+    background: #242424;
+    border-color: #444;
+}
+
+/* ── Dark Mode: Approval Card ─────────────────────────────── */
+
+[data-theme="dark"] .ka-approval-card {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+[data-theme="dark"] .ka-approval-args {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Dark Mode: Voice Button Hover ────────────────────────── */
+
+[data-theme="dark"] .ka-voice-btn:hover {
+    color: #E8E6DC;
+    border-color: #E8E6DC;
 }
 
 /* ═══════════════════════════════════════════════════════════
