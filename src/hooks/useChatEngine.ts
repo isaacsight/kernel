@@ -3,7 +3,7 @@ import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngin
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
-import { classifyIntent, buildRecentContext } from '../engine/AgentRouter'
+import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
@@ -414,13 +414,15 @@ export function useChatEngine(params: UseChatEngineParams) {
       } else {
         const abortController = new AbortController()
         streamAbortRef.current = abortController
+        const autoModel = resolveModelFromClassification(classification)
+        console.log(`[engine] Auto-selected model: ${autoModel} (complexity: ${classification.complexity})`)
         await claudeStreamChat(
           claudeMessages,
           updateKernelMsg,
           {
             system: systemPrompt,
-            model: 'sonnet',
-            max_tokens: 1024,
+            model: autoModel,
+            max_tokens: autoModel === 'opus' ? 8192 : autoModel === 'haiku' ? 512 : 1024,
             web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
             signal: abortController.signal,
           }
