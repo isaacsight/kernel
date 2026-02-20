@@ -5,8 +5,23 @@
 
 import { KERNEL_AGENTS, getNextAgent } from '../agents';
 import { SWARM_AGENTS, routeToAgent } from '../agents/swarm';
+import { SPECIALISTS } from '../agents/specialists';
 import type { Agent } from '../types';
 import type { Perception, AttentionState } from './types';
+
+// Bridge Specialist → Agent so specialist prompts are used directly
+function specialistToAgent(id: string): Agent | null {
+  const s = SPECIALISTS[id];
+  if (!s) return null;
+  return {
+    id: s.id,
+    name: s.name,
+    persona: s.systemPrompt.slice(0, 80),
+    systemPrompt: s.systemPrompt,
+    avatar: s.icon,
+    color: s.color,
+  };
+}
 
 export interface AgentSelectionResult {
   agent: Agent;
@@ -34,9 +49,21 @@ export function selectAgent(
   const { intent, urgency, complexity, routerClassification } = perception;
   const perf = agentPerformance;
 
-  // When AgentRouter classified with high confidence, use it as primary routing
-  // This ensures Observer and Chat use the same routing logic
+  // When AgentRouter classified with high confidence, use the specialist directly.
+  // This ensures the carefully crafted specialist prompts (with artifact rules,
+  // persona, approach instructions) are actually sent to Claude — not the generic
+  // swarm agent prompts.
   if (routerClassification && routerClassification.confidence >= 0.7) {
+    const specialist = specialistToAgent(routerClassification.agentId);
+    if (specialist) {
+      return {
+        agent: specialist,
+        reason: `AgentRouter → ${specialist.name} (${(routerClassification.confidence * 100).toFixed(0)}%)`,
+        confidence: routerClassification.confidence,
+        consumedOverride: false,
+      };
+    }
+    // Fallback to swarm routing for non-specialist classifications
     const routed = routeToAgent(intent.type === 'converse' ? intent.message : '', routerClassification);
     return {
       agent: routed,

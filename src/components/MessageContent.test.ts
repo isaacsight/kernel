@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseCodeFenceHeader, extractArtifactTitle } from './MessageContent'
+import { parseCodeFenceHeader, extractArtifactTitle, inferFilename } from './MessageContent'
 import { getMimeType, LANG_EXT } from './ChatHelpers'
 
 describe('parseCodeFenceHeader', () => {
@@ -151,6 +151,40 @@ describe('getMimeType', () => {
 
   it('is case-insensitive', () => {
     expect(getMimeType('page.HTML')).toBe('text/html')
+  })
+})
+
+describe('inferFilename (auto-artifact)', () => {
+  it('infers index.html for html', () => {
+    expect(inferFilename('html', new Set())).toBe('index.html')
+  })
+
+  it('infers styles.css for css', () => {
+    expect(inferFilename('css', new Set())).toBe('styles.css')
+  })
+
+  it('infers app.js for javascript', () => {
+    expect(inferFilename('javascript', new Set())).toBe('app.js')
+  })
+
+  it('infers main.py for python', () => {
+    expect(inferFilename('python', new Set())).toBe('main.py')
+  })
+
+  it('returns null for unknown language', () => {
+    expect(inferFilename('brainfuck', new Set())).toBeNull()
+  })
+
+  it('avoids duplicate filenames', () => {
+    const used = new Set<string>()
+    expect(inferFilename('css', used)).toBe('styles.css')
+    expect(inferFilename('css', used)).toBe('styles2.css')
+    expect(inferFilename('css', used)).toBe('styles3.css')
+  })
+
+  it('handles case-insensitive languages', () => {
+    expect(inferFilename('HTML', new Set())).toBe('index.html')
+    expect(inferFilename('JavaScript', new Set())).toBe('app.js')
   })
 })
 
