@@ -28,13 +28,13 @@ describe('classifyIntent', () => {
   })
 
   it('uses AgentRouter result when available', () => {
-    const routerResult = { agentId: 'researcher' as const, confidence: 0.9, needsResearch: false, isMultiStep: false, needsSwarm: false }
+    const routerResult = { agentId: 'researcher' as const, confidence: 0.9, needsResearch: false, isMultiStep: false, needsSwarm: false, complexity: 0.5 }
     const intent = classifyIntent('Tell me about quantum computing', 'tell me about quantum computing', routerResult)
     expect(intent.type).toBe('discuss')
   })
 
   it('falls back to keywords when AgentRouter confidence is low', () => {
-    const routerResult = { agentId: 'kernel' as const, confidence: 0.2, needsResearch: false, isMultiStep: false, needsSwarm: false }
+    const routerResult = { agentId: 'kernel' as const, confidence: 0.2, needsResearch: false, isMultiStep: false, needsSwarm: false, complexity: 0.5 }
     const intent = classifyIntent('Build me a website', 'build me a website', routerResult)
     expect(intent.type).toBe('build')
   })

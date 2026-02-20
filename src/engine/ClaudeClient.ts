@@ -29,7 +29,7 @@ export class FreeLimitError extends Error {
   }
 }
 
-type Model = 'sonnet' | 'haiku'
+type Model = 'opus' | 'sonnet' | 'haiku'
 
 // Re-export ContentBlock from provider types for backward compat
 export type { ContentBlock } from './providers/types'
