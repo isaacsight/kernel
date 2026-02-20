@@ -13,6 +13,12 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'content-type, stripe-signature',
 }
 
+/** Safe epoch-seconds → ISO string. Returns null if input is falsy/NaN. */
+function safeEpochToISO(epoch: number | undefined | null): string | null {
+  if (!epoch || isNaN(epoch)) return null
+  return new Date(epoch * 1000).toISOString()
+}
+
 // HMAC-SHA256 signature verification (Deno-compatible, no Stripe SDK needed)
 async function verifyStripeSignature(
   payload: string,
@@ -72,15 +78,18 @@ serve(async (req: Request) => {
     return new Response('Invalid signature', { status: 400 })
   }
 
-  const event = JSON.parse(body)
-  console.log(`Stripe event: ${event.type} (${event.id})`)
-
-  // Supabase admin client (bypasses RLS)
-  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  const supabase = createClient(supabaseUrl, serviceRoleKey)
-
   try {
+    const event = JSON.parse(body)
+    console.log(`Stripe event: ${event.type} (${event.id})`)
+
+    // Supabase admin client (bypasses RLS)
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+      return new Response('Server misconfigured', { status: 500 })
+    }
+    const supabase = createClient(supabaseUrl, serviceRoleKey)
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object
@@ -188,13 +197,15 @@ serve(async (req: Request) => {
           }
         }
 
+        const periodEnd = safeEpochToISO(invoice.lines?.data?.[0]?.period?.end)
+
         if (userId) {
           const { error } = await supabase.from('subscriptions').upsert({
             user_id: userId,
             stripe_customer_id: invoice.customer,
             stripe_subscription_id: subId,
             status: 'active',
-            current_period_end: new Date(invoice.lines?.data?.[0]?.period?.end * 1000).toISOString(),
+            current_period_end: periodEnd,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'user_id' })
 
@@ -204,7 +215,7 @@ serve(async (req: Request) => {
           const { error } = await supabase.from('subscriptions')
             .update({
               status: 'active',
-              current_period_end: new Date(invoice.lines?.data?.[0]?.period?.end * 1000).toISOString(),
+              current_period_end: periodEnd,
               updated_at: new Date().toISOString(),
             })
             .eq('stripe_subscription_id', subId)
@@ -218,6 +229,7 @@ serve(async (req: Request) => {
         const sub = event.data.object
         const userId = sub.metadata?.supabase_user_id
         const status = sub.cancel_at_period_end ? 'canceled' : sub.status === 'active' ? 'active' : 'past_due'
+        const subPeriodEnd = safeEpochToISO(sub.current_period_end)
 
         if (userId) {
           const { error } = await supabase.from('subscriptions').upsert({
@@ -225,7 +237,7 @@ serve(async (req: Request) => {
             stripe_customer_id: sub.customer,
             stripe_subscription_id: sub.id,
             status,
-            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            current_period_end: subPeriodEnd,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'user_id' })
 
@@ -234,7 +246,7 @@ serve(async (req: Request) => {
           const { error } = await supabase.from('subscriptions')
             .update({
               status,
-              current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+              current_period_end: subPeriodEnd,
               updated_at: new Date().toISOString(),
             })
             .eq('stripe_subscription_id', sub.id)
