@@ -9775,3 +9775,92 @@ h4 {
     padding-left: 28px;
     padding-right: 12px;
 }
+
+/* ─── Tap-to-reveal timestamps (hidden by default, shown on mini tap) ── */
+.ka-msg-time { display: none; }
+
+/* ─── Mini Phone Mode (<390px) ─────────────────────────── */
+@media (max-width: 389px) {
+  /* Header */
+  .ka-header { height: 32px; padding: 4px 8px; }
+  .ka-title { display: none; }
+  .ka-admin-badge, .ka-pro-badge { display: none; }
+  .ka-header-right > .ka-header-icon-btn { display: none; }
+
+  /* Chat Area */
+  .ka-chat { padding: 8px 12px; }
+  .ka-msg-content { font-size: 15px; }
+  .ka-msg-avatar { width: 20px; height: 20px; }
+  .ka-msg-time.ka-msg-time--visible {
+    display: block;
+    font-size: 11px;
+    opacity: 0.5;
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  /* Input */
+  .ka-input-bar { padding: 4px 8px; }
+  .ka-input { height: 40px; min-height: 40px; }
+
+  /* Tab bar */
+  .ka-tab-bar { height: 40px; padding-bottom: env(safe-area-inset-bottom, 8px); }
+  .ka-tab-item { padding: 4px 0; }
+  .ka-tab-icon-wrap { margin-bottom: 0; }
+  .ka-tab-label { display: none; }
+
+  /* Panels */
+  .ka-kg-sheet, .ka-bottom-sheet {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+  .ka-kg-drag-handle { display: none; }
+
+  /* Popover */
+  .ka-mini-popover-wrap { position: relative; }
+  .ka-mini-popover {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--rubin-ivory-med);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    padding: 4px;
+    min-width: 120px;
+  }
+  .ka-mini-popover-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--rubin-slate);
+    font-family: var(--font-serif);
+    width: 100%;
+    text-align: left;
+  }
+  .ka-mini-popover-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Dark mode overrides */
+  [data-theme="dark"] .ka-mini-popover {
+    background: var(--rubin-slate);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  [data-theme="dark"] .ka-mini-popover-item {
+    color: var(--rubin-ivory);
+  }
+  [data-theme="dark"] .ka-mini-popover-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
