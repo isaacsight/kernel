@@ -1213,6 +1213,67 @@ h4 {
     opacity: 1;
 }
 
+/* Forgot password link */
+.ka-gate-forgot {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--rubin-accent);
+    cursor: pointer;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+}
+
+.ka-gate-forgot:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* Success message (e.g. password reset sent) */
+.ka-gate-success {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #16a34a;
+    margin: 8px 0;
+}
+
+/* Sign-up / Sign-in toggle section */
+.ka-gate-toggle-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rubin-ivory-dark);
+}
+
+.ka-gate-toggle-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--rubin-slate-muted);
+}
+
+.ka-gate-toggle-btn {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rubin-accent);
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.15s;
+}
+
+.ka-gate-toggle-btn:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
 .ka-gate-admin {
     display: flex;
     gap: 8px;
@@ -5078,6 +5139,162 @@ h4 {
 
 .ka-code-pre::-webkit-scrollbar-thumb {
     background: var(--rubin-ivory-dark);
+}
+
+/* ── File Artifact Cards ──────────────────────────────────── */
+
+.ka-artifact {
+    margin: 10px 0;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--rubin-ivory);
+    transition: border-color 0.15s;
+}
+
+.ka-artifact:hover {
+    border-color: var(--rubin-accent);
+}
+
+.ka-artifact-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    cursor: pointer;
+    gap: 12px;
+}
+
+.ka-artifact-file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: var(--rubin-accent);
+}
+
+.ka-artifact-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ka-artifact-filename {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rubin-slate);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ka-artifact-title {
+    font-family: var(--font-serif);
+    font-size: 12px;
+    color: var(--rubin-slate-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+}
+
+.ka-artifact-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.ka-artifact-lines {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+    opacity: 0.6;
+}
+
+.ka-artifact-lang {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--rubin-accent);
+    background: rgba(139, 115, 85, 0.1);
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+}
+
+.ka-artifact-actions {
+    display: flex;
+    gap: 6px;
+    padding: 0 14px 12px;
+}
+
+.ka-artifact-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    background: #fff;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-artifact-action:hover {
+    border-color: var(--rubin-accent);
+    color: var(--rubin-accent);
+}
+
+.ka-artifact-action--primary {
+    background: var(--rubin-accent);
+    border-color: var(--rubin-accent);
+    color: #fff;
+}
+
+.ka-artifact-action--primary:hover {
+    opacity: 0.85;
+    color: #fff;
+}
+
+/* ── Artifact dark mode ────────────────────────────────────── */
+
+[data-theme="dark"] .ka-artifact {
+    background: #1A1A1A;
+    border-color: #333;
+}
+
+[data-theme="dark"] .ka-artifact:hover {
+    border-color: var(--rubin-accent);
+}
+
+[data-theme="dark"] .ka-artifact-filename {
+    color: #E8E6DC;
+}
+
+[data-theme="dark"] .ka-artifact-lang {
+    background: rgba(139, 115, 85, 0.2);
+}
+
+[data-theme="dark"] .ka-artifact-action {
+    background: #242424;
+    border-color: #444;
+    color: #999;
+}
+
+[data-theme="dark"] .ka-artifact-action:hover {
+    border-color: var(--rubin-accent);
+    color: var(--rubin-accent);
+}
+
+[data-theme="dark"] .ka-artifact-action--primary {
+    background: var(--rubin-accent);
+    border-color: var(--rubin-accent);
+    color: #fff;
 }
 
 /* ── Agent Badges ─────────────────────────────────────────── */
