@@ -5,11 +5,12 @@ import { useAuthContext } from '../providers/AuthProvider'
 
 export function LoginGate() {
   const { t } = useTranslation('auth')
-  const { signInWithProvider, signInWithEmail, signUpWithEmail } = useAuthContext()
+  const { signInWithProvider, signInWithEmail, signUpWithEmail, resetPassword } = useAuthContext()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
 
@@ -18,11 +19,31 @@ export function LoginGate() {
     if (!email.trim() || !password.trim()) return
     setLoading(true)
     setError('')
+    setSuccessMsg('')
     try {
       const result = isSignUp
         ? await signUpWithEmail(email.trim(), password)
         : await signInWithEmail(email.trim(), password)
       if (result.error) setError(result.error)
+    } catch {
+      setError(t('modal.error'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleResetPassword = async () => {
+    if (!email.trim()) {
+      setError('Enter your email address first.')
+      return
+    }
+    setLoading(true)
+    setError('')
+    setSuccessMsg('')
+    try {
+      const result = await resetPassword(email.trim())
+      if (result.error) setError(result.error)
+      else setSuccessMsg(t('modal.resetSent'))
     } catch {
       setError(t('modal.error'))
     } finally {
@@ -166,14 +187,30 @@ export function LoginGate() {
                 </button>
               </form>
 
-              <button
-                className="ka-gate-admin-toggle"
-                onClick={() => setIsSignUp(!isSignUp)}
-              >
-                {t(isSignUp ? 'modal.toggleSignIn' : 'modal.toggleSignUp')}
-              </button>
+              {!isSignUp && (
+                <button
+                  className="ka-gate-forgot"
+                  onClick={handleResetPassword}
+                  type="button"
+                >
+                  {t('modal.forgotPassword')}
+                </button>
+              )}
 
               {error && <p className="ka-gate-error">{error}</p>}
+              {successMsg && <p className="ka-gate-success">{successMsg}</p>}
+
+              <div className="ka-gate-toggle-section">
+                <span className="ka-gate-toggle-label">
+                  {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+                </span>
+                <button
+                  className="ka-gate-toggle-btn"
+                  onClick={() => { setIsSignUp(!isSignUp); setError(''); setSuccessMsg('') }}
+                >
+                  {isSignUp ? 'Sign in' : 'Create Account'}
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
