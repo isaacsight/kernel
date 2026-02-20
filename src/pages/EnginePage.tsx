@@ -32,6 +32,7 @@ import { useConversations } from '../hooks/useConversations'
 import { useMessageActions } from '../hooks/useMessageActions'
 import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
+import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -100,6 +101,7 @@ function EngineChat() {
   // ─── Hooks ────────────────────────────────────────────
   const { darkMode, setDarkMode } = useDarkMode()
   const { toast, showToast } = useToast()
+  const featureDiscovery = useFeatureDiscovery(user?.id)
 
   const billing = useBilling(user, showToast, signOut)
 
@@ -370,23 +372,28 @@ function EngineChat() {
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowGoalsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Target size={14} /> {t('menu.goals')}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowWorkflowsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('workflows'); panels.closeAllPanels(); panels.setShowWorkflowsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Zap size={14} /> {t('menu.workflows')}
+                  {featureDiscovery.isNew('workflows') && <span className="ka-feature-dot" />}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowScheduledPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('scheduled'); panels.closeAllPanels(); panels.setShowScheduledPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Clock size={14} /> {t('menu.scheduledTasks')}
+                  {featureDiscovery.isNew('scheduled') && <span className="ka-feature-dot" />}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBriefingPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Newspaper size={14} /> {t('menu.dailyBriefing')}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowKGPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('knowledge'); panels.closeAllPanels(); panels.setShowKGPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Brain size={14} /> {t('menu.whatKernelKnows')}
+                  {featureDiscovery.isNew('knowledge') && <span className="ka-feature-dot" />}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowStatsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('stats'); panels.closeAllPanels(); panels.setShowStatsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <BarChart3 size={14} /> {t('menu.yourStats')}
+                  {featureDiscovery.isNew('stats') && <span className="ka-feature-dot" />}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('insights'); panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <Eye size={14} /> {t('menu.insights')}
+                  {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
                 </button>
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
@@ -712,10 +719,10 @@ function EngineChat() {
         )}
       </form>
 
-      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} />
+      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} undiscoveredCount={featureDiscovery.undiscoveredCount} />
       <AnimatePresence>
         {panels.showMoreMenu && (
-          <MoreMenu isOpen={panels.showMoreMenu} onClose={() => { panels.setShowMoreMenu(false); panels.setActiveTab('home') }} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} />
+          <MoreMenu isOpen={panels.showMoreMenu} onClose={() => { panels.setShowMoreMenu(false); panels.setActiveTab('home') }} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
         )}
       </AnimatePresence>
 

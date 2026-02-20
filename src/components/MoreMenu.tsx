@@ -69,9 +69,11 @@ interface MoreMenuProps {
   onSelect: (action: MoreAction) => void
   isPro: boolean
   isAdmin: boolean
+  isNewFeature?: (id: string) => boolean
+  onFeatureDiscovered?: (id: string) => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   if (!isOpen) return null
 
@@ -108,14 +110,16 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin }: MoreMenu
           <div className="ka-more-menu-label">{t('features', { ns: 'common' })}</div>
           {ITEMS.map(item => {
             const Icon = item.icon
+            const isNew = isNewFeature?.(item.id)
             return (
               <button
                 key={item.id}
                 className="ka-more-menu-item"
-                onClick={() => { onSelect(item.id); onClose() }}
+                onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
               >
                 <Icon size={18} />
                 <span>{t(item.labelKey)}</span>
+                {isNew && <span className="ka-feature-dot" />}
               </button>
             )
           })}

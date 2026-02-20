@@ -842,7 +842,8 @@ async function discordPlanAndExecute(
     }
   }
 
-  return 'Task completed but no output was generated.'
+  // If the final step failed, return accumulated context from earlier steps
+  return accumulatedContext.trim() || 'Task completed but no output was generated.'
 }
 
 // ─── Knowledge Graph Extraction (background) ─────────────────
@@ -1281,8 +1282,8 @@ client.on('messageCreate', async (msg: Message) => {
     const linkedUserId = await getLinkedUserId(discordUserId)
 
     // ── Command routing ──
-    if (content.startsWith('!goal ')) {
-      const handled = await handleGoalCommand(content.slice(6), linkedUserId, msg)
+    if (content === '!goal' || content.startsWith('!goal ')) {
+      const handled = await handleGoalCommand(content.slice(5).trim(), linkedUserId, msg)
       if (handled) return
     }
     if (content === '!briefing') {
