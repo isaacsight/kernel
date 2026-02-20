@@ -133,8 +133,8 @@ function parseCodeFenceHeader(header: string): { lang: string; filename: string 
   // Check for title comment on next line (// Title: ... or # Title: ...)
   let title: string | null = null
 
-  // Try lang:filename format (e.g. python:hello.py)
-  const colonMatch = header.match(/^(\w+):(.+)$/)
+  // Try lang:filename format (e.g. python:hello.py) — filename must contain a dot for extension
+  const colonMatch = header.match(/^(\w+):(\S+\.\w+)$/)
   if (colonMatch) {
     return { lang: colonMatch[1], filename: colonMatch[2].trim(), title }
   }
