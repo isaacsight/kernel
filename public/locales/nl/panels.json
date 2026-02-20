@@ -174,7 +174,10 @@
         "agentPerformance": "Agentprestaties",
         "noAgentDataYet": "Nog geen agentgegevens.",
         "quality": "Kwaliteit",
-        "usage": "Gebruik"
+        "usage": "Gebruik",
+        "challengedStat": "{{count}}x betwist",
+        "reinforcedStat": "{{count}}x versterkt",
+        "challengeAction": "betwist"
     },
     "share": {
         "title": "Gesprek delen",

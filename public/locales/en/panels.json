@@ -174,7 +174,10 @@
     "agentPerformance": "Agent Performance",
     "noAgentDataYet": "No agent data yet.",
     "quality": "Quality",
-    "usage": "Usage"
+    "usage": "Usage",
+    "challengedStat": "{{count}}x challenged",
+    "reinforcedStat": "{{count}}x reinforced",
+    "challengeAction": "challenge"
   },
   "share": {
     "title": "Share conversation",

@@ -174,7 +174,10 @@
         "agentPerformance": "ئەدای بریکارەکان",
         "noAgentDataYet": "هێشتا داتای بریکار نییە.",
         "quality": "کوالیتی",
-        "usage": "بەکارهێنان"
+        "usage": "بەکارهێنان",
+        "challengedStat": "{{count}} جار چاڵنجکرا",
+        "reinforcedStat": "{{count}} جار بەهێزکرا",
+        "challengeAction": "چاڵنج"
     },
     "share": {
         "title": "هاوبەشکردنی گفتوگۆ",

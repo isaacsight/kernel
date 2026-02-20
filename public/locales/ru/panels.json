@@ -174,7 +174,10 @@
         "agentPerformance": "Эффективность агентов",
         "noAgentDataYet": "Данных об агентах пока нет.",
         "quality": "Качество",
-        "usage": "Использование"
+        "usage": "Использование",
+        "challengedStat": "{{count}}x оспорено",
+        "reinforcedStat": "{{count}}x подтверждено",
+        "challengeAction": "оспорить"
     },
     "share": {
         "title": "Поделиться диалогом",

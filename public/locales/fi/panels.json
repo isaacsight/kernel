@@ -123,7 +123,10 @@
     "agentPerformance": "Agenttien suorituskyky",
     "noAgentDataYet": "Ei vielä agenttitietoja.",
     "quality": "Laatu",
-    "usage": "Käyttö"
+    "usage": "Käyttö",
+    "challengedStat": "{{count}}x kyseenalaistettu",
+    "reinforcedStat": "{{count}}x vahvistettu",
+    "challengeAction": "kyseenalaista"
   },
   "share": {
     "title": "Jaa keskustelu",

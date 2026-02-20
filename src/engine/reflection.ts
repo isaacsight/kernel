@@ -5,7 +5,7 @@
 // - Was this beautiful? (brevity, craft)
 // - What should I believe differently now?
 
-import type { Perception, Reflection } from './types'
+import type { IntentType, Perception, Reflection } from './types'
 import type { Agent, Message } from '../types'
 import { getProvider } from './providers/registry'
 
@@ -15,6 +15,39 @@ interface AIScores {
   relevance: number
   brevity: number
   craft: number
+}
+
+// ─── Rubric-based system prompt for Haiku scorer ──────────
+const REFLECTION_SYSTEM = `You are a quality scorer for an AI assistant's responses. Rate on 5 dimensions (0.0–1.0):
+
+Substance: Real information present? Numbers, examples, evidence, reasoning chains → high. Vague platitudes, "I can help with that" → low.
+Coherence: Logical flow? Builds on prior context? No contradictions or non-sequiturs?
+Relevance: Addresses the actual question or need? Stays on topic? Doesn't wander?
+Brevity: Length appropriate for the query type? Too long or too short both score low.
+Craft: Well-written? Good word choice, varied structure, no filler phrases like "In conclusion" or "Overall"?
+
+Return ONLY valid JSON: {"substance":0.0,"coherence":0.0,"relevance":0.0,"brevity":0.0,"craft":0.0}`
+
+// ─── Context-aware dimension weights by intent type ───────
+// Different intents care about different quality dimensions.
+// e.g. "reason" demands substance & coherence; "converse" is balanced.
+const INTENT_WEIGHTS: Record<IntentType, Record<keyof AIScores, number>> = {
+  reason:   { substance: 0.30, coherence: 0.30, relevance: 0.20, brevity: 0.10, craft: 0.10 },
+  evaluate: { substance: 0.30, coherence: 0.25, relevance: 0.25, brevity: 0.10, craft: 0.10 },
+  build:    { substance: 0.25, coherence: 0.20, relevance: 0.30, brevity: 0.15, craft: 0.10 },
+  discuss:  { substance: 0.20, coherence: 0.25, relevance: 0.20, brevity: 0.15, craft: 0.20 },
+  converse: { substance: 0.20, coherence: 0.20, relevance: 0.20, brevity: 0.20, craft: 0.20 },
+}
+
+function computeWeightedQuality(scores: AIScores, intentType: IntentType): number {
+  const w = INTENT_WEIGHTS[intentType] || INTENT_WEIGHTS.converse
+  return (
+    scores.substance * w.substance +
+    scores.coherence * w.coherence +
+    scores.relevance * w.relevance +
+    scores.brevity * w.brevity +
+    scores.craft * w.craft
+  )
 }
 
 export function reflect(
@@ -76,13 +109,8 @@ export function reflect(
     (notGeneric ? 0.3 : 0)
   )
 
-  const quality = (
-    substance * 0.25 +
-    coherence * 0.25 +
-    relevance * 0.2 +
-    brevity * 0.15 +
-    craft * 0.15
-  )
+  const scores: AIScores = { substance, coherence, relevance, brevity: brevityFinal, craft }
+  const quality = computeWeightedQuality(scores, perception.intent.type)
 
   // ── Conviction Delta ──
   const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0
@@ -117,13 +145,7 @@ export function reflect(
     agentUsed: agent.id,
     durationMs,
     quality,
-    scores: {
-      substance,
-      coherence,
-      relevance,
-      brevity: brevityFinal,
-      craft,
-    },
+    scores,
     lesson,
     worldModelUpdate,
     convictionDelta,
@@ -151,9 +173,10 @@ export async function reflectWithAI(
   if (perception.complexity <= 0.6) return heuristic
 
   try {
+    const intentLabel = perception.intent.type
     const aiScores = await getProvider().json<AIScores>(
-      `Rate this AI response on a 0-1 scale for: substance, coherence, relevance, brevity, craft.\nInput: ${input.slice(0, 200)}\nResponse: ${output.slice(0, 500)}\nReturn JSON: { "substance": 0.0, "coherence": 0.0, "relevance": 0.0, "brevity": 0.0, "craft": 0.0 }`,
-      { tier: 'fast', max_tokens: 100 }
+      `[Intent: ${intentLabel}]\nUser: ${input.slice(0, 200)}\nAssistant: ${output.slice(0, 500)}`,
+      { tier: 'fast', max_tokens: 100, system: REFLECTION_SYSTEM }
     )
 
     // Validate AI scores
@@ -172,13 +195,7 @@ export async function reflectWithAI(
       craft: aiScores.craft * 0.6 + heuristic.scores.craft * 0.4,
     }
 
-    const quality = (
-      blended.substance * 0.25 +
-      blended.coherence * 0.25 +
-      blended.relevance * 0.2 +
-      blended.brevity * 0.15 +
-      blended.craft * 0.15
-    )
+    const quality = computeWeightedQuality(blended, perception.intent.type)
 
     const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0
 

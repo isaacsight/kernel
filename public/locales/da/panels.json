@@ -123,7 +123,10 @@
     "agentPerformance": "Agentydelse",
     "noAgentDataYet": "Ingen agentdata endnu.",
     "quality": "Kvalitet",
-    "usage": "Brug"
+    "usage": "Brug",
+    "challengedStat": "{{count}}x udfordret",
+    "reinforcedStat": "{{count}}x forstærket",
+    "challengeAction": "udfordr"
   },
   "share": {
     "title": "Del samtale",

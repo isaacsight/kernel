@@ -123,7 +123,10 @@
     "agentPerformance": "エージェントのパフォーマンス",
     "noAgentDataYet": "エージェントデータがまだありません。",
     "quality": "品質",
-    "usage": "使用状況"
+    "usage": "使用状況",
+    "challengedStat": "{{count}}回異議",
+    "reinforcedStat": "{{count}}回強化",
+    "challengeAction": "異議を唱える"
   },
   "share": {
     "title": "会話を共有",

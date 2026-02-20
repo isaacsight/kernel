@@ -174,7 +174,10 @@
         "agentPerformance": "ביצועי סוכנים",
         "noAgentDataYet": "אין נתוני סוכנים עדיין.",
         "quality": "איכות",
-        "usage": "שימוש"
+        "usage": "שימוש",
+        "challengedStat": "{{count}} פעמים אותגר",
+        "reinforcedStat": "{{count}} פעמים חוזק",
+        "challengeAction": "אתגר"
     },
     "share": {
         "title": "שתף שיחה",

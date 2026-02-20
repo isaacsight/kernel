@@ -123,7 +123,10 @@
     "agentPerformance": "Ajan Performansı",
     "noAgentDataYet": "Henüz ajan verisi yok.",
     "quality": "Kalite",
-    "usage": "Kullanım"
+    "usage": "Kullanım",
+    "challengedStat": "{{count}}x sorgulandı",
+    "reinforcedStat": "{{count}}x güçlendirildi",
+    "challengeAction": "sorgula"
   },
   "share": {
     "title": "Konuşmayı paylaş",
