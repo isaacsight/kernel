@@ -123,7 +123,10 @@
     "agentPerformance": "Wydajność agentów",
     "noAgentDataYet": "Brak danych o agentach.",
     "quality": "Jakość",
-    "usage": "Użycie"
+    "usage": "Użycie",
+    "challengedStat": "{{count}}x zakwestionowane",
+    "reinforcedStat": "{{count}}x wzmocnione",
+    "challengeAction": "zakwestionuj"
   },
   "share": {
     "title": "Udostępnij rozmowę",

@@ -127,14 +127,14 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
 // ─── Parse code fence header for language and filename ───
 // Supports: ```python:filename.py or ```python filename.py
 
-function parseCodeFenceHeader(header: string): { lang: string; filename: string | null; title: string | null } {
+export function parseCodeFenceHeader(header: string): { lang: string; filename: string | null; title: string | null } {
   if (!header) return { lang: 'text', filename: null, title: null }
 
   // Check for title comment on next line (// Title: ... or # Title: ...)
   let title: string | null = null
 
-  // Try lang:filename format (e.g. python:hello.py) — filename must contain a dot for extension
-  const colonMatch = header.match(/^(\w+):(\S+\.\w+)$/)
+  // Try lang:filename format (e.g. python:hello.py) — filename must have extension, reject URLs (://)
+  const colonMatch = header.match(/^(\w+):(?!\/\/)(\S+\.\w+)$/)
   if (colonMatch) {
     return { lang: colonMatch[1], filename: colonMatch[2].trim(), title }
   }
@@ -150,7 +150,7 @@ function parseCodeFenceHeader(header: string): { lang: string; filename: string 
 
 // ─── Extract title from first line of code ───────────────
 
-function extractArtifactTitle(code: string, lang: string): { title: string | null; cleanCode: string } {
+export function extractArtifactTitle(code: string, lang: string): { title: string | null; cleanCode: string } {
   const lines = code.split('\n')
   if (lines.length === 0) return { title: null, cleanCode: code }
 

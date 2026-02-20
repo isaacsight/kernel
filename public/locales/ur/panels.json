@@ -174,7 +174,10 @@
         "agentPerformance": "ایجنٹس کی کارکردگی",
         "noAgentDataYet": "ابھی تک ایجنٹ کا کوئی ڈیٹا نہیں۔",
         "quality": "معیار",
-        "usage": "استعمال"
+        "usage": "استعمال",
+        "challengedStat": "{{count}} بار چیلنج",
+        "reinforcedStat": "{{count}} بار تقویت",
+        "challengeAction": "چیلنج"
     },
     "share": {
         "title": "گفتگو شیئر کریں",

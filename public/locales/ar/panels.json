@@ -174,7 +174,10 @@
         "agentPerformance": "أداء الوكلاء",
         "noAgentDataYet": "لا توجد بيانات وكلاء بعد.",
         "quality": "الجودة",
-        "usage": "الاستخدام"
+        "usage": "الاستخدام",
+        "challengedStat": "{{count}} مرة متحدى",
+        "reinforcedStat": "{{count}} مرة معزز",
+        "challengeAction": "تحدي"
     },
     "share": {
         "title": "مشاركة المحادثة",

@@ -171,10 +171,10 @@ function BeliefsSection({
               </div>
               <span className="ka-insights-belief-badge">{belief.source}</span>
               {belief.challengedCount > 0 && (
-                <span className="ka-insights-belief-stat">{belief.challengedCount}x challenged</span>
+                <span className="ka-insights-belief-stat">{t('insights.challengedStat', { count: belief.challengedCount })}</span>
               )}
               {belief.reinforcedCount > 0 && (
-                <span className="ka-insights-belief-stat">{belief.reinforcedCount}x reinforced</span>
+                <span className="ka-insights-belief-stat">{t('insights.reinforcedStat', { count: belief.reinforcedCount })}</span>
               )}
             </div>
             <div className="ka-insights-belief-actions">
@@ -183,7 +183,7 @@ function BeliefsSection({
                 onClick={() => onChallenge(belief.id)}
                 title={t('insights.challengeBelief')}
               >
-                challenge
+                {t('insights.challengeAction')}
               </button>
               <button
                 className="ka-insights-belief-action ka-insights-belief-action--danger"

@@ -174,7 +174,10 @@
         "agentPerformance": "عملکرد عوامل",
         "noAgentDataYet": "هنوز داده‌ای از عوامل موجود نیست.",
         "quality": "کیفیت",
-        "usage": "میزان استفاده"
+        "usage": "میزان استفاده",
+        "challengedStat": "{{count}} بار چالش شده",
+        "reinforcedStat": "{{count}} بار تقویت شده",
+        "challengeAction": "چالش"
     },
     "share": {
         "title": "اشتراک‌گذاری گفتگو",

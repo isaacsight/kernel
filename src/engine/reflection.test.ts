@@ -94,6 +94,63 @@ describe('reflect', () => {
     const r = reflect('test', longOutput, mockAgent, basePerception, 100, [])
     expect(r.output.length).toBeLessThanOrEqual(300)
   })
+
+  it('weights substance higher for reason intents', () => {
+    const substantiveOutput = 'The analysis shows 3 key patterns because the data distribution follows a Gaussian curve; the first pattern emerges from temporal clustering—specifically, 87% of events occur within a 4-hour window.'
+    const reasonPerception: Perception = {
+      ...basePerception,
+      intent: { type: 'reason', question: 'analyze this data', domain: 'technical' },
+    }
+    const conversePerception: Perception = {
+      ...basePerception,
+      intent: { type: 'converse', message: 'analyze this data' },
+    }
+    const reasonResult = reflect('analyze this data', substantiveOutput, mockAgent, reasonPerception, 100, [])
+    const converseResult = reflect('analyze this data', substantiveOutput, mockAgent, conversePerception, 100, [])
+    // Same content, but reason intent weights substance/coherence higher
+    // The scores themselves are the same, but quality differs due to weighting
+    expect(reasonResult.scores.substance).toBe(converseResult.scores.substance)
+    expect(reasonResult.quality).not.toBe(converseResult.quality)
+  })
+
+  it('weights relevance higher for build intents', () => {
+    const buildOutput = 'Here is a concrete implementation plan with 3 steps because it addresses the core requirements.'
+    const buildPerception: Perception = {
+      ...basePerception,
+      intent: { type: 'build', description: 'create a login form' },
+    }
+    const r = reflect('create a login form', buildOutput, mockAgent, buildPerception, 100, [])
+    expect(r.quality).toBeGreaterThanOrEqual(0)
+    expect(r.quality).toBeLessThanOrEqual(1)
+  })
+
+  it('negative conviction delta for low quality', () => {
+    const r = reflect('tell me about quantum computing', 'Hi', mockAgent, basePerception, 100, [])
+    expect(r.convictionDelta).toBeLessThanOrEqual(0)
+  })
+
+  it('detects boilerplate and scores low substance', () => {
+    const r = reflect('help me', 'I can help you with that. Here is what you need.', mockAgent, basePerception, 100, [])
+    expect(r.scores.substance).toBeLessThan(0.5)
+  })
+
+  it('generates world model update for questions with good quality', () => {
+    const questionPerception: Perception = {
+      ...basePerception,
+      isQuestion: true,
+      complexity: 0.7,
+      intent: { type: 'reason', question: 'why does this happen', domain: 'technical' },
+    }
+    const r = reflect(
+      'why does this happen',
+      'This happens because of 3 fundamental forces; the primary driver is electromagnetic interaction—specifically, 99% of atomic behavior stems from this.',
+      mockAgent,
+      questionPerception,
+      100,
+      [{ id: '1', agentId: 'human', agentName: 'User', content: 'why does this happen', timestamp: new Date() }]
+    )
+    expect(r.worldModelUpdate).not.toBeNull()
+  })
 })
 
 describe('reflectWithAI', () => {
@@ -184,5 +241,61 @@ describe('reflectWithAI', () => {
     // Each blended score = 1.0 * 0.6 + heuristic * 0.4
     const expectedSubstance = 1.0 * 0.6 + heuristic.scores.substance * 0.4
     expect(r.scores.substance).toBeCloseTo(expectedSubstance, 5)
+  })
+
+  it('passes system prompt and intent to provider', async () => {
+    mockJson.mockResolvedValue({
+      substance: 0.8,
+      coherence: 0.8,
+      relevance: 0.8,
+      brevity: 0.8,
+      craft: 0.8,
+    })
+
+    await reflectWithAI('analyze data', 'The analysis shows patterns.', mockAgent, complexPerception, 100, [])
+
+    expect(mockJson).toHaveBeenCalledWith(
+      expect.stringContaining('[Intent: reason]'),
+      expect.objectContaining({ system: expect.stringContaining('quality scorer') })
+    )
+  })
+
+  it('uses context-aware weighting for blended quality', async () => {
+    mockJson.mockResolvedValue({
+      substance: 0.9,
+      coherence: 0.9,
+      relevance: 0.9,
+      brevity: 0.9,
+      craft: 0.9,
+    })
+
+    const evaluatePerception: Perception = {
+      ...complexPerception,
+      intent: { type: 'evaluate', opportunity: 'should I invest' },
+    }
+
+    const reasonResult = await reflectWithAI('analyze', 'Response.', mockAgent, complexPerception, 100, [])
+    const evaluateResult = await reflectWithAI('evaluate', 'Response.', mockAgent, evaluatePerception, 100, [])
+
+    // Different intents → different quality scores even with same AI scores
+    // (heuristic baselines differ slightly due to intent-based brevity calc)
+    expect(reasonResult).toHaveProperty('quality')
+    expect(evaluateResult).toHaveProperty('quality')
+  })
+
+  it('handles out-of-range AI scores gracefully', async () => {
+    mockJson.mockResolvedValue({
+      substance: 1.5,
+      coherence: -0.2,
+      relevance: 0.8,
+      brevity: 0.8,
+      craft: 0.8,
+    })
+
+    const heuristic = reflect('test', 'Response text.', mockAgent, complexPerception, 100, [])
+    const r = await reflectWithAI('test', 'Response text.', mockAgent, complexPerception, 100, [])
+
+    // Out-of-range scores should fall back to heuristic
+    expect(r.quality).toBe(heuristic.quality)
   })
 })

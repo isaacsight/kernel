@@ -174,7 +174,10 @@
         "agentPerformance": "代理表现",
         "noAgentDataYet": "暂无代理数据。",
         "quality": "质量",
-        "usage": "使用情况"
+        "usage": "使用情况",
+        "challengedStat": "{{count}}次质疑",
+        "reinforcedStat": "{{count}}次强化",
+        "challengeAction": "质疑"
     },
     "share": {
         "title": "分享对话",

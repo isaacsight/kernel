@@ -174,7 +174,10 @@
     "agentPerformance": "Performance des agents",
     "noAgentDataYet": "Pas encore de données sur les agents.",
     "quality": "Qualité",
-    "usage": "Utilisation"
+    "usage": "Utilisation",
+    "challengedStat": "{{count}}x contestée",
+    "reinforcedStat": "{{count}}x renforcée",
+    "challengeAction": "contester"
   },
   "share": {
     "title": "Partager la conversation",

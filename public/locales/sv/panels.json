@@ -174,7 +174,10 @@
         "agentPerformance": "Agentprestanda",
         "noAgentDataYet": "Ingen agentdata ännu.",
         "quality": "Kvalitet",
-        "usage": "Användning"
+        "usage": "Användning",
+        "challengedStat": "{{count}}x ifrågasatt",
+        "reinforcedStat": "{{count}}x förstärkt",
+        "challengeAction": "ifrågasätt"
     },
     "share": {
         "title": "Dela konversation",
