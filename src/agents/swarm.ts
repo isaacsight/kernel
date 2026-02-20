@@ -44,50 +44,6 @@ Format your responses as:
     color: '#6366F1'
   },
   {
-    id: 'scout',
-    name: 'Scout',
-    persona: 'Opportunity hunter. Finds people who need things built. Always prospecting.',
-    systemPrompt: `You are Scout, the opportunity hunter for Kernel.
-
-Your role: Find and qualify potential clients and projects.
-
-When analyzing a request:
-- Identify what the person actually needs
-- Assess if it's a viable project we can deliver
-- Note urgency and budget signals
-- Recommend whether to pursue
-
-Guidelines:
-- Be enthusiastic about good opportunities
-- Be realistic about scope
-- Flag any red flags (unclear requirements, unrealistic expectations)
-- Keep responses to 2-3 sentences`,
-    avatar: 'S',
-    color: '#4A9B7F'
-  },
-  {
-    id: 'salesman',
-    name: 'Salesman',
-    persona: 'Business development. Writes proposals, handles objections, closes deals.',
-    systemPrompt: `You are Salesman, the business development lead for Kernel.
-
-Your role: Convert opportunities into paying clients.
-
-When crafting proposals:
-- Lead with value, not features
-- Address the client's specific pain points
-- Be confident but not pushy
-- Create urgency without pressure
-
-Guidelines:
-- Always include a clear call-to-action
-- Handle objections gracefully
-- Focus on ROI and outcomes
-- Keep responses professional but warm`,
-    avatar: '$',
-    color: '#7B68EE'
-  },
-  {
     id: 'architect',
     name: 'Architect',
     persona: 'Solution designer. Scopes projects, estimates complexity, creates specs.',
@@ -152,28 +108,6 @@ Guidelines:
 - Sign off when ready`,
     avatar: 'C',
     color: '#8C5B5B'
-  },
-  {
-    id: 'treasurer',
-    name: 'Treasurer',
-    persona: 'Finance manager. Tracks costs, sends invoices, manages money.',
-    systemPrompt: `You are Treasurer, the finance manager for Kernel.
-
-Your role: Manage all financial aspects of the business.
-
-Your responsibilities:
-- Generate accurate quotes
-- Track project costs
-- Send invoices and payment links
-- Report on financial health
-
-Guidelines:
-- Be precise with numbers
-- Explain pricing clearly
-- Track every dollar
-- Maximize profitability while being fair`,
-    avatar: 'T',
-    color: '#2E8B57'
   },
   {
     id: 'operator',
@@ -257,9 +191,9 @@ export function getSwarmAgent(id: string): Agent | undefined {
 
 export function getNextSwarmAgent(currentId: string, workflow: 'discovery' | 'execution' | 'review'): Agent {
   const workflows: Record<string, string[]> = {
-    discovery: ['scout', 'architect', 'treasurer', 'salesman'],
+    discovery: ['reasoner', 'architect', 'critic'],
     execution: ['builder', 'critic', 'operator'],
-    review: ['critic', 'treasurer', 'operator']
+    review: ['critic', 'reasoner', 'operator']
   };
 
   const sequence = workflows[workflow];
@@ -273,7 +207,7 @@ export function getNextSwarmAgent(currentId: string, workflow: 'discovery' | 'ex
 const ROUTER_TO_SWARM: Record<string, string> = {
   analyst: 'reasoner',
   coder: 'architect',
-  researcher: 'scout',
+  researcher: 'reasoner',
   writer: 'builder',
   kernel: 'operator',
   aesthete: 'aesthete',
@@ -300,6 +234,18 @@ export function routeToAgent(message: string, routerResult?: { agentId: string; 
   }
   if (lower.includes('bug') || lower.includes('issue') || lower.includes('not working')) {
     return SWARM_AGENTS.find(a => a.id === 'critic')!
+  }
+  if (lower.includes('design') || lower.includes('ui') || lower.includes('aesthetic') || lower.includes('look')) {
+    return SWARM_AGENTS.find(a => a.id === 'aesthete')!
+  }
+  if (lower.includes('secure') || lower.includes('security') || lower.includes('vulnerability') || lower.includes('reliable')) {
+    return SWARM_AGENTS.find(a => a.id === 'guardian')!
+  }
+  if (lower.includes('remember') || lower.includes('history') || lower.includes('last time') || lower.includes('my goals')) {
+    return SWARM_AGENTS.find(a => a.id === 'curator')!
+  }
+  if (lower.includes('market') || lower.includes('roi') || lower.includes('invest') || lower.includes('compete')) {
+    return SWARM_AGENTS.find(a => a.id === 'strategist')!
   }
 
   return SWARM_AGENTS.find(a => a.id === 'operator')!

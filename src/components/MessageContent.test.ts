@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { parseCodeFenceHeader, extractArtifactTitle } from './MessageContent'
+import { getMimeType, LANG_EXT } from './ChatHelpers'
 
 describe('parseCodeFenceHeader', () => {
   it('returns text for empty header', () => {
@@ -15,7 +16,6 @@ describe('parseCodeFenceHeader', () => {
   })
 
   it('parses lang:filename with path', () => {
-    // Paths with slashes won't match \S+\.\w+ because slash is allowed in \S
     expect(parseCodeFenceHeader('typescript:src/utils.ts')).toEqual({ lang: 'typescript', filename: 'src/utils.ts', title: null })
   })
 
@@ -24,12 +24,7 @@ describe('parseCodeFenceHeader', () => {
   })
 
   it('does not match http: as artifact', () => {
-    // http: should not be treated as lang:filename since "//example.com" has no extension
     expect(parseCodeFenceHeader('http://example.com')).toEqual({ lang: 'http://example.com', filename: null, title: null })
-  })
-
-  it('does not match lang:text-without-extension', () => {
-    expect(parseCodeFenceHeader('python:noext')).toEqual({ lang: 'python:noext', filename: null, title: null })
   })
 
   it('parses csv:data.csv', () => {
@@ -38,6 +33,50 @@ describe('parseCodeFenceHeader', () => {
 
   it('parses markdown:report.md', () => {
     expect(parseCodeFenceHeader('markdown:report.md')).toEqual({ lang: 'markdown', filename: 'report.md', title: null })
+  })
+
+  // ── C++/ObjC/C# regex fix ─────────────────────────────────
+
+  it('parses c++:main.cpp', () => {
+    expect(parseCodeFenceHeader('c++:main.cpp')).toEqual({ lang: 'c++', filename: 'main.cpp', title: null })
+  })
+
+  it('parses objective-c:app.m', () => {
+    expect(parseCodeFenceHeader('objective-c:app.m')).toEqual({ lang: 'objective-c', filename: 'app.m', title: null })
+  })
+
+  it('parses c#:Program.cs', () => {
+    expect(parseCodeFenceHeader('c#:Program.cs')).toEqual({ lang: 'c#', filename: 'Program.cs', title: null })
+  })
+
+  it('parses f#:Main.fs', () => {
+    expect(parseCodeFenceHeader('f#:Main.fs')).toEqual({ lang: 'f#', filename: 'Main.fs', title: null })
+  })
+
+  it('parses c++ main.cpp (space format)', () => {
+    expect(parseCodeFenceHeader('c++ main.cpp')).toEqual({ lang: 'c++', filename: 'main.cpp', title: null })
+  })
+
+  // ── Extension inference from language ──────────────────────
+
+  it('infers .py for python:config (no extension)', () => {
+    expect(parseCodeFenceHeader('python:config')).toEqual({ lang: 'python', filename: 'config.py', title: null })
+  })
+
+  it('infers .js for javascript:utils (no extension, colon format)', () => {
+    expect(parseCodeFenceHeader('javascript:utils')).toEqual({ lang: 'javascript', filename: 'utils.js', title: null })
+  })
+
+  it('infers .cpp for c++:solver (no extension)', () => {
+    expect(parseCodeFenceHeader('c++:solver')).toEqual({ lang: 'c++', filename: 'solver.cpp', title: null })
+  })
+
+  it('infers .ts for typescript handler (space format, no extension)', () => {
+    expect(parseCodeFenceHeader('typescript handler')).toEqual({ lang: 'typescript', filename: 'handler.ts', title: null })
+  })
+
+  it('does not infer for unknown language', () => {
+    expect(parseCodeFenceHeader('brainfuck:hello')).toEqual({ lang: 'brainfuck:hello', filename: null, title: null })
   })
 })
 
@@ -71,17 +110,73 @@ describe('extractArtifactTitle', () => {
     const code = '# Project README\n\nThis is a project.'
     const result = extractArtifactTitle(code, 'md')
     expect(result.title).toBe('Project README')
-    expect(result.cleanCode).toBe(code) // heading is kept
+    expect(result.cleanCode).toBe(code)
   })
 
   it('does not extract heading for non-markdown', () => {
     const code = '# This is a comment\nprint("hi")'
-    // # is also a Python/bash comment — should match "# Title:" pattern only
     expect(extractArtifactTitle(code, 'python')).toEqual({ title: null, cleanCode: code })
   })
 
   it('is case-insensitive for title keyword', () => {
     const code = '// title: lowercase title\nconst x = 1'
     expect(extractArtifactTitle(code, 'javascript')).toEqual({ title: 'lowercase title', cleanCode: 'const x = 1' })
+  })
+})
+
+describe('getMimeType', () => {
+  it('returns text/html for .html', () => {
+    expect(getMimeType('page.html')).toBe('text/html')
+  })
+
+  it('returns application/json for .json', () => {
+    expect(getMimeType('data.json')).toBe('application/json')
+  })
+
+  it('returns image/svg+xml for .svg', () => {
+    expect(getMimeType('icon.svg')).toBe('image/svg+xml')
+  })
+
+  it('returns text/css for .css', () => {
+    expect(getMimeType('styles.css')).toBe('text/css')
+  })
+
+  it('returns text/csv for .csv', () => {
+    expect(getMimeType('export.csv')).toBe('text/csv')
+  })
+
+  it('returns text/plain for unknown extension', () => {
+    expect(getMimeType('code.rs')).toBe('text/plain')
+  })
+
+  it('is case-insensitive', () => {
+    expect(getMimeType('page.HTML')).toBe('text/html')
+  })
+})
+
+describe('LANG_EXT coverage', () => {
+  it('maps c++ to .cpp', () => {
+    expect(LANG_EXT['c++']).toBe('.cpp')
+  })
+
+  it('maps c# to .cs', () => {
+    expect(LANG_EXT['c#']).toBe('.cs')
+  })
+
+  it('maps objective-c to .m', () => {
+    expect(LANG_EXT['objective-c']).toBe('.m')
+  })
+
+  it('maps tsx and jsx', () => {
+    expect(LANG_EXT['tsx']).toBe('.tsx')
+    expect(LANG_EXT['jsx']).toBe('.jsx')
+  })
+
+  it('maps svg', () => {
+    expect(LANG_EXT['svg']).toBe('.svg')
+  })
+
+  it('maps toml', () => {
+    expect(LANG_EXT['toml']).toBe('.toml')
   })
 })

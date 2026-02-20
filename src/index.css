@@ -5144,6 +5144,80 @@ h4 {
     background: var(--rubin-ivory-dark);
 }
 
+/* ── Syntax Highlighting (Prism tokens) ─────────────────────── */
+
+.ka-code-pre .token.comment,
+.ka-code-pre .token.prolog,
+.ka-code-pre .token.doctype,
+.ka-code-pre .token.cdata { color: #8b7355; font-style: italic; }
+
+.ka-code-pre .token.punctuation { color: #6b6460; }
+
+.ka-code-pre .token.property,
+.ka-code-pre .token.tag,
+.ka-code-pre .token.boolean,
+.ka-code-pre .token.number,
+.ka-code-pre .token.constant,
+.ka-code-pre .token.symbol { color: #9a5334; }
+
+.ka-code-pre .token.selector,
+.ka-code-pre .token.attr-name,
+.ka-code-pre .token.string,
+.ka-code-pre .token.char,
+.ka-code-pre .token.builtin { color: #5a7a3a; }
+
+.ka-code-pre .token.operator,
+.ka-code-pre .token.entity,
+.ka-code-pre .token.url { color: #8b7355; }
+
+.ka-code-pre .token.atrule,
+.ka-code-pre .token.attr-value,
+.ka-code-pre .token.keyword { color: #6366f1; }
+
+.ka-code-pre .token.function,
+.ka-code-pre .token.class-name { color: #b45309; }
+
+.ka-code-pre .token.regex,
+.ka-code-pre .token.important,
+.ka-code-pre .token.variable { color: #c26633; }
+
+/* ── Syntax Highlighting Dark Mode ──────────────────────────── */
+
+[data-theme="dark"] .ka-code-pre .token.comment,
+[data-theme="dark"] .ka-code-pre .token.prolog,
+[data-theme="dark"] .ka-code-pre .token.doctype,
+[data-theme="dark"] .ka-code-pre .token.cdata { color: #7a7068; }
+
+[data-theme="dark"] .ka-code-pre .token.punctuation { color: #999; }
+
+[data-theme="dark"] .ka-code-pre .token.property,
+[data-theme="dark"] .ka-code-pre .token.tag,
+[data-theme="dark"] .ka-code-pre .token.boolean,
+[data-theme="dark"] .ka-code-pre .token.number,
+[data-theme="dark"] .ka-code-pre .token.constant,
+[data-theme="dark"] .ka-code-pre .token.symbol { color: #e8956a; }
+
+[data-theme="dark"] .ka-code-pre .token.selector,
+[data-theme="dark"] .ka-code-pre .token.attr-name,
+[data-theme="dark"] .ka-code-pre .token.string,
+[data-theme="dark"] .ka-code-pre .token.char,
+[data-theme="dark"] .ka-code-pre .token.builtin { color: #9aca6a; }
+
+[data-theme="dark"] .ka-code-pre .token.operator,
+[data-theme="dark"] .ka-code-pre .token.entity,
+[data-theme="dark"] .ka-code-pre .token.url { color: #b0a090; }
+
+[data-theme="dark"] .ka-code-pre .token.atrule,
+[data-theme="dark"] .ka-code-pre .token.attr-value,
+[data-theme="dark"] .ka-code-pre .token.keyword { color: #818cf8; }
+
+[data-theme="dark"] .ka-code-pre .token.function,
+[data-theme="dark"] .ka-code-pre .token.class-name { color: #f0a050; }
+
+[data-theme="dark"] .ka-code-pre .token.regex,
+[data-theme="dark"] .ka-code-pre .token.important,
+[data-theme="dark"] .ka-code-pre .token.variable { color: #e0905a; }
+
 /* ── File Artifact Cards ──────────────────────────────────── */
 
 .ka-artifact {
@@ -5264,6 +5338,64 @@ h4 {
     color: #fff;
 }
 
+/* ── Artifact preview & extras ────────────────────────────── */
+
+.ka-artifact-action--active {
+    background: var(--rubin-accent);
+    border-color: var(--rubin-accent);
+    color: #fff;
+}
+
+.ka-artifact-action--active:hover {
+    opacity: 0.85;
+    color: #fff;
+}
+
+.ka-artifact-preview {
+    border-top: 1px solid var(--rubin-ivory-dark);
+}
+
+.ka-artifact-iframe {
+    width: 100%;
+    min-height: 200px;
+    max-height: 500px;
+    border: none;
+    background: #fff;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.ka-artifact-truncated {
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+    background: rgba(139, 115, 85, 0.05);
+    border-top: 1px solid var(--rubin-ivory-dark);
+    text-align: center;
+}
+
+.ka-artifact-download-all {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px dashed var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--rubin-slate-muted);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-artifact-download-all:hover {
+    border-color: var(--rubin-accent);
+    color: var(--rubin-accent);
+    border-style: solid;
+}
+
 /* ── Artifact dark mode ────────────────────────────────────── */
 
 [data-theme="dark"] .ka-artifact {
@@ -5298,6 +5430,36 @@ h4 {
     background: var(--rubin-accent);
     border-color: var(--rubin-accent);
     color: #fff;
+}
+
+[data-theme="dark"] .ka-artifact-action--active {
+    background: var(--rubin-accent);
+    border-color: var(--rubin-accent);
+    color: #fff;
+}
+
+[data-theme="dark"] .ka-artifact-preview {
+    border-color: #333;
+}
+
+[data-theme="dark"] .ka-artifact-iframe {
+    background: #1A1A1A;
+}
+
+[data-theme="dark"] .ka-artifact-truncated {
+    background: rgba(139, 115, 85, 0.1);
+    border-color: #333;
+    color: #999;
+}
+
+[data-theme="dark"] .ka-artifact-download-all {
+    border-color: #444;
+    color: #999;
+}
+
+[data-theme="dark"] .ka-artifact-download-all:hover {
+    border-color: var(--rubin-accent);
+    color: var(--rubin-accent);
 }
 
 /* ── Agent Badges ─────────────────────────────────────────── */

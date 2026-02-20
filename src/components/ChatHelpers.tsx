@@ -68,20 +68,44 @@ export function readFileAsText(file: File): Promise<string> {
 
 export const LANG_EXT: Record<string, string> = {
   python: '.py', py: '.py', javascript: '.js', js: '.js', typescript: '.ts', ts: '.ts',
-  html: '.html', css: '.css', csv: '.csv', json: '.json', sql: '.sql',
+  tsx: '.tsx', jsx: '.jsx', html: '.html', css: '.css', csv: '.csv', json: '.json', sql: '.sql',
   bash: '.sh', sh: '.sh', markdown: '.md', md: '.md', yaml: '.yml', yml: '.yml',
   xml: '.xml', java: '.java', rust: '.rs', go: '.go', c: '.c', cpp: '.cpp',
+  'c++': '.cpp', 'c#': '.cs', 'objective-c': '.m', 'f#': '.fs',
   ruby: '.rb', php: '.php', swift: '.swift', kotlin: '.kt', r: '.r',
+  toml: '.toml', svg: '.svg', scss: '.scss', sass: '.sass', less: '.less',
+}
+
+const DOWNLOAD_MIME: Record<string, string> = {
+  '.html': 'text/html', '.htm': 'text/html', '.css': 'text/css',
+  '.js': 'text/javascript', '.mjs': 'text/javascript', '.ts': 'text/typescript',
+  '.json': 'application/json', '.xml': 'application/xml',
+  '.svg': 'image/svg+xml', '.csv': 'text/csv',
+  '.md': 'text/markdown', '.yaml': 'text/yaml', '.yml': 'text/yaml',
+  '.sh': 'application/x-sh', '.py': 'text/x-python',
+}
+
+export function getMimeType(filename: string): string {
+  const ext = '.' + filename.split('.').pop()?.toLowerCase()
+  return DOWNLOAD_MIME[ext] || 'text/plain'
 }
 
 export function downloadFile(content: string, filename: string) {
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+  const mime = getMimeType(filename)
+  const blob = new Blob([content], { type: `${mime};charset=utf-8` })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
   a.download = filename
   a.click()
   URL.revokeObjectURL(url)
+}
+
+export function downloadAllFiles(files: { filename: string; content: string }[]) {
+  // Sequential download with small delays to avoid browser blocking
+  files.forEach((file, i) => {
+    setTimeout(() => downloadFile(file.content, file.filename), i * 150)
+  })
 }
 
 // ─── Engine State Serializer ────────────────────────────

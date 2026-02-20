@@ -110,7 +110,7 @@ describe('AgentSelection', () => {
       expect(result.confidence).toBe(0.85)
     })
 
-    it('routes evaluate to scout', () => {
+    it('routes evaluate to critic', () => {
       const perception: Perception = {
         intent: { type: 'evaluate', opportunity: 'new market' },
         urgency: 0,
@@ -123,7 +123,7 @@ describe('AgentSelection', () => {
       }
 
       const result = selectAgent(perception, baseAttention, null, noPerf, [])
-      expect(result.agent.id).toBe('scout')
+      expect(result.agent.id).toBe('critic')
       expect(result.confidence).toBe(0.8)
     })
 

@@ -262,9 +262,16 @@ export function createEngine(): {
         role: m.agentId === 'human' ? 'user' : 'assistant',
         content: `${m.agentName}: ${m.content}`,
       }));
-    claudeMessages.push({ role: 'user', content: topic + contextSuffix });
+    // For build/code intents, append artifact format reminder to the user message
+    const isBuildIntent = perception.intent.type === 'build' || agent.id === 'coder';
+    const artifactReminder = isBuildIntent
+      ? '\n\n[Reminder: Use ```language:filename.ext for EVERY file. Each file in its own block.]'
+      : '';
+    claudeMessages.push({ role: 'user', content: topic + contextSuffix + artifactReminder });
 
-    const llmOpts = { system: agent.systemPrompt, tier: 'strong' as const, max_tokens: 512 };
+    // Higher token limit for build/code intents that produce file artifacts
+    const maxTokens = isBuildIntent ? 8192 : 4096;
+    const llmOpts = { system: agent.systemPrompt, tier: 'strong' as const, max_tokens: maxTokens };
 
     // Use tool loop if tools are available for this agent
     const agentTools = getToolCount() > 0 ? getToolsForAgent(agent.id) : [];
