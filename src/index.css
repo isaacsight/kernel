@@ -9430,6 +9430,37 @@ h4 {
     background: #333;
 }
 
+/* ─── Feature Discovery Dots ─────────────────────────── */
+
+.ka-feature-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--rubin-accent, #6366F1);
+    flex-shrink: 0;
+    margin-left: auto;
+    animation: ka-dot-pulse 2s ease-in-out infinite;
+}
+
+.ka-feature-dot--tab {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 6px;
+    height: 6px;
+    margin-left: 0;
+}
+
+.ka-tab-icon-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+@keyframes ka-dot-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
 /* ─── Language Picker ──────────────────────────────────── */
 .ka-more-language-select {
     position: relative;

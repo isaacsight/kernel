@@ -19,14 +19,16 @@ const TABS: Tab[] = [
 interface BottomTabBarProps {
   activeTab: TabId
   onTabChange: (tab: TabId) => void
+  undiscoveredCount?: number
 }
 
-export function BottomTabBar({ activeTab, onTabChange }: BottomTabBarProps) {
+export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: BottomTabBarProps) {
   return (
     <nav className="ka-tab-bar" role="tablist" aria-label="Main navigation">
       {TABS.map(tab => {
         const Icon = tab.icon
         const isActive = activeTab === tab.id
+        const showDot = tab.id === 'more' && undiscoveredCount > 0
         return (
           <button
             key={tab.id}
@@ -35,7 +37,10 @@ export function BottomTabBar({ activeTab, onTabChange }: BottomTabBarProps) {
             aria-selected={isActive}
             onClick={() => onTabChange(tab.id)}
           >
-            <Icon size={20} />
+            <span className="ka-tab-icon-wrap">
+              <Icon size={20} />
+              {showDot && <span className="ka-feature-dot ka-feature-dot--tab" />}
+            </span>
             <span className="ka-tab-label">{tab.label}</span>
           </button>
         )
