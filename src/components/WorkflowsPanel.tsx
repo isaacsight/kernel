@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Zap, Play, Trash2, Plus, Clock, Workflow } from 'lucide-react'
+import { X, Zap, Play, Trash2, Plus, Clock } from 'lucide-react'
 import {
   getUserProcedures,
   upsertProcedure,
@@ -111,7 +111,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
           <div className="ka-wf-list">
             {procedures.length === 0 && (
               <div className="ka-empty-state">
-                <Workflow size={48} className="ka-empty-state-icon" />
+                <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-workflows.svg`} alt="" aria-hidden="true" />
                 <div className="ka-empty-state-title">{t('workflows.emptyTitle')}</div>
                 <div className="ka-empty-state-desc">{t('workflows.emptyDesc')}</div>
                 <button className="ka-empty-state-cta" onClick={() => setShowBuilder(true)}>{t('workflows.newWorkflow')}</button>

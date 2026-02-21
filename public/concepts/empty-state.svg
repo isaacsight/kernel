@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <!-- Empty State — Open journal with pen, reading lamp glow -->
+
+  <!-- Warm ambient glow from above-right (lamp) -->
+  <defs>
+    <radialGradient id="lamp-glow" cx="72%" cy="15%" r="50%">
+      <stop offset="0%" stop-color="#D4C5A9" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="#D4C5A9" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#D4C5A9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="320" fill="#FAF9F6"/>
+  <rect width="400" height="320" fill="url(#lamp-glow)"/>
+
+  <!-- Journal — open, slightly angled -->
+  <!-- Left page -->
+  <path d="M90 100 Q90 90 100 88 L195 82 L195 240 L100 248 Q90 250 90 240 Z"
+        fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <!-- Right page -->
+  <path d="M195 82 L290 88 Q300 90 300 100 L300 240 Q300 250 290 248 L195 240 Z"
+        fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <!-- Spine -->
+  <line x1="195" y1="82" x2="195" y2="240" stroke="#D4C5A9" stroke-width="1"/>
+
+  <!-- Ruled lines on left page -->
+  <line x1="106" y1="110" x2="185" y2="106" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="126" x2="185" y2="122" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="142" x2="185" y2="138" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="158" x2="185" y2="154" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="174" x2="185" y2="170" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="190" x2="185" y2="186" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="106" y1="206" x2="185" y2="202" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Faint handwriting traces on left page -->
+  <path d="M110 109 Q120 107 135 108 Q150 109 160 106" stroke="#6B5B95" stroke-width="0.6" opacity="0.15" fill="none"/>
+  <path d="M110 125 Q125 123 145 124" stroke="#6B5B95" stroke-width="0.6" opacity="0.12" fill="none"/>
+
+  <!-- Pen resting diagonally across right page -->
+  <line x1="220" y1="220" x2="280" y2="110" stroke="#6B5B95" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Pen nib -->
+  <path d="M280 110 L284 104 L278 106 Z" fill="#6B5B95"/>
+  <!-- Pen clip -->
+  <line x1="232" y1="204" x2="228" y2="210" stroke="#6B5B95" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Ink bottle — small, to the right -->
+  <rect x="316" y="170" width="30" height="36" rx="3" stroke="#D4C5A9" stroke-width="1.2" fill="none"/>
+  <rect x="322" y="164" width="18" height="8" rx="2" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <!-- Ink level -->
+  <rect x="318" y="190" width="26" height="14" rx="2" fill="#6B5B95" opacity="0.15"/>
+
+  <!-- Single suspended ink drop -->
+  <ellipse cx="331" cy="216" rx="3" ry="3.5" fill="#6B5B95" opacity="0.4"/>
+</svg>

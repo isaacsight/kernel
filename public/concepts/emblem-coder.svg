@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Coder — Terminal / angle brackets with cursor -->
+  <circle cx="128" cy="128" r="120" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- Left angle bracket < -->
+  <polyline points="100,96 68,128 100,160" stroke="#6B8E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Right angle bracket > -->
+  <polyline points="156,96 188,128 156,160" stroke="#6B8E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Forward slash / -->
+  <line x1="140" y1="86" x2="116" y2="170" stroke="#6B8E6B" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Blinking cursor line -->
+  <line x1="128" y1="180" x2="128" y2="196" stroke="#6B8E6B" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Dots — like terminal output -->
+  <circle cx="108" cy="128" r="2" fill="#6B8E6B" opacity="0.3"/>
+  <circle cx="128" cy="128" r="2" fill="#6B8E6B" opacity="0.5"/>
+  <circle cx="148" cy="128" r="2" fill="#6B8E6B" opacity="0.3"/>
+</svg>

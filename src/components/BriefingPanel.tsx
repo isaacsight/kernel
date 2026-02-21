@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Newspaper, RefreshCw, Sparkles, Check, Clock, ArrowRight, AlertCircle, Trash2, MessageCircle, Target } from 'lucide-react'
+import { X, Newspaper, RefreshCw, Check, Clock, ArrowRight, AlertCircle, Trash2, MessageCircle, Target } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { generateBriefing, type Briefing } from '../engine/BriefingGenerator'
 import { MessageContent } from './MessageContent'
@@ -195,7 +195,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
         <div className="ka-brief-loading">{t('briefings.loading')}</div>
       ) : briefings.length === 0 && !generating ? (
         <div className="ka-brief-empty">
-          <Sparkles size={28} className="ka-brief-empty-icon" />
+          <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-briefings.svg`} alt="" aria-hidden="true" />
           <h3 className="ka-brief-empty-title">{t('briefings.emptyTitle')}</h3>
           <p>{t('briefings.emptyDesc')}</p>
           <button className="ka-brief-empty-cta" onClick={handleGenerate}>

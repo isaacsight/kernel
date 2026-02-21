@@ -1,12 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" fill="none">
-  <!-- Direction 5: Dark mode variant — for dark backgrounds -->
-
-  <!-- Circle mark -->
-  <circle cx="60" cy="60" r="48" fill="#1C1A18" stroke="#D4C5A9" stroke-width="1.2"/>
-  <text x="60" y="76" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="52" font-weight="400" fill="#FAF9F6" letter-spacing="-1">K</text>
-  <circle cx="60" cy="96" r="1.8" fill="#8B7BB5"/>
-
-  <!-- Wordmark -->
-  <text x="136" y="68" font-family="EB Garamond, Georgia, serif" font-style="italic" font-size="42" font-weight="400" fill="#FAF9F6" letter-spacing="3">kernel</text>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- The Kernel Mark — Dark Mode variant with warm browns -->
+  <circle cx="60" cy="60" r="56" fill="#1C1A18" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#8B7BB5">K</text>
+  <!-- The "kernel seed" — luminous amethyst -->
+  <circle cx="60" cy="98" r="3" fill="#8B7BB5"/>
 </svg>

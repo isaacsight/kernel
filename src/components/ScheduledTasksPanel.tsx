@@ -138,7 +138,7 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
         <div className="ka-sched-list">
           {tasks.length === 0 && !showForm && (
             <div className="ka-empty-state">
-              <Clock size={48} className="ka-empty-state-icon" />
+              <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-scheduled.svg`} alt="" aria-hidden="true" />
               <div className="ka-empty-state-title">{t('scheduled.emptyTitle')}</div>
               <div className="ka-empty-state-desc">{t('scheduled.emptyDesc')}</div>
               <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>{t('scheduled.createTask')}</button>

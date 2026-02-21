@@ -54,6 +54,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
 
       {totalEntities === 0 ? (
         <div className="ka-kg-empty">
+          <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" aria-hidden="true" />
           <p>{t('kg.emptyTitle')}</p>
           <p className="ka-kg-empty-hint">{t('kg.emptyHint')}</p>
         </div>
