@@ -1828,6 +1828,7 @@ h4 {
     padding: 16px 20px;
     white-space: pre-wrap;
     word-break: break-word;
+    overflow: hidden;
 }
 
 .ka-msg-link {
@@ -5299,7 +5300,6 @@ h4 {
     flex-direction: column;
     max-width: 85%;
     min-width: 0;
-    overflow: hidden;
 }
 
 .ka-msg--user .ka-msg-col {
