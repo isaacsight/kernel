@@ -29,7 +29,7 @@ export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRe
     <div className="ka-insights-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Eye size={18} />
+          <Eye size={18} aria-hidden="true" />
           {t('insights.title')}
         </h2>
         <button className="ka-panel-close" onClick={onClose} aria-label="Close">
@@ -45,11 +45,11 @@ export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRe
             className={`ka-insights-tab${activeSection === s ? ' ka-insights-tab--active' : ''}`}
             onClick={() => setActiveSection(s)}
           >
-            {s === 'world' && <User size={14} />}
-            {s === 'beliefs' && <Brain size={14} />}
-            {s === 'memory' && <Sparkles size={14} />}
-            {s === 'reflections' && <BarChart3 size={14} />}
-            {s === 'agents' && <Shield size={14} />}
+            {s === 'world' && <User size={14} aria-hidden="true" />}
+            {s === 'beliefs' && <Brain size={14} aria-hidden="true" />}
+            {s === 'memory' && <Sparkles size={14} aria-hidden="true" />}
+            {s === 'reflections' && <BarChart3 size={14} aria-hidden="true" />}
+            {s === 'agents' && <Shield size={14} aria-hidden="true" />}
             <span>{t(`insights.sections.${s}`)}</span>
           </button>
         ))}

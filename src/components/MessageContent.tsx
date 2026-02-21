@@ -74,15 +74,15 @@ export function Linkify({ text }: { text: string }) {
 
 function getFileIcon(ext: string) {
   if (['.py', '.js', '.ts', '.tsx', '.jsx', '.rs', '.go', '.java', '.c', '.cpp', '.rb', '.php', '.swift', '.kt', '.sh', '.html', '.css', '.sql'].includes(ext)) {
-    return <FileCode size={16} />
+    return <FileCode size={16} aria-hidden="true" />
   }
   if (['.csv', '.json', '.xml', '.yml', '.yaml'].includes(ext)) {
-    return <FileSpreadsheet size={16} />
+    return <FileSpreadsheet size={16} aria-hidden="true" />
   }
   if (['.md', '.txt'].includes(ext)) {
-    return <FileText size={16} />
+    return <FileText size={16} aria-hidden="true" />
   }
-  return <File size={16} />
+  return <File size={16} aria-hidden="true" />
 }
 
 // ─── Code Block with copy + download ─────────────────────

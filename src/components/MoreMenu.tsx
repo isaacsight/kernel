@@ -117,7 +117,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
                 className="ka-more-menu-item"
                 onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
               >
-                <Icon size={18} />
+                <Icon size={18} aria-hidden="true" />
                 <span>{t(item.labelKey)}</span>
                 {isNew && <span className="ka-feature-dot" />}
               </button>
@@ -126,7 +126,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('language', { ns: 'common' })}</div>
           <div className="ka-more-menu-item ka-more-language-select">
-            <Globe size={18} />
+            <Globe size={18} aria-hidden="true" />
             <select
               value={i18n.language}
               onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -147,7 +147,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
                 className={`ka-more-menu-item${item.danger ? ' ka-more-menu-item--danger' : ''}${item.id === 'upgrade' ? ' ka-more-menu-item--upgrade' : ''}`}
                 onClick={() => { onSelect(item.id); onClose() }}
               >
-                <Icon size={18} />
+                <Icon size={18} aria-hidden="true" />
                 <span>{t(item.labelKey)}</span>
               </button>
             )
