@@ -149,8 +149,8 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
 
   return (
     <div className="ka-brief-panel">
-      <div className="ka-brief-header">
-        <h2 className="ka-brief-title">
+      <div className="ka-panel-header">
+        <h2 className="ka-panel-title">
           <Newspaper size={18} />
           {t('briefings.title')}
         </h2>
@@ -164,7 +164,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
             <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
             {generating ? t('briefings.generating') : t('briefings.newBriefing')}
           </button>
-          <button className="ka-brief-close" onClick={onClose} aria-label="Close">
+          <button className="ka-panel-close" onClick={onClose} aria-label="Close">
             <X size={18} />
           </button>
         </div>

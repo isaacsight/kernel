@@ -54,7 +54,7 @@ export const SPECIALISTS: Record<string, Specialist> = {
     id: 'kernel',
     name: 'Kernel',
     icon: 'K',
-    color: '#6366F1',
+    color: '#6B5B95',
     systemPrompt: KERNEL_AGENT.systemPrompt,
   },
 
@@ -62,7 +62,7 @@ export const SPECIALISTS: Record<string, Specialist> = {
     id: 'researcher',
     name: 'Researcher',
     icon: 'R',
-    color: '#0EA5E9',
+    color: '#5B8BA0',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
 YOUR SPECIALIZATION: Deep Research & Fact-Finding
@@ -88,7 +88,7 @@ FORMAT:
     id: 'coder',
     name: 'Coder',
     icon: 'C',
-    color: '#22C55E',
+    color: '#6B8E6B',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
 YOUR SPECIALIZATION: Programming & Technical Problem-Solving
@@ -112,7 +112,7 @@ FORMAT:
     id: 'writer',
     name: 'Writer',
     icon: 'W',
-    color: '#F59E0B',
+    color: '#C4956A',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
 YOUR SPECIALIZATION: Writing, Editing & Content Creation
@@ -137,7 +137,7 @@ FORMAT:
     id: 'analyst',
     name: 'Analyst',
     icon: 'A',
-    color: '#EC4899',
+    color: '#A0768C',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
 YOUR SPECIALIZATION: Analysis, Strategy & Evaluation

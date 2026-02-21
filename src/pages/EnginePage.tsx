@@ -89,6 +89,28 @@ export function EnginePage() {
   return <EngineChat />
 }
 
+// ─── Helpers ─────────────────────────────────────────────
+
+function getTimeGreeting(): string {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
+function relativeTime(dateStr: string): string {
+  const now = Date.now()
+  const then = new Date(dateStr).getTime()
+  const diff = now - then
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  return `${days}d ago`
+}
+
 // ─── Engine Chat (post-auth) ────────────────────────────
 
 const FREE_MSG_LIMIT = 10
@@ -469,6 +491,7 @@ function EngineChat() {
             <div className="ka-empty-icon">K</div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
+            <p className="ka-home-greeting">{getTimeGreeting()}</p>
             {chatEngine.todayBriefing && (
               <div className="ka-home-briefing-card">
                 <div className="ka-home-briefing-info">
@@ -484,6 +507,16 @@ function EngineChat() {
                     <MessageCircle size={12} /> {t('briefing.discuss')}
                   </button>
                 </div>
+              </div>
+            )}
+            {convs.conversations.length > 0 && (
+              <div className="ka-home-recent">
+                {convs.conversations.slice(0, 2).map(c => (
+                  <div key={c.id} className="ka-home-context-item" onClick={() => convs.switchConversation(c.id)}>
+                    <span className="ka-home-context-title">{c.title}</span>
+                    <span className="ka-home-context-time">{relativeTime(c.updated_at)}</span>
+                  </div>
+                ))}
               </div>
             )}
             <div className="ka-topics">
@@ -567,7 +600,7 @@ function EngineChat() {
             <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
-                  <div className="ka-msg-avatar">{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
+                  <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
                   {msg.agentName && msg.agentName !== 'Kernel' && (
                     <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
                   )}
