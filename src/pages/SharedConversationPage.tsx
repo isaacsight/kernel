@@ -4,12 +4,12 @@
 // Logged-in users can fork it and continue on their own profile.
 
 import { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { IconChats, IconShare } from '../components/KernelIcons'
 import { MessageContent, Linkify } from '../components/MessageContent'
-import { getSpecialist } from '../agents/specialists'
-import { supabase, forkSharedConversation } from '../engine/SupabaseClient'
+import { forkSharedConversation } from '../engine/SupabaseClient'
+import { useAuthContext } from '../providers/AuthProvider'
 
 interface SharedMessage {
   role: string
@@ -31,18 +31,12 @@ const BASE = import.meta.env.BASE_URL
 
 export function SharedConversationPage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { user } = useAuthContext()
   const [data, setData] = useState<SharedData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [userId, setUserId] = useState<string | null>(null)
   const [forking, setForking] = useState(false)
-
-  // Check auth state
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUserId(session?.user?.id ?? null)
-    })
-  }, [])
 
   const handleSharePage = useCallback(async () => {
     const url = window.location.href
@@ -59,26 +53,36 @@ export function SharedConversationPage() {
   }, [data])
 
   const handleContinue = useCallback(async () => {
-    if (!data) return
+    if (!data || forking) return
+    setForking(true)
 
-    if (!userId) {
-      // Store fork intent for post-login redirect
-      sessionStorage.setItem('kernel-fork-intent', JSON.stringify({
+    try {
+      if (user) {
+        // Logged in — fork directly then navigate with convId as URL search param
+        const convId = await forkSharedConversation(user.id, data.title, data.messages)
+        if (convId) {
+          localStorage.setItem('kernel-fork-success', convId)
+          navigate('/')
+          return
+        }
+      }
+
+      // Not logged in or fork failed — store full intent for after login
+      localStorage.setItem('kernel-fork-intent', JSON.stringify({
         title: data.title,
         messages: data.messages,
       }))
-      window.location.href = `${BASE}#/`
-      return
+      navigate('/')
+    } catch {
+      localStorage.setItem('kernel-fork-intent', JSON.stringify({
+        title: data.title,
+        messages: data.messages,
+      }))
+      navigate('/')
+    } finally {
+      setForking(false)
     }
-
-    setForking(true)
-    const convId = await forkSharedConversation(userId, data.title, data.messages)
-    setForking(false)
-
-    if (convId) {
-      window.location.href = `${BASE}#/?fork=${encodeURIComponent(convId)}`
-    }
-  }, [data, userId])
+  }, [data, forking, user, navigate])
 
   // Override body fixed positioning so the page can scroll naturally
   useEffect(() => {
@@ -179,7 +183,7 @@ export function SharedConversationPage() {
       <div className="ka-shared-footer">
         <p>This conversation was shared from <strong>Kernel</strong> — a personal AI that learns your preferences, tracks your goals, and gets better every time you talk.</p>
         <button className="ka-shared-cta ka-shared-cta--continue" onClick={handleContinue} disabled={forking}>
-          {forking ? 'Forking...' : 'Continue this conversation'}
+          {forking ? 'Forking conversation...' : 'Continue this conversation'}
         </button>
       </div>
     </div>

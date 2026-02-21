@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,7 +18,6 @@ import { getSpecialist } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
-const LoginGate = lazy(() => import('../components/LoginGate').then(m => ({ default: m.LoginGate })))
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed } from '../components/ChatHelpers'
 import { useDarkMode } from '../hooks/useDarkMode'
@@ -32,18 +32,21 @@ import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
+import { lazyRetry } from '../utils/lazyRetry'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
-const KGPanel = lazy(() => import('../components/kernel-agent/KGPanel'))
-const StatsPanel = lazy(() => import('../components/kernel-agent/StatsPanel'))
-const GoalsPanel = lazy(() => import('../components/GoalsPanel').then(m => ({ default: m.GoalsPanel })))
-const WorkflowsPanel = lazy(() => import('../components/WorkflowsPanel').then(m => ({ default: m.WorkflowsPanel })))
-const ScheduledTasksPanel = lazy(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
-const BriefingPanel = lazy(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
-const InsightsPanel = lazy(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
-const ShareModal = lazy(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
-const OnboardingFlow = lazy(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
-const MoreMenu = lazy(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
+// lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
+const LoginGate = lazyRetry(() => import('../components/LoginGate').then(m => ({ default: m.LoginGate })))
+const KGPanel = lazyRetry(() => import('../components/kernel-agent/KGPanel'))
+const StatsPanel = lazyRetry(() => import('../components/kernel-agent/StatsPanel'))
+const GoalsPanel = lazyRetry(() => import('../components/GoalsPanel').then(m => ({ default: m.GoalsPanel })))
+const WorkflowsPanel = lazyRetry(() => import('../components/WorkflowsPanel').then(m => ({ default: m.WorkflowsPanel })))
+const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
+const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
+const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
+const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
+const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
+const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -132,6 +135,7 @@ const FREE_MSG_LIMIT = 10
 function EngineChat() {
   const { t } = useTranslation('home')
   const { user, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
+  const [searchParams, setSearchParams] = useSearchParams()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
@@ -220,28 +224,55 @@ function EngineChat() {
     return () => clearInterval(poll)
   }, [refreshSubscription, billing, showToast])
 
-  // Fork shared conversation: detect ?fork= param or post-login sessionStorage intent
+  // Fork shared conversation: read convId from URL search param (?fork=ID) or sessionStorage.
+  // URL search params are reliable across hash router navigation (unlike history.state).
+  // We wait for convsLoading to be false before switching to avoid races with mount effects.
+  const forkHandledRef = useRef(false)
+  const switchConvRef = useRef(convs.switchConversation)
+  switchConvRef.current = convs.switchConversation
+  const loadConvsRef = useRef(convs.loadConversations)
+  loadConvsRef.current = convs.loadConversations
+
   useEffect(() => {
-    const hash = window.location.hash
-    const forkMatch = hash.match(/[?&]fork=([^&]+)/)
-    if (forkMatch) {
-      const forkId = decodeURIComponent(forkMatch[1])
-      convs.switchConversation(forkId)
-      const cleanHash = hash.replace(/[?&]fork=[^&]+/, '').replace(/\?$/, '')
-      window.location.hash = cleanHash || '#/'
+    if (!user || forkHandledRef.current || convs.convsLoading) return
+
+    // Path A: conversation already forked — convId passed via localStorage from SharedConversationPage
+    const forkSuccessId = localStorage.getItem('kernel-fork-success')
+    if (forkSuccessId) {
+      forkHandledRef.current = true
+      localStorage.removeItem('kernel-fork-success')
+      switchConvRef.current(forkSuccessId).then(() => {
+        loadConvsRef.current()
+        showToast('Conversation forked — you can continue chatting.')
+      })
       return
     }
 
-    // Check for post-login fork intent from shared page
-    const intent = sessionStorage.getItem('kernel-fork-intent')
-    if (intent && user) {
-      sessionStorage.removeItem('kernel-fork-intent')
+    // Path B: not logged in when they clicked Continue — fork now from localStorage intent
+    const intent = localStorage.getItem('kernel-fork-intent')
+    if (!intent) return
+
+    forkHandledRef.current = true
+    localStorage.removeItem('kernel-fork-intent')
+
+    try {
       const parsed = JSON.parse(intent)
-      forkSharedConversation(user.id, parsed.title, parsed.messages).then((convId: string | null) => {
-        if (convId) convs.switchConversation(convId)
+      forkSharedConversation(user.id, parsed.title, parsed.messages).then(async (forkId: string | null) => {
+        if (forkId) {
+          await switchConvRef.current(forkId)
+          loadConvsRef.current()
+          showToast('Conversation forked — you can continue chatting.')
+        } else {
+          showToast('Could not continue conversation. Please try again.')
+        }
+      }).catch(() => {
+        showToast('Could not continue conversation. Please try again.')
       })
+    } catch {
+      showToast('Could not continue conversation. Please try again.')
     }
-  }, [user, convs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, convs.convsLoading, searchParams])
 
   // Close header menu on outside click
   const headerMenuRef = useRef<HTMLDivElement>(null)
