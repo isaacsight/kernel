@@ -9,6 +9,17 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+// ─── CORS origin allowlist ──────────────────────────────────
+
+const ALLOWED_ORIGINS = new Set([
+  'https://kernel.chat',
+  'https://www.kernel.chat',
+])
+
+function isAllowedOrigin(origin: string): boolean {
+  return ALLOWED_ORIGINS.has(origin) || /^https?:\/\/localhost(:\d+)?$/.test(origin)
+}
+
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST',
@@ -72,9 +83,10 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
 const DAILY_COST_ALERT_THRESHOLD = 5.00
 const DAILY_COST_HARD_LIMIT = 10.00
 const MAX_TOKENS_CAP = 8192
-const MAX_MESSAGE_SIZE_BYTES = 32_768  // 32KB per message
-const MAX_PAYLOAD_SIZE_BYTES = 262_144 // 256KB total
-const STREAM_IDLE_TIMEOUT_MS = 30_000  // 30s max idle between stream chunks
+const MAX_MESSAGE_SIZE_BYTES = 32_768   // 32KB per message
+const MAX_PAYLOAD_SIZE_BYTES = 262_144  // 256KB total
+const MAX_SYSTEM_PROMPT_BYTES = 16_384  // 16KB system prompt cap
+const STREAM_IDLE_TIMEOUT_MS = 30_000   // 30s max idle between stream chunks
 
 // Read from a stream reader with an idle timeout per chunk.
 // Rejects with an error if no data arrives within timeoutMs.
@@ -849,10 +861,27 @@ async function handleNvidia(
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: CORS_HEADERS })
+    const origin = req.headers.get('origin') || ''
+    return new Response('ok', {
+      headers: {
+        'Access-Control-Allow-Origin': isAllowedOrigin(origin) ? origin : 'https://kernel.chat',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+        'Vary': 'Origin',
+      },
+    })
   }
 
   try {
+    // ── Origin validation ──────────────────────────────
+    const origin = req.headers.get('origin')
+    if (origin && !isAllowedOrigin(origin)) {
+      return new Response(
+        JSON.stringify({ error: 'Origin not allowed' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
     // ── Auth: verify JWT or service key ─────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
@@ -988,6 +1017,14 @@ serve(async (req: Request) => {
       }
     }
 
+    // ── Validate system prompt size ────────────────────────
+    if (payload.system && payload.system.length > MAX_SYSTEM_PROMPT_BYTES) {
+      return new Response(
+        JSON.stringify({ error: 'System prompt too large', max_bytes: MAX_SYSTEM_PROMPT_BYTES }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     // ── Cap max_tokens server-side ─────────────────────────
     if (payload.max_tokens) {
       payload.max_tokens = Math.min(payload.max_tokens, MAX_TOKENS_CAP)
@@ -1000,6 +1037,8 @@ serve(async (req: Request) => {
       if (payload.model && !['haiku', 'gpt-4o-mini', 'gemini-2.0-flash'].includes(payload.model as string)) {
         payload.model = undefined
       }
+      // Disable web_search for free users (extra API cost)
+      payload.web_search = false
     }
 
     // Determine provider (default: anthropic for backward compat)
