@@ -141,7 +141,7 @@ h2 {
 
 h3,
 h4 {
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.02em;
 }
 
@@ -527,7 +527,7 @@ h4 {
 }
 
 .engine-message-name {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.95rem;
 }
 
@@ -2257,7 +2257,7 @@ h4 {
 .ka-share-desc--existing {
     color: var(--rubin-primary);
     opacity: 1;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 /* ─── Shared Conversation Page ─────────────────────────── */
@@ -4384,7 +4384,7 @@ h4 {
 .ka-home-briefing-title {
     font-family: var(--font-serif);
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -6195,7 +6195,7 @@ h4 {
 }
 
 .ka-swarm-agent-name {
-    font-weight: 500;
+    font-weight: 600;
 }
 
 @keyframes ka-swarm-pulse {
@@ -7868,7 +7868,7 @@ h4 {
 
 .kernel-gate-check {
     color: var(--rubin-accent);
-    font-weight: bold;
+    font-weight: 700;
 }
 
 /* Social sign-in */
@@ -8231,7 +8231,7 @@ h4 {
 .conv-item-title {
     font-family: var(--font-serif);
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -8408,7 +8408,7 @@ h4 {
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.02em;
     color: var(--rubin-slate);
     cursor: pointer;
@@ -8694,7 +8694,7 @@ h4 {
 .ka-kg-entity-name {
     font-family: var(--rubin-serif, 'EB Garamond', serif);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .ka-kg-entity-meta {
@@ -10376,7 +10376,7 @@ h4 {
     .ka-tab-label {
         font-family: var(--font-serif);
         font-size: 11px;
-        font-weight: 500;
+        font-weight: 600;
         letter-spacing: 0.01em;
         line-height: 1;
     }
@@ -10473,7 +10473,7 @@ h4 {
 
 .ka-more-menu-item--upgrade {
     color: var(--rubin-accent);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .ka-more-menu-label {

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
@@ -135,7 +134,6 @@ const FREE_MSG_LIMIT = 10
 function EngineChat() {
   const { t } = useTranslation('home')
   const { user, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
-  const [searchParams, setSearchParams] = useSearchParams()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
@@ -271,8 +269,7 @@ function EngineChat() {
     } catch {
       showToast('Could not continue conversation. Please try again.')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, convs.convsLoading, searchParams])
+  }, [user, convs.convsLoading])
 
   // Close header menu on outside click
   const headerMenuRef = useRef<HTMLDivElement>(null)

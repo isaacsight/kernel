@@ -1,15 +1,14 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { createHashRouter, Navigate, useRouteError } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { EnginePage } from './pages/EnginePage'
+import { lazyRetry } from './utils/lazyRetry'
 
-// Lazy-load admin page — only loaded when navigating to /admin
-const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
-// Lazy-load shared conversation page — public, no auth required
-const SharedConversationPage = lazy(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
-// Lazy-load briefing page
-const BriefingPage = lazy(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
+// Lazy-load pages — lazyRetry reloads once on stale-cache 404
+const AdminPage = lazyRetry(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
+const SharedConversationPage = lazyRetry(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
+const BriefingPage = lazyRetry(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>

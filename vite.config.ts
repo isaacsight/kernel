@@ -10,10 +10,28 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             workbox: {
-                globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+                // Only precache the HTML shell + static assets — NOT JS/CSS chunks.
+                // JS chunks have content-hashed filenames that change every build.
+                // Precaching them causes 404s when the old SW serves stale HTML
+                // that references chunk hashes from a previous deployment.
+                globPatterns: ['**/*.{html,ico,png,svg,woff2}'],
                 skipWaiting: true,
                 clientsClaim: true,
+                cleanupOutdatedCaches: true,
+                // Navigation requests always serve the cached HTML shell
+                navigateFallback: '/index.html',
+                navigateFallbackDenylist: [/^\/api/],
                 runtimeCaching: [
+                    {
+                        // JS and CSS — always try network first so stale chunks are never served
+                        urlPattern: /\.(?:js|css)$/i,
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'app-code',
+                            expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 },
+                            networkTimeoutSeconds: 5,
+                        },
+                    },
                     {
                         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
                         handler: 'CacheFirst',
