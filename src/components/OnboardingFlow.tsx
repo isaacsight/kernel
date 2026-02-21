@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, Crown, Check } from 'lucide-react'
+import { DURATION, EASE } from '../constants/motion'
 
 interface OnboardingFlowProps {
   onComplete: (interests?: string[]) => void
@@ -83,7 +84,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: DURATION.NORMAL, ease: EASE.OUT }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
@@ -103,7 +104,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 0 && (
             <>
               <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-1-welcome.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>
+              <h1 className="ka-gate-title onboarding-title">
                 {userName ? t('step0.titleUser', { name: userName.split('@')[0] }) : t('step0.title')}
               </h1>
               <p className="onboarding-subtitle">{t('step0.subtitle')}</p>
@@ -117,7 +118,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 1 && (
             <>
               <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-2-memory.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step1.title')}</h1>
+              <h1 className="ka-gate-title onboarding-title">{t('step1.title')}</h1>
               <p className="onboarding-subtitle">{t('step1.subtitle')}</p>
               <p className="onboarding-body">
                 {t('step1.body')}
@@ -129,7 +130,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 2 && (
             <>
               <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-3-agents.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step2.title')}</h1>
+              <h1 className="ka-gate-title onboarding-title">{t('step2.title')}</h1>
               <p className="onboarding-subtitle">{t('step2.subtitle')}</p>
               <p className="onboarding-body">
                 {t('step2.body')}
@@ -141,7 +142,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 3 && (
             <>
               <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-4-interests.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step3.title')}</h1>
+              <h1 className="ka-gate-title onboarding-title">{t('step3.title')}</h1>
               <p className="onboarding-subtitle">{t('step3.subtitle')}</p>
               <div className="onboarding-interests">
                 {INTERESTS.map(interest => (
@@ -163,7 +164,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {step === 4 && (
             <>
               <div className="onboarding-icon"><Crown size={28} aria-hidden="true" /></div>
-              <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step4.title')}</h1>
+              <h1 className="ka-gate-title onboarding-title">{t('step4.title')}</h1>
               <p className="onboarding-subtitle">{t('step4.subtitle')}</p>
               <div className="onboarding-tiers">
                 <div className="onboarding-tier">

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { TRANSITION } from '../constants/motion'
 import type { MediaAttachment } from '../types'
 
 interface MediaRendererProps {
@@ -106,7 +107,7 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
               key={`${item.url}-${index}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
+              transition={TRANSITION.MEDIA}
               className="ka-media-thumb"
             >
               {item.type === 'image' && (

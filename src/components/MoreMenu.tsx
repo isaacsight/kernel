@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { SPRING } from '../constants/motion'
 import { Zap, Clock, Brain, BarChart3, Eye, Crown, Settings, LogOut, Trash2, Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -97,7 +98,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
-        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+        transition={SPRING.DEFAULT}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}
