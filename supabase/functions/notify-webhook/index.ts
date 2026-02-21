@@ -90,6 +90,16 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: require service role key (called internally by claude-proxy) ──
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!token || !serviceKey || token !== serviceKey) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: service key required' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     const discordWebhookUrl = Deno.env.get('DISCORD_WEBHOOK_URL')
     if (!discordWebhookUrl) {
       console.error('Missing DISCORD_WEBHOOK_URL secret')
