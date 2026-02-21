@@ -234,14 +234,18 @@ function EngineChat() {
   useEffect(() => {
     if (!user || forkHandledRef.current || convs.convsLoading) return
 
-    // Path A: conversation already forked — convId passed via localStorage from SharedConversationPage
+    // Path A: conversation already forked — convId passed via localStorage from SharedConversationPage.
+    // NOTE: Don't remove the key until switchConversation succeeds. EngineChat can mount twice
+    // during hash-router transitions; removing eagerly lets the 2nd mount miss the key.
     const forkSuccessId = localStorage.getItem('kernel-fork-success')
     if (forkSuccessId) {
       forkHandledRef.current = true
-      localStorage.removeItem('kernel-fork-success')
       switchConvRef.current(forkSuccessId).then(() => {
+        localStorage.removeItem('kernel-fork-success')
         loadConvsRef.current()
         showToast('Conversation forked — you can continue chatting.')
+      }).catch(() => {
+        forkHandledRef.current = false
       })
       return
     }
@@ -251,22 +255,25 @@ function EngineChat() {
     if (!intent) return
 
     forkHandledRef.current = true
-    localStorage.removeItem('kernel-fork-intent')
 
     try {
       const parsed = JSON.parse(intent)
       forkSharedConversation(user.id, parsed.title, parsed.messages).then(async (forkId: string | null) => {
         if (forkId) {
           await switchConvRef.current(forkId)
+          localStorage.removeItem('kernel-fork-intent')
           loadConvsRef.current()
           showToast('Conversation forked — you can continue chatting.')
         } else {
+          forkHandledRef.current = false
           showToast('Could not continue conversation. Please try again.')
         }
       }).catch(() => {
+        forkHandledRef.current = false
         showToast('Could not continue conversation. Please try again.')
       })
     } catch {
+      forkHandledRef.current = false
       showToast('Could not continue conversation. Please try again.')
     }
   }, [user, convs.convsLoading])
