@@ -70,6 +70,75 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
 }
 
 const DAILY_COST_ALERT_THRESHOLD = 5.00
+const DAILY_COST_HARD_LIMIT = 10.00
+const MAX_TOKENS_CAP = 8192
+const MAX_MESSAGE_SIZE_BYTES = 32_768  // 32KB per message
+const MAX_PAYLOAD_SIZE_BYTES = 262_144 // 256KB total
+
+// ─── In-memory rate limiter (sliding window) ──────────────
+
+const rateLimitMap = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW_MS = 60_000 // 1 minute
+const RATE_LIMIT_FREE = 10
+const RATE_LIMIT_PAID = 60
+
+function checkRateLimit(userId: string, isPaid: boolean): { allowed: boolean; retryAfter: number } {
+  const now = Date.now()
+  const limit = isPaid ? RATE_LIMIT_PAID : RATE_LIMIT_FREE
+  const timestamps = rateLimitMap.get(userId) || []
+  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+
+  if (recent.length >= limit) {
+    const oldestInWindow = recent[0]
+    const retryAfter = Math.ceil((oldestInWindow + RATE_LIMIT_WINDOW_MS - now) / 1000)
+    return { allowed: false, retryAfter }
+  }
+
+  recent.push(now)
+  rateLimitMap.set(userId, recent)
+  return { allowed: true, retryAfter: 0 }
+}
+
+// Clean up stale rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now()
+  for (const [key, timestamps] of rateLimitMap) {
+    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+    if (recent.length === 0) rateLimitMap.delete(key)
+    else rateLimitMap.set(key, recent)
+  }
+}, 300_000)
+
+// ─── Pre-request daily cost check ─────────────────────────
+
+async function checkDailyCostLimit(userId: string): Promise<{ blocked: boolean; dailyCost: number }> {
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const svc = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    const { data: agg } = await svc
+      .from('usage_logs')
+      .select('estimated_cost_usd, model')
+      .eq('user_id', userId)
+      .gte('created_at', since)
+
+    if (!agg) return { blocked: false, dailyCost: 0 }
+
+    const usageRows = agg.filter((r: { model: string }) => r.model !== '__alert_sent__')
+    const dailyCost = usageRows.reduce(
+      (sum: number, r: { estimated_cost_usd: number }) => sum + Number(r.estimated_cost_usd), 0,
+    )
+
+    return { blocked: dailyCost >= DAILY_COST_HARD_LIMIT, dailyCost }
+  } catch {
+    // Fail-open: if check fails, allow request for availability
+    return { blocked: false, dailyCost: 0 }
+  }
+}
 
 function calculateCost(model: string, inputTokens: number, outputTokens: number): number {
   const pricing = PRICING_PER_M_TOKENS[model]
@@ -242,7 +311,7 @@ async function handleAnthropic(
     const errText = await res.text()
     console.error('Anthropic API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'Anthropic API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -365,7 +434,7 @@ async function handleOpenAI(
     const errText = await res.text()
     console.error('OpenAI API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'OpenAI API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -511,7 +580,7 @@ async function handleGemini(
     const errText = await res.text()
     console.error('Gemini API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'Gemini API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -655,7 +724,7 @@ async function handleNvidia(
     const errText = await res.text()
     console.error('NVIDIA API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'NVIDIA API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -783,6 +852,7 @@ serve(async (req: Request) => {
 
     // ── Free-tier limit: 10 messages for non-subscribers ───
     const isAdmin = !!user.app_metadata?.is_admin
+    let isPaidUser = false
     if (!isServiceCall && !isAdmin) {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
@@ -791,6 +861,7 @@ serve(async (req: Request) => {
         svc.from('user_memory').select('message_count').eq('user_id', user.id).maybeSingle(),
         svc.from('subscriptions').select('status').eq('user_id', user.id).eq('status', 'active').maybeSingle(),
       ])
+      isPaidUser = !!sub
       if (!sub) {
         const used = mem?.message_count ?? 0
         if (used >= 10) {
@@ -802,8 +873,45 @@ serve(async (req: Request) => {
       }
     }
 
+    // ── Rate limiting (per-user sliding window) ────────────
+    if (!isServiceCall) {
+      const rateCheck = checkRateLimit(user.id, isPaidUser || isAdmin)
+      if (!rateCheck.allowed) {
+        return new Response(
+          JSON.stringify({
+            error: 'rate_limited',
+            retry_after: rateCheck.retryAfter,
+            limit: isPaidUser ? RATE_LIMIT_PAID : RATE_LIMIT_FREE,
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    // ── Daily cost hard limit ──────────────────────────────
+    if (!isServiceCall && !isAdmin) {
+      const costCheck = await checkDailyCostLimit(user.id)
+      if (costCheck.blocked) {
+        return new Response(
+          JSON.stringify({
+            error: 'daily_cost_limit_reached',
+            daily_cost_usd: costCheck.dailyCost.toFixed(2),
+            limit_usd: DAILY_COST_HARD_LIMIT.toFixed(2),
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
     // ── Parse payload ──────────────────────────────────────
-    const payload = (await req.json()) as ProxyPayload
+    const rawBody = await req.text()
+    if (rawBody.length > MAX_PAYLOAD_SIZE_BYTES) {
+      return new Response(
+        JSON.stringify({ error: 'Payload too large', max_bytes: MAX_PAYLOAD_SIZE_BYTES }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+    const payload = JSON.parse(rawBody) as ProxyPayload
     const { mode = 'text', messages } = payload
 
     if (!messages?.length) {
@@ -811,6 +919,22 @@ serve(async (req: Request) => {
         JSON.stringify({ error: 'messages array is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
+    }
+
+    // ── Validate individual message sizes ──────────────────
+    for (const msg of messages) {
+      const content = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content)
+      if (content.length > MAX_MESSAGE_SIZE_BYTES) {
+        return new Response(
+          JSON.stringify({ error: 'Individual message too large', max_bytes: MAX_MESSAGE_SIZE_BYTES }),
+          { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    // ── Cap max_tokens server-side ─────────────────────────
+    if (payload.max_tokens) {
+      payload.max_tokens = Math.min(payload.max_tokens, MAX_TOKENS_CAP)
     }
 
     // Determine provider (default: anthropic for backward compat)
