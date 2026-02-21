@@ -151,7 +151,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
     <div className="ka-brief-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Newspaper size={18} />
+          <Newspaper size={18} aria-hidden="true" />
           {t('briefings.title')}
         </h2>
         <div className="ka-brief-header-actions">

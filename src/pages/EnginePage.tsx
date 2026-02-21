@@ -9,7 +9,7 @@ import { getSpecialist } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
-import { LoginGate } from '../components/LoginGate'
+const LoginGate = lazy(() => import('../components/LoginGate').then(m => ({ default: m.LoginGate })))
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed } from '../components/ChatHelpers'
 import { useDarkMode } from '../hooks/useDarkMode'
@@ -57,7 +57,7 @@ export function EnginePage() {
   }
 
   if (!isAuthenticated) {
-    return <LoginGate />
+    return <Suspense fallback={null}><LoginGate /></Suspense>
   }
 
   const onboardingKey = `kernel-onboarded-${user?.id || 'anon'}`
