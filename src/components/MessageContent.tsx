@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-python'
@@ -86,7 +87,7 @@ function getFileIcon(ext: string) {
 
 // ─── Code Block with copy + download ─────────────────────
 
-function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; ext: string; filename: string }) {
+function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: string; ext: string; filename: string; t: (key: string, opts?: Record<string, unknown>) => string }) {
   const [copied, setCopied] = useState(false)
   const highlighted = useMemo(() => highlightCode(code, lang), [code, lang])
   const handleCopy = async () => {
@@ -99,14 +100,14 @@ function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; 
       <div className="ka-code-header">
         <span className="ka-code-lang">{lang}</span>
         <div className="ka-code-actions">
-          <button className="ka-code-copy" onClick={handleCopy} aria-label="Copy code">
+          <button className="ka-code-copy" onClick={handleCopy} aria-label={t('copy')}>
             {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
-            {copied ? 'Copied' : 'Copy'}
+            {copied ? t('copied') : t('copy')}
           </button>
           <button
             className="ka-code-download"
             onClick={() => downloadFile(code, filename)}
-            aria-label={`Download as ${filename}`}
+            aria-label={`${t('download')} ${filename}`}
           >
             <Download size={13} />
             {ext}
@@ -122,12 +123,13 @@ function CodeBlock({ lang, code, ext, filename }: { lang: string; code: string; 
 
 const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
 
-function ArtifactCard({ filename, lang, code, ext, title }: {
+function ArtifactCard({ filename, lang, code, ext, title, t }: {
   filename: string
   lang: string
   code: string
   ext: string
   title?: string
+  t: (key: string, opts?: Record<string, unknown>) => string
 }) {
   const [copied, setCopied] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -168,28 +170,28 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
           </div>
         </div>
         <div className="ka-artifact-stats">
-          <span className="ka-artifact-lines">{lineCount} {lineCount === 1 ? 'line' : 'lines'}</span>
+          <span className="ka-artifact-lines">{lineCount === 1 ? t('line', { count: lineCount }) : t('lines', { count: lineCount })}</span>
           <span className="ka-artifact-lang">{lang}</span>
         </div>
       </div>
       <div className="ka-artifact-actions">
-        <button className="ka-artifact-action" onClick={handleCopy} aria-label="Copy file content">
+        <button className="ka-artifact-action" onClick={handleCopy} aria-label={t('copy')}>
           {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? t('copied') : t('copy')}
         </button>
         {canPreview && (
           <button
             className={`ka-artifact-action${showPreview ? ' ka-artifact-action--active' : ''}`}
             onClick={() => { setShowPreview(!showPreview); if (!expanded) setExpanded(true) }}
-            aria-label={showPreview ? 'Show code' : 'Show preview'}
+            aria-label={showPreview ? t('code') : t('preview')}
           >
             {showPreview ? <Code size={13} /> : <Eye size={13} />}
-            {showPreview ? 'Code' : 'Preview'}
+            {showPreview ? t('code') : t('preview')}
           </button>
         )}
-        <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`Download ${filename}`}>
+        <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`${t('download')} ${filename}`}>
           <Download size={13} />
-          Download
+          {t('download')}
         </button>
       </div>
       {expanded && (
@@ -208,7 +210,7 @@ function ArtifactCard({ filename, lang, code, ext, title }: {
           )}
           {!showPreview && isTruncated && (
             <div className="ka-artifact-truncated">
-              Preview truncated at {MAX_PREVIEW_LINES} lines — download for full file
+              {t('previewTruncated', { lines: MAX_PREVIEW_LINES })}
             </div>
           )}
         </>
@@ -351,6 +353,7 @@ export function inferFilename(lang: string, usedNames: Set<string>): string | nu
 const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
 
 export function MessageContent({ text }: { text: string }) {
+  const { t } = useTranslation('common')
   const parts: React.ReactNode[] = []
   const artifacts: { filename: string; content: string }[] = []
   const usedFilenames = new Set<string>()
@@ -400,13 +403,14 @@ export function MessageContent({ text }: { text: string }) {
           code={cleanCode}
           ext={ext}
           title={title || undefined}
+          t={t}
         />
       )
     } else {
       // Standard code block (short snippets only)
       const defaultFilename = `kernel-export${ext}`
       parts.push(
-        <CodeBlock key={`c${blockIndex}`} lang={lang} code={rawCode} ext={ext} filename={defaultFilename} />
+        <CodeBlock key={`c${blockIndex}`} lang={lang} code={rawCode} ext={ext} filename={defaultFilename} t={t} />
       )
     }
 
@@ -429,10 +433,10 @@ export function MessageContent({ text }: { text: string }) {
         <button
           className="ka-artifact-download-all"
           onClick={() => downloadAllFiles(artifacts)}
-          aria-label={`Download all ${artifacts.length} files`}
+          aria-label={t('downloadAllFiles', { count: artifacts.length })}
         >
           <PackageOpen size={14} />
-          Download all {artifacts.length} files
+          {t('downloadAllFiles', { count: artifacts.length })}
         </button>
       )}
     </>
