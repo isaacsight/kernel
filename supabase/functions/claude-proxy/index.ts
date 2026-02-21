@@ -857,16 +857,38 @@ serve(async (req: Request) => {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
-      const [{ data: mem }, { data: sub }] = await Promise.all([
-        svc.from('user_memory').select('message_count').eq('user_id', user.id).maybeSingle(),
-        svc.from('subscriptions').select('status').eq('user_id', user.id).eq('status', 'active').maybeSingle(),
-      ])
+      const { data: sub } = await svc
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle()
+
       isPaidUser = !!sub
       if (!sub) {
-        const used = mem?.message_count ?? 0
-        if (used >= 10) {
+        // Atomic increment-and-check via Postgres function
+        // Prevents race conditions AND client-side count manipulation
+        const { data: newCount, error: rpcError } = await svc.rpc('increment_message_count', {
+          p_user_id: user.id,
+        })
+        if (rpcError) {
+          console.error('[free-limit] RPC error (function may not exist yet):', rpcError.message)
+          // Fallback to non-atomic read if function doesn't exist yet
+          const { data: mem } = await svc
+            .from('user_memory')
+            .select('message_count')
+            .eq('user_id', user.id)
+            .maybeSingle()
+          const used = mem?.message_count ?? 0
+          if (used >= 10) {
+            return new Response(
+              JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+              { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
+          }
+        } else if (newCount > 10) {
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+            JSON.stringify({ error: 'free_limit_reached', limit: 10, used: newCount }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
@@ -935,6 +957,15 @@ serve(async (req: Request) => {
     // ── Cap max_tokens server-side ─────────────────────────
     if (payload.max_tokens) {
       payload.max_tokens = Math.min(payload.max_tokens, MAX_TOKENS_CAP)
+    }
+
+    // ── Enforce model tiers: free users locked to fast tier ─
+    if (!isServiceCall && !isPaidUser && !isAdmin) {
+      payload.tier = 'fast'
+      // Override any explicit model to the fast-tier equivalent
+      if (payload.model && !['haiku', 'gpt-4o-mini', 'gemini-2.0-flash'].includes(payload.model as string)) {
+        payload.model = undefined
+      }
     }
 
     // Determine provider (default: anthropic for backward compat)
