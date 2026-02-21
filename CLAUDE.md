@@ -79,11 +79,11 @@ tools/                # CLI tools & MCP servers
 
 | ID | Role | Color |
 |---|---|---|
-| `kernel` | General / personal | `#6366F1` |
-| `researcher` | Research & fact-finding | `#0EA5E9` |
-| `coder` | Programming | `#22C55E` |
-| `writer` | Content creation | `#F59E0B` |
-| `analyst` | Strategy & evaluation | `#EC4899` |
+| `kernel` | General / personal | `#6B5B95` (amethyst) |
+| `researcher` | Research & fact-finding | `#5B8BA0` (slate blue) |
+| `coder` | Programming | `#6B8E6B` (sage green) |
+| `writer` | Content creation | `#B8875C` (warm brown) |
+| `analyst` | Strategy & evaluation | `#A0768C` (mauve) |
 
 ### Claude Proxy
 

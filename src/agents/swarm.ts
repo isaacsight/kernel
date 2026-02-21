@@ -41,7 +41,7 @@ Format your responses as:
 **NEXT ACTION:**
 [Specific actionable step]`,
     avatar: '🧠',
-    color: '#6366F1'
+    color: '#6B5B95'
   },
   {
     id: 'architect',

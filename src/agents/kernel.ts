@@ -69,7 +69,7 @@ WRONG: Describing a file without producing it.
 
 Only use plain \`\`\`language (no filename) for 1-3 line shell commands or inline examples.`,
   avatar: 'K',
-  color: '#6366F1',
+  color: '#6B5B95',
 };
 
 export const KERNEL_TOPICS = [
