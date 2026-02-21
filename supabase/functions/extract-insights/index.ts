@@ -5,12 +5,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 
 interface InsightPayload {
   conversationId: string
@@ -39,8 +34,10 @@ Respond with ONLY a JSON array:
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: CORS_HEADERS })
+    return handlePreflight(req)
   }
+
+  const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
   try {
     // ── Auth: verify JWT ────────────────────────────────
