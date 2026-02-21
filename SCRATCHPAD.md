@@ -4,90 +4,89 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-20, evening)
+## Current Session (2026-02-20, late night)
 
 ### Accomplished This Session
 
-#### 1. Haiku-based Reflection Scorer (`src/engine/reflection.ts`)
-- Added rubric-based system prompt (`REFLECTION_SYSTEM`) with explicit scoring criteria per dimension
-- Added `INTENT_WEIGHTS` map — context-aware dimension weights per intent type (reason/evaluate/build/discuss/converse)
-- Extracted `computeWeightedQuality()` shared between heuristic and AI-enhanced paths
-- AI prompt now includes intent label and uses system prompt instead of bare one-liner
-- 8 new tests (context-aware weighting, system prompt passing, out-of-range scores, boilerplate detection, world model updates)
+#### 1. Writing Audit — Platform-Wide Copy Review (P8)
+- **6 locale files rewritten** — canonical vocabulary applied everywhere:
+  - "Kernel" (not "kernel"), "Deep research" (not "Deep research mode"), "Persistent memory" (not "knowledge graph"), "10 messages to start" (not "10 free messages"), "File creation & download" (not "File generation")
+- **Warm, human error messages** — "Couldn't save that goal. Try again." instead of "Failed to add goal" across all panels (goals, workflows, scheduled, briefings, share, stats)
+- **Sentence-case empty states** — "Set your first goal" not "Set Your First Goal"
+- **i18n extraction** — ConversationDrawer.tsx (9 hardcoded strings → `t()` calls with new `conversations.*` and `relativeTime.*` keys), GoalsPanel.tsx (3 placeholders), EnginePage.tsx (2 brand name fixes)
+- **Agent prompt cleanup** — removed stale "knowledge current to early 2025" cutoff, sharpened topic labels ("Think with me", "What's happening today?", "Surprise me")
+- **`2032a2f8`** — feat: Writing audit — canonical vocabulary, warm tone, i18n extraction
 
-#### 2. Test Suite Expansion
-- New `src/engine/MemoryAgent.test.ts` — 14 tests (emptyProfile, formatMemoryForPrompt sections, mergeMemory fallback/dedup/cap)
-- 8 new reflection tests in `src/engine/reflection.test.ts`
-- **Total: 184 tests across 16 files, all passing**
+#### 2. Previous: Usage Cost Tracking & Discord Alerts
+- `usage_logs` table, token extraction in 4 providers, $5/day Discord alerts
+- `f659e582` — feat: Usage cost tracking with Discord alerts + Opus model support
 
-#### 3. InsightsPanel i18n Fix (`src/components/InsightsPanel.tsx`)
-- Fixed 3 hardcoded English strings (lines 174, 177, 186)
-- `challengedStat`: "{{count}}x challenged" → `t('insights.challengedStat', { count })`
-- `reinforcedStat`: "{{count}}x reinforced" → `t('insights.reinforcedStat', { count })`
-- `challengeAction`: "challenge" → `t('insights.challengeAction')`
-- Added keys to all 24 locale `panels.json` files with proper translations
-
-#### 4. Mini Phone Layout Spec
-- Wrote `specs/mini-phone-layout.md` — comprehensive spec for Gemini to implement
-- Covers: header collapse, chat padding, slim input, 3-tab bar, full-screen panels
-- Mostly CSS-only approach at `@media (max-width: 389px)`
-- Targeting iPhone SE, iPhone Mini, Galaxy S10e
-
-#### Commits
-- `aaad4817` — feat: Haiku reflection scorer with rubrics, expand tests, i18n fixes
+#### 3. Previous: Auto Model Selection by Complexity
+- AgentRouter complexity score → Opus/Sonnet/Haiku routing
+- `905ef811` — feat: Auto model selection — engine picks opus/sonnet/haiku by complexity
 
 #### Deployed
-- Pushed to `origin/main`, deployed to kernel.chat via `npm run deploy`
+- All commits pushed to `origin/main`, deployed to kernel.chat
+
+### Key Lesson
+Always deploy Supabase edge functions with `--no-verify-jwt`. The proxy does its own JWT validation internally. Without this flag, the Supabase relay rejects valid ES256 JWTs before they reach the handler code.
 
 ---
+
+## Previous Session (2026-02-20, late night / 2026-02-21 early morning)
+
+### Accomplished
+- Artifact System Overhaul (Prism.js, live preview, download all, MIME types)
+- Agent Audit & Cleanup (23 → 17 agents, 440+ lines removed)
+- 3/3 Artifact Generation Fix (specialist routing + auto-artifact)
+- `f67c2cf9`, `8d631474` — pushed and deployed
+
+## Previous Session (2026-02-19, late night)
+
+### Accomplished
+- Dark Mode Audit & Fixes (~70% → ~95% coverage, system preference, transitions)
+- `ce79e1d3` — feat: Dark mode audit
+
+## Previous Session (2026-02-20, evening)
+
+### Accomplished
+- Haiku-based Reflection Scorer, Test Suite Expansion (184 tests), InsightsPanel i18n Fix, Mini Phone Layout
 
 ## Previous Session (2026-02-20, earlier)
 
 ### Accomplished
-- Feature Discovery Tooltips (useFeatureDiscovery hook, pulsing dots on MoreMenu + BottomTabBar)
-- Discord Bot Fixes (!goal command, fallback messages)
-- Stripe Webhook Hardening (safeEpochToISO, try-catch around JSON.parse)
-- Branch Review + Merge of `claude/add-file-artifact-generation-7jvKg` (artifact cards, auth i18n, regex tightening)
+- Feature Discovery Tooltips, Discord Bot Fixes, Stripe Webhook Hardening, Artifact Branch Merge
 
-## Previous Session (2026-02-19)
+## Previous Sessions (2026-02-17 to 2026-02-19)
 
 ### Accomplished
-- Discord Bot Feature Parity (deep research, swarm, multi-step tasks, KG extraction, goals, briefings, share, help)
-- InsightsPanel (5 tabbed sections: world model, beliefs, memory, reflections, agent performance)
-- Locale translations for all 24 locales (InsightsPanel keys)
-- Deployed and pushed
-
-## Previous Session (2026-02-18)
-
-### Accomplished
-- Empty State CTAs (3 panels), Hover States, Unified Intent Classification, SCRATCHPAD Cleanup
-
-## Previous Session (2026-02-17)
-
-### Accomplished
-- Mobile UX Polish, Panel Overlay + Empty State Fixes, Playwright Config, Site Audit
-- Implemented all 6 Sticky Features (Document Analysis, Shared Conversations, Goal Tracking, Workflows, Recurring Tasks, Daily Briefings)
+- Discord Bot Feature Parity, InsightsPanel, 24 locale translations
+- Empty State CTAs, Hover States, Unified Intent Classification
+- Mobile UX Polish, 6 Sticky Features, Playwright Config
 
 ---
 
 ## Ongoing Backlog
 
-- **P1: Mini phone layout** — spec written at `specs/mini-phone-layout.md`, handed off to Gemini 3
-- **P2: Haiku-based reflection scorer** — DONE (rubrics, context-aware weights, tests)
-- **P3: Test suite** — DONE for now (184 tests). Future: component tests, integration tests
-- **P4: Locale translations** — DONE (all 24 locales complete including InsightsPanel + auth + beliefs)
+- **P1–P5**: All DONE (mini phone, dark mode, reflection scorer, tests, locales)
+- **P6: Artifact system** — DONE (3/3 generation, auto-artifact, syntax highlighting, preview)
+- **P7: Agent cleanup** — DONE (23 → 17, dead code removed, routing fixed)
+- **P8: Writing audit** — DONE (canonical vocabulary, warm tone, i18n extraction across 10 files)
+- **P9: Usage cost tracking** — DONE (usage_logs, Discord alerts, $5/day threshold)
+- **P10: Opus + auto model selection** — DONE (complexity-based routing)
 
 ## Key Decisions Made
 
 - Bottom-sheet pattern for all panels (Goals, Workflows, Scheduled, Briefings, Insights)
 - Haiku-based progress extraction for goals (every 3 messages)
-- BriefingGenerator reuses DeepResearch pipeline
-- Real-time notifications via Supabase realtime subscription
-- verify_jwt=false for shared-conversation, task-scheduler, send-notification, stripe-webhook
-- Write-through pattern: localStorage fast, Supabase durable backup
-- Dynamic import of SupabaseClient in AIEngine (avoids circular deps)
-- AgentRouter (Haiku API) is single source of truth for intent classification; keyword matching is minimal fallback only
-- Discord bot uses direct `callClaude()` (service key), not `getProvider()` (browser-only)
-- InsightsPanel receives engineState as prop from useChatEngine (no extra subscription needed)
-- Feature discovery persisted per-user in localStorage, dots on MoreMenu + BottomTabBar
+- AgentRouter (Haiku) is single source of truth; keyword matching is minimal fallback
+- AgentSelection uses SPECIALISTS directly (not swarm mapping) when router confidence >= 0.7
+- Auto-artifact: >= 8 lines + known language → inferred filename → artifact card
+- Dynamic filename extraction from user messages for explicit ordering
+- Dark mode: `data-theme` on `<html>`, token overrides, `useDarkMode()` hook
 - Reflection scorer: 60/40 AI/heuristic blend, rubric system prompt, intent-aware weights
+- Free tier: 10 messages (enforced in claude-proxy edge function)
+- Auto model selection: complexity >= 0.85 → Opus, <= 0.2 → Haiku, else Sonnet
+- Usage tracking: fire-and-forget INSERT after every API call, $5/day Discord alert
+- Edge function deploys: ALWAYS use `--no-verify-jwt` flag
+- Writing audit canonical vocabulary: "Kernel", "Deep research", "Persistent memory", "10 messages to start"
