@@ -8,23 +8,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-// ─── CORS origin allowlist ──────────────────────────────────
-
-const ALLOWED_ORIGINS = new Set([
-  'https://kernel.chat',
-  'https://www.kernel.chat',
-])
-
-function isAllowedOrigin(origin: string): boolean {
-  return ALLOWED_ORIGINS.has(origin) || /^https?:\/\/localhost(:\d+)?$/.test(origin)
-}
-
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 
 // ─── Model tier mapping ──────────────────────────────────────
 
@@ -297,6 +281,7 @@ async function handleAnthropic(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
   if (!anthropicKey) {
@@ -422,6 +407,7 @@ async function handleOpenAI(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const openaiKey = Deno.env.get('OPENAI_API_KEY')
   if (!openaiKey) {
@@ -567,6 +553,7 @@ async function handleGemini(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const geminiKey = Deno.env.get('GEMINI_API_KEY')
   if (!geminiKey) {
@@ -721,6 +708,7 @@ async function handleNvidia(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const nvidiaKey = Deno.env.get('NVIDIA_API_KEY')
   if (!nvidiaKey) {
@@ -861,24 +849,21 @@ async function handleNvidia(
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    const origin = req.headers.get('origin') || ''
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': isAllowedOrigin(origin) ? origin : 'https://kernel.chat',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-        'Vary': 'Origin',
-      },
-    })
+    return handlePreflight(req)
   }
+
+  const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
   try {
     // ── Origin validation ──────────────────────────────
+    // corsHeaders(req) already validates origin — if it's not allowed,
+    // the response will default to 'https://kernel.chat'. But we still
+    // want to hard-reject unknown browser origins.
     const origin = req.headers.get('origin')
-    if (origin && !isAllowedOrigin(origin)) {
+    if (origin && CORS_HEADERS['Access-Control-Allow-Origin'] !== origin) {
       return new Response(
         JSON.stringify({ error: 'Origin not allowed' }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
+        { status: 403, headers: { 'Content-Type': 'application/json', ...SECURITY_HEADERS } }
       )
     }
 
@@ -1064,13 +1049,13 @@ serve(async (req: Request) => {
     // ── Dispatch to provider handler ───────────────────────
     switch (provider) {
       case 'anthropic':
-        return handleAnthropic(payload, resolvedModel, isStream, trackUserId)
+        return handleAnthropic(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'openai':
-        return handleOpenAI(payload, resolvedModel, isStream, trackUserId)
+        return handleOpenAI(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'gemini':
-        return handleGemini(payload, resolvedModel, isStream, trackUserId)
+        return handleGemini(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'nvidia':
-        return handleNvidia(payload, resolvedModel, isStream, trackUserId)
+        return handleNvidia(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       default:
         return new Response(
           JSON.stringify({ error: `Unknown provider: ${provider}` }),
