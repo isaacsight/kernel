@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Newspaper, RefreshCw, Check, Clock, ArrowRight, AlertCircle, Trash2, MessageCircle, Target } from 'lucide-react'
+import { IconClose, IconNewspaper, IconRefresh, IconCheck, IconClock, IconArrowRight, IconAlertCircle, IconTrash, IconMessageCircle, IconTarget } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { generateBriefing, type Briefing } from '../engine/BriefingGenerator'
 import { MessageContent } from './MessageContent'
@@ -151,7 +151,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
     <div className="ka-brief-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Newspaper size={18} aria-hidden="true" />
+          <IconNewspaper size={18} aria-hidden="true" />
           {t('briefings.title')}
         </h2>
         <div className="ka-brief-header-actions">
@@ -161,11 +161,11 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
             disabled={generating}
             title={t('briefings.generateTooltip')}
           >
-            <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
+            <IconRefresh size={14} className={generating ? 'ka-spin' : ''} />
             {generating ? t('briefings.generating') : t('briefings.newBriefing')}
           </button>
           <button className="ka-panel-close" onClick={onClose} aria-label="Close">
-            <X size={18} />
+            <IconClose size={18} />
           </button>
         </div>
       </div>
@@ -182,7 +182,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 className={`ka-brief-progress-step${isActive ? ' ka-brief-progress-step--active' : ''}${isComplete ? ' ka-brief-progress-step--done' : ''}`}
               >
                 <span className="ka-brief-progress-icon">
-                  {isComplete ? <Check size={12} /> : (i + 1)}
+                  {isComplete ? <IconCheck size={12} /> : (i + 1)}
                 </span>
                 <span className="ka-brief-progress-label">{t(phase.labelKey)}</span>
               </div>
@@ -213,7 +213,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                   onClick={() => setSelectedIdx(i)}
                 >
                   {formatTabLabel(b.created_at!)}
-                  {isBriefingFailed(b) && <AlertCircle size={10} />}
+                  {isBriefingFailed(b) && <IconAlertCircle size={10} />}
                 </button>
               ))}
             </div>
@@ -222,16 +222,16 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
           {current && isBriefingFailed(current) ? (
             <div className="ka-brief-content ka-brief-content--failed">
               <div className="ka-brief-failed">
-                <AlertCircle size={24} />
+                <IconAlertCircle size={24} />
                 <h3>{t('briefings.errorTitle')}</h3>
                 <p>{t('briefings.errorDesc')}</p>
                 <div className="ka-brief-failed-actions">
                   <button className="ka-brief-retry-btn" onClick={handleGenerate} disabled={generating}>
-                    <RefreshCw size={14} className={generating ? 'ka-spin' : ''} />
+                    <IconRefresh size={14} className={generating ? 'ka-spin' : ''} />
                     {generating ? t('briefings.generating') : t('retry', { ns: 'common' })}
                   </button>
                   <button className="ka-brief-delete-btn" onClick={() => current.id && handleDelete(current.id)}>
-                    <Trash2 size={14} />
+                    <IconTrash size={14} />
                     {t('remove', { ns: 'common' })}
                   </button>
                 </div>
@@ -241,7 +241,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
             <div className="ka-brief-content">
               <h3 className="ka-brief-content-title">{current.title}</h3>
               <div className="ka-brief-meta">
-                <Clock size={12} />
+                <IconClock size={12} />
                 <span>{t('briefings.readTime', { count: readingTime })}</span>
                 <span className="ka-brief-meta-sep">&middot;</span>
                 <span>{t('briefings.wordCount', { count: current.content.trim().split(/\s+/).length })}</span>
@@ -263,7 +263,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 href={`${import.meta.env.BASE_URL}#/briefing/${current.id}`}
                 className="ka-brief-fullpage-btn"
               >
-                {preview?.isTruncated ? t('briefings.continueReading') : t('briefings.readFull')} <ArrowRight size={14} />
+                {preview?.isTruncated ? t('briefings.continueReading') : t('briefings.readFull')} <IconArrowRight size={14} />
               </a>
               <div className="ka-brief-actions">
                 {onGoDeeper && (
@@ -271,7 +271,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                     className="ka-brief-action-btn"
                     onClick={() => onGoDeeper(current.title, current.content)}
                   >
-                    <MessageCircle size={14} />
+                    <IconMessageCircle size={14} />
                     {t('briefings.goDeeper')}
                   </button>
                 )}
@@ -283,7 +283,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                       briefingToGoalDescription(current.title, current.content),
                     )}
                   >
-                    <Target size={14} />
+                    <IconTarget size={14} />
                     {t('briefings.saveAsGoal')}
                   </button>
                 )}

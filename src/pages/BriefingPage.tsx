@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Share2, Check, List, Clock, AlertCircle, MessageCircle, Target } from 'lucide-react'
+import { IconArrowLeft, IconShare, IconCheck, IconList, IconClock, IconAlertCircle, IconMessageCircle, IconTarget } from '../components/KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { upsertUserGoal } from '../engine/SupabaseClient'
 import type { UserGoal } from '../engine/GoalTracker'
@@ -188,7 +188,7 @@ export function BriefingPage() {
         <div className="ka-briefing-error">
           <h1>Briefing not found</h1>
           <Link to="/" className="ka-briefing-back">
-            <ArrowLeft size={16} /> Back to Kernel
+            <IconArrowLeft size={16} /> Back to Kernel
           </Link>
         </div>
       </div>
@@ -202,15 +202,15 @@ export function BriefingPage() {
       <div className="ka-briefing-page">
         <div className="ka-briefing-nav">
           <Link to="/" className="ka-briefing-back">
-            <ArrowLeft size={16} /> Back
+            <IconArrowLeft size={16} /> Back
           </Link>
         </div>
         <div className="ka-briefing-error">
-          <AlertCircle size={32} />
+          <IconAlertCircle size={32} />
           <h1>This briefing couldn't be generated</h1>
           <p>The research step didn't return enough data to create a useful summary. You can generate a new briefing from the panel.</p>
           <Link to="/" className="ka-briefing-back">
-            <ArrowLeft size={16} /> Back to Kernel
+            <IconArrowLeft size={16} /> Back to Kernel
           </Link>
         </div>
       </div>
@@ -221,7 +221,7 @@ export function BriefingPage() {
     <div className="ka-briefing-page">
       <div className="ka-briefing-nav">
         <Link to="/" className="ka-briefing-back">
-          <ArrowLeft size={16} /> Back
+          <IconArrowLeft size={16} /> Back
         </Link>
         <div className="ka-briefing-nav-actions">
           {toc.length > 0 && (
@@ -230,7 +230,7 @@ export function BriefingPage() {
               onClick={() => setTocOpen(v => !v)}
               aria-label="Table of contents"
             >
-              <List size={16} />
+              <IconList size={16} />
             </button>
           )}
           <button
@@ -238,7 +238,7 @@ export function BriefingPage() {
             onClick={handleShare}
             aria-label={copied ? 'Copied to clipboard' : 'Share briefing'}
           >
-            {copied ? <Check size={16} /> : <Share2 size={16} />}
+            {copied ? <IconCheck size={16} /> : <IconShare size={16} />}
             {copied ? 'Copied' : 'Share'}
           </button>
         </div>
@@ -254,7 +254,7 @@ export function BriefingPage() {
               })}
             </time>
             <span className="ka-briefing-reading-time">
-              <Clock size={12} />
+              <IconClock size={12} />
               {readingTime} min read &middot; {briefing.content.trim().split(/\s+/).length} words
             </span>
           </div>
@@ -298,7 +298,7 @@ export function BriefingPage() {
                   className="ka-briefing-go-deeper"
                   onClick={() => handleGoDeeper(section.heading, section.body)}
                 >
-                  <MessageCircle size={12} />
+                  <IconMessageCircle size={12} />
                   Go deeper
                 </button>
               </div>
@@ -327,7 +327,7 @@ export function BriefingPage() {
             onClick={handleSaveAsGoal}
             disabled={goalSaved}
           >
-            <Target size={14} />
+            <IconTarget size={14} />
             {goalSaved ? 'Goal saved!' : 'Save takeaways as goal'}
           </button>
         </div>

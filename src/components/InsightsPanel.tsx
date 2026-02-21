@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Eye, Brain, Sparkles, BarChart3, User, ChevronDown, ChevronRight, Shield, Trash2 } from 'lucide-react'
+import { IconClose, IconEye, IconBrain, IconSparkles, IconChart, IconUser, IconChevronDown, IconChevronRight, IconShield, IconTrash } from './KernelIcons'
 import type { EngineState, Belief, Reflection } from '../engine/types'
 import type { UserMemoryProfile } from '../engine/MemoryAgent'
 
@@ -29,11 +29,11 @@ export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRe
     <div className="ka-insights-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Eye size={18} aria-hidden="true" />
+          <IconEye size={18} aria-hidden="true" />
           {t('insights.title')}
         </h2>
         <button className="ka-panel-close" onClick={onClose} aria-label="Close">
-          <X size={18} />
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -45,11 +45,11 @@ export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRe
             className={`ka-insights-tab${activeSection === s ? ' ka-insights-tab--active' : ''}`}
             onClick={() => setActiveSection(s)}
           >
-            {s === 'world' && <User size={14} aria-hidden="true" />}
-            {s === 'beliefs' && <Brain size={14} aria-hidden="true" />}
-            {s === 'memory' && <Sparkles size={14} aria-hidden="true" />}
-            {s === 'reflections' && <BarChart3 size={14} aria-hidden="true" />}
-            {s === 'agents' && <Shield size={14} aria-hidden="true" />}
+            {s === 'world' && <IconUser size={14} aria-hidden="true" />}
+            {s === 'beliefs' && <IconBrain size={14} aria-hidden="true" />}
+            {s === 'memory' && <IconSparkles size={14} aria-hidden="true" />}
+            {s === 'reflections' && <IconChart size={14} aria-hidden="true" />}
+            {s === 'agents' && <IconShield size={14} aria-hidden="true" />}
             <span>{t(`insights.sections.${s}`)}</span>
           </button>
         ))}
@@ -191,7 +191,7 @@ function BeliefsSection({
                 onClick={() => onRemove(belief.id)}
                 title={t('insights.dismissBelief')}
               >
-                <Trash2 size={12} />
+                <IconTrash size={12} />
               </button>
             </div>
           </div>
@@ -329,7 +329,7 @@ function ReflectionsSection({
             className="ka-insights-expand-btn"
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            {expanded ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
             {t('insights.recentLessons')} ({recentLessons.length})
           </button>
           {expanded && (

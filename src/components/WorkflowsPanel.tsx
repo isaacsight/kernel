@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Zap, Play, Trash2, Plus, Clock } from 'lucide-react'
+import { IconClose, IconZap, IconPlay, IconTrash, IconPlus, IconClock } from './KernelIcons'
 import {
   getUserProcedures,
   upsertProcedure,
@@ -90,11 +90,11 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
     <div className="ka-wf-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Zap size={18} aria-hidden="true" />
+          <IconZap size={18} aria-hidden="true" />
           {t('workflows.title')}
         </h2>
         <button className="ka-panel-close" onClick={onClose} aria-label="Close">
-          <X size={18} />
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -125,7 +125,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                 <div key={proc.id} className="ka-wf-card">
                   <div className="ka-wf-card-header">
                     <div className="ka-wf-card-left">
-                      <Zap size={14} />
+                      <IconZap size={14} />
                       <span className="ka-wf-card-name">{proc.name}</span>
                       <span className="ka-wf-card-source">{proc.source}</span>
                     </div>
@@ -135,14 +135,14 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                         onClick={() => onRunWorkflow(proc)}
                         aria-label="Run workflow"
                       >
-                        <Play size={12} /> {t('run', { ns: 'common' })}
+                        <IconPlay size={12} /> {t('run', { ns: 'common' })}
                       </button>
                       <button
                         className="ka-wf-card-delete"
                         onClick={() => handleDelete(proc.id!)}
                         aria-label="Delete"
                       >
-                        <Trash2 size={12} />
+                        <IconTrash size={12} />
                       </button>
                     </div>
                   </div>
@@ -156,7 +156,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                   </div>
                   {proc.times_executed > 0 && (
                     <div className="ka-wf-card-meta">
-                      <Clock size={10} />
+                      <IconClock size={10} />
                       {t('workflows.runCount', { count: proc.times_executed })}
                       {proc.last_executed_at && ` \u00B7 last ${new Date(proc.last_executed_at).toLocaleDateString()}`}
                     </div>
@@ -167,7 +167,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
           </div>
 
           <button className="ka-wf-create-btn" onClick={() => setShowBuilder(true)}>
-            <Plus size={16} /> {t('workflows.createWorkflow')}
+            <IconPlus size={16} /> {t('workflows.createWorkflow')}
           </button>
         </>
       )}

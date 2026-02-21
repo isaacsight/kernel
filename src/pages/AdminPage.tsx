@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Users, MessageSquare, Brain, TrendingUp, Crown, Activity, Download, Trash2, ShieldCheck, ShieldOff, Search, RefreshCw, ChevronRight } from 'lucide-react'
+import { IconArrowLeft, IconUsers, IconChats, IconBrain, IconTrendingUp, IconCrown, IconActivity, IconDownload, IconTrash, IconShieldCheck, IconShieldOff, IconSearch, IconRefresh, IconChevronRight } from '../components/KernelIcons'
 import { useAuthContext } from '../providers/AuthProvider'
 import { supabase } from '../engine/SupabaseClient'
 
@@ -262,7 +262,7 @@ export function AdminPage() {
       {/* Header */}
       <header className="admin-header">
         <button className="admin-back" onClick={() => navigate('/')}>
-          <ArrowLeft size={18} />
+          <IconArrowLeft size={18} />
           <span>Back to Kernel</span>
         </button>
         <h1>Admin Dashboard</h1>
@@ -273,10 +273,10 @@ export function AdminPage() {
             disabled={refreshing}
             title="Refresh data"
           >
-            <RefreshCw size={14} className={refreshing ? 'ka-spin' : ''} /> Refresh
+            <IconRefresh size={14} className={refreshing ? 'ka-spin' : ''} /> Refresh
           </button>
           <button className="admin-action-btn" onClick={exportUsersCSV} title="Export users CSV">
-            <Download size={14} /> Export
+            <IconDownload size={14} /> Export
           </button>
         </div>
       </header>
@@ -289,12 +289,12 @@ export function AdminPage() {
         <>
           {/* Metric Cards */}
           <div className="admin-metrics">
-            <MetricCard icon={<Users size={18} />} label="Users" value={stats.totalUsers} />
-            <MetricCard icon={<Crown size={18} />} label="Subscribers" value={stats.subscribers} accent />
-            <MetricCard icon={<TrendingUp size={18} />} label="MRR" value={`$${stats.mrr}`} accent />
-            <MetricCard icon={<MessageSquare size={18} />} label="Messages" value={stats.messages} />
-            <MetricCard icon={<Brain size={18} />} label="KG Entities" value={stats.kgEntities} />
-            <MetricCard icon={<Activity size={18} />} label="Helpful Rate" value={`${stats.helpfulRate}%`} />
+            <MetricCard icon={<IconUsers size={18} />} label="Users" value={stats.totalUsers} />
+            <MetricCard icon={<IconCrown size={18} />} label="Subscribers" value={stats.subscribers} accent />
+            <MetricCard icon={<IconTrendingUp size={18} />} label="MRR" value={`$${stats.mrr}`} accent />
+            <MetricCard icon={<IconChats size={18} />} label="Messages" value={stats.messages} />
+            <MetricCard icon={<IconBrain size={18} />} label="KG Entities" value={stats.kgEntities} />
+            <MetricCard icon={<IconActivity size={18} />} label="Helpful Rate" value={`${stats.helpfulRate}%`} />
           </div>
 
           {/* Main Content */}
@@ -303,7 +303,7 @@ export function AdminPage() {
             <div className="admin-panel">
               <h3 className="mono admin-panel-title">USER DIRECTORY</h3>
               <div className="admin-search">
-                <Search size={14} />
+                <IconSearch size={14} />
                 <input
                   className="admin-search-input"
                   type="text"
@@ -323,14 +323,14 @@ export function AdminPage() {
                   >
                     <div className="admin-user-info">
                       <span className="admin-user-email">
-                        {u.subscription === 'active' && <Crown size={12} style={{ color: '#8B7355', marginRight: 4 }} />}
+                        {u.subscription === 'active' && <IconCrown size={12} style={{ color: '#8B7355', marginRight: 4 }} />}
                         {u.email}
                       </span>
                       <span className="admin-user-meta mono">
                         {u.messageCount} msgs · {u.kgEntityCount || 0} entities · {u.provider}
                       </span>
                     </div>
-                    <ChevronRight size={14} style={{ opacity: 0.3 }} />
+                    <IconChevronRight size={14} style={{ opacity: 0.3 }} />
                   </motion.div>
                 ))}
                 {filteredUsers.length === 0 && (
@@ -359,15 +359,15 @@ export function AdminPage() {
                   <div className="admin-user-actions">
                     {selectedUser.subscription === 'active' ? (
                       <button className="admin-action-btn admin-action-btn--danger" onClick={() => revokeSubscription(selectedUser.id)}>
-                        <ShieldOff size={14} /> Revoke Pro
+                        <IconShieldOff size={14} /> Revoke Pro
                       </button>
                     ) : (
                       <button className="admin-action-btn admin-action-btn--accent" onClick={() => grantSubscription(selectedUser.id)}>
-                        <ShieldCheck size={14} /> Grant Pro
+                        <IconShieldCheck size={14} /> Grant Pro
                       </button>
                     )}
                     <button className="admin-action-btn admin-action-btn--danger" onClick={() => deleteUserConversations(selectedUser.id)}>
-                      <Trash2 size={14} /> Delete Data
+                      <IconTrash size={14} /> Delete Data
                     </button>
                   </div>
 

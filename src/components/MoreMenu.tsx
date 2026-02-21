@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { Zap, Clock, Brain, BarChart3, Eye, Crown, Settings, LogOut, Trash2, Globe } from 'lucide-react'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 
 const LANGUAGES = [
@@ -44,24 +44,24 @@ export type MoreAction =
 interface MoreMenuItem {
   id: MoreAction
   labelKey: string
-  icon: typeof Zap
+  icon: typeof IconZap
   danger?: boolean
   condition?: 'not-pro' | 'subscribed' | 'always'
 }
 
 const ITEMS: MoreMenuItem[] = [
-  { id: 'workflows', labelKey: 'menu.workflows', icon: Zap },
-  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: Clock },
-  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: Brain },
-  { id: 'stats', labelKey: 'menu.yourStats', icon: BarChart3 },
-  { id: 'insights', labelKey: 'menu.insights', icon: Eye },
+  { id: 'workflows', labelKey: 'menu.workflows', icon: IconZap },
+  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: IconClock },
+  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
+  { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
+  { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
-  { id: 'upgrade', labelKey: 'menu.upgradeToPro', icon: Crown, condition: 'not-pro' },
-  { id: 'manage-subscription', labelKey: 'menu.manageSubscription', icon: Settings, condition: 'subscribed' },
-  { id: 'sign-out', labelKey: 'menu.signOut', icon: LogOut },
-  { id: 'delete-account', labelKey: 'menu.deleteAccount', icon: Trash2, danger: true },
+  { id: 'upgrade', labelKey: 'menu.upgradeToPro', icon: IconCrown, condition: 'not-pro' },
+  { id: 'manage-subscription', labelKey: 'menu.manageSubscription', icon: IconSettings, condition: 'subscribed' },
+  { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut },
+  { id: 'delete-account', labelKey: 'menu.deleteAccount', icon: IconTrash, danger: true },
 ]
 
 interface MoreMenuProps {
@@ -118,7 +118,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
                 className="ka-more-menu-item"
                 onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
               >
-                <Icon size={18} aria-hidden="true" />
+                <Icon size={18} />
                 <span>{t(item.labelKey)}</span>
                 {isNew && <span className="ka-feature-dot" />}
               </button>
@@ -127,7 +127,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('language', { ns: 'common' })}</div>
           <div className="ka-more-menu-item ka-more-language-select">
-            <Globe size={18} aria-hidden="true" />
+            <IconGlobe size={18} />
             <select
               value={i18n.language}
               onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -148,7 +148,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
                 className={`ka-more-menu-item${item.danger ? ' ka-more-menu-item--danger' : ''}${item.id === 'upgrade' ? ' ka-more-menu-item--upgrade' : ''}`}
                 onClick={() => { onSelect(item.id); onClose() }}
               >
-                <Icon size={18} aria-hidden="true" />
+                <Icon size={18} />
                 <span>{t(item.labelKey)}</span>
               </button>
             )

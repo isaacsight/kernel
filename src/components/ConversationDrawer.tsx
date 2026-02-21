@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { SPRING, DURATION } from '../constants/motion'
-import { Plus, Trash2, X, Search, Pencil, Check, Share2 } from 'lucide-react'
+import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
@@ -155,12 +155,12 @@ export function ConversationDrawer({
             <div className="conv-drawer-header">
               <span className="conv-drawer-title">{t('conversations.title', { count: conversations.length })}</span>
               <button className="conv-drawer-close" onClick={onClose} aria-label={t('close')}>
-                <X size={18} />
+                <IconClose size={18} />
               </button>
             </div>
 
             <div className="conv-search">
-              <Search size={14} className="conv-search-icon" />
+              <IconSearch size={14} className="conv-search-icon" />
               <input
                 className="conv-search-input"
                 type="text"
@@ -171,7 +171,7 @@ export function ConversationDrawer({
             </div>
 
             <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
-              <Plus size={16} />
+              <IconPlus size={16} />
               {t('conversations.newChat')}
             </button>
 
@@ -223,7 +223,7 @@ export function ConversationDrawer({
                           onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
                           aria-label="Share conversation"
                         >
-                          <Share2 size={13} />
+                          <IconShare size={13} />
                         </button>
                       )}
                       <button
@@ -231,14 +231,14 @@ export function ConversationDrawer({
                         onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
                         aria-label="Rename conversation"
                       >
-                        <Pencil size={13} />
+                        <IconPencil size={13} />
                       </button>
                       <button
                         className="conv-item-action conv-item-action--delete"
                         onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
                         aria-label="Delete conversation"
                       >
-                        <Trash2 size={13} />
+                        <IconTrash size={13} />
                       </button>
                     </div>
                   )}

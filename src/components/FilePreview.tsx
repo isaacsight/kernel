@@ -3,7 +3,7 @@
 // Thumbnail/page-count preview for attached files before sending.
 
 import { useState, useEffect } from 'react'
-import { FileText, Image, File, X } from 'lucide-react'
+import { IconFileText, IconImage, IconFile, IconClose } from './KernelIcons'
 
 interface FilePreviewProps {
   file: File
@@ -29,7 +29,7 @@ export function FilePreview({ file, onRemove, disabled }: FilePreviewProps) {
       ? `${(file.size / 1024).toFixed(0)}KB`
       : `${(file.size / 1048576).toFixed(1)}MB`
 
-  const icon = isImage ? <Image size={16} /> : isPdf ? <FileText size={16} /> : <File size={16} />
+  const icon = isImage ? <IconImage size={16} /> : isPdf ? <IconFileText size={16} /> : <IconFile size={16} />
 
   return (
     <div className="ka-file-preview">
@@ -51,7 +51,7 @@ export function FilePreview({ file, onRemove, disabled }: FilePreviewProps) {
       </div>
       {!disabled && (
         <button type="button" className="ka-file-preview-remove" onClick={onRemove} aria-label="Remove file">
-          <X size={14} />
+          <IconClose size={14} />
         </button>
       )}
     </div>

@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Plus, Target, Check, ChevronDown, ChevronRight, Trash2 } from 'lucide-react'
+import { IconClose, IconPlus, IconTarget, IconCheck, IconChevronDown, IconChevronRight, IconTrash } from './KernelIcons'
 import {
   getUserGoals,
   upsertUserGoal,
@@ -113,11 +113,11 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
     <div className="ka-goals-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Target size={18} aria-hidden="true" />
+          <IconTarget size={18} aria-hidden="true" />
           {t('goals.title')}
         </h2>
         <button className="ka-panel-close" onClick={onClose} aria-label="Close">
-          <X size={18} />
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -144,7 +144,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
               <div key={goal.id} className="ka-goal-card">
                 <div className="ka-goal-card-header" onClick={() => setExpandedId(expanded ? null : goal.id!)}>
                   <div className="ka-goal-card-left">
-                    {expanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                    {expanded ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
                     <span className="ka-goal-card-title">{goal.title}</span>
                     <span className={`ka-goal-priority ka-goal-priority--${goal.priority}`}>{goal.priority}</span>
                   </div>
@@ -183,10 +183,10 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
                     )}
                     <div className="ka-goal-actions">
                       <button className="ka-goal-action-btn" onClick={() => handleComplete(goal)}>
-                        <Check size={12} /> {t('complete', { ns: 'common' })}
+                        <IconCheck size={12} /> {t('complete', { ns: 'common' })}
                       </button>
                       <button className="ka-goal-action-btn ka-goal-action-btn--danger" onClick={() => handleDelete(goal.id!)}>
-                        <Trash2 size={12} /> {t('delete', { ns: 'common' })}
+                        <IconTrash size={12} /> {t('delete', { ns: 'common' })}
                       </button>
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
                 <div key={goal.id} className="ka-goal-card ka-goal-card--completed">
                   <div className="ka-goal-card-header">
                     <div className="ka-goal-card-left">
-                      <Check size={14} />
+                      <IconCheck size={14} />
                       <span className="ka-goal-card-title">{goal.title}</span>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
         </div>
       ) : (
         <button className="ka-goal-add-btn" onClick={() => setShowForm(true)}>
-          <Plus size={16} /> {t('goals.addGoal')}
+          <IconPlus size={16} /> {t('goals.addGoal')}
         </button>
       )}
     </div>

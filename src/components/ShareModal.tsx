@@ -7,7 +7,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Link, Copy, Check, X, Clock, Trash2, Share2 } from 'lucide-react'
+import { IconLink, IconCopy, IconCheck, IconClose, IconClock, IconTrash, IconShare } from './KernelIcons'
 import { createSharedConversation, getSharedConversation, deleteSharedConversation, getShareCountToday } from '../engine/SupabaseClient'
 
 const FREE_SHARE_LIMIT = 3
@@ -184,11 +184,11 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       >
         <div className="ka-share-header">
           <h2 id="share-modal-title" className="ka-share-title">
-            <Link size={18} />
+            <IconLink size={18} />
             {t('share.title')}
           </h2>
           <button className="ka-share-close" onClick={onClose} aria-label={t('close', { ns: 'common' })}>
-            <X size={18} />
+            <IconClose size={18} />
           </button>
         </div>
 
@@ -209,11 +209,11 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
                 onClick={e => (e.target as HTMLInputElement).select()}
               />
               <button className="ka-share-copy-btn" onClick={handleCopy} aria-label={copied ? t('share.copied') : t('share.copyLink')}>
-                {copied ? <Check size={20} /> : <Copy size={20} />}
+                {copied ? <IconCheck size={20} /> : <IconCopy size={20} />}
               </button>
               {canNativeShare && onNativeShare && (
                 <button className="ka-share-copy-btn" onClick={handleNativeShare} aria-label={t('share.shareVia')}>
-                  <Share2 size={20} />
+                  <IconShare size={20} />
                 </button>
               )}
             </div>
@@ -228,7 +228,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
                 disabled={isRevoking}
                 aria-label={t('share.revokeLink')}
               >
-                <Trash2 size={14} />
+                <IconTrash size={14} />
                 {isRevoking ? t('share.revoking') : t('share.revokeLink')}
               </button>
             </div>
@@ -253,7 +253,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
               </p>
             )}
             <div className="ka-share-expiry">
-              <Clock size={14} />
+              <IconClock size={14} />
               <span>{t('share.linkExpires')}</span>
               <div className="ka-share-expiry-options">
                 {EXPIRY_OPTIONS.map(opt => (

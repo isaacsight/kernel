@@ -4,7 +4,7 @@
 // Each step: description + agent picker. Drag to reorder.
 
 import { useState } from 'react'
-import { Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
+import { IconPlus, IconTrash, IconChevronUp, IconChevronDown } from './KernelIcons'
 import type { ProcedureStep, Procedure } from '../engine/ProceduralMemory'
 import { getSpecialist } from '../agents/specialists'
 
@@ -98,7 +98,7 @@ export function WorkflowBuilder({ userId, onSave, onCancel }: WorkflowBuilderPro
                 disabled={i === 0}
                 aria-label="Move up"
               >
-                <ChevronUp size={12} />
+                <IconChevronUp size={12} />
               </button>
               <button
                 className="ka-wf-step-move"
@@ -106,7 +106,7 @@ export function WorkflowBuilder({ userId, onSave, onCancel }: WorkflowBuilderPro
                 disabled={i === steps.length - 1}
                 aria-label="Move down"
               >
-                <ChevronDown size={12} />
+                <IconChevronDown size={12} />
               </button>
             </div>
             <span className="ka-wf-step-num">{i + 1}</span>
@@ -127,7 +127,7 @@ export function WorkflowBuilder({ userId, onSave, onCancel }: WorkflowBuilderPro
             </select>
             {steps.length > 1 && (
               <button className="ka-wf-step-remove" onClick={() => removeStep(i)}>
-                <Trash2 size={12} />
+                <IconTrash size={12} />
               </button>
             )}
           </div>
@@ -135,7 +135,7 @@ export function WorkflowBuilder({ userId, onSave, onCancel }: WorkflowBuilderPro
       </div>
 
       <button className="ka-wf-add-step" onClick={addStep}>
-        <Plus size={14} /> Add step
+        <IconPlus size={14} /> Add step
       </button>
 
       <div className="ka-wf-builder-btns">

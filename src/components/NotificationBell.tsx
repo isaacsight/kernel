@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Bell, Check } from 'lucide-react'
+import { IconBell, IconCheck } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
 
@@ -72,7 +72,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
         onClick={() => setIsOpen(!isOpen)}
         aria-label={t('aria.notifications')}
       >
-        <Bell size={16} />
+        <IconBell size={16} />
         {unreadCount > 0 && (
           <span className="ka-notif-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
         )}
@@ -84,7 +84,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
             <span>{t('notifications.title')}</span>
             {unreadCount > 0 && (
               <button className="ka-notif-mark-read" onClick={markAllRead}>
-                <Check size={12} /> {t('notifications.markAllRead')}
+                <IconCheck size={12} /> {t('notifications.markAllRead')}
               </button>
             )}
           </div>

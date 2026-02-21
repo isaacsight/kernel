@@ -5,7 +5,7 @@
 // Accessible from the settings menu.
 
 import { useState } from 'react'
-import { X, Brain, ChevronRight } from 'lucide-react'
+import { IconClose, IconBrain, IconChevronRight } from '../KernelIcons'
 import { useTranslation } from 'react-i18next'
 import type { KGEntity, KGRelation } from '../../engine/KnowledgeGraph'
 
@@ -44,11 +44,11 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
     <div className="ka-kg-panel">
       <div className="ka-kg-header">
         <div className="ka-kg-title">
-          <Brain size={18} />
+          <IconBrain size={18} />
           <span>{t('kg.title')}</span>
         </div>
         <button className="ka-kg-close" onClick={onClose}>
-          <X size={18} />
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -76,7 +76,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
                     className="ka-kg-group-header"
                     onClick={() => setExpandedType(isExpanded ? null : type)}
                   >
-                    <ChevronRight
+                    <IconChevronRight
                       size={14}
                       className={`ka-kg-chevron ${isExpanded ? 'ka-kg-chevron--open' : ''}`}
                     />

@@ -1,4 +1,4 @@
-import { MessageSquare, List, Target, Newspaper, MoreHorizontal } from 'lucide-react'
+import { IconHome, IconChats, IconGoals, IconBriefings, IconMore } from './KernelIcons'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 
 export type TabId = 'home' | 'chats' | 'goals' | 'briefings' | 'more'
@@ -6,15 +6,15 @@ export type TabId = 'home' | 'chats' | 'goals' | 'briefings' | 'more'
 interface Tab {
   id: TabId
   label: string
-  icon: typeof MessageSquare
+  icon: typeof IconHome
 }
 
 const TABS: Tab[] = [
-  { id: 'home', label: 'Home', icon: MessageSquare },
-  { id: 'chats', label: 'Chats', icon: List },
-  { id: 'goals', label: 'Goals', icon: Target },
-  { id: 'briefings', label: 'Briefings', icon: Newspaper },
-  { id: 'more', label: 'More', icon: MoreHorizontal },
+  { id: 'home', label: 'Home', icon: IconHome },
+  { id: 'chats', label: 'Chats', icon: IconChats },
+  { id: 'goals', label: 'Goals', icon: IconGoals },
+  { id: 'briefings', label: 'Briefings', icon: IconBriefings },
+  { id: 'more', label: 'More', icon: IconMore },
 ]
 
 interface BottomTabBarProps {
@@ -46,7 +46,7 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: 
             onClick={() => onTabChange(tab.id)}
           >
             <span className="ka-tab-icon-wrap">
-              <Icon size={isMini ? 18 : 20} />
+              <Icon size={isMini ? 20 : 22} />
               {showDot && <span className="ka-feature-dot ka-feature-dot--tab" />}
             </span>
             <span className="ka-tab-label">{tab.label}</span>

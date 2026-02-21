@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, Clock, Plus, Trash2, Play, Pause } from 'lucide-react'
+import { IconClose, IconClock, IconPlus, IconTrash, IconPlay, IconPause } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { calculateNextRunAt, type ScheduledTask, type TaskSchedule } from '../engine/Scheduler'
 
@@ -124,11 +124,11 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
     <div className="ka-sched-panel">
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
-          <Clock size={18} aria-hidden="true" />
+          <IconClock size={18} aria-hidden="true" />
           {t('scheduled.title')}
         </h2>
         <button className="ka-panel-close" onClick={onClose} aria-label="Close">
-          <X size={18} />
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -154,10 +154,10 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
                 </div>
                 <div className="ka-sched-card-actions">
                   <button className="ka-sched-card-btn" onClick={() => handleToggle(task)} aria-label={task.is_active ? 'Pause' : 'Resume'}>
-                    {task.is_active ? <Pause size={12} /> : <Play size={12} />}
+                    {task.is_active ? <IconPause size={12} /> : <IconPlay size={12} />}
                   </button>
                   <button className="ka-sched-card-btn ka-sched-card-btn--danger" onClick={() => handleDelete(task.id!)} aria-label="Delete">
-                    <Trash2 size={12} />
+                    <IconTrash size={12} />
                   </button>
                 </div>
               </div>
@@ -221,7 +221,7 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
         </div>
       ) : (
         <button className="ka-sched-create-btn" onClick={() => setShowForm(true)}>
-          <Plus size={16} /> {t('scheduled.createTask')}
+          <IconPlus size={16} /> {t('scheduled.createTask')}
         </button>
       )}
     </div>
