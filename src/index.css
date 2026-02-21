@@ -5298,6 +5298,8 @@ h4 {
     display: flex;
     flex-direction: column;
     max-width: 85%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .ka-msg--user .ka-msg-col {

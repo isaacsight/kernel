@@ -1,26 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
-  <!-- Writer — Quill nib with ink drop -->
-  <circle cx="128" cy="128" r="120" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
-
-  <!-- Quill nib — elegant pointed pen shape -->
-  <path d="M128 56 Q136 100 140 128 Q142 140 138 148 L128 164 L118 148 Q114 140 116 128 Q120 100 128 56Z"
-        stroke="#B8875C" stroke-width="1.5" fill="none"/>
-
-  <!-- Nib slit -->
-  <line x1="128" y1="110" x2="128" y2="148" stroke="#B8875C" stroke-width="0.8" opacity="0.4"/>
-
-  <!-- Ink flowing from nib tip -->
-  <path d="M128 164 Q128 176 126 184 Q124 192 128 198 Q132 192 130 184 Q128 176 128 164"
-        stroke="#B8875C" stroke-width="1" fill="#B8875C" opacity="0.6"/>
-
-  <!-- Ink drop — suspended -->
-  <ellipse cx="128" cy="210" rx="6" ry="7" fill="#B8875C"/>
-
-  <!-- Subtle ink splash ring -->
-  <circle cx="128" cy="210" r="14" stroke="#B8875C" stroke-width="0.5" opacity="0.2"/>
-
-  <!-- Calligraphic flourish — left -->
-  <path d="M98 80 Q108 74 118 78" stroke="#B8875C" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.3"/>
-  <!-- Calligraphic flourish — right -->
-  <path d="M138 78 Q148 74 158 80" stroke="#B8875C" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Writer — Italic W with ink drop accent -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#B8875C">W</text>
+  <!-- Ink drop below -->
+  <ellipse cx="60" cy="99" rx="3" ry="3.5" fill="#B8875C"/>
 </svg>
