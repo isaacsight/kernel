@@ -588,14 +588,15 @@ export async function getUserMemory(userId: string): Promise<DBUserMemory | null
 export async function upsertUserMemory(
   userId: string,
   profile: Record<string, unknown>,
-  messageCount: number
+  _messageCount?: number
 ) {
+  // message_count is now managed server-side by the atomic increment_message_count
+  // Postgres function (called from claude-proxy). Client only updates profile data.
   const { error } = await supabase
     .from('user_memory')
     .upsert({
       user_id: userId,
       profile,
-      message_count: messageCount,
       updated_at: new Date().toISOString(),
     });
   if (error) console.error('Error upserting user memory:', error);

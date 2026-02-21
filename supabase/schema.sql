@@ -20,20 +20,12 @@ create table if not exists inquiries (
 -- Enable Row Level Security (required for Supabase)
 alter table inquiries enable row level security;
 
--- Allow anonymous inserts (so the frontend can submit without auth)
-create policy "Allow anonymous inserts" on inquiries
-  for insert
-  with check (true);
-
--- Allow anonymous reads (for your dashboard — tighten this later with auth)
-create policy "Allow anonymous reads" on inquiries
-  for select
-  using (true);
-
--- Allow anonymous updates (for status changes — tighten later)
-create policy "Allow anonymous updates" on inquiries
-  for update
-  using (true);
+-- Service role only: edge functions handle all operations.
+-- No anonymous or authenticated user access.
+create policy "Service role only" on inquiries
+  for all
+  using (false)
+  with check (false);
 
 -- Index for fast lookups
 create index if not exists idx_inquiries_status on inquiries (status);
@@ -58,11 +50,11 @@ create table if not exists evaluation_conversations (
 
 alter table evaluation_conversations enable row level security;
 
-create policy "Allow anonymous inserts on eval_conversations" on evaluation_conversations
-  for insert with check (true);
-
-create policy "Allow anonymous reads on eval_conversations" on evaluation_conversations
-  for select using (true);
+-- Service role only: edge functions handle all operations.
+create policy "Service role only" on evaluation_conversations
+  for all
+  using (false)
+  with check (false);
 
 create index if not exists idx_eval_conversations_email on evaluation_conversations (email);
 create index if not exists idx_eval_conversations_created on evaluation_conversations (created_at desc);
@@ -83,14 +75,11 @@ create table if not exists agent_insights (
 
 alter table agent_insights enable row level security;
 
-create policy "Allow anonymous inserts on agent_insights" on agent_insights
-  for insert with check (true);
-
-create policy "Allow anonymous reads on agent_insights" on agent_insights
-  for select using (true);
-
-create policy "Allow anonymous updates on agent_insights" on agent_insights
-  for update using (true);
+-- Service role only: edge functions handle all operations.
+create policy "Service role only" on agent_insights
+  for all
+  using (false)
+  with check (false);
 
 create index if not exists idx_agent_insights_created on agent_insights (created_at desc);
 create index if not exists idx_agent_insights_category on agent_insights (category);

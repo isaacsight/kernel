@@ -8,12 +8,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 
 // ─── Model tier mapping ──────────────────────────────────────
 
@@ -70,6 +65,93 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
 }
 
 const DAILY_COST_ALERT_THRESHOLD = 5.00
+const DAILY_COST_HARD_LIMIT = 10.00
+const MAX_TOKENS_CAP = 8192
+const MAX_MESSAGE_SIZE_BYTES = 32_768   // 32KB per message
+const MAX_PAYLOAD_SIZE_BYTES = 262_144  // 256KB total
+const MAX_SYSTEM_PROMPT_BYTES = 16_384  // 16KB system prompt cap
+const STREAM_IDLE_TIMEOUT_MS = 30_000   // 30s max idle between stream chunks
+
+// Read from a stream reader with an idle timeout per chunk.
+// Rejects with an error if no data arrives within timeoutMs.
+function readWithTimeout(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  timeoutMs: number,
+): Promise<ReadableStreamReadResult<Uint8Array>> {
+  return Promise.race([
+    reader.read(),
+    new Promise<never>((_, reject) => {
+      const id = setTimeout(() => reject(new Error('Stream idle timeout')), timeoutMs)
+      // Prevent the timer from keeping the process alive
+      if (typeof id === 'object' && 'unref' in id) (id as { unref: () => void }).unref()
+    }),
+  ])
+}
+
+// ─── In-memory rate limiter (sliding window) ──────────────
+
+const rateLimitMap = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW_MS = 60_000 // 1 minute
+const RATE_LIMIT_FREE = 10
+const RATE_LIMIT_PAID = 60
+
+function checkRateLimit(userId: string, isPaid: boolean): { allowed: boolean; retryAfter: number } {
+  const now = Date.now()
+  const limit = isPaid ? RATE_LIMIT_PAID : RATE_LIMIT_FREE
+  const timestamps = rateLimitMap.get(userId) || []
+  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+
+  if (recent.length >= limit) {
+    const oldestInWindow = recent[0]
+    const retryAfter = Math.ceil((oldestInWindow + RATE_LIMIT_WINDOW_MS - now) / 1000)
+    return { allowed: false, retryAfter }
+  }
+
+  recent.push(now)
+  rateLimitMap.set(userId, recent)
+  return { allowed: true, retryAfter: 0 }
+}
+
+// Clean up stale rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now()
+  for (const [key, timestamps] of rateLimitMap) {
+    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+    if (recent.length === 0) rateLimitMap.delete(key)
+    else rateLimitMap.set(key, recent)
+  }
+}, 300_000)
+
+// ─── Pre-request daily cost check ─────────────────────────
+
+async function checkDailyCostLimit(userId: string): Promise<{ blocked: boolean; dailyCost: number }> {
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const svc = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    const { data: agg } = await svc
+      .from('usage_logs')
+      .select('estimated_cost_usd, model')
+      .eq('user_id', userId)
+      .gte('created_at', since)
+
+    if (!agg) return { blocked: false, dailyCost: 0 }
+
+    const usageRows = agg.filter((r: { model: string }) => r.model !== '__alert_sent__')
+    const dailyCost = usageRows.reduce(
+      (sum: number, r: { estimated_cost_usd: number }) => sum + Number(r.estimated_cost_usd), 0,
+    )
+
+    return { blocked: dailyCost >= DAILY_COST_HARD_LIMIT, dailyCost }
+  } catch {
+    // Fail-open: if check fails, allow request for availability
+    return { blocked: false, dailyCost: 0 }
+  }
+}
 
 function calculateCost(model: string, inputTokens: number, outputTokens: number): number {
   const pricing = PRICING_PER_M_TOKENS[model]
@@ -199,6 +281,7 @@ async function handleAnthropic(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
   if (!anthropicKey) {
@@ -242,7 +325,7 @@ async function handleAnthropic(
     const errText = await res.text()
     console.error('Anthropic API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'Anthropic API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -256,9 +339,10 @@ async function handleAnthropic(
 
     const stream = new ReadableStream({
       async start(controller) {
+        const encoder = new TextEncoder()
         try {
           while (true) {
-            const { done, value } = await reader.read()
+            const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
             if (done) break
             controller.enqueue(value)
             // Parse SSE events for usage (message_start has input, message_delta has output)
@@ -276,6 +360,10 @@ async function handleAnthropic(
               } catch { /* non-JSON line */ }
             }
           }
+        } catch (err) {
+          console.error('[anthropic-stream] Error:', (err as Error).message)
+          const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+          controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
         } finally {
           reader.releaseLock()
           controller.close()
@@ -319,6 +407,7 @@ async function handleOpenAI(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const openaiKey = Deno.env.get('OPENAI_API_KEY')
   if (!openaiKey) {
@@ -365,7 +454,7 @@ async function handleOpenAI(
     const errText = await res.text()
     console.error('OpenAI API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'OpenAI API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -406,7 +495,7 @@ async function handleOpenAI(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -437,6 +526,10 @@ async function handleOpenAI(
             }
           }
         }
+      } catch (err) {
+        console.error('[openai-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
@@ -460,6 +553,7 @@ async function handleGemini(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const geminiKey = Deno.env.get('GEMINI_API_KEY')
   if (!geminiKey) {
@@ -511,7 +605,7 @@ async function handleGemini(
     const errText = await res.text()
     console.error('Gemini API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'Gemini API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -554,7 +648,7 @@ async function handleGemini(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -587,6 +681,10 @@ async function handleGemini(
           }
         }
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+      } catch (err) {
+        console.error('[gemini-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
@@ -610,6 +708,7 @@ async function handleNvidia(
   resolvedModel: string,
   isStream: boolean,
   userId: string | null,
+  CORS_HEADERS: Record<string, string>,
 ): Promise<Response> {
   const nvidiaKey = Deno.env.get('NVIDIA_API_KEY')
   if (!nvidiaKey) {
@@ -655,7 +754,7 @@ async function handleNvidia(
     const errText = await res.text()
     console.error('NVIDIA API error:', res.status, errText)
     return new Response(
-      JSON.stringify({ error: 'NVIDIA API error', details: errText }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -696,7 +795,7 @@ async function handleNvidia(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -726,6 +825,10 @@ async function handleNvidia(
             }
           }
         }
+      } catch (err) {
+        console.error('[nvidia-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
@@ -746,10 +849,24 @@ async function handleNvidia(
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: CORS_HEADERS })
+    return handlePreflight(req)
   }
 
+  const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
+
   try {
+    // ── Origin validation ──────────────────────────────
+    // corsHeaders(req) already validates origin — if it's not allowed,
+    // the response will default to 'https://kernel.chat'. But we still
+    // want to hard-reject unknown browser origins.
+    const origin = req.headers.get('origin')
+    if (origin && CORS_HEADERS['Access-Control-Allow-Origin'] !== origin) {
+      return new Response(
+        JSON.stringify({ error: 'Origin not allowed' }),
+        { status: 403, headers: { 'Content-Type': 'application/json', ...SECURITY_HEADERS } }
+      )
+    }
+
     // ── Auth: verify JWT or service key ─────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
@@ -783,27 +900,88 @@ serve(async (req: Request) => {
 
     // ── Free-tier limit: 10 messages for non-subscribers ───
     const isAdmin = !!user.app_metadata?.is_admin
+    let isPaidUser = false
     if (!isServiceCall && !isAdmin) {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
-      const [{ data: mem }, { data: sub }] = await Promise.all([
-        svc.from('user_memory').select('message_count').eq('user_id', user.id).maybeSingle(),
-        svc.from('subscriptions').select('status').eq('user_id', user.id).eq('status', 'active').maybeSingle(),
-      ])
+      const { data: sub } = await svc
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle()
+
+      isPaidUser = !!sub
       if (!sub) {
-        const used = mem?.message_count ?? 0
-        if (used >= 10) {
+        // Atomic increment-and-check via Postgres function
+        // Prevents race conditions AND client-side count manipulation
+        const { data: newCount, error: rpcError } = await svc.rpc('increment_message_count', {
+          p_user_id: user.id,
+        })
+        if (rpcError) {
+          console.error('[free-limit] RPC error (function may not exist yet):', rpcError.message)
+          // Fallback to non-atomic read if function doesn't exist yet
+          const { data: mem } = await svc
+            .from('user_memory')
+            .select('message_count')
+            .eq('user_id', user.id)
+            .maybeSingle()
+          const used = mem?.message_count ?? 0
+          if (used >= 10) {
+            return new Response(
+              JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+              { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
+          }
+        } else if (newCount > 10) {
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+            JSON.stringify({ error: 'free_limit_reached', limit: 10, used: newCount }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
       }
     }
 
+    // ── Rate limiting (per-user sliding window) ────────────
+    if (!isServiceCall) {
+      const rateCheck = checkRateLimit(user.id, isPaidUser || isAdmin)
+      if (!rateCheck.allowed) {
+        return new Response(
+          JSON.stringify({
+            error: 'rate_limited',
+            retry_after: rateCheck.retryAfter,
+            limit: isPaidUser ? RATE_LIMIT_PAID : RATE_LIMIT_FREE,
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    // ── Daily cost hard limit ──────────────────────────────
+    if (!isServiceCall && !isAdmin) {
+      const costCheck = await checkDailyCostLimit(user.id)
+      if (costCheck.blocked) {
+        return new Response(
+          JSON.stringify({
+            error: 'daily_cost_limit_reached',
+            daily_cost_usd: costCheck.dailyCost.toFixed(2),
+            limit_usd: DAILY_COST_HARD_LIMIT.toFixed(2),
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
     // ── Parse payload ──────────────────────────────────────
-    const payload = (await req.json()) as ProxyPayload
+    const rawBody = await req.text()
+    if (rawBody.length > MAX_PAYLOAD_SIZE_BYTES) {
+      return new Response(
+        JSON.stringify({ error: 'Payload too large', max_bytes: MAX_PAYLOAD_SIZE_BYTES }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+    const payload = JSON.parse(rawBody) as ProxyPayload
     const { mode = 'text', messages } = payload
 
     if (!messages?.length) {
@@ -811,6 +989,41 @@ serve(async (req: Request) => {
         JSON.stringify({ error: 'messages array is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
+    }
+
+    // ── Validate individual message sizes ──────────────────
+    for (const msg of messages) {
+      const content = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content)
+      if (content.length > MAX_MESSAGE_SIZE_BYTES) {
+        return new Response(
+          JSON.stringify({ error: 'Individual message too large', max_bytes: MAX_MESSAGE_SIZE_BYTES }),
+          { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    // ── Validate system prompt size ────────────────────────
+    if (payload.system && payload.system.length > MAX_SYSTEM_PROMPT_BYTES) {
+      return new Response(
+        JSON.stringify({ error: 'System prompt too large', max_bytes: MAX_SYSTEM_PROMPT_BYTES }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // ── Cap max_tokens server-side ─────────────────────────
+    if (payload.max_tokens) {
+      payload.max_tokens = Math.min(payload.max_tokens, MAX_TOKENS_CAP)
+    }
+
+    // ── Enforce model tiers: free users locked to fast tier ─
+    if (!isServiceCall && !isPaidUser && !isAdmin) {
+      payload.tier = 'fast'
+      // Override any explicit model to the fast-tier equivalent
+      if (payload.model && !['haiku', 'gpt-4o-mini', 'gemini-2.0-flash'].includes(payload.model as string)) {
+        payload.model = undefined
+      }
+      // Disable web_search for free users (extra API cost)
+      payload.web_search = false
     }
 
     // Determine provider (default: anthropic for backward compat)
@@ -836,13 +1049,13 @@ serve(async (req: Request) => {
     // ── Dispatch to provider handler ───────────────────────
     switch (provider) {
       case 'anthropic':
-        return handleAnthropic(payload, resolvedModel, isStream, trackUserId)
+        return handleAnthropic(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'openai':
-        return handleOpenAI(payload, resolvedModel, isStream, trackUserId)
+        return handleOpenAI(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'gemini':
-        return handleGemini(payload, resolvedModel, isStream, trackUserId)
+        return handleGemini(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       case 'nvidia':
-        return handleNvidia(payload, resolvedModel, isStream, trackUserId)
+        return handleNvidia(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
       default:
         return new Response(
           JSON.stringify({ error: `Unknown provider: ${provider}` }),

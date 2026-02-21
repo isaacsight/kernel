@@ -46,6 +46,16 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: require service role key (called from MCP tools) ──
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!token || !serviceKey || token !== serviceKey) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: service key required' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     const resendKey = Deno.env.get('RESEND_API_KEY')
     const notifyEmail = Deno.env.get('NOTIFY_EMAIL')
 

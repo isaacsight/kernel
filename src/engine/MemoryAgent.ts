@@ -82,28 +82,65 @@ export async function mergeMemory(
   }
 }
 
+// ─── Memory sanitization (prompt injection defense) ──────
+
+const MAX_MEMORY_PROMPT_LENGTH = 2000
+const MAX_FIELD_LENGTH = 200
+
+// Patterns that could manipulate model behavior when injected into system prompts
+const INJECTION_PATTERNS = [
+  /\b(?:system|assistant)\s*:/gi,
+  /\b(?:ignore|disregard|forget|override)\s+(?:all\s+)?(?:previous|above|prior)\s+(?:instructions?|rules?|prompts?)/gi,
+  /\b(?:you\s+are\s+now|act\s+as|pretend\s+to\s+be|new\s+instructions?)\b/gi,
+  /<\/?(?:system|prompt|instructions?|rules?)>/gi,
+  /^---+$/gm,
+  /^===+$/gm,
+]
+
+function sanitizeMemoryField(value: string): string {
+  let sanitized = value.slice(0, MAX_FIELD_LENGTH)
+  for (const pattern of INJECTION_PATTERNS) {
+    sanitized = sanitized.replace(pattern, '[removed]')
+  }
+  return sanitized.trim()
+}
+
+function sanitizeMemoryArray(items: string[]): string[] {
+  return items
+    .map(sanitizeMemoryField)
+    .filter(s => s.length > 0 && s !== '[removed]')
+}
+
 export function formatMemoryForPrompt(profile: UserMemoryProfile): string {
   if (isEmptyProfile(profile)) return ''
 
   const sections: string[] = []
 
-  if (profile.facts.length > 0) {
-    sections.push(`**About them:** ${profile.facts.join('. ')}`)
+  const facts = sanitizeMemoryArray(profile.facts)
+  if (facts.length > 0) {
+    sections.push(`**About them:** ${facts.join('. ')}`)
   }
-  if (profile.interests.length > 0) {
-    sections.push(`**Interests:** ${profile.interests.join(', ')}`)
+  const interests = sanitizeMemoryArray(profile.interests)
+  if (interests.length > 0) {
+    sections.push(`**Interests:** ${interests.join(', ')}`)
   }
-  if (profile.goals.length > 0) {
-    sections.push(`**Working toward:** ${profile.goals.join('. ')}`)
+  const goals = sanitizeMemoryArray(profile.goals)
+  if (goals.length > 0) {
+    sections.push(`**Working toward:** ${goals.join('. ')}`)
   }
   if (profile.communication_style) {
-    sections.push(`**Communication style:** ${profile.communication_style}`)
+    const style = sanitizeMemoryField(profile.communication_style)
+    if (style && style !== '[removed]') {
+      sections.push(`**Communication style:** ${style}`)
+    }
   }
-  if (profile.preferences.length > 0) {
-    sections.push(`**Preferences:** ${profile.preferences.join('. ')}`)
+  const prefs = sanitizeMemoryArray(profile.preferences)
+  if (prefs.length > 0) {
+    sections.push(`**Preferences:** ${prefs.join('. ')}`)
   }
 
-  return sections.join('\n')
+  const result = sections.join('\n')
+  return result.slice(0, MAX_MEMORY_PROMPT_LENGTH)
 }
 
 export function emptyProfile(): UserMemoryProfile {
