@@ -1963,6 +1963,14 @@ h4 {
     filter: brightness(1.2);
 }
 
+[data-theme="dark"] .ka-upgrade-icon--danger {
+    background: #B91C1C;
+}
+
+[data-theme="dark"] .ka-upgrade-btn--danger {
+    background: #B91C1C;
+}
+
 [data-theme="dark"] .ka-upgrade-features li {
     border-bottom-color: #333;
 }
