@@ -10,6 +10,7 @@ import { IconChats, IconShare } from '../components/KernelIcons'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { forkSharedConversation } from '../engine/SupabaseClient'
 import { useAuthContext } from '../providers/AuthProvider'
+import { getAllSpecialists } from '../agents/specialists'
 
 interface SharedMessage {
   role: string
@@ -28,6 +29,15 @@ interface SharedData {
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const BASE = import.meta.env.BASE_URL
+
+const specialistsByName = Object.fromEntries(
+  getAllSpecialists().map(s => [s.name.toLowerCase(), s])
+)
+
+function getEmblemForAgent(agentName?: string): string {
+  const specialist = agentName ? specialistsByName[agentName.toLowerCase()] : undefined
+  return `${BASE}${specialist?.emblem || 'concepts/emblem-kernel.svg'}`
+}
 
 export function SharedConversationPage() {
   const { id } = useParams<{ id: string }>()
@@ -161,7 +171,9 @@ export function SharedConversationPage() {
           >
             {msg.role !== 'user' && (
               <div className="ka-msg-avatar-col">
-                <div className="ka-msg-avatar">K</div>
+                <div className="ka-msg-avatar">
+                  <img src={getEmblemForAgent(msg.agentName)} alt="" aria-hidden="true" className="ka-msg-avatar-img" />
+                </div>
                 {msg.agentName && msg.agentName !== 'Kernel' && (
                   <span className="ka-agent-badge">{msg.agentName}</span>
                 )}

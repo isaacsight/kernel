@@ -1,22 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
-  <!-- Kernel — Compass Rose / Seed: personal navigation -->
-  <circle cx="128" cy="128" r="120" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
-
-  <!-- Seed shape — the kernel -->
-  <ellipse cx="128" cy="128" rx="24" ry="38" stroke="#6B5B95" stroke-width="1.5" fill="none"/>
-
-  <!-- Compass lines — cardinal directions -->
-  <line x1="128" y1="40" x2="128" y2="80" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="128" y1="176" x2="128" y2="216" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="40" y1="128" x2="80" y2="128" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="176" y1="128" x2="216" y2="128" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
-
-  <!-- Diagonal whiskers -->
-  <line x1="62" y1="62" x2="86" y2="86" stroke="#6B5B95" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
-  <line x1="170" y1="62" x2="194" y2="86" stroke="#6B5B95" stroke-width="1" stroke-linecap="round" opacity="0.5" transform="rotate(90 182 74)"/>
-  <line x1="62" y1="194" x2="86" y2="170" stroke="#6B5B95" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
-  <line x1="170" y1="194" x2="194" y2="170" stroke="#6B5B95" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
-
-  <!-- Center dot — the origin -->
-  <circle cx="128" cy="128" r="3" fill="#6B5B95"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Kernel — Italic K with seed dot (matches logo-mark.svg) -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#6B5B95">K</text>
+  <circle cx="60" cy="98" r="3" fill="#6B5B95"/>
 </svg>
