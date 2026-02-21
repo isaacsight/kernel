@@ -106,10 +106,10 @@ export function SharedConversationPage() {
             {new Date(data.created_at).toLocaleDateString()} &middot; {data.messages.length} message{data.messages.length !== 1 ? 's' : ''} &middot; {data.view_count} view{data.view_count !== 1 ? 's' : ''}
           </span>
         </div>
-        <button className="ka-shared-new-chat" onClick={handleSharePage} title="Share this conversation" style={{ marginRight: 8 }}>
+        <button className="ka-shared-new-chat" onClick={handleSharePage} aria-label="Share this conversation" style={{ marginRight: 8 }}>
           <Share2 size={18} />
         </button>
-        <a href={`${BASE}#/`} className="ka-shared-new-chat" title="Start a new conversation">
+        <a href={`${BASE}#/`} className="ka-shared-new-chat" aria-label="Start a new conversation">
           <MessageSquare size={18} />
         </a>
       </header>

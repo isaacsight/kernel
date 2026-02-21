@@ -18,7 +18,7 @@ export function KernelAgentPill() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-      title={t('pill.openKernel')}
+      aria-label={t('pill.openKernel')}
     >
       <span className="kernel-pill-icon">K</span>
       <span className="kernel-pill-phase">{t(`pill.phases.${phase}`, { defaultValue: phase })}</span>

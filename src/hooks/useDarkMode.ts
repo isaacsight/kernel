@@ -10,6 +10,11 @@ export function useDarkMode() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light')
     localStorage.setItem('kernel-dark-mode', String(darkMode))
+    // Update PWA theme-color meta tag
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) {
+      meta.setAttribute('content', darkMode ? '#1C1A18' : '#FAF9F6')
+    }
   }, [darkMode])
 
   return { darkMode, setDarkMode }

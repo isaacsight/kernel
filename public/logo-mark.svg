@@ -5,5 +5,5 @@
   <!-- EB Garamond-inspired serif K -->
   <text x="60" y="78" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="64" font-weight="400" fill="#1F1E1D" letter-spacing="-2">K</text>
   <!-- Subtle dot — the "kernel" seed -->
-  <circle cx="60" cy="102" r="2" fill="#6366F1"/>
+  <circle cx="60" cy="102" r="2" fill="#6B5B95"/>
 </svg>

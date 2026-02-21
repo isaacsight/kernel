@@ -87,6 +87,7 @@ export function KernelAgentChat() {
           type="submit"
           disabled={!input.trim() || isStreaming}
           className="kernel-chat-send"
+          aria-label={t('chat.send')}
         >
           &rarr;
         </button>

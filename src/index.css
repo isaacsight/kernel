@@ -21,7 +21,7 @@
     --agent-kernel: #6B5B95;
     --agent-researcher: #5B8BA0;
     --agent-coder: #6B8E6B;
-    --agent-writer: #C4956A;
+    --agent-writer: #B8875C;
     --agent-analyst: #A0768C;
 
     /* Semantic Colors */
@@ -1740,6 +1740,7 @@ h4 {
 
 .ka-msg--kernel {
     animation: ka-ink-appear 0.4s var(--ease-out) both;
+    animation-delay: calc(var(--msg-index, 0) * 60ms);
 }
 
 .ka-msg-bubble {
@@ -9349,6 +9350,43 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   Offline Banner
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-offline-banner {
+    position: fixed;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 20px;
+    background: #92700C;
+    color: #FAF9F6;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-caps);
+    border-radius: var(--radius-full);
+    z-index: 9998;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .ka-offline-banner { bottom: 90px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Panel Loading Shimmer
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-panel-shimmer {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
    Message Edit Form
    ═══════════════════════════════════════════════════════════ */
 
@@ -9477,7 +9515,7 @@ h4 {
     --agent-kernel: #8B7BB5;
     --agent-researcher: #7BADC4;
     --agent-coder: #8BB08B;
-    --agent-writer: #D4A97A;
+    --agent-writer: #C4A07A;
     --agent-analyst: #C09AAC;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
