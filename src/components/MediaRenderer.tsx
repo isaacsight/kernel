@@ -12,7 +12,6 @@ const IMAGE_REGEX = /(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s]
 const VIDEO_REGEX = /(https?:\/\/[^\s]+\.(?:mp4|webm|mov)(?:\?[^\s]*)?)/gi
 const YOUTUBE_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/gi
 const VIMEO_REGEX = /(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/gi
-const URL_REGEX = /(https?:\/\/[^\s]+)/gi
 
 interface MediaItem {
   type: 'image' | 'video' | 'youtube' | 'vimeo' | 'link'
@@ -62,28 +61,28 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
   const allMedia = [...media]
 
   return (
-    <div className="space-y-4">
+    <div className="ka-media-stack">
       {/* Uploaded media attachments */}
       {attachments && attachments.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-2">
+        <div className="ka-media-attachments">
           {attachments.map((att, idx) => (
             <motion.div
               key={`attachment-${idx}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="rounded-lg overflow-hidden"
+              className="ka-media-thumb"
             >
               {att.type === 'image' ? (
                 <img
                   src={att.url}
                   alt="Shared image"
-                  className="max-w-[300px] max-h-[300px] rounded-lg object-contain bg-[--rubin-ivory-med]"
+                  className="ka-media-img"
                 />
               ) : (
                 <video
                   src={att.url}
                   controls
-                  className="max-w-[300px] max-h-[300px] rounded-lg"
+                  className="ka-media-video"
                 />
               )}
             </motion.div>
@@ -95,28 +94,26 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
       {text && (
         <div>
           {text}
-          {isStreaming && (
-            <span className="inline-block w-2 h-5 bg-[--rubin-slate] ml-1 animate-pulse" />
-          )}
+          {isStreaming && <span className="ka-media-cursor" />}
         </div>
       )}
 
       {/* Media embeds */}
       {media.length > 0 && (
-        <div className="space-y-4 mt-4">
+        <div className="ka-media-stack">
           {media.map((item, index) => (
             <motion.div
               key={`${item.url}-${index}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="rounded-lg overflow-hidden"
+              className="ka-media-thumb"
             >
               {item.type === 'image' && (
                 <img
                   src={item.url}
                   alt="Shared image"
-                  className="max-w-full max-h-[400px] rounded-lg object-contain bg-[--rubin-ivory-med]"
+                  className="ka-media-embed-img"
                   loading="lazy"
                 />
               )}
@@ -125,17 +122,17 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
                 <video
                   src={item.url}
                   controls
-                  className="max-w-full max-h-[400px] rounded-lg"
+                  className="ka-media-embed-video"
                   preload="metadata"
                 />
               )}
 
               {item.type === 'youtube' && item.embedId && (
-                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <div className="ka-media-aspect">
                   <iframe
                     src={`https://www.youtube.com/embed/${item.embedId}`}
                     title="YouTube video"
-                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                    className="ka-media-iframe"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
@@ -143,11 +140,11 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
               )}
 
               {item.type === 'vimeo' && item.embedId && (
-                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <div className="ka-media-aspect">
                   <iframe
                     src={`https://player.vimeo.com/video/${item.embedId}`}
                     title="Vimeo video"
-                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                    className="ka-media-iframe"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
                   />
@@ -159,9 +156,7 @@ export function MediaRenderer({ content, isStreaming, attachments }: MediaRender
       )}
 
       {/* Streaming cursor when no text but streaming */}
-      {!text && isStreaming && (
-        <span className="inline-block w-2 h-5 bg-[--rubin-slate] animate-pulse" />
-      )}
+      {!text && isStreaming && <span className="ka-media-cursor" />}
     </div>
   )
 }

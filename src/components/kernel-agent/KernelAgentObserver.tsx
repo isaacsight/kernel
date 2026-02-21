@@ -23,7 +23,7 @@ function Section({ title, defaultOpen = true, children }: {
   );
 }
 
-function MiniBar({ value, color = '#6366F1' }: { value: number; color?: string }) {
+function MiniBar({ value, color = '#6B5B95' }: { value: number; color?: string }) {
   return (
     <div className="kernel-obs-minibar">
       <motion.div
