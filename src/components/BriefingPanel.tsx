@@ -33,10 +33,17 @@ function estimateReadingTime(text: string): number {
   return Math.max(1, Math.round(words / 220))
 }
 
+/** Ensure markdown headings have proper newline separation */
+function normalizeMarkdown(text: string): string {
+  // Ensure ## headings are preceded by a blank line (required for markdown parsers)
+  return text.replace(/([^\n])\n(#{1,6}\s)/g, '$1\n\n$2')
+}
+
 /** Truncate markdown content to approximately N words, breaking at paragraph boundaries */
 function truncateContent(text: string, maxWords: number): { truncated: string; isTruncated: boolean } {
-  const words = text.trim().split(/\s+/)
-  if (words.length <= maxWords) return { truncated: text, isTruncated: false }
+  const normalized = normalizeMarkdown(text)
+  const words = normalized.trim().split(/\s+/)
+  if (words.length <= maxWords) return { truncated: normalized, isTruncated: false }
   // Find paragraph break near maxWords
   const partial = words.slice(0, maxWords).join(' ')
   const lastParagraph = partial.lastIndexOf('\n\n')
