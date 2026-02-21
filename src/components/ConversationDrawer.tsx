@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
+import { SPRING, DURATION } from '../constants/motion'
 import { Plus, Trash2, X, Search, Pencil, Check } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
@@ -133,7 +134,7 @@ export function ConversationDrawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: DURATION.QUICK }}
             style={{ opacity: overlayOpacity }}
             onClick={onClose}
           />
@@ -142,7 +143,7 @@ export function ConversationDrawer({
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={SPRING.DEFAULT}
             drag="x"
             dragConstraints={{ left: -320, right: 0 }}
             dragElastic={0.1}

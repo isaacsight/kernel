@@ -110,7 +110,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out);
 }
 
 /* Override for pages that need natural scrolling (shared convos, briefings) */
@@ -307,7 +307,7 @@ h4 {
 
 .engine-body::-webkit-scrollbar-thumb {
     background: transparent;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--duration-normal) var(--ease-out);
 }
 
 .engine-body:hover::-webkit-scrollbar-thumb,
@@ -1152,7 +1152,7 @@ h4 {
     font-size: 14px;
     color: var(--rubin-slate);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color var(--duration-fast), background var(--duration-fast);
 }
 
 .ka-gate-social-btn:hover {
@@ -1222,7 +1222,7 @@ h4 {
     font-size: 14px;
     color: var(--rubin-slate);
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color var(--duration-fast);
     box-sizing: border-box;
 }
 
@@ -1241,7 +1241,7 @@ h4 {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background var(--duration-fast);
 }
 
 .ka-gate-submit:hover {
@@ -1270,7 +1270,7 @@ h4 {
     margin-top: var(--space-xl);
     margin-bottom: var(--space-sm);
     opacity: 0.4;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-gate-admin-toggle:hover {
@@ -1288,7 +1288,7 @@ h4 {
     margin-top: var(--space-xs);
     margin-bottom: var(--space-sm);
     opacity: 0.7;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-gate-forgot:hover {
@@ -1330,7 +1330,7 @@ h4 {
     color: var(--rubin-accent);
     cursor: pointer;
     padding: 0;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-gate-toggle-btn:hover {
@@ -1433,7 +1433,7 @@ h4 {
     padding: 12px 24px;
     border-bottom: 1px solid var(--rubin-ivory-dark);
     flex-shrink: 0;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
 }
 
 .ka-header-left {
@@ -1979,7 +1979,7 @@ h4 {
     font-weight: 600;
     cursor: pointer;
     letter-spacing: 0.04em;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-upgrade-btn:hover {
@@ -3545,7 +3545,7 @@ h4 {
     opacity: 0.55;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-insights-tab:hover {
@@ -3636,7 +3636,7 @@ h4 {
     height: 100%;
     background: var(--rubin-vignette, cornflowerblue);
     border-radius: var(--radius-xs);
-    transition: width 0.3s ease;
+    transition: width var(--duration-normal) var(--ease-out);
 }
 
 .ka-insights-conviction-value {
@@ -3718,7 +3718,7 @@ h4 {
     cursor: pointer;
     padding: 0.15rem 0.3rem;
     border-radius: var(--radius-xs);
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-insights-belief-action:hover {
@@ -3818,7 +3818,7 @@ h4 {
     height: 100%;
     background: var(--rubin-vignette, cornflowerblue);
     border-radius: var(--radius-xs);
-    transition: width 0.3s ease;
+    transition: width var(--duration-normal) var(--ease-out);
 }
 
 .ka-insights-dim-bar-fill--quality {
@@ -4299,7 +4299,7 @@ h4 {
     font-size: 11px;
     color: var(--rubin-slate);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
     min-height: 36px;
 }
 
@@ -4327,7 +4327,7 @@ h4 {
     border: 1px solid var(--rubin-sepia, var(--rubin-ivory-dark));
     border-left: 3px solid var(--rubin-accent);
     border-radius: var(--radius-md);
-    transition: border-color 0.15s ease;
+    transition: border-color var(--duration-fast) var(--ease-out);
 }
 
 .ka-home-briefing-card:hover {
@@ -4386,7 +4386,7 @@ h4 {
     font-size: 11px;
     color: var(--rubin-slate);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
     display: flex;
     align-items: center;
     gap: var(--space-xs);
@@ -4661,7 +4661,7 @@ h4 {
     color: var(--rubin-slate);
     opacity: 0.6;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-briefing-go-deeper:hover {
@@ -4696,7 +4696,7 @@ h4 {
     font-size: 12px;
     color: var(--rubin-slate);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
     min-height: 40px;
 }
 
@@ -5114,7 +5114,7 @@ h4 {
     background: var(--rubin-ivory);
     flex-shrink: 0;
     align-items: flex-end;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
 }
 
 .ka-input {
@@ -5735,7 +5735,7 @@ h4 {
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--rubin-ivory);
-    transition: border-color 0.15s;
+    transition: border-color var(--duration-fast);
 }
 
 .ka-artifact:hover {
@@ -8053,7 +8053,7 @@ h4 {
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     touch-action: pan-y;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
 }
 
 .conv-drawer-header {
@@ -8580,7 +8580,7 @@ h4 {
     cursor: pointer;
     padding: var(--space-xs);
     opacity: 0.5;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-kg-close:hover {
@@ -8636,7 +8636,7 @@ h4 {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     opacity: 0.7;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-kg-group-header:hover {
@@ -8765,7 +8765,7 @@ h4 {
     font-family: var(--rubin-mono, 'Courier Prime', monospace);
     font-size: 0.8rem;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .ka-approval-btn:hover {
@@ -8835,7 +8835,7 @@ h4 {
     cursor: pointer;
     padding: var(--space-xs);
     opacity: 0.5;
-    transition: opacity 0.15s;
+    transition: opacity var(--duration-fast);
 }
 
 .stats-close:hover {
@@ -9478,6 +9478,10 @@ h4 {
     opacity: 0.7;
 }
 
+.onboarding-title {
+    margin-bottom: var(--space-xs);
+}
+
 .onboarding-subtitle {
     font-family: var(--font-serif);
     font-style: italic;
@@ -9513,7 +9517,7 @@ h4 {
 }
 
 .onboarding-btn:hover {
-    background: #5558E6;
+    background: var(--rubin-primary-hover);
     transform: translateY(-1px);
 }
 

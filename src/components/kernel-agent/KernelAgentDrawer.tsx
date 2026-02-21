@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { SPRING } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import { KernelAgentChat } from './KernelAgentChat';
 import { KernelAgentObserver } from './KernelAgentObserver';
@@ -25,7 +26,7 @@ export function KernelAgentDrawer() {
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          transition={SPRING.DEFAULT}
         >
           {/* Header */}
           <div className="kernel-drawer-header">

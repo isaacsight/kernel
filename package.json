@@ -10,6 +10,8 @@
         "preview": "vite preview",
         "predeploy": "npm run build",
         "test": "vitest run",
+        "test:e2e": "playwright test",
+        "test:e2e:update": "playwright test --update-snapshots",
         "deploy": "gh-pages -d dist",
         "monitor": "npx tsx tools/kernel-monitor.ts",
         "discord": "npx tsx tools/discord-bot.ts"
@@ -34,6 +36,7 @@
     },
     "devDependencies": {
         "@modelcontextprotocol/sdk": "^1.26.0",
+        "@playwright/test": "^1.58.2",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^14.6.1",

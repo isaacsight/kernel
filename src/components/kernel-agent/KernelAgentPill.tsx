@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { SPRING, TRANSITION } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 
 export function KernelAgentPill() {
@@ -17,7 +18,7 @@ export function KernelAgentPill() {
       onClick={openDrawer}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+      transition={SPRING.GENTLE}
       aria-label={t('pill.openKernel')}
     >
       <span className="kernel-pill-icon">K</span>
@@ -28,7 +29,7 @@ export function KernelAgentPill() {
           <motion.span
             className="kernel-pill-conviction-fill"
             animate={{ width: `${conviction * 100}%` }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={TRANSITION.BAR_FILL}
           />
         </span>
         <span className="kernel-pill-conviction-pct">{(conviction * 100).toFixed(0)}%</span>

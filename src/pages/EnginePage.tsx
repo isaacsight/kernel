@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye, Plus } from 'lucide-react'
+import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
@@ -48,7 +49,7 @@ export function EnginePage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          transition={{ duration: DURATION.MODERATE, ease: EASE.OUT_STR }}
         >
           <img className="ka-loading-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
         </motion.div>
@@ -115,10 +116,7 @@ function relativeTime(dateStr: string): string {
   return `${days}d ago`
 }
 
-// ─── Spring Constants ────────────────────────────────────
-
-const SPRING = { damping: 30, stiffness: 300 }
-const SPRING_GENTLE = { damping: 25, stiffness: 200 }
+// Spring constants imported from @/constants/motion
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
@@ -629,7 +627,7 @@ function EngineChat() {
 
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => (
-            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
+            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={TRANSITION.MESSAGE}>
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
                   <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
@@ -880,7 +878,7 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
-        transition={{ type: 'spring', ...SPRING }}
+        transition={SPRING.DEFAULT}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}

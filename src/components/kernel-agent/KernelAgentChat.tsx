@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { TRANSITION } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import { KERNEL_TOPICS } from '../../agents/kernel';
 
@@ -60,7 +61,7 @@ export function KernelAgentChat() {
             className={`kernel-chat-msg kernel-chat-msg--${msg.role}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={TRANSITION.MESSAGE}
           >
             <div className="kernel-chat-msg-content">
               {msg.content || (
