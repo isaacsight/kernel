@@ -5,12 +5,32 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// ─── Per-user rate limiting ──────────────────────────────
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 5 // 5 extractions per minute per user
+const insightRateLimitMap = new Map<string, number[]>()
+
+function checkInsightRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
+  const now = Date.now()
+  const timestamps = (insightRateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
+  }
+  timestamps.push(now)
+  insightRateLimitMap.set(userId, timestamps)
+  return { allowed: true, retryAfter: 0 }
 }
+
+setInterval(() => {
+  const now = Date.now()
+  for (const [key, ts] of insightRateLimitMap) {
+    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+    if (recent.length === 0) insightRateLimitMap.delete(key)
+    else insightRateLimitMap.set(key, recent)
+  }
+}, 300_000)
 
 interface InsightPayload {
   conversationId: string
@@ -39,8 +59,10 @@ Respond with ONLY a JSON array:
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: CORS_HEADERS })
+    return handlePreflight(req)
   }
+
+  const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
   try {
     // ── Auth: verify JWT ────────────────────────────────
@@ -58,6 +80,15 @@ serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // ── Rate limit ──────────────────────────────────────
+    const rateCheck = checkInsightRateLimit(user.id)
+    if (!rateCheck.allowed) {
+      return new Response(
+        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
+        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
       )
     }
 

@@ -92,11 +92,12 @@ ALTER TABLE training_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE rlhf_feedback ENABLE ROW LEVEL SECURITY;
 ALTER TABLE manage_sessions ENABLE ROW LEVEL SECURITY;
 
--- Allow anon/service role full access (edge functions use service role)
-CREATE POLICY "Allow all for anon" ON projects FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON opportunities FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON transactions FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON messages FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON training_data FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON rlhf_feedback FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for anon" ON manage_sessions FOR ALL USING (true) WITH CHECK (true);
+-- Service role only: edge functions use service role key to access these tables.
+-- No anonymous or authenticated user access — all operations go through edge functions.
+CREATE POLICY "Service role only" ON projects FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON opportunities FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON transactions FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON messages FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON training_data FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON rlhf_feedback FOR ALL USING (false) WITH CHECK (false);
+CREATE POLICY "Service role only" ON manage_sessions FOR ALL USING (false) WITH CHECK (false);

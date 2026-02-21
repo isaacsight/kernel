@@ -19,6 +19,16 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Auth: require service role key (internal-only function) ──
+    const token = req.headers.get('authorization')?.replace('Bearer ', '')
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!token || !serviceKey || token !== serviceKey) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: service key required' }), {
+        status: 401,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
+
     const { channel, user_id, title, body, type } = await req.json()
 
     if (!channel || !user_id || !title) {
