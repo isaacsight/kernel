@@ -321,9 +321,22 @@ export function createEngine(): {
   //  THE COGNITIVE LOOP
   // ═══════════════════════════════════════════════════════
 
+  const MAX_INPUT_LENGTH = 32_000; // ~32KB max user input
+
   async function cognitiveLoop(input: string): Promise<void> {
     if (aborted) return;
     aborted = false;
+
+    // Input length validation — reject excessively long messages
+    if (input.length > MAX_INPUT_LENGTH) {
+      emit({
+        type: 'error',
+        message: `Message too long (${input.length} chars). Maximum is ${MAX_INPUT_LENGTH} characters.`,
+        timestamp: Date.now(),
+      });
+      return;
+    }
+
     const cycleStart = Date.now();
 
     state.ephemeral = {
