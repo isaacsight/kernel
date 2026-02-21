@@ -1,14 +1,21 @@
 import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye, Plus } from 'lucide-react'
+import {
+  IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
+  IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
+  IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
+  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconChart,
+  IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
+  IconSettings, IconEye, IconPlus,
+} from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { upsertKGEntity } from '../engine/SupabaseClient'
+import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 const LoginGate = lazy(() => import('../components/LoginGate').then(m => ({ default: m.LoginGate })))
 import { MessageContent, Linkify } from '../components/MessageContent'
@@ -213,6 +220,29 @@ function EngineChat() {
     return () => clearInterval(poll)
   }, [refreshSubscription, billing, showToast])
 
+  // Fork shared conversation: detect ?fork= param or post-login sessionStorage intent
+  useEffect(() => {
+    const hash = window.location.hash
+    const forkMatch = hash.match(/[?&]fork=([^&]+)/)
+    if (forkMatch) {
+      const forkId = decodeURIComponent(forkMatch[1])
+      convs.switchConversation(forkId)
+      const cleanHash = hash.replace(/[?&]fork=[^&]+/, '').replace(/\?$/, '')
+      window.location.hash = cleanHash || '#/'
+      return
+    }
+
+    // Check for post-login fork intent from shared page
+    const intent = sessionStorage.getItem('kernel-fork-intent')
+    if (intent && user) {
+      sessionStorage.removeItem('kernel-fork-intent')
+      const parsed = JSON.parse(intent)
+      forkSharedConversation(user.id, parsed.title, parsed.messages).then((convId: string | null) => {
+        if (convId) convs.switchConversation(convId)
+      })
+    }
+  }, [user, convs])
+
   // Close header menu on outside click
   const headerMenuRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -406,10 +436,12 @@ function EngineChat() {
         onRename={(id, title) => {
           convs.setConversations(prev => prev.map(c => c.id === id ? { ...c, title } : c))
         }}
-        onShare={async (id) => {
-          await convs.switchConversation(id)
+        onShare={(id) => {
           setIsDrawerOpen(false)
-          msgActions.setShowShareModal(true)
+          setTimeout(async () => {
+            await convs.switchConversation(id)
+            msgActions.setShowShareModal(true)
+          }, 250)
         }}
         isLoading={convs.convsLoading}
       />
@@ -418,7 +450,7 @@ function EngineChat() {
       <header className="ka-header">
         <div className="ka-header-left">
           <button className="ka-menu-btn" onClick={() => setIsDrawerOpen(true)} aria-label={t('aria.conversations', { ns: 'common' })}>
-            <Menu size={18} />
+            <IconMenu size={18} />
           </button>
           <button className="ka-home-btn" onClick={() => { panels.closeAllPanels(); convs.handleNewChat() }} aria-label={t('aria.newChat', { ns: 'common' })}>
             <img className="ka-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
@@ -428,15 +460,15 @@ function EngineChat() {
           </button>
         </div>
         <div className="ka-header-right">
-          {isAdmin && <span className="ka-admin-badge"><Shield size={12} /> {t('admin')}</span>}
-          {!isAdmin && isSubscribed && <span className="ka-pro-badge"><Crown size={12} /> {t('pro')}</span>}
+          {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
+          {!isAdmin && isSubscribed && <span className="ka-pro-badge"><IconCrown size={12} /> {t('pro')}</span>}
           {user && <NotificationBell userId={user.id} />}
           <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label={t('aria.toggleDarkMode', { ns: 'common' })}>
-            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
           <div className="ka-header-menu-wrap" ref={headerMenuRef}>
             <button className="ka-header-icon-btn" onClick={() => panels.setHeaderMenuOpen(!panels.headerMenuOpen)} aria-label={t('aria.moreOptions', { ns: 'common' })}>
-              <EllipsisVertical size={16} />
+              <IconMoreVertical size={16} />
             </button>
             {panels.headerMenuOpen && (
               <div className="ka-header-menu">
@@ -444,58 +476,58 @@ function EngineChat() {
                   <>
                     <div className="ka-header-menu-label">{t('conversation', { ns: 'common' })}</div>
                     <button className="ka-header-menu-item" onClick={() => { msgActions.setShowShareModal(true); panels.setHeaderMenuOpen(false) }}>
-                      <Share2 size={14} /> {t('menu.shareConversation')}
+                      <IconShare size={16} /> {t('menu.shareConversation')}
                     </button>
                     <button className="ka-header-menu-item" onClick={() => { msgActions.handleExportConversation(); panels.setHeaderMenuOpen(false) }}>
-                      <FileDown size={14} /> {t('menu.exportMarkdown')}
+                      <IconExport size={16} /> {t('menu.exportMarkdown')}
                     </button>
                   </>
                 )}
                 <div className="ka-header-menu-divider ka-menu-tabbed" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('features', { ns: 'common' })}</div>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowGoalsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Target size={14} /> {t('menu.goals')}
+                  <IconTarget size={16} /> {t('menu.goals')}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('workflows'); panels.closeAllPanels(); panels.setShowWorkflowsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Zap size={14} /> {t('menu.workflows')}
+                  <IconZap size={16} /> {t('menu.workflows')}
                   {featureDiscovery.isNew('workflows') && <span className="ka-feature-dot" />}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('scheduled'); panels.closeAllPanels(); panels.setShowScheduledPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Clock size={14} /> {t('menu.scheduledTasks')}
+                  <IconClock size={16} /> {t('menu.scheduledTasks')}
                   {featureDiscovery.isNew('scheduled') && <span className="ka-feature-dot" />}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBriefingPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Newspaper size={14} /> {t('menu.dailyBriefing')}
+                  <IconNewspaper size={16} /> {t('menu.dailyBriefing')}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('knowledge'); panels.closeAllPanels(); panels.setShowKGPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Brain size={14} /> {t('menu.whatKernelKnows')}
+                  <IconBrain size={16} /> {t('menu.whatKernelKnows')}
                   {featureDiscovery.isNew('knowledge') && <span className="ka-feature-dot" />}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('stats'); panels.closeAllPanels(); panels.setShowStatsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <BarChart3 size={14} /> {t('menu.yourStats')}
+                  <IconChart size={16} /> {t('menu.yourStats')}
                   {featureDiscovery.isNew('stats') && <span className="ka-feature-dot" />}
                 </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('insights'); panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <Eye size={14} /> {t('menu.insights')}
+                  <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
                 </button>
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
                 {!isPro && (
                   <button className="ka-header-menu-item ka-header-menu-item--upgrade ka-menu-tabbed" onClick={() => { billing.handleUpgrade(); panels.setHeaderMenuOpen(false) }}>
-                    <Crown size={14} /> {t('menu.upgradeToPro')}
+                    <IconCrown size={16} /> {t('menu.upgradeToPro')}
                   </button>
                 )}
                 {!isAdmin && isSubscribed && (
                   <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { billing.handleManageSubscription(); panels.setHeaderMenuOpen(false) }} disabled={billing.portalLoading}>
-                    <Settings size={14} className={billing.portalLoading ? 'ka-spin' : ''} /> {t('menu.manageSubscription')}
+                    <IconSettings size={16} className={billing.portalLoading ? 'ka-spin' : ''} /> {t('menu.manageSubscription')}
                   </button>
                 )}
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { signOut(); panels.setHeaderMenuOpen(false) }}>
-                  <LogOut size={14} /> {t('menu.signOut')}
+                  <IconLogOut size={16} /> {t('menu.signOut')}
                 </button>
                 <button className="ka-header-menu-item ka-header-menu-item--danger ka-menu-tabbed" onClick={() => { billing.setShowDeleteConfirm(true); panels.setHeaderMenuOpen(false) }}>
-                  <Trash2 size={14} /> {t('menu.deleteAccount')}
+                  <IconTrash size={16} /> {t('menu.deleteAccount')}
                 </button>
               </div>
             )}
@@ -530,7 +562,7 @@ function EngineChat() {
             {chatEngine.todayBriefing && (
               <div className="ka-home-briefing-card">
                 <div className="ka-home-briefing-info">
-                  <Newspaper size={16} className="ka-home-briefing-icon" />
+                  <IconNewspaper size={16} className="ka-home-briefing-icon" />
                   <div className="ka-home-briefing-text">
                     <span className="ka-home-briefing-label">{t('briefing.todaysBriefing')}</span>
                     <span className="ka-home-briefing-title">{chatEngine.todayBriefing.title}</span>
@@ -539,7 +571,7 @@ function EngineChat() {
                 <div className="ka-home-briefing-actions">
                   <button className="ka-home-briefing-btn" onClick={() => { panels.closeOtherPanels('briefings'); panels.setShowBriefingPanel(true); panels.setActiveTab('briefings') }}>{t('briefing.read')}</button>
                   <button className="ka-home-briefing-btn ka-home-briefing-btn--discuss" onClick={() => chatEngine.handleBriefingGoDeeper(chatEngine.todayBriefing!.title, chatEngine.todayBriefing!.content)}>
-                    <MessageCircle size={12} /> {t('briefing.discuss')}
+                    <IconMessageCircle size={12} /> {t('briefing.discuss')}
                   </button>
                 </div>
               </div>
@@ -665,26 +697,26 @@ function EngineChat() {
                 {msg.role === 'user' && msg.content && !isStreaming && msgActions.editingMsgId !== msg.id && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => { msgActions.setEditingMsgId(msg.id); msgActions.setEditingContent(msg.content) }} aria-label={t('aria.editMessage', { ns: 'common' })}>
-                      <Pencil size={14} />
+                      <IconPencil size={14} />
                     </button>
                   </div>
                 )}
                 {msg.role === 'kernel' && msg.content && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => msgActions.handleCopyMessage(msg.id, msg.content)} aria-label={t('aria.copyMessage', { ns: 'common' })}>
-                      {msgActions.copiedMsgId === msg.id ? <Check size={14} /> : <Copy size={14} />}
+                      {msgActions.copiedMsgId === msg.id ? <IconCheck size={14} /> : <IconCopy size={14} />}
                     </button>
                     <button className="ka-msg-action-btn" onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)} aria-label={t('aria.downloadResponse', { ns: 'common' })}>
-                      <Download size={14} />
+                      <IconDownload size={14} />
                     </button>
                     {msg.signalId && !msg.feedback && (
                       <>
-                        <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><ThumbsUp size={14} /></button>
-                        <button className="ka-msg-action-btn ka-msg-action-btn--down" onClick={() => msgActions.handleFeedback(msg, 'poor')} aria-label={t('aria.notHelpful', { ns: 'common' })}><ThumbsDown size={14} /></button>
+                        <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><IconThumbsUp size={14} /></button>
+                        <button className="ka-msg-action-btn ka-msg-action-btn--down" onClick={() => msgActions.handleFeedback(msg, 'poor')} aria-label={t('aria.notHelpful', { ns: 'common' })}><IconThumbsDown size={14} /></button>
                       </>
                     )}
                     {msg.feedback && (
-                      <span className="ka-msg-feedback-done">{msg.feedback === 'helpful' ? <ThumbsUp size={14} /> : <ThumbsDown size={14} />}</span>
+                      <span className="ka-msg-feedback-done">{msg.feedback === 'helpful' ? <IconThumbsUp size={14} /> : <IconThumbsDown size={14} />}</span>
                     )}
                   </div>
                 )}
@@ -702,7 +734,7 @@ function EngineChat() {
       <AnimatePresence>
         {scroll.showScrollBtn && (
           <motion.button className="ka-scroll-btn" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={scroll.scrollToBottom} aria-label={t('aria.scrollToBottom', { ns: 'common' })}>
-            <ChevronDown size={18} />
+            <IconChevronDown size={18} />
           </motion.button>
         )}
       </AnimatePresence>
@@ -712,11 +744,11 @@ function EngineChat() {
         <div className="ka-file-chips">
           {fileAttachments.attachedFiles.map((f, i) => (
             <span key={i} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}`}>
-              <Paperclip size={12} />
+              <IconAttach size={12} />
               <span className="ka-file-chip-name">{f.name}</span>
               <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>
               {!isStreaming && (
-                <button type="button" className="ka-file-chip-x" onClick={() => fileAttachments.removeFile(i)}><X size={12} /></button>
+                <button type="button" className="ka-file-chip-x" onClick={() => fileAttachments.removeFile(i)}><IconClose size={12} /></button>
               )}
             </span>
           ))}
@@ -766,7 +798,7 @@ function EngineChat() {
         {billing.showDeleteConfirm && (
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <div className="ka-upgrade-icon ka-upgrade-icon--danger"><Trash2 size={22} /></div>
+              <div className="ka-upgrade-icon ka-upgrade-icon--danger"><IconTrash size={22} /></div>
               <h2 className="ka-upgrade-title">{t('deleteConfirm.title')}</h2>
               <p className="ka-upgrade-subtitle">
                 {t('deleteConfirm.subtitle')}
@@ -797,22 +829,22 @@ function EngineChat() {
         {isMini ? (
           <div className="ka-mini-popover-wrap" ref={popoverRef}>
             <button type="button" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(!showMiniPopover)}>
-              <Plus size={18} />
+              <IconPlus size={18} />
             </button>
             {showMiniPopover && (
               <div className="ka-mini-popover">
                 <label htmlFor="ka-file-input" className={`ka-mini-popover-item${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(false)}>
-                  <Paperclip size={16} /> <span>{t('aria.attachFile', { ns: 'common' })}</span>
+                  <IconAttach size={16} /> <span>{t('aria.attachFile', { ns: 'common' })}</span>
                 </label>
                 <button type="button" className={`ka-mini-popover-item${isListening ? ' ka-voice-btn--active' : ''}`} onClick={() => { toggleVoice(); setShowMiniPopover(false); }}>
-                  {isListening ? <MicOff size={16} /> : <Mic size={16} />} <span>{isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}</span>
+                  {isListening ? <IconMicOff size={16} /> : <IconMic size={16} />} <span>{isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}</span>
                 </button>
               </div>
             )}
           </div>
         ) : (
           <label htmlFor="ka-file-input" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label={t('aria.attachFile', { ns: 'common' })}>
-            <Paperclip size={18} />
+            <IconAttach size={18} />
           </label>
         )}
 
@@ -833,13 +865,13 @@ function EngineChat() {
         />
         {!isMini && (
           <button type="button" className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`} onClick={toggleVoice} disabled={isStreaming} aria-label={isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}>
-            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+            {isListening ? <IconMicOff size={18} /> : <IconMic size={18} />}
           </button>
         )}
         {isStreaming ? (
-          <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><Square size={16} /></button>
+          <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><IconStop size={16} /></button>
         ) : (
-          <button type="submit" className="ka-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0} aria-label={t('aria.sendMessage', { ns: 'common' })}><Send size={18} /></button>
+          <button type="submit" className="ka-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0} aria-label={t('aria.sendMessage', { ns: 'common' })}><IconSend size={18} /></button>
         )}
       </form>
 

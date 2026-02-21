@@ -1,14 +1,15 @@
 // ─── SharedConversationPage ──────────────────────────────
 //
-// Read-only public view of a shared conversation.
-// No login required. "Try Kernel" CTA at bottom.
+// Public view of a shared conversation.
+// Logged-in users can fork it and continue on their own profile.
 
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { MessageSquare, Share2 } from 'lucide-react'
+import { IconChats, IconShare } from '../components/KernelIcons'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { getSpecialist } from '../agents/specialists'
+import { supabase, forkSharedConversation } from '../engine/SupabaseClient'
 
 interface SharedMessage {
   role: string
@@ -33,6 +34,15 @@ export function SharedConversationPage() {
   const [data, setData] = useState<SharedData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [forking, setForking] = useState(false)
+
+  // Check auth state
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id ?? null)
+    })
+  }, [])
 
   const handleSharePage = useCallback(async () => {
     const url = window.location.href
@@ -47,6 +57,28 @@ export function SharedConversationPage() {
       // user cancelled or not supported
     }
   }, [data])
+
+  const handleContinue = useCallback(async () => {
+    if (!data) return
+
+    if (!userId) {
+      // Store fork intent for post-login redirect
+      sessionStorage.setItem('kernel-fork-intent', JSON.stringify({
+        title: data.title,
+        messages: data.messages,
+      }))
+      window.location.href = `${BASE}#/`
+      return
+    }
+
+    setForking(true)
+    const convId = await forkSharedConversation(userId, data.title, data.messages)
+    setForking(false)
+
+    if (convId) {
+      window.location.href = `${BASE}#/?fork=${encodeURIComponent(convId)}`
+    }
+  }, [data, userId])
 
   // Override body fixed positioning so the page can scroll naturally
   useEffect(() => {
@@ -107,10 +139,10 @@ export function SharedConversationPage() {
           </span>
         </div>
         <button className="ka-shared-new-chat" onClick={handleSharePage} aria-label="Share this conversation" style={{ marginRight: 8 }}>
-          <Share2 size={18} />
+          <IconShare size={18} />
         </button>
         <a href={`${BASE}#/`} className="ka-shared-new-chat" aria-label="Start a new conversation">
-          <MessageSquare size={18} />
+          <IconChats size={18} />
         </a>
       </header>
 
@@ -146,9 +178,9 @@ export function SharedConversationPage() {
 
       <div className="ka-shared-footer">
         <p>This conversation was shared from <strong>Kernel</strong> — a personal AI that learns your preferences, tracks your goals, and gets better every time you talk.</p>
-        <a href={`${BASE}#/`} className="ka-shared-cta">
-          Start your own conversation
-        </a>
+        <button className="ka-shared-cta ka-shared-cta--continue" onClick={handleContinue} disabled={forking}>
+          {forking ? 'Forking...' : 'Continue this conversation'}
+        </button>
       </div>
     </div>
   )

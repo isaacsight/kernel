@@ -19,7 +19,7 @@ import 'prismjs/components/prism-ruby'
 import 'prismjs/components/prism-swift'
 import 'prismjs/components/prism-kotlin'
 import 'prismjs/components/prism-toml'
-import { Check, ClipboardCopy, Download, FileText, FileCode, FileSpreadsheet, File, Eye, Code, PackageOpen } from 'lucide-react'
+import { IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet, IconFile, IconEye, IconCode, IconPackage } from './KernelIcons'
 import { downloadFile, downloadAllFiles, LANG_EXT, getMimeType } from './ChatHelpers'
 
 // ─── Prism language alias mapping ──────────────────────────
@@ -74,15 +74,15 @@ export function Linkify({ text }: { text: string }) {
 
 function getFileIcon(ext: string) {
   if (['.py', '.js', '.ts', '.tsx', '.jsx', '.rs', '.go', '.java', '.c', '.cpp', '.rb', '.php', '.swift', '.kt', '.sh', '.html', '.css', '.sql'].includes(ext)) {
-    return <FileCode size={16} aria-hidden="true" />
+    return <IconFileCode size={16} aria-hidden="true" />
   }
   if (['.csv', '.json', '.xml', '.yml', '.yaml'].includes(ext)) {
-    return <FileSpreadsheet size={16} aria-hidden="true" />
+    return <IconFileSpreadsheet size={16} aria-hidden="true" />
   }
   if (['.md', '.txt'].includes(ext)) {
-    return <FileText size={16} aria-hidden="true" />
+    return <IconFileText size={16} aria-hidden="true" />
   }
-  return <File size={16} aria-hidden="true" />
+  return <IconFile size={16} aria-hidden="true" />
 }
 
 // ─── Code Block with copy + download ─────────────────────
@@ -101,7 +101,7 @@ function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: strin
         <span className="ka-code-lang">{lang}</span>
         <div className="ka-code-actions">
           <button className="ka-code-copy" onClick={handleCopy} aria-label={t('copy')}>
-            {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
+            {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}
             {copied ? t('copied') : t('copy')}
           </button>
           <button
@@ -109,7 +109,7 @@ function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: strin
             onClick={() => downloadFile(code, filename)}
             aria-label={`${t('download')} ${filename}`}
           >
-            <Download size={13} />
+            <IconDownload size={13} />
             {ext}
           </button>
         </div>
@@ -176,7 +176,7 @@ function ArtifactCard({ filename, lang, code, ext, title, t }: {
       </div>
       <div className="ka-artifact-actions">
         <button className="ka-artifact-action" onClick={handleCopy} aria-label={t('copy')}>
-          {copied ? <Check size={13} /> : <ClipboardCopy size={13} />}
+          {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}
           {copied ? t('copied') : t('copy')}
         </button>
         {canPreview && (
@@ -185,12 +185,12 @@ function ArtifactCard({ filename, lang, code, ext, title, t }: {
             onClick={() => { setShowPreview(!showPreview); if (!expanded) setExpanded(true) }}
             aria-label={showPreview ? t('code') : t('preview')}
           >
-            {showPreview ? <Code size={13} /> : <Eye size={13} />}
+            {showPreview ? <IconCode size={13} /> : <IconEye size={13} />}
             {showPreview ? t('code') : t('preview')}
           </button>
         )}
         <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`${t('download')} ${filename}`}>
-          <Download size={13} />
+          <IconDownload size={13} />
           {t('download')}
         </button>
       </div>
@@ -435,7 +435,7 @@ export function MessageContent({ text }: { text: string }) {
           onClick={() => downloadAllFiles(artifacts)}
           aria-label={t('downloadAllFiles', { count: artifacts.length })}
         >
-          <PackageOpen size={14} />
+          <IconPackage size={14} />
           {t('downloadAllFiles', { count: artifacts.length })}
         </button>
       )}

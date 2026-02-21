@@ -4,7 +4,7 @@
 // conversations, messages, agent breakdown, knowledge graph stats.
 
 import { useState, useEffect } from 'react'
-import { X, BarChart3, MessageSquare, Brain, Users, TrendingUp } from 'lucide-react'
+import { IconClose, IconChart, IconChats, IconBrain, IconUsers, IconTrendingUp } from '../KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { getUserStats, type UserStats } from '../../engine/SupabaseClient'
 import { getSpecialist } from '../../agents/specialists'
@@ -30,8 +30,8 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
     return (
       <div className="stats-panel">
         <div className="stats-header">
-          <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
-          <button className="stats-close" onClick={onClose}><X size={18} /></button>
+          <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
+          <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
         </div>
         <div className="stats-loading">{t('stats.loading')}</div>
       </div>
@@ -42,8 +42,8 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
     return (
       <div className="stats-panel">
         <div className="stats-header">
-          <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
-          <button className="stats-close" onClick={onClose}><X size={18} /></button>
+          <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
+          <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
         </div>
         <div className="stats-loading">{t('stats.loadError')}</div>
       </div>
@@ -61,29 +61,29 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
   return (
     <div className="stats-panel">
       <div className="stats-header">
-        <div className="stats-title"><BarChart3 size={18} /> <span>{t('stats.title')}</span></div>
-        <button className="stats-close" onClick={onClose}><X size={18} /></button>
+        <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
+        <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
       </div>
 
       {/* Key Metrics */}
       <div className="stats-metrics">
         <div className="stats-metric">
-          <MessageSquare size={16} />
+          <IconChats size={16} />
           <div className="stats-metric-val">{stats.totalMessages}</div>
           <div className="stats-metric-label">{t('stats.messages')}</div>
         </div>
         <div className="stats-metric">
-          <TrendingUp size={16} />
+          <IconTrendingUp size={16} />
           <div className="stats-metric-val">{stats.totalConversations}</div>
           <div className="stats-metric-label">{t('stats.conversations')}</div>
         </div>
         <div className="stats-metric">
-          <Brain size={16} />
+          <IconBrain size={16} />
           <div className="stats-metric-val">{stats.kgEntityCount}</div>
           <div className="stats-metric-label">{t('stats.entities')}</div>
         </div>
         <div className="stats-metric">
-          <Users size={16} />
+          <IconUsers size={16} />
           <div className="stats-metric-val">{helpfulPct}%</div>
           <div className="stats-metric-label">{t('stats.helpful')}</div>
         </div>

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { ArrowRight, Crown, Check } from 'lucide-react'
+import { IconArrowRight, IconCrown, IconCheck } from './KernelIcons'
 import { DURATION, EASE } from '../constants/motion'
 
 interface OnboardingFlowProps {
@@ -153,7 +153,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
                   >
                     <span>{interest.emoji}</span>
                     <span>{t(`interests.${interest.id}`)}</span>
-                    {selectedInterests.includes(interest.id) && <Check size={14} />}
+                    {selectedInterests.includes(interest.id) && <IconCheck size={14} />}
                   </button>
                 ))}
               </div>
@@ -163,7 +163,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 4: Free vs Pro + Begin */}
           {step === 4 && (
             <>
-              <div className="onboarding-icon"><Crown size={28} aria-hidden="true" /></div>
+              <div className="onboarding-icon"><IconCrown size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title onboarding-title">{t('step4.title')}</h1>
               <p className="onboarding-subtitle">{t('step4.subtitle')}</p>
               <div className="onboarding-tiers">
@@ -191,7 +191,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Action */}
           <button className="onboarding-btn" onClick={goNext}>
             {step === TOTAL_STEPS - 1 ? t('begin') : step === 3 ? (selectedInterests.length > 0 ? t('continue') : t('skip')) : t('continue')}
-            <ArrowRight size={16} />
+            <IconArrowRight size={16} />
           </button>
 
           {/* Skip */}

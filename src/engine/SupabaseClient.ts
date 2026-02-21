@@ -450,6 +450,35 @@ export async function getSharedConversation(conversationId: string): Promise<{
   return data;
 }
 
+// ─── Fork Shared Conversation ────────────────────────────
+
+export async function forkSharedConversation(
+  userId: string,
+  title: string,
+  messages: { role: string; content: string; agentName?: string; timestamp: number }[]
+): Promise<string | null> {
+  const conv = await createConversation(userId, title)
+  if (!conv) return null
+
+  // Insert all messages into the new conversation
+  const rows = messages.map((msg) => ({
+    id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    channel_id: conv.id,
+    agent_id: msg.role === 'user' ? 'user' : (msg.agentName?.toLowerCase() || 'kernel'),
+    content: msg.content,
+    user_id: userId,
+    created_at: new Date(msg.timestamp).toISOString(),
+  }))
+
+  const { error } = await supabase.from('messages').insert(rows)
+  if (error) {
+    console.error('Error forking shared conversation messages:', error)
+    return null
+  }
+
+  return conv.id
+}
+
 // ─── Collective Intelligence ────────────────────────────
 
 export interface DBResponseSignal {

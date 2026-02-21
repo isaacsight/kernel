@@ -134,10 +134,14 @@ body.ka-scrollable-page {
 }
 
 h1,
-h2,
+h2 {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
 h3,
 h4 {
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.02em;
 }
 
@@ -1755,6 +1759,13 @@ h4 {
     font-weight: 400;
     flex-shrink: 0;
     margin-top: 2px;
+    overflow: hidden;
+}
+
+.ka-msg-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Agent-specific avatar borders */
@@ -1787,7 +1798,7 @@ h4 {
     background: var(--rubin-ink-faint, var(--rubin-ivory-med));
     color: var(--rubin-slate);
     font-family: var(--font-serif);
-    font-size: 1rem;
+    font-size: 1.05rem;
     line-height: 1.7;
     border-radius: var(--radius-sm);
     max-width: 85%;
@@ -2361,6 +2372,7 @@ h4 {
 .ka-shared-cta {
     display: inline-block;
     padding: 14px 36px;
+    border: none;
     border-radius: var(--radius-md);
     background: var(--rubin-slate);
     color: var(--rubin-ivory);
@@ -2368,12 +2380,19 @@ h4 {
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
+    cursor: pointer;
     transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-shared-cta:hover {
     opacity: 0.85;
     transform: translateY(-1px);
+}
+
+.ka-shared-cta:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
 }
 
 /* ─── Goals Panel ──────────────────────────────────────── */
@@ -6310,7 +6329,7 @@ h4 {
     /* Touch-friendly header menu items */
     .ka-header-menu-item {
         padding: 14px 12px;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
     }
 
     .ka-header-menu {
@@ -6438,7 +6457,7 @@ h4 {
     }
 
     .ka-msg--kernel .ka-msg-bubble {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         line-height: 1.6;
         max-width: 90%;
     }
@@ -8212,6 +8231,7 @@ h4 {
 .conv-item-title {
     font-family: var(--font-serif);
     font-size: 0.9rem;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -8335,7 +8355,7 @@ h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.4;
+    opacity: 0.5;
     color: var(--rubin-slate);
     transition: all var(--duration-fast) var(--ease-out);
 }
@@ -8387,7 +8407,8 @@ h4 {
     border: none;
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--rubin-slate);
     cursor: pointer;
@@ -10177,7 +10198,7 @@ h4 {
 .ka-msg--kernel .ka-msg-bubble h2,
 .ka-msg--kernel .ka-msg-bubble h3 {
     margin: 0.6em 0 0.3em;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .ka-msg--kernel .ka-msg-bubble h1 {
@@ -10341,7 +10362,7 @@ h4 {
         border: none;
         cursor: pointer;
         color: var(--rubin-slate);
-        opacity: 0.45;
+        opacity: 0.55;
         transition: opacity var(--duration-fast) var(--ease-out),
             color var(--duration-fast) var(--ease-out);
         -webkit-tap-highlight-color: transparent;
@@ -10354,7 +10375,8 @@ h4 {
 
     .ka-tab-label {
         font-family: var(--font-serif);
-        font-size: 10px;
+        font-size: 11px;
+        font-weight: 500;
         letter-spacing: 0.01em;
         line-height: 1;
     }

@@ -30,3 +30,6 @@ paths:
 - Use parallel Haiku calls for swarm contributions
 - Stream responses when possible (mode: 'stream')
 - Token budget: Haiku max 1024, Sonnet max 4096 for normal responses
+
+## Research Context
+Please refer to `KERNEL_RESEARCH.md` in the project root for the definitive background on the Kernel's identity, system architecture, UX philosophy, and aesthetic engineering requirements.
