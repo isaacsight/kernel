@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Researcher — Magnifying glass over open book -->
+  <circle cx="128" cy="128" r="120" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- Open book — two page spreads -->
+  <path d="M128 180 L128 100" stroke="#5B8BA0" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Left page -->
+  <path d="M128 100 Q100 95 72 105 L72 175 Q100 165 128 180" stroke="#5B8BA0" stroke-width="1.5" fill="none"/>
+  <!-- Right page -->
+  <path d="M128 100 Q156 95 184 105 L184 175 Q156 165 128 180" stroke="#5B8BA0" stroke-width="1.5" fill="none"/>
+
+  <!-- Text lines on left page -->
+  <line x1="86" y1="118" x2="118" y2="115" stroke="#5B8BA0" stroke-width="0.5" opacity="0.4"/>
+  <line x1="84" y1="130" x2="120" y2="127" stroke="#5B8BA0" stroke-width="0.5" opacity="0.4"/>
+  <line x1="82" y1="142" x2="116" y2="139" stroke="#5B8BA0" stroke-width="0.5" opacity="0.4"/>
+  <line x1="80" y1="154" x2="112" y2="151" stroke="#5B8BA0" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- Magnifying glass — upper right -->
+  <circle cx="168" cy="82" r="28" stroke="#5B8BA0" stroke-width="1.5" fill="none"/>
+  <line x1="188" y1="102" x2="204" y2="118" stroke="#5B8BA0" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Lens highlight -->
+  <path d="M155 72 Q160 66 168 66" stroke="#5B8BA0" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+</svg>

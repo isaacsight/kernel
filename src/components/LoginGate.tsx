@@ -60,6 +60,7 @@ export function LoginGate() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
+        <img className="landing-hero-art" src={`${import.meta.env.BASE_URL}concepts/hero-darkmode.svg`} alt="" aria-hidden="true" />
         <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
         <h1 className="landing-title">{t('login.title')}</h1>
         <p className="landing-subtitle">
@@ -79,17 +80,17 @@ export function LoginGate() {
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         <div className="landing-feature">
-          <div className="landing-feature-icon">K</div>
+          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
           <h3>{t('login.feature1Title')}</h3>
           <p>{t('login.feature1Desc')}</p>
         </div>
         <div className="landing-feature">
-          <div className="landing-feature-icon">R</div>
+          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-researcher.svg`} alt="" aria-hidden="true" />
           <h3>{t('login.feature2Title')}</h3>
           <p>{t('login.feature2Desc')}</p>
         </div>
         <div className="landing-feature">
-          <div className="landing-feature-icon">W</div>
+          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-writer.svg`} alt="" aria-hidden="true" />
           <h3>{t('login.feature3Title')}</h3>
           <p>{t('login.feature3Desc')}</p>
         </div>

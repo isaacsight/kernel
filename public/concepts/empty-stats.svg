@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- Stats Empty State — Open ledger with hand-drawn tallies -->
+
+  <!-- Dashed framing circle -->
+  <circle cx="100" cy="80" r="70" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4 4" fill="none" opacity="0.3"/>
+
+  <!-- Open ledger — left page -->
+  <path d="M40 40 L40 125 L98 128 L98 36 Z" stroke="#D4C5A9" stroke-width="1" fill="none" opacity="0.4"/>
+  <!-- Right page -->
+  <path d="M98 36 L98 128 L158 125 L158 40 Z" stroke="#D4C5A9" stroke-width="1" fill="none" opacity="0.4"/>
+  <!-- Spine -->
+  <line x1="98" y1="36" x2="98" y2="128" stroke="#D4C5A9" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Tally marks on left page -->
+  <!-- Group 1: IIII with cross -->
+  <line x1="52" y1="56" x2="52" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.35"/>
+  <line x1="57" y1="56" x2="57" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.35"/>
+  <line x1="62" y1="56" x2="62" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.35"/>
+  <line x1="67" y1="56" x2="67" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.35"/>
+  <line x1="49" y1="64" x2="70" y2="58" stroke="#6B5B95" stroke-width="1" opacity="0.35"/>
+
+  <!-- Group 2: III -->
+  <line x1="76" y1="56" x2="76" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.3"/>
+  <line x1="81" y1="56" x2="81" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.3"/>
+  <line x1="86" y1="56" x2="86" y2="68" stroke="#6B5B95" stroke-width="1" opacity="0.3"/>
+
+  <!-- Horizontal rules on left page -->
+  <line x1="50" y1="80" x2="90" y2="80" stroke="#D4C5A9" stroke-width="0.3" opacity="0.2"/>
+  <line x1="50" y1="90" x2="90" y2="90" stroke="#D4C5A9" stroke-width="0.3" opacity="0.2"/>
+  <line x1="50" y1="100" x2="90" y2="100" stroke="#D4C5A9" stroke-width="0.3" opacity="0.2"/>
+
+  <!-- Bar chart sketch on right page -->
+  <line x1="108" y1="110" x2="150" y2="110" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <rect x="112" y="72" width="8" height="38" rx="1" stroke="#6B5B95" stroke-width="0.8" fill="none" opacity="0.3"/>
+  <rect x="124" y="58" width="8" height="52" rx="1" stroke="#6B5B95" stroke-width="0.8" fill="none" opacity="0.35"/>
+  <rect x="136" y="82" width="8" height="28" rx="1" stroke="#6B5B95" stroke-width="0.8" fill="none" opacity="0.25"/>
+
+  <!-- Pencil on the side -->
+  <line x1="155" y1="52" x2="162" y2="80" stroke="#D4C5A9" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+  <path d="M162 80 L163 84 L161 82 Z" fill="#D4C5A9" opacity="0.3"/>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- Goals Empty State — Bullseye with arrow in flight -->
+
+  <!-- Dashed framing circle -->
+  <circle cx="100" cy="80" r="70" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4 4" fill="none" opacity="0.3"/>
+
+  <!-- Target rings -->
+  <circle cx="100" cy="80" r="44" stroke="#6B5B95" stroke-width="1" fill="none" opacity="0.3"/>
+  <circle cx="100" cy="80" r="30" stroke="#6B5B95" stroke-width="1" fill="none" opacity="0.25"/>
+  <circle cx="100" cy="80" r="16" stroke="#6B5B95" stroke-width="1" fill="none" opacity="0.2"/>
+  <circle cx="100" cy="80" r="4" fill="#6B5B95" opacity="0.5"/>
+
+  <!-- Arrow in flight — approaching target -->
+  <line x1="40" y1="50" x2="80" y2="72" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Arrow head -->
+  <path d="M80 72 L74 66 M80 72 L72 74" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Fletching -->
+  <path d="M42 50 L36 44 M42 50 L36 54" stroke="#D4C5A9" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Motion lines -->
+  <line x1="28" y1="46" x2="36" y2="49" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="30" y1="52" x2="38" y2="53" stroke="#D4C5A9" stroke-width="0.5" opacity="0.25"/>
+
+  <!-- Small star accent -->
+  <circle cx="152" cy="36" r="1.5" fill="#6B5B95" opacity="0.3"/>
+  <line x1="152" y1="32" x2="152" y2="40" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+  <line x1="148" y1="36" x2="156" y2="36" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+</svg>

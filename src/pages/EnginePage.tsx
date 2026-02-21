@@ -520,7 +520,7 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="ka-empty-icon">K</div>
+            <img className="ka-empty-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-state.svg`} alt="" aria-hidden="true" />
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
             <p className="ka-home-greeting">{getTimeGreeting()}</p>
@@ -723,7 +723,7 @@ function EngineChat() {
         {billing.showUpgradeWall && (
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <div className="ka-upgrade-icon">K</div>
+              <img className="ka-upgrade-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
               <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: FREE_MSG_LIMIT })}</h2>
               <p className="ka-upgrade-subtitle">{t('upgrade.subtitle')}</p>
               <ul className="ka-upgrade-features">
@@ -761,13 +761,13 @@ function EngineChat() {
         {billing.showDeleteConfirm && (
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <div className="ka-upgrade-icon" style={{ background: '#DC2626' }}><Trash2 size={22} /></div>
+              <div className="ka-upgrade-icon ka-upgrade-icon--danger"><Trash2 size={22} /></div>
               <h2 className="ka-upgrade-title">{t('deleteConfirm.title')}</h2>
               <p className="ka-upgrade-subtitle">
                 {t('deleteConfirm.subtitle')}
                 {isSubscribed && t('deleteConfirm.subtitleWithSub')}
               </p>
-              <button className="ka-upgrade-btn" style={{ background: '#DC2626' }} onClick={billing.handleDeleteAccount} disabled={billing.deleteLoading}>
+              <button className="ka-upgrade-btn ka-upgrade-btn--danger" onClick={billing.handleDeleteAccount} disabled={billing.deleteLoading}>
                 {billing.deleteLoading ? t('deleteConfirm.confirming') : t('deleteConfirm.confirm')}
               </button>
               <button className="ka-upgrade-dismiss" onClick={() => billing.setShowDeleteConfirm(false)}>{t('cancel', { ns: 'common' })}</button>

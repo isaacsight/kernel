@@ -150,6 +150,7 @@ function BeliefsSection({
     return (
       <div className="ka-insights-section">
         <h3 className="ka-insights-section-title">{t('insights.whatIBelieve')}</h3>
+        <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" aria-hidden="true" />
         <p className="ka-insights-empty">{t('insights.noBeliefsYet')}</p>
       </div>
     )
@@ -209,6 +210,7 @@ function MemorySection({ profile }: { profile: UserMemoryProfile | null }) {
     return (
       <div className="ka-insights-section">
         <h3 className="ka-insights-section-title">{t('insights.myMemory')}</h3>
+        <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" aria-hidden="true" />
         <p className="ka-insights-empty">{t('insights.noMemoryYet')}</p>
       </div>
     )
@@ -292,6 +294,7 @@ function ReflectionsSection({
     return (
       <div className="ka-insights-section">
         <h3 className="ka-insights-section-title">{t('insights.performance')}</h3>
+        <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-stats.svg`} alt="" aria-hidden="true" />
         <p className="ka-insights-empty">{t('insights.noReflectionsYet')}</p>
       </div>
     )
@@ -374,6 +377,7 @@ function AgentPerformanceSection({
     return (
       <div className="ka-insights-section">
         <h3 className="ka-insights-section-title">{t('insights.agentPerformance')}</h3>
+        <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-stats.svg`} alt="" aria-hidden="true" />
         <p className="ka-insights-empty">{t('insights.noAgentDataYet')}</p>
       </div>
     )

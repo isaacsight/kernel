@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
-  <!-- Direction 1: The Kernel Mark — A refined K in a subtle circle -->
-  <!-- Warm ivory background circle with slate stroke -->
-  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#1F1E1D" stroke-width="1.5"/>
-  <!-- EB Garamond-inspired serif K -->
-  <text x="60" y="78" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="64" font-weight="400" fill="#1F1E1D" letter-spacing="-2">K</text>
-  <!-- Subtle dot — the "kernel" seed -->
-  <circle cx="60" cy="102" r="2" fill="#6B5B95"/>
+  <!-- The Kernel Mark — V4 Ink Drop: italic K with seed drop -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#6B5B95">K</text>
+  <!-- The "kernel seed" — ink drop -->
+  <circle cx="60" cy="98" r="3" fill="#6B5B95"/>
 </svg>

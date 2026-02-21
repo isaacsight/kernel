@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- V1: Clean Minimal — just the monogram, no texture -->
+  <rect width="1024" height="1024" rx="224" fill="#FAF9F6"/>
+  <circle cx="512" cy="512" r="340" fill="none" stroke="#D4C5A9" stroke-width="3"/>
+  <text x="512" y="600" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif"
+        font-style="italic" font-size="420" font-weight="400" fill="#6B5B95">K</text>
+</svg>

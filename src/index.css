@@ -1505,6 +1505,13 @@ h4 {
     opacity: 0.7;
 }
 
+.ka-empty-illustration {
+    width: 200px;
+    height: auto;
+    margin-bottom: 24px;
+    opacity: 0.6;
+}
+
 .ka-empty-title {
     font-family: var(--font-serif);
     font-style: italic;
@@ -1852,6 +1859,13 @@ h4 {
     justify-content: center;
 }
 
+.ka-upgrade-emblem {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    opacity: 0.8;
+}
+
 .ka-upgrade-title {
     font-family: var(--font-serif);
     font-size: 1.25rem;
@@ -1914,6 +1928,14 @@ h4 {
     cursor: not-allowed;
 }
 
+.ka-upgrade-icon--danger {
+    background: var(--rubin-error);
+}
+
+.ka-upgrade-btn--danger {
+    background: var(--rubin-error);
+}
+
 .ka-upgrade-dismiss {
     display: block;
     width: 100%;
@@ -1934,6 +1956,11 @@ h4 {
 
 [data-theme="dark"] .ka-upgrade-modal {
     background: #1a1a1a;
+}
+
+[data-theme="dark"] .ka-upgrade-emblem {
+    opacity: 0.9;
+    filter: brightness(1.2);
 }
 
 [data-theme="dark"] .ka-upgrade-features li {
@@ -2338,6 +2365,12 @@ h4 {
     opacity: 0.35;
 }
 
+.ka-empty-state-illustration {
+    width: 120px;
+    height: auto;
+    opacity: 0.6;
+}
+
 .ka-empty-state-title {
     font-family: var(--font-serif);
     font-size: 1.15rem;
@@ -2378,6 +2411,16 @@ h4 {
 
 [data-theme="dark"] .ka-empty-state-cta:hover {
     background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .ka-empty-state-illustration {
+    opacity: 0.5;
+    filter: brightness(1.4) saturate(0.8);
+}
+
+[data-theme="dark"] .ka-empty-illustration {
+    opacity: 0.5;
+    filter: brightness(1.4) saturate(0.8);
 }
 
 .ka-goals-list {
@@ -6271,6 +6314,25 @@ h4 {
     text-align: center;
     padding: 80px 0 48px;
     max-width: 560px;
+    position: relative;
+}
+
+.landing-hero-art {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.landing-hero > *:not(.landing-hero-art) {
+    position: relative;
+    z-index: 1;
 }
 
 .landing-logo {
@@ -6356,6 +6418,13 @@ h4 {
     font-size: 0.75rem;
     font-weight: 600;
     margin-bottom: 12px;
+}
+
+.landing-feature-emblem {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+    opacity: 0.7;
 }
 
 .landing-feature h3 {
@@ -9101,6 +9170,13 @@ h4 {
     margin-bottom: 20px;
 }
 
+.onboarding-illustration {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
 .onboarding-subtitle {
     font-family: var(--font-serif);
     font-style: italic;
@@ -9554,6 +9630,11 @@ h4 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
+[data-theme="dark"] .onboarding-illustration {
+    opacity: 0.6;
+    filter: brightness(1.3);
+}
+
 [data-theme="dark"] .ka-gate-input {
     background: #262320;
     color: #E4DFD5;
@@ -9620,6 +9701,16 @@ h4 {
 
 [data-theme="dark"] .landing {
     background: #161412;
+}
+
+[data-theme="dark"] .landing-hero-art {
+    opacity: 0.10;
+    filter: brightness(1.5);
+}
+
+[data-theme="dark"] .landing-feature-emblem {
+    opacity: 0.85;
+    filter: brightness(1.3);
 }
 
 [data-theme="dark"] .landing-plan {

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Sparkles, ArrowRight, MessageSquare, Brain, Users, Crown, Check } from 'lucide-react'
+import { ArrowRight, Crown, Check } from 'lucide-react'
 
 interface OnboardingFlowProps {
   onComplete: (interests?: string[]) => void
@@ -102,7 +102,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 0: Welcome */}
           {step === 0 && (
             <>
-              <div className="onboarding-icon"><Sparkles size={28} aria-hidden="true" /></div>
+              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-1-welcome.svg`} alt="" aria-hidden="true" />
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>
                 {userName ? t('step0.titleUser', { name: userName.split('@')[0] }) : t('step0.title')}
               </h1>
@@ -116,7 +116,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 1: Memory */}
           {step === 1 && (
             <>
-              <div className="onboarding-icon"><Brain size={28} aria-hidden="true" /></div>
+              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-2-memory.svg`} alt="" aria-hidden="true" />
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step1.title')}</h1>
               <p className="onboarding-subtitle">{t('step1.subtitle')}</p>
               <p className="onboarding-body">
@@ -128,7 +128,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 2: Agents */}
           {step === 2 && (
             <>
-              <div className="onboarding-icon"><Users size={28} aria-hidden="true" /></div>
+              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-3-agents.svg`} alt="" aria-hidden="true" />
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step2.title')}</h1>
               <p className="onboarding-subtitle">{t('step2.subtitle')}</p>
               <p className="onboarding-body">
@@ -140,7 +140,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 3: Interest Picker */}
           {step === 3 && (
             <>
-              <div className="onboarding-icon"><MessageSquare size={28} aria-hidden="true" /></div>
+              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-4-interests.svg`} alt="" aria-hidden="true" />
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step3.title')}</h1>
               <p className="onboarding-subtitle">{t('step3.subtitle')}</p>
               <div className="onboarding-interests">

@@ -45,6 +45,7 @@ export interface Specialist {
   id: string
   name: string
   icon: string
+  emblem?: string
   color: string
   systemPrompt: string
 }
@@ -54,6 +55,7 @@ export const SPECIALISTS: Record<string, Specialist> = {
     id: 'kernel',
     name: 'Kernel',
     icon: 'K',
+    emblem: 'concepts/emblem-kernel.svg',
     color: '#6B5B95',
     systemPrompt: KERNEL_AGENT.systemPrompt,
   },
@@ -62,6 +64,7 @@ export const SPECIALISTS: Record<string, Specialist> = {
     id: 'researcher',
     name: 'Researcher',
     icon: 'R',
+    emblem: 'concepts/emblem-researcher.svg',
     color: '#5B8BA0',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -88,6 +91,7 @@ FORMAT:
     id: 'coder',
     name: 'Coder',
     icon: 'C',
+    emblem: 'concepts/emblem-coder.svg',
     color: '#6B8E6B',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -112,6 +116,7 @@ FORMAT:
     id: 'writer',
     name: 'Writer',
     icon: 'W',
+    emblem: 'concepts/emblem-writer.svg',
     color: '#B8875C',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -137,6 +142,7 @@ FORMAT:
     id: 'analyst',
     name: 'Analyst',
     icon: 'A',
+    emblem: 'concepts/emblem-analyst.svg',
     color: '#A0768C',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
