@@ -88,12 +88,12 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
 
   return (
     <div className="ka-wf-panel">
-      <div className="ka-wf-header">
-        <h2 className="ka-wf-title">
+      <div className="ka-panel-header">
+        <h2 className="ka-panel-title">
           <Zap size={18} />
           {t('workflows.title')}
         </h2>
-        <button className="ka-wf-close" onClick={onClose} aria-label="Close">
+        <button className="ka-panel-close" onClick={onClose} aria-label="Close">
           <X size={18} />
         </button>
       </div>

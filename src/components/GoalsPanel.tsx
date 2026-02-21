@@ -111,12 +111,12 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
 
   return (
     <div className="ka-goals-panel">
-      <div className="ka-goals-header">
-        <h2 className="ka-goals-title">
+      <div className="ka-panel-header">
+        <h2 className="ka-panel-title">
           <Target size={18} />
           {t('goals.title')}
         </h2>
-        <button className="ka-goals-close" onClick={onClose} aria-label="Close">
+        <button className="ka-panel-close" onClick={onClose} aria-label="Close">
           <X size={18} />
         </button>
       </div>

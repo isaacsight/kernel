@@ -122,12 +122,12 @@ export function ScheduledTasksPanel({ userId, onClose, onToast }: ScheduledTasks
 
   return (
     <div className="ka-sched-panel">
-      <div className="ka-sched-header">
-        <h2 className="ka-sched-title">
+      <div className="ka-panel-header">
+        <h2 className="ka-panel-title">
           <Clock size={18} />
           {t('scheduled.title')}
         </h2>
-        <button className="ka-sched-close" onClick={onClose} aria-label="Close">
+        <button className="ka-panel-close" onClick={onClose} aria-label="Close">
           <X size={18} />
         </button>
       </div>
