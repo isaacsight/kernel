@@ -67,26 +67,26 @@ export function EnginePage() {
   if (!onboarded) {
     return (
       <Suspense fallback={<div className="ka-loading-splash" />}>
-      <OnboardingFlow
-        userName={user?.email || undefined}
-        onComplete={(interests) => {
-          localStorage.setItem(onboardingKey, 'true')
-          setOnboarded(true)
-          if (interests && interests.length > 0 && user?.id) {
-            for (const interest of interests) {
-              upsertKGEntity({
-                user_id: user.id,
-                name: interest.charAt(0).toUpperCase() + interest.slice(1),
-                entity_type: 'preference',
-                properties: { source: 'onboarding' },
-                confidence: 0.7,
-                source: 'stated',
-                mention_count: 1,
-              })
+        <OnboardingFlow
+          userName={user?.email || undefined}
+          onComplete={(interests) => {
+            localStorage.setItem(onboardingKey, 'true')
+            setOnboarded(true)
+            if (interests && interests.length > 0 && user?.id) {
+              for (const interest of interests) {
+                upsertKGEntity({
+                  user_id: user.id,
+                  name: interest.charAt(0).toUpperCase() + interest.slice(1),
+                  entity_type: 'preference',
+                  properties: { source: 'onboarding' },
+                  confidence: 0.7,
+                  source: 'stated',
+                  mention_count: 1,
+                })
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
       </Suspense>
     )
   }
@@ -406,6 +406,11 @@ function EngineChat() {
         onRename={(id, title) => {
           convs.setConversations(prev => prev.map(c => c.id === id ? { ...c, title } : c))
         }}
+        onShare={async (id) => {
+          await convs.switchConversation(id)
+          setIsDrawerOpen(false)
+          msgActions.setShowShareModal(true)
+        }}
         isLoading={convs.convsLoading}
       />
 
@@ -630,7 +635,9 @@ function EngineChat() {
             <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={TRANSITION.MESSAGE}>
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
-                  <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
+                  <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>
+                    <img src={`${import.meta.env.BASE_URL}${getSpecialist(msg.agentId || 'kernel').emblem || 'concepts/emblem-kernel.svg'}`} alt="" aria-hidden="true" className="ka-msg-avatar-img" />
+                  </div>
                   {msg.agentName && msg.agentName !== 'Kernel' && (
                     <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
                   )}
@@ -740,16 +747,16 @@ function EngineChat() {
       <AnimatePresence>
         {msgActions.showShareModal && convs.activeConversationId && user && (
           <Suspense fallback={null}>
-          <ShareModal
-            conversationId={convs.activeConversationId}
-            conversationTitle={convs.activeConversation?.title || 'Kernel Conversation'}
-            messages={messages.map(m => ({ role: m.role, content: m.content, agentName: m.agentName, timestamp: m.timestamp }))}
-            userId={user.id}
-            isPro={isPro}
-            onClose={() => msgActions.setShowShareModal(false)}
-            onToast={showToast}
-            onNativeShare={msgActions.handleNativeShare}
-          />
+            <ShareModal
+              conversationId={convs.activeConversationId}
+              conversationTitle={convs.activeConversation?.title || 'Kernel Conversation'}
+              messages={messages.map(m => ({ role: m.role, content: m.content, agentName: m.agentName, timestamp: m.timestamp }))}
+              userId={user.id}
+              isPro={isPro}
+              onClose={() => msgActions.setShowShareModal(false)}
+              onToast={showToast}
+              onNativeShare={msgActions.handleNativeShare}
+            />
           </Suspense>
         )}
       </AnimatePresence>

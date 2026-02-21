@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { SPRING, DURATION } from '../constants/motion'
-import { Plus, Trash2, X, Search, Pencil, Check } from 'lucide-react'
+import { Plus, Trash2, X, Search, Pencil, Check, Share2 } from 'lucide-react'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
@@ -16,6 +16,7 @@ interface ConversationDrawerProps {
   onNewChat: () => void
   onDelete: (id: string) => void
   onRename?: (id: string, title: string) => void
+  onShare?: (id: string) => void
   isLoading?: boolean
 }
 
@@ -42,6 +43,7 @@ export function ConversationDrawer({
   onNewChat,
   onDelete,
   onRename,
+  onShare,
   isLoading,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
@@ -215,6 +217,15 @@ export function ConversationDrawer({
                   </div>
                   {!isRenaming && (
                     <div className="conv-item-actions">
+                      {onShare && (
+                        <button
+                          className="conv-item-action"
+                          onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
+                          aria-label="Share conversation"
+                        >
+                          <Share2 size={13} />
+                        </button>
+                      )}
                       <button
                         className="conv-item-action"
                         onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
