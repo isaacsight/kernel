@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import {
   getUserConversations,
   getChannelMessages,
@@ -28,6 +28,11 @@ export function useConversations(
   const [convsLoading, setConvsLoading] = useState(true)
   const [msgsLoading, setMsgsLoading] = useState(false)
 
+  // Use a ref so switchConversation always calls the latest setMessages callback
+  // (avoids stale closure when called from useEffects that capture old render state)
+  const setMessagesRef = useRef(setMessages)
+  setMessagesRef.current = setMessages
+
   const loadConversations = useCallback(async () => {
     if (!userId) return
     const convs = await getUserConversations(userId)
@@ -42,31 +47,35 @@ export function useConversations(
   const switchConversation = useCallback(async (convId: string) => {
     setMsgsLoading(true)
     setActiveConversationId(convId)
-    setMessages([])
+    setMessagesRef.current([])
     const dbMessages = await getChannelMessages(convId)
     const chatMessages: ChatMessage[] = dbMessages.map(m => ({
       id: m.id,
       role: m.agent_id === 'user' ? 'user' : 'kernel',
       content: m.content,
       timestamp: new Date(m.created_at).getTime(),
+      agentId: m.agent_id !== 'user' ? m.agent_id : undefined,
+      agentName: m.agent_id !== 'user' && m.agent_id !== 'kernel'
+        ? m.agent_id.charAt(0).toUpperCase() + m.agent_id.slice(1)
+        : m.agent_id !== 'user' ? 'Kernel' : undefined,
     }))
-    setMessages(chatMessages)
+    setMessagesRef.current(chatMessages)
     setMsgsLoading(false)
-  }, [setMessages])
+  }, [])
 
   const handleNewChat = useCallback(() => {
-    setMessages([])
+    setMessagesRef.current([])
     setActiveConversationId(null)
-  }, [setMessages])
+  }, [])
 
   const handleDeleteConversation = useCallback(async (convId: string) => {
     await deleteConversation(convId)
     if (activeConversationId === convId) {
-      setMessages([])
+      setMessagesRef.current([])
       setActiveConversationId(null)
     }
     await loadConversations()
-  }, [activeConversationId, loadConversations, setMessages])
+  }, [activeConversationId, loadConversations])
 
   const activeConversation = conversations.find(c => c.id === activeConversationId)
 

@@ -455,20 +455,23 @@ export async function getSharedConversation(conversationId: string): Promise<{
 export async function forkSharedConversation(
   userId: string,
   title: string,
-  messages: { role: string; content: string; agentName?: string; timestamp: number }[]
+  messages: { role: string; content: string; agentName?: string; timestamp?: number }[]
 ): Promise<string | null> {
   const conv = await createConversation(userId, title)
   if (!conv) return null
 
-  // Insert all messages into the new conversation
-  const rows = messages.map((msg) => ({
-    id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    channel_id: conv.id,
-    agent_id: msg.role === 'user' ? 'user' : (msg.agentName?.toLowerCase() || 'kernel'),
-    content: msg.content,
-    user_id: userId,
-    created_at: new Date(msg.timestamp).toISOString(),
-  }))
+  const now = Date.now()
+  const rows = messages.map((msg, i) => {
+    const ts = msg.timestamp && !isNaN(msg.timestamp) ? msg.timestamp : now - (messages.length - i) * 1000
+    return {
+      id: `msg_${now}_${i}_${Math.random().toString(36).substr(2, 6)}`,
+      channel_id: conv.id,
+      agent_id: msg.role === 'user' ? 'user' : (msg.agentName?.toLowerCase() || 'kernel'),
+      content: msg.content,
+      user_id: userId,
+      created_at: new Date(ts).toISOString(),
+    }
+  })
 
   const { error } = await supabase.from('messages').insert(rows)
   if (error) {
