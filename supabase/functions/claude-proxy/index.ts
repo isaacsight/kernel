@@ -74,6 +74,23 @@ const DAILY_COST_HARD_LIMIT = 10.00
 const MAX_TOKENS_CAP = 8192
 const MAX_MESSAGE_SIZE_BYTES = 32_768  // 32KB per message
 const MAX_PAYLOAD_SIZE_BYTES = 262_144 // 256KB total
+const STREAM_IDLE_TIMEOUT_MS = 30_000  // 30s max idle between stream chunks
+
+// Read from a stream reader with an idle timeout per chunk.
+// Rejects with an error if no data arrives within timeoutMs.
+function readWithTimeout(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  timeoutMs: number,
+): Promise<ReadableStreamReadResult<Uint8Array>> {
+  return Promise.race([
+    reader.read(),
+    new Promise<never>((_, reject) => {
+      const id = setTimeout(() => reject(new Error('Stream idle timeout')), timeoutMs)
+      // Prevent the timer from keeping the process alive
+      if (typeof id === 'object' && 'unref' in id) (id as { unref: () => void }).unref()
+    }),
+  ])
+}
 
 // ─── In-memory rate limiter (sliding window) ──────────────
 
@@ -325,9 +342,10 @@ async function handleAnthropic(
 
     const stream = new ReadableStream({
       async start(controller) {
+        const encoder = new TextEncoder()
         try {
           while (true) {
-            const { done, value } = await reader.read()
+            const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
             if (done) break
             controller.enqueue(value)
             // Parse SSE events for usage (message_start has input, message_delta has output)
@@ -345,6 +363,10 @@ async function handleAnthropic(
               } catch { /* non-JSON line */ }
             }
           }
+        } catch (err) {
+          console.error('[anthropic-stream] Error:', (err as Error).message)
+          const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+          controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
         } finally {
           reader.releaseLock()
           controller.close()
@@ -475,7 +497,7 @@ async function handleOpenAI(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -506,6 +528,10 @@ async function handleOpenAI(
             }
           }
         }
+      } catch (err) {
+        console.error('[openai-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
@@ -623,7 +649,7 @@ async function handleGemini(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -656,6 +682,10 @@ async function handleGemini(
           }
         }
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+      } catch (err) {
+        console.error('[gemini-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
@@ -765,7 +795,7 @@ async function handleNvidia(
       const encoder = new TextEncoder()
       try {
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
           if (done) break
           const chunk = decoder.decode(value, { stream: true })
           const lines = chunk.split('\n')
@@ -795,6 +825,10 @@ async function handleNvidia(
             }
           }
         }
+      } catch (err) {
+        console.error('[nvidia-stream] Error:', (err as Error).message)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
         controller.close()
