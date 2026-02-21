@@ -90,7 +90,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           onDragEnd={handleDragEnd}
         >
           {/* Progress dots */}
-          <div className="onboarding-dots">
+          <div className="onboarding-dots" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={TOTAL_STEPS} aria-label={t('progress', { current: step + 1, total: TOTAL_STEPS })}>
             {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
               <div
                 key={i}
@@ -102,7 +102,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 0: Welcome */}
           {step === 0 && (
             <>
-              <div className="onboarding-icon"><Sparkles size={28} /></div>
+              <div className="onboarding-icon"><Sparkles size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>
                 {userName ? t('step0.titleUser', { name: userName.split('@')[0] }) : t('step0.title')}
               </h1>
@@ -116,7 +116,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 1: Memory */}
           {step === 1 && (
             <>
-              <div className="onboarding-icon"><Brain size={28} /></div>
+              <div className="onboarding-icon"><Brain size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step1.title')}</h1>
               <p className="onboarding-subtitle">{t('step1.subtitle')}</p>
               <p className="onboarding-body">
@@ -128,7 +128,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 2: Agents */}
           {step === 2 && (
             <>
-              <div className="onboarding-icon"><Users size={28} /></div>
+              <div className="onboarding-icon"><Users size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step2.title')}</h1>
               <p className="onboarding-subtitle">{t('step2.subtitle')}</p>
               <p className="onboarding-body">
@@ -140,7 +140,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 3: Interest Picker */}
           {step === 3 && (
             <>
-              <div className="onboarding-icon"><MessageSquare size={28} /></div>
+              <div className="onboarding-icon"><MessageSquare size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step3.title')}</h1>
               <p className="onboarding-subtitle">{t('step3.subtitle')}</p>
               <div className="onboarding-interests">
@@ -162,7 +162,7 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
           {/* Step 4: Free vs Pro + Begin */}
           {step === 4 && (
             <>
-              <div className="onboarding-icon"><Crown size={28} /></div>
+              <div className="onboarding-icon"><Crown size={28} aria-hidden="true" /></div>
               <h1 className="ka-gate-title" style={{ marginBottom: 4 }}>{t('step4.title')}</h1>
               <p className="onboarding-subtitle">{t('step4.subtitle')}</p>
               <div className="onboarding-tiers">

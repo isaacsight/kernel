@@ -1,24 +1,14 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Send, Menu, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, X, Download, Moon, Sun, Pencil, Share2, FileDown, Mic, MicOff, Square, ChevronDown, EllipsisVertical, Trash2, Crown, Shield, Brain, BarChart3, Target, Zap, Clock, Newspaper, MessageCircle, LogOut, Settings, Eye, Plus } from 'lucide-react'
 import { BottomTabBar } from '../components/BottomTabBar'
-import { MoreMenu } from '../components/MoreMenu'
-import KGPanel from '../components/kernel-agent/KGPanel'
-import StatsPanel from '../components/kernel-agent/StatsPanel'
-import { GoalsPanel } from '../components/GoalsPanel'
-import { WorkflowsPanel } from '../components/WorkflowsPanel'
-import { ScheduledTasksPanel } from '../components/ScheduledTasksPanel'
-import { BriefingPanel } from '../components/BriefingPanel'
-import { InsightsPanel } from '../components/InsightsPanel'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity } from '../engine/SupabaseClient'
-import { ShareModal } from '../components/ShareModal'
 import { ConversationDrawer } from '../components/ConversationDrawer'
-import { OnboardingFlow } from '../components/OnboardingFlow'
 import { LoginGate } from '../components/LoginGate'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed } from '../components/ChatHelpers'
@@ -34,6 +24,18 @@ import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
+
+// Lazy-loaded panels & modals (only loaded when user opens them)
+const KGPanel = lazy(() => import('../components/kernel-agent/KGPanel'))
+const StatsPanel = lazy(() => import('../components/kernel-agent/StatsPanel'))
+const GoalsPanel = lazy(() => import('../components/GoalsPanel').then(m => ({ default: m.GoalsPanel })))
+const WorkflowsPanel = lazy(() => import('../components/WorkflowsPanel').then(m => ({ default: m.WorkflowsPanel })))
+const ScheduledTasksPanel = lazy(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
+const BriefingPanel = lazy(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
+const InsightsPanel = lazy(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
+const ShareModal = lazy(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
+const OnboardingFlow = lazy(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
+const MoreMenu = lazy(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -63,6 +65,7 @@ export function EnginePage() {
 
   if (!onboarded) {
     return (
+      <Suspense fallback={<div className="ka-loading-splash" />}>
       <OnboardingFlow
         userName={user?.email || undefined}
         onComplete={(interests) => {
@@ -83,6 +86,7 @@ export function EnginePage() {
           }
         }}
       />
+      </Suspense>
     )
   }
 
@@ -111,6 +115,11 @@ function relativeTime(dateStr: string): string {
   return `${days}d ago`
 }
 
+// ─── Spring Constants ────────────────────────────────────
+
+const SPRING = { damping: 30, stiffness: 300 }
+const SPRING_GENTLE = { damping: 25, stiffness: 200 }
+
 // ─── Engine Chat (post-auth) ────────────────────────────
 
 const FREE_MSG_LIMIT = 10
@@ -120,6 +129,15 @@ function EngineChat() {
   const { user, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true)
+    const goOffline = () => setIsOnline(false)
+    window.addEventListener('online', goOnline)
+    window.addEventListener('offline', goOffline)
+    return () => { window.removeEventListener('online', goOnline); window.removeEventListener('offline', goOffline) }
+  }, [])
 
   // ─── Hooks ────────────────────────────────────────────
   const { darkMode, setDarkMode } = useDarkMode()
@@ -294,58 +312,70 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showKGPanel && (
           <BottomSheet onClose={() => { panels.setShowKGPanel(false); panels.setActiveTab('home') }}>
-            <KGPanel entities={chatEngine.kgEntities} relations={chatEngine.kgRelations} onClose={() => { panels.setShowKGPanel(false); panels.setActiveTab('home') }} />
+            <Suspense fallback={<PanelShimmer />}>
+              <KGPanel entities={chatEngine.kgEntities} relations={chatEngine.kgRelations} onClose={() => { panels.setShowKGPanel(false); panels.setActiveTab('home') }} />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showStatsPanel && user && (
           <BottomSheet onClose={() => { panels.setShowStatsPanel(false); panels.setActiveTab('home') }}>
-            <StatsPanel userId={user.id} onClose={() => { panels.setShowStatsPanel(false); panels.setActiveTab('home') }} />
+            <Suspense fallback={<PanelShimmer />}>
+              <StatsPanel userId={user.id} onClose={() => { panels.setShowStatsPanel(false); panels.setActiveTab('home') }} />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showGoalsPanel && user && (
           <BottomSheet onClose={() => { panels.setShowGoalsPanel(false); panels.setActiveTab('home') }}>
-            <GoalsPanel userId={user.id} onClose={() => { panels.setShowGoalsPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+            <Suspense fallback={<PanelShimmer />}>
+              <GoalsPanel userId={user.id} onClose={() => { panels.setShowGoalsPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showWorkflowsPanel && user && (
           <BottomSheet onClose={() => { panels.setShowWorkflowsPanel(false); panels.setActiveTab('home') }}>
-            <WorkflowsPanel
-              userId={user.id}
-              onClose={() => { panels.setShowWorkflowsPanel(false); panels.setActiveTab('home') }}
-              onToast={showToast}
-              onRunWorkflow={(proc) => {
-                panels.setShowWorkflowsPanel(false)
-                chatEngine.sendMessage(`Run workflow: ${proc.name}`)
-              }}
-            />
+            <Suspense fallback={<PanelShimmer />}>
+              <WorkflowsPanel
+                userId={user.id}
+                onClose={() => { panels.setShowWorkflowsPanel(false); panels.setActiveTab('home') }}
+                onToast={showToast}
+                onRunWorkflow={(proc) => {
+                  panels.setShowWorkflowsPanel(false)
+                  chatEngine.sendMessage(`Run workflow: ${proc.name}`)
+                }}
+              />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showScheduledPanel && user && (
           <BottomSheet onClose={() => { panels.setShowScheduledPanel(false); panels.setActiveTab('home') }}>
-            <ScheduledTasksPanel userId={user.id} onClose={() => { panels.setShowScheduledPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+            <Suspense fallback={<PanelShimmer />}>
+              <ScheduledTasksPanel userId={user.id} onClose={() => { panels.setShowScheduledPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showBriefingPanel && user && (
           <BottomSheet onClose={() => { panels.setShowBriefingPanel(false); panels.setActiveTab('home') }}>
-            <BriefingPanel
-              userId={user.id}
-              userMemory={chatEngine.userMemory}
-              kgEntities={chatEngine.kgEntities}
-              onClose={() => { panels.setShowBriefingPanel(false); panels.setActiveTab('home') }}
-              onToast={showToast}
-              onGoDeeper={(title, content) => { panels.setShowBriefingPanel(false); panels.setActiveTab('home'); chatEngine.handleBriefingGoDeeper(title, content) }}
-              onAddGoal={chatEngine.handleBriefingAddGoal}
-            />
+            <Suspense fallback={<PanelShimmer />}>
+              <BriefingPanel
+                userId={user.id}
+                userMemory={chatEngine.userMemory}
+                kgEntities={chatEngine.kgEntities}
+                onClose={() => { panels.setShowBriefingPanel(false); panels.setActiveTab('home') }}
+                onToast={showToast}
+                onGoDeeper={(title, content) => { panels.setShowBriefingPanel(false); panels.setActiveTab('home'); chatEngine.handleBriefingGoDeeper(title, content) }}
+                onAddGoal={chatEngine.handleBriefingAddGoal}
+              />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
@@ -353,13 +383,15 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showInsightsPanel && user && (
           <BottomSheet onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}>
-            <InsightsPanel
-              engineState={chatEngine.engineState}
-              userMemory={chatEngine.userMemory}
-              onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
-              onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
-              onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}
-            />
+            <Suspense fallback={<PanelShimmer />}>
+              <InsightsPanel
+                engineState={chatEngine.engineState}
+                userMemory={chatEngine.userMemory}
+                onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
+                onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
+                onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}
+              />
+            </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
@@ -596,8 +628,8 @@ function EngineChat() {
         </AnimatePresence>
 
         <AnimatePresence initial={false}>
-          {messages.map(msg => (
-            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
+          {messages.map((msg, i) => (
+            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
                   <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>{msg.agentId ? getSpecialist(msg.agentId).icon : 'K'}</div>
@@ -709,6 +741,7 @@ function EngineChat() {
       {/* Share Modal */}
       <AnimatePresence>
         {msgActions.showShareModal && convs.activeConversationId && user && (
+          <Suspense fallback={null}>
           <ShareModal
             conversationId={convs.activeConversationId}
             conversationTitle={convs.activeConversation?.title || 'Kernel Conversation'}
@@ -719,6 +752,7 @@ function EngineChat() {
             onToast={showToast}
             onNativeShare={msgActions.handleNativeShare}
           />
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -800,14 +834,18 @@ function EngineChat() {
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><Square size={16} /></button>
         ) : (
-          <button type="submit" className="ka-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0}><Send size={18} /></button>
+          <button type="submit" className="ka-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0} aria-label={t('aria.sendMessage', { ns: 'common' })}><Send size={18} /></button>
         )}
       </form>
+
+      {!isOnline && <div className="ka-offline-banner">{t('offline', { ns: 'common' })}</div>}
 
       <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} undiscoveredCount={featureDiscovery.undiscoveredCount} />
       <AnimatePresence>
         {panels.showMoreMenu && (
-          <MoreMenu isOpen={panels.showMoreMenu} onClose={() => { panels.setShowMoreMenu(false); panels.setActiveTab('home') }} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
+          <Suspense fallback={null}>
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => { panels.setShowMoreMenu(false); panels.setActiveTab('home') }} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -816,6 +854,18 @@ function EngineChat() {
           <motion.div className="ka-toast" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 30 }}>{toast}</motion.div>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+// ─── Panel Loading Shimmer ────────────────────────────
+
+function PanelShimmer() {
+  return (
+    <div className="ka-panel-shimmer">
+      <div className="ka-skeleton-line ka-skeleton-line--long" />
+      <div className="ka-skeleton-line ka-skeleton-line--short" />
+      <div className="ka-skeleton-line ka-skeleton-line--long" />
     </div>
   )
 }
@@ -830,7 +880,7 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
-        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+        transition={{ type: 'spring', ...SPRING }}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}

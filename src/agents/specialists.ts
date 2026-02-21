@@ -112,7 +112,7 @@ FORMAT:
     id: 'writer',
     name: 'Writer',
     icon: 'W',
-    color: '#C4956A',
+    color: '#B8875C',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
 YOUR SPECIALIZATION: Writing, Editing & Content Creation

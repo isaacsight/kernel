@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Plus, Trash2, X, Search, Pencil, Check } from 'lucide-react'
@@ -50,14 +50,14 @@ export function ConversationDrawer({
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState('')
   const renamingRef = useRef(false) // Guard against double-fire from onSubmit + onBlur
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const handleSearch = useCallback(async (query: string) => {
-    setSearchQuery(query)
-    if (query.trim().length < 2) {
-      setSearchResults([])
-      return
-    }
+  // Clean up debounce timer on unmount
+  useEffect(() => {
+    return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current) }
+  }, [])
 
+  const executeSearch = useCallback(async (query: string) => {
     setSearching(true)
     try {
       const { data } = await supabase
@@ -83,6 +83,16 @@ export function ConversationDrawer({
       setSearching(false)
     }
   }, [])
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query)
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current)
+    if (query.trim().length < 2) {
+      setSearchResults([])
+      return
+    }
+    searchTimerRef.current = setTimeout(() => executeSearch(query), 300)
+  }, [executeSearch])
 
   const handleRename = useCallback(async (convId: string) => {
     if (renamingRef.current) return // Prevent double-fire

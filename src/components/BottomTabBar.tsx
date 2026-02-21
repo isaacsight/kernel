@@ -42,6 +42,7 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: 
             className={`ka-tab-item${isActive ? ' ka-tab-item--active' : ''}`}
             role="tab"
             aria-selected={isActive}
+            aria-label={tab.label}
             onClick={() => onTabChange(tab.id)}
           >
             <span className="ka-tab-icon-wrap">

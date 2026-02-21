@@ -24,6 +24,11 @@ export default defineConfig({
                         handler: 'CacheFirst',
                         options: { cacheName: 'google-fonts-woff2', expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 } },
                     },
+                    {
+                        urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
+                        handler: 'StaleWhileRevalidate',
+                        options: { cacheName: 'supabase-api', expiration: { maxEntries: 50, maxAgeSeconds: 300 } },
+                    },
                 ],
             },
             manifest: {
@@ -39,7 +44,8 @@ export default defineConfig({
                 icons: [
                     { src: 'logo-mark-192.png', sizes: '192x192', type: 'image/png' },
                     { src: 'logo-mark-512.png', sizes: '512x512', type: 'image/png' },
-                    { src: 'logo-mark-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+                    { src: 'logo-maskable.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
+                    { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml' },
                 ],
             },
         }),

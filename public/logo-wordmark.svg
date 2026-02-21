@@ -2,5 +2,5 @@
   <!-- Direction 2: Wordmark — "kernel" in EB Garamond italic with dot accent -->
   <text x="200" y="56" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-style="italic" font-size="52" font-weight="400" fill="#1F1E1D" letter-spacing="4">kernel</text>
   <!-- Accent dot under the wordmark -->
-  <circle cx="200" cy="72" r="2.5" fill="#6366F1"/>
+  <circle cx="200" cy="72" r="2.5" fill="#6B5B95"/>
 </svg>
