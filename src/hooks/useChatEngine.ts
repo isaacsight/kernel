@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
-import { fileToBase64, compressImage, extractPdfText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
+import { fileToBase64, compressImage, extractPdfText, extractSpreadsheetText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
@@ -30,7 +30,7 @@ import {
 import { getCollectiveInsights } from '../engine/SupabaseClient'
 import {
   TEXT_EXTENSIONS, LINK_REGEX,
-  getMediaType, isImageFile, isPdfFile, readFileAsText,
+  getMediaType, isImageFile, isPdfFile, isSpreadsheetFile, readFileAsText,
   serializeState, fetchUrlContent,
 } from '../components/ChatHelpers'
 
@@ -316,6 +316,14 @@ export function useChatEngine(params: UseChatEngineParams) {
             }
             textPrefix += `[PDF: ${file.name} — ${(file.size / 1048576).toFixed(1)}MB, text extracted]\n${text}\n\n`
           }
+        } else if (isSpreadsheetFile(file)) {
+          // Excel/ODS — extract all sheets as CSV text
+          let text = await extractSpreadsheetText(file)
+          const MAX_SHEET_CHARS = 100000
+          if (text.length > MAX_SHEET_CHARS) {
+            text = text.slice(0, MAX_SHEET_CHARS) + `\n\n[... truncated — spreadsheet was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_SHEET_CHARS / 1000).toFixed(0)}K]`
+          }
+          textPrefix += `[Spreadsheet: ${file.name}]\n${text}\n\n`
         } else {
           // Unrecognized file type — read as text fallback
           try {

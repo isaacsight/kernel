@@ -5,14 +5,13 @@ export const PDF_NATIVE_MAX_BYTES = 3.5 * 1024 * 1024
 /**
  * Extract text content from a PDF file using pdf.js.
  * Dynamically imports pdfjs-dist to avoid bundling it in the main chunk.
+ * Uses CDN-hosted worker to avoid self-hosting the 1.9MB worker file.
  * Returns concatenated page text with page markers.
  */
 export async function extractPdfText(file: File): Promise<string> {
   const pdfjsLib = await import('pdfjs-dist')
-  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.mjs',
-    import.meta.url,
-  ).toString()
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.624/build/pdf.worker.mjs'
 
   const buffer = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: buffer }).promise
@@ -30,6 +29,32 @@ export async function extractPdfText(file: File): Promise<string> {
   }
 
   return pages.join('\n\n')
+}
+
+/**
+ * Extract spreadsheet content as CSV text using SheetJS.
+ * Dynamically imports xlsx to avoid bundling in the main chunk.
+ * Multi-sheet workbooks get all sheets with headers.
+ */
+export async function extractSpreadsheetText(file: File): Promise<string> {
+  const XLSX = await import('xlsx')
+  const buffer = await file.arrayBuffer()
+  const workbook = XLSX.read(buffer, { type: 'array' })
+  const sheets: string[] = []
+
+  for (const name of workbook.SheetNames) {
+    const sheet = workbook.Sheets[name]
+    const csv = XLSX.utils.sheet_to_csv(sheet)
+    if (csv.trim()) {
+      if (workbook.SheetNames.length > 1) {
+        sheets.push(`[Sheet: ${name}]\n${csv.trim()}`)
+      } else {
+        sheets.push(csv.trim())
+      }
+    }
+  }
+
+  return sheets.join('\n\n')
 }
 
 // Convert a File to base64 (strips the data URL prefix)

@@ -5,7 +5,8 @@ import { getAccessToken } from '../engine/SupabaseClient'
 
 export const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
 export const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md'
+export const SPREADSHEET_EXTENSIONS = ['.xlsx', '.xls', '.xlsb', '.ods']
+export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.xlsx,.xls,.xlsb,.ods'
 
 const EXT_TO_MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
@@ -28,6 +29,17 @@ export function isPdfFile(file: File): boolean {
   if (file.type === 'application/pdf') return true
   const ext = '.' + file.name.split('.').pop()?.toLowerCase()
   return ext === '.pdf'
+}
+
+export function isSpreadsheetFile(file: File): boolean {
+  const spreadsheetMimes = [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-excel',
+    'application/vnd.oasis.opendocument.spreadsheet',
+  ]
+  if (file.type && spreadsheetMimes.includes(file.type)) return true
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+  return SPREADSHEET_EXTENSIONS.includes(ext)
 }
 
 // ─── File size validation ─────────────────────────────────
