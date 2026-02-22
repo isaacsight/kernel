@@ -32,6 +32,7 @@ import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 import { lazyRetry } from '../utils/lazyRetry'
+import { KernelLoading } from '../components/KernelLoading'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -54,17 +55,7 @@ export function EnginePage() {
   const { user, isLoading, isAuthenticated } = useAuthContext()
 
   if (isLoading) {
-    return (
-      <div className="ka-loading-splash">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: DURATION.MODERATE, ease: EASE.OUT_STR }}
-        >
-          <img className="ka-loading-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-        </motion.div>
-      </div>
-    )
+    return <KernelLoading showLogo />
   }
 
   if (!isAuthenticated) {
