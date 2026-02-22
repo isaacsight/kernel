@@ -1700,11 +1700,10 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Ink Constellation — the art piece
-   Micro / Macro tension through ink-on-paper physics:
-   MACRO — the whole square drifts slowly (ink diffusion, gravity)
-   MICRO — each corner trembles rapidly (surface tension, molecular)
-   THREADS — breathe + carry pulses (binding force between scales)
+   Pixel Constellation — Tamagotchi LCD aesthetic
+   A pixel creature lives on the home screen like a digital pet.
+   Stepped animations for LCD frame feel. Ambient simulation
+   cells flicker like a state machine running in the background.
    ═══════════════════════════════════════════════════════════ */
 
 .ka-empty-constellation {
@@ -1712,124 +1711,94 @@ h4 {
     width: 160px;
     height: 160px;
     margin-bottom: var(--space-2xl);
-    /* MACRO: slow gravitational sway of the whole form */
-    animation: ka-macro-drift 12s ease-in-out infinite;
 }
 
-/* Ambient halo */
+/* LCD backlight glow */
 .ka-empty-constellation::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 220%;
-    height: 220%;
+    width: 200%;
+    height: 200%;
     transform: translate(-50%, -50%);
     background: radial-gradient(
         ellipse at center,
-        rgba(107, 91, 149, 0.05) 0%,
-        rgba(107, 91, 149, 0.02) 35%,
-        transparent 65%
+        rgba(107, 91, 149, 0.04) 0%,
+        transparent 55%
     );
     pointer-events: none;
-    animation: ka-halo-breathe 8s ease-in-out infinite;
+    animation: ka-lcd-glow 6s steps(3) infinite;
 }
 
 [data-theme="dark"] .ka-empty-constellation::before {
     background: radial-gradient(
         ellipse at center,
-        rgba(139, 123, 181, 0.1) 0%,
-        rgba(139, 123, 181, 0.04) 35%,
-        transparent 65%
+        rgba(139, 123, 181, 0.08) 0%,
+        transparent 55%
     );
 }
 
-/* ── Orbs — four equal corners ───────────────────────── */
+/* ── Pixel Creature ──────────────────────────────────── */
 
-.ka-empty-orb {
+.ka-pixel-creature {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
+    top: 39px;
+    left: 39px;
+    width: 82px;
+    height: 82px;
+    /* LCD turn-on + Tamagotchi idle hop */
+    opacity: 0;
+    animation:
+        ka-lcd-on 0.15s steps(1) 0.3s both,
+        ka-creature-hop 1.2s steps(2) 0.8s infinite;
+}
+
+/* ── Pixels — hard-edged squares, no border-radius ─── */
+
+.ka-pixel {
+    position: absolute;
+    width: 14px;
+    height: 14px;
     background: var(--rubin-sepia);
+    opacity: 0.7;
+    /* No border-radius — hard pixel edges */
+}
+
+.ka-pixel--eye {
+    background: var(--rubin-primary, #6B5B95);
+    animation: ka-eye-blink 4s steps(1) 2.5s infinite;
+}
+
+[data-theme="dark"] .ka-pixel {
+    background: rgba(212, 197, 169, 0.75);
+}
+
+[data-theme="dark"] .ka-pixel--eye {
+    background: #8B7BB5;
+}
+
+/* ── Simulation Cells — ambient state machine ────────── */
+
+.ka-pixel--sim {
+    width: 8px;
+    height: 8px;
     opacity: 0;
-    transform: translate(-50%, -50%);
+    background: var(--rubin-sepia);
 }
 
-/* Square corners — viewBox 0 0 160 160, corners at 40,40 → 120,120 */
-.ka-empty-orb:nth-child(1) { top: 25%; left: 25%; }
-.ka-empty-orb:nth-child(2) { top: 25%; left: 75%; }
-.ka-empty-orb:nth-child(3) { top: 75%; left: 75%; }
-.ka-empty-orb:nth-child(4) { top: 75%; left: 25%; }
+/* Each sim cell flickers on its own cycle */
+.ka-empty-constellation > .ka-pixel--sim:nth-child(2) { animation: ka-sim-a 5s steps(1) 1.5s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(3) { animation: ka-sim-b 7s steps(1) 3s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(4) { animation: ka-sim-a 6s steps(1) 4.5s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(5) { animation: ka-sim-b 4s steps(1) 2s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(6) { animation: ka-sim-a 8s steps(1) 5s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(7) { animation: ka-sim-b 5.5s steps(1) 1s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(8) { animation: ka-sim-a 6.5s steps(1) 3.5s infinite; }
+.ka-empty-constellation > .ka-pixel--sim:nth-child(9) { animation: ka-sim-b 4.5s steps(1) 6s infinite; }
 
-/* Materialize staggered → MICRO tremor kicks in */
-.ka-empty-orb:nth-child(1) { animation: ka-orb-bloom 1.2s var(--ease-out) 0.1s both,  ka-micro-tremor 0.7s ease-in-out 1.3s infinite; }
-.ka-empty-orb:nth-child(2) { animation: ka-orb-bloom 1.2s var(--ease-out) 0.25s both, ka-micro-tremor 0.7s ease-in-out 1.45s infinite; }
-.ka-empty-orb:nth-child(3) { animation: ka-orb-bloom 1.2s var(--ease-out) 0.4s both,  ka-micro-tremor 0.7s ease-in-out 1.6s infinite; }
-.ka-empty-orb:nth-child(4) { animation: ka-orb-bloom 1.2s var(--ease-out) 0.55s both, ka-micro-tremor 0.7s ease-in-out 1.75s infinite; }
-
-[data-theme="dark"] .ka-empty-orb {
-    background: rgba(212, 197, 169, 0.7);
-}
-
-/* ── Threads — square perimeter ──────────────────────── */
-
-.ka-empty-thread {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.ka-empty-thread line {
-    stroke: var(--rubin-sepia);
-    stroke-width: 0.5;
-    opacity: 0;
-    stroke-dasharray: 200;
-    stroke-dashoffset: 200;
-    animation: ka-ink-thread 1.8s cubic-bezier(0.22, 1, 0.36, 1) both,
-               ka-thread-breathe 5s ease-in-out 2.5s infinite;
-}
-
-.ka-empty-thread line:nth-child(1) { animation-delay: 0.4s, 2.5s; }
-.ka-empty-thread line:nth-child(2) { animation-delay: 0.6s, 2.7s; }
-.ka-empty-thread line:nth-child(3) { animation-delay: 0.8s, 2.9s; }
-.ka-empty-thread line:nth-child(4) { animation-delay: 1.0s, 3.1s; }
-
-[data-theme="dark"] .ka-empty-thread line {
-    stroke: rgba(212, 197, 169, 0.3);
-}
-
-/* ── Synaptic Pulses — energy circulating the square ── */
-
-.ka-empty-pulse {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.ka-empty-pulse line {
-    stroke: var(--rubin-primary, #6B5B95);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-dasharray: 8 200;
-    opacity: 0;
-}
-
-/* Sequential firing around the perimeter */
-.ka-empty-pulse line:nth-child(1) { animation: ka-synapse 16s ease-in-out 3s infinite; }
-.ka-empty-pulse line:nth-child(2) { animation: ka-synapse 16s ease-in-out 7s infinite; }
-.ka-empty-pulse line:nth-child(3) { animation: ka-synapse-reverse 16s ease-in-out 11s infinite; }
-.ka-empty-pulse line:nth-child(4) { animation: ka-synapse-reverse 16s ease-in-out 15s infinite; }
-
-[data-theme="dark"] .ka-empty-pulse line {
-    stroke: #8B7BB5;
-    stroke-width: 1;
+[data-theme="dark"] .ka-pixel--sim {
+    background: rgba(212, 197, 169, 0.5);
 }
 
 /* ── Reduced Motion ──────────────────────────────────── */
@@ -1840,67 +1809,50 @@ h4 {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
     }
-    .ka-empty-pulse line {
-        display: none;
-    }
 }
 
-/* ── Constellation Keyframes ─────────────────────────── */
+/* ── Pixel Keyframes ─────────────────────────────────── */
 
-@keyframes ka-halo-breathe {
-    0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+/* LCD screen turns on — instant snap */
+@keyframes ka-lcd-on {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
-@keyframes ka-orb-bloom {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0);
-        filter: blur(3px);
-    }
-    60% {
-        opacity: 0.65;
-        transform: translate(-50%, -50%) scale(1.3);
-        filter: blur(0.5px);
-    }
-    100% {
-        opacity: 0.5;
-        transform: translate(-50%, -50%) scale(1);
-        filter: blur(0);
-    }
+/* Tamagotchi idle hop — 2-frame bounce */
+@keyframes ka-creature-hop {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
-@keyframes ka-ink-thread {
-    0% {
-        opacity: 0;
-        stroke-dashoffset: 200;
-    }
-    50% {
-        opacity: 0.25;
-    }
-    100% {
-        opacity: 0.18;
-        stroke-dashoffset: 0;
-    }
+/* Eye blink — brief disappearance */
+@keyframes ka-eye-blink {
+    0%, 88% { opacity: 0.7; }
+    90%, 96% { opacity: 0; }
+    98%, 100% { opacity: 0.7; }
 }
 
-@keyframes ka-thread-breathe {
-    0%, 100% { opacity: 0.18; }
-    50% { opacity: 0.08; }
+/* LCD backlight subtle pulse */
+@keyframes ka-lcd-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.65; }
 }
 
-@keyframes ka-synapse {
-    0%, 12% { stroke-dashoffset: 200; opacity: 0; }
-    14% { opacity: 0.55; }
-    26% { stroke-dashoffset: 0; opacity: 0; }
-    100% { opacity: 0; }
+/* Sim pattern A — on-off-on */
+@keyframes ka-sim-a {
+    0%, 20% { opacity: 0.25; }
+    20.1%, 55% { opacity: 0; }
+    55.1%, 75% { opacity: 0.18; }
+    75.1%, 100% { opacity: 0; }
 }
 
-@keyframes ka-synapse-reverse {
-    0%, 12% { stroke-dashoffset: -200; opacity: 0; }
-    14% { opacity: 0.55; }
-    26% { stroke-dashoffset: 0; opacity: 0; }
-    100% { opacity: 0; }
+/* Sim pattern B — off-on-off */
+@keyframes ka-sim-b {
+    0%, 30% { opacity: 0; }
+    30.1%, 50% { opacity: 0.2; }
+    50.1%, 80% { opacity: 0; }
+    80.1%, 95% { opacity: 0.15; }
+    95.1%, 100% { opacity: 0; }
 }
 
 .ka-empty-title {
