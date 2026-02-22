@@ -136,6 +136,7 @@ function EngineChat() {
   const { user, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   useEffect(() => {
@@ -296,8 +297,8 @@ function EngineChat() {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
-        convs.handleNewChat()
-        chatEngine.inputRef.current?.focus()
+        setDrawerSearchFocus(true)
+        setIsDrawerOpen(true)
       }
       if (e.key === 'Escape') {
         if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -462,7 +463,8 @@ function EngineChat() {
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
-        onClose={() => { setIsDrawerOpen(false); panels.setActiveTab('home') }}
+        onClose={() => { setIsDrawerOpen(false); setDrawerSearchFocus(false); panels.setActiveTab('home') }}
+        autoFocusSearch={drawerSearchFocus}
         conversations={convs.conversations}
         activeId={convs.activeConversationId}
         onSelect={convs.switchConversation}

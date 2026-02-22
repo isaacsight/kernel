@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
+import { usePWAInstall } from '../hooks/usePWAInstall'
+import { IconClose } from './KernelIcons'
 
 export function LoginGate() {
   const { t } = useTranslation('auth')
@@ -13,6 +15,7 @@ export function LoginGate() {
   const [successMsg, setSuccessMsg] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
+  const pwa = usePWAInstall()
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -213,6 +216,29 @@ export function LoginGate() {
                 </button>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* PWA Install Banner */}
+      <AnimatePresence>
+        {pwa.canInstall && (
+          <motion.div
+            className="ka-pwa-banner"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="ka-pwa-banner-content">
+              <span className="ka-pwa-banner-text">{t('pwa.installPrompt', { ns: 'common' })}</span>
+              <button className="ka-pwa-banner-install" onClick={pwa.install}>
+                {t('pwa.install', { ns: 'common' })}
+              </button>
+            </div>
+            <button className="ka-pwa-banner-dismiss" onClick={pwa.dismiss} aria-label={t('close', { ns: 'common' })}>
+              <IconClose size={14} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

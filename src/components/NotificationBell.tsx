@@ -95,7 +95,20 @@ export function NotificationBell({ userId }: NotificationBellProps) {
               {notifications.map(n => (
                 <div
                   key={n.id}
-                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}`}
+                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${n.action_url ? ' ka-notif-item--clickable' : ''}`}
+                  onClick={() => {
+                    if (n.action_url) {
+                      // Navigate via hash router for internal links, or open external
+                      if (n.action_url.startsWith('#') || n.action_url.startsWith('/')) {
+                        window.location.hash = n.action_url.startsWith('#') ? n.action_url : `#${n.action_url}`
+                      } else {
+                        window.open(n.action_url, '_blank', 'noopener')
+                      }
+                      setIsOpen(false)
+                    }
+                  }}
+                  role={n.action_url ? 'button' : undefined}
+                  tabIndex={n.action_url ? 0 : undefined}
                 >
                   <div className="ka-notif-item-title">{n.title}</div>
                   {n.body && <div className="ka-notif-item-body">{n.body}</div>}

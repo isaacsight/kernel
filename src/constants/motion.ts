@@ -5,6 +5,17 @@
  *   import { SPRING, DURATION, EASE } from '@/constants/motion'
  *   <motion.div transition={{ ...SPRING.DEFAULT }} />
  *   <motion.div transition={{ duration: DURATION.FAST, ease: EASE.OUT }} />
+ *
+ * CSS counterparts (defined in src/index.css :root):
+ *   --duration-instant: 100ms  ↔  DURATION.INSTANT
+ *   --duration-fast:    150ms  ↔  DURATION.FAST
+ *   --duration-quick:   200ms  ↔  DURATION.QUICK
+ *   --duration-normal:  300ms  ↔  DURATION.NORMAL
+ *   --duration-moderate:400ms  ↔  DURATION.MODERATE
+ *   --duration-slow:    500ms  ↔  DURATION.SLOW
+ *   --duration-dramatic:600ms  ↔  DURATION.DRAMATIC
+ *   --ease-out:         cubic-bezier(0.16, 1, 0.3, 1)  ↔  EASE.OUT
+ *   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1)
  */
 
 // ─── Spring Configs ─────────────────────────────────────────
