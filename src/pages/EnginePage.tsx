@@ -605,41 +605,45 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-constellation" aria-hidden="true">
-              {/* Pixel creature — Tamagotchi-style */}
+              {/* Pixel sprout — "Kernel" means seed */}
               <div className="ka-pixel-creature">
-                {/* Row 0: head */}
-                <span className="ka-pixel" style={{left:17,top:0}} />
-                <span className="ka-pixel" style={{left:34,top:0}} />
-                <span className="ka-pixel" style={{left:51,top:0}} />
-                {/* Row 1: face + eyes */}
-                <span className="ka-pixel" style={{left:0,top:17}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:17}} />
-                <span className="ka-pixel" style={{left:34,top:17}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:17}} />
-                <span className="ka-pixel" style={{left:68,top:17}} />
-                {/* Row 2: body */}
-                <span className="ka-pixel" style={{left:0,top:34}} />
+                {/* Leaf — amethyst, intelligence emerging */}
+                <span className="ka-pixel ka-pixel--leaf" style={{left:34,top:0}} />
+                {/* Stem */}
+                <span className="ka-pixel ka-pixel--stem" style={{left:34,top:17}} />
+                {/* Head */}
                 <span className="ka-pixel" style={{left:17,top:34}} />
                 <span className="ka-pixel" style={{left:34,top:34}} />
                 <span className="ka-pixel" style={{left:51,top:34}} />
-                <span className="ka-pixel" style={{left:68,top:34}} />
-                {/* Row 3: legs */}
+                {/* Face + eyes */}
                 <span className="ka-pixel" style={{left:0,top:51}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:51}} />
                 <span className="ka-pixel" style={{left:34,top:51}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:51}} />
                 <span className="ka-pixel" style={{left:68,top:51}} />
-                {/* Row 4: feet */}
+                {/* Body */}
+                <span className="ka-pixel" style={{left:0,top:68}} />
                 <span className="ka-pixel" style={{left:17,top:68}} />
+                <span className="ka-pixel" style={{left:34,top:68}} />
                 <span className="ka-pixel" style={{left:51,top:68}} />
+                <span className="ka-pixel" style={{left:68,top:68}} />
+                {/* Legs */}
+                <span className="ka-pixel" style={{left:0,top:85}} />
+                <span className="ka-pixel" style={{left:34,top:85}} />
+                <span className="ka-pixel" style={{left:68,top:85}} />
+                {/* Feet */}
+                <span className="ka-pixel" style={{left:17,top:102}} />
+                <span className="ka-pixel" style={{left:51,top:102}} />
               </div>
               {/* Simulation cells — ambient state machine */}
-              <span className="ka-pixel ka-pixel--sim" style={{left:10,top:10}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:138,top:16}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:14,top:132}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:134,top:128}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:74,top:142}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:6,top:74}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:142,top:70}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:70,top:6}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:10,top:8}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:140,top:14}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:12,top:134}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:136,top:130}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:76,top:144}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:4,top:76}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:144,top:72}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:72,top:4}} />
             </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
