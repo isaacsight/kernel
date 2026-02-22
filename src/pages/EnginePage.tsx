@@ -654,6 +654,7 @@ function EngineChat() {
               <span className="ka-empty-thread" />
               <span className="ka-empty-thread" />
               <span className="ka-empty-ring" />
+              <span className="ka-empty-ring ka-empty-ring--outer" />
             </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>

@@ -1746,48 +1746,50 @@ h4 {
 }
 
 /* ─── Empty State Constellation ─── */
-/* Ambient ink constellation — larger variant of the loading animation,
-   used as a living decoration behind the empty state title. */
+/* Ambient ink constellation — living decoration above the empty state title.
+   Three amethyst orbs breathe and drift in a triangle formation, connected
+   by faint threads, enclosed by two slowly rotating concentric rings. */
 
 .ka-empty-constellation {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin-bottom: var(--space-xl);
-    animation: ka-constellation-breathe 5s ease-in-out infinite;
+    width: 180px;
+    height: 180px;
+    margin-bottom: var(--space-lg);
 }
 
+/* ── Orbs ── */
 .ka-empty-orb {
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: var(--kernel-amethyst, #6B5B95);
+    box-shadow: 0 0 12px 3px var(--kernel-amethyst-glow, rgba(107, 91, 149, 0.25));
     animation:
-        ka-drop-materialize 1s var(--ease-out) both,
+        ka-empty-orb-enter 1s var(--ease-out) both,
         ka-empty-orb-drift 6s ease-in-out infinite;
 }
 
 .ka-empty-orb:nth-child(1) {
-    top: 12px;
+    top: 40px;
     left: 50%;
-    transform: translateX(-50%);
+    margin-left: -5px;
     animation-delay: 0s, 1s;
 }
 
 .ka-empty-orb:nth-child(2) {
-    bottom: 20px;
-    left: 18px;
+    bottom: 44px;
+    left: 38px;
     animation-delay: 0.2s, 1.2s;
 }
 
 .ka-empty-orb:nth-child(3) {
-    bottom: 20px;
-    right: 18px;
+    bottom: 44px;
+    right: 38px;
     animation-delay: 0.4s, 1.4s;
 }
 
-/* Connecting threads between orbs */
+/* ── Threads ── */
 .ka-empty-thread {
     position: absolute;
     background: var(--kernel-amethyst, #6B5B95);
@@ -1797,75 +1799,114 @@ h4 {
 }
 
 .ka-empty-thread:nth-child(4) {
-    top: 22px;
-    left: 32px;
-    width: 24px;
-    transform: rotate(-55deg);
+    top: 54px;
+    left: 50px;
+    width: 36px;
+    transform: rotate(-50deg);
     transform-origin: right center;
 }
 
 .ka-empty-thread:nth-child(5) {
-    top: 22px;
-    right: 32px;
-    width: 24px;
-    transform: rotate(55deg);
+    top: 54px;
+    right: 50px;
+    width: 36px;
+    transform: rotate(50deg);
     transform-origin: left center;
 }
 
 .ka-empty-thread:nth-child(6) {
-    bottom: 26px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
-    width: 48px;
+    width: 64px;
 }
 
-/* Outer ring — slowly rotating halo */
+/* ── Rings ── */
 .ka-empty-ring {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     border: 1px solid var(--kernel-amethyst, #6B5B95);
     opacity: 0;
     transform: translate(-50%, -50%);
     animation: ka-empty-ring-appear 1.5s var(--ease-out) 0.6s both,
-               ka-empty-ring-rotate 20s linear infinite;
+               ka-empty-ring-rotate 25s linear infinite;
 }
 
-/* Keyframes */
+.ka-empty-ring--outer {
+    width: 170px;
+    height: 170px;
+    border-style: dashed;
+    border-width: 1px;
+    animation: ka-empty-ring-appear-faint 2s var(--ease-out) 1s both,
+               ka-empty-ring-rotate-reverse 40s linear infinite;
+}
+
+/* ── Keyframes ── */
+
+@keyframes ka-empty-orb-enter {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+        filter: blur(4px);
+    }
+    60% {
+        opacity: 0.9;
+        transform: scale(1.3);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
 @keyframes ka-empty-orb-drift {
     0%, 100% {
         translate: 0 0;
         opacity: 1;
     }
     25% {
-        translate: -3px 2px;
-        opacity: 0.65;
+        translate: -4px 3px;
+        opacity: 0.6;
     }
     50% {
-        translate: 0 -3px;
+        translate: 0 -4px;
         opacity: 1;
     }
     75% {
-        translate: 3px 2px;
-        opacity: 0.65;
+        translate: 4px 3px;
+        opacity: 0.6;
     }
 }
 
 @keyframes ka-empty-thread-appear {
     0% { opacity: 0; }
-    100% { opacity: 0.12; }
+    100% { opacity: 0.25; }
 }
 
 @keyframes ka-empty-ring-appear {
     0% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7);
+        transform: translate(-50%, -50%) scale(0.6);
     }
     100% {
-        opacity: 0.1;
+        opacity: 0.2;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes ka-empty-ring-appear-faint {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    100% {
+        opacity: 0.12;
         transform: translate(-50%, -50%) scale(1);
     }
 }
@@ -1873,6 +1914,11 @@ h4 {
 @keyframes ka-empty-ring-rotate {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes ka-empty-ring-rotate-reverse {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
 .ka-empty-title {
@@ -3106,6 +3152,7 @@ h4 {
 
 [data-theme="dark"] .ka-empty-orb {
     background: #9B8BC5;
+    box-shadow: 0 0 16px 4px rgba(155, 139, 197, 0.3);
 }
 
 [data-theme="dark"] .ka-empty-thread {
