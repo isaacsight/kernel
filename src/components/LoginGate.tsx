@@ -225,6 +225,7 @@ export function LoginGate() {
         {pwa.canInstall && (
           <motion.div
             className="ka-pwa-banner"
+            role="status"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}

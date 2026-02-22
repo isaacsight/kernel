@@ -174,7 +174,8 @@ export function ConversationDrawer({
               <input
                 ref={searchInputRef}
                 className="conv-search-input"
-                type="text"
+                type="search"
+                aria-label={t('conversations.searchPlaceholder')}
                 placeholder={t('conversations.searchPlaceholder')}
                 value={searchQuery}
                 onChange={e => handleSearch(e.target.value)}
@@ -232,7 +233,7 @@ export function ConversationDrawer({
                         <button
                           className="conv-item-action"
                           onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
-                          aria-label="Share conversation"
+                          aria-label={t('aria.shareableLink')}
                         >
                           <IconShare size={13} />
                         </button>
@@ -240,14 +241,14 @@ export function ConversationDrawer({
                       <button
                         className="conv-item-action"
                         onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
-                        aria-label="Rename conversation"
+                        aria-label={t('aria.editMessage')}
                       >
                         <IconPencil size={13} />
                       </button>
                       <button
                         className="conv-item-action conv-item-action--delete"
                         onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
-                        aria-label="Delete conversation"
+                        aria-label={t('delete')}
                       >
                         <IconTrash size={13} />
                       </button>
