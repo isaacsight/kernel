@@ -564,7 +564,7 @@ export function useChatEngine(params: UseChatEngineParams) {
   const handleBriefingGoDeeper = useCallback((title: string, content: string) => {
     handleNewChat()
     const msg = `I just read my briefing "${title}". Here's a summary:\n\n${content.slice(0, 800)}\n\nLet's discuss this.`
-    setTimeout(() => sendMessage(msg), 100)
+    setTimeout(() => sendMessageRef.current(msg), 300)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleNewChat])
 
