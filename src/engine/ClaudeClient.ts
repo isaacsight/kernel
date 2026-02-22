@@ -43,6 +43,7 @@ interface ClaudeOpts {
   max_tokens?: number
   web_search?: boolean
   signal?: AbortSignal
+  tools?: any[]
 }
 
 async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?: ClaudeOpts) {
@@ -61,6 +62,7 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       max_tokens: opts?.max_tokens ?? 4096,
       messages: [{ role: 'user', content: prompt }],
       web_search: opts?.web_search ?? false,
+      tools: opts?.tools,
     }),
   })
 
@@ -128,6 +130,7 @@ export async function claudeStream(
       system: opts?.system,
       max_tokens: opts?.max_tokens ?? 4096,
       messages: [{ role: 'user', content: prompt }],
+      tools: opts?.tools,
     }),
   })
 
@@ -186,7 +189,7 @@ export async function claudeStreamChat(
   opts?: ClaudeOpts
 ): Promise<string> {
   const token = await getAccessToken()
-  const res = await fetch(PROXY_URL, {
+  const fetchOpts: RequestInit = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -200,9 +203,25 @@ export async function claudeStreamChat(
       max_tokens: opts?.max_tokens ?? 4096,
       messages,
       web_search: opts?.web_search ?? false,
+      tools: opts?.tools,
     }),
     signal: opts?.signal,
-  })
+  }
+
+  // iOS Safari can throw "Load failed" on first attempt due to
+  // service worker race conditions or stale preflight caches.
+  // Retry once after a brief pause.
+  let res: Response
+  try {
+    res = await fetch(PROXY_URL, fetchOpts)
+  } catch (err) {
+    if (err instanceof TypeError && /load failed/i.test(err.message)) {
+      await new Promise(r => setTimeout(r, 500))
+      res = await fetch(PROXY_URL, fetchOpts)
+    } else {
+      throw err
+    }
+  }
 
   if (!res.ok) {
     const err = await res.text()

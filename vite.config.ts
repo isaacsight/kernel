@@ -23,6 +23,12 @@ export default defineConfig({
                 navigateFallbackDenylist: [/^\/api/],
                 runtimeCaching: [
                     {
+                        // NEVER cache or interfere with Supabase edge function calls.
+                        // iOS Safari can fail with "Load failed" if the SW touches these.
+                        urlPattern: /^https:\/\/.*\.supabase\.co\/functions\/.*/i,
+                        handler: 'NetworkOnly',
+                    },
+                    {
                         // JS and CSS — always try network first so stale chunks are never served
                         urlPattern: /\.(?:js|css)$/i,
                         handler: 'NetworkFirst',

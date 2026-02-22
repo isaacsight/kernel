@@ -646,6 +646,43 @@ export async function syncEngineState(
   return newVersion;
 }
 
+// ─── MCP Tools ───────────────────────────────────────────
+
+/**
+ * Invokes a tool on an external MCP server via the secure `mcp-proxy` edge function.
+ */
+export async function invokeMCPTool(
+  serverUrl: string,
+  toolName: string,
+  args: Record<string, unknown>
+): Promise<any> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Authentication required for MCP tools');
+
+  const proxyUrl = `${supabaseUrl}/functions/v1/mcp-proxy`;
+
+  const res = await fetch(proxyUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session.access_token}`,
+      'apikey': supabaseKey,
+    },
+    body: JSON.stringify({
+      serverUrl,
+      toolName,
+      args
+    })
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`MCP Tool Error (\${res.status}): \${errText}`);
+  }
+
+  return res.json();
+}
+
 // ─── Knowledge Graph ─────────────────────────────────────
 
 import type { KGEntity, KGRelation } from './KnowledgeGraph'

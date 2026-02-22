@@ -67,7 +67,7 @@ export async function callLLMProxy(
     opts?: LLMOpts
 ): Promise<Response> {
     const token = await getAccessToken()
-    const res = await fetch(PROXY_URL, {
+    const fetchOpts: RequestInit = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -85,7 +85,20 @@ export async function callLLMProxy(
             web_search: opts?.web_search ?? false,
         }),
         signal: opts?.signal,
-    })
+    }
+
+    // iOS Safari: retry once on "Load failed" (SW race / stale preflight)
+    let res: Response
+    try {
+        res = await fetch(PROXY_URL, fetchOpts)
+    } catch (err) {
+        if (err instanceof TypeError && /load failed/i.test(err.message)) {
+            await new Promise(r => setTimeout(r, 500))
+            res = await fetch(PROXY_URL, fetchOpts)
+        } else {
+            throw err
+        }
+    }
 
     if (!res.ok) {
         const err = await res.text()
@@ -104,7 +117,7 @@ export async function streamFromProxy(
     opts?: LLMOpts
 ): Promise<string> {
     const token = await getAccessToken()
-    const res = await fetch(PROXY_URL, {
+    const fetchOpts: RequestInit = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -122,7 +135,20 @@ export async function streamFromProxy(
             web_search: opts?.web_search ?? false,
         }),
         signal: opts?.signal,
-    })
+    }
+
+    // iOS Safari: retry once on "Load failed" (SW race / stale preflight)
+    let res: Response
+    try {
+        res = await fetch(PROXY_URL, fetchOpts)
+    } catch (err) {
+        if (err instanceof TypeError && /load failed/i.test(err.message)) {
+            await new Promise(r => setTimeout(r, 500))
+            res = await fetch(PROXY_URL, fetchOpts)
+        } else {
+            throw err
+        }
+    }
 
     if (!res.ok) {
         const err = await res.text()
