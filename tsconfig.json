@@ -29,6 +29,10 @@
     "include": [
         "src"
     ],
+    "exclude": [
+        "src/engine/tools/mcp.ts",
+        "src/engine/tools/memory.ts"
+    ],
     "references": [
         {
             "path": "./tsconfig.node.json"
