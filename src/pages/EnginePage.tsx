@@ -605,25 +605,41 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-constellation" aria-hidden="true">
-              {/* Square perimeter threads */}
-              <svg className="ka-empty-thread" viewBox="0 0 160 160">
-                <line x1="40" y1="40" x2="120" y2="40" />
-                <line x1="120" y1="40" x2="120" y2="120" />
-                <line x1="120" y1="120" x2="40" y2="120" />
-                <line x1="40" y1="120" x2="40" y2="40" />
-              </svg>
-              {/* Synaptic pulse along one edge at a time */}
-              <svg className="ka-empty-pulse" viewBox="0 0 160 160">
-                <line x1="40" y1="40" x2="120" y2="40" />
-                <line x1="120" y1="40" x2="120" y2="120" />
-                <line x1="120" y1="120" x2="40" y2="120" />
-                <line x1="40" y1="120" x2="40" y2="40" />
-              </svg>
-              {/* Four corner orbs — no core hierarchy */}
-              <span className="ka-empty-orb" />
-              <span className="ka-empty-orb" />
-              <span className="ka-empty-orb" />
-              <span className="ka-empty-orb" />
+              {/* Pixel creature — Tamagotchi-style */}
+              <div className="ka-pixel-creature">
+                {/* Row 0: head */}
+                <span className="ka-pixel" style={{left:17,top:0}} />
+                <span className="ka-pixel" style={{left:34,top:0}} />
+                <span className="ka-pixel" style={{left:51,top:0}} />
+                {/* Row 1: face + eyes */}
+                <span className="ka-pixel" style={{left:0,top:17}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:17}} />
+                <span className="ka-pixel" style={{left:34,top:17}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:17}} />
+                <span className="ka-pixel" style={{left:68,top:17}} />
+                {/* Row 2: body */}
+                <span className="ka-pixel" style={{left:0,top:34}} />
+                <span className="ka-pixel" style={{left:17,top:34}} />
+                <span className="ka-pixel" style={{left:34,top:34}} />
+                <span className="ka-pixel" style={{left:51,top:34}} />
+                <span className="ka-pixel" style={{left:68,top:34}} />
+                {/* Row 3: legs */}
+                <span className="ka-pixel" style={{left:0,top:51}} />
+                <span className="ka-pixel" style={{left:34,top:51}} />
+                <span className="ka-pixel" style={{left:68,top:51}} />
+                {/* Row 4: feet */}
+                <span className="ka-pixel" style={{left:17,top:68}} />
+                <span className="ka-pixel" style={{left:51,top:68}} />
+              </div>
+              {/* Simulation cells — ambient state machine */}
+              <span className="ka-pixel ka-pixel--sim" style={{left:10,top:10}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:138,top:16}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:14,top:132}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:134,top:128}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:74,top:142}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:6,top:74}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:142,top:70}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:70,top:6}} />
             </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
