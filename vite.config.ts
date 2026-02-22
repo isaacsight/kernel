@@ -8,52 +8,14 @@ export default defineConfig({
     plugins: [
         react(),
         VitePWA({
+            strategies: 'injectManifest',
+            srcDir: 'src',
+            filename: 'sw.ts',
             registerType: 'autoUpdate',
-            workbox: {
+            injectManifest: {
                 // Only precache the HTML shell + static assets — NOT JS/CSS chunks.
                 // JS chunks have content-hashed filenames that change every build.
-                // Precaching them causes 404s when the old SW serves stale HTML
-                // that references chunk hashes from a previous deployment.
                 globPatterns: ['**/*.{html,ico,png,svg,woff2}'],
-                skipWaiting: true,
-                clientsClaim: true,
-                cleanupOutdatedCaches: true,
-                // Navigation requests always serve the cached HTML shell
-                navigateFallback: '/index.html',
-                navigateFallbackDenylist: [/^\/api/],
-                runtimeCaching: [
-                    {
-                        // NEVER cache or interfere with Supabase edge function calls.
-                        // iOS Safari can fail with "Load failed" if the SW touches these.
-                        urlPattern: /^https:\/\/.*\.supabase\.co\/functions\/.*/i,
-                        handler: 'NetworkOnly',
-                    },
-                    {
-                        // JS and CSS — always try network first so stale chunks are never served
-                        urlPattern: /\.(?:js|css)$/i,
-                        handler: 'NetworkFirst',
-                        options: {
-                            cacheName: 'app-code',
-                            expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 },
-                            networkTimeoutSeconds: 5,
-                        },
-                    },
-                    {
-                        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-                        handler: 'CacheFirst',
-                        options: { cacheName: 'google-fonts-css', expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 } },
-                    },
-                    {
-                        urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-                        handler: 'CacheFirst',
-                        options: { cacheName: 'google-fonts-woff2', expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 } },
-                    },
-                    {
-                        urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
-                        handler: 'StaleWhileRevalidate',
-                        options: { cacheName: 'supabase-api', expiration: { maxEntries: 50, maxAgeSeconds: 300 } },
-                    },
-                ],
             },
             manifest: {
                 name: 'Kernel',

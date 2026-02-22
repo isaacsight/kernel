@@ -15,7 +15,13 @@
     "upgradeToPro": "Pro にアップグレード",
     "manageSubscription": "サブスクリプション管理",
     "signOut": "サインアウト",
-    "deleteAccount": "アカウントを削除"
+    "deleteAccount": "アカウントを削除",
+    "notifications": "通知",
+    "notifInApp": "アプリ内通知",
+    "notifBriefings": "ブリーフィング通知",
+    "notifGoals": "目標の更新",
+    "notifReminders": "リマインダー",
+    "notifPush": "プッシュ通知"
   },
   "admin": "管理者",
   "pro": "Pro",

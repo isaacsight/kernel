@@ -7,7 +7,7 @@
     "exportMarkdown": "Esporta come Markdown",
     "goals": "Obiettivi",
     "workflows": "Workflow",
-    "scheduledTasks": "Attivit\u00e0 programmate",
+    "scheduledTasks": "Attività programmate",
     "dailyBriefing": "Briefing giornaliero",
     "whatKernelKnows": "Cosa sa Kernel",
     "yourStats": "Le tue statistiche",
@@ -15,7 +15,13 @@
     "upgradeToPro": "Passa a Pro",
     "manageSubscription": "Gestisci abbonamento",
     "signOut": "Esci",
-    "deleteAccount": "Elimina account"
+    "deleteAccount": "Elimina account",
+    "notifications": "Notifiche",
+    "notifInApp": "Notifiche in-app",
+    "notifBriefings": "Avvisi briefing",
+    "notifGoals": "Aggiornamenti obiettivi",
+    "notifReminders": "Promemoria",
+    "notifPush": "Notifiche push"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -29,20 +35,20 @@
     "subtitle": "Passa a Kernel Pro per continuare la conversazione.",
     "features": {
       "unlimitedMessages": "Messaggi illimitati",
-      "deepResearch": "Modalit\u00e0 ricerca approfondita",
+      "deepResearch": "Modalità ricerca approfondita",
       "multiAgent": "Collaborazione multi-agente",
-      "multiStep": "Pianificazione attivit\u00e0 multi-fase",
+      "multiStep": "Pianificazione attività multi-fase",
       "persistentMemory": "Memoria persistente tra le sessioni"
     },
-    "button": "Passa a Pro \u2014 $20/mo",
+    "button": "Passa a Pro — $20/mo",
     "buttonLoading": "Apertura checkout...",
-    "maybeLater": "Forse pi\u00f9 tardi"
+    "maybeLater": "Forse più tardi"
   },
   "deleteConfirm": {
     "title": "Eliminare il tuo account?",
-    "subtitle": "Questo elimina permanentemente tutti i tuoi dati: conversazioni, memoria e preferenze. Non pu\u00f2 essere annullato.",
-    "subtitleWithSub": " Anche il tuo abbonamento verr\u00e0 annullato.",
-    "confirm": "S\u00ec, elimina il mio account",
+    "subtitle": "Questo elimina permanentemente tutti i tuoi dati: conversazioni, memoria e preferenze. Non può essere annullato.",
+    "subtitleWithSub": " Anche il tuo abbonamento verrà annullato.",
+    "confirm": "Sì, elimina il mio account",
     "confirming": "Eliminazione..."
   },
   "status": {

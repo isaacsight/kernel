@@ -44,5 +44,10 @@
     "markAllRead": "Tümünü okundu işaretle",
     "empty": "Henüz bildirim yok"
   },
-  "language": "Dil"
+  "language": "Dil",
+  "offline": "Çevrimdışısınız. Önbelleğe alınmış sohbetler gösteriliyor.",
+  "pwa": {
+    "installPrompt": "En iyi deneyim için Kernel'i ana ekranınıza ekleyin.",
+    "install": "Yükle"
+  }
 }

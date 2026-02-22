@@ -15,7 +15,13 @@
     "upgradeToPro": "Päivitä Prohon",
     "manageSubscription": "Hallitse tilausta",
     "signOut": "Kirjaudu ulos",
-    "deleteAccount": "Poista tili"
+    "deleteAccount": "Poista tili",
+    "notifications": "Ilmoitukset",
+    "notifInApp": "Sovelluksen sisäiset ilmoitukset",
+    "notifBriefings": "Katsaushälytykset",
+    "notifGoals": "Tavoitepäivitykset",
+    "notifReminders": "Muistutukset",
+    "notifPush": "Push-ilmoitukset"
   },
   "admin": "Ylläpito",
   "pro": "Pro",

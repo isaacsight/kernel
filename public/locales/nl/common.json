@@ -25,7 +25,7 @@
     "moreOptions": "Meer opties",
     "attachFile": "Bestand bijvoegen",
     "editMessage": "Bericht bewerken",
-    "copyMessage": "Bericht kopi\u00ebren",
+    "copyMessage": "Bericht kopiëren",
     "downloadResponse": "Antwoord downloaden",
     "helpful": "Nuttig",
     "notHelpful": "Niet nuttig",
@@ -44,5 +44,10 @@
     "markAllRead": "Alles als gelezen markeren",
     "empty": "Nog geen meldingen"
   },
-  "language": "Taal"
+  "language": "Taal",
+  "offline": "Je bent offline. Opgeslagen gesprekken worden weergegeven.",
+  "pwa": {
+    "installPrompt": "Voeg Kernel toe aan je startscherm voor de beste ervaring.",
+    "install": "Installeren"
+  }
 }

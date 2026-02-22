@@ -1,62 +1,68 @@
 {
-  "tagline": "\u4e00\u4e2a\u8bb0\u4f4f\u4f60\u3001\u4e0e\u4f60\u4e00\u8d77\u601d\u8003\u3001\u5e76\u968f\u65f6\u95f4\u4e0d\u65ad\u8fdb\u6b65\u7684\u4e2a\u4eba AI\u3002",
-  "placeholder": "\u4e0e kernel.chat \u5bf9\u8bdd...",
-  "welcomeToPro": "\u6b22\u8fce\u4f7f\u7528 Kernel Pro\uff01",
+  "tagline": "一个记住你、与你一起思考、并随时间不断进步的个人 AI。",
+  "placeholder": "与 kernel.chat 对话...",
+  "welcomeToPro": "欢迎使用 Kernel Pro！",
   "menu": {
-    "shareConversation": "\u5206\u4eab\u5bf9\u8bdd",
-    "exportMarkdown": "\u5bfc\u51fa\u4e3a Markdown",
-    "goals": "\u76ee\u6807",
-    "workflows": "\u5de5\u4f5c\u6d41",
-    "scheduledTasks": "\u5b9a\u65f6\u4efb\u52a1",
-    "dailyBriefing": "\u6bcf\u65e5\u7b80\u62a5",
-    "whatKernelKnows": "Kernel \u7684\u8bb0\u5fc6",
-    "yourStats": "\u4f60\u7684\u7edf\u8ba1",
+    "shareConversation": "分享对话",
+    "exportMarkdown": "导出为 Markdown",
+    "goals": "目标",
+    "workflows": "工作流",
+    "scheduledTasks": "定时任务",
+    "dailyBriefing": "每日简报",
+    "whatKernelKnows": "Kernel 的记忆",
+    "yourStats": "你的统计",
     "insights": "洞察",
-    "upgradeToPro": "\u5347\u7ea7\u5230 Pro",
-    "manageSubscription": "\u7ba1\u7406\u8ba2\u9605",
-    "signOut": "\u9000\u51fa\u767b\u5f55",
-    "deleteAccount": "\u5220\u9664\u8d26\u6237"
+    "upgradeToPro": "升级到 Pro",
+    "manageSubscription": "管理订阅",
+    "signOut": "退出登录",
+    "deleteAccount": "删除账户",
+    "notifications": "通知",
+    "notifInApp": "应用内通知",
+    "notifBriefings": "简报提醒",
+    "notifGoals": "目标更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知"
   },
   "admin": "Admin",
   "pro": "Pro",
   "briefing": {
-    "todaysBriefing": "\u4eca\u65e5\u7b80\u62a5",
-    "read": "\u9605\u8bfb",
-    "discuss": "\u8ba8\u8bba"
+    "todaysBriefing": "今日简报",
+    "read": "阅读",
+    "discuss": "讨论"
   },
   "upgrade": {
-    "title": "\u4f60\u5df2\u7528\u5b8c {{limit}} \u6761\u514d\u8d39\u6d88\u606f",
-    "subtitle": "\u5347\u7ea7\u5230 Kernel Pro \u4ee5\u7ee7\u7eed\u5bf9\u8bdd\u3002",
+    "title": "你已用完 {{limit}} 条免费消息",
+    "subtitle": "升级到 Kernel Pro 以继续对话。",
     "features": {
-      "unlimitedMessages": "\u65e0\u9650\u6d88\u606f",
-      "deepResearch": "\u6df1\u5ea6\u7814\u7a76\u6a21\u5f0f",
-      "multiAgent": "\u591a\u667a\u80fd\u4f53\u534f\u4f5c",
-      "multiStep": "\u591a\u6b65\u9aa4\u4efb\u52a1\u89c4\u5212",
-      "persistentMemory": "\u8de8\u4f1a\u8bdd\u6301\u4e45\u8bb0\u5fc6"
+      "unlimitedMessages": "无限消息",
+      "deepResearch": "深度研究模式",
+      "multiAgent": "多智能体协作",
+      "multiStep": "多步骤任务规划",
+      "persistentMemory": "跨会话持久记忆"
     },
-    "button": "\u5347\u7ea7\u5230 Pro \u2014 $20/mo",
-    "buttonLoading": "\u6b63\u5728\u6253\u5f00\u7ed3\u8d26...",
-    "maybeLater": "\u4ee5\u540e\u518d\u8bf4"
+    "button": "升级到 Pro — $20/mo",
+    "buttonLoading": "正在打开结账...",
+    "maybeLater": "以后再说"
   },
   "deleteConfirm": {
-    "title": "\u5220\u9664\u4f60\u7684\u8d26\u6237\uff1f",
-    "subtitle": "\u8fd9\u5c06\u6c38\u4e45\u5220\u9664\u4f60\u7684\u6240\u6709\u6570\u636e\uff1a\u5bf9\u8bdd\u3001\u8bb0\u5fc6\u548c\u504f\u597d\u8bbe\u7f6e\u3002\u6b64\u64cd\u4f5c\u4e0d\u53ef\u64a4\u9500\u3002",
-    "subtitleWithSub": " \u4f60\u7684\u8ba2\u9605\u4e5f\u5c06\u88ab\u53d6\u6d88\u3002",
-    "confirm": "\u662f\u7684\uff0c\u5220\u9664\u6211\u7684\u8d26\u6237",
-    "confirming": "\u5220\u9664\u4e2d..."
+    "title": "删除你的账户？",
+    "subtitle": "这将永久删除你的所有数据：对话、记忆和偏好设置。此操作不可撤销。",
+    "subtitleWithSub": " 你的订阅也将被取消。",
+    "confirm": "是的，删除我的账户",
+    "confirming": "删除中..."
   },
   "status": {
-    "assemblingAgents": "\u6b63\u5728\u96c6\u7ed3\u667a\u80fd\u4f53...",
-    "agentsCollaborating": "\u667a\u80fd\u4f53\u534f\u4f5c\u4e2d",
-    "synthesizingPerspectives": "\u6b63\u5728\u7efc\u5408\u89c2\u70b9...",
-    "routingToSpecialist": "\u6b63\u5728\u8f6c\u63a5\u5230\u4e13\u5bb6...",
-    "isWorking": "{{agent}} \u5de5\u4f5c\u4e2d...",
-    "lowConfidence": "\u4f4e\u7f6e\u4fe1\u5ea6"
+    "assemblingAgents": "正在集结智能体...",
+    "agentsCollaborating": "智能体协作中",
+    "synthesizingPerspectives": "正在综合观点...",
+    "routingToSpecialist": "正在转接到专家...",
+    "isWorking": "{{agent}} 工作中...",
+    "lowConfidence": "低置信度"
   },
   "feedback": {
-    "save": "\u4fdd\u5b58",
-    "cancel": "\u53d6\u6d88"
+    "save": "保存",
+    "cancel": "取消"
   },
-  "messagesRemaining": "\u5269\u4f59 {{count}} \u6761\u6d88\u606f",
-  "lastFreeMessage": "\u6700\u540e\u4e00\u6761\u514d\u8d39\u6d88\u606f"
+  "messagesRemaining": "剩余 {{count}} 条消息",
+  "lastFreeMessage": "最后一条免费消息"
 }

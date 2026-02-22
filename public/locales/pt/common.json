@@ -44,5 +44,10 @@
     "markAllRead": "Marcar tudo como lido",
     "empty": "Nenhuma notificação ainda"
   },
-  "language": "Idioma"
+  "language": "Idioma",
+  "offline": "Você está offline. Exibindo conversas em cache.",
+  "pwa": {
+    "installPrompt": "Adicione o Kernel à tela inicial para a melhor experiência.",
+    "install": "Instalar"
+  }
 }

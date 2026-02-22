@@ -44,5 +44,10 @@
     "markAllRead": "Markér alle som læst",
     "empty": "Ingen notifikationer endnu"
   },
-  "language": "Sprog"
+  "language": "Sprog",
+  "offline": "Du er offline. Viser cachede samtaler.",
+  "pwa": {
+    "installPrompt": "Tilføj Kernel til din startskærm for den bedste oplevelse.",
+    "install": "Installér"
+  }
 }

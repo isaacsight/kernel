@@ -44,5 +44,10 @@
     "markAllRead": "Alle als gelesen markieren",
     "empty": "Noch keine Benachrichtigungen"
   },
-  "language": "Sprache"
+  "language": "Sprache",
+  "offline": "Du bist offline. Zwischengespeicherte Unterhaltungen werden angezeigt.",
+  "pwa": {
+    "installPrompt": "Füge Kernel zu deinem Startbildschirm hinzu für das beste Erlebnis.",
+    "install": "Installieren"
+  }
 }

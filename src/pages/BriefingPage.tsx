@@ -101,7 +101,6 @@ export function BriefingPage() {
 
   const handleGoDeeper = useCallback((sectionHeading: string, sectionBody: string) => {
     if (!briefing) return
-    // Use sessionStorage to pass context across route change (more reliable than router state with hash router)
     sessionStorage.setItem('kernel-briefing-context', JSON.stringify({
       title: briefing.title,
       section: sectionHeading,

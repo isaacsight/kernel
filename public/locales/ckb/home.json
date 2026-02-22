@@ -1,62 +1,68 @@
 {
-    "tagline": "AIیەکی کەسی کە تۆی لەبیرە، لەگەڵت بیر دەکاتەوە، و بە تێپەڕبوونی کات باشتر دەبێت.",
-    "placeholder": "قسە لەگەڵ kernel.chat بکە...",
-    "welcomeToPro": "بەخێرهاتی بۆ Kernel Pro!",
-    "menu": {
-        "shareConversation": "هاوبەشکردنی گفتوگۆ",
-        "exportMarkdown": "ناردن وەک Markdown",
-        "goals": "ئامانجەکان",
-        "workflows": "ڕەوتی کارەکان",
-        "scheduledTasks": "کارە کات بۆ دیاریکراوەکان",
-        "dailyBriefing": "کورتەی ڕۆژانە",
-        "whatKernelKnows": "ئەوەی Kernel دەیزانێت",
-        "yourStats": "ئامارەکانت",
-        "insights": "بینینەکان",
-        "upgradeToPro": "بەرزکردنەوە بۆ Pro",
-        "manageSubscription": "بەڕێوەبردنی بەشداریکردن",
-        "signOut": "چوونە دەرەوە",
-        "deleteAccount": "سڕینەوەی هەژمار"
+  "tagline": "AIیەکی کەسی کە تۆی لەبیرە، لەگەڵت بیر دەکاتەوە، و بە تێپەڕبوونی کات باشتر دەبێت.",
+  "placeholder": "قسە لەگەڵ kernel.chat بکە...",
+  "welcomeToPro": "بەخێرهاتی بۆ Kernel Pro!",
+  "menu": {
+    "shareConversation": "هاوبەشکردنی گفتوگۆ",
+    "exportMarkdown": "ناردن وەک Markdown",
+    "goals": "ئامانجەکان",
+    "workflows": "ڕەوتی کارەکان",
+    "scheduledTasks": "کارە کات بۆ دیاریکراوەکان",
+    "dailyBriefing": "کورتەی ڕۆژانە",
+    "whatKernelKnows": "ئەوەی Kernel دەیزانێت",
+    "yourStats": "ئامارەکانت",
+    "insights": "بینینەکان",
+    "upgradeToPro": "بەرزکردنەوە بۆ Pro",
+    "manageSubscription": "بەڕێوەبردنی بەشداریکردن",
+    "signOut": "چوونە دەرەوە",
+    "deleteAccount": "سڕینەوەی هەژمار",
+    "notifications": "ئاگادارییەکان",
+    "notifInApp": "ئاگادارییەکانی ناو ئەپ",
+    "notifBriefings": "ئاگادارییەکانی پوختە",
+    "notifGoals": "نوێکردنەوەی ئامانجەکان",
+    "notifReminders": "بیرخستنەوەکان",
+    "notifPush": "ئاگادارکردنەوەی پووش"
+  },
+  "admin": "بەڕێوەبەر",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "کورتەی ئەمڕۆ",
+    "read": "خوێندنەوە",
+    "discuss": "گفتوگۆکردن"
+  },
+  "upgrade": {
+    "title": "تۆ {{limit}} نامەی خۆڕاییت بەکارهێناوە",
+    "subtitle": "بەرز بکەرەوە بۆ Kernel Pro بۆ بەردەوامبوون لە گفتوگۆکە.",
+    "features": {
+      "unlimitedMessages": "نامەی بێسنوور",
+      "deepResearch": "دۆخی لێکۆڵینەوەی قووڵ",
+      "multiAgent": "هاوکاری چەندین بریکار",
+      "multiStep": "پلاندانانی کاری چەند قۆناغی",
+      "persistentMemory": "بیرگەی بەردەوام لە نێوان دانیشتنەکاندا"
     },
-    "admin": "بەڕێوەبەر",
-    "pro": "Pro",
-    "briefing": {
-        "todaysBriefing": "کورتەی ئەمڕۆ",
-        "read": "خوێندنەوە",
-        "discuss": "گفتوگۆکردن"
-    },
-    "upgrade": {
-        "title": "تۆ {{limit}} نامەی خۆڕاییت بەکارهێناوە",
-        "subtitle": "بەرز بکەرەوە بۆ Kernel Pro بۆ بەردەوامبوون لە گفتوگۆکە.",
-        "features": {
-            "unlimitedMessages": "نامەی بێسنوور",
-            "deepResearch": "دۆخی لێکۆڵینەوەی قووڵ",
-            "multiAgent": "هاوکاری چەندین بریکار",
-            "multiStep": "پلاندانانی کاری چەند قۆناغی",
-            "persistentMemory": "بیرگەی بەردەوام لە نێوان دانیشتنەکاندا"
-        },
-        "button": "بەرزکردنەوە بۆ Pro — $20/مانگ",
-        "buttonLoading": "کردنەوەی پارەدان...",
-        "maybeLater": "بۆ کاتێکی تر"
-    },
-    "deleteConfirm": {
-        "title": "هەژمارەکەت دەسڕیتەوە؟",
-        "subtitle": "ئەمە هەموو زانیارییەکانت بە هەمیشەیی دەسڕێتەوە: گفتوگۆکان، بیرگە، و هەڵبژاردەکان. ئەم کارە ناگەڕێتەوە.",
-        "subtitleWithSub": " بەشداریکردنەکەشت هەڵدەوەشێتەوە.",
-        "confirm": "بەڵێ، هەژمارەکەم بسڕەوە",
-        "confirming": "دەسڕێتەوە..."
-    },
-    "status": {
-        "assemblingAgents": "کۆکردنەوەی بریکارەکان...",
-        "agentsCollaborating": "بریکارەکان هاوکاری دەکەن",
-        "synthesizingPerspectives": "کورتکردنەوەی دیدگاکان...",
-        "routingToSpecialist": "ڕەوانەکردن بۆ پسپۆڕ...",
-        "isWorking": "{{agent}} کار دەکات...",
-        "lowConfidence": "متمانەی کەم"
-    },
-    "feedback": {
-        "save": "پاشکەوتکردن",
-        "cancel": "پاشگەزبوونەوە"
-    },
-    "messagesRemaining": "{{count}} نامە ماوە",
-    "lastFreeMessage": "کۆتا نامەی خۆڕایی"
+    "button": "بەرزکردنەوە بۆ Pro — $20/مانگ",
+    "buttonLoading": "کردنەوەی پارەدان...",
+    "maybeLater": "بۆ کاتێکی تر"
+  },
+  "deleteConfirm": {
+    "title": "هەژمارەکەت دەسڕیتەوە؟",
+    "subtitle": "ئەمە هەموو زانیارییەکانت بە هەمیشەیی دەسڕێتەوە: گفتوگۆکان، بیرگە، و هەڵبژاردەکان. ئەم کارە ناگەڕێتەوە.",
+    "subtitleWithSub": " بەشداریکردنەکەشت هەڵدەوەشێتەوە.",
+    "confirm": "بەڵێ، هەژمارەکەم بسڕەوە",
+    "confirming": "دەسڕێتەوە..."
+  },
+  "status": {
+    "assemblingAgents": "کۆکردنەوەی بریکارەکان...",
+    "agentsCollaborating": "بریکارەکان هاوکاری دەکەن",
+    "synthesizingPerspectives": "کورتکردنەوەی دیدگاکان...",
+    "routingToSpecialist": "ڕەوانەکردن بۆ پسپۆڕ...",
+    "isWorking": "{{agent}} کار دەکات...",
+    "lowConfidence": "متمانەی کەم"
+  },
+  "feedback": {
+    "save": "پاشکەوتکردن",
+    "cancel": "پاشگەزبوونەوە"
+  },
+  "messagesRemaining": "{{count}} نامە ماوە",
+  "lastFreeMessage": "کۆتا نامەی خۆڕایی"
 }

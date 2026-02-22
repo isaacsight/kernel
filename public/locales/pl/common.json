@@ -44,5 +44,10 @@
     "markAllRead": "Oznacz wszystkie jako przeczytane",
     "empty": "Brak powiadomień"
   },
-  "language": "Język"
+  "language": "Język",
+  "offline": "Jesteś offline. Wyświetlanie zapisanych rozmów.",
+  "pwa": {
+    "installPrompt": "Dodaj Kernel do ekranu głównego dla najlepszego doświadczenia.",
+    "install": "Zainstaluj"
+  }
 }

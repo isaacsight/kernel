@@ -44,5 +44,10 @@
     "markAllRead": "Merkitse kaikki luetuiksi",
     "empty": "Ei ilmoituksia vielä"
   },
-  "language": "Kieli"
+  "language": "Kieli",
+  "offline": "Olet offline. Näytetään välimuistissa olevat keskustelut.",
+  "pwa": {
+    "installPrompt": "Lisää Kernel aloitusnäytöllesi parasta kokemusta varten.",
+    "install": "Asenna"
+  }
 }

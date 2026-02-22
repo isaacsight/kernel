@@ -44,5 +44,10 @@
     "markAllRead": "全部標為已讀",
     "empty": "尚無通知"
   },
-  "language": "語言"
+  "language": "語言",
+  "offline": "您已離線。正在查看快取的對話。",
+  "pwa": {
+    "installPrompt": "將 Kernel 加到主畫面以獲得最佳體驗。",
+    "install": "安裝"
+  }
 }

@@ -1,62 +1,68 @@
 {
-    "tagline": "AI אישי שזוכר אותך, חושב איתך ומשתפר עם הזמן.",
-    "placeholder": "דבר עם kernel.chat...",
-    "welcomeToPro": "ברוך הבא ל-Kernel Pro!",
-    "menu": {
-        "shareConversation": "שתף שיחה",
-        "exportMarkdown": "ייצוא כ-Markdown",
-        "goals": "יעדים",
-        "workflows": "תהליכי עבודה",
-        "scheduledTasks": "משימות מתוזמנות",
-        "dailyBriefing": "תדרוך יומי",
-        "whatKernelKnows": "מה Kernel יודע",
-        "yourStats": "הסטטיסטיקה שלך",
-        "insights": "תובנות",
-        "upgradeToPro": "שדרג ל-Pro",
-        "manageSubscription": "נהל מנוי",
-        "signOut": "התנתק",
-        "deleteAccount": "מחק חשבון"
+  "tagline": "AI אישי שזוכר אותך, חושב איתך ומשתפר עם הזמן.",
+  "placeholder": "דבר עם kernel.chat...",
+  "welcomeToPro": "ברוך הבא ל-Kernel Pro!",
+  "menu": {
+    "shareConversation": "שתף שיחה",
+    "exportMarkdown": "ייצוא כ-Markdown",
+    "goals": "יעדים",
+    "workflows": "תהליכי עבודה",
+    "scheduledTasks": "משימות מתוזמנות",
+    "dailyBriefing": "תדרוך יומי",
+    "whatKernelKnows": "מה Kernel יודע",
+    "yourStats": "הסטטיסטיקה שלך",
+    "insights": "תובנות",
+    "upgradeToPro": "שדרג ל-Pro",
+    "manageSubscription": "נהל מנוי",
+    "signOut": "התנתק",
+    "deleteAccount": "מחק חשבון",
+    "notifications": "התראות",
+    "notifInApp": "התראות באפליקציה",
+    "notifBriefings": "התראות תדריך",
+    "notifGoals": "עדכוני יעדים",
+    "notifReminders": "תזכורות",
+    "notifPush": "התראות Push"
+  },
+  "admin": "מנהל",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "התדרוך של היום",
+    "read": "קרא",
+    "discuss": "דון"
+  },
+  "upgrade": {
+    "title": "ניצלת את {{limit}} ההודעות החינמיות שלך",
+    "subtitle": "שדרג ל-Kernel Pro כדי להמשיך את השיחה.",
+    "features": {
+      "unlimitedMessages": "הודעות ללא הגבלה",
+      "deepResearch": "מצב מחקר עמוק",
+      "multiAgent": "שיתוף פעולה בין סוכנים",
+      "multiStep": "תכנון משימות רב-שלבי",
+      "persistentMemory": "זיכרון מתמשך בין הפעלות"
     },
-    "admin": "מנהל",
-    "pro": "Pro",
-    "briefing": {
-        "todaysBriefing": "התדרוך של היום",
-        "read": "קרא",
-        "discuss": "דון"
-    },
-    "upgrade": {
-        "title": "ניצלת את {{limit}} ההודעות החינמיות שלך",
-        "subtitle": "שדרג ל-Kernel Pro כדי להמשיך את השיחה.",
-        "features": {
-            "unlimitedMessages": "הודעות ללא הגבלה",
-            "deepResearch": "מצב מחקר עמוק",
-            "multiAgent": "שיתוף פעולה בין סוכנים",
-            "multiStep": "תכנון משימות רב-שלבי",
-            "persistentMemory": "זיכרון מתמשך בין הפעלות"
-        },
-        "button": "שדרג ל-Pro — $20 לחודש",
-        "buttonLoading": "פותח תשלום...",
-        "maybeLater": "אולי מאוחר יותר"
-    },
-    "deleteConfirm": {
-        "title": "למחוק את החשבון?",
-        "subtitle": "פעולה זו תמחק לצמיתות את כל הנתונים שלך: שיחות, זיכרון והעדפות. לא ניתן לבטל פעולה זו.",
-        "subtitleWithSub": " המנוי שלך יבוטל גם כן.",
-        "confirm": "כן, מחק את החשבון שלי",
-        "confirming": "מוחק..."
-    },
-    "status": {
-        "assemblingAgents": "מקבץ סוכנים...",
-        "agentsCollaborating": "סוכנים משתפים פעולה",
-        "synthesizingPerspectives": "מסנתז נקודות מבט...",
-        "routingToSpecialist": "מנתב למומחה...",
-        "isWorking": "{{agent}} עובד...",
-        "lowConfidence": "ביטחון נמוך"
-    },
-    "feedback": {
-        "save": "שמור",
-        "cancel": "ביטול"
-    },
-    "messagesRemaining": "נותרו {{count}} הודעות",
-    "lastFreeMessage": "הודעה חינמית אחרונה"
+    "button": "שדרג ל-Pro — $20 לחודש",
+    "buttonLoading": "פותח תשלום...",
+    "maybeLater": "אולי מאוחר יותר"
+  },
+  "deleteConfirm": {
+    "title": "למחוק את החשבון?",
+    "subtitle": "פעולה זו תמחק לצמיתות את כל הנתונים שלך: שיחות, זיכרון והעדפות. לא ניתן לבטל פעולה זו.",
+    "subtitleWithSub": " המנוי שלך יבוטל גם כן.",
+    "confirm": "כן, מחק את החשבון שלי",
+    "confirming": "מוחק..."
+  },
+  "status": {
+    "assemblingAgents": "מקבץ סוכנים...",
+    "agentsCollaborating": "סוכנים משתפים פעולה",
+    "synthesizingPerspectives": "מסנתז נקודות מבט...",
+    "routingToSpecialist": "מנתב למומחה...",
+    "isWorking": "{{agent}} עובד...",
+    "lowConfidence": "ביטחון נמוך"
+  },
+  "feedback": {
+    "save": "שמור",
+    "cancel": "ביטול"
+  },
+  "messagesRemaining": "נותרו {{count}} הודעות",
+  "lastFreeMessage": "הודעה חינמית אחרונה"
 }

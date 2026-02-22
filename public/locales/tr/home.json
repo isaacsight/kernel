@@ -15,7 +15,13 @@
     "upgradeToPro": "Pro'ya yükselt",
     "manageSubscription": "Aboneliği yönet",
     "signOut": "Çıkış yap",
-    "deleteAccount": "Hesabı sil"
+    "deleteAccount": "Hesabı sil",
+    "notifications": "Bildirimler",
+    "notifInApp": "Uygulama içi bildirimler",
+    "notifBriefings": "Brifing uyarıları",
+    "notifGoals": "Hedef güncellemeleri",
+    "notifReminders": "Hatırlatıcılar",
+    "notifPush": "Push bildirimleri"
   },
   "admin": "Yönetici",
   "pro": "Pro",

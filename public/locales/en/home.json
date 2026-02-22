@@ -20,7 +20,8 @@
     "notifInApp": "In-app notifications",
     "notifBriefings": "Briefing alerts",
     "notifGoals": "Goal updates",
-    "notifReminders": "Reminders"
+    "notifReminders": "Reminders",
+    "notifPush": "Push notifications"
   },
   "admin": "Admin",
   "pro": "Pro",
