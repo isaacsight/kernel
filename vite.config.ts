@@ -83,12 +83,18 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                manualChunks: {
-                    'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-                    'vendor-supabase': ['@supabase/supabase-js'],
-                    'vendor-ui': ['framer-motion', 'lucide-react'],
-                    'vendor-analytics': ['posthog-js', '@sentry/react'],
-                    'vendor-markdown': ['react-markdown'],
+                manualChunks(id) {
+                    // ── Vendor chunks (entry-point based) ─────
+                    if (id.includes('node_modules')) {
+                        if (id.includes('/react-dom/') || id.includes('/react-router-dom/') || id.includes('/react-router/') || id.includes('/scheduler/') || /\/node_modules\/react\//.test(id)) return 'vendor-react'
+                        if (id.includes('/@supabase/')) return 'vendor-supabase'
+                        if (id.includes('/framer-motion/') || id.includes('/lucide-react/')) return 'vendor-ui'
+                        if (id.includes('/posthog-js/') || id.includes('/@sentry/')) return 'vendor-analytics'
+                        if (id.includes('/react-markdown/') || id.includes('/remark-') || id.includes('/rehype-') || id.includes('/unified/') || id.includes('/prismjs/') || id.includes('/micromark') || id.includes('/mdast-') || id.includes('/hast-') || id.includes('/unist-') || id.includes('/vfile')) return 'vendor-markdown'
+                    }
+                    // ── Application code ──────────────────────
+                    if (id.includes('/src/engine/')) return 'kernel-engine'
+                    if (id.includes('/src/agents/')) return 'kernel-agents'
                 },
             },
         },

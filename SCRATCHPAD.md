@@ -15,7 +15,8 @@
 - **Animation token system**: Replaced hardcoded durations in LoginGate, Layout, SubscriptionGate, KernelAgentObserver with `DURATION.*`, `EASE.*`, `TRANSITION.*` from `constants/motion.ts`. 5 components migrated.
 - **New specialist emblems**: Created 7 SVG emblems matching existing style (italic serif letter in outlined circle with unique accent) for aesthete, guardian, curator, strategist, infrastructure, quant, investigator. Wired `emblem` paths into `specialists.ts`.
 - **Test coverage**: Added 4 new test files (TaskPlanner, SwarmOrchestrator, ClaudeClient, specialists). 292 tests passing (was 234).
-- Build: PASS (510KB precache, 9.6s). Tests: 292/292 PASS.
+- **Bundle splitting (P21)**: Converted `manualChunks` from object to function form. Split app code into `kernel-engine` (73KB) and `kernel-agents` (24KB) chunks. Main index chunk: 529KB → 193KB (63% reduction). No chunk exceeds 500KB warning. Build time: 9.6s → 6.3s.
+- Build: PASS (no warnings). Tests: 292/292 PASS.
 
 ---
 
@@ -142,7 +143,8 @@ Full 5-phase design overhaul committing to the literary-minimalist direction.
 - **P18: Animation token system** — DONE (5 components migrated to motion constants)
 - **P19: New specialist emblems** — DONE (7 SVG emblems + wired into specialists.ts)
 - **P20: Test coverage** — DONE (292 tests, +58 from 234)
-- **Next candidates**: Keyboard shortcuts (Cmd+K search), conversation export, agent memory UI, bundle splitting (528KB main chunk)
+- **P21: Bundle splitting** — DONE (529KB → 193KB main chunk, +kernel-engine 73KB, +kernel-agents 24KB)
+- **Next candidates**: Keyboard shortcuts (Cmd+K search), conversation export, agent memory UI
 
 ## Key Decisions Made
 
