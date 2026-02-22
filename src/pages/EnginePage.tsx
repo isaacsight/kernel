@@ -31,6 +31,7 @@ import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
+import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 
@@ -143,6 +144,7 @@ function EngineChat() {
   // ─── Hooks ────────────────────────────────────────────
   const { darkMode, setDarkMode } = useDarkMode()
   const { toast, showToast } = useToast()
+  const { updateAvailable, updateNow } = useServiceWorkerUpdate()
   const featureDiscovery = useFeatureDiscovery(user?.id)
 
   const billing = useBilling(user, showToast, signOut)
@@ -365,6 +367,22 @@ function EngineChat() {
   // ─── Render ───────────────────────────────────────────
   return (
     <div className="ka-page">
+      {/* Update Banner */}
+      <AnimatePresence>
+        {updateAvailable && (
+          <motion.div
+            className="ka-update-banner"
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -40, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          >
+            <span className="ka-update-banner-text">New version available</span>
+            <button className="ka-update-banner-btn" onClick={updateNow}>Refresh</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Panel Bottom Sheets */}
       <AnimatePresence>
         {panels.showKGPanel && (
