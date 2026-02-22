@@ -6,7 +6,8 @@ import { getAccessToken } from '../engine/SupabaseClient'
 export const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
 export const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 export const SPREADSHEET_EXTENSIONS = ['.xlsx', '.xls', '.xlsb', '.ods']
-export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.xlsx,.xls,.xlsb,.ods'
+export const CONVERSATION_EXTENSIONS = ['.json']
+export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.xlsx,.xls,.xlsb,.ods,.json'
 
 const EXT_TO_MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
