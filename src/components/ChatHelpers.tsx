@@ -224,3 +224,27 @@ export async function fetchUrlContent(url: string): Promise<string> {
     return ''
   }
 }
+
+/**
+ * Fetch raw HTML from a URL (for share link parsing).
+ * Returns the raw HTML string, or empty string on failure.
+ */
+export async function fetchUrlRaw(url: string): Promise<string> {
+  try {
+    const token = await getAccessToken()
+    const res = await fetch(URL_FETCH_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        apikey: SUPABASE_KEY,
+      },
+      body: JSON.stringify({ url, raw: true }),
+    })
+    if (!res.ok) return ''
+    const { html } = await res.json()
+    return html || ''
+  } catch {
+    return ''
+  }
+}

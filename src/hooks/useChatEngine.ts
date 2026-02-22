@@ -3,6 +3,7 @@ import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngin
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64, compressImage, extractPdfText, extractSpreadsheetText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
 import { parseConversationFile, parseConversationExport, formatConversationsAsText, mineConversations, type ParsedConversation } from '../engine/conversationImport'
+import { detectShareLinks, parseShareLink } from '../engine/shareLinkParser'
 import { PICKER_THRESHOLD } from '../components/ConversationPicker'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -290,10 +291,25 @@ export function useChatEngine(params: UseChatEngineParams) {
     setThinkingAgent(specialist.name)
 
     // Fetch URL content if message contains links
+    // Share links from ChatGPT/Claude/Gemini get special handling
     let urlContext = ''
     const urls = trimmed.match(LINK_REGEX)
     if (urls && urls.length > 0) {
+      const shareLinks = detectShareLinks(trimmed)
+      const shareUrls = new Set(shareLinks.map(l => l.url))
+
       const fetches = await Promise.all(urls.slice(0, 3).map(async (url) => {
+        // Share link → parse as conversation import
+        if (shareUrls.has(url)) {
+          const conv = await parseShareLink(url)
+          if (conv && conv.messages.length > 0) {
+            const formatted = formatConversationsAsText([conv])
+            // Background: mine for memory & knowledge graph
+            mineConversations(userId, [conv]).catch(() => {})
+            return `[Imported conversation from ${conv.source}: "${conv.title}"]\n\n${formatted}\n`
+          }
+          // Parsing failed — fall through to regular URL fetch
+        }
         const text = await fetchUrlContent(url)
         return text ? `[URL: ${url}]\n${text}\n` : ''
       }))

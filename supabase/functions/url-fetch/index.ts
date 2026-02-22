@@ -131,7 +131,7 @@ serve(async (req: Request) => {
       )
     }
 
-    const { url } = await req.json()
+    const { url, raw } = await req.json()
     if (!url || typeof url !== 'string') {
       return new Response(
         JSON.stringify({ error: 'url is required' }),
@@ -177,14 +177,23 @@ serve(async (req: Request) => {
     }
 
     const contentType = response.headers.get('content-type') || ''
-    const raw = await response.text()
+    const body = await response.text()
+
+    // If raw mode requested, return the HTML directly (capped at 100KB for share pages)
+    if (raw) {
+      const MAX_RAW = 100_000
+      return new Response(
+        JSON.stringify({ html: body.slice(0, MAX_RAW), url }),
+        { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
 
     let text: string
     if (contentType.includes('text/html') || contentType.includes('application/xhtml')) {
-      text = htmlToText(raw)
+      text = htmlToText(body)
     } else {
       // Plain text, JSON, XML, etc. — return as-is (trimmed)
-      text = raw.slice(0, MAX_CONTENT_LENGTH)
+      text = body.slice(0, MAX_CONTENT_LENGTH)
     }
 
     return new Response(
