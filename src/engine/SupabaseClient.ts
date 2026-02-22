@@ -194,7 +194,11 @@ export async function getChannelMessages(channelId: string, limit = 50) {
 }
 
 // Conversations
-export async function createConversation(userId: string, title = 'New Conversation'): Promise<DBConversation | null> {
+export async function createConversation(
+  userId: string,
+  title = 'New Conversation',
+  metadata?: Record<string, unknown>
+): Promise<DBConversation | null> {
   const id = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   // Verify session is active before attempting insert (RLS requires auth.uid())
@@ -209,9 +213,12 @@ export async function createConversation(userId: string, title = 'New Conversati
     }
   }
 
+  const row: Record<string, unknown> = { id, user_id: userId, title }
+  if (metadata) row.metadata = metadata
+
   const { data, error } = await supabase
     .from('conversations')
-    .insert({ id, user_id: userId, title })
+    .insert(row)
     .select()
     .single();
 
@@ -455,9 +462,10 @@ export async function getSharedConversation(conversationId: string): Promise<{
 export async function forkSharedConversation(
   userId: string,
   title: string,
-  messages: { role: string; content: string; agentName?: string; timestamp?: number }[]
+  messages: { role: string; content: string; agentName?: string; timestamp?: number }[],
+  metadata?: Record<string, unknown>
 ): Promise<string | null> {
-  const conv = await createConversation(userId, title)
+  const conv = await createConversation(userId, title, metadata)
   if (!conv) return null
 
   const now = Date.now()
