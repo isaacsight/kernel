@@ -605,35 +605,29 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-constellation" aria-hidden="true">
-              {/* Pixel sprout — "Kernel" means seed */}
+              {/* Pixel sprout — compact, squat, cute */}
               <div className="ka-pixel-creature">
-                {/* Leaf — amethyst, intelligence emerging */}
+                {/* Leaf — amethyst sprout */}
                 <span className="ka-pixel ka-pixel--leaf" style={{left:34,top:0}} />
-                {/* Stem */}
-                <span className="ka-pixel ka-pixel--stem" style={{left:34,top:17}} />
-                {/* Head */}
-                <span className="ka-pixel" style={{left:17,top:34}} />
-                <span className="ka-pixel" style={{left:34,top:34}} />
-                <span className="ka-pixel" style={{left:51,top:34}} />
+                {/* Head — flows from leaf */}
+                <span className="ka-pixel" style={{left:17,top:17}} />
+                <span className="ka-pixel" style={{left:34,top:17}} />
+                <span className="ka-pixel" style={{left:51,top:17}} />
                 {/* Face + eyes */}
-                <span className="ka-pixel" style={{left:0,top:51}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:51}} />
-                <span className="ka-pixel" style={{left:34,top:51}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:51}} />
-                <span className="ka-pixel" style={{left:68,top:51}} />
+                <span className="ka-pixel" style={{left:0,top:34}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:34}} />
+                <span className="ka-pixel" style={{left:34,top:34}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:34}} />
+                <span className="ka-pixel" style={{left:68,top:34}} />
                 {/* Body */}
-                <span className="ka-pixel" style={{left:0,top:68}} />
-                <span className="ka-pixel" style={{left:17,top:68}} />
-                <span className="ka-pixel" style={{left:34,top:68}} />
-                <span className="ka-pixel" style={{left:51,top:68}} />
-                <span className="ka-pixel" style={{left:68,top:68}} />
-                {/* Legs */}
-                <span className="ka-pixel" style={{left:0,top:85}} />
-                <span className="ka-pixel" style={{left:34,top:85}} />
-                <span className="ka-pixel" style={{left:68,top:85}} />
+                <span className="ka-pixel" style={{left:0,top:51}} />
+                <span className="ka-pixel" style={{left:17,top:51}} />
+                <span className="ka-pixel" style={{left:34,top:51}} />
+                <span className="ka-pixel" style={{left:51,top:51}} />
+                <span className="ka-pixel" style={{left:68,top:51}} />
                 {/* Feet */}
-                <span className="ka-pixel" style={{left:17,top:102}} />
-                <span className="ka-pixel" style={{left:51,top:102}} />
+                <span className="ka-pixel" style={{left:17,top:68}} />
+                <span className="ka-pixel" style={{left:51,top:68}} />
               </div>
               {/* Simulation cells — ambient state machine */}
               <span className="ka-pixel ka-pixel--sim" style={{left:10,top:8}} />
