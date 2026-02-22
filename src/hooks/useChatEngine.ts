@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64, compressImage, extractPdfText, extractSpreadsheetText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
-import { parseConversationExport, formatConversationsAsText } from '../engine/conversationImport'
+import { parseConversationFile, parseConversationExport, formatConversationsAsText } from '../engine/conversationImport'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
@@ -325,6 +325,21 @@ export function useChatEngine(params: UseChatEngineParams) {
             text = text.slice(0, MAX_SHEET_CHARS) + `\n\n[... truncated — spreadsheet was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_SHEET_CHARS / 1000).toFixed(0)}K]`
           }
           textPrefix += `[Spreadsheet: ${file.name}]\n${text}\n\n`
+        } else if (file.name.toLowerCase().endsWith('.zip')) {
+          // ZIP — try to extract AI conversation exports (ChatGPT, Claude, Gemini)
+          try {
+            const conversations = await parseConversationFile(file)
+            if (conversations.length > 0) {
+              const formatted = formatConversationsAsText(conversations)
+              const source = conversations[0].source
+              const count = conversations.length
+              textPrefix += `[Imported ${count} conversation${count > 1 ? 's' : ''} from ${source}: ${file.name}]\n\n${formatted}\n\n`
+            } else {
+              textPrefix += `[ZIP: ${file.name} — no recognized conversation data found]\n\n`
+            }
+          } catch {
+            textPrefix += `[ZIP: ${file.name} — could not extract contents]\n\n`
+          }
         } else if (file.name.toLowerCase().endsWith('.json')) {
           // JSON — try to detect AI conversation exports (ChatGPT, Claude, Gemini)
           const raw = await readFileAsText(file)

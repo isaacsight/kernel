@@ -6,8 +6,8 @@ import { getAccessToken } from '../engine/SupabaseClient'
 export const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
 export const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 export const SPREADSHEET_EXTENSIONS = ['.xlsx', '.xls', '.xlsb', '.ods']
-export const CONVERSATION_EXTENSIONS = ['.json']
-export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.xlsx,.xls,.xlsb,.ods,.json'
+export const CONVERSATION_EXTENSIONS = ['.json', '.zip']
+export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.xlsx,.xls,.xlsb,.ods,.json,.zip'
 
 const EXT_TO_MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
@@ -63,6 +63,9 @@ export function validateFileSize(file: File, isPro: boolean): string | null {
   }
   // PDFs: no size limit — large PDFs are text-extracted client-side
   if (isPdfFile(file)) return null
+  // ZIPs/JSON: no size limit — conversation exports are text-extracted client-side
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+  if (ext === '.zip' || ext === '.json') return null
   if (file.size > limits.text) {
     return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.text / 1048576).toFixed(0)}MB.`
   }
