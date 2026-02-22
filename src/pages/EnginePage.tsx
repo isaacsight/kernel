@@ -604,7 +604,27 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <img className="ka-empty-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-state.svg`} alt="" aria-hidden="true" />
+            <div className="ka-empty-constellation" aria-hidden="true">
+              {/* Square perimeter threads */}
+              <svg className="ka-empty-thread" viewBox="0 0 160 160">
+                <line x1="40" y1="40" x2="120" y2="40" />
+                <line x1="120" y1="40" x2="120" y2="120" />
+                <line x1="120" y1="120" x2="40" y2="120" />
+                <line x1="40" y1="120" x2="40" y2="40" />
+              </svg>
+              {/* Synaptic pulse along one edge at a time */}
+              <svg className="ka-empty-pulse" viewBox="0 0 160 160">
+                <line x1="40" y1="40" x2="120" y2="40" />
+                <line x1="120" y1="40" x2="120" y2="120" />
+                <line x1="120" y1="120" x2="40" y2="120" />
+                <line x1="40" y1="120" x2="40" y2="40" />
+              </svg>
+              {/* Four corner orbs — no core hierarchy */}
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-orb" />
+            </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
             <p className="ka-home-greeting">{getTimeGreeting()}</p>
