@@ -38,8 +38,12 @@ interface FileSizeLimit {
   text: number    // bytes
 }
 
-const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024 }
-const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024 }
+// Server payload limit is 5MB for media requests. Base64 adds ~33% overhead,
+// so raw file must be under ~3.75MB to stay within the limit.
+// Images are compressed client-side so their raw size doesn't matter much.
+// PDFs and animated GIFs are sent raw — these limits must account for base64 bloat.
+const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 3.5 * 1024 * 1024, text: 5 * 1024 * 1024 }
+const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 3.5 * 1024 * 1024, text: 20 * 1024 * 1024 }
 
 export function validateFileSize(file: File, isPro: boolean): string | null {
   const limits = isPro ? PRO_LIMITS : FREE_LIMITS

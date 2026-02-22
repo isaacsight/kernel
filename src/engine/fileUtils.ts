@@ -19,20 +19,52 @@ const IMAGE_MAX_DIMENSION = 1568
 const IMAGE_JPEG_QUALITY = 0.80
 
 /**
+ * Detect whether a GIF is animated by scanning for multiple image frames.
+ * Reads the raw bytes looking for the GIF frame separator (0x00 0x21 0xF9).
+ */
+async function isAnimatedGif(file: File): Promise<boolean> {
+  const buffer = await file.arrayBuffer()
+  const bytes = new Uint8Array(buffer)
+  let frameCount = 0
+  // Scan for Graphic Control Extension blocks (0x21 0xF9) which precede each frame
+  for (let i = 0; i < bytes.length - 2; i++) {
+    if (bytes[i] === 0x21 && bytes[i + 1] === 0xF9) {
+      frameCount++
+      if (frameCount > 1) return true
+    }
+  }
+  return false
+}
+
+/**
  * Compress an image file by resizing to fit within IMAGE_MAX_DIMENSION
  * and re-encoding as JPEG. Returns { base64, mediaType }.
- * GIFs are passed through without compression (may be animated).
+ * Animated GIFs are passed through without compression.
+ * Static GIFs are compressed like other images.
  * Images already small enough are passed through unchanged.
  */
 export function compressImage(
   file: File,
 ): Promise<{ base64: string; mediaType: string }> {
-  // GIFs may be animated — pass through without compression
   const isGif = file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif')
+
   if (isGif) {
-    return fileToBase64(file).then(base64 => ({ base64, mediaType: 'image/gif' }))
+    // Only skip compression for animated GIFs — static GIFs get compressed
+    return isAnimatedGif(file).then(animated => {
+      if (animated) {
+        return fileToBase64(file).then(base64 => ({ base64, mediaType: 'image/gif' }))
+      }
+      // Static GIF — compress like any other image
+      return compressViaCanvas(file)
+    })
   }
 
+  return compressViaCanvas(file)
+}
+
+function compressViaCanvas(
+  file: File,
+): Promise<{ base64: string; mediaType: string }> {
   return new Promise((resolve, reject) => {
     const img = new Image()
     const url = URL.createObjectURL(file)

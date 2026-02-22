@@ -305,6 +305,18 @@ export function useChatEngine(params: UseChatEngineParams) {
             type: 'document',
             source: { type: 'base64', media_type: 'application/pdf', data },
           })
+        } else {
+          // Unrecognized file type — read as text fallback
+          try {
+            let text = await readFileAsText(file)
+            const MAX_TEXT_CHARS = 30000
+            if (text.length > MAX_TEXT_CHARS) {
+              text = text.slice(0, MAX_TEXT_CHARS) + `\n\n[... truncated — file was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_TEXT_CHARS / 1000).toFixed(0)}K]`
+            }
+            textPrefix += `[File: ${file.name}]\n${text}\n\n`
+          } catch {
+            textPrefix += `[File: ${file.name} — could not read contents]\n\n`
+          }
         }
       }
 
