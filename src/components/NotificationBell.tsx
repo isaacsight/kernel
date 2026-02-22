@@ -100,7 +100,6 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                   className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${n.action_url ? ' ka-notif-item--clickable' : ''}`}
                   onClick={() => {
                     if (n.action_url) {
-                      // Navigate via hash router for internal links, or open external
                       if (n.action_url.startsWith('#') || n.action_url.startsWith('/')) {
                         window.location.hash = n.action_url.startsWith('#') ? n.action_url : `#${n.action_url}`
                       } else {
@@ -109,6 +108,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                       setIsOpen(false)
                     }
                   }}
+                  onKeyDown={n.action_url ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click() } } : undefined}
                   role={n.action_url ? 'button' : undefined}
                   tabIndex={n.action_url ? 0 : undefined}
                 >

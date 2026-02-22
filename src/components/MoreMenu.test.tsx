@@ -25,6 +25,11 @@ vi.mock('react-i18next', () => ({
         'menu.manageSubscription': 'Manage Subscription',
         'menu.signOut': 'Sign Out',
         'menu.deleteAccount': 'Delete Account',
+        'menu.notifications': 'Notifications',
+        'menu.notifInApp': 'In-app notifications',
+        'menu.notifBriefings': 'Briefing alerts',
+        'menu.notifGoals': 'Goal updates',
+        'menu.notifReminders': 'Reminders',
         'features': 'Features',
         'language': 'Language',
         'account': 'Account',
@@ -32,6 +37,13 @@ vi.mock('react-i18next', () => ({
       return t[key] || key
     },
     i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}))
+
+vi.mock('../hooks/useNotificationPrefs', () => ({
+  useNotificationPrefs: () => ({
+    prefs: { inApp: true, briefings: true, goals: false, reminders: true },
+    update: vi.fn(),
   }),
 }))
 
@@ -122,5 +134,29 @@ describe('MoreMenu', () => {
     render(<MoreMenu {...baseProps} />)
     fireEvent.click(screen.getByTestId('ka-more-overlay'))
     expect(baseProps.onClose).toHaveBeenCalled()
+  })
+
+  it('renders notification preference toggles', () => {
+    render(<MoreMenu {...baseProps} />)
+    expect(screen.getByText('In-app notifications')).toBeInTheDocument()
+    expect(screen.getByText('Briefing alerts')).toBeInTheDocument()
+    expect(screen.getByText('Goal updates')).toBeInTheDocument()
+    expect(screen.getByText('Reminders')).toBeInTheDocument()
+  })
+
+  it('toggles have role="switch" for accessibility', () => {
+    render(<MoreMenu {...baseProps} />)
+    const switches = screen.getAllByRole('switch')
+    expect(switches).toHaveLength(4)
+  })
+
+  it('toggle states reflect notification prefs', () => {
+    render(<MoreMenu {...baseProps} />)
+    const switches = screen.getAllByRole('switch')
+    // inApp: true, briefings: true, goals: false, reminders: true
+    expect(switches[0]).toBeChecked() // inApp
+    expect(switches[1]).toBeChecked() // briefings
+    expect(switches[2]).not.toBeChecked() // goals
+    expect(switches[3]).toBeChecked() // reminders
   })
 })

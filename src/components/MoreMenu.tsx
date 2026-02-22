@@ -147,22 +147,22 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
           </div>
           <label className="ka-more-toggle">
             <span>{t('menu.notifInApp')}</span>
-            <input type="checkbox" checked={prefs.inApp} onChange={e => updateNotifPrefs({ inApp: e.target.checked })} />
+            <input type="checkbox" role="switch" aria-checked={prefs.inApp} checked={prefs.inApp} onChange={e => updateNotifPrefs({ inApp: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
           <label className="ka-more-toggle">
             <span>{t('menu.notifBriefings')}</span>
-            <input type="checkbox" checked={prefs.briefings} onChange={e => updateNotifPrefs({ briefings: e.target.checked })} />
+            <input type="checkbox" role="switch" aria-checked={prefs.briefings} checked={prefs.briefings} onChange={e => updateNotifPrefs({ briefings: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
           <label className="ka-more-toggle">
             <span>{t('menu.notifGoals')}</span>
-            <input type="checkbox" checked={prefs.goals} onChange={e => updateNotifPrefs({ goals: e.target.checked })} />
+            <input type="checkbox" role="switch" aria-checked={prefs.goals} checked={prefs.goals} onChange={e => updateNotifPrefs({ goals: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
           <label className="ka-more-toggle">
             <span>{t('menu.notifReminders')}</span>
-            <input type="checkbox" checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
+            <input type="checkbox" role="switch" aria-checked={prefs.reminders} checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
           <div className="ka-more-menu-divider" />
