@@ -15,7 +15,13 @@
     "upgradeToPro": "Pro로 업그레이드",
     "manageSubscription": "구독 관리",
     "signOut": "로그아웃",
-    "deleteAccount": "계정 삭제"
+    "deleteAccount": "계정 삭제",
+    "notifications": "알림",
+    "notifInApp": "앱 내 알림",
+    "notifBriefings": "브리핑 알림",
+    "notifGoals": "목표 업데이트",
+    "notifReminders": "리마인더",
+    "notifPush": "푸시 알림"
   },
   "admin": "관리자",
   "pro": "Pro",

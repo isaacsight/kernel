@@ -15,7 +15,13 @@
     "upgradeToPro": "Upgraden naar Pro",
     "manageSubscription": "Abonnement beheren",
     "signOut": "Uitloggen",
-    "deleteAccount": "Account verwijderen"
+    "deleteAccount": "Account verwijderen",
+    "notifications": "Meldingen",
+    "notifInApp": "In-app meldingen",
+    "notifBriefings": "Briefing-meldingen",
+    "notifGoals": "Doelupdates",
+    "notifReminders": "Herinneringen",
+    "notifPush": "Pushmeldingen"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -34,7 +40,7 @@
       "multiStep": "Meerstaps taakplanning",
       "persistentMemory": "Blijvend geheugen tussen sessies"
     },
-    "button": "Upgraden naar Pro \u2014 $20/mo",
+    "button": "Upgraden naar Pro — $20/mo",
     "buttonLoading": "Checkout openen...",
     "maybeLater": "Misschien later"
   },

@@ -3,6 +3,7 @@ import { SPRING } from '../constants/motion'
 import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
+import { useWebPush } from '../hooks/useWebPush'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -78,6 +79,7 @@ interface MoreMenuProps {
 export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
+  const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
   if (!isOpen) return null
 
   const filteredAccount = ACCOUNT_ITEMS.filter(item => {
@@ -165,6 +167,20 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
             <input type="checkbox" role="switch" aria-checked={prefs.reminders} checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
+          {pushSupported && (
+            <label className="ka-more-toggle">
+              <span>{t('menu.notifPush')}</span>
+              <input
+                type="checkbox"
+                role="switch"
+                aria-checked={pushSubscribed}
+                checked={pushSubscribed}
+                disabled={pushLoading}
+                onChange={togglePush}
+              />
+              <span className="ka-more-toggle-track" />
+            </label>
+          )}
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
           {filteredAccount.map(item => {

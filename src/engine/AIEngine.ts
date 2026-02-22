@@ -24,6 +24,7 @@ import { formBelief, challengeBeliefById, shiftConviction, updateWorldModel } fr
 import { runDiscussion as _runDiscussion } from './DiscussionMode';
 import { getToolsForAgent, getToolCount } from './tools/registry';
 import { runToolLoop } from './tools/executor';
+import { syncEngineState, getEngineState } from './SupabaseClient';
 import type { Agent, Message } from '../types';
 import type { ToolLoopCallbacks } from './tools/executor';
 
@@ -190,7 +191,6 @@ export function createEngine(): {
     syncTimer = setTimeout(async () => {
       if (!currentUserId) return;
       try {
-        const { syncEngineState } = await import('./SupabaseClient');
         const newVersion = await syncEngineState(
           currentUserId,
           state.worldModel as unknown as Record<string, unknown>,
@@ -564,7 +564,6 @@ export function createEngine(): {
     loadFromSupabase: async () => {
       if (!currentUserId) return;
       try {
-        const { getEngineState } = await import('./SupabaseClient');
         const remote = await getEngineState(currentUserId);
         if (!remote) {
           console.log('[Engine] No remote state found, will seed on next persist');

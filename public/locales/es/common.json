@@ -44,5 +44,10 @@
     "markAllRead": "Marcar todo como leído",
     "empty": "Aún no hay notificaciones"
   },
-  "language": "Idioma"
+  "language": "Idioma",
+  "offline": "Estás sin conexión. Viendo conversaciones guardadas.",
+  "pwa": {
+    "installPrompt": "Agrega Kernel a tu pantalla de inicio para la mejor experiencia.",
+    "install": "Instalar"
+  }
 }

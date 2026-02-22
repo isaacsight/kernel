@@ -44,5 +44,10 @@
     "markAllRead": "Merk alle som lest",
     "empty": "Ingen varsler ennå"
   },
-  "language": "Språk"
+  "language": "Språk",
+  "offline": "Du er frakoblet. Viser bufrede samtaler.",
+  "pwa": {
+    "installPrompt": "Legg til Kernel på startskjermen for den beste opplevelsen.",
+    "install": "Installer"
+  }
 }

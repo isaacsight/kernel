@@ -546,19 +546,29 @@ export function useChatEngine(params: UseChatEngineParams) {
     sendMessage(input)
   }
 
-  // Handle briefing → chat navigation via sessionStorage
+  // Handle briefing → chat navigation via sessionStorage polling.
+  // BriefingPage sets sessionStorage and navigates to '/'. We poll for it
+  // because AnimatePresence mode="wait" delays EnginePage mount, making a
+  // single useEffect-on-mount unreliable.
   useEffect(() => {
-    const raw = sessionStorage.getItem('kernel-briefing-context')
-    if (!raw) return
-    sessionStorage.removeItem('kernel-briefing-context')
-    try {
-      const { title, section, content } = JSON.parse(raw) as { title: string; section: string; content: string }
-      handleNewChat()
-      const msg = `I just read the "${section}" section of my briefing "${title}". Here's the content:\n\n${content}\n\nLet's go deeper on this.`
-      setTimeout(() => sendMessageRef.current(msg), 300)
-    } catch { /* invalid JSON, ignore */ }
+    const consume = () => {
+      const raw = sessionStorage.getItem('kernel-briefing-context')
+      if (!raw) return false
+      sessionStorage.removeItem('kernel-briefing-context')
+      try {
+        const { title, section, content } = JSON.parse(raw) as { title: string; section: string; content: string }
+        handleNewChat()
+        const msg = `I just read the "${section}" section of my briefing "${title}". Here's the content:\n\n${content}\n\nLet's go deeper on this.`
+        setTimeout(() => sendMessageRef.current(msg), 300)
+      } catch { /* invalid JSON, ignore */ }
+      return true
+    }
+    if (consume()) return // found immediately on mount
+    const id = setInterval(() => { if (consume()) clearInterval(id) }, 200)
+    const cleanup = setTimeout(() => clearInterval(id), 3000) // stop polling after 3s
+    return () => { clearInterval(id); clearTimeout(cleanup) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [handleNewChat])
 
   // Briefing panel → Chat callback
   const handleBriefingGoDeeper = useCallback((title: string, content: string) => {

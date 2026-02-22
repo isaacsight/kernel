@@ -1,62 +1,68 @@
 {
-    "tagline": "En personlig AI som kommer ihåg dig, tänker med dig och blir bättre över tid.",
-    "placeholder": "Prata med kernel.chat...",
-    "welcomeToPro": "Välkommen till Kernel Pro!",
-    "menu": {
-        "shareConversation": "Dela konversation",
-        "exportMarkdown": "Exportera som Markdown",
-        "goals": "Mål",
-        "workflows": "Arbetsflöden",
-        "scheduledTasks": "Schemalagda uppgifter",
-        "dailyBriefing": "Daglig briefing",
-        "whatKernelKnows": "Vad Kernel vet",
-        "yourStats": "Din statistik",
-        "insights": "Insikter",
-        "upgradeToPro": "Uppgradera till Pro",
-        "manageSubscription": "Hantera prenumeration",
-        "signOut": "Logga ut",
-        "deleteAccount": "Radera konto"
+  "tagline": "En personlig AI som kommer ihåg dig, tänker med dig och blir bättre över tid.",
+  "placeholder": "Prata med kernel.chat...",
+  "welcomeToPro": "Välkommen till Kernel Pro!",
+  "menu": {
+    "shareConversation": "Dela konversation",
+    "exportMarkdown": "Exportera som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbetsflöden",
+    "scheduledTasks": "Schemalagda uppgifter",
+    "dailyBriefing": "Daglig briefing",
+    "whatKernelKnows": "Vad Kernel vet",
+    "yourStats": "Din statistik",
+    "insights": "Insikter",
+    "upgradeToPro": "Uppgradera till Pro",
+    "manageSubscription": "Hantera prenumeration",
+    "signOut": "Logga ut",
+    "deleteAccount": "Radera konto",
+    "notifications": "Aviseringar",
+    "notifInApp": "Aviseringar i appen",
+    "notifBriefings": "Briefing-aviseringar",
+    "notifGoals": "Måluppdateringar",
+    "notifReminders": "Påminnelser",
+    "notifPush": "Push-notiser"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Dagens briefing",
+    "read": "Läs",
+    "discuss": "Diskutera"
+  },
+  "upgrade": {
+    "title": "Du har använt dina {{limit}} gratis meddelanden",
+    "subtitle": "Uppgradera till Kernel Pro för att fortsätta konversationen.",
+    "features": {
+      "unlimitedMessages": "Obegränsat antal meddelanden",
+      "deepResearch": "Djupt forskningsläge",
+      "multiAgent": "Samarbete mellan flera agenter",
+      "multiStep": "Planering av flerstegsuppgifter",
+      "persistentMemory": "Bestående minne mellan sessioner"
     },
-    "admin": "Admin",
-    "pro": "Pro",
-    "briefing": {
-        "todaysBriefing": "Dagens briefing",
-        "read": "Läs",
-        "discuss": "Diskutera"
-    },
-    "upgrade": {
-        "title": "Du har använt dina {{limit}} gratis meddelanden",
-        "subtitle": "Uppgradera till Kernel Pro för att fortsätta konversationen.",
-        "features": {
-            "unlimitedMessages": "Obegränsat antal meddelanden",
-            "deepResearch": "Djupt forskningsläge",
-            "multiAgent": "Samarbete mellan flera agenter",
-            "multiStep": "Planering av flerstegsuppgifter",
-            "persistentMemory": "Bestående minne mellan sessioner"
-        },
-        "button": "Uppgradera till Pro — $20/mån",
-        "buttonLoading": "Öppnar kassan...",
-        "maybeLater": "Kanske senare"
-    },
-    "deleteConfirm": {
-        "title": "Radera ditt konto?",
-        "subtitle": "Detta raderar permanent all din data: konversationer, minne och inställningar. Detta kan inte ångras.",
-        "subtitleWithSub": " Din prenumeration kommer också att avslutas.",
-        "confirm": "Ja, radera mitt konto",
-        "confirming": "Raderar..."
-    },
-    "status": {
-        "assemblingAgents": "Samlar agenter...",
-        "agentsCollaborating": "Agenter samarbetar",
-        "synthesizingPerspectives": "Syntetiserar perspektiv...",
-        "routingToSpecialist": "Routerar till specialist...",
-        "isWorking": "{{agent}} arbetar...",
-        "lowConfidence": "låg tillförlitlighet"
-    },
-    "feedback": {
-        "save": "Spara",
-        "cancel": "Avbryt"
-    },
-    "messagesRemaining": "{{count}} meddelanden kvar",
-    "lastFreeMessage": "Sista gratis meddelandet"
+    "button": "Uppgradera till Pro — $20/mån",
+    "buttonLoading": "Öppnar kassan...",
+    "maybeLater": "Kanske senare"
+  },
+  "deleteConfirm": {
+    "title": "Radera ditt konto?",
+    "subtitle": "Detta raderar permanent all din data: konversationer, minne och inställningar. Detta kan inte ångras.",
+    "subtitleWithSub": " Din prenumeration kommer också att avslutas.",
+    "confirm": "Ja, radera mitt konto",
+    "confirming": "Raderar..."
+  },
+  "status": {
+    "assemblingAgents": "Samlar agenter...",
+    "agentsCollaborating": "Agenter samarbetar",
+    "synthesizingPerspectives": "Syntetiserar perspektiv...",
+    "routingToSpecialist": "Routerar till specialist...",
+    "isWorking": "{{agent}} arbetar...",
+    "lowConfidence": "låg tillförlitlighet"
+  },
+  "feedback": {
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
+  "messagesRemaining": "{{count}} meddelanden kvar",
+  "lastFreeMessage": "Sista gratis meddelandet"
 }

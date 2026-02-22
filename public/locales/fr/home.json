@@ -15,7 +15,13 @@
     "upgradeToPro": "Passer à Pro",
     "manageSubscription": "Gérer l'abonnement",
     "signOut": "Se déconnecter",
-    "deleteAccount": "Supprimer le compte"
+    "deleteAccount": "Supprimer le compte",
+    "notifications": "Notifications",
+    "notifInApp": "Notifications dans l'app",
+    "notifBriefings": "Alertes de briefing",
+    "notifGoals": "Mises à jour des objectifs",
+    "notifReminders": "Rappels",
+    "notifPush": "Notifications push"
   },
   "admin": "Admin",
   "pro": "Pro",

@@ -44,5 +44,10 @@
     "markAllRead": "すべて既読にする",
     "empty": "通知はまだありません"
   },
-  "language": "言語"
+  "language": "言語",
+  "offline": "オフラインです。キャッシュされた会話を表示しています。",
+  "pwa": {
+    "installPrompt": "最高の体験のためにKernelをホーム画面に追加してください。",
+    "install": "インストール"
+  }
 }

@@ -15,7 +15,13 @@
     "upgradeToPro": "Opgrader til Pro",
     "manageSubscription": "Administrer abonnement",
     "signOut": "Log ud",
-    "deleteAccount": "Slet konto"
+    "deleteAccount": "Slet konto",
+    "notifications": "Notifikationer",
+    "notifInApp": "In-app notifikationer",
+    "notifBriefings": "Briefing-advarsler",
+    "notifGoals": "Målopdateringer",
+    "notifReminders": "Påmindelser",
+    "notifPush": "Push-notifikationer"
   },
   "admin": "Admin",
   "pro": "Pro",

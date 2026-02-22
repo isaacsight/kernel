@@ -11,14 +11,14 @@
   "complete": "Completa",
   "run": "Esegui",
   "or": "o",
-  "features": "Funzionalit\u00e0",
+  "features": "Funzionalità",
   "account": "Account",
   "conversation": "Conversazione",
-  "errorGeneric": "Qualcosa \u00e8 andato storto. Riprova.",
+  "errorGeneric": "Qualcosa è andato storto. Riprova.",
   "aria": {
     "close": "Chiudi",
     "notifications": "Notifiche",
-    "toggleDarkMode": "Attiva/disattiva modalit\u00e0 scura",
+    "toggleDarkMode": "Attiva/disattiva modalità scura",
     "scrollToBottom": "Scorri in fondo",
     "conversations": "Conversazioni",
     "newChat": "Nuova chat",
@@ -44,5 +44,10 @@
     "markAllRead": "Segna tutte come lette",
     "empty": "Nessuna notifica"
   },
-  "language": "Lingua"
+  "language": "Lingua",
+  "offline": "Sei offline. Visualizzazione conversazioni memorizzate.",
+  "pwa": {
+    "installPrompt": "Aggiungi Kernel alla schermata principale per la migliore esperienza.",
+    "install": "Installa"
+  }
 }

@@ -15,7 +15,13 @@
     "upgradeToPro": "升級為 Pro",
     "manageSubscription": "管理訂閱",
     "signOut": "登出",
-    "deleteAccount": "刪除帳號"
+    "deleteAccount": "刪除帳號",
+    "notifications": "通知",
+    "notifInApp": "應用程式內通知",
+    "notifBriefings": "簡報提醒",
+    "notifGoals": "目標更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知"
   },
   "admin": "管理員",
   "pro": "Pro",
