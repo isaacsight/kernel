@@ -10490,6 +10490,68 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   Update Banner
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-update-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--rubin-ink);
+    color: var(--rubin-ivory);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    z-index: 10000;
+}
+
+.ka-update-banner-text {
+    opacity: 0.8;
+}
+
+.ka-update-banner-btn {
+    background: transparent;
+    border: 1px solid rgba(250, 249, 246, 0.3);
+    color: var(--rubin-ivory);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: var(--letter-spacing-caps);
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: border-color var(--duration-quick) var(--ease-out),
+                background var(--duration-quick) var(--ease-out);
+}
+
+.ka-update-banner-btn:hover {
+    border-color: rgba(250, 249, 246, 0.6);
+    background: rgba(250, 249, 246, 0.08);
+}
+
+[data-theme="dark"] .ka-update-banner {
+    background: #E4DFD5;
+    color: #1C1A18;
+}
+
+[data-theme="dark"] .ka-update-banner-btn {
+    border-color: rgba(28, 26, 24, 0.3);
+    color: #1C1A18;
+}
+
+[data-theme="dark"] .ka-update-banner-btn:hover {
+    border-color: rgba(28, 26, 24, 0.6);
+    background: rgba(28, 26, 24, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════
    Panel Loading Shimmer
    ═══════════════════════════════════════════════════════════ */
 

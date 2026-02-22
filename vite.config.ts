@@ -11,7 +11,7 @@ export default defineConfig({
             strategies: 'injectManifest',
             srcDir: 'src',
             filename: 'sw.ts',
-            registerType: 'autoUpdate',
+            registerType: 'prompt',
             injectManifest: {
                 // Only precache the HTML shell + static assets — NOT JS/CSS chunks.
                 // JS chunks have content-hashed filenames that change every build.

@@ -97,12 +97,11 @@ self.addEventListener('notificationclick', (event) => {
   )
 })
 
-// Skip waiting + claim clients immediately
+// Allow the client to trigger activation via SKIP_WAITING message
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }
 })
 
-self.skipWaiting()
 self.clients.claim()
