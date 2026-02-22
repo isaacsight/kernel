@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { DURATION, EASE } from '../constants/motion'
 import { useAuthContext } from '../providers/AuthProvider'
 import { getAccessToken } from '../engine/SupabaseClient'
 
@@ -87,7 +88,7 @@ export function SubscriptionGate() {
         className="ka-gate-card"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: DURATION.SLOW, ease: EASE.OUT }}
       >
         <div className="ka-gate-icon">K</div>
         <h1 className="ka-gate-title">{t('subscription.title')}</h1>

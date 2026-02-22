@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Quant — Italic Q with ascending chart accent -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#10B981">Q</text>
+  <!-- Ascending chart line accent -->
+  <polyline points="50,100 55,96 60,98 65,92 70,94" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -20,6 +20,20 @@ interface ConversationDrawerProps {
   isLoading?: boolean
 }
 
+/** Highlight matched query text in a snippet string */
+function highlightMatch(text: string, query: string): React.ReactNode {
+  if (!query || query.trim().length < 2) return text
+  const idx = text.toLowerCase().indexOf(query.toLowerCase())
+  if (idx === -1) return text
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="conv-highlight">{text.slice(idx, idx + query.length)}</mark>
+      {text.slice(idx + query.length)}
+    </>
+  )
+}
+
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
   const now = Date.now()
   const then = new Date(dateStr).getTime()
@@ -168,6 +182,15 @@ export function ConversationDrawer({
                 value={searchQuery}
                 onChange={e => handleSearch(e.target.value)}
               />
+              {searchQuery && (
+                <button className="conv-search-clear" onClick={() => { setSearchQuery(''); setSearchResults([]) }} aria-label={t('close')}>
+                  <IconClose size={12} />
+                </button>
+              )}
+              {searching && <span className="conv-search-spinner" />}
+              {!searching && searchQuery.trim().length >= 2 && (
+                <span className="conv-search-count">{filteredConversations.length}</span>
+              )}
             </div>
 
             <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
@@ -211,7 +234,7 @@ export function ConversationDrawer({
                       <span className="conv-item-title">{conv.title}</span>
                     )}
                     {matchSnippet && !isRenaming && (
-                      <span className="conv-item-snippet">{matchSnippet.content.slice(0, 80)}...</span>
+                      <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
                     )}
                     {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
                   </div>

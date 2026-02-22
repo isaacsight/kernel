@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Curator — Italic C with stacked page accent -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#8B5CF6">C</text>
+  <!-- Stacked pages accent -->
+  <rect x="54" y="90" width="12" height="8" rx="1" fill="none" stroke="#8B5CF6" stroke-width="1.2"/>
+  <rect x="56" y="88" width="12" height="8" rx="1" fill="none" stroke="#8B5CF6" stroke-width="1.2" opacity="0.5"/>
+</svg>

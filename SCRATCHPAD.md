@@ -4,7 +4,22 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-20, continued)
+## Current Session (2026-02-22)
+
+### Accomplished This Session
+
+#### P15: Build Fix + P16–P18 Platform Enhancements
+- **Build fix**: Removed phantom `./memory` and `./mcp` exports from `tools/index.ts` (introduced in `2a002b3`)
+- **Conversation search enhancements**: Highlighted match text in search snippets (`<mark>` + `.conv-highlight`), added search result count badge, clear button, loading spinner. Dark mode support.
+- **Onboarding flow redesign**: Refreshed with Rubin design language — literary serif titles (italic, 1.6rem), pill-shaped active dots, transparent bordered CTA buttons (uppercase mono), refined interest picker and tier cards. Full dark mode overrides.
+- **Animation token system**: Replaced hardcoded durations in LoginGate, Layout, SubscriptionGate, KernelAgentObserver with `DURATION.*`, `EASE.*`, `TRANSITION.*` from `constants/motion.ts`. 5 components migrated.
+- **New specialist emblems**: Created 7 SVG emblems matching existing style (italic serif letter in outlined circle with unique accent) for aesthete, guardian, curator, strategist, infrastructure, quant, investigator. Wired `emblem` paths into `specialists.ts`.
+- **Test coverage**: Added 4 new test files (TaskPlanner, SwarmOrchestrator, ClaudeClient, specialists). 292 tests passing (was 234).
+- Build: PASS (510KB precache, 9.6s). Tests: 292/292 PASS.
+
+---
+
+## Previous Session (2026-02-20, continued)
 
 ### Accomplished This Session
 
@@ -121,7 +136,13 @@ Full 5-phase design overhaul committing to the literary-minimalist direction.
 - **P12: Design overhaul** — DONE ("The Rubin Evolution" — tokens, dark mode, panels, chat, home)
 - **P13: Platform polish** — DONE (icons, accessibility, code-splitting, tests, perf audit)
 - **P14: Visual identity audit** — DONE (indigo→amethyst, spacing tokens, dark mode vars, Tailwind removal, radius tokens, optical kerning, fluid spacing)
-- **Next candidates**: Onboarding flow redesign, conversation search, animation token system
+- **P15: Build fix** — DONE (phantom exports removed)
+- **P16: Conversation search** — DONE (highlights, count badge, clear button, spinner)
+- **P17: Onboarding redesign** — DONE (Rubin design language, dark mode)
+- **P18: Animation token system** — DONE (5 components migrated to motion constants)
+- **P19: New specialist emblems** — DONE (7 SVG emblems + wired into specialists.ts)
+- **P20: Test coverage** — DONE (292 tests, +58 from 234)
+- **Next candidates**: Keyboard shortcuts (Cmd+K search), conversation export, agent memory UI, bundle splitting (528KB main chunk)
 
 ## Key Decisions Made
 

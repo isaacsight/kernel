@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { DURATION, EASE, TRANSITION } from '../constants/motion'
 import { useAuthContext } from '../providers/AuthProvider'
 
 export function LoginGate() {
@@ -58,7 +59,7 @@ export function LoginGate() {
         className="landing-hero"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: DURATION.HERO }}
       >
         <img className="landing-hero-art" src={`${import.meta.env.BASE_URL}concepts/hero-darkmode.svg`} alt="" aria-hidden="true" />
         <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
@@ -77,7 +78,7 @@ export function LoginGate() {
         className="landing-features"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        transition={{ duration: DURATION.DRAMATIC, delay: 0.2, ease: EASE.OUT }}
       >
         <div className="landing-feature">
           <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
@@ -101,7 +102,7 @@ export function LoginGate() {
         className="landing-pricing"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: DURATION.DRAMATIC, delay: 0.4, ease: EASE.OUT }}
       >
         <div className="landing-plan">
           <h3>{t('login.freePlan')}</h3>
@@ -143,7 +144,7 @@ export function LoginGate() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.3 }}
+              transition={TRANSITION.CARD}
             >
               <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
               <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>

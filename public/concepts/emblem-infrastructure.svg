@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Infrastructure — Italic I with circuit node accent -->
+  <circle cx="60" cy="60" r="56" fill="#FAF9F6" stroke="#D4C5A9" stroke-width="1.5"/>
+  <text x="60" y="74" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="56" font-weight="400" fill="#3B82F6">I</text>
+  <!-- Circuit node accent -->
+  <circle cx="60" cy="95" r="3" fill="none" stroke="#3B82F6" stroke-width="1.5"/>
+  <line x1="52" y1="95" x2="57" y2="95" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="63" y1="95" x2="68" y2="95" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

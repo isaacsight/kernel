@@ -169,6 +169,7 @@ FORMAT:
     id: 'aesthete',
     name: 'Aesthete',
     icon: '✨',
+    emblem: 'concepts/emblem-aesthete.svg',
     color: '#F472B6',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -192,6 +193,7 @@ FORMAT:
     id: 'guardian',
     name: 'Guardian',
     icon: '🛡️',
+    emblem: 'concepts/emblem-guardian.svg',
     color: '#10B981',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -215,6 +217,7 @@ FORMAT:
     id: 'curator',
     name: 'Curator',
     icon: '📚',
+    emblem: 'concepts/emblem-curator.svg',
     color: '#8B5CF6',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -238,6 +241,7 @@ FORMAT:
     id: 'strategist',
     name: 'Strategist',
     icon: '♟️',
+    emblem: 'concepts/emblem-strategist.svg',
     color: '#F59E0B',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -261,6 +265,7 @@ FORMAT:
     id: 'infrastructure',
     name: 'Infrastructure',
     icon: '🏢',
+    emblem: 'concepts/emblem-infrastructure.svg',
     color: '#3B82F6',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -284,6 +289,7 @@ FORMAT:
     id: 'quant',
     name: 'Quant',
     icon: '📈',
+    emblem: 'concepts/emblem-quant.svg',
     color: '#10B981',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
@@ -307,6 +313,7 @@ FORMAT:
     id: 'investigator',
     name: 'Investigator',
     icon: '🔍',
+    emblem: 'concepts/emblem-investigator.svg',
     color: '#6366F1',
     systemPrompt: `${PERSONALITY_PREAMBLE}
 
