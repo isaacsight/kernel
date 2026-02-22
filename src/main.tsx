@@ -6,6 +6,7 @@ import posthog from 'posthog-js'
 import { router } from './router'
 import { AuthProvider } from './providers/AuthProvider'
 import { KernelAgentProvider } from './components/kernel-agent'
+import { KernelLoading } from './components/KernelLoading'
 import { supabase } from './engine/SupabaseClient'
 import './i18n'
 import './index.css'
@@ -124,7 +125,7 @@ if ('serviceWorker' in navigator && /iPhone|iPad|iPod/.test(navigator.userAgent)
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <Suspense fallback={<div className="ka-loading-splash"><div className="ka-loading-logo-placeholder" /></div>}>
+        <Suspense fallback={<KernelLoading />}>
             <AuthProvider>
                 <KernelAgentProvider>
                     <RouterProvider router={router} />
