@@ -14,15 +14,14 @@ export function KernelLoading({ showLogo = false }: { showLogo?: boolean }) {
         />
       )}
       <div className="ka-loading-constellation" aria-hidden="true">
-        {/* Thread lines connecting the drops */}
+        {/* Thread lines forming a square */}
         <svg className="ka-loading-thread" viewBox="0 0 120 120">
-          <line x1="60" y1="24" x2="22" y2="54" />
-          <line x1="60" y1="24" x2="98" y2="54" />
-          <line x1="22" y1="54" x2="36" y2="86" />
-          <line x1="98" y1="54" x2="84" y2="86" />
+          <line x1="30" y1="30" x2="90" y2="30" />
+          <line x1="90" y1="30" x2="90" y2="90" />
+          <line x1="90" y1="90" x2="30" y2="90" />
+          <line x1="30" y1="90" x2="30" y2="30" />
         </svg>
-        {/* Ink drops */}
-        <span className="ka-loading-drop" />
+        {/* Ink drops — four corners */}
         <span className="ka-loading-drop" />
         <span className="ka-loading-drop" />
         <span className="ka-loading-drop" />
