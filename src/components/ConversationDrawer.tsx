@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { SPRING, DURATION } from '../constants/motion'
-import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare } from './KernelIcons'
+import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
@@ -17,6 +17,7 @@ interface ConversationDrawerProps {
   onDelete: (id: string) => void
   onRename?: (id: string, title: string) => void
   onShare?: (id: string) => void
+  onImport?: () => void
   isLoading?: boolean
   autoFocusSearch?: boolean
 }
@@ -45,6 +46,7 @@ export function ConversationDrawer({
   onDelete,
   onRename,
   onShare,
+  onImport,
   isLoading,
   autoFocusSearch,
 }: ConversationDrawerProps) {
@@ -182,10 +184,17 @@ export function ConversationDrawer({
               />
             </div>
 
-            <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
-              <IconPlus size={16} />
-              {t('conversations.newChat')}
-            </button>
+            <div className="conv-action-row">
+              <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
+                <IconPlus size={16} />
+                {t('conversations.newChat')}
+              </button>
+              {onImport && (
+                <button className="conv-import-btn" onClick={() => { onImport(); onClose(); }} aria-label="Import conversation">
+                  <IconDownload size={14} />
+                </button>
+              )}
+            </div>
 
             <div className="conv-list">
               {isLoading && conversations.length === 0 && (

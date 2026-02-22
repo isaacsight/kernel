@@ -18,7 +18,7 @@ import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
-import { ACCEPTED_FILES, downloadFile, EventFeed } from '../components/ChatHelpers'
+import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile } from '../components/ChatHelpers'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useToast } from '../hooks/useToast'
 import { useScrollTracking } from '../hooks/useScrollTracking'
@@ -44,6 +44,7 @@ const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasks
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
+const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 
@@ -137,6 +138,7 @@ function EngineChat() {
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   useEffect(() => {
@@ -480,6 +482,7 @@ function EngineChat() {
             msgActions.setShowShareModal(true)
           }, 250)
         }}
+        onImport={() => setShowImportModal(true)}
         isLoading={convs.convsLoading}
       />
 
@@ -780,8 +783,8 @@ function EngineChat() {
       {fileAttachments.attachedFiles.length > 0 && (
         <div className="ka-file-chips">
           {fileAttachments.attachedFiles.map((f, i) => (
-            <span key={i} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}`}>
-              <IconAttach size={12} />
+            <span key={i} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}${isAudioFile(f) ? ' ka-file-chip--audio' : ''}`}>
+              {isAudioFile(f) ? <IconMic size={12} /> : <IconAttach size={12} />}
               <span className="ka-file-chip-name">{f.name}</span>
               <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>
               {!isStreaming && (
@@ -825,6 +828,23 @@ function EngineChat() {
               onClose={() => msgActions.setShowShareModal(false)}
               onToast={showToast}
               onNativeShare={msgActions.handleNativeShare}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      {/* Import Conversation Modal */}
+      <AnimatePresence>
+        {showImportModal && user && (
+          <Suspense fallback={null}>
+            <ImportConversationModal
+              userId={user.id}
+              onClose={() => setShowImportModal(false)}
+              onToast={showToast}
+              onImported={(convId) => {
+                convs.switchConversation(convId)
+                convs.loadConversations()
+              }}
             />
           </Suspense>
         )}

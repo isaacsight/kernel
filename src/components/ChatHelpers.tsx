@@ -5,11 +5,14 @@ import { getAccessToken } from '../engine/SupabaseClient'
 
 export const TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
 export const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md'
+export const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.m4a', '.ogg', '.webm', '.flac']
+export const ACCEPTED_FILES = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.md,.mp3,.wav,.m4a,.ogg,.webm,.flac'
 
 const EXT_TO_MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
   '.gif': 'image/gif', '.webp': 'image/webp', '.pdf': 'application/pdf',
+  '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.m4a': 'audio/mp4',
+  '.ogg': 'audio/ogg', '.webm': 'audio/webm', '.flac': 'audio/flac',
 }
 
 export function getMediaType(file: File): string {
@@ -30,16 +33,23 @@ export function isPdfFile(file: File): boolean {
   return ext === '.pdf'
 }
 
+export function isAudioFile(file: File): boolean {
+  if (file.type && file.type.startsWith('audio/')) return true
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+  return AUDIO_EXTENSIONS.includes(ext)
+}
+
 // ─── File size validation ─────────────────────────────────
 
 interface FileSizeLimit {
   images: number  // bytes
   pdfs: number    // bytes
   text: number    // bytes
+  audio: number   // bytes
 }
 
-const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024 }
-const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024 }
+const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024, audio: 2 * 1024 * 1024 }
+const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024, audio: 25 * 1024 * 1024 }
 
 export function validateFileSize(file: File, isPro: boolean): string | null {
   const limits = isPro ? PRO_LIMITS : FREE_LIMITS
@@ -48,6 +58,9 @@ export function validateFileSize(file: File, isPro: boolean): string | null {
   }
   if (isPdfFile(file) && file.size > limits.pdfs) {
     return `PDF too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.pdfs / 1048576).toFixed(0)}MB.`
+  }
+  if (isAudioFile(file) && file.size > limits.audio) {
+    return `Audio too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.audio / 1048576).toFixed(0)}MB.`
   }
   if (file.size > limits.text) {
     return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.text / 1048576).toFixed(0)}MB.`

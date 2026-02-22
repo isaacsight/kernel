@@ -30,9 +30,11 @@ import {
 import { getCollectiveInsights } from '../engine/SupabaseClient'
 import {
   TEXT_EXTENSIONS, LINK_REGEX,
-  getMediaType, isImageFile, isPdfFile, readFileAsText,
+  getMediaType, isImageFile, isPdfFile, isAudioFile, readFileAsText,
   serializeState, fetchUrlContent,
 } from '../components/ChatHelpers'
+import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
+import { transcribeAudio } from '../engine/transcribe'
 
 export interface ChatMessage {
   id: string
@@ -101,7 +103,7 @@ export function useChatEngine(params: UseChatEngineParams) {
 
   // Refs
   const latestKernelContentRef = useRef<string>('')
-  const sendMessageRef = useRef<(content: string) => Promise<void>>(async () => {})
+  const sendMessageRef = useRef<(content: string) => Promise<void>>(async () => { })
   const streamAbortRef = useRef<AbortController | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -177,7 +179,7 @@ export function useChatEngine(params: UseChatEngineParams) {
 
   // Load collective insights
   useEffect(() => {
-    getCollectiveInsights(10).then(setCollectiveInsights).catch(() => {})
+    getCollectiveInsights(10).then(setCollectiveInsights).catch(() => { })
   }, [])
 
   // Load today's briefing
@@ -268,6 +270,28 @@ export function useChatEngine(params: UseChatEngineParams) {
     const urls = trimmed.match(LINK_REGEX)
     if (urls && urls.length > 0) {
       const fetches = await Promise.all(urls.slice(0, 3).map(async (url) => {
+        // Detect platform share links (ChatGPT, Claude, Gemini)
+        if (isPlatformShareLink(url)) {
+          try {
+            const result = await importConversation(url)
+            if (result.messages.length > 0) {
+              return formatImportedContext(result, '')
+            }
+            // Import returned 0 messages — these platforms load data client-side.
+            // Return a helpful context note instead of raw HTML scaffold.
+            const platform = result.platform === 'chatgpt' ? 'ChatGPT'
+              : result.platform === 'claude' ? 'Claude'
+              : result.platform === 'gemini' ? 'Gemini' : 'an AI platform'
+            const titleNote = result.title && result.title !== 'Imported Conversation'
+              ? ` titled "${result.title}"` : ''
+            return `[The user shared a ${platform} conversation link${titleNote}: ${url}]\n[Note: The conversation content could not be extracted because ${platform} loads it client-side. Ask the user to paste the key parts of the conversation directly.]\n`
+          } catch (err) {
+            console.warn('[Import] Failed to import conversation:', err)
+            const platform = isPlatformShareLink(url) ? detectPlatformUrl(url) : null
+            const name = platform === 'chatgpt' ? 'ChatGPT' : platform === 'claude' ? 'Claude' : platform === 'gemini' ? 'Gemini' : 'an AI platform'
+            return `[The user shared a ${name} conversation link: ${url}]\n[Note: Could not fetch the conversation. Ask the user to paste the relevant parts directly.]\n`
+          }
+        }
         const text = await fetchUrlContent(url)
         return text ? `[URL: ${url}]\n${text}\n` : ''
       }))
@@ -286,7 +310,16 @@ export function useChatEngine(params: UseChatEngineParams) {
       for (const file of filesToSend) {
         const ext = '.' + file.name.split('.').pop()?.toLowerCase()
 
-        if (TEXT_EXTENSIONS.includes(ext)) {
+        if (isAudioFile(file)) {
+          try {
+            const result = await transcribeAudio(file)
+            const duration = result.duration_seconds ? ` (${Math.round(result.duration_seconds)}s)` : ''
+            textPrefix += `[Audio transcription: ${file.name}${duration}]\n${result.text}\n\n`
+          } catch (err) {
+            console.warn('[Transcribe] Failed:', err)
+            textPrefix += `[Audio: ${file.name} — transcription failed]\n\n`
+          }
+        } else if (TEXT_EXTENSIONS.includes(ext)) {
           let text = await readFileAsText(file)
           const MAX_TEXT_CHARS = 30000
           if (text.length > MAX_TEXT_CHARS) {
@@ -563,11 +596,12 @@ export function useChatEngine(params: UseChatEngineParams) {
       try {
         const { title, section, content } = JSON.parse(raw) as { title: string; section: string; content: string }
         const msg = `I just read the "${section}" section of my briefing "${title}". Here's the content:\n\n${content}\n\nLet's go deeper on this.`
-        sendMessageRef.current(msg)
+        handleNewChat()
+        setTimeout(() => sendMessageRef.current(msg), 150)
       } catch { /* invalid JSON, ignore */ }
-    }, 350)
+    }, 600)
     return () => clearTimeout(timer)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Briefing panel → Chat callback
@@ -575,7 +609,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     handleNewChat()
     const msg = `I just read my briefing "${title}". Here's a summary:\n\n${content.slice(0, 800)}\n\nLet's discuss this.`
     setTimeout(() => sendMessageRef.current(msg), 300)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleNewChat])
 
   // Briefing panel → Goal callback
