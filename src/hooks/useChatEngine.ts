@@ -546,29 +546,29 @@ export function useChatEngine(params: UseChatEngineParams) {
     sendMessage(input)
   }
 
-  // Handle briefing → chat navigation via sessionStorage polling.
-  // BriefingPage sets sessionStorage and navigates to '/'. We poll for it
-  // because AnimatePresence mode="wait" delays EnginePage mount, making a
-  // single useEffect-on-mount unreliable.
+  // Briefing page → chat: BriefingPage stores context in sessionStorage then
+  // navigates to '/'. AnimatePresence mode="wait" causes a transient mount of
+  // EnginePage inside the exiting wrapper (because Outlet re-renders for the new
+  // route). That transient mount unmounts after ~200ms when the exit animation
+  // completes, then the real mount happens. We use a 350ms delay so the transient
+  // mount's cleanup cancels the timer, preserving sessionStorage for the real mount.
+  const briefingConsumedRef = useRef(false)
   useEffect(() => {
-    const consume = () => {
+    if (briefingConsumedRef.current) return
+    const timer = setTimeout(() => {
       const raw = sessionStorage.getItem('kernel-briefing-context')
-      if (!raw) return false
+      if (!raw) return
+      briefingConsumedRef.current = true
       sessionStorage.removeItem('kernel-briefing-context')
       try {
         const { title, section, content } = JSON.parse(raw) as { title: string; section: string; content: string }
-        handleNewChat()
         const msg = `I just read the "${section}" section of my briefing "${title}". Here's the content:\n\n${content}\n\nLet's go deeper on this.`
-        setTimeout(() => sendMessageRef.current(msg), 300)
+        sendMessageRef.current(msg)
       } catch { /* invalid JSON, ignore */ }
-      return true
-    }
-    if (consume()) return // found immediately on mount
-    const id = setInterval(() => { if (consume()) clearInterval(id) }, 200)
-    const cleanup = setTimeout(() => clearInterval(id), 3000) // stop polling after 3s
-    return () => { clearInterval(id); clearTimeout(cleanup) }
+    }, 350)
+    return () => clearTimeout(timer)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleNewChat])
+  }, [])
 
   // Briefing panel → Chat callback
   const handleBriefingGoDeeper = useCallback((title: string, content: string) => {
