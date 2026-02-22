@@ -4234,6 +4234,434 @@ h4 {
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* ─── Portability Panel ────────────────────────────────── */
+.ka-portability-panel {
+    padding: 1.25rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .ka-portability-panel {
+        padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+.ka-port-desc {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--rubin-slate, #1F1E1D);
+    opacity: 0.7;
+    margin-bottom: 1.25rem;
+}
+
+.ka-port-method {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-md, 10px);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ka-port-method-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+
+.ka-port-method-desc {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.ka-port-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm, 6px);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-port-upload-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.ka-port-platforms {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+}
+
+.ka-port-platform {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(107, 91, 149, 0.08);
+    border-radius: 100px;
+    color: var(--rubin-slate, #1F1E1D);
+    opacity: 0.7;
+}
+
+.ka-port-link-input {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.ka-port-link-input input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-sm, 6px);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    background: transparent;
+    color: var(--rubin-slate, #1F1E1D);
+    outline: none;
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.ka-port-link-input input:focus {
+    border-color: rgba(107, 91, 149, 0.4);
+}
+
+.ka-port-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-sm, 6px);
+    background: var(--rubin-slate, #1F1E1D);
+    color: var(--rubin-ivory, #FAF9F6);
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-port-link-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.ka-port-guides {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ka-port-guides-title {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+    margin-bottom: 0.75rem;
+}
+
+.ka-port-guide {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    padding: 0.2rem 0;
+}
+
+.ka-port-guide strong {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    min-width: 60px;
+    opacity: 0.7;
+}
+
+.ka-port-guide span {
+    opacity: 0.6;
+}
+
+/* Dashboard */
+.ka-port-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.ka-port-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-md, 10px);
+}
+
+.ka-port-stat-number {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.ka-port-stat-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.5;
+    margin-top: 0.25rem;
+}
+
+.ka-port-memory,
+.ka-port-kg {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-md, 10px);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ka-port-memory-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+}
+
+.ka-port-memory-item {
+    margin-bottom: 0.6rem;
+}
+
+.ka-port-memory-label {
+    display: block;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.45;
+    margin-bottom: 0.3rem;
+}
+
+.ka-port-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.ka-port-tag {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(107, 91, 149, 0.08);
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.ka-port-fact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ka-port-fact-list li {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 0.15rem 0;
+    padding-left: 0.75rem;
+    position: relative;
+    opacity: 0.75;
+}
+
+.ka-port-fact-list li::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    opacity: 0.4;
+}
+
+.ka-port-entity-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.ka-port-entity-type {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+}
+
+.ka-port-entity-type-name {
+    text-transform: capitalize;
+    opacity: 0.6;
+}
+
+.ka-port-entity-type-count {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.1rem 0.35rem;
+    border-radius: 100px;
+    font-size: 0.65rem;
+}
+
+.ka-port-entities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.ka-port-entity {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radius-sm, 6px);
+}
+
+.ka-port-entity--more {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.ka-port-empty {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+/* Export */
+.ka-port-export-preview {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-md, 10px);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+}
+
+.ka-port-export-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.ka-port-export-item:last-child {
+    border-bottom: none;
+}
+
+.ka-port-export-count {
+    margin-left: auto;
+    opacity: 0.5;
+    font-size: 0.72rem;
+}
+
+.ka-port-export-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: var(--radius-md, 10px);
+    background: var(--rubin-slate, #1F1E1D);
+    color: var(--rubin-ivory, #FAF9F6);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-port-export-btn:hover {
+    opacity: 0.85;
+}
+
+/* Dark mode */
+[data-theme="dark"] .ka-port-method {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .ka-port-upload-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .ka-port-platform {
+    background: rgba(107, 91, 149, 0.15);
+}
+
+[data-theme="dark"] .ka-port-link-input input {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .ka-port-link-btn {
+    background: var(--rubin-ivory, #FAF9F6);
+    color: var(--rubin-slate, #1F1E1D);
+}
+
+[data-theme="dark"] .ka-port-stat {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .ka-port-memory,
+[data-theme="dark"] .ka-port-kg {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .ka-port-tag {
+    background: rgba(107, 91, 149, 0.2);
+}
+
+[data-theme="dark"] .ka-port-entity-type-count {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .ka-port-entity {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .ka-port-export-preview {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .ka-port-export-item {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .ka-port-export-btn {
+    background: var(--rubin-ivory, #FAF9F6);
+    color: var(--rubin-slate, #1F1E1D);
+}
+
+[data-theme="dark"] .ka-port-guides {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
 /* ─── Briefing Panel ───────────────────────────────────── */
 .ka-brief-panel {
     padding: 20px 16px;

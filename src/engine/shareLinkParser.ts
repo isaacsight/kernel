@@ -115,7 +115,24 @@ function parseChatGPTShareHtml(html: string): ParsedConversation | null {
     } catch { /* fall through */ }
   }
 
-  // Strategy 3: Parse visible text from rendered HTML
+  // Strategy 3: Look for conversation-turn or article blocks in SSR HTML
+  const turnBlocks = html.match(/<article[^>]*data-testid="conversation-turn[^"]*"[\s\S]*?<\/article>/gi)
+    || html.match(/<div[^>]*data-testid="conversation-turn[^"]*"[\s\S]*?(?=<div[^>]*data-testid="conversation-turn|$)/gi)
+  if (turnBlocks && turnBlocks.length > 0) {
+    for (const block of turnBlocks) {
+      const roleMatch = block.match(/data-message-author-role="(user|assistant)"/)
+      if (roleMatch) {
+        const content = stripTags(block).trim()
+        if (content) messages.push({ role: roleMatch[1], content })
+      }
+    }
+    if (messages.length > 0) {
+      const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i)
+      return { source: 'chatgpt', title: titleMatch?.[1]?.trim() || 'ChatGPT Conversation', messages }
+    }
+  }
+
+  // Strategy 4: Parse visible text from rendered HTML
   return parseChatFromRenderedHtml(html, 'chatgpt')
 }
 
@@ -325,43 +342,34 @@ function parseFromPlainText(
 
   const messages: { role: string; content: string }[] = []
 
-  // ChatGPT share pages often have "You said:" labels
-  const youSaidPattern = /You said:\s*([\s\S]*?)(?=ChatGPT said:|You said:|$)/gi
-  const gptSaidPattern = /ChatGPT said:\s*([\s\S]*?)(?=You said:|ChatGPT said:|$)/gi
+  // ChatGPT share pages have "You said:" / "ChatGPT said:" labels
+  const markerPatterns: [RegExp, string][] = [
+    [/You said:\s*/gi, 'user'],
+    [/ChatGPT said:\s*/gi, 'assistant'],
+    [/Human:\s*/gi, 'user'],
+    [/Assistant:\s*/gi, 'assistant'],
+    [/Claude:\s*/gi, 'assistant'],
+    [/User:\s*/gi, 'user'],
+  ]
 
-  const userMsgs = [...text.matchAll(youSaidPattern)]
-  const assistantMsgs = [...text.matchAll(gptSaidPattern)]
-
-  if (userMsgs.length > 0 || assistantMsgs.length > 0) {
-    // Reconstruct by finding all markers and sorting by position
-    const markers: { pos: number; role: string; content: string }[] = []
-    for (const m of userMsgs) {
-      markers.push({ pos: m.index!, role: 'user', content: m[1].trim() })
-    }
-    for (const m of assistantMsgs) {
-      markers.push({ pos: m.index!, role: 'assistant', content: m[1].trim() })
-    }
-    markers.sort((a, b) => a.pos - b.pos)
-    for (const m of markers) {
-      if (m.content) messages.push({ role: m.role, content: m.content })
+  // Find all markers with their positions
+  const markers: { pos: number; role: string }[] = []
+  for (const [pattern, role] of markerPatterns) {
+    let match
+    while ((match = pattern.exec(text)) !== null) {
+      markers.push({ pos: match.index + match[0].length, role })
     }
   }
 
-  // Claude share pages may show "Human:" / "Assistant:" labels
-  if (messages.length === 0) {
-    const humanPattern = /(?:^|\n)\s*(?:Human|User|You):\s*([\s\S]*?)(?=\n\s*(?:Assistant|Claude|AI):|\n\s*(?:Human|User|You):|$)/gi
-    const assistPattern = /(?:^|\n)\s*(?:Assistant|Claude|AI):\s*([\s\S]*?)(?=\n\s*(?:Human|User|You):|\n\s*(?:Assistant|Claude|AI):|$)/gi
-
-    const hMsgs = [...text.matchAll(humanPattern)]
-    const aMsgs = [...text.matchAll(assistPattern)]
-
-    if (hMsgs.length > 0 || aMsgs.length > 0) {
-      const markers: { pos: number; role: string; content: string }[] = []
-      for (const m of hMsgs) markers.push({ pos: m.index!, role: 'user', content: m[1].trim() })
-      for (const m of aMsgs) markers.push({ pos: m.index!, role: 'assistant', content: m[1].trim() })
-      markers.sort((a, b) => a.pos - b.pos)
-      for (const m of markers) {
-        if (m.content) messages.push({ role: m.role, content: m.content })
+  if (markers.length >= 2) {
+    markers.sort((a, b) => a.pos - b.pos)
+    for (let i = 0; i < markers.length; i++) {
+      const start = markers[i].pos
+      const end = i + 1 < markers.length ? markers[i + 1].pos - 30 : text.length // rough end before next marker label
+      const content = text.slice(start, end).replace(/^[\s\n]+|[\s\n]+$/g, '')
+        .replace(/(You said:|ChatGPT said:|Human:|Assistant:|Claude:|User:)\s*$/i, '').trim()
+      if (content) {
+        messages.push({ role: markers[i].role, content })
       }
     }
   }
@@ -408,24 +416,35 @@ export async function parseShareLink(url: string): Promise<ParsedConversation | 
     let html = await fetchUrlRaw(url)
 
     if (!html || html.length < 100) {
-      // Fallback to text-only fetch
+      // Fallback to text-only fetch (edge function may not support raw yet)
       const text = await fetchUrlContent(url)
-      if (!text) return null
+      if (!text) {
+        console.warn(`[ShareLinkParser] Could not fetch content from ${platform} share link`)
+        return null
+      }
       // Wrap text in a minimal HTML structure for the parsers
       html = `<html><body>${text}</body></html>`
     }
 
+    let result: ParsedConversation | null = null
     switch (platform) {
       case 'chatgpt':
-        return parseChatGPTShareHtml(html)
+        result = parseChatGPTShareHtml(html)
+        break
       case 'claude':
-        return parseClaudeShareHtml(html)
+        result = parseClaudeShareHtml(html)
+        break
       case 'gemini':
-        return parseGeminiShareHtml(html)
-      default:
-        return null
+        result = parseGeminiShareHtml(html)
+        break
     }
-  } catch {
+
+    if (!result) {
+      console.warn(`[ShareLinkParser] Could not parse ${platform} share page (${html.length} chars fetched)`)
+    }
+    return result
+  } catch (err) {
+    console.warn('[ShareLinkParser] Error parsing share link:', err)
     return null
   }
 }

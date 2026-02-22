@@ -16,6 +16,7 @@ export function usePanelManager(callbacks: {
   const [showScheduledPanel, setShowScheduledPanel] = useState(false)
   const [showBriefingPanel, setShowBriefingPanel] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
+  const [showPortabilityPanel, setShowPortabilityPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -28,6 +29,7 @@ export function usePanelManager(callbacks: {
     setShowScheduledPanel(false)
     setShowBriefingPanel(false)
     setShowInsightsPanel(false)
+    setShowPortabilityPanel(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
@@ -40,6 +42,7 @@ export function usePanelManager(callbacks: {
     if (except !== 'scheduled') setShowScheduledPanel(false)
     if (except !== 'briefings') setShowBriefingPanel(false)
     if (except !== 'insights') setShowInsightsPanel(false)
+    if (except !== 'portability') setShowPortabilityPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
   }, [callbacks])
@@ -97,6 +100,10 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('insights')
         setShowInsightsPanel(true)
         break
+      case 'portability':
+        closeOtherPanels('portability')
+        setShowPortabilityPanel(true)
+        break
       case 'upgrade':
         callbacks.handleUpgrade()
         break
@@ -120,6 +127,7 @@ export function usePanelManager(callbacks: {
     showScheduledPanel, setShowScheduledPanel,
     showBriefingPanel, setShowBriefingPanel,
     showInsightsPanel, setShowInsightsPanel,
+    showPortabilityPanel, setShowPortabilityPanel,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,

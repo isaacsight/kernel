@@ -32,6 +32,7 @@ import { useChatEngine } from '../hooks/useChatEngine'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 import { lazyRetry } from '../utils/lazyRetry'
+import { parseConversationFile, mineConversations, exportKernelData, downloadKernelExport } from '../engine/conversationImport'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -43,6 +44,7 @@ const WorkflowsPanel = lazyRetry(() => import('../components/WorkflowsPanel').th
 const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
+const PortabilityPanel = lazyRetry(() => import('../components/PortabilityPanel').then(m => ({ default: m.PortabilityPanel })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ConversationPicker = lazyRetry(() => import('../components/ConversationPicker').then(m => ({ default: m.ConversationPicker })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
@@ -460,6 +462,64 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {panels.showPortabilityPanel && user && (
+          <BottomSheet onClose={() => { panels.setShowPortabilityPanel(false); panels.setActiveTab('home') }}>
+            <Suspense fallback={<PanelShimmer />}>
+              <PortabilityPanel
+                userId={user.id}
+                userMemory={chatEngine.userMemory}
+                kgEntities={chatEngine.kgEntities}
+                conversationCount={convs.conversations.length}
+                onImportFiles={async (files) => {
+                  for (const file of files) {
+                    try {
+                      const conversations = await parseConversationFile(file)
+                      if (conversations.length > 0) {
+                        mineConversations(user.id, conversations).catch(() => {})
+                        showToast(`Imported ${conversations.length} conversation${conversations.length > 1 ? 's' : ''} from ${file.name}`)
+                      } else {
+                        showToast('No conversations found in file')
+                      }
+                    } catch {
+                      showToast('Could not parse file')
+                    }
+                  }
+                }}
+                onPasteShareLink={(url) => {
+                  panels.setShowPortabilityPanel(false)
+                  panels.setActiveTab('home')
+                  chatEngine.sendMessage(url)
+                }}
+                onExport={async () => {
+                  try {
+                    const data = await exportKernelData(
+                      user.id,
+                      convs.conversations.map(c => ({
+                        id: c.id,
+                        title: c.title,
+                        messages: chatEngine.messages.map(m => ({
+                          role: m.role,
+                          content: m.content,
+                          agentName: m.agentName,
+                          timestamp: m.timestamp,
+                        })),
+                      })),
+                    )
+                    downloadKernelExport(data)
+                    showToast('Kernel data exported')
+                  } catch {
+                    showToast('Export failed')
+                  }
+                }}
+                onClose={() => { panels.setShowPortabilityPanel(false); panels.setActiveTab('home') }}
+                onToast={showToast}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
@@ -546,6 +606,10 @@ function EngineChat() {
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('insights'); panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('portability'); panels.closeAllPanels(); panels.setShowPortabilityPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconExport size={16} /> {t('menu.portability')}
+                  {featureDiscovery.isNew('portability') && <span className="ka-feature-dot" />}
                 </button>
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconExport, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 
 const LANGUAGES = [
@@ -36,6 +36,7 @@ export type MoreAction =
   | 'knowledge'
   | 'stats'
   | 'insights'
+  | 'portability'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -55,6 +56,7 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
   { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
   { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
+  { id: 'portability', labelKey: 'menu.portability', icon: IconExport },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
