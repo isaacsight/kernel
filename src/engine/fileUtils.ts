@@ -1,3 +1,37 @@
+// Max raw file size for native PDF document blocks (base64 adds ~33% overhead).
+// Above this, we extract text instead.
+export const PDF_NATIVE_MAX_BYTES = 3.5 * 1024 * 1024
+
+/**
+ * Extract text content from a PDF file using pdf.js.
+ * Dynamically imports pdfjs-dist to avoid bundling it in the main chunk.
+ * Returns concatenated page text with page markers.
+ */
+export async function extractPdfText(file: File): Promise<string> {
+  const pdfjsLib = await import('pdfjs-dist')
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.mjs',
+    import.meta.url,
+  ).toString()
+
+  const buffer = await file.arrayBuffer()
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise
+  const pages: string[] = []
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i)
+    const content = await page.getTextContent()
+    const text = content.items
+      .map((item) => ('str' in item ? item.str : ''))
+      .join(' ')
+    if (text.trim()) {
+      pages.push(`[Page ${i}]\n${text.trim()}`)
+    }
+  }
+
+  return pages.join('\n\n')
+}
+
 // Convert a File to base64 (strips the data URL prefix)
 export function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {

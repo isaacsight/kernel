@@ -25,6 +25,7 @@
         "i18next-browser-languagedetector": "^8.2.1",
         "i18next-http-backend": "^3.0.2",
         "lucide-react": "^0.400.0",
+        "pdfjs-dist": "^5.4.624",
         "posthog-js": "^1.347.2",
         "prismjs": "^1.30.0",
         "react": "^19.0.0",

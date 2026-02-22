@@ -85,11 +85,56 @@ function getFileIcon(ext: string) {
   return <IconFile size={16} aria-hidden="true" />
 }
 
+// ─── CSV detection helper ──────────────────────────────────
+
+/** Check if code content looks like CSV/TSV tabular data */
+function isTabularData(code: string, lang: string): boolean {
+  if (lang === 'csv' || lang === 'tsv') return true
+  const lines = code.trim().split('\n')
+  if (lines.length < 2) return false
+  // Check if first few lines have consistent comma or tab delimiters
+  const delim = lines[0].includes('\t') ? '\t' : ','
+  const headerCols = lines[0].split(delim).length
+  if (headerCols < 2) return false
+  // Verify at least 2 data rows have similar column count
+  let matching = 0
+  for (let i = 1; i < Math.min(lines.length, 5); i++) {
+    const cols = lines[i].split(delim).length
+    if (Math.abs(cols - headerCols) <= 1) matching++
+  }
+  return matching >= 1
+}
+
+function downloadAsCsv(code: string, filename: string) {
+  // If tab-separated, convert to comma-separated
+  const lines = code.trim().split('\n')
+  const isTab = lines[0].includes('\t')
+  const csvContent = isTab
+    ? lines.map(line => line.split('\t').map(cell => {
+        const trimmed = cell.trim()
+        return trimmed.includes(',') || trimmed.includes('"')
+          ? `"${trimmed.replace(/"/g, '""')}"`
+          : trimmed
+      }).join(',')).join('\n')
+    : code
+
+  const baseName = filename.replace(/\.[^.]+$/, '')
+  const csvFilename = `${baseName}.csv`
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = csvFilename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 // ─── Code Block with copy + download ─────────────────────
 
 function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: string; ext: string; filename: string; t: (key: string, opts?: Record<string, unknown>) => string }) {
   const [copied, setCopied] = useState(false)
   const highlighted = useMemo(() => highlightCode(code, lang), [code, lang])
+  const showCsvButton = useMemo(() => isTabularData(code, lang), [code, lang])
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
     setCopied(true)
@@ -104,6 +149,16 @@ function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: strin
             {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}
             {copied ? t('copied') : t('copy')}
           </button>
+          {showCsvButton && (
+            <button
+              className="ka-code-download"
+              onClick={() => downloadAsCsv(code, filename)}
+              aria-label="Download as CSV"
+            >
+              <IconFileSpreadsheet size={13} />
+              .csv
+            </button>
+          )}
           <button
             className="ka-code-download"
             onClick={() => downloadFile(code, filename)}
@@ -136,6 +191,7 @@ function ArtifactCard({ filename, lang, code, ext, title, t }: {
   const [showPreview, setShowPreview] = useState(false)
 
   const canPreview = PREVIEWABLE_EXTS.includes(ext)
+  const showCsvButton = useMemo(() => isTabularData(code, lang), [code, lang])
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
@@ -187,6 +243,12 @@ function ArtifactCard({ filename, lang, code, ext, title, t }: {
           >
             {showPreview ? <IconCode size={13} /> : <IconEye size={13} />}
             {showPreview ? t('code') : t('preview')}
+          </button>
+        )}
+        {showCsvButton && (
+          <button className="ka-artifact-action" onClick={() => downloadAsCsv(code, filename)} aria-label="Download as CSV">
+            <IconFileSpreadsheet size={13} />
+            .csv
           </button>
         )}
         <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`${t('download')} ${filename}`}>

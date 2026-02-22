@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
-import { fileToBase64, compressImage } from '../engine/fileUtils'
+import { fileToBase64, compressImage, extractPdfText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
@@ -300,11 +300,22 @@ export function useChatEngine(params: UseChatEngineParams) {
             source: { type: 'base64', media_type: mediaType, data: base64 },
           })
         } else if (isPdfFile(file)) {
-          const data = await fileToBase64(file)
-          blocks.push({
-            type: 'document',
-            source: { type: 'base64', media_type: 'application/pdf', data },
-          })
+          if (file.size <= PDF_NATIVE_MAX_BYTES) {
+            // Small PDF — send as native document block for Claude's PDF vision
+            const data = await fileToBase64(file)
+            blocks.push({
+              type: 'document',
+              source: { type: 'base64', media_type: 'application/pdf', data },
+            })
+          } else {
+            // Large PDF — extract text client-side to avoid payload limits
+            let text = await extractPdfText(file)
+            const MAX_PDF_TEXT_CHARS = 100000
+            if (text.length > MAX_PDF_TEXT_CHARS) {
+              text = text.slice(0, MAX_PDF_TEXT_CHARS) + `\n\n[... truncated — PDF text was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_PDF_TEXT_CHARS / 1000).toFixed(0)}K]`
+            }
+            textPrefix += `[PDF: ${file.name} — ${(file.size / 1048576).toFixed(1)}MB, text extracted]\n${text}\n\n`
+          }
         } else {
           // Unrecognized file type — read as text fallback
           try {
