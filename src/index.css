@@ -55,8 +55,11 @@
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --duration-instant: 100ms;
     --duration-fast: 150ms;
+    --duration-quick: 200ms;
     --duration-normal: 300ms;
+    --duration-moderate: 400ms;
     --duration-slow: 500ms;
+    --duration-dramatic: 600ms;
 
     /* Spacing Scale */
     --space-xs: 4px;
@@ -1820,7 +1823,7 @@ h4 {
 }
 
 .ka-msg--kernel {
-    animation: ka-ink-appear 0.4s var(--ease-out) both;
+    animation: ka-ink-appear var(--duration-moderate) var(--ease-out) both;
     animation-delay: calc(var(--msg-index, 0) * 60ms);
 }
 
@@ -2602,7 +2605,7 @@ h4 {
 .ka-goal-progress-fill {
     height: 100%;
     background: #22C55E;
-    transition: width 0.3s var(--ease-out);
+    transition: width var(--duration-normal) var(--ease-out);
 }
 
 .ka-goal-details {
@@ -3211,6 +3214,14 @@ h4 {
 .ka-notif-item--unread {
     background: rgba(107, 91, 149, 0.04);
     border-left: 3px solid var(--rubin-primary);
+}
+
+.ka-notif-item--clickable {
+    cursor: pointer;
+}
+
+.ka-notif-item--clickable:hover {
+    background: rgba(107, 91, 149, 0.06);
 }
 
 .ka-notif-item-title {
@@ -5147,7 +5158,7 @@ h4 {
     font-size: 1rem;
     color: var(--rubin-slate);
     outline: none;
-    transition: border-color var(--duration-fast) var(--ease-out), height 0.2s ease-out;
+    transition: border-color var(--duration-fast) var(--ease-out), height var(--duration-quick) var(--ease-out);
     resize: none;
     overflow-y: auto;
     min-height: 48px;
@@ -5232,7 +5243,7 @@ h4 {
     justify-content: center;
     cursor: pointer;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    transition: all var(--duration-quick) var(--ease-out);
 }
 
 .ka-voice-btn:hover {
@@ -5418,7 +5429,7 @@ h4 {
     font-family: var(--font-mono);
     font-size: 0.6rem;
     letter-spacing: 0.04em;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-quick);
 }
 
 .ka-file-chip--sending {
@@ -6177,7 +6188,7 @@ h4 {
     font-size: 0.75rem;
     background: var(--rubin-ivory);
     border: 1px solid var(--rubin-ivory-dark);
-    transition: all 0.3s var(--ease-out);
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .ka-swarm-agent--working {
@@ -6690,7 +6701,7 @@ h4 {
     font-size: 0.85rem;
     letter-spacing: 0.06em;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-quick);
 }
 
 .landing-cta:hover {
@@ -6719,7 +6730,7 @@ h4 {
     padding: 32px 24px;
     border: 1px solid var(--rubin-ivory-dark);
     border-radius: var(--radius-md);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color var(--duration-quick), box-shadow var(--duration-quick);
 }
 
 .landing-feature:hover {
@@ -6842,6 +6853,85 @@ h4 {
 
 .landing-plan-btn:hover {
     opacity: 0.85;
+}
+
+/* PWA Install Banner */
+.ka-pwa-banner {
+    position: fixed;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 440px;
+    width: calc(100% - var(--space-xl) * 2);
+    background: var(--rubin-ivory);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+}
+
+.ka-pwa-banner-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.ka-pwa-banner-text {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    color: var(--rubin-slate);
+    line-height: 1.4;
+}
+
+.ka-pwa-banner-install {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rubin-ivory);
+    background: var(--rubin-primary);
+    border: none;
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-xl);
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-pwa-banner-install:hover {
+    opacity: 0.85;
+}
+
+.ka-pwa-banner-dismiss {
+    background: none;
+    border: none;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    cursor: pointer;
+    padding: var(--space-xs);
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-pwa-banner-dismiss:hover {
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .ka-pwa-banner {
+    background: var(--dark-bg-elevated);
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-pwa-banner-text {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-pwa-banner-dismiss {
+    color: var(--dark-text);
 }
 
 /* Auth overlay */
@@ -8274,6 +8364,29 @@ h4 {
     font-style: italic;
     opacity: 0.35;
     padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.conv-empty-clear {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rubin-primary);
+    background: none;
+    border: 1px solid var(--rubin-primary);
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-lg);
+    cursor: pointer;
+    opacity: 1;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.conv-empty-clear:hover {
+    background: rgba(107, 91, 149, 0.08);
 }
 
 /* ─── Header Buttons ─────────────────────────────────────── */
@@ -8384,7 +8497,7 @@ h4 {
     box-shadow: var(--shadow-lg);
     padding: var(--space-xs);
     z-index: 50;
-    animation: ka-menu-in 0.15s var(--ease-out);
+    animation: ka-menu-in var(--duration-fast) var(--ease-out);
 }
 
 @keyframes ka-menu-in {
@@ -8415,7 +8528,7 @@ h4 {
     color: var(--rubin-slate);
     cursor: pointer;
     text-align: left;
-    transition: background 0.1s;
+    transition: background var(--duration-instant);
 }
 
 .ka-header-menu-item:hover {
@@ -8667,7 +8780,7 @@ h4 {
 }
 
 .ka-kg-chevron {
-    transition: transform 0.2s;
+    transition: transform var(--duration-quick);
 }
 
 .ka-kg-chevron--open {
@@ -8964,7 +9077,7 @@ h4 {
 .stats-bar-fill {
     height: 100%;
     border-radius: var(--radius-xs);
-    transition: width 0.6s var(--ease-out);
+    transition: width var(--duration-dramatic) var(--ease-out);
 }
 
 .stats-agent-pct {
@@ -9023,7 +9136,7 @@ h4 {
     min-height: 2px;
     margin-top: auto;
     opacity: 0.7;
-    transition: height 0.4s var(--ease-out);
+    transition: height var(--duration-moderate) var(--ease-out);
 }
 
 .stats-chart-label {
@@ -9583,7 +9696,7 @@ h4 {
 }
 
 .ka-onb-quick-replies--visible {
-    animation: ka-onb-slide-up 0.3s var(--ease-out) forwards;
+    animation: ka-onb-slide-up var(--duration-normal) var(--ease-out) forwards;
 }
 
 @keyframes ka-onb-slide-up {
@@ -9600,11 +9713,11 @@ h4 {
     letter-spacing: var(--letter-spacing-wide);
     color: var(--rubin-slate);
     cursor: pointer;
-    transition: border-color 150ms var(--ease-out), color 150ms var(--ease-out);
+    transition: border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
     white-space: nowrap;
     opacity: 0;
     transform: translateY(10px);
-    animation: ka-onb-slide-up 0.2s var(--ease-out) forwards;
+    animation: ka-onb-slide-up var(--duration-quick) var(--ease-out) forwards;
 }
 
 .ka-onb-quick-reply:hover {
@@ -9685,7 +9798,7 @@ h4 {
     font-size: 0.7rem;
     letter-spacing: 0.03em;
     cursor: pointer;
-    transition: all 150ms var(--ease-out);
+    transition: all var(--duration-fast) var(--ease-out);
 }
 
 .ka-onb-continue-btn:hover {
@@ -9707,7 +9820,7 @@ h4 {
     font-size: 0.8rem;
     letter-spacing: 0.04em;
     cursor: pointer;
-    transition: all 150ms var(--ease-out);
+    transition: all var(--duration-fast) var(--ease-out);
     margin-top: var(--space-sm);
 }
 

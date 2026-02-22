@@ -18,6 +18,7 @@ interface ConversationDrawerProps {
   onRename?: (id: string, title: string) => void
   onShare?: (id: string) => void
   isLoading?: boolean
+  autoFocusSearch?: boolean
 }
 
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
@@ -45,8 +46,10 @@ export function ConversationDrawer({
   onRename,
   onShare,
   isLoading,
+  autoFocusSearch,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<{ conv_id: string; content: string }[]>([])
   const [searching, setSearching] = useState(false)
@@ -59,6 +62,13 @@ export function ConversationDrawer({
   useEffect(() => {
     return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current) }
   }, [])
+
+  // Auto-focus search input when opened via Cmd+K
+  useEffect(() => {
+    if (isOpen && autoFocusSearch) {
+      requestAnimationFrame(() => searchInputRef.current?.focus())
+    }
+  }, [isOpen, autoFocusSearch])
 
   const executeSearch = useCallback(async (query: string) => {
     setSearching(true)
@@ -162,6 +172,7 @@ export function ConversationDrawer({
             <div className="conv-search">
               <IconSearch size={14} className="conv-search-icon" />
               <input
+                ref={searchInputRef}
                 className="conv-search-input"
                 type="text"
                 placeholder={t('conversations.searchPlaceholder')}
@@ -245,7 +256,14 @@ export function ConversationDrawer({
                 </div>
               )})}
               {filteredConversations.length === 0 && searchQuery && (
-                <div className="conv-empty">{searching ? t('conversations.searching') : t('conversations.noMatches')}</div>
+                <div className="conv-empty">
+                  <span>{searching ? t('conversations.searching') : t('conversations.noMatches')}</span>
+                  {!searching && (
+                    <button className="conv-empty-clear" onClick={() => { setSearchQuery(''); setSearchResults([]) }}>
+                      {t('conversations.clearSearch')}
+                    </button>
+                  )}
+                </div>
               )}
               {conversations.length === 0 && !searchQuery && (
                 <div className="conv-empty">{t('conversations.empty')}</div>
