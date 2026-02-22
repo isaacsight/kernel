@@ -35,9 +35,11 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('lucide-react', () => {
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('lucide-react')>()
   const icon = (props: any) => <svg {...props} />
   return {
+    ...actual,
     Zap: icon, Clock: icon, Brain: icon, BarChart3: icon, Eye: icon,
     Crown: icon, Settings: icon, LogOut: icon, Trash2: icon, Globe: icon,
   }

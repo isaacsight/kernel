@@ -7,13 +7,17 @@ vi.mock('../hooks/useMiniPhone', () => ({
   useMiniPhone: vi.fn(() => false),
 }))
 
-vi.mock('lucide-react', () => ({
-  MessageSquare: (props: any) => <svg data-testid="icon-home" {...props} />,
-  List: (props: any) => <svg data-testid="icon-chats" {...props} />,
-  Target: (props: any) => <svg data-testid="icon-goals" {...props} />,
-  Newspaper: (props: any) => <svg data-testid="icon-briefings" {...props} />,
-  MoreHorizontal: (props: any) => <svg data-testid="icon-more" {...props} />,
-}))
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('lucide-react')>()
+  return {
+    ...actual,
+    MessageSquare: (props: any) => <svg data-testid="icon-home" {...props} />,
+    List: (props: any) => <svg data-testid="icon-chats" {...props} />,
+    Target: (props: any) => <svg data-testid="icon-goals" {...props} />,
+    Newspaper: (props: any) => <svg data-testid="icon-briefings" {...props} />,
+    MoreHorizontal: (props: any) => <svg data-testid="icon-more" {...props} />,
+  }
+})
 
 describe('BottomTabBar', () => {
   const onTabChange = vi.fn()
