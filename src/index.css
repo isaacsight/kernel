@@ -1739,14 +1739,14 @@ h4 {
     );
 }
 
-/* ── Pixel Creature ──────────────────────────────────── */
+/* ── Pixel Sprout — "Kernel" means seed ──────────────── */
 
 .ka-pixel-creature {
     position: absolute;
-    top: 39px;
+    top: 22px;
     left: 39px;
     width: 82px;
-    height: 82px;
+    height: 116px;
     /* LCD turn-on + Tamagotchi idle hop */
     opacity: 0;
     animation:
@@ -1762,7 +1762,17 @@ h4 {
     height: 14px;
     background: var(--rubin-sepia);
     opacity: 0.7;
-    /* No border-radius — hard pixel edges */
+}
+
+/* Leaf — amethyst, intelligence emerging from the seed */
+.ka-pixel--leaf {
+    background: var(--rubin-primary, #6B5B95);
+    opacity: 0.8;
+}
+
+/* Stem — lighter, the connection between seed and mind */
+.ka-pixel--stem {
+    opacity: 0.4;
 }
 
 .ka-pixel--eye {
@@ -1772,6 +1782,15 @@ h4 {
 
 [data-theme="dark"] .ka-pixel {
     background: rgba(212, 197, 169, 0.75);
+}
+
+[data-theme="dark"] .ka-pixel--leaf {
+    background: #8B7BB5;
+    opacity: 0.85;
+}
+
+[data-theme="dark"] .ka-pixel--stem {
+    opacity: 0.35;
 }
 
 [data-theme="dark"] .ka-pixel--eye {
