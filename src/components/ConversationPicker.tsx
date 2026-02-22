@@ -109,7 +109,7 @@ export function ConversationPicker({ conversations, onConfirm, onCancel }: Conve
               {conversations.length} conversations found — select which to import
             </p>
           </div>
-          <button className="ka-share-close" onClick={onCancel} aria-label="Close">
+          <button className="ka-panel-close" onClick={onCancel} aria-label="Close">
             <IconClose size={18} />
           </button>
         </div>
@@ -150,7 +150,7 @@ export function ConversationPicker({ conversations, onConfirm, onCancel }: Conve
               <div className="ka-picker-item-body">
                 <span className="ka-picker-item-title">{conv.title}</span>
                 <span className="ka-picker-item-meta">
-                  <IconMessageCircle size={11} />
+                  <IconMessageCircle size={12} />
                   {conv.messages.length} messages
                 </span>
               </div>

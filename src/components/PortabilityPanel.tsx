@@ -276,7 +276,7 @@ export function PortabilityPanel({
                 <div className="ka-port-entities">
                   {kgEntities.slice(0, 12).map((e, i) => (
                     <span key={i} className="ka-port-entity">
-                      <IconMessageCircle size={10} />
+                      <IconMessageCircle size={12} />
                       {e.name}
                     </span>
                   ))}
@@ -292,7 +292,7 @@ export function PortabilityPanel({
             {memoryItems === 0 && kgEntities.length === 0 && (
               <div className="ka-port-empty">
                 <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" aria-hidden="true" />
-                <p className="ka-insights-empty">
+                <p className="ka-port-empty-text">
                   Import conversations to build your knowledge profile
                 </p>
               </div>

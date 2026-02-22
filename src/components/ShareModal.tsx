@@ -238,7 +238,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
             <p className="ka-share-desc">
               {t('share.limitReached', { limit: FREE_SHARE_LIMIT })}
             </p>
-            <p className="ka-share-desc" style={{ opacity: 0.5, fontSize: '0.8rem' }}>
+            <p className="ka-share-desc ka-share-desc--hint">
               {t('share.limitHint', { used: sharesToday, limit: FREE_SHARE_LIMIT })}
             </p>
           </>
@@ -248,7 +248,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
               {t('share.createDesc')}
             </p>
             {!isPro && (
-              <p className="ka-share-desc" style={{ opacity: 0.5, fontSize: '0.8rem' }}>
+              <p className="ka-share-desc ka-share-desc--hint">
                 {t('share.dailyCount', { used: sharesToday, limit: FREE_SHARE_LIMIT })}
               </p>
             )}

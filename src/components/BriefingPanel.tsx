@@ -213,7 +213,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                   onClick={() => setSelectedIdx(i)}
                 >
                   {formatTabLabel(b.created_at!)}
-                  {isBriefingFailed(b) && <IconAlertCircle size={10} />}
+                  {isBriefingFailed(b) && <IconAlertCircle size={12} />}
                 </button>
               ))}
             </div>

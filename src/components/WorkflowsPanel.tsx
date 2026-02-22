@@ -156,7 +156,7 @@ export function WorkflowsPanel({ userId, onClose, onToast, onRunWorkflow }: Work
                   </div>
                   {proc.times_executed > 0 && (
                     <div className="ka-wf-card-meta">
-                      <IconClock size={10} />
+                      <IconClock size={12} />
                       {t('workflows.runCount', { count: proc.times_executed })}
                       {proc.last_executed_at && ` \u00B7 last ${new Date(proc.last_executed_at).toLocaleDateString()}`}
                     </div>

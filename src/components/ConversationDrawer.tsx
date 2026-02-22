@@ -223,7 +223,7 @@ export function ConversationDrawer({
                           onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
                           aria-label="Share conversation"
                         >
-                          <IconShare size={13} />
+                          <IconShare size={14} />
                         </button>
                       )}
                       <button
@@ -231,14 +231,14 @@ export function ConversationDrawer({
                         onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
                         aria-label="Rename conversation"
                       >
-                        <IconPencil size={13} />
+                        <IconPencil size={14} />
                       </button>
                       <button
                         className="conv-item-action conv-item-action--delete"
                         onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
                         aria-label="Delete conversation"
                       >
-                        <IconTrash size={13} />
+                        <IconTrash size={14} />
                       </button>
                     </div>
                   )}
