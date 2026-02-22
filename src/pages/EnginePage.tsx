@@ -646,7 +646,15 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <img className="ka-empty-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-state.svg`} alt="" aria-hidden="true" />
+            <div className="ka-empty-constellation" aria-hidden="true">
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-orb" />
+              <span className="ka-empty-thread" />
+              <span className="ka-empty-thread" />
+              <span className="ka-empty-thread" />
+              <span className="ka-empty-ring" />
+            </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
             <p className="ka-home-greeting">{getTimeGreeting()}</p>
