@@ -36,6 +36,7 @@
     --agent-analyst: #A0768C;
 
     /* ─── Semantic Colors ────────────────────────────────────── */
+    --rubin-vignette: var(--kernel-amethyst);
     --rubin-error: #DC2626;
     --rubin-error-light: rgba(220, 38, 38, 0.08);
     --rubin-error-border: rgba(220, 38, 38, 0.2);
@@ -2538,7 +2539,7 @@ h4 {
 }
 
 [data-theme="dark"] .ka-picker-search input {
-    color: var(--dark-text-primary);
+    color: var(--dark-text);
 }
 
 [data-theme="dark"] .ka-picker-list {
@@ -2546,7 +2547,7 @@ h4 {
 }
 
 [data-theme="dark"] .ka-picker-item {
-    color: var(--dark-text-primary);
+    color: var(--dark-text);
     border-bottom-color: var(--dark-border-subtle);
 }
 
@@ -2555,8 +2556,8 @@ h4 {
 }
 
 [data-theme="dark"] .ka-picker-check--on {
-    background: var(--dark-text-primary);
-    border-color: var(--dark-text-primary);
+    background: var(--dark-text);
+    border-color: var(--dark-text);
     color: var(--dark-bg-surface);
 }
 
@@ -3866,7 +3867,7 @@ h4 {
     border: none;
     background: transparent;
     border-radius: var(--radius-sm, 6px);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     color: var(--rubin-slate, #1F1E1D);
     opacity: 0.55;
@@ -3897,7 +3898,7 @@ h4 {
 }
 
 .ka-insights-section-title {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.15rem;
     font-weight: 600;
     margin: 0;
@@ -3911,7 +3912,7 @@ h4 {
 }
 
 .ka-insights-field-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -3919,13 +3920,13 @@ h4 {
 }
 
 .ka-insights-field-value {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.95rem;
     line-height: 1.4;
 }
 
 .ka-insights-field-value--mono {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.78rem;
 }
 
@@ -3940,7 +3941,7 @@ h4 {
     padding: 0.2rem 0.55rem;
     border-radius: var(--radius-sm, 6px);
     background: rgba(0, 0, 0, 0.05);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     text-transform: capitalize;
 }
@@ -3967,7 +3968,7 @@ h4 {
 }
 
 .ka-insights-conviction-value {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     opacity: 0.7;
     min-width: 3.5rem;
@@ -3989,7 +3990,7 @@ h4 {
 }
 
 .ka-insights-belief-content {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.9rem;
     line-height: 1.35;
     margin-bottom: 0.4rem;
@@ -4017,7 +4018,7 @@ h4 {
 }
 
 .ka-insights-belief-badge {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.62rem;
     text-transform: uppercase;
     opacity: 0.45;
@@ -4025,7 +4026,7 @@ h4 {
 }
 
 .ka-insights-belief-stat {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.62rem;
     opacity: 0.4;
 }
@@ -4039,7 +4040,7 @@ h4 {
 .ka-insights-belief-action {
     border: none;
     background: transparent;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.65rem;
     opacity: 0.4;
     cursor: pointer;
@@ -4065,7 +4066,7 @@ h4 {
 }
 
 .ka-insights-memory-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -4075,7 +4076,7 @@ h4 {
 .ka-insights-memory-list {
     margin: 0;
     padding-left: 1.1rem;
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.88rem;
     line-height: 1.5;
 }
@@ -4085,7 +4086,7 @@ h4 {
 }
 
 .ka-insights-empty {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.78rem;
     opacity: 0.45;
     text-align: center;
@@ -4100,7 +4101,7 @@ h4 {
 }
 
 .ka-insights-quality-number {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 2.5rem;
     font-weight: 700;
     line-height: 1;
@@ -4108,7 +4109,7 @@ h4 {
 }
 
 .ka-insights-quality-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     opacity: 0.45;
 }
@@ -4126,7 +4127,7 @@ h4 {
 }
 
 .ka-insights-dim-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     width: 5.5rem;
     opacity: 0.6;
@@ -4157,7 +4158,7 @@ h4 {
 }
 
 .ka-insights-dim-value {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.65rem;
     opacity: 0.5;
     min-width: 1.8rem;
@@ -4171,7 +4172,7 @@ h4 {
     gap: 0.3rem;
     border: none;
     background: transparent;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     opacity: 0.55;
     cursor: pointer;
@@ -4185,7 +4186,7 @@ h4 {
 .ka-insights-lessons-list {
     margin: 0.3rem 0 0;
     padding-left: 1.1rem;
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.85rem;
     line-height: 1.45;
 }
@@ -4209,7 +4210,7 @@ h4 {
 }
 
 .ka-insights-agent-name {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: capitalize;
@@ -4228,7 +4229,7 @@ h4 {
 }
 
 .ka-insights-agent-bar-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.6rem;
     opacity: 0.4;
     width: 3.5rem;
@@ -4292,7 +4293,7 @@ h4 {
 }
 
 .ka-port-desc {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.95rem;
     line-height: 1.55;
     color: var(--rubin-slate, #1F1E1D);
@@ -4311,14 +4312,14 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.82rem;
     font-weight: 600;
     margin-bottom: 0.35rem;
 }
 
 .ka-port-method-desc {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.85rem;
     opacity: 0.6;
     margin-bottom: 0.75rem;
@@ -4333,7 +4334,7 @@ h4 {
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-sm, 6px);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.78rem;
     cursor: pointer;
     transition: all var(--duration-fast) var(--ease-out);
@@ -4350,11 +4351,11 @@ h4 {
 }
 
 .ka-port-platform {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     padding: 0.2rem 0.5rem;
     background: rgba(107, 91, 149, 0.08);
-    border-radius: 100px;
+    border-radius: var(--radius-full);
     color: var(--rubin-slate, #1F1E1D);
     opacity: 0.7;
 }
@@ -4370,7 +4371,7 @@ h4 {
     padding: 0.5rem 0.75rem;
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: var(--radius-sm, 6px);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.78rem;
     background: transparent;
     color: var(--rubin-slate, #1F1E1D);
@@ -4408,7 +4409,7 @@ h4 {
 }
 
 .ka-port-guides-title {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -4420,14 +4421,14 @@ h4 {
     display: flex;
     gap: 0.5rem;
     align-items: baseline;
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.85rem;
     line-height: 1.6;
     padding: 0.2rem 0;
 }
 
 .ka-port-guide strong {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     min-width: 60px;
     opacity: 0.7;
@@ -4455,14 +4456,14 @@ h4 {
 }
 
 .ka-port-stat-number {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
 }
 
 .ka-port-stat-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -4482,7 +4483,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
@@ -4495,7 +4496,7 @@ h4 {
 
 .ka-port-memory-label {
     display: block;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -4510,11 +4511,11 @@ h4 {
 }
 
 .ka-port-tag {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     padding: 0.15rem 0.5rem;
     background: rgba(107, 91, 149, 0.08);
-    border-radius: 100px;
+    border-radius: var(--radius-full);
     white-space: nowrap;
 }
 
@@ -4525,7 +4526,7 @@ h4 {
 }
 
 .ka-port-fact-list li {
-    font-family: 'EB Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 0.85rem;
     line-height: 1.5;
     padding: 0.15rem 0;
@@ -4552,7 +4553,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.7rem;
 }
 
@@ -4564,7 +4565,7 @@ h4 {
 .ka-port-entity-type-count {
     background: rgba(0, 0, 0, 0.06);
     padding: 0.1rem 0.35rem;
-    border-radius: 100px;
+    border-radius: var(--radius-full);
     font-size: 0.65rem;
 }
 
@@ -4578,7 +4579,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     padding: 0.2rem 0.5rem;
     background: rgba(0, 0, 0, 0.03);
@@ -4616,7 +4617,7 @@ h4 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.65rem 1rem;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.78rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
@@ -4642,7 +4643,7 @@ h4 {
     border-radius: var(--radius-md, 10px);
     background: var(--rubin-slate, #1F1E1D);
     color: var(--rubin-ivory, #FAF9F6);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-mono);
     font-size: 0.82rem;
     cursor: pointer;
     transition: opacity var(--duration-fast) var(--ease-out);
@@ -5826,7 +5827,7 @@ h4 {
 
 .ka-msg-hint {
     text-align: center;
-    font-family: var(--rubin-mono);
+    font-family: var(--font-mono);
     font-size: 12px;
     color: #B45309;
     padding: 4px 0;
@@ -6220,7 +6221,7 @@ h4 {
 }
 
 .ka-file-preview-name {
-    font-family: var(--rubin-mono);
+    font-family: var(--font-mono);
     font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -6228,7 +6229,7 @@ h4 {
 }
 
 .ka-file-preview-size {
-    font-family: var(--rubin-mono);
+    font-family: var(--font-mono);
     font-size: 11px;
     opacity: 0.5;
 }
@@ -9301,7 +9302,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    font-family: var(--rubin-serif, 'EB Garamond', serif);
+    font-family: var(--font-serif);
     font-size: 1.1rem;
     font-weight: 600;
 }
@@ -9322,7 +9323,7 @@ h4 {
 .ka-kg-empty {
     padding: 32px 20px;
     text-align: center;
-    font-family: var(--rubin-serif, 'EB Garamond', serif);
+    font-family: var(--font-serif);
     font-size: 0.95rem;
     line-height: 1.5;
     opacity: 0.6;
@@ -9339,7 +9340,7 @@ h4 {
     align-items: center;
     gap: var(--space-sm);
     padding: 12px 20px;
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     opacity: 0.5;
     text-transform: uppercase;
@@ -9363,7 +9364,7 @@ h4 {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -9403,7 +9404,7 @@ h4 {
 }
 
 .ka-kg-entity-name {
-    font-family: var(--rubin-serif, 'EB Garamond', serif);
+    font-family: var(--font-serif);
     font-size: 0.95rem;
     font-weight: 600;
 }
@@ -9411,7 +9412,7 @@ h4 {
 .ka-kg-entity-meta {
     display: flex;
     gap: var(--space-md);
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     margin-top: 2px;
     opacity: 0.5;
@@ -9429,7 +9430,7 @@ h4 {
     padding: 2px 8px;
     background: rgba(107, 91, 149, 0.08);
     border-radius: var(--radius-xs);
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--rubin-vignette, #6B5B95);
 }
@@ -9452,7 +9453,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: var(--space-sm);
@@ -9463,7 +9464,7 @@ h4 {
 }
 
 .ka-approval-tool {
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -9494,7 +9495,7 @@ h4 {
     padding: 6px 16px;
     border: none;
     border-radius: 6px;
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     cursor: pointer;
     transition: opacity var(--duration-fast);
@@ -9515,14 +9516,14 @@ h4 {
 }
 
 .ka-approval-timer {
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     opacity: 0.5;
     margin-left: auto;
 }
 
 .ka-approval-resolved {
-    font-family: var(--rubin-mono, 'Courier Prime', monospace);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     opacity: 0.5;
     margin-top: var(--space-sm);
