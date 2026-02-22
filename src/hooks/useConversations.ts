@@ -6,6 +6,12 @@ import {
   deleteConversation,
   type DBConversation,
 } from '../engine/SupabaseClient'
+import {
+  cacheConversations,
+  cacheMessages,
+  getCachedConversations,
+  getCachedMessages,
+} from '../engine/OfflineCache'
 
 interface ChatMessage {
   id: string
@@ -35,23 +41,28 @@ export function useConversations(
 
   const loadConversations = useCallback(async () => {
     if (!userId) return
-    const convs = await getUserConversations(userId)
-    setConversations(convs)
-    setConvsLoading(false)
+    try {
+      const convs = await getUserConversations(userId)
+      setConversations(convs)
+      setConvsLoading(false)
+      // Cache top conversations for offline use
+      cacheConversations(convs).catch(() => {})
+    } catch {
+      // Offline fallback: load from IndexedDB
+      const cached = await getCachedConversations()
+      if (cached.length > 0) setConversations(cached)
+      setConvsLoading(false)
+    }
   }, [userId])
 
   useEffect(() => {
     loadConversations()
   }, [loadConversations])
 
-  const switchConversation = useCallback(async (convId: string) => {
-    setMsgsLoading(true)
-    setActiveConversationId(convId)
-    setMessagesRef.current([])
-    const dbMessages = await getChannelMessages(convId)
-    const chatMessages: ChatMessage[] = dbMessages.map(m => ({
+  const toChat = (dbMessages: { id: string; agent_id: string; content: string; created_at: string }[]): ChatMessage[] =>
+    dbMessages.map(m => ({
       id: m.id,
-      role: m.agent_id === 'user' ? 'user' : 'kernel',
+      role: m.agent_id === 'user' ? 'user' as const : 'kernel' as const,
       content: m.content,
       timestamp: new Date(m.created_at).getTime(),
       agentId: m.agent_id !== 'user' ? m.agent_id : undefined,
@@ -59,7 +70,21 @@ export function useConversations(
         ? m.agent_id.charAt(0).toUpperCase() + m.agent_id.slice(1)
         : m.agent_id !== 'user' ? 'Kernel' : undefined,
     }))
-    setMessagesRef.current(chatMessages)
+
+  const switchConversation = useCallback(async (convId: string) => {
+    setMsgsLoading(true)
+    setActiveConversationId(convId)
+    setMessagesRef.current([])
+    try {
+      const dbMessages = await getChannelMessages(convId)
+      setMessagesRef.current(toChat(dbMessages))
+      // Cache messages for offline
+      cacheMessages(convId, dbMessages).catch(() => {})
+    } catch {
+      // Offline fallback
+      const cached = await getCachedMessages(convId)
+      if (cached.length > 0) setMessagesRef.current(toChat(cached))
+    }
     setMsgsLoading(false)
   }, [])
 

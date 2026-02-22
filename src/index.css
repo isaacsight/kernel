@@ -10800,6 +10800,69 @@ h4 {
     background: #3A3630;
 }
 
+/* ─── Notification Preference Toggles ─────────────────── */
+.ka-more-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-xl);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--rubin-slate);
+    cursor: pointer;
+}
+
+.ka-more-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ka-more-toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+    transition: background var(--duration-quick) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.ka-more-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--duration-quick) var(--ease-out);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ka-more-toggle input:checked + .ka-more-toggle-track {
+    background: var(--rubin-primary);
+}
+
+.ka-more-toggle input:checked + .ka-more-toggle-track::after {
+    transform: translateX(16px);
+}
+
+[data-theme="dark"] .ka-more-toggle {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-more-toggle-track {
+    background: #3A3630;
+}
+
+[data-theme="dark"] .ka-more-toggle-track::after {
+    background: var(--dark-text);
+}
+
 /* ─── Feature Discovery Dots ─────────────────────────── */
 
 .ka-feature-dot {

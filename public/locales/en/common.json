@@ -72,6 +72,7 @@
   "errorTitle": "Something went wrong",
   "errorDefault": "Something broke on our end. Try refreshing.",
   "tryAgain": "Try again",
+  "offline": "You're offline. Viewing cached conversations.",
   "pwa": {
     "installPrompt": "Add Kernel to your home screen for the best experience.",
     "install": "Install"

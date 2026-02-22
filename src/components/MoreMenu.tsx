@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
+import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -76,6 +77,7 @@ interface MoreMenuProps {
 
 export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
+  const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
   if (!isOpen) return null
 
   const filteredAccount = ACCOUNT_ITEMS.filter(item => {
@@ -138,6 +140,31 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
               ))}
             </select>
           </div>
+          <div className="ka-more-menu-divider" />
+          <div className="ka-more-menu-label">
+            <IconBell size={14} />
+            {t('menu.notifications')}
+          </div>
+          <label className="ka-more-toggle">
+            <span>{t('menu.notifInApp')}</span>
+            <input type="checkbox" checked={prefs.inApp} onChange={e => updateNotifPrefs({ inApp: e.target.checked })} />
+            <span className="ka-more-toggle-track" />
+          </label>
+          <label className="ka-more-toggle">
+            <span>{t('menu.notifBriefings')}</span>
+            <input type="checkbox" checked={prefs.briefings} onChange={e => updateNotifPrefs({ briefings: e.target.checked })} />
+            <span className="ka-more-toggle-track" />
+          </label>
+          <label className="ka-more-toggle">
+            <span>{t('menu.notifGoals')}</span>
+            <input type="checkbox" checked={prefs.goals} onChange={e => updateNotifPrefs({ goals: e.target.checked })} />
+            <span className="ka-more-toggle-track" />
+          </label>
+          <label className="ka-more-toggle">
+            <span>{t('menu.notifReminders')}</span>
+            <input type="checkbox" checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
+            <span className="ka-more-toggle-track" />
+          </label>
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
           {filteredAccount.map(item => {
