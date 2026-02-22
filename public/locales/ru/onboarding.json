@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Добро пожаловать в Kernel",
-    "titleUser": "Добро пожаловать, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel — это ИИ-движок, который узнает вас, запоминает важное и становится лучше с каждым разговором."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Он учится у вас",
-    "subtitle": "Память, которая накапливается.",
-    "body": "Пока вы общаетесь, Kernel выстраивает граф знаний о ваших интересах, целях и связях. Каждый разговор делает следующий еще лучше."
-  },
-  "step2": {
-    "title": "Специализированные агенты",
-    "subtitle": "Нужный разум для каждой задачи.",
-    "body": "Ваши сообщения направляются специализированным агентам: исследователю для глубоких вопросов, кодеру для технической работы, писателю для творческих задач."
-  },
-  "step3": {
-    "title": "Что вас интересует?",
-    "subtitle": "Выберите несколько тем, чтобы Kernel мог лучше узнать вас."
-  },
-  "step4": {
-    "title": "Всё готово",
-    "subtitle": "Начните бесплатно, переходите на Pro в любое время."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Технологии",
     "business": "Бизнес",
     "creative": "Творчество",
@@ -37,19 +24,20 @@
     "travel": "Путешествия",
     "education": "Образование"
   },
-  "tiers": {
-    "free": "Бесплатно",
-    "freeFeature1": "10 сообщений",
-    "freeFeature2": "Базовые агенты",
-    "freeFeature3": "Память",
-    "pro": "Pro",
-    "proFeature1": "Безлимитные сообщения",
-    "proFeature2": "Глубокое исследование",
-    "proFeature3": "Мультиагентные системы",
-    "proFeature4": "Граф знаний"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Продолжить",
-  "skip": "Пропустить",
-  "begin": "Начать",
   "skipIntro": "Пропустить вступление"
 }

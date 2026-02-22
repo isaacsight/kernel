@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Kernel'e Hoş Geldiniz",
-    "titleUser": "Hoş geldiniz, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel, kim olduğunuzu öğrenen, sizin için önemli olanı hatırlayan ve her konuşmayla daha iyi olan bir AI motorudur."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Sizi Öğrenir",
-    "subtitle": "Biriken bellek.",
-    "body": "Konuştukça Kernel, ilgi alanlarınız, hedefleriniz ve ilişkilerinizin bir bilgi grafiğini oluşturur. Her konuşma bir sonrakini daha iyi yapar."
-  },
-  "step2": {
-    "title": "Uzman Ajanlar",
-    "subtitle": "İş için doğru zihin.",
-    "body": "Mesajlarınız uzman ajanlara yönlendirilir — derin sorular için araştırmacı, teknik işler için kodlayıcı, yaratıcı görevler için yazar."
-  },
-  "step3": {
-    "title": "İlgi alanlarınız neler?",
-    "subtitle": "Kernel'in sizi tanımasına yardımcı olmak için birkaçını seçin."
-  },
-  "step4": {
-    "title": "Hazırsınız",
-    "subtitle": "Ücretsiz başlayın, istediğiniz zaman yükseltin."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Teknoloji",
     "business": "İş Dünyası",
     "creative": "Yaratıcı Yazarlık",
@@ -37,19 +24,20 @@
     "travel": "Seyahat",
     "education": "Eğitim"
   },
-  "tiers": {
-    "free": "Ücretsiz",
-    "freeFeature1": "10 mesaj",
-    "freeFeature2": "Temel ajanlar",
-    "freeFeature3": "Bellek",
-    "pro": "Pro",
-    "proFeature1": "Sınırsız mesaj",
-    "proFeature2": "Derin araştırma",
-    "proFeature3": "Çoklu ajan sürüleri",
-    "proFeature4": "Bilgi grafiği"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Devam",
-  "skip": "Atla",
-  "begin": "Başla",
   "skipIntro": "Girişi atla"
 }

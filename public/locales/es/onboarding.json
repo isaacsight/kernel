@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Bienvenido a Kernel",
-    "titleUser": "Bienvenido, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel es un motor de IA que aprende quién eres, recuerda lo que te importa y mejora con cada conversación."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Te Aprende",
-    "subtitle": "Memoria que se acumula.",
-    "body": "Mientras hablas, Kernel construye un grafo de conocimiento de tus intereses, objetivos y relaciones. Cada conversación mejora la siguiente."
-  },
-  "step2": {
-    "title": "Agentes Especialistas",
-    "subtitle": "La mente correcta para el trabajo.",
-    "body": "Tus mensajes se dirigen a agentes especialistas — un investigador para preguntas profundas, un programador para trabajo técnico, un escritor para tareas creativas."
-  },
-  "step3": {
-    "title": "¿Qué te interesa?",
-    "subtitle": "Elige algunos para ayudar a Kernel a conocerte."
-  },
-  "step4": {
-    "title": "Listo para empezar",
-    "subtitle": "Empieza gratis, mejora cuando quieras."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Tecnología",
     "business": "Negocios",
     "creative": "Escritura Creativa",
@@ -37,19 +24,20 @@
     "travel": "Viajes",
     "education": "Educación"
   },
-  "tiers": {
-    "free": "Gratis",
-    "freeFeature1": "10 mensajes",
-    "freeFeature2": "Agentes básicos",
-    "freeFeature3": "Memoria",
-    "pro": "Pro",
-    "proFeature1": "Mensajes ilimitados",
-    "proFeature2": "Investigación profunda",
-    "proFeature3": "Enjambres multi-agente",
-    "proFeature4": "Grafo de conocimiento"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Continuar",
-  "skip": "Omitir",
-  "begin": "Comenzar",
   "skipIntro": "Saltar introducción"
 }

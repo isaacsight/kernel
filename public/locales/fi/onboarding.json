@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Tervetuloa Kerneliin",
-    "titleUser": "Tervetuloa, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel on tekoälymoottori, joka oppii kuka olet, muistaa mikä on sinulle tärkeää, ja paranee jokaisen keskustelun myötä."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Se oppii sinut",
-    "subtitle": "Muisti, joka kasvaa.",
-    "body": "Keskustellessasi Kernel rakentaa tietograafin kiinnostuksen kohteistasi, tavoitteistasi ja suhteistasi. Jokainen keskustelu tekee seuraavasta paremman."
-  },
-  "step2": {
-    "title": "Erikoisagentit",
-    "subtitle": "Oikea asiantuntija tehtävään.",
-    "body": "Viestisi ohjataan erikoisagenteille — tutkija syviin kysymyksiin, koodari tekniseen työhön, kirjoittaja luoviin tehtäviin."
-  },
-  "step3": {
-    "title": "Mikä kiinnostaa sinua?",
-    "subtitle": "Valitse muutama auttaaksesi Kerneliä tutustumaan sinuun."
-  },
-  "step4": {
-    "title": "Valmis aloittamaan",
-    "subtitle": "Aloita ilmaiseksi, päivitä milloin tahansa."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Teknologia",
     "business": "Liiketoiminta",
     "creative": "Luova kirjoittaminen",
@@ -37,19 +24,20 @@
     "travel": "Matkailu",
     "education": "Koulutus"
   },
-  "tiers": {
-    "free": "Ilmainen",
-    "freeFeature1": "10 viestiä",
-    "freeFeature2": "Perusagentit",
-    "freeFeature3": "Muisti",
-    "pro": "Pro",
-    "proFeature1": "Rajattomat viestit",
-    "proFeature2": "Syvä tutkimus",
-    "proFeature3": "Moniagenttiparveilut",
-    "proFeature4": "Tietograafi"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Jatka",
-  "skip": "Ohita",
-  "begin": "Aloita",
   "skipIntro": "Ohita esittely"
 }

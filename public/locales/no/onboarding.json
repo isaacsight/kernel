@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Velkommen til Kernel",
-    "titleUser": "Velkommen, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel er en AI-motor som lærer hvem du er, husker det som betyr noe for deg, og blir bedre med hver samtale."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Den lærer deg",
-    "subtitle": "Hukommelse som vokser.",
-    "body": "Mens du snakker, bygger Kernel en kunnskapsgraf av dine interesser, mål og relasjoner. Hver samtale gjør den neste bedre."
-  },
-  "step2": {
-    "title": "Spesialistagenter",
-    "subtitle": "Riktig ekspert for jobben.",
-    "body": "Meldingene dine rutes til spesialistagenter — en forsker for dype spørsmål, en koder for teknisk arbeid, en skribent for kreative oppgaver."
-  },
-  "step3": {
-    "title": "Hva interesserer deg?",
-    "subtitle": "Velg noen for å hjelpe Kernel å bli kjent med deg."
-  },
-  "step4": {
-    "title": "Klar til å begynne",
-    "subtitle": "Start gratis, oppgrader når som helst."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Teknologi",
     "business": "Næringsliv",
     "creative": "Kreativ skriving",
@@ -37,19 +24,20 @@
     "travel": "Reise",
     "education": "Utdanning"
   },
-  "tiers": {
-    "free": "Gratis",
-    "freeFeature1": "10 meldinger",
-    "freeFeature2": "Grunnleggende agenter",
-    "freeFeature3": "Hukommelse",
-    "pro": "Pro",
-    "proFeature1": "Ubegrensede meldinger",
-    "proFeature2": "Dyp forskning",
-    "proFeature3": "Multi-agent svermer",
-    "proFeature4": "Kunnskapsgraf"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Fortsett",
-  "skip": "Hopp over",
-  "begin": "Begynn",
   "skipIntro": "Hopp over intro"
 }

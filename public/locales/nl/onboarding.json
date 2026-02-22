@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Welkom bij Kernel",
-    "titleUser": "Welkom, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel is een AI-motor die leert wie je bent, onthoudt wat belangrijk is en bij elk gesprek beter wordt."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Het leert jou kennen",
-    "subtitle": "Geheugen dat zich opbouwt.",
-    "body": "Terwijl je praat, bouwt Kernel een kennisgrafiek op van je interesses, doelen en relaties. Elk gesprek maakt het volgende beter."
-  },
-  "step2": {
-    "title": "Gespecialiseerde agents",
-    "subtitle": "De juiste geest voor de taak.",
-    "body": "Je berichten worden doorgestuurd naar gespecialiseerde agents — een onderzoeker voor diepe vragen, een programmeur voor technisch werk, een schrijver voor creatieve taken."
-  },
-  "step3": {
-    "title": "Wat interesseert je?",
-    "subtitle": "Kies er een paar om Kernel te helpen je te leren kennen."
-  },
-  "step4": {
-    "title": "Klaar om te gaan",
-    "subtitle": "Begin gratis, upgrade wanneer je wilt."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Technologie",
     "business": "Zakelijk",
     "creative": "Creatief schrijven",
@@ -37,19 +24,20 @@
     "travel": "Reizen",
     "education": "Onderwijs"
   },
-  "tiers": {
-    "free": "Gratis",
-    "freeFeature1": "10 berichten",
-    "freeFeature2": "Basis agents",
-    "freeFeature3": "Geheugen",
-    "pro": "Pro",
-    "proFeature1": "Onbeperkt berichten",
-    "proFeature2": "Diep onderzoek",
-    "proFeature3": "Multi-agent zwermen",
-    "proFeature4": "Kennisgrafiek"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Doorgaan",
-  "skip": "Overslaan",
-  "begin": "Beginnen",
   "skipIntro": "Introductie overslaan"
 }

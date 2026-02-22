@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "歡迎來到 Kernel",
-    "titleUser": "歡迎，{{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel 是一個學習你是誰、記住對你重要的事物、並在每次對話中變得更好的 AI 引擎。"
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "它學習你",
-    "subtitle": "不斷累積的記憶。",
-    "body": "隨著你的對話，Kernel 會建立你的興趣、目標和人際關係的知識圖譜。每次對話都讓下一次更好。"
-  },
-  "step2": {
-    "title": "專家代理",
-    "subtitle": "為任務找到合適的專家。",
-    "body": "你的訊息會被路由到專家代理——處理深度問題的研究員、技術工作的工程師、創意任務的作家。"
-  },
-  "step3": {
-    "title": "你對什麼感興趣？",
-    "subtitle": "選擇一些讓 Kernel 認識你。"
-  },
-  "step4": {
-    "title": "準備就緒",
-    "subtitle": "免費開始，隨時升級。"
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "科技",
     "business": "商業",
     "creative": "創意寫作",
@@ -37,19 +24,20 @@
     "travel": "旅行",
     "education": "教育"
   },
-  "tiers": {
-    "free": "免費",
-    "freeFeature1": "10 則訊息",
-    "freeFeature2": "基本代理",
-    "freeFeature3": "記憶",
-    "pro": "Pro",
-    "proFeature1": "無限訊息",
-    "proFeature2": "深度研究",
-    "proFeature3": "多代理群集",
-    "proFeature4": "知識圖譜"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "繼續",
-  "skip": "跳過",
-  "begin": "開始",
   "skipIntro": "跳過介紹"
 }

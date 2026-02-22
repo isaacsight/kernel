@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Kernel에 오신 것을 환영합니다",
-    "titleUser": "환영합니다, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel은 당신이 누구인지 배우고, 중요한 것을 기억하며, 대화할수록 더 나아지는 AI 엔진입니다."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "당신을 배웁니다",
-    "subtitle": "축적되는 메모리.",
-    "body": "대화를 하면서 Kernel은 당신의 관심사, 목표, 관계의 지식 그래프를 구축합니다. 모든 대화가 다음을 더 좋게 만듭니다."
-  },
-  "step2": {
-    "title": "전문 에이전트",
-    "subtitle": "적합한 전문가에게.",
-    "body": "메시지는 전문 에이전트에게 라우팅됩니다 — 심층 질문에는 연구원, 기술적 작업에는 코더, 창작 작업에는 작가."
-  },
-  "step3": {
-    "title": "어떤 것에 관심이 있나요?",
-    "subtitle": "몇 가지를 선택하여 Kernel이 당신을 알아갈 수 있도록 도와주세요."
-  },
-  "step4": {
-    "title": "준비 완료",
-    "subtitle": "무료로 시작, 언제든 업그레이드."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "기술",
     "business": "비즈니스",
     "creative": "창작 글쓰기",
@@ -37,19 +24,20 @@
     "travel": "여행",
     "education": "교육"
   },
-  "tiers": {
-    "free": "무료",
-    "freeFeature1": "10개 메시지",
-    "freeFeature2": "기본 에이전트",
-    "freeFeature3": "메모리",
-    "pro": "Pro",
-    "proFeature1": "무제한 메시지",
-    "proFeature2": "딥 리서치",
-    "proFeature3": "멀티 에이전트 스웜",
-    "proFeature4": "지식 그래프"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "계속",
-  "skip": "건너뛰기",
-  "begin": "시작",
   "skipIntro": "소개 건너뛰기"
 }
