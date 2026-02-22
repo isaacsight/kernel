@@ -269,6 +269,7 @@ interface ProxyPayload {
   messages: { role: string; content: string | unknown[] }[]
   max_tokens?: number
   web_search?: boolean
+  tools?: any[]
   // Legacy field (backward compat)
   // deno-lint-ignore no-explicit-any
   [key: string]: any
@@ -299,7 +300,12 @@ async function handleAnthropic(
   if (payload.system) body.system = payload.system
   if (isStream) body.stream = true
   if (payload.web_search) {
-    body.tools = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }]
+    if (!body.tools) body.tools = []
+    body.tools.push({ type: 'web_search_20250305', name: 'web_search', max_uses: 3 })
+  }
+  if (payload.tools && payload.tools.length > 0) {
+    if (!body.tools) body.tools = []
+    body.tools.push(...payload.tools)
   }
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -857,14 +863,14 @@ serve(async (req: Request) => {
   try {
     // ── Origin validation ──────────────────────────────
     // corsHeaders(req) already validates origin — if it's not allowed,
-    // the response will default to 'https://kernel.chat'. But we still
-    // want to hard-reject unknown browser origins.
+    // the response will default to 'https://kernel.chat'. The browser's
+    // CORS enforcement handles rejection (mismatched ACAO vs Origin).
+    // We log unknown origins but don't hard-reject, because returning
+    // a response without matching CORS headers causes iOS Safari to
+    // throw opaque "Load failed" TypeError instead of a readable error.
     const origin = req.headers.get('origin')
     if (origin && CORS_HEADERS['Access-Control-Allow-Origin'] !== origin) {
-      return new Response(
-        JSON.stringify({ error: 'Origin not allowed' }),
-        { status: 403, headers: { 'Content-Type': 'application/json', ...SECURITY_HEADERS } }
-      )
+      console.warn(`[cors] Rejected origin: ${origin}`)
     }
 
     // ── Auth: verify JWT or service key ─────────────────

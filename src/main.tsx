@@ -110,6 +110,16 @@ if (searchParams.has('error')) {
   window.history.replaceState({}, '', window.location.pathname + window.location.hash)
 }
 
+// ─── iOS Safari: disable service worker ─────────────────────────
+// WebKit has a bug where the SW fetch handler causes cross-origin
+// requests to Supabase edge functions to fail with "Load failed".
+// Unregister the SW on iOS/iPadOS to prevent this.
+if ('serviceWorker' in navigator && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    for (const reg of regs) reg.unregister()
+  })
+}
+
 // ─── Render App ─────────────────────────────────────────────────
 
 createRoot(document.getElementById('root')!).render(
