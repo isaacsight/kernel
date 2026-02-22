@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
-import { fileToBase64 } from '../engine/fileUtils'
+import { fileToBase64, compressImage } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
@@ -294,10 +294,10 @@ export function useChatEngine(params: UseChatEngineParams) {
           }
           textPrefix += `[File: ${file.name}]\n${text}\n\n`
         } else if (isImageFile(file)) {
-          const data = await fileToBase64(file)
+          const { base64, mediaType } = await compressImage(file)
           blocks.push({
             type: 'image',
-            source: { type: 'base64', media_type: getMediaType(file), data },
+            source: { type: 'base64', media_type: mediaType, data: base64 },
           })
         } else if (isPdfFile(file)) {
           const data = await fileToBase64(file)

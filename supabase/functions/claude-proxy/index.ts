@@ -67,9 +67,10 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
 const DAILY_COST_ALERT_THRESHOLD = 5.00
 const DAILY_COST_HARD_LIMIT = 10.00
 const MAX_TOKENS_CAP = 8192
-const MAX_MESSAGE_SIZE_BYTES = 32_768   // 32KB per message
-const MAX_PAYLOAD_SIZE_BYTES = 262_144  // 256KB total
-const MAX_SYSTEM_PROMPT_BYTES = 16_384  // 16KB system prompt cap
+const MAX_MESSAGE_SIZE_BYTES = 32_768     // 32KB per text-only message
+const MAX_PAYLOAD_SIZE_BYTES = 262_144    // 256KB total (text-only requests)
+const MAX_IMAGE_PAYLOAD_SIZE_BYTES = 5_242_880  // 5MB total (requests with images)
+const MAX_SYSTEM_PROMPT_BYTES = 16_384    // 16KB system prompt cap
 const STREAM_IDLE_TIMEOUT_MS = 30_000   // 30s max idle between stream chunks
 
 // Read from a stream reader with an idle timeout per chunk.
@@ -981,9 +982,14 @@ serve(async (req: Request) => {
 
     // ── Parse payload ──────────────────────────────────────
     const rawBody = await req.text()
-    if (rawBody.length > MAX_PAYLOAD_SIZE_BYTES) {
+
+    // Detect if payload contains image/document content (needs higher limit)
+    const hasMediaContent = rawBody.includes('"type":"image"') || rawBody.includes('"type":"document"')
+    const effectivePayloadLimit = hasMediaContent ? MAX_IMAGE_PAYLOAD_SIZE_BYTES : MAX_PAYLOAD_SIZE_BYTES
+
+    if (rawBody.length > effectivePayloadLimit) {
       return new Response(
-        JSON.stringify({ error: 'Payload too large', max_bytes: MAX_PAYLOAD_SIZE_BYTES }),
+        JSON.stringify({ error: 'Payload too large', max_bytes: effectivePayloadLimit }),
         { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
@@ -998,7 +1004,14 @@ serve(async (req: Request) => {
     }
 
     // ── Validate individual message sizes ──────────────────
+    // Skip size check for messages with image/document blocks
     for (const msg of messages) {
+      if (Array.isArray(msg.content)) {
+        const hasMedia = msg.content.some(
+          (b: { type: string }) => b.type === 'image' || b.type === 'document'
+        )
+        if (hasMedia) continue
+      }
       const content = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content)
       if (content.length > MAX_MESSAGE_SIZE_BYTES) {
         return new Response(
