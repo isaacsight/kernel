@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { IconBell, IconCheck } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
+import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 
 interface NotificationBellProps {
   userId: string
@@ -14,6 +15,7 @@ interface NotificationBellProps {
 
 export function NotificationBell({ userId }: NotificationBellProps) {
   const { t } = useTranslation('common')
+  const { shouldShow } = useNotificationPrefs()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
@@ -88,11 +90,11 @@ export function NotificationBell({ userId }: NotificationBellProps) {
               </button>
             )}
           </div>
-          {notifications.length === 0 ? (
+          {notifications.filter(n => shouldShow(n.type)).length === 0 ? (
             <div className="ka-notif-empty">{t('notifications.empty')}</div>
           ) : (
             <div className="ka-notif-list">
-              {notifications.map(n => (
+              {notifications.filter(n => shouldShow(n.type)).map(n => (
                 <div
                   key={n.id}
                   className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${n.action_url ? ' ka-notif-item--clickable' : ''}`}
