@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "مرحباً بك في Kernel",
-    "titleUser": "مرحباً، {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel هو محرك ذكاء اصطناعي يتعلم من أنت، ويتذكر ما يهمك، ويتحسن مع كل محادثة."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "يتعلم منك",
-    "subtitle": "ذاكرة تتراكم.",
-    "body": "بينما تتحدث، يبني Kernel رسماً بيانياً معرفياً لاهتماماتك وأهدافك وعلاقاتك. كل محادثة تجعل المحادثة التالية أفضل."
-  },
-  "step2": {
-    "title": "وكلاء متخصصون",
-    "subtitle": "العقل المناسب للمهمة.",
-    "body": "تُوجه رسائلك إلى وكلاء متخصصين — باحث للأسئلة العميقة، مبرمج للعمل التقني، كاتب للمهام الإبداعية."
-  },
-  "step3": {
-    "title": "ما الذي يهمك؟",
-    "subtitle": "اختر القليل لمساعدة Kernel في التعرف عليك."
-  },
-  "step4": {
-    "title": "جاهز للانطلاق",
-    "subtitle": "ابدأ مجاناً، وقم بالترقية في أي وقت."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "التكنولوجيا",
     "business": "الأعمال",
     "creative": "الكتابة الإبداعية",
@@ -37,19 +24,20 @@
     "travel": "السفر",
     "education": "التعليم"
   },
-  "tiers": {
-    "free": "مجاني",
-    "freeFeature1": "10 رسائل",
-    "freeFeature2": "وكلاء أساسيون",
-    "freeFeature3": "الذاكرة",
-    "pro": "Pro",
-    "proFeature1": "رسائل غير محدودة",
-    "proFeature2": "بحث عميق",
-    "proFeature3": "أسراب من الوكلاء المتعددين",
-    "proFeature4": "الرسم البياني المعرفي"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "متابعة",
-  "skip": "تخطي",
-  "begin": "ابدأ",
   "skipIntro": "تخطي المقدمة"
 }

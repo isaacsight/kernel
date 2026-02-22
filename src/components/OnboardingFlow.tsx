@@ -1,210 +1,449 @@
-import { useState, useCallback } from 'react'
-import { motion, AnimatePresence, PanInfo } from 'framer-motion'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { IconArrowRight, IconCrown, IconCheck } from './KernelIcons'
-import { DURATION, EASE } from '../constants/motion'
+import { IconArrowRight, IconCheck } from './KernelIcons'
+import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
+import { SPECIALISTS } from '../agents/specialists'
+
+// ─── Types ──────────────────────────────────────────────
 
 interface OnboardingFlowProps {
   onComplete: (interests?: string[]) => void
   userName?: string
 }
 
-// ─── Interest Picker ──────────────────────────────────
+type Stage =
+  | 'idle'
+  | 'welcome'
+  | 'awaiting_welcome_reply'
+  | 'capabilities'
+  | 'awaiting_capabilities_reply'
+  | 'interests'
+  | 'awaiting_interests'
+  | 'ready'
+  | 'awaiting_start'
+
+interface ChatMessage {
+  id: string
+  role: 'kernel' | 'user'
+  content: string
+  widget?: 'agent-showcase' | 'interest-picker' | 'start-cta'
+}
+
+interface QuickReply {
+  id: string
+  labelKey: string
+  nextStage: Stage
+}
+
+// ─── Constants ──────────────────────────────────────────
 
 const INTERESTS = [
-  { id: 'tech', label: 'Technology', emoji: '\u2699\ufe0f' },
-  { id: 'business', label: 'Business', emoji: '\ud83d\udcbc' },
-  { id: 'creative', label: 'Creative Writing', emoji: '\u270f\ufe0f' },
-  { id: 'science', label: 'Science', emoji: '\ud83d\udd2c' },
-  { id: 'health', label: 'Health & Fitness', emoji: '\ud83c\udfcb\ufe0f' },
-  { id: 'finance', label: 'Finance', emoji: '\ud83d\udcb0' },
-  { id: 'design', label: 'Design', emoji: '\ud83c\udfa8' },
-  { id: 'coding', label: 'Coding', emoji: '\ud83d\udcbb' },
-  { id: 'music', label: 'Music', emoji: '\ud83c\udfb5' },
-  { id: 'philosophy', label: 'Philosophy', emoji: '\ud83e\udde0' },
-  { id: 'travel', label: 'Travel', emoji: '\u2708\ufe0f' },
-  { id: 'education', label: 'Education', emoji: '\ud83d\udcda' },
+  { id: 'tech', emoji: '\u2699\ufe0f' },
+  { id: 'business', emoji: '\ud83d\udcbc' },
+  { id: 'creative', emoji: '\u270f\ufe0f' },
+  { id: 'science', emoji: '\ud83d\udd2c' },
+  { id: 'health', emoji: '\ud83c\udfcb\ufe0f' },
+  { id: 'finance', emoji: '\ud83d\udcb0' },
+  { id: 'design', emoji: '\ud83c\udfa8' },
+  { id: 'coding', emoji: '\ud83d\udcbb' },
+  { id: 'music', emoji: '\ud83c\udfb5' },
+  { id: 'philosophy', emoji: '\ud83e\udde0' },
+  { id: 'travel', emoji: '\u2708\ufe0f' },
+  { id: 'education', emoji: '\ud83d\udcda' },
 ]
 
-// ─── Steps ────────────────────────────────────────────
+const CORE_AGENT_IDS = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
 
-const TOTAL_STEPS = 5
+const WELCOME_REPLIES: QuickReply[] = [
+  { id: 'what-can', labelKey: 'replies.whatCanYouDo', nextStage: 'capabilities' },
+  { id: 'tell-more', labelKey: 'replies.tellMeMore', nextStage: 'capabilities' },
+  { id: 'lets-start', labelKey: 'replies.letsStart', nextStage: 'interests' },
+]
+
+const CAPABILITIES_REPLIES: QuickReply[] = [
+  { id: 'cool', labelKey: 'replies.thatsCool', nextStage: 'interests' },
+  { id: 'memory', labelKey: 'replies.howMemory', nextStage: 'interests' },
+  { id: 'skip-chat', labelKey: 'replies.skipToChat', nextStage: 'interests' },
+]
+
+// ─── Component ──────────────────────────────────────────
 
 export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
   const { t } = useTranslation('onboarding')
-  const [step, setStep] = useState(0)
+  const [stage, setStage] = useState<Stage>('idle')
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [selectedInterests, setSelectedInterests] = useState<string[]>([])
-  const [direction, setDirection] = useState(1) // 1 = forward, -1 = back
+  const [isTyping, setIsTyping] = useState(false)
+  const [quickReplies, setQuickReplies] = useState<QuickReply[] | null>(null)
 
-  const goNext = useCallback(() => {
-    if (step >= TOTAL_STEPS - 1) {
-      onComplete(selectedInterests.length > 0 ? selectedInterests : undefined)
-    } else {
-      setDirection(1)
-      setStep(s => s + 1)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([])
+  const msgCounter = useRef(0)
+
+  // ─── Helpers ──────────────────────────────────────────
+
+  const addTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(fn, ms)
+    timeoutRefs.current.push(id)
+    return id
+  }, [])
+
+  const pushKernelMsg = useCallback((content: string, widget?: ChatMessage['widget']) => {
+    const id = `k-${++msgCounter.current}`
+    setMessages(prev => [...prev, { id, role: 'kernel', content, widget }])
+  }, [])
+
+  const pushUserMsg = useCallback((content: string) => {
+    const id = `u-${++msgCounter.current}`
+    setMessages(prev => [...prev, { id, role: 'user', content }])
+  }, [])
+
+  // Queue kernel messages with typing gaps
+  const queueMessages = useCallback((
+    msgs: Array<{ content: string; widget?: ChatMessage['widget'] }>,
+    startDelay: number,
+    onDone?: () => void
+  ) => {
+    let cumulative = startDelay
+    msgs.forEach((msg) => {
+      const typingDuration = 800 + Math.min(msg.content.length * 6, 800)
+      addTimeout(() => setIsTyping(true), cumulative)
+      cumulative += typingDuration
+      addTimeout(() => {
+        setIsTyping(false)
+        pushKernelMsg(msg.content, msg.widget)
+      }, cumulative)
+      cumulative += 300
+    })
+    if (onDone) {
+      addTimeout(onDone, cumulative + 100)
     }
-  }, [step, selectedInterests, onComplete])
+  }, [addTimeout, pushKernelMsg])
 
-  const goBack = useCallback(() => {
-    if (step > 0) {
-      setDirection(-1)
-      setStep(s => s - 1)
+  // ─── Auto-scroll ──────────────────────────────────────
+
+  useEffect(() => {
+    if (scrollRef.current?.scrollTo) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
     }
-  }, [step])
+  }, [messages.length, isTyping])
 
-  const toggleInterest = (id: string) => {
+  // ─── Stage Effects ────────────────────────────────────
+
+  // Start welcome sequence after mount
+  useEffect(() => {
+    addTimeout(() => setStage('welcome'), 800)
+    return () => {
+      timeoutRefs.current.forEach(clearTimeout)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Drive the conversation based on stage changes
+  useEffect(() => {
+    // Only clear replies when entering content stages (not awaiting states)
+    if (!stage.startsWith('awaiting')) {
+      setQuickReplies(null)
+    }
+
+    switch (stage) {
+      case 'welcome': {
+        const displayName = userName?.split('@')[0]
+        const greeting = displayName
+          ? t('welcome.greetingUser', { name: displayName })
+          : t('welcome.greeting')
+
+        queueMessages(
+          [
+            { content: greeting },
+            { content: t('welcome.intro') },
+          ],
+          200,
+          () => {
+            setStage('awaiting_welcome_reply')
+            setQuickReplies(WELCOME_REPLIES)
+          }
+        )
+        break
+      }
+
+      case 'capabilities': {
+        queueMessages(
+          [
+            { content: t('capabilities.agents') },
+            { content: '', widget: 'agent-showcase' },
+            { content: t('capabilities.agentsDetail') },
+          ],
+          300,
+          () => {
+            setStage('awaiting_capabilities_reply')
+            setQuickReplies(CAPABILITIES_REPLIES)
+          }
+        )
+        break
+      }
+
+      case 'interests': {
+        queueMessages(
+          [
+            { content: t('interests.prompt') },
+            { content: '', widget: 'interest-picker' },
+          ],
+          300,
+          () => setStage('awaiting_interests')
+        )
+        break
+      }
+
+      case 'ready': {
+        const notedKey = selectedInterests.length > 0 ? 'ready.noted' : 'ready.notedNoInterests'
+        queueMessages(
+          [
+            { content: t(notedKey) },
+            { content: t('ready.freeMessages') },
+            { content: '', widget: 'start-cta' },
+          ],
+          300,
+          () => setStage('awaiting_start')
+        )
+        break
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage])
+
+  // ─── Handlers ─────────────────────────────────────────
+
+  const handleQuickReply = useCallback((reply: QuickReply) => {
+    const label = t(reply.labelKey)
+    pushUserMsg(label)
+    setQuickReplies(null)
+    addTimeout(() => setStage(reply.nextStage), 400)
+  }, [t, pushUserMsg, addTimeout])
+
+  const handleInterestsConfirm = useCallback(() => {
+    addTimeout(() => setStage('ready'), 200)
+  }, [addTimeout])
+
+  const handleStart = useCallback(() => {
+    onComplete(selectedInterests.length > 0 ? selectedInterests : undefined)
+  }, [onComplete, selectedInterests])
+
+  const handleSkip = useCallback(() => {
+    onComplete(selectedInterests.length > 0 ? selectedInterests : undefined)
+  }, [onComplete, selectedInterests])
+
+  const toggleInterest = useCallback((id: string) => {
     setSelectedInterests(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     )
-  }
+  }, [])
 
-  // Swipe navigation
-  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (info.offset.x < -50 && info.velocity.x < -200) {
-      goNext()
-    } else if (info.offset.x > 50 && info.velocity.x > 200) {
-      goBack()
-    }
-  }
-
-  const variants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 80 : -80 }),
-    center: { opacity: 1, x: 0 },
-    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -80 : 80 }),
-  }
+  // ─── Render ───────────────────────────────────────────
 
   return (
-    <div className="ka-gate">
-      <AnimatePresence mode="wait" custom={direction}>
-        <motion.div
-          key={step}
-          className="ka-gate-card onboarding-card"
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: DURATION.NORMAL, ease: EASE.OUT }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.15}
-          onDragEnd={handleDragEnd}
-        >
-          {/* Progress dots */}
-          <div className="onboarding-dots" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={TOTAL_STEPS} aria-label={t('progress', { current: step + 1, total: TOTAL_STEPS })}>
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-              <div
-                key={i}
-                className={`onboarding-dot ${i === step ? 'active' : ''} ${i < step ? 'done' : ''}`}
-              />
-            ))}
-          </div>
+    <div className="ka-onb-page">
+      {/* Minimal header */}
+      <div className="ka-onb-header">
+        <img src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" className="ka-onb-logo" />
+      </div>
 
-          {/* Step 0: Welcome */}
-          {step === 0 && (
-            <>
-              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-1-welcome.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title onboarding-title">
-                {userName ? t('step0.titleUser', { name: userName.split('@')[0] }) : t('step0.title')}
-              </h1>
-              <p className="onboarding-subtitle">{t('step0.subtitle')}</p>
-              <p className="onboarding-body">
-                {t('step0.body')}
-              </p>
-            </>
-          )}
+      {/* Skip link */}
+      <button className="ka-onb-skip" onClick={handleSkip}>
+        {t('skipIntro')}
+      </button>
 
-          {/* Step 1: Memory */}
-          {step === 1 && (
-            <>
-              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-2-memory.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title onboarding-title">{t('step1.title')}</h1>
-              <p className="onboarding-subtitle">{t('step1.subtitle')}</p>
-              <p className="onboarding-body">
-                {t('step1.body')}
-              </p>
-            </>
-          )}
-
-          {/* Step 2: Agents */}
-          {step === 2 && (
-            <>
-              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-3-agents.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title onboarding-title">{t('step2.title')}</h1>
-              <p className="onboarding-subtitle">{t('step2.subtitle')}</p>
-              <p className="onboarding-body">
-                {t('step2.body')}
-              </p>
-            </>
-          )}
-
-          {/* Step 3: Interest Picker */}
-          {step === 3 && (
-            <>
-              <img className="onboarding-illustration" src={`${import.meta.env.BASE_URL}concepts/onboarding-4-interests.svg`} alt="" aria-hidden="true" />
-              <h1 className="ka-gate-title onboarding-title">{t('step3.title')}</h1>
-              <p className="onboarding-subtitle">{t('step3.subtitle')}</p>
-              <div className="onboarding-interests">
-                {INTERESTS.map(interest => (
-                  <button
-                    key={interest.id}
-                    className={`onboarding-interest${selectedInterests.includes(interest.id) ? ' onboarding-interest--selected' : ''}`}
-                    onClick={() => toggleInterest(interest.id)}
-                  >
-                    <span>{interest.emoji}</span>
-                    <span>{t(`interests.${interest.id}`)}</span>
-                    {selectedInterests.includes(interest.id) && <IconCheck size={14} />}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Step 4: Free vs Pro + Begin */}
-          {step === 4 && (
-            <>
-              <div className="onboarding-icon"><IconCrown size={28} aria-hidden="true" /></div>
-              <h1 className="ka-gate-title onboarding-title">{t('step4.title')}</h1>
-              <p className="onboarding-subtitle">{t('step4.subtitle')}</p>
-              <div className="onboarding-tiers">
-                <div className="onboarding-tier">
-                  <span className="onboarding-tier-name">{t('tiers.free')}</span>
-                  <ul className="onboarding-tier-features">
-                    <li>{t('tiers.freeFeature1')}</li>
-                    <li>{t('tiers.freeFeature2')}</li>
-                    <li>{t('tiers.freeFeature3')}</li>
-                  </ul>
-                </div>
-                <div className="onboarding-tier onboarding-tier--pro">
-                  <span className="onboarding-tier-name">{t('tiers.pro')}</span>
-                  <ul className="onboarding-tier-features">
-                    <li>{t('tiers.proFeature1')}</li>
-                    <li>{t('tiers.proFeature2')}</li>
-                    <li>{t('tiers.proFeature3')}</li>
-                    <li>{t('tiers.proFeature4')}</li>
-                  </ul>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* Action */}
-          <button className="onboarding-btn" onClick={goNext}>
-            {step === TOTAL_STEPS - 1 ? t('begin') : step === 3 ? (selectedInterests.length > 0 ? t('continue') : t('skip')) : t('continue')}
-            <IconArrowRight size={16} />
-          </button>
-
-          {/* Skip */}
-          {step < TOTAL_STEPS - 1 && (
-            <button
-              className="onboarding-skip"
-              onClick={() => onComplete(selectedInterests.length > 0 ? selectedInterests : undefined)}
+      {/* Chat area */}
+      <div className="ka-onb-chat" ref={scrollRef} role="log" aria-live="polite">
+        <AnimatePresence initial={false}>
+          {messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              className={`ka-msg ${msg.role === 'kernel' ? 'ka-msg--kernel' : 'ka-msg--user'}`}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: DURATION.NORMAL, ease: EASE.OUT }}
+              style={{ animation: 'none' }} // override CSS ka-ink-appear, use framer instead
             >
-              {t('skipIntro')}
-            </button>
+              {msg.role === 'kernel' && (
+                <div className="ka-msg-avatar" data-agent="kernel">
+                  <img
+                    src={`${import.meta.env.BASE_URL}${SPECIALISTS.kernel.emblem}`}
+                    alt=""
+                    className="ka-msg-avatar-img"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
+              <div className="ka-msg-bubble">
+                {/* Text content */}
+                {msg.content && <span>{msg.content}</span>}
+
+                {/* Inline widgets */}
+                {msg.widget === 'agent-showcase' && <AgentShowcase />}
+                {msg.widget === 'interest-picker' && (
+                  <InterestPicker
+                    selected={selectedInterests}
+                    onToggle={toggleInterest}
+                    onConfirm={handleInterestsConfirm}
+                    locked={stage === 'ready' || stage === 'awaiting_start'}
+                    t={t}
+                  />
+                )}
+                {msg.widget === 'start-cta' && (
+                  <motion.button
+                    className="ka-onb-start-cta"
+                    onClick={handleStart}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={TRANSITION.CARD}
+                  >
+                    {t('ready.startCta')}
+                    <IconArrowRight size={16} />
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Typing indicator */}
+        <AnimatePresence>
+          {isTyping && (
+            <motion.div
+              className="ka-msg ka-msg--kernel"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: DURATION.FAST }}
+              style={{ animation: 'none' }}
+            >
+              <div className="ka-msg-avatar" data-agent="kernel">
+                <img
+                  src={`${import.meta.env.BASE_URL}${SPECIALISTS.kernel.emblem}`}
+                  alt=""
+                  className="ka-msg-avatar-img"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ka-msg-bubble">
+                <div className="ka-typing">
+                  <span /><span /><span />
+                </div>
+              </div>
+            </motion.div>
           )}
-        </motion.div>
-      </AnimatePresence>
+        </AnimatePresence>
+      </div>
+
+      {/* Quick reply bar — uses CSS animations for reliable rendering */}
+      {quickReplies && (
+        <div
+          className="ka-onb-quick-replies ka-onb-quick-replies--visible"
+          role="group"
+          aria-label={t('replies.whatCanYouDo')}
+        >
+          {quickReplies.map((reply, i) => (
+            <button
+              key={reply.id}
+              className="ka-onb-quick-reply"
+              onClick={() => handleQuickReply(reply)}
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              {t(reply.labelKey)}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Agent Showcase ─────────────────────────────────────
+
+function AgentShowcase() {
+  return (
+    <div className="ka-onb-agent-showcase">
+      {CORE_AGENT_IDS.map((id, i) => {
+        const spec = SPECIALISTS[id]
+        if (!spec) return null
+        return (
+          <motion.div
+            key={id}
+            className="ka-onb-agent-item"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ ...SPRING.GENTLE, delay: i * 0.08 }}
+          >
+            <div
+              className="ka-onb-agent-circle"
+              style={{ borderColor: spec.color, color: spec.color }}
+            >
+              {spec.emblem ? (
+                <img src={`${import.meta.env.BASE_URL}${spec.emblem}`} alt="" className="ka-msg-avatar-img" />
+              ) : (
+                <span>{spec.icon}</span>
+              )}
+            </div>
+            <span className="ka-onb-agent-label" style={{ color: spec.color }}>
+              {spec.name}
+            </span>
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ─── Interest Picker ────────────────────────────────────
+
+function InterestPicker({
+  selected,
+  onToggle,
+  onConfirm,
+  locked,
+  t,
+}: {
+  selected: string[]
+  onToggle: (id: string) => void
+  onConfirm: () => void
+  locked: boolean
+  t: (key: string) => string
+}) {
+  return (
+    <div className={`ka-onb-interest-wrap${locked ? ' ka-onb-interest-wrap--locked' : ''}`}>
+      <div className="onboarding-interests">
+        {INTERESTS.map((interest, i) => (
+          <motion.button
+            key={interest.id}
+            className={`onboarding-interest${selected.includes(interest.id) ? ' onboarding-interest--selected' : ''}`}
+            onClick={() => !locked && onToggle(interest.id)}
+            disabled={locked}
+            role="checkbox"
+            aria-checked={selected.includes(interest.id)}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ ...SPRING.GENTLE, delay: i * 0.03 }}
+          >
+            <span>{interest.emoji}</span>
+            <span>{t(`interests.${interest.id}`)}</span>
+            {selected.includes(interest.id) && <IconCheck size={14} />}
+          </motion.button>
+        ))}
+      </div>
+      {!locked && selected.length > 0 && (
+        <motion.button
+          className="ka-onb-continue-btn"
+          onClick={onConfirm}
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          transition={{ duration: DURATION.QUICK, ease: EASE.OUT }}
+        >
+          {t('continue')}
+          <IconArrowRight size={14} />
+        </motion.button>
+      )}
     </div>
   )
 }

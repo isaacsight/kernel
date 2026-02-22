@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Witaj w Kernel",
-    "titleUser": "Witaj, {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel to silnik AI, który uczy się, kim jesteś, pamięta co dla Ciebie ważne i staje się lepszy z każdą rozmową."
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "Uczy się Ciebie",
-    "subtitle": "Pamięć, która rośnie.",
-    "body": "W miarę rozmów Kernel buduje graf wiedzy o Twoich zainteresowaniach, celach i relacjach. Każda rozmowa sprawia, że następna jest lepsza."
-  },
-  "step2": {
-    "title": "Agenci specjaliści",
-    "subtitle": "Właściwy umysł do zadania.",
-    "body": "Twoje wiadomości trafiają do agentów specjalistów — badacz do głębokich pytań, programista do pracy technicznej, pisarz do zadań kreatywnych."
-  },
-  "step3": {
-    "title": "Co Cię interesuje?",
-    "subtitle": "Wybierz kilka, aby pomóc Kernel Cię poznać."
-  },
-  "step4": {
-    "title": "Gotowe",
-    "subtitle": "Zacznij za darmo, uaktualnij kiedy chcesz."
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "Technologia",
     "business": "Biznes",
     "creative": "Pisanie kreatywne",
@@ -37,19 +24,20 @@
     "travel": "Podróże",
     "education": "Edukacja"
   },
-  "tiers": {
-    "free": "Darmowy",
-    "freeFeature1": "10 wiadomości",
-    "freeFeature2": "Podstawowi agenci",
-    "freeFeature3": "Pamięć",
-    "pro": "Pro",
-    "proFeature1": "Nieograniczone wiadomości",
-    "proFeature2": "Głębokie badania",
-    "proFeature3": "Roje wielu agentów",
-    "proFeature4": "Graf wiedzy"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "Kontynuuj",
-  "skip": "Pomiń",
-  "begin": "Rozpocznij",
   "skipIntro": "Pomiń wprowadzenie"
 }

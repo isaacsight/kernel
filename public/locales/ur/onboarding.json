@@ -1,29 +1,16 @@
 {
-  "step0": {
-    "title": "Kernel میں خوش آمدید",
-    "titleUser": "خوش آمدید، {{name}}",
-    "subtitle": "Your personal AI, built for you.",
-    "body": "Kernel ایک AI انجن ہے جو سیکھتا ہے کہ آپ کون ہیں، جو اہم ہے اسے یاد رکھتا ہے، اور ہر گفتگو کے ساتھ بہتر ہوتا ہے۔"
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
   },
-  "step1": {
-    "title": "یہ آپ کو سیکھتا ہے",
-    "subtitle": "یادداشت جو بڑھتی رہتی ہے۔",
-    "body": "جب آپ بات کرتے ہیں، Kernel آپ کی دلچسپیوں، اہداف اور تعلقات کا ایک نالج گراف بناتا ہے۔ ہر گفتگو اگلی گفتگو کو بہتر بناتی ہے۔"
-  },
-  "step2": {
-    "title": "ماہر ایجنٹس",
-    "subtitle": "کام کے لیے صحیح دماغ۔",
-    "body": "آپ کے پیغامات ماہر ایجنٹس کی طرف بھیجے جاتے ہیں - گہرے سوالات کے لیے ریسرچر، تکنیکی کام کے لیے کوڈر، تخلیقی کاموں کے لیے رائٹر۔"
-  },
-  "step3": {
-    "title": "آپ کی دلچسپیاں کیا ہیں؟",
-    "subtitle": "Kernel کو آپ کو جاننے میں مدد دینے کے لیے کچھ منتخب کریں۔"
-  },
-  "step4": {
-    "title": "تیار ہیں",
-    "subtitle": "مفت شروع کریں، کسی بھی وقت اپ گریڈ کریں۔"
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
   },
   "interests": {
+    "prompt": "One thing that helps me — what are you into?",
     "tech": "ٹیکنالوجی",
     "business": "بزنس",
     "creative": "تخلیقی تحریر",
@@ -37,19 +24,20 @@
     "travel": "سفر",
     "education": "تعلیم"
   },
-  "tiers": {
-    "free": "مفت",
-    "freeFeature1": "10 پیغامات",
-    "freeFeature2": "بنیادی ایجنٹس",
-    "freeFeature3": "میموری",
-    "pro": "Pro",
-    "proFeature1": "لامحدود پیغامات",
-    "proFeature2": "ڈیپ ریسرچ",
-    "proFeature3": "ملٹی ایجنٹ گروپس",
-    "proFeature4": "مکمل نالج گراف"
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
   },
   "continue": "جاری رکھیں",
-  "skip": "چھوڑ دیں",
-  "begin": "شروع کریں",
   "skipIntro": "تعارف چھوڑ دیں"
 }
