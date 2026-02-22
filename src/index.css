@@ -44,6 +44,17 @@
     --rubin-primary: var(--kernel-amethyst);
     --rubin-primary-hover: var(--kernel-amethyst-hover);
 
+    /* Semantic state colors — muted to match warm palette */
+    --kernel-success: #22C55E;
+    --kernel-success-light: rgba(34, 197, 94, 0.08);
+    --kernel-success-border: rgba(34, 197, 94, 0.2);
+    --kernel-warning: #B45309;
+    --kernel-warning-light: rgba(180, 83, 9, 0.08);
+    --kernel-warning-border: rgba(180, 83, 9, 0.2);
+    --kernel-info: #0369A1;
+    --kernel-info-light: rgba(3, 105, 161, 0.08);
+    --kernel-info-border: rgba(3, 105, 161, 0.2);
+
     /* ─── Typography ─────────────────────────────────────────── */
     --font-serif: "EB Garamond", serif;
     --font-mono: "Courier Prime", monospace;
@@ -80,8 +91,12 @@
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --duration-instant: 100ms;
     --duration-fast: 150ms;
+    --duration-quick: 200ms;
     --duration-normal: 300ms;
+    --duration-moderate: 400ms;
     --duration-slow: 500ms;
+    --duration-dramatic: 600ms;
+    --duration-hero: 800ms;
 
     /* ─── Spacing Scale ──────────────────────────────────────── */
     --space-xs: 4px;
@@ -1413,11 +1428,20 @@ h4 {
 }
 
 /* ─── Loading Splash ────────────────────────────────────── */
+/*
+ * "Ink Constellation" — Kernel's original loading animation.
+ * Three amethyst ink drops materialize on ivory paper, breathe
+ * in organic rhythm, then orbit gently like a constellation
+ * forming. Embodies the micro→macro tension: tiny intimate
+ * marks assembling into a larger pattern of intelligence.
+ */
 
 .ka-loading-splash {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: var(--space-xl);
     min-height: 100vh;
     min-height: 100dvh;
     background: var(--rubin-ivory);
@@ -1426,17 +1450,164 @@ h4 {
 .ka-loading-logo {
     width: 56px;
     height: 56px;
-    animation: ka-loading-pulse 1.8s ease-in-out infinite;
+    animation: ka-logo-materialize 1.2s var(--ease-out) both;
 }
 
-@keyframes ka-loading-pulse {
+/* The constellation container */
+.ka-loading-constellation {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    animation: ka-constellation-breathe 3s ease-in-out infinite;
+}
 
-    0%,
+/* Individual ink drops */
+.ka-loading-drop {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--kernel-amethyst);
+    animation:
+        ka-drop-materialize 0.8s var(--ease-out) both,
+        ka-drop-orbit 4s ease-in-out infinite;
+}
+
+/* Three drops arranged in a triangle, staggered entrance */
+.ka-loading-drop:nth-child(1) {
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 0s, 0.8s;
+}
+
+.ka-loading-drop:nth-child(2) {
+    bottom: 8px;
+    left: 8px;
+    animation-delay: 0.15s, 0.95s;
+}
+
+.ka-loading-drop:nth-child(3) {
+    bottom: 8px;
+    right: 8px;
+    animation-delay: 0.3s, 1.1s;
+}
+
+/* Faint connecting lines between drops — ink threads */
+.ka-loading-thread {
+    position: absolute;
+    background: var(--kernel-amethyst);
+    opacity: 0;
+    animation: ka-thread-appear 1s var(--ease-out) 0.6s both;
+}
+
+.ka-loading-thread:nth-child(4) {
+    top: 10px;
+    left: 16px;
+    width: 16px;
+    height: 1px;
+    transform: rotate(-55deg);
+    transform-origin: right center;
+}
+
+.ka-loading-thread:nth-child(5) {
+    top: 10px;
+    right: 16px;
+    width: 16px;
+    height: 1px;
+    transform: rotate(55deg);
+    transform-origin: left center;
+}
+
+.ka-loading-thread:nth-child(6) {
+    bottom: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 1px;
+}
+
+/* Drop materializes: ink blooming on paper */
+@keyframes ka-drop-materialize {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+        filter: blur(4px);
+    }
+    60% {
+        opacity: 0.8;
+        transform: scale(1.4);
+        filter: blur(0);
+    }
     100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Gentle orbital drift — not a full rotation, just breathing movement */
+@keyframes ka-drop-orbit {
+    0%, 100% {
+        translate: 0 0;
+        opacity: 1;
+    }
+    25% {
+        translate: -2px 1px;
+        opacity: 0.7;
+    }
+    50% {
+        translate: 0 -2px;
+        opacity: 1;
+    }
+    75% {
+        translate: 2px 1px;
+        opacity: 0.7;
+    }
+}
+
+/* Whole constellation breathes */
+@keyframes ka-constellation-breathe {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.06);
+        opacity: 0.85;
+    }
+}
+
+/* Threads fade in */
+@keyframes ka-thread-appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.15;
+    }
+}
+
+/* Logo materializes like ink */
+@keyframes ka-logo-materialize {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Legacy pulse — still used by cursor blink and other elements */
+@keyframes ka-loading-pulse {
+    0%, 100% {
         opacity: 0.4;
         transform: scale(1);
     }
-
     50% {
         opacity: 1;
         transform: scale(1.05);
@@ -2903,7 +3074,7 @@ h4 {
 .ka-goal-progress-fill {
     height: 100%;
     background: #22C55E;
-    transition: width 0.3s var(--ease-out);
+    transition: width var(--duration-normal) var(--ease-out);
 }
 
 .ka-goal-details {
@@ -5857,7 +6028,7 @@ h4 {
     font-size: 1rem;
     color: var(--rubin-slate);
     outline: none;
-    transition: border-color var(--duration-fast) var(--ease-out), height 0.2s ease-out;
+    transition: border-color var(--duration-fast) var(--ease-out), height var(--duration-quick) var(--ease-out);
     resize: none;
     overflow-y: auto;
     min-height: 48px;
@@ -5942,7 +6113,7 @@ h4 {
     justify-content: center;
     cursor: pointer;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    transition: all var(--duration-quick) var(--ease-out);
 }
 
 .ka-voice-btn:hover {
@@ -6128,7 +6299,7 @@ h4 {
     font-family: var(--font-mono);
     font-size: 0.6rem;
     letter-spacing: 0.04em;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-quick);
 }
 
 .ka-file-chip--sending {
@@ -6887,7 +7058,7 @@ h4 {
     font-size: 0.75rem;
     background: var(--rubin-ivory);
     border: 1px solid var(--rubin-ivory-dark);
-    transition: all 0.3s var(--ease-out);
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .ka-swarm-agent--working {
@@ -7400,7 +7571,7 @@ h4 {
     font-size: 0.85rem;
     letter-spacing: 0.06em;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-quick);
 }
 
 .landing-cta:hover {
@@ -7429,7 +7600,7 @@ h4 {
     padding: 32px 24px;
     border: 1px solid var(--rubin-ivory-dark);
     border-radius: var(--radius-md);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color var(--duration-quick), box-shadow var(--duration-quick);
 }
 
 .landing-feature:hover {
@@ -9377,7 +9548,7 @@ h4 {
 }
 
 .ka-kg-chevron {
-    transition: transform 0.2s;
+    transition: transform var(--duration-quick);
 }
 
 .ka-kg-chevron--open {
@@ -9674,7 +9845,7 @@ h4 {
 .stats-bar-fill {
     height: 100%;
     border-radius: var(--radius-xs);
-    transition: width 0.6s var(--ease-out);
+    transition: width var(--duration-dramatic) var(--ease-out);
 }
 
 .stats-agent-pct {
@@ -9733,7 +9904,7 @@ h4 {
     min-height: 2px;
     margin-top: auto;
     opacity: 0.7;
-    transition: height 0.4s var(--ease-out);
+    transition: height var(--duration-moderate) var(--ease-out);
 }
 
 .stats-chart-label {
@@ -10642,6 +10813,14 @@ h4 {
 [data-theme="dark"] body {
     background-color: #1C1A18;
     color: #E4DFD5;
+}
+
+[data-theme="dark"] .ka-loading-splash {
+    background: #1C1A18;
+}
+
+[data-theme="dark"] .ka-loading-thread {
+    background: rgba(107, 91, 149, 0.6);
 }
 
 [data-theme="dark"] .ka-msg--kernel .ka-msg-bubble {

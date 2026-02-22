@@ -10,6 +10,7 @@ import {
   IconSettings, IconEye, IconPlus,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
+import { KernelLoading } from '../components/KernelLoading'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
@@ -56,17 +57,7 @@ export function EnginePage() {
   const { user, isLoading, isAuthenticated } = useAuthContext()
 
   if (isLoading) {
-    return (
-      <div className="ka-loading-splash">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: DURATION.MODERATE, ease: EASE.OUT_STR }}
-        >
-          <img className="ka-loading-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-        </motion.div>
-      </div>
-    )
+    return <KernelLoading showLogo />
   }
 
   if (!isAuthenticated) {
@@ -78,7 +69,7 @@ export function EnginePage() {
 
   if (!onboarded) {
     return (
-      <Suspense fallback={<div className="ka-loading-splash" />}>
+      <Suspense fallback={<KernelLoading />}>
         <OnboardingFlow
           userName={user?.email || undefined}
           onComplete={(interests) => {
