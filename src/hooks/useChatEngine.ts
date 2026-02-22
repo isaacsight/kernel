@@ -2,7 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64, compressImage, extractPdfText, extractSpreadsheetText, PDF_NATIVE_MAX_BYTES } from '../engine/fileUtils'
-import { parseConversationFile, parseConversationExport, formatConversationsAsText } from '../engine/conversationImport'
+import { parseConversationFile, parseConversationExport, formatConversationsAsText, mineConversations, type ParsedConversation } from '../engine/conversationImport'
+import { PICKER_THRESHOLD } from '../components/ConversationPicker'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
@@ -96,6 +97,10 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [userGoals, setUserGoals] = useState<UserGoal[]>([])
   const userGoalsRef = useRef<UserGoal[]>([])
   userGoalsRef.current = userGoals
+
+  // Conversation picker state (for large imports)
+  const [pickerConversations, setPickerConversations] = useState<ParsedConversation[] | null>(null)
+  const pickerResolveRef = useRef<((selected: ParsedConversation[] | null) => void) | null>(null)
 
   // Today's briefing for home screen
   const [todayBriefing, setTodayBriefing] = useState<{ id: string; title: string; content: string } | null>(null)
@@ -204,6 +209,26 @@ export function useChatEngine(params: UseChatEngineParams) {
     }
     loadTodayBriefing()
   }, [userId])
+
+  // Conversation picker helpers
+  const promptConversationPicker = useCallback((conversations: ParsedConversation[]): Promise<ParsedConversation[] | null> => {
+    return new Promise(resolve => {
+      pickerResolveRef.current = resolve
+      setPickerConversations(conversations)
+    })
+  }, [])
+
+  const handlePickerConfirm = useCallback((selected: ParsedConversation[]) => {
+    pickerResolveRef.current?.(selected)
+    pickerResolveRef.current = null
+    setPickerConversations(null)
+  }, [])
+
+  const handlePickerCancel = useCallback(() => {
+    pickerResolveRef.current?.(null)
+    pickerResolveRef.current = null
+    setPickerConversations(null)
+  }, [])
 
   // Auto-title helper
   function generateTitle(content: string): string {
@@ -328,12 +353,23 @@ export function useChatEngine(params: UseChatEngineParams) {
         } else if (file.name.toLowerCase().endsWith('.zip')) {
           // ZIP — try to extract AI conversation exports (ChatGPT, Claude, Gemini)
           try {
-            const conversations = await parseConversationFile(file)
+            let conversations = await parseConversationFile(file)
+            if (conversations.length > PICKER_THRESHOLD) {
+              // Large import — let user pick which conversations to import
+              const picked = await promptConversationPicker(conversations)
+              if (!picked) {
+                textPrefix += `[Import cancelled by user]\n\n`
+                continue
+              }
+              conversations = picked
+            }
             if (conversations.length > 0) {
               const formatted = formatConversationsAsText(conversations)
               const source = conversations[0].source
               const count = conversations.length
               textPrefix += `[Imported ${count} conversation${count > 1 ? 's' : ''} from ${source}: ${file.name}]\n\n${formatted}\n\n`
+              // Background: mine imported conversations for memory & knowledge graph
+              mineConversations(userId, conversations).catch(() => {})
             } else {
               textPrefix += `[ZIP: ${file.name} — no recognized conversation data found]\n\n`
             }
@@ -344,12 +380,22 @@ export function useChatEngine(params: UseChatEngineParams) {
           // JSON — try to detect AI conversation exports (ChatGPT, Claude, Gemini)
           const raw = await readFileAsText(file)
           try {
-            const conversations = parseConversationExport(raw)
+            let conversations = parseConversationExport(raw)
+            if (conversations.length > PICKER_THRESHOLD) {
+              const picked = await promptConversationPicker(conversations)
+              if (!picked) {
+                textPrefix += `[Import cancelled by user]\n\n`
+                continue
+              }
+              conversations = picked
+            }
             if (conversations.length > 0) {
               const formatted = formatConversationsAsText(conversations)
               const source = conversations[0].source
               const count = conversations.length
               textPrefix += `[Imported ${count} conversation${count > 1 ? 's' : ''} from ${source}: ${file.name}]\n\n${formatted}\n\n`
+              // Background: mine imported conversations for memory & knowledge graph
+              mineConversations(userId, conversations).catch(() => {})
             } else {
               // Not a recognized conversation format — send as raw JSON
               let text = raw
@@ -686,5 +732,6 @@ export function useChatEngine(params: UseChatEngineParams) {
     inputRef, sendMessage, handleSubmit, stopStreaming,
     messageCountRef,
     handleBriefingGoDeeper, handleBriefingAddGoal,
+    pickerConversations, handlePickerConfirm, handlePickerCancel,
   }
 }

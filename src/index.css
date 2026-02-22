@@ -2261,6 +2261,271 @@ h4 {
     font-weight: 400;
 }
 
+/* ─── Conversation Picker Modal ────────────────────────── */
+.ka-picker-modal {
+    background: var(--rubin-ivory);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px 20px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.ka-picker-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.ka-picker-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--rubin-slate);
+    margin: 0;
+}
+
+.ka-picker-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--rubin-slate);
+    opacity: 0.55;
+    margin: 4px 0 0;
+}
+
+.ka-picker-search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 12px;
+    border: 1px solid rgba(100, 100, 100, 0.15);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    color: var(--rubin-slate);
+    opacity: 0.7;
+}
+
+.ka-picker-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--rubin-slate);
+    outline: none;
+}
+
+.ka-picker-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    padding: 0 2px;
+}
+
+.ka-picker-select-all {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--rubin-slate);
+    opacity: 0.6;
+    cursor: pointer;
+    padding: 4px 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.ka-picker-select-all:hover { opacity: 1; }
+
+.ka-picker-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--rubin-slate);
+    opacity: 0.5;
+}
+
+.ka-picker-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: var(--space-md);
+    border: 1px solid rgba(100, 100, 100, 0.1);
+    border-radius: var(--radius-md);
+    min-height: 0;
+}
+
+.ka-picker-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.06);
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--duration-fast) var(--ease-out);
+    color: var(--rubin-slate);
+}
+
+.ka-picker-item:last-child { border-bottom: none; }
+
+.ka-picker-item:hover {
+    background: rgba(100, 100, 100, 0.04);
+}
+
+.ka-picker-item--selected {
+    background: rgba(107, 91, 149, 0.06);
+}
+
+.ka-picker-item--selected:hover {
+    background: rgba(107, 91, 149, 0.10);
+}
+
+.ka-picker-check {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(100, 100, 100, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-picker-check--on {
+    background: var(--rubin-slate);
+    border-color: var(--rubin-slate);
+    color: var(--rubin-ivory);
+}
+
+.ka-picker-item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ka-picker-item-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ka-picker-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    opacity: 0.45;
+    margin-top: 2px;
+}
+
+.ka-picker-empty {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    color: var(--rubin-slate);
+    opacity: 0.5;
+    text-align: center;
+    padding: var(--space-xl);
+    margin: 0;
+}
+
+.ka-picker-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.ka-picker-cancel {
+    flex: 1;
+    padding: var(--space-md);
+    border: 1px solid rgba(100, 100, 100, 0.15);
+    border-radius: var(--radius-md);
+    background: none;
+    color: var(--rubin-slate);
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-picker-cancel:hover {
+    background: rgba(100, 100, 100, 0.04);
+}
+
+.ka-picker-confirm {
+    flex: 2;
+    padding: var(--space-md);
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ka-picker-confirm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ka-picker-confirm:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+    .ka-picker-modal {
+        padding: 24px 16px 16px;
+        padding-bottom: calc(16px + 64px + env(safe-area-inset-bottom, 0px));
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        max-width: 100%;
+        max-height: 85vh;
+    }
+}
+
+[data-theme="dark"] .ka-picker-modal {
+    background: var(--dark-bg-surface);
+}
+
+[data-theme="dark"] .ka-picker-search {
+    border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-picker-search input {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .ka-picker-list {
+    border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-picker-item {
+    color: var(--dark-text-primary);
+    border-bottom-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-picker-check {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .ka-picker-check--on {
+    background: var(--dark-text-primary);
+    border-color: var(--dark-text-primary);
+    color: var(--dark-bg-surface);
+}
+
 /* ─── Shared Conversation Page ─────────────────────────── */
 .ka-shared-page {
     max-width: 720px;

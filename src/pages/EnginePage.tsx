@@ -44,6 +44,7 @@ const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasks
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
+const ConversationPicker = lazyRetry(() => import('../components/ConversationPicker').then(m => ({ default: m.ConversationPicker })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 
@@ -823,6 +824,19 @@ function EngineChat() {
               onClose={() => msgActions.setShowShareModal(false)}
               onToast={showToast}
               onNativeShare={msgActions.handleNativeShare}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      {/* Conversation Import Picker */}
+      <AnimatePresence>
+        {chatEngine.pickerConversations && (
+          <Suspense fallback={null}>
+            <ConversationPicker
+              conversations={chatEngine.pickerConversations}
+              onConfirm={chatEngine.handlePickerConfirm}
+              onCancel={chatEngine.handlePickerCancel}
             />
           </Suspense>
         )}

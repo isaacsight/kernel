@@ -401,3 +401,156 @@ export function formatConversationsAsText(
 
   return parts.join('\n\n---\n\n')
 }
+
+// ─── Memory Mining ───────────────────────────────────────
+// Extract user profile and knowledge graph from imported conversations.
+// Runs in background after import — no blocking.
+
+import type { UserMemoryProfile } from './MemoryAgent'
+import { extractMemory, mergeMemory } from './MemoryAgent'
+import { extractEntities, mergeExtraction, type KGEntity, type KGRelation } from './KnowledgeGraph'
+import { getUserMemory, upsertUserMemory, getKGEntities, getKGRelations, upsertKGEntity, upsertKGRelation } from './SupabaseClient'
+
+export interface MineResult {
+  memoriesMined: number
+  entitiesFound: number
+  relationsFound: number
+}
+
+/**
+ * Mine imported conversations for memory and knowledge graph data.
+ * Processes conversations in batches, merging into the user's existing profile.
+ * Returns counts of what was extracted.
+ */
+export async function mineConversations(
+  userId: string,
+  conversations: ParsedConversation[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<MineResult> {
+  const result: MineResult = { memoriesMined: 0, entitiesFound: 0, relationsFound: 0 }
+
+  // Get existing state
+  const existingMem = await getUserMemory(userId)
+  let currentProfile: UserMemoryProfile = existingMem?.profile as unknown as UserMemoryProfile || {
+    interests: [], communication_style: '', goals: [], facts: [], preferences: [],
+  }
+  let existingEntities = await getKGEntities(userId)
+
+  // Process conversations in batches of 5 (avoid hammering the API)
+  const BATCH_SIZE = 5
+  const allConvs = conversations.filter(c => c.messages.length > 0)
+  let processed = 0
+
+  for (let i = 0; i < allConvs.length; i += BATCH_SIZE) {
+    const batch = allConvs.slice(i, i + BATCH_SIZE)
+
+    // Combine batch messages for memory extraction (take user messages for profile)
+    const batchMessages = batch.flatMap(conv =>
+      conv.messages.slice(0, 20).map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }))
+    ).slice(0, 40) // Cap at 40 messages per batch
+
+    // Extract memory profile from this batch
+    try {
+      const newProfile = await extractMemory(batchMessages)
+      if (newProfile.interests.length > 0 || newProfile.facts.length > 0 || newProfile.goals.length > 0) {
+        currentProfile = await mergeMemory(currentProfile, newProfile)
+        result.memoriesMined += batch.length
+      }
+    } catch { /* non-critical — continue */ }
+
+    // Extract entities from user messages
+    try {
+      const entityMessages = batchMessages
+        .filter(m => m.content.trim())
+        .map((m, idx) => ({
+          id: `import-${i}-${idx}`,
+          agentId: m.role === 'user' ? 'human' : 'kernel',
+          agentName: m.role === 'user' ? 'User' : 'Assistant',
+          content: m.content,
+          timestamp: new Date(),
+        }))
+
+      const extraction = await extractEntities(entityMessages, existingEntities.map(e => e.name))
+      if (extraction.entities.length > 0 || extraction.relations.length > 0) {
+        await mergeExtraction(userId, extraction, existingEntities, upsertKGEntity, upsertKGRelation)
+        result.entitiesFound += extraction.entities.length
+        result.relationsFound += extraction.relations.length
+        // Refresh existing entities for next batch
+        existingEntities = await getKGEntities(userId)
+      }
+    } catch { /* non-critical — continue */ }
+
+    processed += batch.length
+    onProgress?.(processed, allConvs.length)
+  }
+
+  // Persist final merged memory profile
+  if (result.memoriesMined > 0) {
+    await upsertUserMemory(userId, currentProfile as unknown as Record<string, unknown>)
+  }
+
+  return result
+}
+
+// ─── .kernel Export Format ───────────────────────────────
+// Rich export that includes messages, memory, knowledge graph,
+// and metadata. More useful than raw message dumps.
+
+export interface KernelExport {
+  version: 1
+  exported_at: string
+  source: 'kernel'
+  user_profile: UserMemoryProfile | null
+  knowledge_graph: {
+    entities: KGEntity[]
+    relations: KGRelation[]
+  }
+  conversations: {
+    id: string
+    title: string
+    messages: { role: string; content: string; agent?: string; timestamp?: string }[]
+  }[]
+}
+
+export async function exportKernelData(
+  userId: string,
+  conversations: { id: string; title: string; messages: { role: string; content: string; agentName?: string; timestamp?: number }[] }[],
+): Promise<KernelExport> {
+  const [mem, entities, relations] = await Promise.all([
+    getUserMemory(userId),
+    getKGEntities(userId),
+    getKGRelations(userId),
+  ])
+
+  return {
+    version: 1,
+    exported_at: new Date().toISOString(),
+    source: 'kernel',
+    user_profile: mem?.profile as unknown as UserMemoryProfile ?? null,
+    knowledge_graph: { entities, relations },
+    conversations: conversations.map(c => ({
+      id: c.id,
+      title: c.title,
+      messages: c.messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        agent: m.agentName,
+        timestamp: m.timestamp ? new Date(m.timestamp).toISOString() : undefined,
+      })),
+    })),
+  }
+}
+
+export function downloadKernelExport(data: KernelExport) {
+  const json = JSON.stringify(data, null, 2)
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `kernel-export-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
