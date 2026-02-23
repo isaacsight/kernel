@@ -1699,6 +1699,26 @@ h4 {
     opacity: 0.7;
 }
 
+/* ─── Particle Grid ─────────────────────────────────────── */
+
+.ka-particle-grid {
+    width: 240px;
+    height: 240px;
+    margin-bottom: var(--space-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.ka-particle-grid canvas {
+    width: 100%;
+    height: 100%;
+}
+
+[data-theme="dark"] .ka-particle-grid {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
 .ka-empty-title {
     font-family: var(--font-serif);
     font-style: italic;
