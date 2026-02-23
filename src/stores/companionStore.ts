@@ -115,7 +115,7 @@ export const useCompanionStore = create<CompanionStore>()(
       tickDecay: () => {
         set(s => ({
           happiness: clamp(s.happiness - 0.033, 0, 100),  // ~2/hr at 60s interval
-          attention: clamp(s.attention - 0.133, 0, 100),   // ~8/hr at 60s interval
+          attention: clamp(s.attention - 0.133, 15, 100),   // ~8/hr at 60s interval, floor 15 ("waiting")
         }))
       },
 
@@ -127,7 +127,7 @@ export const useCompanionStore = create<CompanionStore>()(
 
         set({
           happiness: clamp(state.happiness - elapsed * 2, 10, 100),  // floor 10
-          attention: clamp(state.attention - elapsed * 8, 0, 100),   // floor 0
+          attention: clamp(state.attention - elapsed * 8, 15, 100),   // floor 15 ("waiting" not "abandoned")
         })
       },
     }),

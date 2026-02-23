@@ -1714,6 +1714,34 @@ h4 {
     contain: layout style paint;
 }
 
+/* Scanline overlay — subtle "digital entity on screen" effect */
+.ka-empty-constellation::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    border-radius: 4px;
+    z-index: 10;
+}
+[data-theme="dark"] .ka-empty-constellation::after {
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(255,255,255,0.02) 2px,
+        rgba(255,255,255,0.02) 4px
+    );
+    mix-blend-mode: screen;
+}
+
 /* Garden glow — warm ambient light like sunlit soil */
 .ka-empty-constellation::before {
     content: '';
@@ -1754,6 +1782,8 @@ h4 {
     animation:
         ka-scanline-reveal 0.6s ease-out 0.2s both,
         ka-entity-float 3s ease-in-out 0.9s infinite;
+    /* Smooth mood transitions — filter/opacity blend organically */
+    transition: filter 1.5s ease-in-out;
 }
 
 /* ── Pixels — 10px, 32-bit gradient-shaded body ──────── */
@@ -1775,7 +1805,7 @@ h4 {
         inset 1px 1px 0 rgba(255,255,255,0.18),
         inset -1px -1px 0 rgba(0,0,0,0.12),
         0 1px 1px rgba(0,0,0,0.06);
-    transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.8s ease-in-out, filter 1.5s ease-in-out;
 }
 
 /* Outline pixels — anti-aliased dark border ring for definition */
@@ -1792,9 +1822,9 @@ h4 {
         0 1px 2px rgba(0,0,0,0.15);
 }
 
-/* Body pixels breathe — warm scale pulse (32-bit life) */
+/* Body pixels breathe — warm scale pulse (32-bit life), rate tied to mood */
 .ka-pixel-creature .ka-pixel:not(.ka-pixel--halo):not(.ka-pixel--eye):not(.ka-pixel--eye-light):not(.ka-pixel--outline):not([class*="wing"]) {
-    animation: ka-body-breathe 4s ease-in-out infinite;
+    animation: ka-body-breathe var(--breathe-rate, 4s) ease-in-out infinite;
 }
 
 /* Sprout/Flower pixels — 32-bit rich gradient green */
@@ -2516,6 +2546,7 @@ h4 {
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Excited — bouncy hop, fast float ──────────────────── */
+.ka-empty-constellation[data-mood="excited"] { --breathe-rate: 2s; }
 .ka-empty-constellation[data-mood="excited"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.5s ease-out 0.2s both,
                ka-entity-hop 1.8s ease-in-out 0.6s infinite;
@@ -2534,6 +2565,7 @@ h4 {
 }
 
 /* ── Happy — bright, lively float + warm glow ──────────── */
+.ka-empty-constellation[data-mood="happy"] { --breathe-rate: 3s; }
 .ka-empty-constellation[data-mood="happy"] .ka-pixel {
     opacity: 0.94;
 }
@@ -2544,6 +2576,7 @@ h4 {
 }
 
 /* ── Content — gentle warm state, slower rhythm ────────── */
+.ka-empty-constellation[data-mood="content"] { --breathe-rate: 4s; }
 .ka-empty-constellation[data-mood="content"] .ka-pixel {
     opacity: 0.85;
 }
@@ -2554,6 +2587,7 @@ h4 {
 }
 
 /* ── Sad — droopy, desaturated, slow ──────────────────── */
+.ka-empty-constellation[data-mood="sad"] { --breathe-rate: 6s; }
 .ka-empty-constellation[data-mood="sad"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
                ka-entity-droop 5s ease-in-out 1s infinite;
@@ -2574,6 +2608,7 @@ h4 {
 }
 
 /* ── Sleepy — drowsy sway, half-closed eyes ────────────── */
+.ka-empty-constellation[data-mood="sleepy"] { --breathe-rate: 8s; }
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
                ka-entity-drowsy 6s ease-in-out 1s infinite;
@@ -2597,6 +2632,7 @@ h4 {
 }
 
 /* ── Lonely — look-around, muted, searching ──────────── */
+.ka-empty-constellation[data-mood="lonely"] { --breathe-rate: 5s; }
 .ka-empty-constellation[data-mood="lonely"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
                ka-entity-lonesome 8s ease-in-out 0.8s infinite;
@@ -2614,6 +2650,7 @@ h4 {
 }
 
 /* ── Bored — neutral, desaturated, slow ────────────────── */
+.ka-empty-constellation[data-mood="bored"] { --breathe-rate: 5s; }
 .ka-empty-constellation[data-mood="bored"] .ka-pixel {
     opacity: 0.72;
 }
