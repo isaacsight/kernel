@@ -200,6 +200,7 @@ function EngineChat() {
     signOut,
     setShowDeleteConfirm: billing.setShowDeleteConfirm,
     setIsDrawerOpen,
+    handleNewChat: () => convs.handleNewChat(),
   })
 
   const fileAttachments = useFileAttachments(isPro, showToast)
@@ -1216,7 +1217,7 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
           </Suspense>
         )}
       </AnimatePresence>

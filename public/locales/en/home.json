@@ -22,7 +22,8 @@
     "notifBriefings": "Briefing alerts",
     "notifGoals": "Goal updates",
     "notifReminders": "Reminders",
-    "notifPush": "Push notifications"
+    "notifPush": "Push notifications",
+    "darkMode": "Dark mode"
   },
   "admin": "Admin",
   "pro": "Pro",

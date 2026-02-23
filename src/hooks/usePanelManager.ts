@@ -8,6 +8,7 @@ export function usePanelManager(callbacks: {
   signOut: () => void
   setShowDeleteConfirm: (v: boolean) => void
   setIsDrawerOpen: (v: boolean) => void
+  handleNewChat: () => void
 }) {
   const [showKGPanel, setShowKGPanel] = useState(false)
   const [showStatsPanel, setShowStatsPanel] = useState(false)
@@ -56,6 +57,7 @@ export function usePanelManager(callbacks: {
     switch (tab) {
       case 'home':
         closeOtherPanels()
+        callbacks.handleNewChat()
         break
       case 'chats':
         closeOtherPanels('drawer')
