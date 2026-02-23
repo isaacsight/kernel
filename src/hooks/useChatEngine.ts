@@ -224,10 +224,16 @@ export function useChatEngine(params: UseChatEngineParams) {
     let convId = activeConversationId
     if (!convId) {
       const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
-      const conv = await createConversation(userId, title)
-      if (!conv) {
+      let conv: Awaited<ReturnType<typeof createConversation>>
+      try {
+        conv = await createConversation(userId, title)
+      } catch {
         showToast('Session expired. Signing you out — please sign back in.')
         signOut()
+        return
+      }
+      if (!conv) {
+        showToast('Failed to create conversation. Please try again.')
         return
       }
       convId = conv.id
