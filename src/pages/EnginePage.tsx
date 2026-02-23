@@ -194,13 +194,14 @@ function EngineChat() {
   const { updateAvailable, updateNow } = useServiceWorkerUpdate()
   const billing = useBilling(user, showToast, signOut)
 
+  const newChatRef = useRef<() => void>(() => {})
   const panels = usePanelManager({
     handleUpgrade: billing.handleUpgrade,
     handleManageSubscription: billing.handleManageSubscription,
     signOut,
     setShowDeleteConfirm: billing.setShowDeleteConfirm,
     setIsDrawerOpen,
-    handleNewChat: () => convs.handleNewChat(),
+    handleNewChat: () => newChatRef.current(),
   })
 
   const fileAttachments = useFileAttachments(isPro, showToast)
@@ -208,6 +209,7 @@ function EngineChat() {
   const convs = useConversations(user?.id, (msgs) => {
     chatEngine.setMessages(msgs as any)
   })
+  newChatRef.current = convs.handleNewChat
 
   const chatEngine = useChatEngine({
     userId: user!.id,
