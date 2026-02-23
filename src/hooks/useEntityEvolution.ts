@@ -9,6 +9,7 @@ import type { KGEntity } from '../engine/KnowledgeGraph'
 import type { UserGoal } from '../engine/GoalTracker'
 import type { UserMemoryProfile } from '../engine/MemoryAgent'
 import { TIER_THRESHOLDS, type TierName, TIER_NAMES } from '../components/pixelGrids'
+import { useCompanionMood, type MoodState, type CompanionMoodResult } from './useCompanionMood'
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -28,6 +29,8 @@ export interface EntityEvolutionState {
   hasUrgentGoals: boolean
   isRecentlyActive: boolean
   isPro: boolean
+  moodState: MoodState
+  companion: CompanionMoodResult
   cssVars: Record<string, string>
   dataAttrs: Record<string, string>
 }
@@ -222,6 +225,10 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
     return (Date.now() - new Date(lastConversationUpdatedAt).getTime()) < 3_600_000
   }, [lastConversationUpdatedAt])
 
+  // Companion mood system
+  const companion = useCompanionMood(timePhase, isRecentlyActive)
+  const { mood: moodState } = companion
+
   // Pre-compute CSS vars
   const rgb = hexToRgb(topicColor)
   const cssVars: Record<string, string> = {
@@ -239,6 +246,8 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
     ...(hasUnreadBriefing ? { 'data-briefing': 'true' } : {}),
     ...(isPro ? { 'data-pro': 'true' } : {}),
     ...(isEvolving ? { 'data-evolving': 'true' } : {}),
+    'data-mood': moodState,
+    'data-topic': topic,
   }
 
   return {
@@ -246,6 +255,7 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
     tierName: TIER_NAMES[tier],
     topic, topicColor, timePhase,
     isEvolving, hasUnreadBriefing, hasUrgentGoals, isRecentlyActive, isPro,
+    moodState, companion,
     cssVars, dataAttrs,
   }
 }

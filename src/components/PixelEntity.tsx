@@ -4,19 +4,28 @@
 // applies evolution CSS vars/data-attrs, handles tap interaction.
 // Mood expressions (mouth, thought bubbles) layered on top.
 // Accessories rendered as pixel overlays.
+// Canvas particle overlay for enhanced visual effects.
 
-import { useRef, useCallback, useEffect, useMemo } from 'react'
+import { useRef, useCallback, useEffect, useMemo, useState } from 'react'
 import { ENTITY_PIXELS, GROUND_GLOW, PARTICLES, ENTITY_PIXELS_BY_TOPIC } from './pixelGrids'
 import { getExpression } from './pixelExpressions'
 import { getEquippedAccessoryPixels } from './pixelAccessories'
+import { PixelEntityCanvas } from './PixelEntityCanvas'
 import type { EntityEvolutionState } from '../hooks/useEntityEvolution'
 
 interface PixelEntityProps {
   evolution: EntityEvolutionState
 }
 
+// Check reduced motion preference
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export function PixelEntity({ evolution }: PixelEntityProps) {
   const creatureRef = useRef<HTMLDivElement>(null)
+  const [showCanvas] = useState(() => !prefersReducedMotion())
 
   const handleTap = useCallback(() => {
     const el = creatureRef.current
@@ -43,7 +52,7 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
     return () => clearTimeout(timerId)
   }, [])
 
-  const { tier, cssVars, dataAttrs, moodState, topic } = evolution
+  const { tier, cssVars, dataAttrs, moodState, topic, topicColor } = evolution
 
   // Select topic-specific pixel grid (fallback to default garden)
   const topicPixels = ENTITY_PIXELS_BY_TOPIC[topic] || ENTITY_PIXELS
@@ -81,6 +90,17 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
       style={cssVars as React.CSSProperties}
       {...dataAttrs}
     >
+      {/* Canvas particle overlay — additive effects */}
+      {showCanvas && (
+        <PixelEntityCanvas
+          width={240}
+          height={220}
+          tier={tier}
+          mood={moodState}
+          topicColor={topicColor}
+        />
+      )}
+
       {/* Floating entity */}
       <div
         ref={creatureRef}

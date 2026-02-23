@@ -192,3 +192,393 @@ export const TIER_NAMES = ['Seed', 'Sprout', 'Awake', 'Bloom', 'Garden'] as cons
 export type TierName = typeof TIER_NAMES[number]
 
 export const TIER_THRESHOLDS = [0, 15, 35, 60, 85] as const
+
+// ─── Topic Creature Variants ────────────────────────────────
+//
+// Each topic domain gets a unique creature shape.
+// CONSTRAINT: All variants share eye positions (x:48,y:36 and x:72,y:36)
+// so expressions (mouth, thought bubbles) work universally.
+// Variants use different halo/wing styles for visual identity.
+
+import type { TopicDomain } from '../hooks/useEntityEvolution'
+
+// Tech — angular/rectangular with antenna and circuit arms
+const TECH_PIXELS: PixelDef[] = [
+  // ── Tier 0: Angular seed — boxy with two eyes ───
+  { x: 48, y: 24, variant: '',    tier: 0 },
+  { x: 60, y: 24, variant: '',    tier: 0 },
+  { x: 72, y: 24, variant: '',    tier: 0 },
+  { x: 36, y: 36, variant: '',    tier: 0 },
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
+  { x: 60, y: 36, variant: '',    tier: 0 },
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
+  { x: 84, y: 36, variant: '',    tier: 0 },
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 48, y: 48, variant: '',    tier: 0 },
+  { x: 60, y: 48, variant: '',    tier: 0 },
+  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 1: Antenna + circuit arms ──
+  { x: 60, y: 0,  variant: 'halo', tier: 1 },  // antenna tip
+  { x: 60, y: 12, variant: 'halo', tier: 1 },  // antenna shaft
+  { x: 36, y: 24, variant: '',     tier: 1 },
+  { x: 84, y: 24, variant: '',     tier: 1 },
+  { x: 24, y: 36, variant: '',     tier: 1 },
+  { x: 96, y: 36, variant: '',     tier: 1 },
+  { x: 36, y: 48, variant: '',     tier: 1 },
+  { x: 84, y: 48, variant: '',     tier: 1 },
+  { x: 36, y: 60, variant: '',     tier: 1 },
+  { x: 48, y: 60, variant: '',     tier: 1 },
+  { x: 60, y: 60, variant: '',     tier: 1 },
+  { x: 72, y: 60, variant: '',     tier: 1 },
+  { x: 84, y: 60, variant: '',     tier: 1 },
+  { x: 20, y: 44, variant: 'wing-l', tier: 1 },  // circuit arm L
+  { x: 100, y: 44, variant: 'wing-r', tier: 1 }, // circuit arm R
+  { x: 48, y: 72, variant: '',     tier: 1 },
+  { x: 60, y: 72, variant: '',     tier: 1 },
+  { x: 72, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 84, variant: '',     tier: 1 },
+  { x: 72, y: 84, variant: '',     tier: 1 },
+  // ── Tier 2: Antenna fork, LED heart, wider circuit ──
+  { x: 48, y: -4, variant: 'halo', tier: 2 },
+  { x: 72, y: -4, variant: 'halo', tier: 2 },
+  { x: 60, y: 60, variant: 'core', tier: 2 },
+  { x: 24, y: 48, variant: '',     tier: 2 },
+  { x: 96, y: 48, variant: '',     tier: 2 },
+  { x: 36, y: 72, variant: '',     tier: 2 },
+  { x: 84, y: 72, variant: '',     tier: 2 },
+  { x: 8,  y: 44, variant: 'wing-l', tier: 2 },
+  { x: 112, y: 44, variant: 'wing-r', tier: 2 },
+  // ── Tier 3: Signal dish, extended arms ──
+  { x: 60, y: -16, variant: 'crown', tier: 3 },
+  { x: 36, y: -4, variant: 'halo', tier: 3 },
+  { x: 84, y: -4, variant: 'halo', tier: 3 },
+  { x: 8,  y: 52, variant: 'wing-l', tier: 3 },
+  { x: 112, y: 52, variant: 'wing-r', tier: 3 },
+  { x: 36, y: 84, variant: '',     tier: 3 },
+  { x: 84, y: 84, variant: '',     tier: 3 },
+  { x: 60, y: 96, variant: '',     tier: 3 },
+  // ── Tier 4: Full array, max circuit ──
+  { x: 36, y: -16, variant: 'halo', tier: 4 },
+  { x: 48, y: -16, variant: 'halo', tier: 4 },
+  { x: 72, y: -16, variant: 'halo', tier: 4 },
+  { x: 84, y: -16, variant: 'halo', tier: 4 },
+  { x: 24, y: -4, variant: 'halo', tier: 4 },
+  { x: 96, y: -4, variant: 'halo', tier: 4 },
+  { x: 0,  y: 44, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 44, variant: 'wing-r', tier: 4 },
+  { x: 0,  y: 52, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 52, variant: 'wing-r', tier: 4 },
+  { x: 24, y: 60, variant: '',     tier: 4 },
+  { x: 96, y: 60, variant: '',     tier: 4 },
+  { x: 48, y: 96, variant: '',     tier: 4 },
+  { x: 72, y: 96, variant: '',     tier: 4 },
+]
+
+// Creative — round/organic with beret and flowing scarf
+const CREATIVE_PIXELS: PixelDef[] = [
+  // ── Tier 0: Round organic seed ───
+  { x: 48, y: 24, variant: '',    tier: 0 },
+  { x: 60, y: 24, variant: '',    tier: 0 },
+  { x: 72, y: 24, variant: '',    tier: 0 },
+  { x: 36, y: 36, variant: '',    tier: 0 },
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
+  { x: 60, y: 36, variant: '',    tier: 0 },
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
+  { x: 84, y: 36, variant: '',    tier: 0 },
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 48, y: 48, variant: '',    tier: 0 },
+  { x: 60, y: 48, variant: '',    tier: 0 },
+  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 1: Beret + scarf ──
+  { x: 36, y: 12, variant: 'halo', tier: 1 },  // beret left
+  { x: 48, y: 8,  variant: 'halo', tier: 1 },  // beret top
+  { x: 60, y: 8,  variant: 'halo', tier: 1 },  // beret center
+  { x: 72, y: 12, variant: 'halo', tier: 1 },  // beret right
+  { x: 36, y: 24, variant: '',     tier: 1 },
+  { x: 84, y: 24, variant: '',     tier: 1 },
+  { x: 24, y: 36, variant: '',     tier: 1 },
+  { x: 96, y: 36, variant: '',     tier: 1 },
+  { x: 36, y: 48, variant: '',     tier: 1 },
+  { x: 84, y: 48, variant: '',     tier: 1 },
+  { x: 36, y: 60, variant: '',     tier: 1 },
+  { x: 48, y: 60, variant: '',     tier: 1 },
+  { x: 60, y: 60, variant: '',     tier: 1 },
+  { x: 72, y: 60, variant: '',     tier: 1 },
+  { x: 84, y: 60, variant: '',     tier: 1 },
+  { x: 96, y: 52, variant: 'wing-r', tier: 1 },  // scarf end
+  { x: 104, y: 56, variant: 'wing-r', tier: 1 }, // scarf trail
+  { x: 48, y: 72, variant: '',     tier: 1 },
+  { x: 60, y: 72, variant: '',     tier: 1 },
+  { x: 72, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 84, variant: '',     tier: 1 },
+  { x: 72, y: 84, variant: '',     tier: 1 },
+  // ── Tier 2: Bigger beret, heart, flowing scarf ──
+  { x: 24, y: 12, variant: 'halo', tier: 2 },
+  { x: 60, y: 0,  variant: 'halo', tier: 2 },  // beret pom
+  { x: 60, y: 60, variant: 'core', tier: 2 },
+  { x: 24, y: 48, variant: '',     tier: 2 },
+  { x: 96, y: 48, variant: '',     tier: 2 },
+  { x: 36, y: 72, variant: '',     tier: 2 },
+  { x: 84, y: 72, variant: '',     tier: 2 },
+  { x: 112, y: 60, variant: 'wing-r', tier: 2 },  // longer scarf
+  { x: 20, y: 52, variant: 'wing-l', tier: 2 },   // left drape
+  // ── Tier 3: Full beret, flowing scarf ──
+  { x: 60, y: -8,  variant: 'crown', tier: 3 },  // beret tip
+  { x: 36, y: 4,  variant: 'halo', tier: 3 },
+  { x: 84, y: 4,  variant: 'halo', tier: 3 },
+  { x: 8,  y: 52, variant: 'wing-l', tier: 3 },
+  { x: 120, y: 64, variant: 'wing-r', tier: 3 },
+  { x: 36, y: 84, variant: '',     tier: 3 },
+  { x: 84, y: 84, variant: '',     tier: 3 },
+  { x: 60, y: 96, variant: '',     tier: 3 },
+  // ── Tier 4: Master artist ──
+  { x: 24, y: 4,  variant: 'halo', tier: 4 },
+  { x: 48, y: -4, variant: 'halo', tier: 4 },
+  { x: 72, y: -4, variant: 'halo', tier: 4 },
+  { x: 96, y: 4,  variant: 'halo', tier: 4 },
+  { x: 0,  y: 52, variant: 'wing-l', tier: 4 },
+  { x: 128, y: 68, variant: 'wing-r', tier: 4 },
+  { x: 0,  y: 60, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 56, variant: 'wing-r', tier: 4 },
+  { x: 24, y: 60, variant: '',     tier: 4 },
+  { x: 96, y: 60, variant: '',     tier: 4 },
+  { x: 48, y: 96, variant: '',     tier: 4 },
+  { x: 72, y: 96, variant: '',     tier: 4 },
+]
+
+// Science — flask shape with bubbles and atom orbits
+const SCIENCE_PIXELS: PixelDef[] = [
+  // ── Tier 0: Flask seed — narrow top, wide bottom ───
+  { x: 48, y: 24, variant: '',    tier: 0 },
+  { x: 60, y: 24, variant: '',    tier: 0 },
+  { x: 72, y: 24, variant: '',    tier: 0 },
+  { x: 36, y: 36, variant: '',    tier: 0 },
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
+  { x: 60, y: 36, variant: '',    tier: 0 },
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
+  { x: 84, y: 36, variant: '',    tier: 0 },
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 48, y: 48, variant: '',    tier: 0 },
+  { x: 60, y: 48, variant: '',    tier: 0 },
+  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 1: Bubbles + wider base ──
+  { x: 56, y: 4,  variant: 'halo', tier: 1 },  // bubble 1
+  { x: 68, y: 0,  variant: 'halo', tier: 1 },  // bubble 2
+  { x: 36, y: 24, variant: '',     tier: 1 },
+  { x: 84, y: 24, variant: '',     tier: 1 },
+  { x: 24, y: 36, variant: '',     tier: 1 },
+  { x: 96, y: 36, variant: '',     tier: 1 },
+  { x: 36, y: 48, variant: '',     tier: 1 },
+  { x: 84, y: 48, variant: '',     tier: 1 },
+  { x: 24, y: 60, variant: '',     tier: 1 },
+  { x: 36, y: 60, variant: '',     tier: 1 },
+  { x: 48, y: 60, variant: '',     tier: 1 },
+  { x: 60, y: 60, variant: '',     tier: 1 },
+  { x: 72, y: 60, variant: '',     tier: 1 },
+  { x: 84, y: 60, variant: '',     tier: 1 },
+  { x: 96, y: 60, variant: '',     tier: 1 },
+  { x: 24, y: 48, variant: 'wing-l', tier: 1 },  // orbit arm L
+  { x: 96, y: 48, variant: 'wing-r', tier: 1 },  // orbit arm R
+  { x: 36, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 72, variant: '',     tier: 1 },
+  { x: 60, y: 72, variant: '',     tier: 1 },
+  { x: 72, y: 72, variant: '',     tier: 1 },
+  { x: 84, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 84, variant: '',     tier: 1 },
+  { x: 72, y: 84, variant: '',     tier: 1 },
+  // ── Tier 2: More bubbles, atom heart ──
+  { x: 44, y: -4, variant: 'halo', tier: 2 },
+  { x: 76, y: -8, variant: 'halo', tier: 2 },
+  { x: 60, y: 60, variant: 'core', tier: 2 },
+  { x: 12, y: 48, variant: 'wing-l', tier: 2 },
+  { x: 108, y: 48, variant: 'wing-r', tier: 2 },
+  { x: 24, y: 72, variant: '',     tier: 2 },
+  { x: 96, y: 72, variant: '',     tier: 2 },
+  // ── Tier 3: Bubble cluster, orbit rings ──
+  { x: 60, y: -16, variant: 'crown', tier: 3 },
+  { x: 36, y: -8, variant: 'halo', tier: 3 },
+  { x: 84, y: -12, variant: 'halo', tier: 3 },
+  { x: 0,  y: 48, variant: 'wing-l', tier: 3 },
+  { x: 120, y: 48, variant: 'wing-r', tier: 3 },
+  { x: 36, y: 84, variant: '',     tier: 3 },
+  { x: 84, y: 84, variant: '',     tier: 3 },
+  { x: 60, y: 96, variant: '',     tier: 3 },
+  // ── Tier 4: Full reaction ──
+  { x: 24, y: -12, variant: 'halo', tier: 4 },
+  { x: 48, y: -16, variant: 'halo', tier: 4 },
+  { x: 72, y: -16, variant: 'halo', tier: 4 },
+  { x: 96, y: -12, variant: 'halo', tier: 4 },
+  { x: 0,  y: 40, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 40, variant: 'wing-r', tier: 4 },
+  { x: 0,  y: 56, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 56, variant: 'wing-r', tier: 4 },
+  { x: 12, y: 60, variant: '',     tier: 4 },
+  { x: 108, y: 60, variant: '',     tier: 4 },
+  { x: 48, y: 96, variant: '',     tier: 4 },
+  { x: 72, y: 96, variant: '',     tier: 4 },
+]
+
+// Business — tall/narrow with tiny hat and briefcase handles
+const BUSINESS_PIXELS: PixelDef[] = [
+  // ── Tier 0: Tall narrow seed ───
+  { x: 48, y: 24, variant: '',    tier: 0 },
+  { x: 60, y: 24, variant: '',    tier: 0 },
+  { x: 72, y: 24, variant: '',    tier: 0 },
+  { x: 36, y: 36, variant: '',    tier: 0 },
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
+  { x: 60, y: 36, variant: '',    tier: 0 },
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
+  { x: 84, y: 36, variant: '',    tier: 0 },
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 48, y: 48, variant: '',    tier: 0 },
+  { x: 60, y: 48, variant: '',    tier: 0 },
+  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 1: Hat brim + handles ──
+  { x: 48, y: 12, variant: 'halo', tier: 1 },  // hat left
+  { x: 60, y: 8,  variant: 'halo', tier: 1 },  // hat top
+  { x: 72, y: 12, variant: 'halo', tier: 1 },  // hat right
+  { x: 36, y: 24, variant: '',     tier: 1 },
+  { x: 84, y: 24, variant: '',     tier: 1 },
+  { x: 24, y: 36, variant: '',     tier: 1 },
+  { x: 96, y: 36, variant: '',     tier: 1 },
+  { x: 36, y: 48, variant: '',     tier: 1 },
+  { x: 84, y: 48, variant: '',     tier: 1 },
+  { x: 36, y: 60, variant: '',     tier: 1 },
+  { x: 48, y: 60, variant: '',     tier: 1 },
+  { x: 60, y: 60, variant: '',     tier: 1 },
+  { x: 72, y: 60, variant: '',     tier: 1 },
+  { x: 84, y: 60, variant: '',     tier: 1 },
+  { x: 20, y: 52, variant: 'wing-l', tier: 1 },  // briefcase handle L
+  { x: 100, y: 52, variant: 'wing-r', tier: 1 }, // briefcase handle R
+  { x: 48, y: 72, variant: '',     tier: 1 },
+  { x: 60, y: 72, variant: '',     tier: 1 },
+  { x: 72, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 84, variant: '',     tier: 1 },
+  { x: 72, y: 84, variant: '',     tier: 1 },
+  // ── Tier 2: Wider hat, tie, bigger case ──
+  { x: 36, y: 8,  variant: 'halo', tier: 2 },
+  { x: 84, y: 8,  variant: 'halo', tier: 2 },
+  { x: 60, y: 60, variant: 'core', tier: 2 },  // tie knot
+  { x: 24, y: 48, variant: '',     tier: 2 },
+  { x: 96, y: 48, variant: '',     tier: 2 },
+  { x: 36, y: 72, variant: '',     tier: 2 },
+  { x: 84, y: 72, variant: '',     tier: 2 },
+  { x: 8,  y: 52, variant: 'wing-l', tier: 2 },
+  { x: 112, y: 52, variant: 'wing-r', tier: 2 },
+  // ── Tier 3: Top hat, executive ──
+  { x: 60, y: -8,  variant: 'crown', tier: 3 },
+  { x: 48, y: 0,  variant: 'halo', tier: 3 },
+  { x: 72, y: 0,  variant: 'halo', tier: 3 },
+  { x: 8,  y: 60, variant: 'wing-l', tier: 3 },
+  { x: 112, y: 60, variant: 'wing-r', tier: 3 },
+  { x: 36, y: 84, variant: '',     tier: 3 },
+  { x: 84, y: 84, variant: '',     tier: 3 },
+  { x: 60, y: 96, variant: '',     tier: 3 },
+  // ── Tier 4: CEO mode ──
+  { x: 36, y: -8, variant: 'halo', tier: 4 },
+  { x: 84, y: -8, variant: 'halo', tier: 4 },
+  { x: 24, y: 0,  variant: 'halo', tier: 4 },
+  { x: 96, y: 0,  variant: 'halo', tier: 4 },
+  { x: 0,  y: 52, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 52, variant: 'wing-r', tier: 4 },
+  { x: 0,  y: 60, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 60, variant: 'wing-r', tier: 4 },
+  { x: 24, y: 60, variant: '',     tier: 4 },
+  { x: 96, y: 60, variant: '',     tier: 4 },
+  { x: 48, y: 96, variant: '',     tier: 4 },
+  { x: 72, y: 96, variant: '',     tier: 4 },
+]
+
+// Learning — book-shaped base with grad cap and page flips
+const LEARNING_PIXELS: PixelDef[] = [
+  // ── Tier 0: Book seed — wider base ───
+  { x: 48, y: 24, variant: '',    tier: 0 },
+  { x: 60, y: 24, variant: '',    tier: 0 },
+  { x: 72, y: 24, variant: '',    tier: 0 },
+  { x: 36, y: 36, variant: '',    tier: 0 },
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
+  { x: 60, y: 36, variant: '',    tier: 0 },
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
+  { x: 84, y: 36, variant: '',    tier: 0 },
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 36, y: 48, variant: '',    tier: 0 },
+  { x: 48, y: 48, variant: '',    tier: 0 },
+  { x: 60, y: 48, variant: '',    tier: 0 },
+  { x: 72, y: 48, variant: '',    tier: 0 },
+  { x: 84, y: 48, variant: '',    tier: 0 },
+  // ── Tier 1: Grad cap + page arms ──
+  { x: 36, y: 12, variant: 'halo', tier: 1 },  // cap left
+  { x: 48, y: 8,  variant: 'halo', tier: 1 },  // cap top
+  { x: 60, y: 8,  variant: 'halo', tier: 1 },  // cap center
+  { x: 72, y: 8,  variant: 'halo', tier: 1 },  // cap top right
+  { x: 84, y: 12, variant: 'halo', tier: 1 },  // cap right
+  { x: 36, y: 24, variant: '',     tier: 1 },
+  { x: 84, y: 24, variant: '',     tier: 1 },
+  { x: 24, y: 36, variant: '',     tier: 1 },
+  { x: 96, y: 36, variant: '',     tier: 1 },
+  { x: 36, y: 60, variant: '',     tier: 1 },
+  { x: 48, y: 60, variant: '',     tier: 1 },
+  { x: 60, y: 60, variant: '',     tier: 1 },
+  { x: 72, y: 60, variant: '',     tier: 1 },
+  { x: 84, y: 60, variant: '',     tier: 1 },
+  { x: 24, y: 52, variant: 'wing-l', tier: 1 },  // page flip L
+  { x: 96, y: 52, variant: 'wing-r', tier: 1 },  // page flip R
+  { x: 36, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 72, variant: '',     tier: 1 },
+  { x: 60, y: 72, variant: '',     tier: 1 },
+  { x: 72, y: 72, variant: '',     tier: 1 },
+  { x: 84, y: 72, variant: '',     tier: 1 },
+  { x: 48, y: 84, variant: '',     tier: 1 },
+  { x: 72, y: 84, variant: '',     tier: 1 },
+  // ── Tier 2: Tassel, knowledge heart ──
+  { x: 24, y: 8,  variant: 'halo', tier: 2 },   // cap wider
+  { x: 96, y: 8,  variant: 'halo', tier: 2 },
+  { x: 96, y: 0,  variant: 'halo', tier: 2 },   // tassel
+  { x: 60, y: 60, variant: 'core', tier: 2 },
+  { x: 24, y: 48, variant: '',     tier: 2 },
+  { x: 96, y: 48, variant: '',     tier: 2 },
+  { x: 12, y: 52, variant: 'wing-l', tier: 2 },
+  { x: 108, y: 52, variant: 'wing-r', tier: 2 },
+  // ── Tier 3: Scholar ──
+  { x: 60, y: -4,  variant: 'crown', tier: 3 },
+  { x: 36, y: 0,  variant: 'halo', tier: 3 },
+  { x: 84, y: 0,  variant: 'halo', tier: 3 },
+  { x: 12, y: 60, variant: 'wing-l', tier: 3 },
+  { x: 108, y: 60, variant: 'wing-r', tier: 3 },
+  { x: 24, y: 72, variant: '',     tier: 3 },
+  { x: 96, y: 72, variant: '',     tier: 3 },
+  { x: 60, y: 96, variant: '',     tier: 3 },
+  // ── Tier 4: PhD ──
+  { x: 24, y: -4, variant: 'halo', tier: 4 },
+  { x: 48, y: -8, variant: 'halo', tier: 4 },
+  { x: 72, y: -8, variant: 'halo', tier: 4 },
+  { x: 96, y: -4, variant: 'halo', tier: 4 },
+  { x: 0,  y: 52, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 52, variant: 'wing-r', tier: 4 },
+  { x: 0,  y: 60, variant: 'wing-l', tier: 4 },
+  { x: 120, y: 60, variant: 'wing-r', tier: 4 },
+  { x: 12, y: 72, variant: '',     tier: 4 },
+  { x: 108, y: 72, variant: '',     tier: 4 },
+  { x: 48, y: 96, variant: '',     tier: 4 },
+  { x: 72, y: 96, variant: '',     tier: 4 },
+]
+
+// ─── Topic → Pixel Map ──────────────────────────────────────
+
+export const ENTITY_PIXELS_BY_TOPIC: Record<TopicDomain, PixelDef[]> = {
+  personal: ENTITY_PIXELS,    // garden blob (default)
+  tech: TECH_PIXELS,          // angular bot
+  creative: CREATIVE_PIXELS,  // round artist
+  science: SCIENCE_PIXELS,    // flask creature
+  business: BUSINESS_PIXELS,  // suited creature
+  learning: LEARNING_PIXELS,  // book creature
+}
+
+// Standard eye positions — must be consistent across all variants
+export const STANDARD_EYE_X = [48, 72] as const
+export const STANDARD_EYE_Y = 36

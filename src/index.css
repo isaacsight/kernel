@@ -2079,6 +2079,16 @@ h4 {
     80% { transform: translateX(2px) rotate(0.5deg); }
 }
 
+/* ── Canvas Particle Overlay ─────────────────────────── */
+
+.ka-entity-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: auto;
+}
+
 /* ── Tap Reaction — Tamagotchi poke ───────────────────── */
 
 .ka-empty-constellation {
@@ -2414,6 +2424,437 @@ h4 {
 [data-theme="dark"] .ka-empty-constellation[data-time="night"] .ka-pixel--eye {
     opacity: 1;
     background: rgba(212, 197, 169, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Tamagotchi Mood System — Emotional state animations
+   data-mood attribute drives creature behavior
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Excited — bouncy hop, fast float ──────────────────── */
+.ka-empty-constellation[data-mood="excited"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.5s ease-out 0.2s both,
+               ka-entity-hop 1.8s ease-in-out 0.6s infinite;
+}
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--eye {
+    animation: ka-eye-sparkle-fast 2s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--wing-l {
+    animation: ka-wing-flutter-l 1.5s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--wing-r {
+    animation: ka-wing-flutter-r 1.5s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--halo {
+    opacity: 0.8;
+}
+
+/* ── Happy — bright, lively float ──────────────────────── */
+.ka-empty-constellation[data-mood="happy"] .ka-pixel {
+    opacity: 0.85;
+}
+.ka-empty-constellation[data-mood="happy"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
+               ka-entity-float 2.5s ease-in-out 0.8s infinite;
+}
+
+/* ── Content — default warm state ──────────────────────── */
+.ka-empty-constellation[data-mood="content"] .ka-pixel {
+    opacity: 0.7;
+}
+
+/* ── Sad — droopy, dim, slow ───────────────────────────── */
+.ka-empty-constellation[data-mood="sad"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
+               ka-entity-droop 5s ease-in-out 1s infinite;
+}
+.ka-empty-constellation[data-mood="sad"] .ka-pixel {
+    opacity: 0.45;
+}
+.ka-empty-constellation[data-mood="sad"] .ka-pixel--eye {
+    opacity: 0.6;
+    animation: ka-eye-blink 8s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="sad"] .ka-pixel--eye-light {
+    opacity: 0.3;
+}
+.ka-empty-constellation[data-mood="sad"] .ka-pixel--halo {
+    opacity: 0.25;
+}
+
+/* ── Sleepy — drowsy sway, half-closed eyes ────────────── */
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
+               ka-entity-drowsy 6s ease-in-out 1s infinite;
+}
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel {
+    opacity: 0.4;
+}
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel--eye {
+    transform: scaleY(0.5);
+    opacity: 0.5;
+    animation: ka-eye-sleepy 7s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel--eye-light {
+    opacity: 0.2;
+}
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel--wing-r {
+    animation: none;
+    opacity: 0.25;
+}
+
+/* ── Lonely — look-around, dimmed attention ────────────── */
+.ka-empty-constellation[data-mood="lonely"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
+               ka-entity-lonesome 8s ease-in-out 0.8s infinite;
+}
+.ka-empty-constellation[data-mood="lonely"] .ka-pixel {
+    opacity: 0.5;
+}
+.ka-empty-constellation[data-mood="lonely"] .ka-pixel--eye {
+    animation: ka-eye-lookabout 6s ease-in-out infinite;
+}
+.ka-empty-constellation[data-mood="lonely"] .ka-pixel--halo {
+    opacity: 0.3;
+}
+
+/* ── Bored — minimal movement, neutral state ───────────── */
+.ka-empty-constellation[data-mood="bored"] .ka-pixel {
+    opacity: 0.55;
+}
+.ka-empty-constellation[data-mood="bored"] .ka-pixel--eye-light {
+    opacity: 0.4;
+}
+.ka-empty-constellation[data-mood="bored"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
+               ka-entity-float 4s ease-in-out 1s infinite;
+}
+
+/* ── Mood Keyframes ────────────────────────────────────── */
+
+/* Excited hop — quick bouncy movement */
+@keyframes ka-entity-hop {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    15% { transform: translateY(-14px) translateX(3px) rotate(2deg); }
+    30% { transform: translateY(-2px) translateX(1px) rotate(0deg); }
+    45% { transform: translateY(-12px) translateX(-2px) rotate(-1.5deg); }
+    60% { transform: translateY(-1px) translateX(-1px) rotate(0deg); }
+    75% { transform: translateY(-10px) translateX(2px) rotate(1deg); }
+    90% { transform: translateY(-3px) translateX(0) rotate(0deg); }
+}
+
+/* Sad droop — slow downward drift */
+@keyframes ka-entity-droop {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(3px) translateX(-1px) rotate(-0.5deg); }
+    50% { transform: translateY(5px) translateX(0) rotate(0deg); }
+    75% { transform: translateY(2px) translateX(1px) rotate(0.3deg); }
+}
+
+/* Sleepy drowsy — minimal slow sway */
+@keyframes ka-entity-drowsy {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(2px) translateX(-1px) rotate(-0.3deg); }
+    50% { transform: translateY(4px) translateX(0) rotate(0deg); }
+    75% { transform: translateY(1px) translateX(1px) rotate(0.2deg); }
+}
+
+/* Sleepy eye — slow droop cycle */
+@keyframes ka-eye-sleepy {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+    30% { transform: scaleY(0.3); opacity: 0.3; }
+    50% { transform: scaleY(0.6); opacity: 0.6; }
+    80% { transform: scaleY(0.35); opacity: 0.35; }
+}
+
+/* Lonely look-around — periodic glances */
+@keyframes ka-entity-lonesome {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    20% { transform: translateY(-3px) translateX(4px) rotate(1deg); }
+    35% { transform: translateY(-1px) translateX(0) rotate(0deg); }
+    60% { transform: translateY(-2px) translateX(-5px) rotate(-1.2deg); }
+    80% { transform: translateY(0) translateX(-1px) rotate(-0.3deg); }
+}
+
+/* Lonely eye scanning */
+@keyframes ka-eye-lookabout {
+    0%, 100% { transform: translate(0, 0); opacity: 0.85; }
+    25% { transform: translate(2px, 0); opacity: 0.9; }
+    50% { transform: translate(0, 0); opacity: 0.7; }
+    75% { transform: translate(-2px, 0); opacity: 0.9; }
+}
+
+/* Excited eye sparkle — fast bright blink */
+@keyframes ka-eye-sparkle-fast {
+    0%, 100% { opacity: 0.95; transform: scale(1); }
+    25% { opacity: 1; transform: scale(1.1); }
+    50% { opacity: 0.7; transform: scale(0.95); }
+    75% { opacity: 1; transform: scale(1.05); }
+}
+
+/* ── Thought Bubble — floating pixel clusters ──────────── */
+
+.ka-pixel--thought {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(107, 91, 149, 0.25);
+    position: absolute;
+    animation: ka-thought-fade 4s ease-in-out infinite;
+    z-index: 2;
+}
+.ka-pixel--thought-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(107, 91, 149, 0.18);
+    position: absolute;
+    animation: ka-thought-fade 4s ease-in-out 0.8s infinite;
+    z-index: 2;
+}
+
+/* Thought content — mood-specific symbols */
+.ka-pixel--thought-content {
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+    position: absolute;
+    animation: ka-thought-fade 4s ease-in-out 0.3s infinite;
+    z-index: 2;
+}
+
+/* Heart thought (happy) */
+.ka-empty-constellation[data-mood="happy"] .ka-pixel--thought-content,
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--thought-content {
+    background: radial-gradient(circle, rgba(180, 100, 120, 0.5) 0%, rgba(180, 100, 120, 0.15) 100%);
+    border-radius: 50%;
+}
+
+/* Raindrop thought (sad) */
+.ka-empty-constellation[data-mood="sad"] .ka-pixel--thought-content {
+    background: radial-gradient(circle, rgba(100, 140, 180, 0.4) 0%, rgba(100, 140, 180, 0.1) 100%);
+    border-radius: 50% 50% 50% 0%;
+}
+
+/* Zzz thought (sleepy) */
+.ka-empty-constellation[data-mood="sleepy"] .ka-pixel--thought-content {
+    background: rgba(107, 91, 149, 0.2);
+    border-radius: 2px;
+    font-size: 0;
+}
+
+/* Dots thought (lonely) */
+.ka-empty-constellation[data-mood="lonely"] .ka-pixel--thought-content {
+    background: rgba(107, 91, 149, 0.15);
+    border-radius: 50%;
+    animation: ka-thought-pulse 3s ease-in-out infinite;
+}
+
+/* Star thought (content) — periodic sparkle */
+.ka-empty-constellation[data-mood="content"] .ka-pixel--thought-content {
+    background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.1) 100%);
+    border-radius: 1px;
+    transform: rotate(45deg);
+    animation: ka-thought-star 10s ease-in-out infinite;
+}
+
+@keyframes ka-thought-fade {
+    0%, 15% { opacity: 0; transform: translateY(0) scale(0.5); }
+    30% { opacity: 0.7; transform: translateY(-2px) scale(1); }
+    70% { opacity: 0.5; transform: translateY(-4px) scale(0.95); }
+    85%, 100% { opacity: 0; transform: translateY(-6px) scale(0.5); }
+}
+
+@keyframes ka-thought-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.15; transform: scale(0.8); }
+}
+
+@keyframes ka-thought-star {
+    0%, 80%, 100% { opacity: 0; transform: rotate(45deg) scale(0.3); }
+    85% { opacity: 0.6; transform: rotate(45deg) scale(1.1); }
+    92% { opacity: 0.4; transform: rotate(45deg) scale(1); }
+}
+
+/* ── Mouth pixels — tiny expression curves ─────────────── */
+
+.ka-pixel--mouth {
+    width: 6px;
+    height: 3px;
+    position: absolute;
+    border-radius: 0 0 3px 3px;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+/* Happy/excited smile */
+.ka-empty-constellation[data-mood="happy"] .ka-pixel--mouth,
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--mouth {
+    background: rgba(90, 74, 61, 0.4);
+    border-radius: 0 0 4px 4px;
+}
+
+/* Sad frown — inverted curve */
+.ka-empty-constellation[data-mood="sad"] .ka-pixel--mouth {
+    background: rgba(90, 74, 61, 0.3);
+    border-radius: 4px 4px 0 0;
+    transform: translateY(-1px);
+}
+
+/* ── Dark mode mood overrides ──────────────────────────── */
+
+[data-theme="dark"] .ka-pixel--thought {
+    background: rgba(155, 139, 197, 0.2);
+}
+[data-theme="dark"] .ka-pixel--thought-dot {
+    background: rgba(155, 139, 197, 0.15);
+}
+[data-theme="dark"] .ka-pixel--mouth {
+    opacity: 0.4;
+}
+[data-theme="dark"] .ka-empty-constellation[data-mood="sad"] .ka-pixel {
+    opacity: 0.35;
+}
+[data-theme="dark"] .ka-empty-constellation[data-mood="sleepy"] .ka-pixel {
+    opacity: 0.3;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Topic Creature Variants — Visual identity per domain
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tech — cooler tones, angular, circuit feel */
+.ka-empty-constellation[data-topic="tech"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #7B9B7B 0%, #6B8E6B 45%, #5A7D5A 100%);
+}
+.ka-empty-constellation[data-topic="tech"] .ka-pixel--halo {
+    background: linear-gradient(160deg, #8AB8C0 0%, #6BA0AA 45%, #5A8F99 100%);
+}
+.ka-empty-constellation[data-topic="tech"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-topic="tech"] .ka-pixel--wing-r {
+    background: linear-gradient(160deg, #7EB0A0 0%, #6B9E8E 50%, #5A8D7D 100%);
+}
+
+/* Creative — warm, organic, artistic */
+.ka-empty-constellation[data-topic="creative"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #C8977C 0%, #B8875C 45%, #A07050 100%);
+}
+.ka-empty-constellation[data-topic="creative"] .ka-pixel--halo {
+    background: linear-gradient(160deg, #D4A07A 0%, #C4906A 45%, #B4805A 100%);
+}
+.ka-empty-constellation[data-topic="creative"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-topic="creative"] .ka-pixel--wing-r {
+    background: linear-gradient(160deg, #CDA090 0%, #BD9080 50%, #AD8070 100%);
+}
+
+/* Science — cool blue, analytical */
+.ka-empty-constellation[data-topic="science"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #6B9BB0 0%, #5B8BA0 45%, #4A7A8F 100%);
+}
+.ka-empty-constellation[data-topic="science"] .ka-pixel--halo {
+    background: linear-gradient(160deg, #80B0C0 0%, #70A0B0 45%, #6090A0 100%);
+    border-radius: 50%;
+}
+.ka-empty-constellation[data-topic="science"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-topic="science"] .ka-pixel--wing-r {
+    background: linear-gradient(160deg, #7BA8B8 0%, #6B98A8 50%, #5B8898 100%);
+}
+
+/* Business — mauve, professional */
+.ka-empty-constellation[data-topic="business"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #B0869C 0%, #A0768C 45%, #90667C 100%);
+}
+.ka-empty-constellation[data-topic="business"] .ka-pixel--halo {
+    background: linear-gradient(160deg, #C0A0AA 0%, #B0909A 45%, #A0808A 100%);
+}
+.ka-empty-constellation[data-topic="business"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-topic="business"] .ka-pixel--wing-r {
+    background: linear-gradient(160deg, #B898A8 0%, #A88898 50%, #987888 100%);
+}
+
+/* Learning — warm gold, scholarly */
+.ka-empty-constellation[data-topic="learning"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #D4B584 0%, #C4A574 45%, #B49564 100%);
+}
+.ka-empty-constellation[data-topic="learning"] .ka-pixel--halo {
+    background: linear-gradient(160deg, #E0C090 0%, #D0B080 45%, #C0A070 100%);
+}
+.ka-empty-constellation[data-topic="learning"] .ka-pixel--wing-l,
+.ka-empty-constellation[data-topic="learning"] .ka-pixel--wing-r {
+    background: linear-gradient(160deg, #D8B888 0%, #C8A878 50%, #B89868 100%);
+}
+
+/* ── Dark mode topic overrides ─────────────────────────── */
+[data-theme="dark"] .ka-empty-constellation[data-topic="tech"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #8BAB8B 0%, #7B9B7B 45%, #6B8B6B 100%);
+}
+[data-theme="dark"] .ka-empty-constellation[data-topic="creative"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #D8A78C 0%, #C8977C 45%, #B88760 100%);
+}
+[data-theme="dark"] .ka-empty-constellation[data-topic="science"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #7BABB0 0%, #6B9BA0 45%, #5B8B90 100%);
+}
+[data-theme="dark"] .ka-empty-constellation[data-topic="business"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #C096AC 0%, #B0869C 45%, #A0768C 100%);
+}
+[data-theme="dark"] .ka-empty-constellation[data-topic="learning"] .ka-pixel:not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]):not(.ka-pixel--halo):not(.ka-pixel--core):not(.ka-pixel--crown) {
+    background: linear-gradient(160deg, #E4C594 0%, #D4B584 45%, #C4A574 100%);
+}
+
+/* ── Accessory Pixels ──────────────────────────────────── */
+
+.ka-pixel--accessory {
+    z-index: 3;
+    opacity: 0.8;
+}
+.ka-pixel--acc-crown {
+    background: linear-gradient(135deg, #E8D08C 0%, #C4A050 50%, #A08030 100%);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2), 0 0 3px rgba(196,160,80,0.3);
+    z-index: 3;
+    opacity: 0.85;
+}
+.ka-pixel--acc-glasses {
+    background: linear-gradient(160deg, #6B5B4A 0%, #5A4A3A 50%, #493929 100%);
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
+    z-index: 3;
+    opacity: 0.7;
+}
+.ka-pixel--acc-scarf {
+    background: linear-gradient(160deg, #C05050 0%, #A04040 50%, #803030 100%);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
+    z-index: 3;
+    opacity: 0.7;
+}
+.ka-pixel--acc-party-hat {
+    background: linear-gradient(180deg, #E8A040 0%, #D08830 50%, #C07020 100%);
+    border-radius: 2px 2px 0 0;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
+    z-index: 3;
+    opacity: 0.8;
+}
+.ka-pixel--acc-star {
+    background: radial-gradient(circle, #E8D060 0%, #D4B840 60%, #C0A030 100%);
+    border-radius: 1px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 3px rgba(212,184,64,0.3);
+    z-index: 3;
+    opacity: 0.8;
+}
+.ka-pixel--acc-mushroom {
+    background: radial-gradient(circle at 50% 30%, #D4887A 0%, #B06850 60%, #905040 100%);
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
+    z-index: 2;
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .ka-pixel--acc-crown {
+    background: linear-gradient(135deg, #F0D89C 0%, #D4B060 50%, #B09040 100%);
+}
+[data-theme="dark"] .ka-pixel--acc-glasses {
+    background: linear-gradient(160deg, #8B7B6A 0%, #7A6A5A 50%, #695949 100%);
 }
 
 .ka-empty-title {
