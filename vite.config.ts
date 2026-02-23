@@ -15,7 +15,7 @@ export default defineConfig({
             injectManifest: {
                 // Only precache the HTML shell + static assets — NOT JS/CSS chunks.
                 // JS chunks have content-hashed filenames that change every build.
-                globPatterns: ['**/*.{html,ico,png,svg,woff2,lottie}'],
+                globPatterns: ['**/*.{html,ico,png,svg,woff2}'],
             },
             manifest: {
                 name: 'Kernel',
@@ -51,7 +51,6 @@ export default defineConfig({
                     'vendor-ui': ['framer-motion', 'lucide-react'],
                     'vendor-analytics': ['posthog-js', '@sentry/react'],
                     'vendor-markdown': ['react-markdown'],
-                    'vendor-lottie': ['@lottiefiles/dotlottie-react'],
                 },
             },
         },
