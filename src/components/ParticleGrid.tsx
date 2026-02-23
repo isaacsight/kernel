@@ -286,16 +286,26 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       const gravity = en ? (small ? 0 : GRAVITY * 15) : GRAVITY
       const damping = en && small ? 0.97 : en ? 0.998 : DAMPING
       const subSteps = en && small ? 1 : en ? SUB_STEPS * 3 : SUB_STEPS
-      for (let step = 0; step < subSteps; step++) {
-        for (const p of s.particles) {
-          updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
-        }
-      }
-      // Small energetic grids: slow organic drift
       if (en && small) {
+        // Small grids: sine-wave flow field — particles drift freely through each other
+        const t = performance.now() * 0.001
         for (const p of s.particles) {
-          p.vx += (Math.random() - 0.5) * 0.015
-          p.vy += (Math.random() - 0.5) * 0.015
+          const phase = p.gx * 0.7 + p.gy * 1.1
+          p.vx += Math.sin(t * 0.8 + phase) * 0.012
+          p.vy += Math.cos(t * 0.6 + phase * 1.3) * 0.012
+          p.vx *= damping; p.vy *= damping
+          p.gx += p.vx; p.gy += p.vy
+          // Soft wrap at edges
+          if (p.gx < 0.5) { p.gx = 0.5; p.vx *= -0.5 }
+          if (p.gx > s.cols - 0.5) { p.gx = s.cols - 0.5; p.vx *= -0.5 }
+          if (p.gy < 0.5) { p.gy = 0.5; p.vy *= -0.5 }
+          if (p.gy > s.rows - 0.5) { p.gy = s.rows - 0.5; p.vy *= -0.5 }
+        }
+      } else {
+        for (let step = 0; step < subSteps; step++) {
+          for (const p of s.particles) {
+            updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
+          }
         }
       }
 
