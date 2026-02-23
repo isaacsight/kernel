@@ -8,8 +8,12 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import type { KGEntity } from '../engine/KnowledgeGraph'
 import type { UserGoal } from '../engine/GoalTracker'
 import type { UserMemoryProfile } from '../engine/MemoryAgent'
-import { TIER_THRESHOLDS, type TierName, TIER_NAMES } from '../components/pixelGrids'
 import { useCompanionMood, type MoodState, type CompanionMoodResult } from './useCompanionMood'
+
+// ─── Tier Metadata ──────────────────────────────────────────
+export const TIER_NAMES = ['Seed', 'Sprout', 'Awake', 'Bloom', 'Garden'] as const
+export type TierName = typeof TIER_NAMES[number]
+export const TIER_THRESHOLDS = [0, 15, 35, 60, 85] as const
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -251,10 +255,15 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
   )
   const topicColor = TOPIC_COLORS[topic]
 
-  // Tier transition detection
-  const prevTierRef = useRef(tier)
+  // Tier transition detection — skip the first render to avoid false "evolved" flash
+  const prevTierRef = useRef<number | null>(null)
   const [isEvolving, setIsEvolving] = useState(false)
   useEffect(() => {
+    if (prevTierRef.current === null) {
+      // First render: just record the initial tier, don't animate
+      prevTierRef.current = tier
+      return
+    }
     if (tier > prevTierRef.current) {
       setIsEvolving(true)
       const timer = setTimeout(() => setIsEvolving(false), 2000)

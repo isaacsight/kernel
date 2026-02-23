@@ -18,6 +18,7 @@
     },
     "homepage": "https://kernel.chat",
     "dependencies": {
+        "@lottiefiles/dotlottie-react": "^0.18.2",
         "@sentry/react": "^10.38.0",
         "@supabase/supabase-js": "^2.93.3",
         "framer-motion": "^11.0.0",
