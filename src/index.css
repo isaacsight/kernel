@@ -12035,8 +12035,18 @@ h4 {
 /* ─── Account Settings Panel ────────────────────────── */
 .ka-settings-panel {
     padding: 0 var(--space-lg) var(--space-xl);
+    padding-bottom: calc(var(--space-xl) + 64px + env(safe-area-inset-bottom, 0px));
     max-width: 480px;
     margin: 0 auto;
+    overflow-y: auto;
+    max-height: calc(80vh - 40px);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 768px) {
+    .ka-settings-panel {
+        max-height: calc(85vh - 40px);
+    }
 }
 
 .ka-settings-user-summary {

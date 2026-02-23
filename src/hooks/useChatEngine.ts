@@ -592,6 +592,22 @@ export function useChatEngine(params: UseChatEngineParams) {
     sendMessage(input)
   }
 
+  // Onboarding first message — same transient-mount guard as briefing
+  const onboardingConsumedRef = useRef(false)
+  useEffect(() => {
+    if (onboardingConsumedRef.current) return
+    const timer = setTimeout(() => {
+      const msg = sessionStorage.getItem('kernel-onboarding-message')
+      if (!msg) return
+      onboardingConsumedRef.current = true
+      sessionStorage.removeItem('kernel-onboarding-message')
+      handleNewChat()
+      setTimeout(() => sendMessageRef.current(msg), 150)
+    }, 600)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Briefing page → chat: BriefingPage stores context in sessionStorage then
   // navigates to '/'. AnimatePresence mode="wait" causes a transient mount of
   // EnginePage inside the exiting wrapper (because Outlet re-renders for the new
