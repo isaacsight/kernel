@@ -6536,6 +6536,7 @@ h4 {
 
 .ka-artifact-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     padding: 0 14px 12px;
 }
@@ -6552,6 +6553,8 @@ h4 {
     font-size: 11px;
     color: var(--rubin-slate-muted);
     cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all var(--duration-fast) var(--ease-out);
 }
 
@@ -12640,9 +12643,17 @@ h4 {
     padding: var(--space-md);
     margin-bottom: var(--space-md);
 }
+.ka-settings-verify-block--active {
+    background: rgba(34,139,34,0.06);
+    border-color: rgba(34,139,34,0.2);
+}
 [data-theme="dark"] .ka-settings-verify-block {
     background: rgba(107,91,149,0.12);
     border-color: rgba(107,91,149,0.25);
+}
+[data-theme="dark"] .ka-settings-verify-block--active {
+    background: rgba(34,139,34,0.1);
+    border-color: rgba(34,139,34,0.3);
 }
 .ka-settings-verify-hint {
     font-family: 'Courier Prime', monospace;
