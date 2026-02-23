@@ -1,70 +1,71 @@
-// ─── Pixel Grid Data — 16-bit Garden Creature ───────────────
+// ─── Pixel Grid Data — 32-bit Retro Garden Creature ──────────
 //
 // A round, friendly creature that grows like a garden.
-// Tier 0: tiny seed with two eyes and eye sparkles.
-// Tier 4: full bloom with lush foliage.
+// 32-bit aesthetic: rich gradients, anti-aliased outline ring,
+// deep shadows, vibrant saturated colors, smooth transparency.
 // Grid: 12px stride, 10px pixels. Two eyes at ALL tiers.
-// 16-bit: gradient shading, eye highlights, smoother shapes.
 // "Halo" pixels → sprout/flower. "Wing" pixels → leaves.
+// "Outline" pixels → dark perimeter ring for definition.
 
 export interface PixelDef {
   x: number
   y: number
-  variant: string        // CSS class suffix: '', 'halo', 'eye', 'eye-light', 'wing-l', 'wing-r', 'core', 'crown', 'notif'
+  variant: string        // CSS class suffix: '', 'outline', 'halo', 'eye', 'eye-light', 'wing-l', 'wing-r', 'core', 'crown', 'notif'
   tier: number           // minimum tier to show this pixel (0-4)
 }
 
-// ─── Entity Body Pixels ─────────────────────────────────────
-//
-// The creature is round and squat — big head, tiny body, cute feet.
-// "Halo" class is restyled as sprout/flower (warm green-gold).
-// "Wing" class is restyled as leaves (sage green).
-//
-// Tier 0 (Seed): round blob with two eyes — 11 pixels
-// Tier 1 (Sprout): wider body, sprout on head, leaf arms, feet
-// Tier 2 (Awake): sprout gets leaves, heart pixel, rounder body
-// Tier 3 (Bloom): flower crown, bigger leaves, wider stance
-// Tier 4 (Garden): full flower ring, lush leaf canopy, maximum roundness
+// ─── Shared Tier 0 — outline + body used by all topic variants ──
+// Outline ring gives 32-bit definition. Body is the filled interior.
 
-export const ENTITY_PIXELS: PixelDef[] = [
-  // ── Tier 0: Seed — round blob, two eyes ───────
-  // Head top
+const TIER0_OUTLINE: PixelDef[] = [
+  { x: 48, y: 12, variant: 'outline', tier: 0 },
+  { x: 60, y: 12, variant: 'outline', tier: 0 },
+  { x: 72, y: 12, variant: 'outline', tier: 0 },
+  { x: 36, y: 24, variant: 'outline', tier: 0 },
+  { x: 84, y: 24, variant: 'outline', tier: 0 },
+  { x: 24, y: 36, variant: 'outline', tier: 0 },
+  { x: 96, y: 36, variant: 'outline', tier: 0 },
+  { x: 24, y: 48, variant: 'outline', tier: 0 },
+  { x: 96, y: 48, variant: 'outline', tier: 0 },
+  { x: 36, y: 60, variant: 'outline', tier: 0 },
+  { x: 48, y: 60, variant: 'outline', tier: 0 },
+  { x: 60, y: 60, variant: 'outline', tier: 0 },
+  { x: 72, y: 60, variant: 'outline', tier: 0 },
+  { x: 84, y: 60, variant: 'outline', tier: 0 },
+]
+
+const TIER0_BODY: PixelDef[] = [
   { x: 48, y: 24, variant: '',    tier: 0 },
   { x: 60, y: 24, variant: '',    tier: 0 },
   { x: 72, y: 24, variant: '',    tier: 0 },
-  // Face — two eyes!
   { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },  // left eye
+  { x: 48, y: 36, variant: 'eye', tier: 0 },
   { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },  // right eye
+  { x: 72, y: 36, variant: 'eye', tier: 0 },
   { x: 84, y: 36, variant: '',    tier: 0 },
-  // Eye sparkles — 16-bit detail
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },  // left eye sparkle
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },  // right eye sparkle
-  // Body
+  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
+  { x: 36, y: 48, variant: '',    tier: 0 },
   { x: 48, y: 48, variant: '',    tier: 0 },
   { x: 60, y: 48, variant: '',    tier: 0 },
   { x: 72, y: 48, variant: '',    tier: 0 },
+  { x: 84, y: 48, variant: '',    tier: 0 },
+]
 
-  // ── Tier 1: Sprout — body, sprout, leaf arms, feet ──
+// ─── Entity Body Pixels ─────────────────────────────────────
+//
+// 32-bit retro creature with outline, rich fill, and eye sparkles.
+// Tier 0: 29 pixels (14 outline + 15 body). Tier 4: full garden bloom.
+
+export const ENTITY_PIXELS: PixelDef[] = [
+  // ── Tier 0: Seed — round blob, two eyes, outline ───────
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
+
+  // ── Tier 1: Sprout — sprout, leaf arms, feet ──
   // Sprout on head
   { x: 60, y: 0,  variant: 'halo', tier: 1 },   // sprout tip
   { x: 60, y: 12, variant: 'halo', tier: 1 },   // sprout stem
-  // Wider head
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  // Wider face
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  // Wider body
-  { x: 36, y: 48, variant: '',     tier: 1 },
-  { x: 84, y: 48, variant: '',     tier: 1 },
-  // Belly
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   // Leaf arms (stubby)
   { x: 24, y: 52, variant: 'wing-l', tier: 1 },
   { x: 96, y: 52, variant: 'wing-r', tier: 1 },
@@ -204,34 +205,12 @@ import type { TopicDomain } from '../hooks/useEntityEvolution'
 
 // Tech — angular/rectangular with antenna and circuit arms
 const TECH_PIXELS: PixelDef[] = [
-  // ── Tier 0: Angular seed — boxy with two eyes ───
-  { x: 48, y: 24, variant: '',    tier: 0 },
-  { x: 60, y: 24, variant: '',    tier: 0 },
-  { x: 72, y: 24, variant: '',    tier: 0 },
-  { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },
-  { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },
-  { x: 84, y: 36, variant: '',    tier: 0 },
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 48, y: 48, variant: '',    tier: 0 },
-  { x: 60, y: 48, variant: '',    tier: 0 },
-  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 0: Angular seed — boxy with two eyes + outline ───
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
   // ── Tier 1: Antenna + circuit arms ──
   { x: 60, y: 0,  variant: 'halo', tier: 1 },  // antenna tip
   { x: 60, y: 12, variant: 'halo', tier: 1 },  // antenna shaft
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  { x: 36, y: 48, variant: '',     tier: 1 },
-  { x: 84, y: 48, variant: '',     tier: 1 },
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   { x: 20, y: 44, variant: 'wing-l', tier: 1 },  // circuit arm L
   { x: 100, y: 44, variant: 'wing-r', tier: 1 }, // circuit arm R
   { x: 48, y: 72, variant: '',     tier: 1 },
@@ -277,36 +256,14 @@ const TECH_PIXELS: PixelDef[] = [
 
 // Creative — round/organic with beret and flowing scarf
 const CREATIVE_PIXELS: PixelDef[] = [
-  // ── Tier 0: Round organic seed ───
-  { x: 48, y: 24, variant: '',    tier: 0 },
-  { x: 60, y: 24, variant: '',    tier: 0 },
-  { x: 72, y: 24, variant: '',    tier: 0 },
-  { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },
-  { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },
-  { x: 84, y: 36, variant: '',    tier: 0 },
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 48, y: 48, variant: '',    tier: 0 },
-  { x: 60, y: 48, variant: '',    tier: 0 },
-  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 0: Round organic seed + outline ───
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
   // ── Tier 1: Beret + scarf ──
   { x: 36, y: 12, variant: 'halo', tier: 1 },  // beret left
   { x: 48, y: 8,  variant: 'halo', tier: 1 },  // beret top
   { x: 60, y: 8,  variant: 'halo', tier: 1 },  // beret center
   { x: 72, y: 12, variant: 'halo', tier: 1 },  // beret right
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  { x: 36, y: 48, variant: '',     tier: 1 },
-  { x: 84, y: 48, variant: '',     tier: 1 },
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   { x: 96, y: 52, variant: 'wing-r', tier: 1 },  // scarf end
   { x: 104, y: 56, variant: 'wing-r', tier: 1 }, // scarf trail
   { x: 48, y: 72, variant: '',     tier: 1 },
@@ -350,35 +307,13 @@ const CREATIVE_PIXELS: PixelDef[] = [
 
 // Science — flask shape with bubbles and atom orbits
 const SCIENCE_PIXELS: PixelDef[] = [
-  // ── Tier 0: Flask seed — narrow top, wide bottom ───
-  { x: 48, y: 24, variant: '',    tier: 0 },
-  { x: 60, y: 24, variant: '',    tier: 0 },
-  { x: 72, y: 24, variant: '',    tier: 0 },
-  { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },
-  { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },
-  { x: 84, y: 36, variant: '',    tier: 0 },
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 48, y: 48, variant: '',    tier: 0 },
-  { x: 60, y: 48, variant: '',    tier: 0 },
-  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 0: Flask seed + outline ───
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
   // ── Tier 1: Bubbles + wider base ──
   { x: 56, y: 4,  variant: 'halo', tier: 1 },  // bubble 1
   { x: 68, y: 0,  variant: 'halo', tier: 1 },  // bubble 2
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  { x: 36, y: 48, variant: '',     tier: 1 },
-  { x: 84, y: 48, variant: '',     tier: 1 },
   { x: 24, y: 60, variant: '',     tier: 1 },
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   { x: 96, y: 60, variant: '',     tier: 1 },
   { x: 24, y: 48, variant: 'wing-l', tier: 1 },  // orbit arm L
   { x: 96, y: 48, variant: 'wing-r', tier: 1 },  // orbit arm R
@@ -423,35 +358,13 @@ const SCIENCE_PIXELS: PixelDef[] = [
 
 // Business — tall/narrow with tiny hat and briefcase handles
 const BUSINESS_PIXELS: PixelDef[] = [
-  // ── Tier 0: Tall narrow seed ───
-  { x: 48, y: 24, variant: '',    tier: 0 },
-  { x: 60, y: 24, variant: '',    tier: 0 },
-  { x: 72, y: 24, variant: '',    tier: 0 },
-  { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },
-  { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },
-  { x: 84, y: 36, variant: '',    tier: 0 },
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 48, y: 48, variant: '',    tier: 0 },
-  { x: 60, y: 48, variant: '',    tier: 0 },
-  { x: 72, y: 48, variant: '',    tier: 0 },
+  // ── Tier 0: Tall narrow seed + outline ───
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
   // ── Tier 1: Hat brim + handles ──
   { x: 48, y: 12, variant: 'halo', tier: 1 },  // hat left
   { x: 60, y: 8,  variant: 'halo', tier: 1 },  // hat top
   { x: 72, y: 12, variant: 'halo', tier: 1 },  // hat right
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  { x: 36, y: 48, variant: '',     tier: 1 },
-  { x: 84, y: 48, variant: '',     tier: 1 },
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   { x: 20, y: 52, variant: 'wing-l', tier: 1 },  // briefcase handle L
   { x: 100, y: 52, variant: 'wing-r', tier: 1 }, // briefcase handle R
   { x: 48, y: 72, variant: '',     tier: 1 },
@@ -495,37 +408,15 @@ const BUSINESS_PIXELS: PixelDef[] = [
 
 // Learning — book-shaped base with grad cap and page flips
 const LEARNING_PIXELS: PixelDef[] = [
-  // ── Tier 0: Book seed — wider base ───
-  { x: 48, y: 24, variant: '',    tier: 0 },
-  { x: 60, y: 24, variant: '',    tier: 0 },
-  { x: 72, y: 24, variant: '',    tier: 0 },
-  { x: 36, y: 36, variant: '',    tier: 0 },
-  { x: 48, y: 36, variant: 'eye', tier: 0 },
-  { x: 60, y: 36, variant: '',    tier: 0 },
-  { x: 72, y: 36, variant: 'eye', tier: 0 },
-  { x: 84, y: 36, variant: '',    tier: 0 },
-  { x: 50, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 74, y: 38, variant: 'eye-light', tier: 0 },
-  { x: 36, y: 48, variant: '',    tier: 0 },
-  { x: 48, y: 48, variant: '',    tier: 0 },
-  { x: 60, y: 48, variant: '',    tier: 0 },
-  { x: 72, y: 48, variant: '',    tier: 0 },
-  { x: 84, y: 48, variant: '',    tier: 0 },
+  // ── Tier 0: Book seed + outline ───
+  ...TIER0_OUTLINE,
+  ...TIER0_BODY,
   // ── Tier 1: Grad cap + page arms ──
   { x: 36, y: 12, variant: 'halo', tier: 1 },  // cap left
   { x: 48, y: 8,  variant: 'halo', tier: 1 },  // cap top
   { x: 60, y: 8,  variant: 'halo', tier: 1 },  // cap center
   { x: 72, y: 8,  variant: 'halo', tier: 1 },  // cap top right
   { x: 84, y: 12, variant: 'halo', tier: 1 },  // cap right
-  { x: 36, y: 24, variant: '',     tier: 1 },
-  { x: 84, y: 24, variant: '',     tier: 1 },
-  { x: 24, y: 36, variant: '',     tier: 1 },
-  { x: 96, y: 36, variant: '',     tier: 1 },
-  { x: 36, y: 60, variant: '',     tier: 1 },
-  { x: 48, y: 60, variant: '',     tier: 1 },
-  { x: 60, y: 60, variant: '',     tier: 1 },
-  { x: 72, y: 60, variant: '',     tier: 1 },
-  { x: 84, y: 60, variant: '',     tier: 1 },
   { x: 24, y: 52, variant: 'wing-l', tier: 1 },  // page flip L
   { x: 96, y: 52, variant: 'wing-r', tier: 1 },  // page flip R
   { x: 36, y: 72, variant: '',     tier: 1 },

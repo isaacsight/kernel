@@ -27,13 +27,66 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
   const creatureRef = useRef<HTMLDivElement>(null)
   const [showCanvas] = useState(() => !prefersReducedMotion())
 
+  // Tap responses with weighted variety (anime-style reactions)
   const handleTap = useCallback(() => {
     const el = creatureRef.current
-    if (!el || el.classList.contains('ka-entity--react')) return
-    el.classList.add('ka-entity--react')
-    setTimeout(() => el.classList.remove('ka-entity--react'), 700)
+    if (!el) return
+    // Don't stack reactions
+    const reacting = ['ka-entity--react', 'ka-entity--react-shy', 'ka-entity--react-sleepy']
+    if (reacting.some(c => el.classList.contains(c))) return
+
+    // Weighted random response
+    const roll = Math.random()
+    let cls: string
+    let duration: number
+    if (roll < 0.55) {
+      cls = 'ka-entity--react'     // happy bounce (55%)
+      duration = 700
+    } else if (roll < 0.75) {
+      cls = 'ka-entity--react'     // excited hop — same anim, faster (20%)
+      duration = 500
+    } else if (roll < 0.9) {
+      cls = 'ka-entity--react-shy' // shy wobble (15%)
+      duration = 800
+    } else {
+      cls = 'ka-entity--react-sleepy' // sleepy blink (10%)
+      duration = 600
+    }
+
+    el.classList.add(cls)
+    setTimeout(() => el.classList.remove(cls), duration)
     evolution.companion.petCreature()
   }, [evolution.companion])
+
+  // Eye tracking — eyes follow cursor (anime-style awareness)
+  useEffect(() => {
+    const el = creatureRef.current
+    if (!el) return
+
+    const handleMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect()
+      if (!rect.width) return
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      const dx = (e.clientX - cx) / window.innerWidth
+      const dy = (e.clientY - cy) / window.innerHeight
+      // Clamp to 2px max offset
+      const eyeX = Math.round(Math.max(-2, Math.min(2, dx * 6)))
+      const eyeY = Math.round(Math.max(-2, Math.min(2, dy * 4)))
+      el.style.setProperty('--eye-dx', `${eyeX}px`)
+      el.style.setProperty('--eye-dy', `${eyeY}px`)
+    }
+
+    // On mobile, eyes look toward center-bottom (chat input)
+    const isMobile = window.innerWidth < 768
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMove, { passive: true })
+      return () => window.removeEventListener('mousemove', handleMove)
+    } else {
+      el.style.setProperty('--eye-dx', '0px')
+      el.style.setProperty('--eye-dy', '1px')
+    }
+  }, [])
 
   // Idle wiggle — periodic happy shimmy every 6-12s
   useEffect(() => {
@@ -112,7 +165,9 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
           // Skip overlay pixels — rendered separately below
           if (p.variant === 'core' || p.variant === 'crown') return null
 
-          const cls = p.variant ? `ka-pixel ka-pixel--${p.variant}` : 'ka-pixel'
+          const cls = p.variant
+            ? `ka-pixel ka-pixel--${p.variant}`
+            : 'ka-pixel'
           return (
             <span
               key={`b${i}`}
@@ -143,6 +198,15 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
           />
         ))}
 
+        {/* Anime blush — kawaii cheek dots */}
+        {expression.blushPixels.map((p, i) => (
+          <span
+            key={`bl${i}`}
+            className={`ka-pixel ka-pixel--${p.variant}`}
+            style={{ left: p.x, top: p.y }}
+          />
+        ))}
+
         {/* Accessory pixels */}
         {accessoryPixels.map((p: { x: number; y: number; variant: string }, i: number) => (
           <span
@@ -159,16 +223,16 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
             style={{ left: 76, top: 4 }}
           />
         )}
-      </div>
 
-      {/* Thought bubble — mood-specific floating symbols */}
-      {expression.thoughtBubble.map((p, i) => (
-        <span
-          key={`t${i}`}
-          className={`ka-pixel--${p.variant}`}
-          style={{ left: p.x + 55, top: p.y + 30 }}
-        />
-      ))}
+        {/* Thought bubble — inside creature div so it floats together */}
+        {expression.thoughtBubble.map((p, i) => (
+          <span
+            key={`t${i}`}
+            className={`ka-pixel--${p.variant}`}
+            style={{ left: p.x, top: p.y }}
+          />
+        ))}
+      </div>
 
       {/* Ground glow */}
       {visibleGlow.map((p, i) => (

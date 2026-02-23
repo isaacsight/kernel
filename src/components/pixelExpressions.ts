@@ -18,6 +18,7 @@ export interface ExpressionPixel {
 export interface ExpressionDef {
   mood: MoodState
   mouthPixels: ExpressionPixel[]
+  blushPixels: ExpressionPixel[]     // anime-style cheek blush
   thoughtBubble: ExpressionPixel[]   // dots + content
 }
 
@@ -28,6 +29,10 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
     mood: 'happy',
     mouthPixels: [
       { x: 57, y: 46, variant: 'mouth' },  // centered smile under eyes
+    ],
+    blushPixels: [
+      { x: 32, y: 42, variant: 'blush' },  // left cheek
+      { x: 88, y: 42, variant: 'blush' },  // right cheek
     ],
     thoughtBubble: [
       // Trail dots rising from top-right
@@ -43,6 +48,12 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
     mouthPixels: [
       { x: 57, y: 46, variant: 'mouth' },  // wide smile
     ],
+    blushPixels: [
+      { x: 30, y: 42, variant: 'blush' },  // left cheek (wider spread)
+      { x: 38, y: 44, variant: 'blush' },
+      { x: 82, y: 44, variant: 'blush' },  // right cheek
+      { x: 90, y: 42, variant: 'blush' },
+    ],
     thoughtBubble: [
       { x: 96, y: 16, variant: 'thought-dot' },
       { x: 104, y: 8, variant: 'thought' },
@@ -56,6 +67,7 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
     mouthPixels: [
       { x: 57, y: 47, variant: 'mouth' },  // inverted frown
     ],
+    blushPixels: [],
     thoughtBubble: [
       { x: 96, y: 18, variant: 'thought-dot' },
       { x: 100, y: 12, variant: 'thought' },
@@ -67,6 +79,7 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
   sleepy: {
     mood: 'sleepy',
     mouthPixels: [],  // no mouth when sleeping
+    blushPixels: [],
     thoughtBubble: [
       { x: 94, y: 20, variant: 'thought-dot' },
       { x: 100, y: 12, variant: 'thought' },
@@ -78,6 +91,7 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
   lonely: {
     mood: 'lonely',
     mouthPixels: [],  // no mouth — withdrawn
+    blushPixels: [],
     thoughtBubble: [
       { x: 94, y: 20, variant: 'thought-dot' },
       { x: 100, y: 14, variant: 'thought' },
@@ -89,6 +103,10 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
   content: {
     mood: 'content',
     mouthPixels: [],  // serene — no mouth needed
+    blushPixels: [
+      { x: 34, y: 43, variant: 'blush' },  // subtle single blush
+      { x: 86, y: 43, variant: 'blush' },
+    ],
     thoughtBubble: [
       // Star appears periodically (animation handles timing)
       { x: 96, y: 18, variant: 'thought-dot' },
@@ -100,6 +118,7 @@ const EXPRESSIONS: Record<MoodState, ExpressionDef> = {
   bored: {
     mood: 'bored',
     mouthPixels: [],
+    blushPixels: [],
     thoughtBubble: [],  // nothing to think about
   },
 }
