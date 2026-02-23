@@ -1700,10 +1700,10 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Pixel Constellation — Tamagotchi LCD aesthetic
-   A pixel creature lives on the home screen like a digital pet.
-   Stepped animations for LCD frame feel. Ambient simulation
-   cells flicker like a state machine running in the background.
+   Pixel Constellation — 16-bit Garden Spirit
+   A pixel creature lives on the home screen like a living companion.
+   Gradient-shaded pixels, eye sparkles, smooth organic animations.
+   16-bit: richer colors, depth via inner highlights/shadows.
    ═══════════════════════════════════════════════════════════ */
 
 .ka-empty-constellation {
@@ -1751,31 +1751,45 @@ h4 {
     height: 110px;
     /* Gentle boot-up → playful bob */
     animation:
-        ka-scanline-reveal 0.6s steps(8) 0.2s both,
+        ka-scanline-reveal 0.6s ease-out 0.2s both,
         ka-entity-float 3s ease-in-out 0.9s infinite;
 }
 
-/* ── Pixels — 10px, warm amethyst body ───────────────── */
+/* ── Pixels — 10px, gradient-shaded body ─────────────── */
 
 .ka-pixel {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: var(--rubin-primary, #6B5B95);
-    border-radius: 2px;
-    opacity: 0.7;
+    background: linear-gradient(160deg,
+        #7D6DAA 0%,
+        #6B5B95 45%,
+        #5A4C82 100%
+    );
+    border-radius: 3px;
+    opacity: 0.8;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.12),
+        inset -1px -1px 0 rgba(0,0,0,0.08);
 }
 
 /* Body pixels breathe — warm pulse */
-.ka-pixel-creature .ka-pixel:not(.ka-pixel--halo):not(.ka-pixel--eye):not([class*="wing"]) {
+.ka-pixel-creature .ka-pixel:not(.ka-pixel--halo):not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]) {
     animation: ka-body-breathe 4s ease-in-out infinite;
 }
 
-/* Sprout/Flower pixels — warm green-gold */
+/* Sprout/Flower pixels — 16-bit gradient green */
 .ka-pixel--halo {
-    opacity: 0.6;
-    background: #7BA07B;
-    border-radius: 2px;
+    opacity: 0.65;
+    background: linear-gradient(160deg,
+        #8FB88F 0%,
+        #7BA07B 45%,
+        #6A8F6A 100%
+    );
+    border-radius: 3px;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.15),
+        inset -1px -1px 0 rgba(0,0,0,0.06);
     animation: ka-halo-shimmer 3.5s ease-in-out infinite;
 }
 .ka-pixel-creature .ka-pixel--halo:nth-child(1) { animation-delay: 0s; }
@@ -1784,22 +1798,46 @@ h4 {
 .ka-pixel-creature .ka-pixel--halo:nth-child(4) { animation-delay: 0.25s; }
 .ka-pixel-creature .ka-pixel--halo:nth-child(5) { animation-delay: 0.75s; }
 
-/* Eyes — big, bright, friendly */
+/* Eyes — 16-bit depth with inner sparkle highlight */
 .ka-pixel--eye {
-    background: #3D3226;
+    background: radial-gradient(circle at 35% 35%,
+        #5A4A3D 0%,
+        #3D3226 60%,
+        #2A2119 100%
+    );
     opacity: 0.95;
-    border-radius: 2px;
+    border-radius: 3px;
+    box-shadow:
+        inset 2px 2px 0 rgba(255,255,255,0.15),
+        0 0 2px rgba(61,50,38,0.2);
     animation: ka-eye-blink 5s ease-in-out 1.5s infinite;
 }
 
-/* Leaves — sage green, stubby, friendly */
+/* Eye sparkle — floating highlight dot */
+.ka-pixel--eye-light {
+    width: 3px;
+    height: 3px;
+    background: rgba(255,255,255,0.55);
+    border-radius: 50%;
+    opacity: 0.8;
+    box-shadow: 0 0 2px rgba(255,255,255,0.3);
+    animation: ka-eye-sparkle 3s ease-in-out infinite;
+    z-index: 1;
+}
+
+/* Leaves — 16-bit gradient sage green */
 .ka-pixel--wing-l,
 .ka-pixel--wing-r {
     width: 8px;
     height: 8px;
-    background: #6B8E6B;
-    border-radius: 2px;
-    opacity: 0.5;
+    background: linear-gradient(160deg,
+        #7EA07E 0%,
+        #6B8E6B 50%,
+        #5A7D5A 100%
+    );
+    border-radius: 3px;
+    opacity: 0.55;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
 }
 .ka-pixel--wing-l {
     animation: ka-wing-flutter-l 3.5s ease-in-out 0.8s infinite;
@@ -1808,13 +1846,18 @@ h4 {
     animation: ka-wing-flutter-r 3.5s ease-in-out 0.8s infinite;
 }
 
-/* Ground glow — warm garden soil */
+/* Ground glow — 16-bit radiant garden soil */
 .ka-pixel--glow {
     width: 8px;
     height: 3px;
-    background: color-mix(in srgb, #7BA07B 50%, #D4A574);
+    background: linear-gradient(90deg,
+        transparent 0%,
+        color-mix(in srgb, #7BA07B 50%, #D4A574) 50%,
+        transparent 100%
+    );
     opacity: 0;
-    border-radius: 2px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(123,160,123,0.15);
     animation: ka-glow-pulse 4s ease-in-out 1.2s infinite;
 }
 
@@ -1828,13 +1871,17 @@ h4 {
 .ka-empty-constellation > .ka-pixel--glow:nth-child(8) { animation-delay: 1.3s; }
 .ka-empty-constellation > .ka-pixel--glow:nth-child(9) { animation-delay: 1.5s; }
 
-/* Ambient particles — seeds and pollen floating upward */
+/* Ambient particles — 16-bit pollen with radial glow */
 .ka-pixel--sim {
     width: 4px;
     height: 4px;
     opacity: 0;
     border-radius: 50%;
-    background: color-mix(in srgb, #7BA07B 50%, #D4A574);
+    background: radial-gradient(circle,
+        rgba(123,160,123,0.7) 0%,
+        rgba(212,165,116,0.3) 100%
+    );
+    box-shadow: 0 0 3px rgba(123,160,123,0.15);
 }
 
 /* Particle animations — varied speeds for organic feel */
@@ -1844,34 +1891,67 @@ h4 {
 .ka-empty-constellation .ka-pixel--sim:nth-child(4n) { animation-duration: 5.5s; animation-delay: 3s; }
 .ka-empty-constellation .ka-pixel--sim:nth-child(5n) { animation-duration: 9s; animation-delay: 1s; }
 
-/* ── Dark mode ─────────────────────────────────────── */
+/* ── Dark mode — 16-bit depth ──────────────────────── */
 
 [data-theme="dark"] .ka-pixel {
-    background: #8B7BB5;
+    background: linear-gradient(160deg,
+        #9B8BC5 0%,
+        #8B7BB5 45%,
+        #7A6AA4 100%
+    );
     opacity: 0.75;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.1),
+        inset -1px -1px 0 rgba(0,0,0,0.12);
 }
 
 [data-theme="dark"] .ka-pixel--halo {
-    background: #7EAA7E;
+    background: linear-gradient(160deg,
+        #8EBA8E 0%,
+        #7EAA7E 45%,
+        #6E9A6E 100%
+    );
     opacity: 0.5;
 }
 
 [data-theme="dark"] .ka-pixel--eye {
-    background: rgba(212, 197, 169, 0.95);
+    background: radial-gradient(circle at 35% 35%,
+        rgba(230,215,190,0.95) 0%,
+        rgba(212,197,169,0.95) 60%,
+        rgba(190,175,145,0.95) 100%
+    );
+}
+
+[data-theme="dark"] .ka-pixel--eye-light {
+    background: rgba(255,255,255,0.3);
+    box-shadow: 0 0 2px rgba(255,255,255,0.15);
 }
 
 [data-theme="dark"] .ka-pixel--wing-l,
 [data-theme="dark"] .ka-pixel--wing-r {
-    background: #7EAA7E;
+    background: linear-gradient(160deg,
+        #8EBA8E 0%,
+        #7EAA7E 50%,
+        #6E9A6E 100%
+    );
     opacity: 0.4;
 }
 
 [data-theme="dark"] .ka-pixel--glow {
-    background: color-mix(in srgb, #7EAA7E 50%, #C4A882);
+    background: linear-gradient(90deg,
+        transparent 0%,
+        color-mix(in srgb, #7EAA7E 50%, #C4A882) 50%,
+        transparent 100%
+    );
+    box-shadow: 0 0 4px rgba(126,170,126,0.15);
 }
 
 [data-theme="dark"] .ka-pixel--sim {
-    background: color-mix(in srgb, rgba(126, 170, 126, 0.6) 50%, rgba(196, 168, 130, 0.4));
+    background: radial-gradient(circle,
+        rgba(126,170,126,0.5) 0%,
+        rgba(196,168,130,0.3) 100%
+    );
+    box-shadow: 0 0 3px rgba(126,170,126,0.12);
 }
 
 /* ── Reduced Motion ──────────────────────────────────── */
@@ -1927,6 +2007,13 @@ h4 {
     100% { opacity: 0.95; transform: translate(0, 0); }
 }
 
+/* Eye sparkle — gentle shimmer */
+@keyframes ka-eye-sparkle {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    30% { opacity: 0.4; transform: scale(0.8); }
+    60% { opacity: 0.9; transform: scale(1.1); }
+}
+
 /* Wing flutter — joyful flap with lift */
 @keyframes ka-wing-flutter-l {
     0%, 100% { opacity: 0.45; transform: translate(0, 0); }
@@ -1980,8 +2067,8 @@ h4 {
 /* ── Idle Wiggle — happy shimmy ─────────────────────── */
 
 .ka-pixel-creature.ka-entity--wiggle {
-    animation: ka-entity-wiggle 0.6s steps(4) both,
-               ka-entity-float 2.8s steps(4) infinite !important;
+    animation: ka-entity-wiggle 0.6s ease-out both,
+               ka-entity-float 2.8s ease-in-out infinite !important;
 }
 
 @keyframes ka-entity-wiggle {
@@ -2002,37 +2089,37 @@ h4 {
 /* Creature bounce */
 .ka-pixel-creature.ka-entity--react {
     clip-path: none;
-    animation: ka-entity-bounce 0.6s steps(5) both !important;
+    animation: ka-entity-bounce 0.6s ease-out both !important;
 }
 
 /* Rapid eye blink */
 .ka-entity--react .ka-pixel--eye {
-    animation: ka-eye-react 0.5s steps(4) !important;
+    animation: ka-eye-react 0.5s ease-in-out !important;
 }
 
-/* Excited wing flap — left */
+/* Excited leaf flap — left */
 .ka-entity--react .ka-pixel--wing-l {
-    animation: ka-wing-react-l 0.5s steps(4) !important;
+    animation: ka-wing-react-l 0.5s ease-out !important;
 }
 
-/* Excited wing flap — right */
+/* Excited leaf flap — right */
 .ka-entity--react .ka-pixel--wing-r {
-    animation: ka-wing-react-r 0.5s steps(4) !important;
+    animation: ka-wing-react-r 0.5s ease-out !important;
 }
 
-/* Halo flares bright */
+/* Sprout flares bright */
 .ka-entity--react .ka-pixel--halo {
-    animation: ka-halo-react 0.4s steps(2) both !important;
+    animation: ka-halo-react 0.4s ease-in-out both !important;
 }
 
 /* Ground glow flash */
 .ka-entity--react ~ .ka-pixel--glow {
-    animation: ka-glow-react 0.5s steps(3) both !important;
+    animation: ka-glow-react 0.5s ease-in-out both !important;
 }
 
 /* Particles scatter outward */
 .ka-entity--react ~ .ka-pixel--sim {
-    animation: ka-particle-burst 0.6s steps(3) both !important;
+    animation: ka-particle-burst 0.6s ease-out both !important;
 }
 
 /* ── Reaction Keyframes ──────────────────────────────── */
@@ -2095,7 +2182,7 @@ h4 {
 
 /* ── Tier 0: Seed — small, gentle, slow bob ────────────── */
 .ka-empty-constellation[data-tier="0"] .ka-pixel-creature {
-    animation: ka-scanline-reveal 0.5s steps(6) 0.2s both,
+    animation: ka-scanline-reveal 0.5s ease-out 0.2s both,
                ka-entity-float 4s ease-in-out 1s infinite;
 }
 .ka-empty-constellation[data-tier="0"] .ka-pixel { opacity: 0.55; }
@@ -2110,7 +2197,7 @@ h4 {
 .ka-empty-constellation[data-tier="3"] .ka-pixel { opacity: 0.8; }
 .ka-empty-constellation[data-tier="3"] .ka-pixel--halo { opacity: 0.7; }
 .ka-empty-constellation[data-tier="3"] .ka-pixel-creature {
-    animation: ka-scanline-reveal 0.6s steps(8) 0.2s both,
+    animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
                ka-entity-float 2.5s ease-in-out 0.8s infinite;
 }
 
@@ -2118,7 +2205,7 @@ h4 {
 .ka-empty-constellation[data-tier="4"] .ka-pixel { opacity: 0.88; }
 .ka-empty-constellation[data-tier="4"] .ka-pixel--halo { opacity: 0.8; }
 .ka-empty-constellation[data-tier="4"] .ka-pixel-creature {
-    animation: ka-scanline-reveal 0.6s steps(8) 0.2s both,
+    animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
                ka-entity-float 2.2s ease-in-out 0.8s infinite;
 }
 .ka-empty-constellation[data-tier="4"]::before {
@@ -2126,26 +2213,44 @@ h4 {
     height: 260%;
 }
 
-/* ── Core (heart) pixel — topic-colored ────────────────── */
+/* ── Core (heart) pixel — 16-bit radial topic glow ────── */
 .ka-pixel--core {
-    background: var(--entity-topic-color, var(--rubin-primary));
-    opacity: 0.8;
-    animation: ka-core-pulse 3s steps(3) infinite;
+    background: radial-gradient(circle at 40% 40%,
+        color-mix(in srgb, var(--entity-topic-color, var(--rubin-primary)) 80%, white) 0%,
+        var(--entity-topic-color, var(--rubin-primary)) 60%,
+        color-mix(in srgb, var(--entity-topic-color, var(--rubin-primary)) 85%, black) 100%
+    );
+    opacity: 0.85;
+    box-shadow:
+        0 0 4px rgba(var(--entity-topic-r, 107), var(--entity-topic-g, 91), var(--entity-topic-b, 149), 0.25),
+        inset 1px 1px 0 rgba(255,255,255,0.15);
+    animation: ka-core-pulse 3s ease-in-out infinite;
 }
 [data-theme="dark"] .ka-pixel--core {
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
-/* ── Crown pixel ───────────────────────────────────────── */
+/* ── Crown pixel — 16-bit gradient gold ────────────────── */
 .ka-pixel--crown {
     width: 8px;
     height: 8px;
-    background: var(--rubin-sepia, #A69279);
+    background: linear-gradient(135deg,
+        #C4A882 0%,
+        #A69279 50%,
+        #8B7A65 100%
+    );
     opacity: 0.7;
-    animation: ka-crown-pulse 4s steps(3) infinite;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.15),
+        0 0 3px rgba(166,146,121,0.2);
+    animation: ka-crown-pulse 4s ease-in-out infinite;
 }
 [data-theme="dark"] .ka-pixel--crown {
-    background: rgba(212, 197, 169, 0.8);
+    background: linear-gradient(135deg,
+        rgba(220,205,180,0.85) 0%,
+        rgba(212,197,169,0.8) 50%,
+        rgba(190,175,145,0.75) 100%
+    );
 }
 
 /* Crown visible faintly at Tier 0-1 for Pro users */
@@ -2159,9 +2264,13 @@ h4 {
 .ka-pixel--notif {
     width: 6px;
     height: 6px;
-    background: var(--rubin-sepia, #A69279);
+    background: radial-gradient(circle,
+        #C4A882 0%,
+        #A69279 100%
+    );
     opacity: 0;
-    animation: ka-notif-blink 2s steps(2) infinite;
+    box-shadow: 0 0 3px rgba(166,146,121,0.3);
+    animation: ka-notif-blink 2s ease-in-out infinite;
 }
 .ka-empty-constellation[data-briefing="true"] .ka-pixel--notif {
     opacity: 1;
@@ -2205,12 +2314,13 @@ h4 {
 /* Night: dim body, bright eye, slow particles */
 .ka-empty-constellation[data-time="night"] .ka-pixel { opacity: 0.4; }
 .ka-empty-constellation[data-time="night"] .ka-pixel--eye { opacity: 1; }
+.ka-empty-constellation[data-time="night"] .ka-pixel--eye-light { opacity: 0.9; }
 .ka-empty-constellation[data-time="night"] .ka-pixel--sim {
     animation-duration: 8s;
 }
 .ka-empty-constellation[data-time="night"] .ka-pixel-creature {
-    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
-               ka-entity-float 3.5s steps(3) 1.2s infinite;
+    animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
+               ka-entity-float 3.5s ease-in-out 1.2s infinite;
 }
 
 /* Dusk: sepia warmth */
@@ -2227,27 +2337,27 @@ h4 {
 
 /* ── Urgent Goals — faster eye blink ───────────────────── */
 .ka-empty-constellation[data-urgent="true"] .ka-pixel--eye {
-    animation: ka-eye-blink 2s steps(2) infinite;
+    animation: ka-eye-blink 2s ease-in-out infinite;
 }
 
 /* ── Recently Active — energetic float, faster flutter ─── */
 .ka-empty-constellation[data-active="true"] .ka-pixel-creature {
-    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
-               ka-entity-float 2s steps(5) 1.2s infinite;
+    animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
+               ka-entity-float 2s ease-in-out 0.8s infinite;
 }
 .ka-empty-constellation[data-active="true"] .ka-pixel--wing-l {
-    animation: ka-wing-flutter-l 2s steps(3) 0.4s infinite;
+    animation: ka-wing-flutter-l 2s ease-in-out 0.4s infinite;
 }
 .ka-empty-constellation[data-active="true"] .ka-pixel--wing-r {
-    animation: ka-wing-flutter-r 2s steps(3) 0.4s infinite;
+    animation: ka-wing-flutter-r 2s ease-in-out 0.4s infinite;
 }
 
 /* ── Tier Transition — level-up flash ──────────────────── */
 .ka-entity--evolving {
-    animation: ka-evolve-flash 2s steps(5) both !important;
+    animation: ka-evolve-flash 2s ease-out both !important;
 }
 .ka-entity--evolving .ka-pixel {
-    animation: ka-pixel-appear 0.8s steps(4) both !important;
+    animation: ka-pixel-appear 0.8s ease-out both !important;
 }
 
 /* ── Evolution Keyframes ───────────────────────────────── */
@@ -2286,10 +2396,17 @@ h4 {
 
 /* ── Dark mode overrides for evolution ─────────────────── */
 [data-theme="dark"] .ka-pixel--core {
-    background: var(--entity-topic-color, #8B7BB5);
+    background: radial-gradient(circle at 40% 40%,
+        color-mix(in srgb, var(--entity-topic-color, #8B7BB5) 80%, white) 0%,
+        var(--entity-topic-color, #8B7BB5) 60%,
+        color-mix(in srgb, var(--entity-topic-color, #8B7BB5) 85%, black) 100%
+    );
 }
 [data-theme="dark"] .ka-pixel--notif {
-    background: rgba(212, 197, 169, 0.8);
+    background: radial-gradient(circle,
+        rgba(220,205,180,0.85) 0%,
+        rgba(212,197,169,0.8) 100%
+    );
 }
 [data-theme="dark"] .ka-empty-constellation[data-time="night"] .ka-pixel {
     opacity: 0.35;
