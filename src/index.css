@@ -2121,7 +2121,6 @@ h4 {
     letter-spacing: 0.02em;
     line-height: 1.5;
     border-radius: var(--radius-md) var(--radius-md) 4px var(--radius-md);
-    max-width: 75%;
 }
 
 .ka-msg-avatar {
@@ -4926,6 +4925,36 @@ h4 {
     position: relative;
 }
 
+.ka-brief-body h1,
+.ka-brief-body h2,
+.ka-brief-body h3 {
+    margin: 0.8em 0 0.3em;
+    font-weight: 600;
+}
+
+.ka-brief-body h1 { font-size: 1.2em; }
+.ka-brief-body h2 { font-size: 1.1em; }
+.ka-brief-body h3 { font-size: 1em; }
+
+.ka-brief-body p { margin: 0.4em 0; }
+
+.ka-brief-body ul,
+.ka-brief-body ol {
+    margin: 0.4em 0;
+    padding-left: 1.4em;
+}
+
+.ka-brief-body li { margin: 0.15em 0; }
+
+.ka-brief-body strong { font-weight: 600; }
+
+.ka-brief-body blockquote {
+    margin: 0.4em 0;
+    padding-left: 12px;
+    border-left: 3px solid var(--rubin-ivory-dark);
+    opacity: 0.8;
+}
+
 .ka-brief-body--faded {
     max-height: 280px;
     overflow: hidden;
@@ -7139,7 +7168,6 @@ h4 {
 
     .ka-msg--user .ka-msg-bubble {
         font-size: 0.75rem;
-        max-width: 80%;
     }
 
     .ka-msg-action-btn {

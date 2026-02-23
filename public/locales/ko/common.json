@@ -31,6 +31,7 @@
     "notHelpful": "도움이 안 됨",
     "stopListening": "듣기 중지",
     "voiceInput": "음성 입력",
+    "sendMessage": "Send message",
     "stopGenerating": "생성 중지",
     "shareableLink": "공유 가능한 대화 링크"
   },
