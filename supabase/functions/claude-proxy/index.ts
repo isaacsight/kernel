@@ -879,7 +879,20 @@ serve(async (req: Request) => {
       user = authUser
     }
 
+    // ── Parse payload early (needed for free-tier streak check) ──
+    const rawBody = await req.text()
+    if (rawBody.length > MAX_PAYLOAD_SIZE_BYTES) {
+      return new Response(
+        JSON.stringify({ error: 'Payload too large', max_bytes: MAX_PAYLOAD_SIZE_BYTES }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+    const payload = JSON.parse(rawBody) as ProxyPayload
+
     // ── Free-tier limit: 10 messages for non-subscribers ───
+    // Streak bonus: +1 message for users with 3+ day companion streak
+    const clientStreak = typeof payload.streak === 'number' ? Math.max(0, Math.min(payload.streak, 365)) : 0
+    const FREE_LIMIT = 10 + (clientStreak >= 3 ? 1 : 0)
     const isAdmin = !!user.app_metadata?.is_admin
     let isPaidUser = false
     if (!isServiceCall && !isAdmin) {
@@ -909,15 +922,15 @@ serve(async (req: Request) => {
             .eq('user_id', user.id)
             .maybeSingle()
           const used = mem?.message_count ?? 0
-          if (used >= 10) {
+          if (used >= FREE_LIMIT) {
             return new Response(
-              JSON.stringify({ error: 'free_limit_reached', limit: 10, used }),
+              JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used }),
               { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
-        } else if (newCount > 10) {
+        } else if (newCount > FREE_LIMIT) {
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: 10, used: newCount }),
+            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: newCount }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
@@ -956,15 +969,7 @@ serve(async (req: Request) => {
       }
     }
 
-    // ── Parse payload ──────────────────────────────────────
-    const rawBody = await req.text()
-    if (rawBody.length > MAX_PAYLOAD_SIZE_BYTES) {
-      return new Response(
-        JSON.stringify({ error: 'Payload too large', max_bytes: MAX_PAYLOAD_SIZE_BYTES }),
-        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      )
-    }
-    const payload = JSON.parse(rawBody) as ProxyPayload
+    // ── Validate parsed payload ─────────────────────────────
     const { mode = 'text', messages } = payload
 
     if (!messages?.length) {
