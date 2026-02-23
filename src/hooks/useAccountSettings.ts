@@ -13,8 +13,9 @@ const INITIAL_SECTION: SectionState = { loading: false, error: null, success: nu
 export function useAccountSettings(
   user: User | null,
   auth: {
-    updateEmail: (email: string) => Promise<{ error: string | null }>
-    updatePassword: (password: string) => Promise<{ error: string | null }>
+    updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>
+    updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>
+    reauthenticate: () => Promise<{ error: string | null }>
     updateProfile: (data: { display_name?: string; avatar_url?: string }) => Promise<{ error: string | null }>
     getUserIdentities: () => UserIdentity[]
     linkIdentity: (provider: Provider) => Promise<void>
@@ -77,30 +78,24 @@ export function useAccountSettings(
     }
   }, [user, auth])
 
-  // ─── Re-authentication ──────────────────────────────
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [reAuthState, setReAuthState] = useState<SectionState>(INITIAL_SECTION)
+  // ─── Email Verification (re-auth) ──────────────────
+  const [verificationCode, setVerificationCode] = useState('')
+  const [verifyState, setVerifyState] = useState<SectionState>(INITIAL_SECTION)
+  const [codeSent, setCodeSent] = useState(false)
 
-  const verifyCurrentPassword = useCallback(async (): Promise<boolean> => {
-    if (!user?.email) return false
-    if (!currentPassword) {
-      setReAuthState({ loading: false, error: 'currentRequired', success: null })
-      return false
-    }
-    setReAuthState({ loading: true, error: null, success: null })
-    const { error } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: currentPassword,
-    })
+  const sendVerificationCode = useCallback(async () => {
+    setVerifyState({ loading: true, error: null, success: null })
+    const { error } = await auth.reauthenticate()
     if (error) {
-      setReAuthState({ loading: false, error: 'wrongPassword', success: null })
-      return false
+      setVerifyState({ loading: false, error, success: null })
+    } else {
+      setCodeSent(true)
+      setVerifyState({ loading: false, error: null, success: 'codeSent' })
+      setTimeout(() => setVerifyState(s => ({ ...s, success: null })), 5000)
     }
-    setReAuthState(INITIAL_SECTION)
-    return true
-  }, [user?.email, currentPassword])
+  }, [auth])
 
-  // ─── Linked Accounts (needed early for re-auth checks) ──
+  // ─── Linked Accounts (needed early for checks) ──
   const identities = auth.getUserIdentities()
   const hasPassword = identities.some(id => id.provider === 'email')
 
@@ -113,21 +108,25 @@ export function useAccountSettings(
       setEmailState({ loading: false, error: 'Enter a valid email', success: null })
       return
     }
-    // Re-auth required for email users
-    if (hasPassword) {
-      const verified = await verifyCurrentPassword()
-      if (!verified) return
+    if (!codeSent) {
+      setVerifyState({ loading: false, error: 'verificationRequired', success: null })
+      return
+    }
+    if (!verificationCode.trim()) {
+      setVerifyState({ loading: false, error: 'codeRequired', success: null })
+      return
     }
     setEmailState({ loading: true, error: null, success: null })
-    const { error } = await auth.updateEmail(newEmail.trim())
+    const { error } = await auth.updateEmail(newEmail.trim(), verificationCode.trim())
     if (error) {
       setEmailState({ loading: false, error, success: null })
     } else {
       setEmailState({ loading: false, error: null, success: 'confirmationSent' })
       setNewEmail('')
-      setCurrentPassword('')
+      setVerificationCode('')
+      setCodeSent(false)
     }
-  }, [newEmail, auth, hasPassword, verifyCurrentPassword])
+  }, [newEmail, auth, codeSent, verificationCode])
 
   // ─── Password ─────────────────────────────────────
   const [newPassword, setNewPassword] = useState('')
@@ -143,23 +142,29 @@ export function useAccountSettings(
       setPasswordState({ loading: false, error: 'mismatch', success: null })
       return
     }
-    // Re-auth required when changing existing password (not setting first password)
     if (hasPassword) {
-      const verified = await verifyCurrentPassword()
-      if (!verified) return
+      if (!codeSent) {
+        setVerifyState({ loading: false, error: 'verificationRequired', success: null })
+        return
+      }
+      if (!verificationCode.trim()) {
+        setVerifyState({ loading: false, error: 'codeRequired', success: null })
+        return
+      }
     }
     setPasswordState({ loading: true, error: null, success: null })
-    const { error } = await auth.updatePassword(newPassword)
+    const { error } = await auth.updatePassword(newPassword, hasPassword ? verificationCode.trim() : undefined)
     if (error) {
       setPasswordState({ loading: false, error, success: null })
     } else {
       setPasswordState({ loading: false, error: null, success: 'changed' })
       setNewPassword('')
       setConfirmPassword('')
-      setCurrentPassword('')
+      setVerificationCode('')
+      setCodeSent(false)
       setTimeout(() => setPasswordState(s => ({ ...s, success: null })), 3000)
     }
-  }, [newPassword, confirmPassword, auth, hasPassword, verifyCurrentPassword])
+  }, [newPassword, confirmPassword, auth, hasPassword, codeSent, verificationCode])
 
   // ─── Linked Accounts ─────────────────────────────
   const [linkState, setLinkState] = useState<SectionState>(INITIAL_SECTION)
@@ -193,9 +198,9 @@ export function useAccountSettings(
     displayName, setDisplayName,
     avatarUrl, setAvatarUrl,
     profileState, saveProfile, uploadAvatar,
-    // Re-auth
-    currentPassword, setCurrentPassword,
-    reAuthState,
+    // Verification
+    verificationCode, setVerificationCode,
+    verifyState, codeSent, sendVerificationCode,
     // Email
     newEmail, setNewEmail,
     emailState, changeEmail,

@@ -21,8 +21,9 @@ export interface AuthState {
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
-  updatePassword: (password: string) => Promise<{ error: string | null }>;
-  updateEmail: (email: string) => Promise<{ error: string | null }>;
+  updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>;
+  updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>;
+  reauthenticate: () => Promise<{ error: string | null }>;
   updateProfile: (data: { display_name?: string; avatar_url?: string }) => Promise<{ error: string | null }>;
   getUserIdentities: () => UserIdentity[];
   linkIdentity: (provider: Provider) => Promise<void>;
@@ -182,8 +183,8 @@ export function useAuth(): AuthState {
     setSession(null);
   }, []);
 
-  const updatePassword = useCallback(async (password: string) => {
-    const { error } = await supabase.auth.updateUser({ password });
+  const updatePassword = useCallback(async (password: string, nonce?: string) => {
+    const { error } = await supabase.auth.updateUser({ password, nonce });
     if (!error) setIsPasswordRecovery(false);
     return { error: error?.message ?? null };
   }, []);
@@ -192,8 +193,13 @@ export function useAuth(): AuthState {
     setIsPasswordRecovery(false);
   }, []);
 
-  const updateEmail = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.updateUser({ email });
+  const updateEmail = useCallback(async (email: string, nonce?: string) => {
+    const { error } = await supabase.auth.updateUser({ email, nonce });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const reauthenticate = useCallback(async () => {
+    const { error } = await supabase.auth.reauthenticate();
     return { error: error?.message ?? null };
   }, []);
 
@@ -244,6 +250,7 @@ export function useAuth(): AuthState {
     resetPassword,
     updatePassword,
     updateEmail,
+    reauthenticate,
     updateProfile,
     getUserIdentities,
     linkIdentity,
