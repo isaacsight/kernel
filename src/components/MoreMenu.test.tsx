@@ -10,6 +10,7 @@ vi.mock('framer-motion', () => ({
       </div>
     ),
   },
+  useDragControls: () => ({ start: vi.fn() }),
 }))
 
 vi.mock('react-i18next', () => ({

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
 import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
@@ -80,6 +80,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
   const { t, i18n } = useTranslation('home')
   const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
+  const dragControls = useDragControls()
   if (!isOpen) return null
 
   const filteredAccount = ACCOUNT_ITEMS.filter(item => {
@@ -104,13 +105,15 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
         exit={{ y: '100%' }}
         transition={SPRING.DEFAULT}
         drag="y"
+        dragControls={dragControls}
+        dragListener={false}
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}
         onDragEnd={(_, info) => {
           if (info.offset.y > 80 || info.velocity.y > 300) onClose()
         }}
       >
-        <div className="ka-more-drag-handle" />
+        <div className="ka-more-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
         <div className="ka-more-menu-items">
           <div className="ka-more-menu-label">{t('features', { ns: 'common' })}</div>
           {ITEMS.map(item => {

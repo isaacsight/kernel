@@ -9818,6 +9818,10 @@ h4 {
     display: none;
 }
 
+.ka-sheet-close-btn {
+    display: none;
+}
+
 .ka-kg-panel {
     background: var(--rubin-ivory, #FAF9F6);
     border-radius: var(--radius-md);
@@ -9848,6 +9852,8 @@ h4 {
         border-radius: var(--radius-xs);
         background: rgba(0, 0, 0, 0.3);
         margin: 12px auto 8px;
+        touch-action: none;
+        cursor: grab;
     }
 
     .ka-kg-panel {
@@ -9855,6 +9861,7 @@ h4 {
         max-height: calc(85vh - 20px);
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
         padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+        overscroll-behavior: contain;
     }
 }
 
@@ -11868,13 +11875,25 @@ h4 {
         color: var(--rubin-slate);
         opacity: 0.55;
         transition: opacity var(--duration-fast) var(--ease-out),
-            color var(--duration-fast) var(--ease-out);
+            color var(--duration-fast) var(--ease-out),
+            transform var(--duration-instant) var(--ease-out);
         -webkit-tap-highlight-color: transparent;
+    }
+
+    .ka-tab-item:active {
+        transform: scale(0.92);
     }
 
     .ka-tab-item--active {
         opacity: 1;
         color: var(--rubin-accent);
+    }
+
+    .ka-tab-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--rubin-accent);
     }
 
     .ka-tab-label {
@@ -11890,13 +11909,13 @@ h4 {
         padding-bottom: 10px;
     }
 
-    /* Adjust toast + scroll-btn up to account for tab bar */
+    /* Adjust toast + scroll-btn up to account for tab bar + keyboard */
     .ka-toast {
-        bottom: 130px;
+        bottom: calc(130px + var(--keyboard-offset, 0px));
     }
 
     .ka-scroll-btn {
-        bottom: 140px;
+        bottom: calc(140px + var(--keyboard-offset, 0px));
     }
 
     /* Hide kebab menu items that duplicate tab bar / More menu features */
@@ -11927,10 +11946,10 @@ h4 {
     padding: 8px 0;
     padding-bottom: calc(8px + 56px + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
-    touch-action: pan-y;
     max-height: 80vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .ka-more-drag-handle {
@@ -11940,6 +11959,8 @@ h4 {
     background: var(--rubin-slate);
     opacity: 0.25;
     margin: 8px auto 12px;
+    touch-action: none;
+    cursor: grab;
 }
 
 .ka-more-menu-items {
@@ -12355,6 +12376,28 @@ h4 {
 
     .ka-kg-drag-handle {
         display: none;
+    }
+
+    .ka-sheet-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.06);
+        border: none;
+        color: var(--rubin-slate);
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    [data-theme="dark"] .ka-sheet-close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--dark-text);
     }
 
     /* Popover */
