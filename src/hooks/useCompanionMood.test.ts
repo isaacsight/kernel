@@ -114,10 +114,10 @@ describe('companionStore', () => {
     expect(useCompanionStore.getState().happiness).toBe(100)
   })
 
-  it('attention floors at 0 after decay', () => {
-    useCompanionStore.setState({ attention: 0.05 })
+  it('attention floors at 15 after decay ("waiting" not "abandoned")', () => {
+    useCompanionStore.setState({ attention: 15.05 })
     useCompanionStore.getState().tickDecay()
-    expect(useCompanionStore.getState().attention).toBe(0)
+    expect(useCompanionStore.getState().attention).toBe(15)
   })
 
   it('retroactive decay reduces values based on elapsed time', () => {
