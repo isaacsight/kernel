@@ -296,16 +296,16 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
           const angle = Math.sin(p.gx * 0.4 + t * 1.2) * 2 + Math.cos(p.gy * 0.6 + t * 0.8) * 2
           p.vx += Math.cos(angle) * 0.008
           p.vy += Math.sin(angle) * 0.008
-          // Edge containment — push back toward center near boundaries
-          if (p.gx < margin) p.vx += (margin - p.gx) * 0.05
-          if (p.gx > s.cols - margin) p.vx -= (p.gx - (s.cols - margin)) * 0.05
-          if (p.gy < margin) p.vy += (margin - p.gy) * 0.05
-          if (p.gy > s.rows - margin) p.vy -= (p.gy - (s.rows - margin)) * 0.05
+          // Edge containment — strong push back near boundaries
+          if (p.gx < margin) p.vx += (margin - p.gx) * 0.1
+          if (p.gx > s.cols - margin) p.vx -= (p.gx - (s.cols - margin)) * 0.1
+          if (p.gy < margin) p.vy += (margin - p.gy) * 0.1
+          if (p.gy > s.rows - margin) p.vy -= (p.gy - (s.rows - margin)) * 0.1
           p.vx *= 0.97; p.vy *= 0.97
           p.gx += p.vx; p.gy += p.vy
-          // Hard clamp — never escape
-          p.gx = Math.max(0, Math.min(s.cols - 1, p.gx))
-          p.gy = Math.max(0, Math.min(s.rows - 1, p.gy))
+          // Hard clamp — keep 1 cell inside edges
+          p.gx = Math.max(1, Math.min(s.cols - 2, p.gx))
+          p.gy = Math.max(1, Math.min(s.rows - 2, p.gy))
         }
       } else {
         for (let step = 0; step < subSteps; step++) {
