@@ -1,8 +1,6 @@
 import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
-import * as Sentry from '@sentry/react'
-import posthog from 'posthog-js'
 import { router } from './router'
 import { AuthProvider } from './providers/AuthProvider'
 import { KernelAgentProvider } from './components/kernel-agent'
@@ -10,66 +8,6 @@ import { KernelLoading } from './components/KernelLoading'
 import { supabase } from './engine/SupabaseClient'
 import './i18n'
 import './index.css'
-
-// ─── Analytics (Posthog) ────────────────────────────────────────
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || ''
-if (POSTHOG_KEY) {
-  posthog.init(POSTHOG_KEY, {
-    api_host: 'https://us.i.posthog.com',
-    autocapture: true,
-    capture_pageview: true,
-    persistence: 'localStorage',
-  })
-}
-
-// ─── Error Monitoring (Sentry) ──────────────────────────────────
-const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || ''
-if (SENTRY_DSN) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    integrations: [
-      Sentry.browserTracingIntegration(),
-    ],
-    tracesSampleRate: 0.1,
-    environment: import.meta.env.MODE,
-    beforeSend(event) {
-      // Scrub sensitive data from error reports
-      if (event.exception?.values) {
-        for (const ex of event.exception.values) {
-          if (ex.value) {
-            // Strip Postgres/Supabase internal details (table names, columns, constraints, row data)
-            ex.value = ex.value.replace(/(?:relation|table|column|constraint|index)\s+"[^"]+"/gi, '[db-object]')
-            ex.value = ex.value.replace(/(?:INSERT|UPDATE|DELETE|SELECT)\s+.*?(?:FROM|INTO|SET)\s+\w+/gi, '[sql-query]')
-            ex.value = ex.value.replace(/row\s*\(.*?\)/gi, '[row-data]')
-            // Strip potential API keys / tokens leaked in error messages
-            ex.value = ex.value.replace(/(?:key|token|secret|password|authorization)[=:\s]+\S{8,}/gi, '[redacted-credential]')
-            // Strip email addresses
-            ex.value = ex.value.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[redacted-email]')
-            // Strip UUIDs (user IDs, row IDs)
-            ex.value = ex.value.replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '[redacted-uuid]')
-            // Strip JWT tokens
-            ex.value = ex.value.replace(/eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]')
-          }
-        }
-      }
-      // Strip sensitive query params and headers from breadcrumbs
-      if (event.breadcrumbs) {
-        for (const crumb of event.breadcrumbs) {
-          if (crumb.data?.url) {
-            try {
-              const url = new URL(crumb.data.url)
-              url.searchParams.delete('apikey')
-              url.searchParams.delete('token')
-              url.searchParams.delete('key')
-              crumb.data.url = url.toString()
-            } catch { /* non-URL, skip */ }
-          }
-        }
-      }
-      return event
-    },
-  })
-}
 
 // ─── Intercept OAuth tokens BEFORE the hash router loads ────────
 // Supabase implicit flow puts tokens in the hash fragment:
@@ -134,3 +72,64 @@ createRoot(document.getElementById('root')!).render(
         </Suspense>
     </StrictMode>,
 )
+
+// ─── Deferred Analytics (load after first paint) ────────────────
+// Sentry + PostHog are ~172KB combined. Loading them after render
+// shaves that off the critical path.
+const deferLoad = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1))
+deferLoad(() => {
+  const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || ''
+  if (POSTHOG_KEY) {
+    import('posthog-js').then(({ default: posthog }) => {
+      posthog.init(POSTHOG_KEY, {
+        api_host: 'https://us.i.posthog.com',
+        autocapture: true,
+        capture_pageview: true,
+        persistence: 'localStorage',
+      })
+    })
+  }
+
+  const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || ''
+  if (SENTRY_DSN) {
+    import('@sentry/react').then((Sentry) => {
+      Sentry.init({
+        dsn: SENTRY_DSN,
+        integrations: [
+          Sentry.browserTracingIntegration(),
+        ],
+        tracesSampleRate: 0.1,
+        environment: import.meta.env.MODE,
+        beforeSend(event) {
+          if (event.exception?.values) {
+            for (const ex of event.exception.values) {
+              if (ex.value) {
+                ex.value = ex.value.replace(/(?:relation|table|column|constraint|index)\s+"[^"]+"/gi, '[db-object]')
+                ex.value = ex.value.replace(/(?:INSERT|UPDATE|DELETE|SELECT)\s+.*?(?:FROM|INTO|SET)\s+\w+/gi, '[sql-query]')
+                ex.value = ex.value.replace(/row\s*\(.*?\)/gi, '[row-data]')
+                ex.value = ex.value.replace(/(?:key|token|secret|password|authorization)[=:\s]+\S{8,}/gi, '[redacted-credential]')
+                ex.value = ex.value.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[redacted-email]')
+                ex.value = ex.value.replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '[redacted-uuid]')
+                ex.value = ex.value.replace(/eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]')
+              }
+            }
+          }
+          if (event.breadcrumbs) {
+            for (const crumb of event.breadcrumbs) {
+              if (crumb.data?.url) {
+                try {
+                  const url = new URL(crumb.data.url)
+                  url.searchParams.delete('apikey')
+                  url.searchParams.delete('token')
+                  url.searchParams.delete('key')
+                  crumb.data.url = url.toString()
+                } catch { /* non-URL, skip */ }
+              }
+            }
+          }
+          return event
+        },
+      })
+    })
+  }
+})
