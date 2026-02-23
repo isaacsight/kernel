@@ -284,7 +284,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       const small = cell < CELL
       const gravity = en ? (small ? 0 : GRAVITY * 15) : GRAVITY
-      const damping = en && small ? 0.92 : en ? 0.998 : DAMPING
+      const damping = en && small ? 0.97 : en ? 0.998 : DAMPING
       const subSteps = en && small ? 1 : en ? SUB_STEPS * 3 : SUB_STEPS
       for (let step = 0; step < subSteps; step++) {
         for (const p of s.particles) {
@@ -294,8 +294,8 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       // Small energetic grids: slow organic drift
       if (en && small) {
         for (const p of s.particles) {
-          p.vx += (Math.random() - 0.5) * 0.006
-          p.vy += (Math.random() - 0.5) * 0.006
+          p.vx += (Math.random() - 0.5) * 0.015
+          p.vy += (Math.random() - 0.5) * 0.015
         }
       }
 
