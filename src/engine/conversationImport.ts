@@ -52,6 +52,26 @@ export async function importConversation(url: string): Promise<ImportResult> {
   return res.json()
 }
 
+export async function importConversationFromText(text: string): Promise<ImportResult> {
+  const token = await getAccessToken()
+  const res = await fetch(IMPORT_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      apikey: SUPABASE_KEY,
+    },
+    body: JSON.stringify({ text }),
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: 'Parse failed' }))
+    throw new Error(body.error || `Parse failed (${res.status})`)
+  }
+
+  return res.json()
+}
+
 export function formatImportedContext(result: ImportResult, userMessage: string): string {
   const platformName = result.platform === 'chatgpt' ? 'ChatGPT'
     : result.platform === 'claude' ? 'Claude'
