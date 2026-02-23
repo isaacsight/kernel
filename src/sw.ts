@@ -1,16 +1,27 @@
 /// <reference lib="webworker" />
 import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching'
-import { registerRoute } from 'workbox-routing'
+import { registerRoute, NavigationRoute } from 'workbox-routing'
 import { NetworkOnly, NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'
 
 declare let self: ServiceWorkerGlobalScope
 
-// Precache manifest injected by VitePWA
+// Precache manifest injected by VitePWA (static assets only, not JS/CSS)
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
 
-// ─── Runtime caching (same as previous generateSW config) ───
+// ─── Runtime caching ───
+
+// Navigation requests (HTML) — always network first so users get fresh index.html.
+// This prevents stale HTML from referencing JS/CSS hashes that no longer exist.
+registerRoute(
+  new NavigationRoute(
+    new NetworkFirst({
+      cacheName: 'html-shell',
+      networkTimeoutSeconds: 3,
+    })
+  )
+)
 
 // Supabase edge functions — never cache
 registerRoute(
