@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kernel</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // Converts path-based URLs to hash URLs so the app's hash router can handle them.
+    // e.g. /shared/abc → /#/shared/abc
+    var segment = window.location.pathname;
+    var hash = window.location.hash;
+    // If already at root or has a hash, just go home
+    if (segment === '/' || hash) {
+      window.location.replace('/');
+    } else {
+      // Preserve the path as a hash route
+      window.location.replace('/#' + segment);
+    }
+  </script>
+</head>
+<body></body>
+</html>
