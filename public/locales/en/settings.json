@@ -11,6 +11,10 @@
   },
   "security": {
     "heading": "Security",
+    "currentPassword": "Current password",
+    "currentPasswordPlaceholder": "Enter current password",
+    "currentRequired": "Enter your current password to continue",
+    "wrongPassword": "Incorrect password",
     "changeEmail": "Change email",
     "emailPlaceholder": "New email address",
     "emailSubmit": "Update email",
