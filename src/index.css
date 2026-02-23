@@ -1885,12 +1885,12 @@ h4 {
     100% { clip-path: inset(-20px); }
 }
 
-/* Ethereal float — hover with subtle tilt, 4 stepped frames */
+/* Playful float — bouncy bob with gentle sway */
 @keyframes ka-entity-float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-5px) rotate(0.5deg); }
-    50% { transform: translateY(-3px) rotate(0deg); }
-    75% { transform: translateY(-6px) rotate(-0.4deg); }
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(-8px) translateX(2px) rotate(1deg); }
+    50% { transform: translateY(-3px) translateX(0) rotate(0deg); }
+    75% { transform: translateY(-10px) translateX(-2px) rotate(-0.8deg); }
 }
 
 /* Body breathing — gentle opacity cycle */
@@ -3031,7 +3031,6 @@ h4 {
 .ka-import-body {
     padding: 20px 24px 24px;
 }
-
 
 .ka-import-hint {
     font-family: var(--font-serif);
