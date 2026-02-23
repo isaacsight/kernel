@@ -4,9 +4,62 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-23, later)
+## Current Session (2026-02-23, latest)
 
 ### Accomplished This Session
+
+#### Account Settings Panel — Full Implementation
+- **`useAuth.ts`**: Added 5 methods (`updateEmail`, `updateProfile`, `getUserIdentities`, `linkIdentity`, `unlinkIdentity`). Fixed `USER_UPDATED` event to always update user state (was dropping metadata changes).
+- **`useAccountSettings.ts`** (new): Hook for profile, email, password, linked accounts form state. Per-section loading/error/success. Re-authentication flow (verify current password before sensitive changes).
+- **`AccountSettingsPanel.tsx`** (new): Bottom-sheet with 5 sections — user summary (avatar + name + tier badge), profile editing, security (email/password), linked accounts (Google/GitHub/X connect/disconnect), danger zone (sign out + delete).
+- **`usePanelManager.ts`**: Added `showAccountSettings` state, wired into all panel management methods.
+- **`MoreMenu.tsx`**: Replaced scattered account items (upgrade, manage, delete) with single "Account settings" + "Sign out".
+- **`EnginePage.tsx`**: Lazy import, BottomSheet render, header menu consolidated, OAuth redirect reopen logic (`kernel-reopen-settings` localStorage flag).
+- **`settings.json`** (new): i18n namespace for all settings sections.
+- **`home.json`**: Added `menu.accountSettings` key.
+- **`index.css`**: ~300 lines `.ka-settings-*` CSS with dark mode.
+- **Supabase**: Created `avatars` storage bucket (public, 2MB, image-only, RLS for user-scoped write).
+- **Bug fixes**: Email input squished (added `min-width: 0` + button `max-width`), panel not scrollable (added `overflow-y: auto`, `max-height`, mobile safe-area padding).
+- New icons: Terminal, Maximize, Smartphone, Tablet, Monitor.
+- Commits: `e7a8ebdb`, `34e7ebd1`, `57d7b5ca` — all pushed to origin/main, deployed to kernel.chat
+
+#### Type Fixes
+- **`useAccountSettings.ts`**: Moved `hasPassword` and `identities` declarations above callbacks that reference them (block-scoped variable used before declaration). Committed `b0e03570`.
+- **`useKernelAgent.ts`**: Fixed `Engine` type extraction — `Awaited<ReturnType<typeof import(...)>>` wraps the module namespace, changed to `Awaited<typeof import(...)>['getEngine']` to correctly extract the function type. Committed `031f5a94`.
+
+---
+
+## Previous Session (2026-02-23, even later 2)
+
+### Accomplished
+
+#### Onboarding Flow Redesign — Single Screen
+- **`OnboardingFlow.tsx`**: Rewrote from 450 lines (9-stage conversational wizard) to ~95 lines. Single screen: ParticleGrid hero (300px, interactive), serif greeting, mono tagline, text input with submit arrow. User's first message stored in `sessionStorage('kernel-onboarding-message')` → `onComplete()`. Skip button bypasses directly.
+- **`useChatEngine.ts`**: Added onboarding message consumer (~14 lines) after briefing effect. Same `useRef` + `setTimeout(600ms)` transient-mount guard pattern. Reads sessionStorage, starts new chat, sends message.
+- **`EnginePage.tsx`**: Simplified `onComplete` — removed `interests` param and `upsertKGEntity` loop. Removed unused import.
+- **`onboarding.json`**: Replaced 43 lines with 6 keys: `greeting`, `greetingUser`, `tagline`, `placeholder`, `skipIntro`
+- **`index.css`**: Replaced ~295 lines of onboarding CSS with ~80 lines — centered flexbox page, hero, serif title, mono tagline, input+submit form. Dark mode, mobile (200px grid), reduced-motion variants.
+- Committed `ac49d997`, pushed to origin/main, deployed to kernel.chat
+
+---
+
+## Previous Session (2026-02-23, even later)
+
+### Accomplished
+
+#### Set New Password Flow (Password Recovery)
+- **`useAuth.ts`**: Added `isPasswordRecovery` state, detect `PASSWORD_RECOVERY` event in `onAuthStateChange`, `updatePassword()` calls `supabase.auth.updateUser({ password })` and clears flag on success, `clearPasswordRecovery()` to dismiss
+- **`SetNewPasswordModal.tsx`** (new): Modal with password + confirm fields, min 8 char validation, match check, reuses existing CSS (`ka-upgrade-overlay`, `ka-upgrade-modal`, `ka-gate-input`, `ka-gate-submit`, `ka-gate-error`, `ka-upgrade-dismiss`), "Skip for now" dismiss
+- **`EnginePage.tsx`**: Lazy import + render inside `<AnimatePresence>` when `isPasswordRecovery` is true
+- **`auth.json`**: Added `setPassword` i18n section (title, subtitle, placeholders, submit, tooShort, mismatch, success, skipForNow)
+- Zero new CSS needed — all existing classes reused
+- Committed `33573887`, pushed to origin/main, deployed to kernel.chat
+
+---
+
+## Previous Session (2026-02-23, later)
+
+### Accomplished
 
 #### Conversation Search — Polish & Enhance
 - **DB migration** (`024_search_index.sql`): `pg_trgm` extension + GIN trigram indexes on `messages.content` and `conversations.title` for fast `.ilike()` substring matching
@@ -95,7 +148,10 @@
 - **Pro usage dashboard**: DONE
 - **ChatGPT import**: DONE
 - **Conversation search polish**: DONE (trigram indexes, server-side title search, highlights, result count, clear button)
-- **Next candidates**: Onboarding flow redesign, animation token system
+- **Password recovery flow**: DONE (detect PASSWORD_RECOVERY event, SetNewPasswordModal, updateUser)
+- **Onboarding redesign**: DONE (single-screen ParticleGrid + input, sessionStorage bridge to chat engine)
+- **Account settings panel**: DONE (profile, email, password, linked accounts, avatar upload, re-auth, Supabase avatars bucket)
+- **Next candidates**: Animation token system
 - **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
 
 ## Key Decisions Made
@@ -115,3 +171,5 @@
 - Zero Tailwind — all vanilla CSS with `ka-` prefix and Rubin design tokens
 - Edge function deploys: ALWAYS use `--no-verify-jwt` flag
 - Conversation search: trigram GIN indexes for `.ilike()`, parallel title+message queries, `<mark>` highlight, no full-text search needed at current scale
+- Onboarding: single screen over multi-stage wizard; sessionStorage bridge pattern (write in onboarding, consume in useChatEngine with transient-mount guard)
+- Account settings: bottom-sheet panel, MoreMenu consolidated to single entry + sign out, OAuth link uses localStorage flag (`kernel-reopen-settings`) to reopen panel after redirect, avatars bucket with user-scoped RLS, re-auth via `signInWithPassword` before email/password changes
