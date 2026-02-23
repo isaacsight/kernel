@@ -69,6 +69,7 @@
   "preview": "Preview",
   "code": "Code",
   "downloadAllFiles": "Download all {{count}} files",
+  "combinedPreview": "Live Preview",
   "previewTruncated": "Preview truncated at {{lines}} lines — download for full file",
   "line": "{{count}} line",
   "lines": "{{count}} lines",

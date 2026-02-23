@@ -123,19 +123,19 @@ function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: strin
 
 const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
 
-function ArtifactCard({ filename, lang, code, ext, title, t }: {
+function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
   filename: string
   lang: string
   code: string
   ext: string
   title?: string
   t: (key: string, opts?: Record<string, unknown>) => string
+  autoPreview?: boolean
 }) {
   const [copied, setCopied] = useState(false)
-  const [expanded, setExpanded] = useState(false)
-  const [showPreview, setShowPreview] = useState(false)
-
   const canPreview = PREVIEWABLE_EXTS.includes(ext)
+  const [expanded, setExpanded] = useState(canPreview && !!autoPreview)
+  const [showPreview, setShowPreview] = useState(canPreview && !!autoPreview)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
@@ -215,6 +215,54 @@ function ArtifactCard({ filename, lang, code, ext, title, t }: {
           )}
         </>
       )}
+    </div>
+  )
+}
+
+// ─── Combined multi-file preview ─────────────────────────
+
+function CombinedPreview({ artifacts, t }: {
+  artifacts: { filename: string; content: string }[]
+  t: (key: string) => string
+}) {
+  const html = artifacts.find(a => /\.html?$/.test(a.filename))
+  if (!html) return null
+
+  const cssFiles = artifacts.filter(a => /\.css$/.test(a.filename))
+  const jsFiles = artifacts.filter(a => /\.(js|ts)$/.test(a.filename))
+
+  const combined = useMemo(() => {
+    let doc = html.content
+    if (cssFiles.length > 0) {
+      const styles = cssFiles.map(f => `<style>/* ${f.filename} */\n${f.content}</style>`).join('\n')
+      doc = doc.includes('</head>')
+        ? doc.replace('</head>', `${styles}\n</head>`)
+        : `${styles}\n${doc}`
+    }
+    if (jsFiles.length > 0) {
+      const scripts = jsFiles.map(f => `<script>/* ${f.filename} */\n${f.content}</script>`).join('\n')
+      doc = doc.includes('</body>')
+        ? doc.replace('</body>', `${scripts}\n</body>`)
+        : `${doc}\n${scripts}`
+    }
+    return doc
+  }, [html, cssFiles, jsFiles])
+
+  return (
+    <div className="ka-combined-preview">
+      <div className="ka-combined-preview-header">
+        <IconEye size={14} />
+        <span>{t('combinedPreview')}</span>
+        <span className="ka-combined-preview-files">
+          {artifacts.map(a => a.filename).join(' + ')}
+        </span>
+      </div>
+      <iframe
+        srcDoc={combined}
+        sandbox="allow-scripts"
+        title="Combined preview"
+        className="ka-artifact-iframe ka-combined-iframe"
+      />
     </div>
   )
 }
@@ -404,6 +452,7 @@ export function MessageContent({ text }: { text: string }) {
           ext={ext}
           title={title || undefined}
           t={t}
+          autoPreview={PREVIEWABLE_EXTS.includes(ext)}
         />
       )
     } else {
@@ -438,6 +487,9 @@ export function MessageContent({ text }: { text: string }) {
           <IconPackage size={14} />
           {t('downloadAllFiles', { count: artifacts.length })}
         </button>
+      )}
+      {artifacts.length >= 2 && artifacts.some(a => /\.html?$/.test(a.filename)) && (
+        <CombinedPreview artifacts={artifacts} t={t} />
       )}
     </>
   )
