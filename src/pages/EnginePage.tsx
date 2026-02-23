@@ -38,7 +38,7 @@ import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
-import { PixelEntity } from '../components/PixelEntity'
+import { LottieEntity } from '../components/LottieEntity'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -243,9 +243,11 @@ function EngineChat() {
     prevGoalsDoneRef.current = done
   }, [chatEngine.userGoals]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Feature 3: Goal check-in chips
+  // Feature 3: Goal check-in chips (exclude auto-generated briefing follow-ups)
   const goalCheckIns = useMemo(
-    () => getGoalsDueForCheckIn(chatEngine.userGoals).slice(0, 2),
+    () => getGoalsDueForCheckIn(chatEngine.userGoals)
+      .filter(g => !g.title.startsWith('Follow up:'))
+      .slice(0, 2),
     [chatEngine.userGoals],
   )
 
@@ -720,7 +722,7 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <PixelEntity evolution={evolution} />
+            <LottieEntity evolution={evolution} />
 
             {/* Feature 5: Mood label */}
             <AnimatePresence mode="wait">
