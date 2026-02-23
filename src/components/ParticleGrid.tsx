@@ -168,12 +168,13 @@ interface ParticleGridProps {
   size?: number
   interactive?: boolean
   energetic?: boolean
+  progressive?: boolean
 }
 
-export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive = true, energetic = false }: ParticleGridProps = {}) {
+export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive = true, energetic = false, progressive = false }: ParticleGridProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const propsRef = useRef({ paletteProp, energetic })
-  propsRef.current = { paletteProp, energetic }
+  const propsRef = useRef({ paletteProp, energetic, progressive })
+  propsRef.current = { paletteProp, energetic, progressive }
 
   const stateRef = useRef<{
     particles: Particle[]
@@ -183,6 +184,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     cols: number; rows: number; size: number
     mouseGx: number; mouseGy: number; mouseActive: boolean
     raf: number
+    progressiveStart: number
   }>({
     particles: [], gridImage: null,
     pal: getPal(),
@@ -190,6 +192,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     cols: 0, rows: 0, size: 0,
     mouseGx: -100, mouseGy: -100, mouseActive: false,
     raf: 0,
+    progressiveStart: 0,
   })
 
   const setup = useCallback(() => {
@@ -211,7 +214,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
     const count = Math.min(PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * 0.4)))
-    const boost = cell < CELL ? 0.3 : 0.05
+    const boost = cell < CELL ? 0.6 : 0.05
     s.particles = Array.from({ length: count }, () => ({
       ...createParticle(cols, rows),
       vx: (Math.random() - 0.5) * boost,
@@ -226,6 +229,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     const ctx = canvas.getContext('2d')
     if (!ctx) return
     const s = stateRef.current
+    s.progressiveStart = performance.now()
 
     const cleanups: (() => void)[] = []
 
@@ -270,17 +274,34 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       }
 
       // Apply palette overrides from props (for color cycling)
-      const { paletteProp: pp, energetic: en } = propsRef.current
+      const { paletteProp: pp, energetic: en, progressive: prog } = propsRef.current
       const drawPal = pp
         ? { ...s.pal, particle: pp.particle, link: pp.link, field: pp.field }
         : s.pal
 
       ctx.drawImage(s.gridImage, 0, 0)
 
-      const gravity = en ? GRAVITY * 8 : GRAVITY
-      const damping = en ? 0.997 : DAMPING
-      const steps = en ? SUB_STEPS + 2 : SUB_STEPS
-      for (let step = 0; step < steps; step++) {
+      // Progressive physics ramp: idle → active over ~4s
+      let gravity: number, damping: number, breathFactor = 1
+      if (prog) {
+        const elapsed = performance.now() - s.progressiveStart
+        const ramp = Math.min(1, Math.max(0, (elapsed - 1500) / 3500))
+        const tG = en ? GRAVITY * 15 : GRAVITY
+        gravity = GRAVITY * 2 + (tG - GRAVITY * 2) * ramp
+        const tD = en ? 0.998 : DAMPING
+        damping = 0.99 + (tD - 0.99) * ramp
+        // Breathing: gentle ramp then sine pulse
+        if (elapsed > 1500) {
+          breathFactor = 0.65 + Math.sin((elapsed - 1500) * Math.PI * 2 / 2500) * 0.35
+        } else {
+          breathFactor = 0.65 + (elapsed / 1500) * 0.1
+        }
+      } else {
+        gravity = en ? GRAVITY * 15 : GRAVITY
+        damping = en ? 0.998 : DAMPING
+      }
+      const subSteps = en ? SUB_STEPS * 3 : SUB_STEPS
+      for (let step = 0; step < subSteps; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
         }
@@ -324,9 +345,9 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
           const euclidean = Math.sqrt(ddx * ddx + ddy * ddy)
           if (euclidean > 5) continue
           const strength = (1 - euclidean / 5.5) * 0.6
-          const steps = Math.max(ddx, ddy)
-          for (let t = 0; t <= steps; t++) {
-            const frac = steps === 0 ? 0 : t / steps
+          const lineSteps = Math.max(ddx, ddy)
+          for (let t = 0; t <= lineSteps; t++) {
+            const frac = lineSteps === 0 ? 0 : t / lineSteps
             const lx = Math.round(acx + (bcx - acx) * frac)
             const ly = Math.round(acy + (bcy - acy) * frac)
             if (lx >= 0 && lx < cols && ly >= 0 && ly < rows) {
@@ -336,18 +357,20 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
         }
       }
 
-      // Render cells
+      // Render cells — breathing modulates field/link intensity
+      const fMul = prog ? 0.4 * breathFactor : 0.4
+      const lMul = prog ? 0.5 * (0.7 + breathFactor * 0.3) : 0.5
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
           const idx = y * cols + x
           const px = x * cell, py = y * cell
 
           if (fieldA[idx] > 0.02) {
-            const c = blendQuantized(fr, fieldA[idx] * 0.4, br)
+            const c = blendQuantized(fr, fieldA[idx] * fMul, br)
             if (c) { ctx.fillStyle = c; ctx.fillRect(px, py, cell, cell) }
           }
           if (linkA[idx] > 0.02 && partA[idx] < 0.5) {
-            const c = blendQuantized(lr, linkA[idx] * 0.5, br)
+            const c = blendQuantized(lr, linkA[idx] * lMul, br)
             if (c) { ctx.fillStyle = c; ctx.fillRect(px, py, cell, cell) }
           }
           if (partA[idx] > 0.5) {

@@ -2,10 +2,11 @@ import { Suspense } from 'react'
 import { createHashRouter, Navigate, useRouteError } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { EnginePage } from './pages/EnginePage'
+import { KernelLoading } from './components/KernelLoading'
 import { lazyRetry } from './utils/lazyRetry'
 
-// Lazy-load pages — lazyRetry reloads once on stale-cache 404
+// Lazy-load ALL pages — lazyRetry reloads once on stale-cache 404
+const EnginePage = lazyRetry(() => import('./pages/EnginePage').then(m => ({ default: m.EnginePage })))
 const AdminPage = lazyRetry(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
 const SharedConversationPage = lazyRetry(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
 const BriefingPage = lazyRetry(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
@@ -47,7 +48,11 @@ export const router = createHashRouter([
     element: <Layout />,
     errorElement: <RootErrorPage />,
     children: [
-      { index: true, element: withErrorBoundary(<EnginePage />) },
+      { index: true, element: withErrorBoundary(
+        <Suspense fallback={<KernelLoading />}>
+          <EnginePage />
+        </Suspense>
+      ) },
       { path: 'admin', element: withErrorBoundary(<LazyAdmin />) },
       { path: 'briefing/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>

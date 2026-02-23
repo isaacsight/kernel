@@ -25,6 +25,7 @@ import { runDiscussion as _runDiscussion } from './DiscussionMode';
 import { getToolsForAgent, getToolCount } from './tools/registry';
 import { runToolLoop } from './tools/executor';
 import { syncEngineState, getEngineState } from './SupabaseClient';
+import { useCompanionStore } from '../stores/companionStore';
 import type { Agent, Message } from '../types';
 import type { ToolLoopCallbacks } from './tools/executor';
 
@@ -285,7 +286,8 @@ export function createEngine(): {
     const systemPrompt = isBuildIntent
       ? agent.systemPrompt + '\n\nCRITICAL RULE: When the user asks for N files, you MUST produce ALL N files as separate ```language:filename.ext code blocks. Start each file immediately — minimal explanation between files. Produce files FIRST, explanations AFTER all files.'
       : agent.systemPrompt;
-    const llmOpts = { system: systemPrompt, tier: 'strong' as const, max_tokens: maxTokens };
+    const streak = useCompanionStore.getState().streak;
+    const llmOpts = { system: systemPrompt, tier: 'strong' as const, max_tokens: maxTokens, streak };
 
     // Use tool loop if tools are available for this agent
     const agentTools = getToolCount() > 0 ? getToolsForAgent(agent.id) : [];
