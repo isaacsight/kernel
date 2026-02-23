@@ -118,16 +118,24 @@ export default function AccountSettingsPanel({
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
-          {/* Email verification — verify identity before sensitive changes */}
-          <div className="ka-settings-verify-block">
-            <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
-            <p className="ka-settings-verify-hint">{t('security.verifyHint')}</p>
-            {!settings.codeSent ? (
+          {/* Step 1: Verify identity */}
+          {!settings.codeSent ? (
+            <div className="ka-settings-verify-block">
+              <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
+              <p className="ka-settings-verify-hint">{t('security.verifyHint')}</p>
               <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading}>
                 {settings.verifyState.loading ? '...' : t('security.sendCode')}
               </button>
-            ) : (
-              <div className="ka-settings-field-row">
+              {settings.verifyState.error && (
+                <p className="ka-gate-error">{settings.verifyState.error}</p>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Step 2: Enter code + make changes */}
+              <div className="ka-settings-verify-block ka-settings-verify-block--active">
+                <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
+                <p className="ka-gate-success" style={{ margin: '4px 0 8px' }}><IconCheck size={14} /> {t('security.codeSent')}</p>
                 <input
                   className="ka-gate-input"
                   type="text"
@@ -137,79 +145,35 @@ export default function AccountSettingsPanel({
                   placeholder={t('security.codePlaceholder')}
                   autoComplete="one-time-code"
                 />
+                {settings.verifyState.error && (
+                  <p className="ka-gate-error">
+                    {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') : settings.verifyState.error}
+                  </p>
+                )}
               </div>
-            )}
-            {settings.verifyState.error && (
-              <p className="ka-gate-error">
-                {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') :
-                 settings.verifyState.error === 'verificationRequired' ? t('security.verificationRequired') :
-                 settings.verifyState.error}
-              </p>
-            )}
-            {settings.verifyState.success === 'codeSent' && (
-              <p className="ka-gate-success"><IconCheck size={14} /> {t('security.codeSent')}</p>
-            )}
-          </div>
 
-          {/* Change Email */}
-          <label className="ka-settings-field">
-            <span className="ka-settings-label">{t('security.changeEmail')}</span>
-            <div className="ka-settings-field-row">
-              <input
-                className="ka-gate-input"
-                type="email"
-                value={settings.newEmail}
-                onChange={e => settings.setNewEmail(e.target.value)}
-                placeholder={t('security.emailPlaceholder')}
-              />
-              <button className="ka-gate-submit ka-settings-inline-btn" onClick={settings.changeEmail} disabled={settings.emailState.loading}>
-                {settings.emailState.loading ? '...' : t('security.emailSubmit')}
-              </button>
-            </div>
-          </label>
-          {settings.emailState.error && <p className="ka-gate-error">{settings.emailState.error}</p>}
-          {settings.emailState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('security.emailConfirmationSent')}</p>}
+              {/* Change Email */}
+              <label className="ka-settings-field">
+                <span className="ka-settings-label">{t('security.changeEmail')}</span>
+                <div className="ka-settings-field-row">
+                  <input
+                    className="ka-gate-input"
+                    type="email"
+                    value={settings.newEmail}
+                    onChange={e => settings.setNewEmail(e.target.value)}
+                    placeholder={t('security.emailPlaceholder')}
+                  />
+                  <button className="ka-gate-submit ka-settings-inline-btn" onClick={settings.changeEmail} disabled={settings.emailState.loading}>
+                    {settings.emailState.loading ? '...' : t('security.emailSubmit')}
+                  </button>
+                </div>
+              </label>
+              {settings.emailState.error && <p className="ka-gate-error">{settings.emailState.error}</p>}
+              {settings.emailState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('security.emailConfirmationSent')}</p>}
 
-          {/* Change Password */}
-          {(settings.hasPassword || !settings.identities.length) ? (
-            <>
+              {/* Change / Set Password */}
               <label className="ka-settings-field">
-                <span className="ka-settings-label">{t('security.changePassword')}</span>
-                <input
-                  className="ka-gate-input"
-                  type="password"
-                  value={settings.newPassword}
-                  onChange={e => settings.setNewPassword(e.target.value)}
-                  placeholder={t('security.newPasswordPlaceholder')}
-                  autoComplete="new-password"
-                />
-              </label>
-              <label className="ka-settings-field">
-                <input
-                  className="ka-gate-input"
-                  type="password"
-                  value={settings.confirmPassword}
-                  onChange={e => settings.setConfirmPassword(e.target.value)}
-                  placeholder={t('security.confirmPasswordPlaceholder')}
-                  autoComplete="new-password"
-                />
-              </label>
-              {settings.passwordState.error && (
-                <p className="ka-gate-error">
-                  {settings.passwordState.error === 'tooShort' ? t('security.tooShort') :
-                   settings.passwordState.error === 'mismatch' ? t('security.mismatch') :
-                   settings.passwordState.error}
-                </p>
-              )}
-              {settings.passwordState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('security.passwordChanged')}</p>}
-              <button className="ka-gate-submit" onClick={settings.changePassword} disabled={settings.passwordState.loading}>
-                {settings.passwordState.loading ? '...' : t('security.passwordSubmit')}
-              </button>
-            </>
-          ) : (
-            <>
-              <label className="ka-settings-field">
-                <span className="ka-settings-label">{t('security.setPassword')}</span>
+                <span className="ka-settings-label">{settings.hasPassword ? t('security.changePassword') : t('security.setPassword')}</span>
                 <input
                   className="ka-gate-input"
                   type="password"
