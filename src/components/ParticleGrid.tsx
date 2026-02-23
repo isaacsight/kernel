@@ -135,18 +135,18 @@ function buildGridImage(size: number, cols: number, rows: number, pal: Palette, 
   g.fillStyle = pal.bg
   g.fillRect(0, 0, size, size)
   // Minor grid
-  g.strokeStyle = pal.gridMin; g.lineWidth = cell < 12 ? 0.3 : 0.5; g.beginPath()
+  g.strokeStyle = pal.gridMin; g.lineWidth = cell < 8 ? 0.2 : 0.5; g.beginPath()
   for (let x = 0; x <= cols; x++) { g.moveTo(x * cell, 0); g.lineTo(x * cell, size) }
   for (let y = 0; y <= rows; y++) { g.moveTo(0, y * cell); g.lineTo(size, y * cell) }
   g.stroke()
   // Major grid
-  g.strokeStyle = pal.gridMaj; g.lineWidth = cell < 12 ? 0.5 : 1; g.beginPath()
-  const majStep = cell < 12 ? 8 : 5
+  g.strokeStyle = pal.gridMaj; g.lineWidth = cell < 8 ? 0.3 : 1; g.beginPath()
+  const majStep = cell < 8 ? 10 : 5
   for (let x = 0; x <= cols; x += majStep) { g.moveTo(x * cell, 0); g.lineTo(x * cell, size) }
   for (let y = 0; y <= rows; y += majStep) { g.moveTo(0, y * cell); g.lineTo(size, y * cell) }
   g.stroke()
   // Registration marks (skip for small grids)
-  if (cell >= 12) {
+  if (cell >= 8) {
     const m = 14
     g.strokeStyle = pal.key; g.lineWidth = 0.8
     for (const [x, y] of [[m, m], [size - m, m], [m, size - m], [size - m, size - m]]) {
@@ -199,7 +199,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     if (!container) return
     const maxSize = sizeProp || 400
     // Use smaller cells for compact grids — more resolution + movement
-    const cell = maxSize <= 100 ? 6 : maxSize <= 200 ? 10 : CELL
+    const cell = maxSize <= 100 ? 4 : maxSize <= 200 ? 6 : CELL
     const raw = Math.min(container.clientWidth, container.clientHeight, maxSize)
     const size = Math.floor(raw / cell) * cell
     if (size < cell) return
@@ -272,8 +272,8 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       ctx.drawImage(s.gridImage, 0, 0)
 
-      const gravity = en ? GRAVITY * 2.5 : GRAVITY
-      const damping = en ? 0.992 : DAMPING
+      const gravity = en ? GRAVITY * 5 : GRAVITY
+      const damping = en ? 0.995 : DAMPING
       for (let step = 0; step < SUB_STEPS; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
