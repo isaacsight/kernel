@@ -1856,7 +1856,7 @@ h4 {
 
 [data-theme="dark"] .ka-pixel--wing-l,
 [data-theme="dark"] .ka-pixel--wing-r {
-    opacity: 0.35;
+    opacity: 0.3;
 }
 
 [data-theme="dark"] .ka-pixel--glow {
@@ -2051,6 +2051,218 @@ h4 {
     33% { opacity: 0.45; transform: scale(1.8); }
     66% { opacity: 0.2; transform: scale(2.5); }
     100% { opacity: 0; transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Entity Evolution — Tier, Time, Topic, Transient States
+   Data-driven visual modifiers for the pixel entity.
+   Tiers are additive; higher tiers get more detail.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Tier 0: Seed — minimal, dim, slow ─────────────────── */
+.ka-empty-constellation[data-tier="0"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s steps(6) 0.3s both,
+               ka-entity-float 4s steps(3) 1.2s infinite;
+}
+.ka-empty-constellation[data-tier="0"] .ka-pixel { opacity: 0.45; }
+.ka-empty-constellation[data-tier="0"] .ka-pixel--halo { opacity: 0.2; }
+.ka-empty-constellation[data-tier="0"] .ka-pixel--sim { width: 4px; height: 4px; }
+
+/* ── Tier 2: Awake — more vivid ────────────────────────── */
+.ka-empty-constellation[data-tier="2"] .ka-pixel { opacity: 0.7; }
+.ka-empty-constellation[data-tier="2"] .ka-pixel--halo { opacity: 0.4; }
+
+/* ── Tier 3: Ascendant — bright, energetic ─────────────── */
+.ka-empty-constellation[data-tier="3"] .ka-pixel { opacity: 0.75; }
+.ka-empty-constellation[data-tier="3"] .ka-pixel--halo { opacity: 0.5; }
+.ka-empty-constellation[data-tier="3"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
+               ka-entity-float 2.4s steps(4) 1.2s infinite;
+}
+
+/* ── Tier 4: Sovereign — full brilliance ───────────────── */
+.ka-empty-constellation[data-tier="4"] .ka-pixel { opacity: 0.85; }
+.ka-empty-constellation[data-tier="4"] .ka-pixel--halo { opacity: 0.6; }
+.ka-empty-constellation[data-tier="4"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
+               ka-entity-float 2.2s steps(5) 1.2s infinite;
+}
+.ka-empty-constellation[data-tier="4"]::before {
+    width: 250%;
+    height: 250%;
+}
+
+/* ── Core (heart) pixel — topic-colored ────────────────── */
+.ka-pixel--core {
+    background: var(--entity-topic-color, var(--rubin-primary));
+    opacity: 0.8;
+    animation: ka-core-pulse 3s steps(3) infinite;
+}
+[data-theme="dark"] .ka-pixel--core {
+    opacity: 0.85;
+}
+
+/* ── Crown pixel ───────────────────────────────────────── */
+.ka-pixel--crown {
+    width: 8px;
+    height: 8px;
+    background: var(--rubin-sepia, #A69279);
+    opacity: 0.7;
+    animation: ka-crown-pulse 4s steps(3) infinite;
+}
+[data-theme="dark"] .ka-pixel--crown {
+    background: rgba(212, 197, 169, 0.8);
+}
+
+/* Crown visible faintly at Tier 0-1 for Pro users */
+.ka-empty-constellation[data-pro="true"][data-tier="0"] .ka-pixel--crown,
+.ka-empty-constellation[data-pro="true"][data-tier="1"] .ka-pixel--crown {
+    display: block;
+    opacity: 0.2;
+}
+
+/* ── Notification pixel — briefing indicator ───────────── */
+.ka-pixel--notif {
+    width: 6px;
+    height: 6px;
+    background: var(--rubin-sepia, #A69279);
+    opacity: 0;
+    animation: ka-notif-blink 2s steps(2) infinite;
+}
+.ka-empty-constellation[data-briefing="true"] .ka-pixel--notif {
+    opacity: 1;
+}
+
+/* ── Topic color bleed — halo tint at Tier 3+ ─────────── */
+.ka-empty-constellation[data-tier="3"] .ka-pixel--halo,
+.ka-empty-constellation[data-tier="4"] .ka-pixel--halo {
+    background: color-mix(in srgb, var(--entity-topic-color, var(--rubin-primary)) 30%, var(--rubin-primary));
+}
+
+/* Topic color on particles at Tier 3+ */
+.ka-empty-constellation[data-tier="3"] .ka-pixel--sim,
+.ka-empty-constellation[data-tier="4"] .ka-pixel--sim {
+    background: color-mix(in srgb, var(--entity-topic-color, var(--rubin-primary)) 40%, var(--rubin-primary));
+}
+
+/* Tier 4: LCD backlight shifts to topic color */
+.ka-empty-constellation[data-tier="4"]::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(var(--entity-topic-r, 107), var(--entity-topic-g, 91), var(--entity-topic-b, 149), 0.06) 0%,
+        transparent 55%
+    );
+}
+
+/* ── Time of Day ───────────────────────────────────────── */
+
+/* Dawn: golden halo tint */
+.ka-empty-constellation[data-time="dawn"] .ka-pixel--halo {
+    background: color-mix(in srgb, #D4A574 30%, var(--rubin-primary));
+}
+.ka-empty-constellation[data-time="dawn"]::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(212, 165, 116, 0.05) 0%,
+        transparent 55%
+    );
+}
+
+/* Night: dim body, bright eye, slow particles */
+.ka-empty-constellation[data-time="night"] .ka-pixel { opacity: 0.4; }
+.ka-empty-constellation[data-time="night"] .ka-pixel--eye { opacity: 1; }
+.ka-empty-constellation[data-time="night"] .ka-pixel--sim {
+    animation-duration: 8s;
+}
+.ka-empty-constellation[data-time="night"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
+               ka-entity-float 3.5s steps(3) 1.2s infinite;
+}
+
+/* Dusk: sepia warmth */
+.ka-empty-constellation[data-time="dusk"] .ka-pixel {
+    background: color-mix(in srgb, var(--rubin-sepia, #A69279) 15%, var(--rubin-primary));
+}
+.ka-empty-constellation[data-time="dusk"]::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(166, 146, 121, 0.04) 0%,
+        transparent 55%
+    );
+}
+
+/* ── Urgent Goals — faster eye blink ───────────────────── */
+.ka-empty-constellation[data-urgent="true"] .ka-pixel--eye {
+    animation: ka-eye-blink 2s steps(2) infinite;
+}
+
+/* ── Recently Active — energetic float, faster flutter ─── */
+.ka-empty-constellation[data-active="true"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.8s steps(11) 0.3s both,
+               ka-entity-float 2s steps(5) 1.2s infinite;
+}
+.ka-empty-constellation[data-active="true"] .ka-pixel--wing-l {
+    animation: ka-wing-flutter-l 2s steps(3) 0.4s infinite;
+}
+.ka-empty-constellation[data-active="true"] .ka-pixel--wing-r {
+    animation: ka-wing-flutter-r 2s steps(3) 0.4s infinite;
+}
+
+/* ── Tier Transition — level-up flash ──────────────────── */
+.ka-entity--evolving {
+    animation: ka-evolve-flash 2s steps(5) both !important;
+}
+.ka-entity--evolving .ka-pixel {
+    animation: ka-pixel-appear 0.8s steps(4) both !important;
+}
+
+/* ── Evolution Keyframes ───────────────────────────────── */
+
+@keyframes ka-core-pulse {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    33% { opacity: 0.6; transform: scale(0.9); }
+    66% { opacity: 0.95; transform: scale(1.1); }
+}
+
+@keyframes ka-crown-pulse {
+    0%, 100% { opacity: 0.7; }
+    33% { opacity: 0.4; }
+    66% { opacity: 0.85; }
+}
+
+@keyframes ka-notif-blink {
+    0%, 60% { opacity: 0.8; }
+    61%, 100% { opacity: 0.15; }
+}
+
+@keyframes ka-evolve-flash {
+    0% { filter: brightness(1); }
+    10% { filter: brightness(2.5); }
+    30% { filter: brightness(1.5); }
+    60% { filter: brightness(1.2); }
+    100% { filter: brightness(1); }
+}
+
+@keyframes ka-pixel-appear {
+    0% { opacity: 0; transform: scale(0); }
+    25% { opacity: 1; transform: scale(1.4); }
+    50% { opacity: 0.8; transform: scale(0.9); }
+    100% { opacity: inherit; transform: scale(1); }
+}
+
+/* ── Dark mode overrides for evolution ─────────────────── */
+[data-theme="dark"] .ka-pixel--core {
+    background: var(--entity-topic-color, #8B7BB5);
+}
+[data-theme="dark"] .ka-pixel--notif {
+    background: rgba(212, 197, 169, 0.8);
+}
+[data-theme="dark"] .ka-empty-constellation[data-time="night"] .ka-pixel {
+    opacity: 0.35;
+}
+[data-theme="dark"] .ka-empty-constellation[data-time="night"] .ka-pixel--eye {
+    opacity: 1;
+    background: rgba(212, 197, 169, 1);
 }
 
 .ka-empty-title {
@@ -2820,70 +3032,6 @@ h4 {
     padding: 20px 24px 24px;
 }
 
-.ka-import-tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--rubin-sepia);
-}
-
-.ka-import-tab {
-    flex: 1;
-    padding: 8px 0;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--rubin-slate);
-    opacity: 0.4;
-    cursor: pointer;
-    transition: opacity var(--duration-fast) var(--ease-out),
-                border-color var(--duration-fast) var(--ease-out);
-}
-
-.ka-import-tab:hover {
-    opacity: 0.7;
-}
-
-.ka-import-tab--active {
-    opacity: 1;
-    border-bottom-color: var(--rubin-slate);
-}
-
-.ka-import-textarea {
-    width: 100%;
-    min-height: 160px;
-    max-height: 320px;
-    padding: 12px 14px;
-    border: 1px solid var(--rubin-sepia);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-serif);
-    font-size: 0.82rem;
-    line-height: var(--line-height-relaxed);
-    background: transparent;
-    color: var(--rubin-slate);
-    outline: none;
-    resize: vertical;
-    transition: border-color var(--duration-fast) var(--ease-out);
-    margin-bottom: 12px;
-}
-
-.ka-import-textarea:focus {
-    border-color: var(--rubin-primary);
-}
-
-.ka-import-textarea::placeholder {
-    opacity: 0.35;
-    font-style: italic;
-}
-
-.ka-import-parse-btn {
-    width: 100%;
-    margin-bottom: 16px;
-}
 
 .ka-import-hint {
     font-family: var(--font-serif);
@@ -3089,23 +3237,10 @@ h4 {
     background: var(--dark-bg-surface);
 }
 
-[data-theme="dark"] .ka-import-input,
-[data-theme="dark"] .ka-import-textarea {
+[data-theme="dark"] .ka-import-input {
     background: rgba(255, 255, 255, 0.04);
     border-color: var(--dark-border-subtle);
     color: var(--dark-text);
-}
-
-[data-theme="dark"] .ka-import-tabs {
-    border-bottom-color: var(--dark-border-subtle);
-}
-
-[data-theme="dark"] .ka-import-tab {
-    color: var(--dark-text);
-}
-
-[data-theme="dark"] .ka-import-tab--active {
-    border-bottom-color: var(--dark-text);
 }
 
 [data-theme="dark"] .ka-import-preview {
