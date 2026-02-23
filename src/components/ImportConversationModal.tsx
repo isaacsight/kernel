@@ -154,9 +154,9 @@ export function ImportConversationModal({
       <motion.div
         ref={modalRef}
         className="ka-modal ka-import-modal"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, x: '-50%', y: 'calc(-50% + 20px)' }}
+        animate={{ opacity: 1, x: '-50%', y: '-50%' }}
+        exit={{ opacity: 0, x: '-50%', y: 'calc(-50% + 20px)' }}
         role="dialog"
         aria-modal="true"
         aria-label="Import conversation"
