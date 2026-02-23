@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
@@ -76,9 +76,11 @@ interface MoreMenuProps {
   isAdmin: boolean
   isNewFeature?: (id: string) => boolean
   onFeatureDiscovered?: (id: string) => void
+  darkMode?: boolean
+  onToggleDarkMode?: () => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered, darkMode, onToggleDarkMode }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
@@ -151,6 +153,16 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
               ))}
             </select>
           </div>
+          {onToggleDarkMode && (
+            <label className="ka-more-toggle">
+              <span>
+                {darkMode ? <IconSun size={14} /> : <IconMoon size={14} />}
+                {' '}{t('menu.darkMode')}
+              </span>
+              <input type="checkbox" role="switch" aria-checked={!!darkMode} checked={!!darkMode} onChange={onToggleDarkMode} />
+              <span className="ka-more-toggle-track" />
+            </label>
+          )}
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">
             <IconBell size={14} />
