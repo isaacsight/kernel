@@ -9,6 +9,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { checkRateLimit as checkRL, rateLimitResponse, type Tier } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 // ─── Model tier mapping ──────────────────────────────────────
 
@@ -88,39 +91,7 @@ function readWithTimeout(
   ])
 }
 
-// ─── In-memory rate limiter (sliding window) ──────────────
-
-const rateLimitMap = new Map<string, number[]>()
-const RATE_LIMIT_WINDOW_MS = 60_000 // 1 minute
-const RATE_LIMIT_FREE = 10
-const RATE_LIMIT_PAID = 60
-
-function checkRateLimit(userId: string, isPaid: boolean): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const limit = isPaid ? RATE_LIMIT_PAID : RATE_LIMIT_FREE
-  const timestamps = rateLimitMap.get(userId) || []
-  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-
-  if (recent.length >= limit) {
-    const oldestInWindow = recent[0]
-    const retryAfter = Math.ceil((oldestInWindow + RATE_LIMIT_WINDOW_MS - now) / 1000)
-    return { allowed: false, retryAfter }
-  }
-
-  recent.push(now)
-  rateLimitMap.set(userId, recent)
-  return { allowed: true, retryAfter: 0 }
-}
-
-// Clean up stale rate limit entries every 5 minutes
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, timestamps] of rateLimitMap) {
-    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) rateLimitMap.delete(key)
-    else rateLimitMap.set(key, recent)
-  }
-}, 300_000)
+// ─── Rate limiting via Postgres RPC (replaces in-memory) ──
 
 // ─── Pre-request daily cost check ─────────────────────────
 
@@ -873,6 +844,10 @@ serve(async (req: Request) => {
       console.warn(`[cors] Rejected origin: ${origin}`)
     }
 
+    // ── Content-type check ───────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: verify JWT or service key ─────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
@@ -949,18 +924,20 @@ serve(async (req: Request) => {
       }
     }
 
-    // ── Rate limiting (per-user sliding window) ────────────
+    // ── Rate limiting (Postgres-backed fixed window) ────────
     if (!isServiceCall) {
-      const rateCheck = checkRateLimit(user.id, isPaidUser || isAdmin)
+      const tier: Tier = isAdmin ? 'pro' : isPaidUser ? 'paid' : 'free'
+      const svcRL = createClient(supabaseUrl, serviceRoleKey!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      const rateCheck = await checkRL(svcRL, user.id, 'claude-proxy', tier)
       if (!rateCheck.allowed) {
-        return new Response(
-          JSON.stringify({
-            error: 'rate_limited',
-            retry_after: rateCheck.retryAfter,
-            limit: isPaidUser ? RATE_LIMIT_PAID : RATE_LIMIT_FREE,
-          }),
-          { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-        )
+        logAudit(svcRL, {
+          actorId: user.id, eventType: 'edge_function.call', action: 'claude-proxy',
+          source: 'claude-proxy', status: 'rate_limited', statusCode: 429,
+          ip: getClientIP(req), userAgent: getUA(req),
+        })
+        return rateLimitResponse(rateCheck, CORS_HEADERS)
       }
     }
 
@@ -1052,6 +1029,25 @@ serve(async (req: Request) => {
     // Only track usage for real authenticated users (skip service/bot calls)
     const trackUserId = isServiceCall ? null : user.id
 
+    // ── Audit log ────────────────────────────────────────
+    {
+      const svcAudit = createClient(supabaseUrl, serviceRoleKey!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      logAudit(svcAudit, {
+        actorId: isServiceCall ? undefined : user.id,
+        actorType: isServiceCall ? 'service' : 'user',
+        eventType: 'edge_function.call',
+        action: 'claude-proxy',
+        source: 'claude-proxy',
+        status: 'success',
+        statusCode: 200,
+        metadata: { provider, model: resolvedModel, mode, tier: payload.tier },
+        ip: getClientIP(req),
+        userAgent: getUA(req),
+      })
+    }
+
     // ── Dispatch to provider handler ───────────────────────
     switch (provider) {
       case 'anthropic':
@@ -1070,6 +1066,17 @@ serve(async (req: Request) => {
     }
   } catch (error) {
     console.error('claude-proxy error:', error)
+    try {
+      const svcErr = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      logAudit(svcErr, {
+        eventType: 'system.alert', action: 'claude-proxy-error',
+        source: 'claude-proxy', status: 'error', statusCode: 500,
+        metadata: { error: (error as Error).message },
+        ip: getClientIP(req), userAgent: getUA(req),
+      })
+    } catch { /* audit best-effort */ }
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }

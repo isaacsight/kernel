@@ -6,6 +6,8 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -24,6 +26,10 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: verify JWT + admin role ────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
@@ -58,6 +64,20 @@ serve(async (req: Request) => {
     if (!subject || !html) {
       return new Response(JSON.stringify({ error: 'Missing subject or html' }), {
         status: 400,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
+
+    if (subject.length > 200) {
+      return new Response(JSON.stringify({ error: 'Subject too long (max 200 chars)' }), {
+        status: 400,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
+
+    if (html.length > 102400) {
+      return new Response(JSON.stringify({ error: 'HTML body too large (max 100KB)' }), {
+        status: 413,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       })
     }
@@ -122,6 +142,14 @@ serve(async (req: Request) => {
 
     const result = await resendRes.json()
     console.log(`Announcement sent to ${emails.length} users:`, result)
+
+    // Audit log
+    logAudit(supabase, {
+      actorId: user.id, eventType: 'system.email', action: 'send-announcement',
+      source: 'send-announcement', status: 'success', statusCode: 200,
+      metadata: { recipientCount: emails.length, subject: subject.substring(0, 100) },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(JSON.stringify({ sent: emails.length, emails, result }), {
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

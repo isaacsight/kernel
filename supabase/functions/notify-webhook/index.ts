@@ -5,6 +5,9 @@
 // Secrets: DISCORD_WEBHOOK_URL
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -90,6 +93,10 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: require service role key (called internally by claude-proxy) ──
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -159,6 +166,17 @@ serve(async (req: Request) => {
     }
 
     console.log(`Discord notification sent successfully: ${payload.event_type}`)
+
+    // Audit log
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    logAudit(svc, {
+      actorType: 'service', eventType: 'system.notification', action: payload.event_type,
+      source: 'notify-webhook', status: 'success', statusCode: 200,
+      metadata: { eventType: payload.event_type },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ success: true, event_type: payload.event_type }),

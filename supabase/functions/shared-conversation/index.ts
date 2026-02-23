@@ -1,54 +1,18 @@
 // Supabase Edge Function: shared-conversation
 // Public GET endpoint for viewing shared conversations.
-// Includes IP-based rate limiting to prevent abuse.
+// Uses Postgres-backed rate limiting and audit logging.
 //
 // Deploy: npx supabase functions deploy shared-conversation --project-ref eoxxpyixdieprsxlpwcs
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
-
-// ─── Rate limiting (in-memory, per-IP) ──────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000 // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 30  // 30 requests per minute per IP
-
-interface RateLimitEntry { count: number; resetAt: number }
-const rateLimitMap = new Map<string, RateLimitEntry>()
-
-function getClientIP(req: Request): string {
-  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-    || req.headers.get('x-real-ip')
-    || 'unknown'
-}
-
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; retryAfter?: number } {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-
-  // Clean expired entries periodically (every 100 checks)
-  if (Math.random() < 0.01) {
-    for (const [key, val] of rateLimitMap) {
-      if (val.resetAt < now) rateLimitMap.delete(key)
-    }
-  }
-
-  if (!entry || entry.resetAt < now) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
-    return { allowed: true, remaining: RATE_LIMIT_MAX_REQUESTS - 1 }
-  }
-
-  entry.count++
-  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
-    const retryAfter = Math.ceil((entry.resetAt - now) / 1000)
-    return { allowed: false, remaining: 0, retryAfter }
-  }
-
-  return { allowed: true, remaining: RATE_LIMIT_MAX_REQUESTS - entry.count }
 }
 
 serve(async (req: Request) => {
@@ -57,41 +21,31 @@ serve(async (req: Request) => {
   }
 
   try {
-    // Rate limit check
-    const clientIP = getClientIP(req)
-    const rateCheck = checkRateLimit(clientIP)
-    if (!rateCheck.allowed) {
-      return new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
-        status: 429,
-        headers: {
-          ...CORS_HEADERS,
-          'Content-Type': 'application/json',
-          'Retry-After': String(rateCheck.retryAfter || 60),
-          'X-RateLimit-Remaining': '0',
-        },
-      })
-    }
+    // Service client for rate limiting, audit, and DB queries
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
+    // Rate limit check (keyed by IP since this is a public endpoint)
+    const clientIP = getClientIP(req) || 'unknown'
+    const rlCheck = await checkRateLimit(svc, clientIP, 'shared-conversation')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     const url = new URL(req.url)
-    const id = url.searchParams.get('id')
+    const shareId = url.searchParams.get('id')
 
-    if (!id) {
+    if (!shareId) {
       return new Response(JSON.stringify({ error: 'Missing id parameter' }), {
         status: 400,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       })
     }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    )
-
     // Fetch the shared conversation
-    const { data, error } = await supabase
+    const { data, error } = await svc
       .from('shared_conversations')
       .select('*')
-      .eq('id', id)
+      .eq('id', shareId)
       .single()
 
     if (error || !data) {
@@ -110,7 +64,15 @@ serve(async (req: Request) => {
     }
 
     // Atomic view count increment via RPC
-    await supabase.rpc('increment_shared_view_count', { share_id: id })
+    await svc.rpc('increment_shared_view_count', { share_id: shareId })
+
+    // Audit log (fire-and-forget)
+    logAudit(svc, {
+      actorType: 'anonymous', eventType: 'edge_function.call', action: 'shared-conversation',
+      source: 'shared-conversation', status: 'success', statusCode: 200,
+      metadata: { shareId },
+      ip: clientIP, userAgent: getUA(req),
+    })
 
     return new Response(JSON.stringify({
       id: data.id,
@@ -123,7 +85,6 @@ serve(async (req: Request) => {
       headers: {
         ...CORS_HEADERS,
         'Content-Type': 'application/json',
-        'X-RateLimit-Remaining': String(rateCheck.remaining),
       },
     })
   } catch (err) {

@@ -6,6 +6,8 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -136,6 +138,10 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: require service role key (internal-only function) ──
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -231,6 +237,15 @@ serve(async (req: Request) => {
         }
       }
     }
+
+    // Audit log
+    logAudit(supabase, {
+      actorId: user_id, actorType: 'service', eventType: 'system.notification',
+      action: `send-notification:${channel}`,
+      source: 'send-notification', status: 'success', statusCode: 200,
+      metadata: { channel, type },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

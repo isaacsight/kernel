@@ -1711,6 +1711,7 @@ h4 {
     width: 240px;
     height: 240px;
     margin-bottom: var(--space-2xl);
+    contain: layout style paint;
 }
 
 /* Garden glow — warm ambient light like sunlit soil */
@@ -1755,41 +1756,62 @@ h4 {
         ka-entity-float 3s ease-in-out 0.9s infinite;
 }
 
-/* ── Pixels — 10px, gradient-shaded body ─────────────── */
+/* ── Pixels — 10px, 32-bit gradient-shaded body ──────── */
 
 .ka-pixel {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: linear-gradient(160deg,
-        #7D6DAA 0%,
-        #6B5B95 45%,
-        #5A4C82 100%
+    background: linear-gradient(145deg,
+        #8A7AB8 0%,
+        #7D6DAA 25%,
+        #6B5B95 55%,
+        #5A4C82 85%,
+        #4A3D70 100%
     );
-    border-radius: 3px;
-    opacity: 0.8;
+    border-radius: 2px;
+    opacity: 0.92;
     box-shadow:
-        inset 1px 1px 0 rgba(255,255,255,0.12),
-        inset -1px -1px 0 rgba(0,0,0,0.08);
+        inset 1px 1px 0 rgba(255,255,255,0.18),
+        inset -1px -1px 0 rgba(0,0,0,0.12),
+        0 1px 1px rgba(0,0,0,0.06);
+    transition: opacity 0.8s ease-in-out;
 }
 
-/* Body pixels breathe — warm pulse */
-.ka-pixel-creature .ka-pixel:not(.ka-pixel--halo):not(.ka-pixel--eye):not(.ka-pixel--eye-light):not([class*="wing"]) {
+/* Outline pixels — anti-aliased dark border ring for definition */
+.ka-pixel--outline {
+    background: linear-gradient(145deg,
+        #3D3050 0%,
+        #2E2440 50%,
+        #221B33 100%
+    );
+    opacity: 0.55;
+    border-radius: 2px;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.05),
+        0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* Body pixels breathe — warm scale pulse (32-bit life) */
+.ka-pixel-creature .ka-pixel:not(.ka-pixel--halo):not(.ka-pixel--eye):not(.ka-pixel--eye-light):not(.ka-pixel--outline):not([class*="wing"]) {
     animation: ka-body-breathe 4s ease-in-out infinite;
 }
 
-/* Sprout/Flower pixels — 16-bit gradient green */
+/* Sprout/Flower pixels — 32-bit rich gradient green */
 .ka-pixel--halo {
-    opacity: 0.65;
-    background: linear-gradient(160deg,
-        #8FB88F 0%,
-        #7BA07B 45%,
-        #6A8F6A 100%
+    opacity: 0.75;
+    background: linear-gradient(145deg,
+        #A8CCA8 0%,
+        #8FB88F 25%,
+        #7BA07B 55%,
+        #6A8F6A 85%,
+        #5A7D5A 100%
     );
-    border-radius: 3px;
+    border-radius: 2px;
     box-shadow:
-        inset 1px 1px 0 rgba(255,255,255,0.15),
-        inset -1px -1px 0 rgba(0,0,0,0.06);
+        inset 1px 1px 0 rgba(255,255,255,0.2),
+        inset -1px -1px 0 rgba(0,0,0,0.08),
+        0 1px 1px rgba(0,0,0,0.04);
     animation: ka-halo-shimmer 3.5s ease-in-out infinite;
 }
 .ka-pixel-creature .ka-pixel--halo:nth-child(1) { animation-delay: 0s; }
@@ -1798,46 +1820,60 @@ h4 {
 .ka-pixel-creature .ka-pixel--halo:nth-child(4) { animation-delay: 0.25s; }
 .ka-pixel-creature .ka-pixel--halo:nth-child(5) { animation-delay: 0.75s; }
 
-/* Eyes — 16-bit depth with inner sparkle highlight */
+/* Eyes — 32-bit depth with cursor tracking */
 .ka-pixel--eye {
     background: radial-gradient(circle at 35% 35%,
-        #5A4A3D 0%,
+        #6B5A4D 0%,
+        #5A4A3D 30%,
         #3D3226 60%,
-        #2A2119 100%
+        #2A2119 85%,
+        #1A1510 100%
     );
-    opacity: 0.95;
+    opacity: 1;
     border-radius: 3px;
     box-shadow:
-        inset 2px 2px 0 rgba(255,255,255,0.15),
-        0 0 2px rgba(61,50,38,0.2);
+        inset 2px 2px 0 rgba(255,255,255,0.2),
+        inset -1px -1px 0 rgba(0,0,0,0.15),
+        0 0 3px rgba(61,50,38,0.25);
     animation: ka-eye-blink 5s ease-in-out 1.5s infinite;
+    transform-origin: center center;
+    /* Eye tracking via CSS custom properties */
+    translate: var(--eye-dx, 0) var(--eye-dy, 0);
+    transition: translate 0.15s ease-out;
 }
 
-/* Eye sparkle — floating highlight dot */
+/* Eye sparkle — bright highlight dot with glow + tracking */
 .ka-pixel--eye-light {
     width: 3px;
     height: 3px;
-    background: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.85);
     border-radius: 50%;
-    opacity: 0.8;
-    box-shadow: 0 0 2px rgba(255,255,255,0.3);
+    opacity: 0.9;
+    box-shadow:
+        0 0 3px rgba(255,255,255,0.5),
+        0 0 6px rgba(255,255,255,0.15);
     animation: ka-eye-sparkle 3s ease-in-out infinite;
     z-index: 1;
+    translate: var(--eye-dx, 0) var(--eye-dy, 0);
+    transition: translate 0.15s ease-out;
 }
 
-/* Leaves — 16-bit gradient sage green */
+/* Leaves — 32-bit rich gradient sage green */
 .ka-pixel--wing-l,
 .ka-pixel--wing-r {
     width: 8px;
     height: 8px;
-    background: linear-gradient(160deg,
-        #7EA07E 0%,
-        #6B8E6B 50%,
+    background: linear-gradient(145deg,
+        #9EBD9E 0%,
+        #7EA07E 30%,
+        #6B8E6B 60%,
         #5A7D5A 100%
     );
-    border-radius: 3px;
-    opacity: 0.55;
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
+    border-radius: 2px;
+    opacity: 0.7;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.15),
+        0 1px 1px rgba(0,0,0,0.06);
 }
 .ka-pixel--wing-l {
     animation: ka-wing-flutter-l 3.5s ease-in-out 0.8s infinite;
@@ -1894,15 +1930,27 @@ h4 {
 /* ── Dark mode — 16-bit depth ──────────────────────── */
 
 [data-theme="dark"] .ka-pixel {
-    background: linear-gradient(160deg,
-        #9B8BC5 0%,
-        #8B7BB5 45%,
-        #7A6AA4 100%
+    background: linear-gradient(145deg,
+        #AE9ED8 0%,
+        #9B8BC5 25%,
+        #8B7BB5 55%,
+        #7A6AA4 85%,
+        #6A5A94 100%
     );
-    opacity: 0.75;
+    opacity: 0.85;
     box-shadow:
-        inset 1px 1px 0 rgba(255,255,255,0.1),
-        inset -1px -1px 0 rgba(0,0,0,0.12);
+        inset 1px 1px 0 rgba(255,255,255,0.12),
+        inset -1px -1px 0 rgba(0,0,0,0.15),
+        0 1px 2px rgba(0,0,0,0.12);
+}
+
+[data-theme="dark"] .ka-pixel--outline {
+    background: linear-gradient(145deg,
+        #5A4D7A 0%,
+        #4A3D6A 50%,
+        #3A2D5A 100%
+    );
+    opacity: 0.5;
 }
 
 [data-theme="dark"] .ka-pixel--halo {
@@ -1980,19 +2028,18 @@ h4 {
     75% { transform: translateY(-10px) translateX(-2px) rotate(-0.8deg); }
 }
 
-/* Body breathing — warm pulse with more life */
+/* Body breathing — scale pulse for 32-bit life */
 @keyframes ka-body-breathe {
-    0%, 100% { opacity: 0.65; }
-    33% { opacity: 0.5; }
-    66% { opacity: 0.78; }
+    0%, 100% { opacity: 0.88; transform: scaleY(1) scaleX(1); }
+    50% { opacity: 0.95; transform: scaleY(1.02) scaleX(0.99); }
 }
 
-/* Halo shimmer — warm sparkle, brighter peaks */
+/* Halo shimmer — warm sparkle with scale pulse */
 @keyframes ka-halo-shimmer {
-    0%, 100% { opacity: 0.35; }
-    25% { opacity: 0.55; }
-    50% { opacity: 0.2; }
-    75% { opacity: 0.6; }
+    0%, 100% { opacity: 0.65; transform: scale(1); }
+    25% { opacity: 0.78; transform: scale(1.05); }
+    50% { opacity: 0.55; transform: scale(0.97); }
+    75% { opacity: 0.82; transform: scale(1.03); }
 }
 
 /* Eye blink — friendly wink with curious glances */
@@ -2096,10 +2143,22 @@ h4 {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Creature bounce */
+/* Creature bounce — default tap */
 .ka-pixel-creature.ka-entity--react {
     clip-path: none;
-    animation: ka-entity-bounce 0.6s ease-out both !important;
+    animation: ka-entity-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+}
+
+/* Shy wobble — occasional gentle pullback */
+.ka-pixel-creature.ka-entity--react-shy {
+    clip-path: none;
+    animation: ka-entity-shy 0.7s ease-out both !important;
+}
+
+/* Sleepy tap — barely responds */
+.ka-pixel-creature.ka-entity--react-sleepy {
+    clip-path: none;
+    animation: ka-entity-sleepy-tap 0.5s ease-in-out both !important;
 }
 
 /* Rapid eye blink */
@@ -2107,14 +2166,14 @@ h4 {
     animation: ka-eye-react 0.5s ease-in-out !important;
 }
 
-/* Excited leaf flap — left */
+/* Excited leaf flap — left (50ms follow-through delay) */
 .ka-entity--react .ka-pixel--wing-l {
-    animation: ka-wing-react-l 0.5s ease-out !important;
+    animation: ka-wing-react-l 0.5s ease-out 0.05s !important;
 }
 
-/* Excited leaf flap — right */
+/* Excited leaf flap — right (50ms follow-through delay) */
 .ka-entity--react .ka-pixel--wing-r {
-    animation: ka-wing-react-r 0.5s ease-out !important;
+    animation: ka-wing-react-r 0.5s ease-out 0.05s !important;
 }
 
 /* Sprout flares bright */
@@ -2134,12 +2193,32 @@ h4 {
 
 /* ── Reaction Keyframes ──────────────────────────────── */
 
+/* Bounce with squash-and-stretch (anime-inspired) */
 @keyframes ka-entity-bounce {
-    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-    15% { transform: translateY(4px) rotate(-1deg) scale(0.95); }
-    35% { transform: translateY(-14px) rotate(2deg) scale(1.05); }
-    55% { transform: translateY(-5px) rotate(-0.5deg) scale(1); }
-    75% { transform: translateY(-9px) rotate(1deg) scale(1.02); }
+    0% { transform: translateY(0) rotate(0deg) scaleX(1) scaleY(1); }
+    8% { transform: translateY(3px) rotate(-0.5deg) scaleX(1.08) scaleY(0.9); }
+    22% { transform: translateY(-18px) rotate(2deg) scaleX(0.92) scaleY(1.1); }
+    38% { transform: translateY(-14px) rotate(0.5deg) scaleX(1) scaleY(1); }
+    52% { transform: translateY(0) rotate(-0.5deg) scaleX(1.04) scaleY(0.96); }
+    68% { transform: translateY(-7px) rotate(0.8deg) scaleX(0.98) scaleY(1.02); }
+    82% { transform: translateY(-2px) rotate(0deg) scaleX(1.01) scaleY(0.99); }
+    100% { transform: translateY(0) rotate(0deg) scaleX(1) scaleY(1); }
+}
+
+/* Shy wobble — gentle pullback then peek */
+@keyframes ka-entity-shy {
+    0% { transform: translateY(0) translateX(0) scaleX(1) scaleY(1); }
+    15% { transform: translateY(2px) translateX(-4px) scaleX(0.95) scaleY(1.02); }
+    40% { transform: translateY(0) translateX(-6px) scaleX(0.97) scaleY(1); }
+    65% { transform: translateY(-3px) translateX(-2px) scaleX(1.02) scaleY(0.99); }
+    100% { transform: translateY(0) translateX(0) scaleX(1) scaleY(1); }
+}
+
+/* Sleepy blink — just barely acknowledges the tap */
+@keyframes ka-entity-sleepy-tap {
+    0%, 100% { transform: translateY(0) scaleY(1); }
+    30% { transform: translateY(2px) scaleY(0.97); }
+    60% { transform: translateY(-2px) scaleY(1.01); }
 }
 
 @keyframes ka-eye-react {
@@ -2190,30 +2269,34 @@ h4 {
    Tiers are additive; higher tiers get more detail.
    ═══════════════════════════════════════════════════════════ */
 
-/* ── Tier 0: Seed — small, gentle, slow bob ────────────── */
+/* ── Tier 0: Seed — solid presence, slow bob ─────────── */
 .ka-empty-constellation[data-tier="0"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.5s ease-out 0.2s both,
                ka-entity-float 4s ease-in-out 1s infinite;
 }
-.ka-empty-constellation[data-tier="0"] .ka-pixel { opacity: 0.55; }
-.ka-empty-constellation[data-tier="0"] .ka-pixel--halo { opacity: 0.3; }
+.ka-empty-constellation[data-tier="0"] .ka-pixel { opacity: 0.78; }
+.ka-empty-constellation[data-tier="0"] .ka-pixel--outline { opacity: 0.45; }
+.ka-empty-constellation[data-tier="0"] .ka-pixel--halo { opacity: 0.5; }
 .ka-empty-constellation[data-tier="0"] .ka-pixel--sim { width: 3px; height: 3px; }
 
-/* ── Tier 2: Awake — growing, more vivid ───────────────── */
-.ka-empty-constellation[data-tier="2"] .ka-pixel { opacity: 0.75; }
-.ka-empty-constellation[data-tier="2"] .ka-pixel--halo { opacity: 0.65; }
+/* ── Tier 2: Awake — growing, vibrant ────────────────── */
+.ka-empty-constellation[data-tier="2"] .ka-pixel { opacity: 0.88; }
+.ka-empty-constellation[data-tier="2"] .ka-pixel--outline { opacity: 0.6; }
+.ka-empty-constellation[data-tier="2"] .ka-pixel--halo { opacity: 0.75; }
 
 /* ── Tier 3: Bloom — lush, energetic ───────────────────── */
-.ka-empty-constellation[data-tier="3"] .ka-pixel { opacity: 0.8; }
-.ka-empty-constellation[data-tier="3"] .ka-pixel--halo { opacity: 0.7; }
+.ka-empty-constellation[data-tier="3"] .ka-pixel { opacity: 0.92; }
+.ka-empty-constellation[data-tier="3"] .ka-pixel--outline { opacity: 0.65; }
+.ka-empty-constellation[data-tier="3"] .ka-pixel--halo { opacity: 0.8; }
 .ka-empty-constellation[data-tier="3"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
                ka-entity-float 2.5s ease-in-out 0.8s infinite;
 }
 
 /* ── Tier 4: Garden — full bloom, radiant ──────────────── */
-.ka-empty-constellation[data-tier="4"] .ka-pixel { opacity: 0.88; }
-.ka-empty-constellation[data-tier="4"] .ka-pixel--halo { opacity: 0.8; }
+.ka-empty-constellation[data-tier="4"] .ka-pixel { opacity: 0.96; }
+.ka-empty-constellation[data-tier="4"] .ka-pixel--outline { opacity: 0.7; }
+.ka-empty-constellation[data-tier="4"] .ka-pixel--halo { opacity: 0.88; }
 .ka-empty-constellation[data-tier="4"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
                ka-entity-float 2.2s ease-in-out 0.8s infinite;
@@ -2321,10 +2404,11 @@ h4 {
     );
 }
 
-/* Night: dim body, bright eye, slow particles */
-.ka-empty-constellation[data-time="night"] .ka-pixel { opacity: 0.4; }
+/* Night: body dims, eyes glow bright */
+.ka-empty-constellation[data-time="night"] .ka-pixel { opacity: 0.55; }
+.ka-empty-constellation[data-time="night"] .ka-pixel--outline { opacity: 0.35; }
 .ka-empty-constellation[data-time="night"] .ka-pixel--eye { opacity: 1; }
-.ka-empty-constellation[data-time="night"] .ka-pixel--eye-light { opacity: 0.9; }
+.ka-empty-constellation[data-time="night"] .ka-pixel--eye-light { opacity: 0.95; }
 .ka-empty-constellation[data-time="night"] .ka-pixel--sim {
     animation-duration: 8s;
 }
@@ -2449,86 +2533,97 @@ h4 {
     opacity: 0.8;
 }
 
-/* ── Happy — bright, lively float ──────────────────────── */
+/* ── Happy — bright, lively float + warm glow ──────────── */
 .ka-empty-constellation[data-mood="happy"] .ka-pixel {
-    opacity: 0.85;
+    opacity: 0.94;
 }
 .ka-empty-constellation[data-mood="happy"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.6s ease-out 0.2s both,
                ka-entity-float 2.5s ease-in-out 0.8s infinite;
+    filter: brightness(1.05) saturate(1.1);
 }
 
-/* ── Content — default warm state ──────────────────────── */
+/* ── Content — gentle warm state, slower rhythm ────────── */
 .ka-empty-constellation[data-mood="content"] .ka-pixel {
-    opacity: 0.7;
+    opacity: 0.85;
+}
+.ka-empty-constellation[data-mood="content"] .ka-pixel-creature {
+    animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
+               ka-entity-float 3.5s ease-in-out 1s infinite;
+    filter: saturate(0.95);
 }
 
-/* ── Sad — droopy, dim, slow ───────────────────────────── */
+/* ── Sad — droopy, desaturated, slow ──────────────────── */
 .ka-empty-constellation[data-mood="sad"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
                ka-entity-droop 5s ease-in-out 1s infinite;
+    filter: saturate(0.6) brightness(0.85);
 }
 .ka-empty-constellation[data-mood="sad"] .ka-pixel {
-    opacity: 0.45;
+    opacity: 0.65;
 }
 .ka-empty-constellation[data-mood="sad"] .ka-pixel--eye {
-    opacity: 0.6;
+    opacity: 0.7;
     animation: ka-eye-blink 8s ease-in-out infinite;
 }
 .ka-empty-constellation[data-mood="sad"] .ka-pixel--eye-light {
-    opacity: 0.3;
+    opacity: 0.35;
 }
 .ka-empty-constellation[data-mood="sad"] .ka-pixel--halo {
-    opacity: 0.25;
+    opacity: 0.4;
 }
 
 /* ── Sleepy — drowsy sway, half-closed eyes ────────────── */
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.8s ease-out 0.3s both,
                ka-entity-drowsy 6s ease-in-out 1s infinite;
+    filter: brightness(0.8) saturate(0.7);
 }
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel {
-    opacity: 0.4;
+    opacity: 0.6;
 }
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel--eye {
     transform: scaleY(0.5);
-    opacity: 0.5;
+    opacity: 0.55;
     animation: ka-eye-sleepy 7s ease-in-out infinite;
 }
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel--eye-light {
-    opacity: 0.2;
+    opacity: 0.25;
 }
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel--wing-l,
 .ka-empty-constellation[data-mood="sleepy"] .ka-pixel--wing-r {
     animation: none;
-    opacity: 0.25;
+    opacity: 0.35;
 }
 
-/* ── Lonely — look-around, dimmed attention ────────────── */
+/* ── Lonely — look-around, muted, searching ──────────── */
 .ka-empty-constellation[data-mood="lonely"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
                ka-entity-lonesome 8s ease-in-out 0.8s infinite;
+    filter: saturate(0.75) brightness(0.9);
 }
 .ka-empty-constellation[data-mood="lonely"] .ka-pixel {
-    opacity: 0.5;
+    opacity: 0.68;
 }
 .ka-empty-constellation[data-mood="lonely"] .ka-pixel--eye {
     animation: ka-eye-lookabout 6s ease-in-out infinite;
+    opacity: 0.9;
 }
 .ka-empty-constellation[data-mood="lonely"] .ka-pixel--halo {
-    opacity: 0.3;
+    opacity: 0.45;
 }
 
-/* ── Bored — minimal movement, neutral state ───────────── */
+/* ── Bored — neutral, desaturated, slow ────────────────── */
 .ka-empty-constellation[data-mood="bored"] .ka-pixel {
-    opacity: 0.55;
+    opacity: 0.72;
 }
 .ka-empty-constellation[data-mood="bored"] .ka-pixel--eye-light {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 .ka-empty-constellation[data-mood="bored"] .ka-pixel-creature {
     animation: ka-scanline-reveal 0.7s ease-out 0.2s both,
                ka-entity-float 4s ease-in-out 1s infinite;
+    filter: saturate(0.85);
 }
 
 /* ── Mood Keyframes ────────────────────────────────────── */
@@ -2675,6 +2770,42 @@ h4 {
     0%, 80%, 100% { opacity: 0; transform: rotate(45deg) scale(0.3); }
     85% { opacity: 0.6; transform: rotate(45deg) scale(1.1); }
     92% { opacity: 0.4; transform: rotate(45deg) scale(1); }
+}
+
+/* ── Anime Blush — kawaii cheek dots ────────────────────── */
+
+.ka-pixel--blush {
+    width: 5px;
+    height: 4px;
+    background: radial-gradient(circle,
+        rgba(220, 140, 160, 0.6) 0%,
+        rgba(220, 140, 160, 0.15) 100%
+    );
+    border-radius: 50%;
+    opacity: 0;
+    animation: ka-blush-pulse 3s ease-in-out infinite;
+}
+
+.ka-empty-constellation[data-mood="happy"] .ka-pixel--blush,
+.ka-empty-constellation[data-mood="content"] .ka-pixel--blush {
+    opacity: 0.6;
+}
+
+.ka-empty-constellation[data-mood="excited"] .ka-pixel--blush {
+    opacity: 0.8;
+    animation: ka-blush-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ka-blush-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(1.15); }
+}
+
+[data-theme="dark"] .ka-pixel--blush {
+    background: radial-gradient(circle,
+        rgba(200, 130, 155, 0.5) 0%,
+        rgba(200, 130, 155, 0.1) 100%
+    );
 }
 
 /* ── Mouth pixels — tiny expression curves ─────────────── */
@@ -10792,6 +10923,261 @@ h4 {
     }
 
     .stats-panel {
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* ─── Usage Dashboard Panel ─────────────────────────────── */
+
+.usage-panel {
+    background: var(--rubin-ivory, #FAF9F6);
+    border-radius: var(--radius-md);
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .usage-panel {
+    background: #1C1A18;
+    color: #E4DFD5;
+}
+
+.usage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.usage-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.usage-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs);
+    opacity: 0.5;
+    transition: opacity var(--duration-fast);
+}
+
+.usage-close:hover { opacity: 1; }
+
+.usage-loading {
+    padding: 40px 20px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.usage-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.usage-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 16px 8px;
+    background: var(--rubin-ivory, #FAF9F6);
+}
+
+[data-theme="dark"] .usage-metric { background: #1C1A18; }
+
+.usage-metric svg { opacity: 0.4; }
+
+.usage-metric-val {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.usage-metric-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
+.usage-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.usage-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: var(--space-md);
+    font-weight: 400;
+}
+
+.usage-token-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.usage-token-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    opacity: 0.6;
+}
+
+.usage-token-val {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.usage-agents, .usage-endpoints { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+.usage-agent-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.usage-agent-name {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    min-width: 70px;
+}
+
+.usage-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+}
+
+[data-theme="dark"] .usage-bar-track { background: rgba(255, 255, 255, 0.08); }
+
+.usage-bar-fill {
+    height: 100%;
+    background: var(--rubin-primary, #6B5B95);
+    border-radius: var(--radius-xs);
+    transition: width var(--duration-dramatic) var(--ease-out);
+}
+
+.usage-agent-pct {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    opacity: 0.5;
+    min-width: 30px;
+    text-align: right;
+}
+
+.usage-endpoint-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.usage-endpoint-name {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+
+.usage-endpoint-count {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    opacity: 0.5;
+}
+
+.usage-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+    height: 80px;
+}
+
+.usage-chart-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.usage-chart-bar {
+    width: 100%;
+    max-width: 24px;
+    background: var(--rubin-primary, #6B5B95);
+    border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+    min-height: 2px;
+    margin-top: auto;
+    opacity: 0.7;
+    transition: height var(--duration-moderate) var(--ease-out);
+}
+
+.usage-chart-label {
+    font-family: var(--font-mono);
+    font-size: 0.45rem;
+    opacity: 0.3;
+    margin-top: var(--space-xs);
+}
+
+.usage-activity { display: flex; flex-direction: column; gap: 6px; }
+
+.usage-activity-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.usage-activity-action {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.usage-activity-source {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    opacity: 0.4;
+}
+
+.usage-activity-time {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    opacity: 0.3;
+    flex-shrink: 0;
+}
+
+.usage-footer {
+    padding: 12px 20px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    opacity: 0.35;
+}
+
+@media (max-width: 768px) {
+    .usage-panel {
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
     }

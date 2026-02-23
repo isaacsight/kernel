@@ -6,6 +6,8 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 // ─── Configuration ──────────────────────────────────────
 const FREE_MAX_SIZE = 2 * 1024 * 1024   // 2MB
@@ -18,31 +20,6 @@ const ALLOWED_TYPES = new Set([
 const ALLOWED_EXTENSIONS = new Set([
   'mp3', 'wav', 'ogg', 'm4a', 'webm', 'flac', 'mp4', 'mpeg', 'mpga',
 ])
-
-// ─── Per-user rate limiting ────────────────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 3
-const rateLimitMap = new Map<string, number[]>()
-
-function checkRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const timestamps = (rateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-  if (timestamps.length >= RATE_LIMIT_MAX) {
-    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
-  }
-  timestamps.push(now)
-  rateLimitMap.set(userId, timestamps)
-  return { allowed: true, retryAfter: 0 }
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, ts] of rateLimitMap) {
-    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) rateLimitMap.delete(key)
-    else rateLimitMap.set(key, recent)
-  }
-}, 300_000)
 
 // ─── Main handler ──────────────────────────────────────
 serve(async (req: Request) => {
@@ -71,14 +48,12 @@ serve(async (req: Request) => {
       )
     }
 
-    // Rate limit
-    const rateCheck = checkRateLimit(user.id)
-    if (!rateCheck.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
-        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-      )
-    }
+    // Rate limit (Postgres RPC)
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rlCheck = await checkRateLimit(svc, user.id, 'transcribe')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     // Parse multipart form data
     const contentType = req.headers.get('content-type') || ''
@@ -108,20 +83,14 @@ serve(async (req: Request) => {
     }
 
     // Check subscription tier for size limits
-    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     let isPro = false
-    if (serviceKey) {
-      const svc = createClient(Deno.env.get('SUPABASE_URL')!, serviceKey, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-      const { data: sub } = await svc
-        .from('subscriptions')
-        .select('status')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .maybeSingle()
-      isPro = !!sub
-    }
+    const { data: sub } = await svc
+      .from('subscriptions')
+      .select('status')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .maybeSingle()
+    isPro = !!sub
 
     const maxSize = isPro ? PRO_MAX_SIZE : FREE_MAX_SIZE
     if (file.size > maxSize) {
@@ -165,6 +134,14 @@ serve(async (req: Request) => {
     }
 
     const result = await whisperRes.json()
+
+    // Audit log
+    logAudit(svc, {
+      actorId: user.id, eventType: 'edge_function.call', action: 'transcribe',
+      source: 'transcribe', status: 'success', statusCode: 200,
+      metadata: { fileSize: file?.size },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({
