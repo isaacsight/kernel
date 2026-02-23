@@ -36,6 +36,7 @@ import { useMiniPhone } from '../hooks/useMiniPhone'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
+import { useColorCycle } from '../hooks/useColorCycle'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
@@ -284,6 +285,8 @@ function EngineChat() {
   )
 
   useKeyboardHeight()
+
+  const cyclingPalette = useColorCycle(convs.msgsLoading)
 
   const msgActions = useMessageActions(
     chatEngine.messages,
@@ -710,18 +713,27 @@ function EngineChat() {
 
       {/* Chat Area */}
       <div className="ka-chat" ref={scroll.scrollRef}>
+        <AnimatePresence mode="wait">
         {convs.msgsLoading && (
-          <div className="ka-skeleton-wrap">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className={`ka-skeleton-msg ${i % 2 === 0 ? 'ka-skeleton-msg--right' : ''}`}>
-                <div className="ka-skeleton-line ka-skeleton-line--long" />
-                {i % 2 !== 0 && <div className="ka-skeleton-line ka-skeleton-line--short" />}
-              </div>
-            ))}
-          </div>
+          <motion.div
+            key="loading-grid"
+            className="ka-loading-grid-wrap"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ParticleGrid
+              size={160}
+              interactive={false}
+              energetic
+              palette={cyclingPalette ?? undefined}
+            />
+            <span className="ka-loading-label">Loading...</span>
+          </motion.div>
         )}
         {messages.length === 0 && !convs.msgsLoading && (
-          <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <motion.div key="empty-home" className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <ParticleGrid />
 
             {/* Feature 2: Streak indicator */}
@@ -838,6 +850,7 @@ function EngineChat() {
             </div>
           </motion.div>
         )}
+        </AnimatePresence>
 
         {researchProgress && researchProgress.phase !== 'complete' && (
           <div className="ka-research-status">

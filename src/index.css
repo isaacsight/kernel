@@ -2003,27 +2003,31 @@ h4 {
     margin-left: 12px;
 }
 
-/* Skeleton loading */
-.ka-skeleton-wrap {
+/* Loading grid (conversation loading state) */
+.ka-loading-grid-wrap {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px 0;
-    max-width: 700px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-3xl) 0;
     width: 100%;
-    align-self: center;
 }
 
-.ka-skeleton-msg {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
+.ka-loading-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--rubin-warm-gray);
+    opacity: 0.6;
+    animation: ka-shimmer 1.5s ease-in-out infinite;
 }
 
-.ka-skeleton-msg--right {
-    align-items: flex-end;
+[data-theme="dark"] .ka-loading-label {
+    color: var(--dark-text-muted, #999);
 }
 
+/* Skeleton lines (used by PanelShimmer) */
 .ka-skeleton-line {
     height: 14px;
     border-radius: var(--radius-sm);
@@ -2037,10 +2041,6 @@ h4 {
 
 .ka-skeleton-line--short {
     width: 40%;
-}
-
-.ka-skeleton-msg--right .ka-skeleton-line--long {
-    width: 55%;
 }
 
 @keyframes ka-shimmer {
