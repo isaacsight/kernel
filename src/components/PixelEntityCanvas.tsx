@@ -33,6 +33,7 @@ interface Particle {
   opacity: number
   life: number
   maxLife: number
+  active: boolean
 }
 
 interface Ripple {
@@ -57,9 +58,17 @@ const MOOD_CONFIGS: Record<MoodState, { spawnRate: number; gravity: number; wind
 
 const MAX_PARTICLES = 30
 
+// Pre-allocate particle pool to avoid GC pressure
+function createPool(): Particle[] {
+  return Array.from({ length: MAX_PARTICLES }, () => ({
+    x: 0, y: 0, vx: 0, vy: 0, size: 0, opacity: 0, life: 0, maxLife: 0, active: false,
+  }))
+}
+
 export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: PixelEntityCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const particles = useRef<Particle[]>([])
+  const pool = useRef<Particle[]>(createPool())
+  const activeCount = useRef(0)
   const ripples = useRef<Ripple[]>([])
   const animFrame = useRef<number>(0)
   const isVisible = useRef(true)
@@ -74,22 +83,21 @@ export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: Pix
 
   const topicRgb = hexToRgb(topicColor)
 
-  // Spawn a new particle
+  // Spawn a new particle from the pool (zero allocation)
   const spawnParticle = useCallback(() => {
-    if (particles.current.length >= MAX_PARTICLES) return
+    if (activeCount.current >= MAX_PARTICLES) return
     const config = MOOD_CONFIGS[mood]
-    const baseLife = 120 + Math.random() * 180 // 2-5 seconds at 60fps
-
-    particles.current.push({
-      x: Math.random() * width,
-      y: height * 0.3 + Math.random() * height * 0.4,
-      vx: (Math.random() - 0.5) * 0.5 + config.wind,
-      vy: config.gravity * (1 + Math.random()),
-      size: 1.5 + Math.random() * 2.5,
-      opacity: 0,
-      life: 0,
-      maxLife: baseLife,
-    })
+    const p = pool.current[activeCount.current]
+    p.x = Math.random() * width
+    p.y = height * 0.3 + Math.random() * height * 0.4
+    p.vx = (Math.random() - 0.5) * 0.5 + config.wind
+    p.vy = config.gravity * (1 + Math.random())
+    p.size = 1.5 + Math.random() * 2.5
+    p.opacity = 0
+    p.life = 0
+    p.maxLife = 120 + Math.random() * 180
+    p.active = true
+    activeCount.current++
   }, [mood, width, height])
 
   // Add tap ripple
@@ -144,8 +152,8 @@ export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: Pix
       }
 
       // Update & draw particles
-      const alive: Particle[] = []
-      for (const p of particles.current) {
+      let aliveCount = 0
+      for (const p of pool.current.slice(0, activeCount.current)) {
         p.life++
         p.x += p.vx
         p.y += p.vy
@@ -165,7 +173,7 @@ export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: Pix
         p.vy += (Math.random() - 0.5) * 0.01
 
         if (p.life < p.maxLife && p.x > -10 && p.x < width + 10) {
-          alive.push(p)
+          aliveCount++
 
           // Draw: mix mood color with topic color
           const mixColor = tier >= 3 ? topicRgb : config.color
@@ -181,7 +189,7 @@ export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: Pix
           ctx.fill()
         }
       }
-      particles.current = alive
+      activeCount.current = aliveCount
 
       // Update & draw ripples
       const activeRipples: Ripple[] = []
