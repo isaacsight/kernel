@@ -202,7 +202,10 @@ export async function createConversation(
   const id = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   // Proactively refresh session — getSession() can return a stale/expired JWT
-  await supabase.auth.refreshSession();
+  const { error: refreshError } = await supabase.auth.refreshSession();
+  if (refreshError) {
+    console.error('[createConversation] Session refresh failed:', refreshError.message);
+  }
 
   const row: Record<string, unknown> = { id, user_id: userId, title }
   if (metadata) row.metadata = metadata
@@ -215,6 +218,7 @@ export async function createConversation(
 
   if (error) {
     console.error('[createConversation] Error:', error.code, error.message, error.details);
+    throw new Error(`${error.message} (${error.code})`);
   }
   return data;
 }
@@ -457,7 +461,7 @@ export async function forkSharedConversation(
   metadata?: Record<string, unknown>
 ): Promise<string> {
   const conv = await createConversation(userId, title, metadata)
-  if (!conv) throw new Error('Session may have expired — try refreshing the page.')
+  if (!conv) throw new Error('Failed to create conversation — no data returned.')
 
   const MAX_CONTENT = 32_000
   const now = Date.now()
