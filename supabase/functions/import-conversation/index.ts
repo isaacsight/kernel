@@ -518,53 +518,82 @@ serve(async (req: Request) => {
       )
     }
 
-    const { url } = await req.json()
-    if (!url || typeof url !== 'string') {
+    const body = await req.json()
+    const { url, text } = body as { url?: string; text?: string }
+
+    if (!url && !text) {
       return new Response(
-        JSON.stringify({ error: 'url is required' }),
+        JSON.stringify({ error: 'url or text is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
 
-    // SSRF protection
-    try {
-      const parsed = new URL(url)
-      if (BLOCKED_HOSTS.some(re => re.test(parsed.hostname))) {
-        return new Response(
-          JSON.stringify({ error: 'URL points to a blocked host' }),
-          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        return new Response(
-          JSON.stringify({ error: 'Only HTTP/HTTPS URLs are allowed' }),
-          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-    } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid URL' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      )
-    }
-
-    // Detect platform and fetch with platform-specific strategy
-    const platform = detectPlatform(url)
     let result: ParseResult
 
-    switch (platform) {
-      case 'chatgpt':
-        result = await fetchChatGPT(url)
-        break
-      case 'claude':
-        result = await fetchClaude(url)
-        break
-      case 'gemini':
-        result = await fetchGemini(url)
-        break
-      default:
-        result = await fetchGeneric(url)
-        break
+    if (text && typeof text === 'string') {
+      // ─── Paste mode: extract turns from raw text ───
+      const trimmed = text.trim()
+      if (trimmed.length < 20) {
+        return new Response(
+          JSON.stringify({ error: 'Text is too short to extract a conversation' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+      if (trimmed.length > 200_000) {
+        return new Response(
+          JSON.stringify({ error: 'Text exceeds 200KB limit' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+      result = await extractTurnsWithHaiku(trimmed, 'unknown', 'Imported Conversation')
+    } else {
+      // ─── Link mode: fetch URL and parse ───
+      if (!url || typeof url !== 'string') {
+        return new Response(
+          JSON.stringify({ error: 'url must be a string' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      // SSRF protection
+      try {
+        const parsed = new URL(url)
+        if (BLOCKED_HOSTS.some(re => re.test(parsed.hostname))) {
+          return new Response(
+            JSON.stringify({ error: 'URL points to a blocked host' }),
+            { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+        if (!['http:', 'https:'].includes(parsed.protocol)) {
+          return new Response(
+            JSON.stringify({ error: 'Only HTTP/HTTPS URLs are allowed' }),
+            { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+      } catch {
+        return new Response(
+          JSON.stringify({ error: 'Invalid URL' }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      // Detect platform and fetch with platform-specific strategy
+      const platform = detectPlatform(url)
+
+      switch (platform) {
+        case 'chatgpt':
+          result = await fetchChatGPT(url)
+          break
+        case 'claude':
+          result = await fetchClaude(url)
+          break
+        case 'gemini':
+          result = await fetchGemini(url)
+          break
+        default:
+          result = await fetchGeneric(url)
+          break
+      }
     }
 
     return new Response(

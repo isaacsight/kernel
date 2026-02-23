@@ -1,14 +1,15 @@
 // ─── ImportConversationModal ──────────────────────────────
 //
-// Modal for importing conversations from ChatGPT, Claude, or Gemini.
-// User pastes a share link, previews the first few messages, then imports.
+// Modal for importing conversations from ChatGPT, Claude, Gemini, or any LLM.
+// Two modes: Link (paste a share URL) or Paste (paste raw conversation text).
 
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { IconClose, IconGlobe, IconCheck } from './KernelIcons'
 import {
-  detectPlatformUrl, importConversation, convertToKernelMessages,
+  detectPlatformUrl, importConversation, importConversationFromText,
+  convertToKernelMessages,
   type Platform, type ImportResult,
 } from '../engine/conversationImport'
 import { forkSharedConversation } from '../engine/SupabaseClient'
@@ -27,23 +28,31 @@ const PLATFORM_LABELS: Record<Platform | 'unknown', string> = {
   unknown: 'Unknown',
 }
 
+type ImportTab = 'link' | 'paste'
+
 export function ImportConversationModal({
   userId, onClose, onToast, onImported,
 }: ImportConversationModalProps) {
   const { t } = useTranslation('common')
+  const [tab, setTab] = useState<ImportTab>('paste')
   const [url, setUrl] = useState('')
+  const [pasteText, setPasteText] = useState('')
   const [platform, setPlatform] = useState<Platform | null>(null)
   const [preview, setPreview] = useState<ImportResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [importing, setImporting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
 
-  // Focus input on mount
+  // Focus appropriate input on mount and tab change
   useEffect(() => {
-    requestAnimationFrame(() => inputRef.current?.focus())
-  }, [])
+    requestAnimationFrame(() => {
+      if (tab === 'link') inputRef.current?.focus()
+      else textareaRef.current?.focus()
+    })
+  }, [tab])
 
   // Escape to close
   useEffect(() => {
@@ -54,12 +63,19 @@ export function ImportConversationModal({
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onClose])
 
-  // Auto-detect platform as user types
+  // Auto-detect platform as user types URL
   useEffect(() => {
     setPlatform(detectPlatformUrl(url))
   }, [url])
 
-  const handleFetch = async () => {
+  // Clear state when switching tabs
+  const switchTab = (newTab: ImportTab) => {
+    setTab(newTab)
+    setPreview(null)
+    setError(null)
+  }
+
+  const handleFetchUrl = async () => {
     if (!url.trim()) return
     setLoading(true)
     setError(null)
@@ -68,12 +84,32 @@ export function ImportConversationModal({
     try {
       const result = await importConversation(url.trim())
       if (result.messages.length === 0) {
-        setError('No messages found at that URL. The page may require authentication or the format may not be supported.')
+        setError('No messages found. Try the Paste tab instead — copy the conversation and paste it directly.')
       } else {
         setPreview(result)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch conversation')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleParsePaste = async () => {
+    if (!pasteText.trim() || pasteText.trim().length < 20) return
+    setLoading(true)
+    setError(null)
+    setPreview(null)
+
+    try {
+      const result = await importConversationFromText(pasteText.trim())
+      if (result.messages.length === 0) {
+        setError('Couldn\'t identify conversation turns. Try including clear user/assistant labels or more context.')
+      } else {
+        setPreview(result)
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to parse conversation')
     } finally {
       setLoading(false)
     }
@@ -133,34 +169,79 @@ export function ImportConversationModal({
         </div>
 
         <div className="ka-import-body">
-          <p className="ka-import-hint">
-            Paste a share link from ChatGPT, Claude, or Gemini to import a conversation.
-          </p>
-
-          <div className="ka-import-input-row">
-            <div className="ka-import-input-wrapper">
-              {platform && (
-                <span className="ka-import-platform-badge">{PLATFORM_LABELS[platform]}</span>
-              )}
-              <input
-                ref={inputRef}
-                className="ka-import-input"
-                type="url"
-                placeholder="https://chatgpt.com/share/..."
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && !loading) handleFetch() }}
-                style={platform ? { paddingLeft: '90px' } : undefined}
-              />
-            </div>
+          <div className="ka-import-tabs" role="tablist">
             <button
-              className="ka-import-fetch-btn"
-              onClick={handleFetch}
-              disabled={loading || !url.trim()}
+              role="tab"
+              aria-selected={tab === 'paste'}
+              className={`ka-import-tab ${tab === 'paste' ? 'ka-import-tab--active' : ''}`}
+              onClick={() => switchTab('paste')}
             >
-              {loading ? 'Fetching...' : 'Preview'}
+              Paste
+            </button>
+            <button
+              role="tab"
+              aria-selected={tab === 'link'}
+              className={`ka-import-tab ${tab === 'link' ? 'ka-import-tab--active' : ''}`}
+              onClick={() => switchTab('link')}
+            >
+              Link
             </button>
           </div>
+
+          {tab === 'link' && (
+            <>
+              <p className="ka-import-hint">
+                Paste a share link from ChatGPT, Claude, or Gemini.
+              </p>
+              <div className="ka-import-input-row">
+                <div className="ka-import-input-wrapper">
+                  {platform && (
+                    <span className="ka-import-platform-badge">{PLATFORM_LABELS[platform]}</span>
+                  )}
+                  <input
+                    ref={inputRef}
+                    className="ka-import-input"
+                    type="url"
+                    placeholder="https://chatgpt.com/share/..."
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter' && !loading) handleFetchUrl() }}
+                    style={platform ? { paddingLeft: '90px' } : undefined}
+                  />
+                </div>
+                <button
+                  className="ka-import-fetch-btn"
+                  onClick={handleFetchUrl}
+                  disabled={loading || !url.trim()}
+                >
+                  {loading ? 'Fetching...' : 'Preview'}
+                </button>
+              </div>
+            </>
+          )}
+
+          {tab === 'paste' && (
+            <>
+              <p className="ka-import-hint">
+                Copy a conversation from any LLM and paste it here.
+              </p>
+              <textarea
+                ref={textareaRef}
+                className="ka-import-textarea"
+                placeholder={'User: How do I center a div?\n\nAssistant: There are several ways...'}
+                value={pasteText}
+                onChange={e => setPasteText(e.target.value)}
+                rows={8}
+              />
+              <button
+                className="ka-import-fetch-btn ka-import-parse-btn"
+                onClick={handleParsePaste}
+                disabled={loading || pasteText.trim().length < 20}
+              >
+                {loading ? 'Parsing...' : 'Preview'}
+              </button>
+            </>
+          )}
 
           {error && (
             <div className="ka-import-error">{error}</div>
