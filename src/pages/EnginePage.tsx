@@ -13,7 +13,7 @@ import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
-import { getSpecialist } from '../agents/specialists'
+import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
@@ -105,6 +105,20 @@ export function EnginePage() {
 }
 
 // ─── Helpers ─────────────────────────────────────────────
+
+function agentPalette(idOrName: string): { particle: string; link: string; field: string } {
+  // Accept agent ID or display name
+  let s = getSpecialist(idOrName)
+  if (s.id === 'kernel' && idOrName !== 'kernel' && idOrName !== 'Kernel') {
+    const byName = getAllSpecialists().find(a => a.name === idOrName)
+    if (byName) s = byName
+  }
+  const c = s.color
+  const r = parseInt(c.slice(1, 3), 16), g = parseInt(c.slice(3, 5), 16), b = parseInt(c.slice(5, 7), 16)
+  const link = `#${[r, g, b].map(v => Math.min(255, v + 40).toString(16).padStart(2, '0')).join('')}`
+  const field = `#${[r, g, b].map(v => Math.min(255, v + 80).toString(16).padStart(2, '0')).join('')}`
+  return { particle: c, link, field }
+}
 
 function getTimeGreeting(): string {
   const h = new Date().getHours()
@@ -443,7 +457,7 @@ function EngineChat() {
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
 
-  const cyclingPalette = useColorCycle(convs.msgsLoading || isThinking || isStreaming)
+  const cyclingPalette = useColorCycle(convs.msgsLoading)
 
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
@@ -910,7 +924,7 @@ function EngineChat() {
           {isThinking && (
             <motion.div className="ka-thinking" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
               <div className="ka-thinking-grid">
-                <ParticleGrid size={60} interactive={false} energetic palette={cyclingPalette ?? undefined} />
+                <ParticleGrid size={60} interactive={false} energetic palette={agentPalette(thinkingAgent || 'kernel')} />
               </div>
               <div className="ka-thinking-info">
                 {thinkingAgent ? (
@@ -953,7 +967,7 @@ function EngineChat() {
                     msg.role === 'kernel' ? <MessageContent text={msg.content} /> : <Linkify text={msg.content} />
                   ) : (
                     <div className="ka-typing-grid">
-                      <ParticleGrid size={40} interactive={false} energetic palette={cyclingPalette ?? undefined} />
+                      <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                     </div>
                   )}
                 </div>
