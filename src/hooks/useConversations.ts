@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import {
   getUserConversations,
   getChannelMessages,
+  getLastAgentId,
   createConversation,
   deleteConversation,
   type DBConversation,
@@ -83,13 +84,7 @@ export function useConversations(
     } catch {
       // Offline fallback
       const cached = await getCachedMessages(convId)
-      if (cached.length > 0) {
-        setMessagesRef.current(toChat(cached))
-      } else {
-        // Network failed and no cache — reset to home instead of showing
-        // an empty conversation that looks broken
-        setActiveConversationId(null)
-      }
+      if (cached.length > 0) setMessagesRef.current(toChat(cached))
     }
     setMsgsLoading(false)
   }, [])
