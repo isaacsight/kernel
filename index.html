@@ -48,6 +48,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://eoxxpyixdieprsxlpwcs.supabase.co">
   <!-- Non-blocking font load: media="print" prevents render-blocking, onload swaps to "all" -->
   <link
     href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
@@ -96,11 +97,12 @@
       if (e.filename && /assets\/.*\.js/.test(e.filename)) _kernelRecover();
     }, true);
     // Catch stuck splash screen (module never loads)
-    // 15s timeout: generous for slow mobile networks — avoids reload loops on 3G
+    // 20s timeout: Android 3G can take 15s+ for initial bundle load.
+    // 15s was triggering false recoveries on slow networks, causing reload loops.
     setTimeout(function() {
       var root = document.getElementById('root');
       if (root && root.querySelector('#splash')) _kernelRecover();
-    }, 15000);
+    }, 20000);
     // Clear recovery counter on successful load
     window.addEventListener('load', function() {
       setTimeout(function() {
