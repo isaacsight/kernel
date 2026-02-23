@@ -605,39 +605,57 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="ka-empty-constellation" aria-hidden="true">
-              {/* Pixel sprout — compact, squat, cute */}
+              {/* Floating entity — angel robot */}
               <div className="ka-pixel-creature">
-                {/* Leaf — amethyst sprout */}
-                <span className="ka-pixel ka-pixel--leaf" style={{left:34,top:0}} />
-                {/* Head — flows from leaf */}
-                <span className="ka-pixel" style={{left:17,top:17}} />
+                {/* Row 0: Halo */}
+                <span className="ka-pixel ka-pixel--halo" style={{left:17,top:0}} />
+                <span className="ka-pixel ka-pixel--halo" style={{left:34,top:0}} />
+                <span className="ka-pixel ka-pixel--halo" style={{left:51,top:0}} />
+                <span className="ka-pixel ka-pixel--halo" style={{left:68,top:0}} />
+                <span className="ka-pixel ka-pixel--halo" style={{left:85,top:0}} />
+                {/* Row 1: Dome */}
                 <span className="ka-pixel" style={{left:34,top:17}} />
                 <span className="ka-pixel" style={{left:51,top:17}} />
-                {/* Face + eyes */}
-                <span className="ka-pixel" style={{left:0,top:34}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:17,top:34}} />
+                <span className="ka-pixel" style={{left:68,top:17}} />
+                {/* Row 2: Head */}
+                <span className="ka-pixel" style={{left:17,top:34}} />
                 <span className="ka-pixel" style={{left:34,top:34}} />
-                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:34}} />
+                <span className="ka-pixel" style={{left:51,top:34}} />
                 <span className="ka-pixel" style={{left:68,top:34}} />
-                {/* Body */}
-                <span className="ka-pixel" style={{left:0,top:51}} />
+                <span className="ka-pixel" style={{left:85,top:34}} />
+                {/* Row 3: Wings + diamond eye */}
+                <span className="ka-pixel ka-pixel--wing" style={{left:0,top:51}} />
                 <span className="ka-pixel" style={{left:17,top:51}} />
                 <span className="ka-pixel" style={{left:34,top:51}} />
-                <span className="ka-pixel" style={{left:51,top:51}} />
+                <span className="ka-pixel ka-pixel--eye" style={{left:51,top:51}} />
                 <span className="ka-pixel" style={{left:68,top:51}} />
-                {/* Feet */}
+                <span className="ka-pixel" style={{left:85,top:51}} />
+                <span className="ka-pixel ka-pixel--wing" style={{left:102,top:51}} />
+                {/* Row 4: Lower body */}
                 <span className="ka-pixel" style={{left:17,top:68}} />
+                <span className="ka-pixel" style={{left:34,top:68}} />
                 <span className="ka-pixel" style={{left:51,top:68}} />
+                <span className="ka-pixel" style={{left:68,top:68}} />
+                <span className="ka-pixel" style={{left:85,top:68}} />
+                {/* Row 5: Narrow */}
+                <span className="ka-pixel" style={{left:34,top:85}} />
+                <span className="ka-pixel" style={{left:51,top:85}} />
+                <span className="ka-pixel" style={{left:68,top:85}} />
+                {/* Row 6: Chin point */}
+                <span className="ka-pixel" style={{left:51,top:102}} />
               </div>
-              {/* Simulation cells — ambient state machine */}
-              <span className="ka-pixel ka-pixel--sim" style={{left:10,top:8}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:140,top:14}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:12,top:134}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:136,top:130}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:76,top:144}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:4,top:76}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:144,top:72}} />
-              <span className="ka-pixel ka-pixel--sim" style={{left:72,top:4}} />
+              {/* Ground glow — holographic ring below */}
+              <span className="ka-pixel ka-pixel--glow" style={{left:52,top:142}} />
+              <span className="ka-pixel ka-pixel--glow" style={{left:66,top:142}} />
+              <span className="ka-pixel ka-pixel--glow" style={{left:80,top:142}} />
+              <span className="ka-pixel ka-pixel--glow" style={{left:94,top:142}} />
+              {/* Ambient particles */}
+              <span className="ka-pixel ka-pixel--sim" style={{left:12,top:36}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:142,top:42}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:20,top:110}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:136,top:104}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:30,top:76}} />
+              <span className="ka-pixel ka-pixel--sim" style={{left:126,top:78}} />
             </div>
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
