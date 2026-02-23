@@ -12633,6 +12633,28 @@ h4 {
     color: rgba(248,113,113,0.5);
 }
 
+.ka-settings-verify-block {
+    background: rgba(107,91,149,0.06);
+    border: 1px solid rgba(107,91,149,0.15);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+[data-theme="dark"] .ka-settings-verify-block {
+    background: rgba(107,91,149,0.12);
+    border-color: rgba(107,91,149,0.25);
+}
+.ka-settings-verify-hint {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin: var(--space-xs) 0 var(--space-sm);
+    line-height: 1.4;
+}
+[data-theme="dark"] .ka-settings-verify-hint {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+
 .ka-settings-section--danger {
     border-top-color: rgba(220,38,38,0.1);
 }
