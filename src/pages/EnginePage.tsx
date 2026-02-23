@@ -38,7 +38,6 @@ import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
-import { LottieEntity } from '../components/LottieEntity'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -722,21 +721,6 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <LottieEntity evolution={evolution} />
-
-            {/* Feature 5: Mood label */}
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={evolution.moodState}
-                className="ka-home-mood"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                {t(`entity.mood.${evolution.moodState}`)}
-              </motion.span>
-            </AnimatePresence>
 
             {/* Feature 2: Streak indicator */}
             {evolution.companion.streak >= 2 && (
