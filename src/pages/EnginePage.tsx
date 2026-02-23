@@ -52,6 +52,7 @@ const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasks
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard'))
+const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
@@ -149,7 +150,7 @@ const FREE_MSG_LIMIT = 10
 
 function EngineChat() {
   const { t } = useTranslation('home')
-  const { user, isAdmin, isSubscribed, signOut, refreshSubscription } = useAuthContext()
+  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, clearPasswordRecovery, signOut, refreshSubscription } = useAuthContext()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
@@ -1077,6 +1078,19 @@ function EngineChat() {
                 convs.switchConversation(convId)
                 convs.loadConversations()
               }}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      {/* Set New Password Modal (password recovery flow) */}
+      <AnimatePresence>
+        {isPasswordRecovery && (
+          <Suspense fallback={null}>
+            <SetNewPasswordModal
+              onSubmit={updatePassword}
+              onDismiss={clearPasswordRecovery}
+              onToast={showToast}
             />
           </Suspense>
         )}
