@@ -2012,32 +2012,6 @@ h4 {
     gap: var(--space-md);
     padding: var(--space-3xl) 0;
     width: 100%;
-    position: relative;
-}
-
-.ka-loading-grid-wrap::before {
-    content: '';
-    position: absolute;
-    top: calc(var(--space-3xl) - 16px);
-    left: 50%;
-    width: 192px;
-    height: 192px;
-    transform: translateX(-50%) scale(0.96);
-    border-radius: 12px;
-    background: radial-gradient(circle, rgba(107,91,149,0.06) 0%, transparent 70%);
-    animation: ka-load-breathe 2.5s ease-in-out infinite;
-    animation-delay: 1.5s;
-    opacity: 0;
-    pointer-events: none;
-}
-
-[data-theme="dark"] .ka-loading-grid-wrap::before {
-    background: radial-gradient(circle, rgba(139,123,181,0.1) 0%, transparent 70%);
-}
-
-@keyframes ka-load-breathe {
-    0%, 100% { transform: translateX(-50%) scale(0.96); opacity: 0.3; }
-    50% { transform: translateX(-50%) scale(1.04); opacity: 1; }
 }
 
 .ka-loading-label {
