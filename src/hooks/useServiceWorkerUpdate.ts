@@ -61,7 +61,12 @@ export function useServiceWorkerUpdate() {
   const updateNow = useCallback(() => {
     if (waitingSW) {
       waitingSW.postMessage({ type: 'SKIP_WAITING' })
-      // controllerchange listener above will handle the reload
+      // controllerchange listener above will handle the reload,
+      // but fall back to a direct reload if it doesn't fire
+      setTimeout(() => window.location.reload(), 1000)
+    } else {
+      // No waiting SW reference — just reload
+      window.location.reload()
     }
   }, [waitingSW])
 
