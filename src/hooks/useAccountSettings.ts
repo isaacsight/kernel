@@ -100,6 +100,10 @@ export function useAccountSettings(
     return true
   }, [user?.email, currentPassword])
 
+  // ─── Linked Accounts (needed early for re-auth checks) ──
+  const identities = auth.getUserIdentities()
+  const hasPassword = identities.some(id => id.provider === 'email')
+
   // ─── Email ────────────────────────────────────────
   const [newEmail, setNewEmail] = useState('')
   const [emailState, setEmailState] = useState<SectionState>(INITIAL_SECTION)
@@ -158,10 +162,7 @@ export function useAccountSettings(
   }, [newPassword, confirmPassword, auth, hasPassword, verifyCurrentPassword])
 
   // ─── Linked Accounts ─────────────────────────────
-  const identities = auth.getUserIdentities()
   const [linkState, setLinkState] = useState<SectionState>(INITIAL_SECTION)
-
-  const hasPassword = identities.some(id => id.provider === 'email')
 
   const linkProvider = useCallback(async (provider: Provider) => {
     setLinkState({ loading: true, error: null, success: null })
