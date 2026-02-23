@@ -51,6 +51,7 @@ const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasks
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard'))
+const AccountSettingsPanel = lazyRetry(() => import('../components/AccountSettingsPanel'))
 const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
@@ -324,6 +325,16 @@ function EngineChat() {
 
   // ─── Remaining effects ────────────────────────────────
 
+  // Reopen account settings after OAuth identity link redirect
+  useEffect(() => {
+    if (localStorage.getItem('kernel-reopen-settings') === 'true') {
+      localStorage.removeItem('kernel-reopen-settings')
+      panels.closeAllPanels()
+      panels.setShowAccountSettings(true)
+      showToast('Account linked successfully')
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Post-checkout: detect ?checkout=complete and poll for Pro status
   useEffect(() => {
     const hash = window.location.hash
@@ -460,10 +471,14 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showUsagePanel
-  useOverlayHistory(anyPanelOpen, panels.closeAllPanels)
-  useOverlayHistory(isDrawerOpen && !anyPanelOpen, () => setIsDrawerOpen(false))
-  useOverlayHistory(panels.showMoreMenu && !anyPanelOpen && !isDrawerOpen, () => { panels.setShowMoreMenu(false); panels.setActiveTab('home') })
+    || panels.showInsightsPanel || panels.showUsagePanel || panels.showAccountSettings
+  const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
+  const closeTopOverlay = useCallback(() => {
+    if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
+    else if (anyPanelOpen) panels.closeAllPanels()
+    else if (isDrawerOpen) setIsDrawerOpen(false)
+  }, [panels, anyPanelOpen, isDrawerOpen, setIsDrawerOpen])
+  useOverlayHistory(anyOverlayOpen, closeTopOverlay)
 
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
@@ -612,6 +627,26 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {panels.showAccountSettings && user && (
+          <BottomSheet onClose={() => panels.closePanel('account-settings')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <AccountSettingsPanel
+                user={user}
+                isPro={isPro}
+                isAdmin={isAdmin}
+                onClose={() => panels.closePanel('account-settings')}
+                onToast={showToast}
+                onUpgrade={billing.handleUpgrade}
+                onManageSubscription={billing.handleManageSubscription}
+                onSignOut={signOut}
+                onDeleteAccount={() => billing.setShowDeleteConfirm(true)}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
@@ -708,21 +743,11 @@ function EngineChat() {
                 )}
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
-                {!isPro && (
-                  <button className="ka-header-menu-item ka-header-menu-item--upgrade ka-menu-tabbed" onClick={() => { billing.handleUpgrade(); panels.setHeaderMenuOpen(false) }}>
-                    <IconCrown size={16} /> {t('menu.upgradeToPro')}
-                  </button>
-                )}
-                {!isAdmin && isSubscribed && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { billing.handleManageSubscription(); panels.setHeaderMenuOpen(false) }} disabled={billing.portalLoading}>
-                    <IconSettings size={16} className={billing.portalLoading ? 'ka-spin' : ''} /> {t('menu.manageSubscription')}
-                  </button>
-                )}
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconSettings size={16} /> {t('menu.accountSettings')}
+                </button>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { signOut(); panels.setHeaderMenuOpen(false) }}>
                   <IconLogOut size={16} /> {t('menu.signOut')}
-                </button>
-                <button className="ka-header-menu-item ka-header-menu-item--danger ka-menu-tabbed" onClick={() => { billing.setShowDeleteConfirm(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconTrash size={16} /> {t('menu.deleteAccount')}
                 </button>
               </div>
             )}

@@ -1,0 +1,56 @@
+{
+  "title": "Account settings",
+  "profile": {
+    "heading": "Profile",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your name",
+    "avatar": "Profile photo",
+    "avatarChange": "Change",
+    "save": "Save profile",
+    "saved": "Profile saved"
+  },
+  "security": {
+    "heading": "Security",
+    "changeEmail": "Change email",
+    "emailPlaceholder": "New email address",
+    "emailSubmit": "Update email",
+    "emailConfirmationSent": "Confirmation email sent to your new address",
+    "changePassword": "Change password",
+    "setPassword": "Set a password",
+    "newPasswordPlaceholder": "New password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "passwordSubmit": "Update password",
+    "passwordChanged": "Password updated",
+    "tooShort": "Password must be at least 8 characters",
+    "mismatch": "Passwords do not match"
+  },
+  "linkedAccounts": {
+    "heading": "Linked accounts",
+    "connected": "Connected",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "cannotUnlinkLast": "Cannot remove your only sign-in method",
+    "unlinked": "Account disconnected",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Subscription",
+    "free": "Free plan",
+    "pro": "Pro plan",
+    "admin": "Admin",
+    "upgrade": "Upgrade to Pro",
+    "manage": "Manage subscription"
+  },
+  "danger": {
+    "heading": "Account",
+    "signOut": "Sign out",
+    "signOutDesc": "Sign out of your account on this device",
+    "deleteAccount": "Delete account",
+    "deleteDesc": "Permanently delete your account and all data"
+  }
+}
