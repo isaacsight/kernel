@@ -4,14 +4,50 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-22, late)
+## Current Session (2026-02-23)
 
 ### Accomplished This Session
 
+#### Backend Hardening — Durable Rate Limits, Audit Trail, Input Validation
+- **DB migration** (`023_hardening.sql`): `rate_limits` table (Postgres fixed-window counters), `audit_events` table (structured event log), 5 RPCs (`check_rate_limit`, `log_audit_event`, `cleanup_rate_limits`, `cleanup_audit_events`, `get_usage_summary`)
+- **3 shared utilities** in `supabase/functions/_shared/`: `rate-limit.ts` (fail-open Postgres RPC), `audit.ts` (fire-and-forget logging), `validate.ts` (content-type, body size, SSRF blocklist, field validation)
+- **9 functions fully overhauled** (rate limit + audit + validation): claude-proxy, web-search, url-fetch, mcp-proxy, evaluate-chat, extract-insights, import-conversation, transcribe, shared-conversation
+- **10 functions audit + validation only**: stripe-webhook, create-checkout, create-portal, delete-account, send-announcement, send-inquiry-email, notify-webhook, send-notification, task-scheduler
+- **SSRF fix**: mcp-proxy was vulnerable (only blocked `localhost` string) — now uses consolidated blocklist covering all private/reserved ranges
+- **3-tier rate limits**: free/paid/pro with per-endpoint configs (e.g. claude-proxy: 10/60/120 req/min)
+- **task-scheduler**: now calls `cleanup_rate_limits()` and `cleanup_audit_events(90)` on every cron run
+- All 19 edge functions deployed, migration applied via Supabase MCP tool
+- Committed `46f02797`, pushed to origin/main
+
+#### Pro Usage Dashboard
+- **Edge function**: `usage-dashboard/index.ts` — GET endpoint, JWT + Pro-only (403 for free), calls `get_usage_summary` RPC
+- **Hook**: `useUsageDashboard.ts` — 5-minute cache, fetch/refresh pattern
+- **Component**: `UsageDashboard.tsx` — bottom sheet with metrics grid, token breakdown, top agents, daily sparkline, recent activity feed
+- **Wired into UI**: MoreMenu → "Usage" (Pro only), usePanelManager (showUsagePanel state), EnginePage (lazy-loaded panel)
+- **CSS**: ~200 lines `.usage-*` classes, dark mode, mobile responsive
+- **i18n**: Added `menu.usage` key to home.json
+
+#### Entity System — 32-bit Upgrade
+- Pixel creature upgraded from 16-bit to 32-bit aesthetic (richer gradients, anti-aliased outline ring, deeper shadows)
+- Cursor-following eye tracking (clamped to 2px offset, mobile defaults to center-bottom)
+- Weighted tap reactions: happy bounce (55%), excited hop (20%), shy wobble (15%), sleepy blink (10%)
+- Anime-style blush pixels for happy/excited/content moods
+- Committed `03a4b3b1`
+
+#### Canvas Particle Performance
+- Fixed `PixelEntityCanvas.tsx` — `particles` ref was undefined (should be `pool` + `activeCount`)
+- Upgraded to zero-allocation particle update with in-place pool compaction
+- Split draw passes (particles → glow) with `lighter` composite for additive halos
+- Committed `6823af98` (fix) + `594a6003` (perf)
+
+---
+
+## Previous Session (2026-02-22, late)
+
+### Accomplished
+
 #### Dark Mode Header Fix
-- Burger menu (`.ka-menu-btn`) and header icon buttons (`.ka-header-icon-btn`) were invisible in dark mode — inherited dark color against dark background
-- Added `[data-theme="dark"]` override: `color: var(--dark-text)` for both selectors
-- Entity animation refinements also included (garden creature, warmer palette, smoother easing, idle wiggle — previously unstaged)
+- Burger menu and header icon buttons invisible in dark mode — added `[data-theme="dark"]` override
 - Committed `25775e83`, deployed to kernel.chat
 
 ---
@@ -19,90 +55,44 @@
 ## Previous Session (2026-02-22, earlier)
 
 ### Accomplished
-
-#### ChatGPT Conversation Import
-- **Import modal**: link-only input for ChatGPT share URLs (no tabs/paste — simplified per user request)
-- **Edge function** (`import-conversation`): accepts `url` param, fetches ChatGPT backend API JSON, falls back to HTML parsing + Haiku extraction
-- **DB migration**: added `metadata` JSONB column to `conversations` table (was missing, caused PGRST204 error)
-- **Session fix**: `createConversation` now calls `refreshSession()` proactively before insert
-- **Error surfacing**: `createConversation` throws with actual Supabase error (code + message) instead of returning null silently. `forkSharedConversation` throws too. All callers updated.
-- **Resilience**: 32KB content truncation per message, batch inserts (50 at a time)
-- **Modal centering**: Framer Motion `y` prop was overwriting CSS `translate(-50%, -50%)` — fixed by using `calc(-50% + 20px)` in motion values
-- **HTTPS enforcement**: re-enabled on GitHub Pages (was unchecked, causing mixed content "Failed to fetch" errors)
-- 6 commits: `b47057e4` → `4627c690`, all pushed to origin/main
-
-#### 16-bit Garden Creature Upgrade
-- **Shape redesign**: angular angel → round friendly garden blob with two eyes at all tiers, sprout/flower/leaf theme
-- **16-bit CSS**: all pixels now use `linear-gradient` fills with `box-shadow` inner highlight/shadow for depth
-- **Eye sparkles**: new `eye-light` variant — 3px white dots inside each eye with shimmer animation
-- **Eyes**: `radial-gradient` rendering with warm depth + inner highlight
-- **Sprout/leaves/particles/glow**: all upgraded with gradient fills and ambient shadows
-- **Smooth animations**: removed all `steps()` timing → `ease-in-out` / `ease-out` throughout
-- **Dark mode**: all 16-bit variants have matching gradient dark mode styles
-- **Core/Crown/Notif**: radial gradients, topic-colored glow, gradient gold crown
-- **Idle wiggle**: random 6-12s happy shimmy via JS class toggle
-- Committed as `d3d18b94`, deployed to kernel.chat, pushed to origin/main
-
-#### Entity Evolution System (P15) — earlier this session
-- 3 new files: `pixelGrids.ts`, `useEntityEvolution.ts`, `PixelEntity.tsx`
-- EnginePage: replaced ~85 lines inline pixel JSX with `<PixelEntity />`
-- 5 tiers, 6 topic domains, transient states (time-of-day, goals, activity, briefing, pro)
-- 24 new tests — 345 total passing
-- Committed as `d5b984ff`
-
----
-
-## Previous Session (2026-02-20, continued)
-
-### Accomplished
-
-#### Visual Identity — Ink Drop Mark + Platform Polish (P13)
-- Updated all logo SVGs with V4 Ink Drop mark (sepia stroke, italic amethyst K, seed dot)
-- Regenerated PNG icons (192 + 512)
-- Accessibility: 17 aria-hidden additions across 9 components
-- Code-splitting: lazy-loaded LoginGate (504KB → 499KB)
-- Component tests: 21 new tests — 234 total passing
-
-#### Visual Identity Audit & CSS Token System (P14)
-- Indigo → Amethyst across 37 instances
-- Spacing scale (8 tokens), dark mode variables (8 tokens), border radius tokens
-- MediaRenderer: Tailwind → vanilla CSS. Zero Tailwind in codebase.
-- Optical kerning, fluid spacing, calm micro-interactions
+- ChatGPT conversation import (link-only, edge function, DB migration, session fix, error surfacing)
+- 16-bit garden creature upgrade (shape redesign, gradient fills, eye sparkles, smooth animations)
+- Entity evolution system P15 (pixelGrids, useEntityEvolution, PixelEntity, 5 tiers, 6 topics)
 
 ---
 
 ## Previous Sessions (2026-02-17 to 2026-02-20)
 
 ### Accomplished
-- P12: Design overhaul — "The Rubin Evolution" (tokens, dark mode, panels, chat, home)
-- P11: Mobile UI/UX audit & fixes (11 items)
+- P12–P14: Design overhaul, visual identity, CSS token system
+- P11: Mobile UI/UX audit & fixes
 - P8–P10: Writing audit, usage cost tracking, auto model selection
-- P6–P7: Artifact system overhaul, agent audit & cleanup
-- P1–P5: Dark mode, reflection scorer, test suite, InsightsPanel, i18n, feature discovery, Discord bot, Stripe webhooks
+- P1–P7: Dark mode, test suite, panels, i18n, artifact system, agent audit, Discord bot, Stripe
 
 ---
 
 ## Ongoing Backlog
 
 - **P1–P15**: All DONE
-- **ChatGPT import**: DONE (link-only, ChatGPT backend API → preview → import)
+- **Backend hardening**: DONE (rate limits, audit trail, input validation, SSRF fix)
+- **Pro usage dashboard**: DONE
+- **ChatGPT import**: DONE
 - **Next candidates**: Onboarding flow redesign, conversation search, animation token system
-- **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content). Would require headless browser to fix.
+- **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
 
 ## Key Decisions Made
 
+- Rate limits: Postgres fixed-window counters with atomic upsert, fail-open semantics (never blocks on RPC error)
+- Audit logging: fire-and-forget (catches all errors internally, never breaks user requests)
+- SSRF blocklist: 10 regex patterns covering localhost, 127.x, 10.x, 172.16-31.x, 192.168.x, link-local, IPv6 private
+- All RPCs: SECURITY DEFINER with privileges revoked from public/authenticated/anon
+- Pro rate limits: 2x free tier for subscribed users (claude-proxy 120/min, web-search 20/min, etc.)
+- Usage dashboard: accessible from MoreMenu, Pro-only, 5-minute client cache
+- Entity: 32-bit aesthetic with outline ring, gradient fills, cursor-tracking eyes
+- Canvas particles: zero-alloc pool compaction, split update/draw/glow passes
 - ChatGPT import uses `/backend-api/share/{id}` JSON endpoint (public, no auth needed)
-- Import modal: link-only, no paste tab (user preference)
-- `conversations` table has `metadata` JSONB column for import source tracking
-- `createConversation` throws on error (not silent null return) — all callers use try/catch
 - Entity evolution score: log2-based, 3 signals (conversations 40%, KG 35%, goals 25%)
-- Tiers are additive — higher tiers render all lower-tier pixels plus new ones
-- 16-bit aesthetic: gradient fills, inner highlight/shadow box-shadows, radial gradients for eyes/core
-- All animations use smooth easing (no steps()) — organic garden feel
-- Topic color applied via CSS custom properties + `color-mix()` for gradual bleed
 - Bottom-sheet pattern for all panels
-- AgentRouter (Haiku) is single source of truth; keyword matching is minimal fallback
 - Dark mode: warm brown undertones, never cool gray — "lamplight reading" principle
-- Auto model selection: complexity >= 0.85 → Opus, <= 0.2 → Haiku, else Sonnet
 - Zero Tailwind — all vanilla CSS with `ka-` prefix and Rubin design tokens
 - Edge function deploys: ALWAYS use `--no-verify-jwt` flag
