@@ -12207,14 +12207,19 @@ h4 {
 .ka-settings-field-row {
     display: flex;
     gap: var(--space-xs);
+    align-items: stretch;
 }
 .ka-settings-field-row .ka-gate-input {
     flex: 1;
+    min-width: 0;
+    width: auto;
 }
 .ka-settings-inline-btn {
     flex-shrink: 0;
     white-space: nowrap;
     padding: 0 var(--space-md) !important;
+    max-width: 140px;
+    font-size: 13px;
 }
 
 .ka-settings-provider-row {
