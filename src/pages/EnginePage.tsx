@@ -36,7 +36,6 @@ import { useMiniPhone } from '../hooks/useMiniPhone'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
-import { useColorCycle } from '../hooks/useColorCycle'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
@@ -105,6 +104,9 @@ export function EnginePage() {
 }
 
 // ─── Helpers ─────────────────────────────────────────────
+
+// CMYK palette from reference — vibrant loading state
+const LOADING_PALETTE = { particle: '#00a4b8', link: '#e8345a', field: '#f5c518' }
 
 const AGENT_PALETTES: Record<string, { particle: string; link: string; field: string }> = {
   kernel:     { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },  // amethyst
@@ -464,8 +466,6 @@ function EngineChat() {
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
 
-  const cyclingPalette = useColorCycle(convs.msgsLoading)
-
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -746,11 +746,10 @@ function EngineChat() {
             transition={{ duration: 0.3 }}
           >
             <ParticleGrid
-              size={160}
+              size={200}
               interactive={false}
               energetic
-              progressive
-              palette={cyclingPalette ?? undefined}
+              palette={LOADING_PALETTE}
             />
             <span className="ka-loading-label">Loading...</span>
           </motion.div>
