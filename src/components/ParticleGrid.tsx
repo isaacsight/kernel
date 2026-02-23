@@ -210,8 +210,9 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.cell = cell
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
-    const count = Math.min(PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * 0.4)))
-    const boost = cell < CELL ? 0.08 : 0.05
+    const density = cell < CELL ? 0.7 : 0.4
+    const count = Math.min(cell < CELL ? 120 : PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * density)))
+    const boost = cell < CELL ? 0.3 : 0.05
     s.particles = Array.from({ length: count }, () => {
       // Small grids: spread across full area; large grids: center cluster
       const gx = cell < CELL
@@ -287,19 +288,24 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       const damping = en && small ? 0.97 : en ? 0.998 : DAMPING
       const subSteps = en && small ? 1 : en ? SUB_STEPS * 3 : SUB_STEPS
       if (en && small) {
-        // Small grids: sine-wave flow field — particles drift freely through each other
-        const t = performance.now() * 0.001
+        // Small grids: flow field swarm — particles stay inside and explore
+        const t = performance.now() * 0.0004
+        const cx = s.cols * 0.5, cy = s.rows * 0.5
+        const margin = 1.5
         for (const p of s.particles) {
-          const phase = p.gx * 0.7 + p.gy * 1.1
-          p.vx += Math.sin(t * 0.8 + phase) * 0.012
-          p.vy += Math.cos(t * 0.6 + phase * 1.3) * 0.012
-          p.vx *= damping; p.vy *= damping
+          const angle = Math.sin(p.gx * 0.4 + t * 1.2) * 2 + Math.cos(p.gy * 0.6 + t * 0.8) * 2
+          p.vx += Math.cos(angle) * 0.008
+          p.vy += Math.sin(angle) * 0.008
+          // Edge containment — push back toward center near boundaries
+          if (p.gx < margin) p.vx += (margin - p.gx) * 0.05
+          if (p.gx > s.cols - margin) p.vx -= (p.gx - (s.cols - margin)) * 0.05
+          if (p.gy < margin) p.vy += (margin - p.gy) * 0.05
+          if (p.gy > s.rows - margin) p.vy -= (p.gy - (s.rows - margin)) * 0.05
+          p.vx *= 0.97; p.vy *= 0.97
           p.gx += p.vx; p.gy += p.vy
-          // Soft wrap at edges
-          if (p.gx < 0.5) { p.gx = 0.5; p.vx *= -0.5 }
-          if (p.gx > s.cols - 0.5) { p.gx = s.cols - 0.5; p.vx *= -0.5 }
-          if (p.gy < 0.5) { p.gy = 0.5; p.vy *= -0.5 }
-          if (p.gy > s.rows - 0.5) { p.gy = s.rows - 0.5; p.vy *= -0.5 }
+          // Hard clamp — never escape
+          p.gx = Math.max(0, Math.min(s.cols - 1, p.gx))
+          p.gy = Math.max(0, Math.min(s.rows - 1, p.gy))
         }
       } else {
         for (let step = 0; step < subSteps; step++) {
