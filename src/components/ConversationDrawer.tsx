@@ -75,17 +75,36 @@ export function ConversationDrawer({
   const executeSearch = useCallback(async (query: string) => {
     setSearching(true)
     try {
-      const { data } = await supabase
-        .from('messages')
-        .select('channel_id, content')
-        .ilike('content', `%${query.trim()}%`)
-        .order('created_at', { ascending: false })
-        .limit(20)
+      const q = query.trim()
+      // Search messages and conversation titles in parallel
+      const [messagesRes, titlesRes] = await Promise.all([
+        supabase
+          .from('messages')
+          .select('channel_id, content')
+          .ilike('content', `%${q}%`)
+          .order('created_at', { ascending: false })
+          .limit(20),
+        supabase
+          .from('conversations')
+          .select('id, title')
+          .ilike('title', `%${q}%`)
+          .limit(20),
+      ])
 
       // Dedupe by conversation, keep first match
       const seen = new Set<string>()
       const results: { conv_id: string; content: string }[] = []
-      for (const row of data || []) {
+
+      // Title matches first (higher relevance)
+      for (const row of titlesRes.data || []) {
+        if (!seen.has(row.id)) {
+          seen.add(row.id)
+          results.push({ conv_id: row.id, content: row.title })
+        }
+      }
+
+      // Then message content matches
+      for (const row of messagesRes.data || []) {
         if (!seen.has(row.channel_id)) {
           seen.add(row.channel_id)
           results.push({ conv_id: row.channel_id, content: row.content })
@@ -108,6 +127,22 @@ export function ConversationDrawer({
     }
     searchTimerRef.current = setTimeout(() => executeSearch(query), 300)
   }, [executeSearch])
+
+  const clearSearch = useCallback(() => {
+    setSearchQuery('')
+    setSearchResults([])
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current)
+  }, [])
+
+  const highlightMatch = useCallback((text: string, query: string) => {
+    if (!query || query.trim().length < 2) return text
+    const idx = text.toLowerCase().indexOf(query.toLowerCase())
+    if (idx === -1) return text
+    const before = text.slice(0, idx)
+    const match = text.slice(idx, idx + query.length)
+    const after = text.slice(idx + query.length)
+    return <>{before}<mark>{match}</mark>{after}</>
+  }, [])
 
   const handleRename = useCallback(async (convId: string) => {
     if (renamingRef.current) return // Prevent double-fire
@@ -182,7 +217,19 @@ export function ConversationDrawer({
                 value={searchQuery}
                 onChange={e => handleSearch(e.target.value)}
               />
+              {searchQuery && (
+                <button className="conv-search-clear" onClick={clearSearch} aria-label={t('conversations.clearSearch')}>
+                  <IconClose size={12} />
+                </button>
+              )}
             </div>
+            {searchQuery.trim().length >= 2 && !searching && (
+              <div className="conv-search-count">
+                {filteredConversations.length > 0
+                  ? t('conversations.resultCount', { count: filteredConversations.length })
+                  : t('conversations.noResults')}
+              </div>
+            )}
 
             <div className="conv-action-row">
               <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
@@ -229,10 +276,12 @@ export function ConversationDrawer({
                         />
                       </form>
                     ) : (
-                      <span className="conv-item-title">{conv.title}</span>
+                      <span className="conv-item-title">
+                        {searchQuery.trim().length >= 2 ? highlightMatch(conv.title, searchQuery) : conv.title}
+                      </span>
                     )}
                     {matchSnippet && !isRenaming && (
-                      <span className="conv-item-snippet">{matchSnippet.content.slice(0, 80)}...</span>
+                      <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
                     )}
                     {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
                   </div>
@@ -269,7 +318,7 @@ export function ConversationDrawer({
                 <div className="conv-empty">
                   <span>{searching ? t('conversations.searching') : t('conversations.noMatches')}</span>
                   {!searching && (
-                    <button className="conv-empty-clear" onClick={() => { setSearchQuery(''); setSearchResults([]) }}>
+                    <button className="conv-empty-clear" onClick={clearSearch}>
                       {t('conversations.clearSearch')}
                     </button>
                   )}
