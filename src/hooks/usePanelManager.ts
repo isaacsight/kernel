@@ -17,7 +17,6 @@ export function usePanelManager(callbacks: {
   const [showScheduledPanel, setShowScheduledPanel] = useState(false)
   const [showBriefingPanel, setShowBriefingPanel] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
-  const [showUsagePanel, setShowUsagePanel] = useState(false)
   const [showAccountSettings, setShowAccountSettings] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
@@ -31,7 +30,6 @@ export function usePanelManager(callbacks: {
     setShowScheduledPanel(false)
     setShowBriefingPanel(false)
     setShowInsightsPanel(false)
-    setShowUsagePanel(false)
     setShowAccountSettings(false)
     setActiveTab('home')
     setShowMoreMenu(false)
@@ -45,7 +43,6 @@ export function usePanelManager(callbacks: {
     if (except !== 'scheduled') setShowScheduledPanel(false)
     if (except !== 'briefings') setShowBriefingPanel(false)
     if (except !== 'insights') setShowInsightsPanel(false)
-    if (except !== 'usage') setShowUsagePanel(false)
     if (except !== 'account-settings') setShowAccountSettings(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
@@ -81,7 +78,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'usage' | 'account-settings' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -92,7 +89,6 @@ export function usePanelManager(callbacks: {
       case 'scheduled': setShowScheduledPanel(false); break
       case 'briefings': setShowBriefingPanel(false); break
       case 'insights': setShowInsightsPanel(false); break
-      case 'usage': setShowUsagePanel(false); break
       case 'account-settings': setShowAccountSettings(false); break
       case 'more': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
@@ -124,10 +120,6 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('insights')
         setShowInsightsPanel(true)
         break
-      case 'usage':
-        closeOtherPanels('usage')
-        setShowUsagePanel(true)
-        break
       case 'account-settings':
         closeOtherPanels('account-settings')
         setShowAccountSettings(true)
@@ -155,7 +147,6 @@ export function usePanelManager(callbacks: {
     showScheduledPanel, setShowScheduledPanel,
     showBriefingPanel, setShowBriefingPanel,
     showInsightsPanel, setShowInsightsPanel,
-    showUsagePanel, setShowUsagePanel,
     showAccountSettings, setShowAccountSettings,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
