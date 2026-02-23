@@ -216,10 +216,11 @@ export function useAuth(): AuthState {
   const linkIdentity = useCallback(async (provider: Provider) => {
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
     localStorage.setItem('kernel-reopen-settings', 'true');
-    await supabase.auth.linkIdentity({
+    const { error } = await supabase.auth.linkIdentity({
       provider,
       options: { redirectTo },
     });
+    if (error) throw new Error(error.message);
   }, []);
 
   const unlinkIdentity = useCallback(async (identity: UserIdentity) => {
