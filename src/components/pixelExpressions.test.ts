@@ -56,4 +56,35 @@ describe('pixelExpressions', () => {
       }
     }
   })
+
+  it('happy and excited have blush pixels', () => {
+    expect(getExpression('happy').blushPixels.length).toBeGreaterThanOrEqual(2)
+    expect(getExpression('excited').blushPixels.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('excited has more blush than happy (wider spread)', () => {
+    expect(getExpression('excited').blushPixels.length).toBeGreaterThan(
+      getExpression('happy').blushPixels.length,
+    )
+  })
+
+  it('content has subtle blush', () => {
+    expect(getExpression('content').blushPixels.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('sad/sleepy/lonely/bored have no blush', () => {
+    const noBlush: MoodState[] = ['sad', 'sleepy', 'lonely', 'bored']
+    for (const mood of noBlush) {
+      expect(getExpression(mood).blushPixels).toHaveLength(0)
+    }
+  })
+
+  it('blush pixels use "blush" variant', () => {
+    for (const mood of ALL_MOODS) {
+      const expr = getExpression(mood)
+      for (const pixel of expr.blushPixels) {
+        expect(pixel.variant).toBe('blush')
+      }
+    }
+  })
 })
