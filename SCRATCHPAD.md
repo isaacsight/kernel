@@ -4,9 +4,26 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-23)
+## Current Session (2026-02-23, later)
 
 ### Accomplished This Session
+
+#### Conversation Search — Polish & Enhance
+- **DB migration** (`024_search_index.sql`): `pg_trgm` extension + GIN trigram indexes on `messages.content` and `conversations.title` for fast `.ilike()` substring matching
+- **Server-side title search**: `executeSearch` now queries both `messages` and `conversations` tables in parallel, title matches ranked first
+- **Highlight matching text**: `highlightMatch` helper wraps matched substrings in `<mark>` tags for titles and snippets
+- **Result count**: Shows "N results" / "No results" below search input when a search is active
+- **Clear button**: X icon inside search input to clear query
+- **i18n**: Added `conversations.noResults` and `conversations.resultCount` to `common.json`
+- **CSS**: `.conv-search-clear`, `.conv-search-count`, `mark` highlight styles (amethyst tint light, warm gold dark)
+- Migration applied via Supabase MCP, deployed to kernel.chat
+- Committed `2aa9ed36`, pushed to origin/main
+
+---
+
+## Previous Session (2026-02-23, earlier)
+
+### Accomplished
 
 #### Backend Hardening — Durable Rate Limits, Audit Trail, Input Validation
 - **DB migration** (`023_hardening.sql`): `rate_limits` table (Postgres fixed-window counters), `audit_events` table (structured event log), 5 RPCs (`check_rate_limit`, `log_audit_event`, `cleanup_rate_limits`, `cleanup_audit_events`, `get_usage_summary`)
@@ -77,7 +94,8 @@
 - **Backend hardening**: DONE (rate limits, audit trail, input validation, SSRF fix)
 - **Pro usage dashboard**: DONE
 - **ChatGPT import**: DONE
-- **Next candidates**: Onboarding flow redesign, conversation search, animation token system
+- **Conversation search polish**: DONE (trigram indexes, server-side title search, highlights, result count, clear button)
+- **Next candidates**: Onboarding flow redesign, animation token system
 - **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
 
 ## Key Decisions Made
@@ -96,3 +114,4 @@
 - Dark mode: warm brown undertones, never cool gray — "lamplight reading" principle
 - Zero Tailwind — all vanilla CSS with `ka-` prefix and Rubin design tokens
 - Edge function deploys: ALWAYS use `--no-verify-jwt` flag
+- Conversation search: trigram GIN indexes for `.ilike()`, parallel title+message queries, `<mark>` highlight, no full-text search needed at current scale
