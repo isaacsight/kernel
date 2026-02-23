@@ -6718,6 +6718,11 @@ h4 {
 .ka-combined-iframe {
     height: 400px;
 }
+@media (max-width: 600px) {
+    .ka-combined-iframe {
+        height: 280px;
+    }
+}
 [data-theme="dark"] .ka-combined-preview {
     border-color: var(--dark-border-subtle);
 }
