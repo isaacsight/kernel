@@ -8,31 +8,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
-
-// ─── Per-user rate limiting ──────────────────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 10 // 10 evaluations per minute per user
-const evalRateLimitMap = new Map<string, number[]>()
-
-function checkEvalRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const timestamps = (evalRateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-  if (timestamps.length >= RATE_LIMIT_MAX) {
-    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
-  }
-  timestamps.push(now)
-  evalRateLimitMap.set(userId, timestamps)
-  return { allowed: true, retryAfter: 0 }
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, ts] of evalRateLimitMap) {
-    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) evalRateLimitMap.delete(key)
-    else evalRateLimitMap.set(key, recent)
-  }
-}, 300_000)
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 interface ChatPayload {
   messages: { role: 'user' | 'assistant'; content: string }[]
@@ -78,6 +56,10 @@ serve(async (req: Request) => {
 
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
+  // ── Content-Type check ──────────────────────────────
+  const ctErr = requireContentType(req)
+  if (ctErr) return ctErr(CORS_HEADERS)
+
   try {
     // ── Auth: verify JWT ────────────────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
@@ -97,14 +79,12 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Rate limit ──────────────────────────────────────
-    const rateCheck = checkEvalRateLimit(user.id)
-    if (!rateCheck.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
-        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-      )
-    }
+    // ── Rate limit (Postgres RPC) ─────────────────────
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rlCheck = await checkRateLimit(svc, user.id, 'evaluate-chat')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
@@ -114,13 +94,30 @@ serve(async (req: Request) => {
       )
     }
 
-    const payload = (await req.json()) as ChatPayload
+    // ── Body size check (max 512KB) ───────────────────
+    const rawBody = await req.text()
+    if (rawBody.length > 524288) {
+      return new Response(
+        JSON.stringify({ error: 'Request body too large (max 512KB)' }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+    const payload = JSON.parse(rawBody) as ChatPayload
+
     const { messages, conversationId } = payload
     const email = user.email // Use email from JWT, not from body
 
     if (!messages?.length || !conversationId) {
       return new Response(
         JSON.stringify({ error: 'messages and conversationId are required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    // ── Input validation: cap messages at 100 ─────────
+    if (messages && messages.length > 100) {
+      return new Response(
+        JSON.stringify({ error: 'Too many messages (max 100)' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
@@ -205,6 +202,14 @@ serve(async (req: Request) => {
         { status: anthropicResponse.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
+
+    // ── Audit log (fire-and-forget) ──────────────────────────
+    logAudit(svc, {
+      actorId: user.id, eventType: 'edge_function.call', action: 'evaluate-chat',
+      source: 'evaluate-chat', status: 'success', statusCode: 200,
+      metadata: { messageCount: messages?.length },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     // Pipe Anthropic's SSE stream directly through to the client
     return new Response(anthropicResponse.body, {

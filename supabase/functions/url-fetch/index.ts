@@ -6,48 +6,11 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { checkRateLimit, rateLimitResponse, type Tier } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType, checkSSRF } from '../_shared/validate.ts'
 
 const MAX_CONTENT_LENGTH = 12000
-
-// ─── Per-user rate limiting ──────────────────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 20 // 20 fetches per minute per user
-const fetchRateLimitMap = new Map<string, number[]>()
-
-function checkFetchRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const timestamps = (fetchRateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-  if (timestamps.length >= RATE_LIMIT_MAX) {
-    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
-  }
-  timestamps.push(now)
-  fetchRateLimitMap.set(userId, timestamps)
-  return { allowed: true, retryAfter: 0 }
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, ts] of fetchRateLimitMap) {
-    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) fetchRateLimitMap.delete(key)
-    else fetchRateLimitMap.set(key, recent)
-  }
-}, 300_000)
-
-// Block private/internal IPs to prevent SSRF
-const BLOCKED_HOSTS = [
-  /^localhost$/i,
-  /^127\./,
-  /^10\./,
-  /^172\.(1[6-9]|2\d|3[01])\./,
-  /^192\.168\./,
-  /^0\./,
-  /^169\.254\./,
-  /^\[::1\]/,
-  /^\[fc/i,
-  /^\[fd/i,
-  /^\[fe80/i,
-]
 
 function htmlToText(html: string): string {
   // Extract Open Graph / meta tags first (useful for social media)
@@ -103,6 +66,10 @@ serve(async (req: Request) => {
 
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
+  // ── Content-Type check ──────────────────────────────
+  const ctErr = requireContentType(req)
+  if (ctErr) return ctErr(CORS_HEADERS)
+
   try {
     // ── Auth: verify JWT ────────────────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
@@ -122,14 +89,12 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Rate limit ──────────────────────────────────────
-    const rateCheck = checkFetchRateLimit(user.id)
-    if (!rateCheck.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
-        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-      )
-    }
+    // ── Rate limit (Postgres RPC) ─────────────────────
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rlCheck = await checkRateLimit(svc, user.id, 'url-fetch')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     const { url } = await req.json()
     if (!url || typeof url !== 'string') {
@@ -140,26 +105,8 @@ serve(async (req: Request) => {
     }
 
     // ── SSRF protection: block private/internal IPs ─────
-    try {
-      const parsed = new URL(url)
-      if (BLOCKED_HOSTS.some(re => re.test(parsed.hostname))) {
-        return new Response(
-          JSON.stringify({ error: 'URL points to a blocked host' }),
-          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        return new Response(
-          JSON.stringify({ error: 'Only HTTP/HTTPS URLs are allowed' }),
-          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-    } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid URL' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      )
-    }
+    const ssrfErr = checkSSRF(url)
+    if (ssrfErr) return ssrfErr(CORS_HEADERS)
 
     const response = await fetch(url, {
       headers: {
@@ -186,6 +133,14 @@ serve(async (req: Request) => {
       // Plain text, JSON, XML, etc. — return as-is (trimmed)
       text = raw.slice(0, MAX_CONTENT_LENGTH)
     }
+
+    // ── Audit log (fire-and-forget) ───────────────────
+    logAudit(svc, {
+      actorId: user.id, eventType: 'edge_function.call', action: 'url-fetch',
+      source: 'url-fetch', status: 'success', statusCode: 200,
+      metadata: { url: url.substring(0, 200) },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ text, url }),

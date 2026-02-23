@@ -6,31 +6,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
-
-// ─── Per-user rate limiting ──────────────────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 5 // 5 extractions per minute per user
-const insightRateLimitMap = new Map<string, number[]>()
-
-function checkInsightRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const timestamps = (insightRateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-  if (timestamps.length >= RATE_LIMIT_MAX) {
-    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
-  }
-  timestamps.push(now)
-  insightRateLimitMap.set(userId, timestamps)
-  return { allowed: true, retryAfter: 0 }
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, ts] of insightRateLimitMap) {
-    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) insightRateLimitMap.delete(key)
-    else insightRateLimitMap.set(key, recent)
-  }
-}, 300_000)
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 interface InsightPayload {
   conversationId: string
@@ -64,6 +42,10 @@ serve(async (req: Request) => {
 
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
+  // ── Content-Type check ──────────────────────────────
+  const ctErr = requireContentType(req)
+  if (ctErr) return ctErr(CORS_HEADERS)
+
   try {
     // ── Auth: verify JWT ────────────────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
@@ -83,14 +65,12 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Rate limit ──────────────────────────────────────
-    const rateCheck = checkInsightRateLimit(user.id)
-    if (!rateCheck.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
-        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-      )
-    }
+    // ── Rate limit (Postgres RPC) ─────────────────────
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rlCheck = await checkRateLimit(svc, user.id, 'extract-insights')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
@@ -104,7 +84,17 @@ serve(async (req: Request) => {
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey)
-    const payload = (await req.json()) as InsightPayload
+
+    // ── Body size limit (512KB) ───────────────────────
+    const rawBody = await req.text()
+    if (rawBody.length > 524288) {
+      return new Response(
+        JSON.stringify({ error: 'Request body too large (max 512KB)' }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+    const payload = JSON.parse(rawBody) as InsightPayload
+
     const { conversationId, messages, evaluationResult } = payload
     const email = user.email // Use email from JWT, not from body
 
@@ -191,6 +181,13 @@ serve(async (req: Request) => {
         console.error('Failed to insert insights:', insertError)
       }
     }
+
+    // ── Audit log ─────────────────────────────────────────────
+    logAudit(svc, {
+      actorId: user.id, eventType: 'edge_function.call', action: 'extract-insights',
+      source: 'extract-insights', status: 'success', statusCode: 200,
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ ok: true, insights: insights.length }),

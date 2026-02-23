@@ -6,6 +6,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit } from '../_shared/audit.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -145,6 +146,21 @@ serve(async (req: Request) => {
         console.error(`Failed to process task ${task.id}:`, taskErr)
       }
     }
+
+    // ── Cleanup: purge expired rate limits and old audit events ──
+    try {
+      await supabase.rpc('cleanup_rate_limits')
+      await supabase.rpc('cleanup_audit_events', { p_retention_days: 90 })
+    } catch (cleanupErr) {
+      console.warn('Cleanup RPCs failed (non-blocking):', cleanupErr)
+    }
+
+    // Audit log
+    logAudit(supabase, {
+      actorType: 'system', eventType: 'system.cron', action: 'task-scheduler',
+      source: 'task-scheduler', status: 'success', statusCode: 200,
+      metadata: { processed },
+    })
 
     return new Response(JSON.stringify({ processed }), {
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

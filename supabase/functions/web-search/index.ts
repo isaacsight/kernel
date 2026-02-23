@@ -7,31 +7,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
-
-// ─── Per-user rate limiting ──────────────────────────────
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 10 // 10 searches per minute per user
-const searchRateLimitMap = new Map<string, number[]>()
-
-function checkSearchRateLimit(userId: string): { allowed: boolean; retryAfter: number } {
-  const now = Date.now()
-  const timestamps = (searchRateLimitMap.get(userId) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-  if (timestamps.length >= RATE_LIMIT_MAX) {
-    return { allowed: false, retryAfter: Math.ceil((timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) }
-  }
-  timestamps.push(now)
-  searchRateLimitMap.set(userId, timestamps)
-  return { allowed: true, retryAfter: 0 }
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, ts] of searchRateLimitMap) {
-    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-    if (recent.length === 0) searchRateLimitMap.delete(key)
-    else searchRateLimitMap.set(key, recent)
-  }
-}, 300_000)
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType, requireJsonBody } from '../_shared/validate.ts'
 
 interface SearchPayload {
   query: string
@@ -44,6 +22,10 @@ serve(async (req: Request) => {
   }
 
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
+
+  // ── Content-Type check ────────────────────────────────
+  const ctErr = requireContentType(req)
+  if (ctErr) return ctErr(CORS_HEADERS)
 
   try {
     // ── Auth: verify JWT ────────────────────────────────
@@ -64,14 +46,12 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Rate limit ──────────────────────────────────────
-    const rateCheck = checkSearchRateLimit(user.id)
-    if (!rateCheck.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'rate_limited', retry_after: rateCheck.retryAfter }),
-        { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(rateCheck.retryAfter), ...CORS_HEADERS } }
-      )
-    }
+    // ── Rate limit (Postgres RPC) ─────────────────────────
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rlCheck = await checkRateLimit(svc, user.id, 'web-search')
+    if (!rlCheck.allowed) return rateLimitResponse(rlCheck, CORS_HEADERS)
 
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
@@ -81,7 +61,10 @@ serve(async (req: Request) => {
       )
     }
 
-    const payload = (await req.json()) as SearchPayload
+    // ── Parse body with 16KB size limit ───────────────────
+    const { body: payload, error: bodyErr } = await requireJsonBody<SearchPayload>(req, 16 * 1024)
+    if (bodyErr) return bodyErr(CORS_HEADERS)
+
     const { query, max_tokens = 800 } = payload
 
     if (!query?.trim()) {
@@ -152,6 +135,14 @@ serve(async (req: Request) => {
         }
       }
     }
+
+    // ── Audit log (fire-and-forget) ───────────────────────
+    logAudit(svc, {
+      actorId: user.id, eventType: 'edge_function.call', action: 'web-search',
+      source: 'web-search', status: 'success', statusCode: 200,
+      metadata: { query: query?.substring(0, 100) },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ text, citations }),

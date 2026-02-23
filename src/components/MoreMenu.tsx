@@ -38,6 +38,7 @@ export type MoreAction =
   | 'knowledge'
   | 'stats'
   | 'insights'
+  | 'usage'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -57,6 +58,7 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
   { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
   { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
+  { id: 'usage', labelKey: 'menu.usage', icon: IconChart, condition: 'subscribed' },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
@@ -116,7 +118,11 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
         <div className="ka-more-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
         <div className="ka-more-menu-items">
           <div className="ka-more-menu-label">{t('features', { ns: 'common' })}</div>
-          {ITEMS.map(item => {
+          {ITEMS.filter(item => {
+            if (item.condition === 'not-pro') return !isPro
+            if (item.condition === 'subscribed') return isPro || isAdmin
+            return true
+          }).map(item => {
             const Icon = item.icon
             const isNew = isNewFeature?.(item.id)
             return (

@@ -6,6 +6,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -279,6 +280,24 @@ serve(async (req: Request) => {
       default:
         console.log(`Unhandled event type: ${event.type}`)
     }
+
+    // Audit log payment events
+    const auditEventType = event.type.startsWith('checkout')
+      ? 'payment.checkout'
+      : event.type.includes('subscription')
+        ? 'payment.subscription'
+        : 'payment.invoice'
+    logAudit(supabase, {
+      actorType: 'service',
+      eventType: auditEventType,
+      action: event.type,
+      source: 'stripe-webhook',
+      status: 'success',
+      statusCode: 200,
+      metadata: { stripeEventId: event.id, stripeType: event.type },
+      ip: getClientIP(req),
+      userAgent: getUA(req),
+    })
   } catch (err) {
     console.error('Webhook handler error:', err)
     return new Response('Webhook handler error', { status: 500 })

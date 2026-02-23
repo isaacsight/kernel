@@ -8,6 +8,8 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -22,6 +24,10 @@ serve(async (req: Request) => {
     })
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: verify user JWT ───────────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return jsonResponse({ error: 'Missing authorization header' }, 401)
@@ -62,6 +68,14 @@ serve(async (req: Request) => {
         }
       }
     }
+
+    // ── Audit BEFORE delete (user data will be gone after) ──
+    logAudit(admin, {
+      actorId: user.id, eventType: 'user.action', action: 'delete-account',
+      source: 'delete-account', status: 'success', statusCode: 200,
+      metadata: { email: user.email },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     // ── Delete auth user (cascades all public tables) ───
     const { error: deleteError } = await admin.auth.admin.deleteUser(user.id)

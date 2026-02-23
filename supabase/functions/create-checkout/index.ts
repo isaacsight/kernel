@@ -8,6 +8,8 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 interface CheckoutPayload {
   mode?: 'subscription' | 'payment'
@@ -24,6 +26,10 @@ serve(async (req: Request) => {
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
     // ── Auth: verify JWT ────────────────────────────────
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
@@ -106,6 +112,17 @@ serve(async (req: Request) => {
     }
 
     const session = await response.json()
+
+    // Audit log
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    logAudit(svc, {
+      actorId: user_id, eventType: 'payment.checkout', action: 'create-checkout',
+      source: 'create-checkout', status: 'success', statusCode: 200,
+      metadata: { mode },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ url: session.url, session_id: session.id }),

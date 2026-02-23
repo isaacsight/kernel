@@ -8,6 +8,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -207,6 +208,14 @@ serve(async (req: Request) => {
 
     const portal = await portalRes.json()
     console.log('Portal session created:', portal.url ? 'success' : 'no url')
+
+    // Audit log
+    logAudit(adminClient, {
+      actorId: user.id, eventType: 'payment.portal', action: 'create-portal',
+      source: 'create-portal', status: 'success', statusCode: 200,
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
+
     return jsonResponse({ url: portal.url })
   } catch (error) {
     console.error('create-portal error:', error)

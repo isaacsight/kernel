@@ -49,6 +49,7 @@ const WorkflowsPanel = lazyRetry(() => import('../components/WorkflowsPanel').th
 const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
+const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard'))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
@@ -376,7 +377,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel
+    || panels.showInsightsPanel || panels.showUsagePanel
   useOverlayHistory(anyPanelOpen, panels.closeAllPanels)
   useOverlayHistory(isDrawerOpen && !anyPanelOpen, () => setIsDrawerOpen(false))
   useOverlayHistory(panels.showMoreMenu && !anyPanelOpen && !isDrawerOpen, () => { panels.setShowMoreMenu(false); panels.setActiveTab('home') })
@@ -513,6 +514,16 @@ function EngineChat() {
                 onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
                 onClose={() => panels.closePanel('insights')}
               />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showUsagePanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('usage')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <UsageDashboard onClose={() => panels.closePanel('usage')} />
             </Suspense>
           </BottomSheet>
         )}

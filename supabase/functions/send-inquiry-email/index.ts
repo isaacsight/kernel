@@ -5,6 +5,9 @@
 // Set secret: npx supabase secrets set RESEND_API_KEY=re_xxxxx NOTIFY_EMAIL=your@email.com
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { requireContentType } from '../_shared/validate.ts'
 
 const RESEND_API = 'https://api.resend.com/emails'
 
@@ -46,6 +49,19 @@ serve(async (req: Request) => {
   }
 
   try {
+    // ── Content-type check ──────────────────────────────
+    const ctErr = requireContentType(req)
+    if (ctErr) return ctErr(CORS_HEADERS)
+
+    // ── Body size check (64KB max) ──────────────────────
+    const cl = req.headers.get('content-length')
+    if (cl && parseInt(cl, 10) > 65536) {
+      return new Response(
+        JSON.stringify({ error: 'Request body too large (max 64KB)' }),
+        { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
     // ── Auth: require service role key (called from MCP tools) ──
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -189,6 +205,17 @@ serve(async (req: Request) => {
       const err = await confirmResponse.text()
       console.error('Resend confirmation failed:', err)
     }
+
+    // Audit log
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    logAudit(svc, {
+      actorType: 'service', eventType: 'edge_function.call', action: 'send-inquiry-email',
+      source: 'send-inquiry-email', status: 'success', statusCode: 200,
+      metadata: { inquiryId: inquiry.id },
+      ip: getClientIP(req), userAgent: getUA(req),
+    })
 
     return new Response(
       JSON.stringify({ success: true }),
