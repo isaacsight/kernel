@@ -30,6 +30,7 @@ export interface LLMOpts {
     web_search?: boolean
     signal?: AbortSignal
     tools?: Record<string, unknown>[]  // tool schemas for providers that support native tool use
+    streak?: number      // companion streak days — server uses for free-tier bonus
 }
 
 // ─── Chat Message ─────────────────────────────────────────────

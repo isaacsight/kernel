@@ -15,8 +15,11 @@ i18n
     fallbackLng: 'en',
     supportedLngs: SUPPORTED,
     load: 'currentOnly',
-    ns: ['common', 'home', 'auth', 'onboarding', 'panels', 'kernel'],
+    // Only load 'common' at startup — other namespaces load on demand when
+    // components call useTranslation('home') etc. Cuts 5 HTTP requests from cold start.
+    ns: ['common'],
     defaultNS: 'common',
+    partialBundledLanguages: true,
     backend: {
       loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
     },

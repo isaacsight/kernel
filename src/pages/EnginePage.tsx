@@ -106,18 +106,25 @@ export function EnginePage() {
 
 // ─── Helpers ─────────────────────────────────────────────
 
+const AGENT_PALETTES: Record<string, { particle: string; link: string; field: string }> = {
+  kernel:     { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },  // amethyst
+  researcher: { particle: '#5B8BA0', link: '#7CB4CC', field: '#A8D4E8' },  // slate blue
+  coder:      { particle: '#6B8E6B', link: '#8FBD8F', field: '#B8D8B5' },  // sage green
+  writer:     { particle: '#B8875C', link: '#D4A774', field: '#E8C494' },  // warm brown
+  analyst:    { particle: '#A0768C', link: '#C096AC', field: '#D8B0C4' },  // mauve
+  aesthete:   { particle: '#F472B6', link: '#F9A8D4', field: '#FBCFE8' },  // pink
+  guardian:   { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },  // emerald
+  curator:    { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },  // violet
+  strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },  // amber
+}
+
 function agentPalette(idOrName: string): { particle: string; link: string; field: string } {
-  // Accept agent ID or display name
-  let s = getSpecialist(idOrName)
-  if (s.id === 'kernel' && idOrName !== 'kernel' && idOrName !== 'Kernel') {
-    const byName = getAllSpecialists().find(a => a.name === idOrName)
-    if (byName) s = byName
-  }
-  const c = s.color
-  const r = parseInt(c.slice(1, 3), 16), g = parseInt(c.slice(3, 5), 16), b = parseInt(c.slice(5, 7), 16)
-  const link = `#${[r, g, b].map(v => Math.min(255, v + 40).toString(16).padStart(2, '0')).join('')}`
-  const field = `#${[r, g, b].map(v => Math.min(255, v + 80).toString(16).padStart(2, '0')).join('')}`
-  return { particle: c, link, field }
+  // Try direct ID lookup first
+  if (AGENT_PALETTES[idOrName]) return AGENT_PALETTES[idOrName]
+  // Try by display name
+  const byName = getAllSpecialists().find(a => a.name === idOrName)
+  if (byName && AGENT_PALETTES[byName.id]) return AGENT_PALETTES[byName.id]
+  return AGENT_PALETTES.kernel
 }
 
 function getTimeGreeting(): string {
@@ -742,6 +749,7 @@ function EngineChat() {
               size={160}
               interactive={false}
               energetic
+              progressive
               palette={cyclingPalette ?? undefined}
             />
             <span className="ka-loading-label">Loading...</span>

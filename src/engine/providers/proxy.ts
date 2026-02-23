@@ -83,6 +83,7 @@ export async function callLLMProxy(
             max_tokens: opts?.max_tokens ?? 4096,
             messages: messages.map(m => ({ role: m.role, content: m.content })),
             web_search: opts?.web_search ?? false,
+            ...(opts?.streak != null ? { streak: opts.streak } : {}),
         }),
         signal: opts?.signal,
     }
@@ -133,6 +134,7 @@ export async function streamFromProxy(
             max_tokens: opts?.max_tokens ?? 4096,
             messages: messages.map(m => ({ role: m.role, content: m.content })),
             web_search: opts?.web_search ?? false,
+            ...(opts?.streak != null ? { streak: opts.streak } : {}),
         }),
         signal: opts?.signal,
     }

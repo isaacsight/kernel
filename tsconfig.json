@@ -31,7 +31,9 @@
     ],
     "exclude": [
         "src/engine/tools/mcp.ts",
-        "src/engine/tools/memory.ts"
+        "src/engine/tools/memory.ts",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx"
     ],
     "references": [
         {
