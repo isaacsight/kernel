@@ -15,11 +15,14 @@ export interface AuthState {
   isAuthenticated: boolean;
   isSubscribed: boolean;
   isAdmin: boolean;
+  isPasswordRecovery: boolean;
 
   signInWithProvider: (provider: Provider) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
+  updatePassword: (password: string) => Promise<{ error: string | null }>;
+  clearPasswordRecovery: () => void;
   signOut: () => Promise<void>;
   refreshSubscription: () => Promise<boolean>;
 }
@@ -29,6 +32,7 @@ export function useAuth(): AuthState {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
   const isAdmin = checkIsAdmin(user);
 
@@ -95,10 +99,10 @@ export function useAuth(): AuthState {
           console.log('[Auth] getSession:', s?.user?.email ?? 'no session');
           setSession(s);
           setUser(s?.user ?? null);
+          // Unblock rendering immediately — subscription check runs in background
+          setIsLoading(false);
           if (s?.user) {
-            checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
-          } else {
-            setIsLoading(false);
+            checkSubscription();
           }
         })
         .catch((err) => {
@@ -111,6 +115,9 @@ export function useAuth(): AuthState {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, s) => {
       if (!mounted) return;
       console.log('[Auth] onAuthStateChange:', event, s?.user?.email ?? 'no user');
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true);
+      }
       setSession(s);
       // Only update user if ID changed (prevents infinite re-render from new object refs)
       setUser(prev => prev?.id === s?.user?.id ? prev : (s?.user ?? null));
@@ -165,6 +172,16 @@ export function useAuth(): AuthState {
     setSession(null);
   }, []);
 
+  const updatePassword = useCallback(async (password: string) => {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (!error) setIsPasswordRecovery(false);
+    return { error: error?.message ?? null };
+  }, []);
+
+  const clearPasswordRecovery = useCallback(() => {
+    setIsPasswordRecovery(false);
+  }, []);
+
   const refreshSubscription = useCallback(async (): Promise<boolean> => {
     return checkSubscription();
   }, [checkSubscription]);
@@ -176,10 +193,13 @@ export function useAuth(): AuthState {
     isAuthenticated: !!user,
     isSubscribed: isSubscribed || isAdmin,
     isAdmin,
+    isPasswordRecovery,
     signInWithProvider,
     signInWithEmail,
     signUpWithEmail,
     resetPassword,
+    updatePassword,
+    clearPasswordRecovery,
     signOut,
     refreshSubscription,
   };
