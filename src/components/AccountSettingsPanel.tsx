@@ -117,6 +117,30 @@ export default function AccountSettingsPanel({
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
+          {/* Current password (re-auth) — only shown for users with a password */}
+          {settings.hasPassword && (
+            <>
+              <label className="ka-settings-field">
+                <span className="ka-settings-label">{t('security.currentPassword')}</span>
+                <input
+                  className="ka-gate-input"
+                  type="password"
+                  value={settings.currentPassword}
+                  onChange={e => settings.setCurrentPassword(e.target.value)}
+                  placeholder={t('security.currentPasswordPlaceholder')}
+                  autoComplete="current-password"
+                />
+              </label>
+              {settings.reAuthState.error && (
+                <p className="ka-gate-error">
+                  {settings.reAuthState.error === 'currentRequired' ? t('security.currentRequired') :
+                   settings.reAuthState.error === 'wrongPassword' ? t('security.wrongPassword') :
+                   settings.reAuthState.error}
+                </p>
+              )}
+            </>
+          )}
+
           {/* Change Email */}
           <label className="ka-settings-field">
             <span className="ka-settings-label">{t('security.changeEmail')}</span>
@@ -147,6 +171,7 @@ export default function AccountSettingsPanel({
                   value={settings.newPassword}
                   onChange={e => settings.setNewPassword(e.target.value)}
                   placeholder={t('security.newPasswordPlaceholder')}
+                  autoComplete="new-password"
                 />
               </label>
               <label className="ka-settings-field">
@@ -156,6 +181,7 @@ export default function AccountSettingsPanel({
                   value={settings.confirmPassword}
                   onChange={e => settings.setConfirmPassword(e.target.value)}
                   placeholder={t('security.confirmPasswordPlaceholder')}
+                  autoComplete="new-password"
                 />
               </label>
               {settings.passwordState.error && (
@@ -180,6 +206,7 @@ export default function AccountSettingsPanel({
                   value={settings.newPassword}
                   onChange={e => settings.setNewPassword(e.target.value)}
                   placeholder={t('security.newPasswordPlaceholder')}
+                  autoComplete="new-password"
                 />
               </label>
               <label className="ka-settings-field">
@@ -189,6 +216,7 @@ export default function AccountSettingsPanel({
                   value={settings.confirmPassword}
                   onChange={e => settings.setConfirmPassword(e.target.value)}
                   placeholder={t('security.confirmPasswordPlaceholder')}
+                  autoComplete="new-password"
                 />
               </label>
               {settings.passwordState.error && (

@@ -470,6 +470,14 @@ function EngineChat() {
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
 
+  // Compute last kernel message index for lazy auto-preview
+  const lastKernelIndex = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'kernel') return i
+    }
+    return -1
+  }, [messages])
+
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -970,7 +978,7 @@ function EngineChat() {
                       <button type="button" className="ka-edit-cancel" onClick={() => { msgActions.setEditingMsgId(null); msgActions.setEditingContent('') }}>{t('feedback.cancel')}</button>
                     </form>
                   ) : msg.content ? (
-                    msg.role === 'kernel' ? <MessageContent text={msg.content} /> : <Linkify text={msg.content} />
+                    msg.role === 'kernel' ? <MessageContent text={msg.content} isLatestMessage={i === lastKernelIndex} /> : <Linkify text={msg.content} />
                   ) : (
                     <div className="ka-typing-grid">
                       <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
