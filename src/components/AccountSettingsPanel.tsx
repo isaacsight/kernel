@@ -106,6 +106,16 @@ export default function AccountSettingsPanel({
               placeholder={t('profile.displayNamePlaceholder')}
             />
           </label>
+          <label className="ka-settings-field">
+            <span className="ka-settings-label">{t('profile.username')}</span>
+            <input
+              className="ka-gate-input"
+              type="text"
+              value={settings.username}
+              onChange={e => settings.setUsername(e.target.value)}
+              placeholder={t('profile.usernamePlaceholder')}
+            />
+          </label>
           {settings.profileState.error && <p className="ka-gate-error">{settings.profileState.error}</p>}
           {settings.profileState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
           <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>

@@ -16,7 +16,7 @@ export function useAccountSettings(
     updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>
     updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>
     reauthenticate: () => Promise<{ error: string | null }>
-    updateProfile: (data: { display_name?: string; avatar_url?: string }) => Promise<{ error: string | null }>
+    updateProfile: (data: { display_name?: string; username?: string; avatar_url?: string }) => Promise<{ error: string | null }>
     getUserIdentities: () => UserIdentity[]
     linkIdentity: (provider: Provider) => Promise<void>
     unlinkIdentity: (identity: UserIdentity) => Promise<{ error: string | null }>
@@ -24,12 +24,14 @@ export function useAccountSettings(
 ) {
   // ─── Profile ──────────────────────────────────────
   const [displayName, setDisplayName] = useState('')
+  const [username, setUsername] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
   const [profileState, setProfileState] = useState<SectionState>(INITIAL_SECTION)
 
   useEffect(() => {
     if (user) {
       setDisplayName(user.user_metadata?.display_name || user.user_metadata?.full_name || '')
+      setUsername(user.user_metadata?.username || '')
       setAvatarUrl(user.user_metadata?.avatar_url || '')
     }
   }, [user])
@@ -38,6 +40,7 @@ export function useAccountSettings(
     setProfileState({ loading: true, error: null, success: null })
     const { error } = await auth.updateProfile({
       display_name: displayName.trim(),
+      username: username.trim(),
       avatar_url: avatarUrl,
     })
     if (error) {
@@ -46,7 +49,7 @@ export function useAccountSettings(
       setProfileState({ loading: false, error: null, success: 'saved' })
       setTimeout(() => setProfileState(s => ({ ...s, success: null })), 3000)
     }
-  }, [displayName, avatarUrl, auth])
+  }, [displayName, username, avatarUrl, auth])
 
   const uploadAvatar = useCallback(async (file: File) => {
     if (!user) return
@@ -196,6 +199,7 @@ export function useAccountSettings(
   return {
     // Profile
     displayName, setDisplayName,
+    username, setUsername,
     avatarUrl, setAvatarUrl,
     profileState, saveProfile, uploadAvatar,
     // Verification

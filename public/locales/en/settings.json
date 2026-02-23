@@ -4,13 +4,15 @@
     "heading": "Profile",
     "displayName": "Display name",
     "displayNamePlaceholder": "Your name",
+    "username": "Username",
+    "usernamePlaceholder": "@username",
     "avatar": "Profile photo",
     "avatarChange": "Change",
     "save": "Save profile",
     "saved": "Profile saved"
   },
   "security": {
-    "heading": "Security",
+    "heading": "Reset password & email",
     "verifyIdentity": "Verify your identity",
     "verifyHint": "A verification code will be sent to your email before making changes",
     "sendCode": "Send verification code",

@@ -24,7 +24,7 @@ export interface AuthState {
   updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>;
   updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>;
   reauthenticate: () => Promise<{ error: string | null }>;
-  updateProfile: (data: { display_name?: string; avatar_url?: string }) => Promise<{ error: string | null }>;
+  updateProfile: (data: { display_name?: string; username?: string; avatar_url?: string }) => Promise<{ error: string | null }>;
   getUserIdentities: () => UserIdentity[];
   linkIdentity: (provider: Provider) => Promise<void>;
   unlinkIdentity: (identity: UserIdentity) => Promise<{ error: string | null }>;
@@ -203,7 +203,7 @@ export function useAuth(): AuthState {
     return { error: error?.message ?? null };
   }, []);
 
-  const updateProfile = useCallback(async (data: { display_name?: string; avatar_url?: string }) => {
+  const updateProfile = useCallback(async (data: { display_name?: string; username?: string; avatar_url?: string }) => {
     const { data: result, error } = await supabase.auth.updateUser({ data });
     if (!error && result.user) setUser(result.user);
     return { error: error?.message ?? null };
