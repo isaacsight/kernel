@@ -4,144 +4,105 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-20, continued)
+## Current Session (2026-02-22, late)
 
 ### Accomplished This Session
 
-#### Visual Identity — Ink Drop Mark + Platform Polish
+#### Dark Mode Header Fix
+- Burger menu (`.ka-menu-btn`) and header icon buttons (`.ka-header-icon-btn`) were invisible in dark mode — inherited dark color against dark background
+- Added `[data-theme="dark"]` override: `color: var(--dark-text)` for both selectors
+- Entity animation refinements also included (garden creature, warmer palette, smoother easing, idle wiggle — previously unstaged)
+- Committed `25775e83`, deployed to kernel.chat
+
+---
+
+## Previous Session (2026-02-22, earlier)
+
+### Accomplished
+
+#### ChatGPT Conversation Import
+- **Import modal**: link-only input for ChatGPT share URLs (no tabs/paste — simplified per user request)
+- **Edge function** (`import-conversation`): accepts `url` param, fetches ChatGPT backend API JSON, falls back to HTML parsing + Haiku extraction
+- **DB migration**: added `metadata` JSONB column to `conversations` table (was missing, caused PGRST204 error)
+- **Session fix**: `createConversation` now calls `refreshSession()` proactively before insert
+- **Error surfacing**: `createConversation` throws with actual Supabase error (code + message) instead of returning null silently. `forkSharedConversation` throws too. All callers updated.
+- **Resilience**: 32KB content truncation per message, batch inserts (50 at a time)
+- **Modal centering**: Framer Motion `y` prop was overwriting CSS `translate(-50%, -50%)` — fixed by using `calc(-50% + 20px)` in motion values
+- **HTTPS enforcement**: re-enabled on GitHub Pages (was unchecked, causing mixed content "Failed to fetch" errors)
+- 6 commits: `b47057e4` → `4627c690`, all pushed to origin/main
+
+#### 16-bit Garden Creature Upgrade
+- **Shape redesign**: angular angel → round friendly garden blob with two eyes at all tiers, sprout/flower/leaf theme
+- **16-bit CSS**: all pixels now use `linear-gradient` fills with `box-shadow` inner highlight/shadow for depth
+- **Eye sparkles**: new `eye-light` variant — 3px white dots inside each eye with shimmer animation
+- **Eyes**: `radial-gradient` rendering with warm depth + inner highlight
+- **Sprout/leaves/particles/glow**: all upgraded with gradient fills and ambient shadows
+- **Smooth animations**: removed all `steps()` timing → `ease-in-out` / `ease-out` throughout
+- **Dark mode**: all 16-bit variants have matching gradient dark mode styles
+- **Core/Crown/Notif**: radial gradients, topic-colored glow, gradient gold crown
+- **Idle wiggle**: random 6-12s happy shimmy via JS class toggle
+- Committed as `d3d18b94`, deployed to kernel.chat, pushed to origin/main
+
+#### Entity Evolution System (P15) — earlier this session
+- 3 new files: `pixelGrids.ts`, `useEntityEvolution.ts`, `PixelEntity.tsx`
+- EnginePage: replaced ~85 lines inline pixel JSX with `<PixelEntity />`
+- 5 tiers, 6 topic domains, transient states (time-of-day, goals, activity, briefing, pro)
+- 24 new tests — 345 total passing
+- Committed as `d5b984ff`
+
+---
+
+## Previous Session (2026-02-20, continued)
+
+### Accomplished
+
+#### Visual Identity — Ink Drop Mark + Platform Polish (P13)
 - Updated all logo SVGs with V4 Ink Drop mark (sepia stroke, italic amethyst K, seed dot)
 - Regenerated PNG icons (192 + 512)
-- Standardized emblem strokes (1.5/1/0.5 hierarchy)
-- Boosted hero-darkmode.svg visibility
-- Design audit: found + fixed missing dark mode overrides for danger classes
-- Accessibility: 17 aria-hidden additions on decorative icons across 9 components
+- Accessibility: 17 aria-hidden additions across 9 components
 - Code-splitting: lazy-loaded LoginGate (504KB → 499KB)
-- Component tests: 21 new tests (BottomTabBar, MoreMenu, useDarkMode) — 234 total passing
-- Performance audit: PASS (161KB gzip JS, 23KB gzip CSS, 6.1s build)
+- Component tests: 21 new tests — 234 total passing
 
 #### Visual Identity Audit & CSS Token System (P14)
-- **Indigo → Amethyst**: Replaced `--rubin-primary: #6366F1` → `#6B5B95` across 37 instances (CSS, agents, components). All `rgba(99,102,241)` → `rgba(107,91,149)`. Dark mode `#818CF8` → `#8B7BB5`.
-- **Spacing scale**: Defined `--space-xs` through `--space-4xl` (8 tokens). ~280 replacements (gap, padding, margin).
-- **Dark mode variables**: Defined 8 `--dark-*` tokens. Replaced all hardcoded `#1a1a1a`, `#0f0f0f`, `#e8e6e3`, `#333` in dark selectors.
-- **MediaRenderer.tsx**: Migrated from Tailwind to vanilla CSS with 12 `ka-media-*` classes. Zero Tailwind in codebase.
-- **Border radius**: Added `--radius-xs: 3px`, replaced 16 hardcoded small radii.
-- **`background: #fff`** → `var(--rubin-ivory)` (5 instances).
-- **CLAUDE.md**: Updated specialist color table to match Rubin palette.
-- **User refinements**: Optical kerning (`text-rendering: optimizeLegibility`), fluid spacing (`clamp()`), calm micro-interactions (pressed paper hover effect), invisible scrollbars.
-- Build: PASS (499KB JS, 2.18s). Tests: 234/234 PASS.
-- Deployed 4 times: `6ee28dd5`, `d1b0a5b4`, `d934c3ee`, `d8f611e0`
+- Indigo → Amethyst across 37 instances
+- Spacing scale (8 tokens), dark mode variables (8 tokens), border radius tokens
+- MediaRenderer: Tailwind → vanilla CSS. Zero Tailwind in codebase.
+- Optical kerning, fluid spacing, calm micro-interactions
 
 ---
-
-## Previous Session (2026-02-20, morning)
-
-### Accomplished
-
-#### Design Overhaul — "The Rubin Evolution" (P12)
-Full 5-phase design overhaul committing to the literary-minimalist direction.
-
-**Phase 1: Design Token Foundation**
-- Extended Rubin palette: `--rubin-ivory-warm`, `--rubin-sepia`, `--rubin-ink`, `--rubin-ink-faint/light`
-- Muted watercolor agent colors: kernel `#6B5B95`, researcher `#5B8BA0`, coder `#6B8E6B`, writer `#C4956A`, analyst `#A0768C`
-- Typography tokens: letter-spacing scale (tight/normal/wide/caps), line-height scale (tight/normal/relaxed)
-- Body: 20px (was 22px), `font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1` (old-style numerals)
-- Added `--ease-spring`, `--duration-instant`, `--radius-lg` → 20px
-- Updated all 5 specialist colors in `specialists.ts`
-
-**Phase 2: Dark Mode — "Lamplight Reading"**
-- Replaced ALL cool grays with warm browns: `#1C1A18` base (was `#1A1A1A`), `#262320` surface, `#36322E` elevated
-- Gold accent `#C4A882` for input focus, drag handles, dividers
-- Warm message bubbles: kernel `#282520`, user `#332F2A`, with sepia-tinted borders
-- Dark agent colors slightly more luminous (e.g. kernel `#8B7BB5`)
-- Ambient vignette: `radial-gradient` pseudo-element on `.ka-chat` (pointer-events: none)
-- Updated 30+ dark mode selectors (tabs, menus, stats, conversations, popover, gate auth)
-
-**Phase 3: Panel Unification**
-- Enhanced `.ka-panel-header`: sepia border-bottom, italic serif title (font-weight 400), `svg { opacity: 0.5 }`, close button with hover background
-- Migrated 4 panels to shared classes: GoalsPanel, WorkflowsPanel, ScheduledTasksPanel, BriefingPanel
-- Bottom sheet: `max-width: 520px` (was 480), `padding: 24px` (was 20), `border-radius: var(--radius-lg)`
-- Drag handle: 40px wide, 4px tall (was 56/6)
-- Empty state: italic serif title, serif description (was mono), uppercase mono CTA with sepia border
-
-**Phase 5: Chat Experience**
-- Ink-appear animation: `blur(1px)→blur(0)` + `translateY(6px)→0` on kernel messages
-- Literary monogram avatars: 28px outlined circle, serif italic letter, agent-specific border/color via `data-agent` attribute
-- Kernel bubble: `var(--rubin-ink-faint)` background, `border-radius: var(--radius-sm)` (subtle, near-transparent)
-- Typing indicator: 4px dots (was 6), accent color (was slate), slower 1.6s (was 1.2s)
-- Thinking indicator: manuscript annotation style — transparent bg, left accent border, serif italic text
-
-**Phase 4: Home Screen**
-- Monogram icon: 48px outlined circle (was 64px filled), serif italic "K", accent-colored
-- Title: italic, 1.8rem, tight letter-spacing
-- Time-of-day greeting: "Good morning/afternoon/evening" — serif italic, opacity 0.5
-- Recent context cards: top 2 conversations as clickable cards with relative time
-- Topic pills: transparent background (was filled), sepia border, uppercase, wide letter-spacing
-- Briefing card: accent left border (3px)
-
-**Commit & Deploy**
-- **`2329ec4f`** — feat: Design overhaul — "The Rubin Evolution"
-- Deployed to kernel.chat
-- Playwright visual verification at 390×844 (iPhone 14) — light + dark mode: home, chat, panel
-
-### Files Modified
-| File | Changes |
-|------|---------|
-| `src/index.css` | All 5 phases — tokens, dark mode, panels, home, chat |
-| `src/agents/specialists.ts` | 5 agent color updates |
-| `src/pages/EnginePage.tsx` | `data-agent` attr, greeting helper, recent context cards |
-| `src/components/GoalsPanel.tsx` | Panel class migration |
-| `src/components/WorkflowsPanel.tsx` | Panel class migration |
-| `src/components/ScheduledTasksPanel.tsx` | Panel class migration |
-| `src/components/BriefingPanel.tsx` | Panel class migration |
-
----
-
-## Previous Session (2026-02-20, late night)
-
-### Accomplished
-- Mobile UI/UX Audit & Fixes (P11) — 11 fixes: bottom cutoff, dark mode contrast, panel headers, tabs, more menu, topic pills, briefing markdown, drawer actions
-- i18n Extraction — ErrorBoundary, MessageContent, meta tags
-- Writing Audit (P8) — canonical vocabulary, warm tone, i18n extraction
-- `a497297c`, `c301174d`, `2032a2f8` — pushed and deployed
 
 ## Previous Sessions (2026-02-17 to 2026-02-20)
 
 ### Accomplished
-- Writing Audit, Usage Cost Tracking, Auto Model Selection (P8–P10)
-- Artifact System Overhaul, Agent Audit & Cleanup (P6–P7)
-- Dark Mode Audit & Fixes (~70% → ~95% coverage)
-- Haiku-based Reflection Scorer, Test Suite (184 tests), InsightsPanel, 24 locales
-- Feature Discovery, Discord Bot, Stripe Webhooks, Mobile UX Polish
+- P12: Design overhaul — "The Rubin Evolution" (tokens, dark mode, panels, chat, home)
+- P11: Mobile UI/UX audit & fixes (11 items)
+- P8–P10: Writing audit, usage cost tracking, auto model selection
+- P6–P7: Artifact system overhaul, agent audit & cleanup
+- P1–P5: Dark mode, reflection scorer, test suite, InsightsPanel, i18n, feature discovery, Discord bot, Stripe webhooks
 
 ---
 
 ## Ongoing Backlog
 
-- **P1–P11**: All DONE
-- **P12: Design overhaul** — DONE ("The Rubin Evolution" — tokens, dark mode, panels, chat, home)
-- **P13: Platform polish** — DONE (icons, accessibility, code-splitting, tests, perf audit)
-- **P14: Visual identity audit** — DONE (indigo→amethyst, spacing tokens, dark mode vars, Tailwind removal, radius tokens, optical kerning, fluid spacing)
+- **P1–P15**: All DONE
+- **ChatGPT import**: DONE (link-only, ChatGPT backend API → preview → import)
 - **Next candidates**: Onboarding flow redesign, conversation search, animation token system
+- **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content). Would require headless browser to fix.
 
 ## Key Decisions Made
 
-- Bottom-sheet pattern for all panels (Goals, Workflows, Scheduled, Briefings, Insights)
-- Haiku-based progress extraction for goals (every 3 messages)
+- ChatGPT import uses `/backend-api/share/{id}` JSON endpoint (public, no auth needed)
+- Import modal: link-only, no paste tab (user preference)
+- `conversations` table has `metadata` JSONB column for import source tracking
+- `createConversation` throws on error (not silent null return) — all callers use try/catch
+- Entity evolution score: log2-based, 3 signals (conversations 40%, KG 35%, goals 25%)
+- Tiers are additive — higher tiers render all lower-tier pixels plus new ones
+- 16-bit aesthetic: gradient fills, inner highlight/shadow box-shadows, radial gradients for eyes/core
+- All animations use smooth easing (no steps()) — organic garden feel
+- Topic color applied via CSS custom properties + `color-mix()` for gradual bleed
+- Bottom-sheet pattern for all panels
 - AgentRouter (Haiku) is single source of truth; keyword matching is minimal fallback
-- AgentSelection uses SPECIALISTS directly (not swarm mapping) when router confidence >= 0.7
-- Auto-artifact: >= 8 lines + known language → inferred filename → artifact card
-- Dynamic filename extraction from user messages for explicit ordering
-- Dark mode: warm brown undertones throughout, never cool gray — "lamplight reading" principle
-- Ambient vignette in dark mode for reading-lamp peripheral dimming effect
-- Reflection scorer: 60/40 AI/heuristic blend, rubric system prompt, intent-aware weights
-- Free tier: 10 messages (enforced in claude-proxy edge function)
+- Dark mode: warm brown undertones, never cool gray — "lamplight reading" principle
 - Auto model selection: complexity >= 0.85 → Opus, <= 0.2 → Haiku, else Sonnet
-- Usage tracking: fire-and-forget INSERT after every API call, $5/day Discord alert
+- Zero Tailwind — all vanilla CSS with `ka-` prefix and Rubin design tokens
 - Edge function deploys: ALWAYS use `--no-verify-jwt` flag
-- Writing audit canonical vocabulary: "Kernel", "Deep research", "Persistent memory", "10 messages to start"
-- Shared `.ka-panel-header` CSS with italic serif titles, sepia dividers — all panels unified
-- Agent avatars: outlined circle monograms with agent-specific colors (not filled circles)
-- Kernel messages: ink-appear animation (blur + translate), near-transparent background
-- Topic pills: transparent + sepia border + uppercase mono (not filled background)
-- Mobile conv drawer: hide actions by default, show only on active item (no hover on touch)
-- More menu: needs max-height + overflow-y for scrollable content on small screens

@@ -47,7 +47,7 @@ describe('pixelGrids — topic variants', () => {
   })
 
   it('all tiers have minimum pixel count', () => {
-    const minByTier = [10, 15, 5, 5, 5] // tier 0 needs body, eyes; higher tiers add fewer
+    const minByTier = [25, 5, 5, 5, 5] // tier 0 has outline+body (29); higher tiers add fewer
     for (const topic of ALL_TOPICS) {
       const pixels = ENTITY_PIXELS_BY_TOPIC[topic]
       for (let tier = 0; tier < TIER_THRESHOLDS.length; tier++) {
@@ -68,6 +68,7 @@ describe('pixelGrids — topic variants', () => {
           // Core/crown can overlap body pixels (intentional replacement)
           if (p.variant === 'core' || p.variant === 'crown') continue
           if (p.variant === 'eye-light') continue // sparkles overlay eyes
+          if (p.variant === 'outline') continue // outline ring surrounds body
           expect(positions.has(key), `${topic} tier ${tier} duplicate at ${key}`).toBe(false)
           positions.add(key)
         }
