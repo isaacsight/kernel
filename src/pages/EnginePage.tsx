@@ -193,6 +193,33 @@ function EngineChat() {
     isPro,
   })
 
+  // ─── Companion mood wiring ──────────────────────────────
+  // Record conversation when messages grow (user sent a message)
+  const prevMsgCountRef = useRef(chatEngine.messages.length)
+  useEffect(() => {
+    const count = chatEngine.messages.length
+    if (count > prevMsgCountRef.current && count > 0) {
+      // Only record when a new user message is added
+      const lastMsg = chatEngine.messages[count - 1]
+      if (lastMsg?.role === 'user') {
+        evolution.companion.recordConversation()
+      }
+    }
+    prevMsgCountRef.current = count
+  }, [chatEngine.messages.length]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Record goal completion
+  const prevGoalsDoneRef = useRef(
+    chatEngine.userGoals.filter(g => g.status === 'completed').length,
+  )
+  useEffect(() => {
+    const done = chatEngine.userGoals.filter(g => g.status === 'completed').length
+    if (done > prevGoalsDoneRef.current) {
+      evolution.companion.recordGoalComplete()
+    }
+    prevGoalsDoneRef.current = done
+  }, [chatEngine.userGoals]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const scroll = useScrollTracking(chatEngine.messages.length)
 
   const { isListening, toggleVoice } = useVoiceInput(

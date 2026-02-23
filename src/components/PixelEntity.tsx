@@ -2,10 +2,13 @@
 //
 // Renders the correct tier's pixels from pixelGrids data,
 // applies evolution CSS vars/data-attrs, handles tap interaction.
-// Replaces the inline pixel JSX that was in EnginePage.
+// Mood expressions (mouth, thought bubbles) layered on top.
+// Accessories rendered as pixel overlays.
 
-import { useRef, useCallback, useEffect } from 'react'
-import { ENTITY_PIXELS, GROUND_GLOW, PARTICLES } from './pixelGrids'
+import { useRef, useCallback, useEffect, useMemo } from 'react'
+import { ENTITY_PIXELS, GROUND_GLOW, PARTICLES, ENTITY_PIXELS_BY_TOPIC } from './pixelGrids'
+import { getExpression } from './pixelExpressions'
+import { getEquippedAccessoryPixels } from './pixelAccessories'
 import type { EntityEvolutionState } from '../hooks/useEntityEvolution'
 
 interface PixelEntityProps {
@@ -20,7 +23,8 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
     if (!el || el.classList.contains('ka-entity--react')) return
     el.classList.add('ka-entity--react')
     setTimeout(() => el.classList.remove('ka-entity--react'), 700)
-  }, [])
+    evolution.companion.petCreature()
+  }, [evolution.companion])
 
   // Idle wiggle — periodic happy shimmy every 6-12s
   useEffect(() => {
@@ -39,10 +43,13 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
     return () => clearTimeout(timerId)
   }, [])
 
-  const { tier, cssVars, dataAttrs } = evolution
+  const { tier, cssVars, dataAttrs, moodState, topic } = evolution
+
+  // Select topic-specific pixel grid (fallback to default garden)
+  const topicPixels = ENTITY_PIXELS_BY_TOPIC[topic] || ENTITY_PIXELS
 
   // Filter pixels visible at current tier
-  const visibleBody = ENTITY_PIXELS.filter(p => p.tier <= tier)
+  const visibleBody = topicPixels.filter(p => p.tier <= tier)
   const visibleGlow = GROUND_GLOW.filter(p => p.tier <= tier)
   const visibleParticles = PARTICLES.filter(p => p.tier <= tier)
 
@@ -56,12 +63,21 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
     }
   }
 
+  // Mood expression overlays
+  const expression = useMemo(() => getExpression(moodState), [moodState])
+
+  // Equipped accessories
+  const accessoryPixels = useMemo(
+    () => getEquippedAccessoryPixels(evolution.companion.tapCount, tier, evolution.companion.streak),
+    [evolution.companion.tapCount, tier, evolution.companion.streak],
+  )
+
   return (
     <div
       className="ka-empty-constellation"
       onClick={handleTap}
       role="img"
-      aria-label={`Kernel entity — ${evolution.tierName}`}
+      aria-label={`Kernel entity — ${evolution.tierName}, feeling ${moodState}`}
       style={cssVars as React.CSSProperties}
       {...dataAttrs}
     >
@@ -98,6 +114,24 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
           )
         })}
 
+        {/* Mood mouth pixels */}
+        {expression.mouthPixels.map((p, i) => (
+          <span
+            key={`m${i}`}
+            className={`ka-pixel ka-pixel--${p.variant}`}
+            style={{ left: p.x, top: p.y }}
+          />
+        ))}
+
+        {/* Accessory pixels */}
+        {accessoryPixels.map((p: { x: number; y: number; variant: string }, i: number) => (
+          <span
+            key={`acc${i}`}
+            className={`ka-pixel ka-pixel--${p.variant}`}
+            style={{ left: p.x, top: p.y }}
+          />
+        ))}
+
         {/* Notification pixel — briefing indicator near sprout */}
         {evolution.hasUnreadBriefing && tier >= 1 && (
           <span
@@ -106,6 +140,15 @@ export function PixelEntity({ evolution }: PixelEntityProps) {
           />
         )}
       </div>
+
+      {/* Thought bubble — mood-specific floating symbols */}
+      {expression.thoughtBubble.map((p, i) => (
+        <span
+          key={`t${i}`}
+          className={`ka-pixel--${p.variant}`}
+          style={{ left: p.x + 55, top: p.y + 30 }}
+        />
+      ))}
 
       {/* Ground glow */}
       {visibleGlow.map((p, i) => (
