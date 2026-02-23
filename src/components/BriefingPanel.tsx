@@ -35,8 +35,14 @@ function estimateReadingTime(text: string): number {
 
 /** Ensure markdown headings have proper newline separation */
 function normalizeMarkdown(text: string): string {
-  // Ensure ## headings are preceded by a blank line (required for markdown parsers)
-  return text.replace(/([^\n])\n(#{1,6}\s)/g, '$1\n\n$2')
+  return text
+    // Strip Windows-style carriage returns
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    // Ensure ## headings are preceded by a blank line (required for markdown parsers)
+    .replace(/([^\n])\n(#{1,6}\s)/g, '$1\n\n$2')
+    // Also handle headings with no newline at all before them
+    .replace(/([^\n\s])(#{1,6}\s)/g, '$1\n\n$2')
 }
 
 /** Truncate markdown content to approximately N words, breaking at paragraph boundaries */
@@ -257,7 +263,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 </div>
               )}
               <div className={`ka-brief-body${preview?.isTruncated ? ' ka-brief-body--faded' : ''}`}>
-                <MessageContent text={preview?.truncated || current.content} />
+                <MessageContent text={preview?.truncated || normalizeMarkdown(current.content)} />
               </div>
               <a
                 href={`${import.meta.env.BASE_URL}#/briefing/${current.id}`}
