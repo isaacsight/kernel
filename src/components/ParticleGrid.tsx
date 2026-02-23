@@ -91,8 +91,9 @@ function createParticle(cols: number, rows: number): Particle {
 function updateParticle(
   p: Particle, all: Particle[], cols: number, rows: number,
   mouseGx: number, mouseGy: number, mouseActive: boolean,
+  gravity = GRAVITY, damping = DAMPING,
 ) {
-  p.vy += GRAVITY
+  p.vy += gravity
   for (const o of all) {
     if (o === p) continue
     const dx = o.gx - p.gx, dy = o.gy - p.gy
@@ -117,8 +118,8 @@ function updateParticle(
       p.vy += (dy / d) * MOUSE_FORCE * falloff
     }
   }
-  p.vx *= DAMPING
-  p.vy *= DAMPING
+  p.vx *= damping
+  p.vy *= damping
   p.gx += p.vx
   p.gy += p.vy
   if (p.gx < 0.5) { p.gx = 0.5; p.vx *= -0.3 }
@@ -159,8 +160,18 @@ function buildGridImage(size: number, cols: number, rows: number, pal: Palette):
   return c
 }
 
-export function ParticleGrid() {
+interface ParticleGridProps {
+  palette?: { particle: string; link: string; field: string }
+  size?: number
+  interactive?: boolean
+  energetic?: boolean
+}
+
+export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive = true, energetic = false }: ParticleGridProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const propsRef = useRef({ paletteProp, energetic })
+  propsRef.current = { paletteProp, energetic }
+
   const stateRef = useRef<{
     particles: Particle[]
     gridImage: HTMLCanvasElement | null
@@ -181,7 +192,8 @@ export function ParticleGrid() {
     if (!canvas) return
     const container = canvas.parentElement
     if (!container) return
-    const raw = Math.min(container.clientWidth, container.clientHeight, 400)
+    const maxSize = sizeProp || 400
+    const raw = Math.min(container.clientWidth, container.clientHeight, maxSize)
     const size = Math.floor(raw / CELL) * CELL
     if (size < CELL) return
     canvas.width = size; canvas.height = size
@@ -191,7 +203,7 @@ export function ParticleGrid() {
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal)
     s.particles = Array.from({ length: PARTICLE_COUNT }, () => createParticle(cols, rows))
-  }, [])
+  }, [sizeProp])
 
   useEffect(() => {
     setup()
@@ -201,26 +213,36 @@ export function ParticleGrid() {
     if (!ctx) return
     const s = stateRef.current
 
-    const onMove = (e: MouseEvent) => {
-      const r = canvas.getBoundingClientRect()
-      s.mouseGx = (e.clientX - r.left) / CELL
-      s.mouseGy = (e.clientY - r.top) / CELL
-      s.mouseActive = true
-    }
-    const onLeave = () => { s.mouseActive = false }
-    const onTouch = (e: TouchEvent) => {
-      e.preventDefault()
-      const r = canvas.getBoundingClientRect()
-      s.mouseGx = (e.touches[0].clientX - r.left) / CELL
-      s.mouseGy = (e.touches[0].clientY - r.top) / CELL
-      s.mouseActive = true
-    }
-    const onTouchEnd = () => { s.mouseActive = false }
+    const cleanups: (() => void)[] = []
 
-    canvas.addEventListener('mousemove', onMove)
-    canvas.addEventListener('mouseleave', onLeave)
-    canvas.addEventListener('touchmove', onTouch, { passive: false })
-    canvas.addEventListener('touchend', onTouchEnd)
+    if (interactive) {
+      const onMove = (e: MouseEvent) => {
+        const r = canvas.getBoundingClientRect()
+        s.mouseGx = (e.clientX - r.left) / CELL
+        s.mouseGy = (e.clientY - r.top) / CELL
+        s.mouseActive = true
+      }
+      const onLeave = () => { s.mouseActive = false }
+      const onTouch = (e: TouchEvent) => {
+        e.preventDefault()
+        const r = canvas.getBoundingClientRect()
+        s.mouseGx = (e.touches[0].clientX - r.left) / CELL
+        s.mouseGy = (e.touches[0].clientY - r.top) / CELL
+        s.mouseActive = true
+      }
+      const onTouchEnd = () => { s.mouseActive = false }
+
+      canvas.addEventListener('mousemove', onMove)
+      canvas.addEventListener('mouseleave', onLeave)
+      canvas.addEventListener('touchmove', onTouch, { passive: false })
+      canvas.addEventListener('touchend', onTouchEnd)
+      cleanups.push(() => {
+        canvas.removeEventListener('mousemove', onMove)
+        canvas.removeEventListener('mouseleave', onLeave)
+        canvas.removeEventListener('touchmove', onTouch)
+        canvas.removeEventListener('touchend', onTouchEnd)
+      })
+    }
 
     const draw = () => {
       if (!s.gridImage || s.cols === 0) { s.raf = requestAnimationFrame(draw); return }
@@ -232,14 +254,24 @@ export function ParticleGrid() {
         s.gridImage = buildGridImage(s.size, s.cols, s.rows, s.pal)
       }
 
+      // Apply palette overrides from props (for color cycling)
+      const { paletteProp: pp, energetic: en } = propsRef.current
+      const drawPal = pp
+        ? { ...s.pal, particle: pp.particle, link: pp.link, field: pp.field }
+        : s.pal
+
       ctx.drawImage(s.gridImage, 0, 0)
 
+      const gravity = en ? GRAVITY * 1.5 : GRAVITY
+      const damping = en ? 0.99 : DAMPING
       for (let step = 0; step < SUB_STEPS; step++) {
-        for (const p of s.particles) updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive)
+        for (const p of s.particles) {
+          updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
+        }
       }
 
-      const { cols, rows, pal } = s
-      const { linkRgb: lr, fieldRgb: fr, bgRgb: br } = getPalRgb(pal)
+      const { cols, rows } = s
+      const { linkRgb: lr, fieldRgb: fr, bgRgb: br } = getPalRgb(drawPal)
       const fieldA = new Float32Array(cols * rows)
       const partA = new Float32Array(cols * rows)
       const linkA = new Float32Array(cols * rows)
@@ -303,10 +335,10 @@ export function ParticleGrid() {
             if (c) { ctx.fillStyle = c; ctx.fillRect(px, py, CELL, CELL) }
           }
           if (partA[idx] > 0.5) {
-            ctx.fillStyle = pal.particle
+            ctx.fillStyle = drawPal.particle
             ctx.fillRect(px, py, CELL, CELL)
             const inset = Math.floor(CELL / 3)
-            ctx.fillStyle = pal.key
+            ctx.fillStyle = drawPal.key
             ctx.fillRect(px + inset, py + inset, CELL - inset * 2, CELL - inset * 2)
           }
         }
@@ -322,13 +354,10 @@ export function ParticleGrid() {
 
     return () => {
       cancelAnimationFrame(s.raf)
-      canvas.removeEventListener('mousemove', onMove)
-      canvas.removeEventListener('mouseleave', onLeave)
-      canvas.removeEventListener('touchmove', onTouch)
-      canvas.removeEventListener('touchend', onTouchEnd)
+      cleanups.forEach(fn => fn())
       window.removeEventListener('resize', onResize)
     }
-  }, [setup])
+  }, [setup, interactive])
 
   return (
     <div className="ka-particle-grid">
