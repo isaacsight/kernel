@@ -211,7 +211,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
     const count = Math.min(PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * 0.4)))
-    const boost = cell < CELL ? 0.6 : 0.05
+    const boost = cell < CELL ? 0.08 : 0.05
     s.particles = Array.from({ length: count }, () => {
       // Small grids: spread across full area; large grids: center cluster
       const gx = cell < CELL
@@ -284,18 +284,18 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       const small = cell < CELL
       const gravity = en ? (small ? 0 : GRAVITY * 15) : GRAVITY
-      const damping = en && small ? 0.96 : en ? 0.998 : DAMPING
-      const subSteps = en && small ? SUB_STEPS : en ? SUB_STEPS * 3 : SUB_STEPS
+      const damping = en && small ? 0.92 : en ? 0.998 : DAMPING
+      const subSteps = en && small ? 1 : en ? SUB_STEPS * 3 : SUB_STEPS
       for (let step = 0; step < subSteps; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
         }
       }
-      // Small energetic grids: gentle drift keeps particles spread and fluid
+      // Small energetic grids: slow organic drift
       if (en && small) {
         for (const p of s.particles) {
-          p.vx += (Math.random() - 0.5) * 0.02
-          p.vy += (Math.random() - 0.5) * 0.02
+          p.vx += (Math.random() - 0.5) * 0.006
+          p.vy += (Math.random() - 0.5) * 0.006
         }
       }
 
