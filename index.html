@@ -66,35 +66,47 @@
   <script type="module" src="/src/main.tsx" onerror="window.__loadFailed=true"></script>
   <script>
     // Recovery: if the app JS fails to load (stale SW cache after deploy),
-    // clear all caches, unregister SW, and reload once.
-    window.addEventListener('error', function(e) {
-      if (e.filename && /assets\/.*\.js/.test(e.filename) && !sessionStorage.getItem('_recovered')) {
-        sessionStorage.setItem('_recovered', '1');
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(regs) {
-            regs.forEach(function(r) { r.unregister(); });
-          });
+    // clear all caches, unregister SW, and reload up to 3 times.
+    function _kernelRecover() {
+      var count = parseInt(sessionStorage.getItem('_rc') || '0', 10);
+      if (count >= 3) {
+        // Exhausted retries — show a manual reload prompt
+        var splash = document.getElementById('splash');
+        if (splash) {
+          splash.innerHTML = '<div style="text-align:center;max-width:280px">'
+            + '<div style="opacity:.35;font-size:15px;letter-spacing:.08em;margin-bottom:24px">kernel</div>'
+            + '<div style="font-size:14px;opacity:.6;margin-bottom:16px">Having trouble loading. Please clear your browser cache and reload.</div>'
+            + '<button onclick="sessionStorage.clear();location.reload()" style="font-family:inherit;font-size:14px;padding:10px 24px;border:1px solid #1F1E1D;border-radius:8px;background:none;color:#1F1E1D;cursor:pointer">Reload</button>'
+            + '</div>';
         }
-        caches.keys().then(function(names) {
-          names.forEach(function(n) { caches.delete(n); });
-        }).then(function() { location.reload(); });
+        return;
       }
+      sessionStorage.setItem('_rc', String(count + 1));
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          regs.forEach(function(r) { r.unregister(); });
+        });
+      }
+      caches.keys().then(function(names) {
+        names.forEach(function(n) { caches.delete(n); });
+      }).then(function() { location.reload(); });
+    }
+    // Catch JS asset load errors (404 on hashed bundles)
+    window.addEventListener('error', function(e) {
+      if (e.filename && /assets\/.*\.js/.test(e.filename)) _kernelRecover();
     }, true);
-    // Also catch module load failures (ERR_ABORTED / 404)
+    // Catch stuck splash screen (module never loads)
+    // 15s timeout: generous for slow mobile networks — avoids reload loops on 3G
     setTimeout(function() {
       var root = document.getElementById('root');
-      if (root && root.querySelector('#splash') && !sessionStorage.getItem('_recovered')) {
-        sessionStorage.setItem('_recovered', '1');
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(regs) {
-            regs.forEach(function(r) { r.unregister(); });
-          });
-        }
-        caches.keys().then(function(names) {
-          names.forEach(function(n) { caches.delete(n); });
-        }).then(function() { location.reload(); });
-      }
-    }, 8000);
+      if (root && root.querySelector('#splash')) _kernelRecover();
+    }, 15000);
+    // Clear recovery counter on successful load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if (!document.getElementById('splash')) sessionStorage.removeItem('_rc');
+      }, 2000);
+    });
   </script>
 </body>
 
