@@ -39,6 +39,7 @@ export type MoreAction =
   | 'stats'
   | 'insights'
   | 'usage'
+  | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -62,10 +63,8 @@ const ITEMS: MoreMenuItem[] = [
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
-  { id: 'upgrade', labelKey: 'menu.upgradeToPro', icon: IconCrown, condition: 'not-pro' },
-  { id: 'manage-subscription', labelKey: 'menu.manageSubscription', icon: IconSettings, condition: 'subscribed' },
+  { id: 'account-settings', labelKey: 'menu.accountSettings', icon: IconSettings },
   { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut },
-  { id: 'delete-account', labelKey: 'menu.deleteAccount', icon: IconTrash, danger: true },
 ]
 
 interface MoreMenuProps {

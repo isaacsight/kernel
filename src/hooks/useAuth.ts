@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, getMySubscription } from '../engine/SupabaseClient';
-import type { User, Session, Provider } from '@supabase/supabase-js';
+import type { User, Session, Provider, UserIdentity } from '@supabase/supabase-js';
 
 // Admin is determined by Supabase app_metadata.is_admin (set via dashboard or service role).
 // To make a user admin: Supabase Dashboard → Auth → Users → Edit → app_metadata: {"is_admin": true}
@@ -22,6 +22,11 @@ export interface AuthState {
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   updatePassword: (password: string) => Promise<{ error: string | null }>;
+  updateEmail: (email: string) => Promise<{ error: string | null }>;
+  updateProfile: (data: { display_name?: string; avatar_url?: string }) => Promise<{ error: string | null }>;
+  getUserIdentities: () => UserIdentity[];
+  linkIdentity: (provider: Provider) => Promise<void>;
+  unlinkIdentity: (identity: UserIdentity) => Promise<{ error: string | null }>;
   clearPasswordRecovery: () => void;
   signOut: () => Promise<void>;
   refreshSubscription: () => Promise<boolean>;
@@ -119,8 +124,13 @@ export function useAuth(): AuthState {
         setIsPasswordRecovery(true);
       }
       setSession(s);
-      // Only update user if ID changed (prevents infinite re-render from new object refs)
-      setUser(prev => prev?.id === s?.user?.id ? prev : (s?.user ?? null));
+      // Always update user on USER_UPDATED (metadata may have changed);
+      // for other events, only update if ID changed to prevent re-render loops
+      if (event === 'USER_UPDATED') {
+        setUser(s?.user ?? null);
+      } else {
+        setUser(prev => prev?.id === s?.user?.id ? prev : (s?.user ?? null));
+      }
       if (s?.user) {
         checkSubscription();
       } else {
@@ -182,6 +192,40 @@ export function useAuth(): AuthState {
     setIsPasswordRecovery(false);
   }, []);
 
+  const updateEmail = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.updateUser({ email });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const updateProfile = useCallback(async (data: { display_name?: string; avatar_url?: string }) => {
+    const { data: result, error } = await supabase.auth.updateUser({ data });
+    if (!error && result.user) setUser(result.user);
+    return { error: error?.message ?? null };
+  }, []);
+
+  const getUserIdentities = useCallback((): UserIdentity[] => {
+    return user?.identities ?? [];
+  }, [user]);
+
+  const linkIdentity = useCallback(async (provider: Provider) => {
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    localStorage.setItem('kernel-reopen-settings', 'true');
+    await supabase.auth.linkIdentity({
+      provider,
+      options: { redirectTo },
+    });
+  }, []);
+
+  const unlinkIdentity = useCallback(async (identity: UserIdentity) => {
+    const { error } = await supabase.auth.unlinkIdentity(identity);
+    if (!error) {
+      // Refresh user to get updated identities
+      const { data } = await supabase.auth.getUser();
+      if (data.user) setUser(data.user);
+    }
+    return { error: error?.message ?? null };
+  }, []);
+
   const refreshSubscription = useCallback(async (): Promise<boolean> => {
     return checkSubscription();
   }, [checkSubscription]);
@@ -199,6 +243,11 @@ export function useAuth(): AuthState {
     signUpWithEmail,
     resetPassword,
     updatePassword,
+    updateEmail,
+    updateProfile,
+    getUserIdentities,
+    linkIdentity,
+    unlinkIdentity,
     clearPasswordRecovery,
     signOut,
     refreshSubscription,
