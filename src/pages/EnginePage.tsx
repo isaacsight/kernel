@@ -286,8 +286,6 @@ function EngineChat() {
 
   useKeyboardHeight()
 
-  const cyclingPalette = useColorCycle(convs.msgsLoading)
-
   const msgActions = useMessageActions(
     chatEngine.messages,
     chatEngine.setMessages,
@@ -443,6 +441,8 @@ function EngineChat() {
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
+
+  const cyclingPalette = useColorCycle(convs.msgsLoading || isThinking || isStreaming)
 
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
@@ -908,7 +908,9 @@ function EngineChat() {
         <AnimatePresence>
           {isThinking && (
             <motion.div className="ka-thinking" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
-              <div className="ka-thinking-dots"><span /><span /><span /></div>
+              <div className="ka-thinking-grid">
+                <ParticleGrid size={60} interactive={false} energetic palette={cyclingPalette ?? undefined} />
+              </div>
               <div className="ka-thinking-info">
                 {thinkingAgent ? (
                   <motion.span key={thinkingAgent} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="ka-thinking-text">{t('status.isWorking', { agent: thinkingAgent })}</motion.span>
@@ -949,7 +951,9 @@ function EngineChat() {
                   ) : msg.content ? (
                     msg.role === 'kernel' ? <MessageContent text={msg.content} /> : <Linkify text={msg.content} />
                   ) : (
-                    <span className="ka-typing"><span /><span /><span /></span>
+                    <div className="ka-typing-grid">
+                      <ParticleGrid size={40} interactive={false} energetic palette={cyclingPalette ?? undefined} />
+                    </div>
                   )}
                 </div>
                 {msg.role === 'user' && msg.content && !isStreaming && msgActions.editingMsgId !== msg.id && (
