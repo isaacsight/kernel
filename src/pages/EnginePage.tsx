@@ -38,6 +38,7 @@ import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
+import { ParticleGrid } from '../components/ParticleGrid'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -721,6 +722,7 @@ function EngineChat() {
         )}
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <ParticleGrid />
 
             {/* Feature 2: Streak indicator */}
             {evolution.companion.streak >= 2 && (
