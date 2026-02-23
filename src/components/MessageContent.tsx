@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-python'
@@ -19,8 +20,14 @@ import 'prismjs/components/prism-ruby'
 import 'prismjs/components/prism-swift'
 import 'prismjs/components/prism-kotlin'
 import 'prismjs/components/prism-toml'
-import { IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet, IconFile, IconEye, IconCode, IconPackage } from './KernelIcons'
-import { downloadFile, downloadAllFiles, LANG_EXT, getMimeType } from './ChatHelpers'
+import {
+  IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet,
+  IconFile, IconEye, IconCode, IconPackage, IconChevronDown, IconClose, IconAlertCircle,
+  IconTerminal, IconMaximize, IconSmartphone, IconTablet, IconMonitor,
+} from './KernelIcons'
+import { downloadFile, downloadAllFiles, LANG_EXT } from './ChatHelpers'
+import { DURATION, EASE } from '../constants/motion'
+import { useOverlayHistory } from '../hooks/useOverlayHistory'
 
 // ─── Prism language alias mapping ──────────────────────────
 
@@ -47,6 +54,168 @@ function highlightCode(code: string, lang: string): string {
 
 function escapeHtml(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+// ─── Console bridge injection ─────────────────────────────
+
+const CONSOLE_BRIDGE_SCRIPT = `<script>
+(function(){
+  var orig = { log: console.log, warn: console.warn, error: console.error, info: console.info };
+  function send(level, args) {
+    try {
+      parent.postMessage({ type: 'kernel-console', level: level, args: Array.prototype.map.call(args, function(a) {
+        try { return typeof a === 'object' ? JSON.stringify(a) : String(a); } catch(e) { return String(a); }
+      })}, '*');
+    } catch(e) {}
+  }
+  console.log = function() { send('log', arguments); orig.log.apply(console, arguments); };
+  console.warn = function() { send('warn', arguments); orig.warn.apply(console, arguments); };
+  console.error = function() { send('error', arguments); orig.error.apply(console, arguments); };
+  console.info = function() { send('info', arguments); orig.info.apply(console, arguments); };
+  window.onerror = function(msg, src, line, col) {
+    send('error', [msg + ' (line ' + line + ')']);
+  };
+  window.addEventListener('load', function() {
+    var h = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+    parent.postMessage({ type: 'kernel-iframe-height', height: h }, '*');
+  });
+})();
+</script>`
+
+function injectConsoleBridge(html: string): string {
+  if (html.includes('</head>')) {
+    return html.replace('</head>', CONSOLE_BRIDGE_SCRIPT + '</head>')
+  }
+  if (html.includes('<html')) {
+    return html.replace('<html', CONSOLE_BRIDGE_SCRIPT + '<html')
+  }
+  return CONSOLE_BRIDGE_SCRIPT + html
+}
+
+// ─── Console entry types ──────────────────────────────────
+
+interface ConsoleEntry {
+  level: 'log' | 'warn' | 'error' | 'info'
+  args: string[]
+  id: number
+}
+
+// ─── Console Panel ────────────────────────────────────────
+
+function ConsolePanel({ entries, t }: {
+  entries: ConsoleEntry[]
+  t: (key: string, opts?: Record<string, unknown>) => string
+}) {
+  const [open, setOpen] = useState(false)
+  const errorCount = entries.filter(e => e.level === 'error').length
+
+  if (entries.length === 0) return null
+
+  return (
+    <div className="ka-console">
+      <button className="ka-console-toggle" onClick={() => setOpen(!open)}>
+        <IconTerminal size={13} />
+        <span>{t('console')} ({entries.length})</span>
+        {errorCount > 0 && <span className="ka-console-errors">{errorCount} {t('errors')}</span>}
+        <IconChevronDown size={12} className={`ka-combined-preview-chevron${open ? ' ka-combined-preview-chevron--open' : ''}`} />
+      </button>
+      {open && (
+        <div className="ka-console-entries">
+          {entries.slice(-100).map(e => (
+            <div key={e.id} className={`ka-console-entry ka-console-entry--${e.level}`}>
+              <span className="ka-console-level">{e.level}</span>
+              <span className="ka-console-msg">{e.args.join(' ')}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Loading skeleton ─────────────────────────────────────
+
+function PreviewLoading() {
+  return (
+    <div className="ka-artifact-loading">
+      <div className="ka-skeleton-line ka-skeleton-line--long" />
+      <div className="ka-skeleton-line ka-skeleton-line--short" />
+      <div className="ka-skeleton-line ka-skeleton-line--long" />
+    </div>
+  )
+}
+
+// ─── Fullscreen Preview ───────────────────────────────────
+
+type ViewportSize = 'mobile' | 'tablet' | 'desktop'
+
+function PreviewFullscreen({ srcDoc, title, consoleEntries, t, onClose }: {
+  srcDoc: string
+  title: string
+  consoleEntries: ConsoleEntry[]
+  t: (key: string, opts?: Record<string, unknown>) => string
+  onClose: () => void
+}) {
+  useOverlayHistory(true, onClose)
+  const [viewportWidth, setViewportWidth] = useState<ViewportSize>('desktop')
+
+  const maxWidth = viewportWidth === 'mobile' ? 375 : viewportWidth === 'tablet' ? 768 : undefined
+
+  return (
+    <motion.div
+      className="ka-preview-fullscreen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: DURATION.NORMAL, ease: EASE.OUT }}
+    >
+      <div className="ka-preview-fullscreen-header">
+        <span className="ka-preview-fullscreen-title">{title}</span>
+        <div className="ka-preview-fullscreen-actions">
+          <div className="ka-preview-viewport-toggles">
+            <button
+              className={`ka-preview-viewport-btn${viewportWidth === 'mobile' ? ' ka-preview-viewport-btn--active' : ''}`}
+              onClick={() => setViewportWidth('mobile')}
+              aria-label={t('previewMobile')}
+              title={t('previewMobile')}
+            >
+              <IconSmartphone size={14} />
+            </button>
+            <button
+              className={`ka-preview-viewport-btn${viewportWidth === 'tablet' ? ' ka-preview-viewport-btn--active' : ''}`}
+              onClick={() => setViewportWidth('tablet')}
+              aria-label={t('previewTablet')}
+              title={t('previewTablet')}
+            >
+              <IconTablet size={14} />
+            </button>
+            <button
+              className={`ka-preview-viewport-btn${viewportWidth === 'desktop' ? ' ka-preview-viewport-btn--active' : ''}`}
+              onClick={() => setViewportWidth('desktop')}
+              aria-label={t('previewDesktop')}
+              title={t('previewDesktop')}
+            >
+              <IconMonitor size={14} />
+            </button>
+          </div>
+          <button className="ka-preview-fullscreen-close" onClick={onClose} aria-label={t('close')}>
+            <IconClose size={16} />
+          </button>
+        </div>
+      </div>
+      <div className="ka-preview-fullscreen-body">
+        <div className="ka-preview-fullscreen-frame" style={maxWidth ? { maxWidth, margin: '0 auto' } : undefined}>
+          <iframe
+            srcDoc={srcDoc}
+            sandbox="allow-scripts"
+            title={title}
+            className="ka-preview-fullscreen-iframe"
+          />
+        </div>
+      </div>
+      <ConsolePanel entries={consoleEntries} t={t} />
+    </motion.div>
+  )
 }
 
 // ─── Linkify helper ─────────────────────────────────────
@@ -119,6 +288,38 @@ function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: strin
   )
 }
 
+// ─── useConsoleCapture hook ──────────────────────────────
+
+function useConsoleCapture(iframeRef: React.RefObject<HTMLIFrameElement | null>) {
+  const [consoleEntries, setConsoleEntries] = useState<ConsoleEntry[]>([])
+  const [renderFailed, setRenderFailed] = useState(false)
+  const entryIdRef = useRef(0)
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (!iframeRef.current || e.source !== iframeRef.current.contentWindow) return
+      if (e.data?.type === 'kernel-console') {
+        setConsoleEntries(prev => {
+          const next = [...prev, { level: e.data.level, args: e.data.args, id: entryIdRef.current++ }]
+          return next.length > 100 ? next.slice(-100) : next
+        })
+      }
+      if (e.data?.type === 'kernel-iframe-height') {
+        setRenderFailed(e.data.height <= 10)
+      }
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [iframeRef])
+
+  const reset = useCallback(() => {
+    setConsoleEntries([])
+    setRenderFailed(false)
+  }, [])
+
+  return { consoleEntries, renderFailed, reset }
+}
+
 // ─── File Artifact Card ──────────────────────────────────
 
 const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
@@ -134,8 +335,14 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
 }) {
   const [copied, setCopied] = useState(false)
   const canPreview = PREVIEWABLE_EXTS.includes(ext)
-  const [expanded, setExpanded] = useState(canPreview && !!autoPreview)
-  const [showPreview, setShowPreview] = useState(canPreview && !!autoPreview)
+  const isSmallSvg = ext === '.svg' && code.split('\n').length < 5
+  const shouldAutoPreview = canPreview && !!autoPreview && !isSmallSvg
+  const [expanded, setExpanded] = useState(shouldAutoPreview)
+  const [showPreview, setShowPreview] = useState(shouldAutoPreview)
+  const [iframeLoaded, setIframeLoaded] = useState(false)
+  const [showFullscreen, setShowFullscreen] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const { consoleEntries, renderFailed, reset } = useConsoleCapture(iframeRef)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
@@ -154,10 +361,17 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
   const iframeSrc = useMemo(() => {
     if (!canPreview) return ''
     if (ext === '.svg') {
-      return `<!DOCTYPE html><html style="height:100%"><head><style>body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f8f8f6}svg{max-width:100%;height:auto}</style></head><body>${code}</body></html>`
+      return injectConsoleBridge(`<!DOCTYPE html><html style="height:100%"><head><style>body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f8f8f6}svg{max-width:100%;height:auto}</style></head><body>${code}</body></html>`)
     }
-    return code
+    return injectConsoleBridge(code)
   }, [code, ext, canPreview])
+
+  const togglePreview = () => {
+    const next = !showPreview
+    setShowPreview(next)
+    if (next) { setIframeLoaded(false); reset() }
+    if (!expanded) setExpanded(true)
+  }
 
   return (
     <div className="ka-artifact">
@@ -182,11 +396,17 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
         {canPreview && (
           <button
             className={`ka-artifact-action${showPreview ? ' ka-artifact-action--active' : ''}`}
-            onClick={() => { setShowPreview(!showPreview); if (!expanded) setExpanded(true) }}
+            onClick={togglePreview}
             aria-label={showPreview ? t('code') : t('preview')}
           >
             {showPreview ? <IconCode size={13} /> : <IconEye size={13} />}
             {showPreview ? t('code') : t('preview')}
+          </button>
+        )}
+        {canPreview && showPreview && expanded && (
+          <button className="ka-artifact-action" onClick={() => setShowFullscreen(true)} aria-label={t('fullscreen')}>
+            <IconMaximize size={13} />
+            {t('fullscreen')}
           </button>
         )}
         <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`${t('download')} ${filename}`}>
@@ -198,12 +418,23 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
         <>
           {showPreview && canPreview ? (
             <div className="ka-artifact-preview">
+              {!iframeLoaded && <PreviewLoading />}
+              {renderFailed && iframeLoaded && (
+                <div className="ka-artifact-fallback">
+                  <IconAlertCircle size={14} />
+                  <span>{t('previewFailed')}</span>
+                </div>
+              )}
               <iframe
+                ref={iframeRef}
                 srcDoc={iframeSrc}
                 sandbox="allow-scripts"
                 title={`Preview of ${filename}`}
                 className="ka-artifact-iframe"
+                style={!iframeLoaded ? { opacity: 0, height: 0, minHeight: 0 } : undefined}
+                onLoad={() => setIframeLoaded(true)}
               />
+              <ConsolePanel entries={consoleEntries} t={t} />
             </div>
           ) : (
             <pre className="ka-code-pre"><code dangerouslySetInnerHTML={{ __html: highlighted }} /></pre>
@@ -215,24 +446,45 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
           )}
         </>
       )}
+      <AnimatePresence>
+        {showFullscreen && (
+          <PreviewFullscreen
+            srcDoc={iframeSrc}
+            title={filename}
+            consoleEntries={consoleEntries}
+            t={t}
+            onClose={() => setShowFullscreen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
 // ─── Combined multi-file preview ─────────────────────────
 
-function CombinedPreview({ artifacts, t }: {
+function CombinedPreview({ artifacts, t, defaultCollapsed }: {
   artifacts: { filename: string; content: string }[]
-  t: (key: string) => string
+  t: (key: string, opts?: Record<string, unknown>) => string
+  defaultCollapsed?: boolean
 }) {
-  const html = artifacts.find(a => /\.html?$/.test(a.filename))
-  if (!html) return null
+  const htmlFiles = artifacts.filter(a => /\.html?$/.test(a.filename))
+  if (htmlFiles.length === 0) return null
 
   const cssFiles = artifacts.filter(a => /\.css$/.test(a.filename))
   const jsFiles = artifacts.filter(a => /\.(js|ts)$/.test(a.filename))
 
+  const [collapsed, setCollapsed] = useState(!!defaultCollapsed)
+  const [activeHtmlIndex, setActiveHtmlIndex] = useState(0)
+  const [iframeLoaded, setIframeLoaded] = useState(false)
+  const [showFullscreen, setShowFullscreen] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const { consoleEntries, renderFailed, reset } = useConsoleCapture(iframeRef)
+
+  const activeHtml = htmlFiles[activeHtmlIndex] || htmlFiles[0]
+
   const combined = useMemo(() => {
-    let doc = html.content
+    let doc = activeHtml.content
     if (cssFiles.length > 0) {
       const styles = cssFiles.map(f => `<style>/* ${f.filename} */\n${f.content}</style>`).join('\n')
       doc = doc.includes('</head>')
@@ -245,24 +497,80 @@ function CombinedPreview({ artifacts, t }: {
         ? doc.replace('</body>', `${scripts}\n</body>`)
         : `${doc}\n${scripts}`
     }
-    return doc
-  }, [html, cssFiles, jsFiles])
+    return injectConsoleBridge(doc)
+  }, [activeHtml, cssFiles, jsFiles])
+
+  const switchTab = (index: number) => {
+    setActiveHtmlIndex(index)
+    setIframeLoaded(false)
+    reset()
+  }
 
   return (
     <div className="ka-combined-preview">
-      <div className="ka-combined-preview-header">
+      <div className="ka-combined-preview-header" onClick={() => setCollapsed(!collapsed)} style={{ cursor: 'pointer' }}>
         <IconEye size={14} />
         <span>{t('combinedPreview')}</span>
         <span className="ka-combined-preview-files">
           {artifacts.map(a => a.filename).join(' + ')}
         </span>
+        {!collapsed && (
+          <button
+            className="ka-artifact-action"
+            onClick={(e) => { e.stopPropagation(); setShowFullscreen(true) }}
+            aria-label={t('fullscreen')}
+            style={{ marginLeft: 'auto', marginRight: 4 }}
+          >
+            <IconMaximize size={12} />
+          </button>
+        )}
+        <IconChevronDown size={14} className={`ka-combined-preview-chevron${!collapsed ? ' ka-combined-preview-chevron--open' : ''}`} />
       </div>
-      <iframe
-        srcDoc={combined}
-        sandbox="allow-scripts"
-        title="Combined preview"
-        className="ka-artifact-iframe ka-combined-iframe"
-      />
+      {!collapsed && (
+        <>
+          {htmlFiles.length > 1 && (
+            <div className="ka-combined-tabs">
+              {htmlFiles.map((f, i) => (
+                <button
+                  key={f.filename}
+                  className={`ka-combined-tab${i === activeHtmlIndex ? ' ka-combined-tab--active' : ''}`}
+                  onClick={() => switchTab(i)}
+                >
+                  {f.filename}
+                </button>
+              ))}
+            </div>
+          )}
+          {!iframeLoaded && <PreviewLoading />}
+          {renderFailed && iframeLoaded && (
+            <div className="ka-artifact-fallback">
+              <IconAlertCircle size={14} />
+              <span>{t('previewFailed')}</span>
+            </div>
+          )}
+          <iframe
+            ref={iframeRef}
+            srcDoc={combined}
+            sandbox="allow-scripts"
+            title="Combined preview"
+            className="ka-artifact-iframe ka-combined-iframe"
+            style={!iframeLoaded ? { opacity: 0, height: 0, minHeight: 0 } : undefined}
+            onLoad={() => setIframeLoaded(true)}
+          />
+          <ConsolePanel entries={consoleEntries} t={t} />
+        </>
+      )}
+      <AnimatePresence>
+        {showFullscreen && (
+          <PreviewFullscreen
+            srcDoc={combined}
+            title={activeHtml.filename}
+            consoleEntries={consoleEntries}
+            t={t}
+            onClose={() => setShowFullscreen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -400,7 +708,7 @@ export function inferFilename(lang: string, usedNames: Set<string>): string | nu
 
 const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
 
-export function MessageContent({ text }: { text: string }) {
+export function MessageContent({ text, isLatestMessage = false }: { text: string; isLatestMessage?: boolean }) {
   const { t } = useTranslation('common')
   const parts: React.ReactNode[] = []
   const artifacts: { filename: string; content: string }[] = []
@@ -452,7 +760,7 @@ export function MessageContent({ text }: { text: string }) {
           ext={ext}
           title={title || undefined}
           t={t}
-          autoPreview={PREVIEWABLE_EXTS.includes(ext)}
+          autoPreview={isLatestMessage && PREVIEWABLE_EXTS.includes(ext)}
         />
       )
     } else {
@@ -489,7 +797,7 @@ export function MessageContent({ text }: { text: string }) {
         </button>
       )}
       {artifacts.length >= 2 && artifacts.some(a => /\.html?$/.test(a.filename)) && (
-        <CombinedPreview artifacts={artifacts} t={t} />
+        <CombinedPreview artifacts={artifacts} t={t} defaultCollapsed={!isLatestMessage} />
       )}
     </>
   )
