@@ -2238,6 +2238,13 @@ h4 {
     height: 40px;
 }
 
+/* Remove bubble background when showing typing grid */
+.ka-msg-bubble:has(.ka-typing-grid) {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px 0;
+}
+
 /* Event feed (inline) */
 .ka-events {
     max-width: 700px;

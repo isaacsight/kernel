@@ -211,7 +211,12 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
     const count = Math.min(PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * 0.4)))
-    s.particles = Array.from({ length: count }, () => createParticle(cols, rows))
+    const boost = cell < CELL ? 0.3 : 0.05
+    s.particles = Array.from({ length: count }, () => ({
+      ...createParticle(cols, rows),
+      vx: (Math.random() - 0.5) * boost,
+      vy: (Math.random() - 0.5) * boost,
+    }))
   }, [sizeProp])
 
   useEffect(() => {
@@ -272,9 +277,10 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       ctx.drawImage(s.gridImage, 0, 0)
 
-      const gravity = en ? GRAVITY * 5 : GRAVITY
-      const damping = en ? 0.995 : DAMPING
-      for (let step = 0; step < SUB_STEPS; step++) {
+      const gravity = en ? GRAVITY * 8 : GRAVITY
+      const damping = en ? 0.997 : DAMPING
+      const steps = en ? SUB_STEPS + 2 : SUB_STEPS
+      for (let step = 0; step < steps; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
         }
