@@ -48,13 +48,20 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Non-blocking font load: media="print" prevents render-blocking, onload swaps to "all" -->
   <link
     href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></noscript>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Inline loading indicator — visible instantly while JS loads -->
+    <div id="splash" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#FAF9F6;font-family:Georgia,'Times New Roman',serif;color:#1F1E1D">
+      <div style="opacity:.35;font-size:15px;letter-spacing:.08em">kernel</div>
+    </div>
+  </div>
   <noscript><h1>Kernel — A personal AI that learns you</h1></noscript>
   <script type="module" src="/src/main.tsx"></script>
 </body>
