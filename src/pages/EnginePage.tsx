@@ -15,7 +15,7 @@ import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
+import { forkSharedConversation } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
@@ -50,7 +50,6 @@ const WorkflowsPanel = lazyRetry(() => import('../components/WorkflowsPanel').th
 const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
-const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard'))
 const AccountSettingsPanel = lazyRetry(() => import('../components/AccountSettingsPanel'))
 const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
@@ -79,22 +78,9 @@ export function EnginePage() {
       <Suspense fallback={<div className="ka-loading-splash" />}>
         <OnboardingFlow
           userName={user?.email || undefined}
-          onComplete={(interests) => {
+          onComplete={() => {
             localStorage.setItem(onboardingKey, 'true')
             setOnboarded(true)
-            if (interests && interests.length > 0 && user?.id) {
-              for (const interest of interests) {
-                upsertKGEntity({
-                  user_id: user.id,
-                  name: interest.charAt(0).toUpperCase() + interest.slice(1),
-                  entity_type: 'preference',
-                  properties: { source: 'onboarding' },
-                  confidence: 0.7,
-                  source: 'stated',
-                  mention_count: 1,
-                })
-              }
-            }
           }}
         />
       </Suspense>
@@ -471,7 +457,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showUsagePanel || panels.showAccountSettings
+    || panels.showInsightsPanel || panels.showAccountSettings
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -618,16 +604,6 @@ function EngineChat() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {panels.showUsagePanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('usage')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <UsageDashboard onClose={() => panels.closePanel('usage')} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
         {panels.showAccountSettings && user && (
           <BottomSheet onClose={() => panels.closePanel('account-settings')}>
             <Suspense fallback={<PanelShimmer />}>
@@ -736,11 +712,6 @@ function EngineChat() {
                   <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
                 </button>
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowUsagePanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconChart size={16} /> {t('menu.usage')}
-                  </button>
-                )}
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>

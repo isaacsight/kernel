@@ -38,7 +38,6 @@ export type MoreAction =
   | 'knowledge'
   | 'stats'
   | 'insights'
-  | 'usage'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
@@ -59,7 +58,6 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
   { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
   { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
-  { id: 'usage', labelKey: 'menu.usage', icon: IconChart, condition: 'subscribed' },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
