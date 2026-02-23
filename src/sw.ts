@@ -14,11 +14,12 @@ cleanupOutdatedCaches()
 
 // Navigation requests (HTML) — always network first so users get fresh index.html.
 // This prevents stale HTML from referencing JS/CSS hashes that no longer exist.
+// 5s timeout: balances freshness vs slow mobile networks (3s was too aggressive).
 registerRoute(
   new NavigationRoute(
     new NetworkFirst({
       cacheName: 'html-shell',
-      networkTimeoutSeconds: 3,
+      networkTimeoutSeconds: 5,
     })
   )
 )
@@ -29,13 +30,15 @@ registerRoute(
   new NetworkOnly()
 )
 
-// JS/CSS — network first with fallback
+// JS/CSS — serve cached immediately, update in background.
+// Content-hashed filenames guarantee stale cache = old version (not corrupt).
+// The HTML shell (NetworkFirst above) always references current hashes,
+// so any new chunks are fetched fresh on next navigation.
 registerRoute(
   /\.(?:js|css)$/i,
-  new NetworkFirst({
+  new StaleWhileRevalidate({
     cacheName: 'app-code',
     plugins: [new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 })],
-    networkTimeoutSeconds: 5,
   })
 )
 
