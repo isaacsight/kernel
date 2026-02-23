@@ -63,7 +63,39 @@
     </div>
   </div>
   <noscript><h1>Kernel — A personal AI that learns you</h1></noscript>
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="/src/main.tsx" onerror="window.__loadFailed=true"></script>
+  <script>
+    // Recovery: if the app JS fails to load (stale SW cache after deploy),
+    // clear all caches, unregister SW, and reload once.
+    window.addEventListener('error', function(e) {
+      if (e.filename && /assets\/.*\.js/.test(e.filename) && !sessionStorage.getItem('_recovered')) {
+        sessionStorage.setItem('_recovered', '1');
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(r) { r.unregister(); });
+          });
+        }
+        caches.keys().then(function(names) {
+          names.forEach(function(n) { caches.delete(n); });
+        }).then(function() { location.reload(); });
+      }
+    }, true);
+    // Also catch module load failures (ERR_ABORTED / 404)
+    setTimeout(function() {
+      var root = document.getElementById('root');
+      if (root && root.querySelector('#splash') && !sessionStorage.getItem('_recovered')) {
+        sessionStorage.setItem('_recovered', '1');
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(r) { r.unregister(); });
+          });
+        }
+        caches.keys().then(function(names) {
+          names.forEach(function(n) { caches.delete(n); });
+        }).then(function() { location.reload(); });
+      }
+    }, 8000);
+  </script>
 </body>
 
 </html>
