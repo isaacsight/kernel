@@ -749,7 +749,7 @@ function EngineChat() {
               size={200}
               interactive={false}
               energetic
-              palette={LOADING_PALETTE}
+              palette={convs.loadingAgentId ? agentPalette(convs.loadingAgentId) : LOADING_PALETTE}
             />
             <span className="ka-loading-label">Loading...</span>
           </motion.div>

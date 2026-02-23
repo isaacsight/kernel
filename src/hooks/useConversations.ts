@@ -34,6 +34,7 @@ export function useConversations(
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null)
   const [convsLoading, setConvsLoading] = useState(true)
   const [msgsLoading, setMsgsLoading] = useState(false)
+  const [loadingAgentId, setLoadingAgentId] = useState<string | null>(null)
 
   // Use a ref so switchConversation always calls the latest setMessages callback
   // (avoids stale closure when called from useEffects that capture old render state)
@@ -76,6 +77,8 @@ export function useConversations(
     setMsgsLoading(true)
     setActiveConversationId(convId)
     setMessagesRef.current([])
+    // Quick peek at last agent for loading palette
+    getLastAgentId(convId).then(id => setLoadingAgentId(id)).catch(() => {})
     try {
       const dbMessages = await getChannelMessages(convId)
       setMessagesRef.current(toChat(dbMessages))
@@ -87,6 +90,7 @@ export function useConversations(
       if (cached.length > 0) setMessagesRef.current(toChat(cached))
     }
     setMsgsLoading(false)
+    setLoadingAgentId(null)
   }, [])
 
   const handleNewChat = useCallback(() => {
@@ -109,7 +113,7 @@ export function useConversations(
     conversations, setConversations,
     activeConversationId, setActiveConversationId,
     activeConversation,
-    convsLoading, msgsLoading,
+    convsLoading, msgsLoading, loadingAgentId,
     loadConversations, switchConversation, handleNewChat, handleDeleteConversation,
     createConversation,
   }

@@ -234,6 +234,18 @@ export async function getUserConversations(userId: string): Promise<DBConversati
   return data || [];
 }
 
+export async function getLastAgentId(conversationId: string): Promise<string> {
+  const { data } = await supabase
+    .from('messages')
+    .select('agent_id')
+    .eq('conversation_id', conversationId)
+    .neq('agent_id', 'user')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+  return data?.agent_id || 'kernel';
+}
+
 export async function updateConversationTitle(id: string, title: string) {
   const { error } = await supabase
     .from('conversations')
