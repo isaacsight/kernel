@@ -128,13 +128,9 @@ export function ImportConversationModal({
         { source: preview.platform, original_title: preview.title }
       )
 
-      if (convId) {
-        onToast(`Imported ${preview.message_count} messages from ${PLATFORM_LABELS[preview.platform]}`)
-        onImported(convId)
-        onClose()
-      } else {
-        setError('Failed to create conversation')
-      }
+      onToast(`Imported ${preview.message_count} messages from ${PLATFORM_LABELS[preview.platform]}`)
+      onImported(convId)
+      onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Import failed')
     } finally {
