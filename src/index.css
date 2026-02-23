@@ -12389,3 +12389,315 @@ h4 {
     margin-left: var(--space-xs);
     animation: ka-loading-pulse 1s ease-in-out infinite;
 }
+
+/* ─── Account Settings Panel ────────────────────────── */
+.ka-settings-panel {
+    padding: 0 var(--space-lg) var(--space-xl);
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.ka-settings-user-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(0,0,0,0.02);
+    border-radius: var(--radius-md);
+}
+[data-theme="dark"] .ka-settings-user-summary {
+    background: rgba(255,255,255,0.04);
+}
+
+.ka-settings-avatar {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--rubin-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ka-settings-avatar--lg {
+    width: 56px;
+    height: 56px;
+}
+.ka-settings-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ka-settings-avatar-initials {
+    color: #fff;
+    font-family: var(--font-meta);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.ka-settings-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 10px;
+    font-family: var(--font-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.ka-settings-avatar:hover .ka-settings-avatar-overlay,
+.ka-settings-avatar:focus-visible .ka-settings-avatar-overlay {
+    opacity: 1;
+}
+
+.ka-settings-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.ka-settings-user-name {
+    font-family: var(--font-prose);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--rubin-slate);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+[data-theme="dark"] .ka-settings-user-name {
+    color: var(--dark-text);
+}
+.ka-settings-user-email {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    color: rgba(31,30,29,0.5);
+}
+[data-theme="dark"] .ka-settings-user-email {
+    color: rgba(250,249,246,0.5);
+}
+
+.ka-settings-tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-meta);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(0,0,0,0.06);
+    color: rgba(31,30,29,0.6);
+    width: fit-content;
+    margin-top: 2px;
+}
+[data-theme="dark"] .ka-settings-tier-badge {
+    background: rgba(255,255,255,0.08);
+    color: rgba(250,249,246,0.6);
+}
+.ka-settings-tier-badge--pro {
+    background: rgba(107,91,149,0.12);
+    color: var(--rubin-primary);
+}
+.ka-settings-tier-badge--admin {
+    background: rgba(16,185,129,0.12);
+    color: #10B981;
+}
+
+.ka-settings-section {
+    border-top: 1px solid rgba(0,0,0,0.06);
+    padding-top: var(--space-md);
+    margin-top: var(--space-md);
+}
+[data-theme="dark"] .ka-settings-section {
+    border-top-color: rgba(255,255,255,0.08);
+}
+
+.ka-settings-section-header {
+    font-family: var(--font-meta);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(31,30,29,0.4);
+    margin: 0 0 var(--space-sm);
+}
+[data-theme="dark"] .ka-settings-section-header {
+    color: rgba(250,249,246,0.4);
+}
+
+.ka-settings-section-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.ka-settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ka-settings-label {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    color: rgba(31,30,29,0.6);
+}
+[data-theme="dark"] .ka-settings-label {
+    color: rgba(250,249,246,0.5);
+}
+
+.ka-settings-field-row {
+    display: flex;
+    gap: var(--space-xs);
+}
+.ka-settings-field-row .ka-gate-input {
+    flex: 1;
+}
+.ka-settings-inline-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0 var(--space-md) !important;
+}
+
+.ka-settings-provider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+}
+
+.ka-settings-provider-name {
+    font-family: var(--font-prose);
+    font-size: 14px;
+    color: var(--rubin-slate);
+}
+[data-theme="dark"] .ka-settings-provider-name {
+    color: var(--dark-text);
+}
+
+.ka-settings-provider-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.ka-settings-connected {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-meta);
+    font-size: 12px;
+    color: #10B981;
+}
+
+.ka-settings-link-btn,
+.ka-settings-unlink-btn {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(0,0,0,0.1);
+    background: transparent;
+    color: var(--rubin-primary);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.ka-settings-link-btn:hover,
+.ka-settings-unlink-btn:hover {
+    background: rgba(107,91,149,0.06);
+}
+[data-theme="dark"] .ka-settings-link-btn,
+[data-theme="dark"] .ka-settings-unlink-btn {
+    border-color: rgba(255,255,255,0.12);
+    color: var(--rubin-primary);
+}
+[data-theme="dark"] .ka-settings-link-btn:hover,
+[data-theme="dark"] .ka-settings-unlink-btn:hover {
+    background: rgba(107,91,149,0.12);
+}
+.ka-settings-unlink-btn {
+    color: rgba(31,30,29,0.4);
+}
+[data-theme="dark"] .ka-settings-unlink-btn {
+    color: rgba(250,249,246,0.4);
+}
+.ka-settings-unlink-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ka-settings-link-btn--upgrade {
+    background: var(--rubin-primary);
+    color: #fff;
+    border-color: var(--rubin-primary);
+}
+.ka-settings-link-btn--upgrade:hover {
+    background: #5A4A84;
+}
+
+.ka-settings-danger-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-sm) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--rubin-slate);
+    transition: opacity 0.15s;
+}
+.ka-settings-danger-btn:hover {
+    opacity: 0.7;
+}
+[data-theme="dark"] .ka-settings-danger-btn {
+    color: var(--dark-text);
+}
+.ka-settings-danger-btn svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ka-settings-danger-label {
+    display: block;
+    font-family: var(--font-prose);
+    font-size: 14px;
+}
+
+.ka-settings-danger-desc {
+    display: block;
+    font-family: var(--font-meta);
+    font-size: 12px;
+    color: rgba(31,30,29,0.4);
+    margin-top: 2px;
+}
+[data-theme="dark"] .ka-settings-danger-desc {
+    color: rgba(250,249,246,0.4);
+}
+
+.ka-settings-danger-btn--destructive {
+    color: #DC2626;
+}
+[data-theme="dark"] .ka-settings-danger-btn--destructive {
+    color: #F87171;
+}
+.ka-settings-danger-btn--destructive .ka-settings-danger-desc {
+    color: rgba(220,38,38,0.5);
+}
+[data-theme="dark"] .ka-settings-danger-btn--destructive .ka-settings-danger-desc {
+    color: rgba(248,113,113,0.5);
+}
+
+.ka-settings-section--danger {
+    border-top-color: rgba(220,38,38,0.1);
+}
+[data-theme="dark"] .ka-settings-section--danger {
+    border-top-color: rgba(248,113,113,0.1);
+}
