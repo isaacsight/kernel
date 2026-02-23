@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
@@ -446,17 +447,20 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
           )}
         </>
       )}
-      <AnimatePresence>
-        {showFullscreen && (
-          <PreviewFullscreen
-            srcDoc={iframeSrc}
-            title={filename}
-            consoleEntries={consoleEntries}
-            t={t}
-            onClose={() => setShowFullscreen(false)}
-          />
-        )}
-      </AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
+          {showFullscreen && (
+            <PreviewFullscreen
+              srcDoc={iframeSrc}
+              title={filename}
+              consoleEntries={consoleEntries}
+              t={t}
+              onClose={() => setShowFullscreen(false)}
+            />
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   )
 }
@@ -560,17 +564,20 @@ function CombinedPreview({ artifacts, t, defaultCollapsed }: {
           <ConsolePanel entries={consoleEntries} t={t} />
         </>
       )}
-      <AnimatePresence>
-        {showFullscreen && (
-          <PreviewFullscreen
-            srcDoc={combined}
-            title={activeHtml.filename}
-            consoleEntries={consoleEntries}
-            t={t}
-            onClose={() => setShowFullscreen(false)}
-          />
-        )}
-      </AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
+          {showFullscreen && (
+            <PreviewFullscreen
+              srcDoc={combined}
+              title={activeHtml.filename}
+              consoleEntries={consoleEntries}
+              t={t}
+              onClose={() => setShowFullscreen(false)}
+            />
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   )
 }
