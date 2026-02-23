@@ -70,14 +70,12 @@ export function SharedConversationPage() {
       if (user) {
         // Logged in — fork directly then navigate with convId as URL search param
         const convId = await forkSharedConversation(user.id, data.title, data.messages)
-        if (convId) {
-          localStorage.setItem('kernel-fork-success', convId)
-          navigate('/')
-          return
-        }
+        localStorage.setItem('kernel-fork-success', convId)
+        navigate('/')
+        return
       }
 
-      // Not logged in or fork failed — store full intent for after login
+      // Not logged in — store full intent for after login
       localStorage.setItem('kernel-fork-intent', JSON.stringify({
         title: data.title,
         messages: data.messages,

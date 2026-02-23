@@ -464,10 +464,11 @@ export async function forkSharedConversation(
   title: string,
   messages: { role: string; content: string; agentName?: string; timestamp?: number }[],
   metadata?: Record<string, unknown>
-): Promise<string | null> {
+): Promise<string> {
   const conv = await createConversation(userId, title, metadata)
-  if (!conv) return null
+  if (!conv) throw new Error('Session may have expired — try refreshing the page.')
 
+  const MAX_CONTENT = 32_000
   const now = Date.now()
   const rows = messages.map((msg, i) => {
     const ts = msg.timestamp && !isNaN(msg.timestamp) ? msg.timestamp : now - (messages.length - i) * 1000
@@ -475,16 +476,21 @@ export async function forkSharedConversation(
       id: `msg_${now}_${i}_${Math.random().toString(36).substr(2, 6)}`,
       channel_id: conv.id,
       agent_id: msg.role === 'user' ? 'user' : (msg.agentName?.toLowerCase() || 'kernel'),
-      content: msg.content,
+      content: msg.content.slice(0, MAX_CONTENT),
       user_id: userId,
       created_at: new Date(ts).toISOString(),
     }
   })
 
-  const { error } = await supabase.from('messages').insert(rows)
-  if (error) {
-    console.error('Error forking shared conversation messages:', error)
-    return null
+  // Insert in batches of 50 to avoid payload limits
+  const BATCH = 50
+  for (let i = 0; i < rows.length; i += BATCH) {
+    const batch = rows.slice(i, i + BATCH)
+    const { error } = await supabase.from('messages').insert(batch)
+    if (error) {
+      console.error('Error inserting messages batch:', error)
+      throw new Error(`Failed to save messages: ${error.message}`)
+    }
   }
 
   return conv.id
