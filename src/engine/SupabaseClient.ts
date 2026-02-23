@@ -201,17 +201,8 @@ export async function createConversation(
 ): Promise<DBConversation | null> {
   const id = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-  // Verify session is active before attempting insert (RLS requires auth.uid())
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    console.error('[createConversation] No active session — RLS will block insert');
-    // Try refreshing the session
-    const { data: { session: refreshed } } = await supabase.auth.refreshSession();
-    if (!refreshed) {
-      console.error('[createConversation] Session refresh failed');
-      return null;
-    }
-  }
+  // Proactively refresh session — getSession() can return a stale/expired JWT
+  await supabase.auth.refreshSession();
 
   const row: Record<string, unknown> = { id, user_id: userId, title }
   if (metadata) row.metadata = metadata
