@@ -119,36 +119,37 @@ export default function AccountSettingsPanel({
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
           {/* Email verification — verify identity before sensitive changes */}
-          {settings.hasPassword && (
-            <div className="ka-settings-verify-block">
-              <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
-              {!settings.codeSent ? (
-                <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading}>
-                  {settings.verifyState.loading ? '...' : t('security.sendCode')}
-                </button>
-              ) : (
-                <div className="ka-settings-field-row">
-                  <input
-                    className="ka-gate-input"
-                    type="text"
-                    inputMode="numeric"
-                    value={settings.verificationCode}
-                    onChange={e => settings.setVerificationCode(e.target.value)}
-                    placeholder={t('security.codePlaceholder')}
-                    autoComplete="one-time-code"
-                  />
-                </div>
-              )}
-              {settings.verifyState.error && (
-                <p className="ka-gate-error">
-                  {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') : settings.verifyState.error}
-                </p>
-              )}
-              {settings.verifyState.success === 'codeSent' && (
-                <p className="ka-gate-success"><IconCheck size={14} /> {t('security.codeSent')}</p>
-              )}
-            </div>
-          )}
+          <div className="ka-settings-verify-block">
+            <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
+            <p className="ka-settings-verify-hint">{t('security.verifyHint')}</p>
+            {!settings.codeSent ? (
+              <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading}>
+                {settings.verifyState.loading ? '...' : t('security.sendCode')}
+              </button>
+            ) : (
+              <div className="ka-settings-field-row">
+                <input
+                  className="ka-gate-input"
+                  type="text"
+                  inputMode="numeric"
+                  value={settings.verificationCode}
+                  onChange={e => settings.setVerificationCode(e.target.value)}
+                  placeholder={t('security.codePlaceholder')}
+                  autoComplete="one-time-code"
+                />
+              </div>
+            )}
+            {settings.verifyState.error && (
+              <p className="ka-gate-error">
+                {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') :
+                 settings.verifyState.error === 'verificationRequired' ? t('security.verificationRequired') :
+                 settings.verifyState.error}
+              </p>
+            )}
+            {settings.verifyState.success === 'codeSent' && (
+              <p className="ka-gate-success"><IconCheck size={14} /> {t('security.codeSent')}</p>
+            )}
+          </div>
 
           {/* Change Email */}
           <label className="ka-settings-field">
