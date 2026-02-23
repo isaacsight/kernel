@@ -31,9 +31,37 @@
     "read": "Read",
     "discuss": "Discuss"
   },
+  "entity": {
+    "evolved": "Evolved to {{tier}}",
+    "streak": "Day {{count}}",
+    "goalCheckIn": "Check in: {{title}}",
+    "mood": {
+      "happy": "happy",
+      "excited": "excited",
+      "content": "content",
+      "sad": "sad",
+      "sleepy": "sleepy",
+      "lonely": "lonely",
+      "bored": "bored"
+    }
+  },
+  "nudge": {
+    "insights": "You've had a few conversations now — Kernel has been finding patterns in what you talk about.",
+    "knowledge": "Your knowledge graph is growing — see the connections Kernel has mapped from your conversations.",
+    "stats": "You completed a goal — check your stats to see how your usage is evolving.",
+    "workflows": "You've been using Kernel regularly — workflows can automate your recurring tasks.",
+    "showMe": "Show me",
+    "notNow": "Not now"
+  },
+  "valuePreview": {
+    "message": "Pro members get daily briefings, deep research, and persistent memory.",
+    "gotIt": "Got it"
+  },
   "upgrade": {
     "title": "You've used your {{limit}} free messages",
     "subtitle": "Upgrade to Pro to keep the conversation going.",
+    "learnedTitle": "What Kernel learned about you",
+    "learnedCta": "Upgrade to keep your memory growing.",
     "features": {
       "unlimitedMessages": "Unlimited messages",
       "deepResearch": "Deep research",

@@ -6,6 +6,7 @@
 import { getProvider } from './providers/registry'
 import type { KGEntity } from './KnowledgeGraph'
 import type { UserMemoryProfile } from './MemoryAgent'
+import type { UserGoal } from './GoalTracker'
 
 export interface Briefing {
   id?: string
@@ -46,10 +47,11 @@ interface QueryPlan {
   topics: string[]
 }
 
-/** Build interest context from user memory and KG entities */
+/** Build interest context from user memory, KG entities, and active goals */
 function buildInterestContext(
   memory: UserMemoryProfile | null,
   entities: KGEntity[],
+  goals?: UserGoal[],
 ): string {
   const parts: string[] = []
 
@@ -60,6 +62,12 @@ function buildInterestContext(
     if (memory.goals.length > 0) {
       parts.push(`Goals: ${memory.goals.join(', ')}`)
     }
+  }
+
+  // Include active user goals for more relevant briefings
+  const activeGoals = goals?.filter(g => g.status === 'active') || []
+  if (activeGoals.length > 0) {
+    parts.push(`Active goals: ${activeGoals.map(g => g.title).join(', ')}`)
   }
 
   const topEntities = entities
@@ -103,10 +111,11 @@ export async function generateBriefing(
   memory: UserMemoryProfile | null,
   entities: KGEntity[],
   onProgress?: (phase: string) => void,
+  goals?: UserGoal[],
 ): Promise<Omit<Briefing, 'id' | 'created_at'>> {
   onProgress?.('planning')
 
-  const interestContext = buildInterestContext(memory, entities)
+  const interestContext = buildInterestContext(memory, entities, goals)
 
   // Plan search queries
   let plan: QueryPlan

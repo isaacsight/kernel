@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 
 /**
  * Features that can be "discovered" by the user.
@@ -18,6 +18,10 @@ function getStorageKey(userId: string) {
   return `kernel-discovered-${userId}`
 }
 
+function getNudgeDismissedKey(userId: string) {
+  return `kernel-nudges-dismissed-${userId}`
+}
+
 function loadDiscovered(userId: string): Set<DiscoverableFeature> {
   try {
     const raw = localStorage.getItem(getStorageKey(userId))
@@ -32,9 +36,51 @@ function saveDiscovered(userId: string, discovered: Set<DiscoverableFeature>) {
   localStorage.setItem(getStorageKey(userId), JSON.stringify([...discovered]))
 }
 
-export function useFeatureDiscovery(userId: string | undefined) {
+function loadDismissedNudges(userId: string): Set<string> {
+  try {
+    const raw = localStorage.getItem(getNudgeDismissedKey(userId))
+    if (!raw) return new Set()
+    return new Set(JSON.parse(raw) as string[])
+  } catch {
+    return new Set()
+  }
+}
+
+function saveDismissedNudges(userId: string, dismissed: Set<string>) {
+  localStorage.setItem(getNudgeDismissedKey(userId), JSON.stringify([...dismissed]))
+}
+
+// ─── Nudge Rules ──────────────────────────────────────────
+
+export interface NudgeContext {
+  conversationCount: number
+  kgEntityCount: number
+  completedGoals: number
+}
+
+interface NudgeRule {
+  featureId: DiscoverableFeature
+  test: (ctx: NudgeContext) => boolean
+}
+
+const NUDGE_RULES: NudgeRule[] = [
+  { featureId: 'insights', test: (ctx) => ctx.conversationCount >= 5 },
+  { featureId: 'knowledge', test: (ctx) => ctx.kgEntityCount >= 10 },
+  { featureId: 'stats', test: (ctx) => ctx.completedGoals >= 1 },
+  { featureId: 'workflows', test: (ctx) => ctx.conversationCount >= 10 },
+]
+
+export interface ActiveNudge {
+  featureId: string
+}
+
+export function useFeatureDiscovery(userId: string | undefined, nudgeContext?: NudgeContext) {
   const [discovered, setDiscovered] = useState<Set<DiscoverableFeature>>(() =>
     userId ? loadDiscovered(userId) : new Set()
+  )
+
+  const [dismissedNudges, setDismissedNudges] = useState<Set<string>>(() =>
+    userId ? loadDismissedNudges(userId) : new Set()
   )
 
   const isNew = useCallback(
@@ -61,9 +107,35 @@ export function useFeatureDiscovery(userId: string | undefined) {
     [userId]
   )
 
+  const dismissNudge = useCallback(
+    (featureId: string) => {
+      if (!userId) return
+      setDismissedNudges(prev => {
+        const next = new Set(prev)
+        next.add(featureId)
+        saveDismissedNudges(userId, next)
+        return next
+      })
+    },
+    [userId]
+  )
+
   const undiscoveredCount = userId
     ? DISCOVERABLE_FEATURES.filter(f => !discovered.has(f)).length
     : 0
 
-  return { isNew, markDiscovered, undiscoveredCount }
+  // Compute active nudge: first matching rule whose feature isn't discovered or dismissed
+  const activeNudge = useMemo<ActiveNudge | null>(() => {
+    if (!userId || !nudgeContext) return null
+    for (const rule of NUDGE_RULES) {
+      if (discovered.has(rule.featureId)) continue
+      if (dismissedNudges.has(rule.featureId)) continue
+      if (rule.test(nudgeContext)) {
+        return { featureId: rule.featureId }
+      }
+    }
+    return null
+  }, [userId, nudgeContext, discovered, dismissedNudges])
+
+  return { isNew, markDiscovered, undiscoveredCount, activeNudge, dismissNudge }
 }
