@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getEngine, type EngineEvent, type EngineState } from '../engine/AIEngine';
-import { KERNEL_AGENT } from '../agents/kernel';
-import { claudeStreamChat } from '../engine/ClaudeClient';
+import type { EngineEvent, EngineState } from '../engine/types';
 import { useAuthContext } from '../providers/AuthProvider';
 import type { Agent } from '../types';
 
@@ -49,6 +47,18 @@ export interface KernelAgentState {
   removeBelief: (beliefId: string) => void;
   pruneReflections: (minQuality: number) => number;
 }
+
+// ─── Default engine state (shown before engine loads) ─────
+
+const DEFAULT_ENGINE_STATE: EngineState = {
+  phase: 'idle',
+  ephemeral: { currentInput: '', perception: null, attention: null, activeAgent: null, startedAt: 0 },
+  working: { conversationHistory: [], topic: '', turnCount: 0, agentSequence: [], emotionalTone: 0, coherenceScore: 1, threadSummary: '', unresolvedQuestions: [] },
+  lasting: { totalInteractions: 0, preferredAgents: {}, topicHistory: [], reflections: [], feedbackRatio: { positive: 0, negative: 0 }, agentPerformance: {}, patternNotes: [] },
+  worldModel: { beliefs: [], convictions: { overall: 0.5, trend: 'stable', lastShift: 0 }, situationSummary: '', userModel: { apparentGoal: '', communicationStyle: 'unknown', expertise: 'unknown' } },
+  isOnline: false,
+  cycleCount: 0,
+};
 
 // ─── Engine State Serializer ──────────────────────────────
 
@@ -145,19 +155,35 @@ function serializeEngineState(state: EngineState): string {
   return parts.join('\n');
 }
 
+// ─── Lazy engine loader ──────────────────────────────────
+
+type Engine = ReturnType<Awaited<typeof import('../engine/AIEngine')>['getEngine']>;
+
+let _enginePromise: Promise<Engine> | null = null;
+let _engine: Engine | null = null;
+
+function loadEngine(): Promise<Engine> {
+  if (_engine) return Promise.resolve(_engine);
+  if (!_enginePromise) {
+    _enginePromise = import('../engine/AIEngine').then(mod => {
+      _engine = mod.getEngine();
+      return _engine;
+    });
+  }
+  return _enginePromise;
+}
+
 // ─── Hook ─────────────────────────────────────────────────
 
 const MAX_EVENTS = 50;
 
 export function useKernelAgent(): KernelAgentState {
-  const engine = getEngine();
-
   // Drawer state
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<KernelTab>('observe');
 
-  // Engine snapshot
-  const [engineState, setEngineState] = useState<EngineState>(engine.getState());
+  // Engine snapshot — starts with default until engine loads
+  const [engineState, setEngineState] = useState<EngineState>(DEFAULT_ENGINE_STATE);
 
   // Event log
   const [events, setEvents] = useState<EngineEvent[]>([]);
@@ -166,18 +192,37 @@ export function useKernelAgent(): KernelAgentState {
   const [messages, setMessages] = useState<KernelMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef(false);
+  const engineRef = useRef<Engine | null>(null);
 
   // Access (from AuthProvider)
   const { isSubscribed } = useAuthContext();
 
-  // Subscribe to engine events
+  // Load engine when drawer opens (deferred from startup)
   useEffect(() => {
-    const unsubscribe = engine.subscribe((event: EngineEvent) => {
-      setEvents(prev => [...prev.slice(-(MAX_EVENTS - 1)), event]);
+    if (!isOpen) return;
+    let cancelled = false;
+
+    loadEngine().then(engine => {
+      if (cancelled) return;
+      engineRef.current = engine;
       setEngineState(engine.getState());
+
+      const unsubscribe = engine.subscribe((event: EngineEvent) => {
+        setEvents(prev => [...prev.slice(-(MAX_EVENTS - 1)), event]);
+        setEngineState(engine.getState());
+      });
+
+      // Store cleanup in ref so we can call it on unmount
+      cleanupRef.current = unsubscribe;
     });
-    return unsubscribe;
-  }, [engine]);
+
+    return () => { cancelled = true; };
+  }, [isOpen]);
+
+  const cleanupRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    return () => { cleanupRef.current?.(); };
+  }, []);
 
   // Send message to Kernel Agent via Claude API
   const sendMessage = useCallback(async (content: string) => {
@@ -194,25 +239,31 @@ export function useKernelAgent(): KernelAgentState {
     setIsStreaming(true);
     abortRef.current = false;
 
-    // Build Claude messages with engine state context
-    const snapshot = serializeEngineState(engine.getState());
-    const systemPrompt = `${KERNEL_AGENT.systemPrompt}\n\n---\n\n${snapshot}`;
-
-    // Convert chat history to Claude format
-    const claudeMessages = [...messages, userMsg].map(m => ({
-      role: m.role === 'kernel' ? 'assistant' : 'user',
-      content: m.content,
-    }));
-
-    const kernelMsgId = `kernel_${Date.now()}`;
-    setMessages(prev => [...prev, {
-      id: kernelMsgId,
-      role: 'kernel',
-      content: '',
-      timestamp: Date.now(),
-    }]);
-
     try {
+      // Lazy-load engine, agent prompt, and Claude client
+      const [engine, { KERNEL_AGENT }, { claudeStreamChat }] = await Promise.all([
+        loadEngine(),
+        import('../agents/kernel'),
+        import('../engine/ClaudeClient'),
+      ]);
+      engineRef.current = engine;
+
+      const snapshot = serializeEngineState(engine.getState());
+      const systemPrompt = `${KERNEL_AGENT.systemPrompt}\n\n---\n\n${snapshot}`;
+
+      const claudeMessages = [...messages, userMsg].map(m => ({
+        role: m.role === 'kernel' ? 'assistant' : 'user',
+        content: m.content,
+      }));
+
+      const kernelMsgId = `kernel_${Date.now()}`;
+      setMessages(prev => [...prev, {
+        id: kernelMsgId,
+        role: 'kernel',
+        content: '',
+        timestamp: Date.now(),
+      }]);
+
       await claudeStreamChat(
         claudeMessages,
         (fullText) => {
@@ -225,13 +276,23 @@ export function useKernelAgent(): KernelAgentState {
       );
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : 'Failed to reach kernel.chat';
-      setMessages(prev =>
-        prev.map(m => m.id === kernelMsgId ? { ...m, content: `*${errMsg}*` } : m)
-      );
+      setMessages(prev => {
+        const last = prev[prev.length - 1];
+        if (last?.role === 'kernel' && last.content === '') {
+          return prev.map(m => m.id === last.id ? { ...m, content: `*${errMsg}*` } : m);
+        }
+        return [...prev, { id: `kernel_err_${Date.now()}`, role: 'kernel', content: `*${errMsg}*`, timestamp: Date.now() }];
+      });
     } finally {
       setIsStreaming(false);
     }
-  }, [messages, isStreaming, engine]);
+  }, [messages, isStreaming]);
+
+  // Engine controls — lazy, noop if engine not loaded yet
+  const withEngine = useCallback((fn: (e: Engine) => void) => {
+    if (engineRef.current) fn(engineRef.current);
+    else loadEngine().then(fn);
+  }, []);
 
   return {
     isOpen,
@@ -250,13 +311,13 @@ export function useKernelAgent(): KernelAgentState {
     isSubscribed,
     refreshAccess: useCallback(() => { /* handled by AuthProvider */ }, []),
 
-    stopEngine: useCallback(() => engine.stop(), [engine]),
-    resetEngine: useCallback(() => engine.reset(), [engine]),
-    overrideAgent: useCallback((agent: Agent | null) => engine.overrideNextAgent(agent), [engine]),
-    setConviction: useCallback((value: number) => engine.setConviction(value, 'Manual adjustment via Kernel Agent'), [engine]),
-    addBelief: useCallback((content: string, confidence: number) => engine.addBelief(content, confidence), [engine]),
-    challengeBelief: useCallback((id: string) => engine.challengeBelief(id), [engine]),
-    removeBelief: useCallback((id: string) => engine.removeBelief(id), [engine]),
-    pruneReflections: useCallback((min: number) => engine.pruneReflections(min), [engine]),
+    stopEngine: useCallback(() => withEngine(e => e.stop()), [withEngine]),
+    resetEngine: useCallback(() => withEngine(e => e.reset()), [withEngine]),
+    overrideAgent: useCallback((agent: Agent | null) => withEngine(e => e.overrideNextAgent(agent)), [withEngine]),
+    setConviction: useCallback((value: number) => withEngine(e => e.setConviction(value, 'Manual adjustment via Kernel Agent')), [withEngine]),
+    addBelief: useCallback((content: string, confidence: number) => withEngine(e => e.addBelief(content, confidence)), [withEngine]),
+    challengeBelief: useCallback((id: string) => withEngine(e => e.challengeBelief(id)), [withEngine]),
+    removeBelief: useCallback((id: string) => withEngine(e => e.removeBelief(id)), [withEngine]),
+    pruneReflections: useCallback((min: number) => engineRef.current ? engineRef.current.pruneReflections(min) : 0, []),
   };
 }
