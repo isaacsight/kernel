@@ -211,17 +211,17 @@ BEGIN
   FROM audit_events
   WHERE actor_id = p_user_id AND created_at >= v_start;
 
-  -- Token totals from usage_logs
+  -- Token totals from usage_logs (direct columns)
   SELECT COALESCE(jsonb_build_object(
-    'input', SUM((metadata->>'input_tokens')::INT),
-    'output', SUM((metadata->>'output_tokens')::INT)
+    'input', SUM(input_tokens),
+    'output', SUM(output_tokens)
   ), '{"input":0,"output":0}'::jsonb)
   INTO v_tokens
   FROM usage_logs
   WHERE user_id = p_user_id AND created_at >= v_start;
 
   -- Estimated cost from usage_logs
-  SELECT COALESCE(SUM(cost), 0) INTO v_cost
+  SELECT COALESCE(SUM(estimated_cost_usd), 0) INTO v_cost
   FROM usage_logs
   WHERE user_id = p_user_id AND created_at >= v_start;
 
@@ -231,7 +231,7 @@ BEGIN
     SELECT metadata->>'agent' AS "agentId", COUNT(*) AS count
     FROM audit_events
     WHERE actor_id = p_user_id AND created_at >= v_start
-      AND metadata ? 'agent'
+      AND metadata->>'agent' IS NOT NULL
     GROUP BY metadata->>'agent'
     ORDER BY count DESC
     LIMIT 10
@@ -262,13 +262,11 @@ BEGIN
       WHERE actor_id = p_user_id AND created_at >= v_start
       GROUP BY created_at::date
     ) ae
-    LEFT JOIN (
-      SELECT created_at::date AS date,
-        SUM((metadata->>'input_tokens')::INT + (metadata->>'output_tokens')::INT) AS tokens
+    LEFT JOIN LATERAL (
+      SELECT SUM(input_tokens + output_tokens) AS tokens
       FROM usage_logs
-      WHERE user_id = p_user_id AND created_at >= v_start
-      GROUP BY created_at::date
-    ) ul ON ae.date = ul.date
+      WHERE user_id = p_user_id AND created_at::date = ae.date
+    ) ul ON TRUE
   ) t;
 
   -- Recent activity (last 50 events)
