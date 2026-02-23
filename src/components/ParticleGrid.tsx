@@ -202,7 +202,10 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.pal = getPal()
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal)
-    s.particles = Array.from({ length: PARTICLE_COUNT }, () => createParticle(cols, rows))
+    const count = cols * rows < 40
+      ? Math.max(6, Math.floor(cols * rows * 0.6))
+      : PARTICLE_COUNT
+    s.particles = Array.from({ length: count }, () => createParticle(cols, rows))
   }, [sizeProp])
 
   useEffect(() => {
