@@ -14,12 +14,13 @@ cleanupOutdatedCaches()
 
 // Navigation requests (HTML) — always network first so users get fresh index.html.
 // This prevents stale HTML from referencing JS/CSS hashes that no longer exist.
-// 5s timeout: balances freshness vs slow mobile networks (3s was too aggressive).
+// 10s timeout: Android 3G/4G networks often need 5-8s. Previous 5s was too aggressive
+// and caused stale cache fallbacks that referenced missing JS/CSS hashes.
 registerRoute(
   new NavigationRoute(
     new NetworkFirst({
       cacheName: 'html-shell',
-      networkTimeoutSeconds: 5,
+      networkTimeoutSeconds: 10,
     })
   )
 )

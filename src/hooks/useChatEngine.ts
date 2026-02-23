@@ -220,28 +220,9 @@ export function useChatEngine(params: UseChatEngineParams) {
     const trimmed = content.trim()
     const filesToSend = [...attachedFiles]
 
-    // Lazy-create conversation on first message
-    let convId = activeConversationId
-    if (!convId) {
-      const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
-      let conv: Awaited<ReturnType<typeof createConversation>>
-      try {
-        conv = await createConversation(userId, title)
-      } catch {
-        showToast('Session expired. Signing you out — please sign back in.')
-        signOut()
-        return
-      }
-      if (!conv) {
-        showToast('Failed to create conversation. Please try again.')
-        return
-      }
-      convId = conv.id
-      setActiveConversationId(convId)
-    }
-
+    // Show immediate feedback — add user message and thinking state BEFORE any network calls.
+    // This ensures the home screen disappears instantly on slow Android connections.
     const attachmentMeta = filesToSend.map(f => ({ name: f.name, type: f.type }))
-
     const userMsgId = `user_${Date.now()}`
     const userMsg: ChatMessage = {
       id: userMsgId,
@@ -259,6 +240,32 @@ export function useChatEngine(params: UseChatEngineParams) {
     setResearchProgress(null)
     setTaskProgress(null)
     setSwarmProgress(null)
+
+    // Lazy-create conversation on first message
+    let convId = activeConversationId
+    if (!convId) {
+      const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
+      let conv: Awaited<ReturnType<typeof createConversation>>
+      try {
+        conv = await createConversation(userId, title)
+      } catch {
+        setMessages(prev => prev.filter(m => m.id !== userMsgId))
+        setIsStreaming(false)
+        setIsThinking(false)
+        showToast('Session expired. Signing you out — please sign back in.')
+        signOut()
+        return
+      }
+      if (!conv) {
+        setMessages(prev => prev.filter(m => m.id !== userMsgId))
+        setIsStreaming(false)
+        setIsThinking(false)
+        showToast('Failed to create conversation. Please try again.')
+        return
+      }
+      convId = conv.id
+      setActiveConversationId(convId)
+    }
 
     // Classify intent via AgentRouter
     const recentCtx = buildRecentContext(
