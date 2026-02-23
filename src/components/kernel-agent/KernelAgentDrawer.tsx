@@ -1,11 +1,14 @@
+import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SPRING } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
-import { KernelAgentChat } from './KernelAgentChat';
-import { KernelAgentObserver } from './KernelAgentObserver';
-import { KernelAgentControls } from './KernelAgentControls';
-import { KernelAgentGate } from './KernelAgentGate';
 import type { KernelTab } from '../../hooks/useKernelAgent';
+
+// Lazy-load drawer tab content — only parsed when drawer opens
+const KernelAgentChat = lazy(() => import('./KernelAgentChat').then(m => ({ default: m.KernelAgentChat })));
+const KernelAgentObserver = lazy(() => import('./KernelAgentObserver').then(m => ({ default: m.KernelAgentObserver })));
+const KernelAgentControls = lazy(() => import('./KernelAgentControls').then(m => ({ default: m.KernelAgentControls })));
+const KernelAgentGate = lazy(() => import('./KernelAgentGate').then(m => ({ default: m.KernelAgentGate })));
 
 const TABS: { id: KernelTab; label: string }[] = [
   { id: 'chat', label: 'Chat' },
@@ -54,15 +57,17 @@ export function KernelAgentDrawer() {
 
           {/* Body */}
           <div className="kernel-drawer-body custom-scrollbar">
-            {needsGate ? (
-              <KernelAgentGate />
-            ) : activeTab === 'chat' ? (
-              <KernelAgentChat />
-            ) : activeTab === 'observe' ? (
-              <KernelAgentObserver />
-            ) : (
-              <KernelAgentControls />
-            )}
+            <Suspense fallback={null}>
+              {needsGate ? (
+                <KernelAgentGate />
+              ) : activeTab === 'chat' ? (
+                <KernelAgentChat />
+              ) : activeTab === 'observe' ? (
+                <KernelAgentObserver />
+              ) : (
+                <KernelAgentControls />
+              )}
+            </Suspense>
           </div>
         </motion.aside>
       )}

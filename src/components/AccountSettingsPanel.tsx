@@ -35,6 +35,7 @@ export default function AccountSettingsPanel({
   const settings = useAccountSettings(user, {
     updateEmail: auth.updateEmail,
     updatePassword: auth.updatePassword,
+    reauthenticate: auth.reauthenticate,
     updateProfile: auth.updateProfile,
     getUserIdentities: auth.getUserIdentities,
     linkIdentity: auth.linkIdentity,
@@ -117,28 +118,36 @@ export default function AccountSettingsPanel({
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
-          {/* Current password (re-auth) — only shown for users with a password */}
+          {/* Email verification — verify identity before sensitive changes */}
           {settings.hasPassword && (
-            <>
-              <label className="ka-settings-field">
-                <span className="ka-settings-label">{t('security.currentPassword')}</span>
-                <input
-                  className="ka-gate-input"
-                  type="password"
-                  value={settings.currentPassword}
-                  onChange={e => settings.setCurrentPassword(e.target.value)}
-                  placeholder={t('security.currentPasswordPlaceholder')}
-                  autoComplete="current-password"
-                />
-              </label>
-              {settings.reAuthState.error && (
+            <div className="ka-settings-verify-block">
+              <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
+              {!settings.codeSent ? (
+                <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading}>
+                  {settings.verifyState.loading ? '...' : t('security.sendCode')}
+                </button>
+              ) : (
+                <div className="ka-settings-field-row">
+                  <input
+                    className="ka-gate-input"
+                    type="text"
+                    inputMode="numeric"
+                    value={settings.verificationCode}
+                    onChange={e => settings.setVerificationCode(e.target.value)}
+                    placeholder={t('security.codePlaceholder')}
+                    autoComplete="one-time-code"
+                  />
+                </div>
+              )}
+              {settings.verifyState.error && (
                 <p className="ka-gate-error">
-                  {settings.reAuthState.error === 'currentRequired' ? t('security.currentRequired') :
-                   settings.reAuthState.error === 'wrongPassword' ? t('security.wrongPassword') :
-                   settings.reAuthState.error}
+                  {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') : settings.verifyState.error}
                 </p>
               )}
-            </>
+              {settings.verifyState.success === 'codeSent' && (
+                <p className="ka-gate-success"><IconCheck size={14} /> {t('security.codeSent')}</p>
+              )}
+            </div>
           )}
 
           {/* Change Email */}
