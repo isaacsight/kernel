@@ -284,18 +284,18 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       const small = cell < CELL
       const gravity = en ? (small ? 0 : GRAVITY * 15) : GRAVITY
-      const damping = en ? 0.998 : DAMPING
-      const subSteps = en ? SUB_STEPS * 3 : SUB_STEPS
+      const damping = en && small ? 0.96 : en ? 0.998 : DAMPING
+      const subSteps = en && small ? SUB_STEPS : en ? SUB_STEPS * 3 : SUB_STEPS
       for (let step = 0; step < subSteps; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
         }
       }
-      // Small energetic grids: turbulence keeps particles spread and alive
+      // Small energetic grids: gentle drift keeps particles spread and fluid
       if (en && small) {
         for (const p of s.particles) {
-          p.vx += (Math.random() - 0.5) * 0.15
-          p.vy += (Math.random() - 0.5) * 0.15
+          p.vx += (Math.random() - 0.5) * 0.02
+          p.vy += (Math.random() - 0.5) * 0.02
         }
       }
 
