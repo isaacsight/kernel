@@ -50,6 +50,8 @@
     "newChat": "New Chat",
     "searching": "Searching...",
     "noMatches": "No matches found",
+    "noResults": "No results",
+    "resultCount": "{{count}} results",
     "clearSearch": "Clear search",
     "empty": "No conversations yet"
   },
