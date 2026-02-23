@@ -43,13 +43,17 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: 
             role="tab"
             aria-selected={isActive}
             aria-label={tab.label}
-            onClick={() => onTabChange(tab.id)}
+            onClick={() => {
+              if ('vibrate' in navigator) navigator.vibrate(10)
+              onTabChange(tab.id)
+            }}
           >
             <span className="ka-tab-icon-wrap">
               <Icon size={isMini ? 20 : 22} />
               {showDot && <span className="ka-feature-dot ka-feature-dot--tab" />}
             </span>
             <span className="ka-tab-label">{tab.label}</span>
+            {isActive && <span className="ka-tab-dot" />}
           </button>
         )
       })}

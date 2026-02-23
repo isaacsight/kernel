@@ -73,6 +73,23 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'more' | 'drawer'
+
+  const closePanel = useCallback((id: PanelId) => {
+    switch (id) {
+      case 'kg': setShowKGPanel(false); break
+      case 'stats': setShowStatsPanel(false); break
+      case 'goals': setShowGoalsPanel(false); break
+      case 'workflows': setShowWorkflowsPanel(false); break
+      case 'scheduled': setShowScheduledPanel(false); break
+      case 'briefings': setShowBriefingPanel(false); break
+      case 'insights': setShowInsightsPanel(false); break
+      case 'more': setShowMoreMenu(false); break
+      case 'drawer': callbacks.setIsDrawerOpen(false); break
+    }
+    setActiveTab('home')
+  }, [callbacks])
+
   const handleMoreAction = useCallback((action: MoreAction) => {
     setShowMoreMenu(false)
     setActiveTab('home')
@@ -123,7 +140,7 @@ export function usePanelManager(callbacks: {
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,
-    closeAllPanels, closeOtherPanels,
+    closeAllPanels, closeOtherPanels, closePanel,
     handleTabChange, handleMoreAction,
   }
 }

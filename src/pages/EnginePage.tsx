@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useDragControls } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
@@ -32,6 +32,8 @@ import { useChatEngine } from '../hooks/useChatEngine'
 import { useEntityEvolution } from '../hooks/useEntityEvolution'
 import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
+import { useOverlayHistory } from '../hooks/useOverlayHistory'
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
@@ -198,6 +200,8 @@ function EngineChat() {
     showToast,
   )
 
+  useKeyboardHeight()
+
   const msgActions = useMessageActions(
     chatEngine.messages,
     chatEngine.setMessages,
@@ -304,8 +308,8 @@ function EngineChat() {
         setIsDrawerOpen(true)
       }
       if (e.key === 'Escape') {
-        if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
-        if (isDrawerOpen) setIsDrawerOpen(false)
+        if (panels.showMoreMenu) panels.closePanel('more')
+        if (isDrawerOpen) panels.closePanel('drawer')
       }
     }
     window.addEventListener('keydown', handler)
@@ -341,6 +345,14 @@ function EngineChat() {
       document.removeEventListener('touchend', onTouchEnd)
     }
   }, [isDrawerOpen])
+
+  // ─── Back button support ─────────────────────────────
+  const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
+    || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
+    || panels.showInsightsPanel
+  useOverlayHistory(anyPanelOpen, panels.closeAllPanels)
+  useOverlayHistory(isDrawerOpen && !anyPanelOpen, () => setIsDrawerOpen(false))
+  useOverlayHistory(panels.showMoreMenu && !anyPanelOpen && !isDrawerOpen, () => { panels.setShowMoreMenu(false); panels.setActiveTab('home') })
 
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
@@ -394,41 +406,41 @@ function EngineChat() {
       {/* Panel Bottom Sheets */}
       <AnimatePresence>
         {panels.showKGPanel && (
-          <BottomSheet onClose={() => { panels.setShowKGPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('kg')}>
             <Suspense fallback={<PanelShimmer />}>
-              <KGPanel entities={chatEngine.kgEntities} relations={chatEngine.kgRelations} onClose={() => { panels.setShowKGPanel(false); panels.setActiveTab('home') }} />
+              <KGPanel entities={chatEngine.kgEntities} relations={chatEngine.kgRelations} onClose={() => panels.closePanel('kg')} />
             </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showStatsPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowStatsPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('stats')}>
             <Suspense fallback={<PanelShimmer />}>
-              <StatsPanel userId={user.id} onClose={() => { panels.setShowStatsPanel(false); panels.setActiveTab('home') }} />
+              <StatsPanel userId={user.id} onClose={() => panels.closePanel('stats')} />
             </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showGoalsPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowGoalsPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('goals')}>
             <Suspense fallback={<PanelShimmer />}>
-              <GoalsPanel userId={user.id} onClose={() => { panels.setShowGoalsPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+              <GoalsPanel userId={user.id} onClose={() => panels.closePanel('goals')} onToast={showToast} />
             </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showWorkflowsPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowWorkflowsPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('workflows')}>
             <Suspense fallback={<PanelShimmer />}>
               <WorkflowsPanel
                 userId={user.id}
-                onClose={() => { panels.setShowWorkflowsPanel(false); panels.setActiveTab('home') }}
+                onClose={() => panels.closePanel('workflows')}
                 onToast={showToast}
                 onRunWorkflow={(proc) => {
-                  panels.setShowWorkflowsPanel(false)
+                  panels.closePanel('workflows')
                   chatEngine.sendMessage(`Run workflow: ${proc.name}`)
                 }}
               />
@@ -438,24 +450,24 @@ function EngineChat() {
       </AnimatePresence>
       <AnimatePresence>
         {panels.showScheduledPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowScheduledPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('scheduled')}>
             <Suspense fallback={<PanelShimmer />}>
-              <ScheduledTasksPanel userId={user.id} onClose={() => { panels.setShowScheduledPanel(false); panels.setActiveTab('home') }} onToast={showToast} />
+              <ScheduledTasksPanel userId={user.id} onClose={() => panels.closePanel('scheduled')} onToast={showToast} />
             </Suspense>
           </BottomSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
         {panels.showBriefingPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowBriefingPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('briefings')}>
             <Suspense fallback={<PanelShimmer />}>
               <BriefingPanel
                 userId={user.id}
                 userMemory={chatEngine.userMemory}
                 kgEntities={chatEngine.kgEntities}
-                onClose={() => { panels.setShowBriefingPanel(false); panels.setActiveTab('home') }}
+                onClose={() => panels.closePanel('briefings')}
                 onToast={showToast}
-                onGoDeeper={(title, content) => { panels.setShowBriefingPanel(false); panels.setActiveTab('home'); chatEngine.handleBriefingGoDeeper(title, content) }}
+                onGoDeeper={(title, content) => { panels.closePanel('briefings'); chatEngine.handleBriefingGoDeeper(title, content) }}
                 onAddGoal={chatEngine.handleBriefingAddGoal}
               />
             </Suspense>
@@ -465,14 +477,14 @@ function EngineChat() {
 
       <AnimatePresence>
         {panels.showInsightsPanel && user && (
-          <BottomSheet onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}>
+          <BottomSheet onClose={() => panels.closePanel('insights')}>
             <Suspense fallback={<PanelShimmer />}>
               <InsightsPanel
                 engineState={chatEngine.engineState}
                 userMemory={chatEngine.userMemory}
                 onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
                 onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
-                onClose={() => { panels.setShowInsightsPanel(false); panels.setActiveTab('home') }}
+                onClose={() => panels.closePanel('insights')}
               />
             </Suspense>
           </BottomSheet>
@@ -482,7 +494,7 @@ function EngineChat() {
       {/* Conversation Drawer */}
       <ConversationDrawer
         isOpen={isDrawerOpen}
-        onClose={() => { setIsDrawerOpen(false); setDrawerSearchFocus(false); panels.setActiveTab('home') }}
+        onClose={() => { panels.closePanel('drawer'); setDrawerSearchFocus(false) }}
         autoFocusSearch={drawerSearchFocus}
         conversations={convs.conversations}
         activeId={convs.activeConversationId}
@@ -933,6 +945,7 @@ function EngineChat() {
             el.style.height = Math.min(el.scrollHeight, 200) + 'px'
           }}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chatEngine.handleSubmit(e) } }}
+          onPaste={fileAttachments.handlePaste}
           placeholder={t('placeholder')}
           disabled={isStreaming}
           rows={1}
@@ -955,7 +968,7 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => { panels.setShowMoreMenu(false); panels.setActiveTab('home') }} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} />
           </Suspense>
         )}
       </AnimatePresence>
@@ -984,6 +997,7 @@ function PanelShimmer() {
 // ─── Shared Bottom Sheet Component ──────────────────────
 
 function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  const dragControls = useDragControls()
   return (
     <motion.div className="ka-kg-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
       <motion.div
@@ -993,12 +1007,15 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         exit={{ y: '100%' }}
         transition={SPRING.DEFAULT}
         drag="y"
+        dragControls={dragControls}
+        dragListener={false}
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}
         onDragEnd={(_, info) => { if (info.offset.y > 100 || info.velocity.y > 300) onClose() }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
-        <div className="ka-kg-drag-handle" />
+        <div className="ka-kg-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
+        <button className="ka-sheet-close-btn" onClick={onClose} aria-label="Close panel"><IconClose size={18} /></button>
         {children}
       </motion.div>
     </motion.div>
