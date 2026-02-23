@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { motion, AnimatePresence, useDragControls } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
@@ -16,6 +16,7 @@ import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { upsertKGEntity, forkSharedConversation } from '../engine/SupabaseClient'
+import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile } from '../components/ChatHelpers'
@@ -123,7 +124,23 @@ function relativeTime(dateStr: string): string {
   return `${days}d ago`
 }
 
-// Spring constants imported from @/constants/motion
+// ─── Feature 4: Open panel for nudge ─────────────────────
+
+function openFeaturePanel(
+  featureId: string,
+  panels: ReturnType<typeof usePanelManager>,
+  featureDiscovery: ReturnType<typeof useFeatureDiscovery>,
+) {
+  featureDiscovery.markDiscovered(featureId)
+  panels.closeOtherPanels(featureId)
+  switch (featureId) {
+    case 'insights': panels.setShowInsightsPanel(true); break
+    case 'knowledge': panels.setShowKGPanel(true); break
+    case 'stats': panels.setShowStatsPanel(true); break
+    case 'workflows': panels.setShowWorkflowsPanel(true); break
+    case 'scheduled': panels.setShowScheduledPanel(true); break
+  }
+}
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
@@ -150,8 +167,6 @@ function EngineChat() {
   const { darkMode, setDarkMode } = useDarkMode()
   const { toast, showToast } = useToast()
   const { updateAvailable, updateNow } = useServiceWorkerUpdate()
-  const featureDiscovery = useFeatureDiscovery(user?.id)
-
   const billing = useBilling(user, showToast, signOut)
 
   const panels = usePanelManager({
@@ -194,6 +209,13 @@ function EngineChat() {
     isPro,
   })
 
+  // Feature 4: Feature discovery with nudge context
+  const featureDiscovery = useFeatureDiscovery(user?.id, {
+    conversationCount: convs.conversations.length,
+    kgEntityCount: chatEngine.kgEntities.length,
+    completedGoals: chatEngine.userGoals.filter(g => g.status === 'completed').length,
+  })
+
   // ─── Companion mood wiring ──────────────────────────────
   // Record conversation when messages grow (user sent a message)
   const prevMsgCountRef = useRef(chatEngine.messages.length)
@@ -220,6 +242,37 @@ function EngineChat() {
     }
     prevGoalsDoneRef.current = done
   }, [chatEngine.userGoals]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Feature 3: Goal check-in chips
+  const goalCheckIns = useMemo(
+    () => getGoalsDueForCheckIn(chatEngine.userGoals).slice(0, 2),
+    [chatEngine.userGoals],
+  )
+
+  // Feature 6: Streak bonus — 3+ day streak gives free users 1 extra message
+  const streakBonus = !isPro && evolution.companion.streak >= 3 ? 1 : 0
+  const effectiveLimit = FREE_MSG_LIMIT + streakBonus
+
+  // Feature 6: Mid-session value preview (once per session, at message 5)
+  const [showValuePreview, setShowValuePreview] = useState(false)
+  const valuePreviewShownRef = useRef(false)
+  useEffect(() => {
+    if (!isPro && chatEngine.messageCountRef.current === 5 && !valuePreviewShownRef.current) {
+      valuePreviewShownRef.current = true
+      setShowValuePreview(true)
+      const timer = setTimeout(() => setShowValuePreview(false), 8000)
+      return () => clearTimeout(timer)
+    }
+  }, [chatEngine.messages.length]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Feature 6: Memory highlights for upgrade wall
+  const memoryHighlights = useMemo(() => {
+    if (!chatEngine.userMemory) return null
+    const interests = chatEngine.userMemory.interests?.slice(0, 3) || []
+    const facts = chatEngine.userMemory.facts?.slice(0, 2) || []
+    if (interests.length === 0 && facts.length === 0) return null
+    return { interests, facts }
+  }, [chatEngine.userMemory])
 
   const scroll = useScrollTracking(chatEngine.messages.length)
 
@@ -618,6 +671,11 @@ function EngineChat() {
                   <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
                 </button>
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowUsagePanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconChart size={16} /> {t('menu.usage')}
+                  </button>
+                )}
                 <div className="ka-header-menu-divider" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
                 {!isPro && (
@@ -663,9 +721,85 @@ function EngineChat() {
         {messages.length === 0 && !convs.msgsLoading && (
           <motion.div className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <PixelEntity evolution={evolution} />
+
+            {/* Feature 5: Mood label */}
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={evolution.moodState}
+                className="ka-home-mood"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                {t(`entity.mood.${evolution.moodState}`)}
+              </motion.span>
+            </AnimatePresence>
+
+            {/* Feature 2: Streak indicator */}
+            {evolution.companion.streak >= 2 && (
+              <span
+                className="ka-home-streak"
+                data-streak-milestone={
+                  evolution.companion.streak >= 30 ? 'month' :
+                  evolution.companion.streak >= 7 ? 'week' : undefined
+                }
+              >
+                {t('entity.streak', { count: evolution.companion.streak })}
+              </span>
+            )}
+
+            {/* Feature 1: Tier label + progress hint */}
+            <AnimatePresence mode="wait">
+              {evolution.isEvolving ? (
+                <motion.div
+                  key="evolving"
+                  className="ka-home-tier ka-home-tier--evolving"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {t('entity.evolved', { tier: evolution.tierName })}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="tier"
+                  className="ka-home-tier"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <span className="ka-home-tier-name">{evolution.tierName}</span>
+                  <span className="ka-home-tier-hint">{evolution.progressHint}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <h1 className="ka-empty-title">Kernel</h1>
             <p className="ka-empty-subtitle">{t('tagline')}</p>
             <p className="ka-home-greeting">{getTimeGreeting()}</p>
+
+            {/* Feature 4: Contextual nudge */}
+            {featureDiscovery.activeNudge && (
+              <motion.div
+                className="ka-home-nudge"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <p className="ka-home-nudge-text">{t(`nudge.${featureDiscovery.activeNudge.featureId}`)}</p>
+                <div className="ka-home-nudge-actions">
+                  <button className="ka-home-nudge-btn" onClick={() => {
+                    openFeaturePanel(featureDiscovery.activeNudge!.featureId, panels, featureDiscovery)
+                  }}>{t('nudge.showMe')}</button>
+                  <button className="ka-home-nudge-dismiss" onClick={() => {
+                    featureDiscovery.dismissNudge(featureDiscovery.activeNudge!.featureId)
+                  }}>{t('nudge.notNow')}</button>
+                </div>
+              </motion.div>
+            )}
+
             {chatEngine.todayBriefing && (
               <div className="ka-home-briefing-card">
                 <div className="ka-home-briefing-info">
@@ -683,6 +817,22 @@ function EngineChat() {
                 </div>
               </div>
             )}
+
+            {/* Feature 3: Goal check-in chips */}
+            {goalCheckIns.length > 0 && (
+              <div className="ka-home-goal-checkins">
+                {goalCheckIns.map(g => (
+                  <button
+                    key={g.id}
+                    className="ka-topic ka-topic--goal"
+                    onClick={() => chatEngine.sendMessage(`How's my progress on "${g.title}"?`)}
+                  >
+                    <IconTarget size={12} /> {t('entity.goalCheckIn', { title: g.title.length > 30 ? g.title.slice(0, 30) + '…' : g.title })}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {convs.conversations.length > 0 && (
               <div className="ka-home-recent">
                 {convs.conversations.slice(0, 2).map(c => (
@@ -868,8 +1018,18 @@ function EngineChat() {
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
               <img className="ka-upgrade-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
-              <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: FREE_MSG_LIMIT })}</h2>
+              <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: effectiveLimit })}</h2>
               <p className="ka-upgrade-subtitle">{t('upgrade.subtitle')}</p>
+              {memoryHighlights && (
+                <div className="ka-upgrade-learned">
+                  <p className="ka-upgrade-learned-title">{t('upgrade.learnedTitle')}</p>
+                  <ul className="ka-upgrade-learned-list">
+                    {memoryHighlights.interests.map(i => <li key={i}>{i}</li>)}
+                    {memoryHighlights.facts.map(f => <li key={f}>{f}</li>)}
+                  </ul>
+                  <p className="ka-upgrade-learned-cta">{t('upgrade.learnedCta')}</p>
+                </div>
+              )}
               <ul className="ka-upgrade-features">
                 <li>{t('upgrade.features.unlimitedMessages')}</li><li>{t('upgrade.features.deepResearch')}</li><li>{t('upgrade.features.multiAgent')}</li><li>{t('upgrade.features.multiStep')}</li><li>{t('upgrade.features.persistentMemory')}</li>
               </ul>
@@ -937,11 +1097,21 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      {/* Feature 6: Mid-session value preview */}
+      <AnimatePresence>
+        {showValuePreview && (
+          <motion.div className="ka-value-preview" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+            <p className="ka-value-preview-text">{t('valuePreview.message')}</p>
+            <button className="ka-value-preview-dismiss" onClick={() => setShowValuePreview(false)}>{t('valuePreview.gotIt')}</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Free-tier hint */}
       <AnimatePresence>
-        {!isPro && chatEngine.messageCountRef.current >= 7 && chatEngine.messageCountRef.current < FREE_MSG_LIMIT && !billing.showUpgradeWall && (
+        {!isPro && chatEngine.messageCountRef.current >= 7 && chatEngine.messageCountRef.current < effectiveLimit && !billing.showUpgradeWall && (
           <motion.div className="ka-msg-hint" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-            {FREE_MSG_LIMIT - chatEngine.messageCountRef.current === 1 ? t('lastFreeMessage') : t('messagesRemaining', { count: FREE_MSG_LIMIT - chatEngine.messageCountRef.current })}
+            {effectiveLimit - chatEngine.messageCountRef.current === 1 ? t('lastFreeMessage') : t('messagesRemaining', { count: effectiveLimit - chatEngine.messageCountRef.current })}
           </motion.div>
         )}
       </AnimatePresence>

@@ -21,6 +21,7 @@ export interface EntityEvolutionState {
   score: number
   tier: number
   tierName: TierName
+  progressHint: string
   topic: TopicDomain
   topicColor: string
   timePhase: TimePhase
@@ -96,6 +97,50 @@ export function scoreToTier(score: number): number {
     if (score >= TIER_THRESHOLDS[i]) return i
   }
   return 0
+}
+
+// ─── Progress Hint ──────────────────────────────────────────
+
+export function computeProgressHint(
+  conversationCount: number,
+  kgEntityCount: number,
+  kgRelationCount: number,
+  completedGoals: number,
+  completedMilestones: number,
+  score: number,
+  tier: number,
+): string {
+  if (tier >= 4) return 'Fully evolved'
+  const nextThreshold = TIER_THRESHOLDS[tier + 1]
+  const gap = nextThreshold - score
+  const nextName = TIER_NAMES[tier + 1]
+
+  // Estimate how many of each action needed to close the gap
+  // Derivative of convScore: d/d(conv) ≈ 15 / ((conv+1) * ln2) * 0.4
+  const convMarginal = (15 / ((conversationCount + 1) * Math.LN2)) * 0.4
+  const convsNeeded = convMarginal > 0 ? Math.ceil(gap / convMarginal) : Infinity
+
+  // Derivative of kgScore: d/d(kg) ≈ 12 / ((kg+rel+1) * ln2) * 0.35
+  const kgTotal = kgEntityCount + kgRelationCount
+  const kgMarginal = (12 / ((kgTotal + 1) * Math.LN2)) * 0.35
+  const kgNeeded = kgMarginal > 0 ? Math.ceil(gap / kgMarginal) : Infinity
+
+  // Goal marginal: 20 * 0.25 = 5 points per goal
+  const goalMarginal = 5
+  const goalsNeeded = Math.ceil(gap / goalMarginal)
+
+  // Pick the path needing fewest units
+  if (convsNeeded <= kgNeeded && convsNeeded <= goalsNeeded) {
+    return convsNeeded === 1
+      ? `1 conversation from ${nextName}`
+      : `${convsNeeded} conversations from ${nextName}`
+  }
+  if (goalsNeeded <= kgNeeded) {
+    return goalsNeeded === 1
+      ? `Complete a goal to reach ${nextName}`
+      : `${goalsNeeded} goals from ${nextName}`
+  }
+  return `Explore knowledge to reach ${nextName}`
 }
 
 // ─── Topic Classification ───────────────────────────────────
@@ -175,20 +220,29 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
   }, [])
 
   // Score & tier
-  const { score, tier } = useMemo(() => {
-    const completedGoals = userGoals.filter(g => g.status === 'completed').length
-    const completedMilestones = userGoals.reduce(
+  const { score, tier, completedGoals: _completedGoals, completedMilestones: _completedMilestones } = useMemo(() => {
+    const cg = userGoals.filter(g => g.status === 'completed').length
+    const cm = userGoals.reduce(
       (acc, g) => acc + g.milestones.filter(m => m.completed).length, 0,
     )
     const s = computeEvolutionScore(
       conversationCount,
       kgEntities.length,
       kgRelations.length,
-      completedGoals,
-      completedMilestones,
+      cg,
+      cm,
     )
-    return { score: s, tier: scoreToTier(s) }
+    return { score: s, tier: scoreToTier(s), completedGoals: cg, completedMilestones: cm }
   }, [conversationCount, kgEntities.length, kgRelations.length, userGoals])
+
+  // Progress hint — cheapest path to next tier
+  const progressHint = useMemo(
+    () => computeProgressHint(
+      conversationCount, kgEntities.length, kgRelations.length,
+      _completedGoals, _completedMilestones, score, tier,
+    ),
+    [conversationCount, kgEntities.length, kgRelations.length, _completedGoals, _completedMilestones, score, tier],
+  )
 
   // Topic classification
   const topic = useMemo(
@@ -253,6 +307,7 @@ export function useEntityEvolution(params: UseEntityEvolutionParams): EntityEvol
   return {
     score, tier,
     tierName: TIER_NAMES[tier],
+    progressHint,
     topic, topicColor, timePhase,
     isEvolving, hasUnreadBriefing, hasUrgentGoals, isRecentlyActive, isPro,
     moodState, companion,

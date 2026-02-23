@@ -3052,6 +3052,219 @@ h4 {
     margin-bottom: var(--space-xl);
 }
 
+/* Feature 5: Mood label */
+.ka-home-mood {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    opacity: 0.25;
+    margin-top: var(--space-sm);
+}
+
+/* Feature 2: Streak indicator */
+.ka-home-streak {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    opacity: 0.3;
+    margin-top: var(--space-xs);
+}
+.ka-home-streak[data-streak-milestone="week"] { opacity: 0.45; }
+.ka-home-streak[data-streak-milestone="month"] { opacity: 0.55; font-weight: 600; }
+
+/* Feature 1: Tier label + progress hint */
+.ka-home-tier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+.ka-home-tier-name {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+}
+.ka-home-tier-hint {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.75rem;
+    opacity: 0.3;
+}
+.ka-home-tier--evolving {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--rubin-primary, #6B5B95);
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+/* Feature 4: Nudge card */
+.ka-home-nudge {
+    width: 100%;
+    max-width: 360px;
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-md);
+    background: rgba(107, 91, 149, 0.03);
+}
+.ka-home-nudge-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    opacity: 0.7;
+    margin: 0 0 var(--space-sm);
+}
+.ka-home-nudge-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+.ka-home-nudge-btn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--rubin-primary, #6B5B95);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--rubin-primary, #6B5B95);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.ka-home-nudge-btn:hover {
+    background: var(--rubin-primary, #6B5B95);
+    color: #fff;
+}
+.ka-home-nudge-dismiss {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: var(--space-xs) var(--space-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    opacity: 0.4;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.ka-home-nudge-dismiss:hover { opacity: 0.7; }
+
+/* Feature 3: Goal check-in chips */
+.ka-home-goal-checkins {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: var(--space-lg);
+}
+.ka-topic--goal {
+    border-color: var(--rubin-primary, #6B5B95);
+    color: var(--rubin-primary, #6B5B95);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.ka-topic--goal:hover {
+    background: rgba(107, 91, 149, 0.08);
+}
+
+/* Feature 6: Value preview */
+.ka-value-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    margin: 0 var(--space-md) var(--space-sm);
+    border-radius: var(--radius-sm);
+    background: rgba(107, 91, 149, 0.04);
+    border: 1px solid rgba(107, 91, 149, 0.08);
+}
+.ka-value-preview-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin: 0;
+    flex: 1;
+}
+.ka-value-preview-dismiss {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    border: none;
+    background: transparent;
+    opacity: 0.4;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.ka-value-preview-dismiss:hover { opacity: 0.7; }
+
+/* Feature 6: Upgrade wall — learned section */
+.ka-upgrade-learned {
+    width: 100%;
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    border-radius: var(--radius-sm);
+    background: rgba(107, 91, 149, 0.04);
+    border: 1px solid rgba(107, 91, 149, 0.08);
+}
+.ka-upgrade-learned-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin: 0 0 var(--space-xs);
+}
+.ka-upgrade-learned-list {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin: 0 0 var(--space-xs);
+    padding-left: var(--space-md);
+    line-height: 1.6;
+}
+.ka-upgrade-learned-cta {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin: 0;
+}
+
+/* Dark mode — behavioral science features */
+[data-theme="dark"] .ka-home-nudge {
+    border-color: var(--dark-border-subtle);
+    background: rgba(107, 91, 149, 0.06);
+}
+[data-theme="dark"] .ka-home-nudge-btn {
+    border-color: var(--rubin-primary, #6B5B95);
+    color: var(--rubin-primary, #6B5B95);
+}
+[data-theme="dark"] .ka-home-nudge-btn:hover {
+    background: var(--rubin-primary, #6B5B95);
+    color: #fff;
+}
+[data-theme="dark"] .ka-home-nudge-dismiss { color: var(--dark-text); }
+[data-theme="dark"] .ka-topic--goal {
+    border-color: rgba(107, 91, 149, 0.5);
+    color: #b8a8d8;
+}
+[data-theme="dark"] .ka-topic--goal:hover {
+    background: rgba(107, 91, 149, 0.12);
+}
+[data-theme="dark"] .ka-value-preview {
+    background: rgba(107, 91, 149, 0.08);
+    border-color: var(--dark-border-subtle);
+}
+[data-theme="dark"] .ka-upgrade-learned {
+    background: rgba(107, 91, 149, 0.08);
+    border-color: var(--dark-border-subtle);
+}
+
 /* Recent context cards */
 .ka-home-recent {
     display: flex;
