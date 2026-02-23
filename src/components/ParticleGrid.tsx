@@ -212,11 +212,16 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
     const count = Math.min(PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * 0.4)))
     const boost = cell < CELL ? 0.6 : 0.05
-    s.particles = Array.from({ length: count }, () => ({
-      ...createParticle(cols, rows),
-      vx: (Math.random() - 0.5) * boost,
-      vy: (Math.random() - 0.5) * boost,
-    }))
+    s.particles = Array.from({ length: count }, () => {
+      // Small grids: spread across full area; large grids: center cluster
+      const gx = cell < CELL
+        ? Math.random() * (cols - 1) + 0.5
+        : Math.random() * cols * 0.6 + cols * 0.2
+      const gy = cell < CELL
+        ? Math.random() * (rows - 1) + 0.5
+        : Math.random() * rows * 0.5 + rows * 0.15
+      return { gx, gy, vx: (Math.random() - 0.5) * boost, vy: (Math.random() - 0.5) * boost }
+    })
   }, [sizeProp])
 
   useEffect(() => {
@@ -277,12 +282,20 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
 
       ctx.drawImage(s.gridImage, 0, 0)
 
-      const gravity = en ? GRAVITY * 15 : GRAVITY
+      const small = cell < CELL
+      const gravity = en ? (small ? 0 : GRAVITY * 15) : GRAVITY
       const damping = en ? 0.998 : DAMPING
       const subSteps = en ? SUB_STEPS * 3 : SUB_STEPS
       for (let step = 0; step < subSteps; step++) {
         for (const p of s.particles) {
           updateParticle(p, s.particles, s.cols, s.rows, s.mouseGx, s.mouseGy, s.mouseActive, gravity, damping)
+        }
+      }
+      // Small energetic grids: turbulence keeps particles spread and alive
+      if (en && small) {
+        for (const p of s.particles) {
+          p.vx += (Math.random() - 0.5) * 0.15
+          p.vy += (Math.random() - 0.5) * 0.15
         }
       }
 
