@@ -151,45 +151,55 @@ export function PixelEntityCanvas({ width, height, tier, mood, topicColor }: Pix
         spawnParticle()
       }
 
-      // Update & draw particles
-      let aliveCount = 0
-      for (const p of pool.current.slice(0, activeCount.current)) {
+      // Update particles — compact pool in-place (no slice/allocation)
+      let writeIdx = 0
+      for (let i = 0; i < activeCount.current; i++) {
+        const p = pool.current[i]
         p.life++
         p.x += p.vx
         p.y += p.vy
 
         // Fade in/out
         const progress = p.life / p.maxLife
-        if (progress < 0.2) {
-          p.opacity = progress / 0.2
-        } else if (progress > 0.8) {
-          p.opacity = (1 - progress) / 0.2
-        } else {
-          p.opacity = 1
-        }
+        if (progress < 0.2) p.opacity = progress / 0.2
+        else if (progress > 0.8) p.opacity = (1 - progress) / 0.2
+        else p.opacity = 1
 
         // Gentle wander
         p.vx += (Math.random() - 0.5) * 0.02
         p.vy += (Math.random() - 0.5) * 0.01
 
         if (p.life < p.maxLife && p.x > -10 && p.x < width + 10) {
-          aliveCount++
-
-          // Draw: mix mood color with topic color
-          const mixColor = tier >= 3 ? topicRgb : config.color
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(${mixColor}, ${p.opacity * 0.35})`
-          ctx.fill()
-
-          // Glow
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(${mixColor}, ${p.opacity * 0.08})`
-          ctx.fill()
+          // Compact: swap alive particle to front of pool
+          if (writeIdx !== i) {
+            pool.current[i] = pool.current[writeIdx]
+            pool.current[writeIdx] = p
+          }
+          writeIdx++
         }
       }
-      activeCount.current = aliveCount
+      activeCount.current = writeIdx
+
+      // Draw pass — separated from update for cache coherence
+      const mixColor = tier >= 3 ? topicRgb : config.color
+      for (let i = 0; i < activeCount.current; i++) {
+        const p = pool.current[i]
+        ctx.fillStyle = `rgba(${mixColor}, ${p.opacity * 0.35})`
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      // Glow pass — additive blend for soft halos
+      ctx.globalCompositeOperation = 'lighter'
+      for (let i = 0; i < activeCount.current; i++) {
+        const p = pool.current[i]
+        ctx.fillStyle = `rgba(${mixColor}, ${p.opacity * 0.08})`
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      ctx.globalCompositeOperation = 'source-over'
 
       // Update & draw ripples
       const activeRipples: Ripple[] = []
