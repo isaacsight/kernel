@@ -53,9 +53,8 @@ const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 
 
 export function validateFileSize(file: File, isPro: boolean): string | null {
   const limits = isPro ? PRO_LIMITS : FREE_LIMITS
-  if (isImageFile(file) && file.size > limits.images) {
-    return `Image too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.images / 1048576).toFixed(0)}MB.`
-  }
+  // Allow all image sizes — no limit enforced
+  if (isImageFile(file)) return null
   if (isPdfFile(file) && file.size > limits.pdfs) {
     return `PDF too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.pdfs / 1048576).toFixed(0)}MB.`
   }
