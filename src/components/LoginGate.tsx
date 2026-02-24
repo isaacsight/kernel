@@ -284,6 +284,13 @@ export function LoginGate() {
                       {isSignUp ? t('modal.toggleSignInAction') : t('modal.toggleSignUpAction')}
                     </button>
                   </div>
+
+                  <p className="ka-gate-legal">
+                    {t('modal.legalAgreement')}{' '}
+                    <a href="#/terms">{t('modal.termsLink')}</a>
+                    {' & '}
+                    <a href="#/privacy">{t('modal.privacyLink')}</a>
+                  </p>
                 </>
               )}
             </motion.div>

@@ -13594,3 +13594,101 @@ h4 {
 .ka-gate-reset-actions .ka-settings-text-btn {
     margin-bottom: var(--space-xs);
 }
+
+/* ─── Legal Pages ─────────────────────────────────────── */
+
+.ka-legal-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-family: var(--font-prose);
+    color: var(--rubin-slate);
+    line-height: 1.7;
+}
+[data-theme="dark"] .ka-legal-page {
+    color: var(--dark-text);
+}
+.ka-legal-page h1 {
+    font-family: var(--font-prose);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+}
+.ka-legal-page h2 {
+    font-family: var(--font-prose);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 12px;
+}
+.ka-legal-page h3 {
+    font-family: var(--font-meta);
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+}
+.ka-legal-page p {
+    font-size: 16px;
+    margin-bottom: 14px;
+}
+.ka-legal-page ul {
+    margin: 0 0 16px 0;
+    padding-left: 20px;
+}
+.ka-legal-page li {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+.ka-legal-page a {
+    color: var(--rubin-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+[data-theme="dark"] .ka-legal-page a {
+    color: #A78BFA;
+}
+.ka-legal-updated {
+    font-family: var(--font-meta);
+    font-size: 13px;
+    opacity: 0.5;
+    margin-bottom: 24px;
+}
+.ka-legal-back {
+    display: inline-block;
+    font-family: var(--font-meta);
+    font-size: 13px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 32px;
+    cursor: pointer;
+    color: var(--rubin-primary);
+    opacity: 0.7;
+}
+.ka-legal-back:hover {
+    opacity: 1;
+}
+
+/* ─── Terms Agreement (LoginGate) ─────────────────────── */
+
+.ka-gate-legal {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.5;
+    margin-top: var(--space-md);
+    line-height: 1.5;
+}
+.ka-gate-legal a {
+    color: var(--rubin-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+[data-theme="dark"] .ka-gate-legal a {
+    color: #A78BFA;
+}

@@ -10,6 +10,8 @@ const EnginePage = lazyRetry(() => import('./pages/EnginePage').then(m => ({ def
 const AdminPage = lazyRetry(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
 const SharedConversationPage = lazyRetry(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
 const BriefingPage = lazyRetry(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
+const PrivacyPage = lazyRetry(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })))
+const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -62,6 +64,16 @@ export const router = createHashRouter([
       { path: 'shared/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <SharedConversationPage />
+        </Suspense>
+      ) },
+      { path: 'privacy', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <PrivacyPage />
+        </Suspense>
+      ) },
+      { path: 'terms', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <TermsPage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },
