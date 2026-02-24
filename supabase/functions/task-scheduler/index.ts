@@ -156,6 +156,14 @@ serve(async (req: Request) => {
       console.warn('Cleanup RPCs failed (non-blocking):', cleanupErr)
     }
 
+    // ── Provider reliability: recompute health scores ──
+    try {
+      await supabase.rpc('compute_provider_health')
+      console.log('[health] Provider scores recomputed')
+    } catch (scoreErr) {
+      console.warn('Provider health computation failed (non-blocking):', scoreErr)
+    }
+
     // ── Health monitoring: check error rates and alert on spikes ──
     try {
       const { data: health } = await supabase.rpc('get_error_health', { p_window_minutes: 15 })

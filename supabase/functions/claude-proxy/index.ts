@@ -175,6 +175,109 @@ async function recordErrorAndRefund(
   }
 }
 
+// ─── Smart retry matrix ─────────────────────────────────────
+
+interface RetryConfig {
+  retry: boolean
+  maxRetries: number
+  baseDelayMs: number
+  switchProvider: boolean
+}
+
+const RETRY_MATRIX: Record<ErrorType, RetryConfig> = {
+  upstream_5xx:  { retry: true,  maxRetries: 1, baseDelayMs: 300,  switchProvider: false },
+  timeout:       { retry: true,  maxRetries: 1, baseDelayMs: 500,  switchProvider: true },
+  internal:      { retry: true,  maxRetries: 1, baseDelayMs: 0,    switchProvider: true },
+  missing_key:   { retry: false, maxRetries: 0, baseDelayMs: 0,    switchProvider: false },
+  user_error:    { retry: false, maxRetries: 0, baseDelayMs: 0,    switchProvider: false },
+}
+
+// Provider fallback order: prefer highest-quality alternatives
+const PROVIDER_FALLBACKS: Record<Provider, Provider[]> = {
+  anthropic: ['openai', 'gemini'],
+  openai:    ['anthropic', 'gemini'],
+  gemini:    ['anthropic', 'openai'],
+  nvidia:    ['openai', 'anthropic'],
+}
+
+function jitteredDelay(baseMs: number): number {
+  return baseMs + Math.floor(Math.random() * baseMs)
+}
+
+// ─── Provider health scoring ────────────────────────────────
+
+interface ProviderScore {
+  score: number
+  total: number
+  errors: number
+  timeouts: number
+  refunds: number
+}
+
+// In-memory cache — refreshed every 60s to avoid DB round-trip per request
+let _providerScoresCache: Record<string, ProviderScore> = {}
+let _providerScoresCacheTime = 0
+const SCORE_CACHE_TTL_MS = 60_000  // 1 minute
+
+async function getProviderScores(): Promise<Record<string, ProviderScore>> {
+  if (Date.now() - _providerScoresCacheTime < SCORE_CACHE_TTL_MS && Object.keys(_providerScoresCache).length > 0) {
+    return _providerScoresCache
+  }
+
+  try {
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const { data } = await svc.rpc('get_provider_scores', { p_window: '15m' })
+    if (data && typeof data === 'object') {
+      _providerScoresCache = data as Record<string, ProviderScore>
+      _providerScoresCacheTime = Date.now()
+    }
+  } catch (err) {
+    console.warn('[provider-health] Failed to fetch scores (using cache):', err)
+  }
+
+  return _providerScoresCache
+}
+
+/**
+ * Pick the best fallback provider based on health scores.
+ * Returns null if no healthy fallback available.
+ */
+async function pickFallbackProvider(
+  failedProvider: Provider,
+  tier: string,
+): Promise<{ provider: Provider; model: string } | null> {
+  const fallbacks = PROVIDER_FALLBACKS[failedProvider]
+  if (!fallbacks.length) return null
+
+  const scores = await getProviderScores()
+
+  // Filter to providers that have the API key configured and score > 50
+  const candidates: { provider: Provider; score: number }[] = []
+  for (const p of fallbacks) {
+    const keyName = p === 'anthropic' ? 'ANTHROPIC_API_KEY'
+      : p === 'openai' ? 'OPENAI_API_KEY'
+      : p === 'gemini' ? 'GEMINI_API_KEY'
+      : 'NVIDIA_API_KEY'
+    if (!Deno.env.get(keyName)) continue
+
+    const pScore = scores[p]?.score ?? 100
+    if (pScore > 50) {
+      candidates.push({ provider: p, score: pScore })
+    }
+  }
+
+  if (candidates.length === 0) return null
+
+  // Sort by score descending — pick the healthiest
+  candidates.sort((a, b) => b.score - a.score)
+  const best = candidates[0]
+  const model = resolveModel(best.provider, tier)
+
+  return { provider: best.provider, model }
+}
+
 // ─── Pre-request daily cost check ─────────────────────────
 
 async function checkDailyCostLimit(userId: string): Promise<{ blocked: boolean; dailyCost: number }> {
@@ -1180,22 +1283,70 @@ serve(async (req: Request) => {
       })
     }
 
-    // ── Dispatch to provider handler ───────────────────────
-    switch (provider) {
-      case 'anthropic':
-        return handleAnthropic(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
-      case 'openai':
-        return handleOpenAI(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
-      case 'gemini':
-        return handleGemini(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
-      case 'nvidia':
-        return handleNvidia(payload, resolvedModel, isStream, trackUserId, CORS_HEADERS)
-      default:
-        return new Response(
-          JSON.stringify({ error: `Unknown provider: ${provider}` }),
-          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
+    // ── Dispatch to provider handler (with smart retry) ────
+
+    function dispatchProvider(p: Provider, m: string): Promise<Response> {
+      switch (p) {
+        case 'anthropic': return handleAnthropic(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'openai':    return handleOpenAI(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'gemini':    return handleGemini(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'nvidia':    return handleNvidia(payload, m, isStream, trackUserId, CORS_HEADERS)
+        default:
+          return Promise.resolve(new Response(
+            JSON.stringify({ error: `Unknown provider: ${p}` }),
+            { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          ))
+      }
     }
+
+    // First attempt with the requested provider
+    const firstResponse = await dispatchProvider(provider, resolvedModel)
+
+    // If successful or streaming (can't retry mid-stream), return immediately
+    if (firstResponse.ok || isStream) return firstResponse
+
+    // Parse the error to determine if we should retry
+    const errBody = await firstResponse.clone().text()
+    let errParsed: { error?: string; status?: number; refunded?: boolean } = {}
+    try { errParsed = JSON.parse(errBody) } catch { /* raw text */ }
+
+    const errStatus = errParsed.status ?? firstResponse.status
+    const errMsg = errParsed.error ?? errBody
+    const errType = classifyError(errStatus, errMsg)
+    const retryConfig = RETRY_MATRIX[errType]
+
+    // If not retryable, return the original error response
+    if (!retryConfig.retry) return firstResponse
+
+    console.log(`[retry] ${provider}/${resolvedModel} failed (${errType}), attempting retry...`)
+
+    // Delay with jitter before retry
+    if (retryConfig.baseDelayMs > 0) {
+      await new Promise(r => setTimeout(r, jitteredDelay(retryConfig.baseDelayMs)))
+    }
+
+    // Decide: retry same provider or switch?
+    let retryProvider = provider
+    let retryModel = resolvedModel
+
+    if (retryConfig.switchProvider) {
+      const fallback = await pickFallbackProvider(provider, payload.tier ?? 'strong')
+      if (fallback) {
+        retryProvider = fallback.provider
+        retryModel = fallback.model
+        console.log(`[retry] Switching to fallback: ${retryProvider}/${retryModel}`)
+      } else {
+        console.log(`[retry] No healthy fallback — retrying same provider`)
+      }
+    }
+
+    const retryResponse = await dispatchProvider(retryProvider, retryModel)
+
+    if (retryResponse.ok) {
+      console.log(`[retry] SUCCESS on retry with ${retryProvider}/${retryModel}`)
+    }
+
+    return retryResponse
   } catch (error) {
     console.error('claude-proxy error:', error)
     // Try to extract userId from the request context for refund
