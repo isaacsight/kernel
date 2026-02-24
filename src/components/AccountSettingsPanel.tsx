@@ -52,6 +52,7 @@ export default function AccountSettingsPanel({
   // ─── Identity Governance ──────────────────────────
   const identity = useIdentityRecovery()
   const [verificationCode, setVerificationCode] = useState('')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const isVerified = identity.request?.state === 'verified' || identity.request?.state === 'executed'
   const isChallenged = identity.request?.state === 'challenged'
@@ -383,13 +384,45 @@ export default function AccountSettingsPanel({
               <span className="ka-settings-danger-desc">{t('danger.signOutDesc')}</span>
             </div>
           </button>
-          <button className="ka-settings-danger-btn ka-settings-danger-btn--destructive" onClick={onDeleteAccount}>
-            <IconTrash size={16} />
-            <div>
-              <span className="ka-settings-danger-label">{t('danger.deleteAccount')}</span>
-              <span className="ka-settings-danger-desc">{t('danger.deleteDesc')}</span>
+          {showDeleteConfirm ? (
+            <div className="ka-settings-reset-confirm">
+              <p className="ka-settings-reset-confirm-text">{t('danger.deleteConfirmText')}</p>
+              <div className="ka-settings-reset-confirm-actions">
+                <button
+                  className="ka-settings-danger-btn ka-settings-danger-btn--sm ka-settings-danger-btn--destructive"
+                  onClick={() => {
+                    setShowDeleteConfirm(false)
+                    onDeleteAccount()
+                  }}
+                >
+                  {t('danger.deleteConfirmBtn')}
+                </button>
+                <button
+                  className="ka-settings-text-btn"
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  {t('resetData.cancel')}
+                </button>
+              </div>
             </div>
-          </button>
+          ) : (
+            <button
+              className="ka-settings-danger-btn ka-settings-danger-btn--destructive"
+              onClick={() => {
+                if (!isVerified) {
+                  onToast(t('danger.verifyFirst'))
+                  return
+                }
+                setShowDeleteConfirm(true)
+              }}
+            >
+              <IconTrash size={16} />
+              <div>
+                <span className="ka-settings-danger-label">{t('danger.deleteAccount')}</span>
+                <span className="ka-settings-danger-desc">{t('danger.deleteDesc')}</span>
+              </div>
+            </button>
+          )}
         </div>
       </div>
     </div>

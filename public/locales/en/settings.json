@@ -104,6 +104,9 @@
     "signOut": "Sign out",
     "signOutDesc": "Sign out of your account on this device",
     "deleteAccount": "Delete account",
-    "deleteDesc": "Permanently delete your account and all data"
+    "deleteDesc": "Permanently delete your account and all data",
+    "verifyFirst": "Please verify your identity first",
+    "deleteConfirmText": "This will permanently delete your account, all conversations, memory, and data. This cannot be undone. Are you sure?",
+    "deleteConfirmBtn": "Yes, delete my account"
   }
 }
