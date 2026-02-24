@@ -8,6 +8,10 @@ function checkIsAdmin(user: User | null): boolean {
   return user?.app_metadata?.is_admin === true;
 }
 
+// localStorage key for pending password recovery.
+// Set when user clicks "Forgot password?", consumed when the recovery redirect lands.
+const RECOVERY_FLAG = 'kernel-pending-recovery';
+
 export interface AuthState {
   user: User | null;
   session: Session | null;
@@ -54,50 +58,105 @@ export function useAuth(): AuthState {
     return active;
   }, []);
 
-  // Initialize auth — handle PKCE callback + existing session
+  // Initialize auth — handle token_hash recovery, PKCE callback, or existing session
+  //
+  // Recovery flow (token_hash strategy — cross-device safe):
+  //   1. User clicks "Forgot password?" → resetPasswordForEmail sends email
+  //   2. Email links to: https://kernel.chat/?token_hash=xxx&type=recovery
+  //   3. App detects token_hash → calls verifyOtp() → creates session
+  //   4. SetNewPasswordModal appears
+  //
+  // Fallback (legacy PKCE — same-browser only):
+  //   Email links through Supabase /auth/v1/verify → redirects with ?code=xxx
+  //   App exchanges code for session using code_verifier from localStorage
   useEffect(() => {
     let mounted = true;
     const params = new URLSearchParams(window.location.search);
     const hasCode = params.has('code');
     const hasError = params.has('error');
+    const tokenHash = params.get('token_hash');
+    const tokenType = params.get('type');
 
-    console.log('[Auth] init — code:', hasCode, 'error:', hasError, 'url:', window.location.href);
+    const pendingRecovery = localStorage.getItem(RECOVERY_FLAG);
+
+    console.log('[Auth] init — code:', hasCode, 'error:', hasError, 'tokenHash:', !!tokenHash, 'pendingRecovery:', !!pendingRecovery, 'url:', window.location.href);
 
     if (hasError) {
       console.warn('[Auth] OAuth error:', params.get('error'), params.get('error_description'));
       window.history.replaceState({}, '', window.location.pathname + window.location.hash);
     }
 
-    if (hasCode) {
+    // Consume the recovery flag and show the modal once the user has a session.
+    const consumeRecoveryFlag = () => {
+      if (pendingRecovery && mounted) {
+        console.log('[Auth] Consuming pending recovery flag — showing credential reset modal');
+        localStorage.removeItem(RECOVERY_FLAG);
+        setIsPasswordRecovery(true);
+      }
+    };
+
+    // Helper: restore session from existing tokens (shared fallback)
+    const fallbackToSession = () => {
+      supabase.auth.getSession().then(({ data: { session: s } }) => {
+        if (!mounted) return;
+        setSession(s);
+        setUser(s?.user ?? null);
+        setIsLoading(false);
+        if (s?.user) {
+          checkSubscription();
+          consumeRecoveryFlag();
+        }
+      });
+    };
+
+    // ─── Primary: token_hash recovery (cross-device safe) ─────────
+    if (tokenHash && tokenType === 'recovery') {
+      console.log('[Auth] Token hash recovery detected, verifying...');
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+        .then(({ data, error }) => {
+          if (!mounted) return;
+          if (error) {
+            console.error('[Auth] Token hash verification failed:', error.message);
+            fallbackToSession();
+          } else if (data.session) {
+            console.log('[Auth] Token hash verification success:', data.session.user?.email);
+            setSession(data.session);
+            setUser(data.session.user);
+            setIsPasswordRecovery(true);
+            localStorage.removeItem(RECOVERY_FLAG);
+            checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
+          } else {
+            setIsLoading(false);
+          }
+          window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+        });
+
+    // ─── Fallback: PKCE code exchange (legacy emails) ─────────────
+    } else if (hasCode) {
       console.log('[Auth] PKCE code detected, exchanging...');
       supabase.auth.exchangeCodeForSession(params.get('code')!)
         .then(({ data, error }) => {
           if (!mounted) return;
           if (error) {
             console.error('[Auth] Code exchange failed:', error.message);
+            fallbackToSession();
           } else {
             console.log('[Auth] Code exchange success, user:', data.session?.user?.email);
             setSession(data.session);
             setUser(data.session.user);
             checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
+            consumeRecoveryFlag();
           }
           window.history.replaceState({}, '', window.location.pathname + window.location.hash);
         })
         .catch(() => {
           if (!mounted) return;
           console.log('[Auth] Exchange threw, trying getSession fallback...');
-          supabase.auth.getSession().then(({ data: { session: s } }) => {
-            if (!mounted) return;
-            setSession(s);
-            setUser(s?.user ?? null);
-            if (s?.user) {
-              checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
-            } else {
-              setIsLoading(false);
-            }
-          });
+          fallbackToSession();
           window.history.replaceState({}, '', window.location.pathname + window.location.hash);
         });
+
+    // ─── Default: restore existing session ────────────────────────
     } else {
       supabase.auth.getSession()
         .then(({ data: { session: s } }) => {
@@ -105,10 +164,10 @@ export function useAuth(): AuthState {
           console.log('[Auth] getSession:', s?.user?.email ?? 'no session');
           setSession(s);
           setUser(s?.user ?? null);
-          // Unblock rendering immediately — subscription check runs in background
           setIsLoading(false);
           if (s?.user) {
             checkSubscription();
+            consumeRecoveryFlag();
           }
         })
         .catch((err) => {
@@ -122,6 +181,14 @@ export function useAuth(): AuthState {
       if (!mounted) return;
       console.log('[Auth] onAuthStateChange:', event, s?.user?.email ?? 'no user');
       if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true);
+        localStorage.removeItem(RECOVERY_FLAG);
+      }
+      // If user signs in manually while recovery flag is pending
+      // (e.g., PKCE failed, user logged in with password/OAuth)
+      if (event === 'SIGNED_IN' && localStorage.getItem(RECOVERY_FLAG)) {
+        console.log('[Auth] User signed in with pending recovery — showing modal');
+        localStorage.removeItem(RECOVERY_FLAG);
         setIsPasswordRecovery(true);
       }
       setSession(s);
@@ -167,12 +234,19 @@ export function useAuth(): AuthState {
 
   const resetPassword = useCallback(async (email: string) => {
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    // Store a recovery flag so we can show the modal when the redirect lands,
+    // even if Supabase strips query params or the PKCE exchange fails.
+    localStorage.setItem(RECOVERY_FLAG, 'true');
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) {
+      localStorage.removeItem(RECOVERY_FLAG);
+    }
     return { error: error?.message ?? null };
   }, []);
 
   const signOut = useCallback(async () => {
     setIsSubscribed(false);
+    localStorage.removeItem(RECOVERY_FLAG);
     try {
       await supabase.auth.signOut();
     } catch (err) {
@@ -191,6 +265,7 @@ export function useAuth(): AuthState {
 
   const clearPasswordRecovery = useCallback(() => {
     setIsPasswordRecovery(false);
+    localStorage.removeItem(RECOVERY_FLAG);
   }, []);
 
   const updateEmail = useCallback(async (email: string, nonce?: string) => {
@@ -204,9 +279,18 @@ export function useAuth(): AuthState {
   }, []);
 
   const updateProfile = useCallback(async (data: { display_name?: string; username?: string; avatar_url?: string }) => {
-    const { data: result, error } = await supabase.auth.updateUser({ data });
-    if (!error && result.user) setUser(result.user);
-    return { error: error?.message ?? null };
+    // Use RPC for atomic uniqueness enforcement (user_profiles table)
+    const { data: result, error: rpcError } = await supabase.rpc('update_user_profile', {
+      p_display_name: data.display_name ?? null,
+      p_username: data.username ?? null,
+      p_avatar_url: data.avatar_url ?? null,
+    });
+    if (rpcError) return { error: rpcError.message };
+    if (result?.error) return { error: result.error as string };
+    // Refresh user object to pick up metadata changes
+    const { data: refreshed } = await supabase.auth.getUser();
+    if (refreshed.user) setUser(refreshed.user);
+    return { error: null };
   }, []);
 
   const getUserIdentities = useCallback((): UserIdentity[] => {
