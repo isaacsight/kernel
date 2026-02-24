@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Wykorzystałeś swoje {{limit}} darmowych wiadomości",
     "subtitle": "Uaktualnij do Kernel Pro, aby kontynuować rozmowę.",
+    "resetsAt": "Twoje wiadomości odnowią się o {{time}}. Przejdź na Pro, aby mieć nieograniczone.",
     "features": {
       "unlimitedMessages": "Nieograniczone wiadomości",
       "deepResearch": "Tryb głębokiego badania",

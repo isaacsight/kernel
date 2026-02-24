@@ -26,11 +26,13 @@ export class RateLimitError extends Error {
 export class FreeLimitError extends Error {
     limit: number
     used: number
-    constructor(limit: number, used: number) {
+    resetsAt: string | null
+    constructor(limit: number, used: number, resetsAt?: string) {
         super(`Free limit reached: ${used}/${limit} messages used`)
         this.name = 'FreeLimitError'
         this.limit = limit
         this.used = used
+        this.resetsAt = resetsAt ?? null
     }
 }
 
@@ -41,7 +43,7 @@ function handleErrorResponse(status: number, body: string): never {
         try {
             const parsed = JSON.parse(body)
             if (parsed.error === 'free_limit_reached') {
-                throw new FreeLimitError(parsed.limit ?? 10, parsed.used ?? 0)
+                throw new FreeLimitError(parsed.limit ?? 20, parsed.used ?? 0, parsed.resets_at)
             }
         } catch (e) {
             if (e instanceof FreeLimitError) throw e

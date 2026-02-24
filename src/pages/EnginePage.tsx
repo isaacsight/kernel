@@ -206,6 +206,7 @@ function EngineChat() {
     createConversation: convs.createConversation,
     showToast,
     setShowUpgradeWall: billing.setShowUpgradeWall,
+    setFreeLimitResetsAt: billing.setFreeLimitResetsAt,
     signOut,
     attachedFiles: fileAttachments.attachedFiles,
     setAttachedFiles: fileAttachments.setAttachedFiles,
@@ -1053,7 +1054,11 @@ function EngineChat() {
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
               <img className="ka-upgrade-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
               <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: effectiveLimit })}</h2>
-              <p className="ka-upgrade-subtitle">{t('upgrade.subtitle')}</p>
+              {billing.freeLimitResetsAt ? (
+                <p className="ka-upgrade-subtitle">{t('upgrade.resetsAt', { time: new Date(billing.freeLimitResetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) })}</p>
+              ) : (
+                <p className="ka-upgrade-subtitle">{t('upgrade.subtitle')}</p>
+              )}
               {memoryHighlights && (
                 <div className="ka-upgrade-learned">
                   <p className="ka-upgrade-learned-title">{t('upgrade.learnedTitle')}</p>

@@ -56,6 +56,7 @@ interface UseChatEngineParams {
   createConversation: (userId: string, title: string) => Promise<{ id: string } | null>
   showToast: (msg: string) => void
   setShowUpgradeWall: (v: boolean) => void
+  setFreeLimitResetsAt?: (v: string | null) => void
   signOut: () => void
   attachedFiles: File[]
   setAttachedFiles: (files: File[]) => void
@@ -67,7 +68,7 @@ export function useChatEngine(params: UseChatEngineParams) {
   const {
     userId, activeConversationId, setActiveConversationId,
     loadConversations, createConversation, showToast,
-    setShowUpgradeWall, signOut,
+    setShowUpgradeWall, setFreeLimitResetsAt, signOut,
     attachedFiles, setAttachedFiles, handleNewChat,
     isPro = false,
   } = params
@@ -567,6 +568,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       }
     } catch (err) {
       if (err instanceof FreeLimitError) {
+        setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else if (err instanceof RateLimitError) {

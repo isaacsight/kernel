@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "لقد استنفدت {{limit}} رسائل مجانية",
     "subtitle": "قم بالترقية إلى Kernel Pro لمواصلة المحادثة.",
+    "resetsAt": "ستتجدد رسائلك في {{time}}. قم بالترقية إلى Pro للحصول على رسائل غير محدودة.",
     "features": {
       "unlimitedMessages": "رسائل غير محدودة",
       "deepResearch": "وضع البحث العميق",

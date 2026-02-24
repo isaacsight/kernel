@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Você usou suas {{limit}} mensagens gratuitas",
     "subtitle": "Faça upgrade para Kernel Pro para continuar conversando.",
+    "resetsAt": "Suas mensagens serão renovadas às {{time}}. Atualize para Pro para mensagens ilimitadas.",
     "features": {
       "unlimitedMessages": "Mensagens ilimitadas",
       "deepResearch": "Modo de pesquisa aprofundada",

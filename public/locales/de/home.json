@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Du hast deine {{limit}} kostenlosen Nachrichten verbraucht",
     "subtitle": "Upgrade auf Kernel Pro, um weiterzureden.",
+    "resetsAt": "Deine Nachrichten werden um {{time}} zurückgesetzt. Upgrade auf Pro für unbegrenzte.",
     "features": {
       "unlimitedMessages": "Unbegrenzte Nachrichten",
       "deepResearch": "Tiefenrecherche-Modus",

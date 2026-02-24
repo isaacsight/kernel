@@ -21,11 +21,13 @@ export class RateLimitError extends Error {
 export class FreeLimitError extends Error {
   limit: number
   used: number
-  constructor(limit: number, used: number) {
+  resetsAt: string | null
+  constructor(limit: number, used: number, resetsAt?: string) {
     super(`Free limit reached: ${used}/${limit} messages used`)
     this.name = 'FreeLimitError'
     this.limit = limit
     this.used = used
+    this.resetsAt = resetsAt ?? null
   }
 }
 
@@ -72,7 +74,7 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
         if (e instanceof FreeLimitError) throw e
@@ -140,7 +142,7 @@ export async function claudeStream(
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
         if (e instanceof FreeLimitError) throw e
@@ -229,7 +231,7 @@ export async function claudeStreamChat(
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 10, body.used ?? 0)
+          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
         if (e instanceof FreeLimitError) throw e

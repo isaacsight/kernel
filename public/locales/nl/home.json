@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Je hebt je {{limit}} gratis berichten gebruikt",
     "subtitle": "Upgrade naar Kernel Pro om het gesprek voort te zetten.",
+    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade naar Pro voor onbeperkt.",
     "features": {
       "unlimitedMessages": "Onbeperkte berichten",
       "deepResearch": "Diepgaande onderzoeksmodus",

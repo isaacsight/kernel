@@ -11,6 +11,7 @@ export function useBilling(
   signOut: () => void,
 ) {
   const [showUpgradeWall, setShowUpgradeWall] = useState(false)
+  const [freeLimitResetsAt, setFreeLimitResetsAt] = useState<string | null>(null)
   const [upgradeLoading, setUpgradeLoading] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState('')
@@ -108,7 +109,7 @@ export function useBilling(
   }, [user, deleteLoading, signOut, showToast])
 
   return {
-    showUpgradeWall, setShowUpgradeWall,
+    showUpgradeWall, setShowUpgradeWall, freeLimitResetsAt, setFreeLimitResetsAt,
     upgradeLoading,
     portalLoading, portalError, setPortalError,
     showDeleteConfirm, setShowDeleteConfirm,

@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "आपने अपने {{limit}} मुफ्त संदेश उपयोग कर लिए हैं",
     "subtitle": "बातचीत जारी रखने के लिए Kernel Pro में अपग्रेड करें।",
+    "resetsAt": "आपके संदेश {{time}} पर रीसेट होंगे। असीमित के लिए Pro में अपग्रेड करें।",
     "features": {
       "unlimitedMessages": "असीमित संदेश",
       "deepResearch": "गहन शोध मोड",

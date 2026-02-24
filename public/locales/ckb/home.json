@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "تۆ {{limit}} نامەی خۆڕاییت بەکارهێناوە",
     "subtitle": "بەرز بکەرەوە بۆ Kernel Pro بۆ بەردەوامبوون لە گفتوگۆکە.",
+    "resetsAt": "نامەکانت لە {{time}} نوێ دەبنەوە. بۆ نامەی بێسنوور Pro بکڕە.",
     "features": {
       "unlimitedMessages": "نامەی بێسنوور",
       "deepResearch": "دۆخی لێکۆڵینەوەی قووڵ",

@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Du har brukt dine {{limit}} gratis meldinger",
     "subtitle": "Oppgrader til Kernel Pro for å fortsette samtalen.",
+    "resetsAt": "Meldingene dine fornyes kl. {{time}}. Oppgrader til Pro for ubegrensede.",
     "features": {
       "unlimitedMessages": "Ubegrensede meldinger",
       "deepResearch": "Dyp forskningsmodus",

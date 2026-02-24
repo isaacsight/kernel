@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type { User, Provider, UserIdentity } from '@supabase/supabase-js'
-import { supabase } from '../engine/SupabaseClient'
+import { supabase, getAccessToken } from '../engine/SupabaseClient'
 
 interface SectionState {
   loading: boolean
@@ -9,6 +9,8 @@ interface SectionState {
 }
 
 const INITIAL_SECTION: SectionState = { loading: false, error: null, success: null }
+
+export type ResetScope = 'conversations' | 'memory' | 'knowledge' | 'goals' | 'preferences' | 'all'
 
 export function useAccountSettings(
   user: User | null,
@@ -51,6 +53,24 @@ export function useAccountSettings(
     }
   }, [displayName, username, avatarUrl, auth])
 
+  const resetProfile = useCallback(async () => {
+    setProfileState({ loading: true, error: null, success: null })
+    const { error } = await auth.updateProfile({
+      display_name: '',
+      username: '',
+      avatar_url: '',
+    })
+    if (error) {
+      setProfileState({ loading: false, error, success: null })
+    } else {
+      setDisplayName('')
+      setUsername('')
+      setAvatarUrl('')
+      setProfileState({ loading: false, error: null, success: 'profileReset' })
+      setTimeout(() => setProfileState(s => ({ ...s, success: null })), 3000)
+    }
+  }, [auth])
+
   const uploadAvatar = useCallback(async (file: File) => {
     if (!user) return
     if (file.size > 50 * 1024 * 1024) {
@@ -85,8 +105,32 @@ export function useAccountSettings(
   const [verificationCode, setVerificationCode] = useState('')
   const [verifyState, setVerifyState] = useState<SectionState>(INITIAL_SECTION)
   const [codeSent, setCodeSent] = useState(false)
+  const [cooldownSeconds, setCooldownSeconds] = useState(0)
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const startCooldown = useCallback((seconds: number) => {
+    setCooldownSeconds(seconds)
+    if (cooldownRef.current) clearInterval(cooldownRef.current)
+    cooldownRef.current = setInterval(() => {
+      setCooldownSeconds(prev => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current)
+          cooldownRef.current = null
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current)
+    }
+  }, [])
 
   const sendVerificationCode = useCallback(async () => {
+    if (cooldownSeconds > 0) return
     setVerifyState({ loading: true, error: null, success: null })
     const { error } = await auth.reauthenticate()
     if (error) {
@@ -94,9 +138,10 @@ export function useAccountSettings(
     } else {
       setCodeSent(true)
       setVerifyState({ loading: false, error: null, success: 'codeSent' })
+      startCooldown(60)
       setTimeout(() => setVerifyState(s => ({ ...s, success: null })), 5000)
     }
-  }, [auth])
+  }, [auth, cooldownSeconds, startCooldown])
 
   // ─── Linked Accounts (needed early for checks) ──
   const identities = auth.getUserIdentities()
@@ -196,15 +241,58 @@ export function useAccountSettings(
     }
   }, [identities.length, auth])
 
+  // ─── Reset User Data ─────────────────────────────
+  const [resetState, setResetState] = useState<SectionState>(INITIAL_SECTION)
+  const [resetConfirmScope, setResetConfirmScope] = useState<ResetScope | null>(null)
+
+  const resetUserData = useCallback(async (scope: ResetScope) => {
+    if (!user) return
+    setResetState({ loading: true, error: null, success: null })
+    try {
+      const token = await getAccessToken()
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || ''
+      const res = await fetch(`${supabaseUrl}/functions/v1/reset-user-data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          apikey: supabaseKey,
+        },
+        body: JSON.stringify({ scope }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Request failed' }))
+        throw new Error(data.error || `HTTP ${res.status}`)
+      }
+      const data = await res.json()
+      setResetState({ loading: false, error: null, success: scope })
+      setResetConfirmScope(null)
+      setTimeout(() => setResetState(s => ({ ...s, success: null })), 5000)
+      return data.deleted as Record<string, number>
+    } catch (err: unknown) {
+      setResetState({
+        loading: false,
+        error: err instanceof Error ? err.message : 'Failed to reset data',
+        success: null,
+      })
+      return undefined
+    }
+  }, [user])
+
+  // ─── Password Strength ────────────────────────────
+  const passwordStrength = getPasswordStrength(newPassword)
+
   return {
     // Profile
     displayName, setDisplayName,
     username, setUsername,
     avatarUrl, setAvatarUrl,
-    profileState, saveProfile, uploadAvatar,
+    profileState, saveProfile, resetProfile, uploadAvatar,
     // Verification
     verificationCode, setVerificationCode,
     verifyState, codeSent, sendVerificationCode,
+    cooldownSeconds,
     // Email
     newEmail, setNewEmail,
     emailState, changeEmail,
@@ -212,8 +300,27 @@ export function useAccountSettings(
     newPassword, setNewPassword,
     confirmPassword, setConfirmPassword,
     passwordState, changePassword,
+    passwordStrength,
     // Linked accounts
     identities, hasPassword,
     linkState, linkProvider, unlinkProvider,
+    // Reset data
+    resetState, resetConfirmScope, setResetConfirmScope, resetUserData,
   }
+}
+
+// ─── Password Strength Helper ──────────────────────
+export type PasswordStrength = 'none' | 'weak' | 'fair' | 'strong'
+
+function getPasswordStrength(password: string): PasswordStrength {
+  if (!password) return 'none'
+  let score = 0
+  if (password.length >= 8) score++
+  if (password.length >= 12) score++
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++
+  if (/\d/.test(password)) score++
+  if (/[^a-zA-Z0-9]/.test(password)) score++
+  if (score <= 1) return 'weak'
+  if (score <= 3) return 'fair'
+  return 'strong'
 }
