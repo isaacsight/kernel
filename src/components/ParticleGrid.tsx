@@ -134,6 +134,8 @@ function buildGridImage(size: number, cols: number, rows: number, pal: Palette, 
   const g = c.getContext('2d')!
   g.fillStyle = pal.bg
   g.fillRect(0, 0, size, size)
+  // Skip grid lines for avatar-sized grids — just solid bg
+  if (cell <= 3) return c
   // Minor grid
   g.strokeStyle = pal.gridMin; g.lineWidth = cell < 8 ? 0.2 : 0.5; g.beginPath()
   for (let x = 0; x <= cols; x++) { g.moveTo(x * cell, 0); g.lineTo(x * cell, size) }
@@ -198,9 +200,12 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     const container = canvas.parentElement
     if (!container) return
     const maxSize = sizeProp || 400
-    // Adaptive cell size: tiny grids get 4px, loading grids get 10px, full gets 20px
-    const cell = maxSize <= 80 ? 4 : maxSize <= 120 ? 6 : maxSize <= 300 ? 10 : CELL
-    const raw = Math.min(container.clientWidth, container.clientHeight, maxSize)
+    // Adaptive cell size: avatar grids get 2px, tiny get 4px, loading get 10px, full gets 20px
+    const cell = maxSize <= 32 ? 2 : maxSize <= 80 ? 4 : maxSize <= 120 ? 6 : maxSize <= 300 ? 10 : CELL
+    // For tiny grids, use sizeProp directly (container may not have layout yet)
+    const raw = maxSize <= 80
+      ? maxSize
+      : Math.min(container.clientWidth, container.clientHeight, maxSize)
     const size = Math.floor(raw / cell) * cell
     if (size < cell) return
     canvas.width = size; canvas.height = size
@@ -210,8 +215,8 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     s.cell = cell
     s.cols = cols; s.rows = rows; s.size = size
     s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
-    const density = cell < CELL ? 0.7 : 0.4
-    const count = Math.min(cell < CELL ? 120 : PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * density)))
+    const density = cell <= 3 ? 0.25 : cell < CELL ? 0.7 : 0.4
+    const count = Math.min(cell <= 3 ? 50 : cell < CELL ? 120 : PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * density)))
     const boost = cell < CELL ? 0.3 : 0.05
     s.particles = Array.from({ length: count }, () => {
       // Small grids: spread across full area; large grids: center cluster
@@ -288,24 +293,32 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       const damping = en && small ? 0.97 : en ? 0.998 : DAMPING
       const subSteps = en && small ? 1 : en ? SUB_STEPS * 3 : SUB_STEPS
       if (en && small) {
-        // Small grids: flow field swarm — particles stay inside and explore
-        const t = performance.now() * 0.0004
+        // Small grids: center-attracting swarm with gentle orbital drift
+        const t = performance.now() * 0.0008
         const cx = s.cols * 0.5, cy = s.rows * 0.5
-        const margin = 1.5
+        const isAvatar = cell <= 3
+        const pullStrength = isAvatar ? 0.025 : 0.012
+        const orbitForce = isAvatar ? 0.012 : 0.006
+        const damp = isAvatar ? 0.94 : 0.97
         for (const p of s.particles) {
-          const angle = Math.sin(p.gx * 0.4 + t * 1.2) * 2 + Math.cos(p.gy * 0.6 + t * 0.8) * 2
-          p.vx += Math.cos(angle) * 0.008
-          p.vy += Math.sin(angle) * 0.008
-          // Edge containment — strong push back near boundaries
-          if (p.gx < margin) p.vx += (margin - p.gx) * 0.1
-          if (p.gx > s.cols - margin) p.vx -= (p.gx - (s.cols - margin)) * 0.1
-          if (p.gy < margin) p.vy += (margin - p.gy) * 0.1
-          if (p.gy > s.rows - margin) p.vy -= (p.gy - (s.rows - margin)) * 0.1
-          p.vx *= 0.97; p.vy *= 0.97
+          // Pull toward center
+          const dx = cx - p.gx, dy = cy - p.gy
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.1
+          p.vx += (dx / dist) * pullStrength
+          p.vy += (dy / dist) * pullStrength
+          // Gentle orbital rotation around center
+          const angle = Math.atan2(dy, dx) + Math.PI * 0.5
+          p.vx += Math.cos(angle) * orbitForce
+          p.vy += Math.sin(angle) * orbitForce
+          // Slight flow field noise so it doesn't collapse to a point
+          const noise = Math.sin(p.gx * 0.8 + t * 1.5) + Math.cos(p.gy * 0.8 + t)
+          p.vx += Math.cos(noise) * 0.004
+          p.vy += Math.sin(noise) * 0.004
+          p.vx *= damp; p.vy *= damp
           p.gx += p.vx; p.gy += p.vy
-          // Hard clamp — keep 1 cell inside edges
-          p.gx = Math.max(1, Math.min(s.cols - 2, p.gx))
-          p.gy = Math.max(1, Math.min(s.rows - 2, p.gy))
+          // Hard clamp
+          p.gx = Math.max(0, Math.min(s.cols - 1, p.gx))
+          p.gy = Math.max(0, Math.min(s.rows - 1, p.gy))
         }
       } else {
         for (let step = 0; step < subSteps; step++) {
@@ -321,15 +334,17 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       const partA = new Float32Array(cols * rows)
       const linkA = new Float32Array(cols * rows)
 
-      // Density field
+      // Density field (smaller radius for tiny grids)
+      const fieldR = cell <= 3 ? 1 : 3
+      const fieldRMax = fieldR + 0.5
       for (const p of s.particles) {
         const cx = Math.round(p.gx), cy = Math.round(p.gy)
-        for (let dy = -3; dy <= 3; dy++) {
-          for (let dx = -3; dx <= 3; dx++) {
+        for (let dy = -fieldR; dy <= fieldR; dy++) {
+          for (let dx = -fieldR; dx <= fieldR; dx++) {
             const nx = cx + dx, ny = cy + dy
             if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue
             const d = Math.sqrt(dx * dx + dy * dy)
-            if (d < 3.5) fieldA[ny * cols + nx] += Math.max(0, (1 - d / 3.5) * 0.35)
+            if (d < fieldRMax) fieldA[ny * cols + nx] += Math.max(0, (1 - d / fieldRMax) * 0.35)
           }
         }
       }
@@ -340,7 +355,8 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
         if (cx >= 0 && cx < cols && cy >= 0 && cy < rows) partA[cy * cols + cx] = 1.0
       }
 
-      // Link cells
+      // Link cells (shorter links for tiny grids)
+      const linkMax = cell <= 3 ? 3 : 5
       for (let i = 0; i < s.particles.length; i++) {
         const a = s.particles[i]
         const acx = Math.round(a.gx), acy = Math.round(a.gy)
@@ -349,10 +365,10 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
           const bcx = Math.round(b.gx), bcy = Math.round(b.gy)
           const ddx = Math.abs(bcx - acx), ddy = Math.abs(bcy - acy)
           const manhattan = ddx + ddy
-          if (manhattan > 5 || manhattan < 2) continue
+          if (manhattan > linkMax || manhattan < 2) continue
           const euclidean = Math.sqrt(ddx * ddx + ddy * ddy)
-          if (euclidean > 5) continue
-          const strength = (1 - euclidean / 5.5) * 0.6
+          if (euclidean > linkMax) continue
+          const strength = (1 - euclidean / (linkMax + 0.5)) * 0.6
           const lineSteps = Math.max(ddx, ddy)
           for (let t = 0; t <= lineSteps; t++) {
             const frac = lineSteps === 0 ? 0 : t / lineSteps
@@ -382,9 +398,11 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
           if (partA[idx] > 0.5) {
             ctx.fillStyle = drawPal.particle
             ctx.fillRect(px, py, cell, cell)
-            const inset = Math.max(1, Math.floor(cell / 3))
-            ctx.fillStyle = drawPal.key
-            ctx.fillRect(px + inset, py + inset, cell - inset * 2, cell - inset * 2)
+            if (cell > 3) {
+              const inset = Math.max(1, Math.floor(cell / 3))
+              ctx.fillStyle = drawPal.key
+              ctx.fillRect(px + inset, py + inset, cell - inset * 2, cell - inset * 2)
+            }
           }
         }
       }
