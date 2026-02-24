@@ -10,8 +10,7 @@ import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 // ─── Configuration ──────────────────────────────────────
-const FREE_MAX_SIZE = 2 * 1024 * 1024   // 2MB
-const PRO_MAX_SIZE = 25 * 1024 * 1024    // 25MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 const ALLOWED_TYPES = new Set([
   'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav',
   'audio/mp4', 'audio/m4a', 'audio/x-m4a',
@@ -82,23 +81,9 @@ serve(async (req: Request) => {
       )
     }
 
-    // Check subscription tier for size limits
-    let isPro = false
-    const { data: sub } = await svc
-      .from('subscriptions')
-      .select('status')
-      .eq('user_id', user.id)
-      .eq('status', 'active')
-      .maybeSingle()
-    isPro = !!sub
-
-    const maxSize = isPro ? PRO_MAX_SIZE : FREE_MAX_SIZE
-    if (file.size > maxSize) {
+    if (file.size > MAX_FILE_SIZE) {
       return new Response(
-        JSON.stringify({
-          error: `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(maxSize / 1048576).toFixed(0)}MB.`,
-          upgrade: !isPro,
-        }),
+        JSON.stringify({ error: `File too large (${(file.size / 1048576).toFixed(1)}MB). Max 50MB.` }),
         { status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }
