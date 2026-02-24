@@ -1094,12 +1094,13 @@ serve(async (req: Request) => {
     }
     const payload = JSON.parse(rawBody) as ProxyPayload
 
-    // ── Free-tier limit: 20 messages per day for non-subscribers ───
+    // ── Grace Shield: check limit WITHOUT charging (charge on success) ───
     // Streak bonus: +1 message for users with 3+ day companion streak
     const clientStreak = typeof payload.streak === 'number' ? Math.max(0, Math.min(payload.streak, 365)) : 0
     const FREE_LIMIT = 20 + (clientStreak >= 3 ? 1 : 0)
     const isAdmin = !!user.app_metadata?.is_admin
     let isPaidUser = false
+    let isFreeUser = false
     if (!isServiceCall && !isAdmin) {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
@@ -1112,15 +1113,16 @@ serve(async (req: Request) => {
         .maybeSingle()
 
       isPaidUser = !!sub
-      if (!sub) {
-        // Atomic increment-and-check via Postgres function (returns JSONB)
-        // Prevents race conditions AND client-side count manipulation
-        const { data: result, error: rpcError } = await svc.rpc('increment_message_count', {
+      isFreeUser = !sub
+      if (isFreeUser) {
+        // Grace Shield: READ-ONLY check — don't charge yet
+        // Message will be charged AFTER successful provider response
+        const { data: limitCheck, error: limitErr } = await svc.rpc('check_message_limit', {
           p_user_id: user.id,
         })
-        if (rpcError) {
-          console.error('[free-limit] RPC error:', rpcError.message)
-          // Fallback to non-atomic read if function doesn't exist yet
+        if (limitErr) {
+          console.error('[grace-shield] check_message_limit error:', limitErr.message)
+          // Fallback to direct read
           const { data: mem } = await svc
             .from('user_memory')
             .select('daily_message_count')
@@ -1133,34 +1135,31 @@ serve(async (req: Request) => {
               { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
-        } else if (result?.daily_count > FREE_LIMIT) {
-          // Notify user once per window (only on first overage)
-          if (result.daily_count === FREE_LIMIT + 1) {
-            const resetTime = result.resets_at
-              ? new Date(result.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-              : 'soon'
-            // In-app notification
-            svc.from('notifications').insert({
-              user_id: user.id,
-              title: 'Daily messages used',
-              body: `You've used all ${FREE_LIMIT} free messages. They reset at ${resetTime}.`,
+        } else if (limitCheck?.daily_count >= FREE_LIMIT) {
+          // Already at limit — block before even trying
+          const resetTime = limitCheck.resets_at
+            ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+            : 'soon'
+          // Notify on first overage attempt
+          svc.from('notifications').insert({
+            user_id: user.id,
+            title: 'Daily messages used',
+            body: `You've used all ${FREE_LIMIT} free messages. They reset at ${resetTime}.`,
+            type: 'info',
+          }).then(() => {}).catch(() => {})
+          const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
+          fetch(notifUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
+            body: JSON.stringify({
+              channel: 'push', user_id: user.id,
+              title: 'Your messages reset ' + resetTime,
+              body: `Your ${FREE_LIMIT} daily messages will be available again at ${resetTime}.`,
               type: 'info',
-            }).then(() => {}).catch(() => {})
-            // Push notification (fire-and-forget via internal edge function)
-            const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
-            fetch(notifUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
-              body: JSON.stringify({
-                channel: 'push', user_id: user.id,
-                title: 'Your messages reset ' + resetTime,
-                body: `Your ${FREE_LIMIT} daily messages will be available again at ${resetTime}.`,
-                type: 'info',
-              }),
-            }).catch(() => {})
-          }
+            }),
+          }).catch(() => {})
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: result.daily_count, resets_at: result.resets_at }),
+            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
@@ -1283,6 +1282,44 @@ serve(async (req: Request) => {
       })
     }
 
+    // ── Message state tracking + post-success charge ────────
+
+    const msgStartTime = Date.now()
+    let messageStateId: string | null = null
+
+    // Record message state: PENDING
+    async function recordMessageState(state: string, extra: Record<string, unknown> = {}): Promise<string | null> {
+      try {
+        const svcState = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+        if (messageStateId) {
+          await svcState.from('message_states').update({
+            state, resolved_at: state === 'pending' || state === 'streaming' ? null : new Date().toISOString(),
+            duration_ms: Date.now() - msgStartTime, ...extra,
+          }).eq('id', messageStateId)
+          return messageStateId
+        }
+        const { data } = await svcState.from('message_states').insert({
+          user_id: isServiceCall ? null : user.id, provider, model: resolvedModel,
+          state, attempt: 1, ...extra,
+        }).select('id').single()
+        return data?.id ?? null
+      } catch { return null }
+    }
+
+    // Charge message AFTER success (Grace Shield)
+    async function chargeMessageOnSuccess(): Promise<void> {
+      if (!isFreeUser || isServiceCall || isAdmin) return
+      try {
+        const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+        await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
+        console.log(`[grace-shield] Charged message post-success for user=${user.id}`)
+      } catch (err) {
+        console.error('[grace-shield] Post-success charge failed:', err)
+      }
+    }
+
+    messageStateId = await recordMessageState('pending')
+
     // ── Dispatch to provider handler (with smart retry) ────
 
     function dispatchProvider(p: Provider, m: string): Promise<Response> {
@@ -1300,10 +1337,18 @@ serve(async (req: Request) => {
     }
 
     // First attempt with the requested provider
+    await recordMessageState('streaming')
     const firstResponse = await dispatchProvider(provider, resolvedModel)
 
-    // If successful or streaming (can't retry mid-stream), return immediately
-    if (firstResponse.ok || isStream) return firstResponse
+    // If successful: charge the message and return
+    if (firstResponse.ok) {
+      await recordMessageState('success')
+      chargeMessageOnSuccess().catch(() => {})  // fire-and-forget
+      return firstResponse
+    }
+
+    // Streaming errors are handled within the stream handlers
+    if (isStream) return firstResponse
 
     // Parse the error to determine if we should retry
     const errBody = await firstResponse.clone().text()
@@ -1344,6 +1389,10 @@ serve(async (req: Request) => {
 
     if (retryResponse.ok) {
       console.log(`[retry] SUCCESS on retry with ${retryProvider}/${retryModel}`)
+      await recordMessageState('success', { attempt: 2, retry_provider: retryProvider })
+      chargeMessageOnSuccess().catch(() => {})
+    } else {
+      await recordMessageState('failed_platform', { attempt: 2, retry_provider: retryProvider, error_type: errType })
     }
 
     return retryResponse

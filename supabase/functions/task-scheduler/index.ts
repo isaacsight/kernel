@@ -152,6 +152,7 @@ serve(async (req: Request) => {
       await supabase.rpc('cleanup_rate_limits')
       await supabase.rpc('cleanup_audit_events', { p_retention_days: 90 })
       await supabase.rpc('cleanup_platform_errors', { p_retention_days: 30 })
+      await supabase.rpc('cleanup_message_states', { p_retention_days: 30 })
     } catch (cleanupErr) {
       console.warn('Cleanup RPCs failed (non-blocking):', cleanupErr)
     }

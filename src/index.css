@@ -2126,53 +2126,30 @@ h4 {
 .ka-msg-avatar {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
+    border-radius: 3px;
     background: transparent;
-    border: 1.5px solid var(--rubin-sepia, var(--rubin-ivory-dark));
-    color: var(--rubin-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 0.85rem;
-    font-weight: 400;
     flex-shrink: 0;
     margin-top: 2px;
     overflow: hidden;
 }
 
-.ka-msg-avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.ka-msg-avatar .ka-particle-grid {
+    width: 28px !important;
+    height: 28px !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
-/* Agent-specific avatar borders */
-.ka-msg-avatar[data-agent="researcher"] {
-    border-color: var(--agent-researcher);
-    color: var(--agent-researcher);
+.ka-msg-avatar .ka-particle-grid canvas {
+    width: 28px !important;
+    height: 28px !important;
 }
 
-.ka-msg-avatar[data-agent="coder"] {
-    border-color: var(--agent-coder);
-    color: var(--agent-coder);
-}
-
-.ka-msg-avatar[data-agent="writer"] {
-    border-color: var(--agent-writer);
-    color: var(--agent-writer);
-}
-
-.ka-msg-avatar[data-agent="analyst"] {
-    border-color: var(--agent-analyst);
-    color: var(--agent-analyst);
-}
-
-.ka-msg-avatar[data-agent="kernel"] {
-    border-color: var(--agent-kernel);
-    color: var(--agent-kernel);
-}
+/* Agent avatar borders removed — particle grid color represents each agent */
 
 .ka-msg--kernel .ka-msg-bubble {
     background: var(--rubin-ink-faint, var(--rubin-ivory-med));
@@ -7475,7 +7452,18 @@ h4 {
     .ka-msg-avatar {
         width: 26px;
         height: 26px;
-        font-size: 0.55rem;
+    }
+
+    .ka-msg-avatar .ka-particle-grid {
+        width: 26px !important;
+        height: 26px !important;
+        margin-bottom: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .ka-msg-avatar .ka-particle-grid canvas {
+        width: 26px !important;
+        height: 26px !important;
     }
 
     .ka-msg-bubble {
@@ -9681,6 +9669,128 @@ h4 {
 
 .ka-portal-error button:hover {
     opacity: 1;
+}
+
+/* ─── Provider Status ─────────────────────────────────── */
+
+.ka-ps-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.ka-ps-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    animation: ka-ps-pulse 2s ease-in-out infinite;
+}
+
+.ka-ps-degraded {
+    background: #D97706;
+    box-shadow: 0 0 6px rgba(217, 119, 6, 0.4);
+}
+
+.ka-ps-down {
+    background: var(--rubin-error);
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.4);
+}
+
+@keyframes ka-ps-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.ka-ps-tooltip {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    white-space: nowrap;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    z-index: 100;
+}
+
+.ka-ps-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.ka-ps-banner.ka-ps-degraded {
+    background: rgba(217, 119, 6, 0.08);
+    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+    color: #92400E;
+}
+
+.ka-ps-banner.ka-ps-down {
+    background: var(--rubin-error-light);
+    border-bottom: 1px solid var(--rubin-error-border);
+    color: #991B1B;
+}
+
+.ka-ps-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.ka-ps-banner-label {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ka-ps-banner-detail {
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ka-ps-banner-dismiss {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0 0 0 8px;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+.ka-ps-banner-dismiss:hover {
+    opacity: 1;
+}
+
+/* Dark mode */
+[data-theme="dark"] .ka-ps-tooltip {
+    background: var(--dark-bg-elevated);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-ps-banner.ka-ps-degraded {
+    background: rgba(217, 119, 6, 0.1);
+    border-bottom-color: rgba(217, 119, 6, 0.15);
+    color: #FBBF24;
+}
+
+[data-theme="dark"] .ka-ps-banner.ka-ps-down {
+    background: rgba(220, 38, 38, 0.1);
+    border-bottom-color: rgba(220, 38, 38, 0.15);
+    color: #FCA5A5;
 }
 
 @keyframes ka-spin {
@@ -12118,6 +12228,18 @@ h4 {
     .ka-msg-avatar {
         width: 20px;
         height: 20px;
+    }
+
+    .ka-msg-avatar .ka-particle-grid {
+        width: 20px !important;
+        height: 20px !important;
+        margin-bottom: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .ka-msg-avatar .ka-particle-grid canvas {
+        width: 20px !important;
+        height: 20px !important;
     }
 
     .ka-msg-time.ka-msg-time--visible {

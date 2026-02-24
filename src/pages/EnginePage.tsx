@@ -56,6 +56,8 @@ const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => 
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
 const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
+const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
+const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -160,7 +162,7 @@ const FREE_MSG_LIMIT = 20
 
 function EngineChat() {
   const { t } = useTranslation('home')
-  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, clearPasswordRecovery, signOut, refreshSubscription } = useAuthContext()
+  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription } = useAuthContext()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
@@ -673,6 +675,7 @@ function EngineChat() {
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
           {!isAdmin && isSubscribed && <span className="ka-pro-badge"><IconCrown size={12} /> {t('pro')}</span>}
           {user && <NotificationBell userId={user.id} />}
+          <Suspense fallback={null}><ProviderStatusDot /></Suspense>
           <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label={t('aria.toggleDarkMode', { ns: 'common' })}>
             {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
@@ -740,6 +743,7 @@ function EngineChat() {
           <button onClick={() => billing.setPortalError('')}>&times;</button>
         </div>
       )}
+      <Suspense fallback={null}><ProviderStatusBanner /></Suspense>
 
       {/* Chat Area */}
       <div className="ka-chat" ref={scroll.scrollRef}>
@@ -958,7 +962,7 @@ function EngineChat() {
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
                   <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>
-                    <img src={`${import.meta.env.BASE_URL}${getSpecialist(msg.agentId || 'kernel').emblem || 'concepts/emblem-kernel.svg'}`} alt="" aria-hidden="true" className="ka-msg-avatar-img" />
+                    <ParticleGrid size={28} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                   </div>
                   {msg.agentName && msg.agentName !== 'Kernel' && (
                     <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
@@ -1121,9 +1125,13 @@ function EngineChat() {
         {isPasswordRecovery && (
           <Suspense fallback={null}>
             <SetNewPasswordModal
-              onSubmit={updatePassword}
+              onUpdatePassword={updatePassword}
+              onUpdateEmail={updateEmail}
+              onUpdateProfile={updateProfile}
               onDismiss={clearPasswordRecovery}
               onToast={showToast}
+              currentEmail={user?.email}
+              currentUsername={user?.user_metadata?.username}
             />
           </Suspense>
         )}
