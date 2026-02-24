@@ -5,7 +5,7 @@ import { useAccountSettings, type ResetScope } from '../hooks/useAccountSettings
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconCrown, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
-  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings, IconRefresh,
+  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings,
 } from './KernelIcons'
 import type { ReactNode } from 'react'
 

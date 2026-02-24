@@ -9,7 +9,9 @@
     "avatar": "Profile photo",
     "avatarChange": "Change",
     "save": "Save profile",
-    "saved": "Profile saved"
+    "saved": "Profile saved",
+    "resetProfile": "Reset profile",
+    "profileReset": "Profile reset to defaults"
   },
   "security": {
     "heading": "Reset password & email",
@@ -20,6 +22,8 @@
     "codeRequired": "Enter the verification code from your email",
     "verificationRequired": "Send a verification code first",
     "codeSent": "Code sent — check your email",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in {{seconds}}s",
     "changeEmail": "Change email",
     "emailPlaceholder": "New email address",
     "emailSubmit": "Update email",
@@ -31,7 +35,12 @@
     "passwordSubmit": "Update password",
     "passwordChanged": "Password updated",
     "tooShort": "Password must be at least 8 characters",
-    "mismatch": "Passwords do not match"
+    "mismatch": "Passwords do not match",
+    "strength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "strong": "Strong"
+    }
   },
   "linkedAccounts": {
     "heading": "Linked accounts",
@@ -54,6 +63,38 @@
     "admin": "Admin",
     "upgrade": "Upgrade to Pro",
     "manage": "Manage subscription"
+  },
+  "resetData": {
+    "heading": "Reset data",
+    "description": "Selectively clear your data without deleting your account. This cannot be undone.",
+    "scopes": {
+      "conversations": "Conversations",
+      "memory": "Memory",
+      "knowledge": "Knowledge graph",
+      "goals": "Goals",
+      "preferences": "Preferences",
+      "all": "Everything"
+    },
+    "scopeDesc": {
+      "conversations": "Delete all conversations and messages",
+      "memory": "Clear learned profile and procedures",
+      "knowledge": "Remove all entities and relations",
+      "goals": "Delete all goals and milestones",
+      "preferences": "Reset briefings and metadata",
+      "all": "Clear all data and start fresh"
+    },
+    "confirm": {
+      "conversations": "This will permanently delete all your conversations and messages. Continue?",
+      "memory": "This will erase everything Kernel has learned about you. Continue?",
+      "knowledge": "This will remove all knowledge graph entities and their connections. Continue?",
+      "goals": "This will delete all your goals and progress tracking. Continue?",
+      "preferences": "This will reset your briefings and metadata preferences. Continue?",
+      "all": "This will clear ALL your data — conversations, memory, knowledge, goals, and preferences. Your account and subscription remain intact. Continue?"
+    },
+    "confirmBtn": "Yes, reset",
+    "cancel": "Cancel",
+    "success": "{{scope}} cleared successfully",
+    "done": "Data reset complete"
   },
   "danger": {
     "heading": "Account",
