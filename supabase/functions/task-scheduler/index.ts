@@ -147,12 +147,45 @@ serve(async (req: Request) => {
       }
     }
 
-    // ── Cleanup: purge expired rate limits and old audit events ──
+    // ── Cleanup: purge expired rate limits, old audit events, old errors ──
     try {
       await supabase.rpc('cleanup_rate_limits')
       await supabase.rpc('cleanup_audit_events', { p_retention_days: 90 })
+      await supabase.rpc('cleanup_platform_errors', { p_retention_days: 30 })
     } catch (cleanupErr) {
       console.warn('Cleanup RPCs failed (non-blocking):', cleanupErr)
+    }
+
+    // ── Health monitoring: check error rates and alert on spikes ──
+    try {
+      const { data: health } = await supabase.rpc('get_error_health', { p_window_minutes: 15 })
+      if (health) {
+        const platformRate = health.platform_error_rate_pct ?? 0
+        const platformErrors = health.platform_errors ?? 0
+
+        // Alert if error rate exceeds 10% OR more than 20 platform errors in 15 min
+        if (platformRate > 10 || platformErrors > 20) {
+          const notifyUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/notify-webhook`
+          await fetch(notifyUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+            },
+            body: JSON.stringify({
+              event_type: 'error_spike',
+              error_rate: platformRate,
+              platform_errors: platformErrors,
+              total_errors: health.total_errors,
+              refunded_count: health.refunded_count,
+              breakdown: JSON.stringify(health.by_provider, null, 2),
+            }),
+          })
+          console.warn(`[health] Error spike alert: ${platformRate}% error rate, ${platformErrors} errors in 15min`)
+        }
+      }
+    } catch (healthErr) {
+      console.warn('Health check failed (non-blocking):', healthErr)
     }
 
     // Audit log
