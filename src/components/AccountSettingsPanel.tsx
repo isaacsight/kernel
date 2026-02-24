@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { User, Provider } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import { useAccountSettings, type ResetScope } from '../hooks/useAccountSettings'
 import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
 import { useAuthContext } from '../providers/AuthProvider'
@@ -9,12 +9,6 @@ import {
   IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings,
 } from './KernelIcons'
 import type { ReactNode } from 'react'
-
-const PROVIDERS: { id: Provider; label: string }[] = [
-  { id: 'google', label: 'Google' },
-  { id: 'github', label: 'GitHub' },
-  { id: 'twitter', label: 'X (Twitter)' },
-]
 
 const RESET_SCOPE_ICONS: Record<ResetScope, ReactNode> = {
   conversations: <IconMessageCircle size={16} />,
@@ -301,50 +295,6 @@ export default function AccountSettingsPanel({
         </div>
       </div>
 
-      {/* Linked Accounts */}
-      <div className="ka-settings-section">
-        <h3 className="ka-settings-section-header">{t('linkedAccounts.heading')}</h3>
-        <div className="ka-settings-section-body">
-          {PROVIDERS.map(p => {
-            const linked = settings.identities.find(id => id.provider === p.id)
-            const isConnected = !!linked
-            const isLastIdentity = settings.identities.length <= 1
-            return (
-              <div key={p.id} className="ka-settings-provider-row">
-                <span className="ka-settings-provider-name">{p.label}</span>
-                {isConnected ? (
-                  <div className="ka-settings-provider-actions">
-                    <span className="ka-settings-connected"><IconCheck size={12} /> {t('linkedAccounts.connected')}</span>
-                    <button
-                      className="ka-settings-unlink-btn"
-                      onClick={() => linked && settings.unlinkProvider(linked)}
-                      disabled={isLastIdentity || settings.linkState.loading}
-                      title={isLastIdentity ? t('linkedAccounts.cannotUnlinkLast') : undefined}
-                    >
-                      {t('linkedAccounts.disconnect')}
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    className="ka-settings-link-btn"
-                    onClick={() => settings.linkProvider(p.id)}
-                    disabled={settings.linkState.loading}
-                  >
-                    {t('linkedAccounts.connect')}
-                  </button>
-                )}
-              </div>
-            )
-          })}
-          {settings.linkState.error && (
-            <p className="ka-gate-error">
-              <IconAlertCircle size={14} />
-              {settings.linkState.error === 'cannotUnlinkLast' ? t('linkedAccounts.cannotUnlinkLast') : settings.linkState.error}
-            </p>
-          )}
-          {settings.linkState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('linkedAccounts.unlinked')}</p>}
-        </div>
-      </div>
 
       {/* Subscription */}
       {!isAdmin && (
