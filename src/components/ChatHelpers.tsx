@@ -51,19 +51,8 @@ interface FileSizeLimit {
 const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024, audio: 2 * 1024 * 1024 }
 const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024, audio: 25 * 1024 * 1024 }
 
-export function validateFileSize(file: File, isPro: boolean): string | null {
-  const limits = isPro ? PRO_LIMITS : FREE_LIMITS
-  // Allow all image sizes — no limit enforced
-  if (isImageFile(file)) return null
-  if (isPdfFile(file) && file.size > limits.pdfs) {
-    return `PDF too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.pdfs / 1048576).toFixed(0)}MB.`
-  }
-  if (isAudioFile(file) && file.size > limits.audio) {
-    return `Audio too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.audio / 1048576).toFixed(0)}MB.`
-  }
-  if (file.size > limits.text) {
-    return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.text / 1048576).toFixed(0)}MB.`
-  }
+export function validateFileSize(_file: File, _isPro: boolean): string | null {
+  // No file size limits enforced
   return null
 }
 
