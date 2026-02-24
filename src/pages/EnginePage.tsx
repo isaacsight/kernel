@@ -156,7 +156,7 @@ function openFeaturePanel(
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
-const FREE_MSG_LIMIT = 10
+const FREE_MSG_LIMIT = 20
 
 function EngineChat() {
   const { t } = useTranslation('home')

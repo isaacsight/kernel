@@ -889,10 +889,10 @@ serve(async (req: Request) => {
     }
     const payload = JSON.parse(rawBody) as ProxyPayload
 
-    // ── Free-tier limit: 10 messages for non-subscribers ───
+    // ── Free-tier limit: 20 messages per day for non-subscribers ───
     // Streak bonus: +1 message for users with 3+ day companion streak
     const clientStreak = typeof payload.streak === 'number' ? Math.max(0, Math.min(payload.streak, 365)) : 0
-    const FREE_LIMIT = 10 + (clientStreak >= 3 ? 1 : 0)
+    const FREE_LIMIT = 20 + (clientStreak >= 3 ? 1 : 0)
     const isAdmin = !!user.app_metadata?.is_admin
     let isPaidUser = false
     if (!isServiceCall && !isAdmin) {
