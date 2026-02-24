@@ -12672,3 +12672,279 @@ h4 {
 [data-theme="dark"] .ka-settings-section--danger {
     border-top-color: rgba(248,113,113,0.1);
 }
+
+/* ─── Password Strength Indicator ─────────────────── */
+.ka-settings-strength {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: var(--space-xs) 0;
+}
+.ka-settings-strength-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(107,91,149,0.12);
+    border-radius: 2px;
+    overflow: hidden;
+}
+[data-theme="dark"] .ka-settings-strength-bar {
+    background: rgba(107,91,149,0.2);
+}
+.ka-settings-strength-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s var(--ease-out);
+}
+.ka-settings-strength-fill--weak {
+    width: 33%;
+    background: #DC2626;
+}
+.ka-settings-strength-fill--fair {
+    width: 66%;
+    background: #F59E0B;
+}
+.ka-settings-strength-fill--strong {
+    width: 100%;
+    background: #22C55E;
+}
+.ka-settings-strength-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+.ka-settings-strength-label--weak { color: #DC2626; }
+.ka-settings-strength-label--fair { color: #F59E0B; }
+.ka-settings-strength-label--strong { color: #22C55E; }
+
+/* ─── Profile Button Row ──────────────────────────── */
+.ka-settings-btn-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+.ka-settings-btn-row .ka-gate-submit {
+    flex: 1;
+}
+
+/* ─── Text Button (reset profile, resend code) ────── */
+.ka-settings-text-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    color: var(--rubin-primary, #6B5B95);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs) 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.ka-settings-text-btn:hover {
+    color: var(--rubin-primary-dark, #564980);
+}
+.ka-settings-text-btn:disabled {
+    color: var(--rubin-text-secondary, #6B6966);
+    cursor: default;
+    text-decoration: none;
+}
+[data-theme="dark"] .ka-settings-text-btn {
+    color: #A896D0;
+}
+[data-theme="dark"] .ka-settings-text-btn:hover {
+    color: #C4B8E0;
+}
+[data-theme="dark"] .ka-settings-text-btn:disabled {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+
+/* ─── Resend Code Row ─────────────────────────────── */
+.ka-settings-resend-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-xs);
+}
+
+/* ─── Reset Data Section ──────────────────────────── */
+.ka-settings-section--warning {
+    border-top-color: rgba(245,158,11,0.15);
+}
+[data-theme="dark"] .ka-settings-section--warning {
+    border-top-color: rgba(245,158,11,0.1);
+}
+.ka-settings-section-desc {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin: 0 0 var(--space-sm);
+    line-height: 1.4;
+    padding: 0 var(--space-md);
+}
+[data-theme="dark"] .ka-settings-section-desc {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+
+.ka-settings-reset-item {
+    margin-bottom: var(--space-xs);
+}
+.ka-settings-reset-item:last-child {
+    margin-bottom: 0;
+}
+
+.ka-settings-reset-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid rgba(107,91,149,0.1);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s;
+}
+.ka-settings-reset-btn:hover {
+    background: rgba(107,91,149,0.04);
+    border-color: rgba(107,91,149,0.2);
+}
+[data-theme="dark"] .ka-settings-reset-btn {
+    border-color: rgba(107,91,149,0.15);
+}
+[data-theme="dark"] .ka-settings-reset-btn:hover {
+    background: rgba(107,91,149,0.08);
+    border-color: rgba(107,91,149,0.3);
+}
+.ka-settings-reset-btn--all {
+    border-color: rgba(220,38,38,0.15);
+}
+.ka-settings-reset-btn--all:hover {
+    background: rgba(220,38,38,0.04);
+    border-color: rgba(220,38,38,0.25);
+}
+[data-theme="dark"] .ka-settings-reset-btn--all {
+    border-color: rgba(248,113,113,0.15);
+}
+[data-theme="dark"] .ka-settings-reset-btn--all:hover {
+    background: rgba(248,113,113,0.06);
+    border-color: rgba(248,113,113,0.3);
+}
+.ka-settings-reset-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.ka-settings-reset-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rubin-primary, #6B5B95);
+}
+[data-theme="dark"] .ka-settings-reset-icon {
+    color: #A896D0;
+}
+.ka-settings-reset-btn--all .ka-settings-reset-icon {
+    color: #DC2626;
+}
+[data-theme="dark"] .ka-settings-reset-btn--all .ka-settings-reset-icon {
+    color: #F87171;
+}
+.ka-settings-reset-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.ka-settings-reset-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.92rem;
+    color: var(--rubin-text, #1F1E1D);
+}
+[data-theme="dark"] .ka-settings-reset-name {
+    color: var(--dark-text, #FAF9F6);
+}
+.ka-settings-reset-desc {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    line-height: 1.3;
+}
+[data-theme="dark"] .ka-settings-reset-desc {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-settings-reset-btn--all .ka-settings-reset-name {
+    color: #DC2626;
+}
+[data-theme="dark"] .ka-settings-reset-btn--all .ka-settings-reset-name {
+    color: #F87171;
+}
+
+/* Reset Confirm Inline */
+.ka-settings-reset-confirm {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: var(--radius-sm);
+    background: rgba(245,158,11,0.05);
+}
+[data-theme="dark"] .ka-settings-reset-confirm {
+    border-color: rgba(245,158,11,0.2);
+    background: rgba(245,158,11,0.06);
+}
+.ka-settings-reset-confirm-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    color: var(--rubin-text, #1F1E1D);
+    line-height: 1.4;
+    margin: 0 0 var(--space-sm);
+}
+[data-theme="dark"] .ka-settings-reset-confirm-text {
+    color: var(--dark-text, #FAF9F6);
+}
+.ka-settings-reset-confirm-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+.ka-settings-danger-btn--sm {
+    font-size: 0.78rem;
+    padding: var(--space-xs) var(--space-md);
+}
+
+/* ─── Login Gate — Reset Sent State ───────────────── */
+.ka-gate-reset-sent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+}
+.ka-gate-reset-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+.ka-gate-reset-desc {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    line-height: 1.5;
+    margin: var(--space-sm) 0 var(--space-lg);
+    max-width: 300px;
+}
+[data-theme="dark"] .ka-gate-reset-desc {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-gate-reset-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+}
+.ka-gate-reset-actions .ka-gate-submit {
+    width: 100%;
+}
+.ka-gate-reset-actions .ka-settings-text-btn {
+    margin-bottom: var(--space-xs);
+}

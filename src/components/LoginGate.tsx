@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { usePWAInstall } from '../hooks/usePWAInstall'
-import { IconClose } from './KernelIcons'
+import { IconClose, IconMail } from './KernelIcons'
 
 export function LoginGate() {
   const { t } = useTranslation('auth')
@@ -15,7 +15,32 @@ export function LoginGate() {
   const [successMsg, setSuccessMsg] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
+  const [resetEmailSent, setResetEmailSent] = useState(false)
+  const [resetCooldown, setResetCooldown] = useState(0)
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const pwa = usePWAInstall()
+
+  // Cleanup cooldown timer
+  useEffect(() => {
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current)
+    }
+  }, [])
+
+  const startCooldown = useCallback((seconds: number) => {
+    setResetCooldown(seconds)
+    if (cooldownRef.current) clearInterval(cooldownRef.current)
+    cooldownRef.current = setInterval(() => {
+      setResetCooldown(prev => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current)
+          cooldownRef.current = null
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }, [])
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,18 +65,30 @@ export function LoginGate() {
       setError(t('modal.enterEmailFirst'))
       return
     }
+    if (resetCooldown > 0) return
     setLoading(true)
     setError('')
     setSuccessMsg('')
     try {
       const result = await resetPassword(email.trim())
-      if (result.error) setError(result.error)
-      else setSuccessMsg(t('modal.resetSent'))
+      if (result.error) {
+        setError(result.error)
+      } else {
+        setResetEmailSent(true)
+        setSuccessMsg(t('modal.resetSent'))
+        startCooldown(60)
+      }
     } catch {
       setError(t('modal.error'))
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleBackToLogin = () => {
+    setResetEmailSent(false)
+    setSuccessMsg('')
+    setError('')
   }
 
   return (
@@ -139,7 +176,7 @@ export function LoginGate() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={(e) => { if (e.target === e.currentTarget) setShowAuth(false) }}
+            onClick={(e) => { if (e.target === e.currentTarget) { setShowAuth(false); handleBackToLogin() } }}
           >
             <motion.div
               className="ka-gate-card"
@@ -148,73 +185,103 @@ export function LoginGate() {
               exit={{ opacity: 0, y: 30 }}
               transition={{ duration: 0.3 }}
             >
-              <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-              <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>
+              {/* Password Reset Sent State */}
+              {resetEmailSent ? (
+                <div className="ka-gate-reset-sent">
+                  <div className="ka-gate-reset-icon"><IconMail size={36} /></div>
+                  <h2 className="ka-gate-title">{t('modal.resetSentTitle')}</h2>
+                  <p className="ka-gate-reset-desc">{t('modal.resetSentDesc', { email })}</p>
+                  <div className="ka-gate-reset-actions">
+                    <button
+                      className="ka-settings-text-btn"
+                      onClick={handleResetPassword}
+                      disabled={resetCooldown > 0 || loading}
+                    >
+                      {resetCooldown > 0
+                        ? t('modal.resendIn', { seconds: resetCooldown })
+                        : t('modal.resendReset')}
+                    </button>
+                    <button className="ka-gate-submit" onClick={handleBackToLogin}>
+                      {t('modal.backToLogin')}
+                    </button>
+                  </div>
+                  {error && <p className="ka-gate-error">{error}</p>}
+                </div>
+              ) : (
+                <>
+                  {/* Normal Auth State */}
+                  <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
+                  <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>
 
-              <div className="ka-gate-social">
-                <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
-                  {t('modal.continueGoogle')}
-                </button>
-                <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
-                  {t('modal.continueGitHub')}
-                </button>
-                <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
-                  {t('modal.continueX')}
-                </button>
-              </div>
+                  <div className="ka-gate-social">
+                    <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
+                      {t('modal.continueGoogle')}
+                    </button>
+                    <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
+                      {t('modal.continueGitHub')}
+                    </button>
+                    <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
+                      {t('modal.continueX')}
+                    </button>
+                  </div>
 
-              <div className="ka-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>
+                  <div className="ka-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>
 
-              <form className="ka-gate-form" onSubmit={handleEmailAuth}>
-                <input
-                  type="email"
-                  className="ka-gate-input"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder={t('modal.emailPlaceholder')}
-                  required
-                />
-                <input
-                  type="password"
-                  className="ka-gate-input"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder={t('modal.passwordPlaceholder')}
-                  required
-                />
-                <button
-                  type="submit"
-                  className="ka-gate-submit"
-                  disabled={loading || !email.trim() || !password.trim()}
-                >
-                  {loading ? t('loading', { ns: 'common' }) : isSignUp ? t('modal.createAccount') : t('modal.signIn')}
-                </button>
-              </form>
+                  <form className="ka-gate-form" onSubmit={handleEmailAuth}>
+                    <input
+                      type="email"
+                      className="ka-gate-input"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder={t('modal.emailPlaceholder')}
+                      required
+                    />
+                    <input
+                      type="password"
+                      className="ka-gate-input"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      placeholder={t('modal.passwordPlaceholder')}
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className="ka-gate-submit"
+                      disabled={loading || !email.trim() || !password.trim()}
+                    >
+                      {loading ? t('loading', { ns: 'common' }) : isSignUp ? t('modal.createAccount') : t('modal.signIn')}
+                    </button>
+                  </form>
 
-              {!isSignUp && (
-                <button
-                  className="ka-gate-forgot"
-                  onClick={handleResetPassword}
-                  type="button"
-                >
-                  {t('modal.forgotPassword')}
-                </button>
+                  {!isSignUp && (
+                    <button
+                      className="ka-gate-forgot"
+                      onClick={handleResetPassword}
+                      disabled={resetCooldown > 0}
+                      type="button"
+                    >
+                      {resetCooldown > 0
+                        ? t('modal.resetCooldown', { seconds: resetCooldown })
+                        : t('modal.forgotPassword')}
+                    </button>
+                  )}
+
+                  {error && <p className="ka-gate-error">{error}</p>}
+                  {successMsg && <p className="ka-gate-success">{successMsg}</p>}
+
+                  <div className="ka-gate-toggle-section">
+                    <span className="ka-gate-toggle-label">
+                      {isSignUp ? t('modal.toggleSignInLabel') : t('modal.toggleSignUpLabel')}
+                    </span>
+                    <button
+                      className="ka-gate-toggle-btn"
+                      onClick={() => { setIsSignUp(!isSignUp); setError(''); setSuccessMsg('') }}
+                    >
+                      {isSignUp ? t('modal.toggleSignInAction') : t('modal.toggleSignUpAction')}
+                    </button>
+                  </div>
+                </>
               )}
-
-              {error && <p className="ka-gate-error">{error}</p>}
-              {successMsg && <p className="ka-gate-success">{successMsg}</p>}
-
-              <div className="ka-gate-toggle-section">
-                <span className="ka-gate-toggle-label">
-                  {isSignUp ? t('modal.toggleSignInLabel') : t('modal.toggleSignUpLabel')}
-                </span>
-                <button
-                  className="ka-gate-toggle-btn"
-                  onClick={() => { setIsSignUp(!isSignUp); setError(''); setSuccessMsg('') }}
-                >
-                  {isSignUp ? t('modal.toggleSignInAction') : t('modal.toggleSignUpAction')}
-                </button>
-              </div>
             </motion.div>
           </motion.div>
         )}

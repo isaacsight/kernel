@@ -35,6 +35,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'transcribe':         { free: 3,  paid: 3,   pro: 6,   windowSeconds: 60 },
   'mcp-proxy':          { free: 20, paid: 20,  pro: 40,  windowSeconds: 60 },
   'shared-conversation':{ free: 30, paid: 30,  pro: 30,  windowSeconds: 60 },
+  'reset-user-data':    { free: 3,  paid: 3,   pro: 5,   windowSeconds: 3600 },
 }
 
 /**
