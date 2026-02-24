@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { usePWAInstall } from '../hooks/usePWAInstall'
 import { IconClose, IconMail } from './KernelIcons'
+import { VARIANT, TRANSITION, EASE, DURATION } from '../constants/motion'
 
 export function LoginGate() {
   const { t } = useTranslation('auth')
@@ -99,7 +100,7 @@ export function LoginGate() {
         className="landing-hero"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
+        transition={TRANSITION.HERO}
       >
         <img className="landing-hero-art" src={`${import.meta.env.BASE_URL}concepts/hero-darkmode.svg`} alt="" aria-hidden="true" />
         <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
@@ -116,9 +117,10 @@ export function LoginGate() {
       {/* Features */}
       <motion.section
         className="landing-features"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        variants={VARIANT.FADE_UP_LG}
+        initial="hidden"
+        animate="visible"
+        transition={TRANSITION.FEATURE(0.2)}
       >
         <div className="landing-feature">
           <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
@@ -140,9 +142,10 @@ export function LoginGate() {
       {/* Pricing */}
       <motion.section
         className="landing-pricing"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        variants={VARIANT.FADE_UP_LG}
+        initial="hidden"
+        animate="visible"
+        transition={TRANSITION.FEATURE(0.4)}
       >
         <div className="landing-plan">
           <h3>{t('login.freePlan')}</h3>
@@ -184,7 +187,7 @@ export function LoginGate() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.3 }}
+              transition={TRANSITION.CARD}
             >
               {/* Password Reset Sent State */}
               {resetEmailSent ? (
@@ -294,10 +297,11 @@ export function LoginGate() {
           <motion.div
             className="ka-pwa-banner"
             role="status"
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            variants={VARIANT.SLIDE_UP}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={TRANSITION.CARD}
           >
             <div className="ka-pwa-banner-content">
               <span className="ka-pwa-banner-text">{t('pwa.installPrompt', { ns: 'common' })}</span>

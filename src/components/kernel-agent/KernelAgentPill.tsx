@@ -38,7 +38,7 @@ export function KernelAgentPill() {
         <motion.span
           className="kernel-pill-pulse"
           animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={TRANSITION.PULSE}
         />
       )}
     </motion.button>

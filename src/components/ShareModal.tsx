@@ -8,6 +8,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { IconLink, IconCopy, IconCheck, IconClose, IconClock, IconTrash, IconShare } from './KernelIcons'
+import { VARIANT, TRANSITION } from '../constants/motion'
 import { createSharedConversation, getSharedConversation, deleteSharedConversation, getShareCountToday } from '../engine/SupabaseClient'
 
 const FREE_SHARE_LIMIT = 3
@@ -166,9 +167,11 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
   return (
     <motion.div
       className="ka-upgrade-overlay"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      variants={VARIANT.FADE}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      transition={TRANSITION.OVERLAY}
       onClick={onClose}
     >
       <motion.div
@@ -177,9 +180,11 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
         role="dialog"
         aria-modal="true"
         aria-labelledby="share-modal-title"
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        variants={VARIANT.FADE_SCALE}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        transition={TRANSITION.CARD}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="ka-share-header">
