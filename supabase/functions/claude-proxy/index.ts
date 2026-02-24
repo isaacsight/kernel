@@ -929,6 +929,31 @@ serve(async (req: Request) => {
             )
           }
         } else if (result?.daily_count > FREE_LIMIT) {
+          // Notify user once per window (only on first overage)
+          if (result.daily_count === FREE_LIMIT + 1) {
+            const resetTime = result.resets_at
+              ? new Date(result.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+              : 'soon'
+            // In-app notification
+            svc.from('notifications').insert({
+              user_id: user.id,
+              title: 'Daily messages used',
+              body: `You've used all ${FREE_LIMIT} free messages. They reset at ${resetTime}.`,
+              type: 'info',
+            }).then(() => {}).catch(() => {})
+            // Push notification (fire-and-forget via internal edge function)
+            const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
+            fetch(notifUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
+              body: JSON.stringify({
+                channel: 'push', user_id: user.id,
+                title: 'Your messages reset ' + resetTime,
+                body: `Your ${FREE_LIMIT} daily messages will be available again at ${resetTime}.`,
+                type: 'info',
+              }),
+            }).catch(() => {})
+          }
           return new Response(
             JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: result.daily_count, resets_at: result.resets_at }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
