@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -571,6 +571,13 @@ export function useChatEngine(params: UseChatEngineParams) {
         setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof PlatformRefundError) {
+        // Platform error — message was auto-refunded, show friendly notice
+        setMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: `*Something went wrong on our end. Your message has been refunded automatically — please try again.*` }
+          : m
+        ))
+        showToast('Message refunded — something went wrong on our end')
       } else if (err instanceof RateLimitError) {
         setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {

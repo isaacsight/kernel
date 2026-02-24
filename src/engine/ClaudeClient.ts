@@ -31,6 +31,15 @@ export class FreeLimitError extends Error {
   }
 }
 
+export class PlatformRefundError extends Error {
+  dailyCount: number | null
+  constructor(message: string, dailyCount?: number) {
+    super(message)
+    this.name = 'PlatformRefundError'
+    this.dailyCount = dailyCount ?? null
+  }
+}
+
 type Model = 'opus' | 'sonnet' | 'haiku'
 
 // Re-export ContentBlock from provider types for backward compat
@@ -87,6 +96,18 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       } catch (e) {
         if (e instanceof RateLimitError) throw e
       }
+    }
+    // Check if the error included an auto-refund
+    try {
+      const body = JSON.parse(err)
+      if (body.refunded) {
+        throw new PlatformRefundError(
+          body.error || 'Something went wrong on our end',
+          body.daily_count,
+        )
+      }
+    } catch (e) {
+      if (e instanceof PlatformRefundError) throw e
     }
     throw new Error(`Claude proxy error (${res.status}): ${err}`)
   }
@@ -148,6 +169,15 @@ export async function claudeStream(
         if (e instanceof FreeLimitError) throw e
       }
     }
+    // Check for auto-refund
+    try {
+      const body = JSON.parse(err)
+      if (body.refunded) {
+        throw new PlatformRefundError(body.error || 'Something went wrong on our end', body.daily_count)
+      }
+    } catch (e) {
+      if (e instanceof PlatformRefundError) throw e
+    }
     throw new Error(`Claude stream error (${res.status}): ${err}`)
   }
 
@@ -175,7 +205,11 @@ export async function claudeStream(
           fullText += event.delta.text
           onChunk(fullText)
         }
-      } catch {
+        if (event.type === 'error' && event.error?.refunded) {
+          throw new PlatformRefundError(event.error.message || 'Stream error — message refunded', event.error.daily_count)
+        }
+      } catch (e) {
+        if (e instanceof PlatformRefundError) throw e
         // skip non-JSON lines
       }
     }
@@ -245,6 +279,15 @@ export async function claudeStreamChat(
         if (e instanceof RateLimitError) throw e
       }
     }
+    // Check for auto-refund in error response
+    try {
+      const body = JSON.parse(err)
+      if (body.refunded) {
+        throw new PlatformRefundError(body.error || 'Something went wrong on our end', body.daily_count)
+      }
+    } catch (e) {
+      if (e instanceof PlatformRefundError) throw e
+    }
     throw new Error(`Claude stream error (${res.status}): ${err}`)
   }
 
@@ -272,7 +315,15 @@ export async function claudeStreamChat(
             fullText += event.delta.text
             onChunk(fullText)
           }
-        } catch {
+          // Detect platform error mid-stream (e.g. timeout)
+          if (event.type === 'error' && event.error?.refunded) {
+            throw new PlatformRefundError(
+              event.error.message || 'Stream error — your message has been refunded',
+              event.error.daily_count,
+            )
+          }
+        } catch (e) {
+          if (e instanceof PlatformRefundError) throw e
           // skip non-JSON lines
         }
       }

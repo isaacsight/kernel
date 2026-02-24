@@ -91,7 +91,89 @@ function readWithTimeout(
   ])
 }
 
-// ─── Rate limiting via Postgres RPC (replaces in-memory) ──
+// ─── Error classification & auto-refund ─────────────────────
+
+type ErrorType = 'upstream_5xx' | 'timeout' | 'missing_key' | 'internal' | 'user_error'
+
+function classifyError(status: number, message: string): ErrorType {
+  if (message.includes('timeout') || message.includes('Timeout') || message.includes('idle timeout')) return 'timeout'
+  if (message.includes('Missing') && message.includes('KEY')) return 'missing_key'
+  if (status >= 500 && status < 600) return 'upstream_5xx'
+  // 400-level errors from upstream are still platform errors if they're
+  // not caused by user input (e.g. Anthropic overloaded returns 529)
+  if (status === 529) return 'upstream_5xx'
+  // 401/403 from upstream = our key is bad, not user's fault
+  if (status === 401 || status === 403) return 'missing_key'
+  // Content policy / bad request = user error, no refund
+  if (status === 400) return 'user_error'
+  if (status === 413) return 'user_error'
+  return 'internal'
+}
+
+function isPlatformError(errorType: ErrorType): boolean {
+  return errorType !== 'user_error'
+}
+
+/**
+ * Record a platform error and auto-refund the user's daily message if it was our fault.
+ * Fire-and-forget — never blocks or throws.
+ */
+async function recordErrorAndRefund(
+  userId: string | null,
+  provider: string,
+  model: string,
+  errorType: ErrorType,
+  errorMessage: string,
+  httpStatus: number,
+): Promise<{ refunded: boolean; dailyCount?: number; resetsAt?: string }> {
+  if (!userId || userId === 'service-bot') return { refunded: false }
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const svc = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
+    const shouldRefund = isPlatformError(errorType)
+
+    // Record the error
+    await svc.from('platform_errors').insert({
+      user_id: userId,
+      provider,
+      model,
+      error_type: errorType,
+      error_message: errorMessage.slice(0, 500),
+      http_status: httpStatus,
+      refunded: shouldRefund,
+    })
+
+    // Refund if platform error
+    if (shouldRefund) {
+      const { data: refundResult } = await svc.rpc('refund_message', { p_user_id: userId })
+
+      // Notify user of the refund (in-app)
+      await svc.from('notifications').insert({
+        user_id: userId,
+        title: 'Message refunded',
+        body: `Something went wrong on our end. Your message has been refunded automatically.`,
+        type: 'refund',
+      })
+
+      console.log(`[refund] user=${userId} provider=${provider} error=${errorType} refunded=true daily_count=${refundResult?.daily_count}`)
+      return {
+        refunded: true,
+        dailyCount: refundResult?.daily_count,
+        resetsAt: refundResult?.resets_at,
+      }
+    }
+
+    return { refunded: false }
+  } catch (err) {
+    console.error('[refund] Error recording/refunding:', err)
+    return { refunded: false }
+  }
+}
 
 // ─── Pre-request daily cost check ─────────────────────────
 
@@ -301,8 +383,10 @@ async function handleAnthropic(
   if (!res.ok) {
     const errText = await res.text()
     console.error('Anthropic API error:', res.status, errText)
+    const errType = classifyError(res.status, errText)
+    const refund = await recordErrorAndRefund(userId, 'anthropic', resolvedModel, errType, errText, res.status)
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -339,7 +423,10 @@ async function handleAnthropic(
           }
         } catch (err) {
           console.error('[anthropic-stream] Error:', (err as Error).message)
-          const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+          const errMsg = (err as Error).message || 'Stream timeout'
+          const errType = classifyError(0, errMsg)
+          const refund = await recordErrorAndRefund(userId, 'anthropic', resolvedModel, errType, errMsg, 0)
+          const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long', refunded: refund.refunded, daily_count: refund.dailyCount } })
           controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
         } finally {
           reader.releaseLock()
@@ -430,8 +517,10 @@ async function handleOpenAI(
   if (!res.ok) {
     const errText = await res.text()
     console.error('OpenAI API error:', res.status, errText)
+    const errType = classifyError(res.status, errText)
+    const refund = await recordErrorAndRefund(userId, 'openai', resolvedModel, errType, errText, res.status)
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -505,7 +594,10 @@ async function handleOpenAI(
         }
       } catch (err) {
         console.error('[openai-stream] Error:', (err as Error).message)
-        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        const errMsg = (err as Error).message || 'Stream timeout'
+        const errType = classifyError(0, errMsg)
+        const refund = await recordErrorAndRefund(userId, 'openai', resolvedModel, errType, errMsg, 0)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long', refunded: refund.refunded, daily_count: refund.dailyCount } })
         controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
@@ -581,8 +673,10 @@ async function handleGemini(
   if (!res.ok) {
     const errText = await res.text()
     console.error('Gemini API error:', res.status, errText)
+    const errType = classifyError(res.status, errText)
+    const refund = await recordErrorAndRefund(userId, 'gemini', resolvedModel, errType, errText, res.status)
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -660,7 +754,10 @@ async function handleGemini(
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
       } catch (err) {
         console.error('[gemini-stream] Error:', (err as Error).message)
-        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        const errMsg = (err as Error).message || 'Stream timeout'
+        const errType = classifyError(0, errMsg)
+        const refund = await recordErrorAndRefund(userId, 'gemini', resolvedModel, errType, errMsg, 0)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long', refunded: refund.refunded, daily_count: refund.dailyCount } })
         controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
@@ -730,8 +827,10 @@ async function handleNvidia(
   if (!res.ok) {
     const errText = await res.text()
     console.error('NVIDIA API error:', res.status, errText)
+    const errType = classifyError(res.status, errText)
+    const refund = await recordErrorAndRefund(userId, 'nvidia', resolvedModel, errType, errText, res.status)
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status }),
+      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -804,7 +903,10 @@ async function handleNvidia(
         }
       } catch (err) {
         console.error('[nvidia-stream] Error:', (err as Error).message)
-        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long' } })
+        const errMsg = (err as Error).message || 'Stream timeout'
+        const errType = classifyError(0, errMsg)
+        const refund = await recordErrorAndRefund(userId, 'nvidia', resolvedModel, errType, errMsg, 0)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long', refunded: refund.refunded, daily_count: refund.dailyCount } })
         controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
       } finally {
         reader.releaseLock()
@@ -1096,6 +1198,8 @@ serve(async (req: Request) => {
     }
   } catch (error) {
     console.error('claude-proxy error:', error)
+    // Try to extract userId from the request context for refund
+    let refundResult = { refunded: false, dailyCount: undefined as number | undefined }
     try {
       const svcErr = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
         auth: { persistSession: false, autoRefreshToken: false },
@@ -1106,9 +1210,19 @@ serve(async (req: Request) => {
         metadata: { error: (error as Error).message },
         ip: getClientIP(req), userAgent: getUA(req),
       })
-    } catch { /* audit best-effort */ }
+      // Attempt refund — extract user from JWT if possible
+      const token = req.headers.get('authorization')?.replace('Bearer ', '')
+      if (token) {
+        const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
+        const tmpClient = createClient(Deno.env.get('SUPABASE_URL')!, anonKey)
+        const { data: { user: errUser } } = await tmpClient.auth.getUser(token)
+        if (errUser) {
+          refundResult = await recordErrorAndRefund(errUser.id, 'unknown', 'unknown', 'internal', (error as Error).message, 500)
+        }
+      }
+    } catch { /* audit/refund best-effort */ }
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error', refunded: refundResult.refunded, daily_count: refundResult.dailyCount }),
       { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }

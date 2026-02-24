@@ -36,7 +36,16 @@ interface UsageAlertPayload {
   breakdown: string
 }
 
-type WebhookPayload = NewUserPayload | NewSubscriberPayload | UsageAlertPayload
+interface ErrorSpikePayload {
+  event_type: 'error_spike'
+  error_rate: number
+  platform_errors: number
+  total_errors: number
+  refunded_count: number
+  breakdown: string
+}
+
+type WebhookPayload = NewUserPayload | NewSubscriberPayload | UsageAlertPayload | ErrorSpikePayload
 
 function buildNewUserEmbed(payload: NewUserPayload) {
   return {
@@ -136,6 +145,23 @@ serve(async (req: Request) => {
       case 'usage_alert':
         embed = buildUsageAlertEmbed(payload as UsageAlertPayload)
         break
+      case 'error_spike': {
+        const ep = payload as ErrorSpikePayload
+        embed = {
+          title: 'Platform Error Spike',
+          color: 0xE53E3E,
+          fields: [
+            { name: 'Error Rate', value: `${ep.error_rate}%`, inline: true },
+            { name: 'Platform Errors (15min)', value: String(ep.platform_errors), inline: true },
+            { name: 'Auto-Refunds', value: String(ep.refunded_count), inline: true },
+            { name: 'Total Errors', value: String(ep.total_errors), inline: true },
+            { name: 'Provider Breakdown', value: ep.breakdown ? `\`\`\`json\n${ep.breakdown.slice(0, 800)}\n\`\`\`` : 'N/A', inline: false },
+          ],
+          footer: { text: 'Kernel Health Monitor' },
+          timestamp: new Date().toISOString(),
+        }
+        break
+      }
       default:
         return new Response(
           JSON.stringify({ error: `Unknown event_type: ${payload.event_type}` }),
