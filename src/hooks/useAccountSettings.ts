@@ -53,8 +53,8 @@ export function useAccountSettings(
 
   const uploadAvatar = useCallback(async (file: File) => {
     if (!user) return
-    if (file.size > 2 * 1024 * 1024) {
-      setProfileState({ loading: false, error: 'File must be under 2MB', success: null })
+    if (file.size > 50 * 1024 * 1024) {
+      setProfileState({ loading: false, error: 'File must be under 50MB', success: null })
       return
     }
     if (!file.type.startsWith('image/')) {

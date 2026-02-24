@@ -41,29 +41,11 @@ export function isAudioFile(file: File): boolean {
 
 // ─── File size validation ─────────────────────────────────
 
-interface FileSizeLimit {
-  images: number  // bytes
-  pdfs: number    // bytes
-  text: number    // bytes
-  audio: number   // bytes
-}
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 
-const FREE_LIMITS: FileSizeLimit = { images: 5 * 1024 * 1024, pdfs: 10 * 1024 * 1024, text: 5 * 1024 * 1024, audio: 2 * 1024 * 1024 }
-const PRO_LIMITS: FileSizeLimit = { images: 20 * 1024 * 1024, pdfs: 20 * 1024 * 1024, text: 20 * 1024 * 1024, audio: 25 * 1024 * 1024 }
-
-export function validateFileSize(file: File, isPro: boolean): string | null {
-  const limits = isPro ? PRO_LIMITS : FREE_LIMITS
-  if (isImageFile(file) && file.size > limits.images) {
-    return `Image too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.images / 1048576).toFixed(0)}MB.`
-  }
-  if (isPdfFile(file) && file.size > limits.pdfs) {
-    return `PDF too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.pdfs / 1048576).toFixed(0)}MB.`
-  }
-  if (isAudioFile(file) && file.size > limits.audio) {
-    return `Audio too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.audio / 1048576).toFixed(0)}MB.`
-  }
-  if (file.size > limits.text) {
-    return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max ${(limits.text / 1048576).toFixed(0)}MB.`
+export function validateFileSize(file: File, _isPro: boolean): string | null {
+  if (file.size > MAX_FILE_SIZE) {
+    return `File too large (${(file.size / 1048576).toFixed(1)}MB). Max 50MB.`
   }
   return null
 }
