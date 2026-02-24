@@ -1,17 +1,30 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { User, Provider } from '@supabase/supabase-js'
-import { useAccountSettings } from '../hooks/useAccountSettings'
+import { useAccountSettings, type ResetScope } from '../hooks/useAccountSettings'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconCrown, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
+  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings, IconRefresh,
 } from './KernelIcons'
+import type { ReactNode } from 'react'
 
 const PROVIDERS: { id: Provider; label: string }[] = [
   { id: 'google', label: 'Google' },
   { id: 'github', label: 'GitHub' },
   { id: 'twitter', label: 'X (Twitter)' },
 ]
+
+const RESET_SCOPE_ICONS: Record<ResetScope, ReactNode> = {
+  conversations: <IconMessageCircle size={16} />,
+  memory: <IconBrain size={16} />,
+  knowledge: <IconLink size={16} />,
+  goals: <IconTarget size={16} />,
+  preferences: <IconSettings size={16} />,
+  all: <IconAlertCircle size={16} />,
+}
+
+const RESET_SCOPES: ResetScope[] = ['conversations', 'memory', 'knowledge', 'goals', 'preferences', 'all']
 
 interface AccountSettingsPanelProps {
   user: User
@@ -117,10 +130,22 @@ export default function AccountSettingsPanel({
             />
           </label>
           {settings.profileState.error && <p className="ka-gate-error">{settings.profileState.error}</p>}
-          {settings.profileState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
-          <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>
-            {settings.profileState.loading ? '...' : t('profile.save')}
-          </button>
+          {settings.profileState.success === 'saved' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
+          {settings.profileState.success === 'profileReset' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.profileReset')}</p>}
+          <div className="ka-settings-btn-row">
+            <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>
+              {settings.profileState.loading ? '...' : t('profile.save')}
+            </button>
+            {(settings.displayName || settings.username || settings.avatarUrl) && (
+              <button
+                className="ka-settings-text-btn"
+                onClick={settings.resetProfile}
+                disabled={settings.profileState.loading}
+              >
+                {t('profile.resetProfile')}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -133,7 +158,7 @@ export default function AccountSettingsPanel({
             <div className="ka-settings-verify-block">
               <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
               <p className="ka-settings-verify-hint">{t('security.verifyHint')}</p>
-              <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading}>
+              <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading || settings.cooldownSeconds > 0}>
                 {settings.verifyState.loading ? '...' : t('security.sendCode')}
               </button>
               {settings.verifyState.error && (
@@ -155,9 +180,22 @@ export default function AccountSettingsPanel({
                   placeholder={t('security.codePlaceholder')}
                   autoComplete="one-time-code"
                 />
+                <div className="ka-settings-resend-row">
+                  <button
+                    className="ka-settings-text-btn"
+                    onClick={settings.sendVerificationCode}
+                    disabled={settings.cooldownSeconds > 0 || settings.verifyState.loading}
+                  >
+                    {settings.cooldownSeconds > 0
+                      ? t('security.resendIn', { seconds: settings.cooldownSeconds })
+                      : t('security.resendCode')}
+                  </button>
+                </div>
                 {settings.verifyState.error && (
                   <p className="ka-gate-error">
-                    {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') : settings.verifyState.error}
+                    {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') :
+                     settings.verifyState.error === 'verificationRequired' ? t('security.verificationRequired') :
+                     settings.verifyState.error}
                   </p>
                 )}
               </div>
@@ -193,6 +231,19 @@ export default function AccountSettingsPanel({
                   autoComplete="new-password"
                 />
               </label>
+
+              {/* Password Strength Indicator */}
+              {settings.passwordStrength !== 'none' && (
+                <div className="ka-settings-strength">
+                  <div className="ka-settings-strength-bar">
+                    <div className={`ka-settings-strength-fill ka-settings-strength-fill--${settings.passwordStrength}`} />
+                  </div>
+                  <span className={`ka-settings-strength-label ka-settings-strength-label--${settings.passwordStrength}`}>
+                    {t(`security.strength.${settings.passwordStrength}`)}
+                  </span>
+                </div>
+              )}
+
               <label className="ka-settings-field">
                 <input
                   className="ka-gate-input"
@@ -280,6 +331,58 @@ export default function AccountSettingsPanel({
           </div>
         </div>
       )}
+
+      {/* Reset Data */}
+      <div className="ka-settings-section ka-settings-section--warning">
+        <h3 className="ka-settings-section-header">{t('resetData.heading')}</h3>
+        <p className="ka-settings-section-desc">{t('resetData.description')}</p>
+        <div className="ka-settings-section-body">
+          {RESET_SCOPES.map(scope => (
+            <div key={scope} className="ka-settings-reset-item">
+              {settings.resetConfirmScope === scope ? (
+                <div className="ka-settings-reset-confirm">
+                  <p className="ka-settings-reset-confirm-text">{t(`resetData.confirm.${scope}`)}</p>
+                  <div className="ka-settings-reset-confirm-actions">
+                    <button
+                      className="ka-settings-danger-btn ka-settings-danger-btn--sm"
+                      onClick={async () => {
+                        const deleted = await settings.resetUserData(scope)
+                        if (deleted) {
+                          onToast(t('resetData.success', { scope: t(`resetData.scopes.${scope}`) }))
+                        }
+                      }}
+                      disabled={settings.resetState.loading}
+                    >
+                      {settings.resetState.loading ? '...' : t('resetData.confirmBtn')}
+                    </button>
+                    <button
+                      className="ka-settings-text-btn"
+                      onClick={() => settings.setResetConfirmScope(null)}
+                      disabled={settings.resetState.loading}
+                    >
+                      {t('resetData.cancel')}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className={`ka-settings-reset-btn${scope === 'all' ? ' ka-settings-reset-btn--all' : ''}`}
+                  onClick={() => settings.setResetConfirmScope(scope)}
+                  disabled={settings.resetState.loading}
+                >
+                  <span className="ka-settings-reset-icon">{RESET_SCOPE_ICONS[scope]}</span>
+                  <div className="ka-settings-reset-info">
+                    <span className="ka-settings-reset-name">{t(`resetData.scopes.${scope}`)}</span>
+                    <span className="ka-settings-reset-desc">{t(`resetData.scopeDesc.${scope}`)}</span>
+                  </div>
+                </button>
+              )}
+            </div>
+          ))}
+          {settings.resetState.error && <p className="ka-gate-error"><IconAlertCircle size={14} /> {settings.resetState.error}</p>}
+          {settings.resetState.success && <p className="ka-gate-success"><IconCheck size={14} /> {t('resetData.done')}</p>}
+        </div>
+      </div>
 
       {/* Danger Zone */}
       <div className="ka-settings-section ka-settings-section--danger">
