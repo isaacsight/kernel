@@ -11,7 +11,10 @@
     "save": "Save profile",
     "saved": "Profile saved",
     "resetProfile": "Reset profile",
-    "profileReset": "Profile reset to defaults"
+    "profileReset": "Profile reset to defaults",
+    "usernameTaken": "This username is already taken",
+    "displayNameTaken": "This display name is already taken",
+    "available": "Available"
   },
   "security": {
     "heading": "Verify identity",

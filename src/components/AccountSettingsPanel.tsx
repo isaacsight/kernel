@@ -197,6 +197,12 @@ export default function AccountSettingsPanel({
                   onChange={e => settings.setDisplayName(e.target.value)}
                   placeholder={t('profile.displayNamePlaceholder')}
                 />
+                {settings.displayNameAvailable === false && (
+                  <p className="ka-gate-error ka-settings-availability">{t('profile.displayNameTaken')}</p>
+                )}
+                {settings.displayNameAvailable === true && (
+                  <p className="ka-gate-success ka-settings-availability"><IconCheck size={12} /> {t('profile.available')}</p>
+                )}
               </label>
               <label className="ka-settings-field">
                 <span className="ka-settings-label">{t('profile.username')}</span>
@@ -207,12 +213,24 @@ export default function AccountSettingsPanel({
                   onChange={e => settings.setUsername(e.target.value)}
                   placeholder={t('profile.usernamePlaceholder')}
                 />
+                {settings.usernameAvailable === false && (
+                  <p className="ka-gate-error ka-settings-availability">{t('profile.usernameTaken')}</p>
+                )}
+                {settings.usernameAvailable === true && (
+                  <p className="ka-gate-success ka-settings-availability"><IconCheck size={12} /> {t('profile.available')}</p>
+                )}
               </label>
-              {settings.profileState.error && <p className="ka-gate-error">{settings.profileState.error}</p>}
+              {settings.profileState.error && (
+                <p className="ka-gate-error">
+                  {settings.profileState.error === 'username_taken' ? t('profile.usernameTaken') :
+                   settings.profileState.error === 'display_name_taken' ? t('profile.displayNameTaken') :
+                   settings.profileState.error}
+                </p>
+              )}
               {settings.profileState.success === 'saved' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
               {settings.profileState.success === 'profileReset' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.profileReset')}</p>}
               <div className="ka-settings-btn-row">
-                <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>
+                <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading || settings.usernameAvailable === false || settings.displayNameAvailable === false}>
                   {settings.profileState.loading ? '...' : t('profile.save')}
                 </button>
                 {(settings.displayName || settings.username || settings.avatarUrl) && (

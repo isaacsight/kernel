@@ -208,11 +208,11 @@ serve(async (req: Request) => {
             apikey: anonKey,
           },
           body: JSON.stringify({
+            channel: 'all',
             user_id: user.id,
             title: 'Kernel — Verification Code',
             body: emailBody,
             type: 'identity_verification',
-            metadata: { request_type: reqData.request_type, trust_tier: reqData.trust_tier },
           }),
         })
       } catch (emailErr) {
@@ -320,13 +320,39 @@ serve(async (req: Request) => {
           if (!newUsername) {
             return json({ error: 'No new username specified in request' }, 400)
           }
-          const { error } = await admin.auth.admin.updateUser(user.id, {
+          // Check uniqueness via user_profiles table
+          const { data: available, error: checkErr } = await admin.rpc('check_name_available', {
+            p_field: 'username',
+            p_value: newUsername,
+          })
+          if (checkErr) {
+            console.error('[identity-recovery] check_name_available error:', checkErr)
+          }
+          if (available === false) {
+            return json({ error: 'username_taken' }, 409)
+          }
+          // Update auth metadata
+          const { error: usernameErr } = await admin.auth.admin.updateUser(user.id, {
             user_metadata: {
               ...user.user_metadata,
               username: newUsername,
             },
           })
-          if (error) executionError = error.message
+          if (usernameErr) {
+            executionError = usernameErr.message
+            break
+          }
+          // Sync user_profiles table
+          const { error: syncErr } = await admin
+            .from('user_profiles')
+            .upsert({
+              user_id: user.id,
+              username: newUsername.trim(),
+              updated_at: new Date().toISOString(),
+            }, { onConflict: 'user_id' })
+          if (syncErr) {
+            console.warn('[identity-recovery] user_profiles sync error:', syncErr)
+          }
           break
         }
       }

@@ -287,6 +287,7 @@ export function useAccountSettings(
     username, setUsername,
     avatarUrl, setAvatarUrl,
     profileState, saveProfile, resetProfile, uploadAvatar,
+    usernameAvailable, displayNameAvailable,
     // Email
     newEmail, setNewEmail,
     emailState, changeEmail,
