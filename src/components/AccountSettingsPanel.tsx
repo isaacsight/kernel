@@ -122,51 +122,7 @@ export default function AccountSettingsPanel({
         </div>
       </div>
 
-      {/* Profile Section */}
-      <div className="ka-settings-section">
-        <h3 className="ka-settings-section-header">{t('profile.heading')}</h3>
-        <div className="ka-settings-section-body">
-          <label className="ka-settings-field">
-            <span className="ka-settings-label">{t('profile.displayName')}</span>
-            <input
-              className="ka-gate-input"
-              type="text"
-              value={settings.displayName}
-              onChange={e => settings.setDisplayName(e.target.value)}
-              placeholder={t('profile.displayNamePlaceholder')}
-            />
-          </label>
-          <label className="ka-settings-field">
-            <span className="ka-settings-label">{t('profile.username')}</span>
-            <input
-              className="ka-gate-input"
-              type="text"
-              value={settings.username}
-              onChange={e => settings.setUsername(e.target.value)}
-              placeholder={t('profile.usernamePlaceholder')}
-            />
-          </label>
-          {settings.profileState.error && <p className="ka-gate-error">{settings.profileState.error}</p>}
-          {settings.profileState.success === 'saved' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
-          {settings.profileState.success === 'profileReset' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.profileReset')}</p>}
-          <div className="ka-settings-btn-row">
-            <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>
-              {settings.profileState.loading ? '...' : t('profile.save')}
-            </button>
-            {(settings.displayName || settings.username || settings.avatarUrl) && (
-              <button
-                className="ka-settings-text-btn"
-                onClick={settings.resetProfile}
-                disabled={settings.profileState.loading}
-              >
-                {t('profile.resetProfile')}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Security Section */}
+      {/* Verify Identity */}
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
@@ -217,14 +173,65 @@ export default function AccountSettingsPanel({
               {identity.error && <p className="ka-gate-error">{identity.error}</p>}
             </div>
           ) : (
-            <>
-              {/* Verified badge */}
-              <div className="ka-settings-verify-block ka-settings-verify-block--active">
-                <p className="ka-gate-success" style={{ margin: 0 }}>
-                  <IconCheck size={14} /> {t('security.verified')}
-                </p>
-              </div>
+            <div className="ka-settings-verify-block ka-settings-verify-block--active">
+              <p className="ka-gate-success" style={{ margin: 0 }}>
+                <IconCheck size={14} /> {t('security.verified')}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
 
+      {isVerified && (
+        <>
+          {/* Profile Section */}
+          <div className="ka-settings-section">
+            <h3 className="ka-settings-section-header">{t('profile.heading')}</h3>
+            <div className="ka-settings-section-body">
+              <label className="ka-settings-field">
+                <span className="ka-settings-label">{t('profile.displayName')}</span>
+                <input
+                  className="ka-gate-input"
+                  type="text"
+                  value={settings.displayName}
+                  onChange={e => settings.setDisplayName(e.target.value)}
+                  placeholder={t('profile.displayNamePlaceholder')}
+                />
+              </label>
+              <label className="ka-settings-field">
+                <span className="ka-settings-label">{t('profile.username')}</span>
+                <input
+                  className="ka-gate-input"
+                  type="text"
+                  value={settings.username}
+                  onChange={e => settings.setUsername(e.target.value)}
+                  placeholder={t('profile.usernamePlaceholder')}
+                />
+              </label>
+              {settings.profileState.error && <p className="ka-gate-error">{settings.profileState.error}</p>}
+              {settings.profileState.success === 'saved' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.saved')}</p>}
+              {settings.profileState.success === 'profileReset' && <p className="ka-gate-success"><IconCheck size={14} /> {t('profile.profileReset')}</p>}
+              <div className="ka-settings-btn-row">
+                <button className="ka-gate-submit" onClick={settings.saveProfile} disabled={settings.profileState.loading}>
+                  {settings.profileState.loading ? '...' : t('profile.save')}
+                </button>
+                {(settings.displayName || settings.username || settings.avatarUrl) && (
+                  <button
+                    className="ka-settings-text-btn"
+                    onClick={settings.resetProfile}
+                    disabled={settings.profileState.loading}
+                  >
+                    {t('profile.resetProfile')}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Email & Password */}
+          <div className="ka-settings-section">
+            <h3 className="ka-settings-section-header">{t('security.credentialsHeading')}</h3>
+            <div className="ka-settings-section-body">
               {/* Change Email */}
               <label className="ka-settings-field">
                 <span className="ka-settings-label">{t('security.changeEmail')}</span>
@@ -290,10 +297,10 @@ export default function AccountSettingsPanel({
               <button className="ka-gate-submit" onClick={settings.changePassword} disabled={settings.passwordState.loading}>
                 {settings.passwordState.loading ? '...' : t('security.passwordSubmit')}
               </button>
-            </>
-          )}
-        </div>
-      </div>
+            </div>
+          </div>
+        </>
+      )}
 
 
       {/* Subscription */}
