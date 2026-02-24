@@ -61,6 +61,7 @@
   "upgrade": {
     "title": "You've used your {{limit}} free messages",
     "subtitle": "Upgrade to Pro to keep the conversation going.",
+    "resetsAt": "Your messages reset at {{time}}. Upgrade to Pro for unlimited.",
     "learnedTitle": "What Kernel learned about you",
     "learnedCta": "Upgrade to keep your memory growing.",
     "features": {

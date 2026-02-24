@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "您已使用完 {{limit}} 則免費訊息",
     "subtitle": "升級為 Kernel Pro 以繼續對話。",
+    "resetsAt": "您的訊息將在 {{time}} 重置。升級至 Pro 享受無限訊息。",
     "features": {
       "unlimitedMessages": "無限訊息",
       "deepResearch": "深度研究模式",

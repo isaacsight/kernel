@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Olet käyttänyt {{limit}} ilmaista viestiäsi",
     "subtitle": "Päivitä Kernel Prohon jatkaaksesi keskustelua.",
+    "resetsAt": "Viestisi nollautuvat klo {{time}}. Päivitä Pro:ksi rajattomia viestejä varten.",
     "features": {
       "unlimitedMessages": "Rajattomat viestit",
       "deepResearch": "Syvä tutkimustila",

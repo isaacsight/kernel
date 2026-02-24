@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "{{limit}} 件の無料メッセージを使い切りました",
     "subtitle": "Kernel Pro にアップグレードして会話を続けましょう。",
+    "resetsAt": "メッセージは{{time}}にリセットされます。無制限にはProにアップグレード。",
     "features": {
       "unlimitedMessages": "無制限メッセージ",
       "deepResearch": "ディープリサーチモード",

@@ -908,29 +908,29 @@ serve(async (req: Request) => {
 
       isPaidUser = !!sub
       if (!sub) {
-        // Atomic increment-and-check via Postgres function
+        // Atomic increment-and-check via Postgres function (returns JSONB)
         // Prevents race conditions AND client-side count manipulation
-        const { data: newCount, error: rpcError } = await svc.rpc('increment_message_count', {
+        const { data: result, error: rpcError } = await svc.rpc('increment_message_count', {
           p_user_id: user.id,
         })
         if (rpcError) {
-          console.error('[free-limit] RPC error (function may not exist yet):', rpcError.message)
+          console.error('[free-limit] RPC error:', rpcError.message)
           // Fallback to non-atomic read if function doesn't exist yet
           const { data: mem } = await svc
             .from('user_memory')
-            .select('message_count')
+            .select('daily_message_count')
             .eq('user_id', user.id)
             .maybeSingle()
-          const used = mem?.message_count ?? 0
+          const used = mem?.daily_message_count ?? 0
           if (used >= FREE_LIMIT) {
             return new Response(
               JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used }),
               { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
-        } else if (newCount > FREE_LIMIT) {
+        } else if (result?.daily_count > FREE_LIMIT) {
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: newCount }),
+            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: result.daily_count, resets_at: result.resets_at }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }

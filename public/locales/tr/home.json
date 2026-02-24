@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "{{limit}} ücretsiz mesajınızı kullandınız",
     "subtitle": "Konuşmaya devam etmek için Kernel Pro'ya yükseltin.",
+    "resetsAt": "Mesajlarınız {{time}} saatinde yenilenir. Sınırsız mesaj için Pro'ya yükseltin.",
     "features": {
       "unlimitedMessages": "Sınırsız mesaj",
       "deepResearch": "Derin araştırma modu",

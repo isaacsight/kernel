@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "Du har använt dina {{limit}} gratis meddelanden",
     "subtitle": "Uppgradera till Kernel Pro för att fortsätta konversationen.",
+    "resetsAt": "Dina meddelanden förnyas kl. {{time}}. Uppgradera till Pro för obegränsade.",
     "features": {
       "unlimitedMessages": "Obegränsat antal meddelanden",
       "deepResearch": "Djupt forskningsläge",

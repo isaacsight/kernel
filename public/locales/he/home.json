@@ -33,6 +33,7 @@
   "upgrade": {
     "title": "ניצלת את {{limit}} ההודעות החינמיות שלך",
     "subtitle": "שדרג ל-Kernel Pro כדי להמשיך את השיחה.",
+    "resetsAt": "ההודעות שלך מתחדשות ב-{{time}}. שדרג ל-Pro להודעות ללא הגבלה.",
     "features": {
       "unlimitedMessages": "הודעות ללא הגבלה",
       "deepResearch": "מצב מחקר עמוק",
