@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { getAccessToken } from '../engine/SupabaseClient'
+import { TRANSITION } from '../constants/motion'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
@@ -87,7 +88,7 @@ export function SubscriptionGate() {
         className="ka-gate-card"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={TRANSITION.SECTION}
       >
         <div className="ka-gate-icon">K</div>
         <h1 className="ka-gate-title">{t('subscription.title')}</h1>

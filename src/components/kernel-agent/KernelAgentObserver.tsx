@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import type { CognitivePhase } from '../../engine/AIEngine';
+import { TRANSITION } from '../../constants/motion';
 
 const PHASES: CognitivePhase[] = ['perceiving', 'attending', 'deciding', 'acting', 'reflecting'];
 
@@ -30,7 +31,7 @@ function MiniBar({ value, color = '#6B5B95' }: { value: number; color?: string }
         className="kernel-obs-minibar-fill"
         style={{ background: color }}
         animate={{ width: `${Math.max(0, Math.min(100, value * 100))}%` }}
-        transition={{ duration: 0.3 }}
+        transition={TRANSITION.CARD}
       />
     </div>
   );
@@ -125,7 +126,7 @@ export function KernelAgentObserver() {
             <motion.div
               className="kernel-obs-conviction-fill"
               animate={{ width: `${conviction.overall * 100}%` }}
-              transition={{ duration: 0.4 }}
+              transition={TRANSITION.BAR_FILL}
             />
           </div>
           <div className="kernel-obs-conviction-meta">

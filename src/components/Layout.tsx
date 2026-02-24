@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { TRANSITION } from '../constants/motion'
 
 export function Layout() {
   const location = useLocation()
@@ -12,7 +13,7 @@ export function Layout() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={TRANSITION.MESSAGE}
           className="site-main"
         >
           <Outlet />
