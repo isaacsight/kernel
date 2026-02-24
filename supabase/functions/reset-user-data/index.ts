@@ -150,6 +150,13 @@ serve(async (req: Request) => {
         .delete({ count: 'exact' })
         .eq('user_id', userId)
       deleted.briefings = briefCount ?? 0
+
+      // Delete engine state (model preferences, routing config)
+      const { count: engineCount } = await admin
+        .from('user_engine_state')
+        .delete({ count: 'exact' })
+        .eq('user_id', userId)
+      deleted.engine_state = engineCount ?? 0
     }
 
     // ── Audit log ───────────────────────────────────────
