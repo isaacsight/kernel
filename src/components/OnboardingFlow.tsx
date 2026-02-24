@@ -3,13 +3,12 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { IconArrowRight } from './KernelIcons'
 import { ParticleGrid } from './ParticleGrid'
+import { VARIANT, TRANSITION } from '../constants/motion'
 
 interface OnboardingFlowProps {
   onComplete: (interests?: string[]) => void
   userName?: string
 }
-
-const stagger = (i: number) => ({ delay: 0.15 + i * 0.1 })
 
 export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
   const { t } = useTranslation('onboarding')
@@ -39,27 +38,30 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
       <div className="ka-onb-content">
         <motion.div
           className="ka-onb-hero"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], ...stagger(0) }}
+          variants={VARIANT.HERO_SCALE}
+          initial="hidden"
+          animate="visible"
+          transition={TRANSITION.CASCADE(0)}
         >
           <ParticleGrid size={300} interactive />
         </motion.div>
 
         <motion.h1
           className="ka-onb-title"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], ...stagger(1) }}
+          variants={VARIANT.FADE_UP}
+          initial="hidden"
+          animate="visible"
+          transition={TRANSITION.CASCADE(1)}
         >
           {displayName ? t('greetingUser', { name: displayName }) : t('greeting')}
         </motion.h1>
 
         <motion.p
           className="ka-onb-tagline"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], ...stagger(2) }}
+          variants={VARIANT.FADE_UP}
+          initial="hidden"
+          animate="visible"
+          transition={TRANSITION.CASCADE(2)}
         >
           {t('tagline')}
         </motion.p>
@@ -67,9 +69,10 @@ export function OnboardingFlow({ onComplete, userName }: OnboardingFlowProps) {
         <motion.form
           className="ka-onb-form"
           onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], ...stagger(3) }}
+          variants={VARIANT.FADE_UP}
+          initial="hidden"
+          animate="visible"
+          transition={TRANSITION.CASCADE(3)}
         >
           <input
             ref={inputRef}
