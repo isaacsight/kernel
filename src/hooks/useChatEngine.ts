@@ -6,6 +6,7 @@ import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { extractFacet, converge, formatMirrorForPrompt, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
@@ -18,6 +19,7 @@ import {
   upsertCollectiveInsight,
   getUserMemory,
   upsertUserMemory,
+  upsertUserMirror,
   getKGEntities,
   getKGRelations,
   upsertKGEntity,
@@ -91,6 +93,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const userMemoryRef = useRef<UserMemoryProfile>(userMemory)
   userMemoryRef.current = userMemory
   const messageCountRef = useRef(0)
+
+  // Convergence mirror — multi-agent perception synthesis
+  const [userMirror, setUserMirror] = useState<UserMirror>(emptyMirror())
+  const userMirrorRef = useRef<UserMirror>(userMirror)
+  userMirrorRef.current = userMirror
   const [kgEntities, setKGEntities] = useState<KGEntity[]>([])
   const [kgRelations, setKGRelations] = useState<KGRelation[]>([])
   const kgEntitiesRef = useRef<KGEntity[]>([])
@@ -128,7 +135,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     })
   }, [engine])
 
-  // Load user memory
+  // Load user memory + mirror
   useEffect(() => {
     getUserMemory(userId).then(async (mem) => {
       if (mem && mem.profile) {
@@ -139,6 +146,17 @@ export function useChatEngine(params: UseChatEngineParams) {
         if (hasContent) {
           setUserMemory(p as unknown as UserMemoryProfile)
           messageCountRef.current = mem.message_count
+
+          // Load mirror data if present
+          if (mem.agent_facets && Object.keys(mem.agent_facets).length > 0) {
+            const mirror: UserMirror = {
+              facets: mem.agent_facets as unknown as UserMirror['facets'],
+              insights: (mem.convergence_insights || []) as unknown as UserMirror['insights'],
+              lastConvergence: mem.last_convergence ? new Date(mem.last_convergence).getTime() : 0,
+              convergenceCount: ((mem.convergence_insights || []) as unknown[]).length > 0 ? 1 : 0,
+            }
+            setUserMirror(mirror)
+          }
           return
         }
       }
@@ -376,6 +394,10 @@ export function useChatEngine(params: UseChatEngineParams) {
     const memoryBlock = memoryText
       ? `\n\n---\n\n## User Memory\nYou know this about the user. Use it naturally — don't announce it.\n\n${memoryText}`
       : ''
+    const mirrorText = formatMirrorForPrompt(userMirrorRef.current)
+    const mirrorBlock = mirrorText
+      ? `\n\n## Mirror\nDeeper patterns the agents have noticed together:\n\n${mirrorText}`
+      : ''
     const kgText = formatGraphForPrompt(kgEntities, kgRelations)
     const kgBlock = kgText
       ? `\n\n## Knowledge Graph\nStructured facts and relationships you've learned:\n\n${kgText}`
@@ -384,7 +406,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
     const goalBlock = getGoalCheckInPrompt(userGoalsRef.current)
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${kgBlock}${goalBlock}${collectiveBlock}`
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${kgBlock}${goalBlock}${collectiveBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -505,9 +527,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       touchConversation(convId)
       loadConversations()
 
-      // Background memory + KG extraction every 3 messages
+      // Background memory + KG + convergence extraction every 3 messages
       messageCountRef.current++
-      if (messageCountRef.current % 3 === 0) {
+      const currentMsgCount = messageCountRef.current
+      if (currentMsgCount % 3 === 0) {
         setMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
@@ -521,8 +544,37 @@ export function useChatEngine(params: UseChatEngineParams) {
               if (!hasData) return
               const merged = await mergeMemory(userMemoryRef.current, newProfile)
               setUserMemory(merged)
-              await upsertUserMemory(userId, merged as unknown as Record<string, unknown>, messageCountRef.current)
+              await upsertUserMemory(userId, merged as unknown as Record<string, unknown>, currentMsgCount)
             }).catch((err) => console.warn('[Memory] Periodic extraction failed:', err))
+
+            // Convergence — facet extraction for the active agent
+            const facetAgentId = resolveFacetAgent(classification.agentId)
+            const existingFacet = userMirrorRef.current.facets[facetAgentId]
+            extractFacet(facetAgentId, recentMsgs, existingFacet).then(async (facet) => {
+              if (!facet) return
+              const updatedMirror: UserMirror = {
+                ...userMirrorRef.current,
+                facets: { ...userMirrorRef.current.facets, [facetAgentId]: facet },
+              }
+
+              // Check if convergence should run
+              if (shouldConverge(updatedMirror, currentMsgCount)) {
+                console.log('[Convergence] Running convergence...')
+                const insights = await converge(updatedMirror)
+                updatedMirror.insights = insights
+                updatedMirror.lastConvergence = Date.now()
+                updatedMirror.convergenceCount++
+                console.log(`[Convergence] Produced ${insights.length} insights`)
+              }
+
+              setUserMirror(updatedMirror)
+              await upsertUserMirror(
+                userId,
+                updatedMirror.facets as unknown as Record<string, unknown>,
+                updatedMirror.insights as unknown[],
+                updatedMirror.lastConvergence ? new Date(updatedMirror.lastConvergence).toISOString() : null,
+              )
+            }).catch(err => console.warn('[Convergence] Facet extraction failed:', err))
 
             // Goal progress extraction
             const activeGoals = userGoalsRef.current.filter(g => g.status === 'active')

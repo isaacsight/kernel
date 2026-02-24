@@ -593,6 +593,9 @@ export interface DBUserMemory {
   profile: Record<string, unknown>;
   message_count: number;
   updated_at: string;
+  agent_facets?: Record<string, unknown>;
+  convergence_insights?: unknown[];
+  last_convergence?: string | null;
 }
 
 export async function getUserMemory(userId: string): Promise<DBUserMemory | null> {
@@ -621,6 +624,25 @@ export async function upsertUserMemory(
       updated_at: new Date().toISOString(),
     });
   if (error) console.error('Error upserting user memory:', error);
+}
+
+export async function upsertUserMirror(
+  userId: string,
+  agentFacets: Record<string, unknown>,
+  convergenceInsights: unknown[],
+  lastConvergence?: string | null,
+) {
+  const payload: Record<string, unknown> = {
+    user_id: userId,
+    agent_facets: agentFacets,
+    convergence_insights: convergenceInsights,
+    updated_at: new Date().toISOString(),
+  };
+  if (lastConvergence) payload.last_convergence = lastConvergence;
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert(payload);
+  if (error) console.error('Error upserting user mirror:', error);
 }
 
 // ─── Engine State (world model + lasting memory) ─────────

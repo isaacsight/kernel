@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type { User, Provider, UserIdentity } from '@supabase/supabase-js'
 import { supabase, getAccessToken } from '../engine/SupabaseClient'
 
@@ -29,15 +29,70 @@ export function useAccountSettings(
   const [avatarUrl, setAvatarUrl] = useState('')
   const [profileState, setProfileState] = useState<SectionState>(INITIAL_SECTION)
 
+  // Availability tracking
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null)
+  const [displayNameAvailable, setDisplayNameAvailable] = useState<boolean | null>(null)
+  const usernameCheckRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const displayNameCheckRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  // Original values from user metadata (to skip checks when unchanged)
+  const origUsername = user?.user_metadata?.username || ''
+  const origDisplayName = user?.user_metadata?.display_name || user?.user_metadata?.full_name || ''
+
   useEffect(() => {
     if (user) {
       setDisplayName(user.user_metadata?.display_name || user.user_metadata?.full_name || '')
       setUsername(user.user_metadata?.username || '')
       setAvatarUrl(user.user_metadata?.avatar_url || '')
+      setUsernameAvailable(null)
+      setDisplayNameAvailable(null)
     }
   }, [user])
 
+  // Debounced username availability check
+  useEffect(() => {
+    clearTimeout(usernameCheckRef.current)
+    const trimmed = username.trim()
+    if (!trimmed || trimmed.toLowerCase() === origUsername.toLowerCase()) {
+      setUsernameAvailable(null)
+      return
+    }
+    usernameCheckRef.current = setTimeout(async () => {
+      const { data } = await supabase.rpc('check_name_available', {
+        p_field: 'username', p_value: trimmed,
+      })
+      setUsernameAvailable(data ?? null)
+    }, 400)
+    return () => clearTimeout(usernameCheckRef.current)
+  }, [username, origUsername])
+
+  // Debounced display name availability check
+  useEffect(() => {
+    clearTimeout(displayNameCheckRef.current)
+    const trimmed = displayName.trim()
+    if (!trimmed || trimmed.toLowerCase() === origDisplayName.toLowerCase()) {
+      setDisplayNameAvailable(null)
+      return
+    }
+    displayNameCheckRef.current = setTimeout(async () => {
+      const { data } = await supabase.rpc('check_name_available', {
+        p_field: 'display_name', p_value: trimmed,
+      })
+      setDisplayNameAvailable(data ?? null)
+    }, 400)
+    return () => clearTimeout(displayNameCheckRef.current)
+  }, [displayName, origDisplayName])
+
   const saveProfile = useCallback(async () => {
+    // Block save if either name is known to be taken
+    if (usernameAvailable === false) {
+      setProfileState({ loading: false, error: 'username_taken', success: null })
+      return
+    }
+    if (displayNameAvailable === false) {
+      setProfileState({ loading: false, error: 'display_name_taken', success: null })
+      return
+    }
     setProfileState({ loading: true, error: null, success: null })
     const { error } = await auth.updateProfile({
       display_name: displayName.trim(),
@@ -48,9 +103,11 @@ export function useAccountSettings(
       setProfileState({ loading: false, error, success: null })
     } else {
       setProfileState({ loading: false, error: null, success: 'saved' })
+      setUsernameAvailable(null)
+      setDisplayNameAvailable(null)
       setTimeout(() => setProfileState(s => ({ ...s, success: null })), 3000)
     }
-  }, [displayName, username, avatarUrl, auth])
+  }, [displayName, username, avatarUrl, auth, usernameAvailable, displayNameAvailable])
 
   const resetProfile = useCallback(async () => {
     setProfileState({ loading: true, error: null, success: null })
