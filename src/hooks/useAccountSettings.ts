@@ -262,6 +262,12 @@ export function useAccountSettings(
         body: JSON.stringify({ scope }),
       })
       if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error('Rate limit reached. Try again later.')
+        }
+        if (res.status === 401) {
+          throw new Error('Session expired. Please sign in again.')
+        }
         const data = await res.json().catch(() => ({ error: 'Request failed' }))
         throw new Error(data.error || `HTTP ${res.status}`)
       }
@@ -312,7 +318,7 @@ export function useAccountSettings(
 // ─── Password Strength Helper ──────────────────────
 export type PasswordStrength = 'none' | 'weak' | 'fair' | 'strong'
 
-function getPasswordStrength(password: string): PasswordStrength {
+export function getPasswordStrength(password: string): PasswordStrength {
   if (!password) return 'none'
   let score = 0
   if (password.length >= 8) score++

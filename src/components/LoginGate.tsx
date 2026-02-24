@@ -89,6 +89,7 @@ export function LoginGate() {
     setResetEmailSent(false)
     setSuccessMsg('')
     setError('')
+    setPassword('')
   }
 
   return (
