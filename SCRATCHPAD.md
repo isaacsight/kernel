@@ -4,9 +4,38 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-23, latest)
+## Current Session (2026-02-24, latest)
 
 ### Accomplished This Session
+
+#### Free-Tier Daily Message Limit — Full Implementation
+- **Migration 025** (`protect_message_count.sql`): BEFORE UPDATE trigger on `user_memory` blocks direct modification of `message_count`. Uses `app.allow_message_count_update` session variable as bypass token for the RPC. Committed `21832166`.
+- **Migration 026** (`daily_message_limit.sql`): Added `daily_message_count` and `daily_message_date` columns to `user_memory`. Updated `increment_message_count` RPC to auto-reset daily count on new day. Trigger extended to protect new columns. Committed `9b3cf8f4`.
+- **Migration 027** (`24h_rolling_window.sql`): Replaced `daily_message_date DATE` with `daily_window_start TIMESTAMPTZ`. 24h rolling window starts on user's first message after reset. RPC return type changed from INT to JSONB `{daily_count, resets_at}`. Required `DROP FUNCTION` before recreate (return type change). Committed `78c23e82`.
+- **Edge function** (`claude-proxy`): `FREE_LIMIT` changed from 10 to 20. Parses JSONB from RPC. Returns `resets_at` in 403 response. Sends in-app + push notification on first overage (`daily_count === FREE_LIMIT + 1`). Deployed 3 times across iterations.
+- **`FreeLimitError`** (both `proxy.ts` and `ClaudeClient.ts`): Added `resetsAt: string | null` field. Error handler parses `resets_at` from 403 body.
+- **`useBilling.ts`**: Added `freeLimitResetsAt` / `setFreeLimitResetsAt` state.
+- **`useChatEngine.ts`**: Added `setFreeLimitResetsAt` param. Passes `err.resetsAt` to billing on `FreeLimitError`.
+- **`EnginePage.tsx`**: `FREE_MSG_LIMIT` changed from 10 to 20. Upgrade wall now shows "Your messages reset at HH:MM" (localized via `toLocaleTimeString`). Passes `setFreeLimitResetsAt` to chat engine.
+- **i18n**: Added `upgrade.resetsAt` key to all 24 locale files with translated text.
+- **`useAccountSettings.ts`**: Fixed pre-existing type error (`supabaseKey` possibly undefined → added `|| ''`).
+- **Notification on limit hit**: In-app notification ("Daily messages used — They reset at X") + push notification via internal `send-notification` edge function call. Only fires once per 24h window.
+- **Tested end-to-end**: Playwright browser test — sent message (RPC created row), simulated limit hit (upgrade wall appeared with reset time "11:24 PM"), verified notifications created in DB, cleaned up test data.
+- **Reset all users**: Set `daily_message_count = 0` and `daily_window_start = NULL` for all 18 users.
+- Commits: `21832166`, `9b3cf8f4`, `78c23e82`, `d307b5d7` — all pushed to origin/main, deployed to kernel.chat.
+
+#### Unified 50MB Upload Limit (earlier)
+- **`ChatHelpers.tsx`**: Replaced per-type/per-tier file size limits (free: 2-10MB, pro: 20-25MB) with single 50MB cap for all file types.
+- **`useAccountSettings.ts`**: Avatar upload limit raised from 2MB to 50MB.
+- **`transcribe/index.ts`**: Removed tier-based size check (2MB free / 25MB pro), replaced with flat 50MB limit. Removed subscription lookup for size gating.
+- **Supabase avatars bucket**: Updated `file_size_limit` to 50MB server-side.
+- Transcribe edge function redeployed. Committed `b97a7186`, pushed to origin/main, deployed to kernel.chat.
+
+---
+
+## Previous Session (2026-02-23, latest)
+
+### Accomplished
 
 #### Account Settings Panel — Full Implementation
 - **`useAuth.ts`**: Added 5 methods (`updateEmail`, `updateProfile`, `getUserIdentities`, `linkIdentity`, `unlinkIdentity`). Fixed `USER_UPDATED` event to always update user state (was dropping metadata changes).
@@ -26,6 +55,11 @@
 #### Type Fixes
 - **`useAccountSettings.ts`**: Moved `hasPassword` and `identities` declarations above callbacks that reference them (block-scoped variable used before declaration). Committed `b0e03570`.
 - **`useKernelAgent.ts`**: Fixed `Engine` type extraction — `Awaited<ReturnType<typeof import(...)>>` wraps the module namespace, changed to `Awaited<typeof import(...)>['getEngine']` to correctly extract the function type. Committed `031f5a94`.
+
+#### Account Settings — Verification & Error Handling
+- **`AccountSettingsPanel.tsx`**: Removed `hasPassword` gate on verification block so OAuth-only users can verify identity too. Added `verifyHint` text and `verificationRequired` error handling.
+- **`useAuth.ts`**: `linkIdentity` now throws on error instead of silently swallowing.
+- Committed `5e7e7a38`, pushed to origin/main, deployed to kernel.chat.
 
 ---
 
@@ -151,6 +185,8 @@
 - **Password recovery flow**: DONE (detect PASSWORD_RECOVERY event, SetNewPasswordModal, updateUser)
 - **Onboarding redesign**: DONE (single-screen ParticleGrid + input, sessionStorage bridge to chat engine)
 - **Account settings panel**: DONE (profile, email, password, linked accounts, avatar upload, re-auth, Supabase avatars bucket)
+- **Upload limits**: DONE (unified 50MB per file, no tier split)
+- **Free-tier daily limit**: DONE (20 msgs/24h rolling window, reset time shown, in-app + push notifications)
 - **Next candidates**: Animation token system
 - **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
 
@@ -173,3 +209,5 @@
 - Conversation search: trigram GIN indexes for `.ilike()`, parallel title+message queries, `<mark>` highlight, no full-text search needed at current scale
 - Onboarding: single screen over multi-stage wizard; sessionStorage bridge pattern (write in onboarding, consume in useChatEngine with transient-mount guard)
 - Account settings: bottom-sheet panel, MoreMenu consolidated to single entry + sign out, OAuth link uses localStorage flag (`kernel-reopen-settings`) to reopen panel after redirect, avatars bucket with user-scoped RLS, re-auth via `signInWithPassword` before email/password changes
+- Upload limits: flat 50MB per file everywhere (chat attachments, avatars, transcription) — no free/pro tier split for file sizes
+- Free-tier messaging: 20 messages per 24h rolling window (not midnight reset). Window starts on first message after previous window expires. RPC returns JSONB `{daily_count, resets_at}`. Trigger protects `message_count`, `daily_message_count`, and `daily_window_start` from direct client manipulation. Lifetime `message_count` preserved for entity evolution. In-app + push notification fires once per window on first overage. Streak bonus (+1 at 3+ days) still applies on top of 20.
