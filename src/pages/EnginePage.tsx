@@ -58,6 +58,7 @@ const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').th
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
+const ReliabilityDashboard = lazyRetry(() => import('../components/ReliabilityDashboard').then(m => ({ default: m.ReliabilityDashboard })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -460,7 +461,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -631,6 +632,18 @@ function EngineChat() {
               />
             </Suspense>
           </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showReliabilityPanel && user && (
+          <Suspense fallback={null}>
+            <ReliabilityDashboard
+              userId={user.id}
+              isAdmin={isAdmin}
+              onClose={() => panels.closePanel('reliability')}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -1197,9 +1210,9 @@ function EngineChat() {
             )}
           </div>
         ) : (
-          <label htmlFor="ka-file-input" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label={t('aria.attachFile', { ns: 'common' })}>
+          <button type="button" className={`ka-attach-btn${isStreaming ? ' ka-attach-btn--disabled' : ''}`} aria-label={t('aria.attachFile', { ns: 'common' })} onClick={() => fileAttachments.fileInputRef.current?.click()}>
             <IconAttach size={18} />
-          </label>
+          </button>
         )}
 
         <textarea

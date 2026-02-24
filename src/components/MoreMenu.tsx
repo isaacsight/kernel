@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconShield } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
@@ -38,6 +38,7 @@ export type MoreAction =
   | 'knowledge'
   | 'stats'
   | 'insights'
+  | 'reliability'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
@@ -58,6 +59,7 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
   { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
   { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
+  { id: 'reliability', labelKey: 'menu.reliability', icon: IconShield },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
