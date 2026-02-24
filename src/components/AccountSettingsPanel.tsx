@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { User, Provider } from '@supabase/supabase-js'
 import { useAccountSettings, type ResetScope } from '../hooks/useAccountSettings'
+import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconCrown, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
@@ -48,12 +49,34 @@ export default function AccountSettingsPanel({
   const settings = useAccountSettings(user, {
     updateEmail: auth.updateEmail,
     updatePassword: auth.updatePassword,
-    reauthenticate: auth.reauthenticate,
     updateProfile: auth.updateProfile,
     getUserIdentities: auth.getUserIdentities,
     linkIdentity: auth.linkIdentity,
     unlinkIdentity: auth.unlinkIdentity,
   })
+
+  // ─── Identity Governance ──────────────────────────
+  const identity = useIdentityRecovery()
+  const [verificationCode, setVerificationCode] = useState('')
+
+  const isVerified = identity.request?.state === 'verified' || identity.request?.state === 'executed'
+  const isChallenged = identity.request?.state === 'challenged'
+
+  const handleSendCode = useCallback(async () => {
+    const req = await identity.initiate('password_reset')
+    if (req) {
+      await identity.sendChallenge(req.requestId)
+    }
+  }, [identity])
+
+  const handleVerifyCode = useCallback(async () => {
+    if (!identity.request || !verificationCode.trim()) return
+    const ok = await identity.verify(identity.request.requestId, verificationCode.trim())
+    if (ok) setVerificationCode('')
+  }, [identity, verificationCode])
+
+  // Resend creates a fresh request (old one auto-revoked via supersession)
+  const handleResendCode = handleSendCode
 
   const initials = (settings.displayName || user.email || '?')
     .split(/[\s@]/)
@@ -153,51 +176,59 @@ export default function AccountSettingsPanel({
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('security.heading')}</h3>
         <div className="ka-settings-section-body">
-          {/* Step 1: Verify identity */}
-          {!settings.codeSent ? (
+          {!isVerified ? (
             <div className="ka-settings-verify-block">
               <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
               <p className="ka-settings-verify-hint">{t('security.verifyHint')}</p>
-              <button className="ka-gate-submit" onClick={settings.sendVerificationCode} disabled={settings.verifyState.loading || settings.cooldownSeconds > 0}>
-                {settings.verifyState.loading ? '...' : t('security.sendCode')}
-              </button>
-              {settings.verifyState.error && (
-                <p className="ka-gate-error">{settings.verifyState.error}</p>
+
+              {!isChallenged ? (
+                <button className="ka-gate-submit" onClick={handleSendCode} disabled={identity.loading}>
+                  {identity.loading ? '...' : t('security.sendCode')}
+                </button>
+              ) : (
+                <>
+                  <p className="ka-gate-success" style={{ margin: '4px 0 8px' }}>
+                    <IconCheck size={14} /> {t('security.codeSent')}
+                  </p>
+                  <input
+                    className="ka-gate-input"
+                    type="text"
+                    inputMode="numeric"
+                    value={verificationCode}
+                    onChange={e => setVerificationCode(e.target.value)}
+                    placeholder={t('security.codePlaceholder')}
+                    autoComplete="one-time-code"
+                  />
+                  <button
+                    className="ka-gate-submit"
+                    onClick={handleVerifyCode}
+                    disabled={identity.loading || !verificationCode.trim()}
+                  >
+                    {identity.loading ? '...' : t('security.verify')}
+                  </button>
+                  <div className="ka-settings-resend-row">
+                    <button
+                      className="ka-settings-text-btn"
+                      onClick={handleResendCode}
+                      disabled={identity.cooldown > 0 || identity.loading}
+                    >
+                      {identity.cooldown > 0
+                        ? t('security.resendIn', { seconds: identity.cooldown })
+                        : t('security.resendCode')}
+                    </button>
+                  </div>
+                </>
               )}
+
+              {identity.error && <p className="ka-gate-error">{identity.error}</p>}
             </div>
           ) : (
             <>
-              {/* Step 2: Enter code + make changes */}
+              {/* Verified badge */}
               <div className="ka-settings-verify-block ka-settings-verify-block--active">
-                <span className="ka-settings-label">{t('security.verifyIdentity')}</span>
-                <p className="ka-gate-success" style={{ margin: '4px 0 8px' }}><IconCheck size={14} /> {t('security.codeSent')}</p>
-                <input
-                  className="ka-gate-input"
-                  type="text"
-                  inputMode="numeric"
-                  value={settings.verificationCode}
-                  onChange={e => settings.setVerificationCode(e.target.value)}
-                  placeholder={t('security.codePlaceholder')}
-                  autoComplete="one-time-code"
-                />
-                <div className="ka-settings-resend-row">
-                  <button
-                    className="ka-settings-text-btn"
-                    onClick={settings.sendVerificationCode}
-                    disabled={settings.cooldownSeconds > 0 || settings.verifyState.loading}
-                  >
-                    {settings.cooldownSeconds > 0
-                      ? t('security.resendIn', { seconds: settings.cooldownSeconds })
-                      : t('security.resendCode')}
-                  </button>
-                </div>
-                {settings.verifyState.error && (
-                  <p className="ka-gate-error">
-                    {settings.verifyState.error === 'codeRequired' ? t('security.codeRequired') :
-                     settings.verifyState.error === 'verificationRequired' ? t('security.verificationRequired') :
-                     settings.verifyState.error}
-                  </p>
-                )}
+                <p className="ka-gate-success" style={{ margin: 0 }}>
+                  <IconCheck size={14} /> {t('security.verified')}
+                </p>
               </div>
 
               {/* Change Email */}
@@ -275,8 +306,8 @@ export default function AccountSettingsPanel({
         <h3 className="ka-settings-section-header">{t('linkedAccounts.heading')}</h3>
         <div className="ka-settings-section-body">
           {PROVIDERS.map(p => {
-            const identity = settings.identities.find(id => id.provider === p.id)
-            const isConnected = !!identity
+            const linked = settings.identities.find(id => id.provider === p.id)
+            const isConnected = !!linked
             const isLastIdentity = settings.identities.length <= 1
             return (
               <div key={p.id} className="ka-settings-provider-row">
@@ -286,7 +317,7 @@ export default function AccountSettingsPanel({
                     <span className="ka-settings-connected"><IconCheck size={12} /> {t('linkedAccounts.connected')}</span>
                     <button
                       className="ka-settings-unlink-btn"
-                      onClick={() => identity && settings.unlinkProvider(identity)}
+                      onClick={() => linked && settings.unlinkProvider(linked)}
                       disabled={isLastIdentity || settings.linkState.loading}
                       title={isLastIdentity ? t('linkedAccounts.cannotUnlinkLast') : undefined}
                     >

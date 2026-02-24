@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { User, Provider, UserIdentity } from '@supabase/supabase-js'
 import { supabase, getAccessToken } from '../engine/SupabaseClient'
 
@@ -17,7 +17,6 @@ export function useAccountSettings(
   auth: {
     updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>
     updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>
-    reauthenticate: () => Promise<{ error: string | null }>
     updateProfile: (data: { display_name?: string; username?: string; avatar_url?: string }) => Promise<{ error: string | null }>
     getUserIdentities: () => UserIdentity[]
     linkIdentity: (provider: Provider) => Promise<void>
@@ -101,48 +100,6 @@ export function useAccountSettings(
     }
   }, [user, auth])
 
-  // ─── Email Verification (re-auth) ──────────────────
-  const [verificationCode, setVerificationCode] = useState('')
-  const [verifyState, setVerifyState] = useState<SectionState>(INITIAL_SECTION)
-  const [codeSent, setCodeSent] = useState(false)
-  const [cooldownSeconds, setCooldownSeconds] = useState(0)
-  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  const startCooldown = useCallback((seconds: number) => {
-    setCooldownSeconds(seconds)
-    if (cooldownRef.current) clearInterval(cooldownRef.current)
-    cooldownRef.current = setInterval(() => {
-      setCooldownSeconds(prev => {
-        if (prev <= 1) {
-          if (cooldownRef.current) clearInterval(cooldownRef.current)
-          cooldownRef.current = null
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      if (cooldownRef.current) clearInterval(cooldownRef.current)
-    }
-  }, [])
-
-  const sendVerificationCode = useCallback(async () => {
-    if (cooldownSeconds > 0) return
-    setVerifyState({ loading: true, error: null, success: null })
-    const { error } = await auth.reauthenticate()
-    if (error) {
-      setVerifyState({ loading: false, error, success: null })
-    } else {
-      setCodeSent(true)
-      setVerifyState({ loading: false, error: null, success: 'codeSent' })
-      startCooldown(60)
-      setTimeout(() => setVerifyState(s => ({ ...s, success: null })), 5000)
-    }
-  }, [auth, cooldownSeconds, startCooldown])
-
   // ─── Linked Accounts (needed early for checks) ──
   const identities = auth.getUserIdentities()
   const hasPassword = identities.some(id => id.provider === 'email')
@@ -156,25 +113,15 @@ export function useAccountSettings(
       setEmailState({ loading: false, error: 'Enter a valid email', success: null })
       return
     }
-    if (!codeSent) {
-      setVerifyState({ loading: false, error: 'verificationRequired', success: null })
-      return
-    }
-    if (!verificationCode.trim()) {
-      setVerifyState({ loading: false, error: 'codeRequired', success: null })
-      return
-    }
     setEmailState({ loading: true, error: null, success: null })
-    const { error } = await auth.updateEmail(newEmail.trim(), verificationCode.trim())
+    const { error } = await auth.updateEmail(newEmail.trim())
     if (error) {
       setEmailState({ loading: false, error, success: null })
     } else {
       setEmailState({ loading: false, error: null, success: 'confirmationSent' })
       setNewEmail('')
-      setVerificationCode('')
-      setCodeSent(false)
     }
-  }, [newEmail, auth, codeSent, verificationCode])
+  }, [newEmail, auth])
 
   // ─── Password ─────────────────────────────────────
   const [newPassword, setNewPassword] = useState('')
@@ -190,29 +137,17 @@ export function useAccountSettings(
       setPasswordState({ loading: false, error: 'mismatch', success: null })
       return
     }
-    if (hasPassword) {
-      if (!codeSent) {
-        setVerifyState({ loading: false, error: 'verificationRequired', success: null })
-        return
-      }
-      if (!verificationCode.trim()) {
-        setVerifyState({ loading: false, error: 'codeRequired', success: null })
-        return
-      }
-    }
     setPasswordState({ loading: true, error: null, success: null })
-    const { error } = await auth.updatePassword(newPassword, hasPassword ? verificationCode.trim() : undefined)
+    const { error } = await auth.updatePassword(newPassword)
     if (error) {
       setPasswordState({ loading: false, error, success: null })
     } else {
       setPasswordState({ loading: false, error: null, success: 'changed' })
       setNewPassword('')
       setConfirmPassword('')
-      setVerificationCode('')
-      setCodeSent(false)
       setTimeout(() => setPasswordState(s => ({ ...s, success: null })), 3000)
     }
-  }, [newPassword, confirmPassword, auth, hasPassword, codeSent, verificationCode])
+  }, [newPassword, confirmPassword, auth])
 
   // ─── Linked Accounts ─────────────────────────────
   const [linkState, setLinkState] = useState<SectionState>(INITIAL_SECTION)
@@ -295,10 +230,6 @@ export function useAccountSettings(
     username, setUsername,
     avatarUrl, setAvatarUrl,
     profileState, saveProfile, resetProfile, uploadAvatar,
-    // Verification
-    verificationCode, setVerificationCode,
-    verifyState, codeSent, sendVerificationCode,
-    cooldownSeconds,
     // Email
     newEmail, setNewEmail,
     emailState, changeEmail,
