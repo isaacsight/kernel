@@ -228,16 +228,51 @@ async function getProviderScores(): Promise<Record<string, ProviderScore>> {
     const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
-    const { data } = await svc.rpc('get_provider_scores', { p_window: '15m' })
+    // Use trend-aware scores for predictive routing
+    const { data } = await svc.rpc('get_provider_scores_with_trends', { p_window: '15m' })
     if (data && typeof data === 'object') {
       _providerScoresCache = data as Record<string, ProviderScore>
       _providerScoresCacheTime = Date.now()
     }
   } catch (err) {
-    console.warn('[provider-health] Failed to fetch scores (using cache):', err)
+    // Fallback to basic scores if trend RPC doesn't exist yet
+    try {
+      const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      const { data } = await svc.rpc('get_provider_scores', { p_window: '15m' })
+      if (data && typeof data === 'object') {
+        _providerScoresCache = data as Record<string, ProviderScore>
+        _providerScoresCacheTime = Date.now()
+      }
+    } catch {
+      console.warn('[provider-health] Failed to fetch scores (using cache):', err)
+    }
   }
 
   return _providerScoresCache
+}
+
+/**
+ * Predictive routing: check if a provider is trending downward.
+ * If the 15m score is declining relative to 1h, penalize it.
+ * Returns an effective score that accounts for trend.
+ */
+function getEffectiveScore(providerScores: Record<string, ProviderScore>, provider: string): number {
+  const s = providerScores[provider]
+  if (!s) return 100 // no data = assume healthy
+
+  const base = s.score
+  const trend = (s as any).trend as string | undefined
+
+  // Predictive penalty: declining providers get score reduced by 15
+  // This makes the system preemptively route away before full degradation
+  if (trend === 'declining') {
+    console.log(`[predictive] Provider ${provider} is declining (15m: ${base}, 1h: ${(s as any).score_1h}), applying penalty`)
+    return Math.max(0, base - 15)
+  }
+
+  return base
 }
 
 /**
@@ -253,7 +288,8 @@ async function pickFallbackProvider(
 
   const scores = await getProviderScores()
 
-  // Filter to providers that have the API key configured and score > 50
+  // Filter to providers that have the API key configured and effective score > 50
+  // Uses predictive scoring: declining providers get penalized
   const candidates: { provider: Provider; score: number }[] = []
   for (const p of fallbacks) {
     const keyName = p === 'anthropic' ? 'ANTHROPIC_API_KEY'
@@ -262,9 +298,9 @@ async function pickFallbackProvider(
       : 'NVIDIA_API_KEY'
     if (!Deno.env.get(keyName)) continue
 
-    const pScore = scores[p]?.score ?? 100
-    if (pScore > 50) {
-      candidates.push({ provider: p, score: pScore })
+    const effectiveScore = getEffectiveScore(scores, p)
+    if (effectiveScore > 50) {
+      candidates.push({ provider: p, score: effectiveScore })
     }
   }
 
@@ -1336,9 +1372,27 @@ serve(async (req: Request) => {
       }
     }
 
-    // First attempt with the requested provider
+    // ── Predictive pre-routing: preemptively switch away from declining providers ──
+    let effectiveProvider = provider
+    let effectiveModel = resolvedModel
+    {
+      const scores = await getProviderScores()
+      const effScore = getEffectiveScore(scores, provider)
+      // If requested provider has effective score < 60 (declining/degraded),
+      // proactively route to a healthier provider before even trying
+      if (effScore < 60 && !isServiceCall) {
+        const fallback = await pickFallbackProvider(provider, payload.tier ?? 'strong')
+        if (fallback) {
+          console.log(`[predictive] Pre-routing away from ${provider} (score: ${effScore}) → ${fallback.provider}`)
+          effectiveProvider = fallback.provider
+          effectiveModel = fallback.model
+        }
+      }
+    }
+
+    // First attempt with the (possibly pre-routed) provider
     await recordMessageState('streaming')
-    const firstResponse = await dispatchProvider(provider, resolvedModel)
+    const firstResponse = await dispatchProvider(effectiveProvider, effectiveModel)
 
     // If successful: charge the message and return
     if (firstResponse.ok) {

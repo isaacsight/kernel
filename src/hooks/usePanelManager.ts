@@ -18,6 +18,7 @@ export function usePanelManager(callbacks: {
   const [showBriefingPanel, setShowBriefingPanel] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
   const [showAccountSettings, setShowAccountSettings] = useState(false)
+  const [showReliabilityPanel, setShowReliabilityPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -31,6 +32,7 @@ export function usePanelManager(callbacks: {
     setShowBriefingPanel(false)
     setShowInsightsPanel(false)
     setShowAccountSettings(false)
+    setShowReliabilityPanel(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
@@ -44,6 +46,7 @@ export function usePanelManager(callbacks: {
     if (except !== 'briefings') setShowBriefingPanel(false)
     if (except !== 'insights') setShowInsightsPanel(false)
     if (except !== 'account-settings') setShowAccountSettings(false)
+    if (except !== 'reliability') setShowReliabilityPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
   }, [callbacks])
@@ -78,7 +81,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'reliability' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -90,6 +93,7 @@ export function usePanelManager(callbacks: {
       case 'briefings': setShowBriefingPanel(false); break
       case 'insights': setShowInsightsPanel(false); break
       case 'account-settings': setShowAccountSettings(false); break
+      case 'reliability': setShowReliabilityPanel(false); break
       case 'more': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
     }
@@ -124,6 +128,10 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('account-settings')
         setShowAccountSettings(true)
         break
+      case 'reliability':
+        closeOtherPanels('reliability')
+        setShowReliabilityPanel(true)
+        break
       case 'upgrade':
         callbacks.handleUpgrade()
         break
@@ -148,6 +156,7 @@ export function usePanelManager(callbacks: {
     showBriefingPanel, setShowBriefingPanel,
     showInsightsPanel, setShowInsightsPanel,
     showAccountSettings, setShowAccountSettings,
+    showReliabilityPanel, setShowReliabilityPanel,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,
