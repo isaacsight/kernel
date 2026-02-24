@@ -70,8 +70,8 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
 const DAILY_COST_ALERT_THRESHOLD = 5.00
 const DAILY_COST_HARD_LIMIT = 10.00
 const MAX_TOKENS_CAP = 8192
-const MAX_MESSAGE_SIZE_BYTES = 32_768   // 32KB per message
-const MAX_PAYLOAD_SIZE_BYTES = 262_144  // 256KB total
+const MAX_MESSAGE_SIZE_BYTES = 52_428_800  // 50MB per message (base64 files)
+const MAX_PAYLOAD_SIZE_BYTES = 52_428_800  // 50MB total payload
 const MAX_SYSTEM_PROMPT_BYTES = 16_384  // 16KB system prompt cap
 const STREAM_IDLE_TIMEOUT_MS = 30_000   // 30s max idle between stream chunks
 
