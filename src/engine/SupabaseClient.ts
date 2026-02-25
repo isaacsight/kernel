@@ -596,6 +596,7 @@ export interface DBUserMemory {
   agent_facets?: Record<string, unknown>;
   convergence_insights?: unknown[];
   last_convergence?: string | null;
+  loom_state?: Record<string, unknown>;
 }
 
 export async function getUserMemory(userId: string): Promise<DBUserMemory | null> {
@@ -643,6 +644,33 @@ export async function upsertUserMirror(
     .from('user_memory')
     .upsert(payload);
   if (error) console.error('Error upserting user mirror:', error);
+}
+
+// ─── Loom State (reflexive intelligence) ─────────────────
+
+export async function getLoomState(userId: string): Promise<Record<string, unknown> | null> {
+  const { data, error } = await supabase
+    .from('user_memory')
+    .select('loom_state')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) console.error('Error fetching loom state:', error);
+  return data?.loom_state as Record<string, unknown> | null;
+}
+
+export async function upsertLoomState(
+  userId: string,
+  loomState: Record<string, unknown>,
+) {
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert({
+      user_id: userId,
+      loom_state: loomState,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) console.error('Error upserting loom state:', error);
 }
 
 // ─── Engine State (world model + lasting memory) ─────────

@@ -7,6 +7,12 @@ import { classifyIntent, buildRecentContext, resolveModelFromClassification } fr
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
 import { extractFacet, converge, formatMirrorForPrompt, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
+import {
+  captureOutcome, recordOutcome, detectRephrase,
+  buildRoutingContext, buildSwarmContext, formatSelfMirror,
+  emptyLoomState, serializeLoomState, deserializeLoomState,
+  type LoomState, type Outcome, type UserSignal,
+} from '../engine/Loom'
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
@@ -20,6 +26,8 @@ import {
   getUserMemory,
   upsertUserMemory,
   upsertUserMirror,
+  getLoomState,
+  upsertLoomState,
   getKGEntities,
   getKGRelations,
   upsertKGEntity,
@@ -98,6 +106,20 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [userMirror, setUserMirror] = useState<UserMirror>(emptyMirror())
   const userMirrorRef = useRef<UserMirror>(userMirror)
   userMirrorRef.current = userMirror
+
+  // Loom — reflexive intelligence (the system observing itself)
+  const loomRef = useRef<LoomState>(emptyLoomState())
+  const pendingOutcomeRef = useRef<{
+    classification: Awaited<ReturnType<typeof classifyIntent>>
+    agentUsed: string
+    swarmComposition: string[] | null
+    modelUsed: string
+    responseContent: string
+    timestamp: number
+    previousUserMsg: string
+  } | null>(null)
+  const avgUserMsgLengthRef = useRef(60) // rolling average for length delta
+
   const [kgEntities, setKGEntities] = useState<KGEntity[]>([])
   const [kgRelations, setKGRelations] = useState<KGRelation[]>([])
   const kgEntitiesRef = useRef<KGEntity[]>([])
@@ -138,6 +160,13 @@ export function useChatEngine(params: UseChatEngineParams) {
       setEngineState(engine.getState())
     })
   }, [engine])
+
+  // Load Loom state
+  useEffect(() => {
+    getLoomState(userId).then(data => {
+      if (data) loomRef.current = deserializeLoomState(data)
+    }).catch(err => console.warn('[Loom] Failed to load:', err))
+  }, [userId])
 
   // Load user memory + mirror
   useEffect(() => {
@@ -243,6 +272,42 @@ export function useChatEngine(params: UseChatEngineParams) {
     const trimmed = content.trim()
     const filesToSend = [...attachedFiles]
 
+    // Loom — resolve pending outcome from previous response
+    const pending = pendingOutcomeRef.current
+    if (pending && trimmed) {
+      const latencyMs = Date.now() - pending.timestamp
+      const isRephrase = detectRephrase(pending.previousUserMsg, trimmed)
+      const avg = avgUserMsgLengthRef.current
+      const lengthDelta = avg > 0 ? (trimmed.length - avg) / avg : 0
+      avgUserMsgLengthRef.current = avg * 0.8 + trimmed.length * 0.2
+
+      const signal: UserSignal = {
+        continued: true,
+        messageLatencyMs: latencyMs,
+        lengthDelta: Math.max(-1, Math.min(1, lengthDelta)),
+        rephrased: isRephrase,
+        abandoned: false,
+      }
+
+      // Build a lightweight reflection from engine state
+      const engineReflection = engine.getState().lasting.reflections.slice(-1)[0]
+      if (engineReflection) {
+        const outcome = captureOutcome(
+          pending.classification,
+          pending.agentUsed,
+          pending.swarmComposition,
+          pending.modelUsed,
+          engineReflection,
+          signal,
+        )
+        recordOutcome(loomRef.current, outcome).then(didSynthesize => {
+          if (didSynthesize) console.log('[Loom] Pattern synthesis complete')
+          upsertLoomState(userId, serializeLoomState(loomRef.current) as Record<string, unknown>)
+        }).catch(err => console.warn('[Loom] Record outcome failed:', err))
+      }
+      pendingOutcomeRef.current = null
+    }
+
     // Show immediate feedback — add user message and thinking state BEFORE any network calls.
     // This ensures the home screen disappears instantly on slow Android connections.
     const attachmentMeta = filesToSend.map(f => ({ name: f.name, type: f.type }))
@@ -299,7 +364,8 @@ export function useChatEngine(params: UseChatEngineParams) {
     )
     let classification: Awaited<ReturnType<typeof classifyIntent>>
     try {
-      classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0)
+      const loomRoutingCtx = buildRoutingContext(loomRef.current)
+      classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined)
     } catch (err) {
       console.error('[engine] classifyIntent failed:', err)
       // Fall back to kernel agent on classifier failure
@@ -409,6 +475,10 @@ export function useChatEngine(params: UseChatEngineParams) {
     const mirrorBlock = mirrorText
       ? `\n\n## Mirror\nDeeper patterns the agents have noticed together:\n\n${mirrorText}`
       : ''
+    const selfMirrorText = formatSelfMirror(loomRef.current)
+    const selfBlock = selfMirrorText
+      ? `\n\n## Self\nWhat the Loom sees about how I serve this user:\n\n${selfMirrorText}`
+      : ''
     const kgText = formatGraphForPrompt(kgEntities, kgRelations)
     const kgBlock = kgText
       ? `\n\n## Knowledge Graph\nStructured facts and relationships you've learned:\n\n${kgText}`
@@ -417,7 +487,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
     const goalBlock = getGoalCheckInPrompt(userGoalsRef.current)
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${kgBlock}${goalBlock}${collectiveBlock}`
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -457,6 +527,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text } : m))
     }
 
+    let swarmAgentIds: string[] | null = null
     try {
       if (classification.isMultiStep && isPro) {
         const plan = await planTask(trimmed)
@@ -475,12 +546,19 @@ export function useChatEngine(params: UseChatEngineParams) {
             role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
             content: m.content,
           }))
+        const loomSwarmCtx = buildSwarmContext(loomRef.current)
         await runSwarm(
           trimmed,
           memoryText,
           history,
-          (progress) => setSwarmProgress(progress),
-          updateKernelMsg
+          (progress) => {
+            setSwarmProgress(progress)
+            if (progress.agents.length > 0 && !swarmAgentIds) {
+              swarmAgentIds = progress.agents.map(a => a.id)
+            }
+          },
+          updateKernelMsg,
+          loomSwarmCtx || undefined,
         )
         setSwarmProgress(null)
       } else if (classification.needsResearch && isPro) {
@@ -537,6 +615,19 @@ export function useChatEngine(params: UseChatEngineParams) {
       }
       touchConversation(convId)
       loadConversations()
+
+      // Loom — capture pending outcome (resolved on next user message)
+      if (finalContent) {
+        pendingOutcomeRef.current = {
+          classification,
+          agentUsed: specialist.id,
+          swarmComposition: swarmAgentIds,
+          modelUsed: resolveModelFromClassification(classification),
+          responseContent: finalContent,
+          timestamp: Date.now(),
+          previousUserMsg: trimmed,
+        }
+      }
 
       // Background memory + KG + convergence extraction every 3 messages
       messageCountRef.current++
