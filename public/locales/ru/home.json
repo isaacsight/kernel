@@ -1,0 +1,70 @@
+{
+  "tagline": "Персональный ИИ, который помнит вас, думает вместе с вами и становится лучше со временем.",
+  "placeholder": "Поговорите с kernel.chat...",
+  "welcomeToPro": "Добро пожаловать в Kernel Pro!",
+  "menu": {
+    "shareConversation": "Поделиться разговором",
+    "exportMarkdown": "Экспорт в Markdown",
+    "goals": "Цели",
+    "workflows": "Рабочие процессы",
+    "scheduledTasks": "Запланированные задачи",
+    "dailyBriefing": "Ежедневный брифинг",
+    "whatKernelKnows": "Что знает Kernel",
+    "yourStats": "Ваша статистика",
+    "insights": "Аналитика",
+    "upgradeToPro": "Перейти на Pro",
+    "manageSubscription": "Управление подпиской",
+    "signOut": "Выйти",
+    "deleteAccount": "Удалить аккаунт",
+    "notifications": "Уведомления",
+    "notifInApp": "Уведомления в приложении",
+    "notifBriefings": "Оповещения о брифингах",
+    "notifGoals": "Обновления целей",
+    "notifReminders": "Напоминания",
+    "notifPush": "Push-уведомления"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Брифинг на сегодня",
+    "read": "Читать",
+    "discuss": "Обсудить"
+  },
+  "upgrade": {
+    "title": "Вы использовали свои {{limit}} бесплатных сообщений",
+    "subtitle": "Перейдите на Kernel Pro, чтобы продолжить разговор.",
+    "resetsAt": "Ваши сообщения обновятся в {{time}}. Перейдите на Pro для безлимитных.",
+    "features": {
+      "unlimitedMessages": "Неограниченные сообщения",
+      "deepResearch": "Режим глубокого исследования",
+      "multiAgent": "Многоагентное сотрудничество",
+      "multiStep": "Многоэтапное планирование задач",
+      "persistentMemory": "Постоянная память между сессиями"
+    },
+    "button": "Перейти на Pro — $20/mo",
+    "buttonLoading": "Открытие оплаты...",
+    "maybeLater": "Может быть позже"
+  },
+  "deleteConfirm": {
+    "title": "Удалить ваш аккаунт?",
+    "subtitle": "Это навсегда удалит все ваши данные: разговоры, память и настройки. Это нельзя отменить.",
+    "subtitleWithSub": " Ваша подписка также будет отменена.",
+    "typeDelete": "Введите DELETE для подтверждения:",
+    "confirm": "Да, удалить мой аккаунт",
+    "confirming": "Удаление..."
+  },
+  "status": {
+    "assemblingAgents": "Сборка агентов...",
+    "agentsCollaborating": "Агенты сотрудничают",
+    "synthesizingPerspectives": "Синтез перспектив...",
+    "routingToSpecialist": "Направление к специалисту...",
+    "isWorking": "{{agent}} работает...",
+    "lowConfidence": "низкая уверенность"
+  },
+  "feedback": {
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  },
+  "messagesRemaining": "{{count}} сообщений осталось",
+  "lastFreeMessage": "Последнее бесплатное сообщение"
+}

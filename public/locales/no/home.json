@@ -1,0 +1,70 @@
+{
+  "tagline": "En personlig AI som husker deg, tenker med deg og blir bedre over tid.",
+  "placeholder": "Snakk med kernel.chat...",
+  "welcomeToPro": "Velkommen til Kernel Pro!",
+  "menu": {
+    "shareConversation": "Del samtale",
+    "exportMarkdown": "Eksporter som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbeidsflyter",
+    "scheduledTasks": "Planlagte oppgaver",
+    "dailyBriefing": "Daglig oppsummering",
+    "whatKernelKnows": "Hva Kernel vet",
+    "yourStats": "Din statistikk",
+    "insights": "Innsikt",
+    "upgradeToPro": "Oppgrader til Pro",
+    "manageSubscription": "Administrer abonnement",
+    "signOut": "Logg ut",
+    "deleteAccount": "Slett konto",
+    "notifications": "Varsler",
+    "notifInApp": "Varsler i appen",
+    "notifBriefings": "Briefing-varsler",
+    "notifGoals": "Måloppdateringer",
+    "notifReminders": "Påminnelser",
+    "notifPush": "Push-varsler"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Dagens oppsummering",
+    "read": "Les",
+    "discuss": "Diskuter"
+  },
+  "upgrade": {
+    "title": "Du har brukt dine {{limit}} gratis meldinger",
+    "subtitle": "Oppgrader til Kernel Pro for å fortsette samtalen.",
+    "resetsAt": "Meldingene dine fornyes kl. {{time}}. Oppgrader til Pro for ubegrensede.",
+    "features": {
+      "unlimitedMessages": "Ubegrensede meldinger",
+      "deepResearch": "Dyp forskningsmodus",
+      "multiAgent": "Flerfaglig agentsamarbeid",
+      "multiStep": "Flertrinns oppgaveplanlegging",
+      "persistentMemory": "Vedvarende hukommelse mellom økter"
+    },
+    "button": "Oppgrader til Pro — $20/mo",
+    "buttonLoading": "Åpner kassen...",
+    "maybeLater": "Kanskje senere"
+  },
+  "deleteConfirm": {
+    "title": "Slette kontoen din?",
+    "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og innstillinger. Dette kan ikke angres.",
+    "subtitleWithSub": " Abonnementet ditt vil også bli kansellert.",
+    "typeDelete": "Skriv DELETE for å bekrefte:",
+    "confirm": "Ja, slett kontoen min",
+    "confirming": "Sletter..."
+  },
+  "status": {
+    "assemblingAgents": "Samler agenter...",
+    "agentsCollaborating": "Agenter samarbeider",
+    "synthesizingPerspectives": "Syntetiserer perspektiver...",
+    "routingToSpecialist": "Ruter til spesialist...",
+    "isWorking": "{{agent}} jobber...",
+    "lowConfidence": "lav selvtillit"
+  },
+  "feedback": {
+    "save": "Lagre",
+    "cancel": "Avbryt"
+  },
+  "messagesRemaining": "{{count}} meldinger gjenstår",
+  "lastFreeMessage": "Siste gratis melding"
+}

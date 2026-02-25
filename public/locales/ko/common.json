@@ -1,0 +1,54 @@
+{
+  "close": "닫기",
+  "cancel": "취소",
+  "delete": "삭제",
+  "save": "저장",
+  "retry": "다시 시도",
+  "loading": "로딩 중...",
+  "submit": "제출",
+  "add": "추가",
+  "remove": "제거",
+  "complete": "완료",
+  "run": "실행",
+  "or": "또는",
+  "features": "기능",
+  "account": "계정",
+  "conversation": "대화",
+  "errorGeneric": "문제가 발생했습니다. 다시 시도해 주세요.",
+  "aria": {
+    "close": "닫기",
+    "notifications": "알림",
+    "toggleDarkMode": "다크 모드 전환",
+    "scrollToBottom": "맨 아래로 스크롤",
+    "conversations": "대화",
+    "newChat": "새 채팅",
+    "moreOptions": "더 보기",
+    "attachFile": "파일 첨부",
+    "editMessage": "메시지 수정",
+    "copyMessage": "메시지 복사",
+    "downloadResponse": "응답 다운로드",
+    "helpful": "도움이 됨",
+    "notHelpful": "도움이 안 됨",
+    "stopListening": "듣기 중지",
+    "voiceInput": "음성 입력",
+    "sendMessage": "Send message",
+    "stopGenerating": "생성 중지",
+    "shareableLink": "공유 가능한 대화 링크"
+  },
+  "time": {
+    "overdue": "기한 초과",
+    "minutesShort": "{{count}}분 후",
+    "hoursShort": "{{count}}시간 후"
+  },
+  "notifications": {
+    "title": "알림",
+    "markAllRead": "모두 읽음 표시",
+    "empty": "아직 알림이 없습니다"
+  },
+  "language": "언어",
+  "offline": "오프라인입니다. 캐시된 대화를 표시합니다.",
+  "pwa": {
+    "installPrompt": "최고의 경험을 위해 Kernel을 홈 화면에 추가하세요.",
+    "install": "설치"
+  }
+}

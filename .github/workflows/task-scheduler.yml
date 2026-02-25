@@ -1,0 +1,23 @@
+name: Task Scheduler
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  run-scheduler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call task-scheduler edge function
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/task-scheduler")
+          echo "Status: $response"
+          if [ "$response" -ge 500 ]; then
+            echo "::error::Scheduler returned $response"
+            exit 1
+          fi

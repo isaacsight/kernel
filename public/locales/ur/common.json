@@ -1,0 +1,54 @@
+{
+  "close": "بند کریں",
+  "cancel": "منسوخ کریں",
+  "delete": "حذف کریں",
+  "save": "محفوظ کریں",
+  "retry": "دوبارہ کوشش کریں",
+  "loading": "لوڈ ہو رہا ہے...",
+  "submit": "ارسال کریں",
+  "add": "شامل کریں",
+  "remove": "ہٹائیں",
+  "complete": "مکمل",
+  "run": "چلائیں",
+  "or": "یا",
+  "features": "خصوصیات",
+  "account": "اکاؤنٹ",
+  "conversation": "گفتگو",
+  "errorGeneric": "کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔",
+  "aria": {
+    "close": "بند کریں",
+    "notifications": "اطلاعات",
+    "toggleDarkMode": "ڈارک موڈ تبدیل کریں",
+    "scrollToBottom": "نیچے جائیں",
+    "conversations": "گفتگوئیں",
+    "newChat": "نئی چیٹ",
+    "moreOptions": "مزید اختیارات",
+    "attachFile": "فائل منسلک کریں",
+    "editMessage": "پیغام کی ترمیم کریں",
+    "copyMessage": "پیغام کاپی کریں",
+    "downloadResponse": "جواب ڈاؤن لوڈ کریں",
+    "helpful": "مددگار",
+    "notHelpful": "غیر مددگار",
+    "stopListening": "سننا بند کریں",
+    "voiceInput": "وائس ان پٹ",
+    "sendMessage": "Send message",
+    "stopGenerating": "جنریٹ کرنا بند کریں",
+    "shareableLink": "گفتگو کا شیئر کرنے کے قابل لنک"
+  },
+  "time": {
+    "overdue": "تاخیر شدہ",
+    "minutesShort": "{{count}} منٹ میں",
+    "hoursShort": "{{count}} گھنٹے میں"
+  },
+  "notifications": {
+    "title": "اطلاعات",
+    "markAllRead": "سب کو پڑھا ہوا قرار دیں",
+    "empty": "ابھی تک کوئی اطلاع نہیں ہے"
+  },
+  "language": "زبان",
+  "offline": "آپ آف لائن ہیں۔ محفوظ شدہ گفتگو دکھائی جا رہی ہیں۔",
+  "pwa": {
+    "installPrompt": "بہترین تجربے کے لیے Kernel کو اپنی ہوم اسکرین پر شامل کریں۔",
+    "install": "انسٹال"
+  }
+}

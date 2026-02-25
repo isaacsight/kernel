@@ -1,0 +1,54 @@
+{
+  "close": "Kapat",
+  "cancel": "İptal",
+  "delete": "Sil",
+  "save": "Kaydet",
+  "retry": "Tekrar dene",
+  "loading": "Yükleniyor...",
+  "submit": "Gönder",
+  "add": "Ekle",
+  "remove": "Kaldır",
+  "complete": "Tamamla",
+  "run": "Çalıştır",
+  "or": "veya",
+  "features": "Özellikler",
+  "account": "Hesap",
+  "conversation": "Konuşma",
+  "errorGeneric": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+  "aria": {
+    "close": "Kapat",
+    "notifications": "Bildirimler",
+    "toggleDarkMode": "Karanlık modu aç/kapat",
+    "scrollToBottom": "En alta kaydır",
+    "conversations": "Konuşmalar",
+    "newChat": "Yeni sohbet",
+    "moreOptions": "Daha fazla seçenek",
+    "attachFile": "Dosya ekle",
+    "editMessage": "Mesajı düzenle",
+    "copyMessage": "Mesajı kopyala",
+    "downloadResponse": "Yanıtı indir",
+    "helpful": "Yararlı",
+    "notHelpful": "Yararlı değil",
+    "stopListening": "Dinlemeyi durdur",
+    "voiceInput": "Sesli giriş",
+    "sendMessage": "Send message",
+    "stopGenerating": "Oluşturmayı durdur",
+    "shareableLink": "Paylaşılabilir konuşma bağlantısı"
+  },
+  "time": {
+    "overdue": "gecikmiş",
+    "minutesShort": "{{count}} dk içinde",
+    "hoursShort": "{{count}} sa içinde"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "markAllRead": "Tümünü okundu işaretle",
+    "empty": "Henüz bildirim yok"
+  },
+  "language": "Dil",
+  "offline": "Çevrimdışısınız. Önbelleğe alınmış sohbetler gösteriliyor.",
+  "pwa": {
+    "installPrompt": "En iyi deneyim için Kernel'i ana ekranınıza ekleyin.",
+    "install": "Yükle"
+  }
+}

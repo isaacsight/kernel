@@ -1,0 +1,70 @@
+{
+  "tagline": "Een persoonlijke AI die je onthoudt, met je meedenkt en steeds beter wordt.",
+  "placeholder": "Praat met kernel.chat...",
+  "welcomeToPro": "Welkom bij Kernel Pro!",
+  "menu": {
+    "shareConversation": "Gesprek delen",
+    "exportMarkdown": "Exporteren als Markdown",
+    "goals": "Doelen",
+    "workflows": "Workflows",
+    "scheduledTasks": "Geplande taken",
+    "dailyBriefing": "Dagelijkse briefing",
+    "whatKernelKnows": "Wat Kernel weet",
+    "yourStats": "Jouw statistieken",
+    "insights": "Inzichten",
+    "upgradeToPro": "Upgraden naar Pro",
+    "manageSubscription": "Abonnement beheren",
+    "signOut": "Uitloggen",
+    "deleteAccount": "Account verwijderen",
+    "notifications": "Meldingen",
+    "notifInApp": "In-app meldingen",
+    "notifBriefings": "Briefing-meldingen",
+    "notifGoals": "Doelupdates",
+    "notifReminders": "Herinneringen",
+    "notifPush": "Pushmeldingen"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "Briefing van vandaag",
+    "read": "Lezen",
+    "discuss": "Bespreken"
+  },
+  "upgrade": {
+    "title": "Je hebt je {{limit}} gratis berichten gebruikt",
+    "subtitle": "Upgrade naar Kernel Pro om het gesprek voort te zetten.",
+    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade naar Pro voor onbeperkt.",
+    "features": {
+      "unlimitedMessages": "Onbeperkte berichten",
+      "deepResearch": "Diepgaande onderzoeksmodus",
+      "multiAgent": "Multi-agent samenwerking",
+      "multiStep": "Meerstaps taakplanning",
+      "persistentMemory": "Blijvend geheugen tussen sessies"
+    },
+    "button": "Upgraden naar Pro — $20/mo",
+    "buttonLoading": "Checkout openen...",
+    "maybeLater": "Misschien later"
+  },
+  "deleteConfirm": {
+    "title": "Je account verwijderen?",
+    "subtitle": "Dit verwijdert permanent al je gegevens: gesprekken, geheugen en voorkeuren. Dit kan niet ongedaan worden gemaakt.",
+    "subtitleWithSub": " Je abonnement wordt ook opgezegd.",
+    "typeDelete": "Typ DELETE om te bevestigen:",
+    "confirm": "Ja, verwijder mijn account",
+    "confirming": "Verwijderen..."
+  },
+  "status": {
+    "assemblingAgents": "Agenten samenstellen...",
+    "agentsCollaborating": "Agenten werken samen",
+    "synthesizingPerspectives": "Perspectieven samenvoegen...",
+    "routingToSpecialist": "Doorsturen naar specialist...",
+    "isWorking": "{{agent}} is bezig...",
+    "lowConfidence": "lage betrouwbaarheid"
+  },
+  "feedback": {
+    "save": "Opslaan",
+    "cancel": "Annuleren"
+  },
+  "messagesRemaining": "{{count}} berichten resterend",
+  "lastFreeMessage": "Laatste gratis bericht"
+}

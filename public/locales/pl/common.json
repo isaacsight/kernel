@@ -1,0 +1,54 @@
+{
+  "close": "Zamknij",
+  "cancel": "Anuluj",
+  "delete": "Usuń",
+  "save": "Zapisz",
+  "retry": "Spróbuj ponownie",
+  "loading": "Ładowanie...",
+  "submit": "Wyślij",
+  "add": "Dodaj",
+  "remove": "Usuń",
+  "complete": "Ukończ",
+  "run": "Uruchom",
+  "or": "lub",
+  "features": "Funkcje",
+  "account": "Konto",
+  "conversation": "Rozmowa",
+  "errorGeneric": "Coś poszło nie tak. Spróbuj ponownie.",
+  "aria": {
+    "close": "Zamknij",
+    "notifications": "Powiadomienia",
+    "toggleDarkMode": "Przełącz tryb ciemny",
+    "scrollToBottom": "Przewiń na dół",
+    "conversations": "Rozmowy",
+    "newChat": "Nowy czat",
+    "moreOptions": "Więcej opcji",
+    "attachFile": "Dołącz plik",
+    "editMessage": "Edytuj wiadomość",
+    "copyMessage": "Kopiuj wiadomość",
+    "downloadResponse": "Pobierz odpowiedź",
+    "helpful": "Pomocne",
+    "notHelpful": "Niepomocne",
+    "stopListening": "Zatrzymaj słuchanie",
+    "voiceInput": "Wprowadzanie głosowe",
+    "sendMessage": "Send message",
+    "stopGenerating": "Zatrzymaj generowanie",
+    "shareableLink": "Link do udostępnienia rozmowy"
+  },
+  "time": {
+    "overdue": "po terminie",
+    "minutesShort": "za {{count}} min",
+    "hoursShort": "za {{count}} godz."
+  },
+  "notifications": {
+    "title": "Powiadomienia",
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "empty": "Brak powiadomień"
+  },
+  "language": "Język",
+  "offline": "Jesteś offline. Wyświetlanie zapisanych rozmów.",
+  "pwa": {
+    "installPrompt": "Dodaj Kernel do ekranu głównego dla najlepszego doświadczenia.",
+    "install": "Zainstaluj"
+  }
+}

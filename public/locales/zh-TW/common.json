@@ -1,0 +1,54 @@
+{
+  "close": "關閉",
+  "cancel": "取消",
+  "delete": "刪除",
+  "save": "儲存",
+  "retry": "重試",
+  "loading": "載入中...",
+  "submit": "提交",
+  "add": "新增",
+  "remove": "移除",
+  "complete": "完成",
+  "run": "執行",
+  "or": "或",
+  "features": "功能",
+  "account": "帳號",
+  "conversation": "對話",
+  "errorGeneric": "發生錯誤，請再試一次。",
+  "aria": {
+    "close": "關閉",
+    "notifications": "通知",
+    "toggleDarkMode": "切換深色模式",
+    "scrollToBottom": "捲動至底部",
+    "conversations": "對話",
+    "newChat": "新對話",
+    "moreOptions": "更多選項",
+    "attachFile": "附加檔案",
+    "editMessage": "編輯訊息",
+    "copyMessage": "複製訊息",
+    "downloadResponse": "下載回覆",
+    "helpful": "有幫助",
+    "notHelpful": "沒有幫助",
+    "stopListening": "停止聆聽",
+    "voiceInput": "語音輸入",
+    "sendMessage": "Send message",
+    "stopGenerating": "停止生成",
+    "shareableLink": "可分享的對話連結"
+  },
+  "time": {
+    "overdue": "已逾期",
+    "minutesShort": "{{count}}分鐘後",
+    "hoursShort": "{{count}}小時後"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部標為已讀",
+    "empty": "尚無通知"
+  },
+  "language": "語言",
+  "offline": "您已離線。正在查看快取的對話。",
+  "pwa": {
+    "installPrompt": "將 Kernel 加到主畫面以獲得最佳體驗。",
+    "install": "安裝"
+  }
+}

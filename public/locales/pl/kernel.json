@@ -1,0 +1,51 @@
+{
+  "observer": {
+    "phasePipeline": "Potok faz",
+    "phases": { "perceiving": "postrzeganie", "attending": "skupienie", "deciding": "decydowanie", "acting": "działanie", "reflecting": "refleksja" },
+    "perception": "Percepcja",
+    "intent": "Zamiar",
+    "urgency": "Pilność",
+    "complexity": "Złożoność",
+    "sentiment": "Sentyment",
+    "impliedNeed": "Dorozumiana potrzeba",
+    "noActivePerception": "Brak aktywnej percepcji",
+    "attention": "Uwaga",
+    "focus": "Skupienie",
+    "depth": "Głębokość",
+    "noActiveAttention": "Brak aktywnej uwagi",
+    "conviction": "Przekonanie",
+    "trend": { "rising": "rośnie", "falling": "spada", "stable": "stabilne" },
+    "beliefs": "Przekonania ({{count}})",
+    "noBeliefsFormed": "Brak ukształtowanych przekonań",
+    "eventFeed": "Kanał zdarzeń",
+    "noEventsYet": "Brak zdarzeń",
+    "lastReflection": "Ostatnia refleksja",
+    "noReflectionsYet": "Brak refleksji"
+  },
+  "controls": {
+    "engine": "Silnik",
+    "stop": "Zatrzymaj",
+    "reset": "Resetuj",
+    "agentOverride": "Nadpisanie agenta",
+    "overrideNext": "Nadpisz następny",
+    "conviction": "Przekonanie",
+    "beliefs": "Przekonania",
+    "newBeliefPlaceholder": "Nowe przekonanie...",
+    "challenge": "Zakwestionuj",
+    "reflections": "Refleksje",
+    "pruneLabel": "Usuń poniżej jakości:",
+    "prune": "Przytnij",
+    "pruneResult": "Usunięto {{count}} refleksji",
+    "agentPerformance": "Wydajność agentów",
+    "noPerformanceData": "Brak danych o wydajności"
+  },
+  "chat": {
+    "emptyTitle": "Zapytaj kernel.chat",
+    "emptySubtitle": "Widzi wszystko, co widzi silnik.",
+    "placeholder": "Zapytaj Kernel..."
+  },
+  "pill": {
+    "openKernel": "Otwórz kernel.chat",
+    "phases": { "idle": "bezczynny", "perceiving": "postrzeganie", "attending": "skupienie", "deciding": "decydowanie", "acting": "działanie", "reflecting": "refleksja" }
+  }
+}

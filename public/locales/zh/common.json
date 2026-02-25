@@ -1,0 +1,54 @@
+{
+  "close": "关闭",
+  "cancel": "取消",
+  "delete": "删除",
+  "save": "保存",
+  "retry": "重试",
+  "loading": "加载中...",
+  "submit": "提交",
+  "add": "添加",
+  "remove": "移除",
+  "complete": "完成",
+  "run": "运行",
+  "or": "或",
+  "features": "功能",
+  "account": "账户",
+  "conversation": "对话",
+  "errorGeneric": "出了点问题。请重试。",
+  "aria": {
+    "close": "关闭",
+    "notifications": "通知",
+    "toggleDarkMode": "切换深色模式",
+    "scrollToBottom": "滚动到底部",
+    "conversations": "对话",
+    "newChat": "新对话",
+    "moreOptions": "更多选项",
+    "attachFile": "附加文件",
+    "editMessage": "编辑消息",
+    "copyMessage": "复制消息",
+    "downloadResponse": "下载回复",
+    "helpful": "有帮助",
+    "notHelpful": "没帮助",
+    "stopListening": "停止聆听",
+    "voiceInput": "语音输入",
+    "sendMessage": "Send message",
+    "stopGenerating": "停止生成",
+    "shareableLink": "可分享的对话链接"
+  },
+  "time": {
+    "overdue": "已过期",
+    "minutesShort": "{{count}}分钟后",
+    "hoursShort": "{{count}}小时后"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部标记为已读",
+    "empty": "暂无通知"
+  },
+  "language": "语言",
+  "offline": "您已离线。正在查看缓存的对话。",
+  "pwa": {
+    "installPrompt": "将 Kernel 添加到主屏幕以获得最佳体验。",
+    "install": "安装"
+  }
+}

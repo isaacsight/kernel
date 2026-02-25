@@ -1,0 +1,70 @@
+{
+  "tagline": "ایک ذاتی AI جو آپ کو یاد رکھتا ہے، آپ کے ساتھ سوچتا ہے، اور وقت کے ساتھ بہتر ہوتا ہے۔",
+  "placeholder": "kernel.chat سے بات کریں...",
+  "welcomeToPro": "Kernel Pro میں خوش آمدید!",
+  "menu": {
+    "shareConversation": "گفتگو شیئر کریں",
+    "exportMarkdown": "Markdown کے طور پر ایکسپورٹ کریں",
+    "goals": "اہداف",
+    "workflows": "ورک فلوز",
+    "scheduledTasks": "شیڈول شدہ کام",
+    "dailyBriefing": "روزانہ بریفنگ",
+    "whatKernelKnows": "Kernel کیا جانتا ہے",
+    "yourStats": "آپ کے اعداد و شمار",
+    "insights": "بصیرت",
+    "upgradeToPro": "Pro میں اپ گریڈ کریں",
+    "manageSubscription": "سبسکرپشن کا انتظام کریں",
+    "signOut": "سائن آؤٹ",
+    "deleteAccount": "اکاؤنٹ حذف کریں",
+    "notifications": "اطلاعات",
+    "notifInApp": "ایپ میں اطلاعات",
+    "notifBriefings": "بریفنگ الرٹس",
+    "notifGoals": "مقاصد کی تازہ کاری",
+    "notifReminders": "یاد دہانیاں",
+    "notifPush": "پش اطلاعات"
+  },
+  "admin": "ایڈمن",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "آج کی بریفنگ",
+    "read": "پڑھیں",
+    "discuss": "تبادلہ خیال کریں"
+  },
+  "upgrade": {
+    "title": "آپ نے اپنے {{limit}} مفت پیغامات استعمال کر لیے ہیں",
+    "subtitle": "گفتگو جاری رکھنے کے لیے Kernel Pro میں اپ گریڈ کریں۔",
+    "resetsAt": "آپ کے پیغامات {{time}} پر ری سیٹ ہوں گے۔ لامحدود کے لیے Pro میں اپگریڈ کریں۔",
+    "features": {
+      "unlimitedMessages": "لامحدود پیغامات",
+      "deepResearch": "ڈیپ ریسرچ موڈ",
+      "multiAgent": "ملٹی ایجنٹ تعاون",
+      "multiStep": "کثیر مرحلہ کام کی منصوبہ بندی",
+      "persistentMemory": "سیشنز میں مستقل یادداشت"
+    },
+    "button": "Pro میں اپ گریڈ کریں — $20/ماہ",
+    "buttonLoading": "ادائیگی کا عمل شروع ہو رہا ہے...",
+    "maybeLater": "شاید بعد میں"
+  },
+  "deleteConfirm": {
+    "title": "اپنا اکاؤنٹ حذف کریں؟",
+    "subtitle": "یہ آپ کا تمام ڈیٹا مستقل طور پر حذف کر دے گا: گفتگو، یادداشت، اور ترجیحات۔ یہ عمل واپس نہیں لیا جا سکتا۔",
+    "subtitleWithSub": " آپ کی سبسکرپشن بھی منسوخ کر دی جائے گی۔",
+    "typeDelete": "تصدیق کے لیے DELETE ٹائپ کریں:",
+    "confirm": "ہاں، میرا اکاؤنٹ حذف کریں",
+    "confirming": "حذف ہو رہا ہے..."
+  },
+  "status": {
+    "assemblingAgents": "ایجنٹس جمع ہو رہے ہیں...",
+    "agentsCollaborating": "ایجنٹس تعاون کر رہے ہیں",
+    "synthesizingPerspectives": "نقطہ نظر کا خلاصہ ہو رہا ہے...",
+    "routingToSpecialist": "ماہر کی طرف بھیجا جا رہا ہے...",
+    "isWorking": "{{agent}} کام کر رہا ہے...",
+    "lowConfidence": "کم اعتماد"
+  },
+  "feedback": {
+    "save": "محفوظ کریں",
+    "cancel": "منسوخ کریں"
+  },
+  "messagesRemaining": "{{count}} پیغامات باقی ہیں",
+  "lastFreeMessage": "آخری مفت پیغام"
+}

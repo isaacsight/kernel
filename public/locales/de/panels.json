@@ -1,0 +1,205 @@
+{
+  "goals": {
+    "title": "Ziele",
+    "emptyTitle": "Setze Dein Erstes Ziel",
+    "emptyDesc": "Verfolge was wichtig ist — Kernel überprüft deinen Fortschritt automatisch.",
+    "createGoal": "Ziel Erstellen",
+    "addGoal": "Ziel Hinzufügen",
+    "completed": "Abgeschlossen ({{count}})",
+    "target": "Ziel: {{date}}",
+    "priority": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "frequency": {
+      "daily": "Tägliche Überprüfung",
+      "weekly": "Wöchentlich",
+      "biweekly": "Zweiwöchentlich",
+      "monthly": "Monatlich"
+    },
+    "errors": {
+      "addFailed": "Ziel konnte nicht hinzugefügt werden",
+      "updateFailed": "Meilenstein konnte nicht aktualisiert werden",
+      "completeFailed": "Ziel konnte nicht abgeschlossen werden",
+      "deleteFailed": "Ziel konnte nicht gelöscht werden"
+    },
+    "deleteConfirm": "Dieses Ziel löschen? Dies kann nicht rückgängig gemacht werden."
+  },
+  "workflows": {
+    "title": "Arbeitsabläufe",
+    "loading": "Arbeitsabläufe werden geladen...",
+    "emptyTitle": "Erstelle Deinen Ersten Arbeitsablauf",
+    "emptyDesc": "Automatisiere mehrstufige Aufgaben — Kernel führt sie genau so aus, wie du sie entwirfst.",
+    "newWorkflow": "Neuer Arbeitsablauf",
+    "createWorkflow": "Arbeitsablauf Erstellen",
+    "runCount_one": "{{count}} Mal ausgeführt",
+    "runCount_other": "{{count}} Mal ausgeführt",
+    "errors": {
+      "saveFailed": "Arbeitsablauf konnte nicht gespeichert werden",
+      "deleteFailed": "Arbeitsablauf konnte nicht gelöscht werden"
+    },
+    "deleteConfirm": "Diesen Arbeitsablauf löschen? Dies kann nicht rückgängig gemacht werden."
+  },
+  "scheduled": {
+    "title": "Geplante Aufgaben",
+    "loading": "Aufgaben werden geladen...",
+    "emptyTitle": "Plane Deine Erste Aufgabe",
+    "emptyDesc": "Einrichten und vergessen — Kernel führt Aufgaben nach deinem Zeitplan aus.",
+    "createTask": "Aufgabe Erstellen",
+    "schedule": "Planen",
+    "taskTypes": {
+      "reminder": "Erinnerung",
+      "workflow": "Arbeitsablauf Ausführen",
+      "briefing": "Tägliches Briefing",
+      "goalCheckin": "Ziel-Überprüfung"
+    },
+    "presets": {
+      "daily": "Täglich",
+      "weekdays": "Werktags",
+      "weekly": "Wöchentlich (Mo)",
+      "once": "Einmalig"
+    },
+    "channels": {
+      "inApp": "In der App",
+      "email": "E-Mail",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Geplante Aufgabe konnte nicht erstellt werden",
+      "updateFailed": "Aufgabe konnte nicht aktualisiert werden",
+      "deleteFailed": "Aufgabe konnte nicht gelöscht werden"
+    },
+    "deleteConfirm": "Diese geplante Aufgabe löschen?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Ein neues Briefing basierend auf deinen Interessen und aktueller Aktivität generieren",
+    "generating": "Wird generiert...",
+    "newBriefing": "Neues Briefing",
+    "phases": {
+      "planning": "Planung",
+      "researching": "Recherche",
+      "writing": "Verfassen"
+    },
+    "loading": "Briefings werden geladen...",
+    "emptyTitle": "Dein tägliches Briefing",
+    "emptyDesc": "Erhalte eine personalisierte Nachrichten- und Analysezusammenfassung, zugeschnitten auf deine Interessen und Ziele.",
+    "generateFirst": "Generiere dein erstes Briefing",
+    "errorTitle": "Dieses Briefing konnte nicht generiert werden",
+    "errorDesc": "Der Rechercheschritt hat nicht genügend Daten für eine nützliche Zusammenfassung geliefert. Dies kann passieren, wenn der Suchdienst vorübergehend nicht verfügbar war.",
+    "readTime": "{{count}} Min. Lesezeit",
+    "wordCount": "{{count}} Wörter",
+    "topicsCovered": "Behandelte Themen",
+    "continueReading": "Weiterlesen",
+    "readFull": "Vollständiges Briefing lesen",
+    "goDeeper": "Im Chat vertiefen",
+    "saveAsGoal": "Erkenntnisse als Ziel speichern",
+    "errors": {
+      "generateFailed": "Briefing konnte nicht generiert werden"
+    },
+    "toast": {
+      "generated": "Briefing generiert",
+      "removed": "Briefing entfernt"
+    }
+  },
+  "stats": {
+    "title": "Deine Statistiken",
+    "loading": "Laden...",
+    "loadError": "Statistiken konnten nicht geladen werden.",
+    "messages": "Nachrichten",
+    "conversations": "Konversationen",
+    "entities": "Entitäten",
+    "helpful": "Hilfreich",
+    "agentUsage": "Agentennutzung",
+    "topTopics": "Top-Themen",
+    "activity": "Aktivität",
+    "memberSince": "Mitglied seit {{date}}"
+  },
+  "kg": {
+    "title": "Was Kernel Weiß",
+    "emptyTitle": "Kernel hat noch nichts gelernt.",
+    "emptyHint": "Chatte weiter — es erkennt Personen, Projekte und Konzepte, die du erwähnst.",
+    "entitiesCount": "{{count}} Entitäten",
+    "connectionsCount": "{{count}} Verbindungen",
+    "confident": "{{value}}% sicher",
+    "mentioned": "{{count}}x erwähnt",
+    "types": {
+      "person": "Personen",
+      "company": "Unternehmen",
+      "project": "Projekte",
+      "concept": "Konzepte",
+      "preference": "Präferenzen",
+      "location": "Orte"
+    }
+  },
+  "insights": {
+    "title": "Einblicke",
+    "sections": {
+      "world": "Du",
+      "beliefs": "Überzeugungen",
+      "memory": "Erinnerung",
+      "reflections": "Qualität",
+      "agents": "Agenten"
+    },
+    "howISeeYou": "Wie ich dich sehe",
+    "apparentGoal": "Erkennbares Ziel",
+    "situation": "Aktuelle Situation",
+    "conviction": "Überzeugung",
+    "whatIBelieve": "Was ich glaube",
+    "noBeliefsYet": "Noch keine Überzeugungen gebildet. Chatte weiter — ich lerne, was dir wichtig ist.",
+    "challengeBelief": "Diese Überzeugung hinterfragen",
+    "dismissBelief": "Diese Überzeugung verwerfen",
+    "myMemory": "Meine Erinnerung an dich",
+    "noMemoryYet": "Noch keine Erinnerung. Ich lerne dich kennen, während wir sprechen.",
+    "commStyle": "Kommunikationsstil",
+    "memory": {
+      "interests": "Interessen",
+      "goals": "Ziele",
+      "facts": "Über dich",
+      "preferences": "Präferenzen"
+    },
+    "performance": "Meine Leistung",
+    "noReflectionsYet": "Noch keine Reflexionen. Ich beginne die Qualität nach ein paar Gesprächen zu bewerten.",
+    "avgQuality": "Durchschnittsqualität (letzte 20)",
+    "dims": {
+      "substance": "Substanz",
+      "coherence": "Kohärenz",
+      "relevance": "Relevanz",
+      "brevity": "Kürze",
+      "craft": "Handwerk"
+    },
+    "recentLessons": "Aktuelle Erkenntnisse",
+    "patternNotes": "Musternotizen",
+    "agentPerformance": "Agentenleistung",
+    "noAgentDataYet": "Noch keine Agentendaten.",
+    "quality": "Qualität",
+    "usage": "Nutzung",
+    "challengedStat": "{{count}}x hinterfragt",
+    "reinforcedStat": "{{count}}x bestätigt",
+    "challengeAction": "hinterfragen"
+  },
+  "share": {
+    "title": "Konversation teilen",
+    "checking": "Vorhandenen Link prüfen...",
+    "existingLink": "Diese Konversation hat bereits einen öffentlichen Link.",
+    "anyoneCanView": "Jeder mit diesem Link kann diese Konversation ansehen.",
+    "revokeLink": "Link widerrufen",
+    "revoking": "Wird widerrufen...",
+    "createDesc": "Erstelle einen öffentlichen Link, den jeder ansehen kann. Keine Anmeldung erforderlich.",
+    "linkExpires": "Link läuft ab:",
+    "never": "Nie",
+    "hours24": "24 Stunden",
+    "days7": "7 Tage",
+    "days30": "30 Tage",
+    "createLink": "Teilen-Link erstellen",
+    "creating": "Wird erstellt...",
+    "errors": {
+      "createFailed": "Teilen-Link konnte nicht erstellt werden",
+      "revokeFailed": "Link konnte nicht widerrufen werden"
+    },
+    "toast": {
+      "revoked": "Teilen-Link widerrufen"
+    }
+  }
+}

@@ -1,0 +1,205 @@
+{
+    "goals": {
+        "title": "اهداف",
+        "emptyTitle": "اولین هدف خود را تعیین کنید",
+        "emptyDesc": "آنچه مهم است را دنبال کنید - Kernel پیشرفت شما را به طور خودکار بررسی می‌کند.",
+        "createGoal": "ایجاد هدف",
+        "addGoal": "افزودن هدف",
+        "completed": "تکمیل شده ({{count}})",
+        "target": "هدف: {{date}}",
+        "priority": {
+            "low": "پایین",
+            "medium": "متوسط",
+            "high": "بالا"
+        },
+        "frequency": {
+            "daily": "بررسی روزانه",
+            "weekly": "هفتگی",
+            "biweekly": "دو هفته یکبار",
+            "monthly": "ماهانه"
+        },
+        "errors": {
+            "addFailed": "افزودن هدف شکست خورد",
+            "updateFailed": "به‌روزرسانی مرحله شکست خورد",
+            "completeFailed": "تکمیل هدف شکست خورد",
+            "deleteFailed": "حذف هدف شکست خورد"
+        },
+        "deleteConfirm": "این هدف حذف شود؟ این عمل قابل بازگشت نیست."
+    },
+    "workflows": {
+        "title": "گردش‌کارها",
+        "loading": "در حال بارگذاری گردش‌کارها...",
+        "emptyTitle": "اولین گردش‌کار خود را بسازید",
+        "emptyDesc": "وظایف چند مرحله‌ای را خودکار کنید - Kernel آن‌ها را دقیقاً همان‌طور که طراحی کرده‌اید اجرا می‌کند.",
+        "newWorkflow": "گردش‌کار جدید",
+        "createWorkflow": "ایجاد گردش‌کار",
+        "runCount_one": "{{count}} بار اجرا شده",
+        "runCount_other": "{{count}} بار اجرا شده",
+        "errors": {
+            "saveFailed": "ذخیره گردش‌کار شکست خورد",
+            "deleteFailed": "حذف گردش‌کار شکست خورد"
+        },
+        "deleteConfirm": "این گردش‌کار حذف شود؟ این عمل قابل بازگشت نیست."
+    },
+    "scheduled": {
+        "title": "وظایف زمان‌بندی شده",
+        "loading": "در حال بارگذاری وظایف...",
+        "emptyTitle": "اولین وظیفه خود را زمان‌بندی کنید",
+        "emptyDesc": "تنظیم کنید و فراموش کنید - Kernel وظایف را طبق برنامه شما اجرا می‌کند.",
+        "createTask": "ایجاد وظیفه",
+        "schedule": "زمان‌بندی",
+        "taskTypes": {
+            "reminder": "یادآوری",
+            "workflow": "اجرای گردش‌کار",
+            "briefing": "گزارش روزانه",
+            "goalCheckin": "بررسی هدف"
+        },
+        "presets": {
+            "daily": "روزانه",
+            "weekdays": "روزهای کاری",
+            "weekly": "هفتگی (دوشنبه)",
+            "once": "یک‌بار"
+        },
+        "channels": {
+            "inApp": "داخل برنامه",
+            "email": "ایمیل",
+            "discord": "دیسکورد"
+        },
+        "errors": {
+            "createFailed": "ایجاد وظیفه زمان‌بندی شده شکست خورد",
+            "updateFailed": "به‌روزرسانی وظیفه شکست خورد",
+            "deleteFailed": "حذف وظیفه شکست خورد"
+        },
+        "deleteConfirm": "این وظیفه زمان‌بندی شده حذف شود؟"
+    },
+    "briefings": {
+        "title": "گزارش‌ها",
+        "generateTooltip": "تولید گزارش جدید بر اساس علایق و فعالیت‌های اخیر شما",
+        "generating": "در حال تولید...",
+        "newBriefing": "گزارش جدید",
+        "phases": {
+            "planning": "برنامه‌ریزی",
+            "researching": "تحقیق",
+            "writing": "نویسندگی"
+        },
+        "loading": "در حال بارگذاری گزارش‌ها...",
+        "emptyTitle": "گزارش روزانه شما",
+        "emptyDesc": "خلاصه‌ای شخصی‌سازی شده از اخبار و دیدگاه‌ها متناسب با علایق و اهداف خود دریافت کنید.",
+        "generateFirst": "اولین گزارش خود را تولید کنید",
+        "errorTitle": "این گزارش قابل تولید نبود",
+        "errorDesc": "مرحله تحقیق داده‌های کافی برای ایجاد یک خلاصه مفید بازنگرداند. این اتفاق ممکن است در صورت در دسترس نبودن موقت سرویس جستجو رخ دهد.",
+        "readTime": "{{count}} دقیقه مطالعه",
+        "wordCount": "{{count}} کلمه",
+        "topicsCovered": "موضوعات پوشش داده شده",
+        "continueReading": "ادامه مطالعه",
+        "readFull": "خواندن گزارش کامل",
+        "goDeeper": "بررسی عمیق‌تر در گفتگو",
+        "saveAsGoal": "ذخیره نکات به عنوان هدف",
+        "errors": {
+            "generateFailed": "تولید گزارش شکست خورد"
+        },
+        "toast": {
+            "generated": "گزارش تولید شد",
+            "removed": "گزارش حذف شد"
+        }
+    },
+    "stats": {
+        "title": "آمار شما",
+        "loading": "در حال بارگذاری...",
+        "loadError": "امکان بارگذاری آمار وجود ندارد.",
+        "messages": "پیام‌ها",
+        "conversations": "گفتگوها",
+        "entities": "موجودیت‌ها",
+        "helpful": "مفید",
+        "agentUsage": "استفاده از عوامل",
+        "topTopics": "موضوعات برتر",
+        "activity": "فعالیت",
+        "memberSince": "عضو از {{date}}"
+    },
+    "kg": {
+        "title": "آنچه Kernel می‌داند",
+        "emptyTitle": "Kernel هنوز چیزی یاد نگرفته است.",
+        "emptyHint": "به گفتگو ادامه دهید - افرادی، پروژه‌ها و مفاهیمی که ذکر می‌کنید را یاد می‌گیرد.",
+        "entitiesCount": "{{count}} موجودیت",
+        "connectionsCount": "{{count}} اتصال",
+        "confident": "{{value}}٪ اطمینان",
+        "mentioned": "{{count}} بار ذکر شده",
+        "types": {
+            "person": "افراد",
+            "company": "شرکت‌ها",
+            "project": "پروژه‌ها",
+            "concept": "مفاهیم",
+            "preference": "ترجیحات",
+            "location": "مکان‌ها"
+        }
+    },
+    "insights": {
+        "title": "بینش‌ها",
+        "sections": {
+            "world": "شما",
+            "beliefs": "باورها",
+            "memory": "حافظه",
+            "reflections": "کیفیت",
+            "agents": "عوامل"
+        },
+        "howISeeYou": "دید من از شما",
+        "apparentGoal": "هدف آشکار",
+        "situation": "وضعیت فعلی",
+        "conviction": "اعتقاد",
+        "whatIBelieve": "آنچه باور دارم",
+        "noBeliefsYet": "هنوز باوری شکل نگرفته است. به گفتگو ادامه دهید — یاد می‌گیرم چه چیزی برایتان مهم است.",
+        "challengeBelief": "به چالش کشیدن این باور",
+        "dismissBelief": "رد کردن این باور",
+        "myMemory": "خاطرات من از شما",
+        "noMemoryYet": "هنوز خاطره‌ای ندارم. در طول گفتگو شما را می‌شناسم.",
+        "commStyle": "سبک ارتباطی",
+        "memory": {
+            "interests": "علایق",
+            "goals": "اهداف",
+            "facts": "درباره شما",
+            "preferences": "ترجیحات"
+        },
+        "performance": "عملکرد من",
+        "noReflectionsYet": "هنوز بازتابی وجود ندارد. پس از چند گفتگو شروع به پیگیری کیفیت می‌کنم.",
+        "avgQuality": "میانگین کیفیت (۲۰ مورد اخیر)",
+        "dims": {
+            "substance": "محتوا",
+            "coherence": "انسجام",
+            "relevance": "مرتبط بودن",
+            "brevity": "اختصار",
+            "craft": "مهارت"
+        },
+        "recentLessons": "درس‌های اخیر",
+        "patternNotes": "یادداشت‌های الگو",
+        "agentPerformance": "عملکرد عوامل",
+        "noAgentDataYet": "هنوز داده‌ای از عوامل موجود نیست.",
+        "quality": "کیفیت",
+        "usage": "میزان استفاده",
+        "challengedStat": "{{count}} بار چالش شده",
+        "reinforcedStat": "{{count}} بار تقویت شده",
+        "challengeAction": "چالش"
+    },
+    "share": {
+        "title": "اشتراک‌گذاری گفتگو",
+        "checking": "در حال بررسی لینک موجود...",
+        "existingLink": "این گفتگو قبلاً یک لینک عمومی دارد.",
+        "anyoneCanView": "هر کسی با این لینک می‌تواند این گفتگو را مشاهده کند.",
+        "revokeLink": "ابطال لینک",
+        "revoking": "در حال ابطال...",
+        "createDesc": "یک لینک عمومی بسازید که هر کسی بتواند آن را مشاهده کند. نیازی به ورود نیست.",
+        "linkExpires": "انقضای لینک:",
+        "never": "هرگز",
+        "hours24": "۲۴ ساعت",
+        "days7": "۷ روز",
+        "days30": "۳۰ روز",
+        "createLink": "ایجاد لینک اشتراک‌گذاری",
+        "creating": "در حال ایجاد...",
+        "errors": {
+            "createFailed": "ایجاد لینک اشتراک‌گذاری شکست خورد",
+            "revokeFailed": "ابطال لینک شکست خورد"
+        },
+        "toast": {
+            "revoked": "لینک اشتراک‌گذاری ابطال شد"
+        }
+    }
+}

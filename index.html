@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- CSP disabled: iOS Safari has issues with wildcard connect-src (*.supabase.co) -->
+  <!-- TODO: re-enable with explicit origins once verified on iOS -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.sentry.io https://api.anthropic.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self';" /> -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1F1E1D" />
+  <meta name="description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
+  <link rel="apple-touch-icon" href="/logo-mark-192.png" />
+  <title>Kernel — AI That Learns You</title>
+  <link rel="canonical" href="https://kernel.chat/" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Kernel",
+    "url": "https://kernel.chat",
+    "description": "A personal AI that learns who you are, remembers what matters, and gets better with every conversation.",
+    "applicationCategory": "Productivity",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Social / Open Graph -->
+  <meta property="og:title" content="Kernel — AI That Learns You" />
+  <meta property="og:description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://kernel.chat/concepts/og-card-bg.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Kernel — AI That Learns You" />
+  <meta name="twitter:description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
+  <meta name="twitter:image" content="https://kernel.chat/concepts/og-card-bg.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://eoxxpyixdieprsxlpwcs.supabase.co">
+  <!-- Non-blocking font load: media="print" prevents render-blocking, onload swaps to "all" -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></noscript>
+</head>
+
+<body>
+  <div id="root">
+    <!-- Inline loading indicator — visible instantly while JS loads -->
+    <div id="splash" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#FAF9F6;font-family:Georgia,'Times New Roman',serif;color:#1F1E1D">
+      <div style="opacity:.35;font-size:15px;letter-spacing:.08em">kernel</div>
+    </div>
+  </div>
+  <noscript><h1>Kernel — A personal AI that learns you</h1></noscript>
+  <script type="module" src="/src/main.tsx" onerror="window.__loadFailed=true"></script>
+  <script>
+    // Recovery: if the app JS fails to load (stale SW cache after deploy),
+    // clear all caches, unregister SW, and reload up to 3 times.
+    function _kernelRecover() {
+      var count = parseInt(sessionStorage.getItem('_rc') || '0', 10);
+      if (count >= 3) {
+        // Exhausted retries — show a manual reload prompt
+        var splash = document.getElementById('splash');
+        if (splash) {
+          splash.innerHTML = '<div style="text-align:center;max-width:280px">'
+            + '<div style="opacity:.35;font-size:15px;letter-spacing:.08em;margin-bottom:24px">kernel</div>'
+            + '<div style="font-size:14px;opacity:.6;margin-bottom:16px">Having trouble loading. Please clear your browser cache and reload.</div>'
+            + '<button onclick="sessionStorage.clear();location.reload()" style="font-family:inherit;font-size:14px;padding:10px 24px;border:1px solid #1F1E1D;border-radius:8px;background:none;color:#1F1E1D;cursor:pointer">Reload</button>'
+            + '</div>';
+        }
+        return;
+      }
+      sessionStorage.setItem('_rc', String(count + 1));
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          regs.forEach(function(r) { r.unregister(); });
+        });
+      }
+      caches.keys().then(function(names) {
+        names.forEach(function(n) { caches.delete(n); });
+      }).then(function() { location.reload(); });
+    }
+    // Catch JS asset load errors (404 on hashed bundles)
+    window.addEventListener('error', function(e) {
+      if (e.filename && /assets\/.*\.js/.test(e.filename)) _kernelRecover();
+    }, true);
+    // Catch stuck splash screen (module never loads)
+    // 20s timeout: Android 3G can take 15s+ for initial bundle load.
+    // 15s was triggering false recoveries on slow networks, causing reload loops.
+    setTimeout(function() {
+      var root = document.getElementById('root');
+      if (root && root.querySelector('#splash')) _kernelRecover();
+    }, 20000);
+    // Clear recovery counter on successful load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if (!document.getElementById('splash')) sessionStorage.removeItem('_rc');
+      }, 2000);
+    });
+  </script>
+</body>
+
+</html>

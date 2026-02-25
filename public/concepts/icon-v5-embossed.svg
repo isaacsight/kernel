@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- V5: Embossed / Letterpress — K appears pressed into the surface -->
+  <defs>
+    <filter id="emboss">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+      <feOffset in="blur" dx="2" dy="2" result="shadow"/>
+      <feOffset in="blur" dx="-1" dy="-1" result="highlight"/>
+      <feFlood flood-color="#1F1E1D" flood-opacity="0.08" result="shadow-color"/>
+      <feFlood flood-color="#FFFFFF" flood-opacity="0.5" result="highlight-color"/>
+      <feComposite in="shadow-color" in2="shadow" operator="in" result="shadow-final"/>
+      <feComposite in="highlight-color" in2="highlight" operator="in" result="highlight-final"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="shadow-final"/>
+        <feMergeNode in="highlight-final"/>
+      </feMerge>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="4" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+      <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="textured"/>
+      <feComponentTransfer in="textured">
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="#FAF9F6"/>
+  <!-- Subtle paper texture overlay -->
+  <rect width="1024" height="1024" rx="224" fill="#EDE8DE" filter="url(#paper)"/>
+  <g filter="url(#emboss)">
+    <circle cx="512" cy="512" r="340" fill="none" stroke="#D4C5A9" stroke-width="4"/>
+    <text x="512" y="600" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif"
+          font-style="italic" font-size="420" font-weight="400" fill="#6B5B95">K</text>
+  </g>
+</svg>

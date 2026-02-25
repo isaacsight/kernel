@@ -1,0 +1,212 @@
+// ─── Reflection Module ──────────────────────────────────────
+//
+// The engine looks at what it just produced and asks:
+// - Was this good? (substance, coherence, relevance)
+// - Was this beautiful? (brevity, craft)
+// - What should I believe differently now?
+
+import type { IntentType, Perception, Reflection } from './types'
+import type { Agent, Message } from '../types'
+import { getProvider } from './providers/registry'
+
+interface AIScores {
+  substance: number
+  coherence: number
+  relevance: number
+  brevity: number
+  craft: number
+}
+
+// ─── Rubric-based system prompt for Haiku scorer ──────────
+const REFLECTION_SYSTEM = `You are a quality scorer for an AI assistant's responses. Rate on 5 dimensions (0.0–1.0):
+
+Substance: Real information present? Numbers, examples, evidence, reasoning chains → high. Vague platitudes, "I can help with that" → low.
+Coherence: Logical flow? Builds on prior context? No contradictions or non-sequiturs?
+Relevance: Addresses the actual question or need? Stays on topic? Doesn't wander?
+Brevity: Length appropriate for the query type? Too long or too short both score low.
+Craft: Well-written? Good word choice, varied structure, no filler phrases like "In conclusion" or "Overall"?
+
+Return ONLY valid JSON: {"substance":0.0,"coherence":0.0,"relevance":0.0,"brevity":0.0,"craft":0.0}`
+
+// ─── Context-aware dimension weights by intent type ───────
+// Different intents care about different quality dimensions.
+// e.g. "reason" demands substance & coherence; "converse" is balanced.
+const INTENT_WEIGHTS: Record<IntentType, Record<keyof AIScores, number>> = {
+  reason:   { substance: 0.30, coherence: 0.30, relevance: 0.20, brevity: 0.10, craft: 0.10 },
+  evaluate: { substance: 0.30, coherence: 0.25, relevance: 0.25, brevity: 0.10, craft: 0.10 },
+  build:    { substance: 0.25, coherence: 0.20, relevance: 0.30, brevity: 0.15, craft: 0.10 },
+  discuss:  { substance: 0.20, coherence: 0.25, relevance: 0.20, brevity: 0.15, craft: 0.20 },
+  converse: { substance: 0.20, coherence: 0.20, relevance: 0.20, brevity: 0.20, craft: 0.20 },
+}
+
+function computeWeightedQuality(scores: AIScores, intentType: IntentType): number {
+  const w = INTENT_WEIGHTS[intentType] || INTENT_WEIGHTS.converse
+  return (
+    scores.substance * w.substance +
+    scores.coherence * w.coherence +
+    scores.relevance * w.relevance +
+    scores.brevity * w.brevity +
+    scores.craft * w.craft
+  )
+}
+
+export function reflect(
+  input: string,
+  output: string,
+  agent: Agent,
+  perception: Perception,
+  durationMs: number,
+  conversationHistory: Message[],
+): Reflection {
+  const words = output.split(/\s+/).length
+  const sentences = (output.match(/[.!?]+/g) || []).length || 1
+  const avgSentenceLength = words / sentences
+
+  // ── Substance (0-1) ──
+  const hasSubstance = output.length > 50
+  const hasSpecifics = /\d/.test(output) || output.includes('"') || output.includes('because')
+  const notBoilerplate = !output.includes('I can help') && !output.includes('Here is')
+  const substance = (
+    (hasSubstance ? 0.4 : 0) +
+    (hasSpecifics ? 0.35 : 0) +
+    (notBoilerplate ? 0.25 : 0)
+  )
+
+  // ── Coherence (0-1) ──
+  const noErrors = !output.includes('Error') && !output.includes('Unable to')
+  const lastMessage = conversationHistory[conversationHistory.length - 2]
+  const buildsOnPrior = lastMessage
+    ? output.toLowerCase().split(' ').some(w =>
+        w.length > 4 && lastMessage.content.toLowerCase().includes(w)
+      )
+    : true
+  const coherence = (noErrors ? 0.5 : 0) + (buildsOnPrior ? 0.5 : 0)
+
+  // ── Relevance (0-1) ──
+  const inputWords = input.toLowerCase().split(/\s+/).filter(w => w.length > 3)
+  const outputLower = output.toLowerCase()
+  const relevantWords = inputWords.filter(w => outputLower.includes(w)).length
+  const relevance = inputWords.length > 0
+    ? Math.min(1, relevantWords / Math.min(inputWords.length, 5))
+    : 0.5
+
+  // ── Brevity (0-1) ──
+  const isReasoning = perception.intent.type === 'reason' || perception.intent.type === 'evaluate'
+  const idealSentences = isReasoning ? 8 : 3
+  const sentenceRatio = sentences / idealSentences
+  const brevity = sentenceRatio <= 1
+    ? 0.6 + (sentenceRatio * 0.4)
+    : Math.max(0, 1 - (sentenceRatio - 1) * 0.3)
+  const brevityFinal = Math.min(1, brevity * (avgSentenceLength < 25 ? 1 : 0.7))
+
+  // ── Craft (0-1) ──
+  const hasVariedPunctuation = /[;:—–]/.test(output)
+  const noRepetition = new Set(output.toLowerCase().split(/\s+/)).size / words > 0.6
+  const notGeneric = !output.includes('In conclusion') && !output.includes('Overall')
+  const craft = (
+    (hasVariedPunctuation ? 0.3 : 0) +
+    (noRepetition ? 0.4 : 0) +
+    (notGeneric ? 0.3 : 0)
+  )
+
+  const scores: AIScores = { substance, coherence, relevance, brevity: brevityFinal, craft }
+  const quality = computeWeightedQuality(scores, perception.intent.type)
+
+  // ── Conviction Delta ──
+  const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0
+
+  // ── Lesson ──
+  const lesson =
+    quality > 0.75
+      ? `Strong cycle. ${agent.name}'s voice fits this intent well.`
+      : quality > 0.5
+      ? substance < 0.5
+        ? `${agent.name} responded but lacked specifics. Push for concrete details.`
+        : brevity < 0.4
+        ? `Too verbose. ${agent.name} should be more concise for ${perception.intent.type} intents.`
+        : `Adequate. The coherence could improve — build more on prior context.`
+      : `Weak cycle. ${
+          coherence < 0.3 ? 'Lost thread of conversation.' :
+          relevance < 0.3 ? 'Missed the actual question.' :
+          `${agent.name} may not be the right voice for this.`
+        }`
+
+  // ── World Model Update ──
+  let worldModelUpdate: string | null = null
+  if (perception.isQuestion && quality > 0.6) {
+    worldModelUpdate = `User asks ${perception.intent.type} questions — prefers ${perception.complexity > 0.5 ? 'depth' : 'directness'}.`
+  }
+
+  return {
+    timestamp: Date.now(),
+    phase: 'reflecting',
+    input,
+    output: output.slice(0, 300),
+    agentUsed: agent.id,
+    durationMs,
+    quality,
+    scores,
+    lesson,
+    worldModelUpdate,
+    convictionDelta,
+  }
+}
+
+// ─── AI-Enhanced Reflection ──────────────────────────────────
+//
+// For high-complexity queries (complexity > 0.6), calls Haiku to
+// score the response. Blends AI score (60%) with heuristic (40%).
+// Falls back to pure heuristic on failure.
+
+export async function reflectWithAI(
+  input: string,
+  output: string,
+  agent: Agent,
+  perception: Perception,
+  durationMs: number,
+  conversationHistory: Message[],
+): Promise<Reflection> {
+  // Always compute heuristic baseline
+  const heuristic = reflect(input, output, agent, perception, durationMs, conversationHistory)
+
+  // Only enhance with AI for complex queries
+  if (perception.complexity <= 0.6) return heuristic
+
+  try {
+    const intentLabel = perception.intent.type
+    const aiScores = await getProvider().json<AIScores>(
+      `[Intent: ${intentLabel}]\nUser: ${input.slice(0, 200)}\nAssistant: ${output.slice(0, 500)}`,
+      { tier: 'fast', max_tokens: 100, system: REFLECTION_SYSTEM }
+    )
+
+    // Validate AI scores
+    const keys: (keyof AIScores)[] = ['substance', 'coherence', 'relevance', 'brevity', 'craft']
+    const valid = keys.every(k =>
+      typeof aiScores[k] === 'number' && aiScores[k] >= 0 && aiScores[k] <= 1
+    )
+    if (!valid) return heuristic
+
+    // Blend: 60% AI, 40% heuristic
+    const blended = {
+      substance: aiScores.substance * 0.6 + heuristic.scores.substance * 0.4,
+      coherence: aiScores.coherence * 0.6 + heuristic.scores.coherence * 0.4,
+      relevance: aiScores.relevance * 0.6 + heuristic.scores.relevance * 0.4,
+      brevity: aiScores.brevity * 0.6 + heuristic.scores.brevity * 0.4,
+      craft: aiScores.craft * 0.6 + heuristic.scores.craft * 0.4,
+    }
+
+    const quality = computeWeightedQuality(blended, perception.intent.type)
+
+    const convictionDelta = quality > 0.7 ? 0.03 : quality < 0.4 ? -0.05 : 0
+
+    return {
+      ...heuristic,
+      quality,
+      scores: blended,
+      convictionDelta,
+    }
+  } catch {
+    // Fall back to heuristic on any failure
+    return heuristic
+  }
+}

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" fill="none">
+  <!-- Onboarding Step 4: Interests — Collection of stamps/bookplates -->
+  <rect width="280" height="280" fill="#FAF9F6"/>
+
+  <!-- Grid of bookplate-style stamps — 3x3 arrangement, slightly irregular -->
+
+  <!-- Row 1 -->
+  <rect x="30" y="30" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <circle cx="63" cy="63" r="18" stroke="#6B5B95" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <text x="63" y="69" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#6B5B95" opacity="0.6">&#x2699;</text>
+
+  <rect x="107" y="26" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <line x1="125" y1="50" x2="155" y2="50" stroke="#5B8BA0" stroke-width="0.8" opacity="0.4"/>
+  <line x1="125" y1="58" x2="148" y2="58" stroke="#5B8BA0" stroke-width="0.8" opacity="0.4"/>
+  <line x1="125" y1="66" x2="155" y2="66" stroke="#5B8BA0" stroke-width="0.8" opacity="0.4"/>
+  <line x1="125" y1="74" x2="140" y2="74" stroke="#5B8BA0" stroke-width="0.8" opacity="0.4"/>
+
+  <rect x="184" y="32" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <path d="M206 56 L217 65 L228 56 L228 78 L206 78 Z" stroke="#B8875C" stroke-width="0.8" fill="none" opacity="0.5"/>
+
+  <!-- Row 2 -->
+  <rect x="34" y="110" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <polyline points="55,134 67,150 79,134" stroke="#6B8E6B" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <circle cx="67" cy="152" r="2" fill="#6B8E6B" opacity="0.3"/>
+
+  <rect x="112" y="106" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1.2" fill="none"/>
+  <!-- Center stamp — special, the "kernel" -->
+  <rect x="116" y="110" width="58" height="58" rx="2" stroke="#6B5B95" stroke-width="0.5" fill="none" opacity="0.3"/>
+  <text x="145" y="146" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="28" fill="#6B5B95" opacity="0.6">K</text>
+
+  <rect x="188" y="112" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <circle cx="221" cy="145" r="16" stroke="#A0768C" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <line x1="221" y1="133" x2="221" y2="157" stroke="#A0768C" stroke-width="0.5" opacity="0.3"/>
+  <line x1="209" y1="145" x2="233" y2="145" stroke="#A0768C" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Row 3 -->
+  <rect x="28" y="190" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <path d="M50 214 Q61 206 72 214 Q61 222 50 214" stroke="#6B5B95" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <circle cx="61" cy="230" r="2" fill="#6B5B95" opacity="0.3"/>
+
+  <rect x="106" y="186" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <path d="M124 210 L139 210 L139 240 L124 240 Z" stroke="#D4C5A9" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <path d="M142" y1="210" L158 210 L158 240 L142 240 Z" stroke="#D4C5A9" stroke-width="0.8" fill="none" opacity="0.4"/>
+
+  <rect x="186" y="192" width="66" height="66" rx="3" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+  <!-- Musical note -->
+  <circle cx="213" cy="226" r="5" stroke="#B8875C" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <line x1="218" y1="226" x2="218" y2="208" stroke="#B8875C" stroke-width="0.8" opacity="0.5"/>
+  <path d="M218 208 Q226 206 226 212" stroke="#B8875C" stroke-width="0.8" fill="none" opacity="0.5"/>
+</svg>

@@ -1,0 +1,70 @@
+{
+  "tagline": "一個記住你、與你一起思考、隨時間變得更好的個人 AI。",
+  "placeholder": "與 kernel.chat 對話...",
+  "welcomeToPro": "歡迎使用 Kernel Pro！",
+  "menu": {
+    "shareConversation": "分享對話",
+    "exportMarkdown": "匯出為 Markdown",
+    "goals": "目標",
+    "workflows": "工作流程",
+    "scheduledTasks": "排程任務",
+    "dailyBriefing": "每日簡報",
+    "whatKernelKnows": "Kernel 知道什麼",
+    "yourStats": "你的統計數據",
+    "insights": "洞察",
+    "upgradeToPro": "升級為 Pro",
+    "manageSubscription": "管理訂閱",
+    "signOut": "登出",
+    "deleteAccount": "刪除帳號",
+    "notifications": "通知",
+    "notifInApp": "應用程式內通知",
+    "notifBriefings": "簡報提醒",
+    "notifGoals": "目標更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知"
+  },
+  "admin": "管理員",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "今日簡報",
+    "read": "閱讀",
+    "discuss": "討論"
+  },
+  "upgrade": {
+    "title": "您已使用完 {{limit}} 則免費訊息",
+    "subtitle": "升級為 Kernel Pro 以繼續對話。",
+    "resetsAt": "您的訊息將在 {{time}} 重置。升級至 Pro 享受無限訊息。",
+    "features": {
+      "unlimitedMessages": "無限訊息",
+      "deepResearch": "深度研究模式",
+      "multiAgent": "多代理協作",
+      "multiStep": "多步驟任務規劃",
+      "persistentMemory": "跨會話持久記憶"
+    },
+    "button": "升級為 Pro — $20/mo",
+    "buttonLoading": "正在開啟結帳...",
+    "maybeLater": "稍後再說"
+  },
+  "deleteConfirm": {
+    "title": "刪除您的帳號？",
+    "subtitle": "這將永久刪除您所有的資料：對話、記憶和偏好設定。此操作無法復原。",
+    "subtitleWithSub": " 您的訂閱也將被取消。",
+    "typeDelete": "輸入 DELETE 以確認：",
+    "confirm": "是的，刪除我的帳號",
+    "confirming": "刪除中..."
+  },
+  "status": {
+    "assemblingAgents": "正在組裝代理...",
+    "agentsCollaborating": "代理協作中",
+    "synthesizingPerspectives": "正在綜合觀點...",
+    "routingToSpecialist": "正在路由至專家...",
+    "isWorking": "{{agent}} 工作中...",
+    "lowConfidence": "低信心度"
+  },
+  "feedback": {
+    "save": "儲存",
+    "cancel": "取消"
+  },
+  "messagesRemaining": "剩餘 {{count}} 則訊息",
+  "lastFreeMessage": "最後一則免費訊息"
+}

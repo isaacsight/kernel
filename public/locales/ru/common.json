@@ -1,0 +1,54 @@
+{
+  "close": "Закрыть",
+  "cancel": "Отмена",
+  "delete": "Удалить",
+  "save": "Сохранить",
+  "retry": "Попробовать снова",
+  "loading": "Загрузка...",
+  "submit": "Отправить",
+  "add": "Добавить",
+  "remove": "Убрать",
+  "complete": "Завершить",
+  "run": "Запустить",
+  "or": "или",
+  "features": "Функции",
+  "account": "Аккаунт",
+  "conversation": "Разговор",
+  "errorGeneric": "Что-то пошло не так. Попробуйте снова.",
+  "aria": {
+    "close": "Закрыть",
+    "notifications": "Уведомления",
+    "toggleDarkMode": "Переключить тёмную тему",
+    "scrollToBottom": "Прокрутить вниз",
+    "conversations": "Разговоры",
+    "newChat": "Новый чат",
+    "moreOptions": "Дополнительные опции",
+    "attachFile": "Прикрепить файл",
+    "editMessage": "Редактировать сообщение",
+    "copyMessage": "Копировать сообщение",
+    "downloadResponse": "Скачать ответ",
+    "helpful": "Полезно",
+    "notHelpful": "Не полезно",
+    "stopListening": "Прекратить прослушивание",
+    "voiceInput": "Голосовой ввод",
+    "sendMessage": "Send message",
+    "stopGenerating": "Остановить генерацию",
+    "shareableLink": "Ссылка для общего доступа к разговору"
+  },
+  "time": {
+    "overdue": "просрочено",
+    "minutesShort": "через {{count}}м",
+    "hoursShort": "через {{count}}ч"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "markAllRead": "Отметить все как прочитанные",
+    "empty": "Уведомлений пока нет"
+  },
+  "language": "Язык",
+  "offline": "Вы не в сети. Показаны сохранённые беседы.",
+  "pwa": {
+    "installPrompt": "Добавьте Kernel на главный экран для лучшего опыта.",
+    "install": "Установить"
+  }
+}

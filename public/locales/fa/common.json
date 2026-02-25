@@ -1,0 +1,54 @@
+{
+  "close": "بستن",
+  "cancel": "لغو",
+  "delete": "حذف",
+  "save": "ذخیره",
+  "retry": "تلاش مجدد",
+  "loading": "در حال بارگذاری...",
+  "submit": "ارسال",
+  "add": "افزودن",
+  "remove": "حذف کردن",
+  "complete": "کامل شده",
+  "run": "اجرا",
+  "or": "یا",
+  "features": "ویژگی‌ها",
+  "account": "حساب کاربری",
+  "conversation": "گفتگو",
+  "errorGeneric": "مشکلی پیش آمد. لطفا دوباره تلاش کنید.",
+  "aria": {
+    "close": "بستن",
+    "notifications": "اعلان‌ها",
+    "toggleDarkMode": "تغییر حالت شب",
+    "scrollToBottom": "رفتن به پایین",
+    "conversations": "گفتگوها",
+    "newChat": "گفتگوی جدید",
+    "moreOptions": "گزینه‌های بیشتر",
+    "attachFile": "پیوست فایل",
+    "editMessage": "ویرایش پیام",
+    "copyMessage": "کپی پیام",
+    "downloadResponse": "دانلود پاسخ",
+    "helpful": "مفید",
+    "notHelpful": "نامفید",
+    "stopListening": "توقف شنیدن",
+    "voiceInput": "ورودی صوتی",
+    "sendMessage": "Send message",
+    "stopGenerating": "توقف تولید",
+    "shareableLink": "لینک قابل اشتراک‌گذاری گفتگو"
+  },
+  "time": {
+    "overdue": "تأخیر یافته",
+    "minutesShort": "{{count}} دقیقه دیگر",
+    "hoursShort": "{{count}} ساعت دیگر"
+  },
+  "notifications": {
+    "title": "اعلان‌ها",
+    "markAllRead": "خواندن همه",
+    "empty": "هنوز اعلانی ندارید"
+  },
+  "language": "زبان",
+  "offline": "آفلاین هستید. مشاهده مکالمات ذخیره‌شده.",
+  "pwa": {
+    "installPrompt": "Kernel را به صفحه اصلی خود اضافه کنید.",
+    "install": "نصب"
+  }
+}

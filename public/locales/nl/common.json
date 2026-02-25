@@ -1,0 +1,54 @@
+{
+  "close": "Sluiten",
+  "cancel": "Annuleren",
+  "delete": "Verwijderen",
+  "save": "Opslaan",
+  "retry": "Opnieuw proberen",
+  "loading": "Laden...",
+  "submit": "Verzenden",
+  "add": "Toevoegen",
+  "remove": "Verwijderen",
+  "complete": "Voltooien",
+  "run": "Uitvoeren",
+  "or": "of",
+  "features": "Functies",
+  "account": "Account",
+  "conversation": "Gesprek",
+  "errorGeneric": "Er is iets misgegaan. Probeer het opnieuw.",
+  "aria": {
+    "close": "Sluiten",
+    "notifications": "Meldingen",
+    "toggleDarkMode": "Donkere modus in-/uitschakelen",
+    "scrollToBottom": "Scroll naar beneden",
+    "conversations": "Gesprekken",
+    "newChat": "Nieuw gesprek",
+    "moreOptions": "Meer opties",
+    "attachFile": "Bestand bijvoegen",
+    "editMessage": "Bericht bewerken",
+    "copyMessage": "Bericht kopiëren",
+    "downloadResponse": "Antwoord downloaden",
+    "helpful": "Nuttig",
+    "notHelpful": "Niet nuttig",
+    "stopListening": "Stop met luisteren",
+    "voiceInput": "Spraakinvoer",
+    "sendMessage": "Send message",
+    "stopGenerating": "Stop met genereren",
+    "shareableLink": "Deelbare gesprekslink"
+  },
+  "time": {
+    "overdue": "achterstallig",
+    "minutesShort": "over {{count}}m",
+    "hoursShort": "over {{count}}u"
+  },
+  "notifications": {
+    "title": "Meldingen",
+    "markAllRead": "Alles als gelezen markeren",
+    "empty": "Nog geen meldingen"
+  },
+  "language": "Taal",
+  "offline": "Je bent offline. Opgeslagen gesprekken worden weergegeven.",
+  "pwa": {
+    "installPrompt": "Voeg Kernel toe aan je startscherm voor de beste ervaring.",
+    "install": "Installeren"
+  }
+}

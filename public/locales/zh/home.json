@@ -1,0 +1,70 @@
+{
+  "tagline": "一个记住你、与你一起思考、并随时间不断进步的个人 AI。",
+  "placeholder": "与 kernel.chat 对话...",
+  "welcomeToPro": "欢迎使用 Kernel Pro！",
+  "menu": {
+    "shareConversation": "分享对话",
+    "exportMarkdown": "导出为 Markdown",
+    "goals": "目标",
+    "workflows": "工作流",
+    "scheduledTasks": "定时任务",
+    "dailyBriefing": "每日简报",
+    "whatKernelKnows": "Kernel 的记忆",
+    "yourStats": "你的统计",
+    "insights": "洞察",
+    "upgradeToPro": "升级到 Pro",
+    "manageSubscription": "管理订阅",
+    "signOut": "退出登录",
+    "deleteAccount": "删除账户",
+    "notifications": "通知",
+    "notifInApp": "应用内通知",
+    "notifBriefings": "简报提醒",
+    "notifGoals": "目标更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "briefing": {
+    "todaysBriefing": "今日简报",
+    "read": "阅读",
+    "discuss": "讨论"
+  },
+  "upgrade": {
+    "title": "你已用完 {{limit}} 条免费消息",
+    "subtitle": "升级到 Kernel Pro 以继续对话。",
+    "resetsAt": "您的消息将在 {{time}} 重置。升级到 Pro 享受无限消息。",
+    "features": {
+      "unlimitedMessages": "无限消息",
+      "deepResearch": "深度研究模式",
+      "multiAgent": "多智能体协作",
+      "multiStep": "多步骤任务规划",
+      "persistentMemory": "跨会话持久记忆"
+    },
+    "button": "升级到 Pro — $20/mo",
+    "buttonLoading": "正在打开结账...",
+    "maybeLater": "以后再说"
+  },
+  "deleteConfirm": {
+    "title": "删除你的账户？",
+    "subtitle": "这将永久删除你的所有数据：对话、记忆和偏好设置。此操作不可撤销。",
+    "subtitleWithSub": " 你的订阅也将被取消。",
+    "typeDelete": "输入 DELETE 以确认：",
+    "confirm": "是的，删除我的账户",
+    "confirming": "删除中..."
+  },
+  "status": {
+    "assemblingAgents": "正在集结智能体...",
+    "agentsCollaborating": "智能体协作中",
+    "synthesizingPerspectives": "正在综合观点...",
+    "routingToSpecialist": "正在转接到专家...",
+    "isWorking": "{{agent}} 工作中...",
+    "lowConfidence": "低置信度"
+  },
+  "feedback": {
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "messagesRemaining": "剩余 {{count}} 条消息",
+  "lastFreeMessage": "最后一条免费消息"
+}
