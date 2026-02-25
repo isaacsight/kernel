@@ -67,7 +67,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
           </div>
 
           <div className="ka-kg-groups">
-            {TYPE_ORDER.filter(tp => byType.has(tp)).map(type => {
+            {[...TYPE_ORDER.filter(tp => byType.has(tp)), ...[...byType.keys()].filter(tp => !TYPE_ORDER.includes(tp))].map(type => {
               const group = byType.get(type)!
               const isExpanded = expandedType === type
               return (
@@ -80,7 +80,7 @@ export default function KGPanel({ entities, relations, onClose }: KGPanelProps) 
                       size={14}
                       className={`ka-kg-chevron ${isExpanded ? 'ka-kg-chevron--open' : ''}`}
                     />
-                    <span className="ka-kg-group-label">{t(`kg.types.${type}`, { defaultValue: type })}</span>
+                    <span className="ka-kg-group-label">{t(`kg.types.${type}`, { defaultValue: type.charAt(0).toUpperCase() + type.slice(1) + 's' })}</span>
                     <span className="ka-kg-group-count">{group.length}</span>
                   </button>
                   {isExpanded && (
