@@ -1176,6 +1176,143 @@ async function handleReaction(reaction: MessageReaction, user: User) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  AMBIENT PRESENCE — Proactive, context-aware interjections
+//  Kernel listens to all channel messages and occasionally speaks
+//  when it has something genuinely worth saying.
+// ═══════════════════════════════════════════════════════════════
+
+interface BufferedMessage {
+  author: string
+  authorId: string
+  content: string
+  timestamp: number
+}
+
+interface ChannelAmbientState {
+  buffer: BufferedMessage[]
+  messagesSinceLastSpeak: number
+  lastSpokeAt: number
+  enabled: boolean
+}
+
+const ambientChannels = new Map<string, ChannelAmbientState>()
+const AMBIENT_BUFFER_SIZE = 25
+const AMBIENT_EVAL_INTERVAL = 10       // evaluate every N messages
+const AMBIENT_COOLDOWN_MS = 5 * 60_000 // 5 min between interjections
+const AMBIENT_MIN_MESSAGES = 6         // need this many before considering
+
+function getAmbientState(channelId: string): ChannelAmbientState {
+  if (!ambientChannels.has(channelId)) {
+    ambientChannels.set(channelId, {
+      buffer: [],
+      messagesSinceLastSpeak: 0,
+      lastSpokeAt: 0,
+      enabled: true,
+    })
+  }
+  return ambientChannels.get(channelId)!
+}
+
+function bufferMessage(channelId: string, msg: Message) {
+  const state = getAmbientState(channelId)
+  const name = msg.member?.displayName || msg.author.displayName || msg.author.username
+
+  state.buffer.push({
+    author: name,
+    authorId: msg.author.id,
+    content: msg.content.slice(0, 300),
+    timestamp: Date.now(),
+  })
+
+  if (state.buffer.length > AMBIENT_BUFFER_SIZE) state.buffer.shift()
+  state.messagesSinceLastSpeak++
+}
+
+const AMBIENT_EVAL_SYSTEM = `You are Kernel's ambient presence evaluator. You decide whether Kernel should speak up UNPROMPTED in a Discord channel.
+
+The bar is EXTREMELY high. Kernel earns its seat at the table by speaking only when it has genuine signal:
+
+SPEAK for:
+- A real connection between people ("you two are working on the same thing")
+- A callback to something someone said before that's directly relevant now
+- An insight the room genuinely hasn't considered
+- Noticing effort/progress worth acknowledging
+- A gentle, factual correction when someone is confidently wrong
+
+DO NOT speak for:
+- Summarizing what was already said
+- Agreeing with someone
+- Generic questions or observations
+- Being "helpful" when nobody asked
+- Restating what's obvious to everyone in the room
+- Topics you know nothing specific about
+
+Most of the time, the answer is NO. Silence is the default.
+
+Respond with ONLY valid JSON:
+{"shouldSpeak": false, "reason": "brief reason", "type": "none"}
+
+If shouldSpeak is true, set type to one of: "connection", "callback", "insight", "encouragement", "correction"
+And include "seed": a 1-sentence sketch of what you'd say.`
+
+async function evaluateAmbient(channelId: string, channel: TextChannel): Promise<void> {
+  const state = getAmbientState(channelId)
+
+  // Guards — don't evaluate unless conditions are met
+  if (!state.enabled) return
+  if (state.messagesSinceLastSpeak < AMBIENT_EVAL_INTERVAL) return
+  if (state.buffer.length < AMBIENT_MIN_MESSAGES) return
+  if (Date.now() - state.lastSpokeAt < AMBIENT_COOLDOWN_MS) return
+
+  // Reset counter early to prevent re-entry
+  state.messagesSinceLastSpeak = 0
+
+  const transcript = state.buffer
+    .map(m => `${m.author}: ${m.content}`)
+    .join('\n')
+
+  // Gather known memories for participants
+  const participantIds = [...new Set(state.buffer.map(m => m.authorId))]
+  const memories: string[] = []
+  for (const id of participantIds.slice(0, 4)) {
+    const mem = await getUserMemory(`discord_${id}`)
+    if (mem) memories.push(mem)
+  }
+
+  const evalPrompt = `Recent conversation in #${channel.name}:\n\n${transcript}${memories.length > 0 ? `\n\nWhat Kernel knows about these people:\n${memories.join('\n')}` : ''}\n\nShould Kernel speak up?`
+
+  try {
+    const evalText = await callClaude(
+      [{ role: 'user', content: evalPrompt }],
+      AMBIENT_EVAL_SYSTEM,
+      'haiku', 200
+    )
+
+    const match = evalText.match(/\{[\s\S]*\}/)
+    if (!match) return
+
+    const result = JSON.parse(match[0])
+    if (!result.shouldSpeak) return
+
+    // Generate the actual interjection
+    const interjection = await callClaude(
+      [{ role: 'user', content: `You've been listening to this conversation in #${channel.name}:\n\n${transcript}\n\nYou decided to speak because: ${result.reason}\nType: ${result.type}\nSeed: ${result.seed}\n\nWrite your message. Rules:\n- 1-3 sentences MAX. This is an interjection, not a speech.\n- Sound natural — like someone who's been listening and has one thing to add.\n- No "Hey everyone!" or "I noticed that..." — just say the thing.\n- Reference people by name when relevant.\n- Match the room's energy.` }],
+      PERSONALITY,
+      'sonnet', 300
+    )
+
+    if (!interjection || interjection.length < 5) return
+
+    await channel.send(interjection)
+
+    state.lastSpokeAt = Date.now()
+    console.log(`[Ambient] #${channel.name} (${result.type}): ${interjection.slice(0, 80)}...`)
+  } catch (err) {
+    console.warn('[Ambient] Evaluation failed:', err)
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  SLASH COMMANDS
 // ═══════════════════════════════════════════════════════════════
 
@@ -1225,6 +1362,11 @@ const slashCommands = [
     .setDescription('Unlink your kernel.chat account'),
 
   new SlashCommandBuilder()
+    .setName('ambient')
+    .setDescription('Toggle Kernel\'s ambient presence in this channel')
+    .addStringOption(opt => opt.setName('mode').setDescription('on or off').setRequired(true).addChoices({ name: 'on', value: 'on' }, { name: 'off', value: 'off' })),
+
+  new SlashCommandBuilder()
     .setName('help')
     .setDescription('See what Kernel can do'),
 ]
@@ -1249,6 +1391,22 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
   const { commandName } = interaction
   const discordUserId = `discord_${interaction.user.id}`
 
+  // ── /ambient ──
+  if (commandName === 'ambient') {
+    const mode = interaction.options.getString('mode', true)
+    const state = getAmbientState(interaction.channelId)
+    state.enabled = mode === 'on'
+    await interaction.reply({
+      embeds: [makeEmbed({
+        description: mode === 'on'
+          ? 'Ambient presence **on** for this channel. I\'ll listen and speak up when I have something worth saying.'
+          : 'Ambient presence **off** for this channel. I\'ll only respond when mentioned.',
+        color: COLORS.kernel,
+      })],
+    })
+    return
+  }
+
   // ── /help ──
   if (commandName === 'help') {
     const embed = makeEmbed({
@@ -1266,7 +1424,9 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
           '`/goal` — Track your goals',
           '`/share` — Share a conversation',
           '`/link` — Connect your kernel.chat account',
+          '`/ambient on|off` — Toggle ambient presence',
         ].join('\n'), inline: false },
+        { name: 'Ambient presence', value: 'I listen to the conversation and occasionally speak up when I have a genuine connection to make, a callback to something you said before, or an insight the room hasn\'t considered. Toggle with `/ambient`.', inline: false },
         { name: 'Reactions', value: 'React to any message with:\n🧠 — I\'ll give my perspective\n🔍 — I\'ll research the topic', inline: false },
       ],
     })
@@ -1735,7 +1895,20 @@ client.once('clientReady', async () => {
     status: 'online',
   })
 
-  console.log('  Mode: @mention + DMs + threads')
+  // Set nickname to "kernel.chat" in all servers
+  for (const [, guild] of client.guilds.cache) {
+    try {
+      const me = guild.members.cache.get(client.user!.id) || await guild.members.fetchMe()
+      if (me.displayName !== 'kernel.chat') {
+        await me.setNickname('kernel.chat')
+        console.log(`  Nickname set to "kernel.chat" in ${guild.name}`)
+      }
+    } catch (err) {
+      console.warn(`  Could not set nickname in ${guild.name}:`, err)
+    }
+  }
+
+  console.log('  Mode: @mention + DMs + threads + ambient')
   console.log('  Reactions: 🧠 perspective, 🔍 research')
   console.log('─────────────────────────────────────────')
 })
@@ -1789,6 +1962,13 @@ function shouldRespond(msg: Message): boolean {
 // ─── Message handler ─────────────────────────────────────────
 client.on('messageCreate', async (msg: Message) => {
   if (msg.author.bot) return
+
+  // Buffer ALL non-bot server messages for ambient presence evaluation
+  if (msg.channel.type !== ChannelType.DM && 'send' in msg.channel) {
+    bufferMessage(msg.channelId, msg)
+    evaluateAmbient(msg.channelId, msg.channel as TextChannel).catch(() => {})
+  }
+
   if (!shouldRespond(msg)) return
 
   // Ensure the channel supports sending messages
