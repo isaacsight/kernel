@@ -46,6 +46,7 @@ export async function classifyIntent(
   message: string,
   recentContext: string,
   hasAttachments?: boolean,
+  loomContext?: string,
 ): Promise<ClassificationResult> {
   try {
     const attachmentNote = hasAttachments ? '\n\n[User has attached files for analysis]' : ''
@@ -53,8 +54,13 @@ export async function classifyIntent(
       ? `Recent conversation:\n${recentContext}\n\nNew message to classify:\n${message}${attachmentNote}`
       : `Message to classify:\n${message}${attachmentNote}`
 
+    // Inject Loom routing history if available
+    const system = loomContext
+      ? `${CLASSIFICATION_SYSTEM}\n\n---\n\n${loomContext}`
+      : CLASSIFICATION_SYSTEM
+
     const result = await getProvider().json<ClassificationResult>(prompt, {
-      system: CLASSIFICATION_SYSTEM,
+      system,
       tier: 'fast',
       max_tokens: 150,
     })
