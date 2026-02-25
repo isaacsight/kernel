@@ -63,100 +63,87 @@ serve(async (req: Request) => {
 
     // ── Execute scoped deletion ─────────────────────────
     const deleted: Record<string, number> = {}
+    const errors: string[] = []
     const userId = user.id
 
     const shouldDelete = (s: Scope) => scope === 'all' || scope === s
 
-    // Conversations + messages (messages cascade via FK)
+    /** Safe delete helper — catches per-table errors so one failure doesn't abort all */
+    async function safeDelete(table: string, key: string, filter?: Record<string, unknown>) {
+      try {
+        let query = admin.from(table).delete({ count: 'exact' }).eq('user_id', userId)
+        if (filter) {
+          for (const [k, v] of Object.entries(filter)) {
+            query = query.eq(k, v as string)
+          }
+        }
+        const { count, error } = await query
+        if (error) {
+          console.error(`[reset] ${table} delete error:`, error.message)
+          errors.push(`${table}: ${error.message}`)
+          deleted[key] = 0
+        } else {
+          deleted[key] = count ?? 0
+        }
+      } catch (err) {
+        console.error(`[reset] ${table} threw:`, err)
+        errors.push(`${table}: ${err instanceof Error ? err.message : 'unknown'}`)
+        deleted[key] = 0
+      }
+    }
+
+    // Conversations + messages
     if (shouldDelete('conversations')) {
-      const { count } = await admin
-        .from('conversations')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.conversations = count ?? 0
-
-      // Also delete orphaned messages (messages without conversation)
-      const { count: msgCount } = await admin
-        .from('messages')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.messages = msgCount ?? 0
-
-      // Delete shared conversations
-      await admin
-        .from('shared_conversations')
-        .delete()
-        .eq('user_id', userId)
+      await safeDelete('conversations', 'conversations')
+      await safeDelete('messages', 'messages')
+      await safeDelete('shared_conversations', 'shared_conversations')
     }
 
     // User memory (profile extracted from conversations)
     if (shouldDelete('memory')) {
-      const { count } = await admin
-        .from('user_memory')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.memory = count ?? 0
-
-      // Also delete procedural memory
-      const { count: procCount } = await admin
-        .from('procedures')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.procedures = procCount ?? 0
+      await safeDelete('user_memory', 'memory')
+      await safeDelete('procedures', 'procedures')
     }
 
-    // Knowledge graph (relations cascade via FK on entities)
+    // Knowledge graph (relations first — they reference entities)
     if (shouldDelete('knowledge')) {
-      // Delete relations first (they reference entities)
-      const { count: relCount } = await admin
-        .from('knowledge_graph_relations')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.relations = relCount ?? 0
-
-      const { count: entCount } = await admin
-        .from('knowledge_graph_entities')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.entities = entCount ?? 0
+      await safeDelete('knowledge_graph_relations', 'relations')
+      await safeDelete('knowledge_graph_entities', 'entities')
     }
 
     // Goals
     if (shouldDelete('goals')) {
-      const { count } = await admin
-        .from('user_goals')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.goals = count ?? 0
+      await safeDelete('user_goals', 'goals')
     }
 
     // Preferences (reset user_metadata to clean state)
     if (shouldDelete('preferences')) {
-      const { error: updateErr } = await admin.auth.admin.updateUser(userId, {
-        user_metadata: {
-          // Preserve only essential fields
-          display_name: user.user_metadata?.display_name || '',
-          avatar_url: user.user_metadata?.avatar_url || '',
-        },
-      })
-      if (updateErr) {
-        console.warn('Failed to reset preferences:', updateErr.message)
+      try {
+        const { error: updateErr } = await admin.auth.admin.updateUser(userId, {
+          user_metadata: {
+            display_name: user.user_metadata?.display_name || '',
+            avatar_url: user.user_metadata?.avatar_url || '',
+          },
+        })
+        if (updateErr) {
+          console.warn('Failed to reset preferences:', updateErr.message)
+          errors.push(`preferences: ${updateErr.message}`)
+        }
+        deleted.preferences = updateErr ? 0 : 1
+      } catch (err) {
+        console.error('[reset] updateUser threw:', err)
+        errors.push(`preferences: ${err instanceof Error ? err.message : 'unknown'}`)
+        deleted.preferences = 0
       }
-      deleted.preferences = updateErr ? 0 : 1
 
-      // Delete briefings
-      const { count: briefCount } = await admin
-        .from('briefings')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.briefings = briefCount ?? 0
+      await safeDelete('briefings', 'briefings')
+      await safeDelete('user_engine_state', 'engine_state')
+    }
 
-      // Delete engine state (model preferences, routing config)
-      const { count: engineCount } = await admin
-        .from('user_engine_state')
-        .delete({ count: 'exact' })
-        .eq('user_id', userId)
-      deleted.engine_state = engineCount ?? 0
+    // If ALL operations failed, return 500 with details
+    if (errors.length > 0 && Object.values(deleted).every(v => v === 0)) {
+      console.error('[reset] all operations failed:', errors)
+      return jsonResponse({ error: 'Reset failed', details: errors }, 500)
     }
 
     // ── Audit log ───────────────────────────────────────

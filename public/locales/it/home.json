@@ -49,6 +49,7 @@
     "title": "Eliminare il tuo account?",
     "subtitle": "Questo elimina permanentemente tutti i tuoi dati: conversazioni, memoria e preferenze. Non può essere annullato.",
     "subtitleWithSub": " Anche il tuo abbonamento verrà annullato.",
+    "typeDelete": "Digita DELETE per confermare:",
     "confirm": "Sì, elimina il mio account",
     "confirming": "Eliminazione..."
   },

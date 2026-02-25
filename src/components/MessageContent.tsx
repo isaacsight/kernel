@@ -782,12 +782,56 @@ export function MessageContent({ text, isLatestMessage = false }: { text: string
     blockIndex++
   }
 
-  // Remaining text after last code block
+  // Remaining text after last code block — check for truncated (unclosed) code blocks
   if (lastIndex < text.length) {
     const remaining = text.slice(lastIndex)
-    parts.push(
-      <ReactMarkdown key={`t${blockIndex}`} components={mdComponents}>{remaining}</ReactMarkdown>
-    )
+    const unclosedMatch = remaining.match(/^([\s\S]*?)```([^\n]*)\n([\s\S]+)$/)
+    if (unclosedMatch) {
+      // Text before the unclosed block
+      const textBefore = unclosedMatch[1]
+      if (textBefore.trim()) {
+        parts.push(
+          <ReactMarkdown key={`t${blockIndex}`} components={mdComponents}>{textBefore}</ReactMarkdown>
+        )
+        blockIndex++
+      }
+      // Treat the unclosed code block as a complete one
+      const rawHeader = unclosedMatch[2].trim()
+      const rawCode = unclosedMatch[3]
+      const { lang, filename } = parseCodeFenceHeader(rawHeader)
+      const ext = LANG_EXT[lang.toLowerCase()] || '.txt'
+      const lineCount = rawCode.split('\n').length
+      const autoFilename = !filename && lineCount >= AUTO_ARTIFACT_MIN_LINES
+        ? inferFilename(lang, usedFilenames)
+        : null
+      const resolvedFilename = filename || autoFilename
+      if (resolvedFilename) {
+        if (filename) usedFilenames.add(filename)
+        const { title, cleanCode } = extractArtifactTitle(rawCode, lang)
+        artifacts.push({ filename: resolvedFilename, content: cleanCode })
+        parts.push(
+          <ArtifactCard
+            key={`a${blockIndex}`}
+            filename={resolvedFilename}
+            lang={lang}
+            code={cleanCode}
+            ext={ext}
+            title={title || undefined}
+            t={t}
+            autoPreview={isLatestMessage && PREVIEWABLE_EXTS.includes(ext)}
+          />
+        )
+      } else {
+        const defaultFilename = `kernel-export${ext}`
+        parts.push(
+          <CodeBlock key={`c${blockIndex}`} lang={lang} code={rawCode} ext={ext} filename={defaultFilename} t={t} />
+        )
+      }
+    } else {
+      parts.push(
+        <ReactMarkdown key={`t${blockIndex}`} components={mdComponents}>{remaining}</ReactMarkdown>
+      )
+    }
   }
 
   return (

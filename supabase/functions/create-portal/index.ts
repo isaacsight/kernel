@@ -95,6 +95,8 @@ serve(async (req: Request) => {
             .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
             .eq('user_id', user.id)
         }
+      } else {
+        await subRes.text().catch(() => {}) // consume body to release connection
       }
     }
 
@@ -121,6 +123,8 @@ serve(async (req: Request) => {
               .eq('user_id', user.id)
           }
         }
+      } else {
+        await searchRes.text().catch(() => {}) // consume body to release connection
       }
     }
 
@@ -139,6 +143,8 @@ serve(async (req: Request) => {
           customerId = customers[0].id
           console.log('Strategy 4 (customer list):', customerId)
         }
+      } else {
+        await listRes.text().catch(() => {}) // consume body to release connection
       }
     }
 

@@ -245,7 +245,7 @@ async function getProviderScores(): Promise<Record<string, ProviderScore>> {
         _providerScoresCache = data as Record<string, ProviderScore>
         _providerScoresCacheTime = Date.now()
       }
-    } catch {
+    } catch (err) {
       console.warn('[provider-health] Failed to fetch scores (using cache):', err)
     }
   }
@@ -1271,8 +1271,12 @@ serve(async (req: Request) => {
     // ── Enforce model tiers: free users locked to fast tier ─
     if (!isServiceCall && !isPaidUser && !isAdmin) {
       payload.tier = 'fast'
-      // Override any explicit model to the fast-tier equivalent
-      if (payload.model && !['haiku', 'gpt-4o-mini', 'gemini-2.0-flash'].includes(payload.model as string)) {
+      // Build the complete set of allowed free-tier models (legacy aliases + full IDs)
+      const allowedFreeModels = new Set([
+        'haiku', 'gpt-4o-mini', 'gemini-2.0-flash',  // legacy aliases
+        ...Object.values(TIER_MODELS).map(t => t.fast),  // full model IDs for all providers
+      ])
+      if (payload.model && !allowedFreeModels.has(payload.model as string)) {
         payload.model = undefined
       }
       // Disable web_search for free users (extra API cost)

@@ -49,6 +49,7 @@
     "title": "Excluir sua conta?",
     "subtitle": "Isso exclui permanentemente todos os seus dados: conversas, memória e preferências. Isso não pode ser desfeito.",
     "subtitleWithSub": " Sua assinatura também será cancelada.",
+    "typeDelete": "Digite DELETE para confirmar:",
     "confirm": "Sim, excluir minha conta",
     "confirming": "Excluindo..."
   },

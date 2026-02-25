@@ -161,21 +161,29 @@ serve(async (req: Request) => {
       })
     }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    )
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('[send-notification] Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+      return new Response(JSON.stringify({ error: 'Server misconfiguration' }), {
+        status: 500,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     const channels = channel === 'all' ? ['in_app', 'email', 'push'] : [channel]
 
-    // Always create in-app notification
-    await supabase.from('notifications').insert({
-      user_id,
-      title,
-      body: body || '',
-      type: type || 'info',
-      action_url: actionUrl || null,
-    })
+    // Create in-app notification only when requested
+    if (channels.includes('in_app')) {
+      await supabase.from('notifications').insert({
+        user_id,
+        title,
+        body: body || '',
+        type: type || 'info',
+        action_url: actionUrl || null,
+      })
+    }
 
     // Channel-specific delivery
     if (channels.includes('email')) {

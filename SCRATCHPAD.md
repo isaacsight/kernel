@@ -8,6 +8,32 @@
 
 ### Accomplished This Session
 
+#### Privacy Policy, Terms of Service & User Agreement Flow
+- **`src/pages/PrivacyPage.tsx`** (new): Comprehensive privacy policy — 11 sections covering information collected, The Mirror/Convergence system (all 6 facet lenses documented), data usage, what we don't do, third-party services (Supabase, Anthropic, Stripe, Perplexity), data retention, security measures, user rights (CCPA + GDPR), children, changes, contact. Written in plain language.
+- **`src/pages/TermsPage.tsx`** (new): Terms of service — 11 sections covering service description, accounts, content ownership, conversation analysis consent, acceptable use, Pro subscriptions, limitations/liability, free tier limits, data deletion, changes, contact.
+- **`src/router.tsx`**: Added lazy-loaded routes for `/#/privacy` and `/#/terms`.
+- **`src/components/LoginGate.tsx`**: Added legal agreement text to auth modal — "By continuing, you agree to the Terms of Service & Privacy Policy" with links to both pages.
+- **`public/locales/en/auth.json`**: Added `modal.legalAgreement`, `modal.termsLink`, `modal.privacyLink` i18n keys.
+- **`src/index.css`**: ~90 lines `.ka-legal-page` CSS (typography, spacing, links, lists, dark mode) + `.ka-gate-legal` for auth modal.
+- Mirror seeded for 10 users (30 facets, 14 convergence insights) via direct SQL.
+- Committed `e35906010`, pushed to origin/main, deployed to kernel.chat.
+
+#### Ship Pipeline — Full 6-Gate Pass
+- **Gate 1 — Security: PASS** — No P0/P1 findings. All 20 edge functions auth-verified. Clean secrets scan. 8 dev-only npm vulns (discord.js/blessed-contrib, not client-shipped). SSRF, CORS, iframe sandboxing all verified.
+- **Gate 2 — QA: PASS** — Zero type errors. Clean build. 1059 modules, 56 precache entries (518KB). Bundle sizes stable vs previous ship.
+- **Gate 3 — Design: PASS** — No critical Rubin violations. 4 non-blocking warnings: `--font-prose`/`--font-meta` tokens undefined (should alias `--font-serif`/`--font-mono`), hardcoded `#A78BFA` dark link color, `.ka-legal-back` touch target below 44px, `.ka-gate-legal` opacity:0.5 contrast concern.
+- **Gate 4 — Performance: PASS** — Main JS 92.4KB gzip (31% of 300KB budget). CSS 30.8KB gzip (21% of 150KB budget). 0 npm vulnerabilities. 6 safe patch/minor updates available, 2 majors held (framer-motion v12, lucide-react v0.575).
+- **Gate 5 — DevOps: PASS** — Deploy live. GH Pages 200 (348ms), Supabase 401, Claude 415 — all nominal. Consistent with 8+ prior deploys.
+- **Gate 6 — Product: PASS** — Landing, privacy, terms all render on live site. Auth modal shows legal agreement links. Mobile 375x812 layout verified. No regressions.
+
+#### Convergence — Multi-Agent Perception Synthesis
+- **`src/engine/Convergence.ts`** (new): Core convergence engine. 6 facet lenses — Kernel (relationship), Researcher (curiosity), Coder (craft), Writer (voice), Analyst (judgment), Curator (arc). `extractFacet()` runs 1 Haiku call per conversation for the active agent's dimension. `converge()` runs 1 Sonnet call every ~5 conversations, sharing all facet observations and producing 2-4 emergent insights. `formatMirrorForPrompt()` injects mirror context into agent system prompts. `shouldConverge()` triggers on 3+ updated facets or every 5 messages. `resolveFacetAgent()` maps non-facet agents to kernel lens.
+- **Migration 033** (`convergence.sql`): Added `agent_facets JSONB DEFAULT '{}'`, `convergence_insights JSONB DEFAULT '[]'`, `last_convergence TIMESTAMPTZ` columns to `user_memory`. Applied via Supabase MCP.
+- **`SupabaseClient.ts`**: Extended `DBUserMemory` interface with `agent_facets`, `convergence_insights`, `last_convergence`. Added `upsertUserMirror()` function.
+- **`useChatEngine.ts`**: Added `UserMirror` state + ref. Mirror loaded from Supabase on mount (from `agent_facets`/`convergence_insights` columns). Facet extraction integrated into background extraction cycle (every 3 messages, alongside memory/KG/goals). Convergence runs conditionally via `shouldConverge()`. Mirror context injected into system prompt between User Memory and Knowledge Graph blocks.
+- **`useAccountSettings.ts`**: Fixed pre-existing React 19 type error — `useRef()` requires initial value, changed to `useRef(undefined)`.
+- Committed `36fa92481`, pushed to origin/main, deployed to kernel.chat.
+
 #### Free-Tier Daily Message Limit — Full Implementation
 - **Migration 025** (`protect_message_count.sql`): BEFORE UPDATE trigger on `user_memory` blocks direct modification of `message_count`. Uses `app.allow_message_count_update` session variable as bypass token for the RPC. Committed `21832166`.
 - **Migration 026** (`daily_message_limit.sql`): Added `daily_message_count` and `daily_message_date` columns to `user_memory`. Updated `increment_message_count` RPC to auto-reset daily count on new day. Trigger extended to protect new columns. Committed `9b3cf8f4`.
@@ -24,12 +50,14 @@
 - **Reset all users**: Set `daily_message_count = 0` and `daily_window_start = NULL` for all 18 users.
 - Commits: `21832166`, `9b3cf8f4`, `78c23e82`, `d307b5d7` — all pushed to origin/main, deployed to kernel.chat.
 
-#### Unified 50MB Upload Limit (earlier)
+#### Unified 50MB Upload Limit + Claude Proxy Fix
 - **`ChatHelpers.tsx`**: Replaced per-type/per-tier file size limits (free: 2-10MB, pro: 20-25MB) with single 50MB cap for all file types.
 - **`useAccountSettings.ts`**: Avatar upload limit raised from 2MB to 50MB.
 - **`transcribe/index.ts`**: Removed tier-based size check (2MB free / 25MB pro), replaced with flat 50MB limit. Removed subscription lookup for size gating.
 - **Supabase avatars bucket**: Updated `file_size_limit` to 50MB server-side.
-- Transcribe edge function redeployed. Committed `b97a7186`, pushed to origin/main, deployed to kernel.chat.
+- **`claude-proxy/index.ts`**: **Root cause of upload failures** — `MAX_MESSAGE_SIZE_BYTES` was 32KB and `MAX_PAYLOAD_SIZE_BYTES` was 256KB. Base64-encoded images/PDFs would exceed these limits silently. Raised both to 50MB. Committed `71a1fbfa`.
+- **`AccountSettingsPanel.tsx`**: Fixed `ResetScope` type errors — `RESET_SCOPES` is a string array, code was treating elements as objects with `.id`/`.icon`. Changed to use string directly + `RESET_SCOPE_ICONS[scope]` lookup. Committed `6c60cd94`.
+- Transcribe + claude-proxy edge functions redeployed. Committed `b97a7186`, `6c60cd94`, `71a1fbfa` — all pushed to origin/main, deployed to kernel.chat.
 
 ---
 
@@ -187,7 +215,12 @@
 - **Account settings panel**: DONE (profile, email, password, linked accounts, avatar upload, re-auth, Supabase avatars bucket)
 - **Upload limits**: DONE (unified 50MB per file, no tier split)
 - **Free-tier daily limit**: DONE (20 msgs/24h rolling window, reset time shown, in-app + push notifications)
-- **Next candidates**: Animation token system
+- **Convergence**: DONE (multi-agent perception synthesis — 6 facet lenses, emergent insights, mirror context in prompts)
+- **Legal pages**: DONE (privacy policy, terms of service, user agreement flow in auth modal, CCPA/GDPR, Mirror documented)
+- **Mirror seeding**: DONE (30 facets, 14 convergence insights across 10 users)
+- **Next candidates**: Animation token system, convergence UI (show users what the mirror sees?)
+- **Design polish backlog** (from ship Gate 3): Add `--font-prose`/`--font-meta` token aliases to `:root`, tokenize `#A78BFA` dark link color, add 44px min touch target to `.ka-legal-back`, raise `.ka-gate-legal` opacity from 0.5 to 0.6
+- **Dep updates available**: @sentry/react, @supabase/supabase-js, @types/react, i18next, posthog-js, react-router-dom (all patch/minor). Hold framer-motion v12 + lucide-react v0.575 (breaking).
 - **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
 
 ## Key Decisions Made
@@ -210,4 +243,7 @@
 - Onboarding: single screen over multi-stage wizard; sessionStorage bridge pattern (write in onboarding, consume in useChatEngine with transient-mount guard)
 - Account settings: bottom-sheet panel, MoreMenu consolidated to single entry + sign out, OAuth link uses localStorage flag (`kernel-reopen-settings`) to reopen panel after redirect, avatars bucket with user-scoped RLS, re-auth via `signInWithPassword` before email/password changes
 - Upload limits: flat 50MB per file everywhere (chat attachments, avatars, transcription) — no free/pro tier split for file sizes
+- Claude proxy payload limits: 50MB for both per-message and total payload (was 32KB/256KB — broke all file uploads with base64 content)
 - Free-tier messaging: 20 messages per 24h rolling window (not midnight reset). Window starts on first message after previous window expires. RPC returns JSONB `{daily_count, resets_at}`. Trigger protects `message_count`, `daily_message_count`, and `daily_window_start` from direct client manipulation. Lifetime `message_count` preserved for entity evolution. In-app + push notification fires once per window on first overage. Streak bonus (+1 at 3+ days) still applies on top of 20.
+- Convergence: 6 facet agents (kernel/researcher/coder/writer/analyst/curator) each maintain observations+patterns about the user. Non-facet agents fall back to kernel lens. Facet extraction runs every 3 messages (1 Haiku call). Convergence runs every ~5 messages or when 3+ facets updated (1 Sonnet call). Mirror data stored in `user_memory` table (`agent_facets`, `convergence_insights`, `last_convergence` columns). Mirror context injected into all agent system prompts under `## Mirror` section. Cost: ~$0.001/conversation for facets, ~$0.01 per convergence.
+- Legal pages: Plain-language privacy policy and terms of service as React page components at `/#/privacy` and `/#/terms`. Auth modal shows "By continuing, you agree to Terms & Privacy" with links. Privacy policy explicitly documents the Mirror/Convergence system. Both pages use `.ka-legal-page` CSS with dark mode.

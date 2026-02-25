@@ -49,6 +49,7 @@
     "title": "删除你的账户？",
     "subtitle": "这将永久删除你的所有数据：对话、记忆和偏好设置。此操作不可撤销。",
     "subtitleWithSub": " 你的订阅也将被取消。",
+    "typeDelete": "输入 DELETE 以确认：",
     "confirm": "是的，删除我的账户",
     "confirming": "删除中..."
   },

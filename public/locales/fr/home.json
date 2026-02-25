@@ -49,6 +49,7 @@
     "title": "Supprimer votre compte ?",
     "subtitle": "Cela supprime définitivement toutes vos données : conversations, mémoire et préférences. Cette action est irréversible.",
     "subtitleWithSub": " Votre abonnement sera également annulé.",
+    "typeDelete": "Tapez DELETE pour confirmer :",
     "confirm": "Oui, supprimer mon compte",
     "confirming": "Suppression..."
   },

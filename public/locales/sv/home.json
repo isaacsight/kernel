@@ -49,6 +49,7 @@
     "title": "Radera ditt konto?",
     "subtitle": "Detta raderar permanent all din data: konversationer, minne och inställningar. Detta kan inte ångras.",
     "subtitleWithSub": " Din prenumeration kommer också att avslutas.",
+    "typeDelete": "Skriv DELETE för att bekräfta:",
     "confirm": "Ja, radera mitt konto",
     "confirming": "Raderar..."
   },

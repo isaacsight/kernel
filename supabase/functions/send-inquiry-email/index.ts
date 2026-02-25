@@ -156,7 +156,8 @@ serve(async (req: Request) => {
       }),
     })
 
-    if (!notifyResponse.ok) {
+    const notifyOk = notifyResponse.ok
+    if (!notifyOk) {
       const err = await notifyResponse.text()
       console.error('Resend notification failed:', err)
     }
@@ -201,9 +202,18 @@ serve(async (req: Request) => {
       }),
     })
 
-    if (!confirmResponse.ok) {
+    const confirmOk = confirmResponse.ok
+    if (!confirmOk) {
       const err = await confirmResponse.text()
       console.error('Resend confirmation failed:', err)
+    }
+
+    // If both emails failed, return error
+    if (!notifyOk && !confirmOk) {
+      return new Response(
+        JSON.stringify({ error: 'Both notification and confirmation emails failed to send' }),
+        { status: 502, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
     }
 
     // Audit log
@@ -212,13 +222,14 @@ serve(async (req: Request) => {
     })
     logAudit(svc, {
       actorType: 'service', eventType: 'edge_function.call', action: 'send-inquiry-email',
-      source: 'send-inquiry-email', status: 'success', statusCode: 200,
-      metadata: { inquiryId: inquiry.id },
+      source: 'send-inquiry-email', status: notifyOk && confirmOk ? 'success' : 'partial',
+      statusCode: 200,
+      metadata: { inquiryId: inquiry.id, notifyOk, confirmOk },
       ip: getClientIP(req), userAgent: getUA(req),
     })
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({ success: true, notifyOk, confirmOk }),
       { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   } catch (error) {

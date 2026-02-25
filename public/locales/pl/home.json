@@ -49,6 +49,7 @@
     "title": "Usunąć konto?",
     "subtitle": "To trwale usunie wszystkie Twoje dane: rozmowy, pamięć i preferencje. Tej operacji nie można cofnąć.",
     "subtitleWithSub": " Twoja subskrypcja również zostanie anulowana.",
+    "typeDelete": "Wpisz DELETE, aby potwierdzić:",
     "confirm": "Tak, usuń moje konto",
     "confirming": "Usuwanie..."
   },
