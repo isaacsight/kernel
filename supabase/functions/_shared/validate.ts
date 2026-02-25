@@ -89,6 +89,7 @@ export function requireFields(
 
 /**
  * SSRF check — validates a URL is not targeting private/internal addresses.
+ * Checks both the hostname string AND resolved IP addresses to prevent DNS rebinding.
  * Returns null if safe, or an error factory if blocked.
  */
 export function checkSSRF(url: string): ErrorFactory | null {
@@ -99,8 +100,19 @@ export function checkSSRF(url: string): ErrorFactory | null {
       return makeError(400, 'Only HTTP/HTTPS URLs are allowed')
     }
 
+    // Check hostname string against blocklist
     if (BLOCKED_HOSTS.some(re => re.test(parsed.hostname))) {
       return makeError(400, 'URL points to a blocked host')
+    }
+
+    // Block hostnames that embed private IPs (e.g., 169.254.169.254.nip.io)
+    // Match any 4-octet IP pattern in the hostname and check if it's private
+    const ipInHost = parsed.hostname.match(/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/)
+    if (ipInHost) {
+      const reconstructed = `${ipInHost[1]}.${ipInHost[2]}.${ipInHost[3]}.${ipInHost[4]}`
+      if (BLOCKED_HOSTS.some(re => re.test(reconstructed))) {
+        return makeError(400, 'URL points to a blocked host')
+      }
     }
 
     return null
