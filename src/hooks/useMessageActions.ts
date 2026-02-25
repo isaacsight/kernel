@@ -47,17 +47,28 @@ export function useMessageActions(
 
   const handleFeedback = useCallback(async (msg: ChatMessage, quality: 'helpful' | 'poor') => {
     if (!msg.signalId || msg.feedback) return
+    // Optimistic UI update
     setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, feedback: quality } : m))
-    updateSignalQuality(msg.signalId, quality)
-    if (quality === 'helpful' && msg.signalId) {
-      const idx = messages.findIndex(m => m.id === msg.id)
-      const userMsg = idx > 0 ? messages[idx - 1] : null
-      if (userMsg && userMsg.role === 'user') {
-        const topic = userMsg.content.slice(0, 60).trim()
-        upsertCollectiveInsight(topic)
-      }
+    const ok = await updateSignalQuality(msg.signalId, quality)
+    if (!ok) {
+      // Revert on failure so user can retry
+      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, feedback: undefined } : m))
+      showToast('Feedback failed — try again')
+      return
     }
-  }, [messages, setMessages])
+    if (quality === 'helpful') {
+      // Read latest messages from updater to avoid stale closure
+      setMessages(prev => {
+        const idx = prev.findIndex(m => m.id === msg.id)
+        const userMsg = idx > 0 ? prev[idx - 1] : null
+        if (userMsg && userMsg.role === 'user') {
+          const topic = userMsg.content.slice(0, 60).trim()
+          if (topic.length > 3) upsertCollectiveInsight(topic)
+        }
+        return prev // no mutation
+      })
+    }
+  }, [setMessages, showToast])
 
   const handleShare = useCallback(async () => {
     if (!activeConversationId || messages.length === 0) return

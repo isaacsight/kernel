@@ -601,7 +601,7 @@ export function useChatEngine(params: UseChatEngineParams) {
 
         const signalId = `sig_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
         const topic = trimmed.slice(0, 60).trim()
-        saveResponseSignal({
+        const signalSaved = await saveResponseSignal({
           id: signalId,
           user_id: userId,
           conversation_id: convId,
@@ -611,7 +611,10 @@ export function useChatEngine(params: UseChatEngineParams) {
         if (topic.length > 3) {
           upsertCollectiveInsight(topic)
         }
-        setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, signalId } : m))
+        // Only show feedback buttons if signal was persisted — clicking them updates the signal row
+        if (signalSaved) {
+          setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, signalId } : m))
+        }
       }
       touchConversation(convId)
       loadConversations()
