@@ -95,18 +95,26 @@ serve(async (req: Request) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     )
 
-    // Get all users
-    const { data: usersData, error: usersErr } = await supabase.auth.admin.listUsers()
-    if (usersErr) {
-      return new Response(JSON.stringify({ error: 'Failed to list users' }), {
-        status: 500,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      })
+    // Get all users (paginated — listUsers returns max 1000 per page)
+    const allEmails: string[] = []
+    let page = 1
+    const perPage = 1000
+    while (true) {
+      const { data: usersData, error: usersErr } = await supabase.auth.admin.listUsers({ page, perPage })
+      if (usersErr) {
+        return new Response(JSON.stringify({ error: 'Failed to list users' }), {
+          status: 500,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        })
+      }
+      const users = usersData?.users || []
+      for (const u of users) {
+        if (u.email) allEmails.push(u.email)
+      }
+      if (users.length < perPage) break // no more pages
+      page++
     }
-
-    const emails = (usersData?.users || [])
-      .map(u => u.email)
-      .filter((e): e is string => !!e)
+    const emails = allEmails
 
     if (emails.length === 0) {
       return new Response(JSON.stringify({ sent: 0, message: 'No users found' }), {
@@ -151,7 +159,7 @@ serve(async (req: Request) => {
       ip: getClientIP(req), userAgent: getUA(req),
     })
 
-    return new Response(JSON.stringify({ sent: emails.length, emails, result }), {
+    return new Response(JSON.stringify({ sent: emails.length, result }), {
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
     })
   } catch (err) {
