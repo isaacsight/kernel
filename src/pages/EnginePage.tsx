@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconChart,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus,
+  IconSettings, IconEye, IconPlus, IconBookOpen,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -20,7 +20,7 @@ import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile } from '../components/ChatHelpers'
-import { useDarkMode } from '../hooks/useDarkMode'
+import { useTheme } from '../hooks/useTheme'
 import { useToast } from '../hooks/useToast'
 import { useScrollTracking } from '../hooks/useScrollTracking'
 import { useVoiceInput } from '../hooks/useVoiceInput'
@@ -231,7 +231,7 @@ function EngineChat() {
   }, [])
 
   // ─── Hooks ────────────────────────────────────────────
-  const { darkMode, setDarkMode } = useDarkMode()
+  const { theme, setTheme } = useTheme()
   const { toast, showToast } = useToast()
   const { updateAvailable, updateNow } = useServiceWorkerUpdate()
   const billing = useBilling(user, showToast, signOut)
@@ -741,8 +741,8 @@ function EngineChat() {
           {!isAdmin && isSubscribed && <span className="ka-pro-badge"><IconCrown size={12} /> {t('pro')}</span>}
           {user && <NotificationBell userId={user.id} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
-          <button className="ka-header-icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label={t('aria.toggleDarkMode', { ns: 'common' })}>
-            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
+          <button className="ka-header-icon-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
+            {theme === 'dark' ? <IconSun size={16} /> : theme === 'eink' ? <IconBookOpen size={16} /> : <IconMoon size={16} />}
           </button>
           <div className="ka-header-menu-wrap" ref={headerMenuRef}>
             <button className="ka-header-icon-btn" onClick={() => panels.setHeaderMenuOpen(!panels.headerMenuOpen)} aria-label={t('aria.moreOptions', { ns: 'common' })}>
@@ -1290,7 +1290,7 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} theme={theme} onSetTheme={setTheme} />
           </Suspense>
         )}
       </AnimatePresence>
