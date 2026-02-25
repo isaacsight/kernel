@@ -114,6 +114,10 @@ export function useChatEngine(params: UseChatEngineParams) {
   const sendMessageRef = useRef<(content: string) => Promise<void>>(async () => { })
   const streamAbortRef = useRef<AbortController | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const messagesRef = useRef<ChatMessage[]>(messages)
+  messagesRef.current = messages
+  const isThinkingRef = useRef(false)
+  isThinkingRef.current = isThinking
 
   // Clean up active stream on unmount
   useEffect(() => {
@@ -286,14 +290,21 @@ export function useChatEngine(params: UseChatEngineParams) {
       setActiveConversationId(convId)
     }
 
-    // Classify intent via AgentRouter
+    // Classify intent via AgentRouter (read from ref for latest state across awaits)
     const recentCtx = buildRecentContext(
-      messages.filter(m => m.content.trim()).map(m => ({
+      messagesRef.current.filter(m => m.content.trim()).map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
         content: m.content,
       }))
     )
-    const classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0)
+    let classification: Awaited<ReturnType<typeof classifyIntent>>
+    try {
+      classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0)
+    } catch (err) {
+      console.error('[engine] classifyIntent failed:', err)
+      // Fall back to kernel agent on classifier failure
+      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false }
+    }
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
 
@@ -419,8 +430,8 @@ export function useChatEngine(params: UseChatEngineParams) {
     }])
     latestKernelContentRef.current = ''
 
-    // Build claude messages
-    const rawHistory = messages
+    // Build claude messages (read from ref for latest state across awaits)
+    const rawHistory = messagesRef.current
       .filter(m => m.content.trim() !== '')
       .map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
@@ -441,7 +452,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     ]
 
     const updateKernelMsg = (text: string) => {
-      if (isThinking) { setIsThinking(false); setThinkingAgent(null) }
+      if (isThinkingRef.current) { setIsThinking(false); setThinkingAgent(null); isThinkingRef.current = false }
       latestKernelContentRef.current = text
       setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text } : m))
     }
@@ -458,7 +469,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         )
         setTaskProgress(null)
       } else if (classification.needsSwarm && isPro) {
-        const history = messages
+        const history = messagesRef.current
           .filter(m => m.content.trim())
           .map(m => ({
             role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,

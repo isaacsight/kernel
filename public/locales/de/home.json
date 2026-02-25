@@ -49,6 +49,7 @@
     "title": "Konto löschen?",
     "subtitle": "Dies löscht dauerhaft alle deine Daten: Konversationen, Erinnerungen und Einstellungen. Dies kann nicht rückgängig gemacht werden.",
     "subtitleWithSub": " Dein Abonnement wird ebenfalls gekündigt.",
+    "typeDelete": "Geben Sie DELETE ein, um zu bestätigen:",
     "confirm": "Ja, mein Konto löschen",
     "confirming": "Wird gelöscht..."
   },

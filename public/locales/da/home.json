@@ -49,6 +49,7 @@
     "title": "Slet din konto?",
     "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og præferencer. Dette kan ikke fortrydes.",
     "subtitleWithSub": " Dit abonnement vil også blive annulleret.",
+    "typeDelete": "Skriv DELETE for at bekræfte:",
     "confirm": "Ja, slet min konto",
     "confirming": "Sletter..."
   },

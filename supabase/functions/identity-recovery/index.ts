@@ -320,13 +320,14 @@ serve(async (req: Request) => {
           if (!newUsername) {
             return json({ error: 'No new username specified in request' }, 400)
           }
-          // Check uniqueness via user_profiles table
+          // Check uniqueness via user_profiles table (fail closed — block on RPC error)
           const { data: available, error: checkErr } = await admin.rpc('check_name_available', {
             p_field: 'username',
             p_value: newUsername,
           })
           if (checkErr) {
             console.error('[identity-recovery] check_name_available error:', checkErr)
+            return json({ error: 'Unable to verify username availability. Please try again.' }, 503)
           }
           if (available === false) {
             return json({ error: 'username_taken' }, 409)

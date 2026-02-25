@@ -49,6 +49,7 @@
     "title": "Hesabınızı silin mi?",
     "subtitle": "Bu, tüm verilerinizi kalıcı olarak siler: konuşmalar, bellek ve tercihler. Bu geri alınamaz.",
     "subtitleWithSub": " Aboneliğiniz de iptal edilecektir.",
+    "typeDelete": "Onaylamak için DELETE yazın:",
     "confirm": "Evet, hesabımı sil",
     "confirming": "Siliniyor..."
   },

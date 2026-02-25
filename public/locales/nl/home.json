@@ -49,6 +49,7 @@
     "title": "Je account verwijderen?",
     "subtitle": "Dit verwijdert permanent al je gegevens: gesprekken, geheugen en voorkeuren. Dit kan niet ongedaan worden gemaakt.",
     "subtitleWithSub": " Je abonnement wordt ook opgezegd.",
+    "typeDelete": "Typ DELETE om te bevestigen:",
     "confirm": "Ja, verwijder mijn account",
     "confirming": "Verwijderen..."
   },

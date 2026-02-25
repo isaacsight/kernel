@@ -49,6 +49,7 @@
     "title": "Poistetaanko tilisi?",
     "subtitle": "Tämä poistaa pysyvästi kaikki tietosi: keskustelut, muistin ja asetukset. Tätä ei voi kumota.",
     "subtitleWithSub": " Tilauksesi peruutetaan myös.",
+    "typeDelete": "Kirjoita DELETE vahvistaaksesi:",
     "confirm": "Kyllä, poista tilini",
     "confirming": "Poistetaan..."
   },

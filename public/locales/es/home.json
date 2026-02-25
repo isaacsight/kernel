@@ -49,6 +49,7 @@
     "title": "¿Eliminar tu cuenta?",
     "subtitle": "Esto elimina permanentemente todos tus datos: conversaciones, memoria y preferencias. Esto no se puede deshacer.",
     "subtitleWithSub": " Tu suscripción también será cancelada.",
+    "typeDelete": "Escribe DELETE para confirmar:",
     "confirm": "Sí, eliminar mi cuenta",
     "confirming": "Eliminando..."
   },

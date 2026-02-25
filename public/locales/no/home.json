@@ -49,6 +49,7 @@
     "title": "Slette kontoen din?",
     "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og innstillinger. Dette kan ikke angres.",
     "subtitleWithSub": " Abonnementet ditt vil også bli kansellert.",
+    "typeDelete": "Skriv DELETE for å bekrefte:",
     "confirm": "Ja, slett kontoen min",
     "confirming": "Sletter..."
   },

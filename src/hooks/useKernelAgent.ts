@@ -197,9 +197,16 @@ export function useKernelAgent(): KernelAgentState {
   // Access (from AuthProvider)
   const { isSubscribed } = useAuthContext();
 
+  const cleanupRef = useRef<(() => void) | null>(null);
+
   // Load engine when drawer opens (deferred from startup)
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      // Unsubscribe when drawer closes
+      cleanupRef.current?.();
+      cleanupRef.current = null;
+      return;
+    }
     let cancelled = false;
 
     loadEngine().then(engine => {
@@ -212,17 +219,15 @@ export function useKernelAgent(): KernelAgentState {
         setEngineState(engine.getState());
       });
 
-      // Store cleanup in ref so we can call it on unmount
       cleanupRef.current = unsubscribe;
     });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      cleanupRef.current?.();
+      cleanupRef.current = null;
+    };
   }, [isOpen]);
-
-  const cleanupRef = useRef<(() => void) | null>(null);
-  useEffect(() => {
-    return () => { cleanupRef.current?.(); };
-  }, []);
 
   // Send message to Kernel Agent via Claude API
   const sendMessage = useCallback(async (content: string) => {

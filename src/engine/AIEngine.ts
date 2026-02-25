@@ -281,7 +281,7 @@ export function createEngine(): {
     claudeMessages.push({ role: 'user', content: topic + contextSuffix + artifactReminder });
 
     // Higher token limit for build/code intents that produce file artifacts
-    const maxTokens = isBuildIntent ? 8192 : 4096;
+    const maxTokens = isBuildIntent ? 16384 : 4096;
     // Append artifact compliance suffix to system prompt for build intents
     const systemPrompt = isBuildIntent
       ? agent.systemPrompt + '\n\nCRITICAL RULE: When the user asks for N files, you MUST produce ALL N files as separate ```language:filename.ext code blocks. Start each file immediately — minimal explanation between files. Produce files FIRST, explanations AFTER all files.'

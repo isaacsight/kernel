@@ -73,14 +73,18 @@ export function EnginePage() {
     return <Suspense fallback={null}><LoginGate /></Suspense>
   }
 
-  const onboardingKey = `kernel-onboarded-${user?.id || 'anon'}`
+  return <EnginePageAuthed user={user!} />
+}
+
+function EnginePageAuthed({ user }: { user: NonNullable<ReturnType<typeof useAuthContext>['user']> }) {
+  const onboardingKey = `kernel-onboarded-${user.id}`
   const [onboarded, setOnboarded] = useState(() => localStorage.getItem(onboardingKey) === 'true')
 
   if (!onboarded) {
     return (
       <Suspense fallback={<div className="ka-loading-splash" />}>
         <OnboardingFlow
-          userName={user?.email || undefined}
+          userName={user.email || undefined}
           onComplete={() => {
             localStorage.setItem(onboardingKey, 'true')
             setOnboarded(true)
@@ -155,6 +159,54 @@ function openFeaturePanel(
     case 'workflows': panels.setShowWorkflowsPanel(true); break
     case 'scheduled': panels.setShowScheduledPanel(true); break
   }
+}
+
+// ─── Delete Account Confirmation ────────────────────────
+function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }: {
+  show: boolean; loading: boolean; isSubscribed: boolean;
+  onConfirm: () => void; onCancel: () => void;
+}) {
+  const { t } = useTranslation('home')
+  const [confirmText, setConfirmText] = useState('')
+  const canDelete = confirmText.trim().toUpperCase() === 'DELETE'
+
+  // Reset input when modal opens/closes
+  useEffect(() => { if (!show) setConfirmText('') }, [show])
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
+            <div className="ka-upgrade-icon ka-upgrade-icon--danger"><IconTrash size={22} /></div>
+            <h2 className="ka-upgrade-title">{t('deleteConfirm.title')}</h2>
+            <p className="ka-upgrade-subtitle">
+              {t('deleteConfirm.subtitle')}
+              {isSubscribed && t('deleteConfirm.subtitleWithSub')}
+            </p>
+            <p className="ka-upgrade-subtitle" style={{ marginTop: 8 }}>{t('deleteConfirm.typeDelete')}</p>
+            <input
+              className="ka-gate-input"
+              type="text"
+              value={confirmText}
+              onChange={e => setConfirmText(e.target.value)}
+              placeholder="DELETE"
+              autoComplete="off"
+              autoFocus
+            />
+            <button
+              className="ka-upgrade-btn ka-upgrade-btn--danger"
+              onClick={onConfirm}
+              disabled={loading || !canDelete}
+            >
+              {loading ? t('deleteConfirm.confirming') : t('deleteConfirm.confirm')}
+            </button>
+            <button className="ka-upgrade-dismiss" onClick={onCancel}>{t('cancel', { ns: 'common' })}</button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
 }
 
 // ─── Engine Chat (post-auth) ────────────────────────────
@@ -1151,24 +1203,13 @@ function EngineChat() {
       </AnimatePresence>
 
       {/* Delete Account Confirmation */}
-      <AnimatePresence>
-        {billing.showDeleteConfirm && (
-          <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <div className="ka-upgrade-icon ka-upgrade-icon--danger"><IconTrash size={22} /></div>
-              <h2 className="ka-upgrade-title">{t('deleteConfirm.title')}</h2>
-              <p className="ka-upgrade-subtitle">
-                {t('deleteConfirm.subtitle')}
-                {isSubscribed && t('deleteConfirm.subtitleWithSub')}
-              </p>
-              <button className="ka-upgrade-btn ka-upgrade-btn--danger" onClick={billing.handleDeleteAccount} disabled={billing.deleteLoading}>
-                {billing.deleteLoading ? t('deleteConfirm.confirming') : t('deleteConfirm.confirm')}
-              </button>
-              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowDeleteConfirm(false)}>{t('cancel', { ns: 'common' })}</button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <DeleteAccountModal
+        show={billing.showDeleteConfirm}
+        loading={billing.deleteLoading}
+        isSubscribed={isSubscribed}
+        onConfirm={billing.handleDeleteAccount}
+        onCancel={() => billing.setShowDeleteConfirm(false)}
+      />
 
       {/* Feature 6: Mid-session value preview */}
       <AnimatePresence>

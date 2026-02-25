@@ -80,6 +80,7 @@
     "title": "Delete your account?",
     "subtitle": "This permanently deletes all your data: conversations, memory, and preferences. This cannot be undone.",
     "subtitleWithSub": " Your subscription will also be cancelled.",
+    "typeDelete": "Type DELETE to confirm:",
     "confirm": "Yes, delete my account",
     "confirming": "Deleting..."
   },

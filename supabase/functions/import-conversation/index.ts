@@ -22,6 +22,19 @@ const MAX_HTML_SIZE = 2_000_000 // 2MB
 
 const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
 
+// Safe text reader — enforces MAX_HTML_SIZE on response body
+async function safeReadText(res: Response): Promise<string> {
+  const cl = res.headers.get('content-length')
+  if (cl && parseInt(cl, 10) > MAX_HTML_SIZE) {
+    throw new Error(`Response too large (${cl} bytes, max ${MAX_HTML_SIZE})`)
+  }
+  const text = await res.text()
+  if (text.length > MAX_HTML_SIZE) {
+    return text.slice(0, MAX_HTML_SIZE)
+  }
+  return text
+}
+
 // ─── Platform detection ────────────────────────────────
 type Platform = 'chatgpt' | 'claude' | 'gemini'
 
@@ -202,7 +215,7 @@ async function fetchChatGPTHtml(url: string): Promise<ParseResult> {
   })
   if (!res.ok) return { platform: 'chatgpt', title: 'ChatGPT Conversation', messages: [] }
 
-  const html = await res.text()
+  const html = await safeReadText(res)
   const messages: ParsedMessage[] = []
   let title = ''
 
@@ -255,7 +268,7 @@ async function fetchClaude(url: string): Promise<ParseResult> {
   })
   if (!res.ok) return { platform: 'claude', title: 'Claude Conversation', messages: [] }
 
-  const html = await res.text()
+  const html = await safeReadText(res)
   const messages: ParsedMessage[] = []
 
   // Look for role markers in HTML structure
@@ -294,7 +307,7 @@ async function fetchGemini(url: string): Promise<ParseResult> {
   })
   if (!res.ok) return { platform: 'gemini', title: 'Gemini Conversation', messages: [] }
 
-  const html = await res.text()
+  const html = await safeReadText(res)
   const messages: ParsedMessage[] = []
 
   // Gemini share pages — look for conversation blocks
@@ -333,7 +346,7 @@ async function fetchGeneric(url: string): Promise<ParseResult> {
   })
   if (!res.ok) return { platform: 'unknown', title: 'Imported Conversation', messages: [] }
 
-  const html = await res.text()
+  const html = await safeReadText(res)
   const text = stripTags(html)
 
   if (text.length > 50) {

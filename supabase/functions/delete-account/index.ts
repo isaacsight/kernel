@@ -58,31 +58,43 @@ serve(async (req: Request) => {
       const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
       if (stripeKey) {
         try {
-          await fetch(`https://api.stripe.com/v1/subscriptions/${sub.stripe_subscription_id}`, {
+          const stripeRes = await fetch(`https://api.stripe.com/v1/subscriptions/${sub.stripe_subscription_id}`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${stripeKey}` },
           })
-          console.log('Cancelled Stripe subscription:', sub.stripe_subscription_id)
+          if (stripeRes.ok) {
+            console.log('Cancelled Stripe subscription:', sub.stripe_subscription_id)
+          } else {
+            const errText = await stripeRes.text().catch(() => 'unknown')
+            console.warn(`Stripe cancellation failed (${stripeRes.status}):`, errText)
+          }
         } catch (err) {
           console.warn('Stripe cancellation failed (continuing with deletion):', err)
         }
       }
     }
 
-    // ── Audit BEFORE delete (user data will be gone after) ──
+    // ── Delete auth user (cascades all public tables) ───
+    const { error: deleteError } = await admin.auth.admin.deleteUser(user.id)
+    if (deleteError) {
+      console.error('Failed to delete user:', deleteError)
+      // Audit the failure
+      logAudit(admin, {
+        actorId: user.id, eventType: 'user.action', action: 'delete-account',
+        source: 'delete-account', status: 'error', statusCode: 500,
+        metadata: { email: user.email, error: deleteError.message },
+        ip: getClientIP(req), userAgent: getUA(req),
+      })
+      return jsonResponse({ error: 'Failed to delete account' }, 500)
+    }
+
+    // Audit AFTER successful deletion
     logAudit(admin, {
       actorId: user.id, eventType: 'user.action', action: 'delete-account',
       source: 'delete-account', status: 'success', statusCode: 200,
       metadata: { email: user.email },
       ip: getClientIP(req), userAgent: getUA(req),
     })
-
-    // ── Delete auth user (cascades all public tables) ───
-    const { error: deleteError } = await admin.auth.admin.deleteUser(user.id)
-    if (deleteError) {
-      console.error('Failed to delete user:', deleteError)
-      return jsonResponse({ error: 'Failed to delete account' }, 500)
-    }
 
     console.log('Account deleted:', user.id, user.email)
     return jsonResponse({ success: true })
