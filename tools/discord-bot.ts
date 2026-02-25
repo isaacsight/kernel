@@ -1962,9 +1962,9 @@ client.on('messageCreate', async (msg: Message) => {
       if (i === 0) {
         await msg.reply({ content: chunks[i], components: i === chunks.length - 1 ? [buttons] : [] })
       } else if (i === chunks.length - 1) {
-        await msg.channel.send({ content: chunks[i], components: [buttons] })
+        await (ch as TextChannel).send({ content: chunks[i], components: [buttons] })
       } else {
-        await msg.channel.send(chunks[i])
+        await (ch as TextChannel).send(chunks[i])
       }
     }
 
