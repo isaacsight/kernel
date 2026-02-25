@@ -524,17 +524,19 @@ export interface DBCollectiveInsight {
   updated_at: string;
 }
 
-export async function saveResponseSignal(signal: Omit<DBResponseSignal, 'created_at'>) {
+export async function saveResponseSignal(signal: Omit<DBResponseSignal, 'created_at'>): Promise<boolean> {
   const { error } = await supabase.from('response_signals').insert(signal);
-  if (error) console.error('Error saving response signal:', error);
+  if (error) { console.error('Error saving response signal:', error); return false }
+  return true
 }
 
-export async function updateSignalQuality(id: string, quality: 'helpful' | 'poor') {
+export async function updateSignalQuality(id: string, quality: 'helpful' | 'poor'): Promise<boolean> {
   const { error } = await supabase
     .from('response_signals')
     .update({ response_quality: quality })
     .eq('id', id);
-  if (error) console.error('Error updating signal quality:', error);
+  if (error) { console.error('Error updating signal quality:', error); return false }
+  return true
 }
 
 export async function getCollectiveInsights(limit = 10): Promise<DBCollectiveInsight[]> {
