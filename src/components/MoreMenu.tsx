@@ -1,9 +1,10 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconShield } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconShield } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
+import type { ThemeMode } from '../hooks/useTheme'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -67,6 +68,12 @@ const ACCOUNT_ITEMS: MoreMenuItem[] = [
   { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut },
 ]
 
+const THEMES: { id: ThemeMode; icon: typeof IconSun; labelKey: string }[] = [
+  { id: 'light', icon: IconSun, labelKey: 'menu.themeLight' },
+  { id: 'dark', icon: IconMoon, labelKey: 'menu.themeDark' },
+  { id: 'eink', icon: IconBookOpen, labelKey: 'menu.themeEink' },
+]
+
 interface MoreMenuProps {
   isOpen: boolean
   onClose: () => void
@@ -75,11 +82,11 @@ interface MoreMenuProps {
   isAdmin: boolean
   isNewFeature?: (id: string) => boolean
   onFeatureDiscovered?: (id: string) => void
-  darkMode?: boolean
-  onToggleDarkMode?: () => void
+  theme?: ThemeMode
+  onSetTheme?: (t: ThemeMode) => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered, darkMode, onToggleDarkMode }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered, theme, onSetTheme }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
@@ -152,15 +159,23 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
               ))}
             </select>
           </div>
-          {onToggleDarkMode && (
-            <label className="ka-more-toggle">
-              <span>
-                {darkMode ? <IconSun size={14} /> : <IconMoon size={14} />}
-                {' '}{t('menu.darkMode')}
-              </span>
-              <input type="checkbox" role="switch" aria-checked={!!darkMode} checked={!!darkMode} onChange={onToggleDarkMode} />
-              <span className="ka-more-toggle-track" />
-            </label>
+          {onSetTheme && (
+            <>
+              <div className="ka-more-menu-label">{t('menu.theme')}</div>
+              <div className="ka-theme-switcher">
+                {THEMES.map(({ id, icon: Icon, labelKey }) => (
+                  <button
+                    key={id}
+                    className={`ka-theme-option${theme === id ? ' ka-theme-option--active' : ''}`}
+                    onClick={() => onSetTheme(id)}
+                    aria-pressed={theme === id}
+                  >
+                    <Icon size={14} />
+                    <span>{t(labelKey)}</span>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">

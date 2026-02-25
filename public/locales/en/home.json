@@ -24,7 +24,11 @@
     "notifGoals": "Goal updates",
     "notifReminders": "Reminders",
     "notifPush": "Push notifications",
-    "darkMode": "Dark mode"
+    "darkMode": "Dark mode",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeEink": "E-Ink"
   },
   "admin": "Admin",
   "pro": "Pro",

@@ -12051,6 +12051,640 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   E-Ink Theme — Paper & Ink
+   Inspired by Kindle Paperwhite, reMarkable, Flexoki palette.
+   High contrast, no shadows, no gradients, no color, no motion.
+   ═══════════════════════════════════════════════════════════ */
+
+[data-theme="eink"] {
+    /* Paper surface — warm cream from Flexoki */
+    --rubin-ivory: #FFFCF0;
+    --rubin-slate: #1C1B1A;
+    --rubin-ivory-med: #F2F0E5;
+    --rubin-ivory-dark: #E6E4D9;
+    --rubin-accent: #575653;
+    --rubin-slate-muted: #6F6E69;
+    --rubin-text-secondary: #878580;
+    --rubin-border: #CECDC3;
+
+    --rubin-ivory-warm: #F2F0E5;
+    --rubin-ivory-cool: #E6E4D9;
+    --rubin-sepia: #DAD8CE;
+    --rubin-ink: #1C1B1A;
+    --rubin-ink-faint: rgba(28, 27, 26, 0.04);
+    --rubin-ink-light: rgba(28, 27, 26, 0.10);
+
+    /* All agent colors → monochrome grays */
+    --agent-kernel: #575653;
+    --agent-researcher: #575653;
+    --agent-coder: #575653;
+    --agent-writer: #575653;
+    --agent-analyst: #575653;
+
+    /* Semantic colors — desaturated */
+    --rubin-primary: #403E3C;
+    --rubin-primary-hover: #1C1B1A;
+    --rubin-error: #1C1B1A;
+    --rubin-error-light: rgba(28, 27, 26, 0.06);
+    --rubin-error-border: rgba(28, 27, 26, 0.2);
+    --kernel-success: #403E3C;
+    --kernel-success-bg: rgba(28, 27, 26, 0.04);
+    --kernel-warning: #6F6E69;
+    --kernel-warning-bg: rgba(28, 27, 26, 0.04);
+    --kernel-info: #575653;
+    --kernel-info-bg: rgba(28, 27, 26, 0.04);
+
+    /* No shadows — borders only */
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+
+    /* Sharper corners — printed feel */
+    --radius-xs: 1px;
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 4px;
+
+    /* No motion */
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-quick: 0ms;
+    --duration-normal: 0ms;
+    --duration-moderate: 0ms;
+    --duration-slow: 0ms;
+    --duration-dramatic: 0ms;
+    --duration-hero: 0ms;
+    --duration-settle: 0ms;
+    --loop-fast: 0s;
+    --loop-normal: 0s;
+    --loop-slow: 0s;
+    --loop-drift: 0s;
+}
+
+[data-theme="eink"] body {
+    background-color: #FFFCF0;
+    color: #1C1B1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Paper grain texture overlay */
+[data-theme="eink"] body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+}
+
+/* Disable all animations and transitions */
+[data-theme="eink"] *,
+[data-theme="eink"] *::before,
+[data-theme="eink"] *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+}
+
+/* ── E-Ink: Header ─────────────────────────────────────── */
+[data-theme="eink"] .ka-header {
+    background: #FFFCF0;
+    border-bottom: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-header-icon-btn {
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-menu-btn {
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: Chat Area ──────────────────────────────────── */
+[data-theme="eink"] .ka-chat {
+    background: #FFFCF0;
+}
+
+/* No ambient vignette */
+[data-theme="eink"] .ka-chat::after {
+    display: none;
+}
+
+/* ── E-Ink: Messages ───────────────────────────────────── */
+[data-theme="eink"] .ka-msg--kernel .ka-msg-bubble {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-msg--user .ka-msg-bubble {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border: 1px solid #1C1B1A;
+}
+
+[data-theme="eink"] .ka-msg--user .ka-msg-link {
+    color: #DAD8CE;
+}
+
+[data-theme="eink"] .ka-msg-link {
+    color: #403E3C;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+[data-theme="eink"] .ka-msg-hint {
+    color: #6F6E69;
+}
+
+/* ── E-Ink: Input Bar ──────────────────────────────────── */
+[data-theme="eink"] .ka-input-bar {
+    background: #FFFCF0;
+    border-top: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-input {
+    background: #F2F0E5;
+    color: #1C1B1A;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-input:focus {
+    border-color: #878580;
+}
+
+[data-theme="eink"] .ka-input::placeholder {
+    color: #9F9D96;
+}
+
+/* ── E-Ink: Buttons ────────────────────────────────────── */
+[data-theme="eink"] .ka-send {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border: 1px solid #1C1B1A;
+}
+
+[data-theme="eink"] .ka-gate-submit {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border: 1px solid #1C1B1A;
+}
+
+[data-theme="eink"] .ka-gate-submit:hover {
+    background: #403E3C;
+}
+
+/* ── E-Ink: Gate / Auth ────────────────────────────────── */
+[data-theme="eink"] .ka-gate-card {
+    background: #FFFCF0;
+    border: 1.5px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-gate-input {
+    background: #F2F0E5;
+    color: #1C1B1A;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-gate-input:focus {
+    border-color: #878580;
+}
+
+[data-theme="eink"] .ka-gate-social-btn {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-gate-social-btn:hover {
+    background: #E6E4D9;
+    border-color: #B7B5AC;
+}
+
+[data-theme="eink"] .ka-gate-social-apple,
+[data-theme="eink"] .ka-gate-social-twitter {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border-color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-gate-social-apple:hover,
+[data-theme="eink"] .ka-gate-social-twitter:hover {
+    background: #403E3C;
+    border-color: #403E3C;
+}
+
+[data-theme="eink"] .ka-gate-legal a {
+    color: #575653;
+}
+
+/* ── E-Ink: Conversation Drawer ────────────────────────── */
+[data-theme="eink"] .conv-drawer {
+    background: #FFFCF0;
+    border-right: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .conv-search-input {
+    background: #F2F0E5;
+    color: #1C1B1A;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .conv-item-snippet mark,
+[data-theme="eink"] .conv-item-title mark {
+    background: rgba(28, 27, 26, 0.1);
+}
+
+[data-theme="eink"] .conv-rename-input {
+    background: #F2F0E5;
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: More Menu ──────────────────────────────────── */
+[data-theme="eink"] .ka-more-menu {
+    background: #FFFCF0;
+    border-top: 1.5px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-more-drag-handle {
+    background: #CECDC3;
+}
+
+[data-theme="eink"] .ka-more-menu-item {
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-more-menu-item:hover {
+    background: #F2F0E5;
+}
+
+[data-theme="eink"] .ka-more-menu-item:active {
+    background: #E6E4D9;
+}
+
+[data-theme="eink"] .ka-more-menu-item--danger {
+    color: #1C1B1A;
+    font-weight: 600;
+}
+
+[data-theme="eink"] .ka-more-menu-divider {
+    background: #CECDC3;
+}
+
+[data-theme="eink"] .ka-more-toggle {
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-more-toggle-track {
+    background: #DAD8CE;
+}
+
+[data-theme="eink"] .ka-more-toggle-track::after {
+    background: #FFFCF0;
+    border: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-more-toggle input:checked + .ka-more-toggle-track {
+    background: #1C1B1A;
+}
+
+/* ── E-Ink: Tab Bar ────────────────────────────────────── */
+[data-theme="eink"] .ka-tab-bar {
+    background: #FFFCF0;
+    border-top: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-tab-item {
+    color: #878580;
+}
+
+[data-theme="eink"] .ka-tab-item--active {
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: Toast ──────────────────────────────────────── */
+[data-theme="eink"] .ka-toast {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border: none;
+    box-shadow: none;
+}
+
+/* ── E-Ink: Code Blocks ────────────────────────────────── */
+[data-theme="eink"] .ka-code-pre {
+    background: #F2F0E5;
+    color: #1C1B1A;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-code-header {
+    background: #E6E4D9;
+    border-bottom: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-code-copy,
+[data-theme="eink"] .ka-code-download {
+    background: #DAD8CE;
+    border: 1px solid #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-code-copy:hover,
+[data-theme="eink"] .ka-code-download:hover {
+    background: #CECDC3;
+}
+
+/* ── E-Ink: Modals ─────────────────────────────────────── */
+[data-theme="eink"] .ka-upgrade-modal,
+[data-theme="eink"] .ka-modal,
+[data-theme="eink"] .ka-share-modal {
+    background: #FFFCF0;
+    border: 1.5px solid #CECDC3;
+    box-shadow: none;
+}
+
+[data-theme="eink"] .ka-share-url-input,
+[data-theme="eink"] .ka-share-url-wrap input {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-import-input {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-import-preview {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+}
+
+/* ── E-Ink: Settings Panel ─────────────────────────────── */
+[data-theme="eink"] .ka-settings-user-summary {
+    background: #F2F0E5;
+    border: 1px solid #E6E4D9;
+}
+
+[data-theme="eink"] .ka-settings-section {
+    border-top-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-settings-section-header {
+    color: #878580;
+}
+
+[data-theme="eink"] .ka-settings-label {
+    color: #6F6E69;
+}
+
+[data-theme="eink"] .ka-settings-tier-badge {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+    color: #575653;
+}
+
+/* ── E-Ink: Approval Card ──────────────────────────────── */
+[data-theme="eink"] .ka-approval-card {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-approval-args {
+    background: #E6E4D9;
+}
+
+/* ── E-Ink: Notification Dropdown ──────────────────────── */
+[data-theme="eink"] .ka-notif-dropdown {
+    background: #FFFCF0;
+    border: 1px solid #CECDC3;
+    box-shadow: none;
+}
+
+/* ── E-Ink: Landing Page ───────────────────────────────── */
+[data-theme="eink"] .landing {
+    background: #FFFCF0;
+}
+
+[data-theme="eink"] .landing-hero-art {
+    opacity: 0.06;
+    filter: grayscale(100%);
+}
+
+[data-theme="eink"] .landing-feature-emblem {
+    filter: grayscale(100%);
+}
+
+[data-theme="eink"] .landing-plan {
+    background: #FFFCF0;
+    border: 1.5px solid #CECDC3;
+    box-shadow: none;
+}
+
+/* ── E-Ink: Misc ───────────────────────────────────────── */
+[data-theme="eink"] .ka-edit-input {
+    background: #F2F0E5;
+    color: #1C1B1A;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-events {
+    background: #F2F0E5;
+    border-left: 2px solid #878580;
+}
+
+[data-theme="eink"] .ka-home-nudge {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-home-nudge-btn {
+    background: #1C1B1A;
+    color: #FFFCF0;
+}
+
+[data-theme="eink"] .ka-empty-state-cta {
+    background: #1C1B1A;
+    color: #FFFCF0;
+}
+
+[data-theme="eink"] .ka-empty-state-cta:hover {
+    background: #403E3C;
+}
+
+[data-theme="eink"] .ka-particle-grid {
+    filter: grayscale(100%) contrast(1.2);
+}
+
+[data-theme="eink"] .ka-upgrade-emblem {
+    filter: grayscale(100%);
+}
+
+[data-theme="eink"] .ka-loading-splash {
+    background: #FFFCF0;
+}
+
+/* ── E-Ink: Briefing ───────────────────────────────────── */
+[data-theme="eink"] .ka-home-briefing-card {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+}
+
+[data-theme="eink"] .ka-home-briefing-btn {
+    background: #E6E4D9;
+    border: 1px solid #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-home-briefing-btn:hover {
+    background: #DAD8CE;
+}
+
+/* ── E-Ink: Insights ───────────────────────────────────── */
+[data-theme="eink"] .ka-insights-tab {
+    background: #F2F0E5;
+    border: 1px solid #CECDC3;
+    color: #575653;
+}
+
+[data-theme="eink"] .ka-insights-tab:hover {
+    background: #E6E4D9;
+}
+
+[data-theme="eink"] .ka-insights-tab--active {
+    background: #1C1B1A;
+    color: #FFFCF0;
+    border-color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-insights-badge {
+    background: #E6E4D9;
+    border: 1px solid #CECDC3;
+}
+
+/* ── E-Ink: Goals ──────────────────────────────────────── */
+[data-theme="eink"] .ka-goal-form-input,
+[data-theme="eink"] .ka-goal-form-textarea,
+[data-theme="eink"] .ka-goal-form-select {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: Scheduler ──────────────────────────────────── */
+[data-theme="eink"] .ka-sched-form-input,
+[data-theme="eink"] .ka-sched-form-select,
+[data-theme="eink"] .ka-sched-form-time {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: Workflow Builder ───────────────────────────── */
+[data-theme="eink"] .ka-wf-builder-input,
+[data-theme="eink"] .ka-wf-builder-textarea,
+[data-theme="eink"] .ka-wf-step-input,
+[data-theme="eink"] .ka-wf-step-agent {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+    color: #1C1B1A;
+}
+
+/* ── E-Ink: Voice Button ───────────────────────────────── */
+[data-theme="eink"] .ka-voice-btn:hover {
+    color: #1C1B1A;
+    border-color: #1C1B1A;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Theme Switcher (segmented control in MoreMenu)
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-theme-switcher {
+    display: flex;
+    gap: 0;
+    margin: 0 var(--space-lg);
+    border: 1px solid var(--rubin-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.ka-theme-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: var(--space-sm) var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--rubin-slate-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ka-theme-option + .ka-theme-option {
+    border-left: 1px solid var(--rubin-border);
+}
+
+.ka-theme-option:hover {
+    background: var(--rubin-ink-faint);
+}
+
+.ka-theme-option--active {
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+}
+
+[data-theme="dark"] .ka-theme-switcher {
+    border-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-theme-option + .ka-theme-option {
+    border-left-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-theme-option:hover {
+    background: rgba(196, 168, 130, 0.06);
+}
+
+[data-theme="dark"] .ka-theme-option--active {
+    background: #E4DFD5;
+    color: #1C1A18;
+}
+
+[data-theme="eink"] .ka-theme-switcher {
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-theme-option + .ka-theme-option {
+    border-left-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-theme-option:hover {
+    background: #F2F0E5;
+}
+
+[data-theme="eink"] .ka-theme-option--active {
+    background: #1C1B1A;
+    color: #FFFCF0;
+}
+
+/* ═══════════════════════════════════════════════════════════
    Loading Skeleton
    ═══════════════════════════════════════════════════════════ */
 
