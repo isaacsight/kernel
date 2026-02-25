@@ -77,14 +77,20 @@ Respond with ONLY valid JSON:
 
 async function selectAgents(
   message: string,
-  recentContext: string
+  recentContext: string,
+  loomContext?: string,
 ): Promise<{ agents: SwarmAgent[]; focus: string }> {
   try {
+    // Inject Loom composition history if available
+    const system = loomContext
+      ? `${SELECT_SYSTEM}\n\n---\n\n${loomContext}`
+      : SELECT_SYSTEM
+
     const result = await getProvider().json<{ agents: string[]; focus: string }>(
       recentContext
         ? `Recent conversation:\n${recentContext}\n\nUser message: ${message}`
         : `User message: ${message}`,
-      { system: SELECT_SYSTEM, tier: 'fast', max_tokens: 200 }
+      { system, tier: 'fast', max_tokens: 200 }
     )
 
     const ids = (result.agents || []).slice(0, 4)
@@ -169,7 +175,8 @@ export async function runSwarm(
   userMemoryContext: string,
   conversationHistory: { role: string; content: string }[],
   onProgress: (progress: SwarmProgress) => void,
-  onStream: (text: string) => void
+  onStream: (text: string) => void,
+  loomContext?: string,
 ): Promise<string> {
   // Phase 1: Select agents
   const progress: SwarmProgress = { phase: 'selecting', agents: [] }
@@ -180,7 +187,7 @@ export async function runSwarm(
     .map(m => `${m.role}: ${m.content.slice(0, 150)}`)
     .join('\n')
 
-  const { agents, focus } = await selectAgents(message, recentCtx)
+  const { agents, focus } = await selectAgents(message, recentCtx, loomContext)
 
   // Phase 2: Parallel contributions
   progress.phase = 'collaborating'
