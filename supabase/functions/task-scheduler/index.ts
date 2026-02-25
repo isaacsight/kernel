@@ -58,17 +58,17 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: CORS_HEADERS })
   }
 
-  // Verify CRON_SECRET to prevent unauthorized access (fail closed — require secret)
-  const cronSecret = Deno.env.get('CRON_SECRET')
-  if (!cronSecret) {
-    console.error('[task-scheduler] CRON_SECRET not configured — rejecting request')
+  // Verify caller is authorized via service role key (auto-injected by Supabase)
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (!serviceKey) {
+    console.error('[task-scheduler] SUPABASE_SERVICE_ROLE_KEY not available — rejecting request')
     return new Response(JSON.stringify({ error: 'Server misconfiguration' }), {
       status: 500,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
     })
   }
   const authHeader = req.headers.get('Authorization')
-  if (authHeader !== `Bearer ${cronSecret}`) {
+  if (authHeader !== `Bearer ${serviceKey}`) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
