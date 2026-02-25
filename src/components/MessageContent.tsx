@@ -713,7 +713,11 @@ export function inferFilename(lang: string, usedNames: Set<string>): string | nu
 
 // ─── Message Content (markdown + code blocks + artifacts) ─
 
-const CODE_BLOCK_REGEX = /```([^\n]*)\n([\s\S]*?)```/g
+// Hoisted outside component to avoid recreating on every render (stable reference for ReactMarkdown)
+const mdComponents = {
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
+  code: ({ children }: { children?: React.ReactNode }) => <code className="ka-inline-code">{children}</code>,
+}
 
 export function MessageContent({ text, isLatestMessage = false }: { text: string; isLatestMessage?: boolean }) {
   const { t } = useTranslation('common')
@@ -723,16 +727,11 @@ export function MessageContent({ text, isLatestMessage = false }: { text: string
   let lastIndex = 0
   let blockIndex = 0
 
-  const mdComponents = {
-    a: ({ href, children }: { href?: string; children?: React.ReactNode }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
-    code: ({ children }: { children?: React.ReactNode }) => <code className="ka-inline-code">{children}</code>,
-  }
-
-  // Reset regex state
-  CODE_BLOCK_REGEX.lastIndex = 0
+  // Create regex per call to avoid global lastIndex issues
+  const codeBlockRegex = /```([^\n]*)\n([\s\S]*?)```/g
 
   let match
-  while ((match = CODE_BLOCK_REGEX.exec(text)) !== null) {
+  while ((match = codeBlockRegex.exec(text)) !== null) {
     // Markdown text before code block
     if (match.index > lastIndex) {
       const before = text.slice(lastIndex, match.index)

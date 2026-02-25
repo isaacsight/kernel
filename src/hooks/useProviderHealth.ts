@@ -26,7 +26,7 @@ export function useProviderHealth(): ProviderHealthState {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
-    async function fetch() {
+    async function pollHealth() {
       try {
         const { data } = await supabase
           .from('provider_health')
@@ -49,8 +49,8 @@ export function useProviderHealth(): ProviderHealthState {
       }
     }
 
-    fetch()
-    intervalRef.current = setInterval(fetch, POLL_INTERVAL_MS)
+    pollHealth()
+    intervalRef.current = setInterval(pollHealth, POLL_INTERVAL_MS)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [])
 

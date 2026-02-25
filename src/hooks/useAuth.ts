@@ -46,15 +46,16 @@ export function useAuth(): AuthState {
 
   const isAdmin = checkIsAdmin(user);
 
-  // Use ref so checkSubscription stays stable (avoids re-triggering the auth effect)
+  // Use refs so checkSubscription stays stable (avoids re-triggering the auth effect)
   const userRef = useRef(user);
   userRef.current = user;
+  const mountedRef = useRef(true);
 
   const checkSubscription = useCallback(async (): Promise<boolean> => {
     if (checkIsAdmin(userRef.current)) return true;
     const sub = await getMySubscription();
     const active = sub?.status === 'active';
-    setIsSubscribed(active);
+    if (mountedRef.current) setIsSubscribed(active);
     return active;
   }, []);
 
@@ -209,6 +210,7 @@ export function useAuth(): AuthState {
 
     return () => {
       mounted = false;
+      mountedRef.current = false;
       subscription.unsubscribe();
     };
   }, [checkSubscription]);

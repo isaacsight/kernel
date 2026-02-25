@@ -14,7 +14,10 @@ const ALLOWED_ORIGINS = new Set([
 ])
 
 function isAllowedOrigin(origin: string): boolean {
-  return ALLOWED_ORIGINS.has(origin) || /^https?:\/\/localhost(:\d+)?$/.test(origin)
+  if (ALLOWED_ORIGINS.has(origin)) return true
+  // Only allow localhost in non-production environments
+  if (Deno.env.get('ENVIRONMENT') !== 'production' && /^https?:\/\/localhost(:\d+)?$/.test(origin)) return true
+  return false
 }
 
 /**

@@ -88,9 +88,11 @@ export function useReliabilityDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const cachedAt = useRef(0)
+  const dataRef = useRef(data)
+  dataRef.current = data
 
-  const fetch = useCallback(async (force = false) => {
-    if (!force && Date.now() - cachedAt.current < CACHE_TTL && data) return
+  const fetchDashboard = useCallback(async (force = false) => {
+    if (!force && Date.now() - cachedAt.current < CACHE_TTL && dataRef.current) return
     setLoading(true)
     setError(null)
     try {
@@ -103,11 +105,11 @@ export function useReliabilityDashboard() {
     } finally {
       setLoading(false)
     }
-  }, [data])
+  }, [])
 
-  useEffect(() => { fetch() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchDashboard() }, [fetchDashboard])
 
-  return { data, loading, error, refresh: () => fetch(true) }
+  return { data, loading, error, refresh: () => fetchDashboard(true) }
 }
 
 export function useUserReliability(userId: string | undefined) {
