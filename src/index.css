@@ -12081,6 +12081,9 @@ h4 {
     --agent-writer: #575653;
     --agent-analyst: #575653;
 
+    /* Vignette accent → monochrome */
+    --rubin-vignette: #575653;
+
     /* Semantic colors — desaturated */
     --rubin-primary: #403E3C;
     --rubin-primary-hover: #1C1B1A;
