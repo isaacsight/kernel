@@ -19,13 +19,17 @@ export function useWebPush() {
 
   // Check support + current subscription on mount
   useEffect(() => {
+    let cancelled = false
     const ok = 'serviceWorker' in navigator && 'PushManager' in window && !!VAPID_PUBLIC_KEY
     setIsSupported(ok)
     if (!ok) return
 
-    navigator.serviceWorker.ready.then(reg =>
-      reg.pushManager.getSubscription().then(sub => setIsSubscribed(!!sub))
-    )
+    navigator.serviceWorker.ready
+      .then(reg => reg.pushManager.getSubscription())
+      .then(sub => { if (!cancelled) setIsSubscribed(!!sub) })
+      .catch(() => { /* permission revoked or SW broken */ })
+
+    return () => { cancelled = true }
   }, [])
 
   const subscribe = useCallback(async () => {

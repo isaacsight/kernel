@@ -1104,7 +1104,7 @@ function EngineChat() {
       {fileAttachments.attachedFiles.length > 0 && (
         <div className="ka-file-chips">
           {fileAttachments.attachedFiles.map((f, i) => (
-            <span key={i} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}${isAudioFile(f) ? ' ka-file-chip--audio' : ''}`}>
+            <span key={`${f.name}-${f.size}-${f.lastModified}`} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}${isAudioFile(f) ? ' ka-file-chip--audio' : ''}`}>
               {isAudioFile(f) ? <IconMic size={12} /> : <IconAttach size={12} />}
               <span className="ka-file-chip-name">{f.name}</span>
               <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>

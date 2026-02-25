@@ -57,13 +57,14 @@ export function useAccountSettings(
       setUsernameAvailable(null)
       return
     }
+    let cancelled = false
     usernameCheckRef.current = setTimeout(async () => {
       const { data } = await supabase.rpc('check_name_available', {
         p_field: 'username', p_value: trimmed,
       })
-      setUsernameAvailable(data ?? null)
+      if (!cancelled) setUsernameAvailable(data ?? null)
     }, 400)
-    return () => clearTimeout(usernameCheckRef.current)
+    return () => { cancelled = true; clearTimeout(usernameCheckRef.current) }
   }, [username, origUsername])
 
   // Debounced display name availability check
@@ -74,13 +75,14 @@ export function useAccountSettings(
       setDisplayNameAvailable(null)
       return
     }
+    let cancelled = false
     displayNameCheckRef.current = setTimeout(async () => {
       const { data } = await supabase.rpc('check_name_available', {
         p_field: 'display_name', p_value: trimmed,
       })
-      setDisplayNameAvailable(data ?? null)
+      if (!cancelled) setDisplayNameAvailable(data ?? null)
     }, 400)
-    return () => clearTimeout(displayNameCheckRef.current)
+    return () => { cancelled = true; clearTimeout(displayNameCheckRef.current) }
   }, [displayName, origDisplayName])
 
   const saveProfile = useCallback(async () => {

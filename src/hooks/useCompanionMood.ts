@@ -68,13 +68,13 @@ export function useCompanionMood(timePhase: TimePhase, isRecentlyActive: boolean
       hasAppliedDecay.current = true
       store._applyRetroactiveDecay()
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [store])
 
   // Decay interval — every 60s
   useEffect(() => {
     const interval = setInterval(() => store.tickDecay(), 60_000)
     return () => clearInterval(interval)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [store])
 
   // Compute energy from time-of-day + activity
   const [energy, setEnergy] = useState(() =>
