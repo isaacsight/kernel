@@ -94,15 +94,11 @@ server.tool(
                     }
                 }
 
-                const res = await fetch(`${SUPABASE_URL}/functions/v1/notify-webhook`, {
+                const res = await fetch(webhookUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${SERVICE_KEY}`,
-                        apikey: SUPABASE_KEY,
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        webhook_url: webhookUrl,
+                        username: 'Kernel — Claude Code',
                         content: `🤖 **Claude Code Notification**\n\n${message}`,
                     }),
                 })

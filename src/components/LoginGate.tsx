@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { usePWAInstall } from '../hooks/usePWAInstall'
 import { IconClose, IconMail } from './KernelIcons'
-import { VARIANT, TRANSITION, EASE, DURATION } from '../constants/motion'
+import { ParticleGrid } from './ParticleGrid'
+import { LandingHero } from './LandingHero'
+import { LandingFeatures } from './LandingFeatures'
+import { VARIANT, TRANSITION } from '../constants/motion'
 
 export function LoginGate() {
   const { t } = useTranslation('auth')
@@ -95,56 +98,19 @@ export function LoginGate() {
 
   return (
     <div className="landing">
-      {/* Hero */}
-      <motion.section
-        className="landing-hero"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={TRANSITION.HERO}
-      >
-        <img className="landing-hero-art" src={`${import.meta.env.BASE_URL}concepts/hero-darkmode.svg`} alt="" aria-hidden="true" />
-        <img className="landing-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
-        <h1 className="landing-title">{t('login.title')}</h1>
-        <p className="landing-subtitle">
-          {t('login.subtitle')}
-        </p>
-        <button className="landing-cta" onClick={() => setShowAuth(true)}>
-          {t('login.cta')}
-        </button>
-        <p className="landing-hint">{t('login.hint')}</p>
-      </motion.section>
+      {/* Hero — full-viewport particle background */}
+      <LandingHero onGetStarted={() => setShowAuth(true)} />
 
-      {/* Features */}
-      <motion.section
-        className="landing-features"
-        variants={VARIANT.FADE_UP_LG}
-        initial="hidden"
-        animate="visible"
-        transition={TRANSITION.FEATURE(0.2)}
-      >
-        <div className="landing-feature">
-          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
-          <h3>{t('login.feature1Title')}</h3>
-          <p>{t('login.feature1Desc')}</p>
-        </div>
-        <div className="landing-feature">
-          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-researcher.svg`} alt="" aria-hidden="true" />
-          <h3>{t('login.feature2Title')}</h3>
-          <p>{t('login.feature2Desc')}</p>
-        </div>
-        <div className="landing-feature">
-          <img className="landing-feature-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-writer.svg`} alt="" aria-hidden="true" />
-          <h3>{t('login.feature3Title')}</h3>
-          <p>{t('login.feature3Desc')}</p>
-        </div>
-      </motion.section>
+      {/* Features — 3 agent cards with mini ParticleGrids */}
+      <LandingFeatures />
 
       {/* Pricing */}
       <motion.section
         className="landing-pricing"
         variants={VARIANT.FADE_UP_LG}
         initial="hidden"
-        animate="visible"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
         transition={TRANSITION.FEATURE(0.4)}
       >
         <div className="landing-plan">
@@ -213,8 +179,10 @@ export function LoginGate() {
                 </div>
               ) : (
                 <>
-                  {/* Normal Auth State */}
-                  <img className="landing-auth-logo" src={`${import.meta.env.BASE_URL}logo-mark.svg`} alt="Kernel" />
+                  {/* Particle logo in auth modal */}
+                  <div className="landing-auth-particle-logo">
+                    <ParticleGrid size={72} interactive={false} energetic />
+                  </div>
                   <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>
 
                   <div className="ka-gate-social">

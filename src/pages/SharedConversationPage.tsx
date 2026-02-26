@@ -49,7 +49,7 @@ export function SharedConversationPage() {
   const [forking, setForking] = useState(false)
 
   const handleSharePage = useCallback(async () => {
-    const url = window.location.href
+    const url = id ? `${window.location.origin}/s/${id}` : window.location.href
     const title = data?.title || 'Kernel Conversation'
     try {
       if (navigator.share) {
@@ -60,7 +60,7 @@ export function SharedConversationPage() {
     } catch {
       // user cancelled or not supported
     }
-  }, [data])
+  }, [id, data])
 
   const handleContinue = useCallback(async () => {
     if (!data || forking) return

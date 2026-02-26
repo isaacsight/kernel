@@ -73,7 +73,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
     ]).then(([existing, count]) => {
       if (cancelled) return
       if (existing) {
-        const url = `${window.location.origin}${window.location.pathname}#/shared/${existing.id}`
+        const url = `${window.location.origin}/s/${existing.id}`
         setShareUrl(url)
         setExistingId(existing.id)
         setIsExisting(true)
@@ -109,7 +109,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
       })
 
       if (shareId) {
-        const url = `${window.location.origin}${window.location.pathname}#/shared/${shareId}`
+        const url = `${window.location.origin}/s/${shareId}`
         setShareUrl(url)
         setExistingId(shareId)
         setIsExisting(true)

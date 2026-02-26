@@ -4,133 +4,119 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-25, latest)
+## Current Session (2026-02-26, latest)
 
 ### Accomplished This Session
 
+#### Comprehensive Legal Update — 20 New Clauses
+Researched industry standards (EU AI Act, GDPR, CCPA/CPRA, updated COPPA, AI SaaS best practices) and identified 20 gaps across ToS and Privacy Policy. Implemented all of them:
+
+**Terms of Service (10 new clauses):**
+1. AI interaction disclosure (EU AI Act compliance)
+2. Operator IP protection clause
+3. AI-generated content IP disclaimer (post-NYT v. OpenAI)
+4. Account suspension/termination rights
+5. Service availability + force majeure
+6. Limitation of liability with cap (12-month fees or $100)
+7. User indemnification
+8. 30-day modification notice period
+9. Governing law (California) + LA County jurisdiction
+10. Binding arbitration (AAA) + class action waiver + severability + entire agreement
+
+**Privacy Policy (10 new disclosures):**
+1. Automated decision-making transparency (agent routing, rate limiting, memory extraction, convergence)
+2. Cookie/localStorage disclosure (JWT, Zustand, PostHog, OAuth flags)
+3. PostHog, Sentry, Resend disclosed as sub-processors (with privacy policy links)
+4. Sub-processor DPA references
+5. International data transfers (US hosting, SCCs, EU-US DPF)
+6. Encryption at rest (AES-256 via Supabase/AWS)
+7. Data breach notification commitment (72h)
+8. Right to restrict processing + automated decision rights (GDPR Art. 18 & 22)
+9. Per-activity GDPR legal basis mapping (contract, consent, legitimate interest)
+10. Expanded COPPA procedures (suspension, deletion steps, parent notification)
+
+- Also expanded CCPA→CPRA coverage, added 30-day change notice, data controller identification
+- Commit: `5a4b21e18` (shipped via 6-gate pipeline)
+
+#### Legal Accuracy Audit — Full Codebase Verification
+Ran 5 parallel verification agents against every claim in both legal documents. Results:
+
+**Verified as accurate (no changes needed):**
+- All 9 security claims (TLS, JWT, RLS, rate limits, SSRF, audit logs, AES-256, input validation, server-side count protection)
+- All 5 deletion paths (conversations, memory, knowledge graph, goals, account)
+- 20 messages / 24h rolling window (`FREE_LIMIT = 20` + `027_24h_rolling_window.sql`)
+- Stripe integration (no card data stored locally)
+- Agent routing via Haiku, memory extraction, convergence synthesis
+- Zustand store name `sovereign-kernel`, legal agreement at signup, shared conversations read-only
+
+**Fixed — 3 sub-processor disclosure errors:**
+1. **Removed Perplexity** — was never used; web search uses Claude's built-in `web_search_20250305` tool
+2. **Added OpenAI** — transcription (Whisper API), TTS, and optional LLM provider (GPT-4o)
+3. **Added Google + NVIDIA** — optional Gemini and Llama LLM providers available in claude-proxy
+4. **Clarified multi-provider data flow** — alternative providers only receive data when user explicitly selects their models
+
+- Commit: `0fe9f5300` (deployed, HTTP 200 confirmed)
+
+#### Earlier This Session: Backlog Sweep + Thinking Toggle
+- Backlog sweep: animation tokens, design polish, convergence UI (all resolved), dep updates (9 packages), MCP dotenv fix, share link preview research
+- Thinking toggle redesign: concentric-ring icon, circular 40px button, pulse animation
+- Commits: `4bfe5432b`, `a4cf62c99` (both shipped earlier today)
+
+---
+
+## Previous Session (2026-02-25)
+
+### Accomplished
+
 #### Pro Features — E2E Testing & Bug Fixes
-Built and tested 6 Pro features (Thinking Mode, Vision, Voice Loop, Document Analysis, Agentic Workflows, Proactive Briefings v2), then ran full E2E verification. Found and fixed 3 critical bugs:
-
-**Bug 1 — Pro users blocked from document/image analysis** (`claude-proxy/index.ts`):
-- Document and image limit checks were OUTSIDE the `isFreeUser` block (ended at line 1210, checks at 1212-1243), so they ran for ALL users including Pro, returning `document_analysis_pro_only` 403.
-- Fix: Wrapped the entire document/image check block inside `if (isFreeUser) { ... }`.
-
-**Bug 2 — File content lost when routed through swarm/workflow** (`useChatEngine.ts`):
-- When files attached (PDFs/images as `ContentBlock[]`), the classifier could route to swarm/workflow/research paths that only accept `string` content, stripping the base64 data.
-- Fix: Added `const hasFileContent = Array.isArray(userContent)` guard. All non-direct paths gated with `!hasFileContent &&`.
-
-**Bug 3 — AgenticWorkflow url_fetch receives descriptions instead of URLs** (`AgenticWorkflow.ts`):
-- Planner generated `{ tool: 'url_fetch', input: 'Fetch detailed information...' }` — descriptions, not URLs. Working memory (containing search results with URLs) was only enriched for `analyze`/`draft` tools.
-- Fix: (1) Changed enrichment to apply to all non-`web_search` tools. (2) Added URL regex extraction in the `url_fetch` handler.
-
-Commits: `a35819b1d` — all three fixes.
+Built and tested 6 Pro features. Found and fixed 3 critical bugs:
+- **Bug 1**: Pro users blocked from document/image analysis — gating checks outside `isFreeUser` block
+- **Bug 2**: File content lost when routed through swarm/workflow — `ContentBlock[]` guard added
+- **Bug 3**: AgenticWorkflow url_fetch receiving descriptions instead of URLs — enrichment + regex fix
+- Commit: `a35819b1d`
 
 #### Tier Features & Web Search for Free Users
-- **Web search enabled for free users**: Removed `payload.web_search = false` from the free-user block in `claude-proxy`.
-- **Updated all 24 locale `auth.json` files** with correct tier features:
-  - Free: "20 messages per day" (was "10 messages to start"), web search, all specialists, file creation
-  - Pro: "Extended thinking" (was "Deep research"), "Document & image analysis" (was "Multi-agent collaboration"), "Voice loop & agentic workflows" (was "Persistent memory")
-- **Updated `home.json`** upgrade wall features to match.
+- Web search enabled for free users, updated all 24 locale auth.json files, home.json upgrade features
 - Commit: `917ea2def`
 
 #### i18n Cache Busting
-- **`vite.config.ts`**: Added `__BUILD_TIME__` define constant (`Date.now().toString(36)`)
-- **`src/i18n.ts`**: Added `queryStringParams: { v: __BUILD_TIME__ }` to i18next-http-backend config
-- Each build generates a unique cache-busting query param, preventing stale locale files from PWA service worker or browser cache.
+- `__BUILD_TIME__` define + `queryStringParams` in i18next-http-backend
 - Commit: `063895a16`
 
-#### Full E2E Verification (Playwright)
-**Free account** (`kernel-test-bot@antigravitygroup.co`):
-- No PRO badge, no thinking toggle, message counter visible (12 remaining) — PASS
-- Web search works (sent "What happened in the news today?" — got real news with sources) — PASS
-
-**Pro account** (`kernel-pro-test@antigravitygroup.co`):
-- PRO badge visible, thinking toggle present, no message counter — PASS
-- Extended thinking: "Thought for 9s" + "Thought for 8s" blocks appeared — PASS
-- Document analysis: PDF uploaded, all 3 key points extracted, no 403 — PASS
-- Agentic workflows: 6/6 steps complete, full research report with sources (Toyota/QuantumScape/Samsung SDI comparison) — PASS
-- Voice button enabled — PASS
-- Convergence engine running ("Produced 3 insights") — PASS
-
-**Landing page**: Correct tier features confirmed on live site.
-
-#### Ship Pipeline — Full 6-Gate Pass
-`063895a16` shipped to kernel.chat:
-- **Gate 1 — Security: PASS** — No secrets, 0 prod vulns, edge auth verified
-- **Gate 2 — QA: PASS** — 0 type errors, clean build (1072 modules, 2.21s)
-- **Gate 3 — Design: PASS** — No new Rubin violations, data-only changes
-- **Gate 4 — Performance: PASS** — JS 93KB gzip (31% budget), CSS 37KB gzip (25% budget)
-- **Gate 5 — DevOps: PASS** — Deployed, HTTP 200 (303ms), uptime green
-- **Gate 6 — Product: PASS** — Landing, auth, home, mobile 375x812 all verified
-
 #### Email Announcement
-- Sent product update email to all 32 registered users via Resend
-- E-ink styled design: Courier Prime headers, EB Garamond body, ivory/amethyst palette, table layout for Pro features
-- Subject: "What's New: Smarter Pro Features & Free Web Search"
-
-#### Discord Webhook
-- Added `DISCORD_WEBHOOK_URL` to `.env` for ship pipeline notifications
+- Sent e-ink styled product update email to all 32 users via Resend
 
 ---
 
 ## Previous Session (2026-02-24)
 
 ### Accomplished
-
-#### Full System Debug Audit — 27 Bugs Found & Fixed
-Deep diagnostic sweep across entire codebase (3 parallel agents: runtime errors, edge functions, React hooks). All issues fixed, committed, and deployed.
-
-**Critical fixes (7):** EnginePage Rules of Hooks, useChatEngine stale closures (messages, isThinking, classifyIntent), claude-proxy free-tier model bypass, task-scheduler auth bypass, identity-recovery uniqueness bypass.
-
-**Medium fixes (11):** Engine subscription leak, unbound err, scroll tracking, send-notification no-op, send-inquiry-email false success, import-conversation size limit, create-portal response body, delete-account premature audit, SSRF DNS rebinding, send-announcement pagination.
-
-**Low fixes (9):** MessageContent stable refs, useProviderHealth shadow, file attachment keys, useWebPush guard, useReliabilityDashboard deps, useCompanionMood deps, useAccountSettings cancelled guards, useAuth mountedRef, CORS localhost restriction.
-
-Commits: `af49f1837`, `502d5b3aa`, `479d58c00`
-
-#### Privacy Policy, Terms of Service & User Agreement Flow
-PrivacyPage.tsx, TermsPage.tsx, router routes, LoginGate legal text, auth.json i18n, .ka-legal-page CSS. Mirror seeded for 10 users. Commit: `e35906010`
-
-#### Convergence — Multi-Agent Perception Synthesis
-Convergence.ts (6 facet lenses), migration 033, SupabaseClient mirror methods, useChatEngine mirror integration. Commit: `36fa92481`
-
-#### Free-Tier Daily Message Limit
-Migrations 025-027 (protect trigger, daily count, 24h rolling window), claude-proxy JSONB response, FreeLimitError.resetsAt, upgrade wall reset time display, in-app + push notifications. Commits: `21832166`, `9b3cf8f4`, `78c23e82`, `d307b5d7`
-
-#### Unified 50MB Upload Limit + Claude Proxy Fix
-Flat 50MB everywhere (chat, avatars, transcription). Claude proxy payload limits raised from 32KB/256KB to 50MB. Commits: `b97a7186`, `6c60cd94`, `71a1fbfa`
+- Full system debug audit — 27 bugs found & fixed (7 critical, 11 medium, 9 low)
+- Privacy Policy, Terms of Service & user agreement flow
+- Convergence — multi-agent perception synthesis (6 facet lenses)
+- Free-tier daily message limit (20/24h rolling window)
+- Unified 50MB upload limit + Claude proxy fix
 
 ---
 
 ## Previous Sessions (2026-02-17 to 2026-02-23)
 
 ### Accomplished
-- Account settings panel (profile, email, password, linked accounts, avatar upload, re-auth)
-- Onboarding redesign (single-screen ParticleGrid + input)
-- Set new password flow (PASSWORD_RECOVERY detection, modal)
-- Conversation search polish (trigram indexes, highlights, result count)
-- Backend hardening (rate limits, audit trail, input validation, SSRF fix)
-- Pro usage dashboard
-- Entity system 32-bit upgrade + canvas particle performance
-- ChatGPT conversation import
-- P12-P14: Design overhaul, visual identity, CSS token system
-- P11: Mobile UI/UX audit & fixes
-- P8-P10: Writing audit, usage cost tracking, auto model selection
-- P1-P7: Dark mode, test suite, panels, i18n, artifact system, agent audit, Discord bot, Stripe
+- Account settings, onboarding redesign, set new password flow
+- Conversation search, backend hardening, Pro usage dashboard
+- Entity system 32-bit upgrade, ChatGPT import
+- P1-P14: Dark mode, test suite, panels, i18n, artifacts, agent audit, Discord bot, Stripe, design overhaul, mobile audit, writing audit, usage tracking
 
 ---
 
 ## Ongoing Backlog
 
-- **All prior work items**: DONE (P1-P15, backend hardening, account settings, legal, convergence, free-tier limits, upload limits, Pro features)
-- **Pro features**: DONE (thinking mode, vision, voice loop, document analysis, agentic workflows, proactive briefings)
-- **Tier copy alignment**: DONE (24 locales updated, landing page matches reality)
-- **Web search for free users**: DONE
-- **i18n cache busting**: DONE
-- **Next candidates**: Animation token system, convergence UI (show users what the mirror sees?)
-- **Design polish backlog** (from ship Gate 3): Add `--font-prose`/`--font-meta` token aliases to `:root`, tokenize `#A78BFA` dark link color, add 44px min touch target to `.ka-legal-back`, raise `.ka-gate-legal` opacity from 0.5 to 0.6
-- **Dep updates available**: @sentry/react, @supabase/supabase-js, @types/react, i18next, posthog-js, react-router-dom (all patch/minor). Hold framer-motion v12 + lucide-react v0.575 (breaking).
-- **Known limitations**: Claude/Gemini share links don't work (CSR — no server-side content)
+- **All prior work items**: DONE (P1-P15, backend, accounts, legal, convergence, limits, Pro features, thinking toggle, animation tokens, design polish, dep updates, MCP dotenv fix, legal compliance overhaul, legal accuracy audit)
+- **Data export endpoint**: Policy promises "request a copy in a structured format" but currently requires manual email. Build `/export-user-data` edge function for automated GDPR/CCPA portability.
+- **Share link previews**: Research done — Cloudflare Workers recommended. Implementation is a separate project (~2-4h). Not yet built.
+- **Dep updates held**: framer-motion v12 + lucide-react v0.575 (breaking changes, need testing)
+- **Discord webhook MCP**: Code fix shipped (`4bfe5432b`), but requires MCP server restart to take effect. Verify after restart.
+- **Known limitations**: Claude/Gemini share links produce blank previews (CSR — no server-side content). Fix: Cloudflare Workers proxy (see research above).
 
 ## Key Decisions Made
 
@@ -150,8 +136,14 @@ Flat 50MB everywhere (chat, avatars, transcription). Claude proxy payload limits
 - Convergence: 6 facet agents, Haiku extraction every 3 msgs, Sonnet convergence every ~5 msgs
 - Legal pages: Plain-language React components at `/#/privacy` and `/#/terms`
 - File routing: When `ContentBlock[]` (images/PDFs) attached, always use direct Claude call — never route through swarm/workflow/research (they only accept strings)
-- Web search: available to ALL users (free and Pro), not gated
+- Web search: uses Claude's built-in `web_search_20250305` tool (NOT Perplexity), available to ALL users
 - i18n cache busting: `__BUILD_TIME__` define + `queryStringParams` in i18next-http-backend
+- Thinking toggle: Concentric-ring icon (`IconThinking`), circular 40px button matching voice button, pulse animation when active, `IconBrain` (stacked layers) kept for menu
+- Animation tokens: `src/constants/motion.ts` (JS) synced with CSS custom properties in `:root`. All CSS transitions must use `var(--duration-*)` and `var(--ease-*)` — no hardcoded values.
+- MCP dotenv: Always use `config({ path: resolve(__dirname, '..', '.env') })` — never bare `config()`.
+- Share link previews: Cloudflare Workers as crawler-aware proxy (recommended approach for GH Pages + hash routing)
+- Legal compliance: ToS governed by California law, LA County courts, AAA arbitration, class action waiver. Privacy Policy maps GDPR legal bases per activity, 72h breach notification, full sub-processor disclosure (Supabase, Anthropic, OpenAI, Google, NVIDIA, Stripe, PostHog, Sentry, Resend).
+- Multi-provider LLM: claude-proxy supports Anthropic (default), OpenAI, Google Gemini, NVIDIA Llama. Alternative providers only receive data when user explicitly selects their model.
 
 ## Test Accounts
 
