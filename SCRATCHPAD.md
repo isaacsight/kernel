@@ -8,6 +8,43 @@
 
 ### Accomplished This Session
 
+#### Full System Debug Audit — 27 Bugs Found & Fixed
+Deep diagnostic sweep across entire codebase (3 parallel agents: runtime errors, edge functions, React hooks). All issues fixed, committed, and deployed.
+
+**Critical fixes (7):**
+- `EnginePage.tsx`: Rules of Hooks violation — `useState` after conditional return. Extracted `EnginePageAuthed` component so hooks always run unconditionally.
+- `useChatEngine.ts`: Stale `messages` closure in `sendMessage` — added `messagesRef`, all reads across awaits now use `messagesRef.current`.
+- `useChatEngine.ts`: `classifyIntent` outside try/catch — if Haiku classifier throws, UI frozen permanently. Wrapped with fallback to kernel agent.
+- `useChatEngine.ts`: Stale `isThinking` in `updateKernelMsg` — added `isThinkingRef`, callback reads ref instead of closure.
+- `claude-proxy`: Free-tier model lock bypass — check used legacy aliases only, not full model IDs. Built complete `allowedFreeModels` Set from `TIER_MODELS[*].fast`.
+- `task-scheduler`: Auth bypass if `CRON_SECRET` not set — changed to fail closed (500 if missing).
+- `identity-recovery`: Username uniqueness bypass on RPC error — `available` was null not false, skipping check. Now returns 503 on RPC failure.
+
+**Medium fixes (11):**
+- `useKernelAgent.ts`: Engine subscription leak — not unsubscribed when drawer closes. Fixed cleanup to run on `isOpen=false`.
+- `claude-proxy`: Unbound `err` in catch block — `catch {}` → `catch (err) {}`.
+- `useScrollTracking.ts`: Stale `messageCount` in scroll handler + auto-scroll jerk on manual scroll. Removed messageCount dep from listener, auto-scroll only on count increase.
+- `send-notification`: Silent no-op with empty env vars → explicit null check, returns 500. Also gated in-app notification behind `channels.includes('in_app')`.
+- `send-inquiry-email`: Returns success when both emails fail → tracks `notifyOk`/`confirmOk`, returns 502 if both fail.
+- `import-conversation`: `MAX_HTML_SIZE` never enforced → added `safeReadText()` helper, all 4 fetch functions enforce 2MB limit.
+- `create-portal`: Stripe response bodies not consumed on failure → added `.text().catch()` on all failed paths.
+- `delete-account`: Premature audit + unchecked Stripe response → moved audit after deletion, consume Stripe response body.
+- `_shared/validate.ts`: SSRF bypass via DNS rebinding (`169.254.169.254.nip.io`) → extracts embedded IPv4 from hostname and checks against blocklist.
+- `send-announcement`: `listUsers()` capped at 1000 → added pagination loop. Also stripped email list from response body.
+
+**Low fixes (9):**
+- `MessageContent.tsx`: Hoisted `mdComponents` outside component (stable ref for ReactMarkdown), replaced module-level `/g` regex with per-call instance.
+- `useProviderHealth.ts`: Renamed inner `fetch` to `pollHealth` — no longer shadows `window.fetch`.
+- `EnginePage.tsx`: File attachment chips use `name+size+lastModified` as key instead of array index.
+- `useWebPush.ts`: Added `cancelled` guard + `.catch()` on `serviceWorker.ready` promise.
+- `useReliabilityDashboard.ts`: Read `data` via ref instead of `useCallback` dep, fixed effect dependency.
+- `useCompanionMood.ts`: Added `store` to both decay effect dependency arrays.
+- `useAccountSettings.ts`: Added `cancelled` guards on debounced RPC callbacks.
+- `useAuth.ts`: Added `mountedRef` to gate `setIsSubscribed` after unmount.
+- `_shared/cors.ts`: Restrict localhost CORS to non-production environments.
+
+Commits: `af49f1837`, `502d5b3aa`, `479d58c00` — all pushed to origin/main, deployed to kernel.chat. 9 edge functions redeployed twice (for medium + low passes).
+
 #### Privacy Policy, Terms of Service & User Agreement Flow
 - **`src/pages/PrivacyPage.tsx`** (new): Comprehensive privacy policy — 11 sections covering information collected, The Mirror/Convergence system (all 6 facet lenses documented), data usage, what we don't do, third-party services (Supabase, Anthropic, Stripe, Perplexity), data retention, security measures, user rights (CCPA + GDPR), children, changes, contact. Written in plain language.
 - **`src/pages/TermsPage.tsx`** (new): Terms of service — 11 sections covering service description, accounts, content ownership, conversation analysis consent, acceptable use, Pro subscriptions, limitations/liability, free tier limits, data deletion, changes, contact.
@@ -18,13 +55,17 @@
 - Mirror seeded for 10 users (30 facets, 14 convergence insights) via direct SQL.
 - Committed `e35906010`, pushed to origin/main, deployed to kernel.chat.
 
-#### Ship Pipeline — Full 6-Gate Pass
-- **Gate 1 — Security: PASS** — No P0/P1 findings. All 20 edge functions auth-verified. Clean secrets scan. 8 dev-only npm vulns (discord.js/blessed-contrib, not client-shipped). SSRF, CORS, iframe sandboxing all verified.
-- **Gate 2 — QA: PASS** — Zero type errors. Clean build. 1059 modules, 56 precache entries (518KB). Bundle sizes stable vs previous ship.
-- **Gate 3 — Design: PASS** — No critical Rubin violations. 4 non-blocking warnings: `--font-prose`/`--font-meta` tokens undefined (should alias `--font-serif`/`--font-mono`), hardcoded `#A78BFA` dark link color, `.ka-legal-back` touch target below 44px, `.ka-gate-legal` opacity:0.5 contrast concern.
+#### Ship Pipeline — Two Full 6-Gate Passes
+**Pass 1** (`e35906010` — legal pages):
+- All 6 gates PASS. GH Pages 200 (348ms). JS 92.4KB gzip (31% budget). No P0/P1 security findings. No critical design violations.
+
+**Pass 2** (`af49f1837` — reliability hardening + debug audit):
+- **Gate 1 — Security: PASS** — No P0/P1. Clean secrets scan. All 20 edge functions auth-verified. 0 production npm vulns.
+- **Gate 2 — QA: PASS** — Zero type errors. Clean build. 1059 modules, 56 precache entries (518KB). Bundle sizes stable.
+- **Gate 3 — Design: PASS** — No critical Rubin violations. 1 new minor (inline style in DeleteAccountModal). Pre-existing: touch target, contrast warnings.
 - **Gate 4 — Performance: PASS** — Main JS 92.4KB gzip (31% of 300KB budget). CSS 30.8KB gzip (21% of 150KB budget). 0 npm vulnerabilities. 6 safe patch/minor updates available, 2 majors held (framer-motion v12, lucide-react v0.575).
-- **Gate 5 — DevOps: PASS** — Deploy live. GH Pages 200 (348ms), Supabase 401, Claude 415 — all nominal. Consistent with 8+ prior deploys.
-- **Gate 6 — Product: PASS** — Landing, privacy, terms all render on live site. Auth modal shows legal agreement links. Mobile 375x812 layout verified. No regressions.
+- **Gate 5 — DevOps: PASS** — Deploy live. GH Pages 200 (487ms), Supabase 401, Claude 415 — all nominal.
+- **Gate 6 — Product: PASS** — Landing, auth modal (with legal links), privacy, terms, authenticated home all verified. Mobile 375x812 clean. No regressions.
 
 #### Convergence — Multi-Agent Perception Synthesis
 - **`src/engine/Convergence.ts`** (new): Core convergence engine. 6 facet lenses — Kernel (relationship), Researcher (curiosity), Coder (craft), Writer (voice), Analyst (judgment), Curator (arc). `extractFacet()` runs 1 Haiku call per conversation for the active agent's dimension. `converge()` runs 1 Sonnet call every ~5 conversations, sharing all facet observations and producing 2-4 emergent insights. `formatMirrorForPrompt()` injects mirror context into agent system prompts. `shouldConverge()` triggers on 3+ updated facets or every 5 messages. `resolveFacetAgent()` maps non-facet agents to kernel lens.
