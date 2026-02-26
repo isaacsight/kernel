@@ -850,5 +850,6 @@ export function useChatEngine(params: UseChatEngineParams) {
     inputRef, sendMessage, handleSubmit, stopStreaming,
     messageCountRef,
     handleBriefingGoDeeper, handleBriefingAddGoal,
+    userMirror,
   }
 }

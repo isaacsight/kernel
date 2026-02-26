@@ -212,5 +212,25 @@
     "toast": {
       "revoked": "Share link revoked"
     }
+  },
+  "mirror": {
+    "title": "The Mirror",
+    "emptyTitle": "The mirror is still forming.",
+    "emptyDesc": "Keep talking \u2014 Kernel's agents are learning to see you from different angles.",
+    "convergenceTitle": "What the mirror sees",
+    "convergenceDesc": "Insights that only emerge when multiple agents compare notes.",
+    "facetsTitle": "Agent perspectives",
+    "facetsDesc": "Each agent observes a different dimension of who you are.",
+    "observations": "observations",
+    "patterns": "Patterns",
+    "convergenceCount": "Converged {{count}} times",
+    "dimensions": {
+      "relationship": "Relationship",
+      "curiosity": "Curiosity",
+      "craft": "Craft",
+      "voice": "Voice",
+      "judgment": "Judgment",
+      "arc": "Arc"
+    }
   }
 }

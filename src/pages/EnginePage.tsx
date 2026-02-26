@@ -59,6 +59,7 @@ const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ d
 const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
 const ReliabilityDashboard = lazyRetry(() => import('../components/ReliabilityDashboard').then(m => ({ default: m.ReliabilityDashboard })))
+const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m => ({ default: m.MirrorPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -154,6 +155,7 @@ function openFeaturePanel(
   panels.closeOtherPanels(featureId)
   switch (featureId) {
     case 'insights': panels.setShowInsightsPanel(true); break
+    case 'mirror': panels.setShowMirrorPanel(true); break
     case 'knowledge': panels.setShowKGPanel(true); break
     case 'stats': panels.setShowStatsPanel(true); break
     case 'workflows': panels.setShowWorkflowsPanel(true); break
@@ -513,7 +515,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel || panels.showMirrorPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -661,6 +663,19 @@ function EngineChat() {
                 onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
                 onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
                 onClose={() => panels.closePanel('insights')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showMirrorPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('mirror')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <MirrorPanel
+                mirror={chatEngine.userMirror}
+                onClose={() => panels.closePanel('mirror')}
               />
             </Suspense>
           </BottomSheet>

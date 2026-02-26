@@ -14356,3 +14356,297 @@ h4 {
 [data-theme="dark"] .ka-gate-legal a {
     color: var(--dark-link-accent);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Mirror Panel — Convergence UI
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-mirror-panel {
+    padding: 1.25rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .ka-mirror-panel {
+        padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+.ka-mirror-content {
+    margin-top: var(--space-lg);
+}
+
+/* ── Empty state ── */
+
+.ka-mirror-empty {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-xl);
+    opacity: 0.6;
+}
+
+.ka-mirror-empty-title {
+    font-family: var(--font-prose);
+    font-size: 18px;
+    font-style: italic;
+    margin-bottom: var(--space-sm);
+}
+
+.ka-mirror-empty-desc {
+    font-family: var(--font-meta);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ── Sections ── */
+
+.ka-mirror-section {
+    margin-bottom: var(--space-xl);
+}
+
+.ka-mirror-section-title {
+    font-family: var(--font-meta);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-caps);
+    text-transform: uppercase;
+    color: var(--rubin-slate-muted);
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.ka-mirror-section-desc {
+    font-family: var(--font-prose);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--rubin-slate-muted);
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+}
+
+/* ── Insight cards ── */
+
+.ka-mirror-insights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.ka-mirror-insight {
+    background: var(--rubin-ink-faint);
+    border: 1px solid var(--rubin-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+}
+
+.ka-mirror-insight-text {
+    font-family: var(--font-prose);
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: var(--space-sm);
+}
+
+.ka-mirror-insight-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-meta);
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+}
+
+.ka-mirror-insight-sources {
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: lowercase;
+}
+
+.ka-mirror-insight-confidence {
+    font-variant-numeric: tabular-nums;
+}
+
+.ka-mirror-confidence--high {
+    color: var(--kernel-success, #22C55E);
+}
+
+.ka-mirror-confidence--medium {
+    color: var(--rubin-accent);
+}
+
+.ka-mirror-confidence--low {
+    color: var(--rubin-slate-muted);
+}
+
+/* ── Facet cards ── */
+
+.ka-mirror-facets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.ka-mirror-facet {
+    border: 1px solid var(--rubin-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.ka-mirror-facet-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-meta);
+    font-size: 13px;
+    color: inherit;
+    text-align: left;
+}
+
+.ka-mirror-facet-header:hover {
+    background: var(--rubin-ink-faint);
+}
+
+.ka-mirror-facet-icon {
+    font-size: 14px;
+    opacity: 0.5;
+    width: 18px;
+    text-align: center;
+}
+
+.ka-mirror-facet-dim {
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    font-size: 11px;
+    flex: 1;
+}
+
+.ka-mirror-facet-count {
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+}
+
+.ka-mirror-facet-body {
+    padding: 0 var(--space-md) var(--space-md);
+    border-top: 1px solid var(--rubin-border);
+}
+
+.ka-mirror-facet-observations {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0 0;
+}
+
+.ka-mirror-facet-observations li {
+    font-family: var(--font-prose);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--rubin-ink-faint);
+}
+
+.ka-mirror-facet-observations li:last-child {
+    border-bottom: none;
+}
+
+.ka-mirror-facet-patterns {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    align-items: center;
+}
+
+.ka-mirror-facet-patterns-label {
+    font-family: var(--font-meta);
+    font-size: 10px;
+    letter-spacing: var(--letter-spacing-caps);
+    text-transform: uppercase;
+    color: var(--rubin-slate-muted);
+    margin-right: var(--space-xs);
+}
+
+.ka-mirror-facet-pattern {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    background: var(--rubin-ink-faint);
+    border: 1px solid var(--rubin-border);
+    border-radius: var(--radius-full);
+    padding: 2px 10px;
+    color: var(--rubin-slate-muted);
+}
+
+/* ── Meta footer ── */
+
+.ka-mirror-meta {
+    font-family: var(--font-meta);
+    font-size: 11px;
+    color: var(--rubin-slate-muted);
+    text-align: center;
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--rubin-border);
+    margin-top: var(--space-lg);
+}
+
+/* ── Mirror: Dark mode ── */
+
+[data-theme="dark"] .ka-mirror-insight {
+    background: var(--dark-bg-elevated);
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-mirror-facet {
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-mirror-facet-header:hover {
+    background: var(--dark-bg-elevated);
+}
+
+[data-theme="dark"] .ka-mirror-facet-body {
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-mirror-facet-observations li {
+    border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-mirror-facet-pattern {
+    background: var(--dark-bg-surface);
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-mirror-meta {
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .ka-mirror-confidence--high {
+    color: #4ade80;
+}
+
+/* ── Mirror: E-ink mode ── */
+
+[data-theme="eink"] .ka-mirror-insight {
+    background: rgba(28, 27, 26, 0.03);
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-mirror-facet {
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-mirror-facet-pattern {
+    background: rgba(28, 27, 26, 0.04);
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-mirror-confidence--high,
+[data-theme="eink"] .ka-mirror-confidence--medium {
+    color: #403E3C;
+}
