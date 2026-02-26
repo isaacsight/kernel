@@ -610,8 +610,11 @@ export function useChatEngine(params: UseChatEngineParams) {
     }
 
     let swarmAgentIds: string[] | null = null
+    // When files are attached (images, PDFs), always use direct Claude call.
+    // Swarm/workflow/research paths only pass string content, losing ContentBlock[].
+    const hasFileContent = Array.isArray(userContent)
     try {
-      if (classification.isMultiStep && classification.needsResearch && isPro) {
+      if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
         // Agentic Workflow: multi-step + research = autonomous workflow execution
         const { AgenticWorkflow } = await import('../engine/AgenticWorkflow')
         const workflow = new AgenticWorkflow(systemPrompt, {
@@ -636,7 +639,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         await workflow.execute(trimmed, context)
         setIsWorkflowActive(false)
         workflowRef.current = null
-      } else if (classification.isMultiStep && isPro) {
+      } else if (!hasFileContent && classification.isMultiStep && isPro) {
         const plan = await planTask(trimmed)
         setTaskProgress({ plan, currentStep: 0 })
         await executeTask(
@@ -646,7 +649,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           updateKernelMsg
         )
         setTaskProgress(null)
-      } else if (classification.needsSwarm && isPro) {
+      } else if (!hasFileContent && classification.needsSwarm && isPro) {
         const history = messagesRef.current
           .filter(m => m.content.trim())
           .map(m => ({
@@ -668,7 +671,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           loomSwarmCtx || undefined,
         )
         setSwarmProgress(null)
-      } else if (classification.needsResearch && isPro) {
+      } else if (!hasFileContent && classification.needsResearch && isPro) {
         await deepResearch(
           userContent,
           memoryText,
