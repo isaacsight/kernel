@@ -51,12 +51,12 @@ function detectPlatform(url: string): Platform | null {
   }
 }
 
-// Extract share ID from URL path
+// Extract share ID from URL path — handles /share/{uuid}, /share/e/{uuid}, /s/{uuid}
 function extractShareId(url: string): string | null {
   try {
     const parsed = new URL(url)
-    // Patterns: /share/UUID, /share/UUID/continue, /s/UUID
-    const match = parsed.pathname.match(/\/(?:share|s)\/([a-zA-Z0-9_-]+)/)
+    // Capture full path after /share/ or /s/, excluding trailing /continue
+    const match = parsed.pathname.match(/\/(?:share|s)\/(.+?)(?:\/continue)?$/)
     return match?.[1] || null
   } catch {
     return null
@@ -106,6 +106,49 @@ interface ParseResult {
   messages: ParsedMessage[]
 }
 
+// ─── Jina Reader: render JS-heavy pages via r.jina.ai ──
+const JINA_READER_PREFIX = 'https://r.jina.ai/'
+
+async function fetchViaJinaReader(url: string, platform: Platform | 'unknown', fallbackTitle: string): Promise<ParseResult> {
+  console.log(`[import] Trying Jina Reader for: ${url}`)
+  try {
+    const res = await fetch(`${JINA_READER_PREFIX}${url}`, {
+      headers: {
+        'Accept': 'text/plain',
+        'User-Agent': BROWSER_UA,
+      },
+      redirect: 'follow',
+    })
+
+    if (!res.ok) {
+      console.log(`[import] Jina Reader returned ${res.status}`)
+      return { platform, title: fallbackTitle, messages: [] }
+    }
+
+    const text = await safeReadText(res)
+    if (text.length < 50) {
+      return { platform, title: fallbackTitle, messages: [] }
+    }
+
+    // Try to extract title from the markdown (first # heading)
+    const titleMatch = text.match(/^#\s+(.+)$/m)
+    const title = titleMatch?.[1]?.replace(/^ChatGPT\s*[-–—]\s*/, '') || fallbackTitle
+
+    // Try direct markdown extraction first (fast, no API call)
+    const mdResult = extractTurnsFromMarkdown(text, platform, title)
+    if (mdResult.messages.length > 0) {
+      console.log(`[import] Jina Reader + markdown extraction: ${mdResult.messages.length} messages`)
+      return mdResult
+    }
+
+    // Fall back to Haiku for unstructured text
+    return await extractTurnsWithHaiku(text, platform, title)
+  } catch (err) {
+    console.error('[import] Jina Reader fetch failed:', err)
+    return { platform, title: fallbackTitle, messages: [] }
+  }
+}
+
 // ─── ChatGPT: Backend JSON API ─────────────────────────
 
 async function fetchChatGPT(url: string): Promise<ParseResult> {
@@ -127,7 +170,11 @@ async function fetchChatGPT(url: string): Promise<ParseResult> {
   })
 
   if (!res.ok) {
-    console.log(`[import] ChatGPT API returned ${res.status}, falling back to HTML`)
+    console.log(`[import] ChatGPT API returned ${res.status}, trying Jina Reader`)
+    // ChatGPT is a SPA — HTML scraping won't find content. Use Jina Reader instead.
+    const jinaResult = await fetchViaJinaReader(url, 'chatgpt', 'ChatGPT Conversation')
+    if (jinaResult.messages.length > 0) return jinaResult
+    // Last resort: try HTML scraping anyway
     return fetchChatGPTHtml(url)
   }
 
@@ -200,10 +247,14 @@ async function fetchChatGPT(url: string): Promise<ParseResult> {
       return { platform: 'chatgpt', title, messages: messages.slice(0, MAX_MESSAGES) }
     }
 
-    console.log('[import] ChatGPT API returned JSON but no messages extracted')
+    console.log('[import] ChatGPT API returned JSON but no messages extracted, trying Jina Reader')
+    const jinaResult = await fetchViaJinaReader(url, 'chatgpt', title)
+    if (jinaResult.messages.length > 0) return jinaResult
     return { platform: 'chatgpt', title, messages: [] }
   } catch (err) {
     console.error('[import] ChatGPT API JSON parse failed:', err)
+    const jinaResult = await fetchViaJinaReader(url, 'chatgpt', 'ChatGPT Conversation')
+    if (jinaResult.messages.length > 0) return jinaResult
     return fetchChatGPTHtml(url)
   }
 }
@@ -287,8 +338,11 @@ async function fetchClaude(url: string): Promise<ParseResult> {
   const titleTag = html.match(/<title[^>]*>([^<]*)<\/title>/i)
   const title = ogTitle?.[1] || titleTag?.[1] || 'Claude Conversation'
 
-  // If HTML parsing found nothing, try the raw text approach
+  // If HTML parsing found nothing, try Jina Reader (handles JS-rendered pages)
   if (messages.length === 0) {
+    const jinaResult = await fetchViaJinaReader(url, 'claude', decodeEntities(title))
+    if (jinaResult.messages.length > 0) return jinaResult
+
     const text = stripTags(html)
     if (text.length > 50) {
       return await extractTurnsWithHaiku(text, 'claude', decodeEntities(title))
@@ -326,8 +380,11 @@ async function fetchGemini(url: string): Promise<ParseResult> {
   const titleTag = html.match(/<title[^>]*>([^<]*)<\/title>/i)
   const title = ogTitle?.[1] || titleTag?.[1] || 'Gemini Conversation'
 
-  // If HTML parsing found nothing, try the raw text approach
+  // If HTML parsing found nothing, try Jina Reader (handles JS-rendered pages)
   if (messages.length === 0) {
+    const jinaResult = await fetchViaJinaReader(url, 'gemini', decodeEntities(title))
+    if (jinaResult.messages.length > 0) return jinaResult
+
     const text = stripTags(html)
     if (text.length > 50) {
       return await extractTurnsWithHaiku(text, 'gemini', decodeEntities(title))
@@ -340,6 +397,10 @@ async function fetchGemini(url: string): Promise<ParseResult> {
 // ─── Generic: unknown platform ─────────────────────────
 
 async function fetchGeneric(url: string): Promise<ParseResult> {
+  // Try Jina Reader first for unknown platforms (handles SPAs)
+  const jinaResult = await fetchViaJinaReader(url, 'unknown', 'Imported Conversation')
+  if (jinaResult.messages.length > 0) return jinaResult
+
   const res = await fetch(url, {
     headers: { 'User-Agent': BROWSER_UA, 'Accept': 'text/html,application/xhtml+xml,*/*' },
     redirect: 'follow',
@@ -434,6 +495,54 @@ Rules:
   return simplePatternExtract(text, platform, title)
 }
 
+// ─── Markdown turn extraction (for Jina Reader output) ──
+
+function extractTurnsFromMarkdown(
+  text: string,
+  platform: Platform | 'unknown',
+  title: string
+): ParseResult {
+  const messages: ParsedMessage[] = []
+
+  // Jina Reader renders ChatGPT share pages with "You said:" / "ChatGPT said:" headings
+  // Format: ##### You said:\n{content}\n###### ChatGPT said:\n{content}
+  // Use [^\S\n]* for horizontal whitespace only (not consuming newlines)
+  const userMarker = /#{1,6}[^\S\n]*(?:You|User|Human)[^\S\n]+said[^\S\n]*:?[^\S\n]*\n/gi
+  const assistantMarker = /#{1,6}[^\S\n]*(?:ChatGPT|Assistant|Claude|Gemini|AI|GPT)[^\S\n]+said[^\S\n]*:?[^\S\n]*\n/gi
+
+  // Find all marker positions
+  interface Marker { type: 'user' | 'assistant'; start: number; contentStart: number }
+  const markers: Marker[] = []
+
+  let match
+  while ((match = userMarker.exec(text)) !== null) {
+    markers.push({ type: 'user', start: match.index, contentStart: match.index + match[0].length })
+  }
+  while ((match = assistantMarker.exec(text)) !== null) {
+    markers.push({ type: 'assistant', start: match.index, contentStart: match.index + match[0].length })
+  }
+
+  // Sort by position in text
+  markers.sort((a, b) => a.start - b.start)
+
+  // Extract content between consecutive markers
+  for (let i = 0; i < markers.length; i++) {
+    const contentStart = markers[i].contentStart
+    const contentEnd = i + 1 < markers.length ? markers[i + 1].start : text.length
+    const content = text.slice(contentStart, contentEnd).trim()
+    if (content.length > 2) {
+      messages.push({ role: markers[i].type, content: content.slice(0, 4000) })
+    }
+  }
+
+  if (messages.length > 0) {
+    console.log(`[import] Markdown extraction found ${messages.length} turns`)
+    return { platform, title, messages: messages.slice(0, MAX_MESSAGES) }
+  }
+
+  return { platform, title, messages: [] }
+}
+
 // ─── Simple pattern extraction (no AI) ─────────────────
 
 function simplePatternExtract(
@@ -441,15 +550,20 @@ function simplePatternExtract(
   platform: Platform | 'unknown',
   title: string
 ): ParseResult {
+  // Try markdown heading extraction first (Jina Reader format)
+  const mdResult = extractTurnsFromMarkdown(text, platform, title)
+  if (mdResult.messages.length > 0) return mdResult
+
   const messages: ParsedMessage[] = []
 
   // Try to detect alternating "User:" / "Assistant:" patterns
-  const turnSplitPattern = /(?:^|\n)(?:(?:User|Human|You|Question)\s*[:：])/i
+  // Includes "You said:" / "ChatGPT said:" variants from Jina Reader
+  const turnSplitPattern = /(?:^|\n)(?:(?:User|Human|You|Question)\s*(?:said\s*)?[:：])/i
   const parts = text.split(turnSplitPattern)
 
   if (parts.length >= 2) {
     for (let i = 1; i < parts.length; i++) {
-      const assistantSplit = parts[i].split(/\n(?:(?:Assistant|AI|ChatGPT|Claude|Gemini|Answer|Response)\s*[:：])/i)
+      const assistantSplit = parts[i].split(/\n(?:(?:Assistant|AI|ChatGPT|Claude|Gemini|Answer|Response)\s*(?:said\s*)?[:：])/i)
       if (assistantSplit[0]?.trim()) {
         messages.push({ role: 'user', content: assistantSplit[0].trim().slice(0, 4000) })
       }
