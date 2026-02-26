@@ -109,7 +109,12 @@
     "label": "Extended thinking",
     "duration": "Thought for {{seconds}}s",
     "streaming": "Thinking...",
-    "toggle": "Toggle extended thinking"
+    "toggle": "Toggle extended thinking",
+    "tooltip": "Think deeper before answering"
+  },
+  "explain": {
+    "toggle": "Toggle explain mode",
+    "tooltip": "Explain mode — step-by-step code"
   },
   "voice": {
     "off": "Voice off",
