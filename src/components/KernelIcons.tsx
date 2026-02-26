@@ -244,6 +244,19 @@ export function IconBrain({ size = 16, className }: IconProps) {
   )
 }
 
+/** Deep Thinking — Concentric rings emanating from a point */
+export function IconThinking({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 5a7 7 0 0 1 7 7" />
+      <path d="M5 12a7 7 0 0 1 7-7" />
+      <path d="M12 19a7 7 0 0 1-7-7" />
+      <path d="M19 12a7 7 0 0 1-7 7" />
+    </svg>
+  )
+}
+
 /** Chart / Stats */
 export function IconChart({ size = 16, className }: IconProps) {
   return (

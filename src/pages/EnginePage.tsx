@@ -5,7 +5,7 @@ import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
   IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
   IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
-  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconChart,
+  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
   IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles,
 } from '../components/KernelIcons'
@@ -1463,7 +1463,7 @@ function EngineChat() {
             aria-label={t('thinking.toggle')}
             title={t('thinking.label')}
           >
-            <IconBrain size={16} />
+            <IconThinking size={18} />
           </button>
         )}
         {!isMini && (
