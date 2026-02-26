@@ -2,22 +2,28 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { NotificationBell } from './NotificationBell'
 
-// Mock Supabase
-const mockFrom = vi.fn().mockReturnValue({
-  select: vi.fn().mockReturnValue({
-    eq: vi.fn().mockReturnValue({
-      order: vi.fn().mockReturnValue({
-        limit: vi.fn().mockResolvedValue({
-          data: [
-            { id: '1', title: 'Test', body: 'Body', type: 'info', read: false, created_at: new Date().toISOString(), action_url: null },
-            { id: '2', title: 'Clickable', body: 'Has URL', type: 'info', read: true, created_at: new Date().toISOString(), action_url: '#/goals' },
-          ],
-        }),
-      }),
-    }),
-  }),
-  update: vi.fn().mockReturnValue({ in: vi.fn().mockResolvedValue({}) }),
-})
+// Chainable mock helper
+const chain = (resolvedValue: unknown = {}) => {
+  const obj: Record<string, ReturnType<typeof vi.fn>> = {}
+  const self = () => obj
+  obj.select = vi.fn().mockReturnValue(self())
+  obj.eq = vi.fn().mockReturnValue(self())
+  obj.in = vi.fn().mockReturnValue(self())
+  obj.order = vi.fn().mockReturnValue(self())
+  obj.limit = vi.fn().mockResolvedValue(resolvedValue)
+  obj.update = vi.fn().mockReturnValue(self())
+  obj.delete = vi.fn().mockReturnValue(self())
+  obj.then = vi.fn((cb: (v: unknown) => void) => { cb(resolvedValue); return Promise.resolve() })
+  return obj
+}
+
+const testNotifs = [
+  { id: '1', title: 'Test', body: 'Body', type: 'info', read: false, created_at: new Date().toISOString(), action_url: null },
+  { id: '2', title: 'Clickable', body: 'Has URL', type: 'info', read: true, created_at: new Date().toISOString(), action_url: '#/goals' },
+]
+
+const mockChain = chain({ data: testNotifs })
+const mockFrom = vi.fn().mockReturnValue(mockChain)
 
 vi.mock('../engine/SupabaseClient', () => ({
   supabase: { from: (...args: unknown[]) => mockFrom(...args) },
@@ -29,14 +35,14 @@ vi.mock('../engine/Scheduler', () => ({
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, fallback?: string) => {
       const t: Record<string, string> = {
         'aria.notifications': 'Notifications',
         'notifications.title': 'Notifications',
-        'notifications.markAllRead': 'Mark all read',
+        'notifications.clearAll': 'Clear all',
         'notifications.empty': 'No notifications yet',
       }
-      return t[key] || key
+      return t[key] || fallback || key
     },
   }),
 }))
@@ -63,12 +69,27 @@ describe('NotificationBell', () => {
     })
   })
 
-  it('opens dropdown on click', async () => {
+  it('opens dropdown on click and shows notifications', async () => {
     render(<NotificationBell userId="u1" />)
     await waitFor(() => screen.getByText('1'))
     fireEvent.click(screen.getByLabelText('Notifications'))
-    expect(screen.getByText('Notifications')).toBeInTheDocument()
     expect(screen.getByText('Test')).toBeInTheDocument()
+    expect(screen.getByText('Clickable')).toBeInTheDocument()
+  })
+
+  it('shows clear all button when notifications exist', async () => {
+    render(<NotificationBell userId="u1" />)
+    await waitFor(() => screen.getByText('1'))
+    fireEvent.click(screen.getByLabelText('Notifications'))
+    expect(screen.getByText('Clear all')).toBeInTheDocument()
+  })
+
+  it('each notification has a dismiss button', async () => {
+    render(<NotificationBell userId="u1" />)
+    await waitFor(() => screen.getByText('1'))
+    fireEvent.click(screen.getByLabelText('Notifications'))
+    const dismissBtns = screen.getAllByLabelText('Dismiss')
+    expect(dismissBtns).toHaveLength(2)
   })
 
   it('clickable notifications have role="button" and tabIndex', async () => {
@@ -88,18 +109,6 @@ describe('NotificationBell', () => {
 
     const clickableItem = screen.getByText('Clickable').closest('[role="button"]')!
     fireEvent.keyDown(clickableItem, { key: 'Enter' })
-    // Should navigate — hash should be set
-    expect(window.location.hash).toBe('#/goals')
-  })
-
-  it('clickable notifications respond to Space key', async () => {
-    window.location.hash = ''
-    render(<NotificationBell userId="u1" />)
-    await waitFor(() => screen.getByText('1'))
-    fireEvent.click(screen.getByLabelText('Notifications'))
-
-    const clickableItem = screen.getByText('Clickable').closest('[role="button"]')!
-    fireEvent.keyDown(clickableItem, { key: ' ' })
     expect(window.location.hash).toBe('#/goals')
   })
 

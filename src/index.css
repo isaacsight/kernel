@@ -3841,10 +3841,7 @@ h4 {
     font-weight: 600;
 }
 
-.ka-notif-mark-read {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
+.ka-notif-clear-all {
     background: none;
     border: none;
     font-family: var(--font-mono);
@@ -3854,7 +3851,7 @@ h4 {
     opacity: 0.5;
 }
 
-.ka-notif-mark-read:hover {
+.ka-notif-clear-all:hover {
     opacity: 1;
 }
 
@@ -3871,13 +3868,53 @@ h4 {
 }
 
 .ka-notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xs);
     padding: 10px 14px;
     border-bottom: 1px solid rgba(100, 100, 100, 0.04);
+    transition: opacity var(--duration-normal, 200ms) var(--ease-out, ease-out),
+                max-height var(--duration-normal, 200ms) var(--ease-out, ease-out);
 }
 
-.ka-notif-item--unread {
-    background: rgba(107, 91, 149, 0.04);
-    border-left: 3px solid var(--rubin-primary);
+.ka-notif-item--dismissing {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+
+.ka-notif-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.ka-notif-dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border-radius: var(--radius-xs);
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    color: var(--rubin-slate);
+    transition: opacity var(--duration-fast, 120ms) var(--ease-out, ease-out),
+                background var(--duration-fast, 120ms) var(--ease-out, ease-out);
+}
+
+.ka-notif-item:hover .ka-notif-dismiss {
+    opacity: 0.4;
+}
+
+.ka-notif-dismiss:hover {
+    opacity: 0.8 !important;
+    background: rgba(100, 100, 100, 0.08);
 }
 
 .ka-notif-item--clickable {
@@ -3963,6 +4000,18 @@ h4 {
 [data-theme="dark"] .ka-notif-dropdown {
     background: var(--dark-bg-surface);
     border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-notif-clear-all {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-notif-dismiss {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-notif-dismiss:hover {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* ── Dark: Proactive Notification Items ────────────────── */
@@ -7467,10 +7516,13 @@ h4 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ka-bar-tooltip--discover.ka-thinking-toggle,
-    .ka-bar-tooltip--discover.ka-explain-toggle {
+    .ka-bar-tooltip--discover.ka-thinking-toggle {
         animation: none;
         box-shadow: 0 0 0 3px rgba(107, 91, 149, 0.3);
+    }
+    .ka-bar-tooltip--discover.ka-explain-toggle {
+        animation: none;
+        box-shadow: 0 0 0 3px rgba(107, 142, 107, 0.3);
     }
 }
 
