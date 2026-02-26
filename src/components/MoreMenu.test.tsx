@@ -91,14 +91,10 @@ describe('MoreMenu', () => {
     expect(baseProps.onClose).toHaveBeenCalled()
   })
 
-  it('shows Upgrade for free users, hides for pro', () => {
-    const { rerender } = render(<MoreMenu {...baseProps} isPro={false} />)
-    expect(screen.getByText('Upgrade to Pro')).toBeInTheDocument()
-    expect(screen.queryByText('Manage Subscription')).not.toBeInTheDocument()
-
-    rerender(<MoreMenu {...baseProps} isPro={true} isAdmin={false} />)
-    expect(screen.queryByText('Upgrade to Pro')).not.toBeInTheDocument()
-    expect(screen.getByText('Manage Subscription')).toBeInTheDocument()
+  it('always shows Account settings and Sign Out', () => {
+    render(<MoreMenu {...baseProps} isPro={false} />)
+    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
+    expect(screen.getByText('Sign Out')).toBeInTheDocument()
   })
 
   it('hides Manage Subscription for admins', () => {
@@ -106,16 +102,12 @@ describe('MoreMenu', () => {
     expect(screen.queryByText('Manage Subscription')).not.toBeInTheDocument()
   })
 
-  it('always shows Sign Out and Delete Account', () => {
-    render(<MoreMenu {...baseProps} />)
-    expect(screen.getByText('Sign Out')).toBeInTheDocument()
-    expect(screen.getByText('Delete Account')).toBeInTheDocument()
-  })
+  it('account section shows for both free and pro users', () => {
+    const { rerender } = render(<MoreMenu {...baseProps} isPro={false} />)
+    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
 
-  it('applies danger class to Delete Account', () => {
-    render(<MoreMenu {...baseProps} />)
-    const deleteBtn = screen.getByText('Delete Account').closest('button')
-    expect(deleteBtn?.className).toContain('ka-more-menu-item--danger')
+    rerender(<MoreMenu {...baseProps} isPro={true} />)
+    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
   })
 
   it('renders language picker', () => {
