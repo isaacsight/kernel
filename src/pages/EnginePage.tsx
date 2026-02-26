@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconChart,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus, IconBookOpen,
+  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -40,6 +40,7 @@ import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
+import { VoiceControls, MessageSpeakButton } from '../components/VoiceControls'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -363,7 +364,7 @@ function EngineChat() {
 
   const scroll = useScrollTracking(chatEngine.messages.length)
 
-  const { isVoiceMode: isListening, toggleVoiceMode: toggleVoice, speakResponse } = useVoiceLoop(
+  const voiceLoop = useVoiceLoop(
     (text) => chatEngine.setInput(text),
     (text) => {
       chatEngine.setInput(text)
@@ -371,10 +372,12 @@ function EngineChat() {
     },
     showToast,
   )
+  const { isListening, isSpeaking, voiceMode, speakResponse, toggleVoiceMode: toggleVoice } = voiceLoop
 
+  // Auto-TTS: when streaming ends in voice mode, speak the response
   const prevStreamingRef = useRef(chatEngine.isStreaming)
   useEffect(() => {
-    if (prevStreamingRef.current && !chatEngine.isStreaming && isListening) {
+    if (prevStreamingRef.current && !chatEngine.isStreaming && voiceMode !== 'off') {
       const msgs = chatEngine.messages
       const lastKernel = [...msgs].reverse().find(m => m.role === 'kernel')
       if (lastKernel && lastKernel.content) {
@@ -382,7 +385,7 @@ function EngineChat() {
       }
     }
     prevStreamingRef.current = chatEngine.isStreaming
-  }, [chatEngine.isStreaming, isListening, chatEngine.messages, speakResponse])
+  }, [chatEngine.isStreaming, voiceMode, chatEngine.messages, speakResponse])
 
   useKeyboardHeight()
 
@@ -1177,6 +1180,9 @@ function EngineChat() {
                     <button className="ka-msg-action-btn" onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)} aria-label={t('aria.downloadResponse', { ns: 'common' })}>
                       <IconDownload size={14} />
                     </button>
+                    {voiceMode !== 'off' && (
+                      <MessageSpeakButton content={msg.content} onSpeak={(text) => speakResponse(text, msg.agentId)} isSpeaking={isSpeaking} />
+                    )}
                     {msg.signalId && !msg.feedback && (
                       <>
                         <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><IconThumbsUp size={14} /></button>
@@ -1204,6 +1210,34 @@ function EngineChat() {
           <motion.button className="ka-scroll-btn" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={scroll.scrollToBottom} aria-label={t('aria.scrollToBottom', { ns: 'common' })}>
             <IconChevronDown size={18} />
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Active document indicator (Pro deep document analysis) */}
+      <AnimatePresence>
+        {chatEngine.hasActiveDocument && chatEngine.activeDocument && (
+          <motion.div
+            className="ka-doc-indicator"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <IconFileText size={14} />
+            <span className="ka-doc-indicator-name" title={chatEngine.activeDocument.name}>
+              {t('document.active', { name: chatEngine.activeDocument.name })}
+            </span>
+            <span className="ka-doc-indicator-hint">{t('document.contextHint')}</span>
+            <button
+              type="button"
+              className="ka-doc-indicator-close"
+              onClick={chatEngine.clearDocument}
+              aria-label={t('document.clear')}
+              title={t('document.clear')}
+            >
+              <IconClose size={12} />
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -1361,9 +1395,19 @@ function EngineChat() {
                 <label htmlFor="ka-file-input" className={`ka-mini-popover-item${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(false)}>
                   <IconAttach size={16} /> <span>{t('aria.attachFile', { ns: 'common' })}</span>
                 </label>
-                <button type="button" className={`ka-mini-popover-item${isListening ? ' ka-voice-btn--active' : ''}`} onClick={() => { toggleVoice(); setShowMiniPopover(false); }}>
-                  {isListening ? <IconMicOff size={16} /> : <IconMic size={16} />} <span>{isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}</span>
-                </button>
+                <VoiceControls
+                  voiceMode={voiceLoop.voiceMode}
+                  setVoiceMode={voiceLoop.setVoiceMode}
+                  isListening={isListening}
+                  isSpeaking={isSpeaking}
+                  transcript={voiceLoop.transcript}
+                  selectedVoice={voiceLoop.selectedVoice}
+                  setSelectedVoice={voiceLoop.setSelectedVoice}
+                  onToggleVoice={() => { toggleVoice(); setShowMiniPopover(false); }}
+                  isPro={isPro}
+                  disabled={isStreaming}
+                  isMini
+                />
               </div>
             )}
           </div>
@@ -1402,9 +1446,18 @@ function EngineChat() {
           </button>
         )}
         {!isMini && (
-          <button type="button" className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`} onClick={toggleVoice} disabled={isStreaming} aria-label={isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}>
-            {isListening ? <IconMicOff size={18} /> : <IconMic size={18} />}
-          </button>
+          <VoiceControls
+            voiceMode={voiceLoop.voiceMode}
+            setVoiceMode={voiceLoop.setVoiceMode}
+            isListening={isListening}
+            isSpeaking={isSpeaking}
+            transcript={voiceLoop.transcript}
+            selectedVoice={voiceLoop.selectedVoice}
+            setSelectedVoice={voiceLoop.setSelectedVoice}
+            onToggleVoice={toggleVoice}
+            isPro={isPro}
+            disabled={isStreaming}
+          />
         )}
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><IconStop size={16} /></button>

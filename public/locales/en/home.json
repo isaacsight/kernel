@@ -108,5 +108,20 @@
     "duration": "Thought for {{seconds}}s",
     "streaming": "Thinking...",
     "toggle": "Toggle extended thinking"
+  },
+  "voice": {
+    "off": "Voice off",
+    "listen": "Voice input",
+    "full": "Voice conversation",
+    "speaking": "Speaking...",
+    "listening": "Listening...",
+    "modeLabel": "Voice mode",
+    "voiceLabel": "TTS voice",
+    "speakMessage": "Read aloud"
+  },
+  "document": {
+    "active": "Analyzing: {{name}}",
+    "clear": "Clear document",
+    "contextHint": "Ask follow-up questions about this document"
   }
 }

@@ -60,6 +60,14 @@ export interface ChatMessage {
   thinking?: string
 }
 
+/** Active document for multi-turn document analysis (Pro only) */
+export interface ActiveDocument {
+  name: string
+  type: string
+  dataUrl: string
+  contentBlock: ContentBlock
+}
+
 interface UseChatEngineParams {
   userId: string
   activeConversationId: string | null
@@ -102,6 +110,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
   const [currentThinking, setCurrentThinking] = useState('')
   const thinkingStartRef = useRef<number>(0)
+
+  // Deep Document Analysis state (Pro only)
+  const [activeDocument, setActiveDocument] = useState<ActiveDocument | null>(null)
+  const activeDocumentRef = useRef<ActiveDocument | null>(null)
+  activeDocumentRef.current = activeDocument
 
   // Memory & KG state
   const [userMemory, setUserMemory] = useState<UserMemoryProfile>(emptyProfile())
@@ -152,6 +165,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   useEffect(() => {
     return () => { streamAbortRef.current?.abort() }
   }, [])
+
+  // Clear active document when conversation changes (new chat or switch)
+  useEffect(() => {
+    setActiveDocument(null)
+  }, [activeConversationId])
 
   // Sync engine state with Supabase on auth
   useEffect(() => {
@@ -469,10 +487,20 @@ export function useChatEngine(params: UseChatEngineParams) {
           })
         } else if (isPdfFile(file)) {
           const data = await fileToBase64(file)
-          blocks.push({
+          const docBlock: ContentBlock = {
             type: 'document',
             source: { type: 'base64', media_type: 'application/pdf', data },
-          })
+          }
+          blocks.push(docBlock)
+          // Store as active document for multi-turn analysis (Pro only)
+          if (isPro) {
+            setActiveDocument({
+              name: file.name,
+              type: file.type || 'application/pdf',
+              dataUrl: `data:application/pdf;base64,${data}`,
+              contentBlock: docBlock,
+            })
+          }
         }
       }
 
@@ -513,7 +541,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
       : ''
     const goalBlock = getGoalCheckInPrompt(userGoalsRef.current)
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}`
+    const docCitationBlock = activeDocumentRef.current
+      ? `\n\n## Document Analysis Mode\nThe user has an active document loaded: "${activeDocumentRef.current.name}". When referencing the uploaded document, always cite specific locations using [p.X] notation for pages, [p.X-Y] for page ranges, [§X] for sections, or direct quotes in "quotation marks". Be precise about where information comes from in the document.`
+      : ''
+    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -542,6 +573,17 @@ export function useChatEngine(params: UseChatEngineParams) {
         sanitized.push({ ...m })
       }
     }
+    // If there's an active document and no file was just attached, re-inject the
+    // document content block so Claude retains document context for follow-up questions
+    const docRef = activeDocumentRef.current
+    const hasNewFileAttachment = filesToSend.length > 0
+    if (docRef && !hasNewFileAttachment && typeof userContent === 'string') {
+      userContent = [
+        docRef.contentBlock,
+        { type: 'text', text: `[Continuing analysis of: ${docRef.name}]\n\n${userContent}` },
+      ] as ContentBlock[]
+    }
+
     const claudeMessages: { role: string; content: string | ContentBlock[] }[] = [
       ...sanitized,
       { role: 'user', content: userContent },
@@ -877,6 +919,11 @@ export function useChatEngine(params: UseChatEngineParams) {
     setSwarmProgress(null)
   }, [])
 
+  // Clear active document (manual dismiss)
+  const clearDocument = useCallback(() => {
+    setActiveDocument(null)
+  }, [])
+
   return {
     engine, engineState, events,
     messages, setMessages,
@@ -891,5 +938,6 @@ export function useChatEngine(params: UseChatEngineParams) {
     userMirror,
     extendedThinkingEnabled, setExtendedThinkingEnabled,
     currentThinking, thinkingStartRef,
+    activeDocument, hasActiveDocument: !!activeDocument, clearDocument,
   }
 }
