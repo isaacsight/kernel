@@ -1,3 +1,4 @@
+declare const __BUILD_TIME__: string
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import HttpBackend from 'i18next-http-backend'
@@ -22,6 +23,7 @@ i18n
     partialBundledLanguages: true,
     backend: {
       loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
+      queryStringParams: { v: __BUILD_TIME__ },
     },
     detection: {
       order: ['localStorage', 'navigator'],

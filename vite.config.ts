@@ -5,6 +5,9 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    define: {
+        __BUILD_TIME__: JSON.stringify(Date.now().toString(36)),
+    },
     plugins: [
         react(),
         VitePWA({
