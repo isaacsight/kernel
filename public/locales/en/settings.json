@@ -70,6 +70,13 @@
     "upgrade": "Upgrade to Pro",
     "manage": "Manage subscription"
   },
+  "exportData": {
+    "heading": "Export data",
+    "description": "Download a complete copy of all your data in JSON format.",
+    "button": "Export my data",
+    "success": "Export downloaded",
+    "rateLimited": "Export available again in {{hours}} hours"
+  },
   "resetData": {
     "heading": "Reset data",
     "description": "Selectively clear your data without deleting your account. This cannot be undone.",

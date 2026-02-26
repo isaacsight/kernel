@@ -143,17 +143,12 @@ serve(async (req: Request) => {
         insightsBlock = `\n\nLEARNED PATTERNS (from ${insights.length} previous evaluations):\n` +
           insights.map((i: { insight: string }) => `- ${i.insight}`).join('\n')
 
-        // Increment times_used for the insights we're injecting
-        const ids = insights.map((i: { id: string }) => i.id)
-        await supabase
-          .from('agent_insights')
-          .update({ times_used: supabase.rpc ? undefined : 0 }) // handled below
-          .in('id', ids)
-
-        // Increment each individually (Supabase doesn't support increment in update easily)
+        // Increment times_used for each injected insight
         for (const insight of insights) {
-          await supabase.rpc('increment_insight_usage', { insight_id: (insight as { id: string }).id }).catch(() => {
-            // RPC may not exist yet — that's fine, non-critical
+          await supabase.rpc('increment_insight_usage', {
+            p_insight_id: (insight as { id: string }).id,
+          }).catch((err: unknown) => {
+            console.error('increment_insight_usage failed:', err)
           })
         }
       }
