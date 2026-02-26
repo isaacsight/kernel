@@ -316,7 +316,7 @@ export function PrivacyPage() {
         <li><strong>Correction:</strong> You can update your profile information at any time through account settings</li>
         <li><strong>Deletion:</strong> You can delete individual conversations, reset specific data categories (conversations, memory, knowledge graph, goals, preferences), or delete your entire account. Deletion is permanent and irreversible.</li>
         <li><strong>Export:</strong> You can share and export conversations via the share feature</li>
-        <li><strong>Portability:</strong> You can request a copy of your data in a structured, commonly used format by contacting us</li>
+        <li><strong>Portability:</strong> You can download a complete copy of your data in JSON format from Account Settings using the &ldquo;Export my data&rdquo; button</li>
         <li><strong>Objection:</strong> You can request that we stop processing your data for specific purposes by contacting us</li>
         <li><strong>Restriction:</strong> You can request that we restrict the processing of your data while a dispute is being resolved or while we verify the accuracy of your data</li>
         <li><strong>Automated decisions:</strong> You have the right to not be subject to decisions based solely on automated processing that produce legal or similarly significant effects. As described in Section 4, Kernel's automated processes affect only AI response quality and personalization, not legal or significant decisions. You may request human review of any automated decision by contacting us.</li>

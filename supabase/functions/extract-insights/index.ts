@@ -111,6 +111,7 @@ serve(async (req: Request) => {
 
     await supabase.from('evaluation_conversations').upsert({
       id: conversationId,
+      user_id: user.id,
       email: email || null,
       messages,
       evaluation_result: evaluationResult || null,

@@ -235,6 +235,55 @@ export function useAccountSettings(
     }
   }, [identities.length, auth])
 
+  // ─── Export User Data ────────────────────────────
+  const [exportState, setExportState] = useState<SectionState>(INITIAL_SECTION)
+
+  const exportData = useCallback(async () => {
+    if (!user) return
+    setExportState({ loading: true, error: null, success: null })
+    try {
+      const token = await getAccessToken()
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || ''
+      const res = await fetch(`${supabaseUrl}/functions/v1/export-user-data`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: supabaseKey,
+        },
+      })
+      if (!res.ok) {
+        if (res.status === 429) {
+          const data = await res.json().catch(() => ({ retry_after: 86400 }))
+          const hours = Math.ceil((data.retry_after || 86400) / 3600)
+          throw new Error(`rateLimited:${hours}`)
+        }
+        if (res.status === 401) {
+          throw new Error('Session expired. Please sign in again.')
+        }
+        const data = await res.json().catch(() => ({ error: 'Request failed' }))
+        throw new Error(data.error || `HTTP ${res.status}`)
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `kernel-data-export-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      setExportState({ loading: false, error: null, success: 'downloaded' })
+      setTimeout(() => setExportState(s => ({ ...s, success: null })), 5000)
+    } catch (err: unknown) {
+      setExportState({
+        loading: false,
+        error: err instanceof Error ? err.message : 'Failed to export data',
+        success: null,
+      })
+    }
+  }, [user])
+
   // ─── Reset User Data ─────────────────────────────
   const [resetState, setResetState] = useState<SectionState>(INITIAL_SECTION)
   const [resetConfirmScope, setResetConfirmScope] = useState<ResetScope | null>(null)
@@ -301,6 +350,8 @@ export function useAccountSettings(
     // Linked accounts
     identities, hasPassword,
     linkState, linkProvider, unlinkProvider,
+    // Export data
+    exportState, exportData,
     // Reset data
     resetState, resetConfirmScope, setResetConfirmScope, resetUserData,
   }

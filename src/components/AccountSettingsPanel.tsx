@@ -6,7 +6,7 @@ import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconCrown, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
-  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings,
+  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings, IconDownload,
 } from './KernelIcons'
 import type { ReactNode } from 'react'
 
@@ -364,6 +364,33 @@ export default function AccountSettingsPanel({
           </div>
         </div>
       )}
+
+      {/* Export Data */}
+      <div className="ka-settings-section">
+        <h3 className="ka-settings-section-header">{t('exportData.heading')}</h3>
+        <div className="ka-settings-section-body">
+          <p className="ka-settings-section-desc">{t('exportData.description')}</p>
+          <button
+            className="ka-gate-submit"
+            onClick={settings.exportData}
+            disabled={settings.exportState.loading}
+          >
+            <IconDownload size={16} />
+            {settings.exportState.loading ? '...' : t('exportData.button')}
+          </button>
+          {settings.exportState.error && (
+            <p className="ka-gate-error">
+              <IconAlertCircle size={14} />{' '}
+              {settings.exportState.error.startsWith('rateLimited:')
+                ? t('exportData.rateLimited', { hours: settings.exportState.error.split(':')[1] })
+                : settings.exportState.error}
+            </p>
+          )}
+          {settings.exportState.success && (
+            <p className="ka-gate-success"><IconCheck size={14} /> {t('exportData.success')}</p>
+          )}
+        </div>
+      </div>
 
       {/* Reset Data */}
       <div className="ka-settings-section ka-settings-section--warning">
