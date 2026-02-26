@@ -47,6 +47,7 @@
         "@vitejs/plugin-react": "^4.7.0",
         "blessed": "^0.1.81",
         "blessed-contrib": "^4.11.0",
+        "canvas": "^3.2.1",
         "discord.js": "^14.25.1",
         "dotenv": "^17.3.1",
         "fake-indexeddb": "^6.2.5",

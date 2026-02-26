@@ -128,38 +128,38 @@ function updateParticle(
   if (p.gy > rows - 0.5) { p.gy = rows - 0.5; p.vy *= -0.3 }
 }
 
-function buildGridImage(size: number, cols: number, rows: number, pal: Palette, cell: number): HTMLCanvasElement {
+function buildGridImage(w: number, h: number, cols: number, rows: number, pal: Palette, cell: number): HTMLCanvasElement {
   const c = document.createElement('canvas')
-  c.width = size; c.height = size
+  c.width = w; c.height = h
   const g = c.getContext('2d')!
   g.fillStyle = pal.bg
-  g.fillRect(0, 0, size, size)
+  g.fillRect(0, 0, w, h)
   // Skip grid lines for avatar-sized grids — just solid bg
   if (cell <= 3) return c
   // Minor grid
   g.strokeStyle = pal.gridMin; g.lineWidth = cell < 8 ? 0.2 : 0.5; g.beginPath()
-  for (let x = 0; x <= cols; x++) { g.moveTo(x * cell, 0); g.lineTo(x * cell, size) }
-  for (let y = 0; y <= rows; y++) { g.moveTo(0, y * cell); g.lineTo(size, y * cell) }
+  for (let x = 0; x <= cols; x++) { g.moveTo(x * cell, 0); g.lineTo(x * cell, h) }
+  for (let y = 0; y <= rows; y++) { g.moveTo(0, y * cell); g.lineTo(w, y * cell) }
   g.stroke()
   // Major grid
   g.strokeStyle = pal.gridMaj; g.lineWidth = cell < 8 ? 0.3 : 1; g.beginPath()
   const majStep = cell < 8 ? 10 : 5
-  for (let x = 0; x <= cols; x += majStep) { g.moveTo(x * cell, 0); g.lineTo(x * cell, size) }
-  for (let y = 0; y <= rows; y += majStep) { g.moveTo(0, y * cell); g.lineTo(size, y * cell) }
+  for (let x = 0; x <= cols; x += majStep) { g.moveTo(x * cell, 0); g.lineTo(x * cell, h) }
+  for (let y = 0; y <= rows; y += majStep) { g.moveTo(0, y * cell); g.lineTo(w, y * cell) }
   g.stroke()
   // Registration marks (skip for small grids)
   if (cell >= 8) {
     const m = 14
     g.strokeStyle = pal.key; g.lineWidth = 0.8
-    for (const [x, y] of [[m, m], [size - m, m], [m, size - m], [size - m, size - m]]) {
+    for (const [x, y] of [[m, m], [w - m, m], [m, h - m], [w - m, h - m]]) {
       g.beginPath(); g.moveTo(x - 5, y); g.lineTo(x + 5, y); g.moveTo(x, y - 5); g.lineTo(x, y + 5); g.stroke()
       g.beginPath(); g.arc(x, y, 3.5, 0, Math.PI * 2); g.stroke()
     }
     // Color bar
-    const bw = 20, bh = 4, by = size - 10
+    const bw = 20, bh = 4, by = h - 10
     ;[pal.particle, pal.link, pal.field, pal.key].forEach((cl, i) => {
       g.fillStyle = cl
-      g.fillRect(size / 2 - 50 + i * (bw + 3), by, bw, bh)
+      g.fillRect(w / 2 - 50 + i * (bw + 3), by, bw, bh)
     })
   }
   return c
@@ -168,11 +168,14 @@ function buildGridImage(size: number, cols: number, rows: number, pal: Palette, 
 interface ParticleGridProps {
   palette?: { particle: string; link: string; field: string }
   size?: number
+  width?: number
+  height?: number
   interactive?: boolean
   energetic?: boolean
+  className?: string
 }
 
-export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive = true, energetic = false }: ParticleGridProps = {}) {
+export function ParticleGrid({ palette: paletteProp, size: sizeProp, width: widthProp, height: heightProp, interactive = true, energetic = false, className }: ParticleGridProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const propsRef = useRef({ paletteProp, energetic })
   propsRef.current = { paletteProp, energetic }
@@ -199,22 +202,31 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
     if (!canvas) return
     const container = canvas.parentElement
     if (!container) return
+    const isRect = !!(widthProp && heightProp)
     const maxSize = sizeProp || 400
     // Adaptive cell size: avatar grids get 2px, tiny get 4px, loading get 10px, full gets 20px
-    const cell = maxSize <= 32 ? 2 : maxSize <= 80 ? 4 : maxSize <= 120 ? 6 : maxSize <= 300 ? 10 : CELL
-    // For tiny grids, use sizeProp directly (container may not have layout yet)
-    const raw = maxSize <= 80
-      ? maxSize
-      : Math.min(container.clientWidth, container.clientHeight, maxSize)
-    const size = Math.floor(raw / cell) * cell
-    if (size < cell) return
-    canvas.width = size; canvas.height = size
-    const cols = size / cell, rows = size / cell
+    const refDim = isRect ? Math.min(widthProp!, heightProp!) : maxSize
+    const cell = refDim <= 32 ? 2 : refDim <= 80 ? 4 : refDim <= 120 ? 6 : refDim <= 300 ? 10 : CELL
+
+    let w: number, h: number
+    if (isRect) {
+      w = Math.floor(widthProp! / cell) * cell
+      h = Math.floor(heightProp! / cell) * cell
+    } else {
+      const raw = maxSize <= 80
+        ? maxSize
+        : Math.min(container.clientWidth, container.clientHeight, maxSize)
+      const size = Math.floor(raw / cell) * cell
+      w = size; h = size
+    }
+    if (w < cell || h < cell) return
+    canvas.width = w; canvas.height = h
+    const cols = w / cell, rows = h / cell
     const s = stateRef.current
     s.pal = getPal()
     s.cell = cell
-    s.cols = cols; s.rows = rows; s.size = size
-    s.gridImage = buildGridImage(size, cols, rows, s.pal, cell)
+    s.cols = cols; s.rows = rows; s.size = Math.max(w, h)
+    s.gridImage = buildGridImage(w, h, cols, rows, s.pal, cell)
     const density = cell <= 3 ? 0.25 : cell < CELL ? 0.7 : 0.4
     const count = Math.min(cell <= 3 ? 50 : cell < CELL ? 120 : PARTICLE_COUNT, Math.max(10, Math.floor(cols * rows * density)))
     const boost = cell < CELL ? 0.3 : 0.05
@@ -228,7 +240,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
         : Math.random() * rows * 0.5 + rows * 0.15
       return { gx, gy, vx: (Math.random() - 0.5) * boost, vy: (Math.random() - 0.5) * boost }
     })
-  }, [sizeProp])
+  }, [sizeProp, widthProp, heightProp])
 
   useEffect(() => {
     setup()
@@ -277,7 +289,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
       const currentPal = getPal()
       if (currentPal.bg !== s.pal.bg) {
         s.pal = currentPal
-        s.gridImage = buildGridImage(s.size, s.cols, s.rows, s.pal, cell)
+        s.gridImage = buildGridImage(canvas.width, canvas.height, s.cols, s.rows, s.pal, cell)
       }
 
       // Apply palette overrides from props
@@ -423,7 +435,7 @@ export function ParticleGrid({ palette: paletteProp, size: sizeProp, interactive
   }, [setup, interactive])
 
   return (
-    <div className="ka-particle-grid">
+    <div className={className ? `ka-particle-grid ${className}` : 'ka-particle-grid'}>
       <canvas
         ref={canvasRef}
         style={{ display: 'block', imageRendering: 'pixelated' }}
