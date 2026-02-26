@@ -1,128 +1,208 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { synthesizeSpeech, playAudio, stopAudio, cleanTextForTTS, type TTSVoice } from '../engine/tts'
+
+export type VoiceMode = 'off' | 'listen' | 'full'
+
+const VOICE_PREF_KEY = 'kernel-voice-preference'
+const VOICE_MODE_KEY = 'kernel-voice-mode'
+
+function loadVoicePref(): TTSVoice {
+  try {
+    const v = localStorage.getItem(VOICE_PREF_KEY)
+    if (v === 'alloy' || v === 'nova' || v === 'echo' || v === 'onyx' || v === 'shimmer') return v
+  } catch { /* ignore */ }
+  return 'alloy'
+}
+
+function loadVoiceMode(): VoiceMode {
+  try {
+    const v = localStorage.getItem(VOICE_MODE_KEY)
+    if (v === 'listen' || v === 'full') return v
+  } catch { /* ignore */ }
+  return 'off'
+}
 
 export function useVoiceLoop(
-    onInterimResult: (text: string) => void,
-    onFinalResult: (text: string) => void,
-    onError: (msg: string) => void
+  onInterimResult: (text: string) => void,
+  onFinalResult: (text: string) => void,
+  onError: (msg: string) => void,
 ) {
-    const [isVoiceMode, setIsVoiceMode] = useState(false)
-    const [isSpeaking, setIsSpeaking] = useState(false)
-    const recognitionRef = useRef<any>(null)
+  const [voiceMode, setVoiceModeState] = useState<VoiceMode>(loadVoiceMode)
+  const [isListening, setIsListening] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [transcript, setTranscript] = useState('')
+  const [selectedVoice, setSelectedVoiceState] = useState<TTSVoice>(loadVoicePref)
 
-    const startListening = useCallback(() => {
-        if (recognitionRef.current || isSpeaking) return
+  const recognitionRef = useRef<any>(null)
+  const voiceModeRef = useRef<VoiceMode>(voiceMode)
+  voiceModeRef.current = voiceMode
+  const isSpeakingRef = useRef(false)
+  isSpeakingRef.current = isSpeaking
 
-        const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
-        if (!SpeechRecognition) {
-            onError('Speech recognition not supported in this browser')
-            return
-        }
+  // Persist voice preference
+  const setSelectedVoice = useCallback((voice: TTSVoice) => {
+    setSelectedVoiceState(voice)
+    try { localStorage.setItem(VOICE_PREF_KEY, voice) } catch { /* ignore */ }
+  }, [])
 
-        const recognition = new SpeechRecognition()
-        recognition.continuous = false // Stop after phrase finishes
-        recognition.interimResults = true
-        recognition.lang = 'en-US'
-
-        recognition.onresult = (event: any) => {
-            let transcript = ''
-            let isFinal = false
-            for (let i = 0; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript
-                if (event.results[i].isFinal) isFinal = true
-            }
-
-            onInterimResult(transcript)
-
-            if (isFinal && transcript.trim()) {
-                onFinalResult(transcript.trim())
-            }
-        }
-
-        recognition.onend = () => {
-            recognitionRef.current = null
-        }
-
-        recognition.onerror = () => {
-            recognitionRef.current = null
-        }
-
-        recognitionRef.current = recognition
-        try {
-            recognition.start()
-        } catch (err) {
-            console.warn('SpeechRecognition start error:', err)
-        }
-    }, [isSpeaking, onInterimResult, onFinalResult, onError])
-
-    const stopListening = useCallback(() => {
-        recognitionRef.current?.stop()
+  // Persist voice mode
+  const setVoiceMode = useCallback((mode: VoiceMode) => {
+    setVoiceModeState(mode)
+    try { localStorage.setItem(VOICE_MODE_KEY, mode) } catch { /* ignore */ }
+    // If turning off, stop everything
+    if (mode === 'off') {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop()
         recognitionRef.current = null
-    }, [])
+      }
+      setIsListening(false)
+      stopAudio()
+      setIsSpeaking(false)
+      setTranscript('')
+    }
+  }, [])
 
-    const toggleVoiceMode = useCallback(() => {
-        setIsVoiceMode(prev => {
-            const next = !prev
-            if (next) {
-                startListening()
-            } else {
-                stopListening()
-                window.speechSynthesis?.cancel()
-                setIsSpeaking(false)
-            }
-            return next
-        })
-    }, [startListening, stopListening])
+  const startListening = useCallback(() => {
+    if (recognitionRef.current || isSpeakingRef.current) return
 
-    const speakResponse = useCallback((text: string, agentId: string = 'kernel') => {
-        if (!isVoiceMode) return
-        if (!window.speechSynthesis) return
+    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      onError('Speech recognition not supported in this browser')
+      return
+    }
 
-        // Clean up text
-        const cleanText = text
-            .replace(/```[\s\S]*?```/g, ' [code block] ')
-            .replace(/https?:\/\/[^\s]+/g, ' [link] ')
-            .replace(/\*|_|#/g, '')
-            .trim()
+    const recognition = new SpeechRecognition()
+    recognition.continuous = false
+    recognition.interimResults = true
+    recognition.lang = 'en-US'
 
-        if (!cleanText) {
-            if (isVoiceMode) startListening()
-            return
-        }
+    recognition.onresult = (event: any) => {
+      let fullTranscript = ''
+      let isFinal = false
+      for (let i = 0; i < event.results.length; i++) {
+        fullTranscript += event.results[i][0].transcript
+        if (event.results[i].isFinal) isFinal = true
+      }
 
-        setIsSpeaking(true)
-        stopListening()
+      setTranscript(fullTranscript)
+      onInterimResult(fullTranscript)
 
-        const utterance = new SpeechSynthesisUtterance(cleanText)
-        const voices = window.speechSynthesis.getVoices()
+      if (isFinal && fullTranscript.trim()) {
+        onFinalResult(fullTranscript.trim())
+        setTranscript('')
+      }
+    }
 
-        const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Siri female'))
-        const maleVoice = voices.find(v => v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Google UK English Male'))
+    recognition.onend = () => {
+      recognitionRef.current = null
+      setIsListening(false)
+    }
 
-        if (agentId === 'aesthete' && femaleVoice) utterance.voice = femaleVoice
-        else if (maleVoice) utterance.voice = maleVoice
+    recognition.onerror = () => {
+      recognitionRef.current = null
+      setIsListening(false)
+    }
 
-        utterance.rate = 1.05
-        utterance.pitch = agentId === 'aesthete' ? 1.1 : 1.0
+    recognitionRef.current = recognition
+    try {
+      recognition.start()
+      setIsListening(true)
+    } catch (err) {
+      console.warn('SpeechRecognition start error:', err)
+      recognitionRef.current = null
+    }
+  }, [onInterimResult, onFinalResult, onError])
 
-        utterance.onend = () => {
-            setIsSpeaking(false)
-            if (isVoiceMode) startListening()
-        }
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop()
+      recognitionRef.current = null
+    }
+    setIsListening(false)
+    setTranscript('')
+  }, [])
 
-        utterance.onerror = () => {
-            setIsSpeaking(false)
-            if (isVoiceMode) startListening()
-        }
+  // Toggle voice mode on/off from the mic button
+  // Clicking mic when off -> 'listen' mode + start listening
+  // Clicking mic when listen/full -> stop listening (but keep mode)
+  const toggleVoiceMode = useCallback(() => {
+    if (voiceModeRef.current === 'off') {
+      // Activate voice mode — default to 'listen'
+      setVoiceModeState('listen')
+      try { localStorage.setItem(VOICE_MODE_KEY, 'listen') } catch { /* ignore */ }
+      startListening()
+    } else if (isListening) {
+      // Currently listening — stop and turn off
+      stopListening()
+      stopAudio()
+      setIsSpeaking(false)
+      setVoiceModeState('off')
+      try { localStorage.setItem(VOICE_MODE_KEY, 'off') } catch { /* ignore */ }
+    } else {
+      // Voice mode is on but not listening — start listening
+      startListening()
+    }
+  }, [isListening, startListening, stopListening])
 
-        window.speechSynthesis.speak(utterance)
-    }, [isVoiceMode, stopListening, startListening])
+  // Speak a response using TTS (for full-loop mode)
+  const speakResponse = useCallback(async (text: string, _agentId?: string) => {
+    const mode = voiceModeRef.current
+    if (mode !== 'full') return
 
-    useEffect(() => {
-        return () => {
-            stopListening()
-            window.speechSynthesis?.cancel()
-        }
-    }, [stopListening])
+    const cleaned = cleanTextForTTS(text)
+    if (!cleaned) {
+      // Nothing to speak — restart listening in full mode
+      if (mode === 'full') startListening()
+      return
+    }
 
-    return { isVoiceMode, toggleVoiceMode, speakResponse, isSpeaking }
+    // Truncate for TTS (max 4096 chars)
+    const truncated = cleaned.length > 4096 ? cleaned.slice(0, 4096) : cleaned
+
+    setIsSpeaking(true)
+    stopListening()
+
+    try {
+      const blob = await synthesizeSpeech(truncated, selectedVoice)
+      await playAudio(blob)
+    } catch (err) {
+      console.warn('[VoiceLoop] TTS error:', err)
+    } finally {
+      setIsSpeaking(false)
+      // In full-loop mode, auto-restart listening after TTS completes
+      if (voiceModeRef.current === 'full') {
+        startListening()
+      }
+    }
+  }, [selectedVoice, startListening, stopListening])
+
+  // Legacy compatibility — maps to the old isVoiceMode boolean
+  const isVoiceMode = voiceMode !== 'off'
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop()
+        recognitionRef.current = null
+      }
+      stopAudio()
+    }
+  }, [])
+
+  return {
+    voiceMode,
+    setVoiceMode,
+    isListening,
+    isSpeaking,
+    transcript,
+    startListening,
+    stopListening,
+    toggleVoiceMode,
+    speakResponse,
+    selectedVoice,
+    setSelectedVoice,
+    // Legacy compatibility
+    isVoiceMode,
+  }
 }

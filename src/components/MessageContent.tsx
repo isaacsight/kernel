@@ -739,12 +739,67 @@ function ThinkingBlock({ thinking, t }: { thinking: string; t: (key: string, opt
   )
 }
 
+// ─── Citation rendering ──────────────────────────────────
+
+// Matches [p.1], [p.12], [p.3-7], [§Introduction], [§2.1]
+const CITATION_REGEX = /\[(p\.\d+(?:-\d+)?|§[^\]]+)\]/g
+const CITATION_TEST = /\[(p\.\d+(?:-\d+)?|§[^\]]+)\]/  // non-global for .test() checks
+
+/** Wrap citation patterns in styled badges, returning mixed React nodes */
+function renderCitations(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = []
+  let lastIdx = 0
+  let m: RegExpExecArray | null
+  let i = 0
+  // Reset lastIndex for safety
+  CITATION_REGEX.lastIndex = 0
+  while ((m = CITATION_REGEX.exec(text)) !== null) {
+    if (m.index > lastIdx) {
+      parts.push(<span key={`ct${i++}`}>{text.slice(lastIdx, m.index)}</span>)
+    }
+    parts.push(
+      <span key={`cb${i++}`} className="ka-citation" title={m[0]}>
+        {m[1]}
+      </span>
+    )
+    lastIdx = m.index + m[0].length
+  }
+  if (lastIdx < text.length) {
+    parts.push(<span key={`ct${i++}`}>{text.slice(lastIdx)}</span>)
+  }
+  return parts
+}
+
 // ─── Message Content (markdown + code blocks + artifacts) ─
 
 // Hoisted outside component to avoid recreating on every render (stable reference for ReactMarkdown)
 const mdComponents = {
   a: ({ href, children }: { href?: string; children?: React.ReactNode }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
   code: ({ children }: { children?: React.ReactNode }) => <code className="ka-inline-code">{children}</code>,
+  // Intercept paragraph text to render citation badges inline
+  p: ({ children }: { children?: React.ReactNode }) => {
+    // If children include plain strings with citation patterns, process them
+    const processed = Array.isArray(children) ? children.map((child, idx) => {
+      if (typeof child === 'string' && CITATION_TEST.test(child)) {
+        return <span key={`cp${idx}`}>{renderCitations(child)}</span>
+      }
+      return child
+    }) : (typeof children === 'string' && CITATION_TEST.test(children as string))
+      ? renderCitations(children)
+      : children
+    return <p>{processed}</p>
+  },
+  li: ({ children }: { children?: React.ReactNode }) => {
+    const processed = Array.isArray(children) ? children.map((child, idx) => {
+      if (typeof child === 'string' && CITATION_TEST.test(child)) {
+        return <span key={`cl${idx}`}>{renderCitations(child)}</span>
+      }
+      return child
+    }) : (typeof children === 'string' && CITATION_TEST.test(children as string))
+      ? renderCitations(children)
+      : children
+    return <li>{processed}</li>
+  },
 }
 
 export function MessageContent({ text, thinking, isLatestMessage = false }: { text: string; thinking?: string; isLatestMessage?: boolean }) {

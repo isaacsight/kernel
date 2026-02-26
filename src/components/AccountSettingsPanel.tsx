@@ -338,6 +338,33 @@ export default function AccountSettingsPanel({
         </div>
       )}
 
+      {/* Voice Preference */}
+      {isPro && (
+        <div className="ka-settings-section">
+          <h3 className="ka-settings-section-header">{t('voice.heading')}</h3>
+          <div className="ka-settings-section-body">
+            <label className="ka-settings-field">
+              <span className="ka-settings-label">{t('voice.ttsVoice')}</span>
+              <select
+                className="ka-settings-voice-select"
+                value={localStorage.getItem('kernel-voice-preference') || 'alloy'}
+                onChange={(e) => {
+                  localStorage.setItem('kernel-voice-preference', e.target.value)
+                  onToast('Voice preference saved')
+                }}
+              >
+                <option value="alloy">Alloy</option>
+                <option value="nova">Nova</option>
+                <option value="echo">Echo</option>
+                <option value="onyx">Onyx</option>
+                <option value="shimmer">Shimmer</option>
+              </select>
+              <span className="ka-settings-hint">{t('voice.ttsVoiceHint')}</span>
+            </label>
+          </div>
+        </div>
+      )}
+
       {/* Reset Data */}
       <div className="ka-settings-section ka-settings-section--warning">
         <h3 className="ka-settings-section-header">{t('resetData.heading')}</h3>

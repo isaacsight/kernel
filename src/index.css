@@ -5969,6 +5969,196 @@ h4 {
     }
 }
 
+/* ─── Voice Controls ──────────────────────────────────── */
+
+.ka-voice-controls {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ka-voice-btn--speaking {
+    background: var(--rubin-primary, #6B5B95);
+    color: #fff;
+    border-color: var(--rubin-primary, #6B5B95);
+    animation: ka-voice-speak-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ka-voice-speak-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(107, 91, 149, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(107, 91, 149, 0); }
+}
+
+.ka-voice-mode-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--rubin-primary, #6B5B95);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ka-voice-transcript {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    background: var(--rubin-bg-elevated, #fff);
+    border: 1px solid var(--rubin-border, rgba(31, 30, 29, 0.08));
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--rubin-text-secondary);
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: var(--shadow-sm);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ka-voice-dropdown {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: var(--rubin-bg-elevated, #fff);
+    border: 1px solid var(--rubin-border, rgba(31, 30, 29, 0.08));
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.ka-voice-dropdown-section {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rubin-border-subtle, rgba(31, 30, 29, 0.04));
+}
+
+.ka-voice-dropdown-section:last-child {
+    border-bottom: none;
+}
+
+.ka-voice-dropdown-label {
+    display: block;
+    padding: 4px 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--rubin-text-tertiary);
+}
+
+.ka-voice-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    color: var(--rubin-text, #1F1E1D);
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--duration-quick) var(--ease-out);
+}
+
+.ka-voice-dropdown-item:hover {
+    background: var(--rubin-bg-hover, rgba(31, 30, 29, 0.04));
+}
+
+.ka-voice-dropdown-item--active {
+    color: var(--rubin-primary, #6B5B95);
+    font-weight: 600;
+}
+
+.ka-voice-dropdown-item--disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.ka-voice-dropdown-item--disabled:hover {
+    background: transparent;
+}
+
+.ka-voice-pro-badge {
+    margin-left: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--rubin-primary, #6B5B95);
+    opacity: 0.7;
+}
+
+/* Speaker button on kernel messages */
+.ka-msg-speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--rubin-text-tertiary);
+    cursor: pointer;
+    opacity: 0;
+    transition: all var(--duration-quick) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.ka-msg:hover .ka-msg-speak-btn,
+.ka-msg-speak-btn--active {
+    opacity: 1;
+}
+
+.ka-msg-speak-btn:hover {
+    color: var(--rubin-primary, #6B5B95);
+    border-color: var(--rubin-border);
+}
+
+.ka-msg-speak-btn--active {
+    color: var(--rubin-primary, #6B5B95);
+    animation: ka-voice-speak-pulse 2s ease-in-out infinite;
+}
+
+/* Voice preference in settings */
+.ka-settings-voice-select {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--rubin-text);
+    background: var(--rubin-bg, #FAF9F6);
+    border: 1px solid var(--rubin-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231F1E1D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    transition: border-color var(--duration-quick) var(--ease-out);
+}
+
+.ka-settings-voice-select:hover,
+.ka-settings-voice-select:focus {
+    border-color: var(--rubin-primary, #6B5B95);
+    outline: none;
+}
+
 /* Search indicator */
 .ka-search-indicator {
     display: flex;
@@ -12376,6 +12566,44 @@ h4 {
     border-color: #E4DFD5;
 }
 
+[data-theme="dark"] .ka-voice-transcript {
+    background: var(--dark-bg-elevated, #2A2724);
+    border-color: var(--dark-border, #3A3630);
+    color: var(--dark-text-secondary, #A09A90);
+}
+
+[data-theme="dark"] .ka-voice-dropdown {
+    background: var(--dark-bg-elevated, #2A2724);
+    border-color: var(--dark-border, #3A3630);
+}
+
+[data-theme="dark"] .ka-voice-dropdown-section {
+    border-color: var(--dark-border-subtle, #2E2B27);
+}
+
+[data-theme="dark"] .ka-voice-dropdown-item {
+    color: var(--dark-text, #E4DFD5);
+}
+
+[data-theme="dark"] .ka-voice-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .ka-voice-dropdown-label {
+    color: var(--dark-text-tertiary, #7A756B);
+}
+
+[data-theme="dark"] .ka-msg-speak-btn:hover {
+    border-color: var(--dark-border, #3A3630);
+}
+
+[data-theme="dark"] .ka-settings-voice-select {
+    background: var(--dark-bg-surface, #232120);
+    color: var(--dark-text, #E4DFD5);
+    border-color: var(--dark-border, #3A3630);
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23E4DFD5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
 /* ── Dark Mode: Ambient Vignette ─────────────────────────── */
 
 [data-theme="dark"] .ka-chat {
@@ -12976,6 +13204,37 @@ h4 {
 [data-theme="eink"] .ka-voice-btn:hover {
     color: #1C1B1A;
     border-color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-voice-btn--speaking {
+    background: #1C1B1A;
+    border-color: #1C1B1A;
+    animation: none;
+}
+
+[data-theme="eink"] .ka-voice-btn--active {
+    animation: none;
+    box-shadow: inset 0 0 0 2px #1C1B1A;
+}
+
+[data-theme="eink"] .ka-voice-dropdown {
+    background: #F5F1E8;
+    border-color: #1C1B1A;
+    box-shadow: 2px 2px 0 #1C1B1A;
+}
+
+[data-theme="eink"] .ka-voice-dropdown-item:hover {
+    background: rgba(28, 27, 26, 0.06);
+}
+
+[data-theme="eink"] .ka-voice-mode-badge {
+    background: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-settings-voice-select {
+    background: #F5F1E8;
+    border-color: #1C1B1A;
+    border-radius: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -15038,4 +15297,145 @@ h4 {
     white-space: pre-wrap;
     line-height: 1.5;
     border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* ─── Deep Document Analysis: Citations ─────────────────── */
+
+.ka-citation {
+    display: inline;
+    padding: 1px 6px;
+    margin: 0 1px;
+    background: rgba(107, 91, 149, 0.1);
+    color: #6B5B95;
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    vertical-align: baseline;
+    cursor: default;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-citation:hover {
+    background: rgba(107, 91, 149, 0.18);
+}
+
+[data-theme="dark"] .ka-citation {
+    background: rgba(155, 139, 197, 0.15);
+    color: #C4B8E0;
+}
+
+[data-theme="dark"] .ka-citation:hover {
+    background: rgba(155, 139, 197, 0.25);
+}
+
+[data-theme="eink"] .ka-citation {
+    background: rgba(0, 0, 0, 0.08);
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ─── Deep Document Analysis: Document Indicator ────────── */
+
+.ka-doc-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    margin: 0 24px;
+    background: rgba(107, 91, 149, 0.06);
+    border: 1px solid rgba(107, 91, 149, 0.15);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: #6B5B95;
+    letter-spacing: 0.03em;
+    overflow: hidden;
+}
+
+.ka-doc-indicator svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.ka-doc-indicator-name {
+    font-weight: 600;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ka-doc-indicator-hint {
+    opacity: 0.5;
+    font-size: 0.62rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ka-doc-indicator-close {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #6B5B95;
+    opacity: 0.4;
+    border-radius: var(--radius-full);
+    transition: opacity var(--duration-fast) var(--ease-out),
+                background var(--duration-fast) var(--ease-out);
+}
+
+.ka-doc-indicator-close:hover {
+    opacity: 1;
+    background: rgba(107, 91, 149, 0.1);
+}
+
+[data-theme="dark"] .ka-doc-indicator {
+    background: rgba(155, 139, 197, 0.08);
+    border-color: rgba(155, 139, 197, 0.2);
+    color: #C4B8E0;
+}
+
+[data-theme="dark"] .ka-doc-indicator-close {
+    color: #C4B8E0;
+}
+
+[data-theme="dark"] .ka-doc-indicator-close:hover {
+    background: rgba(155, 139, 197, 0.15);
+}
+
+[data-theme="eink"] .ka-doc-indicator {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #333;
+}
+
+[data-theme="eink"] .ka-doc-indicator-close {
+    color: #333;
+}
+
+[data-theme="eink"] .ka-doc-indicator-close:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile: narrower margins */
+@media (max-width: 768px) {
+    .ka-doc-indicator {
+        margin: 0 12px;
+    }
+
+    .ka-doc-indicator-hint {
+        display: none;
+    }
+
+    .ka-doc-indicator-name {
+        max-width: 180px;
+    }
 }

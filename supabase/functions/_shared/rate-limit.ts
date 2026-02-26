@@ -37,6 +37,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'shared-conversation':{ free: 30, paid: 30,  pro: 30,  windowSeconds: 60 },
   'reset-user-data':    { free: 3,  paid: 3,   pro: 5,   windowSeconds: 3600 },
   'identity-recovery':  { free: 10, paid: 10,  pro: 20,  windowSeconds: 300 },
+  'tts':                { free: 0,  paid: 0,   pro: 10,  windowSeconds: 60 },
 }
 
 /**
