@@ -6275,6 +6275,132 @@ h4 {
     color: #C7D2FE;
 }
 
+/* ─── Image thumbnails in chat messages ───────────────── */
+
+.ka-msg-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.ka-msg-thumb-btn {
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.ka-msg-thumb-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ka-msg-thumb {
+    display: block;
+    height: 80px;
+    max-width: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+/* ─── Image preview in file chips ─────────────────────── */
+
+.ka-file-chip--image {
+    padding: 4px 10px 4px 4px;
+    gap: 8px;
+}
+
+.ka-file-chip-preview {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* ─── Drag-drop overlay ───────────────────────────────── */
+
+.ka-dropzone {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(107, 91, 149, 0.08);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+.ka-dropzone-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 64px;
+    border: 2px dashed var(--rubin-primary);
+    border-radius: var(--radius-lg);
+    color: var(--rubin-primary);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.ka-dropzone-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* ─── Image lightbox ──────────────────────────────────── */
+
+.ka-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 24px;
+}
+
+.ka-lightbox-img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    cursor: default;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+.ka-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: var(--radius-full);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 /* Code blocks in kernel messages */
 .ka-code-block {
     margin: 10px 0;
@@ -7284,6 +7410,24 @@ h4 {
 
     .ka-file-chips {
         padding: 8px 12px 0;
+    }
+
+    .ka-msg-thumb {
+        height: 60px;
+        max-width: 150px;
+    }
+
+    .ka-lightbox {
+        padding: 12px;
+    }
+
+    .ka-lightbox-img {
+        max-width: 95vw;
+        max-height: 80vh;
+    }
+
+    .ka-dropzone-inner {
+        padding: 32px 40px;
     }
 
     .ka-empty-title {
@@ -11596,7 +11740,155 @@ h4 {
     opacity: 0.5;
 }
 
+/* ─── Thinking Block (Extended Thinking display) ─────────── */
 
+.ka-thinking-block {
+    max-width: 700px;
+    width: 100%;
+    margin-bottom: var(--space-xs);
+}
+
+.ka-thinking-block-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: none;
+    border: none;
+    border-left: 2px solid var(--rubin-primary);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--rubin-primary);
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.ka-thinking-block-toggle:hover {
+    opacity: 1;
+}
+
+.ka-thinking-block-chevron {
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.ka-thinking-block-label {
+    white-space: nowrap;
+}
+
+.ka-thinking-block-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rubin-primary);
+    animation: ka-thinking-pulse 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes ka-thinking-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+.ka-thinking-block-content {
+    overflow: hidden;
+    border-left: 2px solid var(--rubin-primary);
+    margin-left: 0;
+    background: rgba(107, 91, 149, 0.04);
+}
+
+.ka-thinking-block-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--rubin-slate);
+    opacity: 0.65;
+    padding: 10px 14px;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* ─── Thinking Toggle Button (input bar) ─────────────────── */
+
+.ka-thinking-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.ka-thinking-toggle:hover {
+    opacity: 0.7;
+    background: rgba(107, 91, 149, 0.08);
+}
+
+.ka-thinking-toggle--active {
+    opacity: 1;
+    color: var(--rubin-primary);
+    background: rgba(107, 91, 149, 0.1);
+    box-shadow: 0 0 8px rgba(107, 91, 149, 0.25);
+}
+
+.ka-thinking-toggle--active:hover {
+    opacity: 1;
+    background: rgba(107, 91, 149, 0.15);
+}
+
+/* ─── Dark mode overrides ─────────────────────────────────── */
+
+[data-theme="dark"] .ka-thinking-block-toggle {
+    border-left-color: var(--rubin-primary);
+    color: var(--rubin-primary);
+}
+
+[data-theme="dark"] .ka-thinking-block-content {
+    background: rgba(107, 91, 149, 0.08);
+    border-left-color: var(--rubin-primary);
+}
+
+[data-theme="dark"] .ka-thinking-block-text {
+    color: var(--dark-text);
+    opacity: 0.55;
+}
+
+[data-theme="dark"] .ka-thinking-toggle--active {
+    color: var(--rubin-primary);
+    background: rgba(107, 91, 149, 0.15);
+    box-shadow: 0 0 10px rgba(107, 91, 149, 0.3);
+}
+
+/* ─── E-Ink theme overrides ───────────────────────────────── */
+
+[data-theme="eink"] .ka-thinking-block-toggle {
+    border-left-color: var(--rubin-slate);
+    color: var(--rubin-slate);
+}
+
+[data-theme="eink"] .ka-thinking-block-content {
+    background: rgba(0, 0, 0, 0.03);
+    border-left-color: var(--rubin-slate);
+}
+
+[data-theme="eink"] .ka-thinking-toggle--active {
+    color: var(--rubin-slate);
+    background: rgba(0, 0, 0, 0.06);
+    box-shadow: none;
+}
 
 /* ═══════════════════════════════════════════════════════════
    Toast Notifications
@@ -11928,6 +12220,33 @@ h4 {
     color: #FBBF24;
 }
 
+[data-theme="dark"] .ka-msg-thumb-btn:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .ka-file-chip {
+    background: #282520;
+    border-color: #3A3630;
+    color: #E4DFD5;
+}
+
+[data-theme="dark"] .ka-file-chip-size {
+    color: #998;
+}
+
+[data-theme="dark"] .ka-file-chips {
+    background: #1C1A18;
+}
+
+[data-theme="dark"] .ka-dropzone {
+    background: rgba(31, 30, 29, 0.85);
+}
+
+[data-theme="dark"] .ka-dropzone-inner {
+    background: rgba(40, 37, 32, 0.9);
+    border-color: var(--rubin-primary);
+}
+
 [data-theme="dark"] .ka-input-bar {
     background: #1C1A18;
     border-color: #3A3630;
@@ -12229,6 +12548,30 @@ h4 {
 
 [data-theme="eink"] .ka-msg-hint {
     color: #6F6E69;
+}
+
+[data-theme="eink"] .ka-msg-thumb {
+    filter: grayscale(1) contrast(1.1);
+}
+
+[data-theme="eink"] .ka-file-chips {
+    background: #FFFCF0;
+}
+
+[data-theme="eink"] .ka-file-chip {
+    background: #F2F0E5;
+    border-color: #CECDC3;
+    color: #1C1B1A;
+}
+
+[data-theme="eink"] .ka-dropzone {
+    background: rgba(255, 252, 240, 0.85);
+}
+
+[data-theme="eink"] .ka-dropzone-inner {
+    background: #FFFCF0;
+    border-color: #1C1B1A;
+    color: #1C1B1A;
 }
 
 /* ── E-Ink: Input Bar ──────────────────────────────────── */
@@ -14649,4 +14992,50 @@ h4 {
 [data-theme="eink"] .ka-mirror-confidence--high,
 [data-theme="eink"] .ka-mirror-confidence--medium {
     color: #403E3C;
+}
+/* Thinking Block */
+.ka-thinking-block {
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--rubin-sage);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+}
+.ka-thinking-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--rubin-sand);
+    cursor: pointer;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.05);
+}
+.ka-thinking-header:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.ka-thinking-icon {
+    color: var(--rubin-accent);
+}
+.ka-thinking-chevron {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+.ka-thinking-chevron--closed {
+    transform: rotate(-90deg);
+}
+.ka-thinking-content {
+    background: transparent;
+}
+.ka-thinking-block .ka-thinking-text {
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--rubin-slate);
+    opacity: 0.8;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    border-top: 1px solid rgba(0,0,0,0.05);
 }

@@ -46,5 +46,5 @@ export function useFileAttachments(isPro: boolean, onError: (msg: string) => voi
     setAttachedFiles(prev => prev.filter((_, i) => i !== index))
   }, [])
 
-  return { attachedFiles, setAttachedFiles, fileInputRef, handleFileSelect, handlePaste, removeFile }
+  return { attachedFiles, setAttachedFiles, fileInputRef, handleFileSelect, handlePaste, removeFile, addFiles }
 }

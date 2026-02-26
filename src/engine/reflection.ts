@@ -32,11 +32,12 @@ Return ONLY valid JSON: {"substance":0.0,"coherence":0.0,"relevance":0.0,"brevit
 // Different intents care about different quality dimensions.
 // e.g. "reason" demands substance & coherence; "converse" is balanced.
 const INTENT_WEIGHTS: Record<IntentType, Record<keyof AIScores, number>> = {
-  reason:   { substance: 0.30, coherence: 0.30, relevance: 0.20, brevity: 0.10, craft: 0.10 },
+  reason: { substance: 0.30, coherence: 0.30, relevance: 0.20, brevity: 0.10, craft: 0.10 },
   evaluate: { substance: 0.30, coherence: 0.25, relevance: 0.25, brevity: 0.10, craft: 0.10 },
-  build:    { substance: 0.25, coherence: 0.20, relevance: 0.30, brevity: 0.15, craft: 0.10 },
-  discuss:  { substance: 0.20, coherence: 0.25, relevance: 0.20, brevity: 0.15, craft: 0.20 },
+  build: { substance: 0.25, coherence: 0.20, relevance: 0.30, brevity: 0.15, craft: 0.10 },
+  discuss: { substance: 0.20, coherence: 0.25, relevance: 0.20, brevity: 0.15, craft: 0.20 },
   converse: { substance: 0.20, coherence: 0.20, relevance: 0.20, brevity: 0.20, craft: 0.20 },
+  workflow: { substance: 0.25, coherence: 0.25, relevance: 0.30, brevity: 0.10, craft: 0.10 },
 }
 
 function computeWeightedQuality(scores: AIScores, intentType: IntentType): number {
@@ -77,8 +78,8 @@ export function reflect(
   const lastMessage = conversationHistory[conversationHistory.length - 2]
   const buildsOnPrior = lastMessage
     ? output.toLowerCase().split(' ').some(w =>
-        w.length > 4 && lastMessage.content.toLowerCase().includes(w)
-      )
+      w.length > 4 && lastMessage.content.toLowerCase().includes(w)
+    )
     : true
   const coherence = (noErrors ? 0.5 : 0) + (buildsOnPrior ? 0.5 : 0)
 
@@ -120,15 +121,14 @@ export function reflect(
     quality > 0.75
       ? `Strong cycle. ${agent.name}'s voice fits this intent well.`
       : quality > 0.5
-      ? substance < 0.5
-        ? `${agent.name} responded but lacked specifics. Push for concrete details.`
-        : brevity < 0.4
-        ? `Too verbose. ${agent.name} should be more concise for ${perception.intent.type} intents.`
-        : `Adequate. The coherence could improve — build more on prior context.`
-      : `Weak cycle. ${
-          coherence < 0.3 ? 'Lost thread of conversation.' :
+        ? substance < 0.5
+          ? `${agent.name} responded but lacked specifics. Push for concrete details.`
+          : brevity < 0.4
+            ? `Too verbose. ${agent.name} should be more concise for ${perception.intent.type} intents.`
+            : `Adequate. The coherence could improve — build more on prior context.`
+        : `Weak cycle. ${coherence < 0.3 ? 'Lost thread of conversation.' :
           relevance < 0.3 ? 'Missed the actual question.' :
-          `${agent.name} may not be the right voice for this.`
+            `${agent.name} may not be the right voice for this.`
         }`
 
   // ── World Model Update ──

@@ -185,19 +185,19 @@ interface RetryConfig {
 }
 
 const RETRY_MATRIX: Record<ErrorType, RetryConfig> = {
-  upstream_5xx:  { retry: true,  maxRetries: 1, baseDelayMs: 300,  switchProvider: false },
-  timeout:       { retry: true,  maxRetries: 1, baseDelayMs: 500,  switchProvider: true },
-  internal:      { retry: true,  maxRetries: 1, baseDelayMs: 0,    switchProvider: true },
-  missing_key:   { retry: false, maxRetries: 0, baseDelayMs: 0,    switchProvider: false },
-  user_error:    { retry: false, maxRetries: 0, baseDelayMs: 0,    switchProvider: false },
+  upstream_5xx: { retry: true, maxRetries: 1, baseDelayMs: 300, switchProvider: false },
+  timeout: { retry: true, maxRetries: 1, baseDelayMs: 500, switchProvider: true },
+  internal: { retry: true, maxRetries: 1, baseDelayMs: 0, switchProvider: true },
+  missing_key: { retry: false, maxRetries: 0, baseDelayMs: 0, switchProvider: false },
+  user_error: { retry: false, maxRetries: 0, baseDelayMs: 0, switchProvider: false },
 }
 
 // Provider fallback order: prefer highest-quality alternatives
 const PROVIDER_FALLBACKS: Record<Provider, Provider[]> = {
   anthropic: ['openai', 'gemini'],
-  openai:    ['anthropic', 'gemini'],
-  gemini:    ['anthropic', 'openai'],
-  nvidia:    ['openai', 'anthropic'],
+  openai: ['anthropic', 'gemini'],
+  gemini: ['anthropic', 'openai'],
+  nvidia: ['openai', 'anthropic'],
 }
 
 function jitteredDelay(baseMs: number): number {
@@ -294,8 +294,8 @@ async function pickFallbackProvider(
   for (const p of fallbacks) {
     const keyName = p === 'anthropic' ? 'ANTHROPIC_API_KEY'
       : p === 'openai' ? 'OPENAI_API_KEY'
-      : p === 'gemini' ? 'GEMINI_API_KEY'
-      : 'NVIDIA_API_KEY'
+        : p === 'gemini' ? 'GEMINI_API_KEY'
+          : 'NVIDIA_API_KEY'
     if (!Deno.env.get(keyName)) continue
 
     const effectiveScore = getEffectiveScore(scores, p)
@@ -458,6 +458,10 @@ interface ProxyPayload {
   tier?: 'fast' | 'strong'
   model?: string               // explicit model override
   system?: string
+  thinking?: {
+    type: 'enabled'
+    budget_tokens: number
+  }
   messages: { role: string; content: string | unknown[] }[]
   max_tokens?: number
   web_search?: boolean
@@ -491,6 +495,10 @@ async function handleAnthropic(
   }
   if (payload.system) body.system = payload.system
   if (isStream) body.stream = true
+  if (payload.thinking && payload.thinking.type === 'enabled') {
+    body.thinking = payload.thinking
+    body.max_tokens = Math.max(payload.max_tokens ?? 0, (payload.thinking.budget_tokens || 0) + 1024)
+  }
   if (payload.web_search) {
     if (!body.tools) body.tools = []
     body.tools.push({ type: 'web_search_20250305', name: 'web_search', max_uses: 3 })
@@ -1182,7 +1190,7 @@ serve(async (req: Request) => {
             title: 'Daily messages used',
             body: `You've used all ${FREE_LIMIT} free messages. They reset at ${resetTime}.`,
             type: 'info',
-          }).then(() => {}).catch(() => {})
+          }).then(() => { }).catch(() => { })
           const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
           fetch(notifUrl, {
             method: 'POST',
@@ -1193,9 +1201,42 @@ serve(async (req: Request) => {
               body: `Your ${FREE_LIMIT} daily messages will be available again at ${resetTime}.`,
               type: 'info',
             }),
-          }).catch(() => {})
+          }).catch(() => { })
           return new Response(
             JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+            { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+      }
+
+      // Pre-flight image & document check
+      let uploadedImageCount = 0
+      let hasDocument = false
+      if (payload.messages) {
+        for (const m of payload.messages) {
+          if (Array.isArray(m.content)) {
+            for (const block of m.content as any[]) {
+              if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
+              if (block.type === 'document') hasDocument = true
+            }
+          }
+        }
+      }
+
+      if (hasDocument) {
+        return new Response(
+          JSON.stringify({ error: 'document_analysis_pro_only', message: 'Document analysis is a Pro feature.' }),
+          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      const FREE_IMAGE_LIMIT = 3
+      if (uploadedImageCount > 0) {
+        const svc = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+        const { data: imgCheck, error: imgErr } = await svc.rpc('check_image_limit', { p_user_id: user.id })
+        if (!imgErr && imgCheck?.daily_count + uploadedImageCount > FREE_IMAGE_LIMIT) {
+          return new Response(
+            JSON.stringify({ error: 'free_image_limit_reached', limit: FREE_IMAGE_LIMIT, used: imgCheck.daily_count, resets_at: imgCheck.resets_at }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
@@ -1264,8 +1305,13 @@ serve(async (req: Request) => {
     }
 
     // ── Cap max_tokens server-side ─────────────────────────
+    // When thinking is enabled, allow higher max_tokens to accommodate
+    // both the thinking budget and the output tokens.
+    const effectiveTokensCap = payload.thinking?.type === 'enabled'
+      ? MAX_TOKENS_CAP + (payload.thinking.budget_tokens || 0)
+      : MAX_TOKENS_CAP
     if (payload.max_tokens) {
-      payload.max_tokens = Math.min(payload.max_tokens, MAX_TOKENS_CAP)
+      payload.max_tokens = Math.min(payload.max_tokens, effectiveTokensCap)
     }
 
     // ── Enforce model tiers: free users locked to fast tier ─
@@ -1281,6 +1327,8 @@ serve(async (req: Request) => {
       }
       // Disable web_search for free users (extra API cost)
       payload.web_search = false
+      // Disable extended thinking for free users (Pro only)
+      payload.thinking = undefined
     }
 
     // Determine provider (default: anthropic for backward compat)
@@ -1352,6 +1400,21 @@ serve(async (req: Request) => {
       try {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
         await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
+
+        let uploadedImageCount = 0
+        if (payload.messages) {
+          for (const m of payload.messages) {
+            if (Array.isArray(m.content)) {
+              for (const block of m.content as any[]) {
+                if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
+              }
+            }
+          }
+        }
+        if (uploadedImageCount > 0) {
+          await svcCharge.rpc('increment_image_count', { p_user_id: user.id, p_increment: uploadedImageCount })
+        }
+
         console.log(`[grace-shield] Charged message post-success for user=${user.id}`)
       } catch (err) {
         console.error('[grace-shield] Post-success charge failed:', err)
@@ -1365,9 +1428,9 @@ serve(async (req: Request) => {
     function dispatchProvider(p: Provider, m: string): Promise<Response> {
       switch (p) {
         case 'anthropic': return handleAnthropic(payload, m, isStream, trackUserId, CORS_HEADERS)
-        case 'openai':    return handleOpenAI(payload, m, isStream, trackUserId, CORS_HEADERS)
-        case 'gemini':    return handleGemini(payload, m, isStream, trackUserId, CORS_HEADERS)
-        case 'nvidia':    return handleNvidia(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'openai': return handleOpenAI(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'gemini': return handleGemini(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'nvidia': return handleNvidia(payload, m, isStream, trackUserId, CORS_HEADERS)
         default:
           return Promise.resolve(new Response(
             JSON.stringify({ error: `Unknown provider: ${p}` }),
@@ -1401,7 +1464,7 @@ serve(async (req: Request) => {
     // If successful: charge the message and return
     if (firstResponse.ok) {
       await recordMessageState('success')
-      chargeMessageOnSuccess().catch(() => {})  // fire-and-forget
+      chargeMessageOnSuccess().catch(() => { })  // fire-and-forget
       return firstResponse
     }
 
@@ -1448,7 +1511,7 @@ serve(async (req: Request) => {
     if (retryResponse.ok) {
       console.log(`[retry] SUCCESS on retry with ${retryProvider}/${retryModel}`)
       await recordMessageState('success', { attempt: 2, retry_provider: retryProvider })
-      chargeMessageOnSuccess().catch(() => {})
+      chargeMessageOnSuccess().catch(() => { })
     } else {
       await recordMessageState('failed_platform', { attempt: 2, retry_provider: retryProvider, error_type: errType })
     }
@@ -1457,7 +1520,7 @@ serve(async (req: Request) => {
   } catch (error) {
     console.error('claude-proxy error:', error)
     // Try to extract userId from the request context for refund
-    let refundResult = { refunded: false, dailyCount: undefined as number | undefined }
+    let refundResult: { refunded: boolean; dailyCount?: number; resetsAt?: string } = { refunded: false }
     try {
       const svcErr = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
         auth: { persistSession: false, autoRefreshToken: false },

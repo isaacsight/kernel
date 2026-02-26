@@ -31,6 +31,19 @@ export class FreeLimitError extends Error {
   }
 }
 
+export class ImageLimitError extends Error {
+  limit: number
+  used: number
+  resetsAt: string | null
+  constructor(limit: number, used: number, resetsAt?: string) {
+    super(`Daily image limit reached: ${used}/${limit} images used`)
+    this.name = 'ImageLimitError'
+    this.limit = limit
+    this.used = used
+    this.resetsAt = resetsAt ?? null
+  }
+}
+
 export class PlatformRefundError extends Error {
   dailyCount: number | null
   constructor(message: string, dailyCount?: number) {
@@ -55,6 +68,16 @@ interface ClaudeOpts {
   web_search?: boolean
   signal?: AbortSignal
   tools?: any[]
+  thinking?: {
+    type: 'enabled'
+    budget_tokens: number
+  }
+  onThinking?: (thinkingText: string) => void
+}
+
+export interface StreamChatResult {
+  text: string
+  thinking: string
 }
 
 async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?: ClaudeOpts) {
@@ -74,6 +97,7 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       messages: [{ role: 'user', content: prompt }],
       web_search: opts?.web_search ?? false,
       tools: opts?.tools,
+      thinking: opts?.thinking,
     }),
   })
 
@@ -85,8 +109,11 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
         if (body.error === 'free_limit_reached') {
           throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
+        if (body.error === 'free_image_limit_reached') {
+          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        }
       } catch (e) {
-        if (e instanceof FreeLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
       }
     }
     if (res.status === 429) {
@@ -154,6 +181,7 @@ export async function claudeStream(
       max_tokens: opts?.max_tokens ?? 4096,
       messages: [{ role: 'user', content: prompt }],
       tools: opts?.tools,
+      thinking: opts?.thinking,
     }),
   })
 
@@ -165,8 +193,11 @@ export async function claudeStream(
         if (body.error === 'free_limit_reached') {
           throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
+        if (body.error === 'free_image_limit_reached') {
+          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        }
       } catch (e) {
-        if (e instanceof FreeLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
       }
     }
     // Check for auto-refund
@@ -223,7 +254,7 @@ export async function claudeStreamChat(
   messages: { role: string; content: string | ContentBlock[] }[],
   onChunk: (text: string) => void,
   opts?: ClaudeOpts
-): Promise<string> {
+): Promise<StreamChatResult> {
   const token = await getAccessToken()
   const fetchOpts: RequestInit = {
     method: 'POST',
@@ -240,6 +271,7 @@ export async function claudeStreamChat(
       messages,
       web_search: opts?.web_search ?? false,
       tools: opts?.tools,
+      thinking: opts?.thinking,
     }),
     signal: opts?.signal,
   }
@@ -267,8 +299,11 @@ export async function claudeStreamChat(
         if (body.error === 'free_limit_reached') {
           throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
         }
+        if (body.error === 'free_image_limit_reached') {
+          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        }
       } catch (e) {
-        if (e instanceof FreeLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
       }
     }
     if (res.status === 429) {
@@ -296,6 +331,8 @@ export async function claudeStreamChat(
 
   const decoder = new TextDecoder()
   let fullText = ''
+  let fullThinking = ''
+  let currentBlockType: 'text' | 'thinking' | null = null
 
   try {
     while (true) {
@@ -311,6 +348,23 @@ export async function claudeStreamChat(
 
         try {
           const event = JSON.parse(data)
+          // Track content block type (thinking vs text)
+          if (event.type === 'content_block_start') {
+            if (event.content_block?.type === 'thinking') {
+              currentBlockType = 'thinking'
+            } else if (event.content_block?.type === 'text') {
+              currentBlockType = 'text'
+            }
+          }
+          if (event.type === 'content_block_stop') {
+            currentBlockType = null
+          }
+          // Handle thinking deltas
+          if (event.type === 'content_block_delta' && event.delta?.type === 'thinking_delta' && event.delta?.thinking) {
+            fullThinking += event.delta.thinking
+            opts?.onThinking?.(fullThinking)
+          }
+          // Handle text deltas
           if (event.type === 'content_block_delta' && event.delta?.text) {
             fullText += event.delta.text
             onChunk(fullText)
@@ -332,5 +386,5 @@ export async function claudeStreamChat(
     reader.releaseLock()
   }
 
-  return fullText
+  return { text: fullText, thinking: fullThinking }
 }

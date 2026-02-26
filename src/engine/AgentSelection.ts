@@ -132,5 +132,15 @@ export function selectAgent(
         consumedOverride: false,
       };
     }
+
+    case 'workflow': {
+      const routed = routeToAgent(intent.request, routerClassification);
+      return {
+        agent: routed,
+        reason: `Workflow request — routed to orchestrator`,
+        confidence: 0.9,
+        consumedOverride: false,
+      };
+    }
   }
 }

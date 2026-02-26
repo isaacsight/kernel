@@ -17,12 +17,14 @@ export function attend(
   const primaryFocus = intent.type === 'discuss'
     ? intent.topic
     : intent.type === 'reason'
-    ? intent.question
-    : intent.type === 'build'
-    ? intent.description
-    : intent.type === 'evaluate'
-    ? intent.opportunity
-    : intent.message
+      ? intent.question
+      : intent.type === 'build'
+        ? intent.description
+        : intent.type === 'evaluate'
+          ? intent.opportunity
+          : intent.type === 'workflow'
+            ? intent.request
+            : intent.message
 
   // Build salience map from entities + conversation context
   const salience: Record<string, number> = {}
@@ -45,8 +47,8 @@ export function attend(
   // Depth depends on complexity and intent
   const depth: AttentionState['depth'] =
     complexity > 0.6 || intent.type === 'reason' ? 'deep' :
-    complexity > 0.3 || intent.type === 'evaluate' ? 'moderate' :
-    'surface'
+      complexity > 0.3 || intent.type === 'evaluate' ? 'moderate' :
+        'surface'
 
   // Distractions = things that might pull attention away
   const distractions: string[] = []

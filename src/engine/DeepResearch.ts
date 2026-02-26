@@ -117,11 +117,15 @@ async function executeSearch(query: string): Promise<string> {
 // ─── Main Pipeline ──────────────────────────────────────────
 
 export async function deepResearch(
-  question: string,
+  userInput: string | any[],
   userContext: string,
   onProgress: (progress: ResearchProgress) => void,
   onStream: (text: string) => void
 ): Promise<string> {
+  const questionText = typeof userInput === 'string'
+    ? userInput
+    : userInput.find(b => b.type === 'text')?.text || 'Analyze the provided documents.';
+
   const progress: ResearchProgress = {
     phase: 'planning',
     totalQueries: 0,
@@ -134,13 +138,13 @@ export async function deepResearch(
   let queries: string[]
   try {
     const plan = await getProvider().json<ResearchPlan>(
-      `Research question: ${question}`,
+      `Research question: ${questionText}`,
       { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 300 }
     )
     queries = (plan.queries || []).slice(0, 5)
-    if (queries.length === 0) queries = [question]
+    if (queries.length === 0) queries = [questionText]
   } catch {
-    queries = [question]
+    queries = [questionText]
   }
 
   progress.phase = 'searching'
@@ -170,7 +174,7 @@ export async function deepResearch(
       const gradePromise = gradeRelevance(
         finding.split('\n')[0].replace('**Query: ', '').replace('**', ''),
         finding,
-        question
+        questionText
       ).then(grade => {
         totalScore += grade.score
         gradeCount++
@@ -200,7 +204,7 @@ export async function deepResearch(
     progress.phase = 'reformulating'
     onProgress({ ...progress })
 
-    const followUpQueries = await reformulateQueries(question, allGaps, progress.findings.filter(Boolean))
+    const followUpQueries = await reformulateQueries(questionText, allGaps, progress.findings.filter(Boolean))
 
     if (followUpQueries.length > 0) {
       progress.totalQueries += followUpQueries.length
@@ -217,7 +221,6 @@ export async function deepResearch(
     }
   }
 
-  // Step 5: Synthesize findings
   progress.phase = 'synthesizing'
   progress.currentQuery = undefined
   progress.confidence = avgScore
@@ -232,11 +235,19 @@ export async function deepResearch(
     ? '\n\nNote: Research confidence is low — some findings may be incomplete or tangential. Flag this to the user.'
     : ''
 
+  let finalContent: any = `${synthesisContext}Original question: ${questionText}\n\n## Research Findings\n\n${findingsText}${confidenceNote}\n\nSynthesize these findings into a comprehensive response.`
+
+  if (Array.isArray(userInput)) {
+    // Append the document blocks to the prompt so Claude can read them natively
+    const blocks = userInput.filter(b => b.type !== 'text');
+    finalContent = [...blocks, { type: 'text', text: finalContent }];
+  }
+
   const result = await getProvider().streamChat(
     [
       {
         role: 'user',
-        content: `${synthesisContext}Original question: ${question}\n\n## Research Findings\n\n${findingsText}${confidenceNote}\n\nSynthesize these findings into a comprehensive response.`,
+        content: finalContent,
       },
     ],
     onStream,

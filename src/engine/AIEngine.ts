@@ -252,10 +252,11 @@ export function createEngine(): {
 
     const topic =
       perception.intent.type === 'discuss' ? perception.intent.topic :
-      perception.intent.type === 'reason' ? perception.intent.question :
-      perception.intent.type === 'build' ? perception.intent.description :
-      perception.intent.type === 'evaluate' ? perception.intent.opportunity :
-      perception.intent.message;
+        perception.intent.type === 'reason' ? perception.intent.question :
+          perception.intent.type === 'build' ? perception.intent.description :
+            perception.intent.type === 'evaluate' ? perception.intent.opportunity :
+              perception.intent.type === 'workflow' ? perception.intent.request :
+                perception.intent.message;
 
     const claudeMessages: { role: string; content: string }[] = state.working.conversationHistory
       .slice(-10)
@@ -288,6 +289,16 @@ export function createEngine(): {
       : agent.systemPrompt;
     const streak = useCompanionStore.getState().streak;
     const llmOpts = { system: systemPrompt, tier: 'strong' as const, max_tokens: maxTokens, streak };
+
+    if (perception.intent.type === 'workflow') {
+      const { AgenticWorkflow } = await import('./AgenticWorkflow');
+      const workflow = new AgenticWorkflow(agent, {
+        onProgress: (evt) => emit(evt),
+        onChunk: (chunk) => emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() })
+      });
+      const context = state.working.conversationHistory.slice(-5).map(m => `${m.agentName}: ${m.content}`).join('\n');
+      return await workflow.executeSequential(topic, context);
+    }
 
     // Use tool loop if tools are available for this agent
     const agentTools = getToolCount() > 0 ? getToolsForAgent(agent.id) : [];
@@ -469,7 +480,7 @@ export function createEngine(): {
 
     const style = content.length < 30 ? 'terse'
       : content.length < 100 ? 'conversational'
-      : 'detailed';
+        : 'detailed';
     state.worldModel.userModel.communicationStyle = style as typeof state.worldModel.userModel.communicationStyle;
   }
 

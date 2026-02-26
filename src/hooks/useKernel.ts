@@ -111,7 +111,7 @@ export const useKernel = create<KernelStore>()(
             content: `CURRENT TOPIC: "${swarm.topic}"\n\nNow respond as ${currentAgent.name}. Remember: 2-3 sentences max, build on what others said, reference them by name.`,
           });
 
-          const response = await claudeStreamChat(
+          const result = await claudeStreamChat(
             claudeMessages,
             (streamedText) => {
               // Update the message content as it streams
@@ -131,7 +131,7 @@ export const useKernel = create<KernelStore>()(
           set((state) => ({
             messages: state.messages.map(m =>
               m.id === messageId
-                ? { ...m, content: response, isStreaming: false }
+                ? { ...m, content: result.text, isStreaming: false }
                 : m
             ),
             streamingContent: '',

@@ -102,5 +102,11 @@
     "cancel": "Cancel"
   },
   "messagesRemaining": "{{count}} messages remaining",
-  "lastFreeMessage": "Last free message"
+  "lastFreeMessage": "Last free message",
+  "thinking": {
+    "label": "Extended thinking",
+    "duration": "Thought for {{seconds}}s",
+    "streaming": "Thinking...",
+    "toggle": "Toggle extended thinking"
+  }
 }
