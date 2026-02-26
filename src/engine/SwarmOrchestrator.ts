@@ -71,6 +71,7 @@ Selection guidelines:
 - "coder" for technical/programming aspects
 - "writer" for content creation or communication
 - 2 agents for focused queries, 3-4 for complex multi-domain questions
+- For architecture/design queries: ALWAYS include "swarm:architect", "coder", and "analyst". Add "guardian" for security-critical systems.
 
 Respond with ONLY valid JSON:
 {"agents": ["kernel", "analyst"], "focus": "what the synthesis should prioritize"}`
@@ -120,7 +121,8 @@ async function getContributions(
   message: string,
   userMemoryContext: string,
   onProgress: (progress: SwarmProgress) => void,
-  progress: SwarmProgress
+  progress: SwarmProgress,
+  isArchitecture?: boolean,
 ): Promise<{ name: string; contribution: string }[]> {
   const results = await Promise.all(
     agents.map(async (agent, i) => {
@@ -129,12 +131,16 @@ async function getContributions(
           ? `${agent.systemPrompt}\n\n---\n\nUser context:\n${userMemoryContext}`
           : agent.systemPrompt
 
+        const prompt = isArchitecture
+          ? `${message}\n\nProvide your focused architecture perspective in 2-3 paragraphs. Consider: components, data flow, technology choices, risks, and implementation order. Be specific — generic advice is worthless.`
+          : `${message}\n\nProvide your focused perspective in 2-3 concise paragraphs. Be specific and actionable.`
+
         const contribution = await getProvider().text(
-          `${message}\n\nProvide your focused perspective in 2-3 concise paragraphs. Be specific and actionable.`,
+          prompt,
           {
             system,
             tier: 'fast',
-            max_tokens: 600,
+            max_tokens: isArchitecture ? 800 : 600,
             web_search: agent.id === 'researcher',
           }
         )
@@ -168,6 +174,52 @@ Rules:
 - Keep it concise — the power of the swarm is synthesis, not volume
 - Maintain the Kernel's warm, direct voice throughout`
 
+const ARCHITECTURE_SYNTH_SYSTEM = `You are the Kernel — synthesizing specialist perspectives into a structured architecture document.
+
+Your voice: Warm, sharp, real. Like a brilliant friend who actually listens.
+
+Structure your response as a COMPLETE architecture document with these sections:
+
+## Overview
+One paragraph describing what we're building and the core philosophy.
+
+## Components
+A clear component/module breakdown with responsibilities. Use a table if helpful.
+
+## Data Flow
+How data moves through the system. Describe the key flows.
+
+## Technology Choices
+Recommended stack with brief rationale for each choice. Acknowledge alternatives.
+
+## Risks & Trade-offs
+What could go wrong. What we're deliberately accepting. Be honest.
+
+## Implementation Roadmap
+Phased approach — what to build first and why.
+
+Rules:
+- Do NOT attribute individual agents
+- Weave the best insights from each perspective naturally
+- Be specific — generic advice is worthless
+- If perspectives conflict, present the tension and make a recommendation
+- Include an SVG diagram artifact if the system has 3+ components`
+
+/** Detect architecture-related intent for specialized synthesis */
+function isArchitectureQuery(message: string): boolean {
+  const patterns = [
+    /\b(?:architect (?:a|the|this|my|our|an))\b/i,
+    /\b(?:architecture (?:for|of|design|document|review|plan))\b/i,
+    /\b(?:system design)\b/i,
+    /\b(?:design.*system)\b/i,
+    /\b(?:plan.*(?:build|system|app|platform))\b/i,
+    /\b(?:help me (?:design|architect|plan|structure))\b/i,
+    /\b(?:how (?:should|would) (?:I|we) (?:design|architect|build|structure))\b/i,
+    /\b(?:technical.*(?:design|spec|specification))\b/i,
+  ]
+  return patterns.some(p => p.test(message))
+}
+
 // ── Main Orchestrator ─────────────────────────────────
 
 export async function runSwarm(
@@ -199,12 +251,15 @@ export async function runSwarm(
   }))
   onProgress({ ...progress })
 
+  const isArchitecture = isArchitectureQuery(message)
+
   const contributions = await getContributions(
     agents,
     message,
     userMemoryContext,
     onProgress,
-    progress
+    progress,
+    isArchitecture,
   )
 
   if (contributions.length === 0) {
@@ -221,7 +276,8 @@ export async function runSwarm(
     .map(c => `## ${c.name}\n${c.contribution}`)
     .join('\n\n---\n\n')
 
-  const synthSystem = `${SYNTH_SYSTEM}\n\nSynthesis focus: ${focus}`
+  const baseSynth = isArchitecture ? ARCHITECTURE_SYNTH_SYSTEM : SYNTH_SYSTEM
+  const synthSystem = `${baseSynth}\n\nSynthesis focus: ${focus}`
 
   const result = await getProvider().streamChat(
     [

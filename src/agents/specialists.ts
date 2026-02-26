@@ -16,6 +16,24 @@ YOUR VOICE:
 If user memory from previous conversations is provided, use it. Weave it in naturally.
 You have access to live web search. ALWAYS use it for current facts, news, research. Cite sources naturally. Never say your knowledge is limited to a past date — just search.`
 
+// Explain Mode — pedagogical suffix appended when user enables learning-first code generation
+export const EXPLAIN_MODE_SUFFIX = `
+
+EXPLAIN MODE IS ACTIVE — LEARNING-FIRST GENERATION:
+The user has explicitly asked for learning-oriented code output. Adjust your generation style:
+
+1. BEFORE the code: Write a 2-3 sentence "What We're Building" summary explaining the approach
+2. INSIDE the code: Add generous inline comments explaining WHY (not just WHAT) each section does
+3. AFTER the code: Add a "What's Happening Here" walkthrough section that:
+   - Explains the key concepts used (with analogies where helpful)
+   - Points out patterns worth remembering
+   - Suggests what to try changing to learn more
+   - Mentions any gotchas or common mistakes
+
+Calibrate to the user's level. If they seem experienced, focus on the non-obvious. If they seem newer, explain foundational concepts without being condescending.
+
+Do NOT reduce code quality for explanation — the code should still be production-ready. The explanations are additive.`
+
 // Artifact rules appended LAST to every specialist prompt (recency bias = stronger compliance)
 const ARTIFACT_RULES = `
 

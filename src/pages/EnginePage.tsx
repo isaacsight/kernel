@@ -5,7 +5,7 @@ import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
   IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
   IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
-  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart,
+  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart, IconGraduationCap,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
   IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles,
 } from '../components/KernelIcons'
@@ -36,6 +36,7 @@ import { useMiniPhone } from '../hooks/useMiniPhone'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
+import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
@@ -63,6 +64,7 @@ const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatu
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
 const ReliabilityDashboard = lazyRetry(() => import('../components/ReliabilityDashboard').then(m => ({ default: m.ReliabilityDashboard })))
 const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m => ({ default: m.MirrorPanel })))
+const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m => ({ default: m.ProjectPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -284,6 +286,18 @@ function EngineChat() {
     handleNewChat: convs.handleNewChat,
     isPro,
   })
+
+  // Project context — file tracking (select only the action for stable reference)
+  const registerProjectFile = useProjectStore(s => s.registerFile)
+  const messagesRef = useRef(chatEngine.messages)
+  messagesRef.current = chatEngine.messages
+  const handleArtifactRendered = useCallback((filename: string, language: string, content: string) => {
+    const convId = convs.activeConversationId
+    if (!convId) return
+    const latestKernelMsg = messagesRef.current.filter(m => m.role === 'kernel').pop()
+    const messageId = latestKernelMsg?.id || `msg_${Date.now()}`
+    registerProjectFile(convId, filename, language, content, messageId)
+  }, [convs.activeConversationId, registerProjectFile])
 
   const evolution = useEntityEvolution({
     conversationCount: convs.conversations.length,
@@ -547,7 +561,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel || panels.showMirrorPanel
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel || panels.showMirrorPanel || panels.showProjectPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -559,7 +573,7 @@ function EngineChat() {
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress, workflowSteps, isWorkflowActive, cancelWorkflow } = chatEngine
-  const { extendedThinkingEnabled, setExtendedThinkingEnabled, currentThinking, thinkingStartRef } = chatEngine
+  const { extendedThinkingEnabled, setExtendedThinkingEnabled, explainModeEnabled, setExplainModeEnabled, currentThinking, thinkingStartRef } = chatEngine
 
   // Compute last kernel message index for lazy auto-preview
   const lastKernelIndex = useMemo(() => {
@@ -756,6 +770,19 @@ function EngineChat() {
               <MirrorPanel
                 mirror={chatEngine.userMirror}
                 onClose={() => panels.closePanel('mirror')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showProjectPanel && (
+          <BottomSheet onClose={() => panels.closePanel('project')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <ProjectPanel
+                conversationId={convs.activeConversationId}
+                onClose={() => panels.closePanel('project')}
               />
             </Suspense>
           </BottomSheet>
@@ -1179,7 +1206,7 @@ function EngineChat() {
                       <button type="button" className="ka-edit-cancel" onClick={() => { msgActions.setEditingMsgId(null); msgActions.setEditingContent('') }}>{t('feedback.cancel')}</button>
                     </form>
                   ) : msg.content || msg.thinking ? (
-                    msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} /> : <Linkify text={msg.content} />
+                    msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} onArtifactRendered={handleArtifactRendered} conversationId={convs.activeConversationId} /> : <Linkify text={msg.content} />
                   ) : (
                     <div className="ka-typing-grid">
                       <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
@@ -1454,6 +1481,16 @@ function EngineChat() {
           disabled={isStreaming}
           rows={1}
         />
+        <button
+          type="button"
+          className={`ka-explain-toggle${explainModeEnabled ? ' ka-explain-toggle--active' : ''}`}
+          onClick={() => setExplainModeEnabled(prev => !prev)}
+          disabled={isStreaming}
+          aria-label="Toggle explain mode"
+          title="Explain mode — learning-first code"
+        >
+          <IconGraduationCap size={18} />
+        </button>
         {isPro && (
           <button
             type="button"

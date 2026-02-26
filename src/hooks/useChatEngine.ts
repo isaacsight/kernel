@@ -2,11 +2,11 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
 import { claudeStreamChat, RateLimitError, FreeLimitError, ImageLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
-import { getSpecialist } from '../agents/specialists'
+import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
 import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
-import { extractFacet, converge, formatMirrorForPrompt, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
+import { extractFacet, converge, formatMirrorForPrompt, formatCraftCalibration, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
 import {
   captureOutcome, recordOutcome, detectRephrase,
   buildRoutingContext, buildSwarmContext, formatSelfMirror,
@@ -45,6 +45,7 @@ import {
 } from '../components/ChatHelpers'
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
+import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
   name: string
@@ -124,6 +125,12 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
   const [currentThinking, setCurrentThinking] = useState('')
   const thinkingStartRef = useRef<number>(0)
+
+  // Code Explain Mode — pedagogical code generation
+  const [explainModeEnabled, setExplainModeEnabled] = useState(false)
+
+  // Project context — select only the action for stable reference
+  const formatProjectManifest = useProjectStore(s => s.formatManifest)
 
   // Deep Document Analysis state (Pro only)
   const [activeDocument, setActiveDocument] = useState<ActiveDocument | null>(null)
@@ -543,6 +550,13 @@ export function useChatEngine(params: UseChatEngineParams) {
     const mirrorBlock = mirrorText
       ? `\n\n## Mirror\nDeeper patterns the agents have noticed together:\n\n${mirrorText}`
       : ''
+    // Craft calibration — inject coder-specific adaptation when routing to coder
+    const craftBlock = specialist.id === 'coder'
+      ? (() => {
+          const craftText = formatCraftCalibration(userMirrorRef.current)
+          return craftText ? `\n\n${craftText}` : ''
+        })()
+      : ''
     const selfMirrorText = formatSelfMirror(loomRef.current)
     const selfBlock = selfMirrorText
       ? `\n\n## Self\nWhat the Loom sees about how I serve this user:\n\n${selfMirrorText}`
@@ -558,7 +572,16 @@ export function useChatEngine(params: UseChatEngineParams) {
     const docCitationBlock = activeDocumentRef.current
       ? `\n\n## Document Analysis Mode\nThe user has an active document loaded: "${activeDocumentRef.current.name}". When referencing the uploaded document, always cite specific locations using [p.X] notation for pages, [p.X-Y] for page ranges, [§X] for sections, or direct quotes in "quotation marks". Be precise about where information comes from in the document.`
       : ''
-    const systemPrompt = `${specialist.systemPrompt}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}`
+    // Explain mode — append pedagogical instructions when enabled
+    const explainBlock = explainModeEnabled && specialist.id === 'coder' ? EXPLAIN_MODE_SUFFIX : ''
+    // Project manifest — inject file context for coder
+    const projectManifest = activeConversationId && specialist.id === 'coder'
+      ? (() => {
+          const manifest = formatProjectManifest(activeConversationId)
+          return manifest ? `\n\n${manifest}` : ''
+        })()
+      : ''
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -1015,6 +1038,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     handleBriefingGoDeeper, handleBriefingAddGoal,
     userMirror,
     extendedThinkingEnabled, setExtendedThinkingEnabled,
+    explainModeEnabled, setExplainModeEnabled,
     currentThinking, thinkingStartRef,
     activeDocument, hasActiveDocument: !!activeDocument, clearDocument,
     injectProactiveMessage,

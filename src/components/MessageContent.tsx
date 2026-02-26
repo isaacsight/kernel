@@ -25,8 +25,12 @@ import {
   IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet,
   IconFile, IconEye, IconCode, IconPackage, IconChevronDown, IconClose, IconAlertCircle,
   IconTerminal, IconMaximize, IconSmartphone, IconTablet, IconMonitor, IconBrain,
+  IconGitBranch,
 } from './KernelIcons'
 import { downloadFile, downloadAllFiles, LANG_EXT } from './ChatHelpers'
+import { GuardianBadge } from './GuardianBadge'
+import { computeDiff, diffStats, type DiffLine } from '../engine/DiffEngine'
+import { useProjectStore } from '../stores/projectStore'
 import { DURATION, EASE } from '../constants/motion'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 
@@ -321,11 +325,46 @@ function useConsoleCapture(iframeRef: React.RefObject<HTMLIFrameElement | null>)
   return { consoleEntries, renderFailed, reset }
 }
 
+// Artifact version tracking is handled by useProjectStore (persisted via Zustand).
+// No module-level registry needed — ArtifactCard reads previous content directly from the store.
+
+// ─── Diff View ───────────────────────────────────────────
+
+function DiffView({ oldCode, newCode }: { oldCode: string; newCode: string }) {
+  const diff = useMemo(() => computeDiff(oldCode, newCode), [oldCode, newCode])
+  const stats = useMemo(() => diffStats(diff), [diff])
+
+  return (
+    <div className="ka-diff">
+      <div className="ka-diff-stats">
+        <span className="ka-diff-stat ka-diff-stat--add">+{stats.additions}</span>
+        <span className="ka-diff-stat ka-diff-stat--remove">-{stats.removals}</span>
+      </div>
+      <pre className="ka-diff-pre">
+        {diff.map((line: DiffLine, i: number) => (
+          <div key={i} className={`ka-diff-line ka-diff-line--${line.type}`}>
+            <span className="ka-diff-gutter">
+              {line.type === 'remove' ? line.oldLineNo : line.type === 'add' ? '' : line.oldLineNo}
+            </span>
+            <span className="ka-diff-gutter">
+              {line.type === 'add' ? line.newLineNo : line.type === 'remove' ? '' : line.newLineNo}
+            </span>
+            <span className="ka-diff-marker">
+              {line.type === 'add' ? '+' : line.type === 'remove' ? '\u2212' : ' '}
+            </span>
+            <span className="ka-diff-content">{line.content}</span>
+          </div>
+        ))}
+      </pre>
+    </div>
+  )
+}
+
 // ─── File Artifact Card ──────────────────────────────────
 
 const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
 
-function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
+function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRendered, conversationId }: {
   filename: string
   lang: string
   code: string
@@ -333,6 +372,8 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
   title?: string
   t: (key: string, opts?: Record<string, unknown>) => string
   autoPreview?: boolean
+  onRendered?: (filename: string, language: string, content: string) => void
+  conversationId?: string | null
 }) {
   const [copied, setCopied] = useState(false)
   const canPreview = PREVIEWABLE_EXTS.includes(ext)
@@ -340,10 +381,27 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
   const shouldAutoPreview = canPreview && !!autoPreview && !isSmallSvg
   const [expanded, setExpanded] = useState(shouldAutoPreview)
   const [showPreview, setShowPreview] = useState(shouldAutoPreview)
+  const [showDiff, setShowDiff] = useState(false)
   const [iframeLoaded, setIframeLoaded] = useState(false)
   const [showFullscreen, setShowFullscreen] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const { consoleEntries, renderFailed, reset } = useConsoleCapture(iframeRef)
+
+  // Track previous version for diff — reads from project store's previousContents map.
+  // getPreviousContent() returns the content BEFORE registerFile() overwrites it,
+  // so it survives the store update triggered by onRendered.
+  const [previousCode, setPreviousCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Capture previous content BEFORE registering — registerFile saves old→previousContents first
+    if (onRendered) onRendered(filename, lang, code)
+    // After registration, read back the stashed previous content
+    if (conversationId) {
+      const prev = useProjectStore.getState().getPreviousContent(conversationId, filename)
+      if (prev && prev !== code) setPreviousCode(prev)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // only on mount
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
@@ -389,6 +447,7 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
           <span className="ka-artifact-lang">{lang}</span>
         </div>
       </div>
+      {lineCount >= 8 && <GuardianBadge code={code} filename={filename} language={lang} />}
       <div className="ka-artifact-actions">
         <button className="ka-artifact-action" onClick={handleCopy} aria-label={t('copy')}>
           {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}
@@ -410,6 +469,16 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
             {t('fullscreen')}
           </button>
         )}
+        {previousCode && (
+          <button
+            className={`ka-artifact-action${showDiff ? ' ka-artifact-action--active' : ''}`}
+            onClick={() => { setShowDiff(!showDiff); setShowPreview(false); if (!expanded) setExpanded(true) }}
+            aria-label={showDiff ? 'Hide changes' : 'Show changes'}
+          >
+            <IconGitBranch size={13} />
+            {showDiff ? 'Code' : 'Diff'}
+          </button>
+        )}
         <button className="ka-artifact-action ka-artifact-action--primary" onClick={() => downloadFile(code, filename)} aria-label={`${t('download')} ${filename}`}>
           <IconDownload size={13} />
           {t('download')}
@@ -417,7 +486,9 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview }: {
       </div>
       {expanded && (
         <>
-          {showPreview && canPreview ? (
+          {showDiff && previousCode ? (
+            <DiffView oldCode={previousCode} newCode={code} />
+          ) : showPreview && canPreview ? (
             <div className="ka-artifact-preview">
               {!iframeLoaded && <PreviewLoading />}
               {renderFailed && iframeLoaded && (
@@ -802,7 +873,7 @@ const mdComponents = {
   },
 }
 
-export function MessageContent({ text, thinking, isLatestMessage = false }: { text: string; thinking?: string; isLatestMessage?: boolean }) {
+export function MessageContent({ text, thinking, isLatestMessage = false, onArtifactRendered, conversationId }: { text: string; thinking?: string; isLatestMessage?: boolean; onArtifactRendered?: (filename: string, language: string, content: string) => void; conversationId?: string | null }) {
   const { t } = useTranslation('common')
   const parts: React.ReactNode[] = []
 
@@ -855,6 +926,8 @@ export function MessageContent({ text, thinking, isLatestMessage = false }: { te
           title={title || undefined}
           t={t}
           autoPreview={isLatestMessage && PREVIEWABLE_EXTS.includes(ext)}
+          onRendered={onArtifactRendered}
+          conversationId={conversationId}
         />
       )
     } else {
@@ -906,6 +979,8 @@ export function MessageContent({ text, thinking, isLatestMessage = false }: { te
             title={title || undefined}
             t={t}
             autoPreview={isLatestMessage && PREVIEWABLE_EXTS.includes(ext)}
+            onRendered={onArtifactRendered}
+            conversationId={conversationId}
           />
         )
       } else {
