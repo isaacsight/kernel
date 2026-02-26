@@ -196,18 +196,23 @@ export function PrivacyPage() {
 
       <ul>
         <li><strong>Supabase</strong> (supabase.com) &mdash; Authentication, PostgreSQL database, edge functions, and file storage. Your data is stored on Supabase's infrastructure. Supabase processes data in accordance with their <a href="https://supabase.com/privacy" target="_blank" rel="noopener">privacy policy</a> and we maintain a data processing agreement with them.</li>
-        <li><strong>Anthropic</strong> (anthropic.com) &mdash; Claude language models power Kernel's responses. Your messages and relevant context are sent to Anthropic's API for processing. Anthropic's <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">usage policy</a> applies to that processing. Anthropic does not use API inputs to train models.</li>
+        <li><strong>Anthropic</strong> (anthropic.com) &mdash; Claude language models power Kernel's default responses. Your messages and relevant context are sent to Anthropic's API for processing. When Kernel performs web searches, it uses Claude's built-in web search capability &mdash; search queries (not your full conversation) are sent through Anthropic's API. Anthropic's <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">usage policy</a> applies to all processing. Anthropic does not use API inputs to train models.</li>
+        <li><strong>OpenAI</strong> (openai.com) &mdash; Audio transcription (Whisper) and text-to-speech services. When you send voice messages, audio is transcribed via OpenAI's API. When Kernel reads responses aloud, speech is generated via OpenAI's TTS API. Additionally, OpenAI models (GPT-4o) are available as an alternative AI provider if you select them. OpenAI's <a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">privacy policy</a> applies. Conversation content is sent to OpenAI only when these features are used.</li>
+        <li><strong>Google</strong> (google.com) &mdash; Gemini language models are available as an alternative AI provider if you select them. When a Gemini model is active, your messages and context are sent to Google's API for processing. Google's <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a> applies.</li>
+        <li><strong>NVIDIA</strong> (nvidia.com) &mdash; Open-source language models (Llama) hosted by NVIDIA are available as an alternative AI provider if you select them. When an NVIDIA-hosted model is active, your messages and context are sent to NVIDIA's API. NVIDIA's <a href="https://www.nvidia.com/en-us/about-nvidia/privacy-policy/" target="_blank" rel="noopener">privacy policy</a> applies.</li>
         <li><strong>Stripe</strong> (stripe.com) &mdash; Payment processing for Pro subscriptions. Stripe's <a href="https://stripe.com/privacy" target="_blank" rel="noopener">privacy policy</a> governs payment data.</li>
-        <li><strong>Perplexity</strong> (perplexity.ai) &mdash; Web search when Kernel needs current information. Search queries (not your full conversation) are sent to Perplexity's API.</li>
         <li><strong>PostHog</strong> (posthog.com) &mdash; Product analytics. Collects anonymous usage data (page views, feature interactions, session duration) to help us understand how Kernel is used. PostHog's <a href="https://posthog.com/privacy" target="_blank" rel="noopener">privacy policy</a> applies. We do not send conversation content to PostHog.</li>
         <li><strong>Sentry</strong> (sentry.io) &mdash; Error monitoring. When Kernel encounters a software error, Sentry captures the error details (stack trace, browser info, error message) to help us fix bugs. Sentry's <a href="https://sentry.io/privacy/" target="_blank" rel="noopener">privacy policy</a> applies. Conversation content is not included in error reports.</li>
         <li><strong>Resend</strong> (resend.com) &mdash; Transactional and announcement emails. Your email address is shared with Resend for the purpose of sending service communications. Resend's <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">privacy policy</a> applies.</li>
       </ul>
 
       <p>
-        <strong>What we send to the AI model:</strong> Your message, recent conversation history,
+        <strong>What we send to AI providers:</strong> Your message, recent conversation history,
         a summary of your memory profile, relevant knowledge graph entries, and convergence
-        insights. We do not send your full conversation archive or raw facet data.
+        insights. We do not send your full conversation archive or raw facet data. The same
+        context is sent regardless of which AI provider processes your message. By default,
+        Kernel uses Anthropic's Claude models. Alternative providers (OpenAI, Google, NVIDIA)
+        only receive your data when you explicitly select one of their models.
       </p>
 
       <p>
