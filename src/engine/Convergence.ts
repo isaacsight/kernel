@@ -243,6 +243,69 @@ export function formatMirrorForPrompt(mirror: UserMirror): string {
   return result.slice(0, 1500)
 }
 
+/**
+ * Format coder-specific calibration from the Convergence mirror.
+ * Injects into coder system prompt to adapt code output to user's skill level.
+ */
+export function formatCraftCalibration(mirror: UserMirror): string {
+  if (!mirror) return ''
+
+  const coderFacet = mirror.facets['coder']
+  const analystFacet = mirror.facets['analyst']
+
+  // Need at least the coder facet with observations
+  if (!coderFacet || coderFacet.observations.length === 0) return ''
+
+  const parts: string[] = []
+  parts.push('## CRAFT CALIBRATION')
+  parts.push('Adapt your code output to match this user\'s demonstrated level and preferences:')
+  parts.push('')
+
+  // Coder observations → technical identity
+  if (coderFacet.observations.length > 0) {
+    parts.push('**Technical identity:**')
+    for (const obs of coderFacet.observations.slice(0, 4)) {
+      parts.push(`- ${obs}`)
+    }
+  }
+
+  // Coder patterns → coding style
+  if (coderFacet.patterns.length > 0) {
+    parts.push('')
+    parts.push('**Coding patterns:**')
+    for (const pat of coderFacet.patterns.slice(0, 3)) {
+      parts.push(`- ${pat}`)
+    }
+  }
+
+  // Analyst facet → decision-making style (useful for code trade-offs)
+  if (analystFacet && analystFacet.patterns.length > 0) {
+    parts.push('')
+    parts.push('**Decision style:**')
+    for (const pat of analystFacet.patterns.slice(0, 2)) {
+      parts.push(`- ${pat}`)
+    }
+  }
+
+  // Convergence insights that involve the coder facet
+  const coderInsights = mirror.insights.filter(i =>
+    i.sources.includes('coder') && i.confidence >= 0.6
+  )
+  if (coderInsights.length > 0) {
+    parts.push('')
+    parts.push('**Emergent insights about their craft:**')
+    for (const insight of coderInsights.slice(0, 3)) {
+      parts.push(`- ${insight.insight}`)
+    }
+  }
+
+  parts.push('')
+  parts.push('Use this calibration to adjust: comment density, abstraction level, error handling verbosity, variable naming style, and whether to explain decisions inline or after the code.')
+
+  const result = parts.join('\n')
+  return result.slice(0, 1200) // cap to prevent prompt bloat
+}
+
 // ── Scheduling ────────────────────────────────────────────────
 
 export function shouldConverge(mirror: UserMirror, messageCount: number): boolean {
