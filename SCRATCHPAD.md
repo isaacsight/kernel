@@ -4,12 +4,40 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-26, latest)
+## Current Session (2026-02-26 evening)
 
 ### Accomplished This Session
 
+#### Shipped Data Export + Insights Fixes
+Deployed all uncommitted work from earlier session — data export endpoint, insights backend fixes, and frontend changes. Full E2E verification via Playwright.
+
+**Deployed:**
+- Migration `037_insights_fixes.sql` applied via Supabase MCP (CLI migration history was out of sync — used `apply_migration` directly)
+- 3 edge functions deployed: `export-user-data`, `evaluate-chat`, `extract-insights`
+- Frontend built (JS: 93KB gzip, CSS: 40KB gzip, 1080 modules) and deployed to GitHub Pages
+- Commits pushed to origin/main: `cae96c889` (data export + insights fixes), `d5985cf39` (session logs)
+
+**API Key Rotation:**
+- Rotated Anthropic API key (old keys were leaked in `.claude/prompt-log.txt`)
+- Updated Supabase secrets via `supabase secrets set`
+- Redacted 3 leaked keys (2 Anthropic + 1 Google) from prompt-log before push
+- GitHub push protection caught the leak — amended commit to remove secrets from history
+
+**E2E Test Results (all PASS):**
+- AI + new API key: sent "1+1", got "2", convergence produced 2 insights
+- Export data: downloaded `kernel-data-export-2026-02-26.json` — 23 tables, 74 records, 428ms
+- Rate limit: 3rd export attempt returned 429 with `retry_after: 6471s`
+- Privacy page: portability text updated to reference "Export my data" in Account Settings
+- kernel.chat: HTTP 200, 141ms
+
+---
+
+## Previous Session (2026-02-26, daytime)
+
+### Accomplished
+
 #### Data Export Endpoint — GDPR/CCPA Portability
-Built and shipped automated data export, fulfilling Privacy Policy's portability promise (GDPR Art. 20 / CCPA).
+Built automated data export, fulfilling Privacy Policy's portability promise (GDPR Art. 20 / CCPA).
 
 **New edge function** (`supabase/functions/export-user-data/index.ts`):
 - 22 parallel `safeQuery()` calls across all user tables + 1 conditional follow-up for `discord_user_memory`
@@ -28,8 +56,6 @@ Built and shipped automated data export, fulfilling Privacy Policy's portability
 
 **Security fixes during ship pipeline:**
 - P1: `recovery_requests` switched from `select('*')` to explicit column list (excludes `old_value`, `new_value`, `risk_factors`)
-
-Shipped via 6-gate pipeline — all gates PASS. Edge function deployed. JS: 93KB gzip | CSS: 40KB gzip.
 
 #### Notification UX — Auto-Read, Dismiss, Clear All
 Fixed notifications so they disappear once read and can be cleared. Commit `994ee7b38`, deployed live.
@@ -227,8 +253,10 @@ Built and tested 6 Pro features. Found and fixed 3 critical bugs:
 
 ## Ongoing Backlog
 
-- **All prior work items**: DONE (P1-P15, backend, accounts, legal, convergence, limits, Pro features, thinking toggle, animation tokens, design polish, dep updates, MCP dotenv fix, legal compliance overhaul, legal accuracy audit, vibe coding R&D, landing page redesign)
-- **Data export endpoint**: DONE — `/export-user-data` edge function + "Export my data" button in Account Settings. Shipped 2026-02-26.
+- **All prior work items**: DONE (P1-P15, backend, accounts, legal, convergence, limits, Pro features, thinking toggle, animation tokens, design polish, dep updates, MCP dotenv fix, legal compliance overhaul, legal accuracy audit, vibe coding R&D, landing page redesign, data export, insights fixes)
+- **Data export endpoint**: DONE — Deployed, E2E verified. `/export-user-data` edge function + "Export my data" button in Account Settings. Rate limit confirmed working (429 on repeat).
+- **Supabase CLI migration history**: OUT OF SYNC — 29 remote migrations not found locally. `supabase db push` fails. Workaround: use Supabase MCP `apply_migration` tool directly. To fix permanently: run `supabase db pull` to sync local migration files with remote.
+- **API key rotation**: Anthropic key rotated 2026-02-26 evening. Google key also rotated by user. Old keys redacted from `.claude/prompt-log.txt`.
 - **Share link OG proxy**: Built and deployed as Cloudflare Worker (`kernel-og-proxy`). Share URLs now use `/s/{uuid}` format. Worker intercepts crawler UAs (Twitterbot, Discord, etc.) and returns OG meta tags; humans get 302 redirect to `/#/shared/{uuid}`. **PENDING: DNS propagation** — kernel.chat nameservers need to switch from GoDaddy (`domaincontrol.com`) to Cloudflare. Once propagated, Worker routes activate automatically.
 - **Dep updates held**: framer-motion v12 + lucide-react v0.575 (breaking changes, need testing)
 - **Discord webhook MCP**: Was working, now returning 401 as of 2026-02-26 evening. Webhook URL in `.env` may need refresh.
