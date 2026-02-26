@@ -14,6 +14,7 @@ describe('useNotificationPrefs', () => {
       briefings: true,
       goals: true,
       reminders: true,
+      proactive: true,
     })
   })
 

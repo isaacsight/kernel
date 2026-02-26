@@ -152,6 +152,27 @@ serve(async (req: Request) => {
       }
     }
 
+    // ── Proactive briefings: generate "Kernel noticed..." insights ──
+    try {
+      const proactiveUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/proactive-briefings`
+      const proactiveRes = await fetch(proactiveUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+        },
+        body: JSON.stringify({}),
+      })
+      if (proactiveRes.ok) {
+        const result = await proactiveRes.json()
+        console.log(`[proactive] Processed: ${result.processed}, skipped: ${result.skipped}`)
+      } else {
+        console.warn(`[proactive] Failed (${proactiveRes.status}):`, await proactiveRes.text().catch(() => 'unknown'))
+      }
+    } catch (proactiveErr) {
+      console.warn('Proactive briefings failed (non-blocking):', proactiveErr)
+    }
+
     // ── Cleanup: purge expired rate limits, old audit events, old errors ──
     try {
       await supabase.rpc('cleanup_rate_limits')

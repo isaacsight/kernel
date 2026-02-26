@@ -24,6 +24,7 @@
     "notifBriefings": "Briefing alerts",
     "notifGoals": "Goal updates",
     "notifReminders": "Reminders",
+    "notifProactive": "Proactive insights",
     "notifPush": "Push notifications",
     "darkMode": "Dark mode",
     "theme": "Theme",
@@ -123,5 +124,18 @@
     "active": "Analyzing: {{name}}",
     "clear": "Clear document",
     "contextHint": "Ask follow-up questions about this document"
+  },
+  "proactive": {
+    "noticed": "Kernel noticed...",
+    "notification": "Kernel has an observation for you",
+    "explore": "Let's explore this"
+  },
+  "workflow": {
+    "planning": "Planning steps...",
+    "executing": "Executing: {{step}}",
+    "complete": "Workflow complete",
+    "failed": "Step failed: {{step}}",
+    "cancel": "Cancel workflow",
+    "cancelled": "Workflow cancelled"
   }
 }

@@ -31,6 +31,7 @@ vi.mock('react-i18next', () => ({
         'menu.notifBriefings': 'Briefing alerts',
         'menu.notifGoals': 'Goal updates',
         'menu.notifReminders': 'Reminders',
+        'menu.notifProactive': 'Proactive insights',
         'features': 'Features',
         'language': 'Language',
         'account': 'Account',
@@ -43,7 +44,7 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../hooks/useNotificationPrefs', () => ({
   useNotificationPrefs: () => ({
-    prefs: { inApp: true, briefings: true, goals: false, reminders: true },
+    prefs: { inApp: true, briefings: true, goals: false, reminders: true, proactive: true },
     update: vi.fn(),
   }),
 }))
@@ -143,21 +144,23 @@ describe('MoreMenu', () => {
     expect(screen.getByText('Briefing alerts')).toBeInTheDocument()
     expect(screen.getByText('Goal updates')).toBeInTheDocument()
     expect(screen.getByText('Reminders')).toBeInTheDocument()
+    expect(screen.getByText('Proactive insights')).toBeInTheDocument()
   })
 
   it('toggles have role="switch" for accessibility', () => {
     render(<MoreMenu {...baseProps} />)
     const switches = screen.getAllByRole('switch')
-    expect(switches).toHaveLength(4)
+    expect(switches).toHaveLength(5)
   })
 
   it('toggle states reflect notification prefs', () => {
     render(<MoreMenu {...baseProps} />)
     const switches = screen.getAllByRole('switch')
-    // inApp: true, briefings: true, goals: false, reminders: true
+    // inApp: true, briefings: true, goals: false, reminders: true, proactive: true
     expect(switches[0]).toBeChecked() // inApp
     expect(switches[1]).toBeChecked() // briefings
     expect(switches[2]).not.toBeChecked() // goals
     expect(switches[3]).toBeChecked() // reminders
+    expect(switches[4]).toBeChecked() // proactive
   })
 })

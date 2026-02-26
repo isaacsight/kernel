@@ -204,6 +204,11 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
             <input type="checkbox" role="switch" aria-checked={prefs.reminders} checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
             <span className="ka-more-toggle-track" />
           </label>
+          <label className="ka-more-toggle">
+            <span>{t('menu.notifProactive')}</span>
+            <input type="checkbox" role="switch" aria-checked={prefs.proactive} checked={prefs.proactive} onChange={e => updateNotifPrefs({ proactive: e.target.checked })} />
+            <span className="ka-more-toggle-track" />
+          </label>
           {pushSupported && (
             <label className="ka-more-toggle">
               <span>{t('menu.notifPush')}</span>

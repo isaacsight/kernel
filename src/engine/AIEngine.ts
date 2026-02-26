@@ -292,12 +292,12 @@ export function createEngine(): {
 
     if (perception.intent.type === 'workflow') {
       const { AgenticWorkflow } = await import('./AgenticWorkflow');
-      const workflow = new AgenticWorkflow(agent, {
+      const workflow = new AgenticWorkflow(agent.systemPrompt, {
         onProgress: (evt) => emit(evt),
-        onChunk: (chunk) => emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() })
+        onChunk: (chunk) => emit({ type: 'response_chunk', text: chunk, timestamp: Date.now() }),
       });
       const context = state.working.conversationHistory.slice(-5).map(m => `${m.agentName}: ${m.content}`).join('\n');
-      return await workflow.executeSequential(topic, context);
+      return await workflow.execute(topic, context);
     }
 
     // Use tool loop if tools are available for this agent

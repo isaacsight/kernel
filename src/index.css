@@ -3908,9 +3908,92 @@ h4 {
     margin-top: var(--space-xs);
 }
 
+/* ── Proactive Notification Items ───────────────────────── */
+
+.ka-notif-proactive {
+    border-left: 3px solid var(--rubin-primary);
+    background: linear-gradient(135deg, rgba(107, 91, 149, 0.04) 0%, rgba(107, 91, 149, 0.01) 100%);
+}
+
+.ka-notif-proactive .ka-notif-item-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--rubin-primary);
+}
+
+.ka-notif-proactive-icon {
+    color: var(--rubin-primary);
+    flex-shrink: 0;
+}
+
+.ka-notif-proactive .ka-notif-item-body {
+    opacity: 0.75;
+    font-style: italic;
+}
+
+/* ── Proactive Message Bubble ──────────────────────────── */
+
+.ka-msg-proactive .ka-msg-bubble {
+    border: 1px solid rgba(107, 91, 149, 0.15);
+    background: linear-gradient(135deg, rgba(107, 91, 149, 0.04) 0%, transparent 60%);
+    position: relative;
+}
+
+.ka-msg-proactive-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--rubin-primary);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(107, 91, 149, 0.1);
+}
+
+.ka-msg-proactive-icon {
+    color: var(--rubin-primary);
+    flex-shrink: 0;
+}
+
 [data-theme="dark"] .ka-notif-dropdown {
     background: var(--dark-bg-surface);
     border-color: var(--dark-border-subtle);
+}
+
+/* ── Dark: Proactive Notification Items ────────────────── */
+
+[data-theme="dark"] .ka-notif-proactive {
+    background: linear-gradient(135deg, rgba(107, 91, 149, 0.1) 0%, rgba(107, 91, 149, 0.03) 100%);
+    border-left-color: var(--rubin-primary);
+}
+
+[data-theme="dark"] .ka-notif-proactive .ka-notif-item-title {
+    color: #C4B8E0;
+}
+
+[data-theme="dark"] .ka-notif-proactive-icon {
+    color: #C4B8E0;
+}
+
+/* ── Dark: Proactive Message Bubble ────────────────────── */
+
+[data-theme="dark"] .ka-msg-proactive .ka-msg-bubble {
+    border-color: rgba(107, 91, 149, 0.25);
+    background: linear-gradient(135deg, rgba(107, 91, 149, 0.08) 0%, transparent 60%);
+}
+
+[data-theme="dark"] .ka-msg-proactive-label {
+    color: #C4B8E0;
+    border-bottom-color: rgba(107, 91, 149, 0.15);
+}
+
+[data-theme="dark"] .ka-msg-proactive-icon {
+    color: #C4B8E0;
 }
 
 /* ─── Scheduled Tasks Panel ────────────────────────────── */
@@ -13071,6 +13154,37 @@ h4 {
     box-shadow: none;
 }
 
+/* ── E-Ink: Proactive Notification Items ──────────────── */
+
+[data-theme="eink"] .ka-notif-proactive {
+    background: #F2F0E5;
+    border-left: 3px solid #575653;
+}
+
+[data-theme="eink"] .ka-notif-proactive .ka-notif-item-title {
+    color: #343331;
+}
+
+[data-theme="eink"] .ka-notif-proactive-icon {
+    color: #575653;
+}
+
+/* ── E-Ink: Proactive Message Bubble ─────────────────── */
+
+[data-theme="eink"] .ka-msg-proactive .ka-msg-bubble {
+    border: 1px solid #CECDC3;
+    background: #F2F0E5;
+}
+
+[data-theme="eink"] .ka-msg-proactive-label {
+    color: #575653;
+    border-bottom-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-msg-proactive-icon {
+    color: #575653;
+}
+
 /* ── E-Ink: Landing Page ───────────────────────────────── */
 [data-theme="eink"] .landing {
     background: #FFFCF0;
@@ -15437,5 +15551,342 @@ h4 {
 
     .ka-doc-indicator-name {
         max-width: 180px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Workflow Timeline — Agentic Workflow Progress Display
+   ═══════════════════════════════════════════════════════════════ */
+
+.ka-workflow-timeline {
+    margin: 0 20px 12px;
+    background: var(--rubin-ivory-med, #F5F4F1);
+    border: 1px solid var(--rubin-ivory-dark, #E8E6E1);
+    border-radius: var(--radius-md, 10px);
+    overflow: hidden;
+}
+
+.ka-workflow-timeline-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm, 8px);
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono, 'Courier Prime', monospace);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rubin-primary, #6B5B95);
+    text-align: left;
+}
+
+.ka-workflow-timeline-header:hover {
+    background: rgba(107, 91, 149, 0.04);
+}
+
+.ka-workflow-timeline-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ka-workflow-timeline-count {
+    font-size: 0.6rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.ka-workflow-timeline-chevron {
+    font-size: 0.6rem;
+    opacity: 0.5;
+    transition: transform var(--duration-fast, 150ms) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.ka-workflow-timeline-chevron--open {
+    transform: rotate(90deg);
+}
+
+.ka-workflow-steps {
+    padding: 0 16px 12px;
+    overflow: hidden;
+}
+
+.ka-workflow-step {
+    display: flex;
+    gap: var(--space-sm, 8px);
+    min-height: 32px;
+    transition: opacity var(--duration-fast, 150ms) var(--ease-out);
+}
+
+.ka-workflow-step--pending {
+    opacity: 0.35;
+}
+
+.ka-workflow-step--active {
+    opacity: 1;
+}
+
+.ka-workflow-step--complete {
+    opacity: 0.65;
+}
+
+.ka-workflow-step--failed {
+    opacity: 0.7;
+}
+
+.ka-workflow-step--skipped {
+    opacity: 0.3;
+}
+
+.ka-workflow-step-line-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 18px;
+    padding-top: 2px;
+}
+
+.ka-workflow-step-connector {
+    flex: 1;
+    width: 1.5px;
+    min-height: 8px;
+    background: var(--rubin-ivory-dark, #E8E6E1);
+    margin: 3px 0;
+    transition: background var(--duration-fast, 150ms) var(--ease-out);
+}
+
+.ka-workflow-step-connector--done {
+    background: var(--rubin-primary, #6B5B95);
+    opacity: 0.4;
+}
+
+.ka-workflow-step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 0.55rem;
+    font-family: var(--font-mono, 'Courier Prime', monospace);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.ka-workflow-step-indicator--pending {
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    background: var(--rubin-ivory-dark, #E8E6E1);
+}
+
+.ka-workflow-step-indicator--active {
+    width: 10px;
+    height: 10px;
+    margin: 3px;
+    background: var(--rubin-primary, #6B5B95);
+    animation: ka-workflow-pulse 1.5s ease-in-out infinite;
+}
+
+.ka-workflow-step-indicator--complete {
+    background: var(--kernel-success, #22C55E);
+    color: white;
+    font-weight: 700;
+    font-size: 0.6rem;
+}
+
+.ka-workflow-step-indicator--failed {
+    background: var(--rubin-error, #DC2626);
+    color: white;
+    font-weight: 700;
+    font-size: 0.6rem;
+}
+
+.ka-workflow-step-indicator--skipped {
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    background: var(--rubin-ivory-dark, #E8E6E1);
+    opacity: 0.5;
+}
+
+@keyframes ka-workflow-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(107, 91, 149, 0.4);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.15);
+        box-shadow: 0 0 0 4px rgba(107, 91, 149, 0);
+    }
+}
+
+.ka-workflow-step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 0 8px;
+    min-width: 0;
+}
+
+.ka-workflow-step-name {
+    font-family: var(--font-serif, 'EB Garamond', serif);
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: var(--rubin-slate, #1F1E1D);
+}
+
+.ka-workflow-step-result {
+    font-family: var(--font-mono, 'Courier Prime', monospace);
+    font-size: 0.6rem;
+    line-height: 1.4;
+    color: var(--rubin-slate, #1F1E1D);
+    opacity: 0.5;
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.ka-workflow-step-error {
+    font-family: var(--font-mono, 'Courier Prime', monospace);
+    font-size: 0.6rem;
+    line-height: 1.4;
+    color: var(--rubin-error, #DC2626);
+}
+
+.ka-workflow-cancel {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--rubin-ivory-dark, #E8E6E1);
+    cursor: pointer;
+    font-family: var(--font-mono, 'Courier Prime', monospace);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rubin-error, #DC2626);
+    opacity: 0.7;
+    transition: opacity var(--duration-fast, 150ms) var(--ease-out),
+                background var(--duration-fast, 150ms) var(--ease-out);
+}
+
+.ka-workflow-cancel:hover {
+    opacity: 1;
+    background: var(--rubin-error-light, rgba(220, 38, 38, 0.08));
+}
+
+/* Dark mode */
+[data-theme="dark"] .ka-workflow-timeline {
+    background: var(--dark-bg-elevated, #262320);
+    border-color: var(--dark-border-subtle, rgba(255, 255, 255, 0.06));
+}
+
+[data-theme="dark"] .ka-workflow-timeline-header {
+    color: var(--rubin-primary, #6B5B95);
+}
+
+[data-theme="dark"] .ka-workflow-timeline-header:hover {
+    background: rgba(107, 91, 149, 0.08);
+}
+
+[data-theme="dark"] .ka-workflow-step-name {
+    color: var(--dark-text, #E8E5E0);
+}
+
+[data-theme="dark"] .ka-workflow-step-result {
+    color: var(--dark-text, #E8E5E0);
+}
+
+[data-theme="dark"] .ka-workflow-step-connector {
+    background: var(--dark-border-subtle, rgba(255, 255, 255, 0.06));
+}
+
+[data-theme="dark"] .ka-workflow-step-indicator--pending {
+    background: var(--dark-border, rgba(255, 255, 255, 0.12));
+}
+
+[data-theme="dark"] .ka-workflow-step-indicator--skipped {
+    background: var(--dark-border, rgba(255, 255, 255, 0.12));
+}
+
+[data-theme="dark"] .ka-workflow-cancel {
+    border-top-color: var(--dark-border-subtle, rgba(255, 255, 255, 0.06));
+}
+
+[data-theme="dark"] .ka-workflow-cancel:hover {
+    background: rgba(220, 38, 38, 0.12);
+}
+
+/* E-ink theme */
+[data-theme="eink"] .ka-workflow-timeline {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="eink"] .ka-workflow-timeline-header {
+    color: #333;
+}
+
+[data-theme="eink"] .ka-workflow-step-name {
+    color: #1a1a1a;
+}
+
+[data-theme="eink"] .ka-workflow-step-result {
+    color: #555;
+}
+
+[data-theme="eink"] .ka-workflow-step-indicator--active {
+    background: #333;
+    animation: none;
+}
+
+[data-theme="eink"] .ka-workflow-step-indicator--complete {
+    background: #333;
+}
+
+[data-theme="eink"] .ka-workflow-step-indicator--failed {
+    background: #666;
+}
+
+[data-theme="eink"] .ka-workflow-step-connector {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="eink"] .ka-workflow-step-connector--done {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="eink"] .ka-workflow-cancel {
+    color: #555;
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .ka-workflow-timeline {
+        margin: 0 16px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ka-workflow-timeline {
+        margin: 0 10px 6px;
+    }
+
+    .ka-workflow-step-name {
+        font-size: 0.75rem;
+    }
+
+    .ka-workflow-step-result {
+        display: none;
     }
 }

@@ -46,6 +46,13 @@ import {
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
 
+export interface WorkflowStepState {
+  name: string
+  status: 'pending' | 'active' | 'complete' | 'failed' | 'skipped'
+  result?: string
+  error?: string
+}
+
 export interface ChatMessage {
   id: string
   role: 'user' | 'kernel'
@@ -58,6 +65,8 @@ export interface ChatMessage {
   agentId?: string
   agentName?: string
   thinking?: string
+  workflowSteps?: WorkflowStepState[]
+  isProactive?: boolean
 }
 
 /** Active document for multi-turn document analysis (Pro only) */
@@ -105,6 +114,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [taskProgress, setTaskProgress] = useState<TaskProgress | null>(null)
   const [swarmProgress, setSwarmProgress] = useState<SwarmProgress | null>(null)
   const [collectiveInsights, setCollectiveInsights] = useState<DBCollectiveInsight[]>([])
+
+  // Agentic Workflow state (Pro only)
+  const [workflowSteps, setWorkflowSteps] = useState<WorkflowStepState[]>([])
+  const [isWorkflowActive, setIsWorkflowActive] = useState(false)
+  const workflowRef = useRef<import('../engine/AgenticWorkflow').AgenticWorkflow | null>(null)
 
   // Extended thinking state (Pro only)
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
@@ -597,7 +611,32 @@ export function useChatEngine(params: UseChatEngineParams) {
 
     let swarmAgentIds: string[] | null = null
     try {
-      if (classification.isMultiStep && isPro) {
+      if (classification.isMultiStep && classification.needsResearch && isPro) {
+        // Agentic Workflow: multi-step + research = autonomous workflow execution
+        const { AgenticWorkflow } = await import('../engine/AgenticWorkflow')
+        const workflow = new AgenticWorkflow(systemPrompt, {
+          onProgress: () => {},
+          onChunk: updateKernelMsg,
+          onStepsUpdate: (steps) => {
+            setWorkflowSteps(steps)
+            setMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, workflowSteps: steps }
+              : m
+            ))
+          },
+        })
+        workflowRef.current = workflow
+        setIsWorkflowActive(true)
+        setWorkflowSteps([])
+        const context = messagesRef.current
+          .filter(m => m.content.trim())
+          .slice(-10)
+          .map(m => `${m.role === 'user' ? 'User' : (m.agentName || 'Kernel')}: ${m.content}`)
+          .join('\n')
+        await workflow.execute(trimmed, context)
+        setIsWorkflowActive(false)
+        workflowRef.current = null
+      } else if (classification.isMultiStep && isPro) {
         const plan = await planTask(trimmed)
         setTaskProgress({ plan, currentStep: 0 })
         await executeTask(
@@ -824,6 +863,8 @@ export function useChatEngine(params: UseChatEngineParams) {
       setResearchProgress(null)
       setTaskProgress(null)
       setSwarmProgress(null)
+      setIsWorkflowActive(false)
+      workflowRef.current = null
     } finally {
       setIsStreaming(false)
       setIsThinking(false)
@@ -917,6 +958,21 @@ export function useChatEngine(params: UseChatEngineParams) {
     setResearchProgress(null)
     setTaskProgress(null)
     setSwarmProgress(null)
+    // Cancel any active workflow
+    if (workflowRef.current) {
+      workflowRef.current.cancel()
+      workflowRef.current = null
+    }
+    setIsWorkflowActive(false)
+  }, [])
+
+  // Cancel workflow specifically
+  const cancelWorkflow = useCallback(() => {
+    if (workflowRef.current) {
+      workflowRef.current.cancel()
+      workflowRef.current = null
+    }
+    setIsWorkflowActive(false)
   }, [])
 
   // Clear active document (manual dismiss)
@@ -924,12 +980,31 @@ export function useChatEngine(params: UseChatEngineParams) {
     setActiveDocument(null)
   }, [])
 
+  // Inject a proactive "Kernel noticed..." message into a new conversation
+  const injectProactiveMessage = useCallback(async (text: string) => {
+    handleNewChat()
+    // Small delay to let the new chat state settle
+    await new Promise(r => setTimeout(r, 200))
+    const proactiveId = `proactive_${Date.now()}`
+    const proactiveMsg: ChatMessage = {
+      id: proactiveId,
+      role: 'kernel',
+      content: text,
+      timestamp: Date.now(),
+      agentId: 'kernel',
+      agentName: 'Kernel',
+      isProactive: true,
+    }
+    setMessages([proactiveMsg])
+  }, [handleNewChat])
+
   return {
     engine, engineState, events,
     messages, setMessages,
     input, setInput,
     isStreaming, isThinking, thinkingAgent,
     researchProgress, taskProgress, swarmProgress,
+    workflowSteps, isWorkflowActive, cancelWorkflow,
     userMemory, kgEntities, kgRelations, userGoals, setUserGoals,
     todayBriefing,
     inputRef, sendMessage, handleSubmit, stopStreaming,
@@ -939,5 +1014,6 @@ export function useChatEngine(params: UseChatEngineParams) {
     extendedThinkingEnabled, setExtendedThinkingEnabled,
     currentThinking, thinkingStartRef,
     activeDocument, hasActiveDocument: !!activeDocument, clearDocument,
+    injectProactiveMessage,
   }
 }
