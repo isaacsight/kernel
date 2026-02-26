@@ -91,17 +91,19 @@ export function useColorCycle(active: boolean): CyclePalette | null {
       const count = palettes.length
       const totalCycle = count * CYCLE_MS
       const pos = elapsed % totalCycle
-      const idx = Math.floor(pos / CYCLE_MS)
+      const idx = Math.min(Math.floor(pos / CYCLE_MS), count - 1)
       const phaseTime = pos - idx * CYCLE_MS
+      const current = palettes[idx]
+      if (!current) { rafRef.current = requestAnimationFrame(tick); return }
 
       if (phaseTime <= HOLD_MS) {
         // Hold phase — static color
-        setPalette(palettes[idx])
+        setPalette(current)
       } else {
         // Crossfade phase
         const t = (phaseTime - HOLD_MS) / FADE_MS
-        const next = (idx + 1) % count
-        setPalette(lerpPalette(palettes[idx], palettes[next], t))
+        const next = palettes[(idx + 1) % count] || current
+        setPalette(lerpPalette(current, next, t))
       }
 
       rafRef.current = requestAnimationFrame(tick)

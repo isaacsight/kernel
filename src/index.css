@@ -1344,7 +1344,7 @@ h4 {
 .ka-gate-success {
     font-family: var(--font-mono);
     font-size: 13px;
-    color: #16a34a;
+    color: var(--kernel-success);
     margin: 8px 0;
 }
 
@@ -8722,7 +8722,7 @@ h4 {
 .landing-hero-dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     opacity: 0.75;
 }
 
@@ -8909,6 +8909,7 @@ h4 {
 .landing-plan-btn {
     margin-top: var(--space-lg);
     padding: 10px 24px;
+    min-height: 44px;
     background: var(--rubin-slate);
     color: var(--rubin-ivory);
     border: none;
@@ -13290,6 +13291,16 @@ h4 {
     border-width: 2px;
 }
 
+[data-theme="dark"] .landing-cta,
+[data-theme="dark"] .landing-plan-btn {
+    background: var(--dark-text);
+    color: var(--dark-bg);
+}
+
+[data-theme="dark"] .landing-pricing {
+    border-top-color: #3A3630;
+}
+
 [data-theme="dark"] .ka-code-copy,
 [data-theme="dark"] .ka-code-download {
     background: #36322E;
@@ -13912,6 +13923,16 @@ h4 {
 [data-theme="eink"] .landing-plan-pro {
     animation: none;
     border-color: #403E3C;
+}
+
+[data-theme="eink"] .landing-cta,
+[data-theme="eink"] .landing-plan-btn {
+    background: #403E3C;
+    color: #FFFCF0;
+}
+
+[data-theme="eink"] .landing-feature {
+    border-color: #CECDC3;
 }
 
 /* ── E-Ink: Misc ───────────────────────────────────────── */
