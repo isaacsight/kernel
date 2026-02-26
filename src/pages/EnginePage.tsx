@@ -575,6 +575,32 @@ function EngineChat() {
   const { researchProgress, taskProgress, swarmProgress, workflowSteps, isWorkflowActive, cancelWorkflow } = chatEngine
   const { extendedThinkingEnabled, setExtendedThinkingEnabled, explainModeEnabled, setExplainModeEnabled, currentThinking, thinkingStartRef } = chatEngine
 
+  // ─── Discovery pulse (one-time per user) ─────────────
+  const userId = user?.id
+  const [explainDiscovered, setExplainDiscovered] = useState(() => {
+    if (!userId) return true
+    return localStorage.getItem(`kernel:explain-discovered:${userId}`) === '1'
+  })
+  const [thinkingDiscovered, setThinkingDiscovered] = useState(() => {
+    if (!userId) return true
+    return localStorage.getItem(`kernel:thinking-discovered:${userId}`) === '1'
+  })
+
+  useEffect(() => {
+    if (explainDiscovered && thinkingDiscovered) return
+    const timer = setTimeout(() => {
+      if (!explainDiscovered) {
+        setExplainDiscovered(true)
+        if (userId) localStorage.setItem(`kernel:explain-discovered:${userId}`, '1')
+      }
+      if (!thinkingDiscovered) {
+        setThinkingDiscovered(true)
+        if (userId) localStorage.setItem(`kernel:thinking-discovered:${userId}`, '1')
+      }
+    }, 10_000)
+    return () => clearTimeout(timer)
+  }, [explainDiscovered, thinkingDiscovered, userId])
+
   // Compute last kernel message index for lazy auto-preview
   const lastKernelIndex = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -1483,22 +1509,34 @@ function EngineChat() {
         />
         <button
           type="button"
-          className={`ka-explain-toggle${explainModeEnabled ? ' ka-explain-toggle--active' : ''}`}
-          onClick={() => setExplainModeEnabled(prev => !prev)}
+          className={`ka-explain-toggle ka-bar-tooltip${explainModeEnabled ? ' ka-explain-toggle--active' : ''}${!explainDiscovered ? ' ka-bar-tooltip--discover' : ''}`}
+          data-tooltip={t('explain.tooltip')}
+          onClick={() => {
+            setExplainModeEnabled(prev => !prev)
+            if (!explainDiscovered) {
+              setExplainDiscovered(true)
+              if (userId) localStorage.setItem(`kernel:explain-discovered:${userId}`, '1')
+            }
+          }}
           disabled={isStreaming}
-          aria-label="Toggle explain mode"
-          title="Explain mode — learning-first code"
+          aria-label={t('explain.toggle')}
         >
           <IconGraduationCap size={18} />
         </button>
         {isPro && (
           <button
             type="button"
-            className={`ka-thinking-toggle${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}`}
-            onClick={() => setExtendedThinkingEnabled(prev => !prev)}
+            className={`ka-thinking-toggle ka-bar-tooltip${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}${!thinkingDiscovered ? ' ka-bar-tooltip--discover' : ''}`}
+            data-tooltip={t('thinking.tooltip')}
+            onClick={() => {
+              setExtendedThinkingEnabled(prev => !prev)
+              if (!thinkingDiscovered) {
+                setThinkingDiscovered(true)
+                if (userId) localStorage.setItem(`kernel:thinking-discovered:${userId}`, '1')
+              }
+            }}
             disabled={isStreaming}
             aria-label={t('thinking.toggle')}
-            title={t('thinking.label')}
           >
             <IconThinking size={18} />
           </button>
