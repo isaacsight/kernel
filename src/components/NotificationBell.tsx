@@ -1,19 +1,22 @@
 // ─── NotificationBell ────────────────────────────────────
 //
 // Header icon with unread count and notification dropdown.
+// Supports proactive "Kernel noticed..." notifications with
+// distinct styling and click-to-chat behavior.
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconBell, IconCheck } from './KernelIcons'
+import { IconBell, IconCheck, IconSparkles } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 
 interface NotificationBellProps {
   userId: string
+  onProactiveClick?: (insightText: string) => void
 }
 
-export function NotificationBell({ userId }: NotificationBellProps) {
+export function NotificationBell({ userId, onProactiveClick }: NotificationBellProps) {
   const { t } = useTranslation('common')
   const { shouldShow } = useNotificationPrefs()
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -67,6 +70,35 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     setUnreadCount(0)
   }, [notifications])
 
+  const handleNotificationClick = useCallback((n: Notification) => {
+    // Proactive notifications open a new chat with the insight
+    if (n.type === 'proactive' && n.proactive_trigger && onProactiveClick) {
+      onProactiveClick(n.proactive_trigger)
+      // Mark this notification as read
+      if (!n.read) {
+        supabase.from('notifications').update({ read: true }).eq('id', n.id).then(() => {
+          setNotifications(prev => prev.map(x => x.id === n.id ? { ...x, read: true } : x))
+          setUnreadCount(prev => Math.max(0, prev - 1))
+        })
+      }
+      setIsOpen(false)
+      return
+    }
+
+    // Default action_url handling
+    if (n.action_url) {
+      if (n.action_url.startsWith('#') || n.action_url.startsWith('/')) {
+        window.location.hash = n.action_url.startsWith('#') ? n.action_url : `#${n.action_url}`
+      } else {
+        window.open(n.action_url, '_blank', 'noopener')
+      }
+      setIsOpen(false)
+    }
+  }, [onProactiveClick])
+
+  const isClickable = (n: Notification) =>
+    (n.type === 'proactive' && n.proactive_trigger && onProactiveClick) || n.action_url
+
   return (
     <div className="ka-notif-wrap" ref={dropdownRef}>
       <button
@@ -97,22 +129,16 @@ export function NotificationBell({ userId }: NotificationBellProps) {
               {notifications.filter(n => shouldShow(n.type)).map(n => (
                 <div
                   key={n.id}
-                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${n.action_url ? ' ka-notif-item--clickable' : ''}`}
-                  onClick={() => {
-                    if (n.action_url) {
-                      if (n.action_url.startsWith('#') || n.action_url.startsWith('/')) {
-                        window.location.hash = n.action_url.startsWith('#') ? n.action_url : `#${n.action_url}`
-                      } else {
-                        window.open(n.action_url, '_blank', 'noopener')
-                      }
-                      setIsOpen(false)
-                    }
-                  }}
-                  onKeyDown={n.action_url ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click() } } : undefined}
-                  role={n.action_url ? 'button' : undefined}
-                  tabIndex={n.action_url ? 0 : undefined}
+                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${isClickable(n) ? ' ka-notif-item--clickable' : ''}${n.type === 'proactive' ? ' ka-notif-proactive' : ''}`}
+                  onClick={() => handleNotificationClick(n)}
+                  onKeyDown={isClickable(n) ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click() } } : undefined}
+                  role={isClickable(n) ? 'button' : undefined}
+                  tabIndex={isClickable(n) ? 0 : undefined}
                 >
-                  <div className="ka-notif-item-title">{n.title}</div>
+                  <div className="ka-notif-item-title">
+                    {n.type === 'proactive' && <IconSparkles size={12} className="ka-notif-proactive-icon" />}
+                    {n.title}
+                  </div>
                   {n.body && <div className="ka-notif-item-body">{n.body}</div>}
                   <div className="ka-notif-item-time">
                     {new Date(n.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}

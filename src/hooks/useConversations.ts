@@ -24,6 +24,7 @@ interface ChatMessage {
   attachments?: { name: string; type: string }[]
   agentId?: string
   agentName?: string
+  isProactive?: boolean
 }
 
 export function useConversations(

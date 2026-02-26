@@ -5,6 +5,7 @@ export interface NotificationPrefs {
   briefings: boolean
   goals: boolean
   reminders: boolean
+  proactive: boolean
 }
 
 const STORAGE_KEY = 'kernel-notification-prefs'
@@ -14,6 +15,7 @@ const DEFAULTS: NotificationPrefs = {
   briefings: true,
   goals: true,
   reminders: true,
+  proactive: true,
 }
 
 function load(): NotificationPrefs {
@@ -42,6 +44,7 @@ export function useNotificationPrefs() {
     if (type === 'briefing' && !prefs.briefings) return false
     if (type === 'goal' && !prefs.goals) return false
     if (type === 'reminder' && !prefs.reminders) return false
+    if (type === 'proactive' && !prefs.proactive) return false
     return true
   }, [prefs])
 

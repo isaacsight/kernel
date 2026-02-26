@@ -33,7 +33,8 @@ export interface Notification {
   user_id: string
   title: string
   body: string
-  type: 'info' | 'reminder' | 'task_complete' | 'briefing' | 'goal' | 'refund'
+  type: 'info' | 'reminder' | 'task_complete' | 'briefing' | 'goal' | 'refund' | 'proactive'
+  proactive_trigger?: string | null
   read: boolean
   action_url: string | null
   created_at: string

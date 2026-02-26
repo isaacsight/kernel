@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconChart,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText,
+  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -41,6 +41,7 @@ import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
 import { VoiceControls, MessageSpeakButton } from '../components/VoiceControls'
+import { WorkflowTimeline } from '../components/WorkflowTimeline'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -557,7 +558,7 @@ function EngineChat() {
 
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
-  const { researchProgress, taskProgress, swarmProgress } = chatEngine
+  const { researchProgress, taskProgress, swarmProgress, workflowSteps, isWorkflowActive, cancelWorkflow } = chatEngine
   const { extendedThinkingEnabled, setExtendedThinkingEnabled, currentThinking, thinkingStartRef } = chatEngine
 
   // Compute last kernel message index for lazy auto-preview
@@ -833,7 +834,7 @@ function EngineChat() {
         <div className="ka-header-right">
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
           {!isAdmin && isSubscribed && <span className="ka-pro-badge"><IconCrown size={12} /> {t('pro')}</span>}
-          {user && <NotificationBell userId={user.id} />}
+          {user && <NotificationBell userId={user.id} onProactiveClick={(text) => chatEngine.injectProactiveMessage(text)} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
           <button className="ka-header-icon-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
             {theme === 'dark' ? <IconSun size={16} /> : theme === 'eink' ? <IconBookOpen size={16} /> : <IconMoon size={16} />}
@@ -1098,8 +1099,16 @@ function EngineChat() {
           </div>
         )}
 
+        {(workflowSteps.length > 0 || isWorkflowActive) && (
+          <WorkflowTimeline
+            steps={workflowSteps}
+            isActive={isWorkflowActive}
+            onCancel={cancelWorkflow}
+          />
+        )}
+
         <AnimatePresence>
-          {isThinking && (
+          {isThinking && !isWorkflowActive && (
             <motion.div className="ka-thinking" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
               <div className="ka-thinking-grid">
                 <ParticleGrid size={60} interactive={false} energetic palette={agentPalette(thinkingAgent || 'kernel')} />
@@ -1117,7 +1126,7 @@ function EngineChat() {
 
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => (
-            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={TRANSITION.MESSAGE}>
+            <motion.div key={msg.id} className={`ka-msg ka-msg--${msg.role}${msg.isProactive ? ' ka-msg-proactive' : ''}`} style={{ '--msg-index': i } as React.CSSProperties} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={TRANSITION.MESSAGE}>
               {msg.role === 'kernel' && (
                 <div className="ka-msg-avatar-col">
                   <div className="ka-msg-avatar" data-agent={msg.agentId || 'kernel'}>
@@ -1136,7 +1145,19 @@ function EngineChat() {
                     isStreaming={isStreaming && !msg.thinking && i === messages.length - 1}
                   />
                 )}
+                {msg.role === 'kernel' && msg.workflowSteps && msg.workflowSteps.length > 0 && (
+                  <WorkflowTimeline
+                    steps={msg.workflowSteps}
+                    isActive={false}
+                  />
+                )}
                 <div className="ka-msg-bubble">
+                  {msg.isProactive && (
+                    <div className="ka-msg-proactive-label">
+                      <IconSparkles size={13} className="ka-msg-proactive-icon" />
+                      <span>{t('proactive.noticed')}</span>
+                    </div>
+                  )}
                   {msg.imageDataUrls && msg.imageDataUrls.length > 0 && (
                     <div className="ka-msg-thumbnails">
                       {msg.imageDataUrls.map((url, j) => (
