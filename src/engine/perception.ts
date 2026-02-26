@@ -79,6 +79,10 @@ export function perceiveInput(
 }
 
 export function classifyIntent(input: string, lower: string, routerResult?: ClassificationResult): Intent {
+  if (routerResult && (routerResult.isMultiStep || routerResult.needsSwarm)) {
+    return { type: 'workflow', request: input }
+  }
+
   // AgentRouter is the single source of truth — map agentId → IntentType
   if (routerResult && routerResult.confidence >= 0.5) {
     const agentToIntent: Record<string, IntentType> = {
@@ -138,6 +142,7 @@ export function inferNeed(
     case 'reason': return 'Rigorous thinking made visible'
     case 'build': return 'A concrete plan or artifact'
     case 'evaluate': return 'An honest assessment with numbers'
+    case 'workflow': return 'An orchestrated sequential execution plan'
     case 'converse': return 'A thoughtful, human response'
   }
 }

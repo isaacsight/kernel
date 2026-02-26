@@ -19,11 +19,11 @@ import { forkSharedConversation } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
-import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile } from '../components/ChatHelpers'
+import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
 import { useTheme } from '../hooks/useTheme'
 import { useToast } from '../hooks/useToast'
 import { useScrollTracking } from '../hooks/useScrollTracking'
-import { useVoiceInput } from '../hooks/useVoiceInput'
+import { useVoiceLoop } from '../hooks/useVoiceLoop'
 import { useFileAttachments } from '../hooks/useFileAttachments'
 import { usePanelManager } from '../hooks/usePanelManager'
 import { useConversations } from '../hooks/useConversations'
@@ -39,6 +39,7 @@ import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
+import { ThinkingBlock } from '../components/ThinkingBlock'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -104,14 +105,14 @@ function EnginePageAuthed({ user }: { user: NonNullable<ReturnType<typeof useAut
 const LOADING_PALETTE = { particle: '#00a4b8', link: '#e8345a', field: '#f5c518' }
 
 const AGENT_PALETTES: Record<string, { particle: string; link: string; field: string }> = {
-  kernel:     { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },  // amethyst
+  kernel: { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },  // amethyst
   researcher: { particle: '#5B8BA0', link: '#7CB4CC', field: '#A8D4E8' },  // slate blue
-  coder:      { particle: '#6B8E6B', link: '#8FBD8F', field: '#B8D8B5' },  // sage green
-  writer:     { particle: '#B8875C', link: '#D4A774', field: '#E8C494' },  // warm brown
-  analyst:    { particle: '#A0768C', link: '#C096AC', field: '#D8B0C4' },  // mauve
-  aesthete:   { particle: '#F472B6', link: '#F9A8D4', field: '#FBCFE8' },  // pink
-  guardian:   { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },  // emerald
-  curator:    { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },  // violet
+  coder: { particle: '#6B8E6B', link: '#8FBD8F', field: '#B8D8B5' },  // sage green
+  writer: { particle: '#B8875C', link: '#D4A774', field: '#E8C494' },  // warm brown
+  analyst: { particle: '#A0768C', link: '#C096AC', field: '#D8B0C4' },  // mauve
+  aesthete: { particle: '#F472B6', link: '#F9A8D4', field: '#FBCFE8' },  // pink
+  guardian: { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },  // emerald
+  curator: { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },  // violet
   strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },  // amber
 }
 
@@ -223,6 +224,9 @@ function EngineChat() {
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
+  const dragCounterRef = useRef(0)
 
   useEffect(() => {
     const goOnline = () => setIsOnline(true)
@@ -232,13 +236,21 @@ function EngineChat() {
     return () => { window.removeEventListener('online', goOnline); window.removeEventListener('offline', goOffline) }
   }, [])
 
+  // Close lightbox on Escape
+  useEffect(() => {
+    if (!lightboxSrc) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setLightboxSrc(null) }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [lightboxSrc])
+
   // ─── Hooks ────────────────────────────────────────────
   const { theme, setTheme } = useTheme()
   const { toast, showToast } = useToast()
   const { updateAvailable, updateNow } = useServiceWorkerUpdate()
   const billing = useBilling(user, showToast, signOut)
 
-  const newChatRef = useRef<() => void>(() => {})
+  const newChatRef = useRef<() => void>(() => { })
   const panels = usePanelManager({
     handleUpgrade: billing.handleUpgrade,
     handleManageSubscription: billing.handleManageSubscription,
@@ -351,10 +363,26 @@ function EngineChat() {
 
   const scroll = useScrollTracking(chatEngine.messages.length)
 
-  const { isListening, toggleVoice } = useVoiceInput(
+  const { isVoiceMode: isListening, toggleVoiceMode: toggleVoice, speakResponse } = useVoiceLoop(
     (text) => chatEngine.setInput(text),
+    (text) => {
+      chatEngine.setInput(text)
+      chatEngine.sendMessage(text)
+    },
     showToast,
   )
+
+  const prevStreamingRef = useRef(chatEngine.isStreaming)
+  useEffect(() => {
+    if (prevStreamingRef.current && !chatEngine.isStreaming && isListening) {
+      const msgs = chatEngine.messages
+      const lastKernel = [...msgs].reverse().find(m => m.role === 'kernel')
+      if (lastKernel && lastKernel.content) {
+        speakResponse(lastKernel.content, lastKernel.agentId)
+      }
+    }
+    prevStreamingRef.current = chatEngine.isStreaming
+  }, [chatEngine.isStreaming, isListening, chatEngine.messages, speakResponse])
 
   useKeyboardHeight()
 
@@ -527,6 +555,7 @@ function EngineChat() {
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress } = chatEngine
+  const { extendedThinkingEnabled, setExtendedThinkingEnabled, currentThinking, thinkingStartRef } = chatEngine
 
   // Compute last kernel message index for lazy auto-preview
   const lastKernelIndex = useMemo(() => {
@@ -562,9 +591,56 @@ function EngineChat() {
     }))
   }
 
+  // ─── Drag-drop handlers ─────────────────────────────
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounterRef.current++
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDragOver(true)
+    }
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounterRef.current--
+    if (dragCounterRef.current === 0) {
+      setIsDragOver(false)
+    }
+  }, [])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragCounterRef.current = 0
+    setIsDragOver(false)
+    const files = Array.from(e.dataTransfer.files)
+    if (files.length > 0) {
+      fileAttachments.addFiles(files)
+    }
+  }, [fileAttachments])
+
   // ─── Render ───────────────────────────────────────────
   return (
-    <div className="ka-page">
+    <div className="ka-page" onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onDrop={handleDrop}>
+      {/* Drag-drop overlay */}
+      <AnimatePresence>
+        {isDragOver && (
+          <motion.div className="ka-dropzone" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            <div className="ka-dropzone-inner">
+              <IconAttach size={32} />
+              <span className="ka-dropzone-text">Drop image here</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Update Banner */}
       <AnimatePresence>
         {updateAvailable && (
@@ -828,142 +904,142 @@ function EngineChat() {
       {/* Chat Area */}
       <div className="ka-chat" ref={scroll.scrollRef}>
         <AnimatePresence mode="wait">
-        {convs.msgsLoading && (
-          <motion.div
-            key="loading-grid"
-            className="ka-loading-grid-wrap"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={TRANSITION.CARD}
-          >
-            <ParticleGrid
-              size={200}
-              interactive={false}
-              energetic
-              palette={convs.loadingAgentId ? agentPalette(convs.loadingAgentId) : LOADING_PALETTE}
-            />
-            <span className="ka-loading-label">Loading...</span>
-          </motion.div>
-        )}
-        {messages.length === 0 && !convs.msgsLoading && (
-          <motion.div key="empty-home" className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={TRANSITION.CARD}>
-            <ParticleGrid />
+          {convs.msgsLoading && (
+            <motion.div
+              key="loading-grid"
+              className="ka-loading-grid-wrap"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={TRANSITION.CARD}
+            >
+              <ParticleGrid
+                size={200}
+                interactive={false}
+                energetic
+                palette={convs.loadingAgentId ? agentPalette(convs.loadingAgentId) : LOADING_PALETTE}
+              />
+              <span className="ka-loading-label">Loading...</span>
+            </motion.div>
+          )}
+          {messages.length === 0 && !convs.msgsLoading && (
+            <motion.div key="empty-home" className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={TRANSITION.CARD}>
+              <ParticleGrid />
 
-            {/* Feature 2: Streak indicator */}
-            {evolution.companion.streak >= 2 && (
-              <span
-                className="ka-home-streak"
-                data-streak-milestone={
-                  evolution.companion.streak >= 30 ? 'month' :
-                  evolution.companion.streak >= 7 ? 'week' : undefined
-                }
-              >
-                {t('entity.streak', { count: evolution.companion.streak })}
-              </span>
-            )}
+              {/* Feature 2: Streak indicator */}
+              {evolution.companion.streak >= 2 && (
+                <span
+                  className="ka-home-streak"
+                  data-streak-milestone={
+                    evolution.companion.streak >= 30 ? 'month' :
+                      evolution.companion.streak >= 7 ? 'week' : undefined
+                  }
+                >
+                  {t('entity.streak', { count: evolution.companion.streak })}
+                </span>
+              )}
 
-            {/* Feature 1: Tier label + progress hint */}
-            <AnimatePresence mode="wait">
-              {evolution.isEvolving ? (
+              {/* Feature 1: Tier label + progress hint */}
+              <AnimatePresence mode="wait">
+                {evolution.isEvolving ? (
+                  <motion.div
+                    key="evolving"
+                    className="ka-home-tier ka-home-tier--evolving"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={TRANSITION.SECTION}
+                  >
+                    {t('entity.evolved', { tier: evolution.tierName })}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="tier"
+                    className="ka-home-tier"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <span className="ka-home-tier-name">{evolution.tierName}</span>
+                    <span className="ka-home-tier-hint">{evolution.progressHint}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <h1 className="ka-empty-title">Kernel</h1>
+              <p className="ka-empty-subtitle">{t('tagline')}</p>
+              <p className="ka-home-greeting">{getTimeGreeting()}</p>
+
+              {/* Feature 4: Contextual nudge */}
+              {featureDiscovery.activeNudge && (
                 <motion.div
-                  key="evolving"
-                  className="ka-home-tier ka-home-tier--evolving"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
+                  className="ka-home-nudge"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={TRANSITION.SECTION}
                 >
-                  {t('entity.evolved', { tier: evolution.tierName })}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="tier"
-                  className="ka-home-tier"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <span className="ka-home-tier-name">{evolution.tierName}</span>
-                  <span className="ka-home-tier-hint">{evolution.progressHint}</span>
+                  <p className="ka-home-nudge-text">{t(`nudge.${featureDiscovery.activeNudge.featureId}`)}</p>
+                  <div className="ka-home-nudge-actions">
+                    <button className="ka-home-nudge-btn" onClick={() => {
+                      openFeaturePanel(featureDiscovery.activeNudge!.featureId, panels, featureDiscovery)
+                    }}>{t('nudge.showMe')}</button>
+                    <button className="ka-home-nudge-dismiss" onClick={() => {
+                      featureDiscovery.dismissNudge(featureDiscovery.activeNudge!.featureId)
+                    }}>{t('nudge.notNow')}</button>
+                  </div>
                 </motion.div>
               )}
-            </AnimatePresence>
 
-            <h1 className="ka-empty-title">Kernel</h1>
-            <p className="ka-empty-subtitle">{t('tagline')}</p>
-            <p className="ka-home-greeting">{getTimeGreeting()}</p>
-
-            {/* Feature 4: Contextual nudge */}
-            {featureDiscovery.activeNudge && (
-              <motion.div
-                className="ka-home-nudge"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={TRANSITION.SECTION}
-              >
-                <p className="ka-home-nudge-text">{t(`nudge.${featureDiscovery.activeNudge.featureId}`)}</p>
-                <div className="ka-home-nudge-actions">
-                  <button className="ka-home-nudge-btn" onClick={() => {
-                    openFeaturePanel(featureDiscovery.activeNudge!.featureId, panels, featureDiscovery)
-                  }}>{t('nudge.showMe')}</button>
-                  <button className="ka-home-nudge-dismiss" onClick={() => {
-                    featureDiscovery.dismissNudge(featureDiscovery.activeNudge!.featureId)
-                  }}>{t('nudge.notNow')}</button>
-                </div>
-              </motion.div>
-            )}
-
-            {chatEngine.todayBriefing && (
-              <div className="ka-home-briefing-card">
-                <div className="ka-home-briefing-info">
-                  <IconNewspaper size={16} className="ka-home-briefing-icon" />
-                  <div className="ka-home-briefing-text">
-                    <span className="ka-home-briefing-label">{t('briefing.todaysBriefing')}</span>
-                    <span className="ka-home-briefing-title">{chatEngine.todayBriefing.title}</span>
+              {chatEngine.todayBriefing && (
+                <div className="ka-home-briefing-card">
+                  <div className="ka-home-briefing-info">
+                    <IconNewspaper size={16} className="ka-home-briefing-icon" />
+                    <div className="ka-home-briefing-text">
+                      <span className="ka-home-briefing-label">{t('briefing.todaysBriefing')}</span>
+                      <span className="ka-home-briefing-title">{chatEngine.todayBriefing.title}</span>
+                    </div>
+                  </div>
+                  <div className="ka-home-briefing-actions">
+                    <button className="ka-home-briefing-btn" onClick={() => { panels.closeOtherPanels('briefings'); panels.setShowBriefingPanel(true); panels.setActiveTab('briefings') }}>{t('briefing.read')}</button>
+                    <button className="ka-home-briefing-btn ka-home-briefing-btn--discuss" onClick={() => chatEngine.handleBriefingGoDeeper(chatEngine.todayBriefing!.title, chatEngine.todayBriefing!.content)}>
+                      <IconMessageCircle size={12} /> {t('briefing.discuss')}
+                    </button>
                   </div>
                 </div>
-                <div className="ka-home-briefing-actions">
-                  <button className="ka-home-briefing-btn" onClick={() => { panels.closeOtherPanels('briefings'); panels.setShowBriefingPanel(true); panels.setActiveTab('briefings') }}>{t('briefing.read')}</button>
-                  <button className="ka-home-briefing-btn ka-home-briefing-btn--discuss" onClick={() => chatEngine.handleBriefingGoDeeper(chatEngine.todayBriefing!.title, chatEngine.todayBriefing!.content)}>
-                    <IconMessageCircle size={12} /> {t('briefing.discuss')}
-                  </button>
+              )}
+
+              {/* Feature 3: Goal check-in chips */}
+              {goalCheckIns.length > 0 && (
+                <div className="ka-home-goal-checkins">
+                  {goalCheckIns.map(g => (
+                    <button
+                      key={g.id}
+                      className="ka-topic ka-topic--goal"
+                      onClick={() => chatEngine.sendMessage(`How's my progress on "${g.title}"?`)}
+                    >
+                      <IconTarget size={12} /> {t('entity.goalCheckIn', { title: g.title.length > 30 ? g.title.slice(0, 30) + '…' : g.title })}
+                    </button>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Feature 3: Goal check-in chips */}
-            {goalCheckIns.length > 0 && (
-              <div className="ka-home-goal-checkins">
-                {goalCheckIns.map(g => (
-                  <button
-                    key={g.id}
-                    className="ka-topic ka-topic--goal"
-                    onClick={() => chatEngine.sendMessage(`How's my progress on "${g.title}"?`)}
-                  >
-                    <IconTarget size={12} /> {t('entity.goalCheckIn', { title: g.title.length > 30 ? g.title.slice(0, 30) + '…' : g.title })}
-                  </button>
+              {convs.conversations.length > 0 && (
+                <div className="ka-home-recent">
+                  {convs.conversations.slice(0, 2).map(c => (
+                    <div key={c.id} className="ka-home-context-item" onClick={() => convs.switchConversation(c.id)}>
+                      <span className="ka-home-context-title">{c.title}</span>
+                      <span className="ka-home-context-time">{relativeTime(c.updated_at)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="ka-topics">
+                {KERNEL_TOPICS.map(t => (
+                  <button key={t.label} className="ka-topic" onClick={() => chatEngine.sendMessage(t.prompt)}>{t.label}</button>
                 ))}
               </div>
-            )}
-
-            {convs.conversations.length > 0 && (
-              <div className="ka-home-recent">
-                {convs.conversations.slice(0, 2).map(c => (
-                  <div key={c.id} className="ka-home-context-item" onClick={() => convs.switchConversation(c.id)}>
-                    <span className="ka-home-context-title">{c.title}</span>
-                    <span className="ka-home-context-time">{relativeTime(c.updated_at)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="ka-topics">
-              {KERNEL_TOPICS.map(t => (
-                <button key={t.label} className="ka-topic" onClick={() => chatEngine.sendMessage(t.prompt)}>{t.label}</button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {researchProgress && researchProgress.phase !== 'complete' && (
@@ -1050,10 +1126,26 @@ function EngineChat() {
                 </div>
               )}
               <div className="ka-msg-col" onClick={(e) => { if (isMini) toggleTimestamp(msg.id, e) }}>
+                {msg.role === 'kernel' && (msg.thinking || (isStreaming && currentThinking && i === messages.length - 1)) && (
+                  <ThinkingBlock
+                    thinking={msg.thinking || currentThinking}
+                    thinkingStartTime={thinkingStartRef.current || undefined}
+                    isStreaming={isStreaming && !msg.thinking && i === messages.length - 1}
+                  />
+                )}
                 <div className="ka-msg-bubble">
+                  {msg.imageDataUrls && msg.imageDataUrls.length > 0 && (
+                    <div className="ka-msg-thumbnails">
+                      {msg.imageDataUrls.map((url, j) => (
+                        <button key={j} className="ka-msg-thumb-btn" type="button" onClick={() => setLightboxSrc(url)}>
+                          <img src={url} alt={msg.attachments?.[j]?.name || 'Attached image'} className="ka-msg-thumb" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {msg.attachments && msg.attachments.length > 0 && (
                     <div className="ka-msg-attachments">
-                      {msg.attachments.map((a, i) => <span key={i} className="ka-msg-attachment">{a.name}</span>)}
+                      {msg.attachments.filter(a => !a.type.startsWith('image/')).map((a, i) => <span key={i} className="ka-msg-attachment">{a.name}</span>)}
                     </div>
                   )}
                   {msgActions.editingMsgId === msg.id ? (
@@ -1062,8 +1154,8 @@ function EngineChat() {
                       <button type="submit" className="ka-edit-save">{t('feedback.save')}</button>
                       <button type="button" className="ka-edit-cancel" onClick={() => { msgActions.setEditingMsgId(null); msgActions.setEditingContent('') }}>{t('feedback.cancel')}</button>
                     </form>
-                  ) : msg.content ? (
-                    msg.role === 'kernel' ? <MessageContent text={msg.content} isLatestMessage={i === lastKernelIndex} /> : <Linkify text={msg.content} />
+                  ) : msg.content || msg.thinking ? (
+                    msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} /> : <Linkify text={msg.content} />
                   ) : (
                     <div className="ka-typing-grid">
                       <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
@@ -1115,18 +1207,28 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      {/* File chips */}
+      {/* File chips / image previews above input */}
       {fileAttachments.attachedFiles.length > 0 && (
         <div className="ka-file-chips">
           {fileAttachments.attachedFiles.map((f, i) => (
-            <span key={`${f.name}-${f.size}-${f.lastModified}`} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}${isAudioFile(f) ? ' ka-file-chip--audio' : ''}`}>
-              {isAudioFile(f) ? <IconMic size={12} /> : <IconAttach size={12} />}
-              <span className="ka-file-chip-name">{f.name}</span>
-              <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>
-              {!isStreaming && (
-                <button type="button" className="ka-file-chip-x" onClick={() => fileAttachments.removeFile(i)}><IconClose size={12} /></button>
-              )}
-            </span>
+            isImageFile(f) ? (
+              <span key={`${f.name}-${f.size}-${f.lastModified}`} className={`ka-file-chip ka-file-chip--image${isStreaming ? ' ka-file-chip--sending' : ''}`}>
+                <img src={URL.createObjectURL(f)} alt={f.name} className="ka-file-chip-preview" />
+                <span className="ka-file-chip-name">{f.name}</span>
+                {!isStreaming && (
+                  <button type="button" className="ka-file-chip-x" onClick={() => fileAttachments.removeFile(i)}><IconClose size={12} /></button>
+                )}
+              </span>
+            ) : (
+              <span key={`${f.name}-${f.size}-${f.lastModified}`} className={`ka-file-chip${isStreaming ? ' ka-file-chip--sending' : ''}${isAudioFile(f) ? ' ka-file-chip--audio' : ''}`}>
+                {isAudioFile(f) ? <IconMic size={12} /> : <IconAttach size={12} />}
+                <span className="ka-file-chip-name">{f.name}</span>
+                <span className="ka-file-chip-size">{f.size < 1024 ? `${f.size}B` : f.size < 1048576 ? `${(f.size / 1024).toFixed(0)}KB` : `${(f.size / 1048576).toFixed(1)}MB`}</span>
+                {!isStreaming && (
+                  <button type="button" className="ka-file-chip-x" onClick={() => fileAttachments.removeFile(i)}><IconClose size={12} /></button>
+                )}
+              </span>
+            )
           ))}
         </div>
       )}
@@ -1287,6 +1389,18 @@ function EngineChat() {
           disabled={isStreaming}
           rows={1}
         />
+        {isPro && (
+          <button
+            type="button"
+            className={`ka-thinking-toggle${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}`}
+            onClick={() => setExtendedThinkingEnabled(prev => !prev)}
+            disabled={isStreaming}
+            aria-label={t('thinking.toggle')}
+            title={t('thinking.label')}
+          >
+            <IconBrain size={16} />
+          </button>
+        )}
         {!isMini && (
           <button type="button" className={`ka-voice-btn${isListening ? ' ka-voice-btn--active' : ''}`} onClick={toggleVoice} disabled={isStreaming} aria-label={isListening ? t('aria.stopListening', { ns: 'common' }) : t('aria.voiceInput', { ns: 'common' })}>
             {isListening ? <IconMicOff size={18} /> : <IconMic size={18} />}
@@ -1313,6 +1427,38 @@ function EngineChat() {
       <AnimatePresence>
         {toast && (
           <motion.div className="ka-toast" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 30 }}>{toast}</motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Image Lightbox */}
+      <AnimatePresence>
+        {lightboxSrc && (
+          <motion.div
+            className="ka-lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setLightboxSrc(null)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setLightboxSrc(null) }}
+            tabIndex={0}
+            role="dialog"
+            aria-label="Image viewer"
+          >
+            <motion.img
+              src={lightboxSrc}
+              className="ka-lightbox-img"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              alt="Full size preview"
+            />
+            <button className="ka-lightbox-close" onClick={() => setLightboxSrc(null)} aria-label="Close image viewer">
+              <IconClose size={20} />
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

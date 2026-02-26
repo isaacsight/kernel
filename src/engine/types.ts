@@ -17,7 +17,7 @@ export type CognitivePhase =
 
 // ─── Intent Classification ──────────────────────────────────
 
-export type IntentType = 'discuss' | 'reason' | 'build' | 'evaluate' | 'converse';
+export type IntentType = 'discuss' | 'reason' | 'build' | 'evaluate' | 'converse' | 'workflow';
 export type ReasoningDomain = 'financial' | 'technical' | 'strategic' | 'general';
 
 export type Intent =
@@ -25,7 +25,8 @@ export type Intent =
   | { type: 'reason'; question: string; domain: ReasoningDomain }
   | { type: 'build'; description: string }
   | { type: 'evaluate'; opportunity: string }
-  | { type: 'converse'; message: string };
+  | { type: 'converse'; message: string }
+  | { type: 'workflow'; request: string };
 
 // ─── Perception ─────────────────────────────────────────────
 
@@ -167,6 +168,15 @@ export type EngineEvent =
   | { type: 'approval_resolved'; requestId: string; approved: boolean; timestamp: number }
   | { type: 'procedure_detected'; name: string; triggerPhrase: string; timestamp: number }
   | { type: 'procedure_matched'; name: string; timestamp: number }
+  | { type: 'workflow_progress'; state: string; step: string; details?: string; timestamp: number }
   | { type: 'error'; message: string; timestamp: number };
 
 export type EngineListener = (event: EngineEvent) => void;
+
+export interface WorkflowEvent {
+  type: 'workflow_progress';
+  state: string;
+  step: string;
+  details?: string;
+  timestamp: number;
+}

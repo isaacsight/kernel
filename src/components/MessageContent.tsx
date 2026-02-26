@@ -24,7 +24,7 @@ import 'prismjs/components/prism-toml'
 import {
   IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet,
   IconFile, IconEye, IconCode, IconPackage, IconChevronDown, IconClose, IconAlertCircle,
-  IconTerminal, IconMaximize, IconSmartphone, IconTablet, IconMonitor,
+  IconTerminal, IconMaximize, IconSmartphone, IconTablet, IconMonitor, IconBrain,
 } from './KernelIcons'
 import { downloadFile, downloadAllFiles, LANG_EXT } from './ChatHelpers'
 import { DURATION, EASE } from '../constants/motion'
@@ -711,6 +711,34 @@ export function inferFilename(lang: string, usedNames: Set<string>): string | nu
   return base
 }
 
+function ThinkingBlock({ thinking, t }: { thinking: string; t: (key: string, opts?: Record<string, unknown>) => string }) {
+  const [expanded, setExpanded] = useState(true)
+  if (!thinking) return null
+
+  return (
+    <div className="ka-thinking-block">
+      <div className="ka-thinking-header" onClick={() => setExpanded(!expanded)}>
+        <IconBrain size={14} className="ka-thinking-icon" />
+        <span>Thinking</span>
+        <IconChevronDown size={14} className={`ka-thinking-chevron${!expanded ? ' ka-thinking-chevron--closed' : ''}`} />
+      </div>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            className="ka-thinking-content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="ka-thinking-text">{thinking}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 // ─── Message Content (markdown + code blocks + artifacts) ─
 
 // Hoisted outside component to avoid recreating on every render (stable reference for ReactMarkdown)
@@ -719,9 +747,14 @@ const mdComponents = {
   code: ({ children }: { children?: React.ReactNode }) => <code className="ka-inline-code">{children}</code>,
 }
 
-export function MessageContent({ text, isLatestMessage = false }: { text: string; isLatestMessage?: boolean }) {
+export function MessageContent({ text, thinking, isLatestMessage = false }: { text: string; thinking?: string; isLatestMessage?: boolean }) {
   const { t } = useTranslation('common')
   const parts: React.ReactNode[] = []
+
+  if (thinking) {
+    parts.push(<ThinkingBlock key="thinking-block" thinking={thinking} t={t} />)
+  }
+
   const artifacts: { filename: string; content: string }[] = []
   const usedFilenames = new Set<string>()
   let lastIndex = 0

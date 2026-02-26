@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, ImageLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -54,8 +54,10 @@ export interface ChatMessage {
   signalId?: string
   feedback?: 'helpful' | 'poor'
   attachments?: { name: string; type: string }[]
+  imageDataUrls?: string[]  // data URLs for inline image thumbnails
   agentId?: string
   agentName?: string
+  thinking?: string
 }
 
 interface UseChatEngineParams {
@@ -95,6 +97,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [taskProgress, setTaskProgress] = useState<TaskProgress | null>(null)
   const [swarmProgress, setSwarmProgress] = useState<SwarmProgress | null>(null)
   const [collectiveInsights, setCollectiveInsights] = useState<DBCollectiveInsight[]>([])
+
+  // Extended thinking state (Pro only)
+  const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
+  const [currentThinking, setCurrentThinking] = useState('')
+  const thinkingStartRef = useRef<number>(0)
 
   // Memory & KG state
   const [userMemory, setUserMemory] = useState<UserMemoryProfile>(emptyProfile())
@@ -311,6 +318,22 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Show immediate feedback — add user message and thinking state BEFORE any network calls.
     // This ensures the home screen disappears instantly on slow Android connections.
     const attachmentMeta = filesToSend.map(f => ({ name: f.name, type: f.type }))
+
+    // Generate data URLs for image files (for inline thumbnails in chat)
+    const imageFiles = filesToSend.filter(f => isImageFile(f))
+    const imageDataUrls: string[] = []
+    for (const imgFile of imageFiles) {
+      try {
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.readAsDataURL(imgFile)
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = reject
+        })
+        imageDataUrls.push(dataUrl)
+      } catch { /* skip failed reads */ }
+    }
+
     const userMsgId = `user_${Date.now()}`
     const userMsg: ChatMessage = {
       id: userMsgId,
@@ -318,10 +341,13 @@ export function useChatEngine(params: UseChatEngineParams) {
       content: trimmed,
       timestamp: Date.now(),
       attachments: attachmentMeta.length > 0 ? attachmentMeta : undefined,
+      imageDataUrls: imageDataUrls.length > 0 ? imageDataUrls : undefined,
     }
     setMessages(prev => [...prev, userMsg])
     setIsStreaming(true)
     setIsThinking(true)
+    setCurrentThinking('')
+    thinkingStartRef.current = Date.now()
     setInput('')
     if (inputRef.current) inputRef.current.style.height = 'auto'
     setAttachedFiles([])
@@ -390,7 +416,7 @@ export function useChatEngine(params: UseChatEngineParams) {
             // Return a helpful context note instead of raw HTML scaffold.
             const platform = result.platform === 'chatgpt' ? 'ChatGPT'
               : result.platform === 'claude' ? 'Claude'
-              : result.platform === 'gemini' ? 'Gemini' : 'an AI platform'
+                : result.platform === 'gemini' ? 'Gemini' : 'an AI platform'
             const titleNote = result.title && result.title !== 'Imported Conversation'
               ? ` titled "${result.title}"` : ''
             return `[The user shared a ${platform} conversation link${titleNote}: ${url}]\n[Note: The conversation content could not be extracted because ${platform} loads it client-side. Ask the user to paste the key parts of the conversation directly.]\n`
@@ -521,10 +547,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       { role: 'user', content: userContent },
     ]
 
-    const updateKernelMsg = (text: string) => {
-      if (isThinkingRef.current) { setIsThinking(false); setThinkingAgent(null); isThinkingRef.current = false }
+    const updateKernelMsg = (text: string, thinkingText?: string) => {
+      if (isThinkingRef.current && (text || thinkingText)) { setIsThinking(false); setThinkingAgent(null); isThinkingRef.current = false }
       latestKernelContentRef.current = text
-      setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text } : m))
+      setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text, thinking: thinkingText ?? m.thinking } : m))
     }
 
     let swarmAgentIds: string[] | null = null
@@ -563,7 +589,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         setSwarmProgress(null)
       } else if (classification.needsResearch && isPro) {
         await deepResearch(
-          trimmed,
+          userContent,
           memoryText,
           (progress) => setResearchProgress(progress),
           updateKernelMsg
@@ -574,18 +600,24 @@ export function useChatEngine(params: UseChatEngineParams) {
         streamAbortRef.current = abortController
         const autoModel = resolveModelFromClassification(classification)
         console.log(`[engine] Auto-selected model: ${autoModel} (complexity: ${classification.complexity})`)
-        await claudeStreamChat(
+        const streamResult = await claudeStreamChat(
           claudeMessages,
           updateKernelMsg,
           {
             system: systemPrompt,
             model: autoModel,
-            max_tokens: autoModel === 'opus' ? 8192 : autoModel === 'haiku' ? 512 : 1024,
+            max_tokens: autoModel === 'opus' ? 8192 : autoModel === 'haiku' ? 512 : 8192,
             web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
             signal: abortController.signal,
+            thinking: extendedThinkingEnabled && isPro ? { type: 'enabled', budget_tokens: 10000 } : undefined,
+            onThinking: extendedThinkingEnabled && isPro ? (text: string) => { setCurrentThinking(text) } : undefined,
           }
         )
         streamAbortRef.current = null
+        // Store thinking text on the assistant message when complete
+        if (streamResult.thinking) {
+          setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, thinking: streamResult.thinking } : m))
+        }
       }
 
       // Persist kernel response
@@ -728,6 +760,12 @@ export function useChatEngine(params: UseChatEngineParams) {
         setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof ImageLimitError) {
+        setMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for unlimited image analysis.*` }
+          : m
+        ))
+        showToast(`Daily image limit reached (${err.used}/${err.limit})`)
       } else if (err instanceof PlatformRefundError) {
         // Platform error — message was auto-refunded, show friendly notice
         setMessages(prev => prev.map(m => m.id === kernelId
@@ -851,5 +889,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     messageCountRef,
     handleBriefingGoDeeper, handleBriefingAddGoal,
     userMirror,
+    extendedThinkingEnabled, setExtendedThinkingEnabled,
+    currentThinking, thinkingStartRef,
   }
 }
