@@ -8,9 +8,12 @@ import { z } from 'zod'
 import { config } from 'dotenv'
 import { execSync } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'fs'
-import { join } from 'path'
+import { join, resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-config()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+config({ path: resolve(__dirname, '..', '.env') })
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || ''
 const SUPABASE_KEY = process.env.VITE_SUPABASE_KEY || ''
