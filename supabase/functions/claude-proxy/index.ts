@@ -1327,8 +1327,7 @@ serve(async (req: Request) => {
       if (payload.model && !allowedFreeModels.has(payload.model as string)) {
         payload.model = undefined
       }
-      // Disable web_search for free users (extra API cost)
-      payload.web_search = false
+      // Web search available for all users
       // Disable extended thinking for free users (Pro only)
       payload.thinking = undefined
     }
