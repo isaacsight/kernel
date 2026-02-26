@@ -36,6 +36,8 @@ import { useMiniPhone } from '../hooks/useMiniPhone'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
+import { useCrisisDetection } from '../hooks/useCrisisDetection'
+import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
@@ -265,6 +267,7 @@ function EngineChat() {
   })
 
   const fileAttachments = useFileAttachments(isPro, showToast)
+  const crisis = useCrisisDetection()
 
   const convs = useConversations(user?.id, (msgs) => {
     chatEngine.setMessages(msgs as any)
@@ -285,7 +288,29 @@ function EngineChat() {
     setAttachedFiles: fileAttachments.setAttachedFiles,
     handleNewChat: convs.handleNewChat,
     isPro,
+    crisisActive: crisis.crisisState.isActive,
+    crisisSeverity: crisis.crisisState.highestSeverity,
   })
+
+  // Crisis-aware send wrapper — check every user message for crisis language
+  const originalSendRef = useRef(chatEngine.sendMessage)
+  originalSendRef.current = chatEngine.sendMessage
+  const crisisSendMessage = useCallback(async (msg: string) => {
+    crisis.checkMessage(msg)
+    await originalSendRef.current(msg)
+  }, [crisis.checkMessage])
+  // Override sendMessage on chatEngine for all downstream consumers
+  chatEngine.sendMessage = crisisSendMessage
+
+  // Reset crisis state on new conversation
+  const originalNewChatRef = useRef(convs.handleNewChat)
+  originalNewChatRef.current = convs.handleNewChat
+  const crisisNewChat = useCallback(() => {
+    crisis.resetCrisisState()
+    originalNewChatRef.current()
+  }, [crisis.resetCrisisState])
+  convs.handleNewChat = crisisNewChat
+  newChatRef.current = crisisNewChat
 
   // Project context — file tracking (select only the action for stable reference)
   const registerProjectFile = useProjectStore(s => s.registerFile)
@@ -684,6 +709,9 @@ function EngineChat() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Crisis Banner — above all other banners */}
+      <CrisisBanner isActive={crisis.crisisState.isActive} severity={crisis.crisisState.highestSeverity} />
 
       {/* Update Banner */}
       <AnimatePresence>

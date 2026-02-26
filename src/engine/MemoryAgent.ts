@@ -20,6 +20,8 @@ Extract:
 - facts: Concrete facts about them (job, location, projects, relationships)
 - preferences: How they like things done (communication style, format preferences, etc.)
 
+CRITICAL: NEVER extract or store information about crisis states, suicidal ideation, self-harm, or mental health emergencies. Skip any such content entirely.
+
 Only include items you're confident about from the conversation. Better to miss something than to guess wrong. Keep each item to one concise sentence.
 
 Respond with ONLY valid JSON:
@@ -34,6 +36,7 @@ Rules:
 - Remove items that seem outdated based on new context
 - Keep each category to max 8 items (drop least important if needed)
 - Keep items concise — one sentence each
+- NEVER extract or store information about crisis states, suicidal ideation, self-harm, or mental health emergencies. If such content appears in either profile, omit it.
 
 Respond with ONLY valid JSON:
 {"interests": [], "communication_style": "", "goals": [], "facts": [], "preferences": []}`
