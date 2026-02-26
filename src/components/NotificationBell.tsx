@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconBell, IconCheck, IconSparkles } from './KernelIcons'
+import { IconBell, IconClose, IconSparkles } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { subscribeToNotifications, type Notification } from '../engine/Scheduler'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
@@ -22,6 +22,7 @@ export function NotificationBell({ userId, onProactiveClick }: NotificationBellP
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const [dismissing, setDismissing] = useState<Set<string>>(new Set())
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Load notifications
@@ -47,6 +48,21 @@ export function NotificationBell({ userId, onProactiveClick }: NotificationBellP
     })
   }, [userId])
 
+  // Auto-mark all as read when dropdown opens
+  useEffect(() => {
+    if (!isOpen || unreadCount === 0) return
+    const unreadIds = notifications.filter(n => !n.read).map(n => n.id)
+    if (unreadIds.length === 0) return
+    supabase
+      .from('notifications')
+      .update({ read: true })
+      .in('id', unreadIds)
+      .then(() => {
+        setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+        setUnreadCount(0)
+      })
+  }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Close dropdown on outside click
   useEffect(() => {
     if (!isOpen) return
@@ -59,28 +75,33 @@ export function NotificationBell({ userId, onProactiveClick }: NotificationBellP
     return () => document.removeEventListener('click', onClick, true)
   }, [isOpen])
 
-  const markAllRead = useCallback(async () => {
-    const unreadIds = notifications.filter(n => !n.read).map(n => n.id)
-    if (unreadIds.length === 0) return
-    await supabase
-      .from('notifications')
-      .update({ read: true })
-      .in('id', unreadIds)
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
-    setUnreadCount(0)
+  const dismissOne = useCallback(async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+    setDismissing(prev => new Set(prev).add(id))
+    // Wait for CSS fade-out
+    setTimeout(async () => {
+      await supabase.from('notifications').delete().eq('id', id)
+      setNotifications(prev => prev.filter(n => n.id !== id))
+      setDismissing(prev => { const next = new Set(prev); next.delete(id); return next })
+    }, 200)
+  }, [])
+
+  const clearAll = useCallback(async () => {
+    const ids = notifications.map(n => n.id)
+    if (ids.length === 0) return
+    setDismissing(new Set(ids))
+    setTimeout(async () => {
+      await supabase.from('notifications').delete().in('id', ids)
+      setNotifications([])
+      setUnreadCount(0)
+      setDismissing(new Set())
+    }, 200)
   }, [notifications])
 
   const handleNotificationClick = useCallback((n: Notification) => {
     // Proactive notifications open a new chat with the insight
     if (n.type === 'proactive' && n.proactive_trigger && onProactiveClick) {
       onProactiveClick(n.proactive_trigger)
-      // Mark this notification as read
-      if (!n.read) {
-        supabase.from('notifications').update({ read: true }).eq('id', n.id).then(() => {
-          setNotifications(prev => prev.map(x => x.id === n.id ? { ...x, read: true } : x))
-          setUnreadCount(prev => Math.max(0, prev - 1))
-        })
-      }
       setIsOpen(false)
       return
     }
@@ -99,6 +120,8 @@ export function NotificationBell({ userId, onProactiveClick }: NotificationBellP
   const isClickable = (n: Notification) =>
     (n.type === 'proactive' && n.proactive_trigger && onProactiveClick) || n.action_url
 
+  const visible = notifications.filter(n => shouldShow(n.type))
+
   return (
     <div className="ka-notif-wrap" ref={dropdownRef}>
       <button
@@ -116,33 +139,42 @@ export function NotificationBell({ userId, onProactiveClick }: NotificationBellP
         <div className="ka-notif-dropdown">
           <div className="ka-notif-dropdown-header">
             <span>{t('notifications.title')}</span>
-            {unreadCount > 0 && (
-              <button className="ka-notif-mark-read" onClick={markAllRead}>
-                <IconCheck size={12} /> {t('notifications.markAllRead')}
+            {visible.length > 0 && (
+              <button className="ka-notif-clear-all" onClick={clearAll}>
+                {t('notifications.clearAll', 'Clear all')}
               </button>
             )}
           </div>
-          {notifications.filter(n => shouldShow(n.type)).length === 0 ? (
+          {visible.length === 0 ? (
             <div className="ka-notif-empty">{t('notifications.empty')}</div>
           ) : (
             <div className="ka-notif-list">
-              {notifications.filter(n => shouldShow(n.type)).map(n => (
+              {visible.map(n => (
                 <div
                   key={n.id}
-                  className={`ka-notif-item${n.read ? '' : ' ka-notif-item--unread'}${isClickable(n) ? ' ka-notif-item--clickable' : ''}${n.type === 'proactive' ? ' ka-notif-proactive' : ''}`}
+                  className={`ka-notif-item${isClickable(n) ? ' ka-notif-item--clickable' : ''}${n.type === 'proactive' ? ' ka-notif-proactive' : ''}${dismissing.has(n.id) ? ' ka-notif-item--dismissing' : ''}`}
                   onClick={() => handleNotificationClick(n)}
                   onKeyDown={isClickable(n) ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click() } } : undefined}
                   role={isClickable(n) ? 'button' : undefined}
                   tabIndex={isClickable(n) ? 0 : undefined}
                 >
-                  <div className="ka-notif-item-title">
-                    {n.type === 'proactive' && <IconSparkles size={12} className="ka-notif-proactive-icon" />}
-                    {n.title}
+                  <div className="ka-notif-item-content">
+                    <div className="ka-notif-item-title">
+                      {n.type === 'proactive' && <IconSparkles size={12} className="ka-notif-proactive-icon" />}
+                      {n.title}
+                    </div>
+                    {n.body && <div className="ka-notif-item-body">{n.body}</div>}
+                    <div className="ka-notif-item-time">
+                      {new Date(n.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </div>
                   </div>
-                  {n.body && <div className="ka-notif-item-body">{n.body}</div>}
-                  <div className="ka-notif-item-time">
-                    {new Date(n.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                  </div>
+                  <button
+                    className="ka-notif-dismiss"
+                    onClick={(e) => dismissOne(e, n.id)}
+                    aria-label="Dismiss"
+                  >
+                    <IconClose size={10} />
+                  </button>
                 </div>
               ))}
             </div>
