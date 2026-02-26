@@ -8,6 +8,52 @@
 
 ### Accomplished This Session
 
+#### Data Export Endpoint — GDPR/CCPA Portability
+Built and shipped automated data export, fulfilling Privacy Policy's portability promise (GDPR Art. 20 / CCPA).
+
+**New edge function** (`supabase/functions/export-user-data/index.ts`):
+- 22 parallel `safeQuery()` calls across all user tables + 1 conditional follow-up for `discord_user_memory`
+- IP masking on all security tables (recursive, IPv4 + IPv6)
+- `recovery_requests` uses explicit safe columns (excludes `old_value`, `new_value`, `risk_factors`)
+- `recovery_tokens` and `rate_limits` excluded entirely
+- Partial failure tolerance — returns collected data + `warnings` array
+- Rate limited: 1 export per 24h (uniform across tiers)
+- `Content-Disposition: attachment` triggers browser download
+
+**Frontend changes:**
+- `useAccountSettings.ts` — new `exportData` callback + `exportState` (blob URL download, 429 handling with hours display)
+- `AccountSettingsPanel.tsx` — "Export data" section between Voice and Reset Data, with `IconDownload`, loading/error/success/rate-limit states
+- `settings.json` — `exportData` i18n keys (heading, description, button, success, rateLimited)
+- `PrivacyPage.tsx` — Portability bullet updated from "contact us" to reference automated export in Account Settings
+
+**Security fixes during ship pipeline:**
+- P1: `recovery_requests` switched from `select('*')` to explicit column list (excludes `old_value`, `new_value`, `risk_factors`)
+
+Shipped via 6-gate pipeline — all gates PASS. Edge function deployed. JS: 93KB gzip | CSS: 40KB gzip.
+
+#### Notification UX — Auto-Read, Dismiss, Clear All
+Fixed notifications so they disappear once read and can be cleared. Commit `994ee7b38`, deployed live.
+
+**Changes:**
+- **Auto-mark read** — opening the dropdown immediately marks all unread notifications as read in DB and clears the badge
+- **Dismiss individual** — each notification has an X button (hover-reveal) that deletes it from Supabase with CSS fade-out animation
+- **Clear all** — header button deletes all notifications from DB, replaces old "Mark all read"
+- Removed `--unread` visual distinction (unnecessary since auto-mark on open)
+- Dark mode support for dismiss button and clear-all
+- Updated tests to match new behavior (8 tests passing)
+
+**Files:** `NotificationBell.tsx`, `NotificationBell.test.tsx`, `index.css`
+
+#### Tooltips + First-Time Discovery Pulse for Toggle Buttons
+Added CSS tooltips and one-time discovery pulse animations to the Explain Mode (graduation cap) and Extended Thinking (concentric rings) buttons in the input bar. New users now see a 3x pulse animation on first load (amethyst for thinking, sage green for explain) that auto-dismisses after 10s or on first click. Hover/tap shows Courier Prime tooltip above each button.
+
+**Files changed:**
+- `src/index.css` — `.ka-bar-tooltip` (::after tooltip), `.ka-bar-tooltip--discover` (pulse keyframes), dark/eink/reduced-motion overrides, mobile `.ka-explain-toggle` size fix
+- `src/pages/EnginePage.tsx` — `explainDiscovered`/`thinkingDiscovered` localStorage-backed state, 10s auto-dismiss useEffect, updated button JSX with tooltip classes + data attributes
+- `public/locales/en/home.json` — `thinking.tooltip`, `explain.toggle`, `explain.tooltip` i18n keys
+
+Shipped via 6-gate pipeline — all gates PASS. JS: 92.87KB gzip | CSS: 39.55KB gzip.
+
 #### Ship — Landing Page Redesign + All Prior Work
 Final ship of the session. 6-gate pipeline — all gates PASS. Commit `3dbf2cfde`.
 
@@ -182,10 +228,10 @@ Built and tested 6 Pro features. Found and fixed 3 critical bugs:
 ## Ongoing Backlog
 
 - **All prior work items**: DONE (P1-P15, backend, accounts, legal, convergence, limits, Pro features, thinking toggle, animation tokens, design polish, dep updates, MCP dotenv fix, legal compliance overhaul, legal accuracy audit, vibe coding R&D, landing page redesign)
-- **Data export endpoint**: Policy promises "request a copy in a structured format" but currently requires manual email. Build `/export-user-data` edge function for automated GDPR/CCPA portability.
+- **Data export endpoint**: DONE — `/export-user-data` edge function + "Export my data" button in Account Settings. Shipped 2026-02-26.
 - **Share link OG proxy**: Built and deployed as Cloudflare Worker (`kernel-og-proxy`). Share URLs now use `/s/{uuid}` format. Worker intercepts crawler UAs (Twitterbot, Discord, etc.) and returns OG meta tags; humans get 302 redirect to `/#/shared/{uuid}`. **PENDING: DNS propagation** — kernel.chat nameservers need to switch from GoDaddy (`domaincontrol.com`) to Cloudflare. Once propagated, Worker routes activate automatically.
 - **Dep updates held**: framer-motion v12 + lucide-react v0.575 (breaking changes, need testing)
-- **Discord webhook MCP**: FIXED — `kernel_notify` confirmed working (ship notification sent successfully 2026-02-26). Direct webhook posting via `4bfe5432b`.
+- **Discord webhook MCP**: Was working, now returning 401 as of 2026-02-26 evening. Webhook URL in `.env` may need refresh.
 - **Future Pro candidate**: Server-side project persistence (Supabase Storage for files that survive page reload + work across devices). Has real infrastructure cost — natural Pro feature when needed.
 
 ## Key Decisions Made
