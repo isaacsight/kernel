@@ -120,7 +120,7 @@ export function useAuth(): AuthState {
             console.error('[Auth] Token hash verification failed:', error.message);
             fallbackToSession();
           } else if (data.session) {
-            console.log('[Auth] Token hash verification success:', data.session.user?.email);
+            console.log('[Auth] Token hash verification success');
             setSession(data.session);
             setUser(data.session.user);
             setIsPasswordRecovery(true);
@@ -142,7 +142,7 @@ export function useAuth(): AuthState {
             console.error('[Auth] Code exchange failed:', error.message);
             fallbackToSession();
           } else {
-            console.log('[Auth] Code exchange success, user:', data.session?.user?.email);
+            console.log('[Auth] Code exchange success');
             setSession(data.session);
             setUser(data.session.user);
             checkSubscription().finally(() => { if (mounted) setIsLoading(false); });
@@ -162,7 +162,7 @@ export function useAuth(): AuthState {
       supabase.auth.getSession()
         .then(({ data: { session: s } }) => {
           if (!mounted) return;
-          console.log('[Auth] getSession:', s?.user?.email ?? 'no session');
+          console.log('[Auth] getSession:', s ? 'authenticated' : 'no session');
           setSession(s);
           setUser(s?.user ?? null);
           setIsLoading(false);
@@ -180,7 +180,7 @@ export function useAuth(): AuthState {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, s) => {
       if (!mounted) return;
-      console.log('[Auth] onAuthStateChange:', event, s?.user?.email ?? 'no user');
+      console.log('[Auth] onAuthStateChange:', event, s ? 'authenticated' : 'no user');
       if (event === 'PASSWORD_RECOVERY') {
         setIsPasswordRecovery(true);
         localStorage.removeItem(RECOVERY_FLAG);

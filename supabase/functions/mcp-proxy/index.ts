@@ -3,13 +3,13 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8"
-import { corsHeaders } from "../_shared/cors.ts"
+import { corsHeaders, SECURITY_HEADERS } from "../_shared/cors.ts"
 import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 import { requireContentType, checkSSRF } from '../_shared/validate.ts'
 
 serve(async (req: Request) => {
-    const CORS_HEADERS = corsHeaders(req)
+    const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
     // 1. Handle CORS preflight
     if (req.method === 'OPTIONS') {

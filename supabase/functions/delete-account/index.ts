@@ -10,6 +10,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 import { requireContentType } from '../_shared/validate.ts'
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -45,6 +46,10 @@ serve(async (req: Request) => {
     const admin = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
+
+    // ── Rate limit: 3 per 24h ─────────────────────────
+    const rl = await checkRateLimit(admin, user.id, 'delete-account', 'free')
+    if (!rl.allowed) return rateLimitResponse(rl, CORS_HEADERS)
 
     // ── Cancel Stripe subscription if active ────────────
     const { data: sub } = await admin

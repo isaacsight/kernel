@@ -10,6 +10,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 import { requireContentType } from '../_shared/validate.ts'
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface CheckoutPayload {
   mode?: 'subscription' | 'payment'
@@ -51,6 +52,13 @@ serve(async (req: Request) => {
     // Derive email and user_id from verified JWT — never trust the client body
     const email = user.email!
     const user_id = user.id
+
+    // ── Rate limit: 5 per hour ────────────────────────
+    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const rl = await checkRateLimit(svc, user_id, 'create-checkout', 'free')
+    if (!rl.allowed) return rateLimitResponse(rl, CORS_HEADERS)
 
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
     if (!stripeKey) {
