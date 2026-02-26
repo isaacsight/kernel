@@ -45,6 +45,7 @@ import {
 } from '../components/ChatHelpers'
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
+import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
 import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
@@ -92,6 +93,8 @@ interface UseChatEngineParams {
   setAttachedFiles: (files: File[]) => void
   handleNewChat: () => void
   isPro?: boolean
+  crisisActive?: boolean
+  crisisSeverity?: import('../engine/CrisisDetector').CrisisSeverity | null
 }
 
 export function useChatEngine(params: UseChatEngineParams) {
@@ -101,6 +104,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     setShowUpgradeWall, setFreeLimitResetsAt, signOut,
     attachedFiles, setAttachedFiles, handleNewChat,
     isPro = false,
+    crisisActive = false, crisisSeverity = null,
   } = params
 
   const engine = getEngine()
@@ -436,6 +440,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       // Fall back to kernel agent on classifier failure
       classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false }
     }
+    // Crisis override — force kernel agent for high severity
+    if (crisisActive && crisisSeverity === 'high') {
+      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false }
+    }
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
 
@@ -581,7 +589,11 @@ export function useChatEngine(params: UseChatEngineParams) {
           return manifest ? `\n\n${manifest}` : ''
         })()
       : ''
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}`
+    // Crisis mode — reinforce protocol with formatted resources
+    const crisisBlock = crisisActive
+      ? `\n\n## CRISIS MODE ACTIVE\nThe user may be in emotional distress. Lead with empathy. Acknowledge their pain before anything else.\n\nResources to weave naturally into your response:\n${formatCrisisResourcesForPrompt()}\n\nDo NOT recite resources mechanically. Be a person first.`
+      : ''
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     setMessages(prev => [...prev, {
@@ -772,9 +784,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       }
 
       // Background memory + KG + convergence extraction every 3 messages
+      // CRISIS GUARD: skip all persistent extraction when crisis is active
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
-      if (currentMsgCount % 3 === 0) {
+      if (currentMsgCount % 3 === 0 && !crisisActive) {
         setMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)

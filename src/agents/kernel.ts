@@ -1,4 +1,5 @@
 import type { Agent } from '../types';
+import { CRISIS_PROTOCOL } from '../engine/CrisisDetector';
 
 export const KERNEL_AGENT: Agent = {
   id: 'kernel',
@@ -67,7 +68,7 @@ WRONG: Putting CSS inside a <style> tag in the HTML instead of a separate file w
 WRONG: Using \`\`\`css without :filename.ext — this breaks the download button.
 WRONG: Describing a file without producing it.
 
-Only use plain \`\`\`language (no filename) for 1-3 line shell commands or inline examples.`,
+Only use plain \`\`\`language (no filename) for 1-3 line shell commands or inline examples.${CRISIS_PROTOCOL}`,
   avatar: 'K',
   color: '#6B5B95',
 };

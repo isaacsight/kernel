@@ -13045,6 +13045,135 @@ h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   Crisis Banner — fixed top, warm teal, non-dismissible
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-crisis-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    background: #2D6A6A;
+    color: #FAF9F6;
+    z-index: 10001;
+    text-align: center;
+}
+
+.ka-crisis-banner--high {
+    padding: var(--space-md) var(--space-lg);
+    background: #245858;
+}
+
+.ka-crisis-banner--contextual {
+    background: #3A7D7D;
+}
+
+.ka-crisis-banner-message {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.ka-crisis-banner-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ka-crisis-banner-resource {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.ka-crisis-banner-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: var(--letter-spacing-wide);
+    color: #FAF9F6;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(250, 249, 246, 0.4);
+    transition: text-decoration-color var(--duration-quick) var(--ease-out);
+}
+
+.ka-crisis-banner-link:hover {
+    text-decoration-color: rgba(250, 249, 246, 0.9);
+}
+
+/* Crisis banner — dark mode */
+[data-theme="dark"] .ka-crisis-banner {
+    background: #1A4F4F;
+    color: #E4DFD5;
+}
+
+[data-theme="dark"] .ka-crisis-banner--high {
+    background: #153F3F;
+}
+
+[data-theme="dark"] .ka-crisis-banner--contextual {
+    background: #1F5A5A;
+}
+
+[data-theme="dark"] .ka-crisis-banner-link {
+    color: #E4DFD5;
+    text-decoration-color: rgba(228, 223, 213, 0.4);
+}
+
+[data-theme="dark"] .ka-crisis-banner-link:hover {
+    text-decoration-color: rgba(228, 223, 213, 0.9);
+}
+
+/* Crisis banner — e-ink mode */
+[data-theme="eink"] .ka-crisis-banner,
+[data-theme="eink"] .ka-crisis-banner--high,
+[data-theme="eink"] .ka-crisis-banner--contextual {
+    background: #000;
+    color: #fff;
+    border-bottom: 2px solid #fff;
+}
+
+[data-theme="eink"] .ka-crisis-banner-link {
+    color: #fff;
+}
+
+/* Crisis banner — mobile */
+@media (max-width: 768px) {
+    .ka-crisis-banner {
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .ka-crisis-banner-message {
+        font-size: 0.85rem;
+    }
+
+    .ka-crisis-banner-links {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+
+    .ka-crisis-banner-link {
+        font-size: 0.65rem;
+    }
+}
+
+/* Crisis banner — reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .ka-crisis-banner {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
    Update Banner
    ═══════════════════════════════════════════════════════════ */
 
