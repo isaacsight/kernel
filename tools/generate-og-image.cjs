@@ -1,9 +1,8 @@
 // ─── OG Image Generator ──────────────────────────────────
 //
-// Generates a 1200x630 OG preview image replicating the
-// ParticleGrid aesthetic: CMYK-style layered rendering with
-// amethyst particles, mauve links, warm brown field halos,
-// and the print-style quantized grid background.
+// Pixel-accurate port of ParticleGrid.tsx to Node canvas.
+// Produces a 1200×620 OG image with the exact same rendering:
+// quantized CMYK layers, Bresenham links, blendQuantized cells.
 //
 // Usage: node tools/generate-og-image.cjs
 
@@ -11,31 +10,49 @@ const { createCanvas } = require('canvas')
 const fs = require('fs')
 const path = require('path')
 
+// ── Match ParticleGrid.tsx constants exactly ──
+
+const CELL = 20
 const W = 1200
-const H = 630
-const CELL = 16
-const COLS = Math.floor(W / CELL)
-const ROWS = Math.floor(H / CELL)
-const PARTICLE_COUNT = 140
-const LINK_DIST = 7 // in cells
-const FIELD_RADIUS = 6 // in cells
+const H = Math.floor(630 / CELL) * CELL  // 620 — snaps to cell grid
+const COLS = W / CELL                     // 60
+const ROWS = H / CELL                     // 31
+const BIT_DEPTH = 8
+const PARTICLE_COUNT = 55
+const GRAVITY = 0.006
+const DAMPING = 0.985
+const PRESSURE_RADIUS = 4.5
+const PRESSURE_STRENGTH = 0.08
+const VISCOSITY = 0.04
+const SUB_STEPS = 3
 
-// Rubin palette
-const IVORY = '#FAF9F6'
-const GRID_MINOR = '#E8E6DC'
-const GRID_MAJOR = '#D4C5A9'
-const SLATE = '#1F1E1D'
-const AMETHYST = '#6B5B95'
-const MAUVE = '#A0768C'
-const WARM_BROWN = '#B8875C'
+const PAL = {
+  bg:      '#FAF9F6',
+  gridMin: '#E8E6DC',
+  gridMaj: '#D4C5A9',
+  particle: '#6B5B95',
+  link:    '#A0768C',
+  field:   '#B8875C',
+  key:     '#1F1E1D',
+}
 
-// ── Helpers ──
+// ── Helpers (ported from ParticleGrid.tsx) ──
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return { r, g, b }
+function hexRgb(hex) {
+  return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]
+}
+
+function quantize(val, steps) {
+  return Math.round(val * steps) / steps
+}
+
+function blendQuantized(srcRgb, alpha, bgRgb) {
+  const qa = quantize(Math.min(Math.max(alpha, 0), 1), BIT_DEPTH)
+  if (qa <= 0) return null
+  const r = Math.round(srcRgb[0] * qa + bgRgb[0] * (1 - qa))
+  const g = Math.round(srcRgb[1] * qa + bgRgb[1] * (1 - qa))
+  const b = Math.round(srcRgb[2] * qa + bgRgb[2] * (1 - qa))
+  return `rgb(${r},${g},${b})`
 }
 
 function seedRandom(seed) {
@@ -46,249 +63,214 @@ function seedRandom(seed) {
   }
 }
 
-// ── Particle simulation ──
-
-function generateParticles(rand) {
-  const particles = []
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    // Wide spread across full canvas, gentle center bias
-    const cx = COLS / 2
-    const cy = ROWS / 2
-    const spreadX = COLS * 0.48
-    const spreadY = ROWS * 0.48
-    const x = cx + (rand() - 0.5 + rand() - 0.5 + rand() - 0.5) * spreadX * 0.67
-    const y = cy + (rand() - 0.5 + rand() - 0.5 + rand() - 0.5) * spreadY * 0.67
-    particles.push({
-      x: Math.max(2, Math.min(COLS - 3, x)),
-      y: Math.max(2, Math.min(ROWS - 3, y)),
-    })
-  }
-  return particles
-}
-
-function simulate(particles, rand, steps) {
-  // No gravity — pressure-only simulation for even spread
-  const damping = 0.98
-  const pressureRadius = 4.0
-  const pressureStrength = 0.08
-
-  const vx = new Float32Array(particles.length)
-  const vy = new Float32Array(particles.length)
-
-  for (let step = 0; step < steps; step++) {
-    for (let i = 0; i < particles.length; i++) {
-      // Pressure from neighbors (repulsion only — keeps them spread)
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[j].x - particles[i].x
-        const dy = particles[j].y - particles[i].y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < pressureRadius && dist > 0.01) {
-          const force = pressureStrength * (1 - dist / pressureRadius)
-          const fx = (dx / dist) * force
-          const fy = (dy / dist) * force
-          vx[i] -= fx
-          vy[i] -= fy
-          vx[j] += fx
-          vy[j] += fy
-        }
-      }
-
-      vx[i] *= damping
-      vy[i] *= damping
-      particles[i].x += vx[i]
-      particles[i].y += vy[i]
-
-      // Boundary bounce
-      if (particles[i].x < 2) { particles[i].x = 2; vx[i] *= -0.7 }
-      if (particles[i].x > COLS - 3) { particles[i].x = COLS - 3; vx[i] *= -0.7 }
-      if (particles[i].y < 2) { particles[i].y = 2; vy[i] *= -0.7 }
-      if (particles[i].y > ROWS - 3) { particles[i].y = ROWS - 3; vy[i] *= -0.7 }
-    }
-  }
-
-  return particles
-}
-
-// ── Rendering ──
-
-function render(canvas, ctx, particles) {
-  // Background
-  ctx.fillStyle = IVORY
-  ctx.fillRect(0, 0, W, H)
-
-  // Minor grid
-  ctx.strokeStyle = GRID_MINOR
-  ctx.lineWidth = 0.5
-  for (let c = 0; c <= COLS; c++) {
-    ctx.beginPath()
-    ctx.moveTo(c * CELL, 0)
-    ctx.lineTo(c * CELL, H)
-    ctx.stroke()
-  }
-  for (let r = 0; r <= ROWS; r++) {
-    ctx.beginPath()
-    ctx.moveTo(0, r * CELL)
-    ctx.lineTo(W, r * CELL)
-    ctx.stroke()
-  }
-
-  // Major grid (every 5 cells)
-  ctx.strokeStyle = GRID_MAJOR
-  ctx.lineWidth = 1
-  for (let c = 0; c <= COLS; c += 5) {
-    ctx.beginPath()
-    ctx.moveTo(c * CELL, 0)
-    ctx.lineTo(c * CELL, H)
-    ctx.stroke()
-  }
-  for (let r = 0; r <= ROWS; r += 5) {
-    ctx.beginPath()
-    ctx.moveTo(0, r * CELL)
-    ctx.lineTo(W, r * CELL)
-    ctx.stroke()
-  }
-
-  // Registration marks
-  drawRegistrationMarks(ctx)
-
-  // Layer 1: Field (warm brown density halo) — boosted opacity
-  const fieldRgb = hexToRgb(WARM_BROWN)
-  for (const p of particles) {
-    for (let dy = -FIELD_RADIUS; dy <= FIELD_RADIUS; dy++) {
-      for (let dx = -FIELD_RADIUS; dx <= FIELD_RADIUS; dx++) {
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist > FIELD_RADIUS) continue
-        const falloff = 1 - dist / FIELD_RADIUS
-        const alpha = 0.22 * falloff * falloff
-        const gx = Math.round(p.x) + dx
-        const gy = Math.round(p.y) + dy
-        if (gx < 0 || gx >= COLS || gy < 0 || gy >= ROWS) continue
-        ctx.fillStyle = `rgba(${fieldRgb.r},${fieldRgb.g},${fieldRgb.b},${alpha})`
-        ctx.fillRect(gx * CELL, gy * CELL, CELL, CELL)
-      }
-    }
-  }
-
-  // Layer 2: Links (mauve connections) — boosted opacity and width
-  const mauveRgb = hexToRgb(MAUVE)
-  ctx.lineWidth = 2
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[j].x - particles[i].x
-      const dy = particles[j].y - particles[i].y
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist < LINK_DIST) {
-        const alpha = 0.5 * (1 - dist / LINK_DIST)
-        ctx.strokeStyle = `rgba(${mauveRgb.r},${mauveRgb.g},${mauveRgb.b},${alpha})`
-        ctx.beginPath()
-        ctx.moveTo(particles[i].x * CELL + CELL / 2, particles[i].y * CELL + CELL / 2)
-        ctx.lineTo(particles[j].x * CELL + CELL / 2, particles[j].y * CELL + CELL / 2)
-        ctx.stroke()
-      }
-    }
-  }
-
-  // Layer 3: Particles (amethyst dots) — larger cells = more visible
-  for (const p of particles) {
-    const gx = Math.round(p.x)
-    const gy = Math.round(p.y)
-    if (gx < 0 || gx >= COLS || gy < 0 || gy >= ROWS) continue
-
-    // Solid particle
-    ctx.fillStyle = AMETHYST
-    ctx.fillRect(gx * CELL + 1, gy * CELL + 1, CELL - 2, CELL - 2)
-
-    // Inset highlight
-    ctx.fillStyle = 'rgba(147,131,181,0.45)'
-    ctx.fillRect(gx * CELL + 4, gy * CELL + 4, CELL - 8, CELL - 8)
-  }
-
-  // Branding — no radial gradient, just text shadow for readability
-  drawBranding(ctx)
-}
-
-function drawRegistrationMarks(ctx) {
-  const markLen = 20
-  const offset = 15
-  ctx.strokeStyle = SLATE
-  ctx.lineWidth = 1
-
-  ctx.beginPath()
-  ctx.moveTo(offset, offset + markLen)
-  ctx.lineTo(offset, offset)
-  ctx.lineTo(offset + markLen, offset)
-  ctx.stroke()
-
-  ctx.beginPath()
-  ctx.moveTo(W - offset - markLen, offset)
-  ctx.lineTo(W - offset, offset)
-  ctx.lineTo(W - offset, offset + markLen)
-  ctx.stroke()
-
-  ctx.beginPath()
-  ctx.moveTo(offset, H - offset - markLen)
-  ctx.lineTo(offset, H - offset)
-  ctx.lineTo(offset + markLen, H - offset)
-  ctx.stroke()
-
-  ctx.beginPath()
-  ctx.moveTo(W - offset - markLen, H - offset)
-  ctx.lineTo(W - offset, H - offset)
-  ctx.lineTo(W - offset, H - offset - markLen)
-  ctx.stroke()
-}
-
-function drawBranding(ctx) {
-  // Text sits directly on the particle field — shadow for legibility
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-
-  // "Kernel" — slightly above center (OG cards crop bottom)
-  const titleY = H * 0.38
-
-  // Shadow pass
-  ctx.fillStyle = 'rgba(250,249,246,0.9)'
-  ctx.font = '700 80px Georgia, serif'
-  // Draw a thick ivory shadow behind the text
-  for (let ox = -3; ox <= 3; ox++) {
-    for (let oy = -3; oy <= 3; oy++) {
-      ctx.fillText('Kernel', W / 2 + ox, titleY + oy)
-    }
-  }
-
-  // Actual title
-  ctx.fillStyle = SLATE
-  ctx.font = '700 80px Georgia, serif'
-  ctx.fillText('Kernel', W / 2, titleY)
-
-  // Tagline
-  const tagY = H * 0.52
-
-  // Shadow pass for tagline
-  ctx.fillStyle = 'rgba(250,249,246,0.9)'
-  ctx.font = '400 24px "Courier New", monospace'
-  for (let ox = -2; ox <= 2; ox++) {
-    for (let oy = -2; oy <= 2; oy++) {
-      ctx.fillText('AI That Learns You', W / 2 + ox, tagY + oy)
-    }
-  }
-
-  ctx.fillStyle = AMETHYST
-  ctx.font = '400 24px "Courier New", monospace'
-  ctx.fillText('AI That Learns You', W / 2, tagY)
-}
-
-// ── Main ──
+// ── Particle creation & physics (ported exactly) ──
 
 const rand = seedRandom(42)
-let particles = generateParticles(rand)
-particles = simulate(particles, rand, 300)
+
+function createParticle() {
+  return {
+    gx: rand() * COLS * 0.6 + COLS * 0.2,
+    gy: rand() * ROWS * 0.5 + ROWS * 0.15,
+    vx: (rand() - 0.5) * 0.05,
+    vy: (rand() - 0.5) * 0.05,
+  }
+}
+
+function updateParticle(p, all) {
+  p.vy += GRAVITY
+  for (const o of all) {
+    if (o === p) continue
+    const dx = o.gx - p.gx, dy = o.gy - p.gy
+    const d2 = dx * dx + dy * dy
+    if (d2 < PRESSURE_RADIUS * PRESSURE_RADIUS && d2 > 0.001) {
+      const d = Math.sqrt(d2)
+      const f = (1 - d / PRESSURE_RADIUS) * PRESSURE_STRENGTH
+      const nx = dx / d, ny = dy / d
+      p.vx -= nx * f
+      p.vy -= ny * f
+      p.vx += (o.vx - p.vx) * VISCOSITY
+      p.vy += (o.vy - p.vy) * VISCOSITY
+    }
+  }
+  p.vx *= DAMPING
+  p.vy *= DAMPING
+  p.gx += p.vx
+  p.gy += p.vy
+  if (p.gx < 0.5) { p.gx = 0.5; p.vx *= -0.3 }
+  if (p.gx > COLS - 0.5) { p.gx = COLS - 0.5; p.vx *= -0.3 }
+  if (p.gy < 0.5) { p.gy = 0.5; p.vy *= -0.3 }
+  if (p.gy > ROWS - 0.5) { p.gy = ROWS - 0.5; p.vy *= -0.3 }
+}
+
+// ── Simulate ──
+
+const particles = Array.from({ length: PARTICLE_COUNT }, () => createParticle())
+
+// Run ~200 frames of physics so particles settle naturally
+for (let frame = 0; frame < 200; frame++) {
+  for (let step = 0; step < SUB_STEPS; step++) {
+    for (const p of particles) {
+      updateParticle(p, particles)
+    }
+  }
+}
+
+// ── Render (pixel-accurate port of draw loop) ──
 
 const canvas = createCanvas(W, H)
 const ctx = canvas.getContext('2d')
-render(canvas, ctx, particles)
+
+// 1. Grid background (matches buildGridImage)
+ctx.fillStyle = PAL.bg
+ctx.fillRect(0, 0, W, H)
+
+// Minor grid
+ctx.strokeStyle = PAL.gridMin
+ctx.lineWidth = 0.5
+ctx.beginPath()
+for (let x = 0; x <= COLS; x++) { ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, H) }
+for (let y = 0; y <= ROWS; y++) { ctx.moveTo(0, y * CELL); ctx.lineTo(W, y * CELL) }
+ctx.stroke()
+
+// Major grid (every 5 cells)
+ctx.strokeStyle = PAL.gridMaj
+ctx.lineWidth = 1
+ctx.beginPath()
+for (let x = 0; x <= COLS; x += 5) { ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, H) }
+for (let y = 0; y <= ROWS; y += 5) { ctx.moveTo(0, y * CELL); ctx.lineTo(W, y * CELL) }
+ctx.stroke()
+
+// Registration marks — crosshair + circle (matches ParticleGrid exactly)
+const regM = 14
+ctx.strokeStyle = PAL.key
+ctx.lineWidth = 0.8
+for (const [rx, ry] of [[regM, regM], [W - regM, regM], [regM, H - regM], [W - regM, H - regM]]) {
+  ctx.beginPath(); ctx.moveTo(rx - 5, ry); ctx.lineTo(rx + 5, ry); ctx.moveTo(rx, ry - 5); ctx.lineTo(rx, ry + 5); ctx.stroke()
+  ctx.beginPath(); ctx.arc(rx, ry, 3.5, 0, Math.PI * 2); ctx.stroke()
+}
+
+// Color bar (centered at bottom)
+const bw = 20, bh = 4, by = H - 10
+;[PAL.particle, PAL.link, PAL.field, PAL.key].forEach((cl, i) => {
+  ctx.fillStyle = cl
+  ctx.fillRect(W / 2 - 50 + i * (bw + 3), by, bw, bh)
+})
+
+// 2. Build density arrays (matches draw loop exactly)
+const bgRgb = hexRgb(PAL.bg)
+const linkRgb = hexRgb(PAL.link)
+const fieldRgb = hexRgb(PAL.field)
+
+const fieldA = new Float32Array(COLS * ROWS)
+const partA = new Float32Array(COLS * ROWS)
+const linkArr = new Float32Array(COLS * ROWS)
+
+// Density field
+const fieldR = 3
+const fieldRMax = fieldR + 0.5
+for (const p of particles) {
+  const cx = Math.round(p.gx), cy = Math.round(p.gy)
+  for (let dy = -fieldR; dy <= fieldR; dy++) {
+    for (let dx = -fieldR; dx <= fieldR; dx++) {
+      const nx = cx + dx, ny = cy + dy
+      if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) continue
+      const d = Math.sqrt(dx * dx + dy * dy)
+      if (d < fieldRMax) fieldA[ny * COLS + nx] += Math.max(0, (1 - d / fieldRMax) * 0.35)
+    }
+  }
+}
+
+// Particle cells
+for (const p of particles) {
+  const cx = Math.round(p.gx), cy = Math.round(p.gy)
+  if (cx >= 0 && cx < COLS && cy >= 0 && cy < ROWS) partA[cy * COLS + cx] = 1.0
+}
+
+// Link cells (Bresenham rasterization, matches ParticleGrid exactly)
+const linkMax = 5
+for (let i = 0; i < particles.length; i++) {
+  const a = particles[i]
+  const acx = Math.round(a.gx), acy = Math.round(a.gy)
+  for (let j = i + 1; j < particles.length; j++) {
+    const b = particles[j]
+    const bcx = Math.round(b.gx), bcy = Math.round(b.gy)
+    const ddx = Math.abs(bcx - acx), ddy = Math.abs(bcy - acy)
+    const manhattan = ddx + ddy
+    if (manhattan > linkMax || manhattan < 2) continue
+    const euclidean = Math.sqrt(ddx * ddx + ddy * ddy)
+    if (euclidean > linkMax) continue
+    const strength = (1 - euclidean / (linkMax + 0.5)) * 0.6
+    const lineSteps = Math.max(ddx, ddy)
+    for (let t = 0; t <= lineSteps; t++) {
+      const frac = lineSteps === 0 ? 0 : t / lineSteps
+      const lx = Math.round(acx + (bcx - acx) * frac)
+      const ly = Math.round(acy + (bcy - acy) * frac)
+      if (lx >= 0 && lx < COLS && ly >= 0 && ly < ROWS) {
+        linkArr[ly * COLS + lx] = Math.max(linkArr[ly * COLS + lx], strength)
+      }
+    }
+  }
+}
+
+// 3. Render cells (matches draw loop exactly)
+for (let y = 0; y < ROWS; y++) {
+  for (let x = 0; x < COLS; x++) {
+    const idx = y * COLS + x
+    const px = x * CELL, py = y * CELL
+
+    if (fieldA[idx] > 0.02) {
+      const c = blendQuantized(fieldRgb, fieldA[idx] * 0.4, bgRgb)
+      if (c) { ctx.fillStyle = c; ctx.fillRect(px, py, CELL, CELL) }
+    }
+    if (linkArr[idx] > 0.02 && partA[idx] < 0.5) {
+      const c = blendQuantized(linkRgb, linkArr[idx] * 0.5, bgRgb)
+      if (c) { ctx.fillStyle = c; ctx.fillRect(px, py, CELL, CELL) }
+    }
+    if (partA[idx] > 0.5) {
+      ctx.fillStyle = PAL.particle
+      ctx.fillRect(px, py, CELL, CELL)
+      const inset = Math.max(1, Math.floor(CELL / 3))  // 6px
+      ctx.fillStyle = PAL.key
+      ctx.fillRect(px + inset, py + inset, CELL - inset * 2, CELL - inset * 2)
+    }
+  }
+}
+
+// 4. Branding overlay — "Kernel" + tagline with ivory text shadow
+ctx.textAlign = 'center'
+ctx.textBaseline = 'middle'
+
+const titleY = H * 0.38
+const tagY = H * 0.52
+
+// Ivory shadow behind text for legibility
+ctx.fillStyle = 'rgba(250,249,246,0.92)'
+ctx.font = '700 76px Georgia, serif'
+for (let ox = -3; ox <= 3; ox++) {
+  for (let oy = -3; oy <= 3; oy++) {
+    ctx.fillText('Kernel', W / 2 + ox, titleY + oy)
+  }
+}
+ctx.font = '400 22px "Courier New", monospace'
+for (let ox = -2; ox <= 2; ox++) {
+  for (let oy = -2; oy <= 2; oy++) {
+    ctx.fillText('AI That Learns You', W / 2 + ox, tagY + oy)
+  }
+}
+
+// Actual text
+ctx.fillStyle = PAL.key
+ctx.font = '700 76px Georgia, serif'
+ctx.fillText('Kernel', W / 2, titleY)
+
+ctx.fillStyle = PAL.particle
+ctx.font = '400 22px "Courier New", monospace'
+ctx.fillText('AI That Learns You', W / 2, tagY)
+
+// ── Write output ──
 
 const outPath = path.join(__dirname, '..', 'public', 'og-image.png')
 const buffer = canvas.toBuffer('image/png')
 fs.writeFileSync(outPath, buffer)
 console.log(`OG image written to ${outPath} (${(buffer.length / 1024).toFixed(1)} KB)`)
+console.log(`Dimensions: ${W}×${H}, Cell: ${CELL}px, Grid: ${COLS}×${ROWS}, Particles: ${PARTICLE_COUNT}`)
