@@ -39,6 +39,9 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'export-user-data':   { free: 1,  paid: 1,   pro: 1,   windowSeconds: 86400 },
   'identity-recovery':  { free: 10, paid: 10,  pro: 20,  windowSeconds: 300 },
   'tts':                { free: 0,  paid: 0,   pro: 10,  windowSeconds: 60 },
+  'delete-account':     { free: 3,  paid: 3,   pro: 3,   windowSeconds: 86400 },
+  'create-checkout':    { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
+  'create-portal':      { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
 }
 
 /**

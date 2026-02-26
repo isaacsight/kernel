@@ -7,12 +7,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { corsHeaders, handlePreflight } from '../_shared/cors.ts'
-
-const CORS_HEADERS = {
-  ...corsHeaders,
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-}
+import { corsHeaders, handlePreflight, OPEN_CORS_HEADERS, SECURITY_HEADERS } from '../_shared/cors.ts'
 
 // Throttle: max 1 proactive notification per user per 24 hours
 const THROTTLE_MS = 24 * 60 * 60 * 1000
@@ -25,6 +20,8 @@ serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return handlePreflight(req)
   }
+
+  const CORS_HEADERS = { ...OPEN_CORS_HEADERS, ...SECURITY_HEADERS }
 
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   const supabaseUrl = Deno.env.get('SUPABASE_URL')

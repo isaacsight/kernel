@@ -9,6 +9,7 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
+import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -59,10 +60,14 @@ serve(async (req: Request) => {
     }
 
     const userEmail = user.email
-    console.log(`Portal request from user ${user.id} (${userEmail})`)
+    console.log(`Portal request from user ${user.id}`)
+
+    // ── Rate limit: 5 per hour ────────────────────────
+    const adminClient = createClient(supabaseUrl, serviceRoleKey)
+    const rl = await checkRateLimit(adminClient, user.id, 'create-portal', 'free')
+    if (!rl.allowed) return rateLimitResponse(rl, CORS_HEADERS)
 
     // ── Step 2: Look up subscription in DB (service role bypasses RLS) ──
-    const adminClient = createClient(supabaseUrl, serviceRoleKey)
     const { data: sub } = await adminClient
       .from('subscriptions')
       .select('stripe_customer_id, stripe_subscription_id')
