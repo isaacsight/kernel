@@ -83,8 +83,13 @@ async function executeWorkflowTool(
                 : text
         }
         case 'url_fetch': {
-            const result = await callEdgeFunction('url-fetch', { url: input })
-            return (result.text as string) || `Failed to fetch content from ${input}`
+            // Extract a URL from the input — the planner may provide a description + working memory
+            const urlMatch = input.match(/https?:\/\/[^\s"'<>)\]]+/i)
+            if (!urlMatch) {
+                return `No valid URL found in input. Available context: ${input.slice(0, 200)}`
+            }
+            const result = await callEdgeFunction('url-fetch', { url: urlMatch[0] })
+            return (result.text as string) || `Failed to fetch content from ${urlMatch[0]}`
         }
         case 'analyze': {
             const response = await getProvider().text(input, {
@@ -235,10 +240,10 @@ Rules:
         this.state = 'executing'
         this.emit(`Step ${stepIndex + 1}/${this.steps.length}`, parsed.name)
 
-        // Enrich the tool input with working memory for context
-        const enrichedInput = parsed.tool === 'analyze' || parsed.tool === 'draft'
-            ? `${parsed.input}\n\nContext from previous steps:\n${workingMemory}`
-            : parsed.input
+        // Enrich tool inputs with working memory for context
+        const enrichedInput = parsed.tool === 'web_search'
+            ? parsed.input
+            : `${parsed.input}\n\nContext from previous steps:\n${workingMemory}`
 
         let lastError = ''
         for (let attempt = 0; attempt <= MAX_RETRIES_PER_STEP; attempt++) {

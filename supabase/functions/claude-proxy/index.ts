@@ -1209,36 +1209,38 @@ serve(async (req: Request) => {
         }
       }
 
-      // Pre-flight image & document check
-      let uploadedImageCount = 0
-      let hasDocument = false
-      if (payload.messages) {
-        for (const m of payload.messages) {
-          if (Array.isArray(m.content)) {
-            for (const block of m.content as any[]) {
-              if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
-              if (block.type === 'document') hasDocument = true
+      // Pre-flight image & document check (free users only — Pro has unlimited)
+      if (isFreeUser) {
+        let uploadedImageCount = 0
+        let hasDocument = false
+        if (payload.messages) {
+          for (const m of payload.messages) {
+            if (Array.isArray(m.content)) {
+              for (const block of m.content as any[]) {
+                if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
+                if (block.type === 'document') hasDocument = true
+              }
             }
           }
         }
-      }
 
-      if (hasDocument) {
-        return new Response(
-          JSON.stringify({ error: 'document_analysis_pro_only', message: 'Document analysis is a Pro feature.' }),
-          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-
-      const FREE_IMAGE_LIMIT = 3
-      if (uploadedImageCount > 0) {
-        const svc = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
-        const { data: imgCheck, error: imgErr } = await svc.rpc('check_image_limit', { p_user_id: user.id })
-        if (!imgErr && imgCheck?.daily_count + uploadedImageCount > FREE_IMAGE_LIMIT) {
+        if (hasDocument) {
           return new Response(
-            JSON.stringify({ error: 'free_image_limit_reached', limit: FREE_IMAGE_LIMIT, used: imgCheck.daily_count, resets_at: imgCheck.resets_at }),
+            JSON.stringify({ error: 'document_analysis_pro_only', message: 'Document analysis is a Pro feature.' }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
+        }
+
+        const FREE_IMAGE_LIMIT = 3
+        if (uploadedImageCount > 0) {
+          const svc = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+          const { data: imgCheck, error: imgErr } = await svc.rpc('check_image_limit', { p_user_id: user.id })
+          if (!imgErr && imgCheck?.daily_count + uploadedImageCount > FREE_IMAGE_LIMIT) {
+            return new Response(
+              JSON.stringify({ error: 'free_image_limit_reached', limit: FREE_IMAGE_LIMIT, used: imgCheck.daily_count, resets_at: imgCheck.resets_at }),
+              { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
+          }
         }
       }
     }
