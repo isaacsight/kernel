@@ -18,7 +18,6 @@ export function usePanelManager(callbacks: {
   const [showBriefingPanel, setShowBriefingPanel] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
   const [showAccountSettings, setShowAccountSettings] = useState(false)
-  const [showReliabilityPanel, setShowReliabilityPanel] = useState(false)
   const [showMirrorPanel, setShowMirrorPanel] = useState(false)
   const [showProjectPanel, setShowProjectPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
@@ -34,7 +33,6 @@ export function usePanelManager(callbacks: {
     setShowBriefingPanel(false)
     setShowInsightsPanel(false)
     setShowAccountSettings(false)
-    setShowReliabilityPanel(false)
     setShowMirrorPanel(false)
     setShowProjectPanel(false)
     setActiveTab('home')
@@ -50,7 +48,6 @@ export function usePanelManager(callbacks: {
     if (except !== 'briefings') setShowBriefingPanel(false)
     if (except !== 'insights') setShowInsightsPanel(false)
     if (except !== 'account-settings') setShowAccountSettings(false)
-    if (except !== 'reliability') setShowReliabilityPanel(false)
     if (except !== 'mirror') setShowMirrorPanel(false)
     if (except !== 'project') setShowProjectPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
@@ -87,7 +84,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'reliability' | 'mirror' | 'project' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -99,7 +96,6 @@ export function usePanelManager(callbacks: {
       case 'briefings': setShowBriefingPanel(false); break
       case 'insights': setShowInsightsPanel(false); break
       case 'account-settings': setShowAccountSettings(false); break
-      case 'reliability': setShowReliabilityPanel(false); break
       case 'mirror': setShowMirrorPanel(false); break
       case 'project': setShowProjectPanel(false); break
       case 'more': setShowMoreMenu(false); break
@@ -136,10 +132,6 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('account-settings')
         setShowAccountSettings(true)
         break
-      case 'reliability':
-        closeOtherPanels('reliability')
-        setShowReliabilityPanel(true)
-        break
       case 'mirror':
         closeOtherPanels('mirror')
         setShowMirrorPanel(true)
@@ -172,7 +164,6 @@ export function usePanelManager(callbacks: {
     showBriefingPanel, setShowBriefingPanel,
     showInsightsPanel, setShowInsightsPanel,
     showAccountSettings, setShowAccountSettings,
-    showReliabilityPanel, setShowReliabilityPanel,
     showMirrorPanel, setShowMirrorPanel,
     showProjectPanel, setShowProjectPanel,
     activeTab, setActiveTab,
