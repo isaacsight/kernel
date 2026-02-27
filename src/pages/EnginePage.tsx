@@ -855,7 +855,7 @@ function EngineChat() {
                 isAdmin={isAdmin}
                 onClose={() => panels.closePanel('account-settings')}
                 onToast={showToast}
-                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
+                onUpgrade={(plan) => billing.handleUpgrade(plan)}
                 onManageSubscription={billing.handleManageSubscription}
                 onSignOut={signOut}
                 onDeleteAccount={() => billing.setShowDeleteConfirm(true)}

@@ -27,7 +27,7 @@ interface AccountSettingsPanelProps {
   isAdmin: boolean
   onClose: () => void
   onToast: (msg: string) => void
-  onUpgrade: () => void
+  onUpgrade: (plan: 'pro_monthly' | 'pro_annual') => void
   onManageSubscription: () => void
   onSignOut: () => void
   onDeleteAccount: () => void
@@ -331,7 +331,10 @@ export default function AccountSettingsPanel({
               {isPro ? (
                 <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
               ) : (
-                <button className="ka-settings-link-btn ka-settings-link-btn--upgrade" onClick={onUpgrade}>{t('subscription.upgrade')}</button>
+                <div className="ka-settings-upgrade-options">
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade" onClick={() => onUpgrade('pro_monthly')}>{t('subscription.upgradeMonthly')}</button>
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-annual" onClick={() => onUpgrade('pro_annual')}>{t('subscription.upgradeAnnual')}</button>
+                </div>
               )}
             </div>
           </div>

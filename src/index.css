@@ -15377,6 +15377,10 @@ h4 {
     cursor: not-allowed;
 }
 
+.ka-settings-upgrade-options {
+    display: flex;
+    gap: var(--space-xs);
+}
 .ka-settings-link-btn--upgrade {
     background: var(--rubin-primary);
     color: #fff;
@@ -15384,6 +15388,15 @@ h4 {
 }
 .ka-settings-link-btn--upgrade:hover {
     background: #5A4A84;
+}
+.ka-settings-link-btn--upgrade-annual {
+    background: transparent;
+    color: var(--rubin-primary);
+    border-color: var(--rubin-primary);
+}
+.ka-settings-link-btn--upgrade-annual:hover {
+    background: var(--rubin-primary);
+    color: #fff;
 }
 
 .ka-settings-danger-btn {

@@ -68,6 +68,8 @@
     "pro": "Pro plan",
     "admin": "Admin",
     "upgrade": "Upgrade to Pro",
+    "upgradeMonthly": "Pro — $29/mo",
+    "upgradeAnnual": "Pro — $290/yr",
     "manage": "Manage subscription"
   },
   "exportData": {
