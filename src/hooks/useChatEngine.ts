@@ -787,7 +787,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       // CRISIS GUARD: skip all persistent extraction when crisis is active
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
-      if (currentMsgCount % 3 === 0 && !crisisActive) {
+      if (currentMsgCount % 6 === 0 && !crisisActive) {
         setMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)

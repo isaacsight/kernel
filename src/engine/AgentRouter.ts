@@ -13,7 +13,7 @@ export interface ClassificationResult {
 /** Auto-select model based on task complexity from the router */
 export function resolveModelFromClassification(c: ClassificationResult): 'opus' | 'sonnet' | 'haiku' {
   if (c.complexity >= 0.85) return 'opus'   // Hard reasoning, complex code, deep analysis
-  if (c.complexity <= 0.2) return 'haiku'   // Greetings, simple factual, casual chat
+  if (c.complexity <= 0.35) return 'haiku'  // Greetings, simple factual, casual chat, straightforward questions
   return 'sonnet'                            // Everything else
 }
 
@@ -34,7 +34,7 @@ Agents:
 - investigator: OSINT, deep research, tracing metadata, forensics, connecting disparate data points
 
 Also determine:
-- complexity: 0.0-1.0 score for how intellectually demanding the task is. 0.0-0.2 = trivial (greetings, simple factual). 0.2-0.8 = moderate (most tasks). 0.85-1.0 = very hard (complex multi-step reasoning, intricate code architecture, nuanced philosophical analysis, tasks requiring exceptional depth)
+- complexity: 0.0-1.0 score for how intellectually demanding the task is. 0.0-0.35 = simple (greetings, simple factual, casual chat, straightforward questions). 0.35-0.8 = moderate (most tasks). 0.85-1.0 = very hard (complex multi-step reasoning, intricate code architecture, nuanced philosophical analysis, tasks requiring exceptional depth)
 - needsResearch: true if the question requires multi-step web research (not just a simple search). Examples: "research AI regulation in the EU", "deep dive into...", "comprehensive analysis of..."
 - isMultiStep: true if the request requires 3+ distinct operations that build on each other. Examples: "research X, then analyze Y, then write Z", "build a complete...", "create a plan and execute it"
 - needsSwarm: true if the question would benefit from multiple specialist perspectives working together. Examples: "what should I do about...", "evaluate this idea", "help me think through...", complex decisions, multi-domain questions, strategy + analysis + creativity combined. NOT for simple factual questions or single-domain tasks.
