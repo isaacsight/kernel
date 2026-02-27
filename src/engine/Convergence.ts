@@ -319,7 +319,7 @@ export function shouldConverge(mirror: UserMirror, messageCount: number): boolea
   const updatedSince = activeFacets.filter(f => f.updatedAt > mirror.lastConvergence).length
   if (updatedSince >= 3) return true
 
-  return messageCount > 0 && messageCount % 5 === 0
+  return messageCount > 0 && messageCount % 10 === 0
 }
 
 export function resolveFacetAgent(activeAgentId: string): string {

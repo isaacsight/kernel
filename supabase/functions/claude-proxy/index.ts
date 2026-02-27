@@ -493,7 +493,13 @@ async function handleAnthropic(
     max_tokens: payload.max_tokens ?? 4096,
     messages: payload.messages.map(m => ({ role: m.role, content: m.content })),
   }
-  if (payload.system) body.system = payload.system
+  if (payload.system) {
+    body.system = [{
+      type: 'text',
+      text: payload.system,
+      cache_control: { type: 'ephemeral' },
+    }]
+  }
   if (isStream) body.stream = true
   if (payload.thinking && payload.thinking.type === 'enabled') {
     body.thinking = payload.thinking
@@ -514,7 +520,7 @@ async function handleAnthropic(
       'Content-Type': 'application/json',
       'x-api-key': anthropicKey,
       'anthropic-version': '2023-06-01',
-      'anthropic-beta': 'pdfs-2024-09-25',
+      'anthropic-beta': 'prompt-caching-2024-07-31,pdfs-2024-09-25',
     },
     body: JSON.stringify(body),
   })
