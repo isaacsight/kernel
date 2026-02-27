@@ -8,6 +8,39 @@
 
 ### Accomplished This Session
 
+#### Image Credit Packs + Auto-Reload + Fixes
+Converted image generation from Pro-included to credit-based system with auto-reload.
+
+**New files:**
+- `supabase/migrations/042_auto_reload.sql` — 3 columns on `user_memory` (stripe_customer_id, auto_reload_pack, auto_reload_threshold) + 3 RPCs (get_auto_reload, set_auto_reload, set_stripe_customer_id)
+- `src/components/ImageCreditModal.tsx` — Credit purchase modal with 3 packs + auto-reload toggle
+- `supabase/functions/create-image-checkout/index.ts` — Stripe Checkout for credit packs
+
+**Modified files:**
+- `supabase/functions/image-gen/index.ts` — Credit gating, admin bypass (ADMIN_USER_IDS env), auto-reload trigger after decrement, get/set auto-reload actions. Fixed Gemini model from deprecated `gemini-2.0-flash-exp` (502 errors) to `gemini-2.5-flash-image`.
+- `supabase/functions/stripe-webhook/index.ts` — Stores stripe_customer_id after credit purchase for auto-reload
+- `src/engine/imageGen.ts` — Added `getAutoReload()`, `setAutoReload()`, `getImageCredits()`, `ImageCreditError` class
+- `src/hooks/useChatEngine.ts` — Auto-reload toast, credit modal trigger on 0 credits
+- `src/index.css` — Credit modal styles + auto-reload section + fix upgrade wall overflow (max-height + overflow-y: auto)
+
+**Stripe products created:**
+- Starter: 25 credits / $4.99 (price_1R7...)
+- Standard: 75 credits / $12.99 (price_1R7..., "Most Popular")
+- Power: 200 credits / $29.99 (price_1R7...)
+
+**Admin bypass:** `ADMIN_USER_IDS` env var on image-gen — skips credit check, rate limit, and credit decrement. Set to Isaac's user ID.
+
+**Admin Pro subscription:** Added active Pro (1 year) for admin account `68194440-44c5-41df-86f5-1e5fa25b13a0`.
+
+**E2E verified on kernel.chat via Playwright:**
+- Image gen: "draw me a cozy cabin" → image + credits decremented
+- Image gen: "sunset over ocean" → image + credits decremented
+- 0 credits → auto-opens credit modal with 3 packs + auto-reload section
+- Starter pack → Stripe Checkout with correct price, future charge consent
+- Auto-reload APIs: get/set/disable all working (curl tested)
+
+**Commits:** `54b022fc6` (credit packs + auto-reload), `6fbfd811b` (Gemini model fix + upgrade wall overflow)
+
 #### Comped Pro for siijoseph333@gmail.com
 Granted 1 month complimentary Pro access to `siijoseph333@gmail.com` (user ID: `65848452-c1d9-4b9b-ade7-bbfbf47a14fe`). Expires **2026-03-27**.
 - Inserted `subscriptions` row with `status: 'active'`, `current_period_end: now() + 1 month`

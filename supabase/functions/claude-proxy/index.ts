@@ -522,7 +522,7 @@ async function handleAnthropic(
       'Content-Type': 'application/json',
       'x-api-key': anthropicKey,
       'anthropic-version': '2023-06-01',
-      'anthropic-beta': 'prompt-caching-2024-07-31,pdfs-2024-09-25',
+      'anthropic-beta': 'prompt-caching-2024-07-31,pdfs-2024-09-25,web-search-2025-03-05',
     },
     body: JSON.stringify(body),
   })

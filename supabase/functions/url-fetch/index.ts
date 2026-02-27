@@ -12,6 +12,48 @@ import { requireContentType, checkSSRF } from '../_shared/validate.ts'
 
 const MAX_CONTENT_LENGTH = 12000
 
+// ── oEmbed: YouTube & Spotify link intelligence ──────────────
+
+function isYouTubeUrl(url: string): boolean {
+  return /(?:youtube\.com\/(?:watch|shorts)|youtu\.be\/|music\.youtube\.com\/watch)/.test(url)
+}
+
+function isSpotifyUrl(url: string): boolean {
+  return /open\.spotify\.com\/(track|album|playlist|artist|episode|show)\//.test(url)
+}
+
+async function fetchOEmbed(oembedUrl: string): Promise<Record<string, unknown> | null> {
+  try {
+    const res = await fetch(oembedUrl)
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
+}
+
+async function fetchYouTubeInfo(url: string): Promise<string | null> {
+  const data = await fetchOEmbed(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+  if (!data?.title) return null
+  let text = `YouTube Video: ${data.title}`
+  if (data.author_name) text += `\nChannel: ${data.author_name}`
+  if (data.author_url) text += `\nChannel URL: ${data.author_url}`
+  return text
+}
+
+async function fetchSpotifyInfo(url: string): Promise<string | null> {
+  const data = await fetchOEmbed(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+  if (!data?.title) return null
+  // Detect type from URL path
+  const typeMatch = url.match(/open\.spotify\.com\/(track|album|playlist|artist|episode|show)\//)
+  const type = typeMatch ? typeMatch[1].charAt(0).toUpperCase() + typeMatch[1].slice(1) : 'Content'
+  let text = `Spotify ${type}: ${data.title}`
+  if (data.description) text += `\nDescription: ${data.description}`
+  return text
+}
+
+// ── HTML text extraction ─────────────────────────────────────
+
 function htmlToText(html: string): string {
   // Extract Open Graph / meta tags first (useful for social media)
   const ogTitle = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]*)"/) ||
@@ -108,6 +150,40 @@ serve(async (req: Request) => {
     const ssrfErr = checkSSRF(url)
     if (ssrfErr) return ssrfErr(CORS_HEADERS)
 
+    // ── oEmbed: YouTube & Spotify ─────────────────────
+    if (isYouTubeUrl(url)) {
+      const text = await fetchYouTubeInfo(url)
+      if (text) {
+        logAudit(svc, {
+          actorId: user.id, eventType: 'edge_function.call', action: 'url-fetch',
+          source: 'url-fetch', status: 'success', statusCode: 200,
+          metadata: { url: url.substring(0, 200), handler: 'youtube-oembed' },
+          ip: getClientIP(req), userAgent: getUA(req),
+        })
+        return new Response(
+          JSON.stringify({ text, url }),
+          { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    if (isSpotifyUrl(url)) {
+      const text = await fetchSpotifyInfo(url)
+      if (text) {
+        logAudit(svc, {
+          actorId: user.id, eventType: 'edge_function.call', action: 'url-fetch',
+          source: 'url-fetch', status: 'success', statusCode: 200,
+          metadata: { url: url.substring(0, 200), handler: 'spotify-oembed' },
+          ip: getClientIP(req), userAgent: getUA(req),
+        })
+        return new Response(
+          JSON.stringify({ text, url }),
+          { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+    }
+
+    // ── Generic fetch (fallback) ──────────────────────
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; KernelBot/1.0)',
