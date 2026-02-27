@@ -173,6 +173,37 @@ serve(async (req: Request) => {
       console.warn('Proactive briefings failed (non-blocking):', proactiveErr)
     }
 
+    // ── Expire subscriptions past current_period_end ──
+    try {
+      const { data: expired } = await supabase
+        .from('subscriptions')
+        .select('user_id')
+        .eq('status', 'active')
+        .not('current_period_end', 'is', null)
+        .lt('current_period_end', new Date().toISOString())
+
+      if (expired && expired.length > 0) {
+        const userIds = expired.map((s: { user_id: string }) => s.user_id)
+        await supabase
+          .from('subscriptions')
+          .update({ status: 'inactive', updated_at: new Date().toISOString() })
+          .in('user_id', userIds)
+
+        // Notify each expired user
+        const notifications = userIds.map((uid: string) => ({
+          user_id: uid,
+          title: 'Your Pro subscription has ended',
+          body: 'Your complimentary Pro access has expired. Upgrade anytime to restore unlimited messages and Pro features.',
+          type: 'info',
+        }))
+        await supabase.from('notifications').insert(notifications)
+
+        console.log(`[subscriptions] Expired ${userIds.length} subscription(s)`)
+      }
+    } catch (subErr) {
+      console.warn('Subscription expiration failed (non-blocking):', subErr)
+    }
+
     // ── Cleanup: purge expired rate limits, old audit events, old errors ──
     try {
       await supabase.rpc('cleanup_rate_limits')
