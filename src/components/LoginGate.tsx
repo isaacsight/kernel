@@ -131,6 +131,7 @@ export function LoginGate() {
             <li>{t('login.proFeature2')}</li>
             <li>{t('login.proFeature3')}</li>
             <li>{t('login.proFeature4')}</li>
+            <li>{t('login.proFeature5')}</li>
           </ul>
           <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
             {t('login.startFree')}

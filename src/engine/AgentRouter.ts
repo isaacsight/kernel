@@ -8,6 +8,7 @@ export interface ClassificationResult {
   needsResearch: boolean
   isMultiStep: boolean
   needsSwarm: boolean
+  needsImageGen: boolean
 }
 
 /** Auto-select model based on task complexity from the router */
@@ -38,9 +39,10 @@ Also determine:
 - needsResearch: true if the question requires multi-step web research (not just a simple search). Examples: "research AI regulation in the EU", "deep dive into...", "comprehensive analysis of..."
 - isMultiStep: true if the request requires 3+ distinct operations that build on each other. Examples: "research X, then analyze Y, then write Z", "build a complete...", "create a plan and execute it"
 - needsSwarm: true if the question would benefit from multiple specialist perspectives working together. Examples: "what should I do about...", "evaluate this idea", "help me think through...", complex decisions, multi-domain questions, strategy + analysis + creativity combined. NOT for simple factual questions or single-domain tasks.
+- needsImageGen: true if the user explicitly wants an image created or generated. Examples: "generate an image of...", "draw me a...", "create a picture of...", "make an illustration of...", "paint a...", "visualize...". NOT for image analysis, editing existing images, or describing images.
 
 Respond with ONLY valid JSON, no other text:
-{"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false}`
+{"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsImageGen": false}`
 
 export async function classifyIntent(
   message: string,
@@ -68,12 +70,12 @@ export async function classifyIntent(
     // Validate the result
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator']
     if (!validAgents.includes(result.agentId)) {
-      return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false }
+      return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
     }
 
     // Fall back to kernel if confidence is too low
     if (typeof result.confidence !== 'number' || result.confidence < 0.3) {
-      return { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false }
+      return { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
     }
 
     return {
@@ -83,10 +85,11 @@ export async function classifyIntent(
       needsResearch: !!result.needsResearch,
       isMultiStep: !!result.isMultiStep,
       needsSwarm: !!result.needsSwarm,
+      needsImageGen: !!result.needsImageGen,
     }
   } catch {
     // On any failure, fall back to kernel
-    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false }
+    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
   }
 }
 
