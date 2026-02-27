@@ -19,6 +19,7 @@ import { forkSharedConversation } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
+import { GeneratedImageCard } from '../components/GeneratedImageCard'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
 import { useTheme } from '../hooks/useTheme'
 import { useToast } from '../hooks/useToast'
@@ -64,7 +65,6 @@ const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').th
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
-const ReliabilityDashboard = lazyRetry(() => import('../components/ReliabilityDashboard').then(m => ({ default: m.ReliabilityDashboard })))
 const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m => ({ default: m.MirrorPanel })))
 const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m => ({ default: m.ProjectPanel })))
 
@@ -586,7 +586,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showReliabilityPanel || panels.showMirrorPanel || panels.showProjectPanel
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -860,18 +860,6 @@ function EngineChat() {
               />
             </Suspense>
           </BottomSheet>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {panels.showReliabilityPanel && user && (
-          <Suspense fallback={null}>
-            <ReliabilityDashboard
-              userId={user.id}
-              isAdmin={isAdmin}
-              onClose={() => panels.closePanel('reliability')}
-            />
-          </Suspense>
         )}
       </AnimatePresence>
 
@@ -1261,12 +1249,15 @@ function EngineChat() {
                     </form>
                   ) : msg.content || msg.thinking ? (
                     msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} onArtifactRendered={handleArtifactRendered} conversationId={convs.activeConversationId} /> : <Linkify text={msg.content} />
-                  ) : (
+                  ) : msg.generatedImages && msg.generatedImages.length > 0 ? null : (
                     <div className="ka-typing-grid">
                       <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                     </div>
                   )}
                 </div>
+                {msg.role === 'kernel' && msg.generatedImages && msg.generatedImages.length > 0 && (
+                  <GeneratedImageCard images={msg.generatedImages} text={msg.content} />
+                )}
                 {msg.role === 'user' && msg.content && !isStreaming && msgActions.editingMsgId !== msg.id && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => { msgActions.setEditingMsgId(msg.id); msgActions.setEditingContent(msg.content) }} aria-label={t('aria.editMessage', { ns: 'common' })}>
@@ -1274,7 +1265,7 @@ function EngineChat() {
                     </button>
                   </div>
                 )}
-                {msg.role === 'kernel' && msg.content && (
+                {msg.role === 'kernel' && (msg.content || (msg.generatedImages && msg.generatedImages.length > 0)) && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => msgActions.handleCopyMessage(msg.id, msg.content)} aria-label={t('aria.copyMessage', { ns: 'common' })}>
                       {msgActions.copiedMsgId === msg.id ? <IconCheck size={14} /> : <IconCopy size={14} />}
