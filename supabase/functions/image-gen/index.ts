@@ -167,7 +167,7 @@ serve(async (req: Request) => {
       )
     }
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${geminiKey}`
 
     const geminiRes = await fetch(geminiUrl, {
       method: 'POST',
