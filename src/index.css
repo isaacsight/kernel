@@ -1681,7 +1681,9 @@ h4 {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--rubin-ivory);
+    background: rgba(250, 249, 246, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     border: 1px solid var(--rubin-ivory-dark);
     box-shadow: var(--shadow-md);
     color: var(--rubin-slate);
@@ -8497,6 +8499,11 @@ h4 {
         -webkit-overflow-scrolling: touch;
     }
 
+    /* Hide empty kebab menu on mobile when no conversation items visible */
+    .ka-header-menu:not(:has(.ka-header-menu-item:not(.ka-menu-tabbed))) {
+        display: none;
+    }
+
     .ka-header-icon-btn {
         width: 44px;
         height: 44px;
@@ -13517,6 +13524,12 @@ h4 {
 [data-theme="dark"] .ka-toast {
     background: #E4DFD5;
     color: #1C1A18;
+}
+
+[data-theme="dark"] .ka-scroll-btn {
+    background: rgba(28, 26, 24, 0.85);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
 }
 
 [data-theme="dark"] .ka-edit-input {

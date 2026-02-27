@@ -965,7 +965,7 @@ function EngineChat() {
                   <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
                 </button>
-                <div className="ka-header-menu-divider" />
+                <div className="ka-header-menu-divider ka-menu-tabbed" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
                   <IconSettings size={16} /> {t('menu.accountSettings')}
