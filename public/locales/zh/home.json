@@ -35,7 +35,7 @@
     "subtitle": "升级到 Kernel Pro 以继续对话。",
     "resetsAt": "您的消息将在 {{time}} 重置。升级到 Pro 享受无限消息。",
     "features": {
-      "unlimitedMessages": "无限消息",
+      "unlimitedMessages": "每天50条消息",
       "deepResearch": "深度研究模式",
       "multiAgent": "多智能体协作",
       "multiStep": "多步骤任务规划",

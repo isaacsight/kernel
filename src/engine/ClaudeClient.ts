@@ -31,6 +31,19 @@ export class FreeLimitError extends Error {
   }
 }
 
+export class ProLimitError extends Error {
+  limit: number
+  used: number
+  resetsAt: string | null
+  constructor(limit: number, used: number, resetsAt?: string) {
+    super(`Daily Pro limit reached: ${used}/${limit} messages used`)
+    this.name = 'ProLimitError'
+    this.limit = limit
+    this.used = used
+    this.resetsAt = resetsAt ?? null
+  }
+}
+
 export class ImageLimitError extends Error {
   limit: number
   used: number
@@ -119,9 +132,12 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
+        if (body.error === 'pro_limit_reached') {
+          throw new ProLimitError(body.limit ?? 50, body.used ?? 0, body.resets_at)
+        }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof RateLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError) throw e
       }
     }
     // Check if the error included an auto-refund
@@ -309,9 +325,12 @@ export async function claudeStreamChat(
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
+        if (body.error === 'pro_limit_reached') {
+          throw new ProLimitError(body.limit ?? 50, body.used ?? 0, body.resets_at)
+        }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof RateLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError) throw e
       }
     }
     // Check for auto-refund in error response
