@@ -7,7 +7,7 @@ import { IconCrown } from './KernelIcons'
 import type { PlanId } from '../config/planLimits'
 
 interface UpgradePromptProps {
-  feature: 'memory' | 'goals' | 'briefings' | 'monthly_limit' | 'daily_limit' | 'files' | 'voice'
+  feature: 'memory' | 'goals' | 'briefings' | 'monthly_limit' | 'daily_limit' | 'files'
   onUpgrade: (plan: PlanId) => void
   loading?: boolean
 }
@@ -36,10 +36,6 @@ const COPY: Record<string, { title: string; description: string }> = {
   files: {
     title: 'File analysis is a Pro feature',
     description: 'Upgrade to analyze images, PDFs, and documents with Kernel.',
-  },
-  voice: {
-    title: 'Voice is a Pro feature',
-    description: 'Upgrade for voice input and text-to-speech across all conversations.',
   },
 }
 
