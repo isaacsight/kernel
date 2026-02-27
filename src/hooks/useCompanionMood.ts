@@ -59,46 +59,55 @@ export function deriveMoodState(
 }
 
 export function useCompanionMood(timePhase: TimePhase, isRecentlyActive: boolean): CompanionMoodResult {
-  const store = useCompanionStore()
+  // Select individual primitives to avoid re-renders from store identity changes
+  const happiness = useCompanionStore(s => s.happiness)
+  const attention = useCompanionStore(s => s.attention)
+  const tapCount = useCompanionStore(s => s.tapCount)
+  const streak = useCompanionStore(s => s.streak)
+  const conversationsToday = useCompanionStore(s => s.conversationsToday)
+  const petCreature = useCompanionStore(s => s.petCreature)
+  const recordConversation = useCompanionStore(s => s.recordConversation)
+  const recordGoalComplete = useCompanionStore(s => s.recordGoalComplete)
+
   const hasAppliedDecay = useRef(false)
 
-  // Apply retroactive decay once on mount
+  // Apply retroactive decay once on mount — use getState() to avoid dependency
   useEffect(() => {
     if (!hasAppliedDecay.current) {
       hasAppliedDecay.current = true
-      store._applyRetroactiveDecay()
+      useCompanionStore.getState()._applyRetroactiveDecay()
     }
-  }, [store])
+  }, [])
 
-  // Decay interval — every 60s
+  // Decay interval — every 60s, use getState() for stable reference
   useEffect(() => {
-    const interval = setInterval(() => store.tickDecay(), 60_000)
+    const interval = setInterval(() => useCompanionStore.getState().tickDecay(), 60_000)
     return () => clearInterval(interval)
-  }, [store])
+  }, [])
 
   // Compute energy from time-of-day + activity
   const [energy, setEnergy] = useState(() =>
-    getTimeEnergy(timePhase, isRecentlyActive, store.conversationsToday),
+    getTimeEnergy(timePhase, isRecentlyActive, conversationsToday),
   )
 
   useEffect(() => {
-    setEnergy(getTimeEnergy(timePhase, isRecentlyActive, store.conversationsToday))
-  }, [timePhase, isRecentlyActive, store.conversationsToday])
+    setEnergy(getTimeEnergy(timePhase, isRecentlyActive, conversationsToday))
+  }, [timePhase, isRecentlyActive, conversationsToday])
 
   const mood = useMemo(
-    () => deriveMoodState(store.happiness, energy, store.attention, timePhase),
-    [store.happiness, energy, store.attention, timePhase],
+    () => deriveMoodState(happiness, energy, attention, timePhase),
+    [happiness, energy, attention, timePhase],
   )
 
   return {
     mood,
-    happiness: store.happiness,
+    happiness,
     energy,
-    attention: store.attention,
-    tapCount: store.tapCount,
-    streak: store.streak,
-    petCreature: store.petCreature,
-    recordConversation: store.recordConversation,
-    recordGoalComplete: store.recordGoalComplete,
+    attention,
+    tapCount,
+    streak,
+    petCreature,
+    recordConversation,
+    recordGoalComplete,
   }
 }
