@@ -46,6 +46,7 @@ import {
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
+import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult } from '../engine/imageGen'
 import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
@@ -69,6 +70,7 @@ export interface ChatMessage {
   thinking?: string
   workflowSteps?: WorkflowStepState[]
   isProactive?: boolean
+  generatedImages?: ImageGenResult[]
 }
 
 /** Active document for multi-turn document analysis (Pro only) */
@@ -96,6 +98,7 @@ interface UseChatEngineParams {
   planLimits?: import('../config/planLimits').PlanLimits
   crisisActive?: boolean
   crisisSeverity?: import('../engine/CrisisDetector').CrisisSeverity | null
+  onShowCreditModal?: () => void
 }
 
 export function useChatEngine(params: UseChatEngineParams) {
@@ -439,11 +442,11 @@ export function useChatEngine(params: UseChatEngineParams) {
     } catch (err) {
       console.error('[engine] classifyIntent failed:', err)
       // Fall back to kernel agent on classifier failure
-      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false }
+      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
     }
     // Crisis override — force kernel agent for high severity
     if (crisisActive && crisisSeverity === 'high') {
-      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false }
+      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
     }
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
@@ -650,6 +653,65 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Swarm/workflow/research paths only pass string content, losing ContentBlock[].
     const hasFileContent = Array.isArray(userContent)
     try {
+      // ── Image Generation (credit-gated) ────────────────
+      if (classification.needsImageGen) {
+        setThinkingAgent('Kernel')
+        try {
+          const result = await generateImage(trimmed)
+          setIsThinking(false)
+          isThinkingRef.current = false
+          setMessages(prev => prev.map(m => m.id === kernelId
+            ? { ...m, content: trimmed, generatedImages: [result] }
+            : m
+          ))
+          latestKernelContentRef.current = `[Generated image: ${trimmed}]`
+          // Persist a record of the generation
+          saveMessage({
+            id: kernelId,
+            channel_id: convId,
+            agent_id: 'kernel',
+            content: `[Generated image: ${trimmed}]`,
+            user_id: userId,
+          })
+          // Show toast if auto-reload was triggered
+          if (result.auto_reloaded && result.reloaded_credits) {
+            const packName = result.reloaded_pack
+              ? result.reloaded_pack.charAt(0).toUpperCase() + result.reloaded_pack.slice(1)
+              : 'Credit'
+            showToast(`Auto-reloaded ${result.reloaded_credits} credits (${packName} pack)`)
+          }
+          touchConversation(convId)
+          loadConversations()
+          setIsStreaming(false)
+          return
+        } catch (imgErr) {
+          if (imgErr instanceof ImageCreditError) {
+            setIsThinking(false)
+            isThinkingRef.current = false
+            setMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, content: '*You need image credits to generate images. Purchase a credit pack to get started.*' }
+              : m
+            ))
+            params.onShowCreditModal?.()
+            setIsStreaming(false)
+            return
+          } else if (imgErr instanceof ImageGenLimitError) {
+            setIsThinking(false)
+            isThinkingRef.current = false
+            setMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, content: '*Image generation rate limited. Please wait a moment and try again.*' }
+              : m
+            ))
+            showToast('Image generation rate limited')
+            setIsStreaming(false)
+            return
+          }
+          // Other errors — fall through to normal routing as fallback
+          console.warn('[ImageGen] Failed, falling through to normal response:', imgErr)
+          classification = { ...classification, needsImageGen: false }
+        }
+      }
+
       if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
         // Agentic Workflow: multi-step + research = autonomous workflow execution
         const { AgenticWorkflow } = await import('../engine/AgenticWorkflow')
