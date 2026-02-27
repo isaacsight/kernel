@@ -1,5 +1,5 @@
 // Supabase Edge Function: create-checkout
-// Creates a Stripe Checkout session for $20/mo Kernel Agent subscription.
+// Creates a Stripe Checkout session for Kernel Pro subscription ($29/mo or $290/yr).
 // Now accepts user_id to correlate Stripe → Supabase user via client_reference_id.
 //
 // Deploy: npx supabase functions deploy create-checkout --project-ref eoxxpyixdieprsxlpwcs
@@ -93,8 +93,6 @@ serve(async (req: Request) => {
     if (mode === 'subscription') {
       params.set('subscription_data[metadata][supabase_user_id]', user_id)
       params.set('subscription_data[metadata][plan]', selectedPlan)
-      // 7-day free trial
-      params.set('subscription_data[trial_period_days]', '7')
     }
 
     if (resolvedPriceId) {
