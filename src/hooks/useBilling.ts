@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react'
 import { getAccessToken } from '../engine/SupabaseClient'
+import type { PlanId } from '../config/planLimits'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
-const PRICE_ID = import.meta.env.VITE_STRIPE_KERNEL_PRICE_ID || ''
 
 export function useBilling(
   user: { id: string; email?: string } | null,
@@ -18,7 +18,7 @@ export function useBilling(
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
-  const handleUpgrade = useCallback(async () => {
+  const handleUpgrade = useCallback(async (plan: PlanId = 'pro_monthly') => {
     if (!user?.email || upgradeLoading) return
     setUpgradeLoading(true)
     try {
@@ -32,7 +32,7 @@ export function useBilling(
         },
         body: JSON.stringify({
           mode: 'subscription',
-          price_id: PRICE_ID,
+          plan,
           success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
           cancel_url: window.location.href,
         }),

@@ -12,6 +12,7 @@ import { corsHeaders, handlePreflight, SECURITY_HEADERS } from '../_shared/cors.
 import { checkRateLimit as checkRL, rateLimitResponse, type Tier } from '../_shared/rate-limit.ts'
 import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 import { requireContentType } from '../_shared/validate.ts'
+import { PLAN_LIMITS, ACTIVE_STATUSES, resolvePlanId, type PlanId } from '../_shared/plan-limits.ts'
 
 // ─── Model tier mapping ──────────────────────────────────────
 
@@ -20,7 +21,7 @@ type Provider = 'anthropic' | 'openai' | 'gemini' | 'nvidia'
 const TIER_MODELS: Record<Provider, Record<string, string>> = {
   anthropic: {
     fast: 'claude-haiku-4-5-20251001',
-    strong: 'claude-sonnet-4-5-20250929',
+    strong: 'claude-sonnet-4-6-20250514',
   },
   openai: {
     fast: 'gpt-4o-mini',
@@ -39,7 +40,7 @@ const TIER_MODELS: Record<Provider, Record<string, string>> = {
 // Legacy model names (backward compat with existing 'sonnet'/'haiku' callers)
 const LEGACY_MODEL_MAP: Record<string, string> = {
   opus: 'claude-opus-4-6',
-  sonnet: 'claude-sonnet-4-5-20250929',
+  sonnet: 'claude-sonnet-4-6-20250514',
   haiku: 'claude-haiku-4-5-20251001',
 }
 
@@ -59,16 +60,17 @@ function resolveModel(provider: Provider, tier?: string, model?: string, legacyM
 
 const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = {
   'claude-opus-4-6': { input: 15.00, output: 75.00 },
+  'claude-sonnet-4-6-20250514': { input: 3.00, output: 15.00 },
   'claude-sonnet-4-5-20250929': { input: 3.00, output: 15.00 },
-  'claude-haiku-4-5-20251001': { input: 0.80, output: 4.00 },
+  'claude-haiku-4-5-20251001': { input: 1.00, output: 5.00 },
   'gpt-4o': { input: 2.50, output: 10.00 },
   'gpt-4o-mini': { input: 0.15, output: 0.60 },
   'gemini-2.5-pro': { input: 1.25, output: 10.00 },
   'gemini-2.0-flash': { input: 0.10, output: 0.40 },
 }
 
-const DAILY_COST_ALERT_THRESHOLD = 1.50
-const DAILY_COST_HARD_LIMIT = 2.00
+const DAILY_COST_ALERT_THRESHOLD = 3.00
+const DAILY_COST_HARD_LIMIT = 5.00
 const MAX_TOKENS_CAP = 8192
 const MAX_MESSAGE_SIZE_BYTES = 52_428_800  // 50MB per message (base64 files)
 const MAX_PAYLOAD_SIZE_BYTES = 52_428_800  // 50MB total payload
@@ -1145,11 +1147,8 @@ serve(async (req: Request) => {
     const payload = JSON.parse(rawBody) as ProxyPayload
 
     // ── Grace Shield: check limit WITHOUT charging (charge on success) ───
-    // Streak bonus: +1 message for users with 3+ day companion streak
-    const clientStreak = typeof payload.streak === 'number' ? Math.max(0, Math.min(payload.streak, 365)) : 0
-    const FREE_LIMIT = 10 + (clientStreak >= 3 ? 1 : 0)
-    const PRO_LIMIT = 50
     const isAdmin = !!user.app_metadata?.is_admin
+    let planId: PlanId = 'free'
     let isPaidUser = false
     let isFreeUser = false
     if (!isServiceCall && !isAdmin) {
@@ -1158,16 +1157,18 @@ serve(async (req: Request) => {
       })
       const { data: sub } = await svc
         .from('subscriptions')
-        .select('status')
+        .select('status, plan')
         .eq('user_id', user.id)
-        .eq('status', 'active')
+        .in('status', ACTIVE_STATUSES)
         .maybeSingle()
 
-      isPaidUser = !!sub
-      isFreeUser = !sub
-      if (isFreeUser) {
-        // Grace Shield: READ-ONLY check — don't charge yet
-        // Message will be charged AFTER successful provider response
+      planId = resolvePlanId(sub)
+      isPaidUser = planId !== 'free'
+      isFreeUser = planId === 'free'
+      const limits = PLAN_LIMITS[planId]
+
+      // ── Daily message limit (all tiers) ───────────────────
+      {
         const { data: limitCheck, error: limitErr } = await svc.rpc('check_message_limit', {
           p_user_id: user.id,
         })
@@ -1180,92 +1181,99 @@ serve(async (req: Request) => {
             .eq('user_id', user.id)
             .maybeSingle()
           const used = mem?.daily_message_count ?? 0
-          if (used >= FREE_LIMIT) {
+          if (used >= limits.messagesPerDay) {
+            const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
             return new Response(
-              JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used }),
-              { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+              JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used }),
+              { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
-        } else if (limitCheck?.daily_count >= FREE_LIMIT) {
-          // Already at limit — block before even trying
+        } else if (limitCheck?.daily_count >= limits.messagesPerDay) {
           const resetTime = limitCheck.resets_at
             ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
             : 'soon'
-          // Notify on first overage attempt
-          svc.from('notifications').insert({
-            user_id: user.id,
-            title: 'Daily messages used',
-            body: `You've used all ${FREE_LIMIT} free messages. They reset at ${resetTime}.`,
-            type: 'info',
-          }).then(() => { }).catch(() => { })
-          const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
-          fetch(notifUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
-            body: JSON.stringify({
-              channel: 'push', user_id: user.id,
-              title: 'Your messages reset ' + resetTime,
-              body: `Your ${FREE_LIMIT} daily messages will be available again at ${resetTime}.`,
+          if (isFreeUser) {
+            svc.from('notifications').insert({
+              user_id: user.id,
+              title: 'Daily messages used',
+              body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
               type: 'info',
-            }),
-          }).catch(() => { })
+            }).then(() => { }).catch(() => { })
+            const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
+            fetch(notifUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
+              body: JSON.stringify({
+                channel: 'push', user_id: user.id,
+                title: 'Your messages reset ' + resetTime,
+                body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
+                type: 'info',
+              }),
+            }).catch(() => { })
+          }
+          const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
           return new Response(
-            JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
-            { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+            { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
       }
 
-      // Pro user message limit (50/day)
-      if (isPaidUser) {
-        const { data: limitCheck, error: limitErr } = await svc.rpc('check_message_limit', {
+      // ── Monthly message limit (all tiers) ─────────────────
+      {
+        const { data: monthCheck } = await svc.rpc('check_monthly_message_limit', {
           p_user_id: user.id,
         })
-        if (!limitErr && limitCheck?.daily_count >= PRO_LIMIT) {
-          const resetTime = limitCheck.resets_at
-            ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-            : 'soon'
+        if (monthCheck && monthCheck.monthly_count >= limits.messagesPerMonth) {
           return new Response(
-            JSON.stringify({ error: 'pro_limit_reached', limit: PRO_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+            JSON.stringify({
+              error: 'monthly_limit_reached',
+              limit: limits.messagesPerMonth,
+              used: monthCheck.monthly_count,
+              resets_at: monthCheck.resets_at,
+              plan: planId,
+            }),
             { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
       }
 
-      // Pre-flight image & document check (free users only — Pro has unlimited)
-      if (isFreeUser) {
-        let uploadedImageCount = 0
-        let hasDocument = false
+      // ── File upload check (images + documents) ────────────
+      {
+        let fileCount = 0
         if (payload.messages) {
           for (const m of payload.messages) {
             if (Array.isArray(m.content)) {
               for (const block of m.content as any[]) {
-                if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
-                if (block.type === 'document') hasDocument = true
+                if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
               }
             }
           }
         }
-
-        if (hasDocument) {
-          return new Response(
-            JSON.stringify({ error: 'document_analysis_pro_only', message: 'Document analysis is a Pro feature.' }),
-            { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-          )
-        }
-
-        const FREE_IMAGE_LIMIT = 3
-        if (uploadedImageCount > 0) {
-          const svc = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
-          const { data: imgCheck, error: imgErr } = await svc.rpc('check_image_limit', { p_user_id: user.id })
-          if (!imgErr && imgCheck?.daily_count + uploadedImageCount > FREE_IMAGE_LIMIT) {
+        if (fileCount > 0) {
+          if (limits.filesPerMonth === 0) {
             return new Response(
-              JSON.stringify({ error: 'free_image_limit_reached', limit: FREE_IMAGE_LIMIT, used: imgCheck.daily_count, resets_at: imgCheck.resets_at }),
+              JSON.stringify({ error: 'files_pro_only', message: 'File analysis is a Pro feature.' }),
               { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
+          }
+          const { data: fileCheck } = await svc.rpc('check_monthly_file_limit', { p_user_id: user.id })
+          if (fileCheck && fileCheck.monthly_count + fileCount > limits.filesPerMonth) {
+            return new Response(
+              JSON.stringify({
+                error: 'monthly_file_limit_reached',
+                limit: limits.filesPerMonth,
+                used: fileCheck.monthly_count,
+                resets_at: fileCheck.resets_at,
+              }),
+              { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
         }
       }
+    } else if (isAdmin) {
+      planId = 'pro_annual'
+      isPaidUser = true
     }
 
     // ── Rate limiting (Postgres-backed fixed window) ────────
@@ -1329,12 +1337,11 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Cap max_tokens server-side ─────────────────────────
-    // When thinking is enabled, allow higher max_tokens to accommodate
-    // both the thinking budget and the output tokens.
+    // ── Cap max_tokens server-side (plan-aware) ─────────────
+    const planTokenCap = (!isServiceCall && !isAdmin) ? PLAN_LIMITS[planId].maxTokens : MAX_TOKENS_CAP
     const effectiveTokensCap = payload.thinking?.type === 'enabled'
-      ? MAX_TOKENS_CAP + (payload.thinking.budget_tokens || 0)
-      : MAX_TOKENS_CAP
+      ? planTokenCap + (payload.thinking.budget_tokens || 0)
+      : planTokenCap
     if (payload.max_tokens) {
       payload.max_tokens = Math.min(payload.max_tokens, effectiveTokensCap)
     }
@@ -1342,10 +1349,9 @@ serve(async (req: Request) => {
     // ── Enforce model tiers: free users locked to fast tier ─
     if (!isServiceCall && !isPaidUser && !isAdmin) {
       payload.tier = 'fast'
-      // Build the complete set of allowed free-tier models (legacy aliases + full IDs)
       const allowedFreeModels = new Set([
-        'haiku', 'gpt-4o-mini', 'gemini-2.0-flash',  // legacy aliases
-        ...Object.values(TIER_MODELS).map(t => t.fast),  // full model IDs for all providers
+        'haiku', 'gpt-4o-mini', 'gemini-2.0-flash',
+        ...Object.values(TIER_MODELS).map(t => t.fast),
       ])
       if (payload.model && !allowedFreeModels.has(payload.model as string)) {
         payload.model = undefined
@@ -1353,6 +1359,19 @@ serve(async (req: Request) => {
       // Web search available for all users
       // Disable extended thinking for free users (Pro only)
       payload.thinking = undefined
+    }
+    // ── Extended thinking monthly limit (Pro users) ─────────
+    if (!isServiceCall && !isAdmin && isPaidUser && payload.thinking?.type === 'enabled') {
+      const limits = PLAN_LIMITS[planId]
+      if (limits.etPerMonth > 0) {
+        const svcET = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+        const { data: etCheck } = await svcET.rpc('check_monthly_et_limit', { p_user_id: user.id })
+        if (etCheck && etCheck.monthly_count >= limits.etPerMonth) {
+          // Silently strip thinking instead of blocking the message
+          payload.thinking = undefined
+          console.log(`[proxy] ET monthly limit reached for user=${user.id}, stripping thinking`)
+        }
+      }
     }
 
     // Determine provider (default: anthropic for backward compat)
@@ -1424,23 +1443,34 @@ serve(async (req: Request) => {
       if (!isFreeUser && !isPaidUser) return
       try {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
+        // Daily counter
         await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
+        // Monthly counter
+        await svcCharge.rpc('increment_monthly_message_count', { p_user_id: user.id })
 
-        let uploadedImageCount = 0
+        // Monthly file counter
+        let fileCount = 0
         if (payload.messages) {
           for (const m of payload.messages) {
             if (Array.isArray(m.content)) {
               for (const block of m.content as any[]) {
-                if (block.type === 'image' || block.type === 'image_url') uploadedImageCount++
+                if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
               }
             }
           }
         }
-        if (uploadedImageCount > 0 && isFreeUser) {
-          await svcCharge.rpc('increment_image_count', { p_user_id: user.id, p_increment: uploadedImageCount })
+        if (fileCount > 0) {
+          for (let i = 0; i < fileCount; i++) {
+            await svcCharge.rpc('increment_monthly_file_count', { p_user_id: user.id })
+          }
         }
 
-        console.log(`[grace-shield] Charged message post-success for user=${user.id}`)
+        // Monthly ET counter (if thinking was used in this request)
+        if (payload.thinking?.type === 'enabled') {
+          await svcCharge.rpc('increment_monthly_et_count', { p_user_id: user.id })
+        }
+
+        console.log(`[grace-shield] Charged message post-success for user=${user.id} plan=${planId}`)
       } catch (err) {
         console.error('[grace-shield] Post-success charge failed:', err)
       }

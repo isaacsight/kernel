@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Hai utilizzato i tuoi {{limit}} messaggi gratuiti",
-    "subtitle": "Passa a Kernel Pro per continuare la conversazione.",
-    "resetsAt": "I tuoi messaggi si rinnovano alle {{time}}. Passa a Pro per messaggi illimitati.",
+    "subtitle": "Pro ti offre messaggi illimitati, una memoria che impara a conoscerti e briefing completi.",
+    "resetsAt": "I tuoi messaggi si rinnovano alle {{time}}. Passa a Pro per 100 messaggi al giorno.",
     "features": {
       "unlimitedMessages": "Messaggi illimitati",
-      "deepResearch": "Modalità ricerca approfondita",
-      "multiAgent": "Collaborazione multi-agente",
-      "multiStep": "Pianificazione attività multi-fase",
-      "persistentMemory": "Memoria persistente tra le sessioni"
+      "deepResearch": "Pensiero esteso (30/mese)",
+      "multiAgent": "Analisi file (10/mese)",
+      "multiStep": "Obiettivi, voce e workflow agentici",
+      "persistentMemory": "Memoria + briefing proattivi"
     },
-    "button": "Passa a Pro — $20/mo",
+    "button": "Passa a Pro — $29/mese",
+    "annualButton": "$290/anno — risparmia $58",
     "buttonLoading": "Apertura checkout...",
     "maybeLater": "Forse più tardi"
   },

@@ -56,7 +56,7 @@ serve(async (req: Request) => {
       .from('subscriptions')
       .select('stripe_subscription_id, status')
       .eq('user_id', user.id)
-      .eq('status', 'active')
+      .in('status', ['active', 'trialing'])
       .maybeSingle()
 
     if (sub?.stripe_subscription_id) {

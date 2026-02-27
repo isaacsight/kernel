@@ -17,9 +17,11 @@ interface GoalsPanelProps {
   userId: string
   onClose: () => void
   onToast: (msg: string) => void
+  readOnly?: boolean
+  onUpgrade?: () => void
 }
 
-export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
+export function GoalsPanel({ userId, onClose, onToast, readOnly, onUpgrade }: GoalsPanelProps) {
   const { t } = useTranslation('panels')
   const [goals, setGoals] = useState<UserGoal[]>([])
   const [loading, setLoading] = useState(true)
@@ -121,6 +123,13 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
         </button>
       </div>
 
+      {readOnly && (
+        <div className="ka-goals-readonly-banner">
+          <span>Goals and streaks are Pro features.</span>
+          {onUpgrade && <button className="ka-goals-readonly-cta" onClick={onUpgrade}>Upgrade to Pro</button>}
+        </div>
+      )}
+
       {loading ? (
         <div className="ka-goals-loading">{t('goals.loading')}</div>
       ) : (
@@ -130,7 +139,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
               <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-goals.svg`} alt="" aria-hidden="true" />
               <div className="ka-empty-state-title">{t('goals.emptyTitle')}</div>
               <div className="ka-empty-state-desc">{t('goals.emptyDesc')}</div>
-              <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>{t('goals.createGoal')}</button>
+              {!readOnly && <button className="ka-empty-state-cta" onClick={() => setShowForm(true)}>{t('goals.createGoal')}</button>}
             </div>
           )}
 
@@ -175,20 +184,23 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
                               type="checkbox"
                               checked={ms.completed}
                               onChange={() => toggleMilestone(goal, ms.id)}
+                              disabled={readOnly}
                             />
                             <span className={ms.completed ? 'ka-goal-milestone--done' : ''}>{ms.title}</span>
                           </label>
                         ))}
                       </div>
                     )}
-                    <div className="ka-goal-actions">
-                      <button className="ka-goal-action-btn" onClick={() => handleComplete(goal)}>
-                        <IconCheck size={12} /> {t('complete', { ns: 'common' })}
-                      </button>
-                      <button className="ka-goal-action-btn ka-goal-action-btn--danger" onClick={() => handleDelete(goal.id!)}>
-                        <IconTrash size={12} /> {t('delete', { ns: 'common' })}
-                      </button>
-                    </div>
+                    {!readOnly && (
+                      <div className="ka-goal-actions">
+                        <button className="ka-goal-action-btn" onClick={() => handleComplete(goal)}>
+                          <IconCheck size={12} /> {t('complete', { ns: 'common' })}
+                        </button>
+                        <button className="ka-goal-action-btn ka-goal-action-btn--danger" onClick={() => handleDelete(goal.id!)}>
+                          <IconTrash size={12} /> {t('delete', { ns: 'common' })}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -213,7 +225,7 @@ export function GoalsPanel({ userId, onClose, onToast }: GoalsPanelProps) {
         </div>
       )}
 
-      {showForm ? (
+      {readOnly ? null : showForm ? (
         <div className="ka-goal-form">
           <input
             className="ka-goal-form-input"

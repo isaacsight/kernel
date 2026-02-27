@@ -66,6 +66,34 @@ export class PlatformRefundError extends Error {
   }
 }
 
+export class MonthlyLimitError extends Error {
+  limit: number
+  used: number
+  resetsAt: string | null
+  plan: string | null
+  constructor(limit: number, used: number, resetsAt?: string, plan?: string) {
+    super(`Monthly limit reached: ${used}/${limit} messages used`)
+    this.name = 'MonthlyLimitError'
+    this.limit = limit
+    this.used = used
+    this.resetsAt = resetsAt ?? null
+    this.plan = plan ?? null
+  }
+}
+
+export class FileLimitError extends Error {
+  limit: number
+  used: number
+  resetsAt: string | null
+  constructor(limit: number, used: number, resetsAt?: string) {
+    super(`Monthly file limit reached: ${used}/${limit} files used`)
+    this.name = 'FileLimitError'
+    this.limit = limit
+    this.used = used
+    this.resetsAt = resetsAt ?? null
+  }
+}
+
 type Model = 'opus' | 'sonnet' | 'haiku'
 
 // Re-export ContentBlock from provider types for backward compat
@@ -120,24 +148,30 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
+          throw new FreeLimitError(body.limit ?? 5, body.used ?? 0, body.resets_at)
         }
-        if (body.error === 'free_image_limit_reached') {
-          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        if (body.error === 'free_image_limit_reached' || body.error === 'files_pro_only') {
+          throw new FileLimitError(body.limit ?? 0, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
-        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof FileLimitError) throw e
       }
     }
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
         if (body.error === 'pro_limit_reached') {
-          throw new ProLimitError(body.limit ?? 50, body.used ?? 0, body.resets_at)
+          throw new ProLimitError(body.limit ?? 100, body.used ?? 0, body.resets_at)
+        }
+        if (body.error === 'monthly_limit_reached') {
+          throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
+        }
+        if (body.error === 'monthly_file_limit_reached') {
+          throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
         }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof ProLimitError || e instanceof RateLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
       }
     }
     // Check if the error included an auto-refund
@@ -207,13 +241,30 @@ export async function claudeStream(
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
+          throw new FreeLimitError(body.limit ?? 5, body.used ?? 0, body.resets_at)
         }
-        if (body.error === 'free_image_limit_reached') {
-          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        if (body.error === 'free_image_limit_reached' || body.error === 'files_pro_only') {
+          throw new FileLimitError(body.limit ?? 0, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
-        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof FileLimitError) throw e
+      }
+    }
+    if (res.status === 429) {
+      try {
+        const body = JSON.parse(err)
+        if (body.error === 'pro_limit_reached') {
+          throw new ProLimitError(body.limit ?? 100, body.used ?? 0, body.resets_at)
+        }
+        if (body.error === 'monthly_limit_reached') {
+          throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
+        }
+        if (body.error === 'monthly_file_limit_reached') {
+          throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
+        }
+        throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
+      } catch (e) {
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
       }
     }
     // Check for auto-refund
@@ -313,24 +364,30 @@ export async function claudeStreamChat(
       try {
         const body = JSON.parse(err)
         if (body.error === 'free_limit_reached') {
-          throw new FreeLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at)
+          throw new FreeLimitError(body.limit ?? 5, body.used ?? 0, body.resets_at)
         }
-        if (body.error === 'free_image_limit_reached') {
-          throw new ImageLimitError(body.limit ?? 3, body.used ?? 0, body.resets_at)
+        if (body.error === 'free_image_limit_reached' || body.error === 'files_pro_only') {
+          throw new FileLimitError(body.limit ?? 0, body.used ?? 0, body.resets_at)
         }
       } catch (e) {
-        if (e instanceof FreeLimitError || e instanceof ImageLimitError) throw e
+        if (e instanceof FreeLimitError || e instanceof FileLimitError) throw e
       }
     }
     if (res.status === 429) {
       try {
         const body = JSON.parse(err)
         if (body.error === 'pro_limit_reached') {
-          throw new ProLimitError(body.limit ?? 50, body.used ?? 0, body.resets_at)
+          throw new ProLimitError(body.limit ?? 100, body.used ?? 0, body.resets_at)
+        }
+        if (body.error === 'monthly_limit_reached') {
+          throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
+        }
+        if (body.error === 'monthly_file_limit_reached') {
+          throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
         }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof ProLimitError || e instanceof RateLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
       }
     }
     // Check for auto-refund in error response

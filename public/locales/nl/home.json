@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Je hebt je {{limit}} gratis berichten gebruikt",
-    "subtitle": "Upgrade naar Kernel Pro om het gesprek voort te zetten.",
-    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade naar Pro voor onbeperkt.",
+    "subtitle": "Pro geeft je onbeperkt berichten, een geheugen dat je leert kennen en volledige briefings.",
+    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade voor 100 berichten per dag.",
     "features": {
-      "unlimitedMessages": "Onbeperkte berichten",
-      "deepResearch": "Diepgaande onderzoeksmodus",
-      "multiAgent": "Multi-agent samenwerking",
-      "multiStep": "Meerstaps taakplanning",
-      "persistentMemory": "Blijvend geheugen tussen sessies"
+      "unlimitedMessages": "Onbeperkt berichten",
+      "deepResearch": "Uitgebreid denken (30/mnd)",
+      "multiAgent": "Bestandsanalyse (10/mnd)",
+      "multiStep": "Doelen, spraak en agentische workflows",
+      "persistentMemory": "Geheugen + proactieve briefings"
     },
-    "button": "Upgraden naar Pro — $20/mo",
+    "button": "Ga Pro — $29/mnd",
+    "annualButton": "$290/jaar — bespaar $58",
     "buttonLoading": "Checkout openen...",
     "maybeLater": "Misschien later"
   },

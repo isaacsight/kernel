@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, getMySubscription } from '../engine/SupabaseClient';
 import type { User, Session, Provider, UserIdentity } from '@supabase/supabase-js';
+import { PLAN_LIMITS, resolvePlanId, type PlanId, type PlanLimits } from '../config/planLimits';
 
 // Admin is determined by Supabase app_metadata.is_admin (set via dashboard or service role).
 // To make a user admin: Supabase Dashboard → Auth → Users → Edit → app_metadata: {"is_admin": true}
@@ -20,6 +21,8 @@ export interface AuthState {
   isSubscribed: boolean;
   isAdmin: boolean;
   isPasswordRecovery: boolean;
+  planId: PlanId;
+  planLimits: PlanLimits;
 
   signInWithProvider: (provider: Provider) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
@@ -43,6 +46,7 @@ export function useAuth(): AuthState {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+  const [planId, setPlanId] = useState<PlanId>('free');
 
   const isAdmin = checkIsAdmin(user);
 
@@ -52,11 +56,20 @@ export function useAuth(): AuthState {
   const mountedRef = useRef(true);
 
   const checkSubscription = useCallback(async (): Promise<boolean> => {
-    if (checkIsAdmin(userRef.current)) return true;
+    if (checkIsAdmin(userRef.current)) {
+      if (mountedRef.current) {
+        setPlanId('pro_annual');
+        setIsSubscribed(true);
+      }
+      return true;
+    }
     const sub = await getMySubscription();
-    const active = sub?.status === 'active';
-    if (mountedRef.current) setIsSubscribed(active);
-    return active;
+    const resolved = resolvePlanId(sub);
+    if (mountedRef.current) {
+      setPlanId(resolved);
+      setIsSubscribed(resolved !== 'free');
+    }
+    return resolved !== 'free';
   }, []);
 
   // Initialize auth — handle token_hash recovery, PKCE callback, or existing session
@@ -331,6 +344,8 @@ export function useAuth(): AuthState {
     isSubscribed: isSubscribed || isAdmin,
     isAdmin,
     isPasswordRecovery,
+    planId: isAdmin ? 'pro_annual' as PlanId : planId,
+    planLimits: PLAN_LIMITS[isAdmin ? 'pro_annual' : planId],
     signInWithProvider,
     signInWithEmail,
     signUpWithEmail,

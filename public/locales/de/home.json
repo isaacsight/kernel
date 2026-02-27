@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Du hast deine {{limit}} kostenlosen Nachrichten verbraucht",
-    "subtitle": "Upgrade auf Kernel Pro, um weiterzureden.",
-    "resetsAt": "Deine Nachrichten werden um {{time}} zurückgesetzt. Upgrade auf Pro für unbegrenzte.",
+    "subtitle": "Pro gibt dir unbegrenzte Nachrichten, ein Gedächtnis das dich kennenlernt, und vollständige Briefings.",
+    "resetsAt": "Deine Nachrichten werden um {{time}} zurückgesetzt. Upgrade für 100 Nachrichten pro Tag.",
     "features": {
       "unlimitedMessages": "Unbegrenzte Nachrichten",
-      "deepResearch": "Tiefenrecherche-Modus",
-      "multiAgent": "Multi-Agenten-Zusammenarbeit",
-      "multiStep": "Mehrstufige Aufgabenplanung",
-      "persistentMemory": "Dauerhafter Speicher über Sitzungen hinweg"
+      "deepResearch": "Erweitertes Denken (30/Mo.)",
+      "multiAgent": "Dateianalyse (10/Mo.)",
+      "multiStep": "Ziele, Sprache & agentische Workflows",
+      "persistentMemory": "Gedächtnis + proaktive Briefings"
     },
-    "button": "Auf Pro upgraden — $20/mo",
+    "button": "Pro werden — $29/Mo.",
+    "annualButton": "$290/Jahr — $58 sparen",
     "buttonLoading": "Kasse wird geöffnet...",
     "maybeLater": "Vielleicht später"
   },

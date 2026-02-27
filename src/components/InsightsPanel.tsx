@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconClose, IconEye, IconBrain, IconSparkles, IconChart, IconUser, IconChevronDown, IconChevronRight, IconShield, IconTrash } from './KernelIcons'
+import { IconClose, IconEye, IconBrain, IconSparkles, IconChart, IconUser, IconChevronDown, IconChevronRight, IconShield, IconTrash, IconCrown } from './KernelIcons'
 import type { EngineState, Belief, Reflection } from '../engine/types'
 import type { UserMemoryProfile } from '../engine/MemoryAgent'
 
@@ -15,11 +15,13 @@ interface InsightsPanelProps {
   onChallengeBelief: (beliefId: string) => void
   onRemoveBelief: (beliefId: string) => void
   onClose: () => void
+  isPro?: boolean
+  onUpgrade?: () => void
 }
 
 type Section = 'world' | 'beliefs' | 'memory' | 'reflections' | 'agents'
 
-export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRemoveBelief, onClose }: InsightsPanelProps) {
+export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRemoveBelief, onClose, isPro = true, onUpgrade }: InsightsPanelProps) {
   const { t } = useTranslation('panels')
   const [activeSection, setActiveSection] = useState<Section>('world')
 
@@ -67,7 +69,23 @@ export function InsightsPanel({ engineState, userMemory, onChallengeBelief, onRe
           />
         )}
         {activeSection === 'memory' && (
-          <MemorySection profile={userMemory} />
+          !isPro ? (
+            <div className="ka-insights-locked-wrap">
+              <div className="ka-insights-locked">
+                <MemorySection profile={userMemory} />
+              </div>
+              <div className="ka-insights-lock-overlay">
+                <IconCrown size={24} />
+                <p className="ka-insights-lock-title">Kernel Pro remembers you</p>
+                <p className="ka-insights-lock-desc">Interests, preferences, and context — carried forward across every conversation.</p>
+                {onUpgrade && (
+                  <button className="ka-insights-lock-btn" onClick={onUpgrade}>Upgrade to Pro</button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <MemorySection profile={userMemory} />
+          )
         )}
         {activeSection === 'reflections' && (
           <ReflectionsSection reflections={lasting.reflections} patternNotes={lasting.patternNotes} />

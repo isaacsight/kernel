@@ -98,7 +98,6 @@ export function SubscriptionGate() {
         <p className="ka-gate-price">{t('subscription.price')}<span>{t('subscription.pricePeriod')}</span></p>
 
         <div className="ka-gate-features">
-          <div className="ka-gate-feature">{t('subscription.feature1')}</div>
           <div className="ka-gate-feature">{t('subscription.feature2')}</div>
           <div className="ka-gate-feature">{t('subscription.feature3')}</div>
           <div className="ka-gate-feature">{t('subscription.feature4')}</div>

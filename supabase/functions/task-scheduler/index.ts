@@ -178,7 +178,7 @@ serve(async (req: Request) => {
       const { data: expired } = await supabase
         .from('subscriptions')
         .select('user_id')
-        .eq('status', 'active')
+        .in('status', ['active', 'trialing'])
         .not('current_period_end', 'is', null)
         .lt('current_period_end', new Date().toISOString())
 

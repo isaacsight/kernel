@@ -20,6 +20,9 @@ interface BriefingPanelProps {
   onToast: (msg: string) => void
   onGoDeeper?: (title: string, content: string) => void
   onAddGoal?: (title: string, description: string) => void
+  isPro?: boolean
+  historyDays?: number | null
+  onUpgrade?: () => void
 }
 
 const GEN_PHASES = [
@@ -78,7 +81,7 @@ function isBriefingFailed(b: Briefing): boolean {
   return b.content.startsWith('Unable to generate briefing')
 }
 
-export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast, onGoDeeper, onAddGoal }: BriefingPanelProps) {
+export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast, onGoDeeper, onAddGoal, isPro = true, historyDays, onUpgrade }: BriefingPanelProps) {
   const { t } = useTranslation('panels')
   const [briefings, setBriefings] = useState<Briefing[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,16 +90,22 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
   const [selectedIdx, setSelectedIdx] = useState(0)
 
   const loadBriefings = useCallback(async () => {
-    const { data, error } = await supabase
+    let query = supabase
       .from('briefings')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(7)
+    // Free users: limit history to historyDays
+    if (historyDays != null) {
+      const cutoff = new Date(Date.now() - historyDays * 86_400_000).toISOString()
+      query = query.gte('created_at', cutoff)
+    }
+    const { data, error } = await query
     if (error) console.error('Error loading briefings:', error)
     setBriefings((data || []) as Briefing[])
     setLoading(false)
-  }, [userId])
+  }, [userId, historyDays])
 
   useEffect(() => { loadBriefings() }, [loadBriefings])
 
@@ -272,7 +281,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                 {preview?.isTruncated ? t('briefings.continueReading') : t('briefings.readFull')} <IconArrowRight size={14} />
               </a>
               <div className="ka-brief-actions">
-                {onGoDeeper && (
+                {onGoDeeper && isPro && (
                   <button
                     className="ka-brief-action-btn"
                     onClick={() => onGoDeeper(current.title, current.content)}
@@ -281,7 +290,16 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
                     {t('briefings.goDeeper')}
                   </button>
                 )}
-                {onAddGoal && (
+                {onGoDeeper && !isPro && onUpgrade && (
+                  <button
+                    className="ka-brief-action-btn ka-brief-action-btn--locked"
+                    onClick={onUpgrade}
+                  >
+                    <IconMessageCircle size={14} />
+                    Discuss — Pro
+                  </button>
+                )}
+                {onAddGoal && isPro && (
                   <button
                     className="ka-brief-action-btn"
                     onClick={() => onAddGoal(

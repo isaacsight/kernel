@@ -58,7 +58,6 @@ export function KernelAgentGate() {
             {t('kernelGate.signedInAs', { email: user.email })}
           </p>
           <div className="kernel-gate-features">
-            <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature1')}</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature2')}</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature3')}</div>
             <div className="kernel-gate-feature"><span className="kernel-gate-check">&check;</span> {t('kernelGate.feature4')}</div>
