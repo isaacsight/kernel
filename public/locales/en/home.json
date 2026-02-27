@@ -75,7 +75,7 @@
       "unlimitedMessages": "Unlimited messaging",
       "deepResearch": "Extended thinking (30/mo)",
       "multiAgent": "File analysis (10/mo)",
-      "multiStep": "Goals, voice & agentic workflows",
+      "multiStep": "Goals & agentic workflows",
       "persistentMemory": "Memory + proactive briefings"
     },
     "button": "Go Pro \u2014 $29/mo",
@@ -115,16 +115,6 @@
   "explain": {
     "toggle": "Toggle explain mode",
     "tooltip": "Explain mode — step-by-step code"
-  },
-  "voice": {
-    "off": "Voice off",
-    "listen": "Voice input",
-    "full": "Voice conversation",
-    "speaking": "Speaking...",
-    "listening": "Listening...",
-    "modeLabel": "Voice mode",
-    "voiceLabel": "TTS voice",
-    "speakMessage": "Read aloud"
   },
   "document": {
     "active": "Analyzing: {{name}}",

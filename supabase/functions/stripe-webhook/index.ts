@@ -100,6 +100,34 @@ serve(async (req: Request) => {
           break
         }
 
+        // Handle one-time image credit purchases
+        if (session.mode === 'payment') {
+          const credits = parseInt(session.metadata?.credits || '0', 10)
+          if (credits > 0 && userId) {
+            const { error: creditErr } = await supabase.rpc('add_image_credits', {
+              p_user_id: userId,
+              p_amount: credits,
+            })
+            if (creditErr) console.error('Failed to add image credits:', creditErr)
+            else console.log(`Added ${credits} image credits for user ${userId}`)
+          }
+
+          // Store Stripe customer ID for future off-session charges (auto-reload)
+          if (session.customer && userId) {
+            const customerId = typeof session.customer === 'string'
+              ? session.customer
+              : session.customer.id
+            const { error: cidErr } = await supabase.rpc('set_stripe_customer_id', {
+              p_user_id: userId,
+              p_customer_id: customerId,
+            })
+            if (cidErr) console.error('Failed to store stripe_customer_id:', cidErr)
+            else console.log(`Stored stripe_customer_id for user ${userId}`)
+          }
+
+          break // Don't process as subscription
+        }
+
         // Extract plan + status from Stripe subscription metadata
         let plan = 'pro_monthly'
         let subStatus: string = 'active'

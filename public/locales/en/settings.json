@@ -111,12 +111,6 @@
     "success": "{{scope}} cleared successfully",
     "done": "Data reset complete"
   },
-  "voice": {
-    "heading": "Voice",
-    "ttsVoice": "TTS voice",
-    "ttsVoiceHint": "Choose the voice for text-to-speech responses",
-    "proRequired": "Upgrade to Pro for voice conversation mode"
-  },
   "danger": {
     "heading": "Account",
     "signOut": "Sign out",

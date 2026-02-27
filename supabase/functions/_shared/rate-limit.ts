@@ -42,6 +42,8 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'delete-account':     { free: 3,  paid: 3,   pro: 3,   windowSeconds: 86400 },
   'create-checkout':    { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
   'create-portal':      { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
+  'image-gen':          { free: 10, paid: 10,  pro: 10,  windowSeconds: 60 },
+  'create-image-checkout': { free: 5, paid: 5, pro: 5,   windowSeconds: 3600 },
 }
 
 /**

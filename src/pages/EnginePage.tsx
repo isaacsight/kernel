@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
   IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
-  IconShare, IconExport, IconMic, IconMicOff, IconStop, IconChevronDown,
+  IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart, IconGraduationCap,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
   IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles,
@@ -23,7 +23,6 @@ import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } fro
 import { useTheme } from '../hooks/useTheme'
 import { useToast } from '../hooks/useToast'
 import { useScrollTracking } from '../hooks/useScrollTracking'
-import { useVoiceLoop } from '../hooks/useVoiceLoop'
 import { useFileAttachments } from '../hooks/useFileAttachments'
 import { usePanelManager } from '../hooks/usePanelManager'
 import { useConversations } from '../hooks/useConversations'
@@ -43,7 +42,6 @@ import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
-import { VoiceControls, MessageSpeakButton } from '../components/VoiceControls'
 import { WorkflowTimeline } from '../components/WorkflowTimeline'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
@@ -66,6 +64,8 @@ const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatu
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
 const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m => ({ default: m.MirrorPanel })))
 const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m => ({ default: m.ProjectPanel })))
+const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
+const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -230,6 +230,8 @@ function EngineChat() {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
   const dragCounterRef = useRef(0)
+  const [showCreditModal, setShowCreditModal] = useState(false)
+  const [imageCredits, setImageCredits] = useState(0)
 
   useEffect(() => {
     const goOnline = () => setIsOnline(true)
@@ -288,6 +290,7 @@ function EngineChat() {
     planLimits,
     crisisActive: crisis.crisisState.isActive,
     crisisSeverity: crisis.crisisState.highestSeverity,
+    onShowCreditModal: () => setShowCreditModal(true),
   })
 
   // Crisis-aware send wrapper — check every user message for crisis language
@@ -401,29 +404,6 @@ function EngineChat() {
 
   const scroll = useScrollTracking(chatEngine.messages.length)
 
-  const voiceLoop = useVoiceLoop(
-    (text) => chatEngine.setInput(text),
-    (text) => {
-      chatEngine.setInput(text)
-      chatEngine.sendMessage(text)
-    },
-    showToast,
-  )
-  const { isListening, isSpeaking, voiceMode, speakResponse, toggleVoiceMode: toggleVoice } = voiceLoop
-
-  // Auto-TTS: when streaming ends in voice mode, speak the response
-  const prevStreamingRef = useRef(chatEngine.isStreaming)
-  useEffect(() => {
-    if (prevStreamingRef.current && !chatEngine.isStreaming && voiceMode !== 'off') {
-      const msgs = chatEngine.messages
-      const lastKernel = [...msgs].reverse().find(m => m.role === 'kernel')
-      if (lastKernel && lastKernel.content) {
-        speakResponse(lastKernel.content, lastKernel.agentId)
-      }
-    }
-    prevStreamingRef.current = chatEngine.isStreaming
-  }, [chatEngine.isStreaming, voiceMode, chatEngine.messages, speakResponse])
-
   useKeyboardHeight()
 
   const msgActions = useMessageActions(
@@ -468,6 +448,20 @@ function EngineChat() {
     }, 2000)
     return () => clearInterval(poll)
   }, [refreshSubscription, billing, showToast])
+
+  // Post-credit-purchase: detect ?credits=purchased and refresh credit balance
+  useEffect(() => {
+    const hash = window.location.hash
+    if (!hash.includes('credits=purchased')) return
+    import('../engine/imageGen').then(({ getImageCredits }) => {
+      getImageCredits().then(c => {
+        setImageCredits(c)
+        if (c > 0) showToast(`Image credits added — ${c} credits available`)
+      })
+    })
+    const cleanHash = hash.replace(/[?&]credits=purchased/, '').replace(/\?$/, '')
+    window.location.hash = cleanHash || '#/'
+  }, [showToast])
 
   // Fork shared conversation: read convId from URL search param (?fork=ID) or sessionStorage.
   // URL search params are reliable across hash router navigation (unlike history.state).
@@ -1257,6 +1251,12 @@ function EngineChat() {
                       <button type="submit" className="ka-edit-save">{t('feedback.save')}</button>
                       <button type="button" className="ka-edit-cancel" onClick={() => { msgActions.setEditingMsgId(null); msgActions.setEditingContent('') }}>{t('feedback.cancel')}</button>
                     </form>
+                  ) : msg.generatedImages && msg.generatedImages.length > 0 ? (
+                    <Suspense fallback={null}>
+                      {msg.generatedImages.map((img, j) => (
+                        <GeneratedImageCard key={j} image={img.image} mimeType={img.mimeType} prompt={msg.content || ''} creditsRemaining={img.credits_remaining} />
+                      ))}
+                    </Suspense>
                   ) : msg.content || msg.thinking ? (
                     msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} onArtifactRendered={handleArtifactRendered} conversationId={convs.activeConversationId} /> : <Linkify text={msg.content} />
                   ) : (
@@ -1280,9 +1280,6 @@ function EngineChat() {
                     <button className="ka-msg-action-btn" onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)} aria-label={t('aria.downloadResponse', { ns: 'common' })}>
                       <IconDownload size={14} />
                     </button>
-                    {voiceMode !== 'off' && (
-                      <MessageSpeakButton content={msg.content} onSpeak={(text) => speakResponse(text, msg.agentId)} isSpeaking={isSpeaking} />
-                    )}
                     {msg.signalId && !msg.feedback && (
                       <>
                         <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><IconThumbsUp size={14} /></button>
@@ -1465,6 +1462,16 @@ function EngineChat() {
         onCancel={() => billing.setShowDeleteConfirm(false)}
       />
 
+      {/* Image Credit Modal */}
+      <Suspense fallback={null}>
+        <ImageCreditModal
+          open={showCreditModal}
+          onClose={() => setShowCreditModal(false)}
+          credits={imageCredits}
+          onToast={showToast}
+        />
+      </Suspense>
+
       {/* Feature 6: Mid-session value preview */}
       <AnimatePresence>
         {showValuePreview && (
@@ -1498,19 +1505,6 @@ function EngineChat() {
                 <label htmlFor="ka-file-input" className={`ka-mini-popover-item${isStreaming ? ' ka-attach-btn--disabled' : ''}`} onClick={() => setShowMiniPopover(false)}>
                   <IconAttach size={16} /> <span>{t('aria.attachFile', { ns: 'common' })}</span>
                 </label>
-                <VoiceControls
-                  voiceMode={voiceLoop.voiceMode}
-                  setVoiceMode={voiceLoop.setVoiceMode}
-                  isListening={isListening}
-                  isSpeaking={isSpeaking}
-                  transcript={voiceLoop.transcript}
-                  selectedVoice={voiceLoop.selectedVoice}
-                  setSelectedVoice={voiceLoop.setSelectedVoice}
-                  onToggleVoice={() => { toggleVoice(); setShowMiniPopover(false); }}
-                  isPro={isPro}
-                  disabled={isStreaming}
-                  isMini
-                />
               </div>
             )}
           </div>
@@ -1569,20 +1563,6 @@ function EngineChat() {
           >
             <IconThinking size={18} />
           </button>
-        )}
-        {!isMini && (
-          <VoiceControls
-            voiceMode={voiceLoop.voiceMode}
-            setVoiceMode={voiceLoop.setVoiceMode}
-            isListening={isListening}
-            isSpeaking={isSpeaking}
-            transcript={voiceLoop.transcript}
-            selectedVoice={voiceLoop.selectedVoice}
-            setSelectedVoice={voiceLoop.setSelectedVoice}
-            onToggleVoice={toggleVoice}
-            isPro={isPro}
-            disabled={isStreaming}
-          />
         )}
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><IconStop size={16} /></button>
