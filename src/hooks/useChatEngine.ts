@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, ImageLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -880,6 +880,12 @@ export function useChatEngine(params: UseChatEngineParams) {
         setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof ProLimitError) {
+        const resetTime = err.resetsAt ? new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'soon'
+        setMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: `*You've used all ${err.limit} messages for today. Resets at ${resetTime}.*` }
+          : m
+        ))
       } else if (err instanceof ImageLimitError) {
         setMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for unlimited image analysis.*` }

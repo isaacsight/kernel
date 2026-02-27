@@ -67,8 +67,8 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
   'gemini-2.0-flash': { input: 0.10, output: 0.40 },
 }
 
-const DAILY_COST_ALERT_THRESHOLD = 5.00
-const DAILY_COST_HARD_LIMIT = 10.00
+const DAILY_COST_ALERT_THRESHOLD = 1.50
+const DAILY_COST_HARD_LIMIT = 2.00
 const MAX_TOKENS_CAP = 8192
 const MAX_MESSAGE_SIZE_BYTES = 52_428_800  // 50MB per message (base64 files)
 const MAX_PAYLOAD_SIZE_BYTES = 52_428_800  // 50MB total payload
@@ -1141,7 +1141,8 @@ serve(async (req: Request) => {
     // ── Grace Shield: check limit WITHOUT charging (charge on success) ───
     // Streak bonus: +1 message for users with 3+ day companion streak
     const clientStreak = typeof payload.streak === 'number' ? Math.max(0, Math.min(payload.streak, 365)) : 0
-    const FREE_LIMIT = 20 + (clientStreak >= 3 ? 1 : 0)
+    const FREE_LIMIT = 10 + (clientStreak >= 3 ? 1 : 0)
+    const PRO_LIMIT = 50
     const isAdmin = !!user.app_metadata?.is_admin
     let isPaidUser = false
     let isFreeUser = false
@@ -1205,6 +1206,22 @@ serve(async (req: Request) => {
           return new Response(
             JSON.stringify({ error: 'free_limit_reached', limit: FREE_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
             { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+      }
+
+      // Pro user message limit (50/day)
+      if (isPaidUser) {
+        const { data: limitCheck, error: limitErr } = await svc.rpc('check_message_limit', {
+          p_user_id: user.id,
+        })
+        if (!limitErr && limitCheck?.daily_count >= PRO_LIMIT) {
+          const resetTime = limitCheck.resets_at
+            ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+            : 'soon'
+          return new Response(
+            JSON.stringify({ error: 'pro_limit_reached', limit: PRO_LIMIT, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+            { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
       }
@@ -1397,7 +1414,8 @@ serve(async (req: Request) => {
 
     // Charge message AFTER success (Grace Shield)
     async function chargeMessageOnSuccess(): Promise<void> {
-      if (!isFreeUser || isServiceCall || isAdmin) return
+      if (isServiceCall || isAdmin) return
+      if (!isFreeUser && !isPaidUser) return
       try {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
         await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
@@ -1412,7 +1430,7 @@ serve(async (req: Request) => {
             }
           }
         }
-        if (uploadedImageCount > 0) {
+        if (uploadedImageCount > 0 && isFreeUser) {
           await svcCharge.rpc('increment_image_count', { p_user_id: user.id, p_increment: uploadedImageCount })
         }
 
