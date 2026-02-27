@@ -1,9 +1,26 @@
 import { useState, useCallback } from 'react'
-import { getAccessToken } from '../engine/SupabaseClient'
+import { getAccessToken, refreshSession } from '../engine/SupabaseClient'
 import type { PlanId } from '../config/planLimits'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
+
+async function callCheckout(token: string, plan: string) {
+  return fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      apikey: SUPABASE_KEY,
+    },
+    body: JSON.stringify({
+      mode: 'subscription',
+      plan,
+      success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
+      cancel_url: window.location.href,
+    }),
+  })
+}
 
 export function useBilling(
   user: { id: string; email?: string } | null,
@@ -22,26 +39,29 @@ export function useBilling(
     if (!user?.email || upgradeLoading) return
     setUpgradeLoading(true)
     try {
-      const token = await getAccessToken()
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          apikey: SUPABASE_KEY,
-        },
-        body: JSON.stringify({
-          mode: 'subscription',
-          plan,
-          success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
-          cancel_url: window.location.href,
-        }),
-      })
-      if (!res.ok) throw new Error('Failed to create checkout')
+      let token = await getAccessToken()
+      let res = await callCheckout(token!, plan)
+
+      // If 401, refresh token and retry once
+      if (res.status === 401) {
+        console.warn('[Billing] Token expired, refreshing...')
+        await refreshSession()
+        token = await getAccessToken()
+        res = await callCheckout(token!, plan)
+      }
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+        console.error('[Billing] Checkout error:', res.status, data)
+        throw new Error(data?.error || data?.details || `Checkout failed (${res.status})`)
+      }
       const { url } = await res.json()
       if (url) window.location.href = url
-    } catch {
-      showToast('Unable to start checkout. Please try again.')
+    } catch (err) {
+      console.error('[Billing] handleUpgrade error:', err)
+      showToast(err instanceof Error && err.message !== 'Failed to fetch'
+        ? err.message
+        : 'Unable to start checkout. Please try again.')
     } finally {
       setUpgradeLoading(false)
     }
