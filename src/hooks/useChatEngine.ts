@@ -706,9 +706,18 @@ export function useChatEngine(params: UseChatEngineParams) {
             setIsStreaming(false)
             return
           }
-          // Other errors — fall through to normal routing as fallback
-          console.warn('[ImageGen] Failed, falling through to normal response:', imgErr)
-          classification = { ...classification, needsImageGen: false }
+          // Show error instead of silently falling through to Claude
+          console.error('[ImageGen] Failed:', imgErr)
+          setIsThinking(false)
+          isThinkingRef.current = false
+          const errMsg = imgErr instanceof Error ? imgErr.message : 'Unknown error'
+          setMessages(prev => prev.map(m => m.id === kernelId
+            ? { ...m, content: `*Image generation failed: ${errMsg}. Please try again shortly.*` }
+            : m
+          ))
+          showToast('Image generation failed')
+          setIsStreaming(false)
+          return
         }
       }
 
