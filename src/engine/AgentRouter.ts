@@ -10,11 +10,27 @@ export interface ClassificationResult {
   needsSwarm: boolean
 }
 
-/** Auto-select model based on task complexity from the router */
-export function resolveModelFromClassification(c: ClassificationResult): 'opus' | 'sonnet' | 'haiku' {
-  if (c.complexity >= 0.85) return 'opus'   // Hard reasoning, complex code, deep analysis
-  if (c.complexity <= 0.35) return 'haiku'  // Greetings, simple factual, casual chat, straightforward questions
-  return 'sonnet'                            // Everything else
+export interface ModelRoutingContext {
+  messageWordCount?: number
+  turnCount?: number
+  extendedThinking?: boolean
+}
+
+/** Auto-select model based on task complexity, message length, and conversation depth */
+export function resolveModelFromClassification(
+  c: ClassificationResult,
+  ctx?: ModelRoutingContext,
+): 'sonnet' | 'haiku' {
+  // Extended thinking — always Sonnet
+  if (ctx?.extendedThinking) return 'sonnet'
+  // Deep conversation (3+ user messages) — Sonnet
+  if (ctx?.turnCount && ctx.turnCount >= 3) return 'sonnet'
+  // High complexity task — Sonnet
+  if (c.complexity >= 0.6) return 'sonnet'
+  // Long/detailed message (30+ words) — Sonnet
+  if (ctx?.messageWordCount && ctx.messageWordCount >= 30) return 'sonnet'
+  // Everything else — Haiku (the default!)
+  return 'haiku'
 }
 
 const CLASSIFICATION_SYSTEM = `You are an intent classifier. Given a user message and recent conversation context, classify the user's intent to route to the best specialist agent.

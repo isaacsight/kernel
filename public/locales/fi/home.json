@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Olet käyttänyt {{limit}} ilmaista viestiäsi",
-    "subtitle": "Päivitä Kernel Prohon jatkaaksesi keskustelua.",
-    "resetsAt": "Viestisi nollautuvat klo {{time}}. Päivitä Pro:ksi rajattomia viestejä varten.",
+    "subtitle": "Pro antaa sinulle rajoittamattoman viestinnän, muistin joka oppii tuntemaan sinut ja täydet katsaukset.",
+    "resetsAt": "Viestisi nollautuvat klo {{time}}. Päivitä saadaksesi 100 viestiä päivässä.",
     "features": {
-      "unlimitedMessages": "Rajattomat viestit",
-      "deepResearch": "Syvä tutkimustila",
-      "multiAgent": "Moniagenttiyhteistyö",
-      "multiStep": "Monivaiheinen tehtäväsuunnittelu",
-      "persistentMemory": "Pysyvä muisti istuntojen välillä"
+      "unlimitedMessages": "Rajoittamaton viestintä",
+      "deepResearch": "Laajennettu ajattelu (30/kk)",
+      "multiAgent": "Tiedostoanalyysi (10/kk)",
+      "multiStep": "Tavoitteet, ääni ja agenttiset työnkulut",
+      "persistentMemory": "Muisti + ennakoivat katsaukset"
     },
-    "button": "Päivitä Prohon — $20/mo",
+    "button": "Siirry Prohon — $29/kk",
+    "annualButton": "$290/vuosi — säästä $58",
     "buttonLoading": "Avataan kassaa...",
     "maybeLater": "Ehkä myöhemmin"
   },

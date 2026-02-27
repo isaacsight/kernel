@@ -2391,6 +2391,14 @@ h4 {
     cursor: not-allowed;
 }
 
+.ka-upgrade-btn--annual {
+    background: transparent;
+    color: var(--rubin-slate);
+    border: 1px solid var(--rubin-ivory-dark);
+    font-weight: 400;
+    margin-top: var(--space-sm);
+}
+
 .ka-upgrade-icon--danger {
     background: var(--rubin-error);
 }
@@ -2432,6 +2440,12 @@ h4 {
 
 [data-theme="dark"] .ka-upgrade-btn--danger {
     background: #B91C1C;
+}
+
+[data-theme="dark"] .ka-upgrade-btn--annual {
+    color: var(--dark-text);
+    border-color: #3A3630;
+    background: transparent;
 }
 
 [data-theme="dark"] .ka-upgrade-features li {
@@ -8978,9 +8992,9 @@ h4 {
 
 /* Pricing */
 .landing-pricing {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 600px;
     width: 100%;
     padding: 48px 0 80px;
@@ -9065,6 +9079,233 @@ h4 {
 
 .landing-plan-btn:hover {
     opacity: 0.85;
+}
+
+.landing-plan-btn--free {
+    background: transparent;
+    color: var(--rubin-slate);
+    border: 1px solid var(--rubin-ivory-dark);
+}
+
+/* Pricing toggle (monthly/annual) */
+.landing-pricing-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: var(--space-xl);
+    background: var(--rubin-ivory-med);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-pricing-toggle-btn {
+    padding: 8px 20px;
+    min-height: 36px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: calc(var(--radius-sm) - 2px);
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all var(--duration-fast) var(--ease-out);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.landing-pricing-toggle-btn--active {
+    background: var(--rubin-ivory);
+    opacity: 1;
+    box-shadow: var(--shadow-sm);
+}
+
+.landing-pricing-save-badge {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    background: var(--agent-kernel);
+    color: white;
+    border-radius: var(--radius-xs);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.landing-pricing-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    width: 100%;
+}
+
+/* ─── Upgrade Prompt (reusable) ─────────────────────────── */
+
+.ka-upgrade-prompt {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+.ka-upgrade-prompt-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--rubin-ivory-med);
+    border-radius: 50%;
+    margin-bottom: var(--space-md);
+    color: var(--agent-kernel);
+}
+
+.ka-upgrade-prompt-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin: 0 0 var(--space-sm);
+}
+
+.ka-upgrade-prompt-desc {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0 0 var(--space-lg);
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ka-upgrade-prompt-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.ka-upgrade-prompt-btn {
+    padding: 10px 24px;
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    width: 220px;
+    border: none;
+}
+
+.ka-upgrade-prompt-btn--primary {
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+}
+
+.ka-upgrade-prompt-btn--secondary {
+    background: transparent;
+    color: var(--rubin-slate);
+    border: 1px solid var(--rubin-ivory-dark);
+}
+
+.ka-upgrade-prompt-btn:hover {
+    opacity: 0.85;
+}
+
+/* ─── Insights Panel Lock Overlay ───────────────────────── */
+
+.ka-insights-locked-wrap {
+    position: relative;
+    min-height: 200px;
+}
+
+.ka-insights-locked {
+    filter: blur(3px);
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+}
+
+.ka-insights-lock-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--rubin-slate);
+    padding: var(--space-lg);
+}
+
+.ka-insights-lock-title {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: var(--space-sm) 0 var(--space-xs);
+}
+
+.ka-insights-lock-desc {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin: 0 0 var(--space-md);
+    max-width: 280px;
+}
+
+.ka-insights-lock-btn {
+    padding: 8px 20px;
+    min-height: 36px;
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+}
+
+.ka-insights-lock-btn:hover {
+    opacity: 0.85;
+}
+
+/* ─── Goals Panel Read-Only Banner ──────────────────────── */
+
+.ka-goals-readonly-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    margin: 0 var(--space-md) var(--space-md);
+    background: var(--rubin-ivory-med);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.ka-goals-readonly-cta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 4px 12px;
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    border: none;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* ─── Briefing Panel Locked Action ──────────────────────── */
+
+.ka-brief-action-btn--locked {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.ka-brief-action-btn--locked:hover {
+    opacity: 0.7;
 }
 
 /* PWA Install Banner */
@@ -9208,7 +9449,7 @@ h4 {
         gap: var(--space-xl);
     }
 
-    .landing-pricing {
+    .landing-pricing-cards {
         grid-template-columns: 1fr;
     }
 }
@@ -13069,6 +13310,51 @@ h4 {
 
 [data-theme="dark"] .landing-pricing {
     border-top-color: #3A3630;
+}
+
+[data-theme="dark"] .landing-pricing-toggle {
+    background: #2A2622;
+}
+
+[data-theme="dark"] .landing-pricing-toggle-btn--active {
+    background: var(--dark-bg);
+}
+
+[data-theme="dark"] .landing-plan-btn--free {
+    color: var(--dark-text);
+    border-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-upgrade-prompt-icon {
+    background: #2A2622;
+}
+
+[data-theme="dark"] .ka-upgrade-prompt-btn--primary {
+    background: var(--dark-text);
+    color: var(--dark-bg);
+}
+
+[data-theme="dark"] .ka-upgrade-prompt-btn--secondary {
+    color: var(--dark-text);
+    border-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-insights-lock-overlay {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-insights-lock-btn {
+    background: var(--dark-text);
+    color: var(--dark-bg);
+}
+
+[data-theme="dark"] .ka-goals-readonly-banner {
+    background: #2A2622;
+}
+
+[data-theme="dark"] .ka-goals-readonly-cta {
+    background: var(--dark-text);
+    color: var(--dark-bg);
 }
 
 [data-theme="dark"] .ka-code-copy,

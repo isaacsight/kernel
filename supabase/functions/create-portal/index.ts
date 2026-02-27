@@ -72,7 +72,7 @@ serve(async (req: Request) => {
       .from('subscriptions')
       .select('stripe_customer_id, stripe_subscription_id')
       .eq('user_id', user.id)
-      .eq('status', 'active')
+      .in('status', ['active', 'trialing'])
       .maybeSingle()
 
     let customerId: string | null = null
@@ -173,6 +173,8 @@ serve(async (req: Request) => {
         configParams.set('business_profile[headline]', 'Manage your Kernel subscription')
         configParams.set('features[subscription_cancel][enabled]', 'true')
         configParams.set('features[subscription_cancel][mode]', 'at_period_end')
+        configParams.set('features[subscription_update][enabled]', 'true')
+        configParams.set('features[subscription_update][proration_behavior]', 'create_prorations')
         configParams.set('features[payment_method_update][enabled]', 'true')
         configParams.set('features[invoice_history][enabled]', 'true')
         const configRes = await fetch('https://api.stripe.com/v1/billing_portal/configurations', {

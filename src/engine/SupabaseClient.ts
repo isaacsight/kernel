@@ -304,7 +304,8 @@ export interface DBSubscription {
   user_id: string;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
-  status: 'active' | 'canceled' | 'past_due' | 'inactive';
+  status: 'active' | 'trialing' | 'canceled' | 'past_due' | 'inactive';
+  plan: 'pro_monthly' | 'pro_annual';
   current_period_end: string | null;
   created_at: string;
   updated_at: string;
@@ -314,7 +315,7 @@ export async function getMySubscription(): Promise<DBSubscription | null> {
   const { data, error } = await supabase
     .from('subscriptions')
     .select('*')
-    .eq('status', 'active')
+    .in('status', ['active', 'trialing'])
     .maybeSingle();
 
   if (error) {

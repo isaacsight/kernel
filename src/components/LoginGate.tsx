@@ -23,6 +23,7 @@ export function LoginGate() {
   const [resetCooldown, setResetCooldown] = useState(0)
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const pwa = usePWAInstall()
+  const [isAnnual, setIsAnnual] = useState(true)
 
   // Cleanup cooldown timer
   useEffect(() => {
@@ -113,28 +114,51 @@ export function LoginGate() {
         viewport={{ once: true, amount: 0.2 }}
         transition={TRANSITION.FEATURE(0.4)}
       >
-        <div className="landing-plan">
-          <h3>{t('login.freePlan')}</h3>
-          <p className="landing-plan-price">{t('login.freePrice')}</p>
-          <ul>
-            <li>{t('login.freeFeature1')}</li>
-            <li>{t('login.freeFeature2')}</li>
-            <li>{t('login.freeFeature3')}</li>
-            <li>{t('login.freeFeature4')}</li>
-          </ul>
-        </div>
-        <div className="landing-plan landing-plan-pro">
-          <h3>{t('login.proPlan')}</h3>
-          <p className="landing-plan-price">{t('login.proPrice')}<span>{t('login.proPricePeriod')}</span></p>
-          <ul>
-            <li>{t('login.proFeature1')}</li>
-            <li>{t('login.proFeature2')}</li>
-            <li>{t('login.proFeature3')}</li>
-            <li>{t('login.proFeature4')}</li>
-          </ul>
-          <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
-            {t('login.startFree')}
+        <div className="landing-pricing-toggle">
+          <button
+            className={`landing-pricing-toggle-btn ${!isAnnual ? 'landing-pricing-toggle-btn--active' : ''}`}
+            onClick={() => setIsAnnual(false)}
+          >
+            {t('login.monthly')}
           </button>
+          <button
+            className={`landing-pricing-toggle-btn ${isAnnual ? 'landing-pricing-toggle-btn--active' : ''}`}
+            onClick={() => setIsAnnual(true)}
+          >
+            {t('login.annual')}
+            <span className="landing-pricing-save-badge">{t('login.annualBadge')}</span>
+          </button>
+        </div>
+
+        <div className="landing-pricing-cards">
+          <div className="landing-plan">
+            <h3>{t('login.freePlan')}</h3>
+            <p className="landing-plan-price">{t('login.freePrice')}</p>
+            <ul>
+              <li>{t('login.freeFeature1')}</li>
+              <li>{t('login.freeFeature2')}</li>
+              <li>{t('login.freeFeature3')}</li>
+              <li>{t('login.freeFeature4')}</li>
+            </ul>
+            <button className="landing-plan-btn landing-plan-btn--free" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
+              {t('login.getStarted')}
+            </button>
+          </div>
+          <div className="landing-plan landing-plan-pro">
+            <h3>{t('login.proPlan')}</h3>
+            <p className="landing-plan-price">
+              {isAnnual ? t('login.proAnnualPrice') : t('login.proPrice')}
+              <span>{isAnnual ? t('login.proAnnualPeriod') : t('login.proPricePeriod')}</span>
+            </p>
+            <ul>
+              <li>{t('login.proFeature2')}</li>
+              <li>{isAnnual ? t('login.proFeatureAnnual3') : t('login.proFeature3')}</li>
+              <li>{t('login.proFeature4')}</li>
+            </ul>
+            <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
+              {t('login.startTrial')}
+            </button>
+          </div>
         </div>
       </motion.section>
 

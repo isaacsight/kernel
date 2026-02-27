@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Du har använt dina {{limit}} gratis meddelanden",
-    "subtitle": "Uppgradera till Kernel Pro för att fortsätta konversationen.",
-    "resetsAt": "Dina meddelanden förnyas kl. {{time}}. Uppgradera till Pro för obegränsade.",
+    "subtitle": "Pro ger dig obegränsade meddelanden, ett minne som lär känna dig och fullständiga briefingar.",
+    "resetsAt": "Dina meddelanden förnyas kl. {{time}}. Uppgradera för 100 meddelanden per dag.",
     "features": {
-      "unlimitedMessages": "Obegränsat antal meddelanden",
-      "deepResearch": "Djupt forskningsläge",
-      "multiAgent": "Samarbete mellan flera agenter",
-      "multiStep": "Planering av flerstegsuppgifter",
-      "persistentMemory": "Bestående minne mellan sessioner"
+      "unlimitedMessages": "Obegränsade meddelanden",
+      "deepResearch": "Utökat tänkande (30/mån)",
+      "multiAgent": "Filanalys (10/mån)",
+      "multiStep": "Mål, röst och agentiska arbetsflöden",
+      "persistentMemory": "Minne + proaktiva briefingar"
     },
-    "button": "Uppgradera till Pro — $20/mån",
+    "button": "Bli Pro — $29/mån",
+    "annualButton": "$290/år — spara $58",
     "buttonLoading": "Öppnar kassan...",
     "maybeLater": "Kanske senare"
   },

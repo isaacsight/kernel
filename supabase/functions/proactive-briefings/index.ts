@@ -58,12 +58,12 @@ serve(async (req: Request) => {
         })
       }
 
-      // Check Pro status
+      // Check Pro status (active or trialing)
       const { data: sub } = await supabase
         .from('subscriptions')
         .select('status')
         .eq('user_id', user.id)
-        .eq('status', 'active')
+        .in('status', ['active', 'trialing'])
         .maybeSingle()
       if (!sub) {
         return new Response(JSON.stringify({ error: 'Proactive Briefings is a Pro feature.' }), {
@@ -93,11 +93,11 @@ serve(async (req: Request) => {
     if (targetUserId) {
       usersToProcess = [{ id: targetUserId }]
     } else {
-      // Cron mode: fetch all Pro users
+      // Cron mode: fetch all Pro users (active + trialing)
       const { data: proUsers } = await supabase
         .from('subscriptions')
         .select('user_id')
-        .eq('status', 'active')
+        .in('status', ['active', 'trialing'])
 
       if (proUsers) {
         usersToProcess = proUsers.map((u: { user_id: string }) => ({ id: u.user_id }))

@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "{{limit}} ücretsiz mesajınızı kullandınız",
-    "subtitle": "Konuşmaya devam etmek için Kernel Pro'ya yükseltin.",
-    "resetsAt": "Mesajlarınız {{time}} saatinde yenilenir. Sınırsız mesaj için Pro'ya yükseltin.",
+    "subtitle": "Pro size sınırsız mesajlaşma, sizi tanıyan bir bellek ve tam brifingler sunar.",
+    "resetsAt": "Mesajlarınız {{time}} saatinde yenilenir. Günde 100 mesaj için yükseltin.",
     "features": {
-      "unlimitedMessages": "Sınırsız mesaj",
-      "deepResearch": "Derin araştırma modu",
-      "multiAgent": "Çoklu ajan işbirliği",
-      "multiStep": "Çok adımlı görev planlaması",
-      "persistentMemory": "Oturumlar arası kalıcı bellek"
+      "unlimitedMessages": "Sınırsız mesajlaşma",
+      "deepResearch": "Genişletilmiş düşünme (30/ay)",
+      "multiAgent": "Dosya analizi (10/ay)",
+      "multiStep": "Hedefler, ses ve ajantik iş akışları",
+      "persistentMemory": "Bellek + proaktif brifingler"
     },
-    "button": "Pro'ya yükselt — $20/mo",
+    "button": "Pro'ya geç — $29/ay",
+    "annualButton": "$290/yıl — $58 tasarruf edin",
     "buttonLoading": "Ödeme açılıyor...",
     "maybeLater": "Belki sonra"
   },

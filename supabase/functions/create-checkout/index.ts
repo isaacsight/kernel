@@ -14,6 +14,7 @@ import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface CheckoutPayload {
   mode?: 'subscription' | 'payment'
+  plan?: 'pro_monthly' | 'pro_annual'
   price_id?: string
   success_url: string
   cancel_url: string
@@ -69,7 +70,15 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as CheckoutPayload
-    const { mode = 'subscription', price_id, success_url, cancel_url } = payload
+    const { mode = 'subscription', plan, price_id, success_url, cancel_url } = payload
+
+    // Resolve plan → price ID
+    const PRICE_MAP: Record<string, string | undefined> = {
+      pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
+      pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
+    }
+    const selectedPlan = plan || 'pro_monthly'
+    const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
 
     // Build Stripe Checkout Session params
     const params = new URLSearchParams()
@@ -83,18 +92,21 @@ serve(async (req: Request) => {
     params.set('metadata[supabase_user_id]', user_id)
     if (mode === 'subscription') {
       params.set('subscription_data[metadata][supabase_user_id]', user_id)
+      params.set('subscription_data[metadata][plan]', selectedPlan)
+      // 7-day free trial
+      params.set('subscription_data[trial_period_days]', '7')
     }
 
-    if (price_id) {
-      // Use existing Price from Stripe dashboard
-      params.set('line_items[0][price]', price_id)
+    if (resolvedPriceId) {
+      // Use Stripe dashboard price (monthly or annual)
+      params.set('line_items[0][price]', resolvedPriceId)
       params.set('line_items[0][quantity]', '1')
     } else {
-      // Create price inline — $20/mo subscription
+      // Fallback: create inline $29/mo subscription
       params.set('line_items[0][price_data][currency]', 'usd')
-      params.set('line_items[0][price_data][unit_amount]', '2000')
-      params.set('line_items[0][price_data][product_data][name]', 'Kernel Agent — Pro')
-      params.set('line_items[0][price_data][product_data][description]', 'Full access to Kernel. Chat, observe, and control the cognitive engine.')
+      params.set('line_items[0][price_data][unit_amount]', '2900')
+      params.set('line_items[0][price_data][product_data][name]', 'Kernel Pro')
+      params.set('line_items[0][price_data][product_data][description]', 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
       if (mode === 'subscription') {
         params.set('line_items[0][price_data][recurring][interval]', 'month')
       }
@@ -122,10 +134,10 @@ serve(async (req: Request) => {
     const session = await response.json()
 
     // Audit log
-    const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+    const svcAudit = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
-    logAudit(svc, {
+    logAudit(svcAudit, {
       actorId: user_id, eventType: 'payment.checkout', action: 'create-checkout',
       source: 'create-checkout', status: 'success', statusCode: 200,
       metadata: { mode },

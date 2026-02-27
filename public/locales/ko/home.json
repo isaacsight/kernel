@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "{{limit}}개의 무료 메시지를 모두 사용했습니다",
-    "subtitle": "Kernel Pro로 업그레이드하여 대화를 계속하세요.",
-    "resetsAt": "메시지가 {{time}}에 초기화됩니다. 무제한 메시지는 Pro로 업그레이드하세요.",
+    "subtitle": "Pro는 무제한 메시징, 당신을 배우는 메모리, 완전한 브리핑을 제공합니다.",
+    "resetsAt": "메시지가 {{time}}에 초기화됩니다. 하루 100개 메시지로 업그레이드하세요.",
     "features": {
-      "unlimitedMessages": "무제한 메시지",
-      "deepResearch": "딥 리서치 모드",
-      "multiAgent": "멀티 에이전트 협업",
-      "multiStep": "다단계 작업 계획",
-      "persistentMemory": "세션 간 영구 메모리"
+      "unlimitedMessages": "무제한 메시징",
+      "deepResearch": "확장 사고 (월 30회)",
+      "multiAgent": "파일 분석 (월 10회)",
+      "multiStep": "목표, 음성 및 에이전트 워크플로",
+      "persistentMemory": "메모리 + 사전 브리핑"
     },
-    "button": "Pro로 업그레이드 — $20/mo",
+    "button": "Pro 시작하기 — $29/월",
+    "annualButton": "$290/년 — $58 절약",
     "buttonLoading": "결제 페이지를 여는 중...",
     "maybeLater": "나중에 하기"
   },

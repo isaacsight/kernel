@@ -219,11 +219,9 @@ function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }
 
 // ─── Engine Chat (post-auth) ────────────────────────────
 
-const FREE_MSG_LIMIT = 20
-
 function EngineChat() {
   const { t } = useTranslation('home')
-  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription } = useAuthContext()
+  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription, planLimits } = useAuthContext()
   const isPro = isSubscribed || isAdmin
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
@@ -270,7 +268,7 @@ function EngineChat() {
 
   const convs = useConversations(user?.id, (msgs) => {
     chatEngine.setMessages(msgs as any)
-  })
+  }, planLimits.historyDays)
   newChatRef.current = convs.handleNewChat
 
   const chatEngine = useChatEngine({
@@ -287,6 +285,7 @@ function EngineChat() {
     setAttachedFiles: fileAttachments.setAttachedFiles,
     handleNewChat: convs.handleNewChat,
     isPro,
+    planLimits,
     crisisActive: crisis.crisisState.isActive,
     crisisSeverity: crisis.crisisState.highestSeverity,
   })
@@ -376,9 +375,8 @@ function EngineChat() {
     [chatEngine.userGoals],
   )
 
-  // Feature 6: Streak bonus — 3+ day streak gives free users 1 extra message
-  const streakBonus = !isPro && evolution.companion.streak >= 3 ? 1 : 0
-  const effectiveLimit = FREE_MSG_LIMIT + streakBonus
+  // Daily message limit from plan
+  const effectiveLimit = planLimits.messagesPerDay
 
   // Feature 6: Mid-session value preview (once per session, at message 5)
   const [showValuePreview, setShowValuePreview] = useState(false)
@@ -751,7 +749,7 @@ function EngineChat() {
         {panels.showGoalsPanel && user && (
           <BottomSheet onClose={() => panels.closePanel('goals')}>
             <Suspense fallback={<PanelShimmer />}>
-              <GoalsPanel userId={user.id} onClose={() => panels.closePanel('goals')} onToast={showToast} />
+              <GoalsPanel userId={user.id} onClose={() => panels.closePanel('goals')} onToast={showToast} readOnly={!isPro} onUpgrade={() => billing.handleUpgrade('pro_monthly')} />
             </Suspense>
           </BottomSheet>
         )}
@@ -794,6 +792,9 @@ function EngineChat() {
                 onToast={showToast}
                 onGoDeeper={(title, content) => { panels.closePanel('briefings'); chatEngine.handleBriefingGoDeeper(title, content) }}
                 onAddGoal={chatEngine.handleBriefingAddGoal}
+                isPro={isPro}
+                historyDays={planLimits.briefingHistoryDays}
+                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
               />
             </Suspense>
           </BottomSheet>
@@ -810,6 +811,8 @@ function EngineChat() {
                 onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
                 onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
                 onClose={() => panels.closePanel('insights')}
+                isPro={isPro}
+                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
               />
             </Suspense>
           </BottomSheet>
@@ -951,6 +954,14 @@ function EngineChat() {
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('insights'); panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <IconEye size={16} /> {t('menu.insights')}
                   {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('mirror'); panels.closeAllPanels(); panels.setShowMirrorPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconSparkles size={16} /> {t('menu.mirror')}
+                  {featureDiscovery.isNew('mirror') && <span className="ka-feature-dot" />}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('project'); panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconFileText size={16} /> {t('menu.projectFiles')}
+                  {featureDiscovery.isNew('project') && <span className="ka-feature-dot" />}
                 </button>
                 <div className="ka-header-menu-divider ka-menu-tabbed" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
@@ -1381,8 +1392,11 @@ function EngineChat() {
               <ul className="ka-upgrade-features">
                 <li>{t('upgrade.features.unlimitedMessages')}</li><li>{t('upgrade.features.deepResearch')}</li><li>{t('upgrade.features.multiAgent')}</li><li>{t('upgrade.features.multiStep')}</li><li>{t('upgrade.features.persistentMemory')}</li>
               </ul>
-              <button className="ka-upgrade-btn" onClick={billing.handleUpgrade} disabled={billing.upgradeLoading}>
+              <button className="ka-upgrade-btn" onClick={() => billing.handleUpgrade('pro_monthly')} disabled={billing.upgradeLoading}>
                 {billing.upgradeLoading ? t('upgrade.buttonLoading') : t('upgrade.button')}
+              </button>
+              <button className="ka-upgrade-btn ka-upgrade-btn--annual" onClick={() => billing.handleUpgrade('pro_annual')} disabled={billing.upgradeLoading}>
+                {t('upgrade.annualButton')}
               </button>
               <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>{t('upgrade.maybeLater')}</button>
             </motion.div>

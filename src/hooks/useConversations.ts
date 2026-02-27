@@ -30,6 +30,7 @@ interface ChatMessage {
 export function useConversations(
   userId: string | undefined,
   setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
+  historyDays?: number | null,
 ) {
   const [conversations, setConversations] = useState<DBConversation[]>([])
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null)
@@ -45,18 +46,21 @@ export function useConversations(
   const loadConversations = useCallback(async () => {
     if (!userId) return
     try {
-      const convs = await getUserConversations(userId)
+      let convs = await getUserConversations(userId)
+      // Client-side history TTL for free users (data stays in DB — just hidden)
+      if (historyDays != null) {
+        const cutoff = Date.now() - historyDays * 86_400_000
+        convs = convs.filter(c => new Date(c.updated_at).getTime() >= cutoff)
+      }
       setConversations(convs)
       setConvsLoading(false)
-      // Cache top conversations for offline use
       cacheConversations(convs).catch(() => {})
     } catch {
-      // Offline fallback: load from IndexedDB
       const cached = await getCachedConversations()
       if (cached.length > 0) setConversations(cached)
       setConvsLoading(false)
     }
-  }, [userId])
+  }, [userId, historyDays])
 
   useEffect(() => {
     loadConversations()

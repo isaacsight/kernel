@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "{{limit}} 件の無料メッセージを使い切りました",
-    "subtitle": "Kernel Pro にアップグレードして会話を続けましょう。",
-    "resetsAt": "メッセージは{{time}}にリセットされます。無制限にはProにアップグレード。",
+    "subtitle": "Proならメッセージ無制限、あなたを学ぶメモリ、完全なブリーフィングが利用できます。",
+    "resetsAt": "メッセージは{{time}}にリセットされます。1日100件にはアップグレード。",
     "features": {
-      "unlimitedMessages": "無制限メッセージ",
-      "deepResearch": "ディープリサーチモード",
-      "multiAgent": "マルチエージェント連携",
-      "multiStep": "マルチステップタスク計画",
-      "persistentMemory": "セッション間の永続メモリ"
+      "unlimitedMessages": "メッセージ無制限",
+      "deepResearch": "拡張思考（月30回）",
+      "multiAgent": "ファイル分析（月10回）",
+      "multiStep": "目標、音声、エージェントワークフロー",
+      "persistentMemory": "メモリ + プロアクティブブリーフィング"
     },
-    "button": "Pro にアップグレード — $20/mo",
+    "button": "Proになる — $29/月",
+    "annualButton": "$290/年 — $58お得",
     "buttonLoading": "チェックアウトを開いています...",
     "maybeLater": "後で考える"
   },

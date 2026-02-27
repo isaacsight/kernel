@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Du har brukt dine {{limit}} gratis meldinger",
-    "subtitle": "Oppgrader til Kernel Pro for å fortsette samtalen.",
-    "resetsAt": "Meldingene dine fornyes kl. {{time}}. Oppgrader til Pro for ubegrensede.",
+    "subtitle": "Pro gir deg ubegrenset meldinger, et minne som lærer deg å kjenne, og fulle briefinger.",
+    "resetsAt": "Meldingene dine fornyes kl. {{time}}. Oppgrader for 100 meldinger per dag.",
     "features": {
-      "unlimitedMessages": "Ubegrensede meldinger",
-      "deepResearch": "Dyp forskningsmodus",
-      "multiAgent": "Flerfaglig agentsamarbeid",
-      "multiStep": "Flertrinns oppgaveplanlegging",
-      "persistentMemory": "Vedvarende hukommelse mellom økter"
+      "unlimitedMessages": "Ubegrenset meldinger",
+      "deepResearch": "Utvidet tenkning (30/mnd)",
+      "multiAgent": "Filanalyse (10/mnd)",
+      "multiStep": "Mål, stemme og agentiske arbeidsflyter",
+      "persistentMemory": "Minne + proaktive briefinger"
     },
-    "button": "Oppgrader til Pro — $20/mo",
+    "button": "Bli Pro — $29/mnd",
+    "annualButton": "$290/år — spar $58",
     "buttonLoading": "Åpner kassen...",
     "maybeLater": "Kanskje senere"
   },

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -93,6 +93,7 @@ interface UseChatEngineParams {
   setAttachedFiles: (files: File[]) => void
   handleNewChat: () => void
   isPro?: boolean
+  planLimits?: import('../config/planLimits').PlanLimits
   crisisActive?: boolean
   crisisSeverity?: import('../engine/CrisisDetector').CrisisSeverity | null
 }
@@ -717,15 +718,21 @@ export function useChatEngine(params: UseChatEngineParams) {
       } else {
         const abortController = new AbortController()
         streamAbortRef.current = abortController
-        const autoModel = resolveModelFromClassification(classification)
-        console.log(`[engine] Auto-selected model: ${autoModel} (complexity: ${classification.complexity})`)
+        const userMsgCount = messagesRef.current.filter(m => m.role === 'user').length
+        const routingCtx = {
+          messageWordCount: trimmed.split(/\s+/).length,
+          turnCount: userMsgCount,
+          extendedThinking: extendedThinkingEnabled && isPro,
+        }
+        const autoModel = resolveModelFromClassification(classification, routingCtx)
+        console.log(`[engine] Auto-selected model: ${autoModel} (complexity: ${classification.complexity}, words: ${routingCtx.messageWordCount}, turns: ${userMsgCount})`)
         const streamResult = await claudeStreamChat(
           claudeMessages,
           updateKernelMsg,
           {
             system: systemPrompt,
             model: autoModel,
-            max_tokens: autoModel === 'opus' ? 8192 : autoModel === 'haiku' ? 512 : 8192,
+            max_tokens: autoModel === 'haiku' ? 4096 : 8192,
             web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
             signal: abortController.signal,
             thinking: extendedThinkingEnabled && isPro ? { type: 'enabled', budget_tokens: 10000 } : undefined,
@@ -776,7 +783,11 @@ export function useChatEngine(params: UseChatEngineParams) {
           classification,
           agentUsed: specialist.id,
           swarmComposition: swarmAgentIds,
-          modelUsed: resolveModelFromClassification(classification),
+          modelUsed: resolveModelFromClassification(classification, {
+            messageWordCount: trimmed.split(/\s+/).length,
+            turnCount: messagesRef.current.filter(m => m.role === 'user').length,
+            extendedThinking: extendedThinkingEnabled && isPro,
+          }),
           responseContent: finalContent,
           timestamp: Date.now(),
           previousUserMsg: trimmed,
@@ -787,7 +798,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       // CRISIS GUARD: skip all persistent extraction when crisis is active
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
-      if (currentMsgCount % 6 === 0 && !crisisActive) {
+      if (currentMsgCount % 6 === 0 && !crisisActive && params.planLimits?.memory !== false) {
         setMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
@@ -880,15 +891,24 @@ export function useChatEngine(params: UseChatEngineParams) {
         setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof MonthlyLimitError) {
+        setShowUpgradeWall(true)
+        setMessages(prev => prev.filter(m => m.id !== kernelId))
       } else if (err instanceof ProLimitError) {
         const resetTime = err.resetsAt ? new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'soon'
         setMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've used all ${err.limit} messages for today. Resets at ${resetTime}.*` }
           : m
         ))
+      } else if (err instanceof FileLimitError) {
+        setMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: `*File analysis is a Pro feature. Upgrade to analyze images and documents.*` }
+          : m
+        ))
+        setShowUpgradeWall(true)
       } else if (err instanceof ImageLimitError) {
         setMessages(prev => prev.map(m => m.id === kernelId
-          ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for unlimited image analysis.*` }
+          ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for more image analysis.*` }
           : m
         ))
         showToast(`Daily image limit reached (${err.used}/${err.limit})`)

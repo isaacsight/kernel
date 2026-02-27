@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "Wykorzystałeś swoje {{limit}} darmowych wiadomości",
-    "subtitle": "Uaktualnij do Kernel Pro, aby kontynuować rozmowę.",
-    "resetsAt": "Twoje wiadomości odnowią się o {{time}}. Przejdź na Pro, aby mieć nieograniczone.",
+    "subtitle": "Pro daje ci nieograniczone wiadomości, pamięć która uczy się ciebie i pełne briefingi.",
+    "resetsAt": "Twoje wiadomości odnowią się o {{time}}. Uaktualnij, aby mieć 100 wiadomości dziennie.",
     "features": {
       "unlimitedMessages": "Nieograniczone wiadomości",
-      "deepResearch": "Tryb głębokiego badania",
-      "multiAgent": "Współpraca wielu agentów",
-      "multiStep": "Wieloetapowe planowanie zadań",
-      "persistentMemory": "Trwała pamięć między sesjami"
+      "deepResearch": "Rozszerzone myślenie (30/mies.)",
+      "multiAgent": "Analiza plików (10/mies.)",
+      "multiStep": "Cele, głos i agentyczne przepływy pracy",
+      "persistentMemory": "Pamięć + proaktywne briefingi"
     },
-    "button": "Uaktualnij do Pro — $20/mo",
+    "button": "Przejdź na Pro — $29/mies.",
+    "annualButton": "$290/rok — zaoszczędź $58",
     "buttonLoading": "Otwieranie płatności...",
     "maybeLater": "Może później"
   },

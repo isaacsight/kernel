@@ -100,12 +100,41 @@ serve(async (req: Request) => {
           break
         }
 
+        // Extract plan + status from Stripe subscription metadata
+        let plan = 'pro_monthly'
+        let subStatus: string = 'active'
+        let trialEnd: string | null = null
+        const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
+        if (stripeKey && session.subscription) {
+          try {
+            const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${session.subscription}`, {
+              headers: { Authorization: `Bearer ${stripeKey}` },
+            })
+            if (subRes.ok) {
+              const stripeSub = await subRes.json()
+              plan = stripeSub.metadata?.plan || 'pro_monthly'
+              // Use real Stripe status (trialing, active, etc.)
+              if (stripeSub.status === 'trialing') subStatus = 'trialing'
+              // Set trial end as period end so scheduler doesn't expire it early
+              if (stripeSub.trial_end) trialEnd = safeEpochToISO(stripeSub.trial_end)
+              // Fallback: check price ID if no metadata
+              if (!stripeSub.metadata?.plan) {
+                const priceId = stripeSub.items?.data?.[0]?.price?.id
+                if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+              }
+            }
+          } catch (e) {
+            console.error('Failed to fetch subscription for plan:', e)
+          }
+        }
+
         const { error } = await supabase.from('subscriptions').upsert({
           user_id: userId,
           stripe_customer_id: session.customer,
           stripe_subscription_id: session.subscription,
-          status: 'active',
-          current_period_end: null, // Will be set by invoice.paid
+          status: subStatus,
+          plan,
+          current_period_end: trialEnd, // Trial end or null (invoice.paid sets real period)
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' })
 
@@ -184,9 +213,10 @@ serve(async (req: Request) => {
         const subId = invoice.subscription
         if (!subId) break
 
-        // Try to get user_id from subscription metadata
+        // Try to get user_id + plan from subscription metadata
         const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
         let userId: string | null = null
+        let plan = 'pro_monthly'
 
         if (stripeKey) {
           const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subId}`, {
@@ -195,6 +225,11 @@ serve(async (req: Request) => {
           if (subRes.ok) {
             const sub = await subRes.json()
             userId = sub.metadata?.supabase_user_id || null
+            plan = sub.metadata?.plan || 'pro_monthly'
+            if (!sub.metadata?.plan) {
+              const priceId = sub.items?.data?.[0]?.price?.id
+              if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+            }
           }
         }
 
@@ -206,6 +241,7 @@ serve(async (req: Request) => {
             stripe_customer_id: invoice.customer,
             stripe_subscription_id: subId,
             status: 'active',
+            plan,
             current_period_end: periodEnd,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'user_id' })
@@ -216,6 +252,7 @@ serve(async (req: Request) => {
           const { error } = await supabase.from('subscriptions')
             .update({
               status: 'active',
+              plan,
               current_period_end: periodEnd,
               updated_at: new Date().toISOString(),
             })
@@ -229,8 +266,17 @@ serve(async (req: Request) => {
       case 'customer.subscription.updated': {
         const sub = event.data.object
         const userId = sub.metadata?.supabase_user_id
-        const status = sub.cancel_at_period_end ? 'canceled' : sub.status === 'active' ? 'active' : 'past_due'
+        const status = sub.cancel_at_period_end ? 'canceled'
+          : sub.status === 'active' ? 'active'
+          : sub.status === 'trialing' ? 'trialing'
+          : 'past_due'
         const subPeriodEnd = safeEpochToISO(sub.current_period_end)
+        // Extract plan from metadata or price ID
+        let plan = sub.metadata?.plan || 'pro_monthly'
+        if (!sub.metadata?.plan) {
+          const priceId = sub.items?.data?.[0]?.price?.id
+          if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+        }
 
         if (userId) {
           const { error } = await supabase.from('subscriptions').upsert({
@@ -238,6 +284,7 @@ serve(async (req: Request) => {
             stripe_customer_id: sub.customer,
             stripe_subscription_id: sub.id,
             status,
+            plan,
             current_period_end: subPeriodEnd,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'user_id' })
@@ -247,6 +294,7 @@ serve(async (req: Request) => {
           const { error } = await supabase.from('subscriptions')
             .update({
               status,
+              plan,
               current_period_end: subPeriodEnd,
               updated_at: new Date().toISOString(),
             })

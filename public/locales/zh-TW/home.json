@@ -32,16 +32,17 @@
   },
   "upgrade": {
     "title": "您已使用完 {{limit}} 則免費訊息",
-    "subtitle": "升級為 Kernel Pro 以繼續對話。",
-    "resetsAt": "您的訊息將在 {{time}} 重置。升級至 Pro 享受無限訊息。",
+    "subtitle": "Pro 為您提供無限訊息、能了解您的記憶和完整簡報。",
+    "resetsAt": "您的訊息將在 {{time}} 重置。升級享受每日 100 則訊息。",
     "features": {
       "unlimitedMessages": "無限訊息",
-      "deepResearch": "深度研究模式",
-      "multiAgent": "多代理協作",
-      "multiStep": "多步驟任務規劃",
-      "persistentMemory": "跨會話持久記憶"
+      "deepResearch": "擴展思考（30次/月）",
+      "multiAgent": "檔案分析（10次/月）",
+      "multiStep": "目標、語音和智能工作流程",
+      "persistentMemory": "記憶 + 主動式簡報"
     },
-    "button": "升級為 Pro — $20/mo",
+    "button": "升級 Pro — $29/月",
+    "annualButton": "$290/年 — 節省 $58",
     "buttonLoading": "正在開啟結帳...",
     "maybeLater": "稍後再說"
   },
