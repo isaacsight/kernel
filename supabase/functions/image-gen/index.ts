@@ -11,9 +11,9 @@ import { logAudit, getClientIP, getUA } from '../_shared/audit.ts'
 
 // ─── Configuration ──────────────────────────────────────
 const MAX_PROMPT_LENGTH = 2000
-const GEMINI_MODEL = 'gemini-3.1-flash-image-preview'
+const GEMINI_MODEL = 'gemini-2.5-flash-image'
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models'
-const ESTIMATED_COST_USD = 0.03
+const ESTIMATED_COST_USD = 0
 
 // ─── Main handler ──────────────────────────────────────
 serve(async (req: Request) => {
