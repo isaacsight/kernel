@@ -4,9 +4,81 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-26 evening)
+## Current Session (2026-02-27)
 
 ### Accomplished This Session
+
+#### Comped Pro for siijoseph333@gmail.com
+Granted 1 month complimentary Pro access to `siijoseph333@gmail.com` (user ID: `65848452-c1d9-4b9b-ade7-bbfbf47a14fe`). Expires **2026-03-27**.
+- Inserted `subscriptions` row with `status: 'active'`, `current_period_end: now() + 1 month`
+- Sent welcome email via Resend (Pro feature overview)
+- Sent in-app notification ("Upgraded to Kernel Pro")
+
+#### Auto-Expire Comped Subscriptions
+Discovered that `current_period_end` was never enforced — the system only checks `status = 'active'`, so comped Pro would last forever. Fixed it.
+
+**Change:** `supabase/functions/task-scheduler/index.ts`
+- Every 5 min, queries `subscriptions` where `status = 'active'` AND `current_period_end < now()`
+- Deactivates expired subs (`status → 'inactive'`)
+- Sends in-app notification to each expired user
+- Non-blocking try/catch — doesn't affect other scheduler tasks
+- Stripe-managed subs are unaffected (Stripe pushes `current_period_end` forward on each renewal before it expires)
+
+- Commit: `575820477` pushed to origin/main
+- Edge function deployed
+- Shipped via 6-gate pipeline — all gates PASS
+
+**Ship pipeline results:**
+- Gate 1 Security: PASS — 0 P0/P1 findings, clean secrets scan
+- Gate 2 QA: PASS — tsc 0 errors, build clean (1083 modules, 2.28s)
+- Gate 3 Design: PASS — Rubin compliant, P2: download button 32px touch target
+- Gate 4 Performance: PASS — JS 93KB gzip (31%), CSS 39KB gzip (26%), 0 prod vulns
+- Gate 5 DevOps: PASS — Deployed to GH Pages, kernel.chat HTTP 200 (506ms)
+- Gate 6 Product: PASS — Landing, auth, mobile 375px, authenticated home all verified
+
+---
+
+## Previous Session (2026-02-27 late night)
+
+### Accomplished
+
+#### AI Image Generation — Pro-Only Feature (Nano Banana 2)
+Built and deployed AI image generation using Google's `gemini-3.1-flash-image-preview` (Nano Banana 2) model. Pro-only feature — free users see upgrade prompt.
+
+**New files:**
+- `supabase/functions/image-gen/index.ts` — Edge function: CORS → JWT → Pro check → rate limit → Gemini API → audit log. Returns base64 images. 422 when no image generated.
+- `src/engine/imageGen.ts` — Frontend client: `generateImage()`, `ImageGenLimitError` class. Handles 403/429/errors.
+- `src/components/GeneratedImageCard.tsx` — Artifact-style card with lightbox, download button, Framer Motion entrance.
+- `src/engine/imageGen.test.ts` — 5 unit tests (success, 403, 429, error, limit error class).
+
+**Modified files:**
+- `supabase/functions/_shared/rate-limit.ts` — Added `image-gen: { free: 0, paid: 5, pro: 10, windowSeconds: 60 }`
+- `src/engine/AgentRouter.ts` — Added `needsImageGen: boolean` to ClassificationResult + detection prompt
+- `src/hooks/useChatEngine.ts` — Image gen branch before workflow/swarm routing, `generatedImages` on ChatMessage
+- `src/pages/EnginePage.tsx` — Renders GeneratedImageCard, handles empty content with images
+- `src/index.css` — ~160 lines `.ka-generated-image-*` styles (dark/eink/mobile)
+- `src/components/LoginGate.tsx` — 5th Pro feature in pricing
+- All 24 `auth.json` locale files — `proFeature5: "AI image generation"` translated
+
+**API key setup:**
+- Gemini API key created and set in Supabase secrets (`GEMINI_API_KEY`)
+- Old key in Supabase was invalid (64-char hex hash, not a Google AI key)
+
+**E2E verified via Playwright:**
+- Pro account: "draw me a cozy cabin in the snow" → image card rendered with download button
+- Free account: "generate an image of a dragon" → instant upgrade message, no API call
+- Edge function: 401 anon, 403 free, 200 Pro
+
+**Cost:** ~$0.039/image, bundled into $20/mo Pro subscription. Rate limited to 10/min.
+
+- Commit: `c752fd275` pushed to origin/main
+- Edge function deployed, frontend deployed to GitHub Pages
+
+---
+
+## Previous Session (2026-02-26 evening)
+
+### Accomplished
 
 #### Shipped Data Export + Insights Fixes
 Deployed all uncommitted work from earlier session — data export endpoint, insights backend fixes, and frontend changes. Full E2E verification via Playwright.
@@ -259,6 +331,7 @@ Built and tested 6 Pro features. Found and fixed 3 critical bugs:
 - **API key rotation**: Anthropic key rotated 2026-02-26 evening. Google key also rotated by user. Old keys redacted from `.claude/prompt-log.txt`.
 - **Share link OG proxy**: Built and deployed as Cloudflare Worker (`kernel-og-proxy`). Share URLs now use `/s/{uuid}` format. Worker intercepts crawler UAs (Twitterbot, Discord, etc.) and returns OG meta tags; humans get 302 redirect to `/#/shared/{uuid}`. **PENDING: DNS propagation** — kernel.chat nameservers need to switch from GoDaddy (`domaincontrol.com`) to Cloudflare. Once propagated, Worker routes activate automatically.
 - **Dep updates held**: framer-motion v12 + lucide-react v0.575 (breaking changes, need testing)
+- **Comped Pro — siijoseph333@gmail.com**: Active until 2026-03-27. Auto-expiration in task-scheduler will handle it. No manual action needed.
 - **Discord webhook MCP**: Was working, now returning 401 as of 2026-02-26 evening. Webhook URL in `.env` may need refresh.
 - **Future Pro candidate**: Server-side project persistence (Supabase Storage for files that survive page reload + work across devices). Has real infrastructure cost — natural Pro feature when needed.
 
@@ -288,6 +361,8 @@ Built and tested 6 Pro features. Found and fixed 3 critical bugs:
 - Share link previews: Cloudflare Workers as crawler-aware proxy (recommended approach for GH Pages + hash routing)
 - Legal compliance: ToS governed by California law, LA County courts, AAA arbitration, class action waiver. Privacy Policy maps GDPR legal bases per activity, 72h breach notification, full sub-processor disclosure (Supabase, Anthropic, OpenAI, Google, NVIDIA, Stripe, PostHog, Sentry, Resend).
 - Multi-provider LLM: claude-proxy supports Anthropic (default), OpenAI, Google Gemini, NVIDIA Llama. Alternative providers only receive data when user explicitly selects their model.
+- Image generation: Pro-only, uses Gemini 3.1 Flash Image (`gemini-3.1-flash-image-preview` / Nano Banana 2). ~$0.039/image cost bundled into $20/mo Pro. Rate limit 10/min. AgentRouter detects intent via `needsImageGen` flag. No per-image billing — subscription covers it.
+- Subscription expiration: task-scheduler checks every 5 min for `current_period_end < now()`, sets `status = 'inactive'`, sends in-app notification. Stripe-managed subs unaffected (renewed before expiry). Comped Pro uses this path.
 - Landing page: ParticleGrid is the visual identity. Hero = full-bleed canvas + frosted glass overlay. Feature cards = 120px energetic mini-grids (IO-gated). Auth modal = 72px energetic grid. Pro card = CSS `@keyframes` cycling 5 agent colors over 14s. Canvas can't read CSS vars — agent palette hex values are hardcoded in JS (architectural constraint).
 
 ## Test Accounts
