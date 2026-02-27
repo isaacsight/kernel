@@ -989,6 +989,10 @@ export async function getAccessToken(): Promise<string> {
   return session?.access_token || supabaseKey
 }
 
+export async function refreshSession(): Promise<void> {
+  await supabase.auth.refreshSession()
+}
+
 // Real-time subscriptions
 export function subscribeToProjects(callback: (project: DBProject) => void) {
   return supabase
