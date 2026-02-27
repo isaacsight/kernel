@@ -12,7 +12,6 @@ export interface PlanLimits {
   briefings: boolean          // full access (generate + discuss)
   briefingHistoryDays: number | null  // null = unlimited
   etPerMonth: number
-  voice: boolean
   filesPerMonth: number
   historyDays: number | null  // null = unlimited
 }
@@ -21,19 +20,19 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: {
     messagesPerMonth: 20, messagesPerDay: 5, maxTokens: 500,
     memory: false, goals: false, briefings: false,
-    briefingHistoryDays: 3, etPerMonth: 0, voice: false,
+    briefingHistoryDays: 3, etPerMonth: 0,
     filesPerMonth: 0, historyDays: 3,
   },
   pro_monthly: {
     messagesPerMonth: 1000, messagesPerDay: 100, maxTokens: 8192,
     memory: true, goals: true, briefings: true,
-    briefingHistoryDays: null, etPerMonth: 30, voice: true,
+    briefingHistoryDays: null, etPerMonth: 30,
     filesPerMonth: 10, historyDays: null,
   },
   pro_annual: {
     messagesPerMonth: 1500, messagesPerDay: 100, maxTokens: 8192,
     memory: true, goals: true, briefings: true,
-    briefingHistoryDays: null, etPerMonth: 45, voice: true,
+    briefingHistoryDays: null, etPerMonth: 45,
     filesPerMonth: 10, historyDays: null,
   },
 }

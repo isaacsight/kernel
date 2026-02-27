@@ -30,8 +30,6 @@
     "downloadResponse": "Download response",
     "helpful": "Helpful",
     "notHelpful": "Not helpful",
-    "stopListening": "Stop listening",
-    "voiceInput": "Voice input",
     "sendMessage": "Send message",
     "stopGenerating": "Stop generating",
     "shareableLink": "Shareable conversation link"
