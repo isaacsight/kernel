@@ -3,6 +3,7 @@
 // Bottom-sheet panel showing all generated files for the active conversation.
 // Supports download individual, download all, and clear project.
 
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore, type ProjectFile } from '../stores/projectStore'
 import { IconClose, IconFileCode, IconFile, IconDownload, IconTrash } from './KernelIcons'
@@ -21,7 +22,13 @@ const CODE_LANGUAGES = new Set([
 
 export function ProjectPanel({ conversationId, onClose }: ProjectPanelProps) {
   const { t } = useTranslation('common')
-  const files = useProjectStore(s => conversationId ? s.getFiles(conversationId) : [])
+  // Select raw project record (referentially stable) instead of calling getFiles()
+  // which creates a new array each time, causing infinite re-renders (React error #185).
+  const project = useProjectStore(s => conversationId ? s.projects[conversationId] : undefined)
+  const files = useMemo(() => {
+    if (!project) return [] as ProjectFile[]
+    return Object.values(project).sort((a, b) => a.createdAt - b.createdAt)
+  }, [project])
   const removeFile = useProjectStore(s => s.removeFile)
   const clearProject = useProjectStore(s => s.clearProject)
 

@@ -19,7 +19,6 @@ import { forkSharedConversation } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
-import { GeneratedImageCard } from '../components/GeneratedImageCard'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
 import { useTheme } from '../hooks/useTheme'
 import { useToast } from '../hooks/useToast'
@@ -1249,15 +1248,12 @@ function EngineChat() {
                     </form>
                   ) : msg.content || msg.thinking ? (
                     msg.role === 'kernel' ? <MessageContent text={msg.content} thinking={msg.thinking} isLatestMessage={i === lastKernelIndex} onArtifactRendered={handleArtifactRendered} conversationId={convs.activeConversationId} /> : <Linkify text={msg.content} />
-                  ) : msg.generatedImages && msg.generatedImages.length > 0 ? null : (
+                  ) : (
                     <div className="ka-typing-grid">
                       <ParticleGrid size={40} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                     </div>
                   )}
                 </div>
-                {msg.role === 'kernel' && msg.generatedImages && msg.generatedImages.length > 0 && (
-                  <GeneratedImageCard images={msg.generatedImages} text={msg.content} />
-                )}
                 {msg.role === 'user' && msg.content && !isStreaming && msgActions.editingMsgId !== msg.id && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => { msgActions.setEditingMsgId(msg.id); msgActions.setEditingContent(msg.content) }} aria-label={t('aria.editMessage', { ns: 'common' })}>
@@ -1265,7 +1261,7 @@ function EngineChat() {
                     </button>
                   </div>
                 )}
-                {msg.role === 'kernel' && (msg.content || (msg.generatedImages && msg.generatedImages.length > 0)) && (
+                {msg.role === 'kernel' && msg.content && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => msgActions.handleCopyMessage(msg.id, msg.content)} aria-label={t('aria.copyMessage', { ns: 'common' })}>
                       {msgActions.copiedMsgId === msg.id ? <IconCheck size={14} /> : <IconCopy size={14} />}

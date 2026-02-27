@@ -45,7 +45,6 @@ import {
 } from '../components/ChatHelpers'
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
-import { generateImage, ImageGenLimitError } from '../engine/imageGen'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
 import { useProjectStore } from '../stores/projectStore'
 
@@ -69,7 +68,6 @@ export interface ChatMessage {
   agentName?: string
   thinking?: string
   workflowSteps?: WorkflowStepState[]
-  generatedImages?: { data: string; mimeType: string }[]
   isProactive?: boolean
 }
 
@@ -440,11 +438,11 @@ export function useChatEngine(params: UseChatEngineParams) {
     } catch (err) {
       console.error('[engine] classifyIntent failed:', err)
       // Fall back to kernel agent on classifier failure
-      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
+      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false }
     }
     // Crisis override — force kernel agent for high severity
     if (crisisActive && crisisSeverity === 'high') {
-      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
+      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false }
     }
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
@@ -651,28 +649,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Swarm/workflow/research paths only pass string content, losing ContentBlock[].
     const hasFileContent = Array.isArray(userContent)
     try {
-      if (classification.needsImageGen) {
-        // Image generation — Pro-only, calls Gemini via edge function
-        if (!isPro) {
-          updateKernelMsg('*Image generation is a Pro feature. Upgrade to create AI-generated images, get unlimited messages, and more.*')
-        } else {
-          try {
-            const result = await generateImage(trimmed)
-            updateKernelMsg(result.text || '')
-            setMessages(prev => prev.map(m => m.id === kernelId
-              ? { ...m, generatedImages: result.images }
-              : m
-            ))
-          } catch (imgErr) {
-            if (imgErr instanceof ImageGenLimitError) {
-              updateKernelMsg(`*You've hit the image generation rate limit (${imgErr.limit}/min). Try again in ${Math.ceil(imgErr.retryAfter / 60)} minutes.*`)
-            } else {
-              const errMsg = imgErr instanceof Error ? imgErr.message : 'Image generation failed'
-              updateKernelMsg(`*${errMsg}*`)
-            }
-          }
-        }
-      } else if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
+      if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
         // Agentic Workflow: multi-step + research = autonomous workflow execution
         const { AgenticWorkflow } = await import('../engine/AgenticWorkflow')
         const workflow = new AgenticWorkflow(systemPrompt, {
