@@ -11934,6 +11934,23 @@ h4 {
         cursor: grab;
     }
 
+    .ka-sheet-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.06);
+        border: none;
+        color: var(--rubin-slate);
+        cursor: pointer;
+        z-index: 10;
+    }
+
     .ka-kg-panel {
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         max-height: calc(85vh - 20px);
@@ -11955,6 +11972,11 @@ h4 {
 
 [data-theme="dark"] .ka-kg-drag-handle {
     background: rgba(196, 168, 130, 0.25);
+}
+
+[data-theme="dark"] .ka-sheet-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--dark-text);
 }
 
 .ka-kg-header {
