@@ -1,4 +1,11 @@
+import { useEffect } from 'react'
+
 export function PrivacyPage() {
+  useEffect(() => {
+    document.body.classList.add('ka-scrollable-page')
+    return () => { document.body.classList.remove('ka-scrollable-page') }
+  }, [])
+
   return (
     <div className="ka-legal-page">
       <button className="ka-legal-back" onClick={() => { window.location.hash = '#/' }}>

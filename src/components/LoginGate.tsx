@@ -232,9 +232,6 @@ export function LoginGate() {
                     <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
                       {t('modal.continueGitHub')}
                     </button>
-                    <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
-                      {t('modal.continueX')}
-                    </button>
                   </div>
 
                   <div className="ka-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>
