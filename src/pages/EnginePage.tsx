@@ -1419,6 +1419,12 @@ function EngineChat() {
               <button className="ka-upgrade-btn ka-upgrade-btn--annual" onClick={() => billing.handleUpgrade('pro_annual')} disabled={billing.upgradeLoading}>
                 {t('upgrade.annualButton')}
               </button>
+              <button className="ka-upgrade-btn ka-upgrade-btn--max" onClick={() => billing.handleUpgrade('max_monthly')} disabled={billing.upgradeLoading}>
+                {t('upgrade.maxButton')}
+              </button>
+              <button className="ka-upgrade-btn ka-upgrade-btn--max-annual" onClick={() => billing.handleUpgrade('max_annual')} disabled={billing.upgradeLoading}>
+                {t('upgrade.maxAnnualButton')}
+              </button>
               <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>{t('upgrade.maybeLater')}</button>
             </motion.div>
           </motion.div>
@@ -1548,7 +1554,7 @@ function EngineChat() {
             el.style.height = 'auto'
             el.style.height = Math.min(el.scrollHeight, 200) + 'px'
           }}
-          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chatEngine.handleSubmit(e) } }}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); chatEngine.handleSubmit(e) } }}
           onPaste={fileAttachments.handlePaste}
           placeholder={t('placeholder')}
           disabled={isStreaming}
@@ -1675,7 +1681,7 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         dragControls={dragControls}
         dragListener={false}
         dragConstraints={{ top: 0 }}
-        dragElastic={0.1}
+        dragElastic={{ top: 0, bottom: 0.2 }}
         onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 300) onClose() }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >

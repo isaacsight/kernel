@@ -17,10 +17,10 @@
     "available": "Available"
   },
   "security": {
-    "heading": "Verify identity",
+    "heading": "Edit credentials",
     "credentialsHeading": "Email & password",
-    "verifyIdentity": "Verify your identity",
-    "verifyHint": "A verification code will be sent to your email before making changes",
+    "verifyIdentity": "Verify to make changes",
+    "verifyHint": "A verification code will be sent to your email before editing credentials",
     "sendCode": "Send verification code",
     "codePlaceholder": "Enter 6-digit code",
     "codeRequired": "Enter the verification code from your email",
@@ -72,6 +72,7 @@
     "upgradeMonthly": "Pro — $29/mo",
     "upgradeAnnual": "Pro — $290/yr",
     "upgradeMax": "Max — $49/mo",
+    "upgradeMaxAnnual": "Max — $490/yr",
     "manage": "Manage subscription"
   },
   "exportData": {

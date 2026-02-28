@@ -18,7 +18,7 @@ export interface PlanLimits {
 
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: {
-    messagesPerMonth: 20, messagesPerDay: 5, maxTokens: 500,
+    messagesPerMonth: 40, messagesPerDay: 10, maxTokens: 500,
     memory: false, goals: false, briefings: false,
     briefingHistoryDays: 3, etPerMonth: 0,
     filesPerMonth: 0, historyDays: 3,

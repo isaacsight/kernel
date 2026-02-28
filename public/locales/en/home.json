@@ -69,12 +69,12 @@
   },
   "upgrade": {
     "title": "You've used your {{limit}} free messages",
-    "subtitle": "Pro gives you unlimited messaging, memory that learns you, and full briefings.",
-    "resetsAt": "Your messages reset at {{time}}. Upgrade for 100 messages per day.",
+    "subtitle": "Pro gives you 100 messages per day, memory that learns you, and full briefings.",
+    "resetsAt": "Your messages reset at {{time}}. Upgrade for up to 200 messages per day.",
     "learnedTitle": "What Kernel learned about you",
     "learnedCta": "Upgrade to keep your memory growing.",
     "features": {
-      "unlimitedMessages": "Unlimited messaging",
+      "unlimitedMessages": "100 messages per day",
       "deepResearch": "Extended thinking (30/mo)",
       "multiAgent": "File analysis (10/mo)",
       "multiStep": "Goals & agentic workflows",
@@ -82,6 +82,8 @@
     },
     "button": "Go Pro \u2014 $29/mo",
     "annualButton": "$290/yr \u2014 save $58",
+    "maxButton": "Go Max \u2014 $49/mo",
+    "maxAnnualButton": "$490/yr \u2014 save $98",
     "buttonLoading": "Opening checkout...",
     "maybeLater": "Maybe later"
   },

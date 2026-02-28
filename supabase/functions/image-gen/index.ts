@@ -16,6 +16,7 @@ interface ImageGenPayload {
   prompt?: string
   image?: string           // base64 of previous image for refinement
   image_mime_type?: string  // e.g. 'image/png'
+  reference_images?: Array<{ data: string; mime_type: string }>  // uploaded files/images as style/content references
   action?: 'check_credits' | 'get_auto_reload' | 'set_auto_reload'
   pack?: string | null
   threshold?: number
@@ -84,8 +85,8 @@ serve(async (req: Request) => {
     const credits = (creditData as { credits: number })?.credits ?? 0
 
     // ── Parse body ──────────────────────────────────────
-    // 6MB limit to accommodate base64 images (4MB image ≈ 5.3MB base64)
-    const { body, error: bodyErr } = await requireJsonBody<ImageGenPayload>(req, 6 * 1024 * 1024)
+    // 20MB limit to accommodate multiple reference images (up to 4 × 4MB base64)
+    const { body, error: bodyErr } = await requireJsonBody<ImageGenPayload>(req, 20 * 1024 * 1024)
     if (bodyErr) return bodyErr(CORS)
 
     // ── Action handlers ──────────────────────────────────
@@ -150,7 +151,7 @@ serve(async (req: Request) => {
       )
     }
 
-    const { prompt, image: inputImage, image_mime_type: inputMimeType } = body
+    const { prompt, image: inputImage, image_mime_type: inputMimeType, reference_images: refImages } = body
 
     // Sanitize prompt length
     if (prompt.length > 2000) {
@@ -168,6 +169,11 @@ serve(async (req: Request) => {
       )
     }
 
+    // Validate reference images (max 4, each max 4MB)
+    const validRefImages = (refImages || [])
+      .filter(r => r.data && r.mime_type && r.data.length <= 4 * 1024 * 1024)
+      .slice(0, 4)
+
     // ── Call Gemini API ─────────────────────────────────
     const geminiKey = Deno.env.get('GEMINI_API_KEY')
     if (!geminiKey) {
@@ -180,12 +186,21 @@ serve(async (req: Request) => {
 
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${geminiKey}`
 
-    // Build multimodal request when input image is provided (refinement flow)
+    // Build multimodal request — refinement image, reference images, then prompt
     const parts: Array<Record<string, unknown>> = []
     if (inputImage && inputMimeType) {
       parts.push({ inlineData: { mimeType: inputMimeType, data: inputImage } })
     }
-    parts.push({ text: prompt })
+    // Add reference images so Gemini uses them for style/content guidance
+    for (const ref of validRefImages) {
+      parts.push({ inlineData: { mimeType: ref.mime_type, data: ref.data } })
+    }
+    // Augment prompt with reference context when images are provided
+    const hasReferences = validRefImages.length > 0
+    const augmentedPrompt = hasReferences
+      ? `${prompt}\n\nUse the provided reference image${validRefImages.length > 1 ? 's' : ''} to inform the style, composition, colors, and content of the generated image.`
+      : prompt
+    parts.push({ text: augmentedPrompt })
 
     const geminiRes = await fetch(geminiUrl, {
       method: 'POST',
@@ -388,6 +403,7 @@ serve(async (req: Request) => {
         mimeType: imageMimeType,
         creditsRemaining,
         ...(inputImage && { isRefinement: true }),
+        ...(validRefImages.length > 0 && { referenceImageCount: validRefImages.length }),
         ...(autoReloaded && { autoReloaded: true, reloadedPack, reloadedCredits }),
       },
       ip: getClientIP(req),

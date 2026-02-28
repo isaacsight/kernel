@@ -46,7 +46,7 @@ import {
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
-import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage } from '../engine/imageGen'
+import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage, type ReferenceImage } from '../engine/imageGen'
 import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
@@ -691,7 +691,37 @@ export function useChatEngine(params: UseChatEngineParams) {
             }
           }
 
-          const result = await generateImage(trimmed, previousImage)
+          // ── Reference images: pull from attachments + conversation history ──
+          const referenceImages: ReferenceImage[] = []
+
+          // 1. Current message attachments (highest priority — user explicitly attached them)
+          for (const file of filesToSend) {
+            if (isImageFile(file) && referenceImages.length < 4) {
+              try {
+                const data = await fileToBase64(file)
+                referenceImages.push({ base64: data, mimeType: getMediaType(file) })
+              } catch { /* skip failed reads */ }
+            }
+          }
+
+          // 2. Recent uploaded images from conversation history
+          if (referenceImages.length < 4) {
+            const currentMsgs = messagesRef.current
+            for (let i = currentMsgs.length - 1; i >= 0 && referenceImages.length < 4; i--) {
+              const msg = currentMsgs[i]
+              if (msg.role === 'user' && msg.imageDataUrls && msg.imageDataUrls.length > 0) {
+                for (const dataUrl of msg.imageDataUrls) {
+                  if (referenceImages.length >= 4) break
+                  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/)
+                  if (match) {
+                    referenceImages.push({ base64: match[2], mimeType: match[1] })
+                  }
+                }
+              }
+            }
+          }
+
+          const result = await generateImage(trimmed, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
           setIsThinking(false)
           isThinkingRef.current = false
           setMessages(prev => prev.map(m => m.id === kernelId

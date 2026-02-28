@@ -27,11 +27,11 @@ const COPY: Record<string, { title: string; description: string }> = {
   },
   monthly_limit: {
     title: 'You\'ve used your free messages',
-    description: 'Pro gives you unlimited messaging, memory that learns you, and full briefings.',
+    description: 'Pro gives you 100 messages per day, memory that learns you, and full briefings.',
   },
   daily_limit: {
-    title: 'You\'ve used your 5 free messages today',
-    description: 'Upgrade for 100 messages per day plus memory, goals, and extended thinking.',
+    title: 'You\'ve used your 10 free messages today',
+    description: 'Upgrade for up to 200 messages per day plus memory, goals, and extended thinking.',
   },
   files: {
     title: 'File analysis is a Pro feature',

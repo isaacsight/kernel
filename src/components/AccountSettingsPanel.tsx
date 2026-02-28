@@ -336,12 +336,14 @@ export default function AccountSettingsPanel({
                 <div className="ka-settings-upgrade-options">
                   <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_annual')}>{t('subscription.upgradeMaxAnnual')}</button>
                 </div>
               ) : (
                 <div className="ka-settings-upgrade-options">
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade" onClick={() => onUpgrade('pro_monthly')}>{t('subscription.upgradeMonthly')}</button>
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-annual" onClick={() => onUpgrade('pro_annual')}>{t('subscription.upgradeAnnual')}</button>
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_annual')}>{t('subscription.upgradeMaxAnnual')}</button>
                 </div>
               )}
             </div>

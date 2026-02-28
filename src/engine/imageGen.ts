@@ -45,9 +45,15 @@ export interface PreviousImage {
   mimeType: string
 }
 
+export interface ReferenceImage {
+  base64: string
+  mimeType: string
+}
+
 export async function generateImage(
   prompt: string,
   previousImage?: PreviousImage,
+  referenceImages?: ReferenceImage[],
 ): Promise<ImageGenResult> {
   const token = await getAccessToken()
   const res = await fetch(`${SUPABASE_URL}/functions/v1/image-gen`, {
@@ -62,6 +68,12 @@ export async function generateImage(
       ...(previousImage && {
         image: previousImage.base64,
         image_mime_type: previousImage.mimeType,
+      }),
+      ...(referenceImages && referenceImages.length > 0 && {
+        reference_images: referenceImages.map(r => ({
+          data: r.base64,
+          mime_type: r.mimeType,
+        })),
       }),
     }),
   })

@@ -195,10 +195,12 @@ h4 {
 /* Site Layout */
 #root {
     min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .site-wrapper {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
 }
@@ -1655,6 +1657,7 @@ h4 {
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     padding: 32px 24px;
     display: flex;
     flex-direction: column;
@@ -2216,7 +2219,8 @@ h4 {
     padding: 16px 20px;
     white-space: pre-wrap;
     word-break: break-word;
-    overflow: hidden;
+    overflow-wrap: anywhere;
+    overflow: clip;
 }
 
 .ka-msg-link {
@@ -2993,6 +2997,10 @@ h4 {
 
     .ka-credit-modal {
         max-width: 100%;
+        max-height: 85vh;
+        max-height: 85dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         padding: 24px 16px;
         border-radius: var(--radius-md);
     }
@@ -6067,6 +6075,7 @@ h4 {
     margin: 0 auto;
     padding: 24px 20px 80px;
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--rubin-ivory);
     color: var(--rubin-slate);
 }
@@ -8018,6 +8027,7 @@ h4 {
     font-size: 11px;
     line-height: 1.3;
     white-space: nowrap;
+    max-width: calc(100vw - 24px);
     padding: 5px 10px;
     border-radius: var(--radius-sm);
     background: var(--rubin-text, #1F1E1D);
@@ -8937,8 +8947,8 @@ h4 {
     }
 
     .ka-attach-btn {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
     }
 
     .ka-file-chips {
@@ -8976,6 +8986,22 @@ h4 {
         opacity: 1;
     }
 
+    /* Always show notification dismiss on mobile (no hover) */
+    .ka-notif-dismiss {
+        opacity: 0.5;
+    }
+
+    /* Always show gen-image buttons on mobile (no hover) */
+    .ka-gen-image-download,
+    .ka-gen-image-refine {
+        opacity: 1;
+    }
+
+    /* Mobile bubble padding */
+    .ka-msg-bubble {
+        padding: 14px 16px;
+    }
+
     /* Hide logo on mobile to save header space */
     .ka-logo {
         display: none;
@@ -8993,7 +9019,7 @@ h4 {
     .ka-pro-badge,
     .ka-max-badge {
         padding: 2px 6px;
-        font-size: 0.55rem;
+        font-size: 0.65rem;
     }
 
     .ka-research-detail {
@@ -9136,15 +9162,15 @@ h4 {
     }
 
     .ka-header-icon-btn {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
     }
 
     .ka-admin-badge,
     .ka-pro-badge,
     .ka-max-badge {
         padding: 2px 5px;
-        font-size: 0.5rem;
+        font-size: 0.6rem;
         gap: 2px;
     }
 
@@ -9194,16 +9220,16 @@ h4 {
     }
 
     .ka-msg--user .ka-msg-bubble {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
 
     .ka-msg-action-btn {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
     }
 
     .ka-agent-badge {
-        font-size: 0.5rem;
+        font-size: 0.6rem;
     }
 
     /* Input bar: compact */
@@ -9219,26 +9245,26 @@ h4 {
     }
 
     .ka-send {
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
     }
 
     .ka-attach-btn,
     .ka-thinking-toggle,
     .ka-explain-toggle {
-        width: 34px;
-        height: 34px;
+        width: 38px;
+        height: 38px;
     }
 
     /* Scroll button: snug above input + tab bar */
     .ka-scroll-btn {
         bottom: 120px;
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
     }
 
     .ka-toast {
-        bottom: 115px;
+        bottom: calc(130px + var(--keyboard-offset, 0px));
         font-size: 0.75rem;
         padding: 8px 14px;
     }
@@ -9254,7 +9280,7 @@ h4 {
     }
 
     .ka-tab-label {
-        font-size: 9px;
+        font-size: 11px;
     }
 
     /* Empty state */
@@ -9276,7 +9302,7 @@ h4 {
 
     .ka-topic {
         padding: 6px 12px;
-        font-size: 0.6rem;
+        font-size: 0.7rem;
     }
 
     /* Briefing card on home */
@@ -9971,6 +9997,7 @@ h4 {
 
 .landing-auth-overlay .ka-gate-card {
     max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
     overflow-y: auto;
 }
 
@@ -11872,7 +11899,7 @@ h4 {
 .ka-kg-overlay {
     position: fixed;
     inset: 0;
-    z-index: 200;
+    z-index: 300;
     background: rgba(0, 0, 0, 0.55);
     /* Desktop: flex-center the sheet child */
     display: flex;
@@ -11882,7 +11909,7 @@ h4 {
 
 .ka-kg-sheet {
     position: relative;
-    z-index: 201;
+    z-index: 301;
     width: 100%;
     max-width: 520px;
     max-height: 80vh;
@@ -11939,10 +11966,10 @@ h4 {
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 32px;
-        height: 32px;
+        top: 8px;
+        right: 8px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: rgba(0, 0, 0, 0.06);
         border: none;
@@ -12467,6 +12494,7 @@ h4 {
         right: 0;
         width: 100vw;
         height: 85vh;
+        height: 85dvh;
         border-right: none;
         border-top: 1px solid var(--rubin-ivory-dark);
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -12483,6 +12511,7 @@ h4 {
     max-width: 1200px;
     margin: 0 auto;
     height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
 }
 
@@ -13393,6 +13422,7 @@ h4 {
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-lg);
+    padding-top: calc(var(--space-sm) + env(safe-area-inset-top, 0px));
     background: #2D6A6A;
     color: #FAF9F6;
     z-index: 10001;
@@ -13522,10 +13552,11 @@ h4 {
     justify-content: center;
     gap: var(--space-md);
     padding: var(--space-sm) var(--space-lg);
+    padding-top: calc(var(--space-sm) + env(safe-area-inset-top, 0px));
     background: var(--rubin-ink);
     color: var(--rubin-ivory);
     font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     letter-spacing: var(--letter-spacing-wide);
     text-transform: uppercase;
     z-index: 10000;
@@ -13543,7 +13574,7 @@ h4 {
     font-size: 0.6rem;
     letter-spacing: var(--letter-spacing-caps);
     text-transform: uppercase;
-    padding: 3px 12px;
+    padding: 8px 16px;
     border-radius: var(--radius-full);
     cursor: pointer;
     transition: border-color var(--duration-quick) var(--ease-out),
@@ -14880,12 +14911,12 @@ h4 {
 @media (max-width: 768px) {
     .ka-notif-dropdown {
         position: fixed;
-        top: 48px;
+        top: calc(env(safe-area-inset-top, 0px) + 56px);
         left: 8px;
         right: 8px;
         width: auto;
         max-height: 60vh;
-        z-index: 200;
+        z-index: 270;
     }
 }
 
@@ -14905,6 +14936,7 @@ h4 {
     .ka-wf-panel,
     .ka-sched-panel {
         padding-bottom: calc(20px + 64px + env(safe-area-inset-bottom, 0px));
+        overscroll-behavior: contain;
     }
 }
 
@@ -14954,8 +14986,8 @@ h4 {
         display: flex;
         align-items: center;
         justify-content: space-around;
-        height: 56px;
-        padding-bottom: env(safe-area-inset-bottom, 0px);
+        min-height: 56px;
+        padding-bottom: env(safe-area-inset-bottom, 8px);
         background: var(--rubin-ivory);
         border-top: 1px solid var(--rubin-ivory-dark);
         flex-shrink: 0;
@@ -15035,7 +15067,7 @@ h4 {
 .ka-more-overlay {
     position: fixed;
     inset: 0;
-    z-index: 250;
+    z-index: 270;
     background: rgba(0, 0, 0, 0.55);
 }
 
@@ -15044,7 +15076,7 @@ h4 {
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 251;
+    z-index: 271;
     background: var(--rubin-ivory);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     padding: 8px 0;
@@ -15460,13 +15492,12 @@ h4 {
     }
 
     .ka-input {
-        height: 40px;
         min-height: 40px;
     }
 
     /* Tab bar */
     .ka-tab-bar {
-        height: 40px;
+        min-height: 40px;
         padding-bottom: env(safe-area-inset-bottom, 8px);
     }
 
@@ -15486,7 +15517,9 @@ h4 {
     .ka-kg-sheet,
     .ka-bottom-sheet {
         height: 100vh !important;
+        height: 100dvh !important;
         max-height: 100vh !important;
+        max-height: 100dvh !important;
         border-radius: 0 !important;
     }
 
@@ -15499,10 +15532,10 @@ h4 {
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 32px;
-        height: 32px;
+        top: 8px;
+        right: 8px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: rgba(0, 0, 0, 0.06);
         border: none;
