@@ -16,7 +16,19 @@ process.stdin.on('end', () => {
         const prompt = event?.prompt || '[unknown]';
         const truncated = prompt.length > 200 ? prompt.slice(0, 200) + '...' : prompt;
 
-        const entry = `[${timestamp}] ${truncated}\n`;
+        // Redact anything that looks like an API key before writing to disk
+        const redacted = truncated
+            .replace(/AIza[A-Za-z0-9_-]{30,}/g, '[REDACTED_KEY]')
+            .replace(/sk-ant-[A-Za-z0-9_-]{20,}/g, '[REDACTED_KEY]')
+            .replace(/sk-proj-[A-Za-z0-9_-]{20,}/g, '[REDACTED_KEY]')
+            .replace(/sk_live_[A-Za-z0-9]+/g, '[REDACTED_KEY]')
+            .replace(/sk_test_[A-Za-z0-9]+/g, '[REDACTED_KEY]')
+            .replace(/whsec_[A-Za-z0-9]+/g, '[REDACTED_KEY]')
+            .replace(/ghp_[A-Za-z0-9]{36,}/g, '[REDACTED_KEY]')
+            .replace(/re_[A-Za-z0-9]{20,}/g, '[REDACTED_KEY]')
+            .replace(/eyJhbGciOi[A-Za-z0-9_-]{50,}/g, '[REDACTED_JWT]');
+
+        const entry = `[${timestamp}] ${redacted}\n`;
         fs.appendFileSync(logFile, entry);
     } catch { }
 

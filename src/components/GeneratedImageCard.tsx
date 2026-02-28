@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { IconDownload, IconClose } from './KernelIcons'
+import { IconDownload, IconClose, IconSparkles } from './KernelIcons'
 import { SPRING } from '../constants/motion'
 
 interface GeneratedImageCardProps {
@@ -9,9 +9,10 @@ interface GeneratedImageCardProps {
   mimeType: string
   prompt: string
   creditsRemaining?: number
+  onRefine?: () => void
 }
 
-export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsRemaining }: GeneratedImageCardProps) {
+export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsRemaining, onRefine }: GeneratedImageCardProps) {
   const [lightbox, setLightbox] = useState(false)
   const src = imageUrl || (image ? `data:${mimeType};base64,${image}` : '')
 
@@ -55,6 +56,11 @@ export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsR
         </div>
         <div className="ka-gen-image-container" onClick={() => setLightbox(true)}>
           <img src={src} alt={prompt || 'AI-generated image'} className="ka-gen-image-img" />
+          {onRefine && (
+            <button className="ka-gen-image-refine" onClick={(e) => { e.stopPropagation(); onRefine() }} aria-label="Refine image">
+              <IconSparkles size={16} />
+            </button>
+          )}
           <button className="ka-gen-image-download" onClick={handleDownload} aria-label="Download image">
             <IconDownload size={16} />
           </button>

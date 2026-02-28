@@ -40,7 +40,15 @@ export class ImageGenLimitError extends Error {
   }
 }
 
-export async function generateImage(prompt: string): Promise<ImageGenResult> {
+export interface PreviousImage {
+  base64: string
+  mimeType: string
+}
+
+export async function generateImage(
+  prompt: string,
+  previousImage?: PreviousImage,
+): Promise<ImageGenResult> {
   const token = await getAccessToken()
   const res = await fetch(`${SUPABASE_URL}/functions/v1/image-gen`, {
     method: 'POST',
@@ -49,7 +57,13 @@ export async function generateImage(prompt: string): Promise<ImageGenResult> {
       Authorization: `Bearer ${token}`,
       apikey: SUPABASE_KEY,
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({
+      prompt,
+      ...(previousImage && {
+        image: previousImage.base64,
+        image_mime_type: previousImage.mimeType,
+      }),
+    }),
   })
 
   if (res.status === 403) {

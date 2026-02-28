@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconSparkles, IconFileCode } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconSparkles, IconFileCode, IconImage } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
@@ -41,6 +41,7 @@ export type MoreAction =
   | 'insights'
   | 'mirror'
   | 'project'
+  | 'image-gallery'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
@@ -63,6 +64,7 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
   { id: 'mirror', labelKey: 'menu.mirror', icon: IconSparkles },
   { id: 'project', labelKey: 'menu.projectFiles', icon: IconFileCode },
+  { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [

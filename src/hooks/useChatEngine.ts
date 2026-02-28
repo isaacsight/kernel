@@ -46,7 +46,7 @@ import {
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
-import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult } from '../engine/imageGen'
+import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage } from '../engine/imageGen'
 import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
@@ -442,11 +442,11 @@ export function useChatEngine(params: UseChatEngineParams) {
     } catch (err) {
       console.error('[engine] classifyIntent failed:', err)
       // Fall back to kernel agent on classifier failure
-      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
+      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
     }
     // Crisis override — force kernel agent for high severity
     if (crisisActive && crisisSeverity === 'high') {
-      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false }
+      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
     }
     const specialist = getSpecialist(classification.agentId)
     setThinkingAgent(specialist.name)
@@ -657,7 +657,41 @@ export function useChatEngine(params: UseChatEngineParams) {
       if (classification.needsImageGen) {
         setThinkingAgent('Kernel')
         try {
-          const result = await generateImage(trimmed)
+          // ── Refinement: find previous generated image ──
+          let previousImage: PreviousImage | undefined
+          if (classification.needsImageRefinement) {
+            const currentMsgs = messagesRef.current
+            for (let i = currentMsgs.length - 1; i >= 0; i--) {
+              const msg = currentMsgs[i]
+              if (msg.generatedImages && msg.generatedImages.length > 0) {
+                const lastImg = msg.generatedImages[msg.generatedImages.length - 1]
+                // Use base64 if still in memory
+                if (lastImg.image) {
+                  previousImage = { base64: lastImg.image, mimeType: lastImg.mimeType }
+                } else if (lastImg.image_url) {
+                  // Fetch from storage URL and convert to base64
+                  try {
+                    const imgRes = await fetch(lastImg.image_url)
+                    const blob = await imgRes.blob()
+                    const base64 = await new Promise<string>((resolve) => {
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        const dataUrl = reader.result as string
+                        resolve(dataUrl.split(',')[1] || '')
+                      }
+                      reader.readAsDataURL(blob)
+                    })
+                    previousImage = { base64, mimeType: lastImg.mimeType }
+                  } catch (fetchErr) {
+                    console.warn('[ImageGen] Failed to fetch previous image for refinement:', fetchErr)
+                  }
+                }
+                break
+              }
+            }
+          }
+
+          const result = await generateImage(trimmed, previousImage)
           setIsThinking(false)
           isThinkingRef.current = false
           setMessages(prev => prev.map(m => m.id === kernelId
@@ -709,7 +743,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           }
           // Other errors — fall through to normal routing as fallback
           console.warn('[ImageGen] Failed, falling through to normal response:', imgErr)
-          classification = { ...classification, needsImageGen: false }
+          classification = { ...classification, needsImageGen: false, needsImageRefinement: false }
         }
       }
 

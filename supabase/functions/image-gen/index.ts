@@ -14,6 +14,8 @@ import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface ImageGenPayload {
   prompt?: string
+  image?: string           // base64 of previous image for refinement
+  image_mime_type?: string  // e.g. 'image/png'
   action?: 'check_credits' | 'get_auto_reload' | 'set_auto_reload'
   pack?: string | null
   threshold?: number
@@ -82,7 +84,8 @@ serve(async (req: Request) => {
     const credits = (creditData as { credits: number })?.credits ?? 0
 
     // ── Parse body ──────────────────────────────────────
-    const { body, error: bodyErr } = await requireJsonBody<ImageGenPayload>(req, 16 * 1024)
+    // 6MB limit to accommodate base64 images (4MB image ≈ 5.3MB base64)
+    const { body, error: bodyErr } = await requireJsonBody<ImageGenPayload>(req, 6 * 1024 * 1024)
     if (bodyErr) return bodyErr(CORS)
 
     // ── Action handlers ──────────────────────────────────
@@ -147,12 +150,20 @@ serve(async (req: Request) => {
       )
     }
 
-    const { prompt } = body
+    const { prompt, image: inputImage, image_mime_type: inputMimeType } = body
 
     // Sanitize prompt length
     if (prompt.length > 2000) {
       return new Response(
         JSON.stringify({ error: 'Prompt too long (max 2000 characters)' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS } }
+      )
+    }
+
+    // Validate input image size (4MB base64 limit to prevent OOM)
+    if (inputImage && inputImage.length > 4 * 1024 * 1024) {
+      return new Response(
+        JSON.stringify({ error: 'Input image too large (max 4MB)' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...CORS } }
       )
     }
@@ -169,11 +180,18 @@ serve(async (req: Request) => {
 
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${geminiKey}`
 
+    // Build multimodal request when input image is provided (refinement flow)
+    const parts: Array<Record<string, unknown>> = []
+    if (inputImage && inputMimeType) {
+      parts.push({ inlineData: { mimeType: inputMimeType, data: inputImage } })
+    }
+    parts.push({ text: prompt })
+
     const geminiRes = await fetch(geminiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ parts }],
         generationConfig: { responseModalities: ['TEXT', 'IMAGE'] },
       }),
     })
@@ -369,6 +387,7 @@ serve(async (req: Request) => {
         promptLength: prompt.length,
         mimeType: imageMimeType,
         creditsRemaining,
+        ...(inputImage && { isRefinement: true }),
         ...(autoReloaded && { autoReloaded: true, reloadedPack, reloadedCredits }),
       },
       ip: getClientIP(req),

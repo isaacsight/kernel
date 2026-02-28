@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart, IconGraduationCap,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles,
+  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -66,6 +66,7 @@ const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m =
 const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m => ({ default: m.ProjectPanel })))
 const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
 const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
+const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPanel').then(m => ({ default: m.ImageGalleryPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -578,7 +579,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel || panels.showImageGallery
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -841,6 +842,24 @@ function EngineChat() {
       </AnimatePresence>
 
       <AnimatePresence>
+        {panels.showImageGallery && user && (
+          <BottomSheet onClose={() => panels.closePanel('image-gallery')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <ImageGalleryPanel
+                userId={user.id}
+                onClose={() => panels.closePanel('image-gallery')}
+                onUseAsStartingPoint={(_imageUrl, _mimeType, prompt) => {
+                  chatEngine.setInput(`Refine this image: ${prompt ? prompt + ' — ' : ''}`)
+                  chatEngine.inputRef.current?.focus()
+                  panels.closePanel('image-gallery')
+                }}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {panels.showAccountSettings && user && (
           <BottomSheet onClose={() => panels.closePanel('account-settings')}>
             <Suspense fallback={<PanelShimmer />}>
@@ -958,6 +977,9 @@ function EngineChat() {
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('project'); panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <IconFileText size={16} /> {t('menu.projectFiles')}
                   {featureDiscovery.isNew('project') && <span className="ka-feature-dot" />}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowImageGallery(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconImage size={16} /> {t('menu.imageGallery')}
                 </button>
                 <div className="ka-header-menu-divider ka-menu-tabbed" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
@@ -1256,7 +1278,7 @@ function EngineChat() {
                   ) : msg.generatedImages && msg.generatedImages.length > 0 ? (
                     <Suspense fallback={null}>
                       {msg.generatedImages.map((img, j) => (
-                        <GeneratedImageCard key={j} image={img.image || undefined} imageUrl={img.image_url} mimeType={img.mimeType} prompt={(msg.content || '').replace(/^\[Generated image:\s*/, '').replace(/\]$/, '') || ''} creditsRemaining={img.credits_remaining > 0 ? img.credits_remaining : undefined} />
+                        <GeneratedImageCard key={j} image={img.image || undefined} imageUrl={img.image_url} mimeType={img.mimeType} prompt={(msg.content || '').replace(/^\[Generated image:\s*/, '').replace(/\]$/, '') || ''} creditsRemaining={img.credits_remaining > 0 ? img.credits_remaining : undefined} onRefine={() => { chatEngine.setInput('Refine this image: '); chatEngine.inputRef.current?.focus() }} />
                       ))}
                     </Suspense>
                   ) : msg.content || msg.thinking ? (
@@ -1652,9 +1674,9 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         drag="y"
         dragControls={dragControls}
         dragListener={false}
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.2}
-        onDragEnd={(_, info) => { if (info.offset.y > 100 || info.velocity.y > 300) onClose() }}
+        dragConstraints={{ top: 0 }}
+        dragElastic={0.1}
+        onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 300) onClose() }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="ka-kg-drag-handle" onPointerDown={(e) => dragControls.start(e)} />

@@ -400,5 +400,5 @@ Built and tested 6 Pro features. Found and fixed 3 critical bugs:
 
 ## Test Accounts
 
-- **Free**: `kernel-test-bot@antigravitygroup.co` / `KernelTest2026!`
-- **Pro**: `kernel-pro-test@antigravitygroup.co` / `KernelProTest2026`
+- **Free**: `kernel-test-bot@antigravitygroup.co` — password in .env
+- **Pro**: `kernel-pro-test@antigravitygroup.co` — password in .env

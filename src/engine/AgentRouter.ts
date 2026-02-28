@@ -9,6 +9,7 @@ export interface ClassificationResult {
   isMultiStep: boolean
   needsSwarm: boolean
   needsImageGen: boolean
+  needsImageRefinement: boolean
 }
 
 export interface ModelRoutingContext {
@@ -56,8 +57,9 @@ Also determine:
 - isMultiStep: true if the request requires 3+ distinct operations that build on each other. Examples: "research X, then analyze Y, then write Z", "build a complete...", "create a plan and execute it"
 - needsSwarm: true if the question would benefit from multiple specialist perspectives working together. Examples: "what should I do about...", "evaluate this idea", "help me think through...", complex decisions, multi-domain questions, strategy + analysis + creativity combined. NOT for simple factual questions or single-domain tasks.
 - needsImageGen: true if the user is explicitly asking to CREATE/GENERATE/DRAW/MAKE an image, picture, illustration, photo, artwork, or visual. Examples: "generate an image of a sunset", "draw me a cat", "create a picture of...", "make me a logo". NOT for analyzing existing images, not for describing images, not for editing photos, not for image-related questions.
+- needsImageRefinement: true if the conversation has a recently generated image AND the user is asking to MODIFY/REFINE/ADJUST it. Examples: "make it darker", "add prices", "change to landscape", "more vibrant", "less busy", "refine this", "try again but with...", "remove the background". When true, needsImageGen should also be true. NOT for unrelated image generation requests.
 Respond with ONLY valid JSON, no other text:
-{"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsImageGen": false}`
+{"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsImageGen": false, "needsImageRefinement": false}`
 
 export async function classifyIntent(
   message: string,
@@ -85,12 +87,12 @@ export async function classifyIntent(
     // Validate the result
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator']
     if (!validAgents.includes(result.agentId)) {
-      return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
+      return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
     }
 
     // Fall back to kernel if confidence is too low
     if (typeof result.confidence !== 'number' || result.confidence < 0.3) {
-      return { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
+      return { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
     }
 
     return {
@@ -101,10 +103,11 @@ export async function classifyIntent(
       isMultiStep: !!result.isMultiStep,
       needsSwarm: !!result.needsSwarm,
       needsImageGen: !!result.needsImageGen,
+      needsImageRefinement: !!result.needsImageRefinement,
     }
   } catch {
     // On any failure, fall back to kernel
-    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false }
+    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
   }
 }
 
