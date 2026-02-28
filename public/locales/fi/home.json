@@ -25,6 +25,7 @@
   },
   "admin": "Ylläpito",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "Päivän katsaus",
     "read": "Lue",

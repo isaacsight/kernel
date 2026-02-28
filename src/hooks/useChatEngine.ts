@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, FairUseLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -956,6 +956,12 @@ export function useChatEngine(params: UseChatEngineParams) {
       } else if (err instanceof MonthlyLimitError) {
         setShowUpgradeWall(true)
         setMessages(prev => prev.filter(m => m.id !== kernelId))
+      } else if (err instanceof FairUseLimitError) {
+        const resetDate = err.resetsAt ? new Date(err.resetsAt).toLocaleDateString([], { month: 'long', day: 'numeric' }) : 'the 1st of next month'
+        setMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: `*You've reached your fair use limit for this month. Your messages reset on ${resetDate}. We'll see you then.*\n\n*If you think this is an error, contact support at hi@kernel.chat*` }
+          : m
+        ))
       } else if (err instanceof ProLimitError) {
         const resetTime = err.resetsAt ? new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'soon'
         setMessages(prev => prev.map(m => m.id === kernelId

@@ -130,7 +130,7 @@ export function LoginGate() {
           </button>
         </div>
 
-        <div className="landing-pricing-cards">
+        <div className="landing-pricing-cards landing-pricing-cards--3col">
           <div className="landing-plan">
             <h3>{t('login.freePlan')}</h3>
             <p className="landing-plan-price">{t('login.freePrice')}</p>
@@ -157,6 +157,22 @@ export function LoginGate() {
             </ul>
             <button className="landing-plan-btn" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
               {t('login.startTrial')}
+            </button>
+          </div>
+          <div className="landing-plan landing-plan-max">
+            <h3>{t('login.maxPlan')}</h3>
+            <p className="landing-plan-price">
+              {isAnnual ? t('login.maxAnnualPrice') : t('login.maxPrice')}
+              <span>{isAnnual ? t('login.maxAnnualPeriod') : t('login.maxPricePeriod')}</span>
+            </p>
+            <ul>
+              <li>{t('login.maxFeature1')}</li>
+              <li>{t('login.maxFeature2')}</li>
+              <li>{t('login.maxFeature3')}</li>
+              <li>{t('login.maxFeature4')}</li>
+            </ul>
+            <button className="landing-plan-btn landing-plan-btn--max" onClick={() => { setShowAuth(true); setIsSignUp(true) }}>
+              {t('login.goMax')}
             </button>
           </div>
         </div>

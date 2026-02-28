@@ -1,7 +1,7 @@
 // Plan limits — single source of truth for the 3-tier subscription system.
 // Frontend mirror: src/config/planLimits.ts (must stay in sync)
 
-export type PlanId = 'free' | 'pro_monthly' | 'pro_annual'
+export type PlanId = 'free' | 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual'
 
 export interface PlanLimits {
   messagesPerMonth: number
@@ -35,6 +35,18 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     briefingHistoryDays: null, etPerMonth: 45,
     filesPerMonth: 10, historyDays: null,
   },
+  max_monthly: {
+    messagesPerMonth: 6000, messagesPerDay: 200, maxTokens: 8192,
+    memory: true, goals: true, briefings: true,
+    briefingHistoryDays: null, etPerMonth: 100,
+    filesPerMonth: 50, historyDays: null,
+  },
+  max_annual: {
+    messagesPerMonth: 6000, messagesPerDay: 200, maxTokens: 8192,
+    memory: true, goals: true, briefings: true,
+    briefingHistoryDays: null, etPerMonth: 100,
+    filesPerMonth: 50, historyDays: null,
+  },
 }
 
 /** Statuses that grant Pro access (active subscription or trial period). */
@@ -42,5 +54,7 @@ export const ACTIVE_STATUSES = ['active', 'trialing']
 
 export function resolvePlanId(sub: { status: string; plan?: string } | null): PlanId {
   if (!sub || !ACTIVE_STATUSES.includes(sub.status)) return 'free'
+  if (sub.plan === 'max_annual') return 'max_annual'
+  if (sub.plan === 'max_monthly') return 'max_monthly'
   return sub.plan === 'pro_annual' ? 'pro_annual' : 'pro_monthly'
 }

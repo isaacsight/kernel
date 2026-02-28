@@ -214,6 +214,22 @@ serve(async (req: Request) => {
       console.warn('Cleanup RPCs failed (non-blocking):', cleanupErr)
     }
 
+    // ── Max tier: reset usage flags on 1st of each month (safety net) ──
+    try {
+      const now = new Date()
+      if (now.getUTCDate() === 1 && now.getUTCHours() === 0 && now.getUTCMinutes() < 10) {
+        // Clear usage_flag for all users (runs only in first 10 min of month)
+        const { error: flagErr } = await supabase
+          .from('user_memory')
+          .update({ usage_flag: null })
+          .not('usage_flag', 'is', null)
+        if (flagErr) console.warn('[max-tier] Flag reset error:', flagErr.message)
+        else console.log('[max-tier] Monthly usage flags cleared')
+      }
+    } catch (flagResetErr) {
+      console.warn('Max tier flag reset failed (non-blocking):', flagResetErr)
+    }
+
     // ── Provider reliability: recompute health scores ──
     try {
       await supabase.rpc('compute_provider_health')

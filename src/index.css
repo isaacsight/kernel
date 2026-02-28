@@ -8899,7 +8899,8 @@ h4 {
     }
 
     .ka-admin-badge,
-    .ka-pro-badge {
+    .ka-pro-badge,
+    .ka-max-badge {
         padding: 2px 6px;
         font-size: 0.55rem;
     }
@@ -9049,14 +9050,16 @@ h4 {
     }
 
     .ka-admin-badge,
-    .ka-pro-badge {
+    .ka-pro-badge,
+    .ka-max-badge {
         padding: 2px 5px;
         font-size: 0.5rem;
         gap: 2px;
     }
 
     .ka-admin-badge svg,
-    .ka-pro-badge svg {
+    .ka-pro-badge svg,
+    .ka-max-badge svg {
         width: 10px;
         height: 10px;
     }
@@ -9501,12 +9504,25 @@ h4 {
     animation: landing-plan-glow 14s ease-in-out infinite;
 }
 
+.landing-plan-max {
+    border-color: #B8860B;
+    border-width: 2px;
+    background: var(--rubin-ivory-med);
+    animation: landing-plan-glow-max 10s ease-in-out infinite;
+}
+
 @keyframes landing-plan-glow {
     0%, 100% { border-color: var(--agent-kernel); box-shadow: 0 0 20px rgba(107, 91, 149, 0.15); }
     20%      { border-color: var(--agent-researcher); box-shadow: 0 0 20px rgba(91, 139, 160, 0.15); }
     40%      { border-color: var(--agent-coder); box-shadow: 0 0 20px rgba(107, 142, 107, 0.15); }
     60%      { border-color: var(--agent-writer); box-shadow: 0 0 20px rgba(184, 135, 92, 0.15); }
     80%      { border-color: var(--agent-analyst); box-shadow: 0 0 20px rgba(160, 118, 140, 0.15); }
+}
+
+@keyframes landing-plan-glow-max {
+    0%, 100% { border-color: #B8860B; box-shadow: 0 0 24px rgba(184, 134, 11, 0.2); }
+    33%      { border-color: #D4A017; box-shadow: 0 0 24px rgba(212, 160, 23, 0.2); }
+    66%      { border-color: #8B6914; box-shadow: 0 0 24px rgba(139, 105, 20, 0.2); }
 }
 
 .landing-plan-btn {
@@ -9531,6 +9547,11 @@ h4 {
     background: transparent;
     color: var(--rubin-slate);
     border: 1px solid var(--rubin-ivory-dark);
+}
+
+.landing-plan-btn--max {
+    background: linear-gradient(135deg, #B8860B, #8B6914);
+    color: #fff;
 }
 
 /* Pricing toggle (monthly/annual) */
@@ -9585,6 +9606,10 @@ h4 {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-xl);
     width: 100%;
+}
+
+.landing-pricing-cards--3col {
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 /* ─── Upgrade Prompt (reusable) ─────────────────────────── */
@@ -9645,6 +9670,11 @@ h4 {
 .ka-upgrade-prompt-btn--primary {
     background: var(--rubin-slate);
     color: var(--rubin-ivory);
+}
+
+.ka-upgrade-prompt-btn--max {
+    background: linear-gradient(135deg, #B8860B, #8B6914);
+    color: #fff;
 }
 
 .ka-upgrade-prompt-btn--secondary {
@@ -9895,7 +9925,8 @@ h4 {
         gap: var(--space-xl);
     }
 
-    .landing-pricing-cards {
+    .landing-pricing-cards,
+    .landing-pricing-cards--3col {
         grid-template-columns: 1fr;
     }
 }
@@ -11443,6 +11474,7 @@ h4 {
 }
 
 .ka-pro-badge,
+.ka-max-badge,
 .ka-admin-badge {
     display: inline-flex;
     align-items: center;
@@ -11460,6 +11492,10 @@ h4 {
 
 .ka-pro-badge {
     background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.ka-max-badge {
+    background: linear-gradient(135deg, #B8860B, #8B6914);
 }
 
 .ka-admin-badge {
@@ -13748,6 +13784,11 @@ h4 {
     border-width: 2px;
 }
 
+[data-theme="dark"] .landing-plan-max {
+    background: #1C1A18;
+    border-width: 2px;
+}
+
 [data-theme="dark"] .landing-cta,
 [data-theme="dark"] .landing-plan-btn {
     background: var(--dark-text);
@@ -13778,6 +13819,10 @@ h4 {
 [data-theme="dark"] .ka-upgrade-prompt-btn--primary {
     background: var(--dark-text);
     color: var(--dark-bg);
+}
+
+[data-theme="dark"] .ka-upgrade-prompt-btn--max {
+    background: linear-gradient(135deg, #D4A017, #B8860B);
 }
 
 [data-theme="dark"] .ka-upgrade-prompt-btn--secondary {
@@ -15609,6 +15654,10 @@ h4 {
     background: rgba(107,91,149,0.12);
     color: var(--rubin-primary);
 }
+.ka-settings-tier-badge--max {
+    background: rgba(184,134,11,0.12);
+    color: #B8860B;
+}
 .ka-settings-tier-badge--admin {
     background: rgba(16,185,129,0.12);
     color: #10B981;
@@ -15761,6 +15810,14 @@ h4 {
 .ka-settings-link-btn--upgrade-annual:hover {
     background: var(--rubin-primary);
     color: #fff;
+}
+.ka-settings-link-btn--upgrade-max {
+    background: linear-gradient(135deg, #B8860B, #8B6914);
+    color: #fff;
+    border-color: #B8860B;
+}
+.ka-settings-link-btn--upgrade-max:hover {
+    background: linear-gradient(135deg, #D4A017, #B8860B);
 }
 
 .ka-settings-danger-btn {

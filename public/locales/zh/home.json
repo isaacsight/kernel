@@ -25,6 +25,7 @@
   },
   "admin": "Admin",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "今日简报",
     "read": "阅读",

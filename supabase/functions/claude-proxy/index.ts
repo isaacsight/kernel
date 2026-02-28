@@ -1151,6 +1151,7 @@ serve(async (req: Request) => {
     let planId: PlanId = 'free'
     let isPaidUser = false
     let isFreeUser = false
+    let isMaxUser = false
     if (!isServiceCall && !isAdmin) {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
@@ -1165,6 +1166,7 @@ serve(async (req: Request) => {
       planId = resolvePlanId(sub)
       isPaidUser = planId !== 'free'
       isFreeUser = planId === 'free'
+      isMaxUser = planId.startsWith('max_')
       const limits = PLAN_LIMITS[planId]
 
       // ── Daily message limit (all tiers) ───────────────────
@@ -1219,8 +1221,25 @@ serve(async (req: Request) => {
         }
       }
 
-      // ── Monthly message limit (all tiers) ─────────────────
-      {
+      // ── Monthly message limit ─────────────────────────────
+      if (isMaxUser) {
+        // Max tier: calendar-month fair use enforcement (invisible to user until 6000)
+        const { data: fairUse } = await svc.rpc('check_max_fair_use', { p_user_id: user.id })
+        if (fairUse?.blocked) {
+          return new Response(
+            JSON.stringify({
+              error: 'fair_use_limit',
+              message: "You've reached your fair use limit for this month.",
+              resets_at: fairUse.resets_at,
+            }),
+            { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
+        // Internal monitoring: flag at 3000 (no user-facing effect)
+        if (fairUse && fairUse.monthly_count >= 3000) {
+          svc.rpc('set_usage_flag', { p_user_id: user.id, p_flag: 'high' }).catch(() => {})
+        }
+      } else {
         const { data: monthCheck } = await svc.rpc('check_monthly_message_limit', {
           p_user_id: user.id,
         })
@@ -1278,7 +1297,7 @@ serve(async (req: Request) => {
 
     // ── Rate limiting (Postgres-backed fixed window) ────────
     if (!isServiceCall) {
-      const tier: Tier = isAdmin ? 'pro' : isPaidUser ? 'paid' : 'free'
+      const tier: Tier = isMaxUser ? 'max' : isAdmin ? 'pro' : isPaidUser ? 'paid' : 'free'
       const svcRL = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
@@ -1445,8 +1464,12 @@ serve(async (req: Request) => {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
         // Daily counter
         await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
-        // Monthly counter
-        await svcCharge.rpc('increment_monthly_message_count', { p_user_id: user.id })
+        // Monthly counter (Max uses calendar-month RPC, others use rolling window)
+        if (isMaxUser) {
+          await svcCharge.rpc('increment_max_message_count', { p_user_id: user.id })
+        } else {
+          await svcCharge.rpc('increment_monthly_message_count', { p_user_id: user.id })
+        }
 
         // Monthly file counter
         let fileCount = 0

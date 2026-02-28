@@ -25,6 +25,7 @@
   },
   "admin": "Yönetici",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "Bugünün brifingi",
     "read": "Oku",

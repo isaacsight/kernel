@@ -25,6 +25,7 @@
   },
   "admin": "관리자",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "오늘의 브리핑",
     "read": "읽기",

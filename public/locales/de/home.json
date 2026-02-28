@@ -25,6 +25,7 @@
   },
   "admin": "Admin",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "Heutiges Briefing",
     "read": "Lesen",

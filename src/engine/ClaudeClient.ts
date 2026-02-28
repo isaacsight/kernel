@@ -81,6 +81,15 @@ export class MonthlyLimitError extends Error {
   }
 }
 
+export class FairUseLimitError extends Error {
+  resetsAt: string | null
+  constructor(resetsAt?: string) {
+    super('Fair use limit reached for this month')
+    this.name = 'FairUseLimitError'
+    this.resetsAt = resetsAt ?? null
+  }
+}
+
 export class FileLimitError extends Error {
   limit: number
   used: number
@@ -166,12 +175,15 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
         if (body.error === 'monthly_limit_reached') {
           throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
         }
+        if (body.error === 'fair_use_limit') {
+          throw new FairUseLimitError(body.resets_at)
+        }
         if (body.error === 'monthly_file_limit_reached') {
           throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
         }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError || e instanceof FairUseLimitError) throw e
       }
     }
     // Check if the error included an auto-refund
@@ -259,12 +271,15 @@ export async function claudeStream(
         if (body.error === 'monthly_limit_reached') {
           throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
         }
+        if (body.error === 'fair_use_limit') {
+          throw new FairUseLimitError(body.resets_at)
+        }
         if (body.error === 'monthly_file_limit_reached') {
           throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
         }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError || e instanceof FairUseLimitError) throw e
       }
     }
     // Check for auto-refund
@@ -382,12 +397,15 @@ export async function claudeStreamChat(
         if (body.error === 'monthly_limit_reached') {
           throw new MonthlyLimitError(body.limit ?? 20, body.used ?? 0, body.resets_at, body.plan)
         }
+        if (body.error === 'fair_use_limit') {
+          throw new FairUseLimitError(body.resets_at)
+        }
         if (body.error === 'monthly_file_limit_reached') {
           throw new FileLimitError(body.limit ?? 10, body.used ?? 0, body.resets_at)
         }
         throw new RateLimitError(body.error || 'Rate limit reached', body.limit || 0, body.resets_at || '')
       } catch (e) {
-        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError) throw e
+        if (e instanceof ProLimitError || e instanceof RateLimitError || e instanceof MonthlyLimitError || e instanceof FileLimitError || e instanceof FairUseLimitError) throw e
       }
     }
     // Check for auto-refund in error response

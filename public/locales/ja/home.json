@@ -25,6 +25,7 @@
   },
   "admin": "管理者",
   "pro": "Pro",
+  "max": "Max",
   "briefing": {
     "todaysBriefing": "今日のブリーフィング",
     "read": "読む",

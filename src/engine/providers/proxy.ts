@@ -36,6 +36,15 @@ export class FreeLimitError extends Error {
     }
 }
 
+export class FairUseLimitError extends Error {
+    resetsAt: string | null
+    constructor(resetsAt?: string) {
+        super('Fair use limit reached for this month')
+        this.name = 'FairUseLimitError'
+        this.resetsAt = resetsAt ?? null
+    }
+}
+
 // ─── Handle error responses from proxy ──────────────────────
 
 function handleErrorResponse(status: number, body: string): never {
@@ -52,9 +61,12 @@ function handleErrorResponse(status: number, body: string): never {
     if (status === 429) {
         try {
             const parsed = JSON.parse(body)
+            if (parsed.error === 'fair_use_limit') {
+                throw new FairUseLimitError(parsed.resets_at)
+            }
             throw new RateLimitError(parsed.error || 'Rate limit reached', parsed.limit || 0, parsed.resets_at || '')
         } catch (e) {
-            if (e instanceof RateLimitError) throw e
+            if (e instanceof RateLimitError || e instanceof FairUseLimitError) throw e
         }
     }
     throw new Error(`Proxy error (${status}): ${body}`)

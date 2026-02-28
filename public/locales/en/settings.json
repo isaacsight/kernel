@@ -66,10 +66,12 @@
     "heading": "Subscription",
     "free": "Free plan",
     "pro": "Pro plan",
+    "max": "Max plan",
     "admin": "Admin",
     "upgrade": "Upgrade to Pro",
     "upgradeMonthly": "Pro — $29/mo",
     "upgradeAnnual": "Pro — $290/yr",
+    "upgradeMax": "Max — $49/mo",
     "manage": "Manage subscription"
   },
   "exportData": {

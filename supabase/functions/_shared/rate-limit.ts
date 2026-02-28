@@ -8,12 +8,13 @@
 
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-export type Tier = 'free' | 'paid' | 'pro'
+export type Tier = 'free' | 'paid' | 'pro' | 'max'
 
 export interface RateLimitConfig {
   free: number
   paid: number
   pro: number
+  max?: number
   windowSeconds?: number
 }
 
@@ -26,24 +27,24 @@ export interface RateLimitResult {
 
 /** Per-endpoint rate limit definitions (requests per window) */
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  'claude-proxy':       { free: 10, paid: 60,  pro: 120, windowSeconds: 60 },
-  'web-search':         { free: 10, paid: 10,  pro: 20,  windowSeconds: 60 },
-  'url-fetch':          { free: 20, paid: 20,  pro: 40,  windowSeconds: 60 },
-  'evaluate-chat':      { free: 10, paid: 10,  pro: 20,  windowSeconds: 60 },
-  'extract-insights':   { free: 5,  paid: 5,   pro: 10,  windowSeconds: 60 },
-  'import-conversation':{ free: 5,  paid: 5,   pro: 10,  windowSeconds: 60 },
-  'transcribe':         { free: 3,  paid: 3,   pro: 6,   windowSeconds: 60 },
-  'mcp-proxy':          { free: 20, paid: 20,  pro: 40,  windowSeconds: 60 },
-  'shared-conversation':{ free: 30, paid: 30,  pro: 30,  windowSeconds: 60 },
-  'reset-user-data':    { free: 3,  paid: 3,   pro: 5,   windowSeconds: 3600 },
-  'export-user-data':   { free: 1,  paid: 1,   pro: 1,   windowSeconds: 86400 },
-  'identity-recovery':  { free: 10, paid: 10,  pro: 20,  windowSeconds: 300 },
-  'tts':                { free: 0,  paid: 0,   pro: 10,  windowSeconds: 60 },
-  'delete-account':     { free: 3,  paid: 3,   pro: 3,   windowSeconds: 86400 },
-  'create-checkout':    { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
-  'create-portal':      { free: 5,  paid: 5,   pro: 10,  windowSeconds: 3600 },
-  'image-gen':          { free: 10, paid: 10,  pro: 10,  windowSeconds: 60 },
-  'create-image-checkout': { free: 5, paid: 5, pro: 5,   windowSeconds: 3600 },
+  'claude-proxy':       { free: 10, paid: 60,  pro: 120, max: 180, windowSeconds: 60 },
+  'web-search':         { free: 10, paid: 10,  pro: 20,  max: 30,  windowSeconds: 60 },
+  'url-fetch':          { free: 20, paid: 20,  pro: 40,  max: 60,  windowSeconds: 60 },
+  'evaluate-chat':      { free: 10, paid: 10,  pro: 20,  max: 30,  windowSeconds: 60 },
+  'extract-insights':   { free: 5,  paid: 5,   pro: 10,  max: 15,  windowSeconds: 60 },
+  'import-conversation':{ free: 5,  paid: 5,   pro: 10,  max: 15,  windowSeconds: 60 },
+  'transcribe':         { free: 3,  paid: 3,   pro: 6,   max: 10,  windowSeconds: 60 },
+  'mcp-proxy':          { free: 20, paid: 20,  pro: 40,  max: 60,  windowSeconds: 60 },
+  'shared-conversation':{ free: 30, paid: 30,  pro: 30,  max: 30,  windowSeconds: 60 },
+  'reset-user-data':    { free: 3,  paid: 3,   pro: 5,   max: 5,   windowSeconds: 3600 },
+  'export-user-data':   { free: 1,  paid: 1,   pro: 1,   max: 1,   windowSeconds: 86400 },
+  'identity-recovery':  { free: 10, paid: 10,  pro: 20,  max: 20,  windowSeconds: 300 },
+  'tts':                { free: 0,  paid: 0,   pro: 10,  max: 15,  windowSeconds: 60 },
+  'delete-account':     { free: 3,  paid: 3,   pro: 3,   max: 3,   windowSeconds: 86400 },
+  'create-checkout':    { free: 5,  paid: 5,   pro: 10,  max: 10,  windowSeconds: 3600 },
+  'create-portal':      { free: 5,  paid: 5,   pro: 10,  max: 10,  windowSeconds: 3600 },
+  'image-gen':          { free: 10, paid: 10,  pro: 10,  max: 15,  windowSeconds: 60 },
+  'create-image-checkout': { free: 5, paid: 5, pro: 5,   max: 5,   windowSeconds: 3600 },
 }
 
 /**
@@ -58,7 +59,7 @@ export async function checkRateLimit(
   const config = RATE_LIMITS[endpoint]
   if (!config) return { allowed: true, current_count: 0, limit: 999, retry_after_seconds: 0 }
 
-  const limit = config[tier]
+  const limit = (tier === 'max' ? config.max ?? config.pro : config[tier])
   const windowSeconds = config.windowSeconds ?? 60
 
   try {

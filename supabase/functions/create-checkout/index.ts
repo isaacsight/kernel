@@ -14,7 +14,7 @@ import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface CheckoutPayload {
   mode?: 'subscription' | 'payment'
-  plan?: 'pro_monthly' | 'pro_annual'
+  plan?: 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual'
   price_id?: string
   success_url: string
   cancel_url: string
@@ -76,6 +76,8 @@ serve(async (req: Request) => {
     const PRICE_MAP: Record<string, string | undefined> = {
       pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
       pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
+      max_monthly: Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID'),
+      max_annual: Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID'),
     }
     const selectedPlan = plan || 'pro_monthly'
     const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
@@ -100,13 +102,17 @@ serve(async (req: Request) => {
       params.set('line_items[0][price]', resolvedPriceId)
       params.set('line_items[0][quantity]', '1')
     } else {
-      // Fallback: create inline $29/mo subscription
+      // Fallback: create inline subscription
+      const isMax = selectedPlan.startsWith('max_')
+      const isAnnual = selectedPlan.endsWith('_annual')
       params.set('line_items[0][price_data][currency]', 'usd')
-      params.set('line_items[0][price_data][unit_amount]', '2900')
-      params.set('line_items[0][price_data][product_data][name]', 'Kernel Pro')
-      params.set('line_items[0][price_data][product_data][description]', 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
+      params.set('line_items[0][price_data][unit_amount]', isMax ? (isAnnual ? '49000' : '4900') : (isAnnual ? '29000' : '2900'))
+      params.set('line_items[0][price_data][product_data][name]', isMax ? 'Kernel Max' : 'Kernel Pro')
+      params.set('line_items[0][price_data][product_data][description]', isMax
+        ? 'Generous messaging, 25 agent calls/day, 100 extended thinking/mo, and 50 file analyses/mo.'
+        : 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
       if (mode === 'subscription') {
-        params.set('line_items[0][price_data][recurring][interval]', 'month')
+        params.set('line_items[0][price_data][recurring][interval]', isAnnual ? 'year' : 'month')
       }
       params.set('line_items[0][quantity]', '1')
     }

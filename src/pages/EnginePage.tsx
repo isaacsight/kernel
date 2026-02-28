@@ -221,8 +221,9 @@ function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }
 
 function EngineChat() {
   const { t } = useTranslation('home')
-  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription, planLimits } = useAuthContext()
+  const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription, planId, planLimits } = useAuthContext()
   const isPro = isSubscribed || isAdmin
+  const isMax = planId.startsWith('max_')
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -847,6 +848,7 @@ function EngineChat() {
                 user={user}
                 isPro={isPro}
                 isAdmin={isAdmin}
+                planId={planId}
                 onClose={() => panels.closePanel('account-settings')}
                 onToast={showToast}
                 onUpgrade={(plan) => billing.handleUpgrade(plan)}
@@ -898,7 +900,7 @@ function EngineChat() {
         </div>
         <div className="ka-header-right">
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
-          {!isAdmin && isSubscribed && <span className="ka-pro-badge"><IconCrown size={12} /> {t('pro')}</span>}
+          {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
           {user && <NotificationBell userId={user.id} onProactiveClick={(text) => chatEngine.injectProactiveMessage(text)} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
           <button className="ka-header-icon-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>

@@ -149,6 +149,8 @@ serve(async (req: Request) => {
               if (!stripeSub.metadata?.plan) {
                 const priceId = stripeSub.items?.data?.[0]?.price?.id
                 if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+                else if (priceId === Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID')) plan = 'max_monthly'
+                else if (priceId === Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID')) plan = 'max_annual'
               }
             }
           } catch (e) {
@@ -257,6 +259,8 @@ serve(async (req: Request) => {
             if (!sub.metadata?.plan) {
               const priceId = sub.items?.data?.[0]?.price?.id
               if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+              else if (priceId === Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID')) plan = 'max_monthly'
+              else if (priceId === Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID')) plan = 'max_annual'
             }
           }
         }
@@ -304,6 +308,8 @@ serve(async (req: Request) => {
         if (!sub.metadata?.plan) {
           const priceId = sub.items?.data?.[0]?.price?.id
           if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
+          else if (priceId === Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID')) plan = 'max_monthly'
+          else if (priceId === Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID')) plan = 'max_annual'
         }
 
         if (userId) {

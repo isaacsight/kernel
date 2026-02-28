@@ -7,7 +7,7 @@ import { IconCrown } from './KernelIcons'
 import type { PlanId } from '../config/planLimits'
 
 interface UpgradePromptProps {
-  feature: 'memory' | 'goals' | 'briefings' | 'monthly_limit' | 'daily_limit' | 'files'
+  feature: 'memory' | 'goals' | 'briefings' | 'monthly_limit' | 'daily_limit' | 'files' | 'pro_monthly_limit'
   onUpgrade: (plan: PlanId) => void
   loading?: boolean
 }
@@ -37,10 +37,15 @@ const COPY: Record<string, { title: string; description: string }> = {
     title: 'File analysis is a Pro feature',
     description: 'Upgrade to analyze images, PDFs, and documents with Kernel.',
   },
+  pro_monthly_limit: {
+    title: 'You\'ve hit your Pro message limit',
+    description: 'Go Max for generous messaging with no visible cap, plus 100 extended thinking and 50 file analyses per month.',
+  },
 }
 
 export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProps) {
   const copy = COPY[feature] || COPY.monthly_limit
+  const isMaxUpsell = feature === 'pro_monthly_limit'
 
   return (
     <div className="ka-upgrade-prompt">
@@ -50,20 +55,41 @@ export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProp
       <h3 className="ka-upgrade-prompt-title">{copy.title}</h3>
       <p className="ka-upgrade-prompt-desc">{copy.description}</p>
       <div className="ka-upgrade-prompt-actions">
-        <button
-          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--primary"
-          onClick={() => onUpgrade('pro_monthly')}
-          disabled={loading}
-        >
-          Go Pro — $29/mo
-        </button>
-        <button
-          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
-          onClick={() => onUpgrade('pro_annual')}
-          disabled={loading}
-        >
-          $290/yr — save $58
-        </button>
+        {isMaxUpsell ? (
+          <>
+            <button
+              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--max"
+              onClick={() => onUpgrade('max_monthly')}
+              disabled={loading}
+            >
+              Go Max — $49/mo
+            </button>
+            <button
+              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
+              onClick={() => onUpgrade('max_annual')}
+              disabled={loading}
+            >
+              $490/yr — save $98
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--primary"
+              onClick={() => onUpgrade('pro_monthly')}
+              disabled={loading}
+            >
+              Go Pro — $29/mo
+            </button>
+            <button
+              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
+              onClick={() => onUpgrade('pro_annual')}
+              disabled={loading}
+            >
+              $290/yr — save $58
+            </button>
+          </>
+        )}
       </div>
     </div>
   )

@@ -25,16 +25,17 @@ interface AccountSettingsPanelProps {
   user: User
   isPro: boolean
   isAdmin: boolean
+  planId?: string
   onClose: () => void
   onToast: (msg: string) => void
-  onUpgrade: (plan: 'pro_monthly' | 'pro_annual') => void
+  onUpgrade: (plan: 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual') => void
   onManageSubscription: () => void
   onSignOut: () => void
   onDeleteAccount: () => void
 }
 
 export default function AccountSettingsPanel({
-  user, isPro, isAdmin, onClose, onToast, onUpgrade, onManageSubscription, onSignOut, onDeleteAccount,
+  user, isPro, isAdmin, planId, onClose, onToast, onUpgrade, onManageSubscription, onSignOut, onDeleteAccount,
 }: AccountSettingsPanelProps) {
   const { t } = useTranslation('settings')
   const auth = useAuthContext()
@@ -79,7 +80,8 @@ export default function AccountSettingsPanel({
     .map(s => s[0].toUpperCase())
     .join('')
 
-  const tierLabel = isAdmin ? t('subscription.admin') : isPro ? t('subscription.pro') : t('subscription.free')
+  const isMax = planId?.startsWith('max_') ?? false
+  const tierLabel = isAdmin ? t('subscription.admin') : isMax ? t('subscription.max') : isPro ? t('subscription.pro') : t('subscription.free')
 
   return (
     <div className="ka-settings-panel">
@@ -115,7 +117,7 @@ export default function AccountSettingsPanel({
         <div className="ka-settings-user-info">
           <span className="ka-settings-user-name">{settings.displayName || user.email}</span>
           {settings.displayName && <span className="ka-settings-user-email">{user.email}</span>}
-          <span className={`ka-settings-tier-badge${isAdmin ? ' ka-settings-tier-badge--admin' : isPro ? ' ka-settings-tier-badge--pro' : ''}`}>
+          <span className={`ka-settings-tier-badge${isAdmin ? ' ka-settings-tier-badge--admin' : isMax ? ' ka-settings-tier-badge--max' : isPro ? ' ka-settings-tier-badge--pro' : ''}`}>
             {isAdmin ? <IconShield size={12} /> : isPro ? <IconCrown size={12} /> : <IconUser size={12} />}
             {tierLabel}
           </span>
@@ -327,13 +329,19 @@ export default function AccountSettingsPanel({
           <h3 className="ka-settings-section-header">{t('subscription.heading')}</h3>
           <div className="ka-settings-section-body">
             <div className="ka-settings-provider-row">
-              <span className="ka-settings-provider-name">{isPro ? t('subscription.pro') : t('subscription.free')}</span>
-              {isPro ? (
+              <span className="ka-settings-provider-name">{isMax ? t('subscription.max') : isPro ? t('subscription.pro') : t('subscription.free')}</span>
+              {isMax ? (
                 <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
+              ) : isPro ? (
+                <div className="ka-settings-upgrade-options">
+                  <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
+                </div>
               ) : (
                 <div className="ka-settings-upgrade-options">
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade" onClick={() => onUpgrade('pro_monthly')}>{t('subscription.upgradeMonthly')}</button>
                   <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-annual" onClick={() => onUpgrade('pro_annual')}>{t('subscription.upgradeAnnual')}</button>
+                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
                 </div>
               )}
             </div>
