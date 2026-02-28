@@ -27,10 +27,11 @@ export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsR
       if (imageUrl) {
         const res = await fetch(imageUrl)
         const blob = await res.blob()
-        link.href = URL.createObjectURL(blob)
+        const blobUrl = URL.createObjectURL(blob)
+        link.href = blobUrl
         link.download = filename
         link.click()
-        URL.revokeObjectURL(link.href)
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000)
       } else if (image) {
         link.href = `data:${mimeType};base64,${image}`
         link.download = filename
