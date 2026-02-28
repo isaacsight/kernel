@@ -10,7 +10,7 @@
 //
 // ═══════════════════════════════════════════════════════════════
 
-import { getProvider } from './providers/registry'
+import { getProvider, getBackgroundProvider } from './providers/registry'
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -127,7 +127,7 @@ export async function extractFacet(
       ? `\n\nYour previous observations about this person:\n${existingFacet.observations.map(o => `- ${o}`).join('\n')}\n\nUpdate or add to these based on what you see in the new conversation. Drop observations that seem outdated.`
       : ''
 
-    const result = await getProvider().json<{ observations: string[]; patterns: string[] }>(
+    const result = await getBackgroundProvider().json<{ observations: string[]; patterns: string[] }>(
       `${conversation}${existingContext}`,
       { system: buildExtractSystem(lens), tier: 'fast', max_tokens: 400 },
     )

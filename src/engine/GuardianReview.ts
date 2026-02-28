@@ -7,7 +7,7 @@
 //  vulnerabilities and quality issues. Non-blocking — the artifact
 //  renders immediately while the review runs in parallel.
 
-import { getProvider } from './providers/registry'
+import { getBackgroundProvider } from './providers/registry'
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -109,7 +109,7 @@ async function _doReview(
   language: string,
 ): Promise<GuardianReview> {
   try {
-    const result = await getProvider().json<{
+    const result = await getBackgroundProvider().json<{
       severity: string
       summary: string
       findings: GuardianFinding[]

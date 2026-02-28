@@ -1,7 +1,7 @@
 // MemoryAgent — Background memory extraction and profile building
 // Replaces raw message dumps (~4000-8000 tokens) with compact profiles (~200-500 tokens)
 
-import { getProvider } from './providers/registry'
+import { getBackgroundProvider } from './providers/registry'
 
 export interface UserMemoryProfile {
   interests: string[]
@@ -49,7 +49,7 @@ export async function extractMemory(
       .map(m => `${m.role === 'user' ? 'User' : 'Kernel'}: ${m.content}`)
       .join('\n\n')
 
-    return await getProvider().json<UserMemoryProfile>(
+    return await getBackgroundProvider().json<UserMemoryProfile>(
       `Analyze this conversation and extract user profile:\n\n${conversation}`,
       { system: EXTRACT_SYSTEM, tier: 'fast', max_tokens: 500 }
     )
@@ -69,7 +69,7 @@ export async function mergeMemory(
   if (isEmptyProfile(newExtraction)) return existing
 
   try {
-    return await getProvider().json<UserMemoryProfile>(
+    return await getBackgroundProvider().json<UserMemoryProfile>(
       `Existing profile:\n${JSON.stringify(existing, null, 2)}\n\nNewly extracted:\n${JSON.stringify(newExtraction, null, 2)}\n\nMerge into a single updated profile.`,
       { system: MERGE_SYSTEM, tier: 'fast', max_tokens: 500 }
     )

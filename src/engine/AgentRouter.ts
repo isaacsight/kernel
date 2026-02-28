@@ -1,5 +1,5 @@
 // AgentRouter — Haiku-based intent classifier for specialist routing
-import { getProvider } from './providers/registry'
+import { getBackgroundProvider } from './providers/registry'
 
 export interface ClassificationResult {
   agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator'
@@ -78,7 +78,7 @@ export async function classifyIntent(
       ? `${CLASSIFICATION_SYSTEM}\n\n---\n\n${loomContext}`
       : CLASSIFICATION_SYSTEM
 
-    const result = await getProvider().json<ClassificationResult>(prompt, {
+    const result = await getBackgroundProvider().json<ClassificationResult>(prompt, {
       system,
       tier: 'fast',
       max_tokens: 150,

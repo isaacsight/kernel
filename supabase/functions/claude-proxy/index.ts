@@ -1,10 +1,10 @@
 // Supabase Edge Function: claude-proxy (multi-provider)
-// Unified LLM proxy — supports Anthropic, OpenAI, Gemini.
+// Unified LLM proxy — supports Anthropic, OpenAI, Gemini, NVIDIA, Groq.
 // All streaming output is normalized to Anthropic SSE format.
 // Tracks token usage per call and alerts on high daily spend.
 //
 // Deploy: npx supabase functions deploy claude-proxy --project-ref eoxxpyixdieprsxlpwcs
-// Secrets: ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, NVIDIA_API_KEY
+// Secrets: ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, NVIDIA_API_KEY, GROQ_API_KEY
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -16,7 +16,7 @@ import { PLAN_LIMITS, ACTIVE_STATUSES, resolvePlanId, type PlanId } from '../_sh
 
 // ─── Model tier mapping ──────────────────────────────────────
 
-type Provider = 'anthropic' | 'openai' | 'gemini' | 'nvidia'
+type Provider = 'anthropic' | 'openai' | 'gemini' | 'nvidia' | 'groq'
 
 const TIER_MODELS: Record<Provider, Record<string, string>> = {
   anthropic: {
@@ -34,6 +34,10 @@ const TIER_MODELS: Record<Provider, Record<string, string>> = {
   nvidia: {
     fast: 'meta/llama-3.1-8b-instruct',
     strong: 'meta/llama-3.3-70b-instruct',
+  },
+  groq: {
+    fast: 'llama-3.1-8b-instant',
+    strong: 'llama-3.3-70b-versatile',
   },
 }
 
@@ -67,6 +71,8 @@ const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = 
   'gpt-4o-mini': { input: 0.15, output: 0.60 },
   'gemini-2.5-pro': { input: 1.25, output: 10.00 },
   'gemini-2.0-flash': { input: 0.10, output: 0.40 },
+  'llama-3.1-8b-instant': { input: 0.05, output: 0.08 },
+  'llama-3.3-70b-versatile': { input: 0.59, output: 0.79 },
 }
 
 const DAILY_COST_ALERT_THRESHOLD = 3.00
@@ -199,7 +205,8 @@ const PROVIDER_FALLBACKS: Record<Provider, Provider[]> = {
   anthropic: ['openai', 'gemini'],
   openai: ['anthropic', 'gemini'],
   gemini: ['anthropic', 'openai'],
-  nvidia: ['openai', 'anthropic'],
+  nvidia: ['groq', 'openai', 'anthropic'],
+  groq: ['openai', 'anthropic'],
 }
 
 function jitteredDelay(baseMs: number): number {
@@ -297,7 +304,8 @@ async function pickFallbackProvider(
     const keyName = p === 'anthropic' ? 'ANTHROPIC_API_KEY'
       : p === 'openai' ? 'OPENAI_API_KEY'
         : p === 'gemini' ? 'GEMINI_API_KEY'
-          : 'NVIDIA_API_KEY'
+          : p === 'groq' ? 'GROQ_API_KEY'
+            : 'NVIDIA_API_KEY'
     if (!Deno.env.get(keyName)) continue
 
     const effectiveScore = getEffectiveScore(scores, p)
@@ -1079,6 +1087,159 @@ async function handleNvidia(
   })
 }
 
+// ─── Groq handler (OpenAI-compatible) ─────────────────────────
+
+async function handleGroq(
+  payload: ProxyPayload,
+  resolvedModel: string,
+  isStream: boolean,
+  userId: string | null,
+  CORS_HEADERS: Record<string, string>,
+): Promise<Response> {
+  const groqKey = Deno.env.get('GROQ_API_KEY')
+  if (!groqKey) {
+    return new Response(
+      JSON.stringify({ error: 'Missing GROQ_API_KEY' }),
+      { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  }
+
+  const messages: { role: string; content: string | unknown[] }[] = []
+  if (payload.system) {
+    messages.push({ role: 'system', content: payload.system })
+  }
+  for (const m of payload.messages) {
+    messages.push({ role: m.role, content: m.content })
+  }
+
+  const body: Record<string, unknown> = {
+    model: resolvedModel,
+    max_tokens: payload.max_tokens ?? 4096,
+    messages,
+    stream: isStream,
+  }
+
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${groqKey}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (res.status === 429) {
+    const retryAfter = res.headers.get('retry-after') || '60'
+    return new Response(
+      JSON.stringify({ error: 'rate_limited', retry_after: parseInt(retryAfter), model: resolvedModel }),
+      { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': retryAfter, ...CORS_HEADERS } }
+    )
+  }
+
+  if (!res.ok) {
+    const errText = await res.text()
+    console.error('Groq API error:', res.status, errText)
+    const errType = classifyError(res.status, errText)
+    const refund = await recordErrorAndRefund(userId, 'groq', resolvedModel, errType, errText, res.status)
+    return new Response(
+      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  }
+
+  // Non-streaming
+  if (!isStream) {
+    const result = await res.json()
+    const text = result.choices?.[0]?.message?.content ?? ''
+
+    if (userId) {
+      const inputTokens = result.usage?.prompt_tokens ?? 0
+      const outputTokens = result.usage?.completion_tokens ?? 0
+      logUsageAndCheckThreshold(userId, 'groq', resolvedModel, inputTokens, outputTokens)
+        .catch(err => console.error('[usage-tracking] Error:', err))
+    }
+
+    return new Response(
+      JSON.stringify({ text }),
+      { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  }
+
+  // Streaming: transform OpenAI-format SSE → normalized Anthropic SSE
+  const reader = res.body?.getReader()
+  if (!reader) {
+    return new Response(
+      JSON.stringify({ error: 'No readable stream from Groq' }),
+      { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+    )
+  }
+
+  let streamInputTokens = 0
+  let streamOutputTokens = 0
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const decoder = new TextDecoder()
+      const encoder = new TextEncoder()
+      try {
+        while (true) {
+          const { done, value } = await readWithTimeout(reader, STREAM_IDLE_TIMEOUT_MS)
+          if (done) break
+          const chunk = decoder.decode(value, { stream: true })
+          const lines = chunk.split('\n')
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue
+            const data = line.slice(6).trim()
+            if (data === '[DONE]') {
+              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+              continue
+            }
+            try {
+              const event = JSON.parse(data)
+              if (event.x_groq?.usage) {
+                streamInputTokens = event.x_groq.usage.prompt_tokens ?? 0
+                streamOutputTokens = event.x_groq.usage.completion_tokens ?? 0
+              }
+              if (event.usage) {
+                streamInputTokens = event.usage.prompt_tokens ?? streamInputTokens
+                streamOutputTokens = event.usage.completion_tokens ?? streamOutputTokens
+              }
+              const delta = event.choices?.[0]?.delta?.content
+              if (delta) {
+                const normalized = JSON.stringify({
+                  type: 'content_block_delta',
+                  delta: { text: delta },
+                })
+                controller.enqueue(encoder.encode(`data: ${normalized}\n\n`))
+              }
+            } catch {
+              // skip
+            }
+          }
+        }
+      } catch (err) {
+        console.error('[groq-stream] Error:', (err as Error).message)
+        const errMsg = (err as Error).message || 'Stream timeout'
+        const errType = classifyError(0, errMsg)
+        const refund = await recordErrorAndRefund(userId, 'groq', resolvedModel, errType, errMsg, 0)
+        const errEvent = JSON.stringify({ type: 'error', error: { message: 'Stream timeout — upstream took too long', refunded: refund.refunded, daily_count: refund.dailyCount } })
+        controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`))
+      } finally {
+        reader.releaseLock()
+        controller.close()
+        if (userId) {
+          logUsageAndCheckThreshold(userId, 'groq', resolvedModel, streamInputTokens, streamOutputTokens)
+            .catch(err => console.error('[usage-tracking] Stream error:', err))
+        }
+      }
+    },
+  })
+
+  return new Response(stream, {
+    headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', ...CORS_HEADERS },
+  })
+}
+
 // ─── Main handler ────────────────────────────────────────────
 
 serve(async (req: Request) => {
@@ -1509,6 +1670,7 @@ serve(async (req: Request) => {
         case 'openai': return handleOpenAI(payload, m, isStream, trackUserId, CORS_HEADERS)
         case 'gemini': return handleGemini(payload, m, isStream, trackUserId, CORS_HEADERS)
         case 'nvidia': return handleNvidia(payload, m, isStream, trackUserId, CORS_HEADERS)
+        case 'groq': return handleGroq(payload, m, isStream, trackUserId, CORS_HEADERS)
         default:
           return Promise.resolve(new Response(
             JSON.stringify({ error: `Unknown provider: ${p}` }),

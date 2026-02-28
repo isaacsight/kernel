@@ -10,6 +10,7 @@ import { OpenAIProvider } from './openai'
 import { GeminiProvider } from './gemini'
 import { OllamaProvider } from './ollama'
 import { NvidiaProvider } from './nvidia'
+import { GroqProvider } from './groq'
 
 // ─── Singleton ────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ export function setProvider(provider: LLMProvider): void {
 
 // ─── Factory ──────────────────────────────────────────────────
 
-export type ProviderName = 'anthropic' | 'openai' | 'gemini' | 'ollama' | 'nvidia'
+export type ProviderName = 'anthropic' | 'openai' | 'gemini' | 'ollama' | 'nvidia' | 'groq'
 
 /** Create a provider by name */
 export function createProvider(name: ProviderName, config?: { baseUrl?: string }): LLMProvider {
@@ -43,9 +44,22 @@ export function createProvider(name: ProviderName, config?: { baseUrl?: string }
             return new OllamaProvider(config?.baseUrl)
         case 'nvidia':
             return new NvidiaProvider()
+        case 'groq':
+            return new GroqProvider()
         default:
             throw new Error(`Unknown provider: ${name}`)
     }
+}
+
+// ─── Background provider (cost-optimized) ────────────────────
+// Shared Groq instance for background operations (routing, memory,
+// guardian review, convergence facets). ~20-60x cheaper than Haiku.
+
+const _bgProvider: LLMProvider = new GroqProvider()
+
+/** Get the cost-optimized provider for background/non-user-facing operations */
+export function getBackgroundProvider(): LLMProvider {
+    return _bgProvider
 }
 
 // ─── Re-exports ───────────────────────────────────────────────
