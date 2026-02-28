@@ -7,6 +7,7 @@ export interface ImageGenResult {
   image: string  // base64
   mimeType: string
   credits_remaining: number
+  image_url?: string  // persistent storage URL
   auto_reloaded?: boolean
   reloaded_pack?: string
   reloaded_credits?: number

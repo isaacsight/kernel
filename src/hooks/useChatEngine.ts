@@ -672,6 +672,7 @@ export function useChatEngine(params: UseChatEngineParams) {
             agent_id: 'kernel',
             content: `[Generated image: ${trimmed}]`,
             user_id: userId,
+            ...(result.image_url && { attachments: [{ url: result.image_url, type: result.mimeType, name: `kernel-image.${(result.mimeType || 'image/png').split('/')[1] || 'png'}` }] }),
           })
           // Show toast if auto-reload was triggered
           if (result.auto_reloaded && result.reloaded_credits) {

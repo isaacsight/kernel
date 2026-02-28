@@ -4,23 +4,39 @@ import { IconDownload, IconClose } from './KernelIcons'
 import { SPRING } from '../constants/motion'
 
 interface GeneratedImageCardProps {
-  image: string  // base64
+  image?: string  // base64
+  imageUrl?: string  // persistent storage URL
   mimeType: string
   prompt: string
   creditsRemaining?: number
 }
 
-export function GeneratedImageCard({ image, mimeType, prompt, creditsRemaining }: GeneratedImageCardProps) {
+export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsRemaining }: GeneratedImageCardProps) {
   const [lightbox, setLightbox] = useState(false)
-  const dataUrl = `data:${mimeType};base64,${image}`
+  const src = imageUrl || (image ? `data:${mimeType};base64,${image}` : '')
 
-  const handleDownload = (e: React.MouseEvent) => {
+  const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation()
     const ext = mimeType.split('/')[1] || 'png'
     const link = document.createElement('a')
-    link.href = dataUrl
-    link.download = `kernel-image-${Date.now()}.${ext}`
-    link.click()
+    if (imageUrl) {
+      // For remote URLs, fetch as blob to trigger download
+      try {
+        const res = await fetch(imageUrl)
+        const blob = await res.blob()
+        link.href = URL.createObjectURL(blob)
+        link.download = `kernel-image-${Date.now()}.${ext}`
+        link.click()
+        URL.revokeObjectURL(link.href)
+      } catch {
+        // Fallback: open in new tab
+        window.open(imageUrl, '_blank')
+      }
+    } else if (image) {
+      link.href = `data:${mimeType};base64,${image}`
+      link.download = `kernel-image-${Date.now()}.${ext}`
+      link.click()
+    }
   }
 
   return (
@@ -38,7 +54,7 @@ export function GeneratedImageCard({ image, mimeType, prompt, creditsRemaining }
           )}
         </div>
         <div className="ka-gen-image-container" onClick={() => setLightbox(true)}>
-          <img src={dataUrl} alt={prompt || 'AI-generated image'} className="ka-gen-image-img" />
+          <img src={src} alt={prompt || 'AI-generated image'} className="ka-gen-image-img" />
           <button className="ka-gen-image-download" onClick={handleDownload} aria-label="Download image">
             <IconDownload size={16} />
           </button>
@@ -59,7 +75,7 @@ export function GeneratedImageCard({ image, mimeType, prompt, creditsRemaining }
               <IconClose size={20} />
             </button>
             <img
-              src={dataUrl}
+              src={src}
               alt={prompt || 'AI-generated image'}
               className="ka-gen-image-lightbox-img"
               onClick={e => e.stopPropagation()}

@@ -21,10 +21,11 @@ interface ChatMessage {
   timestamp: number
   signalId?: string
   feedback?: 'helpful' | 'poor'
-  attachments?: { name: string; type: string }[]
+  attachments?: { name: string; type: string; url?: string }[]
   agentId?: string
   agentName?: string
   isProactive?: boolean
+  generatedImages?: { image: string; mimeType: string; image_url?: string; credits_remaining: number }[]
 }
 
 export function useConversations(
@@ -66,17 +67,32 @@ export function useConversations(
     loadConversations()
   }, [loadConversations])
 
-  const toChat = (dbMessages: { id: string; agent_id: string; content: string; created_at: string }[]): ChatMessage[] =>
-    dbMessages.map(m => ({
-      id: m.id,
-      role: m.agent_id === 'user' ? 'user' as const : 'kernel' as const,
-      content: m.content,
-      timestamp: new Date(m.created_at).getTime(),
-      agentId: m.agent_id !== 'user' ? m.agent_id : undefined,
-      agentName: m.agent_id !== 'user' && m.agent_id !== 'kernel'
-        ? m.agent_id.charAt(0).toUpperCase() + m.agent_id.slice(1)
-        : m.agent_id !== 'user' ? 'Kernel' : undefined,
-    }))
+  const toChat = (dbMessages: { id: string; agent_id: string; content: string; created_at: string; attachments?: { name: string; type: string; url?: string }[] | null }[]): ChatMessage[] =>
+    dbMessages.map(m => {
+      const msg: ChatMessage = {
+        id: m.id,
+        role: m.agent_id === 'user' ? 'user' as const : 'kernel' as const,
+        content: m.content,
+        timestamp: new Date(m.created_at).getTime(),
+        agentId: m.agent_id !== 'user' ? m.agent_id : undefined,
+        agentName: m.agent_id !== 'user' && m.agent_id !== 'kernel'
+          ? m.agent_id.charAt(0).toUpperCase() + m.agent_id.slice(1)
+          : m.agent_id !== 'user' ? 'Kernel' : undefined,
+      }
+      // Reconstruct generatedImages from persisted attachments
+      if (m.content?.startsWith('[Generated image:') && m.attachments?.length) {
+        const imageAttachments = m.attachments.filter(a => a.url && a.type?.startsWith('image/'))
+        if (imageAttachments.length > 0) {
+          msg.generatedImages = imageAttachments.map(a => ({
+            image: '',
+            mimeType: a.type,
+            image_url: a.url,
+            credits_remaining: 0,
+          }))
+        }
+      }
+      return msg
+    })
 
   const switchConversation = useCallback(async (convId: string) => {
     setMsgsLoading(true)

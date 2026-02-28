@@ -1256,7 +1256,7 @@ function EngineChat() {
                   ) : msg.generatedImages && msg.generatedImages.length > 0 ? (
                     <Suspense fallback={null}>
                       {msg.generatedImages.map((img, j) => (
-                        <GeneratedImageCard key={j} image={img.image} mimeType={img.mimeType} prompt={msg.content || ''} creditsRemaining={img.credits_remaining} />
+                        <GeneratedImageCard key={j} image={img.image || undefined} imageUrl={img.image_url} mimeType={img.mimeType} prompt={(msg.content || '').replace(/^\[Generated image:\s*/, '').replace(/\]$/, '') || ''} creditsRemaining={img.credits_remaining > 0 ? img.credits_remaining : undefined} />
                       ))}
                     </Suspense>
                   ) : msg.content || msg.thinking ? (

@@ -164,7 +164,7 @@ export async function getTotalRevenue(): Promise<number> {
 }
 
 // Messages (for conversation persistence)
-export async function saveMessage(msg: Omit<DBMessage, 'created_at'> & { attachments?: { name: string; type: string }[] }) {
+export async function saveMessage(msg: Omit<DBMessage, 'created_at'> & { attachments?: { name: string; type: string; url?: string }[] }) {
   const { error } = await supabase.from('messages').insert(msg);
   if (error) console.error('Error saving message:', error);
 }

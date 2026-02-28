@@ -217,6 +217,48 @@ serve(async (req: Request) => {
     const imageBase64 = imagePart.inlineData.data
     const imageMimeType = imagePart.inlineData.mimeType
 
+    // ── Upload to Supabase Storage + persist metadata ──────────
+    let imageUrl: string | undefined
+    try {
+      const ext = (imageMimeType as string).split('/')[1] || 'png'
+      const imageId = crypto.randomUUID()
+      const storagePath = `${userId}/${imageId}.${ext}`
+
+      // Decode base64 → Uint8Array for upload
+      const raw = atob(imageBase64 as string)
+      const bytes = new Uint8Array(raw.length)
+      for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i)
+
+      const { error: uploadErr } = await svc.storage
+        .from('generated-images')
+        .upload(storagePath, bytes, {
+          contentType: imageMimeType as string,
+          upsert: false,
+        })
+
+      if (uploadErr) {
+        console.error('Storage upload error:', uploadErr)
+      } else {
+        // Insert metadata row
+        await svc.from('generated_images').insert({
+          user_id: userId,
+          prompt,
+          storage_path: storagePath,
+          mime_type: imageMimeType,
+        })
+
+        // Get signed URL (1 year expiry)
+        const { data: signedData } = await svc.storage
+          .from('generated-images')
+          .createSignedUrl(storagePath, 60 * 60 * 24 * 365)
+
+        imageUrl = signedData?.signedUrl
+      }
+    } catch (storageErr) {
+      // Non-blocking — image was still generated, just not persisted
+      console.error('Image storage error:', storageErr)
+    }
+
     // ── Decrement credit (only after successful generation, admins skip) ──
     let decrData = null
     if (!isAdmin) {
@@ -338,6 +380,7 @@ serve(async (req: Request) => {
         image: imageBase64,
         mimeType: imageMimeType,
         credits_remaining: creditsRemaining,
+        ...(imageUrl && { image_url: imageUrl }),
         ...(autoReloaded && { auto_reloaded: true, reloaded_pack: reloadedPack, reloaded_credits: reloadedCredits }),
       }),
       { headers: { 'Content-Type': 'application/json', ...CORS } }
