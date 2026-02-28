@@ -24,7 +24,7 @@ export interface AuthState {
   planId: PlanId;
   planLimits: PlanLimits;
 
-  signInWithProvider: (provider: Provider) => Promise<void>;
+  signInWithProvider: (provider: Provider) => Promise<{ error: string | null }>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
@@ -228,13 +228,26 @@ export function useAuth(): AuthState {
     };
   }, [checkSubscription]);
 
-  const signInWithProvider = useCallback(async (provider: Provider) => {
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+  const signInWithProvider = useCallback(async (provider: Provider): Promise<{ error: string | null }> => {
+    // Use origin only (no pathname) — hash router means pathname is always "/" but
+    // a trailing slash can cause Supabase redirect-URL validation to fail with
+    // "requested path is invalid" if the allowlist entry omits it.
+    const redirectTo = window.location.origin;
     console.log('[Auth] signInWithOAuth:', provider, 'redirectTo:', redirectTo);
-    await supabase.auth.signInWithOAuth({
+
+    // Twitter OAuth 2.0 requires explicit scopes
+    const scopes = provider === 'twitter' ? 'users.read tweet.read' : undefined;
+
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo },
+      options: { redirectTo, scopes },
     });
+
+    if (error) {
+      console.error('[Auth] signInWithOAuth error:', error.message);
+      return { error: error.message };
+    }
+    return { error: null };
   }, []);
 
   const signInWithEmail = useCallback(async (email: string, password: string) => {
@@ -248,7 +261,7 @@ export function useAuth(): AuthState {
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const redirectTo = window.location.origin;
     // Store a recovery flag so we can show the modal when the redirect lands,
     // even if Supabase strips query params or the PKCE exchange fails.
     localStorage.setItem(RECOVERY_FLAG, 'true');
@@ -313,11 +326,12 @@ export function useAuth(): AuthState {
   }, [user]);
 
   const linkIdentity = useCallback(async (provider: Provider) => {
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const redirectTo = window.location.origin;
     localStorage.setItem('kernel-reopen-settings', 'true');
+    const scopes = provider === 'twitter' ? 'users.read tweet.read' : undefined;
     const { error } = await supabase.auth.linkIdentity({
       provider,
-      options: { redirectTo },
+      options: { redirectTo, scopes },
     });
     if (error) throw new Error(error.message);
   }, []);

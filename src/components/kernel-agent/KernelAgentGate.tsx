@@ -103,8 +103,8 @@ export function KernelAgentGate() {
         </p>
 
         <div className="kernel-gate-social">
-          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('google')}>{t('modal.continueGoogle')}</button>
-          <button className="kernel-gate-social-btn" onClick={() => signInWithProvider('github')}>{t('modal.continueGitHub')}</button>
+          <button className="kernel-gate-social-btn" onClick={async () => { const r = await signInWithProvider('google'); if (r.error) setError(r.error) }}>{t('modal.continueGoogle')}</button>
+          <button className="kernel-gate-social-btn" onClick={async () => { const r = await signInWithProvider('github'); if (r.error) setError(r.error) }}>{t('modal.continueGitHub')}</button>
         </div>
 
         <div className="kernel-gate-divider"><span>{t('or', { ns: 'common' })}</span></div>

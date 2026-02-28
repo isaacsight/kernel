@@ -226,13 +226,13 @@ export function LoginGate() {
                   <h1 className="ka-gate-title">{t(isSignUp ? 'modal.createTitle' : 'modal.welcomeTitle')}</h1>
 
                   <div className="ka-gate-social">
-                    <button className="ka-gate-social-btn ka-gate-social-google" onClick={() => signInWithProvider('google')}>
+                    <button className="ka-gate-social-btn ka-gate-social-google" onClick={async () => { const r = await signInWithProvider('google'); if (r.error) setError(r.error) }}>
                       {t('modal.continueGoogle')}
                     </button>
-                    <button className="ka-gate-social-btn ka-gate-social-github" onClick={() => signInWithProvider('github')}>
+                    <button className="ka-gate-social-btn ka-gate-social-github" onClick={async () => { const r = await signInWithProvider('github'); if (r.error) setError(r.error) }}>
                       {t('modal.continueGitHub')}
                     </button>
-                    <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={() => signInWithProvider('twitter')}>
+                    <button className="ka-gate-social-btn ka-gate-social-twitter" onClick={async () => { const r = await signInWithProvider('twitter'); if (r.error) setError(r.error) }}>
                       {t('modal.continueX')}
                     </button>
                   </div>
