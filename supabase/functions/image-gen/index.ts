@@ -208,8 +208,8 @@ serve(async (req: Request) => {
     const geminiData = await geminiRes.json()
 
     // Extract image from response parts
-    const parts = geminiData?.candidates?.[0]?.content?.parts
-    if (!parts || !Array.isArray(parts)) {
+    const responseParts = geminiData?.candidates?.[0]?.content?.parts
+    if (!responseParts || !Array.isArray(responseParts)) {
       console.error('Gemini response missing parts:', JSON.stringify(geminiData).slice(0, 500))
       return new Response(
         JSON.stringify({ error: 'Image generation failed', details: 'No content in response' }),
@@ -217,14 +217,14 @@ serve(async (req: Request) => {
       )
     }
 
-    const imagePart = parts.find(
+    const imagePart = responseParts.find(
       (p: { inlineData?: { mimeType?: string; data?: string } }) =>
         p.inlineData?.mimeType?.startsWith('image/')
     )
 
     if (!imagePart?.inlineData) {
       // Gemini may have returned text-only (e.g., content policy refusal)
-      const textPart = parts.find((p: { text?: string }) => p.text)
+      const textPart = responseParts.find((p: { text?: string }) => p.text)
       const reason = textPart?.text || 'No image generated'
       return new Response(
         JSON.stringify({ error: 'no_image', details: reason }),

@@ -19,24 +19,27 @@ export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsR
   const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation()
     const ext = mimeType.split('/')[1] || 'png'
+    const filename = `kernel-image-${Date.now()}.${ext}`
     const link = document.createElement('a')
-    if (imageUrl) {
-      // For remote URLs, fetch as blob to trigger download
-      try {
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    try {
+      if (imageUrl) {
         const res = await fetch(imageUrl)
         const blob = await res.blob()
         link.href = URL.createObjectURL(blob)
-        link.download = `kernel-image-${Date.now()}.${ext}`
+        link.download = filename
         link.click()
         URL.revokeObjectURL(link.href)
-      } catch {
-        // Fallback: open in new tab
-        window.open(imageUrl, '_blank')
+      } else if (image) {
+        link.href = `data:${mimeType};base64,${image}`
+        link.download = filename
+        link.click()
       }
-    } else if (image) {
-      link.href = `data:${mimeType};base64,${image}`
-      link.download = `kernel-image-${Date.now()}.${ext}`
-      link.click()
+    } catch {
+      if (imageUrl) window.open(imageUrl, '_blank')
+    } finally {
+      document.body.removeChild(link)
     }
   }
 
