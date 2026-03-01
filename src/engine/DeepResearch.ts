@@ -134,12 +134,15 @@ export async function deepResearch(
   }
   onProgress({ ...progress })
 
-  // Step 1: Plan search queries
+  // Step 1: Plan search queries (inject user context for personalized query calibration)
   let queries: string[]
   try {
+    const planSystem = userContext
+      ? `${PLAN_SYSTEM}\n\nUser context — calibrate search depth and specificity to their background:\n${userContext}`
+      : PLAN_SYSTEM
     const plan = await getProvider().json<ResearchPlan>(
       `Research question: ${questionText}`,
-      { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 300 }
+      { system: planSystem, tier: 'fast', max_tokens: 300 }
     )
     queries = (plan.queries || []).slice(0, 5)
     if (queries.length === 0) queries = [questionText]
@@ -243,6 +246,11 @@ export async function deepResearch(
     finalContent = [...blocks, { type: 'text', text: finalContent }];
   }
 
+  // Personalize synthesis with user context
+  const synthSystem = userContext
+    ? `${SYNTHESIZE_SYSTEM}\n\nUser context — adapt depth, tone, and focus to their background:\n${userContext}`
+    : SYNTHESIZE_SYSTEM
+
   const result = await getProvider().streamChat(
     [
       {
@@ -251,7 +259,7 @@ export async function deepResearch(
       },
     ],
     onStream,
-    { system: SYNTHESIZE_SYSTEM, tier: 'strong', max_tokens: 2048 }
+    { system: synthSystem, tier: 'strong', max_tokens: 2048 }
   )
 
   progress.phase = 'complete'

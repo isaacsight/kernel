@@ -34,6 +34,7 @@ import {
   upsertKGRelation,
   getUserGoals,
   upsertUserGoal,
+  getRecentConversationTitles,
   supabase,
   type DBCollectiveInsight,
 } from '../engine/SupabaseClient'
@@ -150,6 +151,7 @@ export function useChatEngine(params: UseChatEngineParams) {
   const userMemoryRef = useRef<UserMemoryProfile>(userMemory)
   userMemoryRef.current = userMemory
   const messageCountRef = useRef(0)
+  const [recentConvTitles, setRecentConvTitles] = useState<{ title: string; updated_at: string }[]>([])
 
   // Convergence mirror — multi-agent perception synthesis
   const [userMirror, setUserMirror] = useState<UserMirror>(emptyMirror())
@@ -280,6 +282,9 @@ export function useChatEngine(params: UseChatEngineParams) {
         }
       }
     }).catch(err => console.warn('[Memory] Failed to load user memory:', err))
+
+    // Load recent conversation titles for cross-conversation context
+    getRecentConversationTitles(userId).then(setRecentConvTitles).catch(() => {})
   }, [userId])
 
   // Load Knowledge Graph
@@ -440,7 +445,8 @@ export function useChatEngine(params: UseChatEngineParams) {
     const classifyPromise = (async () => {
       try {
         const loomRoutingCtx = buildRoutingContext(loomRef.current)
-        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined)
+        const routerMemory = formatMemoryForPrompt(userMemoryRef.current)
+        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, routerMemory || undefined)
       } catch (err) {
         console.error('[engine] classifyIntent failed:', err)
         return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
@@ -655,7 +661,12 @@ export function useChatEngine(params: UseChatEngineParams) {
         })()
       : ''
 
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    // Recent conversations — cross-conversation memory so the AI knows what was discussed before
+    const recentConvsBlock = recentConvTitles.length > 0
+      ? `\n\n## Recent Conversations\nThese are the user's recent conversation topics. You can reference them if the user asks about previous discussions.\n${recentConvTitles.slice(0, 6).map(c => `- ${c.title}`).join('\n')}`
+      : ''
+
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {

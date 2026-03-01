@@ -179,6 +179,7 @@ export async function classifyIntent(
   recentContext: string,
   hasAttachments?: boolean,
   loomContext?: string,
+  userMemoryContext?: string,
 ): Promise<ClassificationResult> {
   // Fast path 1: Short continuation messages reuse previous classification (<1ms)
   // "yes", "ok", "make it darker", "try again" etc. should keep the same agent
@@ -207,10 +208,10 @@ export async function classifyIntent(
       ? `Recent conversation:\n${recentContext}\n\nNew message to classify:\n${message}${attachmentNote}`
       : `Message to classify:\n${message}${attachmentNote}`
 
-    // Inject Loom routing history if available
-    const system = loomContext
-      ? `${CLASSIFICATION_SYSTEM}\n\n---\n\n${loomContext}`
-      : CLASSIFICATION_SYSTEM
+    // Inject user memory + Loom routing history for better classification
+    let system = CLASSIFICATION_SYSTEM
+    if (userMemoryContext) system += `\n\n---\n\nUser Profile (use to inform routing):\n${userMemoryContext}`
+    if (loomContext) system += `\n\n---\n\n${loomContext}`
 
     const result = await getBackgroundProvider().json<ClassificationResult>(prompt, {
       system,
