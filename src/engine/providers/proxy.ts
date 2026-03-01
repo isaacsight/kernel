@@ -45,29 +45,48 @@ export class FairUseLimitError extends Error {
     }
 }
 
+export class PlatformRefundError extends Error {
+    dailyCount: number | null
+    constructor(message: string, dailyCount?: number) {
+        super(message)
+        this.name = 'PlatformRefundError'
+        this.dailyCount = dailyCount ?? null
+    }
+}
+
 // ─── Handle error responses from proxy ──────────────────────
 
 function handleErrorResponse(status: number, body: string): never {
+    // Try to parse JSON body for structured error handling
+    let parsed: Record<string, unknown> = {}
+    try { parsed = JSON.parse(body) } catch { /* raw text */ }
+
+    // Auto-refund: platform error that was refunded server-side
+    if (parsed.refunded) {
+        throw new PlatformRefundError(
+            (parsed.error as string) || 'Something went wrong on our end',
+            parsed.daily_count as number | undefined,
+        )
+    }
+
     if (status === 403) {
-        try {
-            const parsed = JSON.parse(body)
-            if (parsed.error === 'free_limit_reached') {
-                throw new FreeLimitError(parsed.limit ?? 20, parsed.used ?? 0, parsed.resets_at)
-            }
-        } catch (e) {
-            if (e instanceof FreeLimitError) throw e
+        if (parsed.error === 'free_limit_reached') {
+            throw new FreeLimitError(
+                (parsed.limit as number) ?? 20,
+                (parsed.used as number) ?? 0,
+                parsed.resets_at as string | undefined,
+            )
         }
     }
     if (status === 429) {
-        try {
-            const parsed = JSON.parse(body)
-            if (parsed.error === 'fair_use_limit') {
-                throw new FairUseLimitError(parsed.resets_at)
-            }
-            throw new RateLimitError(parsed.error || 'Rate limit reached', parsed.limit || 0, parsed.resets_at || '')
-        } catch (e) {
-            if (e instanceof RateLimitError || e instanceof FairUseLimitError) throw e
+        if (parsed.error === 'fair_use_limit') {
+            throw new FairUseLimitError(parsed.resets_at as string | undefined)
         }
+        throw new RateLimitError(
+            (parsed.error as string) || 'Rate limit reached',
+            (parsed.limit as number) || 0,
+            (parsed.resets_at as string) || '',
+        )
     }
     throw new Error(`Proxy error (${status}): ${body}`)
 }
@@ -195,7 +214,15 @@ export async function streamFromProxy(
                         fullText += event.delta.text
                         onChunk(fullText)
                     }
-                } catch {
+                    // Detect platform error events mid-stream (e.g. timeout, upstream failure)
+                    if (event.type === 'error' && event.error?.refunded) {
+                        throw new PlatformRefundError(
+                            event.error.message || 'Stream error — message refunded',
+                            event.error.daily_count,
+                        )
+                    }
+                } catch (e) {
+                    if (e instanceof PlatformRefundError) throw e
                     // skip non-JSON lines
                 }
             }

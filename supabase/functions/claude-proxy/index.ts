@@ -193,7 +193,7 @@ interface RetryConfig {
 }
 
 const RETRY_MATRIX: Record<ErrorType, RetryConfig> = {
-  upstream_5xx: { retry: true, maxRetries: 1, baseDelayMs: 300, switchProvider: false },
+  upstream_5xx: { retry: true, maxRetries: 1, baseDelayMs: 300, switchProvider: true },
   timeout: { retry: true, maxRetries: 1, baseDelayMs: 500, switchProvider: true },
   internal: { retry: true, maxRetries: 1, baseDelayMs: 0, switchProvider: true },
   missing_key: { retry: false, maxRetries: 0, baseDelayMs: 0, switchProvider: false },
@@ -548,8 +548,14 @@ async function handleAnthropic(
     console.error('Anthropic API error:', res.status, errText)
     const errType = classifyError(res.status, errText)
     const refund = await recordErrorAndRefund(userId, 'anthropic', resolvedModel, errType, errText, res.status)
+    // Extract upstream error message for debugging
+    let upstreamMsg = 'Upstream API error'
+    try {
+      const errObj = JSON.parse(errText)
+      upstreamMsg = errObj.error?.message || errObj.error || upstreamMsg
+    } catch { /* raw text — use default */ }
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      JSON.stringify({ error: upstreamMsg, error_type: errType, status: res.status, provider: 'anthropic', refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -696,8 +702,13 @@ async function handleOpenAI(
     console.error('OpenAI API error:', res.status, errText)
     const errType = classifyError(res.status, errText)
     const refund = await recordErrorAndRefund(userId, 'openai', resolvedModel, errType, errText, res.status)
+    let upstreamMsg = 'Upstream API error'
+    try {
+      const errObj = JSON.parse(errText)
+      upstreamMsg = errObj.error?.message || errObj.error || upstreamMsg
+    } catch { /* raw text */ }
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      JSON.stringify({ error: upstreamMsg, error_type: errType, status: res.status, provider: 'openai', refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -852,8 +863,13 @@ async function handleGemini(
     console.error('Gemini API error:', res.status, errText)
     const errType = classifyError(res.status, errText)
     const refund = await recordErrorAndRefund(userId, 'gemini', resolvedModel, errType, errText, res.status)
+    let upstreamMsg = 'Upstream API error'
+    try {
+      const errObj = JSON.parse(errText)
+      upstreamMsg = errObj.error?.message || errObj.error || upstreamMsg
+    } catch { /* raw text */ }
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      JSON.stringify({ error: upstreamMsg, error_type: errType, status: res.status, provider: 'gemini', refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -1006,8 +1022,13 @@ async function handleNvidia(
     console.error('NVIDIA API error:', res.status, errText)
     const errType = classifyError(res.status, errText)
     const refund = await recordErrorAndRefund(userId, 'nvidia', resolvedModel, errType, errText, res.status)
+    let upstreamMsg = 'Upstream API error'
+    try {
+      const errObj = JSON.parse(errText)
+      upstreamMsg = errObj.error?.message || errObj.error || upstreamMsg
+    } catch { /* raw text */ }
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      JSON.stringify({ error: upstreamMsg, error_type: errType, status: res.status, provider: 'nvidia', refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
@@ -1155,8 +1176,13 @@ async function handleGroq(
     console.error('Groq API error:', res.status, errText)
     const errType = classifyError(res.status, errText)
     const refund = await recordErrorAndRefund(userId, 'groq', resolvedModel, errType, errText, res.status)
+    let upstreamMsg = 'Upstream API error'
+    try {
+      const errObj = JSON.parse(errText)
+      upstreamMsg = errObj.error?.message || errObj.error || upstreamMsg
+    } catch { /* raw text */ }
     return new Response(
-      JSON.stringify({ error: 'Upstream API error', status: res.status, refunded: refund.refunded, daily_count: refund.dailyCount }),
+      JSON.stringify({ error: upstreamMsg, error_type: errType, status: res.status, provider: 'groq', refunded: refund.refunded, daily_count: refund.dailyCount }),
       { status: res.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
     )
   }
