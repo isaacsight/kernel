@@ -581,6 +581,20 @@ async function handleAnthropic(
                 if (event.type === 'message_delta') {
                   outputTokens = event.usage?.output_tokens ?? 0
                 }
+                // Detect upstream error events mid-stream and inject refund info
+                if (event.type === 'error') {
+                  console.error('[anthropic-stream] Upstream error event:', JSON.stringify(event.error))
+                  const errMsg = event.error?.message || 'Upstream error during stream'
+                  const errType = classifyError(0, errMsg)
+                  const refund = await recordErrorAndRefund(userId, 'anthropic', resolvedModel, errType, errMsg, 0)
+                  if (refund.refunded) {
+                    const refundEvent = JSON.stringify({
+                      type: 'error',
+                      error: { message: errMsg, refunded: true, daily_count: refund.dailyCount },
+                    })
+                    controller.enqueue(encoder.encode(`data: ${refundEvent}\n\n`))
+                  }
+                }
               } catch { /* non-JSON line */ }
             }
           }
@@ -1708,8 +1722,11 @@ serve(async (req: Request) => {
       return firstResponse
     }
 
-    // Streaming errors are handled within the stream handlers
-    if (isStream) return firstResponse
+    // Only skip retry for actual streaming responses (text/event-stream).
+    // Pre-stream errors (JSON error responses from failed API calls) should
+    // still go through the retry logic so we can attempt a fallback provider.
+    const isActuallyStreaming = firstResponse.headers.get('content-type')?.includes('text/event-stream')
+    if (isActuallyStreaming) return firstResponse
 
     // Parse the error to determine if we should retry
     const errBody = await firstResponse.clone().text()
