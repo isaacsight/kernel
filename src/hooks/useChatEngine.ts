@@ -593,7 +593,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     const snapshot = serializeState(engine.getState())
     const memoryText = formatMemoryForPrompt(userMemory)
     const memoryBlock = memoryText
-      ? `\n\n---\n\n## User Memory\nYou know this about the user. Use it naturally — don't announce it.\n\n${memoryText}`
+      ? `\n\n---\n\n## User Memory\nYou know this about the user from previous conversations. Weave this knowledge naturally into your responses — reference their interests, goals, and facts when relevant. Never say "I don't know anything about you" when this context exists.\n\n${memoryText}`
       : ''
     const mirrorText = formatMirrorForPrompt(userMirrorRef.current)
     const mirrorBlock = mirrorText
@@ -634,7 +634,28 @@ export function useChatEngine(params: UseChatEngineParams) {
     const crisisBlock = crisisActive
       ? `\n\n## CRISIS MODE ACTIVE\nThe user may be in emotional distress. Lead with empathy. Acknowledge their pain before anything else.\n\nResources to weave naturally into your response:\n${formatCrisisResourcesForPrompt()}\n\nDo NOT recite resources mechanically. Be a person first.`
       : ''
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    // Build conversation context — summarize prior messages so Claude actively references them
+    const priorMessages = messagesRef.current.filter(m => m.content.trim() !== '')
+    const conversationContextBlock = priorMessages.length >= 2
+      ? (() => {
+          const topics = new Set<string>()
+          const userPoints: string[] = []
+          for (const m of priorMessages.slice(-12)) {
+            if (m.role === 'user') {
+              const summary = m.content.slice(0, 120).replace(/\n+/g, ' ').trim()
+              if (summary) userPoints.push(summary)
+            }
+            // Extract key topics from both sides
+            const words = m.content.slice(0, 200).match(/\b[A-Z][a-z]{2,}\b/g)
+            if (words) words.forEach(w => topics.add(w))
+          }
+          const topicStr = [...topics].slice(0, 8).join(', ')
+          const pointsStr = userPoints.slice(-4).map(p => `- ${p}`).join('\n')
+          return `\n\n## Conversation Context\nYou have full access to this conversation's history (${priorMessages.length} messages). Reference earlier messages naturally when relevant. Do NOT say you can't see or remember what was discussed.\n\n**Topics discussed:** ${topicStr || 'various'}\n**Recent user messages:**\n${pointsStr}`
+        })()
+      : ''
+
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
@@ -1005,10 +1026,18 @@ export function useChatEngine(params: UseChatEngineParams) {
       }
 
       // Background memory + KG + convergence extraction every 3 messages
+      // Also extract on first response if no memory exists (bootstrap)
       // CRISIS GUARD: skip all persistent extraction when crisis is active
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
-      if (currentMsgCount % 6 === 0 && !crisisActive && params.planLimits?.memory !== false) {
+      const isEmptyMemory = userMemoryRef.current.interests.length === 0 &&
+        userMemoryRef.current.goals.length === 0 &&
+        userMemoryRef.current.facts.length === 0 &&
+        !userMemoryRef.current.communication_style
+      const shouldExtract = isEmptyMemory
+        ? currentMsgCount >= 1  // Bootstrap: extract on first response if no memory
+        : currentMsgCount % 3 === 0  // Regular: extract every 3 messages
+      if (shouldExtract && !crisisActive && params.planLimits?.memory !== false) {
         guardedSetMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
