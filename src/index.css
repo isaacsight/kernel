@@ -1098,6 +1098,7 @@ h4 {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--rubin-ivory);
     padding: var(--space-xl);
 }
@@ -9240,27 +9241,27 @@ h4 {
 
     .ka-input {
         padding: 10px 12px;
-        min-height: 40px;
+        min-height: 44px;
         font-size: 16px;
     }
 
     .ka-send {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
     }
 
     .ka-attach-btn,
     .ka-thinking-toggle,
     .ka-explain-toggle {
-        width: 38px;
-        height: 38px;
+        width: 44px;
+        height: 44px;
     }
 
     /* Scroll button: snug above input + tab bar */
     .ka-scroll-btn {
         bottom: 120px;
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
     }
 
     .ka-toast {
@@ -11213,7 +11214,7 @@ h4 {
         bottom: 0;
         left: 0;
         right: 0;
-        width: 100vw;
+        width: 100%;
         height: 85vh;
         border-left: none;
         border-top: 1px solid var(--rubin-ivory-dark);
@@ -12492,7 +12493,7 @@ h4 {
         bottom: 0;
         left: 0;
         right: 0;
-        width: 100vw;
+        width: 100%;
         height: 85vh;
         height: 85dvh;
         border-right: none;
@@ -14992,7 +14993,7 @@ h4 {
         border-top: 1px solid var(--rubin-ivory-dark);
         flex-shrink: 0;
         position: relative;
-        z-index: 260;
+        z-index: 275;
     }
 
     .ka-tab-item {
@@ -15492,17 +15493,18 @@ h4 {
     }
 
     .ka-input {
-        min-height: 40px;
+        min-height: 44px;
     }
 
     /* Tab bar */
     .ka-tab-bar {
-        min-height: 40px;
+        min-height: 48px;
         padding-bottom: env(safe-area-inset-bottom, 8px);
     }
 
     .ka-tab-item {
         padding: 4px 0;
+        min-height: 44px;
     }
 
     .ka-tab-icon-wrap {
