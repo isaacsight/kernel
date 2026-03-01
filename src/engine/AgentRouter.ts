@@ -61,12 +61,146 @@ Also determine:
 Respond with ONLY valid JSON, no other text:
 {"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsImageGen": false, "needsImageRefinement": false}`
 
+// ─── Local fast-path classifier (keyword/regex, <1ms) ──────────────
+// Skips the Groq API call when keyword signals are unambiguous.
+// Goal: classify 80%+ of messages locally, only call Groq for genuinely ambiguous intents.
+
+const KEYWORD_MAP: Record<string, string[]> = {
+  coder: ['code', 'debug', 'function', 'algorithm', 'api', 'build', 'program', 'implement', 'deploy', 'compile', 'typescript', 'javascript', 'python', 'react', 'css', 'html', 'sql', 'regex', 'git', 'npm', 'bug', 'error', 'stack', 'class', 'variable', 'refactor', 'lint', 'test', 'component', 'hook', 'import', 'export', 'async', 'promise', 'array', 'object', 'string', 'number', 'boolean', 'interface', 'type', 'const', 'let', 'var', 'return', 'console', 'server', 'endpoint', 'database', 'query', 'schema', 'migration', 'docker', 'kubernetes', 'ci/cd', 'pipeline'],
+  writer: ['write', 'draft', 'email', 'blog', 'poem', 'story', 'essay', 'copy', 'edit', 'rewrite', 'proofread', 'content', 'script', 'tweet', 'caption', 'headline', 'slogan', 'letter', 'article', 'summary', 'paragraph', 'outline', 'tone', 'voice'],
+  researcher: ['research', 'explain', 'what is', 'tell me about', 'how does', 'why does', 'history of', 'compare', 'define', 'source', 'study', 'evidence', 'data', 'fact', 'statistics', 'who invented', 'when was', 'where is', 'difference between'],
+  analyst: ['analyze', 'evaluate', 'strategy', 'pros and cons', 'decision', 'business', 'roi', 'market', 'swot', 'risk', 'forecast', 'metric', 'assessment', 'benchmark', 'tradeoff', 'trade-off'],
+  kernel: ['hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening', 'good night', 'how are you', "what's up", 'sup', 'yo', 'gm', 'bye', 'goodbye', 'see you', 'appreciate it'],
+}
+
+// High-signal single keywords that are nearly unambiguous (no 2-hit requirement)
+const HIGH_SIGNAL_KEYWORDS: Record<string, string[]> = {
+  coder: ['typescript', 'javascript', 'python', 'react', 'docker', 'kubernetes', 'webpack', 'vite', 'supabase', 'postgresql', 'mongodb', 'graphql', 'restapi', 'nginx'],
+  writer: ['poem', 'essay', 'proofread', 'copywriting', 'ghostwrite', 'screenplay'],
+  researcher: ['research', 'what is', 'tell me about', 'who invented', 'history of', 'difference between'],
+  kernel: ['hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening', 'good night', 'how are you'],
+}
+
+const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?(picture|image|illustration|artwork|logo|icon)|make\s+(me\s+)?(a\s+)?(logo|image|picture|illustration|icon)|illustrate|design\s+me)\b/i
+// Image refinement is NOT locally classified — it requires conversation context
+// (whether a recent image exists) that only the LLM can evaluate.
+
+// Short continuation patterns — user is clearly following up on the current conversation
+const CONTINUATION_PATTERNS = /^(yes|no|yeah|nah|sure|ok|okay|go ahead|do it|sounds good|perfect|got it|right|exactly|please|can you|could you|try|again|more|less|also|and|but|what about|how about|instead|change|make it|fix|update|add|remove|show me|tell me more|go on|continue|keep going|elaborate|shorter|longer|simpler|faster|slower)\b/i
+
+function classifyLocal(message: string): ClassificationResult | null {
+  const lower = message.toLowerCase()
+
+  // Image gen — high signal, check first
+  if (IMAGE_GEN_PATTERNS.test(message)) {
+    return {
+      agentId: 'kernel', confidence: 0.95, complexity: 0.3,
+      needsResearch: false, isMultiStep: false, needsSwarm: false,
+      needsImageGen: true, needsImageRefinement: false,
+    }
+  }
+
+  // High-signal single keywords — one hit is enough
+  for (const [agent, keywords] of Object.entries(HIGH_SIGNAL_KEYWORDS)) {
+    for (const kw of keywords) {
+      if (kw.includes(' ')) {
+        if (lower.includes(kw)) {
+          const agentId = agent as ClassificationResult['agentId']
+          const complexity = agentId === 'kernel' ? 0.1 : 0.4
+          return {
+            agentId, confidence: 0.85, complexity,
+            needsResearch: agentId === 'researcher', isMultiStep: false, needsSwarm: false,
+            needsImageGen: false, needsImageRefinement: false,
+          }
+        }
+      } else {
+        const re = new RegExp(`\\b${kw}\\b`, 'i')
+        if (re.test(lower)) {
+          const agentId = agent as ClassificationResult['agentId']
+          const complexity = agentId === 'kernel' ? 0.1 : 0.4
+          return {
+            agentId, confidence: 0.85, complexity,
+            needsResearch: agentId === 'researcher', isMultiStep: false, needsSwarm: false,
+            needsImageGen: false, needsImageRefinement: false,
+          }
+        }
+      }
+    }
+  }
+
+  // Count keyword hits per agent
+  const scores: Record<string, number> = {}
+  for (const [agent, keywords] of Object.entries(KEYWORD_MAP)) {
+    let hits = 0
+    for (const kw of keywords) {
+      // Multi-word keywords: check as substring; single-word: check word boundary
+      if (kw.includes(' ')) {
+        if (lower.includes(kw)) hits++
+      } else {
+        const re = new RegExp(`\\b${kw}\\b`, 'i')
+        if (re.test(lower)) hits++
+      }
+    }
+    if (hits > 0) scores[agent] = hits
+  }
+
+  const entries = Object.entries(scores).sort((a, b) => b[1] - a[1])
+  if (entries.length === 0) return null // ambiguous — fall through to Groq
+
+  const [topAgent, topHits] = entries[0]
+  const runnerUpHits = entries.length > 1 ? entries[1][1] : 0
+
+  // Require 2+ keyword hits with clear dominance (1.5x runner-up or no runner-up)
+  if (topHits >= 2 && topHits >= runnerUpHits * 1.5) {
+    const agentId = topAgent as ClassificationResult['agentId']
+    const complexity = agentId === 'kernel' ? 0.1 : agentId === 'analyst' ? 0.5 : 0.4
+    return {
+      agentId, confidence: 0.85, complexity,
+      needsResearch: false, isMultiStep: false, needsSwarm: false,
+      needsImageGen: false, needsImageRefinement: false,
+    }
+  }
+
+  return null // ambiguous — fall through to Groq
+}
+
+// Cache the last classification to reuse for short continuations
+let _lastClassification: ClassificationResult | null = null
+let _lastClassificationTime = 0
+
+/** Reset classification cache — for testing only */
+export function _resetClassificationCache() {
+  _lastClassification = null
+  _lastClassificationTime = 0
+}
+
 export async function classifyIntent(
   message: string,
   recentContext: string,
   hasAttachments?: boolean,
   loomContext?: string,
 ): Promise<ClassificationResult> {
+  // Fast path 1: Short continuation messages reuse previous classification (<1ms)
+  // "yes", "ok", "make it darker", "try again" etc. should keep the same agent
+  const now = Date.now()
+  if (_lastClassification && (now - _lastClassificationTime) < 120_000) {
+    if (CONTINUATION_PATTERNS.test(message) && message.length < 80) {
+      console.log(`[router] continuation fast-path → ${_lastClassification.agentId} (reusing previous)`)
+      return { ..._lastClassification, needsImageRefinement: false }
+    }
+  }
+
+  // Fast path 2: Local keyword classifier (<1ms)
+  // Now runs even with conversation context — only skip for genuinely ambiguous cases
+  const local = classifyLocal(message)
+  if (local) {
+    console.log(`[router] local fast-path → ${local.agentId} (${local.needsImageGen ? 'imageGen' : 'keywords'})`)
+    _lastClassification = local
+    _lastClassificationTime = now
+    return local
+  }
+
+  // Groq API call — only for genuinely ambiguous messages
   try {
     const attachmentNote = hasAttachments ? '\n\n[User has attached files for analysis]' : ''
     const prompt = recentContext
@@ -87,15 +221,21 @@ export async function classifyIntent(
     // Validate the result
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator']
     if (!validAgents.includes(result.agentId)) {
-      return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      _lastClassification = fallback
+      _lastClassificationTime = now
+      return fallback
     }
 
     // Fall back to kernel if confidence is too low
     if (typeof result.confidence !== 'number' || result.confidence < 0.3) {
-      return { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      const fallback: ClassificationResult = { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      _lastClassification = fallback
+      _lastClassificationTime = now
+      return fallback
     }
 
-    return {
+    const classified: ClassificationResult = {
       agentId: result.agentId,
       confidence: Math.min(1, Math.max(0, result.confidence)),
       complexity: Math.min(1, Math.max(0, typeof result.complexity === 'number' ? result.complexity : 0.5)),
@@ -105,8 +245,15 @@ export async function classifyIntent(
       needsImageGen: !!result.needsImageGen,
       needsImageRefinement: !!result.needsImageRefinement,
     }
+    _lastClassification = classified
+    _lastClassificationTime = now
+    return classified
   } catch {
-    // On any failure, fall back to kernel
+    // On any failure, fall back to kernel (or reuse last classification if recent)
+    if (_lastClassification && (now - _lastClassificationTime) < 60_000) {
+      console.log(`[router] Groq failed, reusing recent classification → ${_lastClassification.agentId}`)
+      return _lastClassification
+    }
     return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
   }
 }

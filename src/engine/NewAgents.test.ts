@@ -1,10 +1,11 @@
 import { describe, it, expect, vi } from 'vitest'
 import { classifyIntent } from './AgentRouter'
 import { routeToAgent } from '../agents/swarm'
-import { getProvider } from './providers/registry'
+import { getProvider, getBackgroundProvider } from './providers/registry'
 
 vi.mock('./providers/registry', () => ({
     getProvider: vi.fn(),
+    getBackgroundProvider: vi.fn(),
 }))
 
 describe('New Agents Integration', () => {
@@ -18,7 +19,7 @@ describe('New Agents Integration', () => {
                 needsSwarm: false,
             }),
         }
-            ; (getProvider as any).mockReturnValue(mockProvider)
+            ; (getBackgroundProvider as any).mockReturnValue(mockProvider)
 
         const result = await classifyIntent('make this look premium', '')
         expect(result.agentId).toBe('aesthete')
@@ -38,7 +39,7 @@ describe('New Agents Integration', () => {
                 needsSwarm: false,
             }),
         }
-            ; (getProvider as any).mockReturnValue(mockProvider)
+            ; (getBackgroundProvider as any).mockReturnValue(mockProvider)
 
         const result = await classifyIntent('check for security bugs', '')
         expect(result.agentId).toBe('guardian')
@@ -58,7 +59,7 @@ describe('New Agents Integration', () => {
                 needsSwarm: false,
             }),
         }
-            ; (getProvider as any).mockReturnValue(mockProvider)
+            ; (getBackgroundProvider as any).mockReturnValue(mockProvider)
 
         const result = await classifyIntent('what were my goals last month', '')
         expect(result.agentId).toBe('curator')
@@ -78,7 +79,7 @@ describe('New Agents Integration', () => {
                 needsSwarm: true,
             }),
         }
-            ; (getProvider as any).mockReturnValue(mockProvider)
+            ; (getBackgroundProvider as any).mockReturnValue(mockProvider)
 
         const result = await classifyIntent('is this a good business move', '')
         expect(result.agentId).toBe('strategist')

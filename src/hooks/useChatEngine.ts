@@ -189,15 +189,29 @@ export function useChatEngine(params: UseChatEngineParams) {
   messagesRef.current = messages
   const isThinkingRef = useRef(false)
   isThinkingRef.current = isThinking
+  // Track the conversation ID that's currently streaming — if the user switches
+  // conversations, UI updates are skipped but the stream continues and persists to DB.
+  const streamingConvIdRef = useRef<string | null>(null)
+  const activeConvIdRef = useRef<string | null>(activeConversationId)
+  activeConvIdRef.current = activeConversationId
 
   // Clean up active stream on unmount
   useEffect(() => {
     return () => { streamAbortRef.current?.abort() }
   }, [])
 
-  // Clear active document when conversation changes (new chat or switch)
+  // Clean up UI state when conversation changes — but DON'T abort the stream.
+  // Let background responses finish and persist to DB so they're there when the user comes back.
   useEffect(() => {
     setActiveDocument(null)
+    setIsStreaming(false)
+    setIsThinking(false)
+    setThinkingAgent(null)
+    setResearchProgress(null)
+    setTaskProgress(null)
+    setSwarmProgress(null)
+    setIsWorkflowActive(false)
+    setCurrentThinking('')
   }, [activeConversationId])
 
   // Sync engine state with Supabase on auth
@@ -366,20 +380,18 @@ export function useChatEngine(params: UseChatEngineParams) {
     // This ensures the home screen disappears instantly on slow Android connections.
     const attachmentMeta = filesToSend.map(f => ({ name: f.name, type: f.type }))
 
-    // Generate data URLs for image files (for inline thumbnails in chat)
+    // Generate data URLs for image files (for inline thumbnails in chat) — parallel
     const imageFiles = filesToSend.filter(f => isImageFile(f))
-    const imageDataUrls: string[] = []
-    for (const imgFile of imageFiles) {
-      try {
-        const dataUrl = await new Promise<string>((resolve, reject) => {
+    const imageDataUrls = (await Promise.all(
+      imageFiles.map(imgFile =>
+        new Promise<string>((resolve) => {
           const reader = new FileReader()
           reader.readAsDataURL(imgFile)
           reader.onload = () => resolve(reader.result as string)
-          reader.onerror = reject
+          reader.onerror = () => resolve('') // skip failed reads
         })
-        imageDataUrls.push(dataUrl)
-      } catch { /* skip failed reads */ }
-    }
+      )
+    )).filter(Boolean)
 
     const userMsgId = `user_${Date.now()}`
     const userMsg: ChatMessage = {
@@ -402,69 +414,50 @@ export function useChatEngine(params: UseChatEngineParams) {
     setTaskProgress(null)
     setSwarmProgress(null)
 
-    // Lazy-create conversation on first message
-    let convId = activeConversationId
-    if (!convId) {
-      const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
-      let conv: Awaited<ReturnType<typeof createConversation>>
-      try {
-        conv = await createConversation(userId, title)
-      } catch {
-        setMessages(prev => prev.filter(m => m.id !== userMsgId))
-        setIsStreaming(false)
-        setIsThinking(false)
-        showToast('Session expired. Signing you out — please sign back in.')
-        signOut()
-        return
-      }
-      if (!conv) {
-        setMessages(prev => prev.filter(m => m.id !== userMsgId))
-        setIsStreaming(false)
-        setIsThinking(false)
-        showToast('Failed to create conversation. Please try again.')
-        return
-      }
-      convId = conv.id
-      setActiveConversationId(convId)
-    }
+    // ── Run conversation creation, classification, and URL fetching in PARALLEL ──
+    // These three operations are independent and were previously sequential (~1-3s wasted).
 
-    // Classify intent via AgentRouter (read from ref for latest state across awaits)
+    // 1. Conversation creation (only if needed)
+    const convPromise = (async () => {
+      if (activeConversationId) return activeConversationId
+      const title = generateTitle(trimmed || filesToSend[0]?.name || 'New chat')
+      try {
+        const conv = await createConversation(userId, title)
+        if (!conv) return null
+        return conv.id
+      } catch {
+        return 'session_expired' as const
+      }
+    })()
+
+    // 2. Classification
     const recentCtx = buildRecentContext(
       messagesRef.current.filter(m => m.content.trim()).map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
         content: m.content,
       }))
     )
-    let classification: Awaited<ReturnType<typeof classifyIntent>>
-    try {
-      const loomRoutingCtx = buildRoutingContext(loomRef.current)
-      classification = await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined)
-    } catch (err) {
-      console.error('[engine] classifyIntent failed:', err)
-      // Fall back to kernel agent on classifier failure
-      classification = { agentId: 'kernel', confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
-    }
-    // Crisis override — force kernel agent for high severity
-    if (crisisActive && crisisSeverity === 'high') {
-      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
-    }
-    const specialist = getSpecialist(classification.agentId)
-    setThinkingAgent(specialist.name)
+    const classifyPromise = (async () => {
+      try {
+        const loomRoutingCtx = buildRoutingContext(loomRef.current)
+        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined)
+      } catch (err) {
+        console.error('[engine] classifyIntent failed:', err)
+        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
+      }
+    })()
 
-    // Fetch URL content if message contains links
-    let urlContext = ''
+    // 3. URL fetching (only if links present)
     const urls = trimmed.match(LINK_REGEX)
-    if (urls && urls.length > 0) {
+    const urlPromise = (async () => {
+      if (!urls || urls.length === 0) return ''
       const fetches = await Promise.all(urls.slice(0, 3).map(async (url) => {
-        // Detect platform share links (ChatGPT, Claude, Gemini)
         if (isPlatformShareLink(url)) {
           try {
             const result = await importConversation(url)
             if (result.messages.length > 0) {
               return formatImportedContext(result, '')
             }
-            // Import returned 0 messages — these platforms load data client-side.
-            // Return a helpful context note instead of raw HTML scaffold.
             const platform = result.platform === 'chatgpt' ? 'ChatGPT'
               : result.platform === 'claude' ? 'Claude'
                 : result.platform === 'gemini' ? 'Gemini' : 'an AI platform'
@@ -481,8 +474,47 @@ export function useChatEngine(params: UseChatEngineParams) {
         const text = await fetchUrlContent(url)
         return text ? `[URL: ${url}]\n${text}\n` : ''
       }))
-      urlContext = fetches.filter(Boolean).join('\n')
+      return fetches.filter(Boolean).join('\n')
+    })()
+
+    // Await all three in parallel
+    const [convResult, classifyResult, urlContext] = await Promise.all([convPromise, classifyPromise, urlPromise])
+
+    // Handle conversation creation result
+    let convId: string
+    if (convResult === 'session_expired') {
+      setMessages(prev => prev.filter(m => m.id !== userMsgId))
+      setIsStreaming(false)
+      setIsThinking(false)
+      showToast('Session expired. Signing you out — please sign back in.')
+      signOut()
+      return
+    } else if (!convResult) {
+      setMessages(prev => prev.filter(m => m.id !== userMsgId))
+      setIsStreaming(false)
+      setIsThinking(false)
+      showToast('Failed to create conversation. Please try again.')
+      return
+    } else {
+      convId = convResult
+      if (!activeConversationId) setActiveConversationId(convId)
     }
+
+    // Track which conversation is streaming — UI updates are skipped if user switches away
+    streamingConvIdRef.current = convId
+    const isStillActive = () => activeConvIdRef.current === convId || activeConvIdRef.current === null
+    // Guarded setMessages — only updates UI if this conversation is still in view
+    const guardedSetMessages: typeof setMessages = (updater) => {
+      if (isStillActive()) setMessages(updater)
+    }
+
+    // Handle classification result
+    let classification = classifyResult
+    if (crisisActive && crisisSeverity === 'high') {
+      classification = { ...classification, agentId: 'kernel', needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
+    }
+    const specialist = getSpecialist(classification.agentId)
+    setThinkingAgent(specialist.name)
 
     // Build content blocks for Claude API
     let userContent: string | ContentBlock[] = urlContext
@@ -493,17 +525,18 @@ export function useChatEngine(params: UseChatEngineParams) {
       const blocks: ContentBlock[] = []
       let textPrefix = ''
 
-      for (const file of filesToSend) {
+      // Process files in parallel for speed
+      const fileResults = await Promise.all(filesToSend.map(async (file) => {
         const ext = '.' + file.name.split('.').pop()?.toLowerCase()
 
         if (isAudioFile(file)) {
           try {
             const result = await transcribeAudio(file)
             const duration = result.duration_seconds ? ` (${Math.round(result.duration_seconds)}s)` : ''
-            textPrefix += `[Audio transcription: ${file.name}${duration}]\n${result.text}\n\n`
+            return { type: 'text' as const, text: `[Audio transcription: ${file.name}${duration}]\n${result.text}\n\n` }
           } catch (err) {
             console.warn('[Transcribe] Failed:', err)
-            textPrefix += `[Audio: ${file.name} — transcription failed]\n\n`
+            return { type: 'text' as const, text: `[Audio: ${file.name} — transcription failed]\n\n` }
           }
         } else if (TEXT_EXTENSIONS.includes(ext)) {
           let text = await readFileAsText(file)
@@ -511,27 +544,31 @@ export function useChatEngine(params: UseChatEngineParams) {
           if (text.length > MAX_TEXT_CHARS) {
             text = text.slice(0, MAX_TEXT_CHARS) + `\n\n[... truncated — file was ${(text.length / 1000).toFixed(0)}K chars, showing first ${(MAX_TEXT_CHARS / 1000).toFixed(0)}K]`
           }
-          textPrefix += `[File: ${file.name}]\n${text}\n\n`
+          return { type: 'text' as const, text: `[File: ${file.name}]\n${text}\n\n` }
         } else if (isImageFile(file)) {
           const data = await fileToBase64(file)
-          blocks.push({
-            type: 'image',
-            source: { type: 'base64', media_type: getMediaType(file), data },
-          })
+          return { type: 'image' as const, block: { type: 'image', source: { type: 'base64', media_type: getMediaType(file), data } } as ContentBlock }
         } else if (isPdfFile(file)) {
           const data = await fileToBase64(file)
-          const docBlock: ContentBlock = {
-            type: 'document',
-            source: { type: 'base64', media_type: 'application/pdf', data },
-          }
-          blocks.push(docBlock)
-          // Store as active document for multi-turn analysis (Pro only)
+          const docBlock: ContentBlock = { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data } }
+          return { type: 'pdf' as const, block: docBlock, file, data }
+        }
+        return null
+      }))
+
+      // Collect results preserving order
+      for (const result of fileResults) {
+        if (!result) continue
+        if (result.type === 'text') textPrefix += result.text
+        else if (result.type === 'image') blocks.push(result.block)
+        else if (result.type === 'pdf') {
+          blocks.push(result.block)
           if (isPro) {
             setActiveDocument({
-              name: file.name,
-              type: file.type || 'application/pdf',
-              dataUrl: `data:application/pdf;base64,${data}`,
-              contentBlock: docBlock,
+              name: result.file.name,
+              type: result.file.type || 'application/pdf',
+              dataUrl: `data:application/pdf;base64,${result.data}`,
+              contentBlock: result.block,
             })
           }
         }
@@ -600,7 +637,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
-    setMessages(prev => [...prev, {
+    guardedSetMessages(prev => [...prev, {
       id: kernelId,
       role: 'kernel',
       content: '',
@@ -637,15 +674,56 @@ export function useChatEngine(params: UseChatEngineParams) {
       ] as ContentBlock[]
     }
 
+    // If there's a recently generated image, inject it so Claude can reference/describe it.
+    // Look for the most recent generated image in conversation history (within last 10 messages).
+    if (!classification.needsImageGen && typeof userContent === 'string') {
+      const recentMsgs = messagesRef.current.slice(-10)
+      for (let i = recentMsgs.length - 1; i >= 0; i--) {
+        const msg = recentMsgs[i]
+        if (msg.generatedImages && msg.generatedImages.length > 0) {
+          const lastImg = msg.generatedImages[msg.generatedImages.length - 1]
+          // Use in-memory base64 if available, otherwise try the storage URL
+          let imageBase64: string | null = null
+          let imageMimeType: string = lastImg.mimeType || 'image/png'
+          if (lastImg.image) {
+            imageBase64 = lastImg.image
+          } else if (lastImg.image_url) {
+            try {
+              const imgRes = await fetch(lastImg.image_url)
+              const blob = await imgRes.blob()
+              imageBase64 = await new Promise<string>((resolve) => {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                  const dataUrl = reader.result as string
+                  resolve(dataUrl.split(',')[1] || '')
+                }
+                reader.readAsDataURL(blob)
+              })
+            } catch { /* skip — Claude just won't see the image */ }
+          }
+          if (imageBase64) {
+            userContent = [
+              {
+                type: 'image',
+                source: { type: 'base64', media_type: imageMimeType, data: imageBase64 },
+              } as ContentBlock,
+              { type: 'text', text: `[This is the most recently generated image in our conversation]\n\n${userContent}` },
+            ] as ContentBlock[]
+          }
+          break
+        }
+      }
+    }
+
     const claudeMessages: { role: string; content: string | ContentBlock[] }[] = [
       ...sanitized,
       { role: 'user', content: userContent },
     ]
 
     const updateKernelMsg = (text: string, thinkingText?: string) => {
-      if (isThinkingRef.current && (text || thinkingText)) { setIsThinking(false); setThinkingAgent(null); isThinkingRef.current = false }
+      if (isThinkingRef.current && (text || thinkingText) && isStillActive()) { setIsThinking(false); setThinkingAgent(null); isThinkingRef.current = false }
       latestKernelContentRef.current = text
-      setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text, thinking: thinkingText ?? m.thinking } : m))
+      guardedSetMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: text, thinking: thinkingText ?? m.thinking } : m))
     }
 
     let swarmAgentIds: string[] | null = null
@@ -724,7 +802,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           const result = await generateImage(trimmed, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
           setIsThinking(false)
           isThinkingRef.current = false
-          setMessages(prev => prev.map(m => m.id === kernelId
+          guardedSetMessages(prev => prev.map(m => m.id === kernelId
             ? { ...m, content: trimmed, generatedImages: [result] }
             : m
           ))
@@ -753,7 +831,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           if (imgErr instanceof ImageCreditError) {
             setIsThinking(false)
             isThinkingRef.current = false
-            setMessages(prev => prev.map(m => m.id === kernelId
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
               ? { ...m, content: '*You need image credits to generate images. Purchase a credit pack to get started.*' }
               : m
             ))
@@ -763,7 +841,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           } else if (imgErr instanceof ImageGenLimitError) {
             setIsThinking(false)
             isThinkingRef.current = false
-            setMessages(prev => prev.map(m => m.id === kernelId
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
               ? { ...m, content: '*Image generation rate limited. Please wait a moment and try again.*' }
               : m
             ))
@@ -785,7 +863,7 @@ export function useChatEngine(params: UseChatEngineParams) {
           onChunk: updateKernelMsg,
           onStepsUpdate: (steps) => {
             setWorkflowSteps(steps)
-            setMessages(prev => prev.map(m => m.id === kernelId
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
               ? { ...m, workflowSteps: steps }
               : m
             ))
@@ -853,13 +931,18 @@ export function useChatEngine(params: UseChatEngineParams) {
         }
         const autoModel = resolveModelFromClassification(classification, routingCtx)
         console.log(`[engine] Auto-selected model: ${autoModel} (complexity: ${classification.complexity}, words: ${routingCtx.messageWordCount}, turns: ${userMsgCount})`)
+        // Content-producing agents (writer, coder, aesthete) need higher token budgets
+        const isContentAgent = specialist.id === 'writer' || specialist.id === 'coder' || specialist.id === 'aesthete'
+        const maxTokens = isContentAgent
+          ? (autoModel === 'haiku' ? 8192 : 16384)
+          : (autoModel === 'haiku' ? 4096 : 8192)
         const streamResult = await claudeStreamChat(
           claudeMessages,
           updateKernelMsg,
           {
             system: systemPrompt,
             model: autoModel,
-            max_tokens: autoModel === 'haiku' ? 4096 : 8192,
+            max_tokens: maxTokens,
             web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
             signal: abortController.signal,
             thinking: extendedThinkingEnabled && isPro ? { type: 'enabled', budget_tokens: 10000 } : undefined,
@@ -869,7 +952,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         streamAbortRef.current = null
         // Store thinking text on the assistant message when complete
         if (streamResult.thinking) {
-          setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, thinking: streamResult.thinking } : m))
+          guardedSetMessages(prev => prev.map(m => m.id === kernelId ? { ...m, thinking: streamResult.thinking } : m))
         }
       }
 
@@ -898,7 +981,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         }
         // Only show feedback buttons if signal was persisted — clicking them updates the signal row
         if (signalSaved) {
-          setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, signalId } : m))
+          guardedSetMessages(prev => prev.map(m => m.id === kernelId ? { ...m, signalId } : m))
         }
       }
       touchConversation(convId)
@@ -926,7 +1009,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
       if (currentMsgCount % 6 === 0 && !crisisActive && params.planLimits?.memory !== false) {
-        setMessages(currentMsgs => {
+        guardedSetMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
             .filter(m => m.content.trim())
@@ -1017,46 +1100,46 @@ export function useChatEngine(params: UseChatEngineParams) {
       if (err instanceof FreeLimitError) {
         setFreeLimitResetsAt?.(err.resetsAt)
         setShowUpgradeWall(true)
-        setMessages(prev => prev.filter(m => m.id !== kernelId))
+        guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
       } else if (err instanceof MonthlyLimitError) {
         setShowUpgradeWall(true)
-        setMessages(prev => prev.filter(m => m.id !== kernelId))
+        guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
       } else if (err instanceof FairUseLimitError) {
         const resetDate = err.resetsAt ? new Date(err.resetsAt).toLocaleDateString([], { month: 'long', day: 'numeric' }) : 'the 1st of next month'
-        setMessages(prev => prev.map(m => m.id === kernelId
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've reached your fair use limit for this month. Your messages reset on ${resetDate}. We'll see you then.*\n\n*If you think this is an error, contact support at hi@kernel.chat*` }
           : m
         ))
       } else if (err instanceof ProLimitError) {
         const resetTime = err.resetsAt ? new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'soon'
-        setMessages(prev => prev.map(m => m.id === kernelId
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've used all ${err.limit} messages for today. Resets at ${resetTime}.*` }
           : m
         ))
       } else if (err instanceof FileLimitError) {
-        setMessages(prev => prev.map(m => m.id === kernelId
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*File analysis is a Pro feature. Upgrade to analyze images and documents.*` }
           : m
         ))
         setShowUpgradeWall(true)
       } else if (err instanceof ImageLimitError) {
-        setMessages(prev => prev.map(m => m.id === kernelId
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for more image analysis.*` }
           : m
         ))
         showToast(`Daily image limit reached (${err.used}/${err.limit})`)
       } else if (err instanceof PlatformRefundError) {
         // Platform error — message was auto-refunded, show friendly notice
-        setMessages(prev => prev.map(m => m.id === kernelId
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*Something went wrong on our end. Your message has been refunded automatically — please try again.*` }
           : m
         ))
         showToast('Message refunded — something went wrong on our end')
       } else if (err instanceof RateLimitError) {
-        setMessages(prev => prev.filter(m => m.id !== kernelId))
+        guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
       } else {
         const errMsg = err instanceof Error ? err.message : 'Failed to reach kernel.chat'
-        setMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId ? { ...m, content: `*${errMsg}*` } : m))
       }
       setResearchProgress(null)
       setTaskProgress(null)
@@ -1064,8 +1147,11 @@ export function useChatEngine(params: UseChatEngineParams) {
       setIsWorkflowActive(false)
       workflowRef.current = null
     } finally {
-      setIsStreaming(false)
-      setIsThinking(false)
+      streamingConvIdRef.current = null
+      if (isStillActive()) {
+        setIsStreaming(false)
+        setIsThinking(false)
+      }
     }
   }
 

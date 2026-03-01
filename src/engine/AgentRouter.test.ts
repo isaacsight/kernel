@@ -11,13 +11,15 @@ const mockProvider = {
 
 vi.mock('./providers/registry', () => ({
   getProvider: () => mockProvider,
+  getBackgroundProvider: () => mockProvider,
 }))
 
-import { classifyIntent, buildRecentContext } from './AgentRouter'
+import { classifyIntent, buildRecentContext, _resetClassificationCache } from './AgentRouter'
 
 describe('AgentRouter', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    _resetClassificationCache()
   })
 
   describe('classifyIntent', () => {
@@ -30,12 +32,13 @@ describe('AgentRouter', () => {
         needsSwarm: false,
       })
 
+      // "write a function" — 'function' is a coder keyword but only 1 hit, falls to Groq
       const result = await classifyIntent('write a function', '')
       expect(result.agentId).toBe('coder')
-      expect(result.confidence).toBe(0.9)
+      expect(result.confidence).toBe(0.9) // from Groq mock
     })
 
-    it('falls back to kernel on invalid agentId', async () => {
+    it('falls back to kernel on invalid agentId via Groq', async () => {
       mockJson.mockResolvedValue({
         agentId: 'nonexistent',
         confidence: 0.8,
@@ -44,21 +47,21 @@ describe('AgentRouter', () => {
         needsSwarm: false,
       })
 
-      const result = await classifyIntent('hello', '')
+      const result = await classifyIntent('do something completely ambiguous for me please', '')
       expect(result.agentId).toBe('kernel')
       expect(result.confidence).toBe(0)
     })
 
-    it('falls back to kernel when confidence < 0.3', async () => {
+    it('falls back to kernel when Groq confidence < 0.3', async () => {
       mockJson.mockResolvedValue({
-        agentId: 'researcher',
+        agentId: 'analyst',
         confidence: 0.2,
         needsResearch: true,
         isMultiStep: false,
         needsSwarm: false,
       })
 
-      const result = await classifyIntent('maybe research?', '')
+      const result = await classifyIntent('I have a vague question about something', '')
       expect(result.agentId).toBe('kernel')
       expect(result.needsResearch).toBe(false)
     })
@@ -72,46 +75,39 @@ describe('AgentRouter', () => {
         needsSwarm: false,
       })
 
-      const result = await classifyIntent('evaluate this', '')
+      const result = await classifyIntent('give me your thoughts on this situation', '')
       expect(result.confidence).toBe(1)
     })
 
     it('falls back to kernel on provider error', async () => {
       mockJson.mockRejectedValue(new Error('Network error'))
 
-      const result = await classifyIntent('anything', '')
+      // No cached classification (reset in beforeEach), so should fall back to kernel
+      const result = await classifyIntent('do something completely unknown', '')
       expect(result.agentId).toBe('kernel')
-      expect(result.confidence).toBe(0)
     })
 
-    it('routes researcher correctly', async () => {
-      mockJson.mockResolvedValue({
-        agentId: 'researcher',
-        confidence: 0.85,
-        needsResearch: true,
-        isMultiStep: false,
-        needsSwarm: false,
-      })
-
+    it('routes researcher via local fast-path', async () => {
       const result = await classifyIntent('research AI regulation', '')
       expect(result.agentId).toBe('researcher')
       expect(result.needsResearch).toBe(true)
+      expect(mockJson).not.toHaveBeenCalled()
     })
 
-    it('routes writer correctly', async () => {
-      mockJson.mockResolvedValue({
-        agentId: 'writer',
-        confidence: 0.75,
-        needsResearch: false,
-        isMultiStep: false,
-        needsSwarm: false,
-      })
-
+    it('routes writer via local fast-path', async () => {
       const result = await classifyIntent('write a blog post', '')
       expect(result.agentId).toBe('writer')
+      expect(mockJson).not.toHaveBeenCalled()
     })
 
-    it('detects multi-step and swarm needs', async () => {
+    it('routes kernel via local fast-path for greetings', async () => {
+      const result = await classifyIntent('hello', '')
+      expect(result.agentId).toBe('kernel')
+      expect(result.confidence).toBe(0.85)
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('detects multi-step and swarm needs via Groq', async () => {
       mockJson.mockResolvedValue({
         agentId: 'analyst',
         confidence: 0.9,
@@ -120,10 +116,20 @@ describe('AgentRouter', () => {
         needsSwarm: true,
       })
 
-      const result = await classifyIntent('research, analyze, and write about AI', '')
+      const result = await classifyIntent('I need you to investigate the feasibility, then plan, and finally deliver a comprehensive report', '')
       expect(result.isMultiStep).toBe(true)
       expect(result.needsSwarm).toBe(true)
       expect(result.needsResearch).toBe(true)
+    })
+
+    it('uses continuation fast-path for short follow-ups', async () => {
+      // First, establish a classification
+      const result1 = await classifyIntent('tell me about quantum computing', '')
+      expect(result1.agentId).toBe('researcher')
+
+      // Short follow-up should reuse previous classification
+      const result2 = await classifyIntent('tell me more', '')
+      expect(result2.agentId).toBe('researcher')
     })
   })
 

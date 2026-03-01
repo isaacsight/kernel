@@ -21,7 +21,7 @@ type Provider = 'anthropic' | 'openai' | 'gemini' | 'nvidia' | 'groq'
 const TIER_MODELS: Record<Provider, Record<string, string>> = {
   anthropic: {
     fast: 'claude-haiku-4-5-20251001',
-    strong: 'claude-sonnet-4-6-20250514',
+    strong: 'claude-sonnet-4-6',
   },
   openai: {
     fast: 'gpt-4o-mini',
@@ -44,7 +44,7 @@ const TIER_MODELS: Record<Provider, Record<string, string>> = {
 // Legacy model names (backward compat with existing 'sonnet'/'haiku' callers)
 const LEGACY_MODEL_MAP: Record<string, string> = {
   opus: 'claude-opus-4-6',
-  sonnet: 'claude-sonnet-4-6-20250514',
+  sonnet: 'claude-sonnet-4-6',
   haiku: 'claude-haiku-4-5-20251001',
 }
 
@@ -64,7 +64,7 @@ function resolveModel(provider: Provider, tier?: string, model?: string, legacyM
 
 const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = {
   'claude-opus-4-6': { input: 15.00, output: 75.00 },
-  'claude-sonnet-4-6-20250514': { input: 3.00, output: 15.00 },
+  'claude-sonnet-4-6': { input: 3.00, output: 15.00 },
   'claude-sonnet-4-5-20250929': { input: 3.00, output: 15.00 },
   'claude-haiku-4-5-20251001': { input: 1.00, output: 5.00 },
   'gpt-4o': { input: 2.50, output: 10.00 },
@@ -1317,6 +1317,8 @@ serve(async (req: Request) => {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
+
+      // ── Wave 1: Subscription query (need plan info for all limit checks) ──
       const { data: sub } = await svc
         .from('subscriptions')
         .select('status, plan')
@@ -1329,12 +1331,50 @@ serve(async (req: Request) => {
       isFreeUser = planId === 'free'
       isMaxUser = planId.startsWith('max_')
       const limits = PLAN_LIMITS[planId]
+      const tier: Tier = isMaxUser ? 'max' : isPaidUser ? 'paid' : 'free'
 
-      // ── Daily message limit (all tiers) ───────────────────
+      // Count files in payload (needed for file limit check)
+      let fileCount = 0
+      if (payload.messages) {
+        for (const m of payload.messages) {
+          if (Array.isArray(m.content)) {
+            for (const block of m.content as any[]) {
+              if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
+            }
+          }
+        }
+      }
+
+      // Quick sync check: files blocked for free tier (no DB needed)
+      if (fileCount > 0 && limits.filesPerMonth === 0) {
+        return new Response(
+          JSON.stringify({ error: 'files_pro_only', message: 'File analysis is a Pro feature.' }),
+          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      // ── Wave 2: All limit checks in parallel ──────────────
+      const [dailyLimitResult, monthlyResult, rateLimitResult, costResult, fileLimitResult] = await Promise.all([
+        // Daily message limit
+        svc.rpc('check_message_limit', { p_user_id: user.id })
+          .then(({ data, error }) => ({ data, error })),
+        // Monthly message limit (different RPC for max tier)
+        isMaxUser
+          ? svc.rpc('check_max_fair_use', { p_user_id: user.id }).then(({ data }) => ({ type: 'max' as const, data }))
+          : svc.rpc('check_monthly_message_limit', { p_user_id: user.id }).then(({ data }) => ({ type: 'standard' as const, data })),
+        // Rate limiting
+        checkRL(svc, user.id, 'claude-proxy', tier),
+        // Daily cost limit
+        checkDailyCostLimit(user.id),
+        // File limit (only if files attached)
+        fileCount > 0
+          ? svc.rpc('check_monthly_file_limit', { p_user_id: user.id }).then(({ data }) => data)
+          : Promise.resolve(null),
+      ])
+
+      // ── Evaluate daily message limit ──────────────────────
       {
-        const { data: limitCheck, error: limitErr } = await svc.rpc('check_message_limit', {
-          p_user_id: user.id,
-        })
+        const { data: limitCheck, error: limitErr } = dailyLimitResult
         if (limitErr) {
           console.error('[grace-shield] check_message_limit error:', limitErr.message)
           // Fallback to direct read
@@ -1382,10 +1422,9 @@ serve(async (req: Request) => {
         }
       }
 
-      // ── Monthly message limit ─────────────────────────────
-      if (isMaxUser) {
-        // Max tier: calendar-month fair use enforcement (invisible to user until 6000)
-        const { data: fairUse } = await svc.rpc('check_max_fair_use', { p_user_id: user.id })
+      // ── Evaluate monthly message limit ────────────────────
+      if (monthlyResult.type === 'max') {
+        const fairUse = monthlyResult.data
         if (fairUse?.blocked) {
           return new Response(
             JSON.stringify({
@@ -1396,14 +1435,11 @@ serve(async (req: Request) => {
             { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
           )
         }
-        // Internal monitoring: flag at 3000 (no user-facing effect)
         if (fairUse && fairUse.monthly_count >= 3000) {
           svc.rpc('set_usage_flag', { p_user_id: user.id, p_flag: 'high' }).catch(() => {})
         }
       } else {
-        const { data: monthCheck } = await svc.rpc('check_monthly_message_limit', {
-          p_user_id: user.id,
-        })
+        const monthCheck = monthlyResult.data
         if (monthCheck && monthCheck.monthly_count >= limits.messagesPerMonth) {
           return new Response(
             JSON.stringify({
@@ -1418,47 +1454,48 @@ serve(async (req: Request) => {
         }
       }
 
-      // ── File upload check (images + documents) ────────────
-      {
-        let fileCount = 0
-        if (payload.messages) {
-          for (const m of payload.messages) {
-            if (Array.isArray(m.content)) {
-              for (const block of m.content as any[]) {
-                if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
-              }
-            }
-          }
-        }
-        if (fileCount > 0) {
-          if (limits.filesPerMonth === 0) {
-            return new Response(
-              JSON.stringify({ error: 'files_pro_only', message: 'File analysis is a Pro feature.' }),
-              { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
-          }
-          const { data: fileCheck } = await svc.rpc('check_monthly_file_limit', { p_user_id: user.id })
-          if (fileCheck && fileCheck.monthly_count + fileCount > limits.filesPerMonth) {
-            return new Response(
-              JSON.stringify({
-                error: 'monthly_file_limit_reached',
-                limit: limits.filesPerMonth,
-                used: fileCheck.monthly_count,
-                resets_at: fileCheck.resets_at,
-              }),
-              { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
-          }
-        }
+      // ── Evaluate rate limit ───────────────────────────────
+      if (!rateLimitResult.allowed) {
+        logAudit(svc, {
+          actorId: user.id, eventType: 'edge_function.call', action: 'claude-proxy',
+          source: 'claude-proxy', status: 'rate_limited', statusCode: 429,
+          ip: getClientIP(req), userAgent: getUA(req),
+        })
+        return rateLimitResponse(rateLimitResult, CORS_HEADERS)
+      }
+
+      // ── Evaluate daily cost limit ─────────────────────────
+      if (costResult.blocked) {
+        return new Response(
+          JSON.stringify({
+            error: 'daily_cost_limit_reached',
+            daily_cost_usd: costResult.dailyCost.toFixed(2),
+            limit_usd: DAILY_COST_HARD_LIMIT.toFixed(2),
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      // ── Evaluate file limit ───────────────────────────────
+      if (fileCount > 0 && fileLimitResult && fileLimitResult.monthly_count + fileCount > limits.filesPerMonth) {
+        return new Response(
+          JSON.stringify({
+            error: 'monthly_file_limit_reached',
+            limit: limits.filesPerMonth,
+            used: fileLimitResult.monthly_count,
+            resets_at: fileLimitResult.resets_at,
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
       }
     } else if (isAdmin) {
       planId = 'pro_annual'
       isPaidUser = true
     }
 
-    // ── Rate limiting (Postgres-backed fixed window) ────────
-    if (!isServiceCall) {
-      const tier: Tier = isMaxUser ? 'max' : isAdmin ? 'pro' : isPaidUser ? 'paid' : 'free'
+    // ── Rate limiting for non-user calls (admin, service) ────
+    if (!isServiceCall && isAdmin) {
+      const tier: Tier = 'pro'
       const svcRL = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
@@ -1470,21 +1507,6 @@ serve(async (req: Request) => {
           ip: getClientIP(req), userAgent: getUA(req),
         })
         return rateLimitResponse(rateCheck, CORS_HEADERS)
-      }
-    }
-
-    // ── Daily cost hard limit ──────────────────────────────
-    if (!isServiceCall && !isAdmin) {
-      const costCheck = await checkDailyCostLimit(user.id)
-      if (costCheck.blocked) {
-        return new Response(
-          JSON.stringify({
-            error: 'daily_cost_limit_reached',
-            daily_cost_usd: costCheck.dailyCost.toFixed(2),
-            limit_usd: DAILY_COST_HARD_LIMIT.toFixed(2),
-          }),
-          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
       }
     }
 
@@ -1660,7 +1682,8 @@ serve(async (req: Request) => {
       }
     }
 
-    messageStateId = await recordMessageState('pending')
+    // Fire-and-forget: don't block upstream API call on observability write
+    recordMessageState('pending').then(id => { messageStateId = id }).catch(() => {})
 
     // ── Dispatch to provider handler (with smart retry) ────
 
@@ -1698,7 +1721,7 @@ serve(async (req: Request) => {
     }
 
     // First attempt with the (possibly pre-routed) provider
-    await recordMessageState('streaming')
+    recordMessageState('streaming').catch(() => {})  // fire-and-forget
     const firstResponse = await dispatchProvider(effectiveProvider, effectiveModel)
 
     // If successful: charge the message and return
