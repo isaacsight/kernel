@@ -5,7 +5,8 @@ import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
-import { extractMemory, mergeMemory, formatMemoryForPrompt, emptyProfile, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { extractMemory, mergeMemory, formatMemoryForPrompt, isEmptyProfile, emptyProfile, updateWarmth, applyProfileDecay, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { summarizeConversation, getMessagesToSummarize, formatSummaryForPrompt, SUMMARY_THRESHOLD, type ConversationSummary } from '../engine/ConversationSummarizer'
 import { extractFacet, converge, formatMirrorForPrompt, formatCraftCalibration, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
 import {
   captureOutcome, recordOutcome, detectRephrase,
@@ -14,6 +15,7 @@ import {
   type LoomState, type Outcome, type UserSignal,
 } from '../engine/Loom'
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
+import { extractKeyEntities } from '../engine/textAnalysis'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
 import { getGoalCheckInPrompt, extractGoalProgress, type UserGoal } from '../engine/GoalTracker'
@@ -87,6 +89,7 @@ interface UseChatEngineParams {
   setActiveConversationId: (id: string | null) => void
   loadConversations: () => Promise<void>
   createConversation: (userId: string, title: string) => Promise<{ id: string } | null>
+  conversations: { id: string; title: string; updated_at: string }[]
   showToast: (msg: string) => void
   setShowUpgradeWall: (v: boolean) => void
   setFreeLimitResetsAt?: (v: string | null) => void
@@ -151,6 +154,9 @@ export function useChatEngine(params: UseChatEngineParams) {
   userMemoryRef.current = userMemory
   const messageCountRef = useRef(0)
 
+  // Conversation summarization — cached summaries for long conversations
+  const convSummaryRef = useRef<ConversationSummary | null>(null)
+
   // Convergence mirror — multi-agent perception synthesis
   const [userMirror, setUserMirror] = useState<UserMirror>(emptyMirror())
   const userMirrorRef = useRef<UserMirror>(userMirror)
@@ -212,6 +218,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     setSwarmProgress(null)
     setIsWorkflowActive(false)
     setCurrentThinking('')
+    convSummaryRef.current = null // Reset summary for new conversation
   }, [activeConversationId])
 
   // Sync engine state with Supabase on auth
@@ -431,6 +438,8 @@ export function useChatEngine(params: UseChatEngineParams) {
     })()
 
     // 2. Classification
+    // Compute memory text once — reused for both routing and system prompt
+    const memoryText = formatMemoryForPrompt(userMemoryRef.current)
     const recentCtx = buildRecentContext(
       messagesRef.current.filter(m => m.content.trim()).map(m => ({
         role: m.role === 'kernel' ? 'assistant' as const : 'user' as const,
@@ -440,7 +449,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     const classifyPromise = (async () => {
       try {
         const loomRoutingCtx = buildRoutingContext(loomRef.current)
-        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined)
+        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, memoryText || undefined)
       } catch (err) {
         console.error('[engine] classifyIntent failed:', err)
         return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
@@ -589,11 +598,10 @@ export function useChatEngine(params: UseChatEngineParams) {
       attachments: attachmentMeta.length > 0 ? attachmentMeta : undefined,
     })
 
-    // Build system prompt
+    // Build system prompt (memoryText computed above alongside classification)
     const snapshot = serializeState(engine.getState())
-    const memoryText = formatMemoryForPrompt(userMemory)
     const memoryBlock = memoryText
-      ? `\n\n---\n\n## User Memory\nYou know this about the user. Use it naturally — don't announce it.\n\n${memoryText}`
+      ? `\n\n---\n\n## User Memory\nYou know this about the user from previous conversations. Weave this knowledge naturally into your responses — reference their interests, goals, and facts when relevant. Never say "I don't know anything about you" when this context exists.\n\n${memoryText}`
       : ''
     const mirrorText = formatMirrorForPrompt(userMirrorRef.current)
     const mirrorBlock = mirrorText
@@ -634,7 +642,40 @@ export function useChatEngine(params: UseChatEngineParams) {
     const crisisBlock = crisisActive
       ? `\n\n## CRISIS MODE ACTIVE\nThe user may be in emotional distress. Lead with empathy. Acknowledge their pain before anything else.\n\nResources to weave naturally into your response:\n${formatCrisisResourcesForPrompt()}\n\nDo NOT recite resources mechanically. Be a person first.`
       : ''
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    // Build conversation context — summarize prior messages so Claude actively references them
+    const priorMessages = messagesRef.current.filter(m => m.content.trim() !== '')
+    const conversationContextBlock = priorMessages.length >= 2
+      ? (() => {
+          const topics = new Set<string>()
+          const userPoints: string[] = []
+          for (const m of priorMessages.slice(-12)) {
+            if (m.role === 'user') {
+              const summary = m.content.slice(0, 120).replace(/\n+/g, ' ').trim()
+              if (summary) userPoints.push(summary)
+            }
+            // Extract key topics from both sides (reuses textAnalysis utility)
+            extractKeyEntities(m.content.slice(0, 200)).forEach(w => topics.add(w))
+          }
+          const topicStr = [...topics].slice(0, 8).join(', ')
+          const pointsStr = userPoints.slice(-4).map(p => `- ${p}`).join('\n')
+          return `\n\n## Conversation Context\nYou have full access to this conversation's history (${priorMessages.length} messages). Reference earlier messages naturally when relevant. Do NOT say you can't see or remember what was discussed.\n\n**Topics discussed:** ${topicStr || 'various'}\n**Recent user messages:**\n${pointsStr}`
+        })()
+      : ''
+
+    // Recent conversations — derived from already-loaded conversations list (always fresh)
+    const recentConvTitles = params.conversations
+      .filter(c => c.title !== 'New Conversation' && c.id !== activeConversationId)
+      .slice(0, 6)
+    const recentConvsBlock = recentConvTitles.length > 0
+      ? `\n\n## Recent Conversations\nThese are the user's recent conversation topics. You can reference them if the user asks about previous discussions.\n${recentConvTitles.map(c => `- ${c.title}`).join('\n')}`
+      : ''
+
+    // Conversation summary — inject cached summary of older messages for long conversations
+    const summaryBlock = convSummaryRef.current
+      ? `\n\n${formatSummaryForPrompt(convSummaryRef.current)}`
+      : ''
+
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
@@ -872,12 +913,14 @@ export function useChatEngine(params: UseChatEngineParams) {
         workflowRef.current = workflow
         setIsWorkflowActive(true)
         setWorkflowSteps([])
-        const context = messagesRef.current
+        const workflowConvContext = messagesRef.current
           .filter(m => m.content.trim())
           .slice(-10)
           .map(m => `${m.role === 'user' ? 'User' : (m.agentName || 'Kernel')}: ${m.content}`)
           .join('\n')
-        await workflow.execute(trimmed, context)
+        // Enrich workflow context with user memory so task planning is personalized
+        const workflowMemoryCtx = memoryText ? `\nUser context:\n${memoryText}\n\n` : ''
+        await workflow.execute(trimmed, workflowMemoryCtx + workflowConvContext)
         setIsWorkflowActive(false)
         workflowRef.current = null
       } else if (!hasFileContent && classification.isMultiStep && isPro) {
@@ -1005,25 +1048,51 @@ export function useChatEngine(params: UseChatEngineParams) {
       }
 
       // Background memory + KG + convergence extraction every 3 messages
+      // Also extract on first response if no memory exists (bootstrap)
       // CRISIS GUARD: skip all persistent extraction when crisis is active
       messageCountRef.current++
       const currentMsgCount = messageCountRef.current
-      if (currentMsgCount % 6 === 0 && !crisisActive && params.planLimits?.memory !== false) {
+      const shouldExtract = isEmptyProfile(userMemoryRef.current)
+        ? currentMsgCount >= 1  // Bootstrap: extract on first response if no memory
+        : currentMsgCount % 3 === 0  // Regular: extract every 3 messages
+      if (shouldExtract && !crisisActive && params.planLimits?.memory !== false) {
         guardedSetMessages(currentMsgs => {
           const recentMsgs = currentMsgs
             .slice(-10)
             .filter(m => m.content.trim())
             .map(m => ({ role: m.role === 'kernel' ? 'assistant' : 'user', content: m.content }))
           if (recentMsgs.length > 0) {
-            // Memory extraction
+            // Memory extraction with warmth tracking + decay
             extractMemory(recentMsgs).then(async (newProfile) => {
               const hasData = newProfile.interests.length > 0 || newProfile.goals.length > 0 ||
                 newProfile.facts.length > 0 || newProfile.communication_style.length > 0
               if (!hasData) return
               const merged = await mergeMemory(userMemoryRef.current, newProfile)
-              setUserMemory(merged)
-              await upsertUserMemory(userId, merged as unknown as Record<string, unknown>, currentMsgCount)
+              const withWarmth = updateWarmth(merged, userMemoryRef.current)
+              const decayed = applyProfileDecay(withWarmth)
+              setUserMemory(decayed)
+              await upsertUserMemory(userId, decayed as unknown as Record<string, unknown>, currentMsgCount)
             }).catch((err) => console.warn('[Memory] Periodic extraction failed:', err))
+
+            // Conversation summarization — summarize older messages in long conversations
+            if (currentMsgs.length >= SUMMARY_THRESHOLD) {
+              const allMsgs = currentMsgs.filter(m => m.content.trim()).map(m => ({
+                role: m.role === 'kernel' ? 'assistant' : 'user',
+                content: m.content,
+              }))
+              const toSummarize = getMessagesToSummarize(allMsgs, convSummaryRef.current)
+              if (toSummarize) {
+                summarizeConversation(toSummarize).then(text => {
+                  if (!text) return
+                  convSummaryRef.current = {
+                    text,
+                    messagesCovered: toSummarize.length,
+                    generatedAt: Date.now(),
+                  }
+                  console.log(`[Summarizer] Summarized ${toSummarize.length} older messages`)
+                }).catch(err => console.warn('[Summarizer] Failed:', err))
+              }
+            }
 
             // Convergence — facet extraction for the active agent
             const facetAgentId = resolveFacetAgent(classification.agentId)

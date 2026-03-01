@@ -80,12 +80,13 @@ async function selectAgents(
   message: string,
   recentContext: string,
   loomContext?: string,
+  userMemoryContext?: string,
 ): Promise<{ agents: SwarmAgent[]; focus: string }> {
   try {
-    // Inject Loom composition history if available
-    const system = loomContext
-      ? `${SELECT_SYSTEM}\n\n---\n\n${loomContext}`
-      : SELECT_SYSTEM
+    // Inject Loom composition history and user memory for better agent selection
+    let system = SELECT_SYSTEM
+    if (userMemoryContext) system += `\n\n---\n\nUser Profile (consider when selecting agents):\n${userMemoryContext}`
+    if (loomContext) system += `\n\n---\n\n${loomContext}`
 
     const result = await getProvider().json<{ agents: string[]; focus: string }>(
       recentContext
@@ -239,7 +240,7 @@ export async function runSwarm(
     .map(m => `${m.role}: ${m.content.slice(0, 150)}`)
     .join('\n')
 
-  const { agents, focus } = await selectAgents(message, recentCtx, loomContext)
+  const { agents, focus } = await selectAgents(message, recentCtx, loomContext, userMemoryContext)
 
   // Phase 2: Parallel contributions
   progress.phase = 'collaborating'
@@ -277,7 +278,10 @@ export async function runSwarm(
     .join('\n\n---\n\n')
 
   const baseSynth = isArchitecture ? ARCHITECTURE_SYNTH_SYSTEM : SYNTH_SYSTEM
-  const synthSystem = `${baseSynth}\n\nSynthesis focus: ${focus}`
+  const synthMemoryNote = userMemoryContext
+    ? `\n\nUser context (use to personalize your synthesis):\n${userMemoryContext}`
+    : ''
+  const synthSystem = `${baseSynth}\n\nSynthesis focus: ${focus}${synthMemoryNote}`
 
   const result = await getProvider().streamChat(
     [
