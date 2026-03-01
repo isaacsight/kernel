@@ -7613,6 +7613,81 @@ h4 {
     border-top: 1px solid var(--rubin-ivory-dark);
 }
 
+.ka-artifact-markdown-preview {
+    border-top: 1px solid var(--rubin-ivory-dark);
+    padding: 16px 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--rubin-slate);
+    background: var(--rubin-ivory);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.ka-artifact-markdown-preview h1 {
+    font-size: 1.6em;
+    font-weight: 700;
+    margin: 0 0 12px;
+    line-height: 1.3;
+}
+
+.ka-artifact-markdown-preview h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    line-height: 1.35;
+}
+
+.ka-artifact-markdown-preview h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 16px 0 6px;
+    line-height: 1.4;
+}
+
+.ka-artifact-markdown-preview p {
+    margin: 0 0 12px;
+}
+
+.ka-artifact-markdown-preview ul,
+.ka-artifact-markdown-preview ol {
+    margin: 0 0 12px;
+    padding-left: 24px;
+}
+
+.ka-artifact-markdown-preview li {
+    margin-bottom: 4px;
+}
+
+.ka-artifact-markdown-preview blockquote {
+    border-left: 3px solid var(--rubin-primary);
+    margin: 12px 0;
+    padding: 4px 16px;
+    color: var(--rubin-slate-muted);
+    font-style: italic;
+}
+
+.ka-artifact-markdown-preview hr {
+    border: none;
+    border-top: 1px solid var(--rubin-ivory-dark);
+    margin: 16px 0;
+}
+
+.ka-artifact-markdown-preview strong {
+    font-weight: 700;
+}
+
+.ka-artifact-markdown-preview em {
+    font-style: italic;
+}
+
+.ka-artifact-markdown-preview .ka-code-pre {
+    margin: 12px 0;
+    border-radius: var(--radius-sm);
+}
+
 .ka-artifact-iframe {
     width: 100%;
     min-height: 200px;
@@ -7697,6 +7772,20 @@ h4 {
 }
 
 [data-theme="dark"] .ka-artifact-preview {
+    border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-artifact-markdown-preview {
+    border-color: var(--dark-border-subtle);
+    color: var(--dark-text);
+    background: var(--dark-bg-surface);
+}
+
+[data-theme="dark"] .ka-artifact-markdown-preview blockquote {
+    color: var(--dark-text-muted);
+}
+
+[data-theme="dark"] .ka-artifact-markdown-preview hr {
     border-color: var(--dark-border-subtle);
 }
 

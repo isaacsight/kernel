@@ -362,7 +362,7 @@ function DiffView({ oldCode, newCode }: { oldCode: string; newCode: string }) {
 
 // ─── File Artifact Card ──────────────────────────────────
 
-const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg']
+const PREVIEWABLE_EXTS = ['.html', '.htm', '.svg', '.md', '.markdown']
 
 function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRendered, conversationId }: {
   filename: string
@@ -377,8 +377,9 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRend
 }) {
   const [copied, setCopied] = useState(false)
   const canPreview = PREVIEWABLE_EXTS.includes(ext)
+  const isMarkdown = ext === '.md' || ext === '.markdown'
   const isSmallSvg = ext === '.svg' && code.split('\n').length < 5
-  const shouldAutoPreview = canPreview && !!autoPreview && !isSmallSvg
+  const shouldAutoPreview = canPreview && (!!autoPreview || isMarkdown) && !isSmallSvg
   const [expanded, setExpanded] = useState(shouldAutoPreview)
   const [showPreview, setShowPreview] = useState(shouldAutoPreview)
   const [showDiff, setShowDiff] = useState(false)
@@ -488,6 +489,10 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRend
         <>
           {showDiff && previousCode ? (
             <DiffView oldCode={previousCode} newCode={code} />
+          ) : showPreview && isMarkdown ? (
+            <div className="ka-artifact-markdown-preview">
+              <ReactMarkdown components={artifactMdComponents}>{code}</ReactMarkdown>
+            </div>
           ) : showPreview && canPreview ? (
             <div className="ka-artifact-preview">
               {!iframeLoaded && <PreviewLoading />}
@@ -842,6 +847,20 @@ function renderCitations(text: string): React.ReactNode[] {
 }
 
 // ─── Message Content (markdown + code blocks + artifacts) ─
+
+// Markdown components for artifact preview — renders formatted markdown inside file cards
+const artifactMdComponents = {
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => <a href={href} target="_blank" rel="noopener noreferrer" className="ka-msg-link">{children}</a>,
+  code: ({ className, children }: { className?: string; children?: React.ReactNode }) => {
+    const langMatch = className?.match(/language-(\w+)/)
+    if (langMatch) {
+      const highlighted = highlightCode(String(children).replace(/\n$/, ''), langMatch[1])
+      return <pre className="ka-code-pre"><code dangerouslySetInnerHTML={{ __html: highlighted }} /></pre>
+    }
+    return <code className="ka-inline-code">{children}</code>
+  },
+  pre: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+}
 
 // Hoisted outside component to avoid recreating on every render (stable reference for ReactMarkdown)
 const mdComponents = {
