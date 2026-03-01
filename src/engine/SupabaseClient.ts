@@ -234,20 +234,6 @@ export async function getUserConversations(userId: string): Promise<DBConversati
   return data || [];
 }
 
-/** Get recent conversation titles for cross-conversation memory context */
-export async function getRecentConversationTitles(userId: string, limit = 8): Promise<{ title: string; updated_at: string }[]> {
-  const { data, error } = await supabase
-    .from('conversations')
-    .select('title, updated_at')
-    .eq('user_id', userId)
-    .neq('title', 'New Conversation')
-    .order('updated_at', { ascending: false })
-    .limit(limit);
-
-  if (error) console.error('Error fetching recent conversations:', error);
-  return data || [];
-}
-
 export async function getLastAgentId(conversationId: string): Promise<string> {
   const { data } = await supabase
     .from('messages')

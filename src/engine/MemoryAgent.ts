@@ -3,12 +3,23 @@
 
 import { getBackgroundProvider } from './providers/registry'
 
+/** A memory item with warmth tracking — items mentioned more often and more recently are "warmer" */
+export interface MemoryItem {
+  text: string
+  /** How many times this item has been extracted/reinforced */
+  mentions: number
+  /** ISO timestamp of last reinforcement */
+  lastReinforced: string
+}
+
 export interface UserMemoryProfile {
   interests: string[]
   communication_style: string
   goals: string[]
   facts: string[]
   preferences: string[]
+  /** Warmth metadata — keyed by item text, tracks mention count + recency */
+  warmth?: Record<string, { mentions: number; lastReinforced: string }>
 }
 
 const EXTRACT_SYSTEM = `You are a memory extraction agent. Analyze the conversation below and extract a structured profile of the user. Focus on durable information — things that would be useful across future conversations.
@@ -164,4 +175,91 @@ export function isEmptyProfile(p: UserMemoryProfile): boolean {
     p.facts.length === 0 &&
     p.preferences.length === 0
   )
+}
+
+// ─── Memory Warmth ──────────────────────────────────────────
+
+/** Update warmth metadata after a merge — reinforces existing items and timestamps new ones */
+export function updateWarmth(
+  merged: UserMemoryProfile,
+  previous: UserMemoryProfile,
+): UserMemoryProfile {
+  const now = new Date().toISOString()
+  const warmth = { ...(previous.warmth || {}) }
+
+  const allItems = [
+    ...merged.interests,
+    ...merged.goals,
+    ...merged.facts,
+    ...merged.preferences,
+  ]
+
+  const previousItems = new Set([
+    ...previous.interests,
+    ...previous.goals,
+    ...previous.facts,
+    ...previous.preferences,
+  ])
+
+  for (const item of allItems) {
+    const existing = warmth[item]
+    if (existing && previousItems.has(item)) {
+      // Reinforced — bump mention count
+      warmth[item] = { mentions: existing.mentions + 1, lastReinforced: now }
+    } else if (!existing) {
+      // New item
+      warmth[item] = { mentions: 1, lastReinforced: now }
+    }
+  }
+
+  // Clean up warmth entries for items that were removed during merge
+  for (const key of Object.keys(warmth)) {
+    if (!allItems.includes(key)) {
+      delete warmth[key]
+    }
+  }
+
+  return { ...merged, warmth }
+}
+
+// ─── Memory Decay ───────────────────────────────────────────
+
+/** Days after which a memory item starts to fade */
+const DECAY_AFTER_DAYS = 60
+/** Items below this mention count are eligible for decay-based removal */
+const LOW_WARMTH_THRESHOLD = 2
+
+/**
+ * Apply time-based decay to profile items.
+ * Items not reinforced in DECAY_AFTER_DAYS with low mention counts are pruned.
+ * Returns a new profile with stale items removed.
+ */
+export function applyProfileDecay(profile: UserMemoryProfile): UserMemoryProfile {
+  const warmth = profile.warmth || {}
+  const now = Date.now()
+
+  function isStale(item: string): boolean {
+    const w = warmth[item]
+    if (!w) return false // No metadata = keep (legacy items)
+    const daysSince = (now - new Date(w.lastReinforced).getTime()) / (1000 * 60 * 60 * 24)
+    // Only decay items with low reinforcement that haven't been seen recently
+    return daysSince > DECAY_AFTER_DAYS && w.mentions < LOW_WARMTH_THRESHOLD
+  }
+
+  const decayed: UserMemoryProfile = {
+    interests: profile.interests.filter(i => !isStale(i)),
+    communication_style: profile.communication_style, // Style doesn't decay
+    goals: profile.goals.filter(g => !isStale(g)),
+    facts: profile.facts.filter(f => !isStale(f)),
+    preferences: profile.preferences.filter(p => !isStale(p)),
+    warmth: { ...warmth },
+  }
+
+  // Clean warmth for removed items
+  const kept = new Set([...decayed.interests, ...decayed.goals, ...decayed.facts, ...decayed.preferences])
+  for (const key of Object.keys(decayed.warmth!)) {
+    if (!kept.has(key)) delete decayed.warmth![key]
+  }
+
+  return decayed
 }
