@@ -156,7 +156,7 @@ export function emptyProfile(): UserMemoryProfile {
   }
 }
 
-function isEmptyProfile(p: UserMemoryProfile): boolean {
+export function isEmptyProfile(p: UserMemoryProfile): boolean {
   return (
     p.interests.length === 0 &&
     !p.communication_style &&

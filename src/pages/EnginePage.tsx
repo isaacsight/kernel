@@ -281,6 +281,7 @@ function EngineChat() {
     setActiveConversationId: convs.setActiveConversationId,
     loadConversations: convs.loadConversations,
     createConversation: convs.createConversation,
+    conversations: convs.conversations,
     showToast,
     setShowUpgradeWall: billing.setShowUpgradeWall,
     setFreeLimitResetsAt: billing.setFreeLimitResetsAt,
