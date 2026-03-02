@@ -93,3 +93,66 @@ export function formatSummaryForPrompt(summary: ConversationSummary): string {
   if (!summary.text) return ''
   return `## Earlier in This Conversation (${summary.messagesCovered} messages summarized)\n${summary.text}`
 }
+
+// ─── Cross-Conversation Memory ──────────────────────────────
+
+/** Conversation entry with optional metadata for cross-thread retrieval */
+interface ConversationEntry {
+  id: string
+  title: string
+  metadata?: Record<string, unknown>
+}
+
+/**
+ * Retrieve the most relevant past conversation for a cross-thread reference.
+ * Matches the user's query against topic-annotated conversations, then returns
+ * the best match's persisted summary (if any). No embedding search needed —
+ * topics from indexing give us enough signal.
+ *
+ * @returns Formatted context block or empty string if no match found
+ */
+export function retrieveRelevantConversation(
+  query: string,
+  currentConvId: string | null,
+  conversations: ConversationEntry[],
+): string {
+  const queryWords = new Set(query.toLowerCase().match(/\b[a-z]{3,}\b/g) || [])
+  if (queryWords.size === 0) return ''
+
+  let bestMatch: { conv: ConversationEntry; score: number; summary: string } | null = null
+
+  for (const conv of conversations) {
+    if (conv.id === currentConvId) continue
+    const meta = conv.metadata
+    if (!meta) continue
+
+    const topics = (meta.topics as string[]) || []
+    const summary = (meta.summary as { text?: string })?.text
+
+    // Score: topic overlap + title keyword overlap
+    const titleWords = new Set(conv.title.toLowerCase().match(/\b[a-z]{3,}\b/g) || [])
+    const topicWords = new Set(topics.flatMap(t => t.toLowerCase().match(/\b[a-z]{3,}\b/g) || []))
+
+    let overlap = 0
+    for (const w of queryWords) {
+      if (titleWords.has(w)) overlap += 1
+      if (topicWords.has(w)) overlap += 2 // topics are stronger signal
+    }
+
+    const score = overlap / queryWords.size
+    if (score > 0.1 && (!bestMatch || score > bestMatch.score)) {
+      bestMatch = { conv, score, summary: summary || '' }
+    }
+  }
+
+  if (!bestMatch) return ''
+
+  const topicStr = ((bestMatch.conv.metadata?.topics as string[]) || []).join(', ')
+  const header = `## Referenced Conversation: "${bestMatch.conv.title}"`
+  const topicLine = topicStr ? `**Topics:** ${topicStr}` : ''
+  const summaryLine = bestMatch.summary
+    ? `**Summary:** ${bestMatch.summary.slice(0, 800)}`
+    : `*No detailed summary available — conversation covered: ${topicStr || bestMatch.conv.title}*`
+
+  return [header, topicLine, summaryLine].filter(Boolean).join('\n')
+}

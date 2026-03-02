@@ -125,30 +125,88 @@ function sanitizeMemoryArray(items: string[]): string[] {
     .filter(s => s.length > 0 && s !== '[removed]')
 }
 
-export function formatMemoryForPrompt(profile: UserMemoryProfile): string {
+// ─── Relevance Scoring ──────────────────────────────────────
+
+/** Tokenize text into lowercase word set for Jaccard overlap */
+function tokenize(text: string): Set<string> {
+  return new Set(text.toLowerCase().match(/\b[a-z]{2,}\b/g) || [])
+}
+
+/** Jaccard similarity between two token sets */
+function jaccard(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0
+  let intersection = 0
+  for (const token of a) {
+    if (b.has(token)) intersection++
+  }
+  const union = a.size + b.size - intersection
+  return union > 0 ? intersection / union : 0
+}
+
+/** Score how relevant a memory item is to the current query + context */
+function scoreRelevance(
+  item: string,
+  queryTokens: Set<string>,
+  contextTokens: Set<string>,
+  warmthBonus: number,
+): number {
+  const itemTokens = tokenize(item)
+  return 0.6 * jaccard(itemTokens, queryTokens) +
+         0.3 * jaccard(itemTokens, contextTokens) +
+         0.1 * warmthBonus
+}
+
+/**
+ * Format memory profile into a prompt block.
+ * When currentQuery and recentContext are provided, filters items by relevance
+ * to reduce token waste. Always includes communication_style and high-warmth
+ * identity facts (3+ mentions).
+ */
+export function formatMemoryForPrompt(
+  profile: UserMemoryProfile,
+  currentQuery?: string,
+  recentContext?: string,
+): string {
   if (isEmptyProfile(profile)) return ''
+
+  const warmth = profile.warmth || {}
+  const queryTokens = currentQuery ? tokenize(currentQuery) : new Set<string>()
+  const contextTokens = recentContext ? tokenize(recentContext) : new Set<string>()
+  const hasRelevanceSignal = queryTokens.size > 0 || contextTokens.size > 0
+
+  /** Check whether an item should be included */
+  function shouldInclude(item: string): boolean {
+    if (!hasRelevanceSignal) return true // No query = dump everything (backwards compat)
+    // Always include high-warmth items (3+ mentions = core identity)
+    const w = warmth[item]
+    if (w && w.mentions >= 3) return true
+    // Check relevance score
+    const wBonus = w ? Math.min(1, w.mentions / 5) : 0
+    return scoreRelevance(item, queryTokens, contextTokens, wBonus) > 0.05
+  }
 
   const sections: string[] = []
 
-  const facts = sanitizeMemoryArray(profile.facts)
+  const facts = sanitizeMemoryArray(profile.facts).filter(shouldInclude)
   if (facts.length > 0) {
     sections.push(`**About them:** ${facts.join('. ')}`)
   }
-  const interests = sanitizeMemoryArray(profile.interests)
+  const interests = sanitizeMemoryArray(profile.interests).filter(shouldInclude)
   if (interests.length > 0) {
     sections.push(`**Interests:** ${interests.join(', ')}`)
   }
-  const goals = sanitizeMemoryArray(profile.goals)
+  const goals = sanitizeMemoryArray(profile.goals).filter(shouldInclude)
   if (goals.length > 0) {
     sections.push(`**Working toward:** ${goals.join('. ')}`)
   }
+  // Communication style is always included
   if (profile.communication_style) {
     const style = sanitizeMemoryField(profile.communication_style)
     if (style && style !== '[removed]') {
       sections.push(`**Communication style:** ${style}`)
     }
   }
-  const prefs = sanitizeMemoryArray(profile.preferences)
+  const prefs = sanitizeMemoryArray(profile.preferences).filter(shouldInclude)
   if (prefs.length > 0) {
     sections.push(`**Preferences:** ${prefs.join('. ')}`)
   }
@@ -222,37 +280,50 @@ export function updateWarmth(
   return { ...merged, warmth }
 }
 
-// ─── Memory Decay ───────────────────────────────────────────
+// ─── Memory Decay (Exponential Half-Life) ───────────────────
 
-/** Days after which a memory item starts to fade */
-const DECAY_AFTER_DAYS = 60
-/** Items below this mention count are eligible for decay-based removal */
-const LOW_WARMTH_THRESHOLD = 2
+/** Prune items when their warmth score drops below this threshold */
+const DECAY_PRUNE_THRESHOLD = 0.1
 
 /**
- * Apply time-based decay to profile items.
- * Items not reinforced in DECAY_AFTER_DAYS with low mention counts are pruned.
- * Returns a new profile with stale items removed.
+ * Compute the warmth score for a memory item using exponential decay.
+ * More mentions = slower fade (half-life increases with reinforcement).
+ *
+ * - 1 mention: half-life 45 days (~fades by 135 days)
+ * - 2 mentions: 60 days
+ * - 3 mentions: 75 days
+ * - Legacy items (no metadata): 0.5 (neutral)
+ */
+export function warmthScore(
+  item: string,
+  warmth: Record<string, { mentions: number; lastReinforced: string }>,
+): number {
+  const w = warmth[item]
+  if (!w) return 0.5 // legacy items — neutral score
+  const daysSince = (Date.now() - new Date(w.lastReinforced).getTime()) / 86400000
+  const halfLife = 30 + (w.mentions * 15) // more mentions = slower fade
+  return Math.pow(0.5, daysSince / halfLife)
+}
+
+/**
+ * Apply exponential decay to profile items.
+ * Items whose warmth score drops below DECAY_PRUNE_THRESHOLD are pruned.
+ * Returns a new profile with faded items removed.
  */
 export function applyProfileDecay(profile: UserMemoryProfile): UserMemoryProfile {
-  const warmth = profile.warmth || {}
-  const now = Date.now()
+  const w = profile.warmth || {}
 
-  function isStale(item: string): boolean {
-    const w = warmth[item]
-    if (!w) return false // No metadata = keep (legacy items)
-    const daysSince = (now - new Date(w.lastReinforced).getTime()) / (1000 * 60 * 60 * 24)
-    // Only decay items with low reinforcement that haven't been seen recently
-    return daysSince > DECAY_AFTER_DAYS && w.mentions < LOW_WARMTH_THRESHOLD
+  function shouldKeep(item: string): boolean {
+    return warmthScore(item, w) >= DECAY_PRUNE_THRESHOLD
   }
 
   const decayed: UserMemoryProfile = {
-    interests: profile.interests.filter(i => !isStale(i)),
+    interests: profile.interests.filter(shouldKeep),
     communication_style: profile.communication_style, // Style doesn't decay
-    goals: profile.goals.filter(g => !isStale(g)),
-    facts: profile.facts.filter(f => !isStale(f)),
-    preferences: profile.preferences.filter(p => !isStale(p)),
-    warmth: { ...warmth },
+    goals: profile.goals.filter(shouldKeep),
+    facts: profile.facts.filter(shouldKeep),
+    preferences: profile.preferences.filter(shouldKeep),
+    warmth: { ...w },
   }
 
   // Clean warmth for removed items
@@ -262,4 +333,73 @@ export function applyProfileDecay(profile: UserMemoryProfile): UserMemoryProfile
   }
 
   return decayed
+}
+
+// ─── Stale Profile Detection ────────────────────────────────
+
+/** Days since last update before considering a profile potentially stale */
+const STALE_AFTER_DAYS = 14
+
+/**
+ * Check if a user's memory profile is stale and needs re-bootstrapping.
+ * A profile is stale if:
+ * - It hasn't been updated in STALE_AFTER_DAYS, AND
+ * - All warmth scores are below 0.2 (everything has faded significantly)
+ */
+export function isProfileStale(
+  profile: UserMemoryProfile,
+  lastUpdated: string | null,
+): boolean {
+  if (!lastUpdated) return false // No profile = will bootstrap normally
+  if (isEmptyProfile(profile)) return false // Empty profiles bootstrap on first message
+
+  const daysSinceUpdate = (Date.now() - new Date(lastUpdated).getTime()) / 86400000
+  if (daysSinceUpdate < STALE_AFTER_DAYS) return false
+
+  const warmth = profile.warmth || {}
+  const items = [...profile.interests, ...profile.goals, ...profile.facts, ...profile.preferences]
+  if (items.length === 0) return true
+
+  // Check if all warmth scores have faded below 0.2
+  return items.every(item => warmthScore(item, warmth) < 0.2)
+}
+
+// ─── KG → Profile Consolidation ─────────────────────────────
+
+interface KGEntityLike {
+  name: string
+  entity_type: string
+  confidence: number
+  mention_count: number
+  properties?: Record<string, unknown>
+}
+
+/**
+ * Find high-confidence KG entities that should be promoted to profile facts.
+ * Entities with confidence >= 0.7 and mention_count >= 3 that don't already
+ * appear in the profile facts are returned as candidate fact strings.
+ */
+export function consolidateFromKG(
+  profile: UserMemoryProfile,
+  entities: KGEntityLike[],
+): string[] {
+  const existingFacts = new Set(profile.facts.map(f => f.toLowerCase()))
+  const candidates: string[] = []
+
+  for (const e of entities) {
+    if (e.confidence < 0.7 || e.mention_count < 3) continue
+    // Check if already represented in facts
+    const nameLower = e.name.toLowerCase()
+    const alreadyExists = [...existingFacts].some(f => f.includes(nameLower))
+    if (alreadyExists) continue
+
+    // Generate a fact string from the entity
+    const desc = e.properties?.description as string | undefined
+    const fact = desc
+      ? `${e.name}: ${desc}`
+      : `${e.entity_type === 'person' ? 'Knows' : 'Interested in'} ${e.name}`
+    candidates.push(fact)
+  }
+
+  return candidates.slice(0, 3) // Max 3 promotions per cycle
 }

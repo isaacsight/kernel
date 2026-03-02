@@ -223,15 +223,53 @@ export async function createConversation(
   return data;
 }
 
-export async function getUserConversations(userId: string): Promise<DBConversation[]> {
+export async function getUserConversations(userId: string): Promise<(DBConversation & { metadata?: Record<string, unknown> })[]> {
   const { data, error } = await supabase
     .from('conversations')
-    .select('*')
+    .select('*, metadata')
     .eq('user_id', userId)
     .order('updated_at', { ascending: false });
 
   if (error) console.error('Error fetching conversations:', error);
   return data || [];
+}
+
+// ─── Conversation Metadata ──────────────────────────────
+
+/** Patch-merge metadata on a conversation's JSONB column */
+export async function updateConversationMetadata(
+  id: string,
+  patch: Record<string, unknown>,
+): Promise<void> {
+  // Read current metadata, merge, write back
+  const { data } = await supabase
+    .from('conversations')
+    .select('metadata')
+    .eq('id', id)
+    .maybeSingle();
+
+  const existing = (data?.metadata as Record<string, unknown>) || {};
+  const merged = { ...existing, ...patch };
+
+  const { error } = await supabase
+    .from('conversations')
+    .update({ metadata: merged, updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) console.error('Error updating conversation metadata:', error);
+}
+
+/** Read metadata from a conversation */
+export async function getConversationMetadata(
+  id: string,
+): Promise<Record<string, unknown> | null> {
+  const { data, error } = await supabase
+    .from('conversations')
+    .select('metadata')
+    .eq('id', id)
+    .maybeSingle();
+
+  if (error) console.error('Error fetching conversation metadata:', error);
+  return (data?.metadata as Record<string, unknown>) || null;
 }
 
 export async function getLastAgentId(conversationId: string): Promise<string> {

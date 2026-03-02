@@ -36,3 +36,45 @@ export function extractKeyEntities(text: string): string[] {
   const unique = [...new Set([...quoted, ...capitalized])];
   return unique.slice(0, 5); // max 5 entities
 }
+
+/**
+ * Extract top conversation topics from a set of messages.
+ * Runs extractKeyEntities across all messages, counts frequency, returns top 5.
+ * Pure JS — no API call needed.
+ */
+export function extractConversationTopics(
+  messages: { role: string; content: string }[],
+): string[] {
+  const freq = new Map<string, number>()
+  for (const m of messages) {
+    // Sample first 500 chars of each message for speed
+    const entities = extractKeyEntities(m.content.slice(0, 500))
+    for (const e of entities) {
+      freq.set(e, (freq.get(e) || 0) + 1)
+    }
+  }
+  // Also extract notable lowercase keywords (technical terms, repeated nouns)
+  const lower = messages.map(m => m.content.toLowerCase()).join(' ')
+  const words = lower.match(/\b[a-z]{4,}\b/g) || []
+  const wordFreq = new Map<string, number>()
+  for (const w of words) wordFreq.set(w, (wordFreq.get(w) || 0) + 1)
+  // Add words that appear 3+ times (indicating a real topic)
+  for (const [word, count] of wordFreq) {
+    if (count >= 3 && !STOP_WORDS.has(word)) {
+      freq.set(word, (freq.get(word) || 0) + count)
+    }
+  }
+
+  return [...freq.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([topic]) => topic)
+}
+
+const STOP_WORDS = new Set([
+  'that', 'this', 'with', 'from', 'have', 'been', 'will', 'would', 'could',
+  'should', 'there', 'their', 'about', 'which', 'when', 'what', 'where',
+  'they', 'your', 'more', 'some', 'also', 'just', 'like', 'into', 'than',
+  'them', 'then', 'each', 'make', 'made', 'does', 'done', 'very', 'only',
+  'here', 'know', 'want', 'need', 'think', 'sure', 'okay', 'well', 'good',
+])
