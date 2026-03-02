@@ -900,20 +900,41 @@ export function useChatEngine(params: UseChatEngineParams) {
             }
           }
 
-          const result = await generateImage(trimmed, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
+          // ── Build effective prompt with conversation context ──
+          // For refinements or vague follow-ups ("try again", "make it blue"),
+          // recover the original image prompt from conversation history so Gemini
+          // has full context about what to generate/modify.
+          let effectivePrompt = trimmed
+          if (classification.needsImageRefinement || trimmed.split(/\s+/).length < 6) {
+            const currentMsgs = messagesRef.current
+            for (let i = currentMsgs.length - 1; i >= 0; i--) {
+              const msg = currentMsgs[i]
+              if (msg.generatedImages && msg.generatedImages.length > 0 && msg.content) {
+                // Recover original prompt from "[Generated image: ...]" or the raw content
+                const match = msg.content.match(/^\[Generated image:\s*(.+)\]$/)
+                const originalPrompt = match ? match[1] : msg.content
+                if (originalPrompt && originalPrompt !== trimmed) {
+                  effectivePrompt = `Original image: ${originalPrompt}\n\nModification: ${trimmed}`
+                }
+                break
+              }
+            }
+          }
+
+          const result = await generateImage(effectivePrompt, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
           setIsThinking(false)
           isThinkingRef.current = false
           guardedSetMessages(prev => prev.map(m => m.id === kernelId
-            ? { ...m, content: trimmed, generatedImages: [result] }
+            ? { ...m, content: effectivePrompt, generatedImages: [result] }
             : m
           ))
-          latestKernelContentRef.current = `[Generated image: ${trimmed}]`
+          latestKernelContentRef.current = `[Generated image: ${effectivePrompt}]`
           // Persist a record of the generation
           saveMessage({
             id: kernelId,
             channel_id: convId,
             agent_id: 'kernel',
-            content: `[Generated image: ${trimmed}]`,
+            content: `[Generated image: ${effectivePrompt}]`,
             user_id: userId,
             ...(result.image_url && { attachments: [{ url: result.image_url, type: result.mimeType, name: `kernel-image.${(result.mimeType || 'image/png').split('/')[1] || 'png'}` }] }),
           })

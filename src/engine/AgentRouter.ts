@@ -187,7 +187,9 @@ export async function classifyIntent(
   if (_lastClassification && (now - _lastClassificationTime) < 120_000) {
     if (CONTINUATION_PATTERNS.test(message) && message.length < 80) {
       console.log(`[router] continuation fast-path → ${_lastClassification.agentId} (reusing previous)`)
-      return { ..._lastClassification, needsImageRefinement: false }
+      // If previous classification was image gen, continuation = refinement
+      const isImageRefinement = !!_lastClassification.needsImageGen
+      return { ..._lastClassification, needsImageRefinement: isImageRefinement }
     }
   }
 
