@@ -776,14 +776,21 @@ export function useChatEngine(params: UseChatEngineParams) {
       if (classification.needsImageGen) {
         setThinkingAgent('Kernel')
         try {
-          // ── Refinement: find previous generated image ──
+          // ── Refinement: find previous generated image + original prompt ──
           let previousImage: PreviousImage | undefined
+          let originalImagePrompt: string | undefined
           if (classification.needsImageRefinement) {
             const currentMsgs = messagesRef.current
             for (let i = currentMsgs.length - 1; i >= 0; i--) {
               const msg = currentMsgs[i]
               if (msg.generatedImages && msg.generatedImages.length > 0) {
                 const lastImg = msg.generatedImages[msg.generatedImages.length - 1]
+                // Extract original prompt from the message content
+                // Content is stored as either the raw prompt or "[Generated image: {prompt}]"
+                if (msg.content) {
+                  const genMatch = msg.content.match(/^\[Generated image: (.+)\]$/)
+                  originalImagePrompt = genMatch ? genMatch[1] : msg.content
+                }
                 // Use base64 if still in memory
                 if (lastImg.image) {
                   previousImage = { base64: lastImg.image, mimeType: lastImg.mimeType }
@@ -808,6 +815,19 @@ export function useChatEngine(params: UseChatEngineParams) {
                 break
               }
             }
+          }
+
+          // ── Build the effective prompt with conversation continuity ──
+          // When refining/retrying, the user's message alone (e.g. "try again", "make it bigger")
+          // lacks the original context. Enrich it with the previous image prompt.
+          let effectivePrompt = trimmed
+          if (originalImagePrompt && classification.needsImageRefinement) {
+            // Check if the user's message is a short follow-up vs a full new prompt
+            const isShortFollowUp = trimmed.split(/\s+/).length < 12
+            if (isShortFollowUp) {
+              effectivePrompt = `Original image: ${originalImagePrompt}\n\nModification: ${trimmed}`
+            }
+            // If it's a long message, it's likely a full new prompt — use as-is
           }
 
           // ── Reference images: pull from attachments + conversation history ──
@@ -840,20 +860,22 @@ export function useChatEngine(params: UseChatEngineParams) {
             }
           }
 
-          const result = await generateImage(trimmed, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
+          const result = await generateImage(effectivePrompt, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
           setIsThinking(false)
           isThinkingRef.current = false
+          // Store the effective prompt so future refinements can recover the full context
+          const displayPrompt = effectivePrompt
           guardedSetMessages(prev => prev.map(m => m.id === kernelId
-            ? { ...m, content: trimmed, generatedImages: [result] }
+            ? { ...m, content: displayPrompt, generatedImages: [result] }
             : m
           ))
-          latestKernelContentRef.current = `[Generated image: ${trimmed}]`
+          latestKernelContentRef.current = `[Generated image: ${displayPrompt}]`
           // Persist a record of the generation
           saveMessage({
             id: kernelId,
             channel_id: convId,
             agent_id: 'kernel',
-            content: `[Generated image: ${trimmed}]`,
+            content: `[Generated image: ${displayPrompt}]`,
             user_id: userId,
             ...(result.image_url && { attachments: [{ url: result.image_url, type: result.mimeType, name: `kernel-image.${(result.mimeType || 'image/png').split('/')[1] || 'png'}` }] }),
           })
