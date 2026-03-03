@@ -45,6 +45,16 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'create-portal':      { free: 5,  paid: 5,   pro: 10,  max: 10,  windowSeconds: 3600 },
   'image-gen':          { free: 10, paid: 10,  pro: 10,  max: 15,  windowSeconds: 60 },
   'create-image-checkout': { free: 5, paid: 5, pro: 5,   max: 5,   windowSeconds: 3600 },
+  'content-engine':        { free: 0, paid: 5, pro: 10,  max: 20,  windowSeconds: 60 },
+  'knowledge-engine':      { free: 0, paid: 5, pro: 10,  max: 20,  windowSeconds: 60 },
+  'social-auth':           { free: 0, paid: 5, pro: 10,  max: 15,  windowSeconds: 3600 },
+  'social-publish':        { free: 0, paid: 3, pro: 10,  max: 20,  windowSeconds: 60 },
+  'social-analytics':      { free: 0, paid: 5, pro: 15,  max: 30,  windowSeconds: 60 },
+  'platform-engine':        { free: 0, paid: 3, pro: 5,   max: 10,  windowSeconds: 60 },
+  'published-content':     { free: 60,paid: 60,pro: 60,  max: 60,  windowSeconds: 60 },
+  'discover-feed':         { free: 60,paid: 60,pro: 60,  max: 60,  windowSeconds: 60 },
+  'engagement':            { free: 30,paid: 30,pro: 60,  max: 120, windowSeconds: 60 },
+  'author-profile':        { free: 30,paid: 30,pro: 60,  max: 60,  windowSeconds: 60 },
 }
 
 /**

@@ -54,6 +54,8 @@ export function AdminPage() {
   const [refreshing, setRefreshing] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [userKGEntities, setUserKGEntities] = useState<any[]>([])
+  const [modQueue, setModQueue] = useState<any[]>([])
+  const [modLoading, setModLoading] = useState(false)
 
   if (!isAdmin) return <Navigate to="/" replace />
 
@@ -225,6 +227,47 @@ export function AdminPage() {
     await supabase.from('knowledge_graph_relations').delete().eq('user_id', userId)
     fetchData()
     setSelectedUser(null)
+  }
+
+  // ── Moderation Queue ──
+  const fetchModQueue = useCallback(async () => {
+    setModLoading(true)
+    try {
+      const { data } = await supabase
+        .from('content_moderation')
+        .select(`
+          id, content_id, status, verdict, review_note, created_at,
+          content_items!inner (title, slug, author_name, user_id, tags)
+        `)
+        .in('status', ['pending', 'flagged'])
+        .order('created_at', { ascending: false })
+        .limit(50)
+      setModQueue(data || [])
+    } catch {
+      // non-critical
+    } finally {
+      setModLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { fetchModQueue() }, [fetchModQueue])
+
+  const moderateContent = async (contentId: string, moderationId: string, action: 'approved' | 'rejected', note?: string) => {
+    const { user } = (await supabase.auth.getUser()).data || {}
+    await supabase.from('content_moderation')
+      .update({
+        status: action,
+        reviewed_by: user?.id,
+        review_note: note || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', moderationId)
+
+    await supabase.from('content_items')
+      .update({ moderation_status: action })
+      .eq('id', contentId)
+
+    fetchModQueue()
   }
 
   const exportUsersCSV = () => {
@@ -457,6 +500,63 @@ export function AdminPage() {
                 </p>
               )}
             </div>
+          </div>
+
+          {/* Content Moderation Queue */}
+          <div className="admin-panel" style={{ marginTop: 16 }}>
+            <h3 className="mono admin-panel-title">CONTENT MODERATION QUEUE</h3>
+            {modLoading ? (
+              <p style={{ opacity: 0.4, fontStyle: 'italic', padding: 16 }}>Loading...</p>
+            ) : modQueue.length === 0 ? (
+              <p style={{ opacity: 0.4, fontStyle: 'italic', padding: 16 }}>
+                No content pending review
+              </p>
+            ) : (
+              <div className="admin-mod-list">
+                {modQueue.map((item: any) => {
+                  const ci = item.content_items
+                  const verdict = item.verdict || {}
+                  return (
+                    <div key={item.id} className="admin-mod-row">
+                      <div className="admin-mod-info">
+                        <span className="admin-mod-title">
+                          {ci?.title || 'Untitled'}
+                        </span>
+                        <span className="admin-mod-meta mono">
+                          by {ci?.author_name || 'Unknown'} · {item.status}
+                          {ci?.slug && (
+                            <> · <a href={`/#/p/${ci.slug}`} target="_blank" rel="noopener noreferrer">view</a></>
+                          )}
+                        </span>
+                        {verdict.reasoning && (
+                          <span className="admin-mod-reasoning">{verdict.reasoning}</span>
+                        )}
+                        <span className="admin-mod-scores mono">
+                          toxicity: {(verdict.toxicity ?? 0).toFixed(2)} · spam: {(verdict.spam ?? 0).toFixed(2)} · guidelines: {(verdict.guidelines ?? 0).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="admin-mod-actions">
+                        <button
+                          className="admin-action-btn admin-action-btn--accent"
+                          onClick={() => moderateContent(item.content_id, item.id, 'approved')}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="admin-action-btn admin-action-btn--danger"
+                          onClick={() => {
+                            const note = prompt('Rejection reason (optional):')
+                            moderateContent(item.content_id, item.id, 'rejected', note || undefined)
+                          }}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </>
       )}

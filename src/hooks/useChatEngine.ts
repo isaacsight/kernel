@@ -157,6 +157,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const contentEngineRef = useRef<import('../engine/ContentEngine').ContentEngine | null>(null)
   const contentPipelineKernelIdRef = useRef<string | null>(null)
 
+  // Platform Engine state (Pro only)
+  const [platformPhases, setPlatformPhases] = useState<import('../engine/platform/types').PlatformPhaseState[]>([])
+  const [isPlatformActive, setIsPlatformActive] = useState(false)
+  const platformEngineRef = useRef<import('../engine/PlatformEngine').PlatformEngine | null>(null)
+
   // Extended thinking state (Pro only)
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
   const [currentThinking, setCurrentThinking] = useState('')
@@ -539,7 +544,7 @@ export function useChatEngine(params: UseChatEngineParams) {
         return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, memoryText || undefined)
       } catch (err) {
         console.error('[engine] classifyIntent failed:', err)
-        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
+        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       }
     })()
 
@@ -1192,6 +1197,47 @@ export function useChatEngine(params: UseChatEngineParams) {
         }
       }
 
+      // ── Platform Engine (Pro) — end-to-end orchestration ──
+      if (!hasFileContent && classification.needsPlatformEngine && isPro) {
+        const { PlatformEngine } = await import('../engine/PlatformEngine')
+        const format = detectContentFormat(trimmed)
+        const platformConfig = {
+          type: 'full' as const,
+          brief: trimmed,
+          format,
+          targetPlatforms: [] as import('../engine/social/types').SocialPlatform[],
+          autoApprovePhases: ['score' as const, 'monitor' as const],
+        }
+        setIsPlatformActive(true)
+        const engine = new PlatformEngine(platformConfig, userId, {
+          onProgress: (phase, status, details) => {
+            console.log(`[platform-engine] ${phase}: ${status}`, details)
+          },
+          onChunk: updateKernelMsg,
+          onPhaseUpdate: (phases) => {
+            setPlatformPhases([...phases])
+          },
+          onApprovalNeeded: (phase, _output) => {
+            console.log(`[platform-engine] Approval needed for ${phase}`)
+          },
+          onContentStageUpdate: (stages) => {
+            setContentPipelineStages([...stages])
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, contentPipelineStages: [...stages] }
+              : m
+            ))
+          },
+          onContentApprovalNeeded: (stage, _output) => {
+            console.log(`[platform-engine] Content approval needed for ${stage}`)
+          },
+        })
+        platformEngineRef.current = engine
+        await engine.start()
+        if (engine.getState() === 'completed' || engine.getState() === 'failed') {
+          setIsPlatformActive(false)
+          platformEngineRef.current = null
+        }
+      } else
       // ── Content Engine (Pro) ────────────────────────────
       if (!hasFileContent && classification.needsContentEngine && isPro) {
         const { ContentEngine } = await import('../engine/ContentEngine')
@@ -1775,6 +1821,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     researchProgress, taskProgress, swarmProgress,
     workflowSteps, isWorkflowActive, cancelWorkflow,
     contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline,
+    platformPhases, isPlatformActive, platformEngineRef,
     userMemory, kgEntities, kgRelations, userGoals, setUserGoals,
     todayBriefing,
     inputRef, sendMessage, handleSubmit, stopStreaming,

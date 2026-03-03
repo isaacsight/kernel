@@ -10,6 +10,10 @@ export interface ClassificationResult {
   needsSwarm: boolean
   needsImageGen: boolean
   needsImageRefinement: boolean
+  needsPlatformEngine: boolean
+  needsContentEngine: boolean
+  needsAlgorithm: boolean
+  needsKnowledgeQuery: boolean
 }
 
 export interface ModelRoutingContext {
@@ -85,11 +89,66 @@ const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?
 // Image refinement is NOT locally classified — it requires conversation context
 // (whether a recent image exists) that only the LLM can evaluate.
 
+// Platform Engine — end-to-end orchestration (superset of content engine)
+const PLATFORM_ENGINE_PATTERNS = /\b(create\s+and\s+publish|end\s+to\s+end\s+content|full\s+pipeline|what\s+should\s+i\s+write\s+next|content\s+to\s+all\s+platforms|research\s+write\s+publish|write.*score.*publish|create.*distribute|blog.*post.*publish.*(?:twitter|linkedin|social)|publish\s+(?:to\s+)?(?:everywhere|all\s+(?:my\s+)?platforms)|full\s+content\s+workflow|platform\s+engine)\b/i
+
+// Content Engine — multi-stage pipeline triggers (NOT simple "write me an email")
+const CONTENT_ENGINE_PATTERNS = /\b(content\s+pipeline|content\s+calendar|content\s+strategy|blog\s+post\s+series|create\s+a\s+newsletter|draft\s+a\s+thread|help\s+me\s+(?:create|write|build)\s+(?:a\s+)?(?:blog|article|essay|newsletter|thread|post).*(?:research|optimize|distribute|publish)|write\s+me\s+a\s+blog|content\s+engine|start\s+content\s+pipeline)\b/i
+
+// Algorithm Engine — content optimization and scoring triggers
+const ALGORITHM_PATTERNS = /\b(optimize\s+(?:my\s+)?content|best\s+time\s+to\s+post|engagement\s+score|content\s+performance|content\s+ranking|score\s+(?:my\s+)?content|rank\s+(?:my\s+)?content|distribution\s+strategy|how\s+(?:will|would|did)\s+(?:my\s+)?(?:content|post|article)\s+perform)\b/i
+
+// Knowledge Engine — explicit knowledge base queries
+const KNOWLEDGE_QUERY_PATTERNS = /\b(what\s+do\s+i\s+know|search\s+my\s+(knowledge|notes|docs)|my\s+knowledge\s+base|recall\s+what\s+i|what\s+have\s+i\s+(learned|saved|stored)|browse\s+my\s+knowledge|show\s+my\s+knowledge|knowledge\s+about)\b/i
+
 // Short continuation patterns — user is clearly following up on the current conversation
 const CONTINUATION_PATTERNS = /^(yes|no|yeah|nah|sure|ok|okay|go ahead|do it|sounds good|perfect|got it|right|exactly|please|can you|could you|try|again|more|less|also|and|but|what about|how about|instead|change|make it|fix|update|add|remove|show me|tell me more|go on|continue|keep going|elaborate|shorter|longer|simpler|faster|slower)\b/i
 
 function classifyLocal(message: string): ClassificationResult | null {
   const lower = message.toLowerCase()
+
+  // Platform Engine — end-to-end content orchestration (superset, check before knowledge)
+  if (PLATFORM_ENGINE_PATTERNS.test(message)) {
+    return {
+      agentId: 'writer', confidence: 0.92, complexity: 0.8,
+      needsResearch: true, isMultiStep: true, needsSwarm: false,
+      needsImageGen: false, needsImageRefinement: false,
+      needsPlatformEngine: true, needsContentEngine: false, needsAlgorithm: false,
+      needsKnowledgeQuery: false,
+    }
+  }
+
+  // Knowledge Engine — explicit knowledge base queries
+  if (KNOWLEDGE_QUERY_PATTERNS.test(message)) {
+    return {
+      agentId: 'curator', confidence: 0.92, complexity: 0.4,
+      needsResearch: false, isMultiStep: false, needsSwarm: false,
+      needsImageGen: false, needsImageRefinement: false,
+      needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false,
+      needsKnowledgeQuery: true,
+    }
+  }
+
+  // Content Engine — multi-stage pipeline (check before generic writer keywords)
+  if (CONTENT_ENGINE_PATTERNS.test(message)) {
+    return {
+      agentId: 'writer', confidence: 0.90, complexity: 0.7,
+      needsResearch: true, isMultiStep: true, needsSwarm: false,
+      needsImageGen: false, needsImageRefinement: false,
+      needsPlatformEngine: false, needsContentEngine: true, needsAlgorithm: false,
+      needsKnowledgeQuery: false,
+    }
+  }
+
+  // Algorithm Engine — content optimization and scoring
+  if (ALGORITHM_PATTERNS.test(message)) {
+    return {
+      agentId: 'analyst', confidence: 0.90, complexity: 0.6,
+      needsResearch: false, isMultiStep: false, needsSwarm: false,
+      needsImageGen: false, needsImageRefinement: false,
+      needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: true, needsKnowledgeQuery: false,
+    }
+  }
 
   // Image gen — high signal, check first
   if (IMAGE_GEN_PATTERNS.test(message)) {
@@ -97,6 +156,7 @@ function classifyLocal(message: string): ClassificationResult | null {
       agentId: 'kernel', confidence: 0.95, complexity: 0.3,
       needsResearch: false, isMultiStep: false, needsSwarm: false,
       needsImageGen: true, needsImageRefinement: false,
+      needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false,
     }
   }
 
@@ -111,6 +171,7 @@ function classifyLocal(message: string): ClassificationResult | null {
             agentId, confidence: 0.85, complexity,
             needsResearch: agentId === 'researcher', isMultiStep: false, needsSwarm: false,
             needsImageGen: false, needsImageRefinement: false,
+            needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false,
           }
         }
       } else {
@@ -122,6 +183,7 @@ function classifyLocal(message: string): ClassificationResult | null {
             agentId, confidence: 0.85, complexity,
             needsResearch: agentId === 'researcher', isMultiStep: false, needsSwarm: false,
             needsImageGen: false, needsImageRefinement: false,
+            needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false,
           }
         }
       }
@@ -158,6 +220,7 @@ function classifyLocal(message: string): ClassificationResult | null {
       agentId, confidence: 0.85, complexity,
       needsResearch: false, isMultiStep: false, needsSwarm: false,
       needsImageGen: false, needsImageRefinement: false,
+      needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false,
     }
   }
 
@@ -224,7 +287,7 @@ export async function classifyIntent(
     // Validate the result
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator']
     if (!validAgents.includes(result.agentId)) {
-      const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       _lastClassification = fallback
       _lastClassificationTime = now
       return fallback
@@ -232,7 +295,7 @@ export async function classifyIntent(
 
     // Fall back to kernel if confidence is too low
     if (typeof result.confidence !== 'number' || result.confidence < 0.3) {
-      const fallback: ClassificationResult = { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+      const fallback: ClassificationResult = { agentId: 'kernel', confidence: result.confidence || 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       _lastClassification = fallback
       _lastClassificationTime = now
       return fallback
@@ -247,6 +310,10 @@ export async function classifyIntent(
       needsSwarm: !!result.needsSwarm,
       needsImageGen: !!result.needsImageGen,
       needsImageRefinement: !!result.needsImageRefinement,
+      needsPlatformEngine: !!result.needsPlatformEngine,
+      needsContentEngine: !!result.needsContentEngine,
+      needsAlgorithm: !!result.needsAlgorithm,
+      needsKnowledgeQuery: !!result.needsKnowledgeQuery,
     }
     _lastClassification = classified
     _lastClassificationTime = now
@@ -257,7 +324,7 @@ export async function classifyIntent(
       console.log(`[router] Groq failed, reusing recent classification → ${_lastClassification.agentId}`)
       return _lastClassification
     }
-    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false }
+    return { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
   }
 }
 

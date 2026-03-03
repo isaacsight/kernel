@@ -131,6 +131,77 @@ describe('AgentRouter', () => {
       const result2 = await classifyIntent('tell me more', '')
       expect(result2.agentId).toBe('researcher')
     })
+
+    it('detects image generation via local fast-path', async () => {
+      const result = await classifyIntent('draw me a cartoon monkey', '')
+      expect(result.needsImageGen).toBe(true)
+      expect(result.needsImageRefinement).toBe(false)
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('sets needsImageRefinement on continuation after image gen', async () => {
+      // First: user asks to generate an image
+      const result1 = await classifyIntent('draw me a sunset over mountains', '')
+      expect(result1.needsImageGen).toBe(true)
+      expect(result1.needsImageRefinement).toBe(false)
+
+      // Second: user says "make it more colorful" — continuation after image gen
+      const result2 = await classifyIntent('make it more colorful', '')
+      expect(result2.needsImageGen).toBe(true)
+      expect(result2.needsImageRefinement).toBe(true)
+    })
+
+    it('sets needsImageRefinement on "try again" after image gen', async () => {
+      await classifyIntent('generate an image of a cat', '')
+
+      const result = await classifyIntent('try again', '')
+      expect(result.needsImageGen).toBe(true)
+      expect(result.needsImageRefinement).toBe(true)
+    })
+
+    it('detects knowledge queries via local fast-path', async () => {
+      const result = await classifyIntent('what do I know about machine learning?', '')
+      expect(result.needsKnowledgeQuery).toBe(true)
+      expect(result.agentId).toBe('curator')
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('detects platform engine via local fast-path', async () => {
+      const result = await classifyIntent('Create a blog post about AI trends, research from my knowledge base, score it, and publish to Twitter and LinkedIn', '')
+      expect(result.needsPlatformEngine).toBe(true)
+      expect(result.needsContentEngine).toBe(false)
+      expect(result.agentId).toBe('writer')
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('detects "what should I write next" as platform engine', async () => {
+      const result = await classifyIntent('what should I write next', '')
+      expect(result.needsPlatformEngine).toBe(true)
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('detects "create and publish" as platform engine', async () => {
+      const result = await classifyIntent('create and publish a newsletter about design trends', '')
+      expect(result.needsPlatformEngine).toBe(true)
+      expect(mockJson).not.toHaveBeenCalled()
+    })
+
+    it('does NOT trigger platform engine for simple content requests', async () => {
+      const result = await classifyIntent('write me a blog post about cooking', '')
+      // This should route to content engine, not platform engine
+      expect(result.needsPlatformEngine).toBe(false)
+    })
+
+    it('does NOT set needsImageRefinement on continuation after non-image classification', async () => {
+      // First: normal researcher classification
+      const result1 = await classifyIntent('research AI regulation', '')
+      expect(result1.needsImageGen).toBe(false)
+
+      // Continuation should NOT trigger image refinement
+      const result2 = await classifyIntent('tell me more', '')
+      expect(result2.needsImageRefinement).toBe(false)
+      expect(result2.needsImageGen).toBe(false)
+    })
   })
 
   describe('buildRecentContext', () => {

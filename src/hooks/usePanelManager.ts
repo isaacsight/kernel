@@ -21,6 +21,9 @@ export function usePanelManager(callbacks: {
   const [showMirrorPanel, setShowMirrorPanel] = useState(false)
   const [showProjectPanel, setShowProjectPanel] = useState(false)
   const [showImageGallery, setShowImageGallery] = useState(false)
+  const [showKnowledgePanel, setShowKnowledgePanel] = useState(false)
+  const [showSocialPanel, setShowSocialPanel] = useState(false)
+  const [showPlatformPanel, setShowPlatformPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -37,6 +40,9 @@ export function usePanelManager(callbacks: {
     setShowMirrorPanel(false)
     setShowProjectPanel(false)
     setShowImageGallery(false)
+    setShowKnowledgePanel(false)
+    setShowSocialPanel(false)
+    setShowPlatformPanel(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
@@ -53,6 +59,9 @@ export function usePanelManager(callbacks: {
     if (except !== 'mirror') setShowMirrorPanel(false)
     if (except !== 'project') setShowProjectPanel(false)
     if (except !== 'image-gallery') setShowImageGallery(false)
+    if (except !== 'knowledge') setShowKnowledgePanel(false)
+    if (except !== 'social') setShowSocialPanel(false)
+    if (except !== 'platform') setShowPlatformPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
   }, [callbacks])
@@ -87,7 +96,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'knowledge' | 'social' | 'platform' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -102,6 +111,9 @@ export function usePanelManager(callbacks: {
       case 'mirror': setShowMirrorPanel(false); break
       case 'project': setShowProjectPanel(false); break
       case 'image-gallery': setShowImageGallery(false); break
+      case 'knowledge': setShowKnowledgePanel(false); break
+      case 'social': setShowSocialPanel(false); break
+      case 'platform': setShowPlatformPanel(false); break
       case 'more': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
     }
@@ -148,6 +160,22 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('image-gallery')
         setShowImageGallery(true)
         break
+      case 'knowledge-base':
+        closeOtherPanels('knowledge')
+        setShowKnowledgePanel(true)
+        break
+      case 'social':
+        closeOtherPanels('social')
+        setShowSocialPanel(true)
+        break
+      case 'platform':
+        closeOtherPanels('platform')
+        setShowPlatformPanel(true)
+        break
+      case 'explore':
+        closeAllPanels()
+        window.location.hash = '#/explore'
+        break
       case 'upgrade':
         callbacks.handleUpgrade()
         break
@@ -175,6 +203,9 @@ export function usePanelManager(callbacks: {
     showMirrorPanel, setShowMirrorPanel,
     showProjectPanel, setShowProjectPanel,
     showImageGallery, setShowImageGallery,
+    showKnowledgePanel, setShowKnowledgePanel,
+    showSocialPanel, setShowSocialPanel,
+    showPlatformPanel, setShowPlatformPanel,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,

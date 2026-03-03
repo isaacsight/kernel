@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconSparkles, IconFileCode, IconImage } from './KernelIcons'
+import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconSparkles, IconFileCode, IconImage, IconShare } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
@@ -42,6 +42,10 @@ export type MoreAction =
   | 'mirror'
   | 'project'
   | 'image-gallery'
+  | 'social'
+  | 'platform'
+  | 'knowledge-base'
+  | 'explore'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
@@ -65,6 +69,10 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'mirror', labelKey: 'menu.mirror', icon: IconSparkles },
   { id: 'project', labelKey: 'menu.projectFiles', icon: IconFileCode },
   { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage },
+  { id: 'social', labelKey: 'menu.social', icon: IconShare, condition: 'subscribed' },
+  { id: 'platform', labelKey: 'menu.platformEngine', icon: IconZap, condition: 'subscribed' },
+  { id: 'explore', labelKey: 'menu.explore', icon: IconGlobe },
+  { id: 'knowledge-base', labelKey: 'menu.knowledgeBase', icon: IconBookOpen },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [

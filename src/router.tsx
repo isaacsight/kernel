@@ -12,6 +12,10 @@ const SharedConversationPage = lazyRetry(() => import('./pages/SharedConversatio
 const BriefingPage = lazyRetry(() => import('./pages/BriefingPage').then(m => ({ default: m.BriefingPage })))
 const PrivacyPage = lazyRetry(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })))
 const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
+const PublishedContentPage = lazyRetry(() => import('./pages/PublishedContentPage').then(m => ({ default: m.PublishedContentPage })))
+const SocialCallbackPage = lazyRetry(() => import('./components/SocialCallbackPage').then(m => ({ default: m.SocialCallbackPage })))
+const ExplorePage = lazyRetry(() => import('./pages/ExplorePage').then(m => ({ default: m.ExplorePage })))
+const AuthorProfilePage = lazyRetry(() => import('./pages/AuthorProfilePage').then(m => ({ default: m.AuthorProfilePage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -74,6 +78,26 @@ export const router = createHashRouter([
       { path: 'terms', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <TermsPage />
+        </Suspense>
+      ) },
+      { path: 'p/:slug', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <PublishedContentPage />
+        </Suspense>
+      ) },
+      { path: 'social/callback/:platform', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <SocialCallbackPage />
+        </Suspense>
+      ) },
+      { path: 'explore', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <ExplorePage />
+        </Suspense>
+      ) },
+      { path: 'author/:id', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <AuthorProfilePage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },

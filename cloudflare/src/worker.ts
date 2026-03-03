@@ -12,12 +12,56 @@ interface Env {
 }
 
 const UUID_RE = /^\/s\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i
+const PUBLISHED_RE = /^\/p\/([a-z0-9][a-z0-9-]{0,80})$/i
 
 const CRAWLER_UA_RE = /bot|crawl|spider|slurp|facebookexternalhit|Facebot|Twitterbot|LinkedInBot|Slackbot|TelegramBot|WhatsApp|Discordbot|redditbot|Mastodon|Googlebot|Bingbot|applebot|preview/i
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url)
+
+    // Check for published content pages /p/{slug}
+    const publishedMatch = url.pathname.match(PUBLISHED_RE)
+    if (publishedMatch) {
+      const slug = publishedMatch[1]
+      const ua = request.headers.get('user-agent') || ''
+
+      if (!CRAWLER_UA_RE.test(ua)) {
+        return Response.redirect(`${env.SITE_URL}/#/p/${slug}`, 302)
+      }
+
+      try {
+        const apiUrl = `${env.SUPABASE_URL}/functions/v1/published-content?slug=${encodeURIComponent(slug)}`
+        const apiRes = await fetch(apiUrl, {
+          cf: { cacheTtl: 300, cacheEverything: true },
+        })
+
+        if (!apiRes.ok) {
+          return fallbackPublishedHtml(env, slug)
+        }
+
+        const data = await apiRes.json() as {
+          title: string
+          meta_description: string
+          author_name: string
+          tags: string[]
+        }
+
+        const title = escapeHtml(data.title || 'Published on Kernel')
+        const description = escapeHtml(data.meta_description || 'Content published on Kernel — AI that learns you.')
+        const pageUrl = `${env.SITE_URL}/p/${slug}`
+
+        return new Response(ogHtml(title, description, pageUrl, env.OG_IMAGE_URL), {
+          headers: {
+            'content-type': 'text/html;charset=UTF-8',
+            'cache-control': 'public, max-age=300',
+          },
+        })
+      } catch {
+        return fallbackPublishedHtml(env, slug)
+      }
+    }
+
     const match = url.pathname.match(UUID_RE)
 
     if (!match) {
@@ -105,6 +149,24 @@ function ogHtml(title: string, description: string, url: string, image: string):
 <p><a href="${url}">View on Kernel</a></p>
 </body>
 </html>`
+}
+
+function fallbackPublishedHtml(env: Env, slug: string): Response {
+  const url = `${env.SITE_URL}/p/${slug}`
+  return new Response(
+    ogHtml(
+      'Published on Kernel',
+      'Content published on Kernel — AI that learns you.',
+      url,
+      env.OG_IMAGE_URL,
+    ),
+    {
+      headers: {
+        'content-type': 'text/html;charset=UTF-8',
+        'cache-control': 'public, max-age=60',
+      },
+    },
+  )
 }
 
 function fallbackHtml(env: Env, shareId: string): Response {

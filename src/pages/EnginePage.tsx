@@ -43,6 +43,7 @@ import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
 import { WorkflowTimeline } from '../components/WorkflowTimeline'
+import { ContentPipeline } from '../components/ContentPipeline'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -55,6 +56,7 @@ const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasks
 const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
 const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const AccountSettingsPanel = lazyRetry(() => import('../components/AccountSettingsPanel'))
+const KnowledgePanel = lazyRetry(() => import('../components/KnowledgePanel').then(m => ({ default: m.KnowledgePanel })))
 const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
@@ -67,6 +69,9 @@ const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m
 const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
 const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
 const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPanel').then(m => ({ default: m.ImageGalleryPanel })))
+const SocialMediaPanel = lazyRetry(() => import('../components/SocialMediaPanel').then(m => ({ default: m.SocialMediaPanel })))
+const SocialAdaptPanel = lazyRetry(() => import('../components/SocialAdaptPanel').then(m => ({ default: m.SocialAdaptPanel })))
+const PlatformPanel = lazyRetry(() => import('../components/PlatformPanel').then(m => ({ default: m.PlatformPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -233,6 +238,8 @@ function EngineChat() {
   const [isDragOver, setIsDragOver] = useState(false)
   const dragCounterRef = useRef(0)
   const [showCreditModal, setShowCreditModal] = useState(false)
+  const [showDistributePanel, setShowDistributePanel] = useState(false)
+  const [distributeContent, setDistributeContent] = useState('')
   const [imageCredits, setImageCredits] = useState(0)
 
   useEffect(() => {
@@ -580,7 +587,7 @@ function EngineChat() {
   // ─── Back button support ─────────────────────────────
   const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
     || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel || panels.showImageGallery
+    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel || panels.showImageGallery || panels.showKnowledgePanel || panels.showSocialPanel || panels.showPlatformPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -592,6 +599,7 @@ function EngineChat() {
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress, workflowSteps, isWorkflowActive, cancelWorkflow } = chatEngine
+  const { contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline } = chatEngine
   const { extendedThinkingEnabled, setExtendedThinkingEnabled, explainModeEnabled, setExplainModeEnabled, currentThinking, thinkingStartRef } = chatEngine
 
   // ─── Discovery pulse (one-time per user) ─────────────
@@ -860,6 +868,61 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {panels.showSocialPanel && (
+          <Suspense fallback={<PanelShimmer />}>
+            <SocialMediaPanel
+              isOpen={panels.showSocialPanel}
+              onClose={() => panels.closePanel('social')}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showDistributePanel && (
+          <Suspense fallback={null}>
+            <SocialAdaptPanel
+              isOpen={showDistributePanel}
+              onClose={() => setShowDistributePanel(false)}
+              content={distributeContent}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showPlatformPanel && (
+          <Suspense fallback={null}>
+            <PlatformPanel
+              isOpen={panels.showPlatformPanel}
+              onClose={() => panels.closePanel('platform')}
+              phases={chatEngine.platformPhases}
+              contentStages={chatEngine.contentPipelineStages}
+              onApprovePhase={(phase) => chatEngine.platformEngineRef.current?.resumeFrom(phase)}
+              onEditPhase={(phase, feedback) => chatEngine.platformEngineRef.current?.resumeFrom(phase, feedback)}
+              onSkipPhase={(phase) => chatEngine.platformEngineRef.current?.resumeFrom(phase)}
+              onApproveContentStage={() => chatEngine.platformEngineRef.current?.approveContentStage()}
+              onEditContentStage={(feedback) => chatEngine.platformEngineRef.current?.editContentStage(feedback)}
+              onUpdateAdaptation={(platform, body) => chatEngine.platformEngineRef.current?.updateAdaptation(platform, body)}
+              onCancel={() => {
+                chatEngine.platformEngineRef.current?.cancel()
+                panels.closePanel('platform')
+              }}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showKnowledgePanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('knowledge')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <KnowledgePanel userId={user.id} onClose={() => panels.closePanel('knowledge')} onToast={showToast} />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {panels.showAccountSettings && user && (
           <BottomSheet onClose={() => panels.closePanel('account-settings')}>
@@ -1205,6 +1268,23 @@ function EngineChat() {
           />
         )}
 
+        {(contentPipelineStages.length > 0 || isContentPipelineActive) && (
+          <ContentPipeline
+            stages={contentPipelineStages}
+            isActive={isContentPipelineActive}
+            onApprove={approveContentStage}
+            onEdit={editContentStage}
+            onCancel={cancelContentPipeline}
+            onDistribute={() => {
+              const editStage = contentPipelineStages.find(s => s.stage === 'edit')
+              const draftStage = contentPipelineStages.find(s => s.stage === 'draft')
+              const content = editStage?.output || draftStage?.output || ''
+              setDistributeContent(content)
+              setShowDistributePanel(true)
+            }}
+          />
+        )}
+
         <AnimatePresence>
           {isThinking && !isWorkflowActive && (
             <motion.div className="ka-thinking" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
@@ -1246,6 +1326,12 @@ function EngineChat() {
                 {msg.role === 'kernel' && msg.workflowSteps && msg.workflowSteps.length > 0 && (
                   <WorkflowTimeline
                     steps={msg.workflowSteps}
+                    isActive={false}
+                  />
+                )}
+                {msg.role === 'kernel' && msg.contentPipelineStages && msg.contentPipelineStages.length > 0 && (
+                  <ContentPipeline
+                    stages={msg.contentPipelineStages}
                     isActive={false}
                   />
                 )}

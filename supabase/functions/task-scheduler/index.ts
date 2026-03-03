@@ -7,6 +7,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { logAudit } from '../_shared/audit.ts'
+import { getAdapter } from '../_shared/social/registry.ts'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -270,11 +271,179 @@ serve(async (req: Request) => {
       console.warn('Health check failed (non-blocking):', healthErr)
     }
 
+    // ── Social: publish scheduled posts ──
+    let socialPublished = 0
+    try {
+      const { data: duePosts } = await supabase
+        .from('social_posts')
+        .select('*, social_accounts!inner(platform, access_token_enc, refresh_token_enc, token_expires_at)')
+        .eq('status', 'scheduled')
+        .lte('scheduled_at', new Date().toISOString())
+        .limit(20)
+
+      if (duePosts && duePosts.length > 0) {
+        const encKey = Deno.env.get('SOCIAL_ENCRYPTION_KEY') || ''
+
+        for (const post of duePosts) {
+          try {
+            // Mark as publishing
+            await supabase.from('social_posts').update({ status: 'publishing' }).eq('id', post.id)
+
+            const account = post.social_accounts
+            const adapter = getAdapter(account.platform)
+
+            // Decrypt access token
+            const { data: decrypted } = await supabase.rpc('decrypt_social_token', {
+              encrypted: account.access_token_enc,
+            })
+            let accessToken = decrypted as string
+
+            // Refresh if expired
+            if (account.token_expires_at && new Date(account.token_expires_at) < new Date()) {
+              const { data: decRefresh } = await supabase.rpc('decrypt_social_token', {
+                encrypted: account.refresh_token_enc,
+              })
+              if (decRefresh) {
+                const refreshed = await adapter.refreshToken(decRefresh as string)
+                accessToken = refreshed.access_token
+                // Re-encrypt and store new tokens
+                const { data: newEnc } = await supabase.rpc('encrypt_social_token', { token: refreshed.access_token })
+                const updateData: Record<string, unknown> = {
+                  access_token_enc: newEnc,
+                  token_expires_at: refreshed.expires_in ? new Date(Date.now() + refreshed.expires_in * 1000).toISOString() : null,
+                }
+                if (refreshed.refresh_token) {
+                  const { data: refEnc } = await supabase.rpc('encrypt_social_token', { token: refreshed.refresh_token })
+                  updateData.refresh_token_enc = refEnc
+                }
+                await supabase.from('social_accounts').update(updateData).eq('id', post.account_id)
+              }
+            }
+
+            // Publish
+            const threadParts = post.thread_parts as string[] | null
+            let result
+            if (threadParts && threadParts.length > 1 && adapter.publishThread) {
+              result = await adapter.publishThread(accessToken, threadParts)
+            } else {
+              result = await adapter.publishPost(accessToken, post.body, post.media_urls || undefined)
+            }
+
+            // Update post as published
+            await supabase.from('social_posts').update({
+              status: 'published',
+              published_at: new Date().toISOString(),
+              platform_post_id: result.platformPostId,
+              platform_url: result.platformUrl,
+            }).eq('id', post.id)
+
+            // Notify user
+            await supabase.from('notifications').insert({
+              user_id: post.user_id,
+              title: 'Scheduled post published',
+              body: `Your ${account.platform} post has been published.`,
+              type: 'info',
+              action_url: result.platformUrl || undefined,
+            })
+
+            socialPublished++
+          } catch (postErr) {
+            const retryCount = (post.retry_count || 0) + 1
+            const newStatus = retryCount >= 3 ? 'failed' : 'scheduled'
+            await supabase.from('social_posts').update({
+              status: newStatus,
+              retry_count: retryCount,
+              publish_error: postErr instanceof Error ? postErr.message : 'Unknown error',
+            }).eq('id', post.id)
+
+            if (newStatus === 'failed') {
+              await supabase.from('notifications').insert({
+                user_id: post.user_id,
+                title: 'Scheduled post failed',
+                body: `Your ${post.platform} post failed after 3 attempts.`,
+                type: 'error',
+              })
+            }
+            console.warn(`[social] Failed to publish post ${post.id}:`, postErr)
+          }
+        }
+        console.log(`[social] Published ${socialPublished}/${duePosts.length} scheduled posts`)
+      }
+    } catch (socialErr) {
+      console.warn('Social scheduled posts failed (non-blocking):', socialErr)
+    }
+
+    // ── Social: cleanup expired OAuth states (10 min TTL) ──
+    try {
+      const cutoff = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      const { count } = await supabase
+        .from('social_oauth_states')
+        .delete()
+        .lt('created_at', cutoff)
+        .select('*', { count: 'exact', head: true })
+      if (count && count > 0) {
+        console.log(`[social] Cleaned up ${count} expired OAuth state(s)`)
+      }
+    } catch (oauthCleanErr) {
+      console.warn('OAuth state cleanup failed (non-blocking):', oauthCleanErr)
+    }
+
+    // ── Social: collect analytics for recent posts ──
+    try {
+      // Posts published in last 7 days — collect every scheduler run
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      const { data: recentPosts } = await supabase
+        .from('social_posts')
+        .select('*, social_accounts!inner(platform, access_token_enc, token_expires_at)')
+        .eq('status', 'published')
+        .not('platform_post_id', 'is', null)
+        .gte('published_at', weekAgo)
+        .limit(50)
+
+      if (recentPosts && recentPosts.length > 0) {
+        let collected = 0
+        for (const post of recentPosts) {
+          try {
+            const account = post.social_accounts
+            const adapter = getAdapter(account.platform)
+            if (!adapter) continue
+
+            const { data: decrypted } = await supabase.rpc('decrypt_social_token', {
+              encrypted: account.access_token_enc,
+            })
+            if (!decrypted) continue
+
+            const analytics = await adapter.getPostAnalytics(decrypted as string, post.platform_post_id)
+            if (analytics) {
+              await supabase.from('social_analytics').upsert({
+                post_id: post.id,
+                user_id: post.user_id,
+                platform: post.platform,
+                impressions: analytics.impressions || 0,
+                likes: analytics.likes || 0,
+                reposts: analytics.reposts || 0,
+                replies: analytics.replies || 0,
+                clicks: analytics.clicks || 0,
+                engagement_rate: analytics.engagementRate || 0,
+                collected_at: new Date().toISOString(),
+              }, { onConflict: 'post_id,collected_at' })
+              collected++
+            }
+          } catch (analyticsErr) {
+            console.warn(`[social-analytics] Failed for post ${post.id}:`, analyticsErr)
+          }
+        }
+        if (collected > 0) console.log(`[social-analytics] Collected metrics for ${collected} posts`)
+      }
+    } catch (analyticsErr) {
+      console.warn('Social analytics collection failed (non-blocking):', analyticsErr)
+    }
+
     // Audit log
     logAudit(supabase, {
       actorType: 'system', eventType: 'system.cron', action: 'task-scheduler',
       source: 'task-scheduler', status: 'success', statusCode: 200,
-      metadata: { processed },
+      metadata: { processed, socialPublished },
     })
 
     return new Response(JSON.stringify({ processed }), {
