@@ -131,6 +131,8 @@ export interface Reflection {
     relevance: number;         // does it address the actual need?
     brevity: number;           // is it tight, or bloated?
     craft: number;             // aesthetic quality — rhythm, word choice
+    continuity?: number;       // does it build on conversational arc?
+    attunement?: number;       // is response length/tone calibrated to user?
   };
   lesson: string;
   worldModelUpdate: string | null;  // did this change what the engine believes?

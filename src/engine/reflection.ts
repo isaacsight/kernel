@@ -110,6 +110,20 @@ export function reflect(
     (notGeneric ? 0.3 : 0)
   )
 
+  // ── Continuity (0-1) — does the response build on conversational arc? ──
+  const hasBackRef = /\b(earlier|before|mentioned|discussed|you said|as we|building on|continuing|following up)\b/i.test(output)
+  const referencesContext = conversationHistory.length >= 4
+    ? conversationHistory.slice(-4, -1).some(m => {
+        const mWords = new Set(m.content.toLowerCase().split(/\s+/).filter(w => w.length > 4))
+        return [...mWords].some(w => outputLower.includes(w))
+      })
+    : false
+  const continuity = (
+    (hasBackRef ? 0.4 : 0) +
+    (referencesContext ? 0.4 : 0) +
+    (buildsOnPrior ? 0.2 : 0)
+  )
+
   const scores: AIScores = { substance, coherence, relevance, brevity: brevityFinal, craft }
   const quality = computeWeightedQuality(scores, perception.intent.type)
 
@@ -145,7 +159,7 @@ export function reflect(
     agentUsed: agent.id,
     durationMs,
     quality,
-    scores,
+    scores: { ...scores, continuity },
     lesson,
     worldModelUpdate,
     convictionDelta,

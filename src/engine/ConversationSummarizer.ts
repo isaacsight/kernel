@@ -39,11 +39,14 @@ const SUMMARIZE_SYSTEM = `You are a conversation summarizer. Produce a compact s
 - Decisions made or conclusions reached
 - Important facts or preferences the user mentioned
 - Any commitments or action items
-- The emotional tone and trajectory of the conversation
+- Emotional arc: how did the user's energy shift? (e.g. "started frustrated, warmed up after getting help")
+- Unresolved threads: questions asked but not fully answered, topics raised but dropped
+- High-energy moments: what made them most engaged or excited?
 
 Write in third person ("The user asked about...", "They discussed...").
 Keep it under 300 words. Be dense with information — every sentence should carry meaning.
-Do NOT include greetings, pleasantries, or filler.`
+Do NOT include greetings, pleasantries, or filler.
+End with a one-line "Unresolved:" note listing any open threads (or "None" if all resolved).`
 
 export async function summarizeConversation(
   messages: { role: string; content: string }[],

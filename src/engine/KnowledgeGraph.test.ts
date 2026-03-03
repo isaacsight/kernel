@@ -67,11 +67,10 @@ describe('formatGraphForPrompt', () => {
       confidence: 0.8,
     }]
     const result = formatGraphForPrompt(entities, relations)
-    expect(result).toContain('concepts:')
     expect(result).toContain('React')
-    expect(result).toContain('companys:')
+    expect(result).toContain('concept')
     expect(result).toContain('Antigravity')
-    expect(result).toContain('React')
+    expect(result).toContain('company')
     expect(result).toContain('uses')
   })
 

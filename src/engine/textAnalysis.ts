@@ -29,6 +29,71 @@ export function countSignals(text: string, signals: string[]): number {
   return signals.filter(s => lower.includes(s)).length;
 }
 
+// ─── Emotional Context Detection ──────────────────────────
+// Computes sentiment trajectory from recent user messages.
+// Zero API calls — pure signal analysis from textAnalysis primitives.
+
+export type EnergyLevel = 'warm' | 'neutral' | 'frustrated' | 'excited' | 'subdued'
+export type EnergyTrajectory = 'improving' | 'stable' | 'declining'
+
+export interface EmotionalContext {
+  energy: EnergyLevel
+  trajectory: EnergyTrajectory
+  /** Raw sentiment scores for the window (most recent last) */
+  sentiments: number[]
+}
+
+/** Compute sentiment for a single message: -1 (negative) to +1 (positive) */
+export function messageSentiment(text: string): number {
+  const pos = countSignals(text, POSITIVE_SIGNALS)
+  const neg = countSignals(text, NEGATIVE_SIGNALS)
+  return Math.max(-1, Math.min(1, (pos - neg) * 0.3))
+}
+
+/** Classify energy level from average sentiment */
+function classifyEnergy(avg: number, urgency: number): EnergyLevel {
+  if (avg >= 0.3) return 'excited'
+  if (avg >= 0.1) return 'warm'
+  if (avg <= -0.3 || urgency > 0.5) return 'frustrated'
+  if (avg <= -0.1) return 'subdued'
+  return 'neutral'
+}
+
+/**
+ * Compute emotional context from the last N user messages.
+ * Uses countSignals + urgency detection — zero API calls.
+ */
+export function computeEmotionalContext(
+  userMessages: string[],
+  windowSize = 6,
+): EmotionalContext {
+  const window = userMessages.slice(-windowSize)
+  if (window.length === 0) {
+    return { energy: 'neutral', trajectory: 'stable', sentiments: [] }
+  }
+
+  const sentiments = window.map(messageSentiment)
+  const avg = sentiments.reduce((a, b) => a + b, 0) / sentiments.length
+  const urgency = window.reduce((sum, m) => sum + countSignals(m, URGENCY_SIGNALS), 0) / window.length
+
+  // Trajectory: compare first half to second half
+  let trajectory: EnergyTrajectory = 'stable'
+  if (sentiments.length >= 3) {
+    const mid = Math.floor(sentiments.length / 2)
+    const firstHalf = sentiments.slice(0, mid).reduce((a, b) => a + b, 0) / mid
+    const secondHalf = sentiments.slice(mid).reduce((a, b) => a + b, 0) / (sentiments.length - mid)
+    const delta = secondHalf - firstHalf
+    if (delta > 0.15) trajectory = 'improving'
+    else if (delta < -0.15) trajectory = 'declining'
+  }
+
+  return {
+    energy: classifyEnergy(avg, urgency),
+    trajectory,
+    sentiments,
+  }
+}
+
 export function extractKeyEntities(text: string): string[] {
   // Extract capitalized words and quoted phrases as key entities
   const quoted = text.match(/"([^"]+)"|'([^']+)'/g)?.map(q => q.replace(/['"]/g, '')) || [];

@@ -364,6 +364,47 @@ export function isProfileStale(
   return items.every(item => warmthScore(item, warmth) < 0.2)
 }
 
+// ─── Warmth-Driven Proactive Callbacks ─────────────────────
+
+/**
+ * Find high-warmth memory items that haven't been referenced recently.
+ * These are topics the user cares deeply about (3+ mentions) but
+ * haven't come up in a while — natural callback opportunities.
+ * Returns at most 1 callback to avoid feeling surveillance-y.
+ */
+export function findCallbackOpportunities(
+  profile: UserMemoryProfile,
+  minMentions = 3,
+  minDaysSilent = 7,
+): { text: string; mentions: number; daysSilent: number } | null {
+  const warmth = profile.warmth || {}
+  const now = Date.now()
+
+  const candidates: { text: string; mentions: number; daysSilent: number }[] = []
+
+  const allItems = [
+    ...profile.interests,
+    ...profile.goals,
+    ...profile.facts,
+    ...profile.preferences,
+  ]
+
+  for (const item of allItems) {
+    const w = warmth[item]
+    if (!w || w.mentions < minMentions) continue
+    const daysSilent = (now - new Date(w.lastReinforced).getTime()) / 86400000
+    if (daysSilent >= minDaysSilent) {
+      candidates.push({ text: item, mentions: w.mentions, daysSilent: Math.floor(daysSilent) })
+    }
+  }
+
+  if (candidates.length === 0) return null
+
+  // Return the one with highest mention count (strongest signal)
+  candidates.sort((a, b) => b.mentions - a.mentions)
+  return candidates[0]
+}
+
 // ─── KG → Profile Consolidation ─────────────────────────────
 
 interface KGEntityLike {

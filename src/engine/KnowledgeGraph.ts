@@ -89,29 +89,31 @@ export function formatGraphForPrompt(
   const entityMap = new Map(entities.map(e => [e.id, e]))
   const lines: string[] = []
 
-  // Group entities by type
-  const byType = new Map<string, KGEntity[]>()
-  for (const e of entities) {
-    const group = byType.get(e.entity_type) || []
-    group.push(e)
-    byType.set(e.entity_type, group)
+  // Build relational narratives instead of flat lists
+  // Sort by mention count (most referenced first)
+  const sorted = [...entities].sort((a, b) => b.mention_count - a.mention_count)
+
+  for (const e of sorted.slice(0, 12)) {
+    const relContext: string[] = []
+    // Find relations involving this entity
+    for (const r of relations) {
+      if (r.source_id === e.id) {
+        const target = entityMap.get(r.target_id)
+        if (target) relContext.push(`${r.relation_type.replace(/_/g, ' ')} ${target.name}`)
+      }
+      if (r.target_id === e.id) {
+        const source = entityMap.get(r.source_id)
+        if (source) relContext.push(`${source.name} ${r.relation_type.replace(/_/g, ' ')} them`)
+      }
+    }
+
+    const engagement = e.mention_count >= 5 ? 'high engagement' : e.mention_count >= 3 ? 'recurring' : 'mentioned'
+    const relStr = relContext.length > 0 ? `, ${relContext.slice(0, 2).join(', ')}` : ''
+    lines.push(`- ${e.name} (${e.entity_type}, ${engagement}${relStr})`)
   }
 
-  for (const [type, ents] of byType) {
-    lines.push(`**${type}s:** ${ents.map(e => e.name).join(', ')}`)
-  }
-
-  // Format relationships
-  if (relations.length > 0) {
-    const relLines = relations.map(r => {
-      const src = entityMap.get(r.source_id)?.name || '?'
-      const tgt = entityMap.get(r.target_id)?.name || '?'
-      return `${src} → ${r.relation_type} → ${tgt}`
-    })
-    lines.push(`**Connections:** ${relLines.join('; ')}`)
-  }
-
-  return lines.join('\n')
+  if (lines.length === 0) return ''
+  return `${lines.join('\n')}\n\n*Demonstrate familiarity with known entities. Don't re-ask about things you already know.*`
 }
 
 // ─── Memory Decay ───────────────────────────────────────────

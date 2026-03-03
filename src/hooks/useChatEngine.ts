@@ -5,7 +5,7 @@ import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
 import { deepResearch, type ResearchProgress } from '../engine/DeepResearch'
-import { extractMemory, mergeMemory, formatMemoryForPrompt, isEmptyProfile, emptyProfile, updateWarmth, applyProfileDecay, isProfileStale, consolidateFromKG, type UserMemoryProfile } from '../engine/MemoryAgent'
+import { extractMemory, mergeMemory, formatMemoryForPrompt, isEmptyProfile, emptyProfile, updateWarmth, applyProfileDecay, isProfileStale, consolidateFromKG, findCallbackOpportunities, type UserMemoryProfile } from '../engine/MemoryAgent'
 import { summarizeConversation, getMessagesToSummarize, formatSummaryForPrompt, retrieveRelevantConversation, SUMMARY_THRESHOLD, type ConversationSummary } from '../engine/ConversationSummarizer'
 import { extractFacet, converge, formatMirrorForPrompt, formatCraftCalibration, shouldConverge, resolveFacetAgent, emptyMirror, type UserMirror } from '../engine/Convergence'
 import {
@@ -15,7 +15,8 @@ import {
   type LoomState, type Outcome, type UserSignal,
 } from '../engine/Loom'
 import { extractEntities, formatGraphForPrompt, mergeExtraction, type KGEntity, type KGRelation } from '../engine/KnowledgeGraph'
-import { extractKeyEntities, extractConversationTopics } from '../engine/textAnalysis'
+import { extractKeyEntities, extractConversationTopics, computeEmotionalContext, type EmotionalContext } from '../engine/textAnalysis'
+import { recordTemporalEntry, shouldAnalyze as shouldAnalyzePatterns, detectPatterns as analyzeTemporalPatterns, formatTemporalForPrompt, type TemporalEntry, type TemporalPattern } from '../engine/TemporalPatterns'
 import { planTask, executeTask, type TaskProgress } from '../engine/TaskPlanner'
 import { runSwarm, type SwarmProgress } from '../engine/SwarmOrchestrator'
 import { getGoalCheckInPrompt, extractGoalProgress, type UserGoal } from '../engine/GoalTracker'
@@ -51,6 +52,7 @@ import { isPlatformShareLink, importConversation, formatImportedContext, detectP
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
 import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage, type ReferenceImage } from '../engine/imageGen'
+import { retrieveForContext, ingestFromConversation, formatForPrompt } from '../engine/KnowledgeEngine'
 import { useProjectStore } from '../stores/projectStore'
 
 export interface WorkflowStepState {
@@ -73,6 +75,7 @@ export interface ChatMessage {
   agentName?: string
   thinking?: string
   workflowSteps?: WorkflowStepState[]
+  contentPipelineStages?: import('../engine/content/types').ContentStageState[]
   isProactive?: boolean
   generatedImages?: ImageGenResult[]
 }
@@ -106,6 +109,20 @@ interface UseChatEngineParams {
   onShowCreditModal?: () => void
 }
 
+/** Detect content format from user's brief */
+function detectContentFormat(brief: string): import('../engine/content/types').ContentFormat {
+  const lower = brief.toLowerCase()
+  if (/newsletter/i.test(lower)) return 'newsletter'
+  if (/thread|tweet/i.test(lower)) return 'twitter_thread'
+  if (/linkedin/i.test(lower)) return 'linkedin_post'
+  if (/essay/i.test(lower)) return 'essay'
+  if (/doc(umentation)?/i.test(lower)) return 'documentation'
+  if (/email\s+(campaign|blast|series)/i.test(lower)) return 'email_campaign'
+  if (/landing\s+page/i.test(lower)) return 'landing_page'
+  if (/press\s+release/i.test(lower)) return 'press_release'
+  return 'blog_post' // default
+}
+
 export function useChatEngine(params: UseChatEngineParams) {
   const {
     userId, activeConversationId, setActiveConversationId,
@@ -133,6 +150,12 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [workflowSteps, setWorkflowSteps] = useState<WorkflowStepState[]>([])
   const [isWorkflowActive, setIsWorkflowActive] = useState(false)
   const workflowRef = useRef<import('../engine/AgenticWorkflow').AgenticWorkflow | null>(null)
+
+  // Content Pipeline state (Pro only)
+  const [contentPipelineStages, setContentPipelineStages] = useState<import('../engine/content/types').ContentStageState[]>([])
+  const [isContentPipelineActive, setIsContentPipelineActive] = useState(false)
+  const contentEngineRef = useRef<import('../engine/ContentEngine').ContentEngine | null>(null)
+  const contentPipelineKernelIdRef = useRef<string | null>(null)
 
   // Extended thinking state (Pro only)
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
@@ -176,6 +199,9 @@ export function useChatEngine(params: UseChatEngineParams) {
     previousUserMsg: string
   } | null>(null)
   const avgUserMsgLengthRef = useRef(60) // rolling average for length delta
+  const rephraseChainRef = useRef(0) // consecutive rephrase count for repair escalation
+  const temporalEntriesRef = useRef<TemporalEntry[]>([])
+  const temporalPatternsRef = useRef<TemporalPattern[]>([])
 
   const [kgEntities, setKGEntities] = useState<KGEntity[]>([])
   const [kgRelations, setKGRelations] = useState<KGRelation[]>([])
@@ -273,6 +299,15 @@ export function useChatEngine(params: UseChatEngineParams) {
           let profile = p as unknown as UserMemoryProfile
           setUserMemory(profile)
           messageCountRef.current = mem.message_count
+
+          // Load temporal patterns if present
+          const memRecord = mem as unknown as Record<string, unknown>
+          if (memRecord.temporal_entries && Array.isArray(memRecord.temporal_entries)) {
+            temporalEntriesRef.current = memRecord.temporal_entries as TemporalEntry[]
+          }
+          if (memRecord.temporal_patterns && Array.isArray(memRecord.temporal_patterns)) {
+            temporalPatternsRef.current = memRecord.temporal_patterns as TemporalPattern[]
+          }
 
           // Load mirror data if present
           if (mem.agent_facets && Object.keys(mem.agent_facets).length > 0) {
@@ -396,6 +431,12 @@ export function useChatEngine(params: UseChatEngineParams) {
     if (pending && trimmed) {
       const latencyMs = Date.now() - pending.timestamp
       const isRephrase = detectRephrase(pending.previousUserMsg, trimmed)
+      // Track consecutive rephrase chains for repair escalation
+      if (isRephrase) {
+        rephraseChainRef.current++
+      } else {
+        rephraseChainRef.current = 0
+      }
       const avg = avgUserMsgLengthRef.current
       const lengthDelta = avg > 0 ? (trimmed.length - avg) / avg : 0
       avgUserMsgLengthRef.current = avg * 0.8 + trimmed.length * 0.2
@@ -492,13 +533,24 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Compute memory text once — reused for both routing and system prompt
     // Relevance-aware: filters items by query + recent context
     const memoryText = formatMemoryForPrompt(userMemoryRef.current, trimmed, recentCtx)
-    const classifyPromise = (async () => {
+    const classifyPromise: Promise<import('../engine/AgentRouter').ClassificationResult> = (async () => {
       try {
         const loomRoutingCtx = buildRoutingContext(loomRef.current)
         return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, memoryText || undefined)
       } catch (err) {
         console.error('[engine] classifyIntent failed:', err)
-        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false }
+        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
+      }
+    })()
+
+    // Knowledge retrieval — runs in parallel with classification (Pro only)
+    const knowledgeTopN = params.planLimits?.knowledgeAutoRetrieval || 0
+    const knowledgePromise: Promise<import('../engine/knowledge/types').RetrievalResult[]> = (async () => {
+      if (!knowledgeTopN || !userId) return []
+      try {
+        return await retrieveForContext(userId, trimmed, knowledgeTopN)
+      } catch {
+        return []
       }
     })()
 
@@ -532,8 +584,8 @@ export function useChatEngine(params: UseChatEngineParams) {
       return fetches.filter(Boolean).join('\n')
     })()
 
-    // Await all three in parallel
-    const [convResult, classifyResult, urlContext] = await Promise.all([convPromise, classifyPromise, urlPromise])
+    // Await all in parallel (knowledge retrieval runs alongside classification)
+    const [convResult, classifyResult, urlContext, knowledgeItems] = await Promise.all([convPromise, classifyPromise, urlPromise, knowledgePromise])
 
     // Handle conversation creation result
     let convId: string
@@ -649,9 +701,118 @@ export function useChatEngine(params: UseChatEngineParams) {
     const memoryBlock = memoryText
       ? `\n\n---\n\n## User Memory\nYou know this about the user from previous conversations. Weave this knowledge naturally into your responses — reference their interests, goals, and facts when relevant. Never say "I don't know anything about you" when this context exists.\n\n${memoryText}`
       : ''
+    // Temporal patterns — inject recurring usage patterns
+    const temporalBlock = (() => {
+      const patterns = temporalPatternsRef.current
+      if (patterns.length === 0) return ''
+      const formatted = formatTemporalForPrompt(patterns)
+      return `\n\n## Usage Patterns\nRecurring patterns in when and what this user discusses:\n${formatted}`
+    })()
+
+    // Conversation opening intelligence — make new conversations feel continuous
+    const openingBlock = (() => {
+      const turnCount = engine.getState().working.turnCount
+      if (turnCount > 0) return '' // Only inject on first turn
+      const recentConvs = params.conversations
+        .filter(c => c.title !== 'New Conversation' && c.id !== activeConversationId)
+      if (recentConvs.length === 0) return ''
+
+      const lastConv = recentConvs[0] as { id: string; title: string; metadata?: Record<string, unknown>; updated_at?: string }
+      const meta = lastConv.metadata
+      const lastTopics = (meta?.topics as string[]) || []
+      const lastSummary = (meta?.summary as { text?: string })?.text
+
+      // Compute time since last conversation
+      let timeSinceStr = ''
+      const lastUpdated = lastConv.updated_at || (meta?.updated_at as string)
+      if (lastUpdated) {
+        const hoursSince = (Date.now() - new Date(lastUpdated).getTime()) / 3600000
+        if (hoursSince < 1) timeSinceStr = 'just recently'
+        else if (hoursSince < 24) timeSinceStr = `${Math.floor(hoursSince)} hours ago`
+        else timeSinceStr = `${Math.floor(hoursSince / 24)} days ago`
+      }
+
+      const parts: string[] = []
+      if (timeSinceStr) parts.push(`Last conversation: ${timeSinceStr}`)
+      if (lastConv.title) parts.push(`Topic: "${lastConv.title}"`)
+      if (lastTopics.length > 0) parts.push(`Covered: ${lastTopics.join(', ')}`)
+      if (lastSummary) {
+        // Extract how it ended (last sentence of summary)
+        const sentences = lastSummary.split(/[.!?]+/).filter(s => s.trim().length > 10)
+        if (sentences.length > 0) parts.push(`Ended with: ${sentences[sentences.length - 1].trim()}`)
+      }
+
+      if (parts.length === 0) return ''
+      return `\n\n## Conversation Opening\nThis is a new conversation. Context from their last session:\n${parts.join('\n')}\nMake this feel continuous — like picking up where you left off, not a cold start.`
+    })()
+
+    // Warmth-driven proactive callback — surface topics the user cares about but hasn't mentioned recently
+    const callbackBlock = (() => {
+      const turnCount = engine.getState().working.turnCount
+      if (turnCount > 0) return '' // Only on first turn of conversation
+      const callback = findCallbackOpportunities(userMemoryRef.current)
+      if (!callback) return ''
+      return `\n\n## Callback Opportunity\n"${callback.text}" (mentioned ${callback.mentions}x, last ${callback.daysSilent} days ago) — ask about this if natural. Don't force it. One callback per conversation max.`
+    })()
+
+    // Confidence hedging — if last reflection scored low on relevance, flag it
+    const confidenceBlock = (() => {
+      const lastReflection = engine.getState().lasting.reflections.slice(-1)[0]
+      if (!lastReflection) return ''
+      if (lastReflection.scores.relevance < 0.4) {
+        return `\n\n## Confidence Note\nYour last response scored low on relevance (${(lastReflection.scores.relevance * 100).toFixed(0)}%). Pay extra attention to what they're actually asking. Re-read their message carefully before responding.`
+      }
+      return ''
+    })()
+
+    // Repair directive — inject when user rephrases (signals dissatisfaction with previous response)
+    const repairBlock = (() => {
+      const chain = rephraseChainRef.current
+      if (chain === 0) return ''
+      if (chain >= 3) {
+        return `\n\n## REPAIR ALERT (Escalated)\nThe user has rephrased ${chain} times in a row. Your previous approaches are NOT working.\nCompletely change your angle. Ask a clarifying question if needed. Do not repeat anything from prior responses.`
+      }
+      if (chain >= 1) {
+        return `\n\n## Repair Alert\nThe user just rephrased their request. Your previous response likely missed the mark.\nTry a different angle. Don't repeat the same approach. If unsure what they need, ask.`
+      }
+      return ''
+    })()
+
+    // Emotional context — sentiment trajectory from recent user messages (zero API calls)
+    const recentUserMessages = messagesRef.current
+      .filter(m => m.role === 'user' && m.content.trim())
+      .map(m => m.content)
+    const emotionalCtx: EmotionalContext = computeEmotionalContext(recentUserMessages)
+    const emotionalContextBlock = recentUserMessages.length >= 2
+      ? (() => {
+          const directives: string[] = []
+          if (emotionalCtx.trajectory === 'declining') {
+            directives.push('Their energy is dipping. Lead with acknowledgment before substance. Slow down.')
+          } else if (emotionalCtx.energy === 'excited') {
+            directives.push('Match their energy. Be expansive, curious, generative.')
+          } else if (emotionalCtx.energy === 'frustrated') {
+            directives.push('They seem frustrated. Validate first, then solve. No cheerfulness.')
+          } else if (emotionalCtx.energy === 'subdued') {
+            directives.push('Quiet energy. Be gentle, thoughtful. Don\'t over-energize.')
+          }
+          const directiveStr = directives.length > 0 ? `\n${directives.join('\n')}` : ''
+          return `\n\n## Emotional Context\nCurrent energy: ${emotionalCtx.energy}\nTrajectory: ${emotionalCtx.trajectory} over last ${Math.min(recentUserMessages.length, 6)} messages${directiveStr}`
+        })()
+      : ''
+
+    // Turn-taking calibration — adapt response length to user's natural verbosity
+    const turnTakingBlock = (() => {
+      const avg = avgUserMsgLengthRef.current
+      if (avg <= 0) return ''
+      const avgWords = avg / 5 // rough chars-to-words
+      if (avgWords < 15) return '\n\n## Verbosity\nThis user writes briefly. Keep answers to 2-4 sentences unless depth is clearly needed. Be concise.'
+      if (avgWords > 30) return '\n\n## Verbosity\nThis user writes at length. Match their depth — give thorough, expansive responses. They want detail.'
+      return ''
+    })()
+
     const mirrorText = formatMirrorForPrompt(userMirrorRef.current)
     const mirrorBlock = mirrorText
-      ? `\n\n## Mirror\nDeeper patterns the agents have noticed together:\n\n${mirrorText}`
+      ? `\n\n## Mirror\nDeeper patterns the agents have noticed together:\n\n${mirrorText}\n\n*Mirror directives: Reference these insights sparingly (1-2 per conversation max). Frame as noticing ("I've noticed..."), never as surveillance. Name growth when visible ("You used to approach X differently — this feels like a shift"). Demonstrate familiarity through behavior, not declaration.*`
       : ''
     // Craft calibration — inject coder-specific adaptation when routing to coder
     const craftBlock = specialist.id === 'coder'
@@ -667,6 +828,10 @@ export function useChatEngine(params: UseChatEngineParams) {
     const kgText = formatGraphForPrompt(kgEntities, kgRelations)
     const kgBlock = kgText
       ? `\n\n## Knowledge Graph\nStructured facts and relationships you've learned:\n\n${kgText}`
+      : ''
+    const knowledgeText = formatForPrompt(knowledgeItems)
+    const knowledgeBlock = knowledgeText
+      ? `\n\n## Your Knowledge Base\nRelevant knowledge from your conversations, documents, and research:\n\n${knowledgeText}`
       : ''
     const collectiveBlock = collectiveInsights.length > 0
       ? `\n\n---\n\n## Collective Intelligence (learned from all users)\nThese patterns have emerged from conversations across all users. Use them to improve your responses:\n${collectiveInsights.map(i => `- [strength ${(i.strength * 100).toFixed(0)}%] ${i.content}`).join('\n')}`
@@ -727,15 +892,65 @@ export function useChatEngine(params: UseChatEngineParams) {
       ? `\n\n${formatSummaryForPrompt(convSummaryRef.current)}`
       : ''
 
+    // Unresolved questions loopback — surface questions the user asked that weren't fully addressed
+    const unresolvedBlock = (() => {
+      const unresolved = engine.getState().working.unresolvedQuestions
+      if (!unresolved || unresolved.length === 0) return ''
+      // Also detect explicit questions in recent user messages that weren't addressed
+      const recentQs = messagesRef.current
+        .filter(m => m.role === 'user')
+        .slice(-6)
+        .flatMap(m => {
+          const sentences = m.content.split(/[.!?\n]+/).filter(s => s.includes('?'))
+          return sentences.map(s => s.trim()).filter(s => s.length > 10 && s.length < 200)
+        })
+      const allUnresolved = [...new Set([...unresolved.slice(-3), ...recentQs.slice(-2)])].slice(0, 4)
+      if (allUnresolved.length === 0) return ''
+      return `\n\n## Unresolved Threads\nThese questions came up earlier and may not have been fully addressed. If relevant to the current topic, circle back naturally. Don't force it.\n${allUnresolved.map(q => `- "${q.slice(0, 150)}"`).join('\n')}`
+    })()
+
     // Cross-conversation memory — detect references to prior conversations and inject context
+    // Enhanced: also proactively detect topic overlap with recent conversations
     const crossConvBlock = (() => {
       const CROSS_CONV_PATTERN = /\b(?:last time|yesterday|remember when|we discussed|previous conversation|earlier we|you told me|we talked about|before we)\b/i
-      if (!CROSS_CONV_PATTERN.test(trimmed)) return ''
+      const isExplicitRef = CROSS_CONV_PATTERN.test(trimmed)
+
+      // Proactive detection: check if current topic overlaps recent conversation topics
+      if (!isExplicitRef) {
+        const queryWords = new Set(trimmed.toLowerCase().match(/\b[a-z]{4,}\b/g) || [])
+        if (queryWords.size >= 2) {
+          const convEntries = params.conversations
+            .filter(c => c.title !== 'New Conversation' && c.id !== activeConversationId)
+            .slice(0, 10) as { id: string; title: string; metadata?: Record<string, unknown> }[]
+          for (const conv of convEntries) {
+            const meta = conv.metadata
+            if (!meta) continue
+            const topics = (meta.topics as string[]) || []
+            const topicWords = new Set(topics.flatMap(t => t.toLowerCase().match(/\b[a-z]{4,}\b/g) || []))
+            // Also check KG entity names
+            const entityNames = kgEntities.map(e => e.name.toLowerCase())
+            let overlap = 0
+            for (const w of queryWords) {
+              if (topicWords.has(w)) overlap += 2
+              if (entityNames.some(n => n.includes(w))) overlap += 1
+            }
+            const score = overlap / (queryWords.size * 2)
+            if (score > 0.3) {
+              const topicStr = topics.join(', ')
+              const summary = (meta.summary as { text?: string })?.text
+              const summaryLine = summary ? `\nKey points: ${summary.slice(0, 300)}` : ''
+              return `\n\n## Connected Thread\nThis relates to a conversation from recently: "${conv.title}" (topics: ${topicStr})${summaryLine}\nWeave in any relevant continuity naturally.`
+            }
+          }
+        }
+        return ''
+      }
+
       const retrieved = retrieveRelevantConversation(trimmed, activeConversationId, params.conversations as { id: string; title: string; metadata?: Record<string, unknown> }[])
       return retrieved ? `\n\n${retrieved}` : ''
     })()
 
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
@@ -977,7 +1192,49 @@ export function useChatEngine(params: UseChatEngineParams) {
         }
       }
 
-      if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
+      // ── Content Engine (Pro) ────────────────────────────
+      if (!hasFileContent && classification.needsContentEngine && isPro) {
+        const { ContentEngine } = await import('../engine/ContentEngine')
+        const format = detectContentFormat(trimmed)
+        setIsContentPipelineActive(true)
+        const engine = new ContentEngine(trimmed, format, {
+          onProgress: () => {},
+          onChunk: updateKernelMsg,
+          onStageUpdate: (stages) => {
+            setContentPipelineStages([...stages])
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, contentPipelineStages: [...stages] }
+              : m
+            ))
+          },
+          onApprovalNeeded: (stage, _output) => {
+            console.log(`[content-engine] Approval needed for ${stage}`)
+            // Pipeline pauses here — user interacts via ContentPipeline UI
+          },
+        })
+        contentEngineRef.current = engine
+        contentPipelineKernelIdRef.current = kernelId
+        await engine.start()
+        // If completed (no approval pauses left), clean up
+        if (engine.getState() === 'completed' || engine.getState() === 'failed') {
+          setIsContentPipelineActive(false)
+          contentEngineRef.current = null
+        }
+      } else if (!hasFileContent && classification.needsAlgorithm && isPro) {
+        // Algorithm Engine: content scoring and optimization
+        // Route to analyst specialist with algorithm intelligence context
+        const algorithmContext = '\n\nYou have access to content scoring intelligence. When the user asks about content performance, optimization, or distribution strategy, provide data-driven advice about relevance, quality, audience fit, and trend alignment.'
+        const streamResult = await claudeStreamChat(
+          claudeMessages,
+          updateKernelMsg,
+          {
+            system: systemPrompt + algorithmContext,
+            model: 'sonnet',
+            max_tokens: 4096,
+          },
+        )
+        // Content captured by updateKernelMsg → latestKernelContentRef
+      } else if (!hasFileContent && classification.isMultiStep && classification.needsResearch && isPro) {
         // Agentic Workflow: multi-step + research = autonomous workflow execution
         const { AgenticWorkflow } = await import('../engine/AgenticWorkflow')
         const workflow = new AgenticWorkflow(systemPrompt, {
@@ -1163,6 +1420,19 @@ export function useChatEngine(params: UseChatEngineParams) {
             const topics = extractConversationTopics(topicMsgs)
             if (topics.length > 0) {
               updateConversationMetadata(convId, { topics }).catch(() => { })
+
+              // Temporal pattern recording — log {dayOfWeek, hourOfDay, topicCategory}
+              const topicLabel = topics[0] || 'general'
+              temporalEntriesRef.current = recordTemporalEntry(temporalEntriesRef.current, topicLabel)
+              if (shouldAnalyzePatterns(temporalEntriesRef.current)) {
+                temporalPatternsRef.current = analyzeTemporalPatterns(temporalEntriesRef.current)
+              }
+              // Persist temporal data alongside memory
+              upsertUserMemory(userId, {
+                ...userMemoryRef.current as unknown as Record<string, unknown>,
+                temporal_entries: temporalEntriesRef.current,
+                temporal_patterns: temporalPatternsRef.current,
+              }, currentMsgCount).catch(() => { })
             }
 
             // Conversation summarization — summarize older messages in long conversations
@@ -1268,6 +1538,14 @@ export function useChatEngine(params: UseChatEngineParams) {
                 console.log(`[Memory] Promoted ${candidates.length} KG entities to profile facts`)
               }
             }).catch((err) => console.warn('[KG] Extraction failed:', err))
+
+            // Knowledge Engine ingestion — extract knowledge items (Pro only)
+            if (params.planLimits?.knowledgeItems && params.planLimits.knowledgeItems > 0) {
+              const convTitle = params.conversations.find(c => c.id === convId)?.title
+              ingestFromConversation(recentMsgs, userId, convId, convTitle)
+                .then(count => { if (count > 0) console.log(`[KnowledgeEngine] Ingested ${count} items`) })
+                .catch(err => console.warn('[KnowledgeEngine] Ingestion failed:', err))
+            }
           }
           return currentMsgs
         })
@@ -1435,6 +1713,37 @@ export function useChatEngine(params: UseChatEngineParams) {
     setIsWorkflowActive(false)
   }, [])
 
+  // Content pipeline actions
+  const approveContentStage = useCallback(async (stage: import('../engine/content/types').ContentStage) => {
+    const engine = contentEngineRef.current
+    if (!engine) return
+    setIsContentPipelineActive(true)
+    await engine.resumeFrom(stage)
+    if (engine.getState() === 'completed' || engine.getState() === 'failed') {
+      setIsContentPipelineActive(false)
+      contentEngineRef.current = null
+    }
+  }, [])
+
+  const editContentStage = useCallback(async (stage: import('../engine/content/types').ContentStage, feedback: string) => {
+    const engine = contentEngineRef.current
+    if (!engine) return
+    setIsContentPipelineActive(true)
+    await engine.resumeFrom(stage, feedback)
+    if (engine.getState() === 'completed' || engine.getState() === 'failed') {
+      setIsContentPipelineActive(false)
+      contentEngineRef.current = null
+    }
+  }, [])
+
+  const cancelContentPipeline = useCallback(() => {
+    if (contentEngineRef.current) {
+      contentEngineRef.current.cancel()
+      contentEngineRef.current = null
+    }
+    setIsContentPipelineActive(false)
+  }, [])
+
   // Clear active document (manual dismiss)
   const clearDocument = useCallback(() => {
     setActiveDocument(null)
@@ -1465,6 +1774,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     isStreaming, isThinking, thinkingAgent,
     researchProgress, taskProgress, swarmProgress,
     workflowSteps, isWorkflowActive, cancelWorkflow,
+    contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline,
     userMemory, kgEntities, kgRelations, userGoals, setUserGoals,
     todayBriefing,
     inputRef, sendMessage, handleSubmit, stopStreaming,

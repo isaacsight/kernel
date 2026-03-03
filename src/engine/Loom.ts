@@ -126,6 +126,29 @@ export function detectRephrase(previous: string, current: string): boolean {
 
 // ── Outcome Capture ───────────────────────────────────────────
 
+/** Compute attunement score: how well-calibrated is the response to the user's behavior? */
+function computeAttunement(signal: UserSignal, reflection: Reflection): number {
+  let score = 0.5
+
+  // Length alignment: if user is sending shorter messages and we're being concise, good
+  // (lengthDelta positive = user getting longer, negative = shorter)
+  const brevity = reflection.scores.brevity
+  if (signal.lengthDelta < -0.2 && brevity > 0.6) score += 0.2 // short user, concise response: good
+  if (signal.lengthDelta > 0.2 && brevity < 0.6) score += 0.15 // long user, detailed response: good
+  if (signal.lengthDelta < -0.3 && brevity < 0.4) score -= 0.2 // short user, verbose response: bad
+
+  // Engagement alignment
+  if (signal.continued && !signal.rephrased) score += 0.15 // good signal
+  if (signal.rephrased) score -= 0.2 // misalignment
+  if (signal.abandoned) score -= 0.3 // severe misalignment
+
+  // Continuity bonus
+  const continuity = reflection.scores.continuity || 0
+  score += continuity * 0.15
+
+  return Math.max(0, Math.min(1, score))
+}
+
 export function captureOutcome(
   classification: ClassificationResult,
   agentUsed: string,
@@ -135,6 +158,7 @@ export function captureOutcome(
   userSignal: UserSignal,
 ): Outcome {
   const signalScore = computeSignalScore(userSignal)
+  const attunement = computeAttunement(userSignal, reflection)
   const effectiveQuality =
     reflection.quality * REFLECTION_WEIGHT +
     signalScore * SIGNAL_WEIGHT
@@ -147,7 +171,7 @@ export function captureOutcome(
     swarmComposition,
     modelUsed,
     reflectionQuality: reflection.quality,
-    reflectionScores: { ...reflection.scores },
+    reflectionScores: { ...reflection.scores, attunement },
     userSignal,
     effectiveQuality,
   }
