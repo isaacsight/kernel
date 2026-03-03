@@ -97,6 +97,7 @@ async function executeSearch(query: string): Promise<string> {
         tier: 'fast',
         max_tokens: 600,
         web_search: true,
+        feature: 'briefing',
       }
     )
     return finding ? `**${query}**\n${finding}` : ''
@@ -122,7 +123,7 @@ export async function generateBriefing(
   try {
     plan = await getProvider().json<QueryPlan>(
       `Generate a morning briefing plan for this user:\n\n${interestContext}`,
-      { system: QUERY_PLAN_SYSTEM, tier: 'fast', max_tokens: 300 }
+      { system: QUERY_PLAN_SYSTEM, tier: 'fast', max_tokens: 300, feature: 'briefing' }
     )
   } catch {
     plan = {
@@ -163,7 +164,7 @@ export async function generateBriefing(
       },
     ],
     (text) => { content = text },
-    { system: SYNTHESIZE_SYSTEM, tier: 'strong', max_tokens: 1500 }
+    { system: SYNTHESIZE_SYSTEM, tier: 'strong', max_tokens: 1500, feature: 'briefing' }
   )
 
   const title = `Morning Briefing — ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`

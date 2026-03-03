@@ -329,6 +329,7 @@ export class ContentEngine {
         tier: stage === 'research' ? 'fast' : 'strong',
         max_tokens: config.maxTokens,
         web_search: stage === 'research',
+        feature: 'content_pipeline',
       },
     )
 
@@ -352,6 +353,7 @@ export class ContentEngine {
             system: specialist.systemPrompt,
             tier: 'fast',
             max_tokens: 300,
+            feature: 'content_pipeline',
           })
           results[agentId] = response
         } catch {

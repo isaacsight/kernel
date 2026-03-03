@@ -246,6 +246,7 @@ Format as numbered list. Be bold and specific.`
         system: specialist.systemPrompt,
         tier: 'fast',
         max_tokens: 1500,
+        feature: 'platform_workflow',
       },
     )
 

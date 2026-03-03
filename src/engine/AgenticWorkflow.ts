@@ -96,6 +96,7 @@ async function executeWorkflowTool(
                 system: systemContext || 'You are an analytical thinker. Analyze the provided information thoroughly. Identify key themes, patterns, and actionable insights. Be concise but comprehensive.',
                 tier: 'strong',
                 max_tokens: 2048,
+                feature: 'workflow',
             })
             return response
         }
@@ -104,6 +105,7 @@ async function executeWorkflowTool(
                 system: systemContext || 'You are an expert writer. Draft the requested content based on the provided research and context. Write clearly, concisely, and professionally.',
                 tier: 'strong',
                 max_tokens: 4096,
+                feature: 'workflow',
             })
             return response
         }
@@ -194,6 +196,7 @@ Rules:
                 system: 'You are a task planning expert. Output ONLY valid JSON.',
                 tier: 'fast',
                 max_tokens: 1024,
+                feature: 'workflow',
             })
 
             if (!result.steps || !Array.isArray(result.steps) || result.steps.length === 0) {
@@ -308,6 +311,7 @@ Rules:
                     system: 'You are a quality evaluator. Judge whether the step result is adequate. Output ONLY valid JSON.',
                     tier: 'fast',
                     max_tokens: 256,
+                    feature: 'workflow',
                 },
             )
             return evaluation.adequate ?? true
@@ -353,6 +357,7 @@ ${stepsContext}
                 system: this._agentSystemPrompt,
                 tier: 'strong',
                 max_tokens: 8192,
+                feature: 'workflow',
             },
         )
 

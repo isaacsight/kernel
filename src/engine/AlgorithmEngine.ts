@@ -206,7 +206,7 @@ export class AlgorithmEngine {
       const trendQuery = `${content.title || content.brief} trends ${new Date().getFullYear()}`
       const trendResult = await getProvider().text(
         `Search for current trends related to: ${trendQuery}. Summarize in 3-4 sentences what the current discourse looks like.`,
-        { tier: 'fast', max_tokens: 300, web_search: true },
+        { tier: 'fast', max_tokens: 300, web_search: true, feature: 'algorithm_scoring' },
       )
       signals.push({
         type: 'trend_data',
@@ -281,7 +281,7 @@ export class AlgorithmEngine {
     try {
       const result = await getProvider().json<{ score: number; reasoning: string }>(
         prompt,
-        { tier: 'fast', max_tokens: 150 },
+        { tier: 'fast', max_tokens: 150, feature: 'algorithm_scoring' },
       )
       return {
         dimension,
@@ -336,6 +336,7 @@ export class AlgorithmEngine {
           system: specialist.systemPrompt,
           tier: 'fast',
           max_tokens: 600,
+          feature: 'algorithm_scoring',
         },
       )
 

@@ -62,7 +62,7 @@ export async function extractMemory(
 
     return await getBackgroundProvider().json<UserMemoryProfile>(
       `Analyze this conversation and extract user profile:\n\n${conversation}`,
-      { system: EXTRACT_SYSTEM, tier: 'fast', max_tokens: 500 }
+      { system: EXTRACT_SYSTEM, tier: 'fast', max_tokens: 500, feature: 'memory_extraction' }
     )
   } catch (err) {
     console.warn('[MemoryAgent] extractMemory failed:', err)
@@ -82,7 +82,7 @@ export async function mergeMemory(
   try {
     return await getBackgroundProvider().json<UserMemoryProfile>(
       `Existing profile:\n${JSON.stringify(existing, null, 2)}\n\nNewly extracted:\n${JSON.stringify(newExtraction, null, 2)}\n\nMerge into a single updated profile.`,
-      { system: MERGE_SYSTEM, tier: 'fast', max_tokens: 500 }
+      { system: MERGE_SYSTEM, tier: 'fast', max_tokens: 500, feature: 'memory_extraction' }
     )
   } catch {
     // On failure, prefer new extraction but keep existing facts

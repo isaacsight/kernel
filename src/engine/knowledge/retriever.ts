@@ -63,7 +63,7 @@ export async function rerankResults(
 
     const result = await getProvider().json<RerankResponse>(
       `Query: "${query}"\n\nRank these knowledge items by relevance to the query (return top ${topN}):\n\n${summaryList}`,
-      { system: RERANK_SYSTEM, tier: 'fast', max_tokens: 300 }
+      { system: RERANK_SYSTEM, tier: 'fast', max_tokens: 300, feature: 'knowledge_ingestion' }
     )
 
     const rankedIds = result.ranked_ids || []
@@ -151,7 +151,7 @@ export async function synthesizeKnowledgeAnswer(
 
     const response = await getProvider().text(
       `User query: "${query}"\n\nRetrieved knowledge items:\n${itemsText}`,
-      { system: SYNTHESIS_SYSTEM, tier: 'strong', max_tokens: 1000 }
+      { system: SYNTHESIS_SYSTEM, tier: 'strong', max_tokens: 1000, feature: 'knowledge_ingestion' }
     )
 
     return response || "I found some related knowledge but couldn't synthesize it. Here's what I have in your knowledge base on this topic."

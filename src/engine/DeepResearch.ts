@@ -71,7 +71,7 @@ async function gradeRelevance(
   try {
     return await getProvider().json<RelevanceGrade>(
       `Original question: ${originalQuestion}\n\nSearch query: ${query}\n\nSearch result:\n${result}\n\nGrade the relevance of this result.`,
-      { system: GRADE_SYSTEM, tier: 'fast', max_tokens: 200 }
+      { system: GRADE_SYSTEM, tier: 'fast', max_tokens: 200, feature: 'research' }
     )
   } catch {
     return { score: 0.5, gaps: [] }
@@ -90,7 +90,7 @@ async function reformulateQueries(
   try {
     const result = await getProvider().json<ReformulationResult>(
       `Original question: ${originalQuestion}\n\nGaps identified: ${gaps.join('; ')}\n\nPrevious findings covered: ${previousResults.slice(0, 3).map(r => r.slice(0, 200)).join('\n---\n')}\n\nGenerate follow-up queries to fill these gaps.`,
-      { system: REFORMULATE_SYSTEM, tier: 'fast', max_tokens: 200 }
+      { system: REFORMULATE_SYSTEM, tier: 'fast', max_tokens: 200, feature: 'research' }
     )
     return (result.queries || []).slice(0, 2)
   } catch {
@@ -106,7 +106,7 @@ async function executeSearch(query: string): Promise<string> {
     await getProvider().streamChat(
       [{ role: 'user', content: query }],
       (text) => { finding = text },
-      { system: SEARCH_SYSTEM, tier: 'fast', max_tokens: 800, web_search: true }
+      { system: SEARCH_SYSTEM, tier: 'fast', max_tokens: 800, web_search: true, feature: 'research' }
     )
     return finding ? `**Query: ${query}**\n${finding}` : `**Query: ${query}**\nNo results found.`
   } catch {
@@ -142,7 +142,7 @@ export async function deepResearch(
       : PLAN_SYSTEM
     const plan = await getProvider().json<ResearchPlan>(
       `Research question: ${questionText}`,
-      { system: planSystem, tier: 'fast', max_tokens: 300 }
+      { system: planSystem, tier: 'fast', max_tokens: 300, feature: 'research' }
     )
     queries = (plan.queries || []).slice(0, 5)
     if (queries.length === 0) queries = [questionText]
@@ -259,7 +259,7 @@ export async function deepResearch(
       },
     ],
     onStream,
-    { system: synthSystem, tier: 'strong', max_tokens: 2048 }
+    { system: synthSystem, tier: 'strong', max_tokens: 2048, feature: 'research' }
   )
 
   progress.phase = 'complete'

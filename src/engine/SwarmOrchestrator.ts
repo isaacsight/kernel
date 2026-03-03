@@ -92,7 +92,7 @@ async function selectAgents(
       recentContext
         ? `Recent conversation:\n${recentContext}\n\nUser message: ${message}`
         : `User message: ${message}`,
-      { system, tier: 'fast', max_tokens: 200 }
+      { system, tier: 'fast', max_tokens: 200, feature: 'swarm' }
     )
 
     const ids = (result.agents || []).slice(0, 4)
@@ -143,6 +143,7 @@ async function getContributions(
             tier: 'fast',
             max_tokens: isArchitecture ? 800 : 600,
             web_search: agent.id === 'researcher',
+            feature: 'swarm',
           }
         )
 
@@ -291,7 +292,7 @@ export async function runSwarm(
       },
     ],
     onStream,
-    { system: synthSystem, tier: 'strong', max_tokens: 2048 }
+    { system: synthSystem, tier: 'strong', max_tokens: 2048, feature: 'swarm_synthesis' }
   )
 
   progress.phase = 'complete'

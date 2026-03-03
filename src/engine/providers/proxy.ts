@@ -98,6 +98,7 @@ export async function callLLMProxy(
             messages: messages.map(m => ({ role: m.role, content: m.content })),
             web_search: opts?.web_search ?? false,
             ...(opts?.streak != null ? { streak: opts.streak } : {}),
+            ...(opts?.feature ? { feature: opts.feature } : {}),
         }),
         signal: opts?.signal,
     }
@@ -149,6 +150,7 @@ export async function streamFromProxy(
             messages: messages.map(m => ({ role: m.role, content: m.content })),
             web_search: opts?.web_search ?? false,
             ...(opts?.streak != null ? { streak: opts.streak } : {}),
+            ...(opts?.feature ? { feature: opts.feature } : {}),
         }),
         signal: opts?.signal,
     }

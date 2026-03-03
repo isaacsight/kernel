@@ -31,6 +31,7 @@ export interface LLMOpts {
     signal?: AbortSignal
     tools?: Record<string, unknown>[]  // tool schemas for providers that support native tool use
     streak?: number      // companion streak days — server uses for free-tier bonus
+    feature?: string     // cost attribution tag (chat, routing, swarm, etc.)
 }
 
 // ─── Chat Message ─────────────────────────────────────────────

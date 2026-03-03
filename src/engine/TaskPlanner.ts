@@ -44,7 +44,7 @@ export async function planTask(request: string): Promise<TaskPlan> {
   try {
     const raw = await getProvider().json<{ goal: string; steps: { id: number; description: string; agentId: string }[] }>(
       `Break this request into steps:\n\n${request}`,
-      { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 500 }
+      { system: PLAN_SYSTEM, tier: 'fast', max_tokens: 500, feature: 'task_planning' }
     )
 
     const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
@@ -99,7 +99,7 @@ export async function executeTask(
         const result = await getProvider().streamChat(
           [{ role: 'user', content: stepPrompt }],
           onStream,
-          { system: systemPrompt, tier: 'strong', max_tokens: 2048, web_search: step.agentId === 'researcher' }
+          { system: systemPrompt, tier: 'strong', max_tokens: 2048, web_search: step.agentId === 'researcher', feature: 'task_planning' }
         )
         step.result = result
       } else {
@@ -109,6 +109,7 @@ export async function executeTask(
           tier: 'fast',
           max_tokens: 1024,
           web_search: step.agentId === 'researcher',
+          feature: 'task_planning',
         })
         step.result = result
         accumulatedContext += `\n\n## Step ${step.id}: ${step.description}\n${result}`

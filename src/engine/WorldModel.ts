@@ -122,6 +122,18 @@ export function updateWorldModel(
     formBelief(state.worldModel, emit, reflection.worldModelUpdate, 0.6, 'reflected');
   }
 
+  // Infer apparent goal from perception and topic
+  if (state.worldModel.userModel.apparentGoal === 'unknown' || state.worldModel.userModel.apparentGoal === '') {
+    if (perception.impliedNeed) {
+      state.worldModel.userModel.apparentGoal = perception.impliedNeed;
+    } else if (state.working.topic) {
+      state.worldModel.userModel.apparentGoal = `Exploring ${state.working.topic}`;
+    }
+  } else if (perception.impliedNeed && perception.impliedNeed !== state.worldModel.userModel.apparentGoal) {
+    // Update goal if the need has shifted significantly
+    state.worldModel.userModel.apparentGoal = perception.impliedNeed;
+  }
+
   if (perception.isQuestion && reflection.scores.relevance < 0.4) {
     state.working.unresolvedQuestions = [
       ...state.working.unresolvedQuestions.slice(-4),

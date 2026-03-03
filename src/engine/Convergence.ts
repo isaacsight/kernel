@@ -129,7 +129,7 @@ export async function extractFacet(
 
     const result = await getBackgroundProvider().json<{ observations: string[]; patterns: string[] }>(
       `${conversation}${existingContext}`,
-      { system: buildExtractSystem(lens), tier: 'fast', max_tokens: 400 },
+      { system: buildExtractSystem(lens), tier: 'fast', max_tokens: 400, feature: 'convergence' },
     )
 
     const observations = existingFacet
@@ -198,7 +198,7 @@ export async function converge(mirror: UserMirror): Promise<ConvergenceInsight[]
 
     const result = await getProvider().json<{ insights: ConvergenceInsight[] }>(
       `Agent perspectives on the user:\n\n${facetText}${previousContext}\n\nWhat can you see now that no single agent could see alone?`,
-      { system: CONVERGENCE_SYSTEM, tier: 'strong', max_tokens: 600 },
+      { system: CONVERGENCE_SYSTEM, tier: 'strong', max_tokens: 600, feature: 'convergence' },
     )
 
     return (result.insights || []).slice(0, 4).map(i => ({

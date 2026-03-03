@@ -162,6 +162,7 @@ export async function processMasterAgent(
         model: autoModel,
         max_tokens: specialist.id === 'writer' || specialist.id === 'coder' ? 16384 : 8192,
         web_search: specialist.id === 'researcher' || specialist.id === 'kernel',
+        feature: 'master_agent',
       },
     )
 
@@ -224,6 +225,7 @@ export async function processMasterAgent(
         model: 'sonnet',
         max_tokens: 16384,
         tools: availableTools.length > 0 ? availableTools : undefined,
+        feature: 'master_agent',
       },
     )
 

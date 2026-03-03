@@ -856,4 +856,203 @@ export function registerBuiltinEngines(): void {
         throw new Error(`Unknown architecture action: ${action}`)
     }
   })
+
+  // ─── Communication Engine ───────────────────────────────────
+  registerEngine('communication', {
+    id: 'communication',
+    name: 'Communication Engine',
+    description: 'Unified messaging across channels — in-app notifications, email, push, Discord. Handles sending, broadcasting, scheduling, delivery tracking, and user preferences.',
+    requiresPro: false,
+    actions: [
+      {
+        name: 'send_message',
+        description: 'Send a notification or message to a user via a specific channel (in_app, email, push, discord).',
+        inputSchema: {
+          userId: { type: 'string', description: 'Target user ID' },
+          channel: { type: 'string', description: 'Channel: in_app, email, push, discord' },
+          title: { type: 'string', description: 'Message title' },
+          body: { type: 'string', description: 'Message body' },
+        },
+        outputDescription: 'Sent message with delivery status',
+      },
+      {
+        name: 'broadcast',
+        description: 'Broadcast a message to all users or a filtered audience.',
+        inputSchema: {
+          title: { type: 'string', description: 'Broadcast title' },
+          body: { type: 'string', description: 'Broadcast body' },
+          channels: { type: 'string', description: 'Comma-separated channels: in_app,email,push,discord' },
+        },
+        outputDescription: 'Broadcast result with sent/failed counts',
+      },
+      {
+        name: 'get_preferences',
+        description: 'Get a user\'s communication channel preferences.',
+        inputSchema: {
+          userId: { type: 'string', description: 'User ID to get preferences for' },
+        },
+        outputDescription: 'Channel preferences with enabled status and quiet hours',
+      },
+      {
+        name: 'get_analytics',
+        description: 'Get communication analytics — delivery rates, open rates, channel performance.',
+        inputSchema: {},
+        outputDescription: 'Communication analytics summary',
+      },
+    ],
+  }, async (action, input, callbacks) => {
+    const comms = await import('../CommunicationEngine')
+    switch (action) {
+      case 'send_message': {
+        callbacks.onProgress('Sending message...')
+        return await comms.sendMessage(
+          input.userId as string,
+          input.channel as 'in_app' | 'email' | 'push' | 'discord',
+          { title: input.title as string, body: input.body as string },
+        )
+      }
+      case 'broadcast': {
+        callbacks.onProgress('Broadcasting...')
+        const channels = (input.channels as string || 'in_app').split(',').map(c => c.trim()) as Array<'in_app' | 'email' | 'push' | 'discord'>
+        return await comms.broadcast({ title: input.title as string, body: input.body as string, channels })
+      }
+      case 'get_preferences': {
+        return await comms.getUserPreferences(input.userId as string)
+      }
+      case 'get_analytics': {
+        return await comms.getAnalytics()
+      }
+      default:
+        throw new Error(`Unknown communication action: ${action}`)
+    }
+  })
+
+  // ─── Adaptive Engine ────────────────────────────────────────
+  registerEngine('adaptive', {
+    id: 'adaptive',
+    name: 'Adaptive Engine',
+    description: 'Self-improving intelligence layer — learns from every interaction, adapts response style, manages A/B experiments, tracks quality metrics, and surfaces behavioral insights.',
+    requiresPro: false,
+    actions: [
+      {
+        name: 'record_signal',
+        description: 'Record a user quality signal (thumbs_up, thumbs_down, copy, retry, edit, share, etc.) for adaptive learning.',
+        inputSchema: {
+          type: { type: 'string', description: 'Signal type: thumbs_up, thumbs_down, edit, retry, copy, share, ignore, expand, follow_up' },
+          messageId: { type: 'string', description: 'ID of the message this signal relates to' },
+          context: { type: 'string', description: 'Optional context about the signal' },
+        },
+        outputDescription: 'Confirmation that signal was recorded',
+      },
+      {
+        name: 'get_profile',
+        description: 'Get the adaptive profile for a user — learned preferences for response length, tone, detail, format.',
+        inputSchema: {
+          userId: { type: 'string', description: 'User ID' },
+        },
+        outputDescription: 'AdaptiveProfile with response preferences and topic affinities',
+      },
+      {
+        name: 'get_response_hints',
+        description: 'Get response generation hints based on learned user preferences — preferred length, tone, format.',
+        inputSchema: {
+          userId: { type: 'string', description: 'User ID' },
+          intent: { type: 'string', description: 'Optional intent type for context-specific hints' },
+        },
+        outputDescription: 'Response hints for prompt engineering',
+      },
+      {
+        name: 'get_insights',
+        description: 'Discover behavioral insights about a user — patterns, anomalies, trends, recommendations.',
+        inputSchema: {
+          userId: { type: 'string', description: 'User ID' },
+        },
+        outputDescription: 'List of adaptive insights with confidence scores',
+      },
+      {
+        name: 'get_quality_metrics',
+        description: 'Get quality metrics dashboard — response quality, user satisfaction, agent accuracy, adaptation rate.',
+        inputSchema: {
+          userId: { type: 'string', description: 'User ID' },
+        },
+        outputDescription: 'QualityMetrics summary',
+      },
+    ],
+  }, async (action, input, callbacks) => {
+    const adaptive = await import('../AdaptiveEngine')
+    switch (action) {
+      case 'record_signal': {
+        return await adaptive.recordSignal({
+          userId: input.userId as string || '',
+          type: input.type as 'thumbs_up' | 'thumbs_down',
+          messageId: input.messageId as string,
+          context: input.context ? { note: input.context } as Record<string, unknown> : undefined,
+          timestamp: Date.now(),
+        })
+      }
+      case 'get_profile': {
+        callbacks.onProgress('Loading adaptive profile...')
+        return await adaptive.getAdaptiveProfile(input.userId as string)
+      }
+      case 'get_response_hints': {
+        return await adaptive.getResponseHints(input.userId as string, input.intent as string)
+      }
+      case 'get_insights': {
+        callbacks.onProgress('Discovering insights...')
+        return await adaptive.discoverInsights(input.userId as string)
+      }
+      case 'get_quality_metrics': {
+        return await adaptive.getQualityMetrics(input.userId as string)
+      }
+      default:
+        throw new Error(`Unknown adaptive action: ${action}`)
+    }
+  })
+
+  // ─── Pricing Engine ──────────────────────────────────────
+  registerEngine('pricing', {
+    id: 'pricing',
+    name: 'Pricing Engine',
+    description: 'Usage analytics, cost attribution, and tier recommendations',
+    requiresPro: false,
+    actions: [
+      {
+        name: 'get_forecast',
+        description: 'Get usage forecast and projected monthly usage',
+        inputSchema: {},
+        outputDescription: 'Usage forecast with daily average, projected monthly, and feature breakdown',
+      },
+      {
+        name: 'get_recommendation',
+        description: 'Get tier recommendation based on usage patterns',
+        inputSchema: {},
+        outputDescription: 'Recommended plan, reason, and usage ratio',
+      },
+      {
+        name: 'get_cost_breakdown',
+        description: 'Get cost breakdown by feature for the last 30 days',
+        inputSchema: { days: { type: 'number', description: 'Number of days to look back (default 30)' } },
+        outputDescription: 'Cost summary with feature breakdown and daily trend',
+      },
+    ],
+  }, async (action: string, input: Record<string, unknown>, callbacks: { onChunk: (text: string) => void; onProgress: (detail: string) => void }) => {
+    const { getUserCostSummary, getUsageForecast, getTierRecommendation } = await import('../PricingEngine')
+    switch (action) {
+      case 'get_forecast': {
+        callbacks.onProgress('Analyzing usage patterns...')
+        return await getUsageForecast()
+      }
+      case 'get_recommendation': {
+        callbacks.onProgress('Evaluating tier fit...')
+        return await getTierRecommendation()
+      }
+      case 'get_cost_breakdown': {
+        callbacks.onProgress('Loading cost breakdown...')
+        const days = (input.days as number) || 30
+        return await getUserCostSummary(days)
+      }
+      default:
+        throw new Error(`Unknown pricing action: ${action}`)
+    }
+  })
 }

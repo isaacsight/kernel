@@ -123,6 +123,7 @@ interface ClaudeOpts {
     budget_tokens: number
   }
   onThinking?: (thinkingText: string) => void
+  feature?: string
 }
 
 export interface StreamChatResult {
@@ -149,6 +150,7 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
       web_search: opts?.web_search ?? false,
       tools: opts?.tools,
       thinking: opts?.thinking,
+      ...(opts?.feature ? { feature: opts.feature } : {}),
     }),
   })
 
@@ -245,6 +247,7 @@ export async function claudeStream(
       messages: [{ role: 'user', content: prompt }],
       tools: opts?.tools,
       thinking: opts?.thinking,
+      ...(opts?.feature ? { feature: opts.feature } : {}),
     }),
   })
 
@@ -355,6 +358,7 @@ export async function claudeStreamChat(
       web_search: opts?.web_search ?? false,
       tools: opts?.tools,
       thinking: opts?.thinking,
+      ...(opts?.feature ? { feature: opts.feature } : {}),
     }),
     signal: opts?.signal,
   }

@@ -282,6 +282,7 @@ export async function classifyIntent(
       system,
       tier: 'fast',
       max_tokens: 150,
+      feature: 'routing',
     })
 
     // Validate the result

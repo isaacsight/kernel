@@ -39,7 +39,7 @@ export async function extractKnowledgeItems(
     const sourceCtx = source.title ? `\nSource: ${source.title} (${source.type})` : ''
     const result = await getProvider().json<ExtractionResponse>(
       `Extract knowledge items from this content:${sourceCtx}\n\n${content}`,
-      { system: EXTRACT_SYSTEM, tier: 'fast', max_tokens: 1500 }
+      { system: EXTRACT_SYSTEM, tier: 'fast', max_tokens: 1500, feature: 'knowledge_ingestion' }
     )
 
     return (result.items || [])
