@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart, IconGraduationCap,
   IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage,
+  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe,
 } from '../components/KernelIcons'
 import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -15,7 +15,7 @@ import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { forkSharedConversation } from '../engine/SupabaseClient'
+import { forkSharedConversation, updateConversationMetadata, getConversationMetadata } from '../engine/SupabaseClient'
 import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
@@ -44,6 +44,8 @@ import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
 import { WorkflowTimeline } from '../components/WorkflowTimeline'
 import { ContentPipeline } from '../components/ContentPipeline'
+import { FeatureTooltip } from '../components/FeatureTooltip'
+import { useFeatureTour } from '../hooks/useFeatureTour'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
 // lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
@@ -85,6 +87,10 @@ const ArchitecturePanel = lazyRetry(() => import('../components/ArchitecturePane
 const DesignPanel = lazyRetry(() => import('../components/DesignPanel').then(m => ({ default: m.DesignPanel })))
 const RoutingInsightsPanel = lazyRetry(() => import('../components/RoutingInsightsPanel').then(m => ({ default: m.RoutingInsightsPanel })))
 const SystemPanel = lazyRetry(() => import('../components/SystemPanel').then(m => ({ default: m.SystemPanel })))
+const CommunicationPanel = lazyRetry(() => import('../components/CommunicationPanel').then(m => ({ default: m.CommunicationPanel })))
+const AdaptivePanel = lazyRetry(() => import('../components/AdaptivePanel').then(m => ({ default: m.AdaptivePanel })))
+const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard').then(m => ({ default: m.UsageDashboard })))
+const TagModal = lazyRetry(() => import('../components/TagModal').then(m => ({ default: m.TagModal })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -255,6 +261,35 @@ function EngineChat() {
   const [distributeContent, setDistributeContent] = useState('')
   const [imageCredits, setImageCredits] = useState(0)
 
+  // Conversation tags
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [taggingConvId, setTaggingConvId] = useState<string | null>(null)
+  const [convTagsMap, setConvTagsMap] = useState<Record<string, string[]>>({})
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>()
+    for (const tags of Object.values(convTagsMap)) {
+      for (const t of tags) tagSet.add(t)
+    }
+    return Array.from(tagSet).sort()
+  }, [convTagsMap])
+
+  const getConvTags = useCallback((id: string) => convTagsMap[id] || [], [convTagsMap])
+
+  const handleSaveTags = useCallback(async (tags: string[]) => {
+    if (!taggingConvId) return
+    setConvTagsMap(prev => ({ ...prev, [taggingConvId]: tags }))
+    try {
+      await updateConversationMetadata(taggingConvId, { tags })
+    } catch (e) {
+      console.warn('[Tags] Failed to save:', e)
+    }
+  }, [taggingConvId])
+
+  const handleToggleTag = useCallback((tag: string) => {
+    setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])
+  }, [])
+
   useEffect(() => {
     const goOnline = () => setIsOnline(true)
     const goOffline = () => setIsOnline(false)
@@ -294,6 +329,23 @@ function EngineChat() {
     chatEngine.setMessages(msgs as any)
   }, planLimits.historyDays)
   newChatRef.current = convs.handleNewChat
+
+  // Load tags from conversation metadata
+  useEffect(() => {
+    const loadTags = async () => {
+      const map: Record<string, string[]> = {}
+      for (const conv of convs.conversations) {
+        try {
+          const meta = await getConversationMetadata(conv.id)
+          if (meta?.tags && Array.isArray(meta.tags)) {
+            map[conv.id] = meta.tags as string[]
+          }
+        } catch { /* ignore */ }
+      }
+      setConvTagsMap(map)
+    }
+    if (convs.conversations.length > 0) loadTags()
+  }, [convs.conversations]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const chatEngine = useChatEngine({
     userId: user!.id,
@@ -403,6 +455,12 @@ function EngineChat() {
 
   // Daily message limit from plan
   const effectiveLimit = planLimits.messagesPerDay
+
+  // Entity info popover
+  const [showEntityInfo, setShowEntityInfo] = useState(false)
+
+  // Agent "Why?" expansion
+  const [expandedWhyId, setExpandedWhyId] = useState<string | null>(null)
 
   // Feature 6: Mid-session value preview (once per session, at message 5)
   const [showValuePreview, setShowValuePreview] = useState(false)
@@ -652,7 +710,11 @@ function EngineChat() {
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
+  const entityRef = useRef<HTMLDivElement>(null)
+  const moreMenuBtnRef = useRef<HTMLButtonElement>(null)
+  const inputBarRef = useRef<HTMLFormElement>(null)
   const isMini = useMiniPhone()
+  const tour = useFeatureTour(userId || null)
 
   // Close popover on click outside
   useEffect(() => {
@@ -1111,6 +1173,46 @@ function EngineChat() {
           </Suspense>
         )}
       </AnimatePresence>
+      <AnimatePresence>
+        {panels.showCommunicationsPanel && user && (
+          <Suspense fallback={<PanelShimmer />}>
+            <CommunicationPanel
+              isOpen={panels.showCommunicationsPanel}
+              userId={user.id}
+              isAdmin={isAdmin}
+              onClose={() => panels.closePanel('communications')}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showAdaptivePanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('adaptive')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <AdaptivePanel
+                userId={user.id}
+                isAdmin={isAdmin}
+                onClose={() => panels.closePanel('adaptive')}
+                onToast={showToast}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showUsageDashboard && user && (
+          <BottomSheet onClose={() => panels.closePanel('usage')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <UsageDashboard
+                onClose={() => panels.closePanel('usage')}
+                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
+                isPro={isPro}
+                monthlyLimit={isPro ? 1000 : 40}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {panels.showKnowledgePanel && user && (
@@ -1164,6 +1266,11 @@ function EngineChat() {
         }}
         onImport={() => setShowImportModal(true)}
         isLoading={convs.convsLoading}
+        onTag={(id) => setTaggingConvId(id)}
+        allTags={allTags}
+        selectedTags={selectedTags}
+        onToggleTag={handleToggleTag}
+        getConvTags={getConvTags}
       />
 
       {/* Header */}
@@ -1243,6 +1350,67 @@ function EngineChat() {
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowImageGallery(true); panels.setHeaderMenuOpen(false) }}>
                   <IconImage size={16} /> {t('menu.imageGallery')}
                 </button>
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowSocialPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconShare size={16} /> {t('menu.social')}
+                  </button>
+                )}
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowPlatformPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconZap size={16} /> {t('menu.platformEngine')}
+                  </button>
+                )}
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAgentBuilderPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconSparkles size={16} /> {t('menu.agentBuilder')}
+                  </button>
+                )}
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAgentLibraryPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconBookOpen size={16} /> {t('menu.agentLibrary')}
+                </button>
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBackgroundAgentsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconClock size={16} /> {t('menu.backgroundAgents')}
+                  </button>
+                )}
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowMyContentPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconFileText size={16} /> {t('menu.myContent')}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBookmarksPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconBookOpen size={16} /> {t('menu.bookmarks')}
+                </button>
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowArchitecturePanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconBrain size={16} /> {t('menu.architecture')}
+                  </button>
+                )}
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowDesignPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconImage size={16} /> {t('menu.designSystem')}
+                  </button>
+                )}
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowRoutingInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconChart size={16} /> {t('menu.routingInsights')}
+                  </button>
+                )}
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowCommunicationsPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconBrain size={16} /> {t('menu.communications')}
+                </button>
+                {(isPro || isAdmin) && (
+                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAdaptivePanel(true); panels.setHeaderMenuOpen(false) }}>
+                    <IconSparkles size={16} /> {t('menu.adaptiveSystem')}
+                  </button>
+                )}
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowSystemPanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconEye size={16} /> {t('menu.system')}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); window.location.hash = '#/explore'; panels.setHeaderMenuOpen(false) }}>
+                  <IconGlobe size={16} /> {t('menu.explore')}
+                </button>
+                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowKnowledgePanel(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconBookOpen size={16} /> {t('menu.knowledgeBase')}
+                </button>
                 <div className="ka-header-menu-divider ka-menu-tabbed" />
                 <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
                 <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
@@ -1287,7 +1455,40 @@ function EngineChat() {
           )}
           {messages.length === 0 && !convs.msgsLoading && (
             <motion.div key="empty-home" className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={TRANSITION.CARD}>
-              <ParticleGrid />
+              <div ref={entityRef} className="ka-entity-tap" onClick={() => setShowEntityInfo(prev => !prev)} role="button" tabIndex={0} aria-label="View entity info">
+                <ParticleGrid />
+              </div>
+
+              {/* Entity info popover */}
+              <AnimatePresence>
+                {showEntityInfo && (
+                  <motion.div
+                    className="ka-entity-info"
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="ka-entity-info-tier" style={{ color: evolution.topicColor || 'var(--rubin-primary)' }}>{evolution.tierName}</div>
+                    <p className="ka-entity-info-hint">{evolution.progressHint}</p>
+                    <div className="ka-entity-info-row">
+                      <span className="ka-entity-info-label">{t('entityInfo.mood')}</span>
+                      <span>{evolution.companion.mood ? t(`entity.mood.${evolution.companion.mood}`) : '—'}</span>
+                    </div>
+                    <div className="ka-entity-info-row">
+                      <span className="ka-entity-info-label">{t('entityInfo.streak')}</span>
+                      <span>{evolution.companion.streak} {t('entityInfo.days')}</span>
+                    </div>
+                    {evolution.topic && (
+                      <div className="ka-entity-info-row">
+                        <span className="ka-entity-info-label">{t('entityInfo.focus')}</span>
+                        <span>{evolution.topic}</span>
+                      </div>
+                    )}
+                    <button className="ka-entity-info-close" onClick={(e) => { e.stopPropagation(); setShowEntityInfo(false) }}>{t('close', { ns: 'common' })}</button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Feature 2: Streak indicator */}
               {evolution.companion.streak >= 2 && (
@@ -1509,7 +1710,21 @@ function EngineChat() {
                     <ParticleGrid size={28} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                   </div>
                   {msg.agentName && msg.agentName !== 'Kernel' && (
-                    <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
+                    <div className="ka-agent-badge-wrap">
+                      <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
+                      {msg.routingReason && (
+                        <>
+                          <button className="ka-agent-why-btn" onClick={() => setExpandedWhyId(prev => prev === msg.id ? null : msg.id)}>{t('agentWhy.label')}</button>
+                          <AnimatePresence>
+                            {expandedWhyId === msg.id && (
+                              <motion.div className="ka-agent-why" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+                                {msg.routingReason}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
@@ -1603,6 +1818,13 @@ function EngineChat() {
                 <div className={`ka-msg-time${revealedTimestamps[msg.id] ? ' ka-msg-time--visible' : ''}`}>
                   {new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                 </div>
+                {msg.role === 'kernel' && i === lastKernelIndex && !isStreaming && msg.suggestions && msg.suggestions.length > 0 && (
+                  <div className="ka-suggestion-chips">
+                    {msg.suggestions.map((s, si) => (
+                      <button key={si} className="ka-suggestion-chip" onClick={() => chatEngine.sendMessage(s)}>{s}</button>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
@@ -1797,17 +2019,19 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      {/* Free-tier hint */}
-      <AnimatePresence>
-        {!isPro && chatEngine.messageCountRef.current >= 7 && chatEngine.messageCountRef.current < effectiveLimit && !billing.showUpgradeWall && (
-          <motion.div className="ka-msg-hint" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-            {effectiveLimit - chatEngine.messageCountRef.current === 1 ? t('lastFreeMessage') : t('messagesRemaining', { count: effectiveLimit - chatEngine.messageCountRef.current })}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Free-tier message counter */}
+      {!isPro && !billing.showUpgradeWall && (() => {
+        const remaining = effectiveLimit - chatEngine.messageCountRef.current
+        const urgency = remaining < 5 ? 'critical' : remaining <= 10 ? 'warning' : 'normal'
+        return remaining > 0 ? (
+          <div className={`ka-msg-counter ka-msg-counter--${urgency}`}>
+            {t('messagesLeft', { count: remaining })}
+          </div>
+        ) : null
+      })()}
 
       {/* Input bar */}
-      <form className="ka-input-bar" onSubmit={chatEngine.handleSubmit}>
+      <form ref={inputBarRef} className="ka-input-bar" onSubmit={chatEngine.handleSubmit}>
         <input id="ka-file-input" ref={fileAttachments.fileInputRef} type="file" accept={ACCEPTED_FILES} multiple onChange={fileAttachments.handleFileSelect} className="ka-attach-input" />
 
         {isMini ? (
@@ -1888,7 +2112,7 @@ function EngineChat() {
 
       {!isOnline && <div className="ka-offline-banner">{t('offline', { ns: 'common' })}</div>}
 
-      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} undiscoveredCount={featureDiscovery.undiscoveredCount} />
+      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} undiscoveredCount={featureDiscovery.undiscoveredCount} moreRef={moreMenuBtnRef} />
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
@@ -1932,6 +2156,33 @@ function EngineChat() {
               <IconClose size={20} />
             </button>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Tag Modal */}
+      <AnimatePresence>
+        {taggingConvId && (
+          <Suspense fallback={null}>
+            <TagModal
+              isOpen={!!taggingConvId}
+              onClose={() => setTaggingConvId(null)}
+              currentTags={getConvTags(taggingConvId)}
+              onSave={handleSaveTags}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      {/* Feature tour tooltips */}
+      <AnimatePresence>
+        {messages.length === 0 && tour.activeStep === 'entity' && (
+          <FeatureTooltip targetRef={entityRef} text={t('tour.entity')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} />
+        )}
+        {messages.length === 0 && tour.activeStep === 'more-menu' && (
+          <FeatureTooltip targetRef={moreMenuBtnRef} text={t('tour.moreMenu')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} position="above" />
+        )}
+        {messages.length === 0 && tour.activeStep === 'input-bar' && (
+          <FeatureTooltip targetRef={inputBarRef} text={t('tour.inputBar')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} position="above" />
         )}
       </AnimatePresence>
     </div>

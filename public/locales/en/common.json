@@ -53,7 +53,12 @@
     "noResults": "No results",
     "resultCount": "{{count}} results",
     "clearSearch": "Clear search",
-    "empty": "No conversations yet"
+    "empty": "No conversations yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This week",
+    "thisMonth": "This month",
+    "earlier": "Earlier"
   },
   "relativeTime": {
     "justNow": "just now",
@@ -83,6 +88,12 @@
   "errorDefault": "Something broke on our end. Try refreshing.",
   "tryAgain": "Try again",
   "offline": "You're offline. Viewing cached conversations.",
+  "tags": {
+    "title": "Tag conversation",
+    "addTag": "Add tag...",
+    "save": "Save",
+    "suggested": "Suggestions"
+  },
   "pwa": {
     "installPrompt": "Add Kernel to your home screen for the best experience.",
     "install": "Install"

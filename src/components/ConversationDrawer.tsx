@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { SPRING, DURATION } from '../constants/motion'
-import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload } from './KernelIcons'
+import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
@@ -20,6 +20,11 @@ interface ConversationDrawerProps {
   onImport?: () => void
   isLoading?: boolean
   autoFocusSearch?: boolean
+  onTag?: (id: string) => void
+  allTags?: string[]
+  selectedTags?: string[]
+  onToggleTag?: (tag: string) => void
+  getConvTags?: (id: string) => string[]
 }
 
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
@@ -36,6 +41,40 @@ function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, un
   return new Date(dateStr).toLocaleDateString()
 }
 
+type DateGroup = 'today' | 'yesterday' | 'thisWeek' | 'thisMonth' | 'earlier'
+
+function getDateGroup(dateStr: string): DateGroup {
+  const now = new Date()
+  const then = new Date(dateStr)
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const yesterday = new Date(today.getTime() - 86400000)
+  const weekAgo = new Date(today.getTime() - 6 * 86400000)
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  if (then >= today) return 'today'
+  if (then >= yesterday) return 'yesterday'
+  if (then >= weekAgo) return 'thisWeek'
+  if (then >= monthStart) return 'thisMonth'
+  return 'earlier'
+}
+
+const DATE_GROUP_KEYS: Record<DateGroup, string> = {
+  today: 'conversations.today',
+  yesterday: 'conversations.yesterday',
+  thisWeek: 'conversations.thisWeek',
+  thisMonth: 'conversations.thisMonth',
+  earlier: 'conversations.earlier',
+}
+
+function groupConversations(convs: DBConversation[]): { group: DateGroup; items: DBConversation[] }[] {
+  const groups: Record<DateGroup, DBConversation[]> = { today: [], yesterday: [], thisWeek: [], thisMonth: [], earlier: [] }
+  for (const c of convs) {
+    groups[getDateGroup(c.updated_at)].push(c)
+  }
+  const order: DateGroup[] = ['today', 'yesterday', 'thisWeek', 'thisMonth', 'earlier']
+  return order.filter(g => groups[g].length > 0).map(g => ({ group: g, items: groups[g] }))
+}
+
 export function ConversationDrawer({
   isOpen,
   onClose,
@@ -49,6 +88,11 @@ export function ConversationDrawer({
   onImport,
   isLoading,
   autoFocusSearch,
+  onTag,
+  allTags,
+  selectedTags,
+  onToggleTag,
+  getConvTags,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -156,12 +200,98 @@ export function ConversationDrawer({
     renamingRef.current = false
   }, [renameValue, onRename])
 
+  const tagFiltered = selectedTags && selectedTags.length > 0 && getConvTags
+    ? conversations.filter(c => {
+        const convTags = getConvTags(c.id)
+        return selectedTags.some(t => convTags.includes(t))
+      })
+    : conversations
+
   const filteredConversations = searchQuery.trim().length >= 2
-    ? conversations.filter(c =>
+    ? tagFiltered.filter(c =>
         c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         searchResults.some(r => r.conv_id === c.id)
       )
-    : conversations
+    : tagFiltered
+
+  const renderConvItem = (conv: DBConversation) => {
+    const matchSnippet = searchResults.find(r => r.conv_id === conv.id)
+    const isRenaming = renamingId === conv.id
+    return (
+      <div
+        key={conv.id}
+        className={`conv-item ${activeId === conv.id ? 'conv-item--active' : ''}`}
+        onClick={() => { if (!isRenaming) { onSelect(conv.id); setSearchQuery(''); setSearchResults([]); onClose(); } }}
+      >
+        <div className="conv-item-content">
+          {isRenaming ? (
+            <form className="conv-rename-form" onSubmit={(e) => { e.preventDefault(); handleRename(conv.id) }} onClick={e => e.stopPropagation()}>
+              <input
+                className="conv-rename-input"
+                value={renameValue}
+                onChange={e => setRenameValue(e.target.value)}
+                autoFocus
+                onKeyDown={e => { if (e.key === 'Escape') setRenamingId(null) }}
+                onBlur={() => handleRename(conv.id)}
+              />
+            </form>
+          ) : (
+            <span className="conv-item-title">
+              {searchQuery.trim().length >= 2 ? highlightMatch(conv.title, searchQuery) : conv.title}
+            </span>
+          )}
+          {matchSnippet && !isRenaming && (
+            <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
+          )}
+          {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
+          {!isRenaming && getConvTags && (() => {
+            const convTags = getConvTags(conv.id)
+            return convTags.length > 0 ? (
+              <div className="ka-conv-tags">
+                {convTags.map(tag => <span key={tag} className="ka-conv-tag-badge">{tag}</span>)}
+              </div>
+            ) : null
+          })()}
+        </div>
+        {!isRenaming && (
+          <div className="conv-item-actions">
+            {onShare && (
+              <button
+                className="conv-item-action"
+                onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
+                aria-label={t('aria.shareableLink')}
+              >
+                <IconShare size={13} />
+              </button>
+            )}
+            {onTag && (
+              <button
+                className="conv-item-action"
+                onClick={(e) => { e.stopPropagation(); onTag(conv.id) }}
+                aria-label="Tag"
+              >
+                <IconBookOpen size={13} />
+              </button>
+            )}
+            <button
+              className="conv-item-action"
+              onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
+              aria-label={t('aria.editMessage')}
+            >
+              <IconPencil size={13} />
+            </button>
+            <button
+              className="conv-item-action conv-item-action--delete"
+              onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
+              aria-label={t('delete')}
+            >
+              <IconTrash size={13} />
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   // Swipe-to-close: drag left to dismiss
   const dragX = useMotionValue(0)
@@ -231,6 +361,20 @@ export function ConversationDrawer({
               </div>
             )}
 
+            {allTags && allTags.length > 0 && onToggleTag && (
+              <div className="ka-tag-filter-bar">
+                {allTags.map(tag => (
+                  <button
+                    key={tag}
+                    className={`ka-tag-pill${selectedTags?.includes(tag) ? ' ka-tag-pill--active' : ''}`}
+                    onClick={() => onToggleTag(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="conv-action-row">
               <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
                 <IconPlus size={16} />
@@ -254,66 +398,15 @@ export function ConversationDrawer({
                   ))}
                 </>
               )}
-              {filteredConversations.map(conv => {
-                const matchSnippet = searchResults.find(r => r.conv_id === conv.id)
-                const isRenaming = renamingId === conv.id
-                return (
-                <div
-                  key={conv.id}
-                  className={`conv-item ${activeId === conv.id ? 'conv-item--active' : ''}`}
-                  onClick={() => { if (!isRenaming) { onSelect(conv.id); setSearchQuery(''); setSearchResults([]); onClose(); } }}
-                >
-                  <div className="conv-item-content">
-                    {isRenaming ? (
-                      <form className="conv-rename-form" onSubmit={(e) => { e.preventDefault(); handleRename(conv.id) }} onClick={e => e.stopPropagation()}>
-                        <input
-                          className="conv-rename-input"
-                          value={renameValue}
-                          onChange={e => setRenameValue(e.target.value)}
-                          autoFocus
-                          onKeyDown={e => { if (e.key === 'Escape') setRenamingId(null) }}
-                          onBlur={() => handleRename(conv.id)}
-                        />
-                      </form>
-                    ) : (
-                      <span className="conv-item-title">
-                        {searchQuery.trim().length >= 2 ? highlightMatch(conv.title, searchQuery) : conv.title}
-                      </span>
-                    )}
-                    {matchSnippet && !isRenaming && (
-                      <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
-                    )}
-                    {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
-                  </div>
-                  {!isRenaming && (
-                    <div className="conv-item-actions">
-                      {onShare && (
-                        <button
-                          className="conv-item-action"
-                          onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
-                          aria-label={t('aria.shareableLink')}
-                        >
-                          <IconShare size={13} />
-                        </button>
-                      )}
-                      <button
-                        className="conv-item-action"
-                        onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
-                        aria-label={t('aria.editMessage')}
-                      >
-                        <IconPencil size={13} />
-                      </button>
-                      <button
-                        className="conv-item-action conv-item-action--delete"
-                        onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
-                        aria-label={t('delete')}
-                      >
-                        <IconTrash size={13} />
-                      </button>
+              {searchQuery.trim().length >= 2
+                ? filteredConversations.map(conv => renderConvItem(conv))
+                : groupConversations(filteredConversations).map(({ group, items }) => (
+                    <div key={group} className="conv-date-group">
+                      <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+                      {items.map(conv => renderConvItem(conv))}
                     </div>
-                  )}
-                </div>
-              )})}
+                  ))
+              }
               {filteredConversations.length === 0 && searchQuery && (
                 <div className="conv-empty">
                   <span>{searching ? t('conversations.searching') : t('conversations.noMatches')}</span>

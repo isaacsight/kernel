@@ -58,11 +58,18 @@ export type MoreAction =
   | 'design-system'
   | 'routing-insights'
   | 'system'
+  | 'communications'
+  | 'adaptive'
+  | 'usage'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
   | 'delete-account'
+
+type MenuSection = 'ai' | 'content' | 'insights' | 'system'
+
+const MENU_SECTION_ORDER: MenuSection[] = ['ai', 'content', 'insights', 'system']
 
 interface MoreMenuItem {
   id: MoreAction
@@ -70,35 +77,40 @@ interface MoreMenuItem {
   icon: typeof IconZap
   danger?: boolean
   condition?: 'not-pro' | 'subscribed' | 'always'
+  section: MenuSection
 }
 
 const ITEMS: MoreMenuItem[] = [
-  { id: 'workflows', labelKey: 'menu.workflows', icon: IconZap },
-  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: IconClock },
-  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain },
-  { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart },
-  { id: 'insights', labelKey: 'menu.insights', icon: IconEye },
-  { id: 'mirror', labelKey: 'menu.mirror', icon: IconSparkles },
-  { id: 'project', labelKey: 'menu.projectFiles', icon: IconFileCode },
-  { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage },
-  { id: 'social', labelKey: 'menu.social', icon: IconShare, condition: 'subscribed' },
-  { id: 'platform', labelKey: 'menu.platformEngine', icon: IconZap, condition: 'subscribed' },
-  { id: 'agent-builder', labelKey: 'menu.agentBuilder', icon: IconSparkles, condition: 'subscribed' },
-  { id: 'agent-library', labelKey: 'menu.agentLibrary', icon: IconBookOpen },
-  { id: 'background-agents', labelKey: 'menu.backgroundAgents', icon: IconClock, condition: 'subscribed' },
-  { id: 'my-content', labelKey: 'menu.myContent', icon: IconFileCode },
-  { id: 'bookmarks', labelKey: 'menu.bookmarks', icon: IconBookOpen },
-  { id: 'architecture', labelKey: 'menu.architecture', icon: IconBrain, condition: 'subscribed' },
-  { id: 'design-system', labelKey: 'menu.designSystem', icon: IconImage, condition: 'subscribed' },
-  { id: 'routing-insights', labelKey: 'menu.routingInsights', icon: IconChart, condition: 'subscribed' },
-  { id: 'system', labelKey: 'menu.system', icon: IconEye },
-  { id: 'explore', labelKey: 'menu.explore', icon: IconGlobe },
-  { id: 'knowledge-base', labelKey: 'menu.knowledgeBase', icon: IconBookOpen },
+  { id: 'workflows', labelKey: 'menu.workflows', icon: IconZap, section: 'ai' },
+  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: IconClock, section: 'ai' },
+  { id: 'agent-builder', labelKey: 'menu.agentBuilder', icon: IconSparkles, condition: 'subscribed', section: 'ai' },
+  { id: 'agent-library', labelKey: 'menu.agentLibrary', icon: IconBookOpen, section: 'ai' },
+  { id: 'background-agents', labelKey: 'menu.backgroundAgents', icon: IconClock, condition: 'subscribed', section: 'ai' },
+  { id: 'sandbox', labelKey: 'menu.sandbox' as string, icon: IconFileCode, condition: 'subscribed', section: 'ai' },
+  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain, section: 'content' },
+  { id: 'knowledge-base', labelKey: 'menu.knowledgeBase', icon: IconBookOpen, section: 'content' },
+  { id: 'project', labelKey: 'menu.projectFiles', icon: IconFileCode, section: 'content' },
+  { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage, section: 'content' },
+  { id: 'my-content', labelKey: 'menu.myContent', icon: IconFileCode, section: 'content' },
+  { id: 'bookmarks', labelKey: 'menu.bookmarks', icon: IconBookOpen, section: 'content' },
+  { id: 'explore', labelKey: 'menu.explore', icon: IconGlobe, section: 'content' },
+  { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart, section: 'insights' },
+  { id: 'insights', labelKey: 'menu.insights', icon: IconEye, section: 'insights' },
+  { id: 'mirror', labelKey: 'menu.mirror', icon: IconSparkles, section: 'insights' },
+  { id: 'social', labelKey: 'menu.social', icon: IconShare, condition: 'subscribed', section: 'insights' },
+  { id: 'routing-insights', labelKey: 'menu.routingInsights', icon: IconChart, condition: 'subscribed', section: 'insights' },
+  { id: 'usage', labelKey: 'menu.usage', icon: IconChart, section: 'insights' },
+  { id: 'platform', labelKey: 'menu.platformEngine', icon: IconZap, condition: 'subscribed', section: 'system' },
+  { id: 'architecture', labelKey: 'menu.architecture', icon: IconBrain, condition: 'subscribed', section: 'system' },
+  { id: 'design-system', labelKey: 'menu.designSystem', icon: IconImage, condition: 'subscribed', section: 'system' },
+  { id: 'system', labelKey: 'menu.system', icon: IconEye, section: 'system' },
+  { id: 'communications', labelKey: 'menu.communications', icon: IconBell, section: 'system' },
+  { id: 'adaptive', labelKey: 'menu.adaptiveSystem', icon: IconSparkles, condition: 'subscribed', section: 'system' },
 ]
 
 const ACCOUNT_ITEMS: MoreMenuItem[] = [
-  { id: 'account-settings', labelKey: 'menu.accountSettings', icon: IconSettings },
-  { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut },
+  { id: 'account-settings', labelKey: 'menu.accountSettings', icon: IconSettings, section: 'system' },
+  { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut, section: 'system' },
 ]
 
 const THEMES: { id: ThemeMode; icon: typeof IconSun; labelKey: string }[] = [
@@ -158,24 +170,34 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
       >
         <div className="ka-more-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
         <div className="ka-more-menu-items">
-          <div className="ka-more-menu-label">{t('features', { ns: 'common' })}</div>
-          {ITEMS.filter(item => {
-            if (item.condition === 'not-pro') return !isPro
-            if (item.condition === 'subscribed') return isPro || isAdmin
-            return true
-          }).map(item => {
-            const Icon = item.icon
-            const isNew = isNewFeature?.(item.id)
+          {MENU_SECTION_ORDER.map((section, si) => {
+            const sectionItems = ITEMS.filter(item => {
+              if (item.section !== section) return false
+              if (item.condition === 'not-pro') return !isPro
+              if (item.condition === 'subscribed') return isPro || isAdmin
+              return true
+            })
+            if (sectionItems.length === 0) return null
             return (
-              <button
-                key={item.id}
-                className="ka-more-menu-item"
-                onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
-              >
-                <Icon size={18} />
-                <span>{t(item.labelKey)}</span>
-                {isNew && <span className="ka-feature-dot" />}
-              </button>
+              <div key={section}>
+                {si > 0 && <div className="ka-more-menu-divider" />}
+                <div className="ka-menu-section-header">{t(`menuSection.${section}`)}</div>
+                {sectionItems.map(item => {
+                  const Icon = item.icon
+                  const isNew = isNewFeature?.(item.id)
+                  return (
+                    <button
+                      key={item.id}
+                      className="ka-more-menu-item"
+                      onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
+                    >
+                      <Icon size={18} />
+                      <span>{t(item.labelKey)}</span>
+                      {isNew && <span className="ka-feature-dot" />}
+                    </button>
+                  )
+                })}
+              </div>
             )
           })}
           <div className="ka-more-menu-divider" />

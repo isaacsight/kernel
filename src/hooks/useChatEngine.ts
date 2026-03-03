@@ -90,6 +90,8 @@ export interface ChatMessage {
   contentPipelineStages?: import('../engine/content/types').ContentStageState[]
   isProactive?: boolean
   generatedImages?: ImageGenResult[]
+  routingReason?: string
+  suggestions?: string[]
 }
 
 /** Active document for multi-turn document analysis (Pro only) */
@@ -98,6 +100,31 @@ export interface ActiveDocument {
   type: string
   dataUrl: string
   contentBlock: ContentBlock
+}
+
+/** Generate a human-readable routing reason from classification */
+function describeRouting(classification: { confidence: number; complexity: number; needsSwarm?: boolean; needsResearch?: boolean; isMultiStep?: boolean }, specialistName: string): string {
+  const parts: string[] = []
+  if (classification.needsResearch) parts.push('deep research needed')
+  else if (classification.needsSwarm) parts.push('multiple perspectives helpful')
+  else if (classification.isMultiStep) parts.push('multi-step task detected')
+  else if (classification.complexity >= 0.7) parts.push('complex question')
+  if (classification.confidence >= 0.8) parts.push(`high confidence match for ${specialistName}`)
+  else if (classification.confidence >= 0.5) parts.push(`good match for ${specialistName}`)
+  else parts.push(`best available match: ${specialistName}`)
+  return parts.join(' — ')
+}
+
+/** Generate contextual follow-up suggestions based on agent type */
+function generateFollowUps(agentId: string, content: string): string[] {
+  const suggestions: Record<string, string[]> = {
+    researcher: ['Tell me more', 'Counterarguments?', 'Recent developments'],
+    coder: ['Optimize this', 'Add error handling', 'Write tests'],
+    writer: ['More concise', 'Change tone', 'Suggest a title'],
+    analyst: ['What are the risks?', 'Compare alternatives', 'Supporting data?'],
+    kernel: ['Go deeper', 'How does this apply to me?', 'What should I do next?'],
+  }
+  return suggestions[agentId] || suggestions.kernel
 }
 
 interface UseChatEngineParams {
@@ -975,6 +1002,8 @@ export function useChatEngine(params: UseChatEngineParams) {
 
     const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
+    const routingReason = describeRouting(classification, specialist.name)
+
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
       id: kernelId,
@@ -983,6 +1012,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       timestamp: Date.now(),
       agentId: specialist.id,
       agentName: specialist.name,
+      routingReason,
     }])
     latestKernelContentRef.current = ''
 
@@ -1355,6 +1385,7 @@ export function useChatEngine(params: UseChatEngineParams) {
             system: systemPrompt + algorithmContext,
             model: 'sonnet',
             max_tokens: 4096,
+            feature: 'chat',
           },
         )
         // Content captured by updateKernelMsg → latestKernelContentRef
@@ -1452,6 +1483,7 @@ export function useChatEngine(params: UseChatEngineParams) {
             signal: abortController.signal,
             thinking: extendedThinkingEnabled && isPro ? { type: 'enabled', budget_tokens: 10000 } : undefined,
             onThinking: extendedThinkingEnabled && isPro ? (text: string) => { setCurrentThinking(text) } : undefined,
+            feature: 'chat',
           }
         )
         streamAbortRef.current = null
@@ -1727,6 +1759,15 @@ export function useChatEngine(params: UseChatEngineParams) {
     } finally {
       streamingConvIdRef.current = null
       if (isStillActive()) {
+        // Inject follow-up suggestion chips on the last kernel message
+        guardedSetMessages(prev => {
+          const last = [...prev].reverse().find(m => m.role === 'kernel' && m.content)
+          if (last) {
+            const chips = generateFollowUps(last.agentId || 'kernel', last.content)
+            return prev.map(m => m.id === last.id ? { ...m, suggestions: chips } : m)
+          }
+          return prev
+        })
         setIsStreaming(false)
         setIsThinking(false)
       }

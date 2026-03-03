@@ -21,9 +21,10 @@ interface BottomTabBarProps {
   activeTab: TabId
   onTabChange: (tab: TabId) => void
   undiscoveredCount?: number
+  moreRef?: React.RefObject<HTMLButtonElement | null>
 }
 
-export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: BottomTabBarProps) {
+export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0, moreRef }: BottomTabBarProps) {
   const isMini = useMiniPhone()
 
   const visibleTabs = isMini
@@ -39,6 +40,7 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0 }: 
         return (
           <button
             key={tab.id}
+            ref={tab.id === 'more' ? moreRef : undefined}
             className={`ka-tab-item${isActive ? ' ka-tab-item--active' : ''}`}
             role="tab"
             aria-selected={isActive}
