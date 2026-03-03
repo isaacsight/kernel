@@ -45,6 +45,13 @@
     "markAllRead": "Segna tutte come lette",
     "empty": "Nessuna notifica"
   },
+  "conversations": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "thisMonth": "Questo mese",
+    "earlier": "Precedente"
+  },
   "language": "Lingua",
   "offline": "Sei offline. Visualizzazione conversazioni memorizzate.",
   "pwa": {

@@ -45,6 +45,13 @@
     "markAllRead": "Alle als gelesen markieren",
     "empty": "Noch keine Benachrichtigungen"
   },
+  "conversations": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Diesen Monat",
+    "earlier": "Früher"
+  },
   "language": "Sprache",
   "offline": "Du bist offline. Zwischengespeicherte Unterhaltungen werden angezeigt.",
   "pwa": {

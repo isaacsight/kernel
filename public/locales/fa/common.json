@@ -45,6 +45,13 @@
     "markAllRead": "خواندن همه",
     "empty": "هنوز اعلانی ندارید"
   },
+  "conversations": {
+    "today": "امروز",
+    "yesterday": "دیروز",
+    "thisWeek": "این هفته",
+    "thisMonth": "این ماه",
+    "earlier": "قبلاً"
+  },
   "language": "زبان",
   "offline": "آفلاین هستید. مشاهده مکالمات ذخیره‌شده.",
   "pwa": {

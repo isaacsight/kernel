@@ -45,6 +45,13 @@
     "markAllRead": "Markera alla som lästa",
     "empty": "Inga aviseringar än"
   },
+  "conversations": {
+    "today": "Idag",
+    "yesterday": "Igår",
+    "thisWeek": "Denna vecka",
+    "thisMonth": "Denna månad",
+    "earlier": "Tidigare"
+  },
   "language": "Språk",
   "offline": "Du är offline. Visar cachade konversationer.",
   "pwa": {

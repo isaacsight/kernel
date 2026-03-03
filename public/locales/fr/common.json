@@ -45,6 +45,13 @@
     "markAllRead": "Tout marquer comme lu",
     "empty": "Aucune notification pour le moment"
   },
+  "conversations": {
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "thisWeek": "Cette semaine",
+    "thisMonth": "Ce mois",
+    "earlier": "Plus ancien"
+  },
   "language": "Langue",
   "offline": "Vous êtes hors ligne. Affichage des conversations en cache.",
   "pwa": {

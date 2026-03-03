@@ -45,6 +45,13 @@
     "markAllRead": "تحديد الكل كمقروء",
     "empty": "لا توجد إشعارات بعد"
   },
+  "conversations": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "earlier": "سابقاً"
+  },
   "language": "اللغة",
   "offline": "أنت غير متصل. عرض المحادثات المخزنة مؤقتاً.",
   "pwa": {

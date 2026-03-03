@@ -45,6 +45,13 @@
     "markAllRead": "Merk alle som lest",
     "empty": "Ingen varsler ennå"
   },
+  "conversations": {
+    "today": "I dag",
+    "yesterday": "I går",
+    "thisWeek": "Denne uken",
+    "thisMonth": "Denne måneden",
+    "earlier": "Tidligere"
+  },
   "language": "Språk",
   "offline": "Du er frakoblet. Viser bufrede samtaler.",
   "pwa": {

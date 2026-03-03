@@ -45,6 +45,13 @@
     "markAllRead": "Markér alle som læst",
     "empty": "Ingen notifikationer endnu"
   },
+  "conversations": {
+    "today": "I dag",
+    "yesterday": "I går",
+    "thisWeek": "Denne uge",
+    "thisMonth": "Denne måned",
+    "earlier": "Tidligere"
+  },
   "language": "Sprog",
   "offline": "Du er offline. Viser cachede samtaler.",
   "pwa": {

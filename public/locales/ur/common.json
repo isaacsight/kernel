@@ -45,6 +45,13 @@
     "markAllRead": "سب کو پڑھا ہوا قرار دیں",
     "empty": "ابھی تک کوئی اطلاع نہیں ہے"
   },
+  "conversations": {
+    "today": "آج",
+    "yesterday": "کل",
+    "thisWeek": "اس ہفتے",
+    "thisMonth": "اس مہینے",
+    "earlier": "پہلے"
+  },
   "language": "زبان",
   "offline": "آپ آف لائن ہیں۔ محفوظ شدہ گفتگو دکھائی جا رہی ہیں۔",
   "pwa": {

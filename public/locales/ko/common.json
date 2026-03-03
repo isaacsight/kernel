@@ -45,6 +45,13 @@
     "markAllRead": "모두 읽음 표시",
     "empty": "아직 알림이 없습니다"
   },
+  "conversations": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "thisWeek": "이번 주",
+    "thisMonth": "이번 달",
+    "earlier": "이전"
+  },
   "language": "언어",
   "offline": "오프라인입니다. 캐시된 대화를 표시합니다.",
   "pwa": {

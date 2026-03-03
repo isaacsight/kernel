@@ -45,6 +45,13 @@
     "markAllRead": "Alles als gelezen markeren",
     "empty": "Nog geen meldingen"
   },
+  "conversations": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "thisWeek": "Deze week",
+    "thisMonth": "Deze maand",
+    "earlier": "Eerder"
+  },
   "language": "Taal",
   "offline": "Je bent offline. Opgeslagen gesprekken worden weergegeven.",
   "pwa": {

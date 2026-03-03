@@ -45,6 +45,13 @@
     "markAllRead": "Tümünü okundu işaretle",
     "empty": "Henüz bildirim yok"
   },
+  "conversations": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "thisWeek": "Bu hafta",
+    "thisMonth": "Bu ay",
+    "earlier": "Önceki"
+  },
   "language": "Dil",
   "offline": "Çevrimdışısınız. Önbelleğe alınmış sohbetler gösteriliyor.",
   "pwa": {

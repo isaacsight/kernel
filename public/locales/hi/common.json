@@ -45,6 +45,13 @@
     "markAllRead": "सभी को पठित चिह्नित करें",
     "empty": "अभी तक कोई सूचना नहीं"
   },
+  "conversations": {
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस सप्ताह",
+    "thisMonth": "इस महीने",
+    "earlier": "पहले"
+  },
   "language": "भाषा",
   "offline": "आप ऑफ़लाइन हैं। कैश की गई बातचीत देख रहे हैं।",
   "pwa": {

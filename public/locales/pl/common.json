@@ -45,6 +45,13 @@
     "markAllRead": "Oznacz wszystkie jako przeczytane",
     "empty": "Brak powiadomień"
   },
+  "conversations": {
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
+    "thisWeek": "Ten tydzień",
+    "thisMonth": "Ten miesiąc",
+    "earlier": "Wcześniej"
+  },
   "language": "Język",
   "offline": "Jesteś offline. Wyświetlanie zapisanych rozmów.",
   "pwa": {

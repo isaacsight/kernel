@@ -45,6 +45,13 @@
     "markAllRead": "סמן הכל כנקרא",
     "empty": "אין עדיין התראות"
   },
+  "conversations": {
+    "today": "היום",
+    "yesterday": "אתמול",
+    "thisWeek": "השבוע",
+    "thisMonth": "החודש",
+    "earlier": "קודם"
+  },
   "language": "שפה",
   "offline": "אתה לא מחובר. צפייה בשיחות שמורות.",
   "pwa": {

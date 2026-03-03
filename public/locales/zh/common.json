@@ -45,6 +45,13 @@
     "markAllRead": "全部标记为已读",
     "empty": "暂无通知"
   },
+  "conversations": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "thisWeek": "本周",
+    "thisMonth": "本月",
+    "earlier": "更早"
+  },
   "language": "语言",
   "offline": "您已离线。正在查看缓存的对话。",
   "pwa": {
