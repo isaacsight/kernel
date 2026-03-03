@@ -440,7 +440,7 @@ Format as numbered list. Be bold and specific.`
 
         if (res.ok) {
           const { slug } = await res.json()
-          results.push({ platform: 'blog', status: 'published', platformUrl: `https://kernel.chat/p/${slug}` })
+          results.push({ platform: 'blog', status: 'published', platformUrl: `https://kernel.chat/#/p/${slug}` })
         } else {
           results.push({ platform: 'blog', status: 'failed', error: 'Publish failed' })
         }

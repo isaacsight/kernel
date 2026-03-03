@@ -72,6 +72,19 @@ const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPane
 const SocialMediaPanel = lazyRetry(() => import('../components/SocialMediaPanel').then(m => ({ default: m.SocialMediaPanel })))
 const SocialAdaptPanel = lazyRetry(() => import('../components/SocialAdaptPanel').then(m => ({ default: m.SocialAdaptPanel })))
 const PlatformPanel = lazyRetry(() => import('../components/PlatformPanel').then(m => ({ default: m.PlatformPanel })))
+const MasterPlanPanel = lazyRetry(() => import('../components/MasterPlanPanel').then(m => ({ default: m.MasterPlanPanel })))
+const AgentBuilderPanel = lazyRetry(() => import('../components/AgentBuilderPanel').then(m => ({ default: m.AgentBuilderPanel })))
+const AgentLibraryPanel = lazyRetry(() => import('../components/AgentLibraryPanel').then(m => ({ default: m.AgentLibraryPanel })))
+const BackgroundAgentsPanel = lazyRetry(() => import('../components/BackgroundAgentsPanel').then(m => ({ default: m.BackgroundAgentsPanel })))
+const PublishPanel = lazyRetry(() => import('../components/PublishPanel').then(m => ({ default: m.PublishPanel })))
+const MyContentPanel = lazyRetry(() => import('../components/MyContentPanel').then(m => ({ default: m.MyContentPanel })))
+const AuthorProfilePanel = lazyRetry(() => import('../components/AuthorProfilePanel').then(m => ({ default: m.AuthorProfilePanel })))
+const BookmarksPanel = lazyRetry(() => import('../components/BookmarksPanel').then(m => ({ default: m.BookmarksPanel })))
+const SandboxPanel = lazyRetry(() => import('../components/SandboxPanel').then(m => ({ default: m.SandboxPanel })))
+const ArchitecturePanel = lazyRetry(() => import('../components/ArchitecturePanel').then(m => ({ default: m.ArchitecturePanel })))
+const DesignPanel = lazyRetry(() => import('../components/DesignPanel').then(m => ({ default: m.DesignPanel })))
+const RoutingInsightsPanel = lazyRetry(() => import('../components/RoutingInsightsPanel').then(m => ({ default: m.RoutingInsightsPanel })))
+const SystemPanel = lazyRetry(() => import('../components/SystemPanel').then(m => ({ default: m.SystemPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -909,6 +922,191 @@ function EngineChat() {
                 chatEngine.platformEngineRef.current?.cancel()
                 panels.closePanel('platform')
               }}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {chatEngine.masterPlan && chatEngine.isMasterActive && (
+          <Suspense fallback={null}>
+            <MasterPlanPanel
+              plan={chatEngine.masterPlan}
+              activeStepId={null}
+              onClose={() => {/* plan auto-closes when complete */}}
+            />
+          </Suspense>
+        )}
+      </AnimatePresence>
+
+      {/* ── New Engine Panels ───────────────────────────── */}
+      <AnimatePresence>
+        {panels.showAgentBuilderPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('agent-builder')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <AgentBuilderPanel
+                onSave={async (data) => {
+                  const { createAgent } = await import('../engine/AgentEngine')
+                  await createAgent(user.id, data)
+                  panels.closePanel('agent-builder')
+                  showToast('Agent created')
+                }}
+                onClose={() => panels.closePanel('agent-builder')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showAgentLibraryPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('agent-library')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <AgentLibraryPanel
+                installedIds={[]}
+                onInstall={async (agent) => {
+                  const { installAgent } = await import('../engine/AgentEngine')
+                  await installAgent(agent.id, user.id)
+                  showToast('Agent installed')
+                }}
+                onUninstall={async (agentId) => {
+                  const { uninstallAgent } = await import('../engine/AgentEngine')
+                  await uninstallAgent(agentId, user.id)
+                  showToast('Agent removed')
+                }}
+                onLoadLibrary={async () => {
+                  const { listPublicAgents } = await import('../engine/AgentEngine')
+                  return await listPublicAgents()
+                }}
+                onClose={() => panels.closePanel('agent-library')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showBackgroundAgentsPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('background-agents')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <BackgroundAgentsPanel
+                agents={[]}
+                runs={[]}
+                onToggle={async (agentId, enabled) => {
+                  const { toggleAgent } = await import('../engine/AutonomousEngine')
+                  await toggleAgent(agentId, enabled)
+                }}
+                onCreate={async (config) => {
+                  const { createBackgroundAgent } = await import('../engine/AutonomousEngine')
+                  await createBackgroundAgent(user.id, config)
+                  showToast('Background agent created')
+                }}
+                onRunAgent={async (agentId) => {
+                  const { listBackgroundAgents, executeAgent } = await import('../engine/AutonomousEngine')
+                  const agents = await listBackgroundAgents(user.id)
+                  const agent = agents.find(a => a.id === agentId)
+                  if (agent) {
+                    await executeAgent(agent)
+                    showToast('Agent executed')
+                  }
+                }}
+                onClose={() => panels.closePanel('background-agents')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showMyContentPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('my-content')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <MyContentPanel
+                onClose={() => panels.closePanel('my-content')}
+                onPublish={(contentId, title) => {
+                  panels.closePanel('my-content')
+                  showToast(`Publishing "${title}"...`)
+                }}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showAuthorProfilePanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('author-profile')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <AuthorProfilePanel
+                onClose={() => panels.closePanel('author-profile')}
+                onToast={showToast}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showBookmarksPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('bookmarks')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <BookmarksPanel
+                onClose={() => panels.closePanel('bookmarks')}
+                onOpenContent={(slug) => { window.location.hash = `#/p/${slug}` }}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showArchitecturePanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('architecture')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <ArchitecturePanel
+                onClose={() => panels.closePanel('architecture')}
+                onToast={showToast}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showDesignPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('design-system')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <DesignPanel
+                onClose={() => panels.closePanel('design-system')}
+                onGenerateComponent={async (desc) => { const { generateComponent } = await import('../engine/DesignEngine'); return generateComponent(desc) }}
+                onDesignLayout={async (req) => { const { designLayout } = await import('../engine/DesignEngine'); return designLayout(req) }}
+                onAuditAccessibility={async (html) => { const { auditAccessibility } = await import('../engine/DesignEngine'); return auditAccessibility(html) }}
+                onEnforceDesignSystem={async (css) => { const { enforceDesignSystem } = await import('../engine/DesignEngine'); return enforceDesignSystem(css) }}
+                onGenerateTheme={async (desc) => { const { generateTheme } = await import('../engine/DesignEngine'); return generateTheme(desc) }}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showRoutingInsightsPanel && user && (
+          <BottomSheet onClose={() => panels.closePanel('routing-insights')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <RoutingInsightsPanel
+                agents={[]}
+                runs={[]}
+                routingWeights={[]}
+                lastOptimizedAt={null}
+                onOptimize={async () => {
+                  const { optimizeRouting } = await import('../engine/AutonomousEngine')
+                  await optimizeRouting(user.id)
+                  showToast('Routing optimized')
+                }}
+                onClose={() => panels.closePanel('routing-insights')}
+              />
+            </Suspense>
+          </BottomSheet>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {panels.showSystemPanel && (
+          <Suspense fallback={null}>
+            <SystemPanel
+              isOpen={panels.showSystemPanel}
+              onClose={() => panels.closePanel('system')}
             />
           </Suspense>
         )}

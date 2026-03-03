@@ -46,6 +46,18 @@ export type MoreAction =
   | 'platform'
   | 'knowledge-base'
   | 'explore'
+  | 'agent-builder'
+  | 'agent-library'
+  | 'background-agents'
+  | 'publish'
+  | 'my-content'
+  | 'author-profile'
+  | 'bookmarks'
+  | 'sandbox'
+  | 'architecture'
+  | 'design-system'
+  | 'routing-insights'
+  | 'system'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
@@ -71,6 +83,15 @@ const ITEMS: MoreMenuItem[] = [
   { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage },
   { id: 'social', labelKey: 'menu.social', icon: IconShare, condition: 'subscribed' },
   { id: 'platform', labelKey: 'menu.platformEngine', icon: IconZap, condition: 'subscribed' },
+  { id: 'agent-builder', labelKey: 'menu.agentBuilder', icon: IconSparkles, condition: 'subscribed' },
+  { id: 'agent-library', labelKey: 'menu.agentLibrary', icon: IconBookOpen },
+  { id: 'background-agents', labelKey: 'menu.backgroundAgents', icon: IconClock, condition: 'subscribed' },
+  { id: 'my-content', labelKey: 'menu.myContent', icon: IconFileCode },
+  { id: 'bookmarks', labelKey: 'menu.bookmarks', icon: IconBookOpen },
+  { id: 'architecture', labelKey: 'menu.architecture', icon: IconBrain, condition: 'subscribed' },
+  { id: 'design-system', labelKey: 'menu.designSystem', icon: IconImage, condition: 'subscribed' },
+  { id: 'routing-insights', labelKey: 'menu.routingInsights', icon: IconChart, condition: 'subscribed' },
+  { id: 'system', labelKey: 'menu.system', icon: IconEye },
   { id: 'explore', labelKey: 'menu.explore', icon: IconGlobe },
   { id: 'knowledge-base', labelKey: 'menu.knowledgeBase', icon: IconBookOpen },
 ]

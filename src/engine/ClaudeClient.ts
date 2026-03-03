@@ -128,6 +128,7 @@ interface ClaudeOpts {
 export interface StreamChatResult {
   text: string
   thinking: string
+  tool_uses?: Array<{ id: string; name: string; input: Record<string, unknown> }>
 }
 
 async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?: ClaudeOpts) {
@@ -426,7 +427,11 @@ export async function claudeStreamChat(
   const decoder = new TextDecoder()
   let fullText = ''
   let fullThinking = ''
-  let currentBlockType: 'text' | 'thinking' | null = null
+  let currentBlockType: 'text' | 'thinking' | 'tool_use' | null = null
+  const toolUses: Array<{ id: string; name: string; input: Record<string, unknown> }> = []
+  let currentToolId = ''
+  let currentToolName = ''
+  let currentToolInputJson = ''
 
   try {
     while (true) {
@@ -442,15 +447,35 @@ export async function claudeStreamChat(
 
         try {
           const event = JSON.parse(data)
-          // Track content block type (thinking vs text)
+          // Track content block type (thinking vs text vs tool_use)
           if (event.type === 'content_block_start') {
             if (event.content_block?.type === 'thinking') {
               currentBlockType = 'thinking'
             } else if (event.content_block?.type === 'text') {
               currentBlockType = 'text'
+            } else if (event.content_block?.type === 'tool_use') {
+              currentBlockType = 'tool_use'
+              currentToolId = event.content_block.id || ''
+              currentToolName = event.content_block.name || ''
+              currentToolInputJson = ''
             }
           }
           if (event.type === 'content_block_stop') {
+            // Finalize tool_use block: parse accumulated JSON input
+            if (currentBlockType === 'tool_use') {
+              let parsedInput: Record<string, unknown> = {}
+              if (currentToolInputJson) {
+                try {
+                  parsedInput = JSON.parse(currentToolInputJson)
+                } catch {
+                  // Malformed JSON — use empty input
+                }
+              }
+              toolUses.push({ id: currentToolId, name: currentToolName, input: parsedInput })
+              currentToolId = ''
+              currentToolName = ''
+              currentToolInputJson = ''
+            }
             currentBlockType = null
           }
           // Handle thinking deltas
@@ -462,6 +487,10 @@ export async function claudeStreamChat(
           if (event.type === 'content_block_delta' && event.delta?.text) {
             fullText += event.delta.text
             onChunk(fullText)
+          }
+          // Handle tool_use input JSON deltas
+          if (event.type === 'content_block_delta' && event.delta?.type === 'input_json_delta' && event.delta?.partial_json != null) {
+            currentToolInputJson += event.delta.partial_json
           }
           // Detect platform error mid-stream (e.g. timeout)
           if (event.type === 'error' && event.error?.refunded) {
@@ -480,5 +509,5 @@ export async function claudeStreamChat(
     reader.releaseLock()
   }
 
-  return { text: fullText, thinking: fullThinking }
+  return { text: fullText, thinking: fullThinking, tool_uses: toolUses.length > 0 ? toolUses : undefined }
 }

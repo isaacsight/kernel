@@ -24,6 +24,18 @@ export function usePanelManager(callbacks: {
   const [showKnowledgePanel, setShowKnowledgePanel] = useState(false)
   const [showSocialPanel, setShowSocialPanel] = useState(false)
   const [showPlatformPanel, setShowPlatformPanel] = useState(false)
+  const [showAgentBuilderPanel, setShowAgentBuilderPanel] = useState(false)
+  const [showAgentLibraryPanel, setShowAgentLibraryPanel] = useState(false)
+  const [showBackgroundAgentsPanel, setShowBackgroundAgentsPanel] = useState(false)
+  const [showPublishPanel, setShowPublishPanel] = useState(false)
+  const [showMyContentPanel, setShowMyContentPanel] = useState(false)
+  const [showAuthorProfilePanel, setShowAuthorProfilePanel] = useState(false)
+  const [showBookmarksPanel, setShowBookmarksPanel] = useState(false)
+  const [showSandboxPanel, setShowSandboxPanel] = useState(false)
+  const [showArchitecturePanel, setShowArchitecturePanel] = useState(false)
+  const [showDesignPanel, setShowDesignPanel] = useState(false)
+  const [showRoutingInsightsPanel, setShowRoutingInsightsPanel] = useState(false)
+  const [showSystemPanel, setShowSystemPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -43,6 +55,18 @@ export function usePanelManager(callbacks: {
     setShowKnowledgePanel(false)
     setShowSocialPanel(false)
     setShowPlatformPanel(false)
+    setShowAgentBuilderPanel(false)
+    setShowAgentLibraryPanel(false)
+    setShowBackgroundAgentsPanel(false)
+    setShowPublishPanel(false)
+    setShowMyContentPanel(false)
+    setShowAuthorProfilePanel(false)
+    setShowBookmarksPanel(false)
+    setShowSandboxPanel(false)
+    setShowArchitecturePanel(false)
+    setShowDesignPanel(false)
+    setShowRoutingInsightsPanel(false)
+    setShowSystemPanel(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
@@ -62,6 +86,18 @@ export function usePanelManager(callbacks: {
     if (except !== 'knowledge') setShowKnowledgePanel(false)
     if (except !== 'social') setShowSocialPanel(false)
     if (except !== 'platform') setShowPlatformPanel(false)
+    if (except !== 'agent-builder') setShowAgentBuilderPanel(false)
+    if (except !== 'agent-library') setShowAgentLibraryPanel(false)
+    if (except !== 'background-agents') setShowBackgroundAgentsPanel(false)
+    if (except !== 'publish') setShowPublishPanel(false)
+    if (except !== 'my-content') setShowMyContentPanel(false)
+    if (except !== 'author-profile') setShowAuthorProfilePanel(false)
+    if (except !== 'bookmarks') setShowBookmarksPanel(false)
+    if (except !== 'sandbox') setShowSandboxPanel(false)
+    if (except !== 'architecture') setShowArchitecturePanel(false)
+    if (except !== 'design-system') setShowDesignPanel(false)
+    if (except !== 'routing-insights') setShowRoutingInsightsPanel(false)
+    if (except !== 'system') setShowSystemPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
   }, [callbacks])
@@ -96,7 +132,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'knowledge' | 'social' | 'platform' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'knowledge' | 'social' | 'platform' | 'agent-builder' | 'agent-library' | 'background-agents' | 'publish' | 'my-content' | 'author-profile' | 'bookmarks' | 'sandbox' | 'architecture' | 'design-system' | 'routing-insights' | 'system' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -114,6 +150,18 @@ export function usePanelManager(callbacks: {
       case 'knowledge': setShowKnowledgePanel(false); break
       case 'social': setShowSocialPanel(false); break
       case 'platform': setShowPlatformPanel(false); break
+      case 'agent-builder': setShowAgentBuilderPanel(false); break
+      case 'agent-library': setShowAgentLibraryPanel(false); break
+      case 'background-agents': setShowBackgroundAgentsPanel(false); break
+      case 'publish': setShowPublishPanel(false); break
+      case 'my-content': setShowMyContentPanel(false); break
+      case 'author-profile': setShowAuthorProfilePanel(false); break
+      case 'bookmarks': setShowBookmarksPanel(false); break
+      case 'sandbox': setShowSandboxPanel(false); break
+      case 'architecture': setShowArchitecturePanel(false); break
+      case 'design-system': setShowDesignPanel(false); break
+      case 'routing-insights': setShowRoutingInsightsPanel(false); break
+      case 'system': setShowSystemPanel(false); break
       case 'more': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
     }
@@ -172,6 +220,54 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('platform')
         setShowPlatformPanel(true)
         break
+      case 'agent-builder':
+        closeOtherPanels('agent-builder')
+        setShowAgentBuilderPanel(true)
+        break
+      case 'agent-library':
+        closeOtherPanels('agent-library')
+        setShowAgentLibraryPanel(true)
+        break
+      case 'background-agents':
+        closeOtherPanels('background-agents')
+        setShowBackgroundAgentsPanel(true)
+        break
+      case 'publish':
+        closeOtherPanels('publish')
+        setShowPublishPanel(true)
+        break
+      case 'my-content':
+        closeOtherPanels('my-content')
+        setShowMyContentPanel(true)
+        break
+      case 'author-profile':
+        closeOtherPanels('author-profile')
+        setShowAuthorProfilePanel(true)
+        break
+      case 'bookmarks':
+        closeOtherPanels('bookmarks')
+        setShowBookmarksPanel(true)
+        break
+      case 'sandbox':
+        closeOtherPanels('sandbox')
+        setShowSandboxPanel(true)
+        break
+      case 'architecture':
+        closeOtherPanels('architecture')
+        setShowArchitecturePanel(true)
+        break
+      case 'design-system':
+        closeOtherPanels('design-system')
+        setShowDesignPanel(true)
+        break
+      case 'routing-insights':
+        closeOtherPanels('routing-insights')
+        setShowRoutingInsightsPanel(true)
+        break
+      case 'system':
+        closeOtherPanels('system')
+        setShowSystemPanel(true)
+        break
       case 'explore':
         closeAllPanels()
         window.location.hash = '#/explore'
@@ -206,6 +302,18 @@ export function usePanelManager(callbacks: {
     showKnowledgePanel, setShowKnowledgePanel,
     showSocialPanel, setShowSocialPanel,
     showPlatformPanel, setShowPlatformPanel,
+    showAgentBuilderPanel, setShowAgentBuilderPanel,
+    showAgentLibraryPanel, setShowAgentLibraryPanel,
+    showBackgroundAgentsPanel, setShowBackgroundAgentsPanel,
+    showPublishPanel, setShowPublishPanel,
+    showMyContentPanel, setShowMyContentPanel,
+    showAuthorProfilePanel, setShowAuthorProfilePanel,
+    showBookmarksPanel, setShowBookmarksPanel,
+    showSandboxPanel, setShowSandboxPanel,
+    showArchitecturePanel, setShowArchitecturePanel,
+    showDesignPanel, setShowDesignPanel,
+    showRoutingInsightsPanel, setShowRoutingInsightsPanel,
+    showSystemPanel, setShowSystemPanel,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,

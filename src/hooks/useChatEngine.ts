@@ -54,6 +54,18 @@ import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
 import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage, type ReferenceImage } from '../engine/imageGen'
 import { retrieveForContext, ingestFromConversation, formatForPrompt } from '../engine/KnowledgeEngine'
 import { useProjectStore } from '../stores/projectStore'
+import { registerBuiltinEngines } from '../engine/master/registry'
+import { processMasterAgent, needsOrchestration, type MasterAgentResult } from '../engine/MasterAgent'
+import { useMasterStore } from '../stores/masterStore'
+import type { EnginePlan } from '../engine/master/types'
+
+// Register all built-in engines once at module load
+let enginesRegistered = false
+function ensureEnginesRegistered() {
+  if (enginesRegistered) return
+  enginesRegistered = true
+  registerBuiltinEngines()
+}
 
 export interface WorkflowStepState {
   name: string
@@ -161,6 +173,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [platformPhases, setPlatformPhases] = useState<import('../engine/platform/types').PlatformPhaseState[]>([])
   const [isPlatformActive, setIsPlatformActive] = useState(false)
   const platformEngineRef = useRef<import('../engine/PlatformEngine').PlatformEngine | null>(null)
+
+  // Master Agent state
+  const [masterPlan, setMasterPlan] = useState<EnginePlan | null>(null)
+  const [isMasterActive, setIsMasterActive] = useState(false)
+  const masterStoreRef = useRef(useMasterStore.getState())
 
   // Extended thinking state (Pro only)
   const [extendedThinkingEnabled, setExtendedThinkingEnabled] = useState(false)
@@ -270,8 +287,9 @@ export function useChatEngine(params: UseChatEngineParams) {
     }
   }, [activeConversationId])
 
-  // Sync engine state with Supabase on auth
+  // Register engines + sync engine state with Supabase on auth
   useEffect(() => {
+    ensureEnginesRegistered()
     engine.setUserId(userId)
     engine.loadFromSupabase()
     return () => { engine.setUserId(null) }
@@ -1052,6 +1070,65 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Swarm/workflow/research paths only pass string content, losing ContentBlock[].
     const hasFileContent = Array.isArray(userContent)
     try {
+      // ── Master Agent orchestration ──────────────────────
+      // For complex multi-engine requests (not image gen or file uploads),
+      // route through the Master Agent which can chain engines together.
+      if (!hasFileContent && !classification.needsImageGen && isPro && needsOrchestration(trimmed, classification)) {
+        setIsMasterActive(true)
+        setThinkingAgent('Kernel')
+        try {
+          const masterResult = await processMasterAgent(
+            trimmed,
+            sanitized,
+            {
+              userId,
+              isPro,
+              callbacks: {
+                onPlan: (plan) => { setMasterPlan(plan); masterStoreRef.current.setPlan(plan) },
+                onStepStart: (stepId, engineId, action) => {
+                  masterStoreRef.current.setActiveStep(stepId)
+                  masterStoreRef.current.setActiveEngine(engineId)
+                  console.log(`[MasterAgent] ${engineId}.${action}`)
+                },
+                onStepComplete: (stepId) => {
+                  masterStoreRef.current.setActiveStep(null)
+                },
+                onChunk: (text) => updateKernelMsg(text),
+                onEngineSwitch: (_from, to) => {
+                  masterStoreRef.current.setActiveEngine(to === 'direct' ? null : to)
+                },
+                onApprovalNeeded: (stepId, reason) => {
+                  console.log(`[MasterAgent] Approval needed: ${reason}`)
+                },
+                onStepFailed: (stepId, error) => {
+                  console.warn(`[MasterAgent] Step failed: ${error}`)
+                },
+              },
+              memory: userMemoryRef.current,
+              systemBlocks: `${memoryBlock}${temporalBlock}${openingBlock}${callbackBlock}${confidenceBlock}${repairBlock}${emotionalContextBlock}${turnTakingBlock}${mirrorBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${crisisBlock}`,
+            },
+          )
+          // Update kernel message with agent info
+          if (masterResult.text) {
+            guardedSetMessages(prev => prev.map(m => m.id === kernelId
+              ? { ...m, content: masterResult.text, agentId: masterResult.agentId, agentName: masterResult.agentName, thinking: masterResult.thinking }
+              : m
+            ))
+            latestKernelContentRef.current = masterResult.text
+          }
+          if (masterResult.plan) {
+            setMasterPlan(masterResult.plan)
+            masterStoreRef.current.completePlan()
+          }
+          setIsMasterActive(false)
+        } catch (masterErr) {
+          console.warn('[MasterAgent] Failed, falling through to legacy routing:', masterErr)
+          setIsMasterActive(false)
+          masterStoreRef.current.clearCurrent()
+          // Fall through to legacy routing below
+        }
+      } else
+
       // ── Image Generation (credit-gated) ────────────────
       if (classification.needsImageGen) {
         setThinkingAgent('Kernel')
@@ -1201,11 +1278,12 @@ export function useChatEngine(params: UseChatEngineParams) {
       if (!hasFileContent && classification.needsPlatformEngine && isPro) {
         const { PlatformEngine } = await import('../engine/PlatformEngine')
         const format = detectContentFormat(trimmed)
+        const targetPlatforms: import('../engine/social/types').SocialPlatform[] = []
         const platformConfig = {
-          type: 'full' as const,
+          type: (targetPlatforms.length > 0 ? 'full' : 'create_and_publish') as 'full' | 'create_and_publish',
           brief: trimmed,
           format,
-          targetPlatforms: [] as import('../engine/social/types').SocialPlatform[],
+          targetPlatforms,
           autoApprovePhases: ['score' as const, 'monitor' as const],
         }
         setIsPlatformActive(true)
@@ -1822,6 +1900,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     workflowSteps, isWorkflowActive, cancelWorkflow,
     contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline,
     platformPhases, isPlatformActive, platformEngineRef,
+    masterPlan, isMasterActive,
     userMemory, kgEntities, kgRelations, userGoals, setUserGoals,
     todayBriefing,
     inputRef, sendMessage, handleSubmit, stopStreaming,
