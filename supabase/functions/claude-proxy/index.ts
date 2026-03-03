@@ -384,6 +384,7 @@ async function logUsageAndCheckThreshold(
   model: string,
   inputTokens: number,
   outputTokens: number,
+  feature: string = 'chat',
 ): Promise<void> {
   if (inputTokens === 0 && outputTokens === 0) return
 
@@ -403,6 +404,7 @@ async function logUsageAndCheckThreshold(
       input_tokens: inputTokens,
       output_tokens: outputTokens,
       estimated_cost_usd: cost,
+      feature,
     })
 
     // Check daily aggregate for threshold alert
@@ -476,6 +478,7 @@ interface ProxyPayload {
   max_tokens?: number
   web_search?: boolean
   tools?: any[]
+  feature?: string             // cost attribution tag (chat, routing, swarm, etc.)
   // Legacy field (backward compat)
   // deno-lint-ignore no-explicit-any
   [key: string]: any
@@ -595,7 +598,7 @@ async function handleAnthropic(
           reader.releaseLock()
           controller.close()
           if (userId) {
-            logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens)
+            logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
               .catch(err => console.error('[usage-tracking] Stream error:', err))
           }
         }
@@ -617,7 +620,7 @@ async function handleAnthropic(
   if (userId) {
     const inputTokens = result.usage?.input_tokens ?? 0
     const outputTokens = result.usage?.output_tokens ?? 0
-    logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens)
+    logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
       .catch(err => console.error('[usage-tracking] Error:', err))
   }
 
@@ -696,7 +699,7 @@ async function handleOpenAI(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'openai', resolvedModel, inputTokens, outputTokens)
+      logUsageAndCheckThreshold(userId, 'openai', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -766,7 +769,7 @@ async function handleOpenAI(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'openai', resolvedModel, streamInputTokens, streamOutputTokens)
+          logUsageAndCheckThreshold(userId, 'openai', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -854,7 +857,7 @@ async function handleGemini(
     if (userId) {
       const inputTokens = result.usageMetadata?.promptTokenCount ?? 0
       const outputTokens = result.usageMetadata?.candidatesTokenCount ?? 0
-      logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, inputTokens, outputTokens)
+      logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -926,7 +929,7 @@ async function handleGemini(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, streamInputTokens, streamOutputTokens)
+          logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -1006,7 +1009,7 @@ async function handleNvidia(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, inputTokens, outputTokens)
+      logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -1075,7 +1078,7 @@ async function handleNvidia(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, streamInputTokens, streamOutputTokens)
+          logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -1155,7 +1158,7 @@ async function handleGroq(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'groq', resolvedModel, inputTokens, outputTokens)
+      logUsageAndCheckThreshold(userId, 'groq', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -1228,7 +1231,7 @@ async function handleGroq(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'groq', resolvedModel, streamInputTokens, streamOutputTokens)
+          logUsageAndCheckThreshold(userId, 'groq', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }

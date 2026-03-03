@@ -129,6 +129,8 @@ serve(async (req: Request) => {
       ? `\n\nFinal evaluation: Score ${evaluationResult.score}, Tier: ${evaluationResult.tier}\nNarrative: ${evaluationResult.narrative || 'N/A'}`
       : ''
 
+    // NOTE: Direct Anthropic call — feature:'evaluation' not tracked in usage_logs.
+    // To track costs, migrate to claude-proxy with feature: 'evaluation'.
     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {

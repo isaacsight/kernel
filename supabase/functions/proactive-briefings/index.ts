@@ -202,6 +202,7 @@ Write a single observation that connects patterns across different dimensions. S
             tier: 'fast',
             messages: [{ role: 'user', content: prompt }],
             max_tokens: 200,
+            feature: 'briefing',
           }),
         })
 

@@ -173,6 +173,8 @@ serve(async (req: Request) => {
     const systemPrompt = BASE_SYSTEM_PROMPT + insightsBlock + userHistoryBlock
 
     // ── Call Anthropic Messages API (streaming) ──────────────
+    // NOTE: Direct Anthropic call — feature:'evaluation' not tracked in usage_logs.
+    // To track costs, migrate to claude-proxy with feature: 'evaluation'.
     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
