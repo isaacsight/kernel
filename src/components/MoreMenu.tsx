@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconZap, IconClock, IconBrain, IconChart, IconEye, IconCrown, IconSettings, IconLogOut, IconTrash, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen, IconSparkles, IconFileCode, IconImage, IconShare } from './KernelIcons'
+import { IconSettings, IconLogOut, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
 import { useWebPush } from '../hooks/useWebPush'
@@ -34,84 +34,11 @@ const LANGUAGES = [
 ]
 
 export type MoreAction =
-  | 'workflows'
-  | 'scheduled'
-  | 'knowledge'
-  | 'stats'
-  | 'insights'
-  | 'mirror'
-  | 'project'
-  | 'image-gallery'
-  | 'social'
-  | 'platform'
-  | 'knowledge-base'
-  | 'explore'
-  | 'agent-builder'
-  | 'agent-library'
-  | 'background-agents'
-  | 'publish'
-  | 'my-content'
-  | 'author-profile'
-  | 'bookmarks'
-  | 'sandbox'
-  | 'architecture'
-  | 'design-system'
-  | 'routing-insights'
-  | 'system'
-  | 'communications'
-  | 'adaptive'
-  | 'usage'
   | 'account-settings'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
   | 'delete-account'
-
-type MenuSection = 'ai' | 'content' | 'insights' | 'system'
-
-const MENU_SECTION_ORDER: MenuSection[] = ['ai', 'content', 'insights', 'system']
-
-interface MoreMenuItem {
-  id: MoreAction
-  labelKey: string
-  icon: typeof IconZap
-  danger?: boolean
-  condition?: 'not-pro' | 'subscribed' | 'always'
-  section: MenuSection
-}
-
-const ITEMS: MoreMenuItem[] = [
-  { id: 'workflows', labelKey: 'menu.workflows', icon: IconZap, section: 'ai' },
-  { id: 'scheduled', labelKey: 'menu.scheduledTasks', icon: IconClock, section: 'ai' },
-  { id: 'agent-builder', labelKey: 'menu.agentBuilder', icon: IconSparkles, condition: 'subscribed', section: 'ai' },
-  { id: 'agent-library', labelKey: 'menu.agentLibrary', icon: IconBookOpen, section: 'ai' },
-  { id: 'background-agents', labelKey: 'menu.backgroundAgents', icon: IconClock, condition: 'subscribed', section: 'ai' },
-  { id: 'sandbox', labelKey: 'menu.sandbox' as string, icon: IconFileCode, condition: 'subscribed', section: 'ai' },
-  { id: 'knowledge', labelKey: 'menu.whatKernelKnows', icon: IconBrain, section: 'content' },
-  { id: 'knowledge-base', labelKey: 'menu.knowledgeBase', icon: IconBookOpen, section: 'content' },
-  { id: 'project', labelKey: 'menu.projectFiles', icon: IconFileCode, section: 'content' },
-  { id: 'image-gallery', labelKey: 'menu.imageGallery', icon: IconImage, section: 'content' },
-  { id: 'my-content', labelKey: 'menu.myContent', icon: IconFileCode, section: 'content' },
-  { id: 'bookmarks', labelKey: 'menu.bookmarks', icon: IconBookOpen, section: 'content' },
-  { id: 'explore', labelKey: 'menu.explore', icon: IconGlobe, section: 'content' },
-  { id: 'stats', labelKey: 'menu.yourStats', icon: IconChart, section: 'insights' },
-  { id: 'insights', labelKey: 'menu.insights', icon: IconEye, section: 'insights' },
-  { id: 'mirror', labelKey: 'menu.mirror', icon: IconSparkles, section: 'insights' },
-  { id: 'social', labelKey: 'menu.social', icon: IconShare, condition: 'subscribed', section: 'insights' },
-  { id: 'routing-insights', labelKey: 'menu.routingInsights', icon: IconChart, condition: 'subscribed', section: 'insights' },
-  { id: 'usage', labelKey: 'menu.usage', icon: IconChart, section: 'insights' },
-  { id: 'platform', labelKey: 'menu.platformEngine', icon: IconZap, condition: 'subscribed', section: 'system' },
-  { id: 'architecture', labelKey: 'menu.architecture', icon: IconBrain, condition: 'subscribed', section: 'system' },
-  { id: 'design-system', labelKey: 'menu.designSystem', icon: IconImage, condition: 'subscribed', section: 'system' },
-  { id: 'system', labelKey: 'menu.system', icon: IconEye, section: 'system' },
-  { id: 'communications', labelKey: 'menu.communications', icon: IconBell, section: 'system' },
-  { id: 'adaptive', labelKey: 'menu.adaptiveSystem', icon: IconSparkles, condition: 'subscribed', section: 'system' },
-]
-
-const ACCOUNT_ITEMS: MoreMenuItem[] = [
-  { id: 'account-settings', labelKey: 'menu.accountSettings', icon: IconSettings, section: 'system' },
-  { id: 'sign-out', labelKey: 'menu.signOut', icon: IconLogOut, section: 'system' },
-]
 
 const THEMES: { id: ThemeMode; icon: typeof IconSun; labelKey: string }[] = [
   { id: 'light', icon: IconSun, labelKey: 'menu.themeLight' },
@@ -125,24 +52,16 @@ interface MoreMenuProps {
   onSelect: (action: MoreAction) => void
   isPro: boolean
   isAdmin: boolean
-  isNewFeature?: (id: string) => boolean
-  onFeatureDiscovered?: (id: string) => void
   theme?: ThemeMode
   onSetTheme?: (t: ThemeMode) => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeature, onFeatureDiscovered, theme, onSetTheme }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, theme, onSetTheme }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
   const dragControls = useDragControls()
   if (!isOpen) return null
-
-  const filteredAccount = ACCOUNT_ITEMS.filter(item => {
-    if (item.condition === 'not-pro') return !isPro
-    if (item.condition === 'subscribed') return !isAdmin && isPro
-    return true
-  })
 
   return (
     <>
@@ -170,50 +89,6 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
       >
         <div className="ka-more-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
         <div className="ka-more-menu-items">
-          {MENU_SECTION_ORDER.map((section, si) => {
-            const sectionItems = ITEMS.filter(item => {
-              if (item.section !== section) return false
-              if (item.condition === 'not-pro') return !isPro
-              if (item.condition === 'subscribed') return isPro || isAdmin
-              return true
-            })
-            if (sectionItems.length === 0) return null
-            return (
-              <div key={section}>
-                {si > 0 && <div className="ka-more-menu-divider" />}
-                <div className="ka-menu-section-header">{t(`menuSection.${section}`)}</div>
-                {sectionItems.map(item => {
-                  const Icon = item.icon
-                  const isNew = isNewFeature?.(item.id)
-                  return (
-                    <button
-                      key={item.id}
-                      className="ka-more-menu-item"
-                      onClick={() => { onFeatureDiscovered?.(item.id); onSelect(item.id); onClose() }}
-                    >
-                      <Icon size={18} />
-                      <span>{t(item.labelKey)}</span>
-                      {isNew && <span className="ka-feature-dot" />}
-                    </button>
-                  )
-                })}
-              </div>
-            )
-          })}
-          <div className="ka-more-menu-divider" />
-          <div className="ka-more-menu-label">{t('language', { ns: 'common' })}</div>
-          <div className="ka-more-menu-item ka-more-language-select">
-            <IconGlobe size={18} />
-            <select
-              value={i18n.language}
-              onChange={(e) => i18n.changeLanguage(e.target.value)}
-              className="ka-language-picker"
-            >
-              {LANGUAGES.map(lang => (
-                <option key={lang.code} value={lang.code}>{lang.name}</option>
-              ))}
-            </select>
-          </div>
           {onSetTheme && (
             <>
               <div className="ka-more-menu-label">{t('menu.theme')}</div>
@@ -232,6 +107,20 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
               </div>
             </>
           )}
+          <div className="ka-more-menu-divider" />
+          <div className="ka-more-menu-label">{t('language', { ns: 'common' })}</div>
+          <div className="ka-more-menu-item ka-more-language-select">
+            <IconGlobe size={18} />
+            <select
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="ka-language-picker"
+            >
+              {LANGUAGES.map(lang => (
+                <option key={lang.code} value={lang.code}>{lang.name}</option>
+              ))}
+            </select>
+          </div>
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">
             <IconBell size={14} />
@@ -278,19 +167,14 @@ export function MoreMenu({ isOpen, onClose, onSelect, isPro, isAdmin, isNewFeatu
           )}
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
-          {filteredAccount.map(item => {
-            const Icon = item.icon
-            return (
-              <button
-                key={item.id}
-                className={`ka-more-menu-item${item.danger ? ' ka-more-menu-item--danger' : ''}${item.id === 'upgrade' ? ' ka-more-menu-item--upgrade' : ''}`}
-                onClick={() => { onSelect(item.id); onClose() }}
-              >
-                <Icon size={18} />
-                <span>{t(item.labelKey)}</span>
-              </button>
-            )
-          })}
+          <button className="ka-more-menu-item" onClick={() => { onSelect('account-settings'); onClose() }}>
+            <IconSettings size={18} />
+            <span>{t('menu.accountSettings')}</span>
+          </button>
+          <button className="ka-more-menu-item" onClick={() => { onSelect('sign-out'); onClose() }}>
+            <IconLogOut size={18} />
+            <span>{t('menu.signOut')}</span>
+          </button>
         </div>
       </motion.div>
     </>

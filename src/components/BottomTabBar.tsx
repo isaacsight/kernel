@@ -1,7 +1,7 @@
-import { IconHome, IconChats, IconGoals, IconBriefings, IconMore } from './KernelIcons'
+import { IconHome, IconChats, IconFileCode, IconImage, IconSettings } from './KernelIcons'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 
-export type TabId = 'home' | 'chats' | 'goals' | 'briefings' | 'more'
+export type TabId = 'home' | 'chats' | 'files' | 'gallery' | 'settings'
 
 interface Tab {
   id: TabId
@@ -12,23 +12,21 @@ interface Tab {
 const TABS: Tab[] = [
   { id: 'home', label: 'Home', icon: IconHome },
   { id: 'chats', label: 'Chats', icon: IconChats },
-  { id: 'goals', label: 'Goals', icon: IconGoals },
-  { id: 'briefings', label: 'Briefings', icon: IconBriefings },
-  { id: 'more', label: 'More', icon: IconMore },
+  { id: 'files', label: 'Files', icon: IconFileCode },
+  { id: 'gallery', label: 'Gallery', icon: IconImage },
+  { id: 'settings', label: 'Settings', icon: IconSettings },
 ]
 
 interface BottomTabBarProps {
   activeTab: TabId
   onTabChange: (tab: TabId) => void
-  undiscoveredCount?: number
-  moreRef?: React.RefObject<HTMLButtonElement | null>
 }
 
-export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0, moreRef }: BottomTabBarProps) {
+export function BottomTabBar({ activeTab, onTabChange }: BottomTabBarProps) {
   const isMini = useMiniPhone()
 
   const visibleTabs = isMini
-    ? TABS.filter(t => ['home', 'chats', 'more'].includes(t.id))
+    ? TABS.filter(t => ['home', 'chats', 'settings'].includes(t.id))
     : TABS
 
   return (
@@ -36,11 +34,9 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0, mo
       {visibleTabs.map(tab => {
         const Icon = tab.icon
         const isActive = activeTab === tab.id
-        const showDot = tab.id === 'more' && undiscoveredCount > 0
         return (
           <button
             key={tab.id}
-            ref={tab.id === 'more' ? moreRef : undefined}
             className={`ka-tab-item${isActive ? ' ka-tab-item--active' : ''}`}
             role="tab"
             aria-selected={isActive}
@@ -52,7 +48,6 @@ export function BottomTabBar({ activeTab, onTabChange, undiscoveredCount = 0, mo
           >
             <span className="ka-tab-icon-wrap">
               <Icon size={isMini ? 20 : 22} />
-              {showDot && <span className="ka-feature-dot ka-feature-dot--tab" />}
             </span>
             <span className="ka-tab-label">{tab.label}</span>
             {isActive && <span className="ka-tab-dot" />}

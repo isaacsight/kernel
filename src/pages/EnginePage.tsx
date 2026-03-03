@@ -5,18 +5,17 @@ import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
   IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
-  IconMoreVertical, IconTrash, IconCrown, IconShield, IconBrain, IconThinking, IconChart, IconGraduationCap,
-  IconTarget, IconZap, IconClock, IconNewspaper, IconMessageCircle, IconLogOut,
-  IconSettings, IconEye, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe,
+  IconMoreVertical, IconTrash, IconCrown, IconShield, IconThinking,
+  IconMessageCircle, IconLogOut,
+  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap,
 } from '../components/KernelIcons'
-import { SPRING, DURATION, EASE, TRANSITION } from '../constants/motion'
+import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
 import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
 import { forkSharedConversation, updateConversationMetadata, getConversationMetadata } from '../engine/SupabaseClient'
-import { getGoalsDueForCheckIn } from '../engine/GoalTracker'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
@@ -30,7 +29,6 @@ import { useMessageActions } from '../hooks/useMessageActions'
 import { useBilling } from '../hooks/useBilling'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useEntityEvolution } from '../hooks/useEntityEvolution'
-import { useFeatureDiscovery } from '../hooks/useFeatureDiscovery'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
@@ -44,21 +42,10 @@ import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
 import { WorkflowTimeline } from '../components/WorkflowTimeline'
 import { ContentPipeline } from '../components/ContentPipeline'
-import { FeatureTooltip } from '../components/FeatureTooltip'
-import { useFeatureTour } from '../hooks/useFeatureTour'
 
 // Lazy-loaded panels & modals (only loaded when user opens them)
-// lazyRetry: on stale-cache 404, reload the page once to pick up new chunks
 const LoginGate = lazyRetry(() => import('../components/LoginGate').then(m => ({ default: m.LoginGate })))
-const KGPanel = lazyRetry(() => import('../components/kernel-agent/KGPanel'))
-const StatsPanel = lazyRetry(() => import('../components/kernel-agent/StatsPanel'))
-const GoalsPanel = lazyRetry(() => import('../components/GoalsPanel').then(m => ({ default: m.GoalsPanel })))
-const WorkflowsPanel = lazyRetry(() => import('../components/WorkflowsPanel').then(m => ({ default: m.WorkflowsPanel })))
-const ScheduledTasksPanel = lazyRetry(() => import('../components/ScheduledTasksPanel').then(m => ({ default: m.ScheduledTasksPanel })))
-const BriefingPanel = lazyRetry(() => import('../components/BriefingPanel').then(m => ({ default: m.BriefingPanel })))
-const InsightsPanel = lazyRetry(() => import('../components/InsightsPanel').then(m => ({ default: m.InsightsPanel })))
 const AccountSettingsPanel = lazyRetry(() => import('../components/AccountSettingsPanel'))
-const KnowledgePanel = lazyRetry(() => import('../components/KnowledgePanel').then(m => ({ default: m.KnowledgePanel })))
 const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
@@ -66,30 +53,10 @@ const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').th
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
-const MirrorPanel = lazyRetry(() => import('../components/MirrorPanel').then(m => ({ default: m.MirrorPanel })))
 const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m => ({ default: m.ProjectPanel })))
 const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
 const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
 const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPanel').then(m => ({ default: m.ImageGalleryPanel })))
-const SocialMediaPanel = lazyRetry(() => import('../components/SocialMediaPanel').then(m => ({ default: m.SocialMediaPanel })))
-const SocialAdaptPanel = lazyRetry(() => import('../components/SocialAdaptPanel').then(m => ({ default: m.SocialAdaptPanel })))
-const PlatformPanel = lazyRetry(() => import('../components/PlatformPanel').then(m => ({ default: m.PlatformPanel })))
-const MasterPlanPanel = lazyRetry(() => import('../components/MasterPlanPanel').then(m => ({ default: m.MasterPlanPanel })))
-const AgentBuilderPanel = lazyRetry(() => import('../components/AgentBuilderPanel').then(m => ({ default: m.AgentBuilderPanel })))
-const AgentLibraryPanel = lazyRetry(() => import('../components/AgentLibraryPanel').then(m => ({ default: m.AgentLibraryPanel })))
-const BackgroundAgentsPanel = lazyRetry(() => import('../components/BackgroundAgentsPanel').then(m => ({ default: m.BackgroundAgentsPanel })))
-const PublishPanel = lazyRetry(() => import('../components/PublishPanel').then(m => ({ default: m.PublishPanel })))
-const MyContentPanel = lazyRetry(() => import('../components/MyContentPanel').then(m => ({ default: m.MyContentPanel })))
-const AuthorProfilePanel = lazyRetry(() => import('../components/AuthorProfilePanel').then(m => ({ default: m.AuthorProfilePanel })))
-const BookmarksPanel = lazyRetry(() => import('../components/BookmarksPanel').then(m => ({ default: m.BookmarksPanel })))
-const SandboxPanel = lazyRetry(() => import('../components/SandboxPanel').then(m => ({ default: m.SandboxPanel })))
-const ArchitecturePanel = lazyRetry(() => import('../components/ArchitecturePanel').then(m => ({ default: m.ArchitecturePanel })))
-const DesignPanel = lazyRetry(() => import('../components/DesignPanel').then(m => ({ default: m.DesignPanel })))
-const RoutingInsightsPanel = lazyRetry(() => import('../components/RoutingInsightsPanel').then(m => ({ default: m.RoutingInsightsPanel })))
-const SystemPanel = lazyRetry(() => import('../components/SystemPanel').then(m => ({ default: m.SystemPanel })))
-const CommunicationPanel = lazyRetry(() => import('../components/CommunicationPanel').then(m => ({ default: m.CommunicationPanel })))
-const AdaptivePanel = lazyRetry(() => import('../components/AdaptivePanel').then(m => ({ default: m.AdaptivePanel })))
-const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard').then(m => ({ default: m.UsageDashboard })))
 const TagModal = lazyRetry(() => import('../components/TagModal').then(m => ({ default: m.TagModal })))
 
 // ─── Main Page ──────────────────────────────────────────
@@ -135,21 +102,19 @@ function EnginePageAuthed({ user }: { user: NonNullable<ReturnType<typeof useAut
 const LOADING_PALETTE = { particle: '#00a4b8', link: '#e8345a', field: '#f5c518' }
 
 const AGENT_PALETTES: Record<string, { particle: string; link: string; field: string }> = {
-  kernel: { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },  // amethyst
-  researcher: { particle: '#5B8BA0', link: '#7CB4CC', field: '#A8D4E8' },  // slate blue
-  coder: { particle: '#6B8E6B', link: '#8FBD8F', field: '#B8D8B5' },  // sage green
-  writer: { particle: '#B8875C', link: '#D4A774', field: '#E8C494' },  // warm brown
-  analyst: { particle: '#A0768C', link: '#C096AC', field: '#D8B0C4' },  // mauve
-  aesthete: { particle: '#F472B6', link: '#F9A8D4', field: '#FBCFE8' },  // pink
-  guardian: { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },  // emerald
-  curator: { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },  // violet
-  strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },  // amber
+  kernel: { particle: '#6B5B95', link: '#9B8BC5', field: '#C4B8E0' },
+  researcher: { particle: '#5B8BA0', link: '#7CB4CC', field: '#A8D4E8' },
+  coder: { particle: '#6B8E6B', link: '#8FBD8F', field: '#B8D8B5' },
+  writer: { particle: '#B8875C', link: '#D4A774', field: '#E8C494' },
+  analyst: { particle: '#A0768C', link: '#C096AC', field: '#D8B0C4' },
+  aesthete: { particle: '#F472B6', link: '#F9A8D4', field: '#FBCFE8' },
+  guardian: { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },
+  curator: { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },
+  strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },
 }
 
 function agentPalette(idOrName: string): { particle: string; link: string; field: string } {
-  // Try direct ID lookup first
   if (AGENT_PALETTES[idOrName]) return AGENT_PALETTES[idOrName]
-  // Try by display name
   const byName = getAllSpecialists().find(a => a.name === idOrName)
   if (byName && AGENT_PALETTES[byName.id]) return AGENT_PALETTES[byName.id]
   return AGENT_PALETTES.kernel
@@ -175,25 +140,6 @@ function relativeTime(dateStr: string): string {
   return `${days}d ago`
 }
 
-// ─── Feature 4: Open panel for nudge ─────────────────────
-
-function openFeaturePanel(
-  featureId: string,
-  panels: ReturnType<typeof usePanelManager>,
-  featureDiscovery: ReturnType<typeof useFeatureDiscovery>,
-) {
-  featureDiscovery.markDiscovered(featureId)
-  panels.closeOtherPanels(featureId)
-  switch (featureId) {
-    case 'insights': panels.setShowInsightsPanel(true); break
-    case 'mirror': panels.setShowMirrorPanel(true); break
-    case 'knowledge': panels.setShowKGPanel(true); break
-    case 'stats': panels.setShowStatsPanel(true); break
-    case 'workflows': panels.setShowWorkflowsPanel(true); break
-    case 'scheduled': panels.setShowScheduledPanel(true); break
-  }
-}
-
 // ─── Delete Account Confirmation ────────────────────────
 function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }: {
   show: boolean; loading: boolean; isSubscribed: boolean;
@@ -203,7 +149,6 @@ function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }
   const [confirmText, setConfirmText] = useState('')
   const canDelete = confirmText.trim().toUpperCase() === 'DELETE'
 
-  // Reset input when modal opens/closes
   useEffect(() => { if (!show) setConfirmText('') }, [show])
 
   return (
@@ -257,8 +202,6 @@ function EngineChat() {
   const [isDragOver, setIsDragOver] = useState(false)
   const dragCounterRef = useRef(0)
   const [showCreditModal, setShowCreditModal] = useState(false)
-  const [showDistributePanel, setShowDistributePanel] = useState(false)
-  const [distributeContent, setDistributeContent] = useState('')
   const [imageCredits, setImageCredits] = useState(0)
 
   // Conversation tags
@@ -368,14 +311,13 @@ function EngineChat() {
     onShowCreditModal: () => setShowCreditModal(true),
   })
 
-  // Crisis-aware send wrapper — check every user message for crisis language
+  // Crisis-aware send wrapper
   const originalSendRef = useRef(chatEngine.sendMessage)
   originalSendRef.current = chatEngine.sendMessage
   const crisisSendMessage = useCallback(async (msg: string) => {
     crisis.checkMessage(msg)
     await originalSendRef.current(msg)
   }, [crisis.checkMessage])
-  // Override sendMessage on chatEngine for all downstream consumers
   chatEngine.sendMessage = crisisSendMessage
 
   // Reset crisis state on new conversation
@@ -388,7 +330,7 @@ function EngineChat() {
   convs.handleNewChat = crisisNewChat
   newChatRef.current = crisisNewChat
 
-  // Project context — file tracking (select only the action for stable reference)
+  // Project context — file tracking
   const registerProjectFile = useProjectStore(s => s.registerFile)
   const messagesRef = useRef(chatEngine.messages)
   messagesRef.current = chatEngine.messages
@@ -411,20 +353,11 @@ function EngineChat() {
     isPro,
   })
 
-  // Feature 4: Feature discovery with nudge context
-  const featureDiscovery = useFeatureDiscovery(user?.id, {
-    conversationCount: convs.conversations.length,
-    kgEntityCount: chatEngine.kgEntities.length,
-    completedGoals: chatEngine.userGoals.filter(g => g.status === 'completed').length,
-  })
-
-  // ─── Companion mood wiring ──────────────────────────────
-  // Record conversation when messages grow (user sent a message)
+  // Companion mood wiring
   const prevMsgCountRef = useRef(chatEngine.messages.length)
   useEffect(() => {
     const count = chatEngine.messages.length
     if (count > prevMsgCountRef.current && count > 0) {
-      // Only record when a new user message is added
       const lastMsg = chatEngine.messages[count - 1]
       if (lastMsg?.role === 'user') {
         evolution.companion.recordConversation()
@@ -445,36 +378,10 @@ function EngineChat() {
     prevGoalsDoneRef.current = done
   }, [chatEngine.userGoals]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Feature 3: Goal check-in chips (exclude auto-generated briefing follow-ups)
-  const goalCheckIns = useMemo(
-    () => getGoalsDueForCheckIn(chatEngine.userGoals)
-      .filter(g => !g.title.startsWith('Follow up:'))
-      .slice(0, 2),
-    [chatEngine.userGoals],
-  )
-
   // Daily message limit from plan
   const effectiveLimit = planLimits.messagesPerDay
 
-  // Entity info popover
-  const [showEntityInfo, setShowEntityInfo] = useState(false)
-
-  // Agent "Why?" expansion
-  const [expandedWhyId, setExpandedWhyId] = useState<string | null>(null)
-
-  // Feature 6: Mid-session value preview (once per session, at message 5)
-  const [showValuePreview, setShowValuePreview] = useState(false)
-  const valuePreviewShownRef = useRef(false)
-  useEffect(() => {
-    if (!isPro && chatEngine.messageCountRef.current === 5 && !valuePreviewShownRef.current) {
-      valuePreviewShownRef.current = true
-      setShowValuePreview(true)
-      const timer = setTimeout(() => setShowValuePreview(false), 8000)
-      return () => clearTimeout(timer)
-    }
-  }, [chatEngine.messages.length]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Feature 6: Memory highlights for upgrade wall
+  // Memory highlights for upgrade wall
   const memoryHighlights = useMemo(() => {
     if (!chatEngine.userMemory) return null
     const interests = chatEngine.userMemory.interests?.slice(0, 3) || []
@@ -544,9 +451,7 @@ function EngineChat() {
     window.location.hash = cleanHash || '#/'
   }, [showToast])
 
-  // Fork shared conversation: read convId from URL search param (?fork=ID) or sessionStorage.
-  // URL search params are reliable across hash router navigation (unlike history.state).
-  // We wait for convsLoading to be false before switching to avoid races with mount effects.
+  // Fork shared conversation
   const forkHandledRef = useRef(false)
   const switchConvRef = useRef(convs.switchConversation)
   switchConvRef.current = convs.switchConversation
@@ -556,9 +461,6 @@ function EngineChat() {
   useEffect(() => {
     if (!user || forkHandledRef.current || convs.convsLoading) return
 
-    // Path A: conversation already forked — convId passed via localStorage from SharedConversationPage.
-    // NOTE: Don't remove the key until switchConversation succeeds. EngineChat can mount twice
-    // during hash-router transitions; removing eagerly lets the 2nd mount miss the key.
     const forkSuccessId = localStorage.getItem('kernel-fork-success')
     if (forkSuccessId) {
       forkHandledRef.current = true
@@ -572,7 +474,6 @@ function EngineChat() {
       return
     }
 
-    // Path B: not logged in when they clicked Continue — fork now from localStorage intent
     const intent = localStorage.getItem('kernel-fork-intent')
     if (!intent) return
 
@@ -617,7 +518,7 @@ function EngineChat() {
         setIsDrawerOpen(true)
       }
       if (e.key === 'Escape') {
-        if (panels.showMoreMenu) panels.closePanel('more')
+        if (panels.showMoreMenu) panels.closePanel('settings')
         if (isDrawerOpen) panels.closePanel('drawer')
       }
     }
@@ -656,9 +557,7 @@ function EngineChat() {
   }, [isDrawerOpen])
 
   // ─── Back button support ─────────────────────────────
-  const anyPanelOpen = panels.showKGPanel || panels.showStatsPanel || panels.showGoalsPanel
-    || panels.showWorkflowsPanel || panels.showScheduledPanel || panels.showBriefingPanel
-    || panels.showInsightsPanel || panels.showAccountSettings || panels.showMirrorPanel || panels.showProjectPanel || panels.showImageGallery || panels.showKnowledgePanel || panels.showSocialPanel || panels.showPlatformPanel
+  const anyPanelOpen = panels.showProjectPanel || panels.showImageGallery || panels.showAccountSettings
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -673,32 +572,6 @@ function EngineChat() {
   const { contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline } = chatEngine
   const { extendedThinkingEnabled, setExtendedThinkingEnabled, explainModeEnabled, setExplainModeEnabled, currentThinking, thinkingStartRef } = chatEngine
 
-  // ─── Discovery pulse (one-time per user) ─────────────
-  const userId = user?.id
-  const [explainDiscovered, setExplainDiscovered] = useState(() => {
-    if (!userId) return true
-    return localStorage.getItem(`kernel:explain-discovered:${userId}`) === '1'
-  })
-  const [thinkingDiscovered, setThinkingDiscovered] = useState(() => {
-    if (!userId) return true
-    return localStorage.getItem(`kernel:thinking-discovered:${userId}`) === '1'
-  })
-
-  useEffect(() => {
-    if (explainDiscovered && thinkingDiscovered) return
-    const timer = setTimeout(() => {
-      if (!explainDiscovered) {
-        setExplainDiscovered(true)
-        if (userId) localStorage.setItem(`kernel:explain-discovered:${userId}`, '1')
-      }
-      if (!thinkingDiscovered) {
-        setThinkingDiscovered(true)
-        if (userId) localStorage.setItem(`kernel:thinking-discovered:${userId}`, '1')
-      }
-    }, 10_000)
-    return () => clearTimeout(timer)
-  }, [explainDiscovered, thinkingDiscovered, userId])
-
   // Compute last kernel message index for lazy auto-preview
   const lastKernelIndex = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -710,11 +583,9 @@ function EngineChat() {
   const [revealedTimestamps, setRevealedTimestamps] = useState<Record<string, boolean>>({})
   const [showMiniPopover, setShowMiniPopover] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
-  const entityRef = useRef<HTMLDivElement>(null)
-  const moreMenuBtnRef = useRef<HTMLButtonElement>(null)
   const inputBarRef = useRef<HTMLFormElement>(null)
   const isMini = useMiniPhone()
-  const tour = useFeatureTour(userId || null)
+  const userId = user?.id
 
   // Close popover on click outside
   useEffect(() => {
@@ -729,7 +600,6 @@ function EngineChat() {
   }, [showMiniPopover])
 
   const toggleTimestamp = (msgId: string, e: React.MouseEvent) => {
-    // Don't toggle when tapping interactive elements inside the message
     if ((e.target as HTMLElement).closest('a, button, pre, code, .ka-msg-actions, .ka-artifact, .ka-edit-form')) return
     setRevealedTimestamps(prev => ({
       ...prev,
@@ -787,7 +657,7 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      {/* Crisis Banner — above all other banners */}
+      {/* Crisis Banner */}
       <CrisisBanner isActive={crisis.crisisState.isActive} severity={crisis.crisisState.highestSeverity} />
 
       {/* Update Banner */}
@@ -806,112 +676,7 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      {/* Panel Bottom Sheets */}
-      <AnimatePresence>
-        {panels.showKGPanel && (
-          <BottomSheet onClose={() => panels.closePanel('kg')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <KGPanel entities={chatEngine.kgEntities} relations={chatEngine.kgRelations} onClose={() => panels.closePanel('kg')} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showStatsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('stats')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <StatsPanel userId={user.id} onClose={() => panels.closePanel('stats')} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showGoalsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('goals')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <GoalsPanel userId={user.id} onClose={() => panels.closePanel('goals')} onToast={showToast} readOnly={!isPro} onUpgrade={() => billing.handleUpgrade('pro_monthly')} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showWorkflowsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('workflows')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <WorkflowsPanel
-                userId={user.id}
-                onClose={() => panels.closePanel('workflows')}
-                onToast={showToast}
-                onRunWorkflow={(proc) => {
-                  panels.closePanel('workflows')
-                  chatEngine.sendMessage(`Run workflow: ${proc.name}`)
-                }}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showScheduledPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('scheduled')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <ScheduledTasksPanel userId={user.id} onClose={() => panels.closePanel('scheduled')} onToast={showToast} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showBriefingPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('briefings')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <BriefingPanel
-                userId={user.id}
-                userMemory={chatEngine.userMemory}
-                kgEntities={chatEngine.kgEntities}
-                onClose={() => panels.closePanel('briefings')}
-                onToast={showToast}
-                onGoDeeper={(title, content) => { panels.closePanel('briefings'); chatEngine.handleBriefingGoDeeper(title, content) }}
-                onAddGoal={chatEngine.handleBriefingAddGoal}
-                isPro={isPro}
-                historyDays={planLimits.briefingHistoryDays}
-                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {panels.showInsightsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('insights')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <InsightsPanel
-                engineState={chatEngine.engineState}
-                userMemory={chatEngine.userMemory}
-                onChallengeBelief={(id) => chatEngine.engine.challengeBelief(id)}
-                onRemoveBelief={(id) => chatEngine.engine.removeBelief(id)}
-                onClose={() => panels.closePanel('insights')}
-                isPro={isPro}
-                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {panels.showMirrorPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('mirror')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <MirrorPanel
-                mirror={chatEngine.userMirror}
-                onClose={() => panels.closePanel('mirror')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-
+      {/* Panel Bottom Sheets — only Project, Gallery, Account Settings */}
       <AnimatePresence>
         {panels.showProjectPanel && (
           <BottomSheet onClose={() => panels.closePanel('project')}>
@@ -943,286 +708,6 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {panels.showSocialPanel && (
-          <Suspense fallback={<PanelShimmer />}>
-            <SocialMediaPanel
-              isOpen={panels.showSocialPanel}
-              onClose={() => panels.closePanel('social')}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showDistributePanel && (
-          <Suspense fallback={null}>
-            <SocialAdaptPanel
-              isOpen={showDistributePanel}
-              onClose={() => setShowDistributePanel(false)}
-              content={distributeContent}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {panels.showPlatformPanel && (
-          <Suspense fallback={null}>
-            <PlatformPanel
-              isOpen={panels.showPlatformPanel}
-              onClose={() => panels.closePanel('platform')}
-              phases={chatEngine.platformPhases}
-              contentStages={chatEngine.contentPipelineStages}
-              onApprovePhase={(phase) => chatEngine.platformEngineRef.current?.resumeFrom(phase)}
-              onEditPhase={(phase, feedback) => chatEngine.platformEngineRef.current?.resumeFrom(phase, feedback)}
-              onSkipPhase={(phase) => chatEngine.platformEngineRef.current?.resumeFrom(phase)}
-              onApproveContentStage={() => chatEngine.platformEngineRef.current?.approveContentStage()}
-              onEditContentStage={(feedback) => chatEngine.platformEngineRef.current?.editContentStage(feedback)}
-              onUpdateAdaptation={(platform, body) => chatEngine.platformEngineRef.current?.updateAdaptation(platform, body)}
-              onCancel={() => {
-                chatEngine.platformEngineRef.current?.cancel()
-                panels.closePanel('platform')
-              }}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {chatEngine.masterPlan && chatEngine.isMasterActive && (
-          <Suspense fallback={null}>
-            <MasterPlanPanel
-              plan={chatEngine.masterPlan}
-              activeStepId={null}
-              onClose={() => {/* plan auto-closes when complete */}}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-
-      {/* ── New Engine Panels ───────────────────────────── */}
-      <AnimatePresence>
-        {panels.showAgentBuilderPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('agent-builder')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <AgentBuilderPanel
-                onSave={async (data) => {
-                  const { createAgent } = await import('../engine/AgentEngine')
-                  await createAgent(user.id, data)
-                  panels.closePanel('agent-builder')
-                  showToast('Agent created')
-                }}
-                onClose={() => panels.closePanel('agent-builder')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showAgentLibraryPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('agent-library')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <AgentLibraryPanel
-                installedIds={[]}
-                onInstall={async (agent) => {
-                  const { installAgent } = await import('../engine/AgentEngine')
-                  await installAgent(agent.id, user.id)
-                  showToast('Agent installed')
-                }}
-                onUninstall={async (agentId) => {
-                  const { uninstallAgent } = await import('../engine/AgentEngine')
-                  await uninstallAgent(agentId, user.id)
-                  showToast('Agent removed')
-                }}
-                onLoadLibrary={async () => {
-                  const { listPublicAgents } = await import('../engine/AgentEngine')
-                  return await listPublicAgents()
-                }}
-                onClose={() => panels.closePanel('agent-library')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showBackgroundAgentsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('background-agents')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <BackgroundAgentsPanel
-                agents={[]}
-                runs={[]}
-                onToggle={async (agentId, enabled) => {
-                  const { toggleAgent } = await import('../engine/AutonomousEngine')
-                  await toggleAgent(agentId, enabled)
-                }}
-                onCreate={async (config) => {
-                  const { createBackgroundAgent } = await import('../engine/AutonomousEngine')
-                  await createBackgroundAgent(user.id, config)
-                  showToast('Background agent created')
-                }}
-                onRunAgent={async (agentId) => {
-                  const { listBackgroundAgents, executeAgent } = await import('../engine/AutonomousEngine')
-                  const agents = await listBackgroundAgents(user.id)
-                  const agent = agents.find(a => a.id === agentId)
-                  if (agent) {
-                    await executeAgent(agent)
-                    showToast('Agent executed')
-                  }
-                }}
-                onClose={() => panels.closePanel('background-agents')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showMyContentPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('my-content')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <MyContentPanel
-                onClose={() => panels.closePanel('my-content')}
-                onPublish={(contentId, title) => {
-                  panels.closePanel('my-content')
-                  showToast(`Publishing "${title}"...`)
-                }}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showAuthorProfilePanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('author-profile')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <AuthorProfilePanel
-                onClose={() => panels.closePanel('author-profile')}
-                onToast={showToast}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showBookmarksPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('bookmarks')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <BookmarksPanel
-                onClose={() => panels.closePanel('bookmarks')}
-                onOpenContent={(slug) => { window.location.hash = `#/p/${slug}` }}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showArchitecturePanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('architecture')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <ArchitecturePanel
-                onClose={() => panels.closePanel('architecture')}
-                onToast={showToast}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showDesignPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('design-system')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <DesignPanel
-                onClose={() => panels.closePanel('design-system')}
-                onGenerateComponent={async (desc) => { const { generateComponent } = await import('../engine/DesignEngine'); return generateComponent(desc) }}
-                onDesignLayout={async (req) => { const { designLayout } = await import('../engine/DesignEngine'); return designLayout(req) }}
-                onAuditAccessibility={async (html) => { const { auditAccessibility } = await import('../engine/DesignEngine'); return auditAccessibility(html) }}
-                onEnforceDesignSystem={async (css) => { const { enforceDesignSystem } = await import('../engine/DesignEngine'); return enforceDesignSystem(css) }}
-                onGenerateTheme={async (desc) => { const { generateTheme } = await import('../engine/DesignEngine'); return generateTheme(desc) }}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showRoutingInsightsPanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('routing-insights')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <RoutingInsightsPanel
-                agents={[]}
-                runs={[]}
-                routingWeights={[]}
-                lastOptimizedAt={null}
-                onOptimize={async () => {
-                  const { optimizeRouting } = await import('../engine/AutonomousEngine')
-                  await optimizeRouting(user.id)
-                  showToast('Routing optimized')
-                }}
-                onClose={() => panels.closePanel('routing-insights')}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showSystemPanel && (
-          <Suspense fallback={null}>
-            <SystemPanel
-              isOpen={panels.showSystemPanel}
-              onClose={() => panels.closePanel('system')}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showCommunicationsPanel && user && (
-          <Suspense fallback={<PanelShimmer />}>
-            <CommunicationPanel
-              isOpen={panels.showCommunicationsPanel}
-              userId={user.id}
-              isAdmin={isAdmin}
-              onClose={() => panels.closePanel('communications')}
-            />
-          </Suspense>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showAdaptivePanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('adaptive')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <AdaptivePanel
-                userId={user.id}
-                isAdmin={isAdmin}
-                onClose={() => panels.closePanel('adaptive')}
-                onToast={showToast}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {panels.showUsageDashboard && user && (
-          <BottomSheet onClose={() => panels.closePanel('usage')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <UsageDashboard
-                onClose={() => panels.closePanel('usage')}
-                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
-                isPro={isPro}
-                monthlyLimit={isPro ? 1000 : 40}
-              />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {panels.showKnowledgePanel && user && (
-          <BottomSheet onClose={() => panels.closePanel('knowledge')}>
-            <Suspense fallback={<PanelShimmer />}>
-              <KnowledgePanel userId={user.id} onClose={() => panels.closePanel('knowledge')} onToast={showToast} />
-            </Suspense>
-          </BottomSheet>
-        )}
-      </AnimatePresence>
       <AnimatePresence>
         {panels.showAccountSettings && user && (
           <BottomSheet onClose={() => panels.closePanel('account-settings')}>
@@ -1311,112 +796,18 @@ function EngineChat() {
                     </button>
                   </>
                 )}
-                <div className="ka-header-menu-divider ka-menu-tabbed" />
-                <div className="ka-header-menu-label ka-menu-tabbed">{t('features', { ns: 'common' })}</div>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowGoalsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconTarget size={16} /> {t('menu.goals')}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('workflows'); panels.closeAllPanels(); panels.setShowWorkflowsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconZap size={16} /> {t('menu.workflows')}
-                  {featureDiscovery.isNew('workflows') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('scheduled'); panels.closeAllPanels(); panels.setShowScheduledPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconClock size={16} /> {t('menu.scheduledTasks')}
-                  {featureDiscovery.isNew('scheduled') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBriefingPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconNewspaper size={16} /> {t('menu.dailyBriefing')}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('knowledge'); panels.closeAllPanels(); panels.setShowKGPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconBrain size={16} /> {t('menu.whatKernelKnows')}
-                  {featureDiscovery.isNew('knowledge') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('stats'); panels.closeAllPanels(); panels.setShowStatsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconChart size={16} /> {t('menu.yourStats')}
-                  {featureDiscovery.isNew('stats') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('insights'); panels.closeAllPanels(); panels.setShowInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconEye size={16} /> {t('menu.insights')}
-                  {featureDiscovery.isNew('insights') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('mirror'); panels.closeAllPanels(); panels.setShowMirrorPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconSparkles size={16} /> {t('menu.mirror')}
-                  {featureDiscovery.isNew('mirror') && <span className="ka-feature-dot" />}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { featureDiscovery.markDiscovered('project'); panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
+                <div className="ka-header-menu-divider" />
+                <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <IconFileText size={16} /> {t('menu.projectFiles')}
-                  {featureDiscovery.isNew('project') && <span className="ka-feature-dot" />}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowImageGallery(true); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowImageGallery(true); panels.setHeaderMenuOpen(false) }}>
                   <IconImage size={16} /> {t('menu.imageGallery')}
                 </button>
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowSocialPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconShare size={16} /> {t('menu.social')}
-                  </button>
-                )}
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowPlatformPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconZap size={16} /> {t('menu.platformEngine')}
-                  </button>
-                )}
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAgentBuilderPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconSparkles size={16} /> {t('menu.agentBuilder')}
-                  </button>
-                )}
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAgentLibraryPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconBookOpen size={16} /> {t('menu.agentLibrary')}
-                </button>
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBackgroundAgentsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconClock size={16} /> {t('menu.backgroundAgents')}
-                  </button>
-                )}
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowMyContentPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconFileText size={16} /> {t('menu.myContent')}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowBookmarksPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconBookOpen size={16} /> {t('menu.bookmarks')}
-                </button>
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowArchitecturePanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconBrain size={16} /> {t('menu.architecture')}
-                  </button>
-                )}
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowDesignPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconImage size={16} /> {t('menu.designSystem')}
-                  </button>
-                )}
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowRoutingInsightsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconChart size={16} /> {t('menu.routingInsights')}
-                  </button>
-                )}
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowCommunicationsPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconBrain size={16} /> {t('menu.communications')}
-                </button>
-                {(isPro || isAdmin) && (
-                  <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAdaptivePanel(true); panels.setHeaderMenuOpen(false) }}>
-                    <IconSparkles size={16} /> {t('menu.adaptiveSystem')}
-                  </button>
-                )}
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowSystemPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconEye size={16} /> {t('menu.system')}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); window.location.hash = '#/explore'; panels.setHeaderMenuOpen(false) }}>
-                  <IconGlobe size={16} /> {t('menu.explore')}
-                </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowKnowledgePanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconBookOpen size={16} /> {t('menu.knowledgeBase')}
-                </button>
-                <div className="ka-header-menu-divider ka-menu-tabbed" />
-                <div className="ka-header-menu-label ka-menu-tabbed">{t('account', { ns: 'common' })}</div>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
+                <div className="ka-header-menu-divider" />
+                <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
                   <IconSettings size={16} /> {t('menu.accountSettings')}
                 </button>
-                <button className="ka-header-menu-item ka-menu-tabbed" onClick={() => { signOut(); panels.setHeaderMenuOpen(false) }}>
+                <button className="ka-header-menu-item" onClick={() => { signOut(); panels.setHeaderMenuOpen(false) }}>
                   <IconLogOut size={16} /> {t('menu.signOut')}
                 </button>
               </div>
@@ -1455,137 +846,11 @@ function EngineChat() {
           )}
           {messages.length === 0 && !convs.msgsLoading && (
             <motion.div key="empty-home" className="ka-empty" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={TRANSITION.CARD}>
-              <div ref={entityRef} className="ka-entity-tap" onClick={() => setShowEntityInfo(prev => !prev)} role="button" tabIndex={0} aria-label="View entity info">
-                <ParticleGrid />
-              </div>
-
-              {/* Entity info popover */}
-              <AnimatePresence>
-                {showEntityInfo && (
-                  <motion.div
-                    className="ka-entity-info"
-                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="ka-entity-info-tier" style={{ color: evolution.topicColor || 'var(--rubin-primary)' }}>{evolution.tierName}</div>
-                    <p className="ka-entity-info-hint">{evolution.progressHint}</p>
-                    <div className="ka-entity-info-row">
-                      <span className="ka-entity-info-label">{t('entityInfo.mood')}</span>
-                      <span>{evolution.companion.mood ? t(`entity.mood.${evolution.companion.mood}`) : '—'}</span>
-                    </div>
-                    <div className="ka-entity-info-row">
-                      <span className="ka-entity-info-label">{t('entityInfo.streak')}</span>
-                      <span>{evolution.companion.streak} {t('entityInfo.days')}</span>
-                    </div>
-                    {evolution.topic && (
-                      <div className="ka-entity-info-row">
-                        <span className="ka-entity-info-label">{t('entityInfo.focus')}</span>
-                        <span>{evolution.topic}</span>
-                      </div>
-                    )}
-                    <button className="ka-entity-info-close" onClick={(e) => { e.stopPropagation(); setShowEntityInfo(false) }}>{t('close', { ns: 'common' })}</button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Feature 2: Streak indicator */}
-              {evolution.companion.streak >= 2 && (
-                <span
-                  className="ka-home-streak"
-                  data-streak-milestone={
-                    evolution.companion.streak >= 30 ? 'month' :
-                      evolution.companion.streak >= 7 ? 'week' : undefined
-                  }
-                >
-                  {t('entity.streak', { count: evolution.companion.streak })}
-                </span>
-              )}
-
-              {/* Feature 1: Tier label + progress hint */}
-              <AnimatePresence mode="wait">
-                {evolution.isEvolving ? (
-                  <motion.div
-                    key="evolving"
-                    className="ka-home-tier ka-home-tier--evolving"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={TRANSITION.SECTION}
-                  >
-                    {t('entity.evolved', { tier: evolution.tierName })}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="tier"
-                    className="ka-home-tier"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    <span className="ka-home-tier-name">{evolution.tierName}</span>
-                    <span className="ka-home-tier-hint">{evolution.progressHint}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <ParticleGrid />
 
               <h1 className="ka-empty-title">Kernel</h1>
               <p className="ka-empty-subtitle">{t('tagline')}</p>
               <p className="ka-home-greeting">{getTimeGreeting()}</p>
-
-              {/* Feature 4: Contextual nudge */}
-              {featureDiscovery.activeNudge && (
-                <motion.div
-                  className="ka-home-nudge"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={TRANSITION.SECTION}
-                >
-                  <p className="ka-home-nudge-text">{t(`nudge.${featureDiscovery.activeNudge.featureId}`)}</p>
-                  <div className="ka-home-nudge-actions">
-                    <button className="ka-home-nudge-btn" onClick={() => {
-                      openFeaturePanel(featureDiscovery.activeNudge!.featureId, panels, featureDiscovery)
-                    }}>{t('nudge.showMe')}</button>
-                    <button className="ka-home-nudge-dismiss" onClick={() => {
-                      featureDiscovery.dismissNudge(featureDiscovery.activeNudge!.featureId)
-                    }}>{t('nudge.notNow')}</button>
-                  </div>
-                </motion.div>
-              )}
-
-              {chatEngine.todayBriefing && (
-                <div className="ka-home-briefing-card">
-                  <div className="ka-home-briefing-info">
-                    <IconNewspaper size={16} className="ka-home-briefing-icon" />
-                    <div className="ka-home-briefing-text">
-                      <span className="ka-home-briefing-label">{t('briefing.todaysBriefing')}</span>
-                      <span className="ka-home-briefing-title">{chatEngine.todayBriefing.title}</span>
-                    </div>
-                  </div>
-                  <div className="ka-home-briefing-actions">
-                    <button className="ka-home-briefing-btn" onClick={() => { panels.closeOtherPanels('briefings'); panels.setShowBriefingPanel(true); panels.setActiveTab('briefings') }}>{t('briefing.read')}</button>
-                    <button className="ka-home-briefing-btn ka-home-briefing-btn--discuss" onClick={() => chatEngine.handleBriefingGoDeeper(chatEngine.todayBriefing!.title, chatEngine.todayBriefing!.content)}>
-                      <IconMessageCircle size={12} /> {t('briefing.discuss')}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Feature 3: Goal check-in chips */}
-              {goalCheckIns.length > 0 && (
-                <div className="ka-home-goal-checkins">
-                  {goalCheckIns.map(g => (
-                    <button
-                      key={g.id}
-                      className="ka-topic ka-topic--goal"
-                      onClick={() => chatEngine.sendMessage(`How's my progress on "${g.title}"?`)}
-                    >
-                      <IconTarget size={12} /> {t('entity.goalCheckIn', { title: g.title.length > 30 ? g.title.slice(0, 30) + '…' : g.title })}
-                    </button>
-                  ))}
-                </div>
-              )}
 
               {convs.conversations.length > 0 && (
                 <div className="ka-home-recent">
@@ -1674,13 +939,6 @@ function EngineChat() {
             onApprove={approveContentStage}
             onEdit={editContentStage}
             onCancel={cancelContentPipeline}
-            onDistribute={() => {
-              const editStage = contentPipelineStages.find(s => s.stage === 'edit')
-              const draftStage = contentPipelineStages.find(s => s.stage === 'draft')
-              const content = editStage?.output || draftStage?.output || ''
-              setDistributeContent(content)
-              setShowDistributePanel(true)
-            }}
           />
         )}
 
@@ -1710,21 +968,7 @@ function EngineChat() {
                     <ParticleGrid size={28} interactive={false} energetic palette={agentPalette(msg.agentId || 'kernel')} />
                   </div>
                   {msg.agentName && msg.agentName !== 'Kernel' && (
-                    <div className="ka-agent-badge-wrap">
-                      <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
-                      {msg.routingReason && (
-                        <>
-                          <button className="ka-agent-why-btn" onClick={() => setExpandedWhyId(prev => prev === msg.id ? null : msg.id)}>{t('agentWhy.label')}</button>
-                          <AnimatePresence>
-                            {expandedWhyId === msg.id && (
-                              <motion.div className="ka-agent-why" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-                                {msg.routingReason}
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      )}
-                    </div>
+                    <span className="ka-agent-badge" style={{ color: getSpecialist(msg.agentId || 'kernel').color }}>{msg.agentName}</span>
                   )}
                 </div>
               )}
@@ -1841,7 +1085,7 @@ function EngineChat() {
         )}
       </AnimatePresence>
 
-      {/* Active document indicator (Pro deep document analysis) */}
+      {/* Active document indicator */}
       <AnimatePresence>
         {chatEngine.hasActiveDocument && chatEngine.activeDocument && (
           <motion.div
@@ -2009,16 +1253,6 @@ function EngineChat() {
         />
       </Suspense>
 
-      {/* Feature 6: Mid-session value preview */}
-      <AnimatePresence>
-        {showValuePreview && (
-          <motion.div className="ka-value-preview" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-            <p className="ka-value-preview-text">{t('valuePreview.message')}</p>
-            <button className="ka-value-preview-dismiss" onClick={() => setShowValuePreview(false)}>{t('valuePreview.gotIt')}</button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Free-tier message counter */}
       {!isPro && !billing.showUpgradeWall && (() => {
         const remaining = effectiveLimit - chatEngine.messageCountRef.current
@@ -2071,15 +1305,9 @@ function EngineChat() {
         />
         <button
           type="button"
-          className={`ka-explain-toggle ka-bar-tooltip${explainModeEnabled ? ' ka-explain-toggle--active' : ''}${!explainDiscovered ? ' ka-bar-tooltip--discover' : ''}`}
+          className={`ka-explain-toggle ka-bar-tooltip${explainModeEnabled ? ' ka-explain-toggle--active' : ''}`}
           data-tooltip={t('explain.tooltip')}
-          onClick={() => {
-            setExplainModeEnabled(prev => !prev)
-            if (!explainDiscovered) {
-              setExplainDiscovered(true)
-              if (userId) localStorage.setItem(`kernel:explain-discovered:${userId}`, '1')
-            }
-          }}
+          onClick={() => setExplainModeEnabled(prev => !prev)}
           disabled={isStreaming}
           aria-label={t('explain.toggle')}
         >
@@ -2088,15 +1316,9 @@ function EngineChat() {
         {isPro && (
           <button
             type="button"
-            className={`ka-thinking-toggle ka-bar-tooltip${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}${!thinkingDiscovered ? ' ka-bar-tooltip--discover' : ''}`}
+            className={`ka-thinking-toggle ka-bar-tooltip${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}`}
             data-tooltip={t('thinking.tooltip')}
-            onClick={() => {
-              setExtendedThinkingEnabled(prev => !prev)
-              if (!thinkingDiscovered) {
-                setThinkingDiscovered(true)
-                if (userId) localStorage.setItem(`kernel:thinking-discovered:${userId}`, '1')
-              }
-            }}
+            onClick={() => setExtendedThinkingEnabled(prev => !prev)}
             disabled={isStreaming}
             aria-label={t('thinking.toggle')}
           >
@@ -2112,11 +1334,11 @@ function EngineChat() {
 
       {!isOnline && <div className="ka-offline-banner">{t('offline', { ns: 'common' })}</div>}
 
-      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} undiscoveredCount={featureDiscovery.undiscoveredCount} moreRef={moreMenuBtnRef} />
+      <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} />
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('more')} onSelect={panels.handleMoreAction} isPro={isPro} isAdmin={isAdmin} isNewFeature={featureDiscovery.isNew} onFeatureDiscovered={featureDiscovery.markDiscovered} theme={theme} onSetTheme={setTheme} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('settings')} onSelect={panels.handleSettingsAction} isPro={isPro} isAdmin={isAdmin} theme={theme} onSetTheme={setTheme} />
           </Suspense>
         )}
       </AnimatePresence>
@@ -2170,19 +1392,6 @@ function EngineChat() {
               onSave={handleSaveTags}
             />
           </Suspense>
-        )}
-      </AnimatePresence>
-
-      {/* Feature tour tooltips */}
-      <AnimatePresence>
-        {messages.length === 0 && tour.activeStep === 'entity' && (
-          <FeatureTooltip targetRef={entityRef} text={t('tour.entity')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} />
-        )}
-        {messages.length === 0 && tour.activeStep === 'more-menu' && (
-          <FeatureTooltip targetRef={moreMenuBtnRef} text={t('tour.moreMenu')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} position="above" />
-        )}
-        {messages.length === 0 && tour.activeStep === 'input-bar' && (
-          <FeatureTooltip targetRef={inputBarRef} text={t('tour.inputBar')} step={tour.stepIndex} totalSteps={tour.totalSteps} onDismiss={tour.dismiss} onSkip={tour.skipAll} position="above" />
         )}
       </AnimatePresence>
     </div>
