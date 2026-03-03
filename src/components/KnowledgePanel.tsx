@@ -158,7 +158,11 @@ export function KnowledgePanel({ userId, onClose, onToast }: KnowledgePanelProps
       {activeTab === 'topics' && (
         <div className="ka-knowledge-topics-list">
           {knowledge.topics.length === 0 ? (
-            <div className="ka-knowledge-empty">No topics yet. Knowledge is extracted as you chat.</div>
+            <div className="ka-empty-state">
+              <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" />
+              <div className="ka-empty-state-title">No topics yet</div>
+              <div className="ka-empty-state-desc">Knowledge is extracted as you chat. Start a conversation to build your knowledge base.</div>
+            </div>
           ) : (
             knowledge.topics.map(topic => (
               <div key={topic.id} className="ka-knowledge-topic-row">

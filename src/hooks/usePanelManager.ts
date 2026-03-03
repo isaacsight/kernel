@@ -36,6 +36,9 @@ export function usePanelManager(callbacks: {
   const [showDesignPanel, setShowDesignPanel] = useState(false)
   const [showRoutingInsightsPanel, setShowRoutingInsightsPanel] = useState(false)
   const [showSystemPanel, setShowSystemPanel] = useState(false)
+  const [showCommunicationsPanel, setShowCommunicationsPanel] = useState(false)
+  const [showAdaptivePanel, setShowAdaptivePanel] = useState(false)
+  const [showUsageDashboard, setShowUsageDashboard] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -67,6 +70,9 @@ export function usePanelManager(callbacks: {
     setShowDesignPanel(false)
     setShowRoutingInsightsPanel(false)
     setShowSystemPanel(false)
+    setShowCommunicationsPanel(false)
+    setShowAdaptivePanel(false)
+    setShowUsageDashboard(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
@@ -98,6 +104,9 @@ export function usePanelManager(callbacks: {
     if (except !== 'design-system') setShowDesignPanel(false)
     if (except !== 'routing-insights') setShowRoutingInsightsPanel(false)
     if (except !== 'system') setShowSystemPanel(false)
+    if (except !== 'communications') setShowCommunicationsPanel(false)
+    if (except !== 'adaptive') setShowAdaptivePanel(false)
+    if (except !== 'usage') setShowUsageDashboard(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'more') setShowMoreMenu(false)
   }, [callbacks])
@@ -132,7 +141,7 @@ export function usePanelManager(callbacks: {
     }
   }, [activeTab, closeAllPanels, closeOtherPanels, callbacks])
 
-  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'knowledge' | 'social' | 'platform' | 'agent-builder' | 'agent-library' | 'background-agents' | 'publish' | 'my-content' | 'author-profile' | 'bookmarks' | 'sandbox' | 'architecture' | 'design-system' | 'routing-insights' | 'system' | 'more' | 'drawer'
+  type PanelId = 'kg' | 'stats' | 'goals' | 'workflows' | 'scheduled' | 'briefings' | 'insights' | 'account-settings' | 'mirror' | 'project' | 'image-gallery' | 'knowledge' | 'social' | 'platform' | 'agent-builder' | 'agent-library' | 'background-agents' | 'publish' | 'my-content' | 'author-profile' | 'bookmarks' | 'sandbox' | 'architecture' | 'design-system' | 'routing-insights' | 'system' | 'communications' | 'adaptive' | 'usage' | 'more' | 'drawer'
 
   const closePanel = useCallback((id: PanelId) => {
     switch (id) {
@@ -162,6 +171,9 @@ export function usePanelManager(callbacks: {
       case 'design-system': setShowDesignPanel(false); break
       case 'routing-insights': setShowRoutingInsightsPanel(false); break
       case 'system': setShowSystemPanel(false); break
+      case 'communications': setShowCommunicationsPanel(false); break
+      case 'adaptive': setShowAdaptivePanel(false); break
+      case 'usage': setShowUsageDashboard(false); break
       case 'more': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
     }
@@ -268,6 +280,18 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('system')
         setShowSystemPanel(true)
         break
+      case 'communications':
+        closeOtherPanels('communications')
+        setShowCommunicationsPanel(true)
+        break
+      case 'adaptive':
+        closeOtherPanels('adaptive')
+        setShowAdaptivePanel(true)
+        break
+      case 'usage':
+        closeOtherPanels('usage')
+        setShowUsageDashboard(true)
+        break
       case 'explore':
         closeAllPanels()
         window.location.hash = '#/explore'
@@ -314,6 +338,9 @@ export function usePanelManager(callbacks: {
     showDesignPanel, setShowDesignPanel,
     showRoutingInsightsPanel, setShowRoutingInsightsPanel,
     showSystemPanel, setShowSystemPanel,
+    showCommunicationsPanel, setShowCommunicationsPanel,
+    showAdaptivePanel, setShowAdaptivePanel,
+    showUsageDashboard, setShowUsageDashboard,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,

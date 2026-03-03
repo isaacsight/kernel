@@ -50,9 +50,11 @@ export function ProjectPanel({ conversationId, onClose }: ProjectPanelProps) {
 
       <div className="ka-project-panel-body">
         {files.length === 0 ? (
-          <p className="ka-project-panel-empty">
-            No files generated yet. Code artifacts will appear here as you build.
-          </p>
+          <div className="ka-empty-state">
+            <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-workflows.svg`} alt="" />
+            <div className="ka-empty-state-title">No files generated yet</div>
+            <div className="ka-empty-state-desc">Code artifacts will appear here as you build.</div>
+          </div>
         ) : (
           <ul className="ka-project-file-list">
             {files.map(file => (

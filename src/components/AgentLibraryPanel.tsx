@@ -102,8 +102,10 @@ export function AgentLibraryPanel({
         {loading ? (
           <div className="ka-agent-library-loading">Loading agents...</div>
         ) : filtered.length === 0 ? (
-          <div className="ka-agent-library-empty">
-            {search ? 'No agents match your search' : 'No public agents yet'}
+          <div className="ka-empty-state">
+            <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-workflows.svg`} alt="" />
+            <div className="ka-empty-state-title">{search ? 'No agents match your search' : 'No public agents yet'}</div>
+            <div className="ka-empty-state-desc">{search ? 'Try different keywords or clear your search.' : 'Community agents will appear here as they are published.'}</div>
           </div>
         ) : (
           <AnimatePresence mode="popLayout">

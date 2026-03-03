@@ -171,7 +171,13 @@ export function GoalsPanel({ userId, onClose, onToast, readOnly, onUpgrade }: Go
                 {expanded && (
                   <div className="ka-goal-details">
                     {goal.description && (
-                      <p className="ka-goal-desc">{goal.description}</p>
+                      <p className="ka-goal-desc" dangerouslySetInnerHTML={{
+                        __html: goal.description
+                          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                          .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                          .replace(/`(.+?)`/g, '<code>$1</code>')
+                          .replace(/\n/g, '<br />')
+                      }} />
                     )}
                     {goal.target_date && (
                       <p className="ka-goal-target">{t('goals.target', { date: new Date(goal.target_date).toLocaleDateString() })}</p>

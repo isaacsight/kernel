@@ -127,8 +127,10 @@ export function MyContentPanel({ onClose, onPublish }: MyContentPanelProps) {
         ) : error ? (
           <div className="ka-my-content-error">{error}</div>
         ) : items.length === 0 ? (
-          <div className="ka-my-content-empty">
-            <p>No content yet. Use the Content Engine to create your first piece.</p>
+          <div className="ka-empty-state">
+            <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-briefings.svg`} alt="" />
+            <div className="ka-empty-state-title">No content yet</div>
+            <div className="ka-empty-state-desc">Use the Content Engine to create your first piece.</div>
           </div>
         ) : (
           <div className="ka-my-content-list">

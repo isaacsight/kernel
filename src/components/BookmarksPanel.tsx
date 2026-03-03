@@ -68,8 +68,10 @@ export function BookmarksPanel({ onClose, onOpenContent }: BookmarksPanelProps) 
         {bookmarksLoading ? (
           <div className="ka-bookmarks-loading">Loading bookmarks...</div>
         ) : bookmarks.length === 0 ? (
-          <div className="ka-bookmarks-empty">
-            <p>No bookmarks yet. Save articles from the Explore feed.</p>
+          <div className="ka-empty-state">
+            <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-knowledge.svg`} alt="" />
+            <div className="ka-empty-state-title">No bookmarks yet</div>
+            <div className="ka-empty-state-desc">Save articles from the Explore feed to build your reading list.</div>
           </div>
         ) : (
           <div className="ka-bookmarks-list">

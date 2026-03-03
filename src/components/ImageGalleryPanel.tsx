@@ -94,10 +94,10 @@ export function ImageGalleryPanel({ userId, onClose, onUseAsStartingPoint }: Ima
           </div>
         </div>
       ) : images.length === 0 ? (
-        <div className="ka-gallery-empty">
-          <IconImage size={32} />
-          <p>No images generated yet</p>
-          <p className="ka-gallery-empty-hint">Ask Kernel to generate an image to get started</p>
+        <div className="ka-empty-state">
+          <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-briefings.svg`} alt="" />
+          <div className="ka-empty-state-title">No images generated yet</div>
+          <div className="ka-empty-state-desc">Ask Kernel to generate an image to get started.</div>
         </div>
       ) : (
         <div className="ka-gallery-grid">
