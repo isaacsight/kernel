@@ -16,13 +16,13 @@ export function lazyRetry<T extends ComponentType<any>>(
 
       if (count < 2) {
         sessionStorage.setItem(key, String(count + 1))
-        // Nuke SW + caches so the reload fetches fresh assets
+        // Tell waiting SW to activate, then clear stale caches
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(regs =>
-            regs.forEach(r => r.unregister())
-          )
+          navigator.serviceWorker.getRegistration().then(reg => {
+            if (reg?.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+          })
         }
-        caches.keys().then(names => names.forEach(n => caches.delete(n)))
+        caches.delete('app-code') // Clear stale JS/CSS cache
         // Cache-bust URL to skip browser HTTP cache (GitHub Pages max-age=600)
         const url = new URL(window.location.href)
         url.searchParams.set('_cb', Date.now().toString(36))

@@ -138,9 +138,12 @@ self.addEventListener('message', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    // Clear the JS/CSS cache on activation — content-hashed filenames
-    // mean a fresh network fetch will always get the correct version.
-    // This prevents stale chunks from a previous deploy being served.
-    caches.delete('app-code').then(() => self.clients.claim())
+    Promise.all([
+      // Clear the JS/CSS cache on activation — content-hashed filenames
+      // mean a fresh network fetch will always get the correct version.
+      caches.delete('app-code'),
+      // Enable navigation preload — starts fetch in parallel with SW boot
+      self.registration.navigationPreload?.enable().catch(() => {}),
+    ]).then(() => self.clients.claim())
   )
 })
