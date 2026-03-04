@@ -48,12 +48,28 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                manualChunks: {
-                    'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-                    'vendor-supabase': ['@supabase/supabase-js'],
-                    'vendor-ui': ['motion'],
-                    'vendor-analytics': ['posthog-js', '@sentry/react'],
-                    'vendor-markdown': ['react-markdown'],
+                manualChunks(id) {
+                    if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router')) {
+                        return 'vendor-react'
+                    }
+                    if (id.includes('node_modules/@supabase/')) {
+                        return 'vendor-supabase'
+                    }
+                    if (id.includes('node_modules/motion/')) {
+                        return 'vendor-ui'
+                    }
+                    if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
+                        return 'vendor-i18n'
+                    }
+                    if (id.includes('node_modules/zustand/')) {
+                        return 'vendor-zustand'
+                    }
+                    if (id.includes('node_modules/posthog-js/') || id.includes('node_modules/@sentry/')) {
+                        return 'vendor-analytics'
+                    }
+                    if (id.includes('node_modules/react-markdown/')) {
+                        return 'vendor-markdown'
+                    }
                 },
             },
         },
