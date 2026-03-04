@@ -205,6 +205,103 @@ serve(async (req: Request) => {
       console.warn('Subscription expiration failed (non-blocking):', subErr)
     }
 
+    // ── API Overage: report usage to Stripe + spending alerts ──
+    let overageReported = 0
+    let alertsSent = 0
+    try {
+      const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
+
+      // 1. Report overage usage to Stripe for keys near window expiry
+      if (stripeKey) {
+        const windowCutoff = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // within 24h of expiry
+        const { data: overageKeys } = await supabase
+          .from('api_keys')
+          .select('id, user_id, overage_count, overage_rate_millicents, stripe_item_id, monthly_window_start, last_overage_reported_at')
+          .eq('status', 'active')
+          .eq('overage_enabled', true)
+          .gt('overage_count', 0)
+          .not('stripe_item_id', 'is', null)
+
+        if (overageKeys && overageKeys.length > 0) {
+          for (const key of overageKeys) {
+            // Skip if already reported recently (within last 4 hours)
+            if (key.last_overage_reported_at) {
+              const lastReported = new Date(key.last_overage_reported_at).getTime()
+              if (Date.now() - lastReported < 4 * 60 * 60 * 1000) continue
+            }
+
+            try {
+              // Report metered usage to Stripe
+              const usageRes = await fetch('https://api.stripe.com/v1/subscription_items/' + key.stripe_item_id + '/usage_records', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${stripeKey}`,
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `quantity=${key.overage_count}&action=set&timestamp=${Math.floor(Date.now() / 1000)}`,
+              })
+
+              if (usageRes.ok) {
+                await supabase.from('api_keys')
+                  .update({ last_overage_reported_at: new Date().toISOString() })
+                  .eq('id', key.id)
+                overageReported++
+              } else {
+                console.warn(`[overage] Stripe usage report failed for key ${key.id}:`, await usageRes.text())
+              }
+            } catch (stripeErr) {
+              console.warn(`[overage] Failed to report usage for key ${key.id}:`, stripeErr)
+            }
+          }
+        }
+      }
+
+      // 2. Spending alerts at 80% and 100% of base quota
+      const { data: alertKeys } = await supabase
+        .from('api_keys')
+        .select('id, user_id, monthly_message_count, monthly_message_limit, alert_80_sent, alert_100_sent')
+        .eq('status', 'active')
+        .in('tier', ['pro', 'growth'])
+
+      if (alertKeys && alertKeys.length > 0) {
+        for (const key of alertKeys) {
+          const pct = key.monthly_message_count / key.monthly_message_limit
+          const notifications: Array<{ user_id: string; title: string; body: string; type: string }> = []
+
+          if (pct >= 0.8 && !key.alert_80_sent) {
+            notifications.push({
+              user_id: key.user_id,
+              title: 'API usage at 80%',
+              body: `You've used ${key.monthly_message_count} of ${key.monthly_message_limit} included messages. Overage billing will apply after the limit.`,
+              type: 'warning',
+            })
+            await supabase.from('api_keys').update({ alert_80_sent: true }).eq('id', key.id)
+            alertsSent++
+          }
+
+          if (pct >= 1.0 && !key.alert_100_sent) {
+            notifications.push({
+              user_id: key.user_id,
+              title: 'API base quota reached',
+              body: `You've used all ${key.monthly_message_limit} included messages. Additional messages will be billed at the overage rate.`,
+              type: 'warning',
+            })
+            await supabase.from('api_keys').update({ alert_100_sent: true }).eq('id', key.id)
+            alertsSent++
+          }
+
+          if (notifications.length > 0) {
+            await supabase.from('notifications').insert(notifications)
+          }
+        }
+      }
+
+      if (overageReported > 0) console.log(`[overage] Reported ${overageReported} usage records to Stripe`)
+      if (alertsSent > 0) console.log(`[overage] Sent ${alertsSent} spending alert(s)`)
+    } catch (overageErr) {
+      console.warn('Overage reporting/alerts failed (non-blocking):', overageErr)
+    }
+
     // ── Cleanup: purge expired rate limits, old audit events, old errors ──
     try {
       await supabase.rpc('cleanup_rate_limits')
@@ -439,11 +536,40 @@ serve(async (req: Request) => {
       console.warn('Social analytics collection failed (non-blocking):', analyticsErr)
     }
 
+    // ── Collective Intelligence: aggregate routing signals every 6 hours ──
+    let collectiveLearnRan = false
+    try {
+      const hour = new Date().getUTCHours()
+      // Run at 0, 6, 12, 18 UTC (within the 5-min window)
+      if (hour % 6 === 0) {
+        const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+        const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+        const learnRes = await fetch(`${supabaseUrl}/functions/v1/collective-learn`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceKey}` },
+        })
+        if (learnRes.ok) {
+          const result = await learnRes.json()
+          console.log('[collective-learn] Patterns updated:', result)
+          collectiveLearnRan = true
+        } else {
+          console.warn('[collective-learn] Failed:', await learnRes.text())
+        }
+      }
+    } catch (learnErr) {
+      console.warn('Collective learning failed (non-blocking):', learnErr)
+    }
+
+    // ── Cleanup: purge old routing signals ──
+    try {
+      await supabase.rpc('purge_old_routing_signals')
+    } catch { /* non-blocking */ }
+
     // Audit log
     logAudit(supabase, {
       actorType: 'system', eventType: 'system.cron', action: 'task-scheduler',
       source: 'task-scheduler', status: 'success', statusCode: 200,
-      metadata: { processed, socialPublished },
+      metadata: { processed, socialPublished, collectiveLearnRan, overageReported, alertsSent },
     })
 
     return new Response(JSON.stringify({ processed }), {

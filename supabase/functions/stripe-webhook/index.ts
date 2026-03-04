@@ -128,6 +128,42 @@ serve(async (req: Request) => {
           break // Don't process as subscription
         }
 
+        // Handle API key subscription checkout
+        if (session.metadata?.type === 'api') {
+          const apiTier = session.metadata?.api_tier || 'free'
+          const tierDefaults: Record<string, { monthly_message_limit: number; rate_limit_per_min: number; swarm_enabled: boolean; all_agents_enabled: boolean; streaming_enabled: boolean; monthly_token_budget: number; overage_enabled: boolean; overage_rate_millicents: number }> = {
+            free:       { monthly_message_limit: 50,     rate_limit_per_min: 10,  swarm_enabled: false, all_agents_enabled: false, streaming_enabled: false, monthly_token_budget: 100000,    overage_enabled: false, overage_rate_millicents: 0 },
+            pro:        { monthly_message_limit: 1500,   rate_limit_per_min: 30,  swarm_enabled: false, all_agents_enabled: false, streaming_enabled: true,  monthly_token_budget: 3000000,   overage_enabled: true,  overage_rate_millicents: 30 },
+            growth:     { monthly_message_limit: 10000,  rate_limit_per_min: 120, swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 25000000,  overage_enabled: true,  overage_rate_millicents: 25 },
+            enterprise: { monthly_message_limit: 999999, rate_limit_per_min: 180, swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 999999999, overage_enabled: false, overage_rate_millicents: 0 },
+          }
+          const defaults = tierDefaults[apiTier] || tierDefaults.free
+
+          // Find most recent active key for this user and update it
+          const { data: activeKey } = await supabase.from('api_keys')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('status', 'active')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+
+          const { error: apiErr } = activeKey
+            ? await supabase.from('api_keys')
+                .update({
+                  tier: apiTier,
+                  stripe_subscription_id: session.subscription,
+                  stripe_item_id: session.metadata?.stripe_item_id || null,
+                  ...defaults,
+                })
+                .eq('id', activeKey.id)
+            : { error: { message: 'No active API key found' } }
+
+          if (apiErr) console.error('API key tier update error:', apiErr)
+          else console.log(`API key updated to ${apiTier} for user ${userId}`)
+          break
+        }
+
         // Extract plan + status from Stripe subscription metadata
         let plan = 'pro_monthly'
         let subStatus: string = 'active'
@@ -342,6 +378,22 @@ serve(async (req: Request) => {
       case 'customer.subscription.deleted': {
         const sub = event.data.object
         const userId = sub.metadata?.supabase_user_id
+
+        // Handle API key subscription cancellation
+        if (sub.metadata?.type === 'api') {
+          const { error } = await supabase.from('api_keys')
+            .update({
+              status: 'expired',
+              overage_enabled: false,
+              overage_count: 0,
+              alert_80_sent: false,
+              alert_100_sent: false,
+            })
+            .eq('stripe_subscription_id', sub.id)
+          if (error) console.error('API key expire error (subscription.deleted):', error)
+          else console.log(`API key expired for subscription ${sub.id}`)
+          break
+        }
 
         if (userId) {
           const { error } = await supabase.from('subscriptions')
