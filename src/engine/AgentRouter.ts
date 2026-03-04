@@ -60,7 +60,7 @@ Also determine:
 - needsResearch: true if the question requires multi-step web research (not just a simple search). Examples: "research AI regulation in the EU", "deep dive into...", "comprehensive analysis of..."
 - isMultiStep: true if the request requires 3+ distinct operations that build on each other. Examples: "research X, then analyze Y, then write Z", "build a complete...", "create a plan and execute it"
 - needsSwarm: true if the question would benefit from multiple specialist perspectives working together. Examples: "what should I do about...", "evaluate this idea", "help me think through...", complex decisions, multi-domain questions, strategy + analysis + creativity combined. NOT for simple factual questions or single-domain tasks.
-- needsImageGen: true if the user is explicitly asking to CREATE/GENERATE/DRAW/MAKE an image, picture, illustration, photo, artwork, or visual. Examples: "generate an image of a sunset", "draw me a cat", "create a picture of...", "make me a logo". NOT for analyzing existing images, not for describing images, not for editing photos, not for image-related questions.
+- needsImageGen: true if the user is asking to CREATE/GENERATE/DRAW/MAKE an image, picture, illustration, photo, artwork, or visual — including when referencing prior conversation context as the subject. Examples: "generate an image of a sunset", "draw me a cat", "create a picture of...", "make me a logo", "make an image from the research", "draw what we just discussed", "create a visual of that". NOT for analyzing existing images, not for describing images, not for editing photos, not for image-related questions.
 - needsImageRefinement: true if the conversation has a recently generated image AND the user is asking to MODIFY/REFINE/ADJUST it. Examples: "make it darker", "add prices", "change to landscape", "more vibrant", "less busy", "refine this", "try again but with...", "remove the background". When true, needsImageGen should also be true. NOT for unrelated image generation requests.
 Respond with ONLY valid JSON, no other text:
 {"agentId": "kernel", "confidence": 0.9, "complexity": 0.5, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsImageGen": false, "needsImageRefinement": false}`
@@ -85,7 +85,7 @@ const HIGH_SIGNAL_KEYWORDS: Record<string, string[]> = {
   kernel: ['hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening', 'good night', 'how are you'],
 }
 
-const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?(picture|image|illustration|artwork|logo|icon)|make\s+(me\s+)?(a\s+)?(logo|image|picture|illustration|icon)|illustrate|design\s+me)\b/i
+const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?(picture|image|illustration|artwork|logo|icon|visual|graphic)|make\s+(me\s+)?(an?\s+)?(logo|image|picture|illustration|icon|visual|graphic)|illustrate|design\s+me)\b/i
 // Image refinement is NOT locally classified — it requires conversation context
 // (whether a recent image exists) that only the LLM can evaluate.
 
