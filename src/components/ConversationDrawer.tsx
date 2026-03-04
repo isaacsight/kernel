@@ -11,7 +11,6 @@ import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
 import type { Folder } from '../hooks/useFolders'
-import type { DrawerTab } from '../hooks/useDrawerTabs'
 
 interface ConversationDrawerProps {
   isOpen: boolean
@@ -48,11 +47,9 @@ interface ConversationDrawerProps {
   onCloseArchive?: () => void
   onLoadArchive?: () => void
   archivedConversations?: DBConversation[]
-  // Tabs
-  activeTab?: DrawerTab
-  onTabChange?: (tab: DrawerTab) => void
-  // Shared data
-  sharedConversations?: DBConversation[]
+  // Folders toggle
+  showFolders?: boolean
+  onToggleFolders?: () => void
 }
 
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
@@ -135,9 +132,8 @@ export function ConversationDrawer({
   onCloseArchive,
   onLoadArchive,
   archivedConversations,
-  activeTab = 'yours',
-  onTabChange,
-  sharedConversations,
+  showFolders,
+  onToggleFolders,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -289,10 +285,7 @@ export function ConversationDrawer({
     setFolderRenameValue('')
   }, [folderRenameValue, onRenameFolder])
 
-  // Pick the conversation list based on active tab
-  const tabConversations = activeTab === 'shared'
-    ? (sharedConversations || [])
-    : conversations
+  const tabConversations = conversations
 
   const tagFiltered = selectedTags && selectedTags.length > 0 && getConvTags
     ? tabConversations.filter(c => {
@@ -308,21 +301,17 @@ export function ConversationDrawer({
       )
     : tagFiltered
 
-  // Split starred vs recents (only on yours tab)
+  // Split starred vs recents
   const starredConversations = useMemo(() =>
-    activeTab === 'yours'
-      ? filteredConversations.filter(c => c.starred_at != null).sort((a, b) =>
-          new Date(b.starred_at!).getTime() - new Date(a.starred_at!).getTime()
-        )
-      : [],
-    [filteredConversations, activeTab],
+    filteredConversations.filter(c => c.starred_at != null).sort((a, b) =>
+      new Date(b.starred_at!).getTime() - new Date(a.starred_at!).getTime()
+    ),
+    [filteredConversations],
   )
 
   const recentConversations = useMemo(() =>
-    activeTab === 'yours'
-      ? filteredConversations.filter(c => c.starred_at == null)
-      : filteredConversations,
-    [filteredConversations, activeTab],
+    filteredConversations.filter(c => c.starred_at == null),
+    [filteredConversations],
   )
 
   // Filtered archived conversations
@@ -363,7 +352,7 @@ export function ConversationDrawer({
   // Build folder map for Yours tab (folders are sub-organization within Recents)
   const folderConvsMap = new Map<string, DBConversation[]>()
   const unfolderedRecents: DBConversation[] = []
-  if (hasFolders && activeTab === 'yours') {
+  if (hasFolders && showFolders) {
     for (const f of folders!) folderConvsMap.set(f.id, [])
     for (const c of recentConversations) {
       if (c.folder_id && folderConvsMap.has(c.folder_id)) {
@@ -578,46 +567,31 @@ export function ConversationDrawer({
       return filteredConversations.map(conv => renderConvItem(conv))
     }
 
-    // Shared tab: flat list sorted by updated_at
-    if (activeTab === 'shared') {
-      if (filteredConversations.length === 0) {
-        return <div className="conv-empty">{t('conversations.empty')}</div>
-      }
-      return filteredConversations.map(conv => renderConvItem(conv))
-    }
-
-    // Yours tab: folders inline within recents, then unfoldered date-grouped
-    if (activeTab === 'yours') {
-      const hasAnyFolderConvs = hasFolders && Array.from(folderConvsMap.values()).some(arr => arr.length > 0)
+    // Folders view: show folder sections with their conversations
+    if (showFolders && hasFolders) {
       return (
         <>
-          {/* Folder sections inline */}
-          {hasFolders && folders!.map(folder => {
+          {folders!.map(folder => {
             const folderConvs = folderConvsMap.get(folder.id) || []
-            if (folderConvs.length === 0) return null
             return renderFolderSection(folder, folderConvs)
           })}
-          {/* Unfoldered conversations, date-grouped */}
-          {hasFolders ? (
-            groupConversations(unfolderedRecents).map(({ group, items }) => (
-              <div key={group} className="conv-date-group">
-                <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-                {items.map(conv => renderConvItem(conv))}
-              </div>
-            ))
-          ) : (
-            groupConversations(recentConversations).map(({ group, items }) => (
-              <div key={group} className="conv-date-group">
-                <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-                {items.map(conv => renderConvItem(conv))}
-              </div>
-            ))
+          {unfolderedRecents.length > 0 && (
+            <div className="conv-date-group">
+              <div className="conv-date-label">{t('conversations.recents')}</div>
+              {unfolderedRecents.map(conv => renderConvItem(conv))}
+            </div>
           )}
         </>
       )
     }
 
-    return null
+    // Default: date-grouped flat list
+    return groupConversations(recentConversations).map(({ group, items }) => (
+      <div key={group} className="conv-date-group">
+        <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+        {items.map(conv => renderConvItem(conv))}
+      </div>
+    ))
   }
 
   return (
@@ -651,28 +625,19 @@ export function ConversationDrawer({
                 <IconClose size={18} />
               </button>
               <span className="conv-drawer-title">Chats</span>
+              {hasFolders && onToggleFolders && (
+                <button
+                  className={`conv-drawer-folder-btn${showFolders ? ' conv-drawer-folder-btn--active' : ''}`}
+                  onClick={onToggleFolders}
+                  aria-label={t('conversations.folders')}
+                >
+                  <IconFolder size={16} />
+                </button>
+              )}
             </div>
 
-            {/* Tab bar: Yours / Team / Shared */}
-            {onTabChange && (
-              <div className="conv-tabs">
-                <button
-                  className={`conv-tab${activeTab === 'yours' ? ' conv-tab--active' : ''}`}
-                  onClick={() => onTabChange('yours')}
-                >
-                  {t('conversations.yours')}
-                </button>
-                <button
-                  className={`conv-tab${activeTab === 'shared' ? ' conv-tab--active' : ''}`}
-                  onClick={() => onTabChange('shared')}
-                >
-                  {t('conversations.shared')}
-                </button>
-              </div>
-            )}
-
-            {/* Tag filter (only on Yours tab) */}
-            {activeTab === 'yours' && allTags && allTags.length > 0 && onToggleTag && (
+            {/* Tag filter */}
+            {allTags && allTags.length > 0 && onToggleTag && (
               <div className="ka-tag-filter-bar">
                 {allTags.map(tag => (
                   <button
@@ -717,7 +682,7 @@ export function ConversationDrawer({
               )}
 
               {/* Starred section (only on Yours tab) */}
-              {starredConversations.length > 0 && !isSearching && activeTab === 'yours' && (
+              {starredConversations.length > 0 && !isSearching && !showFolders && (
                 <div className="conv-section">
                   <div className="conv-section-label">{t('conversations.starred')}</div>
                   {starredConversations.map(conv => renderConvItem(conv))}
@@ -725,9 +690,9 @@ export function ConversationDrawer({
               )}
 
               {/* Recents section */}
-              {(recentConversations.length > 0 || isSearching || activeTab !== 'yours') && (
+              {(recentConversations.length > 0 || isSearching) && (
                 <div className="conv-section">
-                  {activeTab === 'yours' && !isSearching && (
+                  {!showFolders && !isSearching && (
                     <div className="conv-section-label">{t('conversations.recents')}</div>
                   )}
                   {renderRecentsContent()}

@@ -15,8 +15,7 @@ import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { forkSharedConversation, updateConversationMetadata, getConversationMetadata, getSharedWithMeConversations } from '../engine/SupabaseClient'
-import type { DBConversation } from '../engine/SupabaseClient'
+import { forkSharedConversation, updateConversationMetadata, getConversationMetadata } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
@@ -296,16 +295,6 @@ function EngineChat() {
   // ─── Drawer tabs ─────────────────────────────────────
   const drawerTabs = useDrawerTabs()
 
-  // ─── Shared conversations (lazy-loaded on tab switch) ──
-  const [sharedConversations, setSharedConversations] = useState<DBConversation[]>([])
-  const sharedConvsLoadedRef = useRef(false)
-
-  useEffect(() => {
-    if (drawerTabs.activeTab === 'shared' && !sharedConvsLoadedRef.current && user) {
-      sharedConvsLoadedRef.current = true
-      getSharedWithMeConversations(user.id).then(setSharedConversations).catch(() => {})
-    }
-  }, [drawerTabs.activeTab, user])
 
   // ─── Voice I/O (hooks that don't depend on chatEngine) ──
   const voiceInput = useVoiceInput()
@@ -856,9 +845,8 @@ function EngineChat() {
         onCloseArchive={drawerTabs.closeArchive}
         onLoadArchive={convs.loadArchivedConversations}
         archivedConversations={convs.archivedConversations}
-        activeTab={drawerTabs.activeTab}
-        onTabChange={drawerTabs.setActiveTab}
-        sharedConversations={sharedConversations}
+        showFolders={drawerTabs.showFolders}
+        onToggleFolders={drawerTabs.toggleFolders}
       />
 
       {/* Header */}
@@ -896,7 +884,19 @@ function EngineChat() {
           <button className="ka-header-icon-btn" data-testid="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
             {theme === 'dark' ? <IconSun size={16} /> : theme === 'eink' ? <IconBookOpen size={16} /> : <IconMoon size={16} />}
           </button>
-          <div className="ka-header-menu-wrap" ref={headerMenuRef}>
+          {/* Mobile inline actions — replace dropdown on small screens */}
+          {messages.length > 0 && (
+            <div className="ka-mobile-header-actions">
+              <button className="ka-header-icon-btn" onClick={() => msgActions.setShowShareModal(true)} aria-label={t('menu.shareConversation')}>
+                <IconShare size={16} />
+              </button>
+              <button className="ka-header-icon-btn" onClick={() => msgActions.handleExportConversation()} aria-label={t('menu.exportMarkdown')}>
+                <IconExport size={16} />
+              </button>
+            </div>
+          )}
+          {/* Desktop dropdown menu — hidden on mobile */}
+          <div className="ka-header-menu-wrap ka-desktop-only" ref={headerMenuRef}>
             <button className="ka-header-icon-btn" onClick={() => panels.setHeaderMenuOpen(!panels.headerMenuOpen)} aria-label={t('aria.moreOptions', { ns: 'common' })}>
               <IconMoreVertical size={16} />
             </button>

@@ -15473,6 +15473,53 @@ h4 {
     }
 }
 
+/* ─── Drawer folder toggle button ────────────────── */
+
+.conv-drawer-folder-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.35;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    transition: opacity var(--duration-fast), background var(--duration-fast);
+}
+
+.conv-drawer-folder-btn:hover {
+    opacity: 0.7;
+}
+
+.conv-drawer-folder-btn--active {
+    opacity: 1;
+    background: var(--rubin-ivory-dark);
+}
+
+[data-theme="dark"] .conv-drawer-folder-btn--active {
+    background: rgba(196, 168, 130, 0.15);
+}
+
+/* ─── Mobile header actions (inline icons, hidden on desktop) ── */
+
+.ka-mobile-header-actions {
+    display: none;
+    align-items: center;
+    gap: 2px;
+}
+
+@media (max-width: 768px) {
+    .ka-mobile-header-actions {
+        display: flex;
+    }
+    .ka-desktop-only {
+        display: none !important;
+    }
+}
+
 /* ─── Drawer header actions row ───────────────────── */
 
 .conv-drawer-header-actions {

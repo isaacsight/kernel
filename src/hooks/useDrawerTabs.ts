@@ -1,17 +1,16 @@
 import { useState, useCallback } from 'react'
 
-export type DrawerTab = 'yours' | 'shared'
-
 export function useDrawerTabs() {
-  const [activeTab, setActiveTab] = useState<DrawerTab>('yours')
+  const [showFolders, setShowFolders] = useState(false)
   const [showArchive, setShowArchive] = useState(false)
 
+  const toggleFolders = useCallback(() => setShowFolders(prev => !prev), [])
   const openArchive = useCallback(() => setShowArchive(true), [])
   const closeArchive = useCallback(() => setShowArchive(false), [])
 
   return {
-    activeTab,
-    setActiveTab,
+    showFolders,
+    toggleFolders,
     showArchive,
     openArchive,
     closeArchive,
