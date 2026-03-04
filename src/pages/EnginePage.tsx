@@ -42,6 +42,8 @@ import { useVoiceOutput } from '../hooks/useVoiceOutput'
 import { useVoiceLoop } from '../hooks/useVoiceLoop'
 import { VoiceLoopOverlay } from '../components/VoiceLoopOverlay'
 import { LiveShareBadge } from '../components/LiveShareBadge'
+import { WorkspaceSwitcher } from '../components/WorkspaceSwitcher'
+import { useWorkspace } from '../hooks/useWorkspace'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
@@ -286,6 +288,9 @@ function EngineChat() {
 
   // ─── Live Share ─────────────────────────────────────────
   const liveShare = useLiveShare(user?.id ?? null)
+
+  // ─── Workspace ─────────────────────────────────────────
+  const workspaceHook = useWorkspace(user?.id ?? null)
 
   // ─── Voice I/O (hooks that don't depend on chatEngine) ──
   const voiceInput = useVoiceInput()
@@ -838,6 +843,14 @@ function EngineChat() {
           </button>
         </div>
         <div className="ka-header-right">
+          {workspaceHook.workspaces.length > 0 && (
+            <WorkspaceSwitcher
+              workspaces={workspaceHook.workspaces}
+              activeWorkspace={workspaceHook.activeWorkspace}
+              onSelect={workspaceHook.setActiveWorkspaceId}
+              onCreate={(name) => workspaceHook.createWorkspace(name)}
+            />
+          )}
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
           {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
           {liveShare.state.isActive && (

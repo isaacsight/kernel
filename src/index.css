@@ -3803,6 +3803,218 @@ h4 {
     border-color: #3A3630;
 }
 
+/* ─── Workspace Switcher ────────────────────────────── */
+
+.ka-workspace-switcher {
+    position: relative;
+}
+
+.ka-workspace-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--rubin-slate);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.ka-workspace-trigger:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.ka-workspace-name {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ka-workspace-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    min-width: 180px;
+    background: var(--rubin-ivory);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-xs);
+    z-index: 50;
+    animation: ka-menu-in var(--duration-fast) var(--ease-out);
+}
+
+.ka-workspace-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--rubin-slate);
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+    text-align: left;
+    transition: background var(--duration-fast) var(--ease-out);
+}
+
+.ka-workspace-option:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.ka-workspace-option--active {
+    font-weight: 600;
+    color: var(--rubin-primary);
+}
+
+.ka-workspace-option--create {
+    opacity: 0.5;
+}
+
+.ka-workspace-divider {
+    height: 1px;
+    background: var(--rubin-ivory-dark);
+    margin: 4px 0;
+}
+
+.ka-workspace-create-form {
+    padding: 4px;
+}
+
+.ka-workspace-create-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: none;
+}
+
+/* Workspace Admin Page */
+.ka-workspace-admin {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.ka-workspace-admin-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+}
+
+.ka-workspace-admin-meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-bottom: var(--space-xl);
+}
+
+.ka-workspace-section {
+    margin-bottom: var(--space-xl);
+}
+
+.ka-workspace-section h3 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-sm);
+}
+
+.ka-workspace-member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ka-workspace-member {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 12px;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+}
+
+.ka-workspace-member-id {
+    flex: 1;
+    opacity: 0.7;
+}
+
+.ka-workspace-member-role {
+    text-transform: uppercase;
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
+    opacity: 0.4;
+}
+
+.ka-workspace-member-expires {
+    font-size: 0.6rem;
+    opacity: 0.4;
+}
+
+.ka-workspace-invite-form {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.ka-workspace-invite-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: none;
+}
+
+.ka-workspace-invite-select {
+    padding: 8px;
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: none;
+    cursor: pointer;
+}
+
+.ka-workspace-billing-desc {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-bottom: var(--space-sm);
+}
+
+[data-theme="dark"] .ka-workspace-trigger,
+[data-theme="dark"] .ka-workspace-dropdown,
+[data-theme="dark"] .ka-workspace-member,
+[data-theme="dark"] .ka-workspace-invite-input,
+[data-theme="dark"] .ka-workspace-invite-select,
+[data-theme="dark"] .ka-workspace-create-input {
+    border-color: #3A3630;
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-workspace-dropdown {
+    background: #252321;
+}
+
+[data-theme="dark"] .ka-workspace-divider {
+    background: #3A3630;
+}
+
 .ka-share-desc--existing {
     color: var(--rubin-primary);
     opacity: 1;
