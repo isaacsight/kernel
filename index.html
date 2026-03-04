@@ -93,7 +93,13 @@
       }
       caches.keys().then(function(names) {
         names.forEach(function(n) { caches.delete(n); });
-      }).then(function() { location.reload(); });
+      }).then(function() {
+        // Cache-bust: append timestamp to URL so the browser skips HTTP cache
+        // (GitHub Pages sets Cache-Control: max-age=600 on HTML)
+        var url = new URL(location.href);
+        url.searchParams.set('_cb', Date.now().toString(36));
+        location.replace(url.toString());
+      });
     }
     // Catch JS asset load errors (404 on hashed bundles)
     window.addEventListener('error', function(e) {
