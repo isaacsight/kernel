@@ -2717,8 +2717,8 @@ h4 {
 
 .ka-gen-image-lightbox-close {
     position: absolute;
-    top: var(--space-lg);
-    right: var(--space-lg);
+    top: calc(var(--space-lg) + env(safe-area-inset-top, 0px));
+    right: calc(var(--space-lg) + env(safe-area-inset-right, 0px));
     width: 40px;
     height: 40px;
     border-radius: 50%;

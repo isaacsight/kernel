@@ -104,7 +104,10 @@ export interface ActiveDocument {
 }
 
 /** Generate contextual follow-up suggestions based on agent type */
-function generateFollowUps(agentId: string, content: string): string[] {
+function generateFollowUps(agentId: string, content: string, isImageGen?: boolean): string[] {
+  if (isImageGen) {
+    return ['Try a different style', 'Make it darker', 'More vibrant', 'Generate another version']
+  }
   const suggestions: Record<string, string[]> = {
     researcher: ['Tell me more', 'Counterarguments?', 'Recent developments'],
     coder: ['Optimize this', 'Add error handling', 'Write tests'],
@@ -1288,8 +1291,9 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
           const result = await generateImage(effectivePrompt, previousImage, referenceImages.length > 0 ? referenceImages : undefined)
           setIsThinking(false)
           isThinkingRef.current = false
+          const imageChips = generateFollowUps('kernel', effectivePrompt, true)
           guardedSetMessages(prev => prev.map(m => m.id === kernelId
-            ? { ...m, content: effectivePrompt, generatedImages: [result] }
+            ? { ...m, content: effectivePrompt, generatedImages: [result], suggestions: imageChips }
             : m
           ))
           latestKernelContentRef.current = `[Generated image: ${effectivePrompt}]`
@@ -1799,7 +1803,7 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
         // Inject follow-up suggestion chips on the last kernel message
         guardedSetMessages(prev => {
           const last = [...prev].reverse().find(m => m.role === 'kernel' && m.content)
-          if (last) {
+          if (last && !last.suggestions?.length) {
             const chips = generateFollowUps(last.agentId || 'kernel', last.content)
             return prev.map(m => m.id === last.id ? { ...m, suggestions: chips } : m)
           }

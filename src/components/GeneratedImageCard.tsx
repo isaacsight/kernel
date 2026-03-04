@@ -88,7 +88,6 @@ export function GeneratedImageCard({ image, imageUrl, mimeType, prompt, creditsR
               src={src}
               alt={prompt || 'AI-generated image'}
               className="ka-gen-image-lightbox-img"
-              onClick={e => e.stopPropagation()}
             />
           </motion.div>
         )}

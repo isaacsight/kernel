@@ -14,6 +14,8 @@ cleanupOutdatedCaches()
 
 // Navigation requests (HTML) — always network first so users get fresh index.html.
 // This prevents stale HTML from referencing JS/CSS hashes that no longer exist.
+// `cache: 'reload'` bypasses the browser's HTTP cache, critical for GitHub Pages
+// which caches HTML aggressively with no way to set custom Cache-Control headers.
 // 10s timeout: Android 3G/4G networks often need 5-8s. Previous 5s was too aggressive
 // and caused stale cache fallbacks that referenced missing JS/CSS hashes.
 registerRoute(
@@ -21,6 +23,7 @@ registerRoute(
     new NetworkFirst({
       cacheName: 'html-shell',
       networkTimeoutSeconds: 10,
+      fetchOptions: { cache: 'reload' },
     })
   )
 )
@@ -117,6 +120,15 @@ self.addEventListener('notificationclick', (event) => {
 // This ensures users always get the latest code on next navigation.
 self.addEventListener('install', () => {
   self.skipWaiting()
+})
+
+// Handle SKIP_WAITING messages from useServiceWorkerUpdate hook.
+// Belt-and-suspenders: skipWaiting() above runs on install, but the hook
+// also sends this message as a fallback for edge cases.
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
 })
 
 self.addEventListener('activate', (event) => {

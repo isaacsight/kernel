@@ -9,6 +9,11 @@ import { supabase } from './engine/SupabaseClient'
 import './i18n'
 import './index.css'
 
+// ─── Boot sequence ──────────────────────────────────────────────
+// Auth tokens must be fully processed BEFORE React renders.
+// Otherwise useAuth sees no session → LoginGate flashes.
+;(async () => {
+
 // ─── Intercept OAuth tokens BEFORE the hash router loads ────────
 // Supabase implicit flow puts tokens in the hash fragment:
 //   #access_token=xxx&refresh_token=yyy&...
@@ -23,7 +28,7 @@ if (hash && hash.includes('access_token=')) {
 
   if (access_token && refresh_token) {
     console.log('[Auth] Intercepted OAuth tokens from hash fragment')
-    supabase.auth.setSession({ access_token, refresh_token })
+    await supabase.auth.setSession({ access_token, refresh_token })
   }
 
   // Replace hash with clean route so the router works
@@ -35,10 +40,9 @@ const searchParams = new URLSearchParams(window.location.search)
 if (searchParams.has('code')) {
   const code = searchParams.get('code')!
   console.log('[Auth] Intercepted PKCE code from query params')
-  supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-    if (error) console.error('[Auth] PKCE exchange failed:', error.message)
-    else console.log('[Auth] PKCE exchange success')
-  })
+  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  if (error) console.error('[Auth] PKCE exchange failed:', error.message)
+  else console.log('[Auth] PKCE exchange success')
   // Clean URL
   window.history.replaceState({}, '', window.location.pathname + window.location.hash)
 }
@@ -72,6 +76,15 @@ createRoot(document.getElementById('root')!).render(
         </Suspense>
     </StrictMode>,
 )
+
+// ─── Periodic SW update check ───────────────────────────────────
+// SPAs rarely navigate, so the browser won't check for SW updates.
+// Poll every 30 minutes so users get new versions without a hard refresh.
+if ('serviceWorker' in navigator && !/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+  navigator.serviceWorker.getRegistration().then(reg => {
+    if (reg) setInterval(() => reg.update(), 30 * 60 * 1000)
+  })
+}
 
 // ─── Deferred Analytics (load after first paint) ────────────────
 // Sentry + PostHog are ~172KB combined. Loading them after render
@@ -133,3 +146,5 @@ deferLoad(() => {
     })
   }
 })
+
+})() // end async boot
