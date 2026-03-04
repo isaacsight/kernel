@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield,
   IconMessageCircle, IconLogOut,
-  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconFolder,
+  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconFolder, IconArchive,
 } from '../components/KernelIcons'
 import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -913,6 +913,13 @@ function EngineChat() {
                     </button>
                   </>
                 )}
+                <div className="ka-header-menu-divider" />
+                <button className="ka-header-menu-item" onClick={() => { setShowImportModal(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconDownload size={16} /> {t('menu.importConversation', { defaultValue: 'Import conversation' })}
+                </button>
+                <button className="ka-header-menu-item" onClick={() => { convs.loadArchivedConversations(); drawerTabs.openArchive(); setIsDrawerOpen(true); panels.setHeaderMenuOpen(false) }}>
+                  <IconArchive size={16} /> {t('conversations.archive', { ns: 'common' })}
+                </button>
                 <div className="ka-header-menu-divider" />
                 <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
                   <IconFileText size={16} /> {t('menu.projectFiles')}

@@ -428,17 +428,6 @@ export function ConversationDrawer({
           </div>
           {!isRenaming && (
             <div className="conv-item-right">
-              {/* Always-visible folder button */}
-              {!inArchive && onMoveToFolder && hasFolders && activeTab === 'yours' && (
-                <button
-                  className={`conv-item-folder-btn${isMoveOpen ? ' conv-item-folder-btn--active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(isMoveOpen ? null : conv.id) }}
-                  aria-label="Move to folder"
-                >
-                  <IconFolder size={14} />
-                </button>
-              )}
-              <IconChevronRight size={14} className="conv-item-chevron" />
               <div className="conv-item-actions">
                 {/* Star / Unstar */}
                 {!inArchive && onStar && onUnstar && (
@@ -477,15 +466,6 @@ export function ConversationDrawer({
                     <IconShare size={13} />
                   </button>
                 )}
-                {!inArchive && onTag && (
-                  <button
-                    className="conv-item-action"
-                    onClick={(e) => { e.stopPropagation(); onTag(conv.id) }}
-                    aria-label="Tag"
-                  >
-                    <IconBookOpen size={13} />
-                  </button>
-                )}
                 {!inArchive && (
                   <button
                     className="conv-item-action"
@@ -506,23 +486,6 @@ export function ConversationDrawer({
             </div>
           )}
         </div>
-        {/* Inline folder picker — expands below the conversation */}
-        {isMoveOpen && onMoveToFolder && hasFolders && (
-          <div className="conv-move-folders" onClick={e => e.stopPropagation()}>
-            {conv.folder_id && (
-              <button className="conv-move-folder-item" onClick={() => { onMoveToFolder(conv.id, null); setMoveMenuConvId(null) }}>
-                <IconClose size={12} />
-                <span>Remove from folder</span>
-              </button>
-            )}
-            {folders!.filter(f => f.id !== conv.folder_id).map(f => (
-              <button key={f.id} className="conv-move-folder-item" onClick={() => { onMoveToFolder(conv.id, f.id); setMoveMenuConvId(null) }}>
-                <IconFolder size={12} />
-                <span>{f.name}</span>
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     )
   }
@@ -688,27 +651,6 @@ export function ConversationDrawer({
                 <IconClose size={18} />
               </button>
               <span className="conv-drawer-title">Chats</span>
-              <div className="conv-drawer-header-actions">
-                {onOpenArchive && (
-                  <button
-                    className="conv-drawer-archive-btn"
-                    onClick={() => { onLoadArchive?.(); onOpenArchive() }}
-                    aria-label={t('conversations.archive')}
-                  >
-                    <IconArchive size={16} />
-                  </button>
-                )}
-                {onCreateFolder && (
-                  <button className="conv-drawer-archive-btn" onClick={() => setCreatingFolder(true)} aria-label="New folder">
-                    <IconFolderPlus size={16} />
-                  </button>
-                )}
-                {onImport && (
-                  <button className="conv-drawer-archive-btn" onClick={() => { onImport(); onClose(); }} aria-label="Import conversation">
-                    <IconDownload size={14} />
-                  </button>
-                )}
-              </div>
             </div>
 
             {/* Tab bar: Yours / Team / Shared */}
