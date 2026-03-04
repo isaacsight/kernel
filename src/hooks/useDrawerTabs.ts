@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-export type DrawerTab = 'yours' | 'folders' | 'shared'
+export type DrawerTab = 'yours' | 'shared'
 
 export function useDrawerTabs() {
   const [activeTab, setActiveTab] = useState<DrawerTab>('yours')

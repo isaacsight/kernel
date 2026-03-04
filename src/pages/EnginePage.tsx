@@ -5,9 +5,9 @@ import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
   IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
-  IconMoreVertical, IconTrash, IconCrown, IconShield, IconThinking,
+  IconMoreVertical, IconTrash, IconCrown, IconShield,
   IconMessageCircle, IconLogOut,
-  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap, IconFolder, IconVolume,
+  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconFolder,
 } from '../components/KernelIcons'
 import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -40,7 +40,6 @@ import { useFolders } from '../hooks/useFolders'
 import { useDrawerTabs } from '../hooks/useDrawerTabs'
 import { useLiveShare } from '../hooks/useLiveShare'
 import { useVoiceInput } from '../hooks/useVoiceInput'
-import { useVoiceOutput } from '../hooks/useVoiceOutput'
 import { useVoiceLoop } from '../hooks/useVoiceLoop'
 import { VoiceLoopOverlay } from '../components/VoiceLoopOverlay'
 import { LiveShareBadge } from '../components/LiveShareBadge'
@@ -296,18 +295,21 @@ function EngineChat() {
 
   // ─── Drawer tabs ─────────────────────────────────────
   const drawerTabs = useDrawerTabs()
-  const [sharedConversations, setSharedConversations] = useState<DBConversation[]>([])
 
-  // Load shared conversations on tab switch
+  // ─── Shared conversations (lazy-loaded on tab switch) ──
+  const [sharedConversations, setSharedConversations] = useState<DBConversation[]>([])
+  const sharedConvsLoadedRef = useRef(false)
+
   useEffect(() => {
-    if (drawerTabs.activeTab === 'shared' && user?.id) {
+    if (drawerTabs.activeTab === 'shared' && !sharedConvsLoadedRef.current && user) {
+      sharedConvsLoadedRef.current = true
       getSharedWithMeConversations(user.id).then(setSharedConversations).catch(() => {})
     }
-  }, [drawerTabs.activeTab, user?.id])
+  }, [drawerTabs.activeTab, user])
 
   // ─── Voice I/O (hooks that don't depend on chatEngine) ──
   const voiceInput = useVoiceInput()
-  const voiceOutput = useVoiceOutput(isPro)
+
 
   // Load tags from conversation metadata
   useEffect(() => {
@@ -386,6 +388,11 @@ function EngineChat() {
     const text = voiceInput.transcript || voiceInput.finalTranscript
     if (text) chatEngine.setInput(text)
   }, [voiceInput.transcript, voiceInput.finalTranscript, voiceInput.isRecording, voiceLoop.isActive]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Surface voice input errors as toasts
+  useEffect(() => {
+    if (voiceInput.error) showToast(voiceInput.error)
+  }, [voiceInput.error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Project context — file tracking + cloud sync
   const registerProjectFile = useProjectStore(s => s.registerFile)
@@ -646,7 +653,7 @@ function EngineChat() {
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
   const { researchProgress, taskProgress, swarmProgress, workflowSteps, isWorkflowActive, cancelWorkflow } = chatEngine
   const { contentPipelineStages, isContentPipelineActive, approveContentStage, editContentStage, cancelContentPipeline } = chatEngine
-  const { extendedThinkingEnabled, setExtendedThinkingEnabled, explainModeEnabled, setExplainModeEnabled, currentThinking, thinkingStartRef } = chatEngine
+  const { currentThinking, thinkingStartRef } = chatEngine
 
   // Compute last kernel message index for lazy auto-preview
   const lastKernelIndex = useMemo(() => {
@@ -1158,13 +1165,6 @@ function EngineChat() {
                     <button className="ka-msg-action-btn" onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)} aria-label={t('aria.downloadResponse', { ns: 'common' })}>
                       <IconDownload size={14} />
                     </button>
-                    <button
-                      className={`ka-msg-action-btn${voiceOutput.isSpeaking ? ' ka-tts-btn--speaking' : ''}`}
-                      onClick={() => voiceOutput.isSpeaking ? voiceOutput.stop() : voiceOutput.speak(msg.content)}
-                      aria-label={voiceOutput.isSpeaking ? 'Stop reading' : 'Read aloud'}
-                    >
-                      <IconVolume size={14} />
-                    </button>
                     {msg.signalId && !msg.feedback && (
                       <>
                         <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><IconThumbsUp size={14} /></button>
@@ -1432,28 +1432,6 @@ function EngineChat() {
           disabled={isStreaming}
           rows={1}
         />
-        <button
-          type="button"
-          className={`ka-explain-toggle ka-bar-tooltip${explainModeEnabled ? ' ka-explain-toggle--active' : ''}`}
-          data-tooltip={t('explain.tooltip')}
-          onClick={() => setExplainModeEnabled(prev => !prev)}
-          disabled={isStreaming}
-          aria-label={t('explain.toggle')}
-        >
-          <IconGraduationCap size={18} />
-        </button>
-        {isPro && (
-          <button
-            type="button"
-            className={`ka-thinking-toggle ka-bar-tooltip${extendedThinkingEnabled ? ' ka-thinking-toggle--active' : ''}`}
-            data-tooltip={t('thinking.tooltip')}
-            onClick={() => setExtendedThinkingEnabled(prev => !prev)}
-            disabled={isStreaming}
-            aria-label={t('thinking.toggle')}
-          >
-            <IconThinking size={18} />
-          </button>
-        )}
         {voiceInput.isSupported && !isStreaming && (
           <button
             type="button"

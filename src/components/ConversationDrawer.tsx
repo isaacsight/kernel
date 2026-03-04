@@ -51,6 +51,7 @@ interface ConversationDrawerProps {
   // Tabs
   activeTab?: DrawerTab
   onTabChange?: (tab: DrawerTab) => void
+  // Shared data
   sharedConversations?: DBConversation[]
 }
 
@@ -288,7 +289,7 @@ export function ConversationDrawer({
     setFolderRenameValue('')
   }, [folderRenameValue, onRenameFolder])
 
-  // Choose which conversation list to show based on active tab
+  // Pick the conversation list based on active tab
   const tabConversations = activeTab === 'shared'
     ? (sharedConversations || [])
     : conversations
@@ -307,9 +308,9 @@ export function ConversationDrawer({
       )
     : tagFiltered
 
-  // Split starred vs recents (on yours and folders tabs)
+  // Split starred vs recents (only on yours tab)
   const starredConversations = useMemo(() =>
-    activeTab !== 'shared'
+    activeTab === 'yours'
       ? filteredConversations.filter(c => c.starred_at != null).sort((a, b) =>
           new Date(b.starred_at!).getTime() - new Date(a.starred_at!).getTime()
         )
@@ -318,7 +319,7 @@ export function ConversationDrawer({
   )
 
   const recentConversations = useMemo(() =>
-    activeTab !== 'shared'
+    activeTab === 'yours'
       ? filteredConversations.filter(c => c.starred_at == null)
       : filteredConversations,
     [filteredConversations, activeTab],
@@ -358,6 +359,20 @@ export function ConversationDrawer({
   }, [onMoveToFolder])
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+  // Build folder map for Yours tab (folders are sub-organization within Recents)
+  const folderConvsMap = new Map<string, DBConversation[]>()
+  const unfolderedRecents: DBConversation[] = []
+  if (hasFolders && activeTab === 'yours') {
+    for (const f of folders!) folderConvsMap.set(f.id, [])
+    for (const c of recentConversations) {
+      if (c.folder_id && folderConvsMap.has(c.folder_id)) {
+        folderConvsMap.get(c.folder_id)!.push(c)
+      } else {
+        unfolderedRecents.push(c)
+      }
+    }
+  }
 
   const renderConvItem = (conv: DBConversation, opts?: { inArchive?: boolean }) => {
     const matchSnippet = searchResults.find(r => r.conv_id === conv.id)
@@ -414,7 +429,7 @@ export function ConversationDrawer({
           {!isRenaming && (
             <div className="conv-item-right">
               {/* Always-visible folder button */}
-              {!inArchive && onMoveToFolder && hasFolders && (
+              {!inArchive && onMoveToFolder && hasFolders && activeTab === 'yours' && (
                 <button
                   className={`conv-item-folder-btn${isMoveOpen ? ' conv-item-folder-btn--active' : ''}`}
                   onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(isMoveOpen ? null : conv.id) }}
@@ -583,20 +598,6 @@ export function ConversationDrawer({
     )
   }
 
-  // Split conversations by folder (only for Folders tab)
-  const folderConvsMap = new Map<string, DBConversation[]>()
-  const uncategorized: DBConversation[] = []
-  if (hasFolders && activeTab === 'folders') {
-    for (const f of folders!) folderConvsMap.set(f.id, [])
-    for (const c of recentConversations) {
-      if (c.folder_id && folderConvsMap.has(c.folder_id)) {
-        folderConvsMap.get(c.folder_id)!.push(c)
-      } else {
-        uncategorized.push(c)
-      }
-    }
-  }
-
   // Swipe-to-close: drag left to dismiss
   const dragX = useMotionValue(0)
   const overlayOpacity = useTransform(dragX, [-320, 0], [0, 1])
@@ -614,32 +615,46 @@ export function ConversationDrawer({
       return filteredConversations.map(conv => renderConvItem(conv))
     }
 
-    // Folders tab: only folders and their contents
-    if (activeTab === 'folders') {
-      if (!hasFolders) {
+    // Shared tab: flat list sorted by updated_at
+    if (activeTab === 'shared') {
+      if (filteredConversations.length === 0) {
         return <div className="conv-empty">{t('conversations.empty')}</div>
       }
+      return filteredConversations.map(conv => renderConvItem(conv))
+    }
+
+    // Yours tab: folders inline within recents, then unfoldered date-grouped
+    if (activeTab === 'yours') {
+      const hasAnyFolderConvs = hasFolders && Array.from(folderConvsMap.values()).some(arr => arr.length > 0)
       return (
         <>
-          {folders!.map(folder =>
-            renderFolderSection(folder, folderConvsMap.get(folder.id) || [])
+          {/* Folder sections inline */}
+          {hasFolders && folders!.map(folder => {
+            const folderConvs = folderConvsMap.get(folder.id) || []
+            if (folderConvs.length === 0) return null
+            return renderFolderSection(folder, folderConvs)
+          })}
+          {/* Unfoldered conversations, date-grouped */}
+          {hasFolders ? (
+            groupConversations(unfolderedRecents).map(({ group, items }) => (
+              <div key={group} className="conv-date-group">
+                <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+                {items.map(conv => renderConvItem(conv))}
+              </div>
+            ))
+          ) : (
+            groupConversations(recentConversations).map(({ group, items }) => (
+              <div key={group} className="conv-date-group">
+                <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+                {items.map(conv => renderConvItem(conv))}
+              </div>
+            ))
           )}
         </>
       )
     }
 
-    // Yours tab: flat date-grouped
-    if (activeTab === 'yours') {
-      return groupConversations(recentConversations).map(({ group, items }) => (
-        <div key={group} className="conv-date-group">
-          <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-          {items.map(conv => renderConvItem(conv))}
-        </div>
-      ))
-    }
-
-    // Shared tab: flat list
-    return filteredConversations.map(conv => renderConvItem(conv))
+    return null
   }
 
   return (
@@ -693,7 +708,7 @@ export function ConversationDrawer({
               </div>
             </div>
 
-            {/* Tab bar */}
+            {/* Tab bar: Yours / Team / Shared */}
             {onTabChange && (
               <div className="conv-tabs">
                 <button
@@ -701,12 +716,6 @@ export function ConversationDrawer({
                   onClick={() => onTabChange('yours')}
                 >
                   {t('conversations.yours')}
-                </button>
-                <button
-                  className={`conv-tab${activeTab === 'folders' ? ' conv-tab--active' : ''}`}
-                  onClick={() => onTabChange('folders')}
-                >
-                  {t('conversations.folders')}
                 </button>
                 <button
                   className={`conv-tab${activeTab === 'shared' ? ' conv-tab--active' : ''}`}
@@ -717,8 +726,8 @@ export function ConversationDrawer({
               </div>
             )}
 
-            {/* Tag filter */}
-            {allTags && allTags.length > 0 && onToggleTag && (
+            {/* Tag filter (only on Yours tab) */}
+            {activeTab === 'yours' && allTags && allTags.length > 0 && onToggleTag && (
               <div className="ka-tag-filter-bar">
                 {allTags.map(tag => (
                   <button
@@ -762,8 +771,8 @@ export function ConversationDrawer({
                 </>
               )}
 
-              {/* Starred section */}
-              {starredConversations.length > 0 && !isSearching && (
+              {/* Starred section (only on Yours tab) */}
+              {starredConversations.length > 0 && !isSearching && activeTab === 'yours' && (
                 <div className="conv-section">
                   <div className="conv-section-label">{t('conversations.starred')}</div>
                   {starredConversations.map(conv => renderConvItem(conv))}

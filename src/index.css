@@ -15120,14 +15120,12 @@ h4 {
 }
 
 .conv-item-actions {
-    display: flex;
+    display: none;
     gap: 2px;
-    opacity: 0;
-    transition: opacity var(--duration-fast);
 }
 
 .conv-item:hover .conv-item-actions {
-    opacity: 1;
+    display: flex;
 }
 
 .conv-item-action {
