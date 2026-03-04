@@ -12,7 +12,7 @@
         "test": "vitest run",
         "test:e2e": "playwright test",
         "test:e2e:update": "playwright test --update-snapshots",
-        "deploy": "gh-pages -d dist --dotfiles --no-history",
+        "deploy": "gh-pages -d dist --dotfiles",
         "monitor": "npx tsx tools/kernel-monitor.ts",
         "discord": "npx tsx tools/discord-bot.ts",
         "cap:sync": "npx cap sync",
