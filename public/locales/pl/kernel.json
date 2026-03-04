@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "Zapytaj kernel.chat",
     "emptySubtitle": "Widzi wszystko, co widzi silnik.",
-    "placeholder": "Zapytaj Kernel..."
+    "placeholder": "Zapytaj Kernel...",
+    "send": "Wyślij"
   },
   "pill": {
     "openKernel": "Otwórz kernel.chat",

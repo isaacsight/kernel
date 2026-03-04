@@ -861,3 +861,33 @@ export function IconGraduationCap({ size = 24, className = '' }: IconProps) {
     </svg>
   )
 }
+
+/** Cloud — sync in progress */
+export function IconCloud({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+    </svg>
+  )
+}
+
+/** Cloud with checkmark — synced */
+export function IconCloudCheck({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+      <polyline points="10 14 12 16 16 12" />
+    </svg>
+  )
+}
+
+/** Cloud with alert — sync failed */
+export function IconCloudAlert({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+      <line x1="13" y1="13" x2="13" y2="15" />
+      <line x1="13" y1="17" x2="13.01" y2="17" />
+    </svg>
+  )
+}

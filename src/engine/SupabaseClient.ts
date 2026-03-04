@@ -278,7 +278,7 @@ export async function getLastAgentId(conversationId: string): Promise<string> {
   const { data } = await supabase
     .from('messages')
     .select('agent_id')
-    .eq('conversation_id', conversationId)
+    .eq('channel_id', conversationId)
     .neq('agent_id', 'user')
     .order('created_at', { ascending: false })
     .limit(1)

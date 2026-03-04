@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "لە kernel.chat بپرسە",
         "emptySubtitle": "ئەو هەموو ئەوە دەبینێت کە بزوێنەر دەیکات.",
-        "placeholder": "لە Kernel بپرسە..."
+        "placeholder": "لە Kernel بپرسە...",
+        "send": "ناردن"
     },
     "pill": {
         "openKernel": "کردنەوەی kernel.chat",

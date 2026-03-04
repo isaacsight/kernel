@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "از kernel.chat بپرسید",
         "emptySubtitle": "هر آنچه موتور می‌بیند را می‌بیند.",
-        "placeholder": "از Kernel بپرسید..."
+        "placeholder": "از Kernel بپرسید...",
+        "send": "ارسال"
     },
     "pill": {
         "openKernel": "باز کردن kernel.chat",

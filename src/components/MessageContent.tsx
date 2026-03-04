@@ -12,6 +12,7 @@ import {
 } from './KernelIcons'
 import { downloadFile, downloadAllFiles, LANG_EXT } from './ChatHelpers'
 import { GuardianBadge } from './GuardianBadge'
+import { CloudSyncBadge } from './CloudSyncBadge'
 import { computeDiff, diffStats, type DiffLine } from '../engine/DiffEngine'
 import { useProjectStore } from '../stores/projectStore'
 import { DURATION, EASE } from '../constants/motion'
@@ -483,6 +484,7 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRend
         </div>
       </div>
       {lineCount >= 8 && <GuardianBadge code={code} filename={filename} language={lang} />}
+      {conversationId && <CloudSyncBadge conversationId={conversationId} filename={filename} />}
       <div className="ka-artifact-actions">
         <button className="ka-artifact-action" onClick={handleCopy} aria-label={t('copy')}>
           {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}

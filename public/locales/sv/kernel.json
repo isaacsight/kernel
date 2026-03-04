@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "Fråga kernel.chat",
         "emptySubtitle": "Den ser allt som motorn ser.",
-        "placeholder": "Fråga Kernel..."
+        "placeholder": "Fråga Kernel...",
+        "send": "Skicka"
     },
     "pill": {
         "openKernel": "Öppna kernel.chat",

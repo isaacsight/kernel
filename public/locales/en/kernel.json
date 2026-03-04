@@ -52,7 +52,8 @@
   "chat": {
     "emptyTitle": "Ask Kernel",
     "emptySubtitle": "It sees everything the engine sees.",
-    "placeholder": "Ask the Kernel..."
+    "placeholder": "Ask the Kernel...",
+    "send": "Send"
   },
   "pill": {
     "openKernel": "Open Kernel",

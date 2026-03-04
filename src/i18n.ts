@@ -18,7 +18,7 @@ i18n
     load: 'currentOnly',
     // Only load 'common' at startup — other namespaces load on demand when
     // components call useTranslation('home') etc. Cuts 5 HTTP requests from cold start.
-    ns: ['common'],
+    ns: ['common', 'home'],
     defaultNS: 'common',
     partialBundledLanguages: true,
     backend: {

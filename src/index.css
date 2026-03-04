@@ -8095,6 +8095,59 @@ h4 {
     animation: none;
 }
 
+/* ─── Cloud Sync Badge ─────────────────────────────── */
+
+.ka-cloud-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    color: var(--rubin-text-secondary, #6B7280);
+    border: 1px solid var(--rubin-border);
+}
+
+.ka-cloud-badge--syncing {
+    animation: ka-guardian-pulse 1.5s ease-in-out infinite;
+}
+
+.ka-cloud-badge--synced {
+    color: var(--kernel-success, #22C55E);
+    border-color: color-mix(in srgb, var(--kernel-success, #22C55E) 40%, transparent);
+}
+
+.ka-cloud-badge--error {
+    color: var(--rubin-error, #DC2626);
+    border-color: color-mix(in srgb, var(--rubin-error, #DC2626) 40%, transparent);
+}
+
+.ka-cloud-badge-retry {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+[data-theme="dark"] .ka-cloud-badge {
+    border-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .ka-cloud-badge--synced {
+    border-color: color-mix(in srgb, var(--kernel-success) 30%, var(--dark-border));
+}
+
+[data-theme="dark"] .ka-cloud-badge--error {
+    border-color: color-mix(in srgb, var(--rubin-error) 30%, var(--dark-border));
+}
+
 /* ─── Diff View (Iteration Canvas) ─────────────────── */
 
 .ka-diff {

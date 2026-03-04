@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "Спросите kernel.chat",
         "emptySubtitle": "Он видит всё то же, что и движок.",
-        "placeholder": "Спросить Kernel..."
+        "placeholder": "Спросить Kernel...",
+        "send": "Отправить"
     },
     "pill": {
         "openKernel": "Открыть kernel.chat",

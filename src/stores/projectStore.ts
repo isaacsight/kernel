@@ -19,9 +19,13 @@ export interface ProjectFile {
   updatedAt: number
 }
 
+export type SyncStatus = 'syncing' | 'synced' | 'error'
+
 interface ProjectState {
   /** Files keyed by conversationId -> filename */
   projects: Record<string, Record<string, ProjectFile>>
+  /** Cloud sync status keyed by conversationId -> filename */
+  syncStatus: Record<string, Record<string, SyncStatus>>
 }
 
 interface ProjectActions {
@@ -43,6 +47,8 @@ interface ProjectActions {
   syncToCloud: (conversationId: string, filename: string) => void
   /** Load all files from cloud for a conversation (Pro only) */
   loadFromCloud: (conversationId: string) => Promise<void>
+  /** Get cloud sync status for a specific file */
+  getSyncStatus: (conversationId: string, filename: string) => SyncStatus | undefined
 }
 
 type ProjectStore = ProjectState & ProjectActions
@@ -54,6 +60,7 @@ export const useProjectStore = create<ProjectStore>()(
   persist(
     (set, get) => ({
       projects: {},
+      syncStatus: {},
 
       registerFile: (conversationId, filename, language, content, messageId) => {
         const state = get()
@@ -122,6 +129,12 @@ export const useProjectStore = create<ProjectStore>()(
         const file = get().projects[conversationId]?.[filename]
         if (!file || !file.content) return
 
+        // Set syncing status
+        const ss = { ...get().syncStatus }
+        if (!ss[conversationId]) ss[conversationId] = {}
+        ss[conversationId] = { ...ss[conversationId], [filename]: 'syncing' }
+        set({ syncStatus: ss })
+
         // Fire-and-forget — don't block the UI
         supabase.functions.invoke('project-files', {
           body: {
@@ -132,8 +145,17 @@ export const useProjectStore = create<ProjectStore>()(
             content: file.content,
             version: file.version,
           },
+        }).then(() => {
+          const s = { ...get().syncStatus }
+          if (!s[conversationId]) s[conversationId] = {}
+          s[conversationId] = { ...s[conversationId], [filename]: 'synced' }
+          set({ syncStatus: s })
         }).catch((err: unknown) => {
           console.warn('[project-sync] cloud save failed:', err)
+          const s = { ...get().syncStatus }
+          if (!s[conversationId]) s[conversationId] = {}
+          s[conversationId] = { ...s[conversationId], [filename]: 'error' }
+          set({ syncStatus: s })
         })
       },
 
@@ -175,6 +197,10 @@ export const useProjectStore = create<ProjectStore>()(
         }
       },
 
+      getSyncStatus: (conversationId, filename) => {
+        return get().syncStatus[conversationId]?.[filename]
+      },
+
       formatManifest: (conversationId) => {
         const files = get().getFiles(conversationId)
         if (files.length === 0) return ''
@@ -197,6 +223,7 @@ export const useProjectStore = create<ProjectStore>()(
       partialize: (state) => {
         // Persist only metadata (no file content) to avoid hitting localStorage limits.
         // Content lives in memory only — lost on page reload.
+        // syncStatus is transient — don't persist.
         const stripped: Record<string, Record<string, ProjectFile>> = {}
         const convIds = Object.keys(state.projects).slice(-10) // keep last 10 conversations
         for (const cid of convIds) {

@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "Vraag kernel.chat",
         "emptySubtitle": "Het ziet alles wat de motor ziet.",
-        "placeholder": "Vraag het de Kernel..."
+        "placeholder": "Vraag het de Kernel...",
+        "send": "Verzenden"
     },
     "pill": {
         "openKernel": "Open kernel.chat",

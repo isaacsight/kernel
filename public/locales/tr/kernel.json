@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "kernel.chat'e sorun",
     "emptySubtitle": "Motorun gördüğü her şeyi görür.",
-    "placeholder": "Kernel'e sorun..."
+    "placeholder": "Kernel'e sorun...",
+    "send": "Gönder"
   },
   "pill": {
     "openKernel": "kernel.chat'i aç",

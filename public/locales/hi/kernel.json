@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "kernel.chat से पूछें",
     "emptySubtitle": "यह वह सब देखता है जो इंजन देखता है।",
-    "placeholder": "Kernel से पूछें..."
+    "placeholder": "Kernel से पूछें...",
+    "send": "भेजें"
   },
   "pill": {
     "openKernel": "kernel.chat खोलें",

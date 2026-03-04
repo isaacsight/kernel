@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "詢問 kernel.chat",
     "emptySubtitle": "它看到引擎看到的一切。",
-    "placeholder": "詢問 Kernel..."
+    "placeholder": "詢問 Kernel...",
+    "send": "傳送"
   },
   "pill": {
     "openKernel": "開啟 kernel.chat",

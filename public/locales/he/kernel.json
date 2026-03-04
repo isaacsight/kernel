@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "שאל את kernel.chat",
         "emptySubtitle": "הוא רואה כל מה שהמנוע רואה.",
-        "placeholder": "שאל את Kernel..."
+        "placeholder": "שאל את Kernel...",
+        "send": "שלח"
     },
     "pill": {
         "openKernel": "פתח את kernel.chat",

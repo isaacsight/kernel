@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "Kysy kernel.chatilta",
     "emptySubtitle": "Se näkee kaiken minkä moottori näkee.",
-    "placeholder": "Kysy Kernelilta..."
+    "placeholder": "Kysy Kernelilta...",
+    "send": "Lähetä"
   },
   "pill": {
     "openKernel": "Avaa kernel.chat",

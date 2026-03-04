@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "Spør kernel.chat",
     "emptySubtitle": "Den ser alt motoren ser.",
-    "placeholder": "Spør Kernel..."
+    "placeholder": "Spør Kernel...",
+    "send": "Send"
   },
   "pill": {
     "openKernel": "Åpne kernel.chat",

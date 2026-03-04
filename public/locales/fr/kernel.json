@@ -52,7 +52,8 @@
   "chat": {
     "emptyTitle": "Demandez à kernel.chat",
     "emptySubtitle": "Il voit tout ce que le moteur voit.",
-    "placeholder": "Demandez au Kernel..."
+    "placeholder": "Demandez au Kernel...",
+    "send": "Envoyer"
   },
   "pill": {
     "openKernel": "Ouvrir kernel.chat",

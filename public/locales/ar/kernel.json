@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "اسأل kernel.chat",
         "emptySubtitle": "إنه يرى كل ما يراه المحرك.",
-        "placeholder": "اسأل Kernel..."
+        "placeholder": "اسأل Kernel...",
+        "send": "إرسال"
     },
     "pill": {
         "openKernel": "فتح kernel.chat",

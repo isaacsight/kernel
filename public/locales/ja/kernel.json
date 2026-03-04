@@ -42,7 +42,8 @@
   "chat": {
     "emptyTitle": "kernel.chat に聞く",
     "emptySubtitle": "エンジンが見ているものすべてを見ます。",
-    "placeholder": "Kernel に聞く..."
+    "placeholder": "Kernel に聞く...",
+    "send": "送信"
   },
   "pill": {
     "openKernel": "kernel.chat を開く",

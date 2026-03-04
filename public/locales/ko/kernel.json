@@ -52,7 +52,8 @@
     "chat": {
         "emptyTitle": "kernel.chat에 물어보세요",
         "emptySubtitle": "엔진이 보는 모든 것을 봅니다.",
-        "placeholder": "Kernel에게 묻기..."
+        "placeholder": "Kernel에게 묻기...",
+        "send": "보내기"
     },
     "pill": {
         "openKernel": "kernel.chat 열기",
