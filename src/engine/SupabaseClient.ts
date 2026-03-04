@@ -7,7 +7,7 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsIn
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey, {
   auth: {
     flowType: 'pkce',
-    detectSessionInUrl: true,
+    detectSessionInUrl: false, // We handle URL detection manually in main.tsx to avoid race conditions
     autoRefreshToken: true,
   },
 });

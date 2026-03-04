@@ -40,11 +40,20 @@ const searchParams = new URLSearchParams(window.location.search)
 if (searchParams.has('code')) {
   const code = searchParams.get('code')!
   console.log('[Auth] Intercepted PKCE code from query params')
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
-  if (error) console.error('[Auth] PKCE exchange failed:', error.message)
-  else console.log('[Auth] PKCE exchange success')
-  // Clean URL
-  window.history.replaceState({}, '', window.location.pathname + window.location.hash)
+  try {
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) {
+      console.error('[Auth] PKCE exchange failed:', error.message)
+      // Don't clean URL on failure — useAuth.ts will retry
+    } else {
+      console.log('[Auth] PKCE exchange success')
+      // Only clean URL on success
+      window.history.replaceState({}, '', window.location.pathname + (window.location.hash || '#/'))
+    }
+  } catch (err) {
+    console.error('[Auth] PKCE exchange threw:', err)
+    // Don't clean URL — let useAuth.ts have a second chance
+  }
 }
 
 // Clean error params from failed OAuth
@@ -60,6 +69,13 @@ if (searchParams.has('error')) {
 if ('serviceWorker' in navigator && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   navigator.serviceWorker.getRegistrations().then(regs => {
     for (const reg of regs) reg.unregister()
+  })
+} else if ('serviceWorker' in navigator) {
+  // Auto-reload when a new SW takes control (e.g. after deploy).
+  // Must be global — not inside a React component that may not render
+  // (LoginGate doesn't mount useServiceWorkerUpdate).
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload()
   })
 }
 
