@@ -2,7 +2,9 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVveHhweWl4ZGllcHJzeGxwd2NzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk1NTQwMzAsImV4cCI6MjA1NTEzMDAzMH0.ByPCMfiT-JWFpMBdVxiqT0E8kLqMTAhFWdLCGS9FnGQ';
+// IMPORTANT: If Supabase API keys are rotated, update this fallback to match.
+// The .env value takes precedence at build time; this is only a safety net.
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || '';
 
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey, {
   auth: {
