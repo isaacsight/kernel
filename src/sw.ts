@@ -49,6 +49,37 @@ registerRoute(
   })
 )
 
+// ─── Chunk 404 recovery ───
+// After deploy, old HTML may reference JS chunks that no longer exist.
+// Intercept fetch errors for hashed assets and force a full reload.
+self.addEventListener('fetch', (event) => {
+  const url = event.request.url
+  // Only intercept our own hashed JS/CSS assets
+  if (!url.includes('/assets/') || !/\.[jc]ss?$/.test(url)) return
+
+  event.respondWith(
+    fetch(event.request).then((response) => {
+      if (response.status === 404) {
+        // Chunk no longer exists on CDN — nuke caches and tell clients to reload
+        console.warn('[SW] Chunk 404:', url, '— triggering recovery')
+        return caches.delete('app-code').then(() => caches.delete('html-shell')).then(() => {
+          // Notify all clients to reload
+          self.clients.matchAll({ type: 'window' }).then((clients) => {
+            for (const client of clients) {
+              client.postMessage({ type: 'CHUNK_404', url })
+            }
+          })
+          return response
+        })
+      }
+      return response
+    }).catch(() => {
+      // Network failure — let workbox handle it (falls back to cache)
+      return caches.match(event.request).then(cached => cached || new Response('', { status: 503 }))
+    })
+  )
+})
+
 // Google Fonts CSS
 registerRoute(
   /^https:\/\/fonts\.googleapis\.com\/.*/i,

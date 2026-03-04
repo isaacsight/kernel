@@ -135,6 +135,20 @@ if ('serviceWorker' in navigator && !/iPhone|iPad|iPod/.test(navigator.userAgent
       }
     }, 5 * 60 * 1000)
   })
+
+  // ─── Chunk 404 auto-recovery ───────────────────────────────────
+  // When the SW detects a 404 on a hashed asset (stale deploy), it
+  // posts CHUNK_404 to all clients. Auto-reload to pick up new HTML.
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'CHUNK_404') {
+      console.warn('[Recovery] Chunk 404 detected:', event.data.url, '— reloading')
+      // Prevent infinite reload loops — only once per 30 seconds
+      const lastReload = sessionStorage.getItem('__kernel_chunk_reload')
+      if (lastReload && Date.now() - Number(lastReload) < 30_000) return
+      sessionStorage.setItem('__kernel_chunk_reload', String(Date.now()))
+      window.location.reload()
+    }
+  })
 }
 
 // ─── Deferred Analytics (load after first paint) ────────────────
