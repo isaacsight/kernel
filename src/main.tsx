@@ -74,8 +74,11 @@ if ('serviceWorker' in navigator && /iPhone|iPad|iPod/.test(navigator.userAgent)
   // Auto-reload when a new SW takes control (e.g. after deploy).
   // Must be global — not inside a React component that may not render
   // (LoginGate doesn't mount useServiceWorkerUpdate).
+  // Skip during auth redirects to avoid interrupting code/token exchange.
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload()
+    const isAuthRedirect = window.location.hash.includes('access_token=')
+      || window.location.search.includes('code=')
+    if (!isAuthRedirect) window.location.reload()
   })
 }
 
