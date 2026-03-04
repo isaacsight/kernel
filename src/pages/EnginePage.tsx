@@ -36,10 +36,12 @@ import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { useCrisisDetection } from '../hooks/useCrisisDetection'
 import { useMessageUsage } from '../hooks/useMessageUsage'
 import { useFolders } from '../hooks/useFolders'
+import { useLiveShare } from '../hooks/useLiveShare'
 import { useVoiceInput } from '../hooks/useVoiceInput'
 import { useVoiceOutput } from '../hooks/useVoiceOutput'
 import { useVoiceLoop } from '../hooks/useVoiceLoop'
 import { VoiceLoopOverlay } from '../components/VoiceLoopOverlay'
+import { LiveShareBadge } from '../components/LiveShareBadge'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
@@ -281,6 +283,9 @@ function EngineChat() {
   newChatRef.current = convs.handleNewChat
 
   const folderHook = useFolders(user?.id ?? null)
+
+  // ─── Live Share ─────────────────────────────────────────
+  const liveShare = useLiveShare(user?.id ?? null)
 
   // ─── Voice I/O (hooks that don't depend on chatEngine) ──
   const voiceInput = useVoiceInput()
@@ -835,6 +840,12 @@ function EngineChat() {
         <div className="ka-header-right">
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
           {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
+          {liveShare.state.isActive && (
+            <LiveShareBadge
+              participants={liveShare.state.participants}
+              onClick={() => { msgActions.setShowShareModal(true) }}
+            />
+          )}
           {user && <NotificationBell userId={user.id} onProactiveClick={(text) => chatEngine.injectProactiveMessage(text)} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
           <button className="ka-header-icon-btn" data-testid="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
@@ -1282,6 +1293,10 @@ function EngineChat() {
               onClose={() => msgActions.setShowShareModal(false)}
               onToast={showToast}
               onNativeShare={msgActions.handleNativeShare}
+              liveShareState={liveShare.state}
+              onCreateLiveShare={() => liveShare.create(convs.activeConversationId!)}
+              onRevokeLiveShare={liveShare.revoke}
+              onKickParticipant={liveShare.kick}
             />
           </Suspense>
         )}

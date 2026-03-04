@@ -16,6 +16,7 @@ const PublishedContentPage = lazyRetry(() => import('./pages/PublishedContentPag
 const SocialCallbackPage = lazyRetry(() => import('./components/SocialCallbackPage').then(m => ({ default: m.SocialCallbackPage })))
 const ExplorePage = lazyRetry(() => import('./pages/ExplorePage').then(m => ({ default: m.ExplorePage })))
 const AuthorProfilePage = lazyRetry(() => import('./pages/AuthorProfilePage').then(m => ({ default: m.AuthorProfilePage })))
+const LiveSharePage = lazyRetry(() => import('./pages/LiveSharePage').then(m => ({ default: m.LiveSharePage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -98,6 +99,11 @@ export const router = createHashRouter([
       { path: 'author/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <AuthorProfilePage />
+        </Suspense>
+      ) },
+      { path: 'live/:code', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Joining...</div>}>
+          <LiveSharePage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },
