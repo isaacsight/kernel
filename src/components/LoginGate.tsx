@@ -256,6 +256,7 @@ export function LoginGate() {
                     <button
                       type="submit"
                       className="ka-gate-submit"
+                      data-testid="auth-submit"
                       disabled={loading || !email.trim() || !password.trim()}
                     >
                       {loading ? t('loading', { ns: 'common' }) : isSignUp ? t('modal.createAccount') : t('modal.signIn')}

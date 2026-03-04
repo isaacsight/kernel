@@ -12,16 +12,23 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   projects: [
     {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 14'] },
+      name: 'setup',
+      testMatch: /global\.setup\.ts/,
     },
     {
       name: 'Desktop Chrome',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 14'] },
+      dependencies: ['setup'],
     },
   ],
 

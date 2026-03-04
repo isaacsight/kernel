@@ -537,6 +537,7 @@ export function ConversationDrawer({
               <input
                 ref={searchInputRef}
                 className="conv-search-input"
+                data-testid="conv-search"
                 type="search"
                 aria-label={t('conversations.searchPlaceholder')}
                 placeholder={t('conversations.searchPlaceholder')}
@@ -572,7 +573,7 @@ export function ConversationDrawer({
             )}
 
             <div className="conv-action-row">
-              <button className="conv-new-btn" onClick={() => { onNewChat(); onClose(); }}>
+              <button className="conv-new-btn" data-testid="new-chat-btn" onClick={() => { onNewChat(); onClose(); }}>
                 <IconPlus size={16} />
                 {t('conversations.newChat')}
               </button>

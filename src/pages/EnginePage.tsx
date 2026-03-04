@@ -837,7 +837,7 @@ function EngineChat() {
           {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
           {user && <NotificationBell userId={user.id} onProactiveClick={(text) => chatEngine.injectProactiveMessage(text)} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
-          <button className="ka-header-icon-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
+          <button className="ka-header-icon-btn" data-testid="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
             {theme === 'dark' ? <IconSun size={16} /> : theme === 'eink' ? <IconBookOpen size={16} /> : <IconMoon size={16} />}
           </button>
           <div className="ka-header-menu-wrap" ref={headerMenuRef}>
@@ -1229,7 +1229,7 @@ function EngineChat() {
       {/* Upgrade Wall */}
       <AnimatePresence>
         {billing.showUpgradeWall && (
-          <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div className="ka-upgrade-overlay" data-testid="upgrade-wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
               <img className="ka-upgrade-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
               <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: effectiveLimit })}</h2>
@@ -1384,6 +1384,7 @@ function EngineChat() {
         <textarea
           ref={chatEngine.inputRef}
           className="ka-input"
+          data-testid="chat-input"
           value={chatEngine.input}
           onChange={e => {
             chatEngine.setInput(e.target.value)
@@ -1450,7 +1451,7 @@ function EngineChat() {
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><IconStop size={16} /></button>
         ) : (
-          <button type="submit" className="ka-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0} aria-label={t('aria.sendMessage', { ns: 'common' })}><IconSend size={18} /></button>
+          <button type="submit" className="ka-send" data-testid="chat-send" disabled={!chatEngine.input.trim() && fileAttachments.attachedFiles.length === 0} aria-label={t('aria.sendMessage', { ns: 'common' })}><IconSend size={18} /></button>
         )}
       </form>
 
