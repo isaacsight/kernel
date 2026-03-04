@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, FairUseLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, claudeText, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, FairUseLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -1227,22 +1227,60 @@ export function useChatEngine(params: UseChatEngineParams) {
           }
 
           // ── Build effective prompt with conversation context ──
-          // For refinements or vague follow-ups ("try again", "make it blue"),
-          // recover the original image prompt from conversation history so Gemini
-          // has full context about what to generate/modify.
+          // Three cases:
+          // 1. Refinement ("make it darker") → recover original prompt + apply modification
+          // 2. Contextual reference ("make an image from the research") → Haiku synthesizes visual prompt from conversation
+          // 3. Self-contained ("draw a cat on a beach") → use as-is
           let effectivePrompt = trimmed
-          if (classification.needsImageRefinement || trimmed.split(/\s+/).length < 6) {
+
+          if (classification.needsImageRefinement) {
+            // Case 1: Refinement — find original image prompt
             const currentMsgs = messagesRef.current
             for (let i = currentMsgs.length - 1; i >= 0; i--) {
               const msg = currentMsgs[i]
               if (msg.generatedImages && msg.generatedImages.length > 0 && msg.content) {
-                // Recover original prompt from "[Generated image: ...]" or the raw content
                 const match = msg.content.match(/^\[Generated image:\s*(.+)\]$/)
                 const originalPrompt = match ? match[1] : msg.content
                 if (originalPrompt && originalPrompt !== trimmed) {
                   effectivePrompt = `Original image: ${originalPrompt}\n\nModification: ${trimmed}`
                 }
                 break
+              }
+            }
+          } else {
+            // Case 2 & 3: Check if the prompt references conversation context
+            const contextualPattern = /\b(the\s+research|the\s+conversation|what\s+we|from\s+(the|our|this)|about\s+the|based\s+on|from\s+earlier|we\s+(just|were)\s+discuss|that\s+(topic|subject|thing|idea)|those\s+\w+|the\s+\w+\s+we\s+(talked|discussed|covered)|visualize\s+(that|this|it|what)|of\s+that|of\s+this|illustrate\s+(that|this|what))\b/i
+            const isContextual = contextualPattern.test(trimmed) || trimmed.split(/\s+/).length < 6
+
+            if (isContextual) {
+              // Gather recent conversation for context
+              const currentMsgs = messagesRef.current
+              const contextWindow = currentMsgs.slice(-12).filter(m => m.content && !m.content.startsWith('[Generated image:'))
+              const contextStr = contextWindow.map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content!.slice(0, 500)}`).join('\n')
+
+              if (contextStr.length > 20) {
+                try {
+                  effectivePrompt = await claudeText(
+                    `You are an image prompt engineer. Given a conversation and a user's request to generate an image, write a detailed visual prompt for an AI image generator (Gemini).
+
+The user said: "${trimmed}"
+
+Recent conversation:
+${contextStr}
+
+Write a single, detailed image generation prompt that captures the visual essence of what the user wants based on the conversation context. Focus on:
+- Subject matter, composition, and scene
+- Visual style, lighting, and mood
+- Key details mentioned in the conversation
+
+Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
+                    { model: 'haiku', max_tokens: 300 }
+                  )
+                  effectivePrompt = effectivePrompt.trim()
+                } catch (promptErr) {
+                  console.warn('[ImageGen] Prompt enrichment failed, using raw prompt:', promptErr)
+                  // Fall through with original trimmed prompt
+                }
               }
             }
           }
