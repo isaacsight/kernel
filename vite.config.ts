@@ -60,15 +60,15 @@ export default defineConfig({
                     if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) return 'vendor-i18n'
                     if (id.includes('node_modules/zustand')) return 'vendor-zustand'
 
-                    // Engine intelligence chunk — AI/agent modules that aren't needed until first message
+                    // Engine intelligence chunk — AI/agent modules that aren't needed until first message.
+                    // Includes agent definitions (they import engine modules like CrisisDetector,
+                    // so they must stay in the same chunk to avoid circular init errors).
                     if (id.includes('/src/engine/') &&
                         !id.includes('SupabaseClient') && !id.includes('ClaudeClient') &&
                         !id.includes('OfflineCache') && !id.includes('fileUtils')) {
                         return 'engine-intelligence'
                     }
-
-                    // Agent definitions
-                    if (id.includes('/src/agents/')) return 'agent-definitions'
+                    if (id.includes('/src/agents/')) return 'engine-intelligence'
                 },
             },
         },
