@@ -821,7 +821,6 @@ function EngineChat() {
             msgActions.setShowShareModal(true)
           }, 250)
         }}
-        onImport={() => setShowImportModal(true)}
         isLoading={convs.convsLoading}
         onTag={(id) => setTaggingConvId(id)}
         allTags={allTags}
@@ -914,9 +913,6 @@ function EngineChat() {
                   </>
                 )}
                 <div className="ka-header-menu-divider" />
-                <button className="ka-header-menu-item" onClick={() => { setShowImportModal(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconDownload size={16} /> {t('menu.importConversation', { defaultValue: 'Import conversation' })}
-                </button>
                 <button className="ka-header-menu-item" onClick={() => { convs.loadArchivedConversations(); drawerTabs.openArchive(); setIsDrawerOpen(true); panels.setHeaderMenuOpen(false) }}>
                   <IconArchive size={16} /> {t('conversations.archive', { ns: 'common' })}
                 </button>
