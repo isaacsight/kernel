@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS live_shares (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
   owner_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  access_code TEXT UNIQUE DEFAULT encode(gen_random_bytes(6), 'hex'),
+  access_code TEXT UNIQUE DEFAULT substr(md5(random()::text || clock_timestamp()::text), 1, 12),
   is_active BOOLEAN NOT NULL DEFAULT true,
   max_participants INTEGER DEFAULT 10,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
