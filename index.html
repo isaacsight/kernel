@@ -67,51 +67,56 @@
     </div>
   </div>
   <noscript><h1>Kernel — A personal AI that learns you</h1></noscript>
-  <script type="module" src="/src/main.tsx" onerror="window.__loadFailed=true"></script>
+  <script type="module" src="/src/main.tsx" onerror="_kernelRecover()"></script>
   <script>
     // Recovery: if the app JS fails to load (stale SW cache after deploy),
-    // clear all caches, unregister SW, and reload up to 3 times.
+    // clear all caches, unregister SW, and reload.
+    // Debounce: only run once per recovery attempt.
+    var _recovering = false;
     function _kernelRecover() {
+      if (_recovering) return;
+      _recovering = true;
       var count = parseInt(sessionStorage.getItem('_rc') || '0', 10);
       if (count >= 3) {
-        // Exhausted retries — show a manual reload prompt
+        // Exhausted retries — show manual reload that nukes everything
         var splash = document.getElementById('splash');
         if (splash) {
           splash.innerHTML = '<div style="text-align:center;max-width:280px">'
             + '<div style="opacity:.35;font-size:15px;letter-spacing:.08em;margin-bottom:24px">kernel</div>'
-            + '<div style="font-size:14px;opacity:.6;margin-bottom:16px">Having trouble loading. Please clear your browser cache and reload.</div>'
+            + '<div style="font-size:14px;opacity:.6;margin-bottom:16px">Updating — one moment.</div>'
             + '<button onclick="sessionStorage.clear();location.reload()" style="font-family:inherit;font-size:14px;padding:10px 24px;border:1px solid #1F1E1D;border-radius:8px;background:none;color:#1F1E1D;cursor:pointer">Reload</button>'
             + '</div>';
         }
         return;
       }
       sessionStorage.setItem('_rc', String(count + 1));
+      // Wait for BOTH SW unregister AND cache clear before reloading
+      var swDone = Promise.resolve();
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(regs) {
-          regs.forEach(function(r) { r.unregister(); });
-        });
+        swDone = navigator.serviceWorker.getRegistrations().then(function(regs) {
+          return Promise.all(regs.map(function(r) { return r.unregister(); }));
+        }).catch(function() {});
       }
-      caches.keys().then(function(names) {
-        names.forEach(function(n) { caches.delete(n); });
-      }).then(function() {
-        // Cache-bust: append timestamp to URL so the browser skips HTTP cache
-        // (GitHub Pages sets Cache-Control: max-age=600 on HTML)
+      var cacheDone = caches.keys().then(function(names) {
+        return Promise.all(names.map(function(n) { return caches.delete(n); }));
+      }).catch(function() {});
+      Promise.all([swDone, cacheDone]).then(function() {
         var url = new URL(location.href);
         url.searchParams.set('_cb', Date.now().toString(36));
         location.replace(url.toString());
       });
     }
     // Catch JS asset load errors (404 on hashed bundles)
+    // e.target.src catches <script> load failures; e.filename catches runtime errors
     window.addEventListener('error', function(e) {
-      if (e.filename && /assets\/.*\.js/.test(e.filename)) _kernelRecover();
+      var src = (e.target && e.target.src) || e.filename || '';
+      if (/assets\/.*\.(js|css)/.test(src)) _kernelRecover();
     }, true);
-    // Catch stuck splash screen (module never loads)
-    // 20s timeout: Android 3G can take 15s+ for initial bundle load.
-    // 15s was triggering false recoveries on slow networks, causing reload loops.
+    // Backup: stuck splash screen (8s — enough for slow 3G, fast enough to not frustrate)
     setTimeout(function() {
       var root = document.getElementById('root');
       if (root && root.querySelector('#splash')) _kernelRecover();
-    }, 20000);
+    }, 8000);
     // Clear recovery counter on successful load
     window.addEventListener('load', function() {
       setTimeout(function() {
