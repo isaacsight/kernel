@@ -6,6 +6,8 @@ import { ExpirationPlugin } from 'workbox-expiration'
 
 declare let self: ServiceWorkerGlobalScope
 
+const SW_VERSION = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'dev'
+
 // Precache manifest injected by VitePWA (static assets only, not JS/CSS)
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
@@ -122,15 +124,23 @@ self.addEventListener('install', () => {
   self.skipWaiting()
 })
 
-// Handle SKIP_WAITING messages from useServiceWorkerUpdate hook.
-// Belt-and-suspenders: skipWaiting() above runs on install, but the hook
-// also sends this message as a fallback for edge cases.
+// Handle messages from the main thread.
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }
+  // Version check: respond with this SW's build version so the app can
+  // detect stale service workers and trigger an update.
+  if (event.data?.type === 'GET_VERSION') {
+    event.ports?.[0]?.postMessage({ version: SW_VERSION })
+  }
 })
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim())
+  event.waitUntil(
+    // Clear the JS/CSS cache on activation — content-hashed filenames
+    // mean a fresh network fetch will always get the correct version.
+    // This prevents stale chunks from a previous deploy being served.
+    caches.delete('app-code').then(() => self.clients.claim())
+  )
 })

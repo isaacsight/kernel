@@ -2,10 +2,11 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'motion/react'
 import { SPRING, DURATION } from '../constants/motion'
-import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen } from './KernelIcons'
+import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen, IconChevronRight, IconList } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
+import type { Folder } from '../hooks/useFolders'
 
 interface ConversationDrawerProps {
   isOpen: boolean
@@ -25,6 +26,12 @@ interface ConversationDrawerProps {
   selectedTags?: string[]
   onToggleTag?: (tag: string) => void
   getConvTags?: (id: string) => string[]
+  // Folder support
+  folders?: Folder[]
+  onCreateFolder?: (name: string) => void
+  onRenameFolder?: (id: string, name: string) => void
+  onDeleteFolder?: (id: string) => void
+  onMoveToFolder?: (convId: string, folderId: string | null) => void
 }
 
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
@@ -93,6 +100,11 @@ export function ConversationDrawer({
   selectedTags,
   onToggleTag,
   getConvTags,
+  folders,
+  onCreateFolder,
+  onRenameFolder,
+  onDeleteFolder,
+  onMoveToFolder,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -101,8 +113,19 @@ export function ConversationDrawer({
   const [searching, setSearching] = useState(false)
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState('')
-  const renamingRef = useRef(false) // Guard against double-fire from onSubmit + onBlur
+  const renamingRef = useRef(false)
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Folder state
+  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set())
+  const [creatingFolder, setCreatingFolder] = useState(false)
+  const [newFolderName, setNewFolderName] = useState('')
+  const [renamingFolderId, setRenamingFolderId] = useState<string | null>(null)
+  const [folderRenameValue, setFolderRenameValue] = useState('')
+  const [moveMenuConvId, setMoveMenuConvId] = useState<string | null>(null)
+  const [dragOverFolderId, setDragOverFolderId] = useState<string | null>(null)
+
+  const hasFolders = folders && folders.length > 0
 
   // Clean up debounce timer on unmount
   useEffect(() => {
@@ -116,11 +139,18 @@ export function ConversationDrawer({
     }
   }, [isOpen, autoFocusSearch])
 
+  // Close move menu on outside click
+  useEffect(() => {
+    if (!moveMenuConvId) return
+    const handler = () => setMoveMenuConvId(null)
+    document.addEventListener('click', handler)
+    return () => document.removeEventListener('click', handler)
+  }, [moveMenuConvId])
+
   const executeSearch = useCallback(async (query: string) => {
     setSearching(true)
     try {
       const q = query.trim()
-      // Search messages and conversation titles in parallel
       const [messagesRes, titlesRes] = await Promise.all([
         supabase
           .from('messages')
@@ -135,11 +165,9 @@ export function ConversationDrawer({
           .limit(20),
       ])
 
-      // Dedupe by conversation, keep first match
       const seen = new Set<string>()
       const results: { conv_id: string; content: string }[] = []
 
-      // Title matches first (higher relevance)
       for (const row of titlesRes.data || []) {
         if (!seen.has(row.id)) {
           seen.add(row.id)
@@ -147,7 +175,6 @@ export function ConversationDrawer({
         }
       }
 
-      // Then message content matches
       for (const row of messagesRes.data || []) {
         if (!seen.has(row.channel_id)) {
           seen.add(row.channel_id)
@@ -189,7 +216,7 @@ export function ConversationDrawer({
   }, [])
 
   const handleRename = useCallback(async (convId: string) => {
-    if (renamingRef.current) return // Prevent double-fire
+    if (renamingRef.current) return
     const trimmed = renameValue.trim()
     if (!trimmed) { setRenamingId(null); return }
     renamingRef.current = true
@@ -199,6 +226,31 @@ export function ConversationDrawer({
     setRenameValue('')
     renamingRef.current = false
   }, [renameValue, onRename])
+
+  const toggleFolderCollapse = useCallback((folderId: string) => {
+    setCollapsedFolders(prev => {
+      const next = new Set(prev)
+      if (next.has(folderId)) next.delete(folderId)
+      else next.add(folderId)
+      return next
+    })
+  }, [])
+
+  const handleCreateFolder = useCallback(() => {
+    const trimmed = newFolderName.trim()
+    if (!trimmed || !onCreateFolder) return
+    onCreateFolder(trimmed)
+    setNewFolderName('')
+    setCreatingFolder(false)
+  }, [newFolderName, onCreateFolder])
+
+  const handleRenameFolder = useCallback((folderId: string) => {
+    const trimmed = folderRenameValue.trim()
+    if (!trimmed || !onRenameFolder) { setRenamingFolderId(null); return }
+    onRenameFolder(folderId, trimmed)
+    setRenamingFolderId(null)
+    setFolderRenameValue('')
+  }, [folderRenameValue, onRenameFolder])
 
   const tagFiltered = selectedTags && selectedTags.length > 0 && getConvTags
     ? conversations.filter(c => {
@@ -214,7 +266,34 @@ export function ConversationDrawer({
       )
     : tagFiltered
 
-  const renderConvItem = (conv: DBConversation) => {
+  // Desktop drag handlers for moving conversations to folders
+  const handleConvDragStart = useCallback((e: React.DragEvent, convId: string) => {
+    e.dataTransfer.setData('text/plain', convId)
+    e.dataTransfer.effectAllowed = 'move'
+  }, [])
+
+  const handleFolderDragOver = useCallback((e: React.DragEvent, folderId: string | null) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    setDragOverFolderId(folderId)
+  }, [])
+
+  const handleFolderDragLeave = useCallback(() => {
+    setDragOverFolderId(null)
+  }, [])
+
+  const handleFolderDrop = useCallback((e: React.DragEvent, folderId: string | null) => {
+    e.preventDefault()
+    setDragOverFolderId(null)
+    const convId = e.dataTransfer.getData('text/plain')
+    if (convId && onMoveToFolder) {
+      onMoveToFolder(convId, folderId)
+    }
+  }, [onMoveToFolder])
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+  const renderConvItem = (conv: DBConversation, inFolder?: boolean) => {
     const matchSnippet = searchResults.find(r => r.conv_id === conv.id)
     const isRenaming = renamingId === conv.id
     return (
@@ -222,6 +301,8 @@ export function ConversationDrawer({
         key={conv.id}
         className={`conv-item ${activeId === conv.id ? 'conv-item--active' : ''}`}
         onClick={() => { if (!isRenaming) { onSelect(conv.id); setSearchQuery(''); setSearchResults([]); onClose(); } }}
+        draggable={!isMobile && !!onMoveToFolder}
+        onDragStart={(e) => handleConvDragStart(e, conv.id)}
       >
         <div className="conv-item-content">
           {isRenaming ? (
@@ -255,6 +336,32 @@ export function ConversationDrawer({
         </div>
         {!isRenaming && (
           <div className="conv-item-actions">
+            {/* Move to folder (mobile only — desktop uses drag-and-drop) */}
+            {isMobile && onMoveToFolder && hasFolders && (
+              <div style={{ position: 'relative' }}>
+                <button
+                  className="conv-item-action"
+                  onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(moveMenuConvId === conv.id ? null : conv.id) }}
+                  aria-label="Move to folder"
+                >
+                  <IconList size={13} />
+                </button>
+                {moveMenuConvId === conv.id && (
+                  <div className="conv-folder-menu" onClick={e => e.stopPropagation()}>
+                    {conv.folder_id && (
+                      <button className="conv-folder-menu-item" onClick={() => { onMoveToFolder(conv.id, null); setMoveMenuConvId(null) }}>
+                        Remove from folder
+                      </button>
+                    )}
+                    {folders!.filter(f => f.id !== conv.folder_id).map(f => (
+                      <button key={f.id} className="conv-folder-menu-item" onClick={() => { onMoveToFolder(conv.id, f.id); setMoveMenuConvId(null) }}>
+                        {f.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             {onShare && (
               <button
                 className="conv-item-action"
@@ -293,16 +400,105 @@ export function ConversationDrawer({
     )
   }
 
+  const renderFolderSection = (folder: Folder, folderConvs: DBConversation[]) => {
+    const isCollapsed = collapsedFolders.has(folder.id)
+    const isRenaming = renamingFolderId === folder.id
+    const isDragOver = dragOverFolderId === folder.id
+    return (
+      <div
+        key={folder.id}
+        className={`conv-folder${isDragOver ? ' conv-folder--drag-over' : ''}`}
+        onDragOver={(e) => handleFolderDragOver(e, folder.id)}
+        onDragLeave={handleFolderDragLeave}
+        onDrop={(e) => handleFolderDrop(e, folder.id)}
+      >
+        <div
+          className="conv-folder-header"
+          onClick={() => toggleFolderCollapse(folder.id)}
+        >
+          <IconChevronRight
+            size={12}
+            style={{ transform: isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)', transition: 'transform 0.15s' }}
+          />
+          {isRenaming ? (
+            <form
+              className="conv-rename-form"
+              onSubmit={(e) => { e.preventDefault(); handleRenameFolder(folder.id) }}
+              onClick={e => e.stopPropagation()}
+            >
+              <input
+                className="conv-rename-input"
+                value={folderRenameValue}
+                onChange={e => setFolderRenameValue(e.target.value)}
+                autoFocus
+                onKeyDown={e => { if (e.key === 'Escape') setRenamingFolderId(null) }}
+                onBlur={() => handleRenameFolder(folder.id)}
+              />
+            </form>
+          ) : (
+            <span className="conv-folder-name">{folder.name}</span>
+          )}
+          <span className="conv-folder-count">{folderConvs.length}</span>
+          {!isRenaming && (
+            <div className="conv-folder-actions" onClick={e => e.stopPropagation()}>
+              {onRenameFolder && (
+                <button
+                  className="conv-item-action"
+                  onClick={() => { setRenamingFolderId(folder.id); setFolderRenameValue(folder.name) }}
+                  aria-label="Rename folder"
+                >
+                  <IconPencil size={11} />
+                </button>
+              )}
+              {onDeleteFolder && (
+                <button
+                  className="conv-item-action conv-item-action--delete"
+                  onClick={() => onDeleteFolder(folder.id)}
+                  aria-label="Delete folder"
+                >
+                  <IconTrash size={11} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+        {!isCollapsed && (
+          <div className="conv-folder-items">
+            {folderConvs.length > 0
+              ? folderConvs.map(c => renderConvItem(c, true))
+              : <div className="conv-folder-empty">No conversations</div>
+            }
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Split conversations by folder
+  const folderConvsMap = new Map<string, DBConversation[]>()
+  const uncategorized: DBConversation[] = []
+  if (hasFolders) {
+    for (const f of folders!) folderConvsMap.set(f.id, [])
+    for (const c of filteredConversations) {
+      if (c.folder_id && folderConvsMap.has(c.folder_id)) {
+        folderConvsMap.get(c.folder_id)!.push(c)
+      } else {
+        uncategorized.push(c)
+      }
+    }
+  }
+
   // Swipe-to-close: drag left to dismiss
   const dragX = useMotionValue(0)
   const overlayOpacity = useTransform(dragX, [-320, 0], [0, 1])
 
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // Close if dragged more than 80px left or velocity is high
     if (info.offset.x < -80 || info.velocity.x < -300) {
       onClose()
     }
   }
+
+  const isSearching = searchQuery.trim().length >= 2
 
   return (
     <AnimatePresence>
@@ -353,7 +549,7 @@ export function ConversationDrawer({
                 </button>
               )}
             </div>
-            {searchQuery.trim().length >= 2 && !searching && (
+            {isSearching && !searching && (
               <div className="conv-search-count">
                 {filteredConversations.length > 0
                   ? t('conversations.resultCount', { count: filteredConversations.length })
@@ -380,12 +576,34 @@ export function ConversationDrawer({
                 <IconPlus size={16} />
                 {t('conversations.newChat')}
               </button>
+              {onCreateFolder && (
+                <button className="conv-new-folder-btn" onClick={() => setCreatingFolder(true)} aria-label="New folder">
+                  <IconList size={14} />
+                </button>
+              )}
               {onImport && (
                 <button className="conv-import-btn" onClick={() => { onImport(); onClose(); }} aria-label="Import conversation">
                   <IconDownload size={14} />
                 </button>
               )}
             </div>
+
+            {/* Create folder inline form */}
+            {creatingFolder && (
+              <div className="conv-folder-create">
+                <form onSubmit={(e) => { e.preventDefault(); handleCreateFolder() }}>
+                  <input
+                    className="conv-rename-input"
+                    placeholder="Folder name..."
+                    value={newFolderName}
+                    onChange={e => setNewFolderName(e.target.value)}
+                    autoFocus
+                    onKeyDown={e => { if (e.key === 'Escape') { setCreatingFolder(false); setNewFolderName('') } }}
+                    onBlur={() => { if (!newFolderName.trim()) { setCreatingFolder(false); setNewFolderName('') } }}
+                  />
+                </form>
+              </div>
+            )}
 
             <div className="conv-list">
               {isLoading && conversations.length === 0 && (
@@ -398,14 +616,38 @@ export function ConversationDrawer({
                   ))}
                 </>
               )}
-              {searchQuery.trim().length >= 2
-                ? filteredConversations.map(conv => renderConvItem(conv))
-                : groupConversations(filteredConversations).map(({ group, items }) => (
-                    <div key={group} className="conv-date-group">
-                      <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-                      {items.map(conv => renderConvItem(conv))}
-                    </div>
-                  ))
+
+              {isSearching
+                ? /* Search mode: flat list, no folders */
+                  filteredConversations.map(conv => renderConvItem(conv))
+                : hasFolders && !isSearching
+                  ? /* Folder mode: folders first, then uncategorized */
+                    <>
+                      {folders!.map(folder =>
+                        renderFolderSection(folder, folderConvsMap.get(folder.id) || [])
+                      )}
+                      {/* Uncategorized conversations (date-grouped) */}
+                      <div
+                        className={`conv-folder-uncategorized${dragOverFolderId === '__uncategorized' ? ' conv-folder--drag-over' : ''}`}
+                        onDragOver={(e) => handleFolderDragOver(e, '__uncategorized')}
+                        onDragLeave={handleFolderDragLeave}
+                        onDrop={(e) => handleFolderDrop(e, null)}
+                      >
+                        {groupConversations(uncategorized).map(({ group, items }) => (
+                          <div key={group} className="conv-date-group">
+                            <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+                            {items.map(conv => renderConvItem(conv))}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  : /* No folders: date-grouped */
+                    groupConversations(filteredConversations).map(({ group, items }) => (
+                      <div key={group} className="conv-date-group">
+                        <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+                        {items.map(conv => renderConvItem(conv))}
+                      </div>
+                    ))
               }
               {filteredConversations.length === 0 && searchQuery && (
                 <div className="conv-empty">

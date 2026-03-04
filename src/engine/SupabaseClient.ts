@@ -66,6 +66,7 @@ export interface DBConversation {
   id: string;
   user_id: string;
   title: string;
+  folder_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -228,12 +229,25 @@ export async function createConversation(
 export async function getUserConversations(userId: string): Promise<(DBConversation & { metadata?: Record<string, unknown> })[]> {
   const { data, error } = await supabase
     .from('conversations')
-    .select('*, metadata')
+    .select('*, metadata, folder_id')
     .eq('user_id', userId)
     .order('updated_at', { ascending: false });
 
   if (error) console.error('Error fetching conversations:', error);
-  return data || [];
+  return (data || []).map(d => ({ ...d, folder_id: d.folder_id ?? null }));
+}
+
+// ─── Conversation Folders ────────────────────────────────
+
+export async function moveConversationToFolder(
+  conversationId: string,
+  folderId: string | null,
+): Promise<void> {
+  const { error } = await supabase
+    .from('conversations')
+    .update({ folder_id: folderId })
+    .eq('id', conversationId);
+  if (error) console.error('Error moving conversation to folder:', error);
 }
 
 // ─── Conversation Metadata ──────────────────────────────

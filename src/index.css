@@ -12183,6 +12183,121 @@ h4 {
     background: rgba(107, 91, 149, 0.08);
 }
 
+/* ─── Conversation Folders ───────────────────────────────── */
+
+.conv-folder {
+    border-bottom: 1px solid var(--border-subtle, rgba(0,0,0,0.06));
+}
+.conv-folder--drag-over {
+    background: rgba(107, 91, 149, 0.06);
+}
+.conv-folder-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary, #666);
+}
+.conv-folder-header:hover {
+    background: rgba(0,0,0,0.02);
+}
+.conv-folder-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.conv-folder-count {
+    font-size: 10px;
+    color: var(--text-tertiary, #999);
+    min-width: 16px;
+    text-align: center;
+}
+.conv-folder-actions {
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.conv-folder-header:hover .conv-folder-actions {
+    opacity: 1;
+}
+.conv-folder-items {
+    padding-left: 8px;
+}
+.conv-folder-empty {
+    padding: 6px 12px 10px;
+    font-size: 12px;
+    color: var(--text-tertiary, #999);
+    font-style: italic;
+}
+.conv-folder-create {
+    padding: 4px 12px 8px;
+}
+.conv-folder-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 50;
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border-subtle, rgba(0,0,0,0.1));
+    border-radius: var(--radius-sm, 6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 140px;
+    padding: 4px 0;
+}
+.conv-folder-menu-item {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    text-align: left;
+    font-size: 13px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary, #1F1E1D);
+}
+.conv-folder-menu-item:hover {
+    background: rgba(107, 91, 149, 0.06);
+}
+.conv-new-folder-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border-subtle, rgba(0,0,0,0.1));
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    color: var(--text-secondary, #666);
+}
+.conv-new-folder-btn:hover {
+    background: rgba(0,0,0,0.03);
+}
+
+/* Dark mode folder overrides */
+@media (prefers-color-scheme: dark) {
+  .conv-folder--drag-over { background: rgba(107, 91, 149, 0.12); }
+  .conv-folder-header:hover { background: rgba(255,255,255,0.03); }
+  .conv-folder-menu { background: var(--dark-bg-elevated, #2a2826); border-color: var(--dark-border-subtle, #3A3630); }
+  .conv-folder-menu-item:hover { background: rgba(107, 91, 149, 0.12); }
+  .conv-new-folder-btn { border-color: var(--dark-border-subtle, #3A3630); }
+}
+[data-theme="dark"] .conv-folder--drag-over { background: rgba(107, 91, 149, 0.12); }
+[data-theme="dark"] .conv-folder-header:hover { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .conv-folder-menu { background: var(--dark-bg-elevated, #2a2826); border-color: var(--dark-border-subtle, #3A3630); }
+[data-theme="dark"] .conv-folder-menu-item:hover { background: rgba(107, 91, 149, 0.12); }
+[data-theme="dark"] .conv-new-folder-btn { border-color: var(--dark-border-subtle, #3A3630); }
+
 /* ─── Header Buttons ─────────────────────────────────────── */
 
 .ka-menu-btn {

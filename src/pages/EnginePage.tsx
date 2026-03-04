@@ -35,6 +35,7 @@ import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { useCrisisDetection } from '../hooks/useCrisisDetection'
 import { useMessageUsage } from '../hooks/useMessageUsage'
+import { useFolders } from '../hooks/useFolders'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
@@ -274,6 +275,8 @@ function EngineChat() {
     chatEngine.setMessages(msgs as any)
   }, planLimits.historyDays)
   newChatRef.current = convs.handleNewChat
+
+  const folderHook = useFolders(user?.id ?? null)
 
   // Load tags from conversation metadata
   useEffect(() => {
@@ -777,6 +780,14 @@ function EngineChat() {
         selectedTags={selectedTags}
         onToggleTag={handleToggleTag}
         getConvTags={getConvTags}
+        folders={folderHook.folders}
+        onCreateFolder={(name) => folderHook.createFolder(name)}
+        onRenameFolder={folderHook.renameFolder}
+        onDeleteFolder={folderHook.deleteFolder}
+        onMoveToFolder={async (convId, folderId) => {
+          await folderHook.moveConversation(convId, folderId)
+          convs.setConversations(prev => prev.map(c => c.id === convId ? { ...c, folder_id: folderId } : c))
+        }}
       />
 
       {/* Header */}

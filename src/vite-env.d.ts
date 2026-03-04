@@ -28,3 +28,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+// Vite define: build-time constants
+declare const __BUILD_TIME__: string

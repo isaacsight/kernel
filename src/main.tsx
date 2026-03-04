@@ -97,12 +97,43 @@ createRoot(document.getElementById('root')!).render(
     </StrictMode>,
 )
 
-// ─── Periodic SW update check ───────────────────────────────────
+// ─── Periodic SW update check with version coordination ─────────
 // SPAs rarely navigate, so the browser won't check for SW updates.
-// Poll every 30 minutes so users get new versions without a hard refresh.
+// Check frequently in the first hour (5 min), then every 30 min.
+const APP_VERSION = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'dev'
+
+function checkSWVersion(reg: ServiceWorkerRegistration) {
+  const sw = reg.active
+  if (!sw) return
+  const mc = new MessageChannel()
+  mc.port1.onmessage = (e) => {
+    const swVersion = e.data?.version
+    if (swVersion && swVersion !== APP_VERSION) {
+      console.log(`[SW] Version mismatch: app=${APP_VERSION} sw=${swVersion}, updating...`)
+      reg.update().then(() => {
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+      })
+    }
+  }
+  sw.postMessage({ type: 'GET_VERSION' }, [mc.port2])
+}
+
 if ('serviceWorker' in navigator && !/iPhone|iPad|iPod/.test(navigator.userAgent)) {
   navigator.serviceWorker.getRegistration().then(reg => {
-    if (reg) setInterval(() => reg.update(), 30 * 60 * 1000)
+    if (!reg) return
+    // Immediate version check
+    checkSWVersion(reg)
+    // Fast checks for first hour (every 5 min), then slow (every 30 min)
+    let checkCount = 0
+    const intervalId = setInterval(() => {
+      reg.update()
+      checkSWVersion(reg)
+      checkCount++
+      if (checkCount >= 12) {
+        clearInterval(intervalId)
+        setInterval(() => { reg.update(); checkSWVersion(reg) }, 30 * 60 * 1000)
+      }
+    }, 5 * 60 * 1000)
   })
 }
 
