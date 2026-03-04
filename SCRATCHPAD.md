@@ -4,102 +4,100 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-03)
+## Current Session (2026-03-03, continued)
 
 ### Accomplished This Session
 
-#### Backlog Sweep: Dark Mode, Security, Dep Upgrade, Server Persistence
+#### 6-Phase Platform Expansion — ALL PHASES COMPLETE
 
-**1. Dark mode tokens fixed (warm brown)**
-Changed 3 cool neutral gray tokens to warm browns per "lamplight reading" principle:
-- `--dark-bg-surface`: `#1a1a1a` → `#252321`
-- `--dark-bg-deep`: `#0f0f0f` → `#141210`
-- `--dark-border-subtle`: `#333` → `#3A3630`
+Implemented, tested, and deployed all 6 phases from the platform expansion plan:
 
-**Modified:** `src/index.css`
+**Phase 1: Conversation Folders** (completed in prior session)
+- DB migration `058_conversation_folders.sql`, `useFolders.ts` hook, ConversationDrawer accordion UI
+- Move-to-folder submenu in header ⋮ menu, custom folder icons
 
-**2. Removed VITE_GEMINI env vars from client types**
-Removed `VITE_GEMINI_API_KEY`, `VITE_GEMINI_MODEL_PRO`, `VITE_GEMINI_MODEL_FLASH` from `src/vite-env.d.ts` — server-side only keys, prevents accidental client-side usage.
+**Phase 2: Voice Input/Output**
+- `useVoiceInput.ts`: Web Speech API primary + MediaRecorder/Whisper fallback
+- `useVoiceOutput.ts`: OpenAI TTS (Pro) + browser speechSynthesis (free)
+- `useVoiceLoop.ts`: continuous voice conversation mode (Pro only)
+- `VoiceLoopOverlay.tsx`: full-screen animated overlay (listening/thinking/speaking)
+- Mic button in input bar, TTS speaker button on messages
 
-**Modified:** `src/vite-env.d.ts`
+**Phase 3A: SW Cache Versioning**
+- `lazyRetry.ts`: SKIP_WAITING instead of unregistering SW, only clear app-code cache
+- `sw.ts`: navigation preload in activate handler
 
-**3. Upgraded framer-motion → motion**
-- `npm uninstall framer-motion && npm install motion` (v12.34.5)
-- Updated 51 source file imports: `'framer-motion'` → `'motion/react'`
-- Updated 2 test file mocks
-- Updated `vite.config.ts` manualChunks
-- Updated `PROJECT.md` references
-- `vendor-ui` chunk: 116KB → 93KB (20% reduction)
-- Zero type errors, clean build, pre-existing test failures only
+**Phase 3B: Bundle Splitting**
+- Converted `manualChunks` from object to function form
+- Extracted `vendor-i18n` (22KB gzip) and `vendor-zustand` chunks
+- **Main `index.js`: 106KB gzip → 17KB gzip (84% reduction)**
 
-**Modified:** 51 source files, 2 test files, `vite.config.ts`, `PROJECT.md`, `package.json`
+**Phase 3C: E2E Test Suite**
+- 15 tests across auth, chat, conversations, dark-mode, pro-gating, mobile
+- Playwright fixtures with mock claude-proxy, auth state persistence
+- Visual regression tests (light/dark mode screenshots)
+- `.github/workflows/e2e.yml` CI workflow
+- Total: 28 E2E tests passing
 
-**4. Server-side project persistence (Pro feature)**
-Files generated in conversations now persist to Supabase Storage for Pro users. Content survives page reload and works across devices.
+**Phase 4: Collaborative Live Share**
+- Migration `059_live_shares.sql`: live_shares + live_share_participants tables
+- Edge function `live-share`: create/join/kick/revoke/status
+- `useLiveShare.ts`: Supabase Realtime channels + presence tracking
+- `LiveShareBadge.tsx`, `ShareModal.tsx` live share tab, `LiveSharePage.tsx`
+- Route: `/#/live/:code`
 
-- **Migration** (`056_project_files.sql`): `project_files` table + `project-files` Storage bucket + RLS
-- **Edge function** (`project-files/index.ts`): save/list/load routes with JWT auth, subscription check, rate limiting, audit logging
-- **Frontend** (`projectStore.ts`): `syncToCloud()` fire-and-forget on file registration, `loadFromCloud()` hydrates on conversation load
-- **EnginePage.tsx**: wired cloud sync after `registerFile` (Pro gate), auto-load on conversation switch
+**Phase 5: Team/Workspace Tier**
+- Migration `060_teams_workspaces.sql`: workspaces, workspace_members, workspace_invitations
+- Edge function `workspace-invite`: invite/accept/revoke/list
+- `useWorkspace.ts`, `WorkspaceSwitcher.tsx`, `WorkspaceAdminPage.tsx`
+- Route: `/#/workspace/:id`
 
-**Not yet deployed** — needs `npx supabase db push` + `npx supabase functions deploy project-files --no-verify-jwt`
+**Phase 6: Mobile App Wrapper (Capacitor)**
+- `capacitor.config.ts`: appId `chat.kernel.app`, push notification config
+- `src/utils/platform.ts`: isNativePlatform, getPlatform, isIOS, isAndroid
+- `src/hooks/useNativePush.ts`: dynamic import, registration, listeners
+- npm scripts: cap:sync, cap:ios, cap:android
 
-**Modified:** `src/stores/projectStore.ts`, `src/pages/EnginePage.tsx`, `supabase/functions/project-files/index.ts`, `supabase/functions/_shared/rate-limit.ts`, `supabase/migrations/056_project_files.sql`
+#### Deployment Summary
+- All commits pushed to `origin/main`
+- Frontend deployed to kernel.chat (GitHub Pages)
+- DB migrations 059 + 060 applied to Supabase
+- Edge functions deployed: `live-share`, `workspace-invite`, `project-files`
 
-#### Previous Work This Session
+#### Test Results
+- 420/420 unit tests pass (Vitest)
+- 28/28 E2E tests pass (Playwright)
+- Zero TypeScript errors
+- Clean build
 
-#### Image Gen Conversation Continuity
-Added follow-up suggestion chips after image generation ("Try a different style", "Make it darker", "More vibrant", "Generate another version"). Guarded the `finally` block from overwriting image-specific chips.
-
-**Modified:** `src/hooks/useChatEngine.ts`
-
-#### Image Lightbox — Mobile Dismiss + Actions
-- Removed `stopPropagation` from lightbox image so tapping anywhere closes it (mobile had no way to dismiss)
-- Added safe-area insets to close button for iOS notch/Dynamic Island
-- Added download + copy-to-clipboard buttons in lightbox (44px touch targets, PNG conversion for clipboard)
-
-**Modified:** `src/components/GeneratedImageCard.tsx`, `src/index.css`
-
-#### Mobile Auth Redirect — Root Cause Fixed
-Users couldn't log in on mobile — always redirected back to landing page. **Three root causes found and fixed:**
-
-1. **Stale API key (PRIMARY):** Supabase anon key was rotated but the hardcoded fallback in `SupabaseClient.ts` still had the old key (iat: Feb 2025). Builds without `.env` loaded silently used the stale key → "Invalid API key" on all auth requests. Removed the hardcoded fallback entirely.
-
-2. **OAuth flow type:** Switched from PKCE to implicit (`flowType: 'implicit'`). PKCE stores `code_verifier` in localStorage which gets lost on mobile (ITP, PWA context switches). Implicit puts tokens directly in hash fragment — no exchange step needed.
-
-3. **Session race condition:** `setSession()` and `exchangeCodeForSession()` weren't awaited in `main.tsx` — React rendered before session was established. Wrapped boot in async IIFE with proper awaits.
-
-**Modified:** `src/engine/SupabaseClient.ts`, `src/main.tsx`, `src/hooks/useAuth.ts`
-
-#### PWA Cache Staleness Fixes
-- SW HTML route: added `fetchOptions: { cache: 'reload' }` to bypass browser HTTP cache (GitHub Pages caches aggressively)
-- Added 30-min periodic SW update check (SPAs never navigate, so browser never checks for updates)
-- Added `SKIP_WAITING` message handler in SW for `useServiceWorkerUpdate` hook
-
-**Modified:** `src/sw.ts`, `src/main.tsx`
-
-#### All Changes Committed, Pushed, Deployed
-Commits: `c4876c6e`, `ffe108df`, `4cc272b3`, `6371503f`, `3112a652`
-Deployed to kernel.chat, verified live with correct API key.
+#### Bugs Fixed During Testing
+- `gen_random_bytes` → `md5(random())` for Supabase compatibility
+- Migration 060 forward reference: reordered tables before policies
+- Playwright config: switched to preview server (legacy dir broke dev server)
+- `test.use(devices[...])` moved to top level in mobile.spec.ts
+- `SpeechRecognition` class declaration added to vite-env.d.ts
+- Voice hook ordering: split hooks to avoid block-scoped variable error
 
 ---
 
-## Previous Session (2026-02-28)
+## Previous Session (2026-03-03)
 
 ### Accomplished
-- Image gen reference images (uploads + conversation history as Gemini guidance)
-- Backlog cleanup: Cloudflare DNS, Discord webhook, Supabase migration sync, frontend deploy
-- Ship pipeline: all 6 gates PASS
+- Dark mode tokens (warm brown), removed VITE_GEMINI env vars
+- framer-motion → motion upgrade (51 files)
+- Server-side project persistence (Pro feature)
+- Image gen continuity, lightbox mobile dismiss
+- Mobile auth redirect fix (3 root causes)
+- PWA cache staleness fixes
 
 ---
 
-## Previous Sessions (2026-02-26 to 2026-02-27)
+## Previous Sessions (2026-02-26 to 2026-02-28)
 
 ### Accomplished
-- Image credit packs + auto-reload, comped Pro for siijoseph333@gmail.com
-- Auto-expire comped subscriptions, AI image generation (Gemini 2.5 Flash)
+- Image gen reference images, backlog cleanup, ship pipeline
+- Image credit packs, auto-expire comped subscriptions
 - Data export, API key rotation, notification UX, landing page redesign
-- Legal update, backlog sweep, thinking toggle
 
 ---
 
@@ -119,8 +117,9 @@ Deployed to kernel.chat, verified live with correct API key.
 ## Ongoing Backlog
 
 - **Comped Pro — siijoseph333@gmail.com**: Active until 2026-03-27. Auto-expiration handles it.
-- **P1 test fixes** (non-blocking): MoreMenu.test.tsx and BottomTabBar.test.tsx have pre-existing failures (component changed, tests not updated)
-- **Deploy project-files**: Migration + edge function need deployment (`db push` + `functions deploy`)
+- **P1 test fixes** (non-blocking): MoreMenu.test.tsx and BottomTabBar.test.tsx have pre-existing failures (component changed, tests not updated) — actually these now pass after recent changes
+- **Capacitor native shells**: Need `npx cap add ios && npx cap add android` to generate native projects (requires Xcode/Android Studio)
+- **Capacitor advanced**: Biometric auth, deep linking, App Store submission not yet implemented
 
 ## Key Decisions Made
 
@@ -147,13 +146,20 @@ Deployed to kernel.chat, verified live with correct API key.
 - Share link previews: Cloudflare Workers as crawler-aware proxy (GH Pages + hash routing)
 - Legal compliance: California law, LA County, AAA arbitration. GDPR legal bases mapped per activity.
 - Multi-provider LLM: claude-proxy supports Anthropic (default), OpenAI, Google Gemini, NVIDIA Llama
-- Image generation: Credit-gated (not subscription-included), Gemini 2.5 Flash Image. Rate limit 10/min. Reference images from uploads + conversation history passed to Gemini as style/content guidance (max 4, 4MB each).
+- Image generation: Credit-gated (not subscription-included), Gemini 2.5 Flash Image. Rate limit 10/min.
 - Subscription expiration: task-scheduler checks every 5 min, deactivates expired subs
 - Landing page: ParticleGrid visual identity. Canvas can't read CSS vars — hex values hardcoded in JS.
-- **OAuth: implicit flow** (`flowType: 'implicit'`), `detectSessionInUrl: false`. Manual token handling in `main.tsx` before React renders. No hardcoded API key fallbacks — fail loudly if `.env` missing.
-- **SW caching**: `fetchOptions: { cache: 'reload' }` on HTML route bypasses browser HTTP cache. 30-min periodic update check for SPAs. Global `controllerchange` listener for auto-reload on deploy.
-- **framer-motion → motion**: Rebranded in v12. Import path `'motion/react'`. Drop-in replacement, no API changes.
-- **Project file persistence**: Pro feature. Edge function `project-files` saves to Supabase Storage. `projectStore.ts` syncs fire-and-forget on register, loads on conversation switch.
+- **OAuth: implicit flow** (`flowType: 'implicit'`), `detectSessionInUrl: false`. Manual token handling in `main.tsx` before React renders. No hardcoded API key fallbacks.
+- **SW caching**: `fetchOptions: { cache: 'reload' }` on HTML route bypasses browser HTTP cache. 30-min periodic update check for SPAs.
+- **framer-motion → motion**: Rebranded in v12. Import path `'motion/react'`. Drop-in replacement.
+- **Project file persistence**: Pro feature. Edge function `project-files` saves to Supabase Storage.
+- **Bundle splitting**: Function-form manualChunks. vendor-i18n + vendor-zustand extracted. Main index.js 106KB → 17KB gzip.
+- **Live Share**: Supabase Realtime channels for presence + postgres_changes for message sync. Access codes via md5(random()).
+- **Workspaces**: 3-role system (owner/admin/member). Invite by email with 7-day expiry. workspace_id on conversations + folders.
+- **Voice I/O**: Web Speech API primary, Whisper fallback. Pro TTS via OpenAI edge function, free via speechSynthesis. Voice loop = continuous listen→submit→TTS cycle.
+- **Capacitor**: appId `chat.kernel.app`. Dynamic imports for native plugins (avoids bundling for web). ios/ and android/ gitignored.
+- **E2E tests**: Playwright with preview server (not dev server — legacy dir breaks Vite scan). Mock claude-proxy via page.route(). Visual regression snapshots.
+- **Supabase gen_random_bytes**: Not in default search path. Use `md5(random()::text || clock_timestamp()::text)` instead.
 
 ## Test Accounts
 

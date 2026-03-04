@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useDragControls } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
-  IconAttach, IconClose, IconDownload, IconMoon, IconSun, IconPencil,
+  IconAttach, IconClose, IconDownload, IconMoon, IconSun,
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield,
   IconMessageCircle, IconLogOut,
@@ -811,41 +811,11 @@ function EngineChat() {
         onSelect={convs.switchConversation}
         onNewChat={convs.handleNewChat}
         onDelete={convs.handleDeleteConversation}
-        onRename={(id, title) => {
-          convs.setConversations(prev => prev.map(c => c.id === id ? { ...c, title } : c))
-        }}
-        onShare={(id) => {
-          setIsDrawerOpen(false)
-          setTimeout(async () => {
-            await convs.switchConversation(id)
-            msgActions.setShowShareModal(true)
-          }, 250)
-        }}
         isLoading={convs.convsLoading}
-        onTag={(id) => setTaggingConvId(id)}
-        allTags={allTags}
-        selectedTags={selectedTags}
-        onToggleTag={handleToggleTag}
-        getConvTags={getConvTags}
-        folders={folderHook.folders}
-        onCreateFolder={(name) => folderHook.createFolder(name)}
-        onRenameFolder={folderHook.renameFolder}
-        onDeleteFolder={folderHook.deleteFolder}
-        onMoveToFolder={async (convId, folderId) => {
-          await folderHook.moveConversation(convId, folderId)
-          convs.setConversations(prev => prev.map(c => c.id === convId ? { ...c, folder_id: folderId } : c))
-        }}
-        onStar={convs.handleStarConversation}
-        onUnstar={convs.handleUnstarConversation}
-        onArchive={convs.handleArchiveConversation}
         onUnarchive={convs.handleUnarchiveConversation}
         showArchive={drawerTabs.showArchive}
-        onOpenArchive={drawerTabs.openArchive}
         onCloseArchive={drawerTabs.closeArchive}
-        onLoadArchive={convs.loadArchivedConversations}
         archivedConversations={convs.archivedConversations}
-        showFolders={drawerTabs.showFolders}
-        onToggleFolders={drawerTabs.toggleFolders}
       />
 
       {/* Header */}
@@ -1153,13 +1123,6 @@ function EngineChat() {
                     </div>
                   )}
                 </div>
-                {msg.role === 'user' && msg.content && !isStreaming && msgActions.editingMsgId !== msg.id && (
-                  <div className="ka-msg-actions">
-                    <button className="ka-msg-action-btn" onClick={() => { msgActions.setEditingMsgId(msg.id); msgActions.setEditingContent(msg.content) }} aria-label={t('aria.editMessage', { ns: 'common' })}>
-                      <IconPencil size={14} />
-                    </button>
-                  </div>
-                )}
                 {msg.role === 'kernel' && msg.content && (
                   <div className="ka-msg-actions">
                     <button className="ka-msg-action-btn" onClick={() => msgActions.handleCopyMessage(msg.id, msg.content)} aria-label={t('aria.copyMessage', { ns: 'common' })}>

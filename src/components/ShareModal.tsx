@@ -228,69 +228,7 @@ export function ShareModal({ conversationId, conversationTitle, messages, userId
           </button>
         </div>
 
-        {/* Tab toggle */}
-        {onCreateLiveShare && (
-          <div className="ka-share-tabs">
-            <button className={`ka-share-tab${activeTab === 'static' ? ' ka-share-tab--active' : ''}`} onClick={() => setActiveTab('static')}>
-              <IconLink size={14} /> Static Link
-            </button>
-            <button className={`ka-share-tab${activeTab === 'live' ? ' ka-share-tab--active' : ''}`} onClick={() => setActiveTab('live')}>
-              <span className="ka-live-dot" /> Live Share
-            </button>
-          </div>
-        )}
-
-        {/* Live Share Tab */}
-        {activeTab === 'live' && onCreateLiveShare ? (
-          <div className="ka-share-live">
-            {liveShareState?.isActive ? (
-              <>
-                <p className="ka-share-desc">Live share is active. Share the link below.</p>
-                <div className="ka-share-url-wrap">
-                  <input
-                    value={`${window.location.origin}/#/live/${liveShareState.accessCode}`}
-                    readOnly
-                    onClick={e => (e.target as HTMLInputElement).select()}
-                  />
-                  <button className="ka-share-copy-btn" onClick={handleCopyLiveCode}>
-                    {liveCopied ? <IconCheck size={20} /> : <IconCopy size={20} />}
-                  </button>
-                </div>
-                {liveShareState.participants.length > 0 && (
-                  <div className="ka-share-participants">
-                    <p className="ka-share-desc" style={{ marginBottom: '8px' }}>
-                      Participants ({liveShareState.participants.length})
-                    </p>
-                    {liveShareState.participants.map(p => (
-                      <div key={p.user_id} className="ka-share-participant">
-                        <span className={`ka-live-dot${p.online ? '' : ' ka-live-dot--offline'}`} />
-                        <span className="ka-share-participant-role">{p.role}</span>
-                        <span className="ka-share-participant-id">{p.user_id.slice(0, 8)}...</span>
-                        {p.role !== 'owner' && onKickParticipant && (
-                          <button className="ka-share-kick-btn" onClick={() => onKickParticipant(p.user_id)}>
-                            <IconTrash size={12} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <button className="ka-share-revoke-btn" onClick={onRevokeLiveShare} style={{ marginTop: '12px' }}>
-                  <IconTrash size={14} /> End Live Share
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="ka-share-desc">
-                  Create a live share session. Participants join in real-time and see messages as they appear.
-                </p>
-                <button className="ka-share-create-btn" onClick={handleCreateLive} disabled={liveCreating}>
-                  {liveCreating ? 'Creating...' : 'Start Live Share'}
-                </button>
-              </>
-            )}
-          </div>
-        ) : checking ? (
+        {checking ? (
           <p className="ka-share-desc">{t('share.checking')}</p>
         ) : shareUrl ? (
           <>
