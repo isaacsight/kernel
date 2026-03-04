@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Kernel</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // Converts path-based URLs to hash routes for createHashRouter
+    // e.g. kernel.chat/shared/abc → kernel.chat/#/shared/abc
+    var path = window.location.pathname;
+    if (path && path !== '/') {
+      window.location.replace('/' + '#' + path + window.location.search);
+    } else {
+      window.location.replace('/');
+    }
+  </script>
+</head>
+<body></body>
+</html>

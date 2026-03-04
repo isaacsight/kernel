@@ -1,0 +1,89 @@
+{
+  "tagline": "あなたを覚え、一緒に考え、時間とともに成長するパーソナル AI。",
+  "placeholder": "kernel.chat に話しかける...",
+  "welcomeToPro": "Kernel Pro へようこそ！",
+  "menu": {
+    "shareConversation": "会話を共有",
+    "exportMarkdown": "Markdown としてエクスポート",
+    "goals": "目標",
+    "workflows": "ワークフロー",
+    "scheduledTasks": "スケジュール済みタスク",
+    "dailyBriefing": "デイリーブリーフィング",
+    "whatKernelKnows": "Kernel が知っていること",
+    "yourStats": "あなたの統計",
+    "insights": "インサイト",
+    "upgradeToPro": "Pro にアップグレード",
+    "manageSubscription": "サブスクリプション管理",
+    "signOut": "サインアウト",
+    "deleteAccount": "アカウントを削除",
+    "notifications": "通知",
+    "notifInApp": "アプリ内通知",
+    "notifBriefings": "ブリーフィング通知",
+    "notifGoals": "目標の更新",
+    "notifReminders": "リマインダー",
+    "notifPush": "プッシュ通知",
+    "darkMode": "ダークモード",
+    "theme": "テーマ",
+    "themeLight": "ライト",
+    "themeDark": "ダーク",
+    "themeEink": "E-Ink",
+    "agentBuilder": "エージェントビルダー",
+    "agentLibrary": "エージェントライブラリ",
+    "backgroundAgents": "バックグラウンドエージェント",
+    "myContent": "マイコンテンツ",
+    "bookmarks": "ブックマーク",
+    "architecture": "アーキテクチャ",
+    "designSystem": "デザインシステム",
+    "routingInsights": "ルーティングインサイト",
+    "system": "システム",
+    "communications": "コミュニケーション",
+    "adaptiveSystem": "適応システム",
+    "usage": "使用状況"
+  },
+  "admin": "管理者",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "今日のブリーフィング",
+    "read": "読む",
+    "discuss": "議論する"
+  },
+  "upgrade": {
+    "title": "{{limit}} 件の無料メッセージを使い切りました",
+    "subtitle": "Proならメッセージ無制限、あなたを学ぶメモリ、完全なブリーフィングが利用できます。",
+    "resetsAt": "メッセージは{{time}}にリセットされます。1日100件にはアップグレード。",
+    "features": {
+      "unlimitedMessages": "メッセージ無制限",
+      "deepResearch": "拡張思考（月30回）",
+      "multiAgent": "ファイル分析（月10回）",
+      "multiStep": "目標、音声、エージェントワークフロー",
+      "persistentMemory": "メモリ + プロアクティブブリーフィング"
+    },
+    "button": "Proになる — $29/月",
+    "annualButton": "$290/年 — $58お得",
+    "buttonLoading": "チェックアウトを開いています...",
+    "maybeLater": "後で考える"
+  },
+  "deleteConfirm": {
+    "title": "アカウントを削除しますか？",
+    "subtitle": "すべてのデータ（会話、記憶、設定）が完全に削除されます。この操作は元に戻せません。",
+    "subtitleWithSub": " サブスクリプションもキャンセルされます。",
+    "typeDelete": "確認のためDELETEと入力してください：",
+    "confirm": "はい、アカウントを削除します",
+    "confirming": "削除中..."
+  },
+  "status": {
+    "assemblingAgents": "エージェントを編成中...",
+    "agentsCollaborating": "エージェントが連携中",
+    "synthesizingPerspectives": "視点を統合中...",
+    "routingToSpecialist": "スペシャリストにルーティング中...",
+    "isWorking": "{{agent}} が作業中...",
+    "lowConfidence": "低い確信度"
+  },
+  "feedback": {
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+  "messagesRemaining": "残り {{count}} メッセージ",
+  "lastFreeMessage": "最後の無料メッセージ"
+}

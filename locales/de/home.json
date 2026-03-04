@@ -1,0 +1,89 @@
+{
+  "tagline": "Eine persönliche KI, die sich an dich erinnert, mit dir denkt und mit der Zeit besser wird.",
+  "placeholder": "Sprich mit kernel.chat...",
+  "welcomeToPro": "Willkommen bei Kernel Pro!",
+  "menu": {
+    "shareConversation": "Konversation teilen",
+    "exportMarkdown": "Als Markdown exportieren",
+    "goals": "Ziele",
+    "workflows": "Arbeitsabläufe",
+    "scheduledTasks": "Geplante Aufgaben",
+    "dailyBriefing": "Tägliches Briefing",
+    "whatKernelKnows": "Was Kernel weiß",
+    "yourStats": "Deine Statistiken",
+    "insights": "Einblicke",
+    "upgradeToPro": "Auf Pro upgraden",
+    "manageSubscription": "Abonnement verwalten",
+    "signOut": "Abmelden",
+    "deleteAccount": "Konto löschen",
+    "notifications": "Benachrichtigungen",
+    "notifInApp": "In-App-Benachrichtigungen",
+    "notifBriefings": "Briefing-Benachrichtigungen",
+    "notifGoals": "Ziel-Updates",
+    "notifReminders": "Erinnerungen",
+    "notifPush": "Push-Benachrichtigungen",
+    "darkMode": "Dunkelmodus",
+    "theme": "Design",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agenten-Builder",
+    "agentLibrary": "Agenten-Bibliothek",
+    "backgroundAgents": "Hintergrund-Agenten",
+    "myContent": "Meine Inhalte",
+    "bookmarks": "Lesezeichen",
+    "architecture": "Architektur",
+    "designSystem": "Designsystem",
+    "routingInsights": "Routing-Einblicke",
+    "system": "System",
+    "communications": "Kommunikation",
+    "adaptiveSystem": "Adaptives System",
+    "usage": "Nutzung"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Heutiges Briefing",
+    "read": "Lesen",
+    "discuss": "Besprechen"
+  },
+  "upgrade": {
+    "title": "Du hast deine {{limit}} kostenlosen Nachrichten verbraucht",
+    "subtitle": "Pro gibt dir unbegrenzte Nachrichten, ein Gedächtnis das dich kennenlernt, und vollständige Briefings.",
+    "resetsAt": "Deine Nachrichten werden um {{time}} zurückgesetzt. Upgrade für 100 Nachrichten pro Tag.",
+    "features": {
+      "unlimitedMessages": "Unbegrenzte Nachrichten",
+      "deepResearch": "Erweitertes Denken (30/Mo.)",
+      "multiAgent": "Dateianalyse (10/Mo.)",
+      "multiStep": "Ziele, Sprache & agentische Workflows",
+      "persistentMemory": "Gedächtnis + proaktive Briefings"
+    },
+    "button": "Pro werden — $29/Mo.",
+    "annualButton": "$290/Jahr — $58 sparen",
+    "buttonLoading": "Kasse wird geöffnet...",
+    "maybeLater": "Vielleicht später"
+  },
+  "deleteConfirm": {
+    "title": "Konto löschen?",
+    "subtitle": "Dies löscht dauerhaft alle deine Daten: Konversationen, Erinnerungen und Einstellungen. Dies kann nicht rückgängig gemacht werden.",
+    "subtitleWithSub": " Dein Abonnement wird ebenfalls gekündigt.",
+    "typeDelete": "Geben Sie DELETE ein, um zu bestätigen:",
+    "confirm": "Ja, mein Konto löschen",
+    "confirming": "Wird gelöscht..."
+  },
+  "status": {
+    "assemblingAgents": "Agenten werden zusammengestellt...",
+    "agentsCollaborating": "Agenten arbeiten zusammen",
+    "synthesizingPerspectives": "Perspektiven werden synthetisiert...",
+    "routingToSpecialist": "Weiterleitung an Spezialisten...",
+    "isWorking": "{{agent}} arbeitet...",
+    "lowConfidence": "geringe Zuversicht"
+  },
+  "feedback": {
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "messagesRemaining": "{{count}} Nachrichten übrig",
+  "lastFreeMessage": "Letzte kostenlose Nachricht"
+}

@@ -1,0 +1,89 @@
+{
+  "tagline": "당신을 기억하고, 함께 생각하며, 시간이 지날수록 더 나아지는 개인 AI.",
+  "placeholder": "kernel.chat에게 말하기...",
+  "welcomeToPro": "Kernel Pro에 오신 것을 환영합니다!",
+  "menu": {
+    "shareConversation": "대화 공유",
+    "exportMarkdown": "Markdown으로 내보내기",
+    "goals": "목표",
+    "workflows": "워크플로",
+    "scheduledTasks": "예약된 작업",
+    "dailyBriefing": "일일 브리핑",
+    "whatKernelKnows": "Kernel이 아는 것",
+    "yourStats": "내 통계",
+    "insights": "인사이트",
+    "upgradeToPro": "Pro로 업그레이드",
+    "manageSubscription": "구독 관리",
+    "signOut": "로그아웃",
+    "deleteAccount": "계정 삭제",
+    "notifications": "알림",
+    "notifInApp": "앱 내 알림",
+    "notifBriefings": "브리핑 알림",
+    "notifGoals": "목표 업데이트",
+    "notifReminders": "리마인더",
+    "notifPush": "푸시 알림",
+    "darkMode": "다크 모드",
+    "theme": "테마",
+    "themeLight": "라이트",
+    "themeDark": "다크",
+    "themeEink": "E-Ink",
+    "agentBuilder": "에이전트 빌더",
+    "agentLibrary": "에이전트 라이브러리",
+    "backgroundAgents": "백그라운드 에이전트",
+    "myContent": "내 콘텐츠",
+    "bookmarks": "북마크",
+    "architecture": "아키텍처",
+    "designSystem": "디자인 시스템",
+    "routingInsights": "라우팅 인사이트",
+    "system": "시스템",
+    "communications": "커뮤니케이션",
+    "adaptiveSystem": "적응형 시스템",
+    "usage": "사용량"
+  },
+  "admin": "관리자",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "오늘의 브리핑",
+    "read": "읽기",
+    "discuss": "토론하기"
+  },
+  "upgrade": {
+    "title": "{{limit}}개의 무료 메시지를 모두 사용했습니다",
+    "subtitle": "Pro는 무제한 메시징, 당신을 배우는 메모리, 완전한 브리핑을 제공합니다.",
+    "resetsAt": "메시지가 {{time}}에 초기화됩니다. 하루 100개 메시지로 업그레이드하세요.",
+    "features": {
+      "unlimitedMessages": "무제한 메시징",
+      "deepResearch": "확장 사고 (월 30회)",
+      "multiAgent": "파일 분석 (월 10회)",
+      "multiStep": "목표, 음성 및 에이전트 워크플로",
+      "persistentMemory": "메모리 + 사전 브리핑"
+    },
+    "button": "Pro 시작하기 — $29/월",
+    "annualButton": "$290/년 — $58 절약",
+    "buttonLoading": "결제 페이지를 여는 중...",
+    "maybeLater": "나중에 하기"
+  },
+  "deleteConfirm": {
+    "title": "계정을 삭제하시겠습니까?",
+    "subtitle": "모든 데이터(대화, 메모리, 환경설정)가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+    "subtitleWithSub": " 구독도 취소됩니다.",
+    "typeDelete": "확인을 위해 DELETE를 입력하세요:",
+    "confirm": "네, 계정을 삭제합니다",
+    "confirming": "삭제 중..."
+  },
+  "status": {
+    "assemblingAgents": "에이전트 편성 중...",
+    "agentsCollaborating": "에이전트 협업 중",
+    "synthesizingPerspectives": "관점 종합 중...",
+    "routingToSpecialist": "전문가에게 라우팅 중...",
+    "isWorking": "{{agent}} 작업 중...",
+    "lowConfidence": "낮은 확신도"
+  },
+  "feedback": {
+    "save": "저장",
+    "cancel": "취소"
+  },
+  "messagesRemaining": "남은 메시지 {{count}}개",
+  "lastFreeMessage": "마지막 무료 메시지"
+}

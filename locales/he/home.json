@@ -1,0 +1,89 @@
+{
+  "tagline": "AI אישי שזוכר אותך, חושב איתך ומשתפר עם הזמן.",
+  "placeholder": "דבר עם kernel.chat...",
+  "welcomeToPro": "ברוך הבא ל-Kernel Pro!",
+  "menu": {
+    "shareConversation": "שתף שיחה",
+    "exportMarkdown": "ייצוא כ-Markdown",
+    "goals": "יעדים",
+    "workflows": "תהליכי עבודה",
+    "scheduledTasks": "משימות מתוזמנות",
+    "dailyBriefing": "תדרוך יומי",
+    "whatKernelKnows": "מה Kernel יודע",
+    "yourStats": "הסטטיסטיקה שלך",
+    "insights": "תובנות",
+    "upgradeToPro": "שדרג ל-Pro",
+    "manageSubscription": "נהל מנוי",
+    "signOut": "התנתק",
+    "deleteAccount": "מחק חשבון",
+    "notifications": "התראות",
+    "notifInApp": "התראות באפליקציה",
+    "notifBriefings": "התראות תדריך",
+    "notifGoals": "עדכוני יעדים",
+    "notifReminders": "תזכורות",
+    "notifPush": "התראות Push",
+    "darkMode": "מצב כהה",
+    "theme": "ערכת נושא",
+    "themeLight": "בהיר",
+    "themeDark": "כהה",
+    "themeEink": "E-Ink",
+    "agentBuilder": "בונה סוכנים",
+    "agentLibrary": "ספריית סוכנים",
+    "backgroundAgents": "סוכני רקע",
+    "myContent": "התוכן שלי",
+    "bookmarks": "סימניות",
+    "architecture": "ארכיטקטורה",
+    "designSystem": "מערכת עיצוב",
+    "routingInsights": "תובנות ניתוב",
+    "system": "מערכת",
+    "communications": "תקשורת",
+    "adaptiveSystem": "מערכת אדפטיבית",
+    "usage": "שימוש"
+  },
+  "admin": "מנהל",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "התדרוך של היום",
+    "read": "קרא",
+    "discuss": "דון"
+  },
+  "upgrade": {
+    "title": "ניצלת את {{limit}} ההודעות החינמיות שלך",
+    "subtitle": "Pro נותן לך הודעות ללא הגבלה, זיכרון שלומד אותך, ותדריכים מלאים.",
+    "resetsAt": "ההודעות שלך מתחדשות ב-{{time}}. שדרג ל-100 הודעות ביום.",
+    "features": {
+      "unlimitedMessages": "הודעות ללא הגבלה",
+      "deepResearch": "חשיבה מורחבת (30/חודש)",
+      "multiAgent": "ניתוח קבצים (10/חודש)",
+      "multiStep": "יעדים, קול ותהליכי עבודה סוכניים",
+      "persistentMemory": "זיכרון + תדריכים יזומים"
+    },
+    "button": "עבור ל-Pro — $29/חודש",
+    "annualButton": "$290/שנה — חסוך $58",
+    "buttonLoading": "פותח תשלום...",
+    "maybeLater": "אולי מאוחר יותר"
+  },
+  "deleteConfirm": {
+    "title": "למחוק את החשבון?",
+    "subtitle": "פעולה זו תמחק לצמיתות את כל הנתונים שלך: שיחות, זיכרון והעדפות. לא ניתן לבטל פעולה זו.",
+    "subtitleWithSub": " המנוי שלך יבוטל גם כן.",
+    "typeDelete": "הקלד DELETE כדי לאשר:",
+    "confirm": "כן, מחק את החשבון שלי",
+    "confirming": "מוחק..."
+  },
+  "status": {
+    "assemblingAgents": "מקבץ סוכנים...",
+    "agentsCollaborating": "סוכנים משתפים פעולה",
+    "synthesizingPerspectives": "מסנתז נקודות מבט...",
+    "routingToSpecialist": "מנתב למומחה...",
+    "isWorking": "{{agent}} עובד...",
+    "lowConfidence": "ביטחון נמוך"
+  },
+  "feedback": {
+    "save": "שמור",
+    "cancel": "ביטול"
+  },
+  "messagesRemaining": "נותרו {{count}} הודעות",
+  "lastFreeMessage": "הודעה חינמית אחרונה"
+}

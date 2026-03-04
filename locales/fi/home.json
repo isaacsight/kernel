@@ -1,0 +1,89 @@
+{
+  "tagline": "Henkilökohtainen tekoäly, joka muistaa sinut, ajattelee kanssasi ja paranee ajan myötä.",
+  "placeholder": "Keskustele kernel.chatin kanssa...",
+  "welcomeToPro": "Tervetuloa Kernel Prohon!",
+  "menu": {
+    "shareConversation": "Jaa keskustelu",
+    "exportMarkdown": "Vie Markdown-muodossa",
+    "goals": "Tavoitteet",
+    "workflows": "Työnkulut",
+    "scheduledTasks": "Ajastetut tehtävät",
+    "dailyBriefing": "Päivittäinen katsaus",
+    "whatKernelKnows": "Mitä Kernel tietää",
+    "yourStats": "Tilastosi",
+    "insights": "Näkemykset",
+    "upgradeToPro": "Päivitä Prohon",
+    "manageSubscription": "Hallitse tilausta",
+    "signOut": "Kirjaudu ulos",
+    "deleteAccount": "Poista tili",
+    "notifications": "Ilmoitukset",
+    "notifInApp": "Sovelluksen sisäiset ilmoitukset",
+    "notifBriefings": "Katsaushälytykset",
+    "notifGoals": "Tavoitepäivitykset",
+    "notifReminders": "Muistutukset",
+    "notifPush": "Push-ilmoitukset",
+    "darkMode": "Tumma tila",
+    "theme": "Teema",
+    "themeLight": "Vaalea",
+    "themeDark": "Tumma",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agentinrakentaja",
+    "agentLibrary": "Agenttikirjasto",
+    "backgroundAgents": "Taustaagentit",
+    "myContent": "Oma sisältö",
+    "bookmarks": "Kirjanmerkit",
+    "architecture": "Arkkitehtuuri",
+    "designSystem": "Suunnittelujärjestelmä",
+    "routingInsights": "Reititysnäkemykset",
+    "system": "Järjestelmä",
+    "communications": "Viestintä",
+    "adaptiveSystem": "Mukautuva järjestelmä",
+    "usage": "Käyttö"
+  },
+  "admin": "Ylläpito",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Päivän katsaus",
+    "read": "Lue",
+    "discuss": "Keskustele"
+  },
+  "upgrade": {
+    "title": "Olet käyttänyt {{limit}} ilmaista viestiäsi",
+    "subtitle": "Pro antaa sinulle rajoittamattoman viestinnän, muistin joka oppii tuntemaan sinut ja täydet katsaukset.",
+    "resetsAt": "Viestisi nollautuvat klo {{time}}. Päivitä saadaksesi 100 viestiä päivässä.",
+    "features": {
+      "unlimitedMessages": "Rajoittamaton viestintä",
+      "deepResearch": "Laajennettu ajattelu (30/kk)",
+      "multiAgent": "Tiedostoanalyysi (10/kk)",
+      "multiStep": "Tavoitteet, ääni ja agenttiset työnkulut",
+      "persistentMemory": "Muisti + ennakoivat katsaukset"
+    },
+    "button": "Siirry Prohon — $29/kk",
+    "annualButton": "$290/vuosi — säästä $58",
+    "buttonLoading": "Avataan kassaa...",
+    "maybeLater": "Ehkä myöhemmin"
+  },
+  "deleteConfirm": {
+    "title": "Poistetaanko tilisi?",
+    "subtitle": "Tämä poistaa pysyvästi kaikki tietosi: keskustelut, muistin ja asetukset. Tätä ei voi kumota.",
+    "subtitleWithSub": " Tilauksesi peruutetaan myös.",
+    "typeDelete": "Kirjoita DELETE vahvistaaksesi:",
+    "confirm": "Kyllä, poista tilini",
+    "confirming": "Poistetaan..."
+  },
+  "status": {
+    "assemblingAgents": "Kootaan agentteja...",
+    "agentsCollaborating": "Agentit tekevät yhteistyötä",
+    "synthesizingPerspectives": "Syntetisoidaan näkökulmia...",
+    "routingToSpecialist": "Ohjataan asiantuntijalle...",
+    "isWorking": "{{agent}} työskentelee...",
+    "lowConfidence": "matala luottamus"
+  },
+  "feedback": {
+    "save": "Tallenna",
+    "cancel": "Peruuta"
+  },
+  "messagesRemaining": "{{count}} viestiä jäljellä",
+  "lastFreeMessage": "Viimeinen ilmainen viesti"
+}

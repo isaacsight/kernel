@@ -1,0 +1,89 @@
+{
+  "tagline": "Een persoonlijke AI die je onthoudt, met je meedenkt en steeds beter wordt.",
+  "placeholder": "Praat met kernel.chat...",
+  "welcomeToPro": "Welkom bij Kernel Pro!",
+  "menu": {
+    "shareConversation": "Gesprek delen",
+    "exportMarkdown": "Exporteren als Markdown",
+    "goals": "Doelen",
+    "workflows": "Workflows",
+    "scheduledTasks": "Geplande taken",
+    "dailyBriefing": "Dagelijkse briefing",
+    "whatKernelKnows": "Wat Kernel weet",
+    "yourStats": "Jouw statistieken",
+    "insights": "Inzichten",
+    "upgradeToPro": "Upgraden naar Pro",
+    "manageSubscription": "Abonnement beheren",
+    "signOut": "Uitloggen",
+    "deleteAccount": "Account verwijderen",
+    "notifications": "Meldingen",
+    "notifInApp": "In-app meldingen",
+    "notifBriefings": "Briefing-meldingen",
+    "notifGoals": "Doelupdates",
+    "notifReminders": "Herinneringen",
+    "notifPush": "Pushmeldingen",
+    "darkMode": "Donkere modus",
+    "theme": "Thema",
+    "themeLight": "Licht",
+    "themeDark": "Donker",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agent Builder",
+    "agentLibrary": "Agentbibliotheek",
+    "backgroundAgents": "Achtergrondagenten",
+    "myContent": "Mijn inhoud",
+    "bookmarks": "Bladwijzers",
+    "architecture": "Architectuur",
+    "designSystem": "Ontwerpsysteem",
+    "routingInsights": "Routeringsinzichten",
+    "system": "Systeem",
+    "communications": "Communicatie",
+    "adaptiveSystem": "Adaptief systeem",
+    "usage": "Gebruik"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Briefing van vandaag",
+    "read": "Lezen",
+    "discuss": "Bespreken"
+  },
+  "upgrade": {
+    "title": "Je hebt je {{limit}} gratis berichten gebruikt",
+    "subtitle": "Pro geeft je onbeperkt berichten, een geheugen dat je leert kennen en volledige briefings.",
+    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade voor 100 berichten per dag.",
+    "features": {
+      "unlimitedMessages": "Onbeperkt berichten",
+      "deepResearch": "Uitgebreid denken (30/mnd)",
+      "multiAgent": "Bestandsanalyse (10/mnd)",
+      "multiStep": "Doelen, spraak en agentische workflows",
+      "persistentMemory": "Geheugen + proactieve briefings"
+    },
+    "button": "Ga Pro — $29/mnd",
+    "annualButton": "$290/jaar — bespaar $58",
+    "buttonLoading": "Checkout openen...",
+    "maybeLater": "Misschien later"
+  },
+  "deleteConfirm": {
+    "title": "Je account verwijderen?",
+    "subtitle": "Dit verwijdert permanent al je gegevens: gesprekken, geheugen en voorkeuren. Dit kan niet ongedaan worden gemaakt.",
+    "subtitleWithSub": " Je abonnement wordt ook opgezegd.",
+    "typeDelete": "Typ DELETE om te bevestigen:",
+    "confirm": "Ja, verwijder mijn account",
+    "confirming": "Verwijderen..."
+  },
+  "status": {
+    "assemblingAgents": "Agenten samenstellen...",
+    "agentsCollaborating": "Agenten werken samen",
+    "synthesizingPerspectives": "Perspectieven samenvoegen...",
+    "routingToSpecialist": "Doorsturen naar specialist...",
+    "isWorking": "{{agent}} is bezig...",
+    "lowConfidence": "lage betrouwbaarheid"
+  },
+  "feedback": {
+    "save": "Opslaan",
+    "cancel": "Annuleren"
+  },
+  "messagesRemaining": "{{count}} berichten resterend",
+  "lastFreeMessage": "Laatste gratis bericht"
+}

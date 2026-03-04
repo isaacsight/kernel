@@ -1,0 +1,7 @@
+{
+  "greeting": "Hey. I'm Kernel.",
+  "greetingUser": "Hey, {{name}}. I'm Kernel.",
+  "tagline": "Your personal AI — built to learn how you think.",
+  "placeholder": "Ask me anything...",
+  "skipIntro": "Skip intro"
+}

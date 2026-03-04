@@ -1,0 +1,52 @@
+{
+  "observer": {
+    "phasePipeline": "चरण पाइपलाइन",
+    "phases": { "perceiving": "अनुभव कर रहा है", "attending": "ध्यान दे रहा है", "deciding": "निर्णय ले रहा है", "acting": "कार्य कर रहा है", "reflecting": "विचार कर रहा है" },
+    "perception": "अनुभूति",
+    "intent": "इरादा",
+    "urgency": "तात्कालिकता",
+    "complexity": "जटिलता",
+    "sentiment": "भावना",
+    "impliedNeed": "निहित आवश्यकता",
+    "noActivePerception": "कोई सक्रिय अनुभूति नहीं",
+    "attention": "ध्यान",
+    "focus": "फोकस",
+    "depth": "गहराई",
+    "noActiveAttention": "कोई सक्रिय ध्यान नहीं",
+    "conviction": "दृढ़ विश्वास",
+    "trend": { "rising": "बढ़ रहा है", "falling": "गिर रहा है", "stable": "स्थिर" },
+    "beliefs": "विश्वास ({{count}})",
+    "noBeliefsFormed": "कोई विश्वास नहीं बने",
+    "eventFeed": "इवेंट फ़ीड",
+    "noEventsYet": "अभी तक कोई इवेंट नहीं",
+    "lastReflection": "अंतिम विचार",
+    "noReflectionsYet": "अभी तक कोई विचार नहीं"
+  },
+  "controls": {
+    "engine": "इंजन",
+    "stop": "रोकें",
+    "reset": "रीसेट",
+    "agentOverride": "एजेंट ओवरराइड",
+    "overrideNext": "अगला ओवरराइड करें",
+    "conviction": "दृढ़ विश्वास",
+    "beliefs": "विश्वास",
+    "newBeliefPlaceholder": "नया विश्वास...",
+    "challenge": "चुनौती",
+    "reflections": "विचार",
+    "pruneLabel": "इस गुणवत्ता से नीचे हटाएं:",
+    "prune": "छांटें",
+    "pruneResult": "{{count}} विचार हटाए गए",
+    "agentPerformance": "एजेंट प्रदर्शन",
+    "noPerformanceData": "अभी तक कोई प्रदर्शन डेटा नहीं"
+  },
+  "chat": {
+    "emptyTitle": "kernel.chat से पूछें",
+    "emptySubtitle": "यह वह सब देखता है जो इंजन देखता है।",
+    "placeholder": "Kernel से पूछें...",
+    "send": "भेजें"
+  },
+  "pill": {
+    "openKernel": "kernel.chat खोलें",
+    "phases": { "idle": "निष्क्रिय", "perceiving": "अनुभव कर रहा है", "attending": "ध्यान दे रहा है", "deciding": "निर्णय ले रहा है", "acting": "कार्य कर रहा है", "reflecting": "विचार कर रहा है" }
+  }
+}

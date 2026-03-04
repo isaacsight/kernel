@@ -1,0 +1,89 @@
+{
+  "tagline": "یک هوش مصنوعی شخصی که شما را به خاطر می‌سپارد، با شما فکر می‌کند و به مرور زمان بهتر می‌شود.",
+  "placeholder": "با kernel.chat صحبت کنید...",
+  "welcomeToPro": "به Kernel Pro خوش آمدید!",
+  "menu": {
+    "shareConversation": "اشتراک‌گذاری گفتگو",
+    "exportMarkdown": "خروجی به صورت Markdown",
+    "goals": "اهداف",
+    "workflows": "گردش‌کارها",
+    "scheduledTasks": "وظایف زمان‌بندی شده",
+    "dailyBriefing": "گزارش روزانه",
+    "whatKernelKnows": "آنچه Kernel می‌داند",
+    "yourStats": "آمار شما",
+    "insights": "بینش‌ها",
+    "upgradeToPro": "ارتقا به Pro",
+    "manageSubscription": "مدیریت اشتراک",
+    "signOut": "خروج",
+    "deleteAccount": "حذف حساب کاربری",
+    "notifications": "اعلان‌ها",
+    "notifInApp": "اعلان‌های درون‌برنامه",
+    "notifBriefings": "هشدارهای خلاصه",
+    "notifGoals": "به‌روزرسانی اهداف",
+    "notifReminders": "یادآوری‌ها",
+    "notifPush": "اعلان‌های فشاری",
+    "darkMode": "حالت تاریک",
+    "theme": "پوسته",
+    "themeLight": "روشن",
+    "themeDark": "تاریک",
+    "themeEink": "E-Ink",
+    "agentBuilder": "سازنده عامل",
+    "agentLibrary": "کتابخانه عوامل",
+    "backgroundAgents": "عوامل پس‌زمینه",
+    "myContent": "محتوای من",
+    "bookmarks": "نشانک‌ها",
+    "architecture": "معماری",
+    "designSystem": "سیستم طراحی",
+    "routingInsights": "بینش‌های مسیریابی",
+    "system": "سیستم",
+    "communications": "ارتباطات",
+    "adaptiveSystem": "سیستم تطبیقی",
+    "usage": "مصرف"
+  },
+  "admin": "مدیر",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "گزارش امروز",
+    "read": "خواندن",
+    "discuss": "گفتگو"
+  },
+  "upgrade": {
+    "title": "شما از {{limit}} پیام رایگان خود استفاده کرده‌اید",
+    "subtitle": "Pro به شما پیام‌رسانی نامحدود، حافظه‌ای که شما را می‌شناسد، و گزارش‌های کامل می‌دهد.",
+    "resetsAt": "پیام‌های شما در {{time}} بازنشانی می‌شوند. برای 100 پیام در روز ارتقا دهید.",
+    "features": {
+      "unlimitedMessages": "پیام‌رسانی نامحدود",
+      "deepResearch": "تفکر گسترده (30/ماه)",
+      "multiAgent": "تحلیل فایل (10/ماه)",
+      "multiStep": "اهداف، صدا و گردش‌کار هوشمند",
+      "persistentMemory": "حافظه + گزارش‌های پیشگیرانه"
+    },
+    "button": "اشتراک Pro — $29/ماه",
+    "annualButton": "$290/سال — $58 صرفه‌جویی کنید",
+    "buttonLoading": "در حال باز کردن پرداخت...",
+    "maybeLater": "شاید بعداً"
+  },
+  "deleteConfirm": {
+    "title": "حذف حساب کاربری شما؟",
+    "subtitle": "این کار تمام داده‌های شما را برای همیشه حذف می‌کند: گفتگوها، حافظه و تنظیمات. این عمل قابل بازگشت نیست.",
+    "subtitleWithSub": " اشتراک شما نیز لغو خواهد شد.",
+    "typeDelete": "برای تأیید DELETE را تایپ کنید:",
+    "confirm": "بله، حساب من را حذف کن",
+    "confirming": "در حال حذف..."
+  },
+  "status": {
+    "assemblingAgents": "در حال فراخوانی عوامل...",
+    "agentsCollaborating": "عوامل در حال همکاری",
+    "synthesizingPerspectives": "در حال ترکیب دیدگاه‌ها...",
+    "routingToSpecialist": "هدایت به متخصص...",
+    "isWorking": "{{agent}} در حال کار است...",
+    "lowConfidence": "اطمینان پایین"
+  },
+  "feedback": {
+    "save": "ذخیره",
+    "cancel": "لغو"
+  },
+  "messagesRemaining": "{{count}} پیام باقی‌مانده",
+  "lastFreeMessage": "آخرین پیام رایگان"
+}

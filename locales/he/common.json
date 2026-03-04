@@ -1,0 +1,61 @@
+{
+  "close": "סגור",
+  "cancel": "ביטול",
+  "delete": "מחק",
+  "save": "שמור",
+  "retry": "נסה שוב",
+  "loading": "טוען...",
+  "submit": "שלח",
+  "add": "הוסף",
+  "remove": "הסר",
+  "complete": "הושלם",
+  "run": "הפעל",
+  "or": "או",
+  "features": "פיצ'רים",
+  "account": "חשבון",
+  "conversation": "שיחה",
+  "errorGeneric": "משהו השתבש. אנא נסה שוב.",
+  "aria": {
+    "close": "סגור",
+    "notifications": "התראות",
+    "toggleDarkMode": "שנה מצב כהה",
+    "scrollToBottom": "גלול לתחתית",
+    "conversations": "שיחות",
+    "newChat": "שיחה חדשה",
+    "moreOptions": "אפשרויות נוספות",
+    "attachFile": "צרף קובץ",
+    "editMessage": "ערוך הודעה",
+    "copyMessage": "העתק הודעה",
+    "downloadResponse": "הורד תגובה",
+    "helpful": "עוזר",
+    "notHelpful": "לא עוזר",
+    "stopListening": "הפסק להקשיב",
+    "voiceInput": "קלט קולי",
+    "sendMessage": "Send message",
+    "stopGenerating": "הפסק ליצור",
+    "shareableLink": "קישור לשיתוף השיחה"
+  },
+  "time": {
+    "overdue": "באיחור",
+    "minutesShort": "בעוד {{count}} דק'",
+    "hoursShort": "בעוד {{count}} שע'"
+  },
+  "notifications": {
+    "title": "התראות",
+    "markAllRead": "סמן הכל כנקרא",
+    "empty": "אין עדיין התראות"
+  },
+  "conversations": {
+    "today": "היום",
+    "yesterday": "אתמול",
+    "thisWeek": "השבוע",
+    "thisMonth": "החודש",
+    "earlier": "קודם"
+  },
+  "language": "שפה",
+  "offline": "אתה לא מחובר. צפייה בשיחות שמורות.",
+  "pwa": {
+    "installPrompt": "הוסף את Kernel למסך הבית לחוויה הטובה ביותר.",
+    "install": "התקן"
+  }
+}

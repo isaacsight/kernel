@@ -1,0 +1,89 @@
+{
+  "tagline": "Una IA personal que te recuerda, piensa contigo y mejora con el tiempo.",
+  "placeholder": "Habla con kernel.chat...",
+  "welcomeToPro": "¡Bienvenido a Kernel Pro!",
+  "menu": {
+    "shareConversation": "Compartir conversación",
+    "exportMarkdown": "Exportar como Markdown",
+    "goals": "Objetivos",
+    "workflows": "Flujos de trabajo",
+    "scheduledTasks": "Tareas programadas",
+    "dailyBriefing": "Resumen diario",
+    "whatKernelKnows": "Lo que Kernel sabe",
+    "yourStats": "Tus estadísticas",
+    "insights": "Perspectivas",
+    "upgradeToPro": "Mejorar a Pro",
+    "manageSubscription": "Gestionar suscripción",
+    "signOut": "Cerrar sesión",
+    "deleteAccount": "Eliminar cuenta",
+    "notifications": "Notificaciones",
+    "notifInApp": "Notificaciones en la app",
+    "notifBriefings": "Alertas de resumen",
+    "notifGoals": "Actualizaciones de objetivos",
+    "notifReminders": "Recordatorios",
+    "notifPush": "Notificaciones push",
+    "darkMode": "Modo oscuro",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Constructor de agentes",
+    "agentLibrary": "Biblioteca de agentes",
+    "backgroundAgents": "Agentes en segundo plano",
+    "myContent": "Mi contenido",
+    "bookmarks": "Marcadores",
+    "architecture": "Arquitectura",
+    "designSystem": "Sistema de diseño",
+    "routingInsights": "Información de enrutamiento",
+    "system": "Sistema",
+    "communications": "Comunicaciones",
+    "adaptiveSystem": "Sistema adaptativo",
+    "usage": "Uso"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Resumen de hoy",
+    "read": "Leer",
+    "discuss": "Discutir"
+  },
+  "upgrade": {
+    "title": "Has usado tus {{limit}} mensajes gratuitos",
+    "subtitle": "Pro te da mensajes ilimitados, memoria que aprende de ti, y briefings completos.",
+    "resetsAt": "Tus mensajes se renuevan a las {{time}}. Actualiza para 100 mensajes por día.",
+    "features": {
+      "unlimitedMessages": "Mensajes ilimitados",
+      "deepResearch": "Pensamiento extendido (30/mes)",
+      "multiAgent": "Análisis de archivos (10/mes)",
+      "multiStep": "Objetivos, voz y flujos de trabajo agénticos",
+      "persistentMemory": "Memoria + briefings proactivos"
+    },
+    "button": "Hazte Pro — $29/mes",
+    "annualButton": "$290/año — ahorra $58",
+    "buttonLoading": "Abriendo pago...",
+    "maybeLater": "Quizás después"
+  },
+  "deleteConfirm": {
+    "title": "¿Eliminar tu cuenta?",
+    "subtitle": "Esto elimina permanentemente todos tus datos: conversaciones, memoria y preferencias. Esto no se puede deshacer.",
+    "subtitleWithSub": " Tu suscripción también será cancelada.",
+    "typeDelete": "Escribe DELETE para confirmar:",
+    "confirm": "Sí, eliminar mi cuenta",
+    "confirming": "Eliminando..."
+  },
+  "status": {
+    "assemblingAgents": "Reuniendo agentes...",
+    "agentsCollaborating": "Agentes colaborando",
+    "synthesizingPerspectives": "Sintetizando perspectivas...",
+    "routingToSpecialist": "Dirigiendo al especialista...",
+    "isWorking": "{{agent}} está trabajando...",
+    "lowConfidence": "confianza baja"
+  },
+  "feedback": {
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "messagesRemaining": "{{count}} mensajes restantes",
+  "lastFreeMessage": "Último mensaje gratuito"
+}

@@ -1,0 +1,52 @@
+{
+  "observer": {
+    "phasePipeline": "フェーズパイプライン",
+    "phases": { "perceiving": "知覚中", "attending": "注意中", "deciding": "決定中", "acting": "行動中", "reflecting": "振り返り中" },
+    "perception": "知覚",
+    "intent": "意図",
+    "urgency": "緊急度",
+    "complexity": "複雑度",
+    "sentiment": "感情",
+    "impliedNeed": "潜在的ニーズ",
+    "noActivePerception": "アクティブな知覚なし",
+    "attention": "注意",
+    "focus": "フォーカス",
+    "depth": "深度",
+    "noActiveAttention": "アクティブな注意なし",
+    "conviction": "確信度",
+    "trend": { "rising": "上昇", "falling": "下降", "stable": "安定" },
+    "beliefs": "信念 ({{count}})",
+    "noBeliefsFormed": "信念はまだ形成されていません",
+    "eventFeed": "イベントフィード",
+    "noEventsYet": "イベントはまだありません",
+    "lastReflection": "最後の振り返り",
+    "noReflectionsYet": "振り返りはまだありません"
+  },
+  "controls": {
+    "engine": "エンジン",
+    "stop": "停止",
+    "reset": "リセット",
+    "agentOverride": "エージェントオーバーライド",
+    "overrideNext": "次をオーバーライド",
+    "conviction": "確信度",
+    "beliefs": "信念",
+    "newBeliefPlaceholder": "新しい信念...",
+    "challenge": "チャレンジ",
+    "reflections": "振り返り",
+    "pruneLabel": "品質以下を剪定：",
+    "prune": "剪定",
+    "pruneResult": "{{count}} 件の振り返りを削除しました",
+    "agentPerformance": "エージェントパフォーマンス",
+    "noPerformanceData": "パフォーマンスデータはまだありません"
+  },
+  "chat": {
+    "emptyTitle": "kernel.chat に聞く",
+    "emptySubtitle": "エンジンが見ているものすべてを見ます。",
+    "placeholder": "Kernel に聞く...",
+    "send": "送信"
+  },
+  "pill": {
+    "openKernel": "kernel.chat を開く",
+    "phases": { "idle": "アイドル", "perceiving": "知覚中", "attending": "注意中", "deciding": "決定中", "acting": "行動中", "reflecting": "振り返り中" }
+  }
+}

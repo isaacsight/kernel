@@ -1,0 +1,89 @@
+{
+  "tagline": "AIیەکی کەسی کە تۆی لەبیرە، لەگەڵت بیر دەکاتەوە، و بە تێپەڕبوونی کات باشتر دەبێت.",
+  "placeholder": "قسە لەگەڵ kernel.chat بکە...",
+  "welcomeToPro": "بەخێرهاتی بۆ Kernel Pro!",
+  "menu": {
+    "shareConversation": "هاوبەشکردنی گفتوگۆ",
+    "exportMarkdown": "ناردن وەک Markdown",
+    "goals": "ئامانجەکان",
+    "workflows": "ڕەوتی کارەکان",
+    "scheduledTasks": "کارە کات بۆ دیاریکراوەکان",
+    "dailyBriefing": "کورتەی ڕۆژانە",
+    "whatKernelKnows": "ئەوەی Kernel دەیزانێت",
+    "yourStats": "ئامارەکانت",
+    "insights": "بینینەکان",
+    "upgradeToPro": "بەرزکردنەوە بۆ Pro",
+    "manageSubscription": "بەڕێوەبردنی بەشداریکردن",
+    "signOut": "چوونە دەرەوە",
+    "deleteAccount": "سڕینەوەی هەژمار",
+    "notifications": "ئاگادارییەکان",
+    "notifInApp": "ئاگادارییەکانی ناو ئەپ",
+    "notifBriefings": "ئاگادارییەکانی پوختە",
+    "notifGoals": "نوێکردنەوەی ئامانجەکان",
+    "notifReminders": "بیرخستنەوەکان",
+    "notifPush": "ئاگادارکردنەوەی پووش",
+    "darkMode": "دۆخی تاریک",
+    "theme": "ڕووکار",
+    "themeLight": "ڕووناک",
+    "themeDark": "تاریک",
+    "themeEink": "E-Ink",
+    "agentBuilder": "دروستکەری بریکار",
+    "agentLibrary": "کتێبخانەی بریکارەکان",
+    "backgroundAgents": "بریکارانی پشتەوە",
+    "myContent": "ناوەڕۆکەکانم",
+    "bookmarks": "نیشانەکان",
+    "architecture": "تەلارسازی",
+    "designSystem": "سیستەمی دیزاین",
+    "routingInsights": "بینینەکانی ڕێنیشاندان",
+    "system": "سیستەم",
+    "communications": "پەیوەندییەکان",
+    "adaptiveSystem": "سیستەمی ئاداپتیڤ",
+    "usage": "بەکارهێنان"
+  },
+  "admin": "بەڕێوەبەر",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "کورتەی ئەمڕۆ",
+    "read": "خوێندنەوە",
+    "discuss": "گفتوگۆکردن"
+  },
+  "upgrade": {
+    "title": "تۆ {{limit}} نامەی خۆڕاییت بەکارهێناوە",
+    "subtitle": "Pro نامەنامەی بێسنوور، بیرگەیەک کە فێری تۆ دەبێت، و پوختەی تەواو پێت دەدات.",
+    "resetsAt": "نامەکانت لە {{time}} نوێ دەبنەوە. بەرزبکەرەوە بۆ ڕۆژانە 100 نامە.",
+    "features": {
+      "unlimitedMessages": "نامەنامەی بێسنوور",
+      "deepResearch": "بیرکردنەوەی درێژ (30/مانگ)",
+      "multiAgent": "شیکردنەوەی فایل (10/مانگ)",
+      "multiStep": "ئامانجەکان، دەنگ و ڕەوتی کاری زیرەکانە",
+      "persistentMemory": "بیرگە + پوختەی پێشگریمانەیی"
+    },
+    "button": "بەرزکردنەوە بۆ Pro — $29/مانگ",
+    "annualButton": "$290/ساڵ — $58 پاشەکەوت بکە",
+    "buttonLoading": "کردنەوەی پارەدان...",
+    "maybeLater": "بۆ کاتێکی تر"
+  },
+  "deleteConfirm": {
+    "title": "هەژمارەکەت دەسڕیتەوە؟",
+    "subtitle": "ئەمە هەموو زانیارییەکانت بە هەمیشەیی دەسڕێتەوە: گفتوگۆکان، بیرگە، و هەڵبژاردەکان. ئەم کارە ناگەڕێتەوە.",
+    "subtitleWithSub": " بەشداریکردنەکەشت هەڵدەوەشێتەوە.",
+    "typeDelete": "بۆ دڵنیابوونەوە DELETE بنووسە:",
+    "confirm": "بەڵێ، هەژمارەکەم بسڕەوە",
+    "confirming": "دەسڕێتەوە..."
+  },
+  "status": {
+    "assemblingAgents": "کۆکردنەوەی بریکارەکان...",
+    "agentsCollaborating": "بریکارەکان هاوکاری دەکەن",
+    "synthesizingPerspectives": "کورتکردنەوەی دیدگاکان...",
+    "routingToSpecialist": "ڕەوانەکردن بۆ پسپۆڕ...",
+    "isWorking": "{{agent}} کار دەکات...",
+    "lowConfidence": "متمانەی کەم"
+  },
+  "feedback": {
+    "save": "پاشکەوتکردن",
+    "cancel": "پاشگەزبوونەوە"
+  },
+  "messagesRemaining": "{{count}} نامە ماوە",
+  "lastFreeMessage": "کۆتا نامەی خۆڕایی"
+}

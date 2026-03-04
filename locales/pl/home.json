@@ -1,0 +1,89 @@
+{
+  "tagline": "Osobisty AI, który Cię pamięta, myśli razem z Tobą i staje się lepszy z czasem.",
+  "placeholder": "Porozmawiaj z kernel.chat...",
+  "welcomeToPro": "Witaj w Kernel Pro!",
+  "menu": {
+    "shareConversation": "Udostępnij rozmowę",
+    "exportMarkdown": "Eksportuj jako Markdown",
+    "goals": "Cele",
+    "workflows": "Przepływy pracy",
+    "scheduledTasks": "Zaplanowane zadania",
+    "dailyBriefing": "Codzienny briefing",
+    "whatKernelKnows": "Co Kernel wie",
+    "yourStats": "Twoje statystyki",
+    "insights": "Spostrzeżenia",
+    "upgradeToPro": "Uaktualnij do Pro",
+    "manageSubscription": "Zarządzaj subskrypcją",
+    "signOut": "Wyloguj się",
+    "deleteAccount": "Usuń konto",
+    "notifications": "Powiadomienia",
+    "notifInApp": "Powiadomienia w aplikacji",
+    "notifBriefings": "Alerty briefingowe",
+    "notifGoals": "Aktualizacje celów",
+    "notifReminders": "Przypomnienia",
+    "notifPush": "Powiadomienia push",
+    "darkMode": "Tryb ciemny",
+    "theme": "Motyw",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Kreator agentów",
+    "agentLibrary": "Biblioteka agentów",
+    "backgroundAgents": "Agenci w tle",
+    "myContent": "Moje treści",
+    "bookmarks": "Zakładki",
+    "architecture": "Architektura",
+    "designSystem": "System projektowy",
+    "routingInsights": "Informacje o routingu",
+    "system": "System",
+    "communications": "Komunikacja",
+    "adaptiveSystem": "System adaptacyjny",
+    "usage": "Użycie"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Dzisiejszy briefing",
+    "read": "Czytaj",
+    "discuss": "Dyskutuj"
+  },
+  "upgrade": {
+    "title": "Wykorzystałeś swoje {{limit}} darmowych wiadomości",
+    "subtitle": "Pro daje ci nieograniczone wiadomości, pamięć która uczy się ciebie i pełne briefingi.",
+    "resetsAt": "Twoje wiadomości odnowią się o {{time}}. Uaktualnij, aby mieć 100 wiadomości dziennie.",
+    "features": {
+      "unlimitedMessages": "Nieograniczone wiadomości",
+      "deepResearch": "Rozszerzone myślenie (30/mies.)",
+      "multiAgent": "Analiza plików (10/mies.)",
+      "multiStep": "Cele, głos i agentyczne przepływy pracy",
+      "persistentMemory": "Pamięć + proaktywne briefingi"
+    },
+    "button": "Przejdź na Pro — $29/mies.",
+    "annualButton": "$290/rok — zaoszczędź $58",
+    "buttonLoading": "Otwieranie płatności...",
+    "maybeLater": "Może później"
+  },
+  "deleteConfirm": {
+    "title": "Usunąć konto?",
+    "subtitle": "To trwale usunie wszystkie Twoje dane: rozmowy, pamięć i preferencje. Tej operacji nie można cofnąć.",
+    "subtitleWithSub": " Twoja subskrypcja również zostanie anulowana.",
+    "typeDelete": "Wpisz DELETE, aby potwierdzić:",
+    "confirm": "Tak, usuń moje konto",
+    "confirming": "Usuwanie..."
+  },
+  "status": {
+    "assemblingAgents": "Zbieranie agentów...",
+    "agentsCollaborating": "Agenci współpracują",
+    "synthesizingPerspectives": "Synteza perspektyw...",
+    "routingToSpecialist": "Przekierowywanie do specjalisty...",
+    "isWorking": "{{agent}} pracuje...",
+    "lowConfidence": "niskie zaufanie"
+  },
+  "feedback": {
+    "save": "Zapisz",
+    "cancel": "Anuluj"
+  },
+  "messagesRemaining": "Pozostało {{count}} wiadomości",
+  "lastFreeMessage": "Ostatnia darmowa wiadomość"
+}

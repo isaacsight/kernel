@@ -1,0 +1,89 @@
+{
+  "tagline": "一个记住你、与你一起思考、并随时间不断进步的个人 AI。",
+  "placeholder": "与 kernel.chat 对话...",
+  "welcomeToPro": "欢迎使用 Kernel Pro！",
+  "menu": {
+    "shareConversation": "分享对话",
+    "exportMarkdown": "导出为 Markdown",
+    "goals": "目标",
+    "workflows": "工作流",
+    "scheduledTasks": "定时任务",
+    "dailyBriefing": "每日简报",
+    "whatKernelKnows": "Kernel 的记忆",
+    "yourStats": "你的统计",
+    "insights": "洞察",
+    "upgradeToPro": "升级到 Pro",
+    "manageSubscription": "管理订阅",
+    "signOut": "退出登录",
+    "deleteAccount": "删除账户",
+    "notifications": "通知",
+    "notifInApp": "应用内通知",
+    "notifBriefings": "简报提醒",
+    "notifGoals": "目标更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知",
+    "darkMode": "深色模式",
+    "theme": "主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeEink": "E-Ink",
+    "agentBuilder": "智能体构建器",
+    "agentLibrary": "智能体库",
+    "backgroundAgents": "后台智能体",
+    "myContent": "我的内容",
+    "bookmarks": "书签",
+    "architecture": "架构",
+    "designSystem": "设计系统",
+    "routingInsights": "路由洞察",
+    "system": "系统",
+    "communications": "通讯",
+    "adaptiveSystem": "自适应系统",
+    "usage": "使用情况"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "今日简报",
+    "read": "阅读",
+    "discuss": "讨论"
+  },
+  "upgrade": {
+    "title": "你已用完 {{limit}} 条免费消息",
+    "subtitle": "Pro 为你提供无限消息、能了解你的记忆和完整简报。",
+    "resetsAt": "您的消息将在 {{time}} 重置。升级享受每日 100 条消息。",
+    "features": {
+      "unlimitedMessages": "无限消息",
+      "deepResearch": "扩展思考（30次/月）",
+      "multiAgent": "文件分析（10次/月）",
+      "multiStep": "目标、语音和智能工作流",
+      "persistentMemory": "记忆 + 主动简报"
+    },
+    "button": "升级 Pro — $29/月",
+    "annualButton": "$290/年 — 节省 $58",
+    "buttonLoading": "正在打开结账...",
+    "maybeLater": "以后再说"
+  },
+  "deleteConfirm": {
+    "title": "删除你的账户？",
+    "subtitle": "这将永久删除你的所有数据：对话、记忆和偏好设置。此操作不可撤销。",
+    "subtitleWithSub": " 你的订阅也将被取消。",
+    "typeDelete": "输入 DELETE 以确认：",
+    "confirm": "是的，删除我的账户",
+    "confirming": "删除中..."
+  },
+  "status": {
+    "assemblingAgents": "正在集结智能体...",
+    "agentsCollaborating": "智能体协作中",
+    "synthesizingPerspectives": "正在综合观点...",
+    "routingToSpecialist": "正在转接到专家...",
+    "isWorking": "{{agent}} 工作中...",
+    "lowConfidence": "低置信度"
+  },
+  "feedback": {
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "messagesRemaining": "剩余 {{count}} 条消息",
+  "lastFreeMessage": "最后一条免费消息"
+}

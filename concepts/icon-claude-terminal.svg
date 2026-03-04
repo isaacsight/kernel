@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Terminal Prompt Tool icon -->
+  <rect x="40" y="56" width="176" height="144" rx="12" stroke="#D4C5A9" stroke-width="1.5"/>
+  <line x1="40" y1="88" x2="216" y2="88" stroke="#D4C5A9" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- Claude Code Signature Spark in status bar -->
+  <path d="M60 120 Q60 128 68 128 Q60 128 60 136 Q60 128 52 128 Q60 128 60 120" stroke="#D4805A" stroke-width="1.5" fill="none"/>
+  
+  <!-- Prompt UI elements -->
+  <polyline points="84,116 100,128 84,140" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="112" y1="140" x2="136" y2="140" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Emulated output lines -->
+  <line x1="84" y1="164" x2="164" y2="164" stroke="#D4805A" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+  <line x1="84" y1="180" x2="140" y2="180" stroke="#D4805A" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+</svg>

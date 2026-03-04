@@ -1,0 +1,69 @@
+{
+    "observer": {
+        "phasePipeline": "Fase-pijplijn",
+        "phases": {
+            "perceiving": "waarnemen",
+            "attending": "aandacht schenken",
+            "deciding": "beslissen",
+            "acting": "handelen",
+            "reflecting": "reflecteren"
+        },
+        "perception": "Waatneming",
+        "intent": "Intentie",
+        "urgency": "Urgentie",
+        "complexity": "Complexiteit",
+        "sentiment": "Sentiment",
+        "impliedNeed": "Impliciete behoefte",
+        "noActivePerception": "Geen actieve waarneming",
+        "attention": "Aandacht",
+        "focus": "Focus",
+        "depth": "Diepte",
+        "noActiveAttention": "Geen actieve aandacht",
+        "conviction": "Overtuiging",
+        "trend": {
+            "rising": "stijgend",
+            "falling": "dalend",
+            "stable": "stabiel"
+        },
+        "beliefs": "Overtuigingen ({{count}})",
+        "noBeliefsFormed": "Geen overtuigingen gevormd",
+        "eventFeed": "Gebeurtenissenoverzicht",
+        "noEventsYet": "Nog geen gebeurtenissen",
+        "lastReflection": "Laatste reflectie",
+        "noReflectionsYet": "Nog geen reflecties"
+    },
+    "controls": {
+        "engine": "Motor",
+        "stop": "Stop",
+        "reset": "Reset",
+        "agentOverride": "Agent overschrijven",
+        "overrideNext": "Volgende overschrijven",
+        "conviction": "Overtuiging",
+        "beliefs": "Overtuigingen",
+        "newBeliefPlaceholder": "Nieuwe overtuiging...",
+        "challenge": "Uitdagen",
+        "reflections": "Reflecties",
+        "pruneLabel": "Snoeien onder kwaliteit:",
+        "prune": "Snoeien",
+        "pruneResult": "Verwijderde {{count}} reflectie(s)",
+        "agentPerformance": "Agent-prestaties",
+        "noPerformanceData": "Nog geen prestatiegegevens"
+    },
+    "chat": {
+        "emptyTitle": "Vraag kernel.chat",
+        "emptySubtitle": "Het ziet alles wat de motor ziet.",
+        "placeholder": "Vraag het de Kernel...",
+        "send": "Verzenden"
+    },
+    "pill": {
+        "openKernel": "Open kernel.chat",
+        "phases": {
+            "idle": "niet actief",
+            "perceiving": "waarnemen",
+            "attending": "aandacht schenken",
+            "deciding": "beslissen",
+            "acting": "handelen",
+            "reflecting": "reflecteren"
+        }
+    }
+}

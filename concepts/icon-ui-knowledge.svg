@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Stack sequence representing layered memory/database -->
+  <path d="M40 160 L128 200 L216 160" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M40 112 L128 152 L216 112" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M40 64 L128 104 L216 64 L128 24 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- Subtle data points on vertices -->
+  <circle cx="128" cy="64" r="2" fill="currentColor" opacity="0.35"/>
+  <circle cx="128" cy="112" r="2" fill="currentColor" opacity="0.35"/>
+  <circle cx="128" cy="160" r="2" fill="currentColor" opacity="0.35"/>
+</svg>

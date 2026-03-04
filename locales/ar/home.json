@@ -1,0 +1,89 @@
+{
+  "tagline": "ذكاء اصطناعي شخصي يتذكرك، ويفكر معك، ويتحسن بمرور الوقت.",
+  "placeholder": "تحدث إلى kernel.chat...",
+  "welcomeToPro": "مرحبًا بك في Kernel Pro!",
+  "menu": {
+    "shareConversation": "مشاركة المحادثة",
+    "exportMarkdown": "تصدير كـ Markdown",
+    "goals": "الأهداف",
+    "workflows": "سير العمل",
+    "scheduledTasks": "المهام المجدولة",
+    "dailyBriefing": "الإحاطة اليومية",
+    "whatKernelKnows": "ما يعرفه Kernel",
+    "yourStats": "إحصائياتك",
+    "insights": "الرؤى",
+    "upgradeToPro": "الترقية إلى Pro",
+    "manageSubscription": "إدارة الاشتراك",
+    "signOut": "تسجيل الخروج",
+    "deleteAccount": "حذف الحساب",
+    "notifications": "إشعارات",
+    "notifInApp": "إشعارات داخل التطبيق",
+    "notifBriefings": "تنبيهات الملخصات",
+    "notifGoals": "تحديثات الأهداف",
+    "notifReminders": "التذكيرات",
+    "notifPush": "إشعارات الدفع",
+    "darkMode": "الوضع الداكن",
+    "theme": "المظهر",
+    "themeLight": "فاتح",
+    "themeDark": "داكن",
+    "themeEink": "E-Ink",
+    "agentBuilder": "منشئ الوكلاء",
+    "agentLibrary": "مكتبة الوكلاء",
+    "backgroundAgents": "وكلاء الخلفية",
+    "myContent": "محتواي",
+    "bookmarks": "الإشارات المرجعية",
+    "architecture": "البنية",
+    "designSystem": "نظام التصميم",
+    "routingInsights": "رؤى التوجيه",
+    "system": "النظام",
+    "communications": "الاتصالات",
+    "adaptiveSystem": "النظام التكيفي",
+    "usage": "الاستخدام"
+  },
+  "admin": "مسؤول",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "إحاطة اليوم",
+    "read": "قراءة",
+    "discuss": "نقاش"
+  },
+  "upgrade": {
+    "title": "لقد استخدمت {{limit}} رسائلك المجانية",
+    "subtitle": "Pro يمنحك رسائل غير محدودة، وذاكرة تتعلم عنك، وإحاطات كاملة.",
+    "resetsAt": "ستتجدد رسائلك في {{time}}. قم بالترقية للحصول على 100 رسالة يوميًا.",
+    "features": {
+      "unlimitedMessages": "رسائل غير محدودة",
+      "deepResearch": "تفكير موسّع (30/شهريًا)",
+      "multiAgent": "تحليل الملفات (10/شهريًا)",
+      "multiStep": "أهداف، صوت وسير عمل ذكي",
+      "persistentMemory": "ذاكرة + إحاطات استباقية"
+    },
+    "button": "اشترك في Pro — $29/شهريًا",
+    "annualButton": "$290/سنويًا — وفّر $58",
+    "buttonLoading": "جاري فتح الدفع...",
+    "maybeLater": "ربما لاحقاً"
+  },
+  "deleteConfirm": {
+    "title": "حذف حسابك؟",
+    "subtitle": "هذا سيؤدي إلى حذف جميع بياناتك نهائياً: المحادثات والذاكرة والتفضيلات. لا يمكن التراجع عن هذا الإجراء.",
+    "subtitleWithSub": " سيتم إلغاء اشتراكك أيضاً.",
+    "typeDelete": "اكتب DELETE للتأكيد:",
+    "confirm": "نعم، احذف حسابي",
+    "confirming": "جاري الحذف..."
+  },
+  "status": {
+    "assemblingAgents": "جاري تجميع الوكلاء...",
+    "agentsCollaborating": "الوكلاء يتعاونون",
+    "synthesizingPerspectives": "توليف الرؤى...",
+    "routingToSpecialist": "التوجيه إلى أخصائي...",
+    "isWorking": "{{agent}} يعمل...",
+    "lowConfidence": "ثقة منخفضة"
+  },
+  "feedback": {
+    "save": "حفظ",
+    "cancel": "إلغاء"
+  },
+  "messagesRemaining": "تبقت {{count}} رسائل",
+  "lastFreeMessage": "آخر رسالة مجانية"
+}

@@ -1,0 +1,61 @@
+{
+  "close": "Cerrar",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "save": "Guardar",
+  "retry": "Intentar de nuevo",
+  "loading": "Cargando...",
+  "submit": "Enviar",
+  "add": "Agregar",
+  "remove": "Eliminar",
+  "complete": "Completar",
+  "run": "Ejecutar",
+  "or": "o",
+  "features": "Funciones",
+  "account": "Cuenta",
+  "conversation": "Conversación",
+  "errorGeneric": "Algo salió mal. Por favor, inténtalo de nuevo.",
+  "aria": {
+    "close": "Cerrar",
+    "notifications": "Notificaciones",
+    "toggleDarkMode": "Alternar modo oscuro",
+    "scrollToBottom": "Desplazar al final",
+    "conversations": "Conversaciones",
+    "newChat": "Nuevo chat",
+    "moreOptions": "Más opciones",
+    "attachFile": "Adjuntar archivo",
+    "editMessage": "Editar mensaje",
+    "copyMessage": "Copiar mensaje",
+    "downloadResponse": "Descargar respuesta",
+    "helpful": "Útil",
+    "notHelpful": "No útil",
+    "stopListening": "Dejar de escuchar",
+    "voiceInput": "Entrada de voz",
+    "sendMessage": "Send message",
+    "stopGenerating": "Detener generación",
+    "shareableLink": "Enlace para compartir la conversación"
+  },
+  "time": {
+    "overdue": "vencido",
+    "minutesShort": "en {{count}}m",
+    "hoursShort": "en {{count}}h"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leído",
+    "empty": "Aún no hay notificaciones"
+  },
+  "conversations": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mes",
+    "earlier": "Anterior"
+  },
+  "language": "Idioma",
+  "offline": "Estás sin conexión. Viendo conversaciones guardadas.",
+  "pwa": {
+    "installPrompt": "Agrega Kernel a tu pantalla de inicio para la mejor experiencia.",
+    "install": "Instalar"
+  }
+}

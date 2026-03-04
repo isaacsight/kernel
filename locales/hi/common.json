@@ -1,0 +1,61 @@
+{
+  "close": "बंद करें",
+  "cancel": "रद्द करें",
+  "delete": "हटाएं",
+  "save": "सहेजें",
+  "retry": "फिर से प्रयास करें",
+  "loading": "लोड हो रहा है...",
+  "submit": "सबमिट करें",
+  "add": "जोड़ें",
+  "remove": "हटाएं",
+  "complete": "पूर्ण",
+  "run": "चलाएं",
+  "or": "या",
+  "features": "विशेषताएं",
+  "account": "खाता",
+  "conversation": "बातचीत",
+  "errorGeneric": "कुछ गलत हो गया। कृपया फिर से प्रयास करें।",
+  "aria": {
+    "close": "बंद करें",
+    "notifications": "सूचनाएं",
+    "toggleDarkMode": "डार्क मोड टॉगल करें",
+    "scrollToBottom": "नीचे स्क्रॉल करें",
+    "conversations": "बातचीत",
+    "newChat": "नई चैट",
+    "moreOptions": "अधिक विकल्प",
+    "attachFile": "फ़ाइल संलग्न करें",
+    "editMessage": "संदेश संपादित करें",
+    "copyMessage": "संदेश कॉपी करें",
+    "downloadResponse": "प्रतिक्रिया डाउनलोड करें",
+    "helpful": "सहायक",
+    "notHelpful": "सहायक नहीं",
+    "stopListening": "सुनना बंद करें",
+    "voiceInput": "आवाज़ इनपुट",
+    "sendMessage": "Send message",
+    "stopGenerating": "जनरेशन रोकें",
+    "shareableLink": "साझा करने योग्य बातचीत लिंक"
+  },
+  "time": {
+    "overdue": "अतिदेय",
+    "minutesShort": "{{count}} मिनट में",
+    "hoursShort": "{{count}} घंटे में"
+  },
+  "notifications": {
+    "title": "सूचनाएं",
+    "markAllRead": "सभी को पठित चिह्नित करें",
+    "empty": "अभी तक कोई सूचना नहीं"
+  },
+  "conversations": {
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस सप्ताह",
+    "thisMonth": "इस महीने",
+    "earlier": "पहले"
+  },
+  "language": "भाषा",
+  "offline": "आप ऑफ़लाइन हैं। कैश की गई बातचीत देख रहे हैं।",
+  "pwa": {
+    "installPrompt": "सर्वोत्तम अनुभव के लिए Kernel को अपनी होम स्क्रीन पर जोड़ें।",
+    "install": "इंस्टॉल करें"
+  }
+}

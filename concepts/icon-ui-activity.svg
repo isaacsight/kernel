@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Background grid for analytical feel -->
+  <path d="M40 88 L216 88 M40 168 L216 168" stroke="currentColor" stroke-width="1" stroke-dasharray="2 4" opacity="0.25"/>
+  <path d="M88 40 L88 216 M168 40 L168 216" stroke="currentColor" stroke-width="1" stroke-dasharray="2 4" opacity="0.25"/>
+
+  <!-- Activity Waveform -->
+  <polyline points="40,128 88,128 112,64 144,192 168,128 216,128" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- High/Low extraction markers -->
+  <circle cx="112" cy="64" r="3" fill="currentColor"/>
+  <circle cx="144" cy="192" r="3" fill="currentColor"/>
+</svg>

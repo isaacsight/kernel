@@ -1,0 +1,89 @@
+{
+  "tagline": "En personlig AI der husker dig, tænker med dig og bliver bedre over tid.",
+  "placeholder": "Tal med kernel.chat...",
+  "welcomeToPro": "Velkommen til Kernel Pro!",
+  "menu": {
+    "shareConversation": "Del samtale",
+    "exportMarkdown": "Eksportér som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbejdsgange",
+    "scheduledTasks": "Planlagte opgaver",
+    "dailyBriefing": "Daglig briefing",
+    "whatKernelKnows": "Hvad Kernel ved",
+    "yourStats": "Din statistik",
+    "insights": "Indsigter",
+    "upgradeToPro": "Opgrader til Pro",
+    "manageSubscription": "Administrer abonnement",
+    "signOut": "Log ud",
+    "deleteAccount": "Slet konto",
+    "notifications": "Notifikationer",
+    "notifInApp": "In-app notifikationer",
+    "notifBriefings": "Briefing-advarsler",
+    "notifGoals": "Målopdateringer",
+    "notifReminders": "Påmindelser",
+    "notifPush": "Push-notifikationer",
+    "darkMode": "Mørk tilstand",
+    "theme": "Tema",
+    "themeLight": "Lys",
+    "themeDark": "Mørk",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agentbygger",
+    "agentLibrary": "Agentbibliotek",
+    "backgroundAgents": "Baggrundsagenter",
+    "myContent": "Mit indhold",
+    "bookmarks": "Bogmærker",
+    "architecture": "Arkitektur",
+    "designSystem": "Designsystem",
+    "routingInsights": "Routingindsigter",
+    "system": "System",
+    "communications": "Kommunikation",
+    "adaptiveSystem": "Adaptivt system",
+    "usage": "Forbrug"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Dagens briefing",
+    "read": "Læs",
+    "discuss": "Diskutér"
+  },
+  "upgrade": {
+    "title": "Du har brugt dine {{limit}} gratis beskeder",
+    "subtitle": "Pro giver dig ubegrænset messaging, hukommelse der lærer dig at kende, og fulde briefings.",
+    "resetsAt": "Dine beskeder fornyes kl. {{time}}. Opgrader for 100 beskeder om dagen.",
+    "features": {
+      "unlimitedMessages": "Ubegrænset messaging",
+      "deepResearch": "Udvidet tænkning (30/md)",
+      "multiAgent": "Filanalyse (10/md)",
+      "multiStep": "Mål, stemme og agentiske arbejdsgange",
+      "persistentMemory": "Hukommelse + proaktive briefings"
+    },
+    "button": "Bliv Pro — $29/md",
+    "annualButton": "$290/år — spar $58",
+    "buttonLoading": "Åbner kassen...",
+    "maybeLater": "Måske senere"
+  },
+  "deleteConfirm": {
+    "title": "Slet din konto?",
+    "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og præferencer. Dette kan ikke fortrydes.",
+    "subtitleWithSub": " Dit abonnement vil også blive annulleret.",
+    "typeDelete": "Skriv DELETE for at bekræfte:",
+    "confirm": "Ja, slet min konto",
+    "confirming": "Sletter..."
+  },
+  "status": {
+    "assemblingAgents": "Samler agenter...",
+    "agentsCollaborating": "Agenter samarbejder",
+    "synthesizingPerspectives": "Syntetiserer perspektiver...",
+    "routingToSpecialist": "Dirigerer til specialist...",
+    "isWorking": "{{agent}} arbejder...",
+    "lowConfidence": "lav tillid"
+  },
+  "feedback": {
+    "save": "Gem",
+    "cancel": "Annuller"
+  },
+  "messagesRemaining": "{{count}} beskeder tilbage",
+  "lastFreeMessage": "Sidste gratis besked"
+}

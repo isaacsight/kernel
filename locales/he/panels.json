@@ -1,0 +1,205 @@
+{
+    "goals": {
+        "title": "יעדים",
+        "emptyTitle": "הגדר את היעד הראשון שלך",
+        "emptyDesc": "עקוב אחר מה שחשוב - Kernel בודק את ההתקדמות שלך באופן אוטומטי.",
+        "createGoal": "צור יעד",
+        "addGoal": "הוסף יעד",
+        "completed": "הושלם ({{count}})",
+        "target": "יעד: {{date}}",
+        "priority": {
+            "low": "נמוך",
+            "medium": "בינוני",
+            "high": "גבוה"
+        },
+        "frequency": {
+            "daily": "בדיקה יומית",
+            "weekly": "שבועי",
+            "biweekly": "דו-שבועי",
+            "monthly": "חודשי"
+        },
+        "errors": {
+            "addFailed": "הוספת היעד נכשלה",
+            "updateFailed": "עדכון אבן הדרך נכשל",
+            "completeFailed": "השלמת היעד נכשלה",
+            "deleteFailed": "מחיקת היעד נכשלה"
+        },
+        "deleteConfirm": "למחוק יעד זה? לא ניתן לבטל פעולה זו."
+    },
+    "workflows": {
+        "title": "תהליכי עבודה",
+        "loading": "טוען תהליכי עבודה...",
+        "emptyTitle": "בנה את תהליך העבודה הראשון שלך",
+        "emptyDesc": "הפוך משימות רב-שלביות לאוטומטיות - Kernel יריץ אותן בדיוק כפי שתכננת.",
+        "newWorkflow": "תהליך עבודה חדש",
+        "createWorkflow": "צור תהליך עבודה",
+        "runCount_one": "הורץ פעם {{count}}",
+        "runCount_other": "הורץ {{count}} פעמים",
+        "errors": {
+            "saveFailed": "שמירת תהליך העבודה נכשלה",
+            "deleteFailed": "מחיקת תהליך העבודה נכשלה"
+        },
+        "deleteConfirm": "למחוק תהליך עבודה זה? לא ניתן לבטל פעולה זו."
+    },
+    "scheduled": {
+        "title": "משימות מתוזמנות",
+        "loading": "טוען משימות...",
+        "emptyTitle": "תזמן את המשימה הראשונה שלך",
+        "emptyDesc": "הגדר ושכח - Kernel יריץ משימות לפי לוח הזמנים שלך.",
+        "createTask": "צור משימה",
+        "schedule": "תזמן",
+        "taskTypes": {
+            "reminder": "תזכורת",
+            "workflow": "הפעל תהליך עבודה",
+            "briefing": "תדרוך יומי",
+            "goalCheckin": "בדיקת יעד"
+        },
+        "presets": {
+            "daily": "יומי",
+            "weekdays": "ימי חול",
+            "weekly": "שבועי (יום שני)",
+            "once": "חד פעמי"
+        },
+        "channels": {
+            "inApp": "בתוך האפליקציה",
+            "email": "אימייל",
+            "discord": "דיסקורד"
+        },
+        "errors": {
+            "createFailed": "יצירת המשימה המתוזמנת נכשלה",
+            "updateFailed": "עדכון המשימה נכשל",
+            "deleteFailed": "מחיקת המשימה נכשלה"
+        },
+        "deleteConfirm": "למחוק משימה מתוזמנת זו?"
+    },
+    "briefings": {
+        "title": "תדרוכים",
+        "generateTooltip": "צור תדרוך חדש על סמך תחומי העניין והפעילות האחרונה שלך",
+        "generating": "יוצר...",
+        "newBriefing": "תדרוך חדש",
+        "phases": {
+            "planning": "מתכנן",
+            "researching": "חוקר",
+            "writing": "כותב"
+        },
+        "loading": "טוען תדרוכים...",
+        "emptyTitle": "התדרוך היומי שלך",
+        "emptyDesc": "קבל סיכום מותאם אישית של חדשות ותובנות המותאמות לתחומי העניין והיעדים שלך.",
+        "generateFirst": "צור את התדרוך הראשון שלך",
+        "errorTitle": "לא ניתן היה ליצור תדרוך זה",
+        "errorDesc": "שלב המחקר לא החזיר מספיק נתונים ליצירת סיכום מועיל. זה יכול לקרות אם שירות החיפוש אינו זמין זמנית.",
+        "readTime": "{{count}} דקות קריאה",
+        "wordCount": "{{count}} מילים",
+        "topicsCovered": "נושאים שנסקרו",
+        "continueReading": "המשך לקרוא",
+        "readFull": "קרא את התדרוך המלא",
+        "goDeeper": "העמק בשיחה",
+        "saveAsGoal": "שמור תובנות כיעד",
+        "errors": {
+            "generateFailed": "יצירת התדרוך נכשלה"
+        },
+        "toast": {
+            "generated": "התדרוך נוצר",
+            "removed": "התדרוך הוסר"
+        }
+    },
+    "stats": {
+        "title": "הסטטיסטיקה שלך",
+        "loading": "טוען...",
+        "loadError": "לא ניתן לטעון סטטיסטיקה.",
+        "messages": "הודעות",
+        "conversations": "שיחות",
+        "entities": "ישויות",
+        "helpful": "עוזר",
+        "agentUsage": "שימוש בסוכנים",
+        "topTopics": "נושאים מובילים",
+        "activity": "פעילות",
+        "memberSince": "חבר מאז {{date}}"
+    },
+    "kg": {
+        "title": "מה Kernel יודע",
+        "emptyTitle": "Kernel עדיין לא למד דבר.",
+        "emptyHint": "המשך לשוחח - הוא מזהה אנשים, פרויקטים ומושגים שאתה מזכיר.",
+        "entitiesCount": "{{count}} ישויות",
+        "connectionsCount": "{{count}} קשרים",
+        "confident": "ביטחון של {{value}}%",
+        "mentioned": "הוזכר {{count}} פעמים",
+        "types": {
+            "person": "אנשים",
+            "company": "חברות",
+            "project": "פרויקטים",
+            "concept": "מושגים",
+            "preference": "העדפות",
+            "location": "מיקומים"
+        }
+    },
+    "insights": {
+        "title": "תובנות",
+        "sections": {
+            "world": "אתה",
+            "beliefs": "אמונות",
+            "memory": "זיכרון",
+            "reflections": "איכות",
+            "agents": "סוכנים"
+        },
+        "howISeeYou": "איך אני רואה אותך",
+        "apparentGoal": "מטרה נראית לעין",
+        "situation": "מצב נוכחי",
+        "conviction": "שכנוע",
+        "whatIBelieve": "מה אני מאמין",
+        "noBeliefsYet": "אין אמונות עדיין. המשך לשוחח — אלמד מה חשוב לך.",
+        "challengeBelief": "אתגר אמונה זו",
+        "dismissBelief": "דחה אמונה זו",
+        "myMemory": "הזיכרון שלי עליך",
+        "noMemoryYet": "אין זיכרון עדיין. אני לומד עליך תוך כדי שיחה.",
+        "commStyle": "סגנון תקשורת",
+        "memory": {
+            "interests": "תחומי עניין",
+            "goals": "יעדים",
+            "facts": "עליך",
+            "preferences": "העדפות"
+        },
+        "performance": "איך אני מתפקד",
+        "noReflectionsYet": "אין תובנות עדיין. אתחיל לעקוב אחר האיכות לאחר כמה שיחות.",
+        "avgQuality": "איכות ממוצעת (20 אחרונות)",
+        "dims": {
+            "substance": "תוכן",
+            "coherence": "קוהרנטיות",
+            "relevance": "רלוונטיות",
+            "brevity": "תמציתיות",
+            "craft": "מלאכה"
+        },
+        "recentLessons": "לקחים אחרונים",
+        "patternNotes": "הערות דפוס",
+        "agentPerformance": "ביצועי סוכנים",
+        "noAgentDataYet": "אין נתוני סוכנים עדיין.",
+        "quality": "איכות",
+        "usage": "שימוש",
+        "challengedStat": "{{count}} פעמים אותגר",
+        "reinforcedStat": "{{count}} פעמים חוזק",
+        "challengeAction": "אתגר"
+    },
+    "share": {
+        "title": "שתף שיחה",
+        "checking": "בודק קישור קיים...",
+        "existingLink": "לשיחה זו כבר יש קישור ציבורי.",
+        "anyoneCanView": "כל מי שיש לו את הקישור הזה יכול לצפות בשיחה.",
+        "revokeLink": "בטל קישור",
+        "revoking": "מבטל...",
+        "createDesc": "צור קישור ציבורי שכל אחד יכול לצפות בו. אין צורך בהתחברות.",
+        "linkExpires": "הקישור יפוג בעוד:",
+        "never": "לעולם לא",
+        "hours24": "24 שעות",
+        "days7": "7 ימים",
+        "days30": "30 ימים",
+        "createLink": "צור קישור לשיתוף",
+        "creating": "יוצר...",
+        "errors": {
+            "createFailed": "יצירת הקישור לשיתוף נכשלה",
+            "revokeFailed": "ביטול הקישור נכשל"
+        },
+        "toast": {
+            "revoked": "קישור השיתוף בוטל"
+        }
+    }
+}

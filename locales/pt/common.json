@@ -1,0 +1,61 @@
+{
+  "close": "Fechar",
+  "cancel": "Cancelar",
+  "delete": "Excluir",
+  "save": "Salvar",
+  "retry": "Tentar novamente",
+  "loading": "Carregando...",
+  "submit": "Enviar",
+  "add": "Adicionar",
+  "remove": "Remover",
+  "complete": "Concluir",
+  "run": "Executar",
+  "or": "ou",
+  "features": "Recursos",
+  "account": "Conta",
+  "conversation": "Conversa",
+  "errorGeneric": "Algo deu errado. Por favor, tente novamente.",
+  "aria": {
+    "close": "Fechar",
+    "notifications": "Notificações",
+    "toggleDarkMode": "Alternar modo escuro",
+    "scrollToBottom": "Rolar para o final",
+    "conversations": "Conversas",
+    "newChat": "Novo chat",
+    "moreOptions": "Mais opções",
+    "attachFile": "Anexar arquivo",
+    "editMessage": "Editar mensagem",
+    "copyMessage": "Copiar mensagem",
+    "downloadResponse": "Baixar resposta",
+    "helpful": "Útil",
+    "notHelpful": "Não útil",
+    "stopListening": "Parar de ouvir",
+    "voiceInput": "Entrada de voz",
+    "sendMessage": "Send message",
+    "stopGenerating": "Parar geração",
+    "shareableLink": "Link compartilhável da conversa"
+  },
+  "time": {
+    "overdue": "atrasado",
+    "minutesShort": "em {{count}}m",
+    "hoursShort": "em {{count}}h"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar tudo como lido",
+    "empty": "Nenhuma notificação ainda"
+  },
+  "conversations": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mês",
+    "earlier": "Anterior"
+  },
+  "language": "Idioma",
+  "offline": "Você está offline. Exibindo conversas em cache.",
+  "pwa": {
+    "installPrompt": "Adicione o Kernel à tela inicial para a melhor experiência.",
+    "install": "Instalar"
+  }
+}

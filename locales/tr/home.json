@@ -1,0 +1,89 @@
+{
+  "tagline": "Sizi hatırlayan, sizinle düşünen ve zamanla daha iyi olan kişisel bir AI.",
+  "placeholder": "kernel.chat ile konuşun...",
+  "welcomeToPro": "Kernel Pro'ya hoş geldiniz!",
+  "menu": {
+    "shareConversation": "Konuşmayı paylaş",
+    "exportMarkdown": "Markdown olarak dışa aktar",
+    "goals": "Hedefler",
+    "workflows": "İş akışları",
+    "scheduledTasks": "Zamanlanmış görevler",
+    "dailyBriefing": "Günlük brifing",
+    "whatKernelKnows": "Kernel ne biliyor",
+    "yourStats": "İstatistikleriniz",
+    "insights": "İçgörüler",
+    "upgradeToPro": "Pro'ya yükselt",
+    "manageSubscription": "Aboneliği yönet",
+    "signOut": "Çıkış yap",
+    "deleteAccount": "Hesabı sil",
+    "notifications": "Bildirimler",
+    "notifInApp": "Uygulama içi bildirimler",
+    "notifBriefings": "Brifing uyarıları",
+    "notifGoals": "Hedef güncellemeleri",
+    "notifReminders": "Hatırlatıcılar",
+    "notifPush": "Push bildirimleri",
+    "darkMode": "Karanlık mod",
+    "theme": "Tema",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Ajan Oluşturucu",
+    "agentLibrary": "Ajan Kütüphanesi",
+    "backgroundAgents": "Arka Plan Ajanları",
+    "myContent": "İçeriklerim",
+    "bookmarks": "Yer İmleri",
+    "architecture": "Mimari",
+    "designSystem": "Tasarım Sistemi",
+    "routingInsights": "Yönlendirme Bilgileri",
+    "system": "Sistem",
+    "communications": "İletişim",
+    "adaptiveSystem": "Uyarlanabilir sistem",
+    "usage": "Kullanım"
+  },
+  "admin": "Yönetici",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Bugünün brifingi",
+    "read": "Oku",
+    "discuss": "Tartış"
+  },
+  "upgrade": {
+    "title": "{{limit}} ücretsiz mesajınızı kullandınız",
+    "subtitle": "Pro size sınırsız mesajlaşma, sizi tanıyan bir bellek ve tam brifingler sunar.",
+    "resetsAt": "Mesajlarınız {{time}} saatinde yenilenir. Günde 100 mesaj için yükseltin.",
+    "features": {
+      "unlimitedMessages": "Sınırsız mesajlaşma",
+      "deepResearch": "Genişletilmiş düşünme (30/ay)",
+      "multiAgent": "Dosya analizi (10/ay)",
+      "multiStep": "Hedefler, ses ve ajantik iş akışları",
+      "persistentMemory": "Bellek + proaktif brifingler"
+    },
+    "button": "Pro'ya geç — $29/ay",
+    "annualButton": "$290/yıl — $58 tasarruf edin",
+    "buttonLoading": "Ödeme açılıyor...",
+    "maybeLater": "Belki sonra"
+  },
+  "deleteConfirm": {
+    "title": "Hesabınızı silin mi?",
+    "subtitle": "Bu, tüm verilerinizi kalıcı olarak siler: konuşmalar, bellek ve tercihler. Bu geri alınamaz.",
+    "subtitleWithSub": " Aboneliğiniz de iptal edilecektir.",
+    "typeDelete": "Onaylamak için DELETE yazın:",
+    "confirm": "Evet, hesabımı sil",
+    "confirming": "Siliniyor..."
+  },
+  "status": {
+    "assemblingAgents": "Ajanlar toplanıyor...",
+    "agentsCollaborating": "Ajanlar işbirliği yapıyor",
+    "synthesizingPerspectives": "Bakış açıları sentezleniyor...",
+    "routingToSpecialist": "Uzmana yönlendiriliyor...",
+    "isWorking": "{{agent}} çalışıyor...",
+    "lowConfidence": "düşük güven"
+  },
+  "feedback": {
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "messagesRemaining": "{{count}} mesaj kaldı",
+  "lastFreeMessage": "Son ücretsiz mesaj"
+}

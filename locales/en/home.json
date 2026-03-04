@@ -1,0 +1,192 @@
+{
+  "tagline": "A personal AI that learns who you are, remembers what matters, and gets better with every conversation.",
+  "placeholder": "Talk to Kernel...",
+  "welcomeToPro": "Welcome to Kernel Pro!",
+  "menu": {
+    "shareConversation": "Share conversation",
+    "exportMarkdown": "Export as Markdown",
+    "goals": "Goals",
+    "workflows": "Workflows",
+    "scheduledTasks": "Scheduled tasks",
+    "dailyBriefing": "Daily briefing",
+    "whatKernelKnows": "What Kernel knows",
+    "yourStats": "Your stats",
+    "insights": "Insights",
+    "mirror": "The Mirror",
+    "projectFiles": "Project files",
+    "imageGallery": "Image gallery",
+    "knowledgeBase": "Knowledge base",
+    "social": "Social media",
+    "platformEngine": "Content pipeline",
+    "explore": "Explore",
+    "accountSettings": "Account settings",
+    "upgradeToPro": "Upgrade to Pro",
+    "manageSubscription": "Manage subscription",
+    "signOut": "Sign out",
+    "deleteAccount": "Delete account",
+    "notifications": "Notifications",
+    "notifInApp": "In-app notifications",
+    "notifBriefings": "Briefing alerts",
+    "notifGoals": "Goal updates",
+    "notifReminders": "Reminders",
+    "notifProactive": "Proactive insights",
+    "notifPush": "Push notifications",
+    "darkMode": "Dark mode",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agent Builder",
+    "agentLibrary": "Agent Library",
+    "backgroundAgents": "Background Agents",
+    "myContent": "My Content",
+    "bookmarks": "Bookmarks",
+    "architecture": "Architecture",
+    "designSystem": "Design System",
+    "routingInsights": "Routing Insights",
+    "system": "System",
+    "communications": "Communications",
+    "adaptiveSystem": "Adaptive System",
+    "usage": "Usage"
+  },
+  "menuSection": {
+    "ai": "AI & Agents",
+    "content": "Content & Knowledge",
+    "insights": "Insights & Goals",
+    "system": "Settings & System"
+  },
+  "usage": {
+    "title": "Usage",
+    "loading": "Loading usage data...",
+    "retry": "Retry",
+    "last30days": "Last 30 days",
+    "onPace": "On pace for {{projected}} of {{limit}} messages",
+    "overLimit": "On pace to exceed your {{limit}} message limit",
+    "byFeature": "By feature",
+    "dailyTrend": "30-day trend",
+    "recommendation": "Recommendation",
+    "upgrade": "Upgrade"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Today's briefing",
+    "read": "Read",
+    "discuss": "Discuss"
+  },
+  "entity": {
+    "evolved": "Evolved to {{tier}}",
+    "streak": "Day {{count}}",
+    "goalCheckIn": "Check in: {{title}}",
+    "mood": {
+      "happy": "happy",
+      "excited": "excited",
+      "content": "content",
+      "sad": "sad",
+      "sleepy": "sleepy",
+      "lonely": "lonely",
+      "bored": "bored"
+    }
+  },
+  "entityInfo": {
+    "mood": "Mood",
+    "streak": "Streak",
+    "days": "days",
+    "focus": "Focus"
+  },
+  "nudge": {
+    "insights": "You've had a few conversations now — Kernel has been finding patterns in what you talk about.",
+    "knowledge": "Your knowledge graph is growing — see the connections Kernel has mapped from your conversations.",
+    "stats": "You completed a goal — check your stats to see how your usage is evolving.",
+    "workflows": "You've been using Kernel regularly — workflows can automate your recurring tasks.",
+    "showMe": "Show me",
+    "notNow": "Not now"
+  },
+  "valuePreview": {
+    "message": "Pro members get daily briefings, deep research, and persistent memory.",
+    "gotIt": "Got it"
+  },
+  "upgrade": {
+    "title": "You've used your {{limit}} free messages",
+    "subtitle": "Pro gives you 100 messages per day, memory that learns you, and full briefings.",
+    "resetsAt": "Your messages reset at {{time}}. Upgrade for up to 200 messages per day.",
+    "learnedTitle": "What Kernel learned about you",
+    "learnedCta": "Upgrade to keep your memory growing.",
+    "features": {
+      "unlimitedMessages": "100 messages per day",
+      "deepResearch": "Extended thinking (30/mo)",
+      "multiAgent": "File analysis (10/mo)",
+      "multiStep": "Goals & agentic workflows",
+      "persistentMemory": "Memory + proactive briefings"
+    },
+    "button": "Go Pro \u2014 $29/mo",
+    "annualButton": "$290/yr \u2014 save $58",
+    "maxButton": "Go Max \u2014 $49/mo",
+    "maxAnnualButton": "$490/yr \u2014 save $98",
+    "buttonLoading": "Opening checkout...",
+    "maybeLater": "Maybe later"
+  },
+  "deleteConfirm": {
+    "title": "Delete your account?",
+    "subtitle": "This permanently deletes all your data: conversations, memory, and preferences. This cannot be undone.",
+    "subtitleWithSub": " Your subscription will also be cancelled.",
+    "typeDelete": "Type DELETE to confirm:",
+    "confirm": "Yes, delete my account",
+    "confirming": "Deleting..."
+  },
+  "status": {
+    "assemblingAgents": "Assembling agents...",
+    "agentsCollaborating": "Agents collaborating",
+    "synthesizingPerspectives": "Synthesizing perspectives...",
+    "routingToSpecialist": "Routing to specialist...",
+    "isWorking": "{{agent}} is working...",
+    "lowConfidence": "low confidence"
+  },
+  "feedback": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "messagesRemaining": "{{count}} messages remaining",
+  "messagesLeft": "{{count}} messages left",
+  "lastFreeMessage": "Last free message",
+  "agentWhy": {
+    "label": "Why?"
+  },
+  "thinking": {
+    "label": "Extended thinking",
+    "duration": "Thought for {{seconds}}s",
+    "streaming": "Thinking...",
+    "toggle": "Toggle extended thinking",
+    "tooltip": "Think deeper before answering"
+  },
+  "explain": {
+    "toggle": "Toggle explain mode",
+    "tooltip": "Explain mode — step-by-step code"
+  },
+  "document": {
+    "active": "Analyzing: {{name}}",
+    "clear": "Clear document",
+    "contextHint": "Ask follow-up questions about this document"
+  },
+  "proactive": {
+    "noticed": "Kernel noticed...",
+    "notification": "Kernel has an observation for you",
+    "explore": "Let's explore this"
+  },
+  "tour": {
+    "entity": "This is your Kernel entity. It evolves as you chat — tap it to see its mood, streak, and growth tier.",
+    "moreMenu": "Tap here for all of Kernel's features: agents, knowledge base, insights, and more.",
+    "inputBar": "Start a conversation here. Attach files, toggle explain mode, or just say hello.",
+    "gotIt": "Got it",
+    "skip": "Skip tour"
+  },
+  "workflow": {
+    "planning": "Planning steps...",
+    "executing": "Executing: {{step}}",
+    "complete": "Workflow complete",
+    "failed": "Step failed: {{step}}",
+    "cancel": "Cancel workflow",
+    "cancelled": "Workflow cancelled"
+  }
+}

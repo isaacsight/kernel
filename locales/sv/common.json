@@ -1,0 +1,61 @@
+{
+  "close": "Stäng",
+  "cancel": "Avbryt",
+  "delete": "Radera",
+  "save": "Spara",
+  "retry": "Försök igen",
+  "loading": "Laddar...",
+  "submit": "Skicka",
+  "add": "Lägg till",
+  "remove": "Ta bort",
+  "complete": "Klar",
+  "run": "Kör",
+  "or": "eller",
+  "features": "Funktioner",
+  "account": "Konto",
+  "conversation": "Konversation",
+  "errorGeneric": "Något gick fel. Försök igen.",
+  "aria": {
+    "close": "Stäng",
+    "notifications": "Aviseringar",
+    "toggleDarkMode": "Växla mörkt läge",
+    "scrollToBottom": "Skrolla till botten",
+    "conversations": "Konversationer",
+    "newChat": "Ny chatt",
+    "moreOptions": "Fler alternativ",
+    "attachFile": "Bifoga fil",
+    "editMessage": "Redigera meddelande",
+    "copyMessage": "Kopiera meddelande",
+    "downloadResponse": "Ladda ner svar",
+    "helpful": "Hjälpsam",
+    "notHelpful": "Inte hjälpsam",
+    "stopListening": "Sluta lyssna",
+    "voiceInput": "Röstinmatning",
+    "sendMessage": "Send message",
+    "stopGenerating": "Sluta generera",
+    "shareableLink": "Delbar länk till konversation"
+  },
+  "time": {
+    "overdue": "försenad",
+    "minutesShort": "om {{count}}m",
+    "hoursShort": "om {{count}}h"
+  },
+  "notifications": {
+    "title": "Aviseringar",
+    "markAllRead": "Markera alla som lästa",
+    "empty": "Inga aviseringar än"
+  },
+  "conversations": {
+    "today": "Idag",
+    "yesterday": "Igår",
+    "thisWeek": "Denna vecka",
+    "thisMonth": "Denna månad",
+    "earlier": "Tidigare"
+  },
+  "language": "Språk",
+  "offline": "Du är offline. Visar cachade konversationer.",
+  "pwa": {
+    "installPrompt": "Lägg till Kernel på din hemskärm för bästa upplevelse.",
+    "install": "Installera"
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Goals",
+    "emptyTitle": "Set your first goal",
+    "emptyDesc": "Track what matters \u2014 Kernel checks in on your progress automatically.",
+    "createGoal": "Create Goal",
+    "addGoal": "Add Goal",
+    "completed": "Completed ({{count}})",
+    "target": "Target: {{date}}",
+    "loading": "Loading goals...",
+    "titlePlaceholder": "What are you working toward?",
+    "descPlaceholder": "Add some detail (optional)...",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "frequency": {
+      "daily": "Daily check-in",
+      "weekly": "Weekly",
+      "biweekly": "Biweekly",
+      "monthly": "Monthly"
+    },
+    "errors": {
+      "addFailed": "Couldn't save that goal. Try again.",
+      "updateFailed": "Couldn't update that milestone. Try again.",
+      "completeFailed": "Couldn't mark that complete. Try again.",
+      "deleteFailed": "Couldn't delete that goal. Try again."
+    },
+    "deleteConfirm": "Delete this goal? This cannot be undone."
+  },
+  "workflows": {
+    "title": "Workflows",
+    "loading": "Loading workflows...",
+    "emptyTitle": "Build your first workflow",
+    "emptyDesc": "Automate multi-step tasks \u2014 Kernel runs them exactly as you design.",
+    "newWorkflow": "New Workflow",
+    "createWorkflow": "Create Workflow",
+    "runCount_one": "Run {{count}} time",
+    "runCount_other": "Run {{count}} times",
+    "errors": {
+      "saveFailed": "Couldn't save that workflow. Try again.",
+      "deleteFailed": "Couldn't delete that workflow. Try again."
+    },
+    "deleteConfirm": "Delete this workflow? This cannot be undone."
+  },
+  "scheduled": {
+    "title": "Scheduled Tasks",
+    "loading": "Loading tasks...",
+    "emptyTitle": "Schedule your first task",
+    "emptyDesc": "Set it and forget it \u2014 Kernel runs tasks on your schedule.",
+    "createTask": "Create Task",
+    "schedule": "Schedule",
+    "taskTypes": {
+      "reminder": "Reminder",
+      "workflow": "Run Workflow",
+      "briefing": "Daily Briefing",
+      "goalCheckin": "Goal Check-in"
+    },
+    "presets": {
+      "daily": "Daily",
+      "weekdays": "Weekdays",
+      "weekly": "Weekly (Mon)",
+      "once": "Once"
+    },
+    "channels": {
+      "inApp": "In-app",
+      "email": "Email",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Couldn't schedule that task. Try again.",
+      "updateFailed": "Couldn't update that task. Try again.",
+      "deleteFailed": "Couldn't remove that task. Try again."
+    },
+    "deleteConfirm": "Delete this scheduled task?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Generate a new briefing based on your interests and recent activity",
+    "generating": "Generating...",
+    "newBriefing": "New briefing",
+    "phases": {
+      "planning": "Planning",
+      "researching": "Researching",
+      "writing": "Writing"
+    },
+    "loading": "Loading briefings...",
+    "emptyTitle": "Your daily briefing",
+    "emptyDesc": "Get a personalized news and insights summary tailored to your interests and goals.",
+    "generateFirst": "Generate your first briefing",
+    "errorTitle": "This briefing couldn't be generated",
+    "errorDesc": "The research step didn't return enough data to create a useful summary. This can happen if the search service was temporarily unavailable.",
+    "readTime": "{{count}} min read",
+    "wordCount": "{{count}} words",
+    "topicsCovered": "Topics covered",
+    "continueReading": "Continue reading",
+    "readFull": "Read full briefing",
+    "goDeeper": "Go deeper in chat",
+    "saveAsGoal": "Save takeaways as goal",
+    "errors": {
+      "generateFailed": "Couldn't generate your briefing. Try again."
+    },
+    "toast": {
+      "generated": "Briefing generated",
+      "removed": "Briefing removed"
+    }
+  },
+  "stats": {
+    "title": "Your Stats",
+    "loading": "Loading...",
+    "loadError": "Couldn't load your stats. Try refreshing.",
+    "messages": "Messages",
+    "conversations": "Conversations",
+    "entities": "Entities",
+    "helpful": "Helpful",
+    "agentUsage": "Agent Usage",
+    "topTopics": "Top Topics",
+    "activity": "Activity",
+    "memberSince": "Member since {{date}}"
+  },
+  "kg": {
+    "title": "What Kernel Knows",
+    "emptyTitle": "Kernel hasn't learned anything yet.",
+    "emptyHint": "Keep chatting \u2014 it picks up on people, projects, and concepts you mention.",
+    "entitiesCount": "{{count}} entities",
+    "connectionsCount": "{{count}} connections",
+    "confident": "{{value}}% confident",
+    "mentioned": "{{count}}x mentioned",
+    "types": {
+      "person": "People",
+      "company": "Companies",
+      "project": "Projects",
+      "concept": "Concepts",
+      "preference": "Preferences",
+      "location": "Locations"
+    }
+  },
+  "insights": {
+    "title": "Insights",
+    "sections": {
+      "world": "You",
+      "beliefs": "Beliefs",
+      "memory": "Memory",
+      "reflections": "Quality",
+      "agents": "Agents"
+    },
+    "howISeeYou": "How I See You",
+    "apparentGoal": "Apparent goal",
+    "situation": "Current situation",
+    "conviction": "Conviction",
+    "whatIBelieve": "What I Believe",
+    "noBeliefsYet": "No beliefs formed yet. Keep chatting — I'll learn what matters to you.",
+    "challengeBelief": "Challenge this belief",
+    "dismissBelief": "Dismiss this belief",
+    "myMemory": "My Memory of You",
+    "noMemoryYet": "No memory yet. I learn about you as we talk.",
+    "commStyle": "Communication style",
+    "memory": {
+      "interests": "Interests",
+      "goals": "Goals",
+      "facts": "About you",
+      "preferences": "Preferences"
+    },
+    "performance": "How I'm Performing",
+    "noReflectionsYet": "No reflections yet. I'll start tracking quality after a few conversations.",
+    "avgQuality": "avg quality (last 20)",
+    "dims": {
+      "substance": "Substance",
+      "coherence": "Coherence",
+      "relevance": "Relevance",
+      "brevity": "Brevity",
+      "craft": "Craft"
+    },
+    "recentLessons": "Recent lessons",
+    "patternNotes": "Pattern notes",
+    "agentPerformance": "Agent Performance",
+    "noAgentDataYet": "No agent data yet.",
+    "quality": "Quality",
+    "usage": "Usage",
+    "challengedStat": "{{count}}x challenged",
+    "reinforcedStat": "{{count}}x reinforced",
+    "challengeAction": "challenge"
+  },
+  "share": {
+    "title": "Share conversation",
+    "checking": "Checking for existing link...",
+    "existingLink": "This conversation already has a public link.",
+    "anyoneCanView": "Anyone with this link can view this conversation.",
+    "revokeLink": "Revoke link",
+    "revoking": "Revoking...",
+    "createDesc": "Create a public link anyone can view. No login required.",
+    "linkExpires": "Link expires:",
+    "never": "Never",
+    "hours24": "24 hours",
+    "days7": "7 days",
+    "days30": "30 days",
+    "createLink": "Create share link",
+    "creating": "Creating...",
+    "shareableLink": "Shareable link",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "copiedAnnounce": "Link copied to clipboard",
+    "shareVia": "Share via...",
+    "limitReached": "You've reached your daily limit of {{limit}} shared links. Upgrade to Pro for more sharing.",
+    "limitHint": "{{used}}/{{limit}} links used today",
+    "dailyCount": "{{used}}/{{limit}} free shares used today",
+    "errors": {
+      "createFailed": "Couldn't create the share link. Try again.",
+      "revokeFailed": "Couldn't revoke that link. Try again."
+    },
+    "toast": {
+      "revoked": "Share link revoked"
+    }
+  },
+  "mirror": {
+    "title": "The Mirror",
+    "emptyTitle": "The mirror is still forming.",
+    "emptyDesc": "Keep talking \u2014 Kernel's agents are learning to see you from different angles.",
+    "convergenceTitle": "What the mirror sees",
+    "convergenceDesc": "Insights that only emerge when multiple agents compare notes.",
+    "facetsTitle": "Agent perspectives",
+    "facetsDesc": "Each agent observes a different dimension of who you are.",
+    "observations": "observations",
+    "patterns": "Patterns",
+    "convergenceCount": "Converged {{count}} times",
+    "dimensions": {
+      "relationship": "Relationship",
+      "curiosity": "Curiosity",
+      "craft": "Craft",
+      "voice": "Voice",
+      "judgment": "Judgment",
+      "arc": "Arc"
+    }
+  }
+}
