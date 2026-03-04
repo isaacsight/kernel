@@ -1,10 +1,9 @@
 import { motion, useDragControls } from 'framer-motion'
 import { SPRING } from '../constants/motion'
-import { IconSettings, IconLogOut, IconGlobe, IconBell, IconSun, IconMoon, IconBookOpen } from './KernelIcons'
+import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconCrown } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
-import { useNotificationPrefs } from '../hooks/useNotificationPrefs'
-import { useWebPush } from '../hooks/useWebPush'
 import type { ThemeMode } from '../hooks/useTheme'
+import type { PlanId } from '../config/planLimits'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -46,20 +45,36 @@ const THEMES: { id: ThemeMode; icon: typeof IconSun; labelKey: string }[] = [
   { id: 'eink', icon: IconBookOpen, labelKey: 'menu.themeEink' },
 ]
 
+interface PlanOption {
+  id: PlanId
+  name: string
+  price: string
+  period: string
+  badge?: string
+}
+
+const PLANS: PlanOption[] = [
+  { id: 'pro_monthly', name: 'Pro', price: '$29', period: '/mo' },
+  { id: 'pro_annual', name: 'Pro', price: '$290', period: '/yr', badge: 'Save 17%' },
+  { id: 'max_monthly', name: 'Max', price: '$49', period: '/mo' },
+  { id: 'max_annual', name: 'Max', price: '$490', period: '/yr', badge: 'Save 17%' },
+]
+
 interface MoreMenuProps {
   isOpen: boolean
   onClose: () => void
   onSelect: (action: MoreAction) => void
+  onUpgrade: (plan: PlanId) => void
   isPro: boolean
+  isSubscribed?: boolean
   isAdmin: boolean
+  upgradeLoading?: boolean
   theme?: ThemeMode
   onSetTheme?: (t: ThemeMode) => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, theme, onSetTheme }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, onUpgrade, isPro, isSubscribed, upgradeLoading, theme, onSetTheme }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
-  const { prefs, update: updateNotifPrefs } = useNotificationPrefs()
-  const { isSupported: pushSupported, isSubscribed: pushSubscribed, isLoading: pushLoading, toggle: togglePush } = useWebPush()
   const dragControls = useDragControls()
   if (!isOpen) return null
 
@@ -121,52 +136,41 @@ export function MoreMenu({ isOpen, onClose, onSelect, theme, onSetTheme }: MoreM
               ))}
             </select>
           </div>
-          <div className="ka-more-menu-divider" />
-          <div className="ka-more-menu-label">
-            <IconBell size={14} />
-            {t('menu.notifications')}
-          </div>
-          <label className="ka-more-toggle">
-            <span>{t('menu.notifInApp')}</span>
-            <input type="checkbox" role="switch" aria-checked={prefs.inApp} checked={prefs.inApp} onChange={e => updateNotifPrefs({ inApp: e.target.checked })} />
-            <span className="ka-more-toggle-track" />
-          </label>
-          <label className="ka-more-toggle">
-            <span>{t('menu.notifBriefings')}</span>
-            <input type="checkbox" role="switch" aria-checked={prefs.briefings} checked={prefs.briefings} onChange={e => updateNotifPrefs({ briefings: e.target.checked })} />
-            <span className="ka-more-toggle-track" />
-          </label>
-          <label className="ka-more-toggle">
-            <span>{t('menu.notifGoals')}</span>
-            <input type="checkbox" role="switch" aria-checked={prefs.goals} checked={prefs.goals} onChange={e => updateNotifPrefs({ goals: e.target.checked })} />
-            <span className="ka-more-toggle-track" />
-          </label>
-          <label className="ka-more-toggle">
-            <span>{t('menu.notifReminders')}</span>
-            <input type="checkbox" role="switch" aria-checked={prefs.reminders} checked={prefs.reminders} onChange={e => updateNotifPrefs({ reminders: e.target.checked })} />
-            <span className="ka-more-toggle-track" />
-          </label>
-          <label className="ka-more-toggle">
-            <span>{t('menu.notifProactive')}</span>
-            <input type="checkbox" role="switch" aria-checked={prefs.proactive} checked={prefs.proactive} onChange={e => updateNotifPrefs({ proactive: e.target.checked })} />
-            <span className="ka-more-toggle-track" />
-          </label>
-          {pushSupported && (
-            <label className="ka-more-toggle">
-              <span>{t('menu.notifPush')}</span>
-              <input
-                type="checkbox"
-                role="switch"
-                aria-checked={pushSubscribed}
-                checked={pushSubscribed}
-                disabled={pushLoading}
-                onChange={togglePush}
-              />
-              <span className="ka-more-toggle-track" />
-            </label>
+
+          {!isPro && (
+            <>
+              <div className="ka-more-menu-divider" />
+              <div className="ka-more-menu-label">
+                <IconCrown size={14} />
+                Upgrade
+              </div>
+              <div className="ka-plan-grid">
+                {PLANS.map(plan => (
+                  <button
+                    key={plan.id}
+                    className="ka-plan-card"
+                    disabled={upgradeLoading}
+                    onClick={() => { onUpgrade(plan.id); onClose() }}
+                  >
+                    <span className="ka-plan-card-name">{plan.name}</span>
+                    <span className="ka-plan-card-price">
+                      {plan.price}<span className="ka-plan-card-period">{plan.period}</span>
+                    </span>
+                    {plan.badge && <span className="ka-plan-card-badge">{plan.badge}</span>}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
+
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
+          {isSubscribed && (
+            <button className="ka-more-menu-item" onClick={() => { onSelect('manage-subscription'); onClose() }}>
+              <IconCrown size={18} />
+              <span>{t('menu.manageSubscription', { defaultValue: 'Manage Subscription' })}</span>
+            </button>
+          )}
           <button className="ka-more-menu-item" onClick={() => { onSelect('account-settings'); onClose() }}>
             <IconSettings size={18} />
             <span>{t('menu.accountSettings')}</span>

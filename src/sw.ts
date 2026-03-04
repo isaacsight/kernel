@@ -31,15 +31,16 @@ registerRoute(
   new NetworkOnly()
 )
 
-// JS/CSS — serve cached immediately, update in background.
-// Content-hashed filenames guarantee stale cache = old version (not corrupt).
-// The HTML shell (NetworkFirst above) always references current hashes,
-// so any new chunks are fetched fresh on next navigation.
+// JS/CSS — network first with short timeout.
+// Content-hashed filenames mean each deploy produces unique URLs.
+// NetworkFirst ensures users always get fresh code; 3s timeout falls back to cache
+// only on very slow connections. Max 1 day cache prevents stale chunk buildup.
 registerRoute(
   /\.(?:js|css)$/i,
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: 'app-code',
-    plugins: [new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 })],
+    networkTimeoutSeconds: 3,
+    plugins: [new ExpirationPlugin({ maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 })],
   })
 )
 
@@ -112,11 +113,12 @@ self.addEventListener('notificationclick', (event) => {
   )
 })
 
-// Allow the client to trigger activation via SKIP_WAITING message
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting()
-  }
+// Immediately activate new service worker — don't wait for tabs to close.
+// This ensures users always get the latest code on next navigation.
+self.addEventListener('install', () => {
+  self.skipWaiting()
 })
 
-self.clients.claim()
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim())
+})

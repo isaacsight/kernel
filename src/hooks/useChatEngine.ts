@@ -58,6 +58,7 @@ import { registerBuiltinEngines } from '../engine/master/registry'
 import { processMasterAgent, needsOrchestration, type MasterAgentResult } from '../engine/MasterAgent'
 import { useMasterStore } from '../stores/masterStore'
 import type { EnginePlan } from '../engine/master/types'
+import { buildContextPreamble } from '../engine/ContextPreamble'
 
 // Register all built-in engines once at module load
 let enginesRegistered = false
@@ -987,7 +988,21 @@ export function useChatEngine(params: UseChatEngineParams) {
       return retrieved ? `\n\n${retrieved}` : ''
     })()
 
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    // Build dynamic context preamble — gives Kernel self-awareness
+    const contextPreamble = buildContextPreamble({
+      memory: userMemoryRef.current,
+      mirror: userMirrorRef.current,
+      usage: params.planLimits ? { used: messagesRef.current.filter(m => m.role === 'user').length, limit: params.planLimits.messagesPerDay } : null,
+      agentName: specialist.name,
+      turnCount: engine.getState().working.turnCount,
+      recentTopics: params.conversations
+        .filter(c => c.title !== 'New Conversation' && c.id !== activeConversationId)
+        .slice(0, 4)
+        .map(c => c.title),
+      isFree: !params.isPro,
+    })
+
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}${contextPreamble}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {

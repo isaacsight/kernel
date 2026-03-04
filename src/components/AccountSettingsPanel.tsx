@@ -6,7 +6,7 @@ import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconCrown, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
-  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings, IconDownload,
+  IconMessageCircle, IconBrain, IconLink, IconTarget, IconSettings, IconDownload, IconClose,
 } from './KernelIcons'
 import type { ReactNode } from 'react'
 
@@ -85,7 +85,12 @@ export default function AccountSettingsPanel({
 
   return (
     <div className="ka-settings-panel">
-      <h2 className="ka-panel-title">{t('title')}</h2>
+      <div className="ka-settings-panel-header">
+        <h2 className="ka-panel-title">{t('title')}</h2>
+        <button className="ka-project-panel-close" onClick={onClose} aria-label={t('close', { ns: 'common' })}>
+          <IconClose size={16} />
+        </button>
+      </div>
 
       {/* User Summary */}
       <div className="ka-settings-user-summary">
@@ -328,25 +333,36 @@ export default function AccountSettingsPanel({
         <div className="ka-settings-section">
           <h3 className="ka-settings-section-header">{t('subscription.heading')}</h3>
           <div className="ka-settings-section-body">
-            <div className="ka-settings-provider-row">
-              <span className="ka-settings-provider-name">{isMax ? t('subscription.max') : isPro ? t('subscription.pro') : t('subscription.free')}</span>
-              {isMax ? (
-                <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
-              ) : isPro ? (
-                <div className="ka-settings-upgrade-options">
-                  <button className="ka-settings-link-btn" onClick={onManageSubscription}>{t('subscription.manage')}</button>
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_annual')}>{t('subscription.upgradeMaxAnnual')}</button>
-                </div>
-              ) : (
-                <div className="ka-settings-upgrade-options">
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade" onClick={() => onUpgrade('pro_monthly')}>{t('subscription.upgradeMonthly')}</button>
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-annual" onClick={() => onUpgrade('pro_annual')}>{t('subscription.upgradeAnnual')}</button>
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_monthly')}>{t('subscription.upgradeMax')}</button>
-                  <button className="ka-settings-link-btn ka-settings-link-btn--upgrade-max" onClick={() => onUpgrade('max_annual')}>{t('subscription.upgradeMaxAnnual')}</button>
-                </div>
-              )}
-            </div>
+            <span className="ka-settings-provider-name">{isMax ? t('subscription.max') : isPro ? t('subscription.pro') : t('subscription.free')}</span>
+            {(isPro || isMax) && (
+              <button className="ka-settings-link-btn" onClick={onManageSubscription} style={{ marginTop: 8 }}>{t('subscription.manage')}</button>
+            )}
+            {!isMax && (
+              <div className="ka-plan-grid" style={{ padding: '12px 0 0' }}>
+                {!isPro && (
+                  <>
+                    <button className="ka-plan-card" onClick={() => onUpgrade('pro_monthly')}>
+                      <span className="ka-plan-card-name">Pro</span>
+                      <span className="ka-plan-card-price">$29<span className="ka-plan-card-period">/mo</span></span>
+                    </button>
+                    <button className="ka-plan-card" onClick={() => onUpgrade('pro_annual')}>
+                      <span className="ka-plan-card-name">Pro</span>
+                      <span className="ka-plan-card-price">$290<span className="ka-plan-card-period">/yr</span></span>
+                      <span className="ka-plan-card-badge">Save 17%</span>
+                    </button>
+                  </>
+                )}
+                <button className="ka-plan-card" onClick={() => onUpgrade('max_monthly')}>
+                  <span className="ka-plan-card-name">Max</span>
+                  <span className="ka-plan-card-price">$49<span className="ka-plan-card-period">/mo</span></span>
+                </button>
+                <button className="ka-plan-card" onClick={() => onUpgrade('max_annual')}>
+                  <span className="ka-plan-card-name">Max</span>
+                  <span className="ka-plan-card-price">$490<span className="ka-plan-card-period">/yr</span></span>
+                  <span className="ka-plan-card-badge">Save 17%</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

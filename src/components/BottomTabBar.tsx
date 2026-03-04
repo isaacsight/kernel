@@ -46,10 +46,7 @@ export function BottomTabBar({ activeTab, onTabChange }: BottomTabBarProps) {
               onTabChange(tab.id)
             }}
           >
-            <span className="ka-tab-icon-wrap">
-              <Icon size={isMini ? 20 : 22} />
-            </span>
-            <span className="ka-tab-label">{tab.label}</span>
+            <Icon size={isMini ? 22 : 24} />
             {isActive && <span className="ka-tab-dot" />}
           </button>
         )

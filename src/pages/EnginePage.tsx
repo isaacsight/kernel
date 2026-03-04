@@ -34,6 +34,7 @@ import { useOverlayHistory } from '../hooks/useOverlayHistory'
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight'
 import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { useCrisisDetection } from '../hooks/useCrisisDetection'
+import { useMessageUsage } from '../hooks/useMessageUsage'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
@@ -203,6 +204,7 @@ function EngineChat() {
   const dragCounterRef = useRef(0)
   const [showCreditModal, setShowCreditModal] = useState(false)
   const [imageCredits, setImageCredits] = useState(0)
+  const messageUsage = useMessageUsage(user?.id, planLimits.messagesPerDay)
 
   // Conversation tags
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -565,6 +567,13 @@ function EngineChat() {
     else if (isDrawerOpen) setIsDrawerOpen(false)
   }, [panels, anyPanelOpen, isDrawerOpen, setIsDrawerOpen])
   useOverlayHistory(anyOverlayOpen, closeTopOverlay)
+
+  // Refresh message counter after each AI response completes
+  const prevStreamingRef = useRef(false)
+  useEffect(() => {
+    if (prevStreamingRef.current && !chatEngine.isStreaming) messageUsage.refresh()
+    prevStreamingRef.current = chatEngine.isStreaming
+  }, [chatEngine.isStreaming]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Derived ──────────────────────────────────────────
   const { messages, isStreaming, isThinking, thinkingAgent, events } = chatEngine
@@ -1264,6 +1273,13 @@ function EngineChat() {
         ) : null
       })()}
 
+      {/* Message usage counter */}
+      {!messageUsage.loading && !isAdmin && (
+        <div className={`ka-usage-counter${messageUsage.used >= messageUsage.limit ? ' ka-usage-counter--limit' : messageUsage.used >= messageUsage.limit * 0.7 ? ' ka-usage-counter--warn' : ''}`}>
+          {messageUsage.used} / {messageUsage.limit}
+        </div>
+      )}
+
       {/* Input bar */}
       <form ref={inputBarRef} className="ka-input-bar" onSubmit={chatEngine.handleSubmit}>
         <input id="ka-file-input" ref={fileAttachments.fileInputRef} type="file" accept={ACCEPTED_FILES} multiple onChange={fileAttachments.handleFileSelect} className="ka-attach-input" />
@@ -1338,7 +1354,7 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('settings')} onSelect={panels.handleSettingsAction} isPro={isPro} isAdmin={isAdmin} theme={theme} onSetTheme={setTheme} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('settings')} onSelect={panels.handleSettingsAction} onUpgrade={billing.handleUpgrade} upgradeLoading={billing.upgradeLoading} isPro={isPro} isSubscribed={isSubscribed} isAdmin={isAdmin} theme={theme} onSetTheme={setTheme} />
           </Suspense>
         )}
       </AnimatePresence>
@@ -1431,7 +1447,6 @@ function BottomSheet({ children, onClose }: { children: React.ReactNode; onClose
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="ka-kg-drag-handle" onPointerDown={(e) => dragControls.start(e)} />
-        <button className="ka-sheet-close-btn" onClick={onClose} aria-label="Close panel"><IconClose size={18} /></button>
         {children}
       </motion.div>
     </motion.div>

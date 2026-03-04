@@ -6910,6 +6910,21 @@ h4 {
     font-weight: 600;
 }
 
+.ka-usage-counter {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: var(--rubin-text-secondary, #9A9590);
+    padding: 2px 0 0;
+    line-height: 1;
+}
+.ka-usage-counter--warn { color: #B8860B; }
+.ka-usage-counter--limit { color: var(--rubin-error, #C0392B); font-weight: 600; }
+[data-theme="dark"] .ka-usage-counter { color: #A09A90; }
+[data-theme="dark"] .ka-usage-counter--warn { color: #D4A017; }
+[data-theme="dark"] .ka-usage-counter--limit { color: #E57373; }
+
 .ka-input-bar {
     display: flex;
     gap: 10px;
@@ -15584,7 +15599,7 @@ h4 {
         display: flex;
         align-items: center;
         justify-content: space-around;
-        min-height: 56px;
+        min-height: 48px;
         padding-bottom: env(safe-area-inset-bottom, 8px);
         background: var(--rubin-ivory);
         border-top: 1px solid var(--rubin-ivory-dark);
@@ -15631,11 +15646,7 @@ h4 {
     }
 
     .ka-tab-label {
-        font-family: var(--font-serif);
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        line-height: 1;
+        display: none;
     }
 
     /* Transfer safe-area from input bar to tab bar */
@@ -15733,6 +15744,107 @@ h4 {
 .ka-more-menu-item--upgrade {
     color: var(--rubin-accent);
     font-weight: 600;
+}
+
+.ka-plan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 8px 24px 12px;
+}
+
+.ka-plan-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 12px;
+    border: 1.5px solid var(--rubin-border, #E5E2DB);
+    border-radius: var(--radius-md, 10px);
+    background: none;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    transition: border-color 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+.ka-plan-card:hover {
+    border-color: var(--rubin-accent);
+    background: rgba(139, 115, 85, 0.04);
+}
+
+.ka-plan-card:active {
+    transform: scale(0.97);
+}
+
+.ka-plan-card:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.ka-plan-card-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--rubin-slate);
+}
+
+.ka-plan-card-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--rubin-slate);
+    line-height: 1.1;
+}
+
+.ka-plan-card-period {
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.5;
+}
+
+.ka-plan-card-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--rubin-accent);
+    background: rgba(139, 115, 85, 0.08);
+    padding: 2px 8px;
+    border-radius: var(--radius-full, 999px);
+}
+
+[data-theme="dark"] .ka-plan-card {
+    border-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-plan-card:hover {
+    border-color: var(--rubin-accent);
+    background: rgba(196, 168, 130, 0.06);
+}
+
+[data-theme="dark"] .ka-plan-card-name,
+[data-theme="dark"] .ka-plan-card-price {
+    color: var(--dark-text, #E8E0D4);
+}
+
+[data-theme="dark"] .ka-plan-card-badge {
+    background: rgba(196, 168, 130, 0.12);
+}
+
+[data-theme="eink"] .ka-plan-card {
+    border-color: #CECDC3;
+}
+
+[data-theme="eink"] .ka-plan-card:hover {
+    border-color: #1C1B1A;
+    background: #F2F0E5;
+}
+
+[data-theme="eink"] .ka-plan-card-badge {
+    color: #1C1B1A;
+    background: #E8E6DB;
 }
 
 .ka-more-menu-label {
@@ -16304,6 +16416,13 @@ h4 {
     .ka-settings-panel {
         max-height: calc(85vh - 40px);
     }
+}
+
+.ka-settings-panel-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
 }
 
 .ka-settings-user-summary {
