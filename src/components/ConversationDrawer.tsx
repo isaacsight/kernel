@@ -684,6 +684,9 @@ export function ConversationDrawer({
           >
             {/* Header */}
             <div className="conv-drawer-header">
+              <button className="conv-drawer-close-mobile" onClick={onClose} aria-label={t('close')}>
+                <IconClose size={18} />
+              </button>
               <span className="conv-drawer-title">Chats</span>
               <div className="conv-drawer-header-actions">
                 {onOpenArchive && (

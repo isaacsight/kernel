@@ -10303,11 +10303,11 @@ h4 {
 
     /* Only show conv actions on active item (mobile — no hover) */
     .conv-item-actions {
-        opacity: 0;
+        display: none;
     }
 
     .conv-item--active .conv-item-actions {
-        opacity: 1;
+        display: flex;
     }
 
     .conv-item-action {
@@ -15445,6 +15445,32 @@ h4 {
     font-size: 0.85rem;
     opacity: 0.4;
     font-style: italic;
+}
+
+/* ─── Drawer close button (mobile only) ─────────────── */
+
+.conv-drawer-close-mobile {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    border-radius: var(--radius-full);
+    transition: opacity var(--duration-fast);
+}
+
+.conv-drawer-close-mobile:hover {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .conv-drawer-close-mobile {
+        display: flex;
+    }
 }
 
 /* ─── Drawer header actions row ───────────────────── */
