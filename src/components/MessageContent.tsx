@@ -4,23 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import Prism from 'prismjs'
-import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-typescript'
-import 'prismjs/components/prism-jsx'
-import 'prismjs/components/prism-tsx'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-yaml'
-import 'prismjs/components/prism-markdown'
-import 'prismjs/components/prism-sql'
-import 'prismjs/components/prism-css'
-import 'prismjs/components/prism-rust'
-import 'prismjs/components/prism-go'
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-ruby'
-import 'prismjs/components/prism-swift'
-import 'prismjs/components/prism-kotlin'
-import 'prismjs/components/prism-toml'
 import {
   IconCheck, IconCopy, IconDownload, IconFileText, IconFileCode, IconFileSpreadsheet,
   IconFile, IconEye, IconCode, IconPackage, IconChevronDown, IconClose, IconAlertCircle,
@@ -46,6 +29,55 @@ const PRISM_LANG: Record<string, string> = {
   rust: 'rust', rs: 'rust', go: 'go', java: 'java',
   ruby: 'ruby', rb: 'ruby', swift: 'swift', kotlin: 'kotlin', kt: 'kotlin',
   c: 'c', cpp: 'cpp', 'c++': 'cpp',
+}
+
+// ─── Dynamic Prism grammar loader ────────────────────────
+
+const GRAMMAR_LOADERS: Record<string, () => Promise<unknown>> = {
+  python: () => import('prismjs/components/prism-python'),
+  typescript: () => import('prismjs/components/prism-typescript'),
+  jsx: () => import('prismjs/components/prism-jsx'),
+  tsx: () => import('prismjs/components/prism-tsx'),
+  bash: () => import('prismjs/components/prism-bash'),
+  json: () => import('prismjs/components/prism-json'),
+  yaml: () => import('prismjs/components/prism-yaml'),
+  markdown: () => import('prismjs/components/prism-markdown'),
+  sql: () => import('prismjs/components/prism-sql'),
+  css: () => import('prismjs/components/prism-css'),
+  rust: () => import('prismjs/components/prism-rust'),
+  go: () => import('prismjs/components/prism-go'),
+  java: () => import('prismjs/components/prism-java'),
+  ruby: () => import('prismjs/components/prism-ruby'),
+  swift: () => import('prismjs/components/prism-swift'),
+  kotlin: () => import('prismjs/components/prism-kotlin'),
+  toml: () => import('prismjs/components/prism-toml'),
+}
+
+const loadedGrammars = new Set<string>()
+const pendingLoads = new Map<string, Promise<void>>()
+
+function loadPrismLanguage(lang: string): Promise<void> | undefined {
+  const prismLang = PRISM_LANG[lang.toLowerCase()]
+  if (!prismLang || loadedGrammars.has(prismLang) || Prism.languages[prismLang]) return
+  if (pendingLoads.has(prismLang)) return pendingLoads.get(prismLang)
+  const loader = GRAMMAR_LOADERS[prismLang]
+  if (!loader) return
+  const promise = loader().then(() => { loadedGrammars.add(prismLang) })
+  pendingLoads.set(prismLang, promise)
+  return promise
+}
+
+/** Hook that loads a Prism grammar on demand and triggers re-render when ready */
+function usePrismGrammar(lang: string): boolean {
+  const prismLang = PRISM_LANG[lang.toLowerCase()]
+  const alreadyLoaded = !prismLang || !!Prism.languages[prismLang]
+  const [ready, setReady] = useState(alreadyLoaded)
+  useEffect(() => {
+    if (alreadyLoaded) { setReady(true); return }
+    const p = loadPrismLanguage(lang)
+    if (p) p.then(() => setReady(true))
+  }, [lang, prismLang, alreadyLoaded])
+  return ready
 }
 
 function highlightCode(code: string, lang: string): string {
@@ -263,7 +295,8 @@ function getFileIcon(ext: string) {
 
 function CodeBlock({ lang, code, ext, filename, t }: { lang: string; code: string; ext: string; filename: string; t: (key: string, opts?: Record<string, unknown>) => string }) {
   const [copied, setCopied] = useState(false)
-  const highlighted = useMemo(() => highlightCode(code, lang), [code, lang])
+  const grammarReady = usePrismGrammar(lang)
+  const highlighted = useMemo(() => highlightCode(code, lang), [code, lang, grammarReady])
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
     setCopied(true)
@@ -410,12 +443,13 @@ function ArtifactCard({ filename, lang, code, ext, title, t, autoPreview, onRend
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const grammarReady = usePrismGrammar(lang)
   const lines = code.split('\n')
   const lineCount = lines.length
   const MAX_PREVIEW_LINES = 500
   const isTruncated = lineCount > MAX_PREVIEW_LINES
   const previewCode = isTruncated ? lines.slice(0, MAX_PREVIEW_LINES).join('\n') : code
-  const highlighted = useMemo(() => highlightCode(previewCode, lang), [previewCode, lang])
+  const highlighted = useMemo(() => highlightCode(previewCode, lang), [previewCode, lang, grammarReady])
 
   // For SVG, wrap in minimal HTML doc for iframe rendering
   const iframeSrc = useMemo(() => {

@@ -7,7 +7,8 @@ import { KernelAgentProvider } from './components/kernel-agent'
 import { KernelLoading } from './components/KernelLoading'
 import { supabase } from './engine/SupabaseClient'
 import './i18n'
-import './index.css'
+import './critical.css'
+import('./index.css')
 
 // ─── Boot sequence ──────────────────────────────────────────────
 // Auth tokens must be fully processed BEFORE React renders.

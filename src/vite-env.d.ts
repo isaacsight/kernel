@@ -5,6 +5,10 @@ declare module '*.md?raw' {
   export default content
 }
 
+declare module 'prismjs/components/prism-*' {
+  // Side-effect-only modules that register grammars on the Prism global
+}
+
 // Web Speech API types
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList
