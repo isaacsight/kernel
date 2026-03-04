@@ -14,10 +14,18 @@
         "test:e2e:update": "playwright test --update-snapshots",
         "deploy": "gh-pages -d dist --dotfiles",
         "monitor": "npx tsx tools/kernel-monitor.ts",
-        "discord": "npx tsx tools/discord-bot.ts"
+        "discord": "npx tsx tools/discord-bot.ts",
+        "cap:sync": "npx cap sync",
+        "cap:ios": "npm run build && npx cap sync ios && npx cap open ios",
+        "cap:android": "npm run build && npx cap sync android && npx cap open android"
     },
     "homepage": "https://kernel.chat",
     "dependencies": {
+        "@capacitor/app": "^8.0.1",
+        "@capacitor/cli": "^8.1.0",
+        "@capacitor/core": "^8.1.0",
+        "@capacitor/haptics": "^8.0.1",
+        "@capacitor/push-notifications": "^8.0.1",
         "@sentry/react": "^10.40.0",
         "@supabase/supabase-js": "^2.98.0",
         "i18next": "^25.8.13",

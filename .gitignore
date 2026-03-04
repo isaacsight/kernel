@@ -68,6 +68,10 @@ playwright-report/
 test-results/
 test-upload.txt
 
+# Capacitor native projects (generated, not tracked)
+ios/
+android/
+
 # Session/handover docs
 claude_code_handover.md
 CREATIVE-BRIEF.md
