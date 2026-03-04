@@ -48,27 +48,12 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                manualChunks(id) {
-                    // Vendor chunks
-                    if (id.includes('node_modules/react-dom')) return 'vendor-react'
-                    if (id.includes('node_modules/react-router')) return 'vendor-react'
-                    if (id.includes('node_modules/react/')) return 'vendor-react'
-                    if (id.includes('node_modules/@supabase')) return 'vendor-supabase'
-                    if (id.includes('node_modules/motion')) return 'vendor-ui'
-                    if (id.includes('node_modules/posthog-js') || id.includes('node_modules/@sentry')) return 'vendor-analytics'
-                    if (id.includes('node_modules/react-markdown')) return 'vendor-markdown'
-                    if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) return 'vendor-i18n'
-                    if (id.includes('node_modules/zustand')) return 'vendor-zustand'
-
-                    // Engine intelligence chunk — AI/agent modules that aren't needed until first message.
-                    // Includes agent definitions (they import engine modules like CrisisDetector,
-                    // so they must stay in the same chunk to avoid circular init errors).
-                    if (id.includes('/src/engine/') &&
-                        !id.includes('SupabaseClient') && !id.includes('ClaudeClient') &&
-                        !id.includes('OfflineCache') && !id.includes('fileUtils')) {
-                        return 'engine-intelligence'
-                    }
-                    if (id.includes('/src/agents/')) return 'engine-intelligence'
+                manualChunks: {
+                    'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+                    'vendor-supabase': ['@supabase/supabase-js'],
+                    'vendor-ui': ['motion'],
+                    'vendor-analytics': ['posthog-js', '@sentry/react'],
+                    'vendor-markdown': ['react-markdown'],
                 },
             },
         },
