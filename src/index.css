@@ -12490,6 +12490,36 @@ h4 {
     margin: 4px 0;
 }
 
+.ka-header-menu-folder-group {
+    border-top: 1px solid var(--rubin-ivory-dark);
+    margin-top: 4px;
+    padding-top: 2px;
+}
+
+.ka-header-menu-sublabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    padding: 6px 12px 2px;
+    user-select: none;
+}
+
+.ka-header-menu-item--sub {
+    padding-left: 24px !important;
+    font-size: 0.72rem !important;
+}
+
+.ka-header-menu-item--active {
+    color: var(--rubin-primary);
+    font-weight: 600;
+}
+
 .ka-portal-error {
     display: flex;
     align-items: center;
@@ -14626,6 +14656,20 @@ h4 {
 [data-theme="dark"] .ka-menu-btn,
 [data-theme="dark"] .ka-header-icon-btn {
     color: var(--dark-text);
+}
+
+[data-theme="dark"] .ka-header-menu {
+    background: #252321;
+    border-color: #3A3630;
+}
+
+[data-theme="dark"] .ka-header-menu-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .ka-header-menu-divider,
+[data-theme="dark"] .ka-header-menu-folder-group {
+    border-color: #3A3630;
 }
 
 [data-theme="dark"] .conv-drawer {

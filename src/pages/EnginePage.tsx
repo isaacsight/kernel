@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconThinking,
   IconMessageCircle, IconLogOut,
-  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap,
+  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap, IconFolder,
 } from '../components/KernelIcons'
 import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -826,6 +826,25 @@ function EngineChat() {
                     <button className="ka-header-menu-item" onClick={() => { msgActions.handleExportConversation(); panels.setHeaderMenuOpen(false) }}>
                       <IconExport size={16} /> {t('menu.exportMarkdown')}
                     </button>
+                    {folderHook.folders.length > 0 && convs.activeConversation && (
+                      <div className="ka-header-menu-folder-group">
+                        <div className="ka-header-menu-sublabel"><IconFolder size={14} /> Move to folder</div>
+                        {folderHook.folders.map(f => (
+                          <button
+                            key={f.id}
+                            className={`ka-header-menu-item ka-header-menu-item--sub${convs.activeConversation?.folder_id === f.id ? ' ka-header-menu-item--active' : ''}`}
+                            onClick={async () => {
+                              const targetId = convs.activeConversation?.folder_id === f.id ? null : f.id
+                              await folderHook.moveConversation(convs.activeConversation!.id, targetId)
+                              convs.setConversations(prev => prev.map(c => c.id === convs.activeConversation!.id ? { ...c, folder_id: targetId } : c))
+                              panels.setHeaderMenuOpen(false)
+                            }}
+                          >
+                            {f.name}{convs.activeConversation?.folder_id === f.id ? ' ✓' : ''}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </>
                 )}
                 <div className="ka-header-menu-divider" />

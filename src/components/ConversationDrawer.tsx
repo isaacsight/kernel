@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'motion/react'
 import { SPRING, DURATION } from '../constants/motion'
-import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen, IconChevronRight, IconList } from './KernelIcons'
+import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen, IconChevronRight, IconFolderPlus, IconFolder } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
@@ -336,15 +336,15 @@ export function ConversationDrawer({
         </div>
         {!isRenaming && (
           <div className="conv-item-actions">
-            {/* Move to folder (mobile only — desktop uses drag-and-drop) */}
-            {isMobile && onMoveToFolder && hasFolders && (
+            {/* Move to folder */}
+            {onMoveToFolder && hasFolders && (
               <div style={{ position: 'relative' }}>
                 <button
                   className="conv-item-action"
                   onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(moveMenuConvId === conv.id ? null : conv.id) }}
                   aria-label="Move to folder"
                 >
-                  <IconList size={13} />
+                  <IconFolder size={13} />
                 </button>
                 {moveMenuConvId === conv.id && (
                   <div className="conv-folder-menu" onClick={e => e.stopPropagation()}>
@@ -578,7 +578,7 @@ export function ConversationDrawer({
               </button>
               {onCreateFolder && (
                 <button className="conv-new-folder-btn" onClick={() => setCreatingFolder(true)} aria-label="New folder">
-                  <IconList size={14} />
+                  <IconFolderPlus size={16} />
                 </button>
               )}
               {onImport && (
