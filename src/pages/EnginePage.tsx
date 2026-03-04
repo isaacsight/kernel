@@ -7,7 +7,7 @@ import {
   IconShare, IconExport, IconMic, IconStop, IconChevronDown,
   IconMoreVertical, IconTrash, IconCrown, IconShield, IconThinking,
   IconMessageCircle, IconLogOut,
-  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap, IconFolder,
+  IconSettings, IconPlus, IconBookOpen, IconFileText, IconSparkles, IconImage, IconGlobe, IconGraduationCap, IconFolder, IconVolume,
 } from '../components/KernelIcons'
 import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
@@ -36,6 +36,10 @@ import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { useCrisisDetection } from '../hooks/useCrisisDetection'
 import { useMessageUsage } from '../hooks/useMessageUsage'
 import { useFolders } from '../hooks/useFolders'
+import { useVoiceInput } from '../hooks/useVoiceInput'
+import { useVoiceOutput } from '../hooks/useVoiceOutput'
+import { useVoiceLoop } from '../hooks/useVoiceLoop'
+import { VoiceLoopOverlay } from '../components/VoiceLoopOverlay'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { lazyRetry } from '../utils/lazyRetry'
@@ -278,6 +282,10 @@ function EngineChat() {
 
   const folderHook = useFolders(user?.id ?? null)
 
+  // ─── Voice I/O (hooks that don't depend on chatEngine) ──
+  const voiceInput = useVoiceInput()
+  const voiceOutput = useVoiceOutput(isPro)
+
   // Load tags from conversation metadata
   useEffect(() => {
     const loadTags = async () => {
@@ -334,6 +342,27 @@ function EngineChat() {
   }, [crisis.resetCrisisState])
   convs.handleNewChat = crisisNewChat
   newChatRef.current = crisisNewChat
+
+  // ─── Voice Loop (depends on chatEngine) ──────────────
+  const lastKernelResponse = useMemo(() => {
+    for (let i = chatEngine.messages.length - 1; i >= 0; i--) {
+      const m = chatEngine.messages[i]
+      if (m.role === 'kernel' && typeof m.content === 'string') return m.content
+    }
+    return null
+  }, [chatEngine.messages])
+
+  const voiceLoop = useVoiceLoop(isPro, (text) => {
+    chatEngine.setInput(text)
+    chatEngine.handleSubmit(new Event('submit') as any)
+  }, lastKernelResponse, chatEngine.isStreaming)
+
+  // Feed voice transcript into input field (non-loop mode)
+  useEffect(() => {
+    if (!voiceInput.isRecording || voiceLoop.isActive) return
+    const text = voiceInput.transcript || voiceInput.finalTranscript
+    if (text) chatEngine.setInput(text)
+  }, [voiceInput.transcript, voiceInput.finalTranscript, voiceInput.isRecording, voiceLoop.isActive]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Project context — file tracking + cloud sync
   const registerProjectFile = useProjectStore(s => s.registerFile)
@@ -1099,6 +1128,13 @@ function EngineChat() {
                     <button className="ka-msg-action-btn" onClick={() => downloadFile(msg.content, `kernel-${new Date(msg.timestamp).toISOString().slice(0, 10)}.md`)} aria-label={t('aria.downloadResponse', { ns: 'common' })}>
                       <IconDownload size={14} />
                     </button>
+                    <button
+                      className={`ka-msg-action-btn${voiceOutput.isSpeaking ? ' ka-tts-btn--speaking' : ''}`}
+                      onClick={() => voiceOutput.isSpeaking ? voiceOutput.stop() : voiceOutput.speak(msg.content)}
+                      aria-label={voiceOutput.isSpeaking ? 'Stop reading' : 'Read aloud'}
+                    >
+                      <IconVolume size={14} />
+                    </button>
                     {msg.signalId && !msg.feedback && (
                       <>
                         <button className="ka-msg-action-btn ka-msg-action-btn--up" onClick={() => msgActions.handleFeedback(msg, 'helpful')} aria-label={t('aria.helpful', { ns: 'common' })}><IconThumbsUp size={14} /></button>
@@ -1383,6 +1419,34 @@ function EngineChat() {
             <IconThinking size={18} />
           </button>
         )}
+        {voiceInput.isSupported && !isStreaming && (
+          <button
+            type="button"
+            className={`ka-voice-btn${voiceInput.isRecording ? ' ka-voice-btn--recording' : ''}`}
+            onClick={() => {
+              if (voiceInput.isRecording) {
+                voiceInput.stopRecording()
+                // Auto-submit if there's a final transcript
+                if (voiceInput.finalTranscript.trim()) {
+                  chatEngine.setInput(voiceInput.finalTranscript.trim())
+                  setTimeout(() => chatEngine.handleSubmit(new Event('submit') as any), 50)
+                }
+              } else {
+                voiceInput.startRecording()
+              }
+            }}
+            onContextMenu={(e) => {
+              // Long-press on mobile: start voice loop (Pro only)
+              if (isPro) {
+                e.preventDefault()
+                voiceLoop.start()
+              }
+            }}
+            aria-label={voiceInput.isRecording ? 'Stop recording' : 'Start voice input'}
+          >
+            <IconMic size={18} />
+          </button>
+        )}
         {isStreaming ? (
           <button type="button" className="ka-stop" onClick={chatEngine.stopStreaming} aria-label={t('aria.stopGenerating', { ns: 'common' })}><IconStop size={16} /></button>
         ) : (
@@ -1391,6 +1455,13 @@ function EngineChat() {
       </form>
 
       {!isOnline && <div className="ka-offline-banner">{t('offline', { ns: 'common' })}</div>}
+
+      <VoiceLoopOverlay
+        isActive={voiceLoop.isActive}
+        state={voiceLoop.state}
+        transcript={voiceLoop.transcript}
+        onStop={voiceLoop.stop}
+      />
 
       <BottomTabBar activeTab={panels.activeTab} onTabChange={panels.handleTabChange} />
       <AnimatePresence>

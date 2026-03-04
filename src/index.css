@@ -7025,6 +7025,204 @@ h4 {
     }
 }
 
+/* ─── Voice Input/Output ────────────────────────────── */
+
+.ka-voice-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--rubin-slate);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--duration-fast) var(--ease-out);
+    opacity: 0.5;
+}
+
+.ka-voice-btn:hover {
+    opacity: 0.8;
+}
+
+.ka-voice-btn--recording {
+    color: #dc3545;
+    opacity: 1;
+    animation: ka-voice-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ka-voice-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(220, 53, 69, 0); }
+}
+
+.ka-tts-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--rubin-slate);
+    opacity: 0.3;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
+}
+
+.ka-tts-btn:hover {
+    opacity: 0.6;
+}
+
+.ka-tts-btn--speaking {
+    opacity: 0.8;
+    color: var(--rubin-primary);
+}
+
+/* Voice Loop Overlay */
+.ka-voice-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(31, 30, 29, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ka-voice-overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+    max-width: 320px;
+    text-align: center;
+}
+
+.ka-voice-indicator {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ka-voice-icon {
+    position: relative;
+    z-index: 2;
+    color: var(--rubin-ivory);
+    opacity: 0.9;
+}
+
+.ka-voice-rings {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ka-voice-ring {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(250, 249, 246, 0.2);
+}
+
+.ka-voice-ring--2 {
+    width: 100px;
+    height: 100px;
+    opacity: 0.6;
+}
+
+.ka-voice-ring--3 {
+    width: 120px;
+    height: 120px;
+    opacity: 0.3;
+}
+
+.ka-voice-pulse {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--rubin-primary);
+    opacity: 0.3;
+}
+
+.ka-voice-bars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 60px;
+    position: absolute;
+}
+
+.ka-voice-bar {
+    width: 4px;
+    height: 40px;
+    background: var(--rubin-ivory);
+    border-radius: 2px;
+    opacity: 0.6;
+    transform-origin: center;
+}
+
+.ka-voice-label {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: var(--rubin-ivory);
+    opacity: 0.9;
+    margin: 0;
+}
+
+.ka-voice-transcript {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--rubin-ivory);
+    opacity: 0.5;
+    margin: 0;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ka-voice-dismiss {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid rgba(250, 249, 246, 0.2);
+    background: transparent;
+    color: var(--rubin-ivory);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    margin-top: var(--space-lg);
+}
+
+.ka-voice-dismiss:hover {
+    background: rgba(250, 249, 246, 0.1);
+    border-color: rgba(250, 249, 246, 0.4);
+}
+
+.ka-voice-hint {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--rubin-ivory);
+    opacity: 0.3;
+    margin: 0;
+}
+
 /* Search indicator */
 .ka-search-indicator {
     display: flex;
