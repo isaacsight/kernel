@@ -462,12 +462,9 @@ export function ConversationDrawer({
             </div>
           )}
         </div>
-        {!isCollapsed && (
+        {!isCollapsed && folderConvs.length > 0 && (
           <div className="conv-folder-items">
-            {folderConvs.length > 0
-              ? folderConvs.map(c => renderConvItem(c, true))
-              : <div className="conv-folder-empty">No conversations</div>
-            }
+            {folderConvs.map(c => renderConvItem(c, true))}
           </div>
         )}
       </div>

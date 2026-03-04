@@ -12901,6 +12901,8 @@ h4 {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     min-width: 140px;
     padding: 4px 0;
+    max-height: 200px;
+    overflow-y: auto;
 }
 .conv-folder-menu-item {
     display: block;
@@ -13142,6 +13144,8 @@ h4 {
     border-top: 1px solid var(--rubin-ivory-dark);
     margin-top: 4px;
     padding-top: 2px;
+    max-height: 180px;
+    overflow-y: auto;
 }
 
 .ka-header-menu-sublabel {
