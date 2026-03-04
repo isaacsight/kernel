@@ -21,13 +21,13 @@ export function useMessageUsage(userId: string | undefined, dailyLimit: number):
     const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
     const { data } = await supabase
       .from('user_memory')
-      .select('daily_message_count, daily_message_date')
+      .select('daily_message_count, daily_window_start')
       .eq('user_id', userId)
       .maybeSingle()
 
     if (data) {
-      // If the stored date is today, use the count. Otherwise it's a new day = 0.
-      const storedDate = data.daily_message_date
+      // If the stored window start is today, use the count. Otherwise it's a new day = 0.
+      const storedDate = data.daily_window_start ? new Date(data.daily_window_start).toISOString().slice(0, 10) : null
       setUsed(storedDate === today ? (data.daily_message_count ?? 0) : 0)
     } else {
       setUsed(0)

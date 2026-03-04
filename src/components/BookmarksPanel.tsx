@@ -4,7 +4,7 @@
 // for loading bookmarks and toggling bookmark state.
 
 import { useEffect } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconBookOpen, IconEye, IconThumbsUp } from './KernelIcons'
 import { useDiscovery } from '../hooks/useDiscovery'

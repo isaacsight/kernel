@@ -169,7 +169,7 @@ export default defineConfig({
     },
     "homepage": "https://isaacsight.github.io/kernel",
     "dependencies": {
-        "framer-motion": "^11.0.0",
+        "motion": "^12.0.0",
         "lucide-react": "^0.400.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -443,7 +443,7 @@ export function getAllTags(): string[] {
 
 ```tsx
 import { Outlet, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 
 export function Layout() {
   const location = useLocation()
@@ -521,7 +521,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
 ```tsx
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { PostCard } from '../components/blog/PostCard'
 import { TagFilter } from '../components/blog/TagFilter'
 import { getAllPosts, getAllTags, getPostsByTag } from '../utils/markdown'
@@ -630,7 +630,7 @@ export function ClaudePhysicsPage() {
 
 ```tsx
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import type { PostMeta } from '../../utils/markdown'
 
 interface PostCardProps { post: PostMeta; index: number }
@@ -681,7 +681,7 @@ export function PostCard({ post, index }: PostCardProps) {
 
 ```tsx
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import ReactMarkdown from 'react-markdown'
 import type { Post } from '../../utils/markdown'
 
@@ -763,7 +763,7 @@ export function PostLayout({ post }: { post: Post }) {
 ### `src/components/blog/TagFilter.tsx`
 
 ```tsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 interface TagFilterProps {
   tags: string[]
@@ -882,7 +882,7 @@ export const CONTEXT_WINDOW_TOKENS = Array.from({ length: 80 }, (_, i) => ({
 
 ```ts
 import { useRef } from 'react'
-import { useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion'
+import { useScroll, useTransform, useSpring, type MotionValue } from 'motion/react'
 
 interface UseScrollSectionOptions {
   offset?: [string, string]
@@ -924,7 +924,7 @@ export function useScrollTransform(
 
 ```tsx
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 
 interface SectionWrapperProps {
   children: React.ReactNode
@@ -991,7 +991,7 @@ export function SectionWrapper({ children, label, title, subtitle }: SectionWrap
 ### `src/components/claude-physics/HeroSection.tsx`
 
 ```tsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 const TITLE_WORDS = "The Physics & Neuroscience of Claude".split(" ")
 
@@ -1066,7 +1066,7 @@ export function HeroSection() {
 
 ```tsx
 import { useState } from 'react'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 import { EXAMPLE_SENTENCE, TOKENS } from './data/tokens'
 
@@ -1152,7 +1152,7 @@ function DraggableToken({
 
 ```tsx
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 import { TOKENS, ATTENTION_WEIGHTS } from './data/tokens'
 
@@ -1294,7 +1294,7 @@ export function AttentionSection() {
 
 ```tsx
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, type MotionValue } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 import { TRANSFORMER_LAYERS } from './data/tokens'
 
@@ -1387,7 +1387,7 @@ function TransformerLayer({
 
 ```tsx
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 
 const PARTICLE_COUNT = 40
@@ -1494,7 +1494,7 @@ export function TemperatureSection() {
 
 ```tsx
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, type MotionValue } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 
 const MAX_TOKENS = 200000
@@ -1591,7 +1591,7 @@ function CounterDisplay({ value }: { value: MotionValue<number> }) {
 
 ```tsx
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { SectionWrapper } from './SectionWrapper'
 
 const REASONING_CATEGORIES = [
@@ -1700,7 +1700,7 @@ export function ReasoningSection() {
 
 ```tsx
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { Link } from 'react-router-dom'
 
 export function ClosingSection() {

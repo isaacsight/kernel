@@ -4,7 +4,7 @@
 // Three tabs: Accounts, Posts, Analytics.
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { useSocialMedia } from '../hooks/useSocialMedia'
 import { PLATFORM_META } from '../engine/social/types'

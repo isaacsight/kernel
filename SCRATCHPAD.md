@@ -4,76 +4,102 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-02-28)
+## Current Session (2026-03-03)
 
 ### Accomplished This Session
 
-#### Image Gen Reference Images
-Added support for uploaded files/images to be used as reference material when generating images. When a user attaches an image and asks to "draw me..." Gemini receives the uploaded image(s) as style/content guidance alongside the text prompt.
+#### Backlog Sweep: Dark Mode, Security, Dep Upgrade, Server Persistence
 
-**Modified files:**
-- `src/engine/imageGen.ts` — Added `ReferenceImage` type, `referenceImages` param to `generateImage()`, sends as `reference_images` array
-- `supabase/functions/image-gen/index.ts` — Accepts `reference_images` array (max 4, 4MB each), adds as Gemini `inlineData` parts, augments prompt with reference context, increased body limit 6MB→20MB, tracks `referenceImageCount` in audit
-- `src/hooks/useChatEngine.ts` — Collects reference images from: (1) current message attachments, (2) recent conversation history `imageDataUrls`. Max 4 references.
+**1. Dark mode tokens fixed (warm brown)**
+Changed 3 cool neutral gray tokens to warm browns per "lamplight reading" principle:
+- `--dark-bg-surface`: `#1a1a1a` → `#252321`
+- `--dark-bg-deep`: `#0f0f0f` → `#141210`
+- `--dark-border-subtle`: `#333` → `#3A3630`
 
-**E2E verified:** curl test with reference image → HTTP 200, audit log shows `referenceImageCount: 1`. Edge function deployed.
+**Modified:** `src/index.css`
 
-- Commit: `a8025396` (already committed before session started)
-- Edge function deployed, frontend deployed to GitHub Pages
+**2. Removed VITE_GEMINI env vars from client types**
+Removed `VITE_GEMINI_API_KEY`, `VITE_GEMINI_MODEL_PRO`, `VITE_GEMINI_MODEL_FLASH` from `src/vite-env.d.ts` — server-side only keys, prevents accidental client-side usage.
 
-#### Backlog Cleanup — 4 Items Resolved
+**Modified:** `src/vite-env.d.ts`
 
-1. **Cloudflare DNS / OG Proxy** — RESOLVED. Nameservers already on Cloudflare (`mcgrory.ns.cloudflare.com`, `jo.ns.cloudflare.com`). OG proxy Worker confirmed active — Twitterbot UA returns proper OG meta tags for `/s/{uuid}` URLs. Was listed as pending but is actually live.
+**3. Upgraded framer-motion → motion**
+- `npm uninstall framer-motion && npm install motion` (v12.34.5)
+- Updated 51 source file imports: `'framer-motion'` → `'motion/react'`
+- Updated 2 test file mocks
+- Updated `vite.config.ts` manualChunks
+- Updated `PROJECT.md` references
+- `vendor-ui` chunk: 116KB → 93KB (20% reduction)
+- Zero type errors, clean build, pre-existing test failures only
 
-2. **Discord Webhook** — FIXED. Local `.env` URL was valid (HTTP 200). Re-set `DISCORD_WEBHOOK_URL` Supabase secret to ensure edge functions have correct URL. Test notification sent successfully (HTTP 204).
+**Modified:** 51 source files, 2 test files, `vite.config.ts`, `PROJECT.md`, `package.json`
 
-3. **Supabase CLI Migration Sync** — FIXED. Ran 80+ `migration repair` commands (40 reverted remote-only timestamps, 38+ marked applied for local migration files 007-044). `supabase migration list --linked` now shows all migrations synced.
+**4. Server-side project persistence (Pro feature)**
+Files generated in conversations now persist to Supabase Storage for Pro users. Content survives page reload and works across devices.
 
-4. **Frontend Deploy** — Done. Published to GitHub Pages, kernel.chat HTTP 200 (301ms).
+- **Migration** (`056_project_files.sql`): `project_files` table + `project-files` Storage bucket + RLS
+- **Edge function** (`project-files/index.ts`): save/list/load routes with JWT auth, subscription check, rate limiting, audit logging
+- **Frontend** (`projectStore.ts`): `syncToCloud()` fire-and-forget on file registration, `loadFromCloud()` hydrates on conversation load
+- **EnginePage.tsx**: wired cloud sync after `registerFile` (Pro gate), auto-load on conversation switch
 
-#### Ship Pipeline — All 6 Gates PASS
+**Not yet deployed** — needs `npx supabase db push` + `npx supabase functions deploy project-files --no-verify-jwt`
 
-- Gate 1 Security: PASS — 0 P0 findings, 4 P1 non-blocking (Gemini key in URL param, dangerouslySetInnerHTML via Prism, VITE_GEMINI_API_KEY type decl, notification action_url)
-- Gate 2 QA: PASS — tsc 0 errors, build clean (1084 modules, 2.19s)
-- Gate 3 Design: PASS — Rubin compliant. P1: 6 buttons <44px, 3 cool-gray dark tokens
-- Gate 4 Performance: PASS — JS 93KB gzip (31%), CSS 41KB gzip (27%), 0 prod vulns
-- Gate 5 DevOps: PASS — kernel.chat HTTP 200 (301ms)
-- Gate 6 Product: PASS — Home, chat UI, mobile 375px all verified via Playwright
+**Modified:** `src/stores/projectStore.ts`, `src/pages/EnginePage.tsx`, `supabase/functions/project-files/index.ts`, `supabase/functions/_shared/rate-limit.ts`, `supabase/migrations/056_project_files.sql`
 
-Discord notification sent (204).
+#### Previous Work This Session
+
+#### Image Gen Conversation Continuity
+Added follow-up suggestion chips after image generation ("Try a different style", "Make it darker", "More vibrant", "Generate another version"). Guarded the `finally` block from overwriting image-specific chips.
+
+**Modified:** `src/hooks/useChatEngine.ts`
+
+#### Image Lightbox — Mobile Dismiss + Actions
+- Removed `stopPropagation` from lightbox image so tapping anywhere closes it (mobile had no way to dismiss)
+- Added safe-area insets to close button for iOS notch/Dynamic Island
+- Added download + copy-to-clipboard buttons in lightbox (44px touch targets, PNG conversion for clipboard)
+
+**Modified:** `src/components/GeneratedImageCard.tsx`, `src/index.css`
+
+#### Mobile Auth Redirect — Root Cause Fixed
+Users couldn't log in on mobile — always redirected back to landing page. **Three root causes found and fixed:**
+
+1. **Stale API key (PRIMARY):** Supabase anon key was rotated but the hardcoded fallback in `SupabaseClient.ts` still had the old key (iat: Feb 2025). Builds without `.env` loaded silently used the stale key → "Invalid API key" on all auth requests. Removed the hardcoded fallback entirely.
+
+2. **OAuth flow type:** Switched from PKCE to implicit (`flowType: 'implicit'`). PKCE stores `code_verifier` in localStorage which gets lost on mobile (ITP, PWA context switches). Implicit puts tokens directly in hash fragment — no exchange step needed.
+
+3. **Session race condition:** `setSession()` and `exchangeCodeForSession()` weren't awaited in `main.tsx` — React rendered before session was established. Wrapped boot in async IIFE with proper awaits.
+
+**Modified:** `src/engine/SupabaseClient.ts`, `src/main.tsx`, `src/hooks/useAuth.ts`
+
+#### PWA Cache Staleness Fixes
+- SW HTML route: added `fetchOptions: { cache: 'reload' }` to bypass browser HTTP cache (GitHub Pages caches aggressively)
+- Added 30-min periodic SW update check (SPAs never navigate, so browser never checks for updates)
+- Added `SKIP_WAITING` message handler in SW for `useServiceWorkerUpdate` hook
+
+**Modified:** `src/sw.ts`, `src/main.tsx`
+
+#### All Changes Committed, Pushed, Deployed
+Commits: `c4876c6e`, `ffe108df`, `4cc272b3`, `6371503f`, `3112a652`
+Deployed to kernel.chat, verified live with correct API key.
 
 ---
 
-## Previous Session (2026-02-27)
+## Previous Session (2026-02-28)
 
 ### Accomplished
-
-#### Image Credit Packs + Auto-Reload + Fixes
-Converted image generation from Pro-included to credit-based system with auto-reload. Stripe credit packs (Starter 25/$4.99, Standard 75/$12.99, Power 200/$29.99). Admin bypass via `ADMIN_USER_IDS` env.
-
-#### Comped Pro for siijoseph333@gmail.com
-1 month complimentary Pro (expires 2026-03-27). Auto-expiration in task-scheduler.
-
-#### Auto-Expire Comped Subscriptions
-task-scheduler checks every 5 min for expired `current_period_end`, deactivates subs.
-
-#### AI Image Generation (earlier)
-Built Gemini 2.5 Flash image gen. Credit-gated, rate limited 10/min. AgentRouter detects `needsImageGen` intent.
+- Image gen reference images (uploads + conversation history as Gemini guidance)
+- Backlog cleanup: Cloudflare DNS, Discord webhook, Supabase migration sync, frontend deploy
+- Ship pipeline: all 6 gates PASS
 
 ---
 
-## Previous Session (2026-02-26)
+## Previous Sessions (2026-02-26 to 2026-02-27)
 
 ### Accomplished
-- Data export endpoint (GDPR/CCPA portability) — E2E verified
-- API key rotation (Anthropic + Google)
-- Notification UX (auto-read, dismiss, clear all)
-- Tooltips + discovery pulse for toggle buttons
-- Landing page ParticleGrid redesign
-- Vibe Coding R&D — 6 features + white paper + 12 hardening fixes
-- Legal update — 20 new clauses (ToS + Privacy Policy)
-- Legal accuracy audit — fixed 3 sub-processor disclosure errors
-- Backlog sweep + thinking toggle redesign
+- Image credit packs + auto-reload, comped Pro for siijoseph333@gmail.com
+- Auto-expire comped subscriptions, AI image generation (Gemini 2.5 Flash)
+- Data export, API key rotation, notification UX, landing page redesign
+- Legal update, backlog sweep, thinking toggle
 
 ---
 
@@ -92,17 +118,9 @@ Built Gemini 2.5 Flash image gen. Credit-gated, rate limited 10/min. AgentRouter
 
 ## Ongoing Backlog
 
-- **Dep updates held**: framer-motion v12 + lucide-react v0.575 (breaking changes, need testing)
 - **Comped Pro — siijoseph333@gmail.com**: Active until 2026-03-27. Auto-expiration handles it.
-- **Future Pro candidate**: Server-side project persistence (Supabase Storage for files that survive page reload + work across devices). Has real infrastructure cost — natural Pro feature when needed.
-- **P1 design items** (non-blocking): 6 buttons below 44px iOS HIG minimum (scroll btn, image download/refine, lightbox close, toggle switch); 3 dark mode tokens use cool neutral grays instead of warm browns (`--dark-bg-surface`, `--dark-bg-deep`, `--dark-border-subtle`)
-- **P1 security items** (non-blocking): Remove `VITE_GEMINI_API_KEY` from `src/vite-env.d.ts` to prevent accidental client-side usage
-
-### Resolved This Session
-- ~~Share link OG proxy DNS~~ — DONE, Cloudflare nameservers active, Worker intercepting
-- ~~Discord webhook 401~~ — FIXED, Supabase secret re-set
-- ~~Supabase CLI migration sync~~ — FIXED, 80+ repairs, all migrations aligned
-- ~~Image gen reference images~~ — DONE, deployed and verified
+- **P1 test fixes** (non-blocking): MoreMenu.test.tsx and BottomTabBar.test.tsx have pre-existing failures (component changed, tests not updated)
+- **Deploy project-files**: Migration + edge function need deployment (`db push` + `functions deploy`)
 
 ## Key Decisions Made
 
@@ -132,6 +150,10 @@ Built Gemini 2.5 Flash image gen. Credit-gated, rate limited 10/min. AgentRouter
 - Image generation: Credit-gated (not subscription-included), Gemini 2.5 Flash Image. Rate limit 10/min. Reference images from uploads + conversation history passed to Gemini as style/content guidance (max 4, 4MB each).
 - Subscription expiration: task-scheduler checks every 5 min, deactivates expired subs
 - Landing page: ParticleGrid visual identity. Canvas can't read CSS vars — hex values hardcoded in JS.
+- **OAuth: implicit flow** (`flowType: 'implicit'`), `detectSessionInUrl: false`. Manual token handling in `main.tsx` before React renders. No hardcoded API key fallbacks — fail loudly if `.env` missing.
+- **SW caching**: `fetchOptions: { cache: 'reload' }` on HTML route bypasses browser HTTP cache. 30-min periodic update check for SPAs. Global `controllerchange` listener for auto-reload on deploy.
+- **framer-motion → motion**: Rebranded in v12. Import path `'motion/react'`. Drop-in replacement, no API changes.
+- **Project file persistence**: Pro feature. Edge function `project-files` saves to Supabase Storage. `projectStore.ts` syncs fire-and-forget on register, loads on conversation switch.
 
 ## Test Accounts
 

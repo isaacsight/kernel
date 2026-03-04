@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'motion/react'
 import { SPRING, DURATION } from '../constants/motion'
 import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen } from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../providers/AuthProvider'
 import { getAccessToken } from '../engine/SupabaseClient'

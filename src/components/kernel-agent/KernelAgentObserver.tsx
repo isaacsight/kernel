@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import type { CognitivePhase } from '../../engine/AIEngine';
 import { TRANSITION } from '../../constants/motion';

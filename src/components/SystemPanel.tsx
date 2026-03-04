@@ -5,7 +5,7 @@
 // indicators, and process list.
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, useDragControls, AnimatePresence } from 'framer-motion'
+import { motion, useDragControls, AnimatePresence } from 'motion/react'
 import { SPRING, TRANSITION, VARIANT } from '../constants/motion'
 import type {
   SystemMetrics,

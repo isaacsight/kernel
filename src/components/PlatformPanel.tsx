@@ -5,7 +5,7 @@
 // adapted content cards, distribution summary, and analytics.
 
 import { useState } from 'react'
-import { motion, AnimatePresence, useDragControls } from 'framer-motion'
+import { motion, AnimatePresence, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { ContentPipeline } from './ContentPipeline'
 import type {

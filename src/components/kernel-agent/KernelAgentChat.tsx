@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { TRANSITION } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import { KERNEL_TOPICS } from '../../agents/kernel';

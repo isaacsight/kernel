@@ -5,7 +5,7 @@
 // Analytics (delivery stats, admin only).
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { useCommunicationEngine } from '../hooks/useCommunicationEngine'
 import {

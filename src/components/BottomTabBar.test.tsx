@@ -7,14 +7,6 @@ vi.mock('../hooks/useMiniPhone', () => ({
   useMiniPhone: vi.fn(() => false),
 }))
 
-vi.mock('lucide-react', () => ({
-  MessageSquare: (props: any) => <svg data-testid="icon-home" {...props} />,
-  List: (props: any) => <svg data-testid="icon-chats" {...props} />,
-  Target: (props: any) => <svg data-testid="icon-goals" {...props} />,
-  Newspaper: (props: any) => <svg data-testid="icon-briefings" {...props} />,
-  MoreHorizontal: (props: any) => <svg data-testid="icon-more" {...props} />,
-}))
-
 describe('BottomTabBar', () => {
   const onTabChange = vi.fn()
 
@@ -29,11 +21,11 @@ describe('BottomTabBar', () => {
   })
 
   it('marks active tab with aria-selected and CSS class', () => {
-    render(<BottomTabBar activeTab="goals" onTabChange={onTabChange} />)
+    render(<BottomTabBar activeTab="files" onTabChange={onTabChange} />)
 
-    const goalsTab = screen.getByRole('tab', { name: 'Goals' })
-    expect(goalsTab).toHaveAttribute('aria-selected', 'true')
-    expect(goalsTab.className).toContain('ka-tab-item--active')
+    const filesTab = screen.getByRole('tab', { name: 'Files' })
+    expect(filesTab).toHaveAttribute('aria-selected', 'true')
+    expect(filesTab.className).toContain('ka-tab-item--active')
 
     const homeTab = screen.getByRole('tab', { name: 'Home' })
     expect(homeTab).toHaveAttribute('aria-selected', 'false')
@@ -44,29 +36,20 @@ describe('BottomTabBar', () => {
     const user = userEvent.setup()
     render(<BottomTabBar activeTab="home" onTabChange={onTabChange} />)
 
-    await user.click(screen.getByRole('tab', { name: 'Briefings' }))
-    expect(onTabChange).toHaveBeenCalledWith('briefings')
+    await user.click(screen.getByRole('tab', { name: 'Gallery' }))
+    expect(onTabChange).toHaveBeenCalledWith('gallery')
 
-    await user.click(screen.getByRole('tab', { name: 'More' }))
-    expect(onTabChange).toHaveBeenCalledWith('more')
+    await user.click(screen.getByRole('tab', { name: 'Settings' }))
+    expect(onTabChange).toHaveBeenCalledWith('settings')
   })
 
-  it('shows undiscovered feature dot on More tab', () => {
+  it('shows active dot only on active tab', () => {
     const { container } = render(
-      <BottomTabBar activeTab="home" onTabChange={onTabChange} undiscoveredCount={3} />
+      <BottomTabBar activeTab="chats" onTabChange={onTabChange} />
     )
 
-    const dot = container.querySelector('.ka-feature-dot--tab')
-    expect(dot).toBeInTheDocument()
-  })
-
-  it('hides feature dot when undiscoveredCount is 0', () => {
-    const { container } = render(
-      <BottomTabBar activeTab="home" onTabChange={onTabChange} undiscoveredCount={0} />
-    )
-
-    const dot = container.querySelector('.ka-feature-dot--tab')
-    expect(dot).not.toBeInTheDocument()
+    const dots = container.querySelectorAll('.ka-tab-dot')
+    expect(dots).toHaveLength(1)
   })
 
   it('filters to 3 tabs in mini phone mode', async () => {
@@ -77,7 +60,10 @@ describe('BottomTabBar', () => {
 
     const tabs = screen.getAllByRole('tab')
     expect(tabs).toHaveLength(3)
-    expect(screen.queryByRole('tab', { name: 'Goals' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('tab', { name: 'Briefings' })).not.toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'Home' })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'Chats' })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'Settings' })).toBeInTheDocument()
+    expect(screen.queryByRole('tab', { name: 'Files' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('tab', { name: 'Gallery' })).not.toBeInTheDocument()
   })
 })

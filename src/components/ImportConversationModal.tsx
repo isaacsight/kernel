@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { IconClose, IconGlobe, IconCheck } from './KernelIcons'
 import {
   detectPlatformUrl, importConversation, convertToKernelMessages,

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import { ParticleGrid } from './ParticleGrid'
 import { VARIANT, TRANSITION } from '../constants/motion'

@@ -1,4 +1,4 @@
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconCrown } from './KernelIcons'
 import { useTranslation } from 'react-i18next'

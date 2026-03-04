@@ -3,7 +3,7 @@
 // Shows the Master Agent's current execution plan as a step graph.
 // Each step displays its engine, action, status, and data flow.
 
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import type { EnginePlan, EnginePlanStep } from '../engine/master/types'
 

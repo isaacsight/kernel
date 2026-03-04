@@ -5,7 +5,7 @@
 // with approve/edit/skip actions at pause points.
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import type { ContentStageState, ContentStage } from '../engine/content/types'
 
 interface ContentPipelineProps {

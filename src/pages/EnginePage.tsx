@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo, Suspense } from 'react'
-import { motion, AnimatePresence, useDragControls } from 'framer-motion'
+import { motion, AnimatePresence, useDragControls } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import {
   IconSend, IconMenu, IconCopy, IconCheck, IconThumbsUp, IconThumbsDown,
@@ -332,8 +332,10 @@ function EngineChat() {
   convs.handleNewChat = crisisNewChat
   newChatRef.current = crisisNewChat
 
-  // Project context — file tracking
+  // Project context — file tracking + cloud sync
   const registerProjectFile = useProjectStore(s => s.registerFile)
+  const syncToCloud = useProjectStore(s => s.syncToCloud)
+  const loadFromCloud = useProjectStore(s => s.loadFromCloud)
   const messagesRef = useRef(chatEngine.messages)
   messagesRef.current = chatEngine.messages
   const handleArtifactRendered = useCallback((filename: string, language: string, content: string) => {
@@ -342,7 +344,17 @@ function EngineChat() {
     const latestKernelMsg = messagesRef.current.filter(m => m.role === 'kernel').pop()
     const messageId = latestKernelMsg?.id || `msg_${Date.now()}`
     registerProjectFile(convId, filename, language, content, messageId)
-  }, [convs.activeConversationId, registerProjectFile])
+    if (isPro) syncToCloud(convId, filename)
+  }, [convs.activeConversationId, registerProjectFile, isPro, syncToCloud])
+
+  // Load project files from cloud when conversation changes (Pro only)
+  const prevConvIdRef = useRef<string | null>(null)
+  useEffect(() => {
+    const convId = convs.activeConversationId
+    if (!convId || convId === prevConvIdRef.current || !isPro) return
+    prevConvIdRef.current = convId
+    loadFromCloud(convId)
+  }, [convs.activeConversationId, isPro, loadFromCloud])
 
   const evolution = useEntityEvolution({
     conversationCount: convs.conversations.length,

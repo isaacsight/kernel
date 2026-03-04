@@ -4,7 +4,7 @@
 // create form, and run history.
 
 import { useState, useMemo } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import {
   IconClose,

@@ -2,10 +2,10 @@
 //
 // Bottom-sheet panel for system design and architecture analysis.
 // Tabs: Design (diagrams + components), Dependencies, Code Gen.
-// Uses framer-motion drag-to-dismiss bottom-sheet pattern.
+// Uses motion drag-to-dismiss bottom-sheet pattern.
 
 import { useState, useCallback } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconCode, IconZap, IconGitBranch, IconPackage, IconGlobe } from './KernelIcons'
 import type { SystemDesign, Dependency, CodeGenResult, InfrastructurePlan } from '../engine/architecture/types'

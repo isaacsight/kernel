@@ -4,7 +4,7 @@
 // for profile operations (getOwnProfile, updateProfile).
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconUser, IconCheck } from './KernelIcons'
 import { useDiscovery } from '../hooks/useDiscovery'

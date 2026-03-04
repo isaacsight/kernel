@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { CRISIS_RESOURCES, type CrisisSeverity } from '../engine/CrisisDetector'
 import { SPRING } from '../constants/motion'
 

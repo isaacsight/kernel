@@ -4,7 +4,7 @@
 // and bookmark counts. Uses content-engine list_items action.
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconFileText, IconEye, IconThumbsUp, IconLink } from './KernelIcons'
 

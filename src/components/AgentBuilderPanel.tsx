@@ -4,7 +4,7 @@
 // tools, knowledge, starters, icon, and color.
 
 import { useState, useEffect } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import type { CustomAgent } from '../engine/agent/types'
 

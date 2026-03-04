@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { IconLink, IconCopy, IconCheck, IconClose, IconClock, IconTrash, IconShare } from './KernelIcons'
 import { VARIANT, TRANSITION } from '../constants/motion'
 import { createSharedConversation, getSharedConversation, deleteSharedConversation, getShareCountToday } from '../engine/SupabaseClient'

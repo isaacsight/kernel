@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { TRANSITION } from '../constants/motion'
 
 export function Layout() {

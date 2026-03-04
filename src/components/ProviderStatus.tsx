@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useProviderHealth, type SystemStatus } from '../hooks/useProviderHealth'
 import { TRANSITION, DURATION } from '../constants/motion'
 

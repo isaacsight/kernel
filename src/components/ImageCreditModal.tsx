@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { getAccessToken } from '../engine/SupabaseClient'
 import { getAutoReload, setAutoReload, type AutoReloadSettings } from '../engine/imageGen'
 import { IconClose } from './KernelIcons'

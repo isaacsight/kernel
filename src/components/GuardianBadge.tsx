@@ -7,7 +7,7 @@
 //  then displays severity with expandable findings.
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { IconShield, IconChevronDown } from './KernelIcons'
 import { reviewCodeArtifact, type GuardianReview } from '../engine/GuardianReview'
 import { DURATION, EASE } from '../constants/motion'

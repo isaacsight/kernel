@@ -3,7 +3,7 @@
 // Opens when user clicks "Distribute" on finished content.
 
 import { useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { useSocialMedia } from '../hooks/useSocialMedia'
 import { PLATFORM_META } from '../engine/social/types'

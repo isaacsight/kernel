@@ -4,7 +4,7 @@
 // Users can browse, install, and uninstall agents.
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, useDragControls, AnimatePresence } from 'framer-motion'
+import { motion, useDragControls, AnimatePresence } from 'motion/react'
 import { SPRING, VARIANT, TRANSITION } from '../constants/motion'
 import type { CustomAgent } from '../engine/agent/types'
 

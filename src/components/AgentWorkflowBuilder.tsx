@@ -4,7 +4,7 @@
 // Users can add steps, reorder them, and configure each step.
 
 import { useState } from 'react'
-import { motion, useDragControls, Reorder } from 'framer-motion'
+import { motion, useDragControls, Reorder } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import type { CustomAgent } from '../engine/agent/types'
 

@@ -2,7 +2,7 @@
 // Shows "Thought for Xs" when collapsed, full thinking text when expanded.
 
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import { IconChevronRight } from './KernelIcons'
 import { TRANSITION } from '../constants/motion'

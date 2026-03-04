@@ -113,12 +113,12 @@
 [data-theme="dark"] {
     --dark-bg: #1C1A18;
     --dark-bg-elevated: #262320;
-    --dark-bg-surface: #1a1a1a;
-    --dark-bg-deep: #0f0f0f;
+    --dark-bg-surface: #252321;
+    --dark-bg-deep: #141210;
     --dark-text: #e8e6e3;
     --dark-text-secondary: rgba(255, 255, 255, 0.6);
     --dark-border: #36322E;
-    --dark-border-subtle: #333;
+    --dark-border-subtle: #3A3630;
     --dark-link-accent: #A78BFA;
 }
 

@@ -55,6 +55,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'discover-feed':         { free: 60,paid: 60,pro: 60,  max: 60,  windowSeconds: 60 },
   'engagement':            { free: 30,paid: 30,pro: 60,  max: 120, windowSeconds: 60 },
   'author-profile':        { free: 30,paid: 30,pro: 60,  max: 60,  windowSeconds: 60 },
+  'project-files':         { free: 0, paid: 10,pro: 30,  max: 60,  windowSeconds: 60 },
 }
 
 /**

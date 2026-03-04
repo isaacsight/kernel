@@ -4,7 +4,7 @@
 // and post-publish link. Uses the content-engine publish_item action.
 
 import { useState, useCallback } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconLink, IconCheck, IconGlobe } from './KernelIcons'
 

@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { MessageContent } from '../components/MessageContent'
 import { useAuthContext } from '../providers/AuthProvider'
 import { EngagementButtons } from '../components/discovery/EngagementButtons'

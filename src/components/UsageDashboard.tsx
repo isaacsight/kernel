@@ -1,5 +1,5 @@
 // ─── UsageDashboard — Usage analytics & forecast panel ───────────
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { IconClose, IconChart, IconZap, IconCrown } from './KernelIcons'
 import { usePricingEngine } from '../hooks/usePricingEngine'

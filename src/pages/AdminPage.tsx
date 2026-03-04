@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { IconArrowLeft, IconUsers, IconChats, IconBrain, IconTrendingUp, IconCrown, IconActivity, IconDownload, IconTrash, IconShieldCheck, IconShieldOff, IconSearch, IconRefresh, IconChevronRight } from '../components/KernelIcons'
 import { useAuthContext } from '../providers/AuthProvider'

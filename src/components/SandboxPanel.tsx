@@ -4,7 +4,7 @@
 // File tree sidebar, browser preview tab.
 
 import { useState, useRef, useEffect } from 'react'
-import { motion, useDragControls } from 'framer-motion'
+import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import type { Sandbox, SandboxFile } from '../engine/computer/types'
 

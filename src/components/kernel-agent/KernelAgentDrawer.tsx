@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { SPRING } from '../../constants/motion';
 import { useKernelAgentContext } from './KernelAgentProvider';
 import type { KernelTab } from '../../hooks/useKernelAgent';

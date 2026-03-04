@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import { SPRING } from '../constants/motion'
 import { IconClose } from './KernelIcons'
-import { useDragControls } from 'framer-motion'
+import { useDragControls } from 'motion/react'
 
 const SUGGESTED_TAGS = ['Work', 'Personal', 'Research', 'Ideas', 'Important']
 

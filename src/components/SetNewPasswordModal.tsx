@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import { getPasswordStrength } from '../hooks/useAccountSettings'
 import { VARIANT, TRANSITION } from '../constants/motion'

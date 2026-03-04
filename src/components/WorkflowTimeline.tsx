@@ -5,7 +5,7 @@
 // with animated transitions. Collapsible for compact viewing.
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useTranslation } from 'react-i18next'
 import type { WorkflowStepState } from '../hooks/useChatEngine'
 

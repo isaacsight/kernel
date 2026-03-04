@@ -4,7 +4,7 @@
 // Grid of thumbnails with lightbox view, prompt text, and "Use as starting point" for refinement.
 
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { SPRING } from '../constants/motion'
 import { supabase } from '../engine/SupabaseClient'
 import { IconClose, IconImage, IconSparkles } from './KernelIcons'

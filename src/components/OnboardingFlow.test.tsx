@@ -13,7 +13,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('framer-motion', () => ({
+vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...props }: any) => {
       const safe = filterMotionProps(props)

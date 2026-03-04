@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { IconChats, IconShare } from '../components/KernelIcons'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { forkSharedConversation } from '../engine/SupabaseClient'

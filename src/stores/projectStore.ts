@@ -3,9 +3,11 @@
 // Tracks all generated files across a conversation. Injects manifest
 // into coder prompts so subsequent requests have awareness of existing files.
 // Files are registered when ArtifactCard mounts via callback.
+// Pro users get server-side persistence via the project-files edge function.
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { supabase } from '../engine/SupabaseClient'
 
 export interface ProjectFile {
   filename: string
@@ -37,6 +39,10 @@ interface ProjectActions {
   clearProject: (conversationId: string) => void
   /** Format manifest for injection into coder prompt */
   formatManifest: (conversationId: string) => string
+  /** Sync a file to cloud storage (Pro only, fire-and-forget) */
+  syncToCloud: (conversationId: string, filename: string) => void
+  /** Load all files from cloud for a conversation (Pro only) */
+  loadFromCloud: (conversationId: string) => Promise<void>
 }
 
 type ProjectStore = ProjectState & ProjectActions
@@ -110,6 +116,63 @@ export const useProjectStore = create<ProjectStore>()(
         delete projects[conversationId]
         delete previousContents[conversationId]
         set({ projects })
+      },
+
+      syncToCloud: (conversationId, filename) => {
+        const file = get().projects[conversationId]?.[filename]
+        if (!file || !file.content) return
+
+        // Fire-and-forget — don't block the UI
+        supabase.functions.invoke('project-files', {
+          body: {
+            action: 'save',
+            conversation_id: conversationId,
+            filename: file.filename,
+            language: file.language,
+            content: file.content,
+            version: file.version,
+          },
+        }).catch((err: unknown) => {
+          console.warn('[project-sync] cloud save failed:', err)
+        })
+      },
+
+      loadFromCloud: async (conversationId) => {
+        try {
+          const { data, error } = await supabase.functions.invoke('project-files', {
+            body: { action: 'load', conversation_id: conversationId },
+          })
+
+          if (error || !data?.files) return
+
+          const state = get()
+          const project = { ...state.projects[conversationId] }
+          let changed = false
+
+          for (const file of data.files as Array<{ filename: string; language: string; content: string | null; version: number }>) {
+            if (!file.content) continue
+            const existing = project[file.filename]
+            // Only hydrate if we don't already have content in memory
+            if (existing?.content) continue
+
+            project[file.filename] = {
+              filename: file.filename,
+              language: file.language,
+              content: file.content,
+              version: file.version,
+              lastModifiedMessageId: existing?.lastModifiedMessageId || '',
+              createdAt: existing?.createdAt || Date.now(),
+              updatedAt: existing?.updatedAt || Date.now(),
+            }
+            changed = true
+          }
+
+          if (changed) {
+            set({ projects: { ...state.projects, [conversationId]: project } })
+          }
+        } catch (err) {
+          console.warn('[project-sync] cloud load failed:', err)
+        }
       },
 
       formatManifest: (conversationId) => {

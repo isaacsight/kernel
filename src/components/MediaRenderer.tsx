@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { TRANSITION } from '../constants/motion'
 import type { MediaAttachment } from '../types'
 

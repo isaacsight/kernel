@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MoreMenu } from './MoreMenu'
 
-vi.mock('framer-motion', () => ({
+vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, onClick, className, ...rest }: any) => (
       <div className={className} onClick={onClick} data-testid={className}>
@@ -15,53 +15,30 @@ vi.mock('framer-motion', () => ({
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, opts?: any) => {
       const t: Record<string, string> = {
-        'menu.workflows': 'Workflows',
-        'menu.scheduledTasks': 'Scheduled Tasks',
-        'menu.whatKernelKnows': 'What Kernel Knows',
-        'menu.yourStats': 'Your Stats',
-        'menu.insights': 'Insights',
-        'menu.upgradeToPro': 'Upgrade to Pro',
-        'menu.manageSubscription': 'Manage Subscription',
+        'menu.theme': 'Theme',
+        'menu.themeLight': 'Light',
+        'menu.themeDark': 'Dark',
+        'menu.themeEink': 'E-ink',
+        'menu.accountSettings': 'Account Settings',
         'menu.signOut': 'Sign Out',
-        'menu.deleteAccount': 'Delete Account',
-        'menu.notifications': 'Notifications',
-        'menu.notifInApp': 'In-app notifications',
-        'menu.notifBriefings': 'Briefing alerts',
-        'menu.notifGoals': 'Goal updates',
-        'menu.notifReminders': 'Reminders',
-        'menu.notifProactive': 'Proactive insights',
-        'features': 'Features',
+        'menu.manageSubscription': 'Manage Subscription',
         'language': 'Language',
         'account': 'Account',
       }
-      return t[key] || key
+      return t[key] || opts?.defaultValue || key
     },
     i18n: { language: 'en', changeLanguage: vi.fn() },
   }),
 }))
-
-vi.mock('../hooks/useNotificationPrefs', () => ({
-  useNotificationPrefs: () => ({
-    prefs: { inApp: true, briefings: true, goals: false, reminders: true, proactive: true },
-    update: vi.fn(),
-  }),
-}))
-
-vi.mock('lucide-react', () => {
-  const icon = (props: any) => <svg {...props} />
-  return {
-    Zap: icon, Clock: icon, Brain: icon, BarChart3: icon, Eye: icon,
-    Crown: icon, Settings: icon, LogOut: icon, Trash2: icon, Globe: icon,
-  }
-})
 
 describe('MoreMenu', () => {
   const baseProps = {
     isOpen: true,
     onClose: vi.fn(),
     onSelect: vi.fn(),
+    onUpgrade: vi.fn(),
     isPro: false,
     isAdmin: false,
   }
@@ -73,86 +50,79 @@ describe('MoreMenu', () => {
     expect(container.firstChild).toBeNull()
   })
 
-  it('renders all 5 feature items', () => {
-    render(<MoreMenu {...baseProps} />)
-
-    expect(screen.getByText('Workflows')).toBeInTheDocument()
-    expect(screen.getByText('Scheduled Tasks')).toBeInTheDocument()
-    expect(screen.getByText('What Kernel Knows')).toBeInTheDocument()
-    expect(screen.getByText('Your Stats')).toBeInTheDocument()
-    expect(screen.getByText('Insights')).toBeInTheDocument()
-  })
-
-  it('calls onSelect + onClose when feature item clicked', () => {
-    render(<MoreMenu {...baseProps} />)
-
-    fireEvent.click(screen.getByText('Workflows'))
-    expect(baseProps.onSelect).toHaveBeenCalledWith('workflows')
-    expect(baseProps.onClose).toHaveBeenCalled()
-  })
-
-  it('always shows Account settings and Sign Out', () => {
-    render(<MoreMenu {...baseProps} isPro={false} />)
-    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
-    expect(screen.getByText('Sign Out')).toBeInTheDocument()
-  })
-
-  it('hides Manage Subscription for admins', () => {
-    render(<MoreMenu {...baseProps} isPro={true} isAdmin={true} />)
-    expect(screen.queryByText('Manage Subscription')).not.toBeInTheDocument()
-  })
-
-  it('account section shows for both free and pro users', () => {
-    const { rerender } = render(<MoreMenu {...baseProps} isPro={false} />)
-    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
-
-    rerender(<MoreMenu {...baseProps} isPro={true} />)
-    expect(screen.getByText('menu.accountSettings')).toBeInTheDocument()
-  })
-
   it('renders language picker', () => {
     render(<MoreMenu {...baseProps} />)
     const select = screen.getByRole('combobox')
     expect(select).toBeInTheDocument()
   })
 
-  it('shows feature discovery dot when isNewFeature returns true', () => {
-    const { container } = render(
-      <MoreMenu {...baseProps} isNewFeature={(id) => id === 'insights'} />
-    )
-    const dots = container.querySelectorAll('.ka-feature-dot')
-    expect(dots.length).toBeGreaterThan(0)
+  it('shows theme switcher when onSetTheme provided', () => {
+    render(<MoreMenu {...baseProps} theme="light" onSetTheme={vi.fn()} />)
+    expect(screen.getByText('Light')).toBeInTheDocument()
+    expect(screen.getByText('Dark')).toBeInTheDocument()
+    expect(screen.getByText('E-ink')).toBeInTheDocument()
+  })
+
+  it('calls onSetTheme when theme option clicked', () => {
+    const onSetTheme = vi.fn()
+    render(<MoreMenu {...baseProps} theme="light" onSetTheme={onSetTheme} />)
+    fireEvent.click(screen.getByText('Dark'))
+    expect(onSetTheme).toHaveBeenCalledWith('dark')
+  })
+
+  it('shows upgrade plans for free users', () => {
+    render(<MoreMenu {...baseProps} isPro={false} />)
+    expect(screen.getByText('Upgrade')).toBeInTheDocument()
+    expect(screen.getAllByText('Pro')).toHaveLength(2) // monthly + annual
+    expect(screen.getAllByText('Max')).toHaveLength(2)
+  })
+
+  it('hides upgrade plans for Pro users', () => {
+    render(<MoreMenu {...baseProps} isPro={true} />)
+    expect(screen.queryByText('Upgrade')).not.toBeInTheDocument()
+  })
+
+  it('calls onUpgrade and onClose when plan card clicked', () => {
+    render(<MoreMenu {...baseProps} isPro={false} />)
+    const proButtons = screen.getAllByText('Pro')
+    fireEvent.click(proButtons[0].closest('button')!)
+    expect(baseProps.onUpgrade).toHaveBeenCalledWith('pro_monthly')
+    expect(baseProps.onClose).toHaveBeenCalled()
+  })
+
+  it('always shows Account Settings and Sign Out', () => {
+    render(<MoreMenu {...baseProps} />)
+    expect(screen.getByText('Account Settings')).toBeInTheDocument()
+    expect(screen.getByText('Sign Out')).toBeInTheDocument()
+  })
+
+  it('shows Manage Subscription when subscribed', () => {
+    render(<MoreMenu {...baseProps} isPro={true} isSubscribed={true} />)
+    expect(screen.getByText('Manage Subscription')).toBeInTheDocument()
+  })
+
+  it('hides Manage Subscription when not subscribed', () => {
+    render(<MoreMenu {...baseProps} isPro={false} />)
+    expect(screen.queryByText('Manage Subscription')).not.toBeInTheDocument()
+  })
+
+  it('calls onSelect and onClose when Account Settings clicked', () => {
+    render(<MoreMenu {...baseProps} />)
+    fireEvent.click(screen.getByText('Account Settings'))
+    expect(baseProps.onSelect).toHaveBeenCalledWith('account-settings')
+    expect(baseProps.onClose).toHaveBeenCalled()
+  })
+
+  it('calls onSelect and onClose when Sign Out clicked', () => {
+    render(<MoreMenu {...baseProps} />)
+    fireEvent.click(screen.getByText('Sign Out'))
+    expect(baseProps.onSelect).toHaveBeenCalledWith('sign-out')
+    expect(baseProps.onClose).toHaveBeenCalled()
   })
 
   it('calls onClose when overlay clicked', () => {
     render(<MoreMenu {...baseProps} />)
     fireEvent.click(screen.getByTestId('ka-more-overlay'))
     expect(baseProps.onClose).toHaveBeenCalled()
-  })
-
-  it('renders notification preference toggles', () => {
-    render(<MoreMenu {...baseProps} />)
-    expect(screen.getByText('In-app notifications')).toBeInTheDocument()
-    expect(screen.getByText('Briefing alerts')).toBeInTheDocument()
-    expect(screen.getByText('Goal updates')).toBeInTheDocument()
-    expect(screen.getByText('Reminders')).toBeInTheDocument()
-    expect(screen.getByText('Proactive insights')).toBeInTheDocument()
-  })
-
-  it('toggles have role="switch" for accessibility', () => {
-    render(<MoreMenu {...baseProps} />)
-    const switches = screen.getAllByRole('switch')
-    expect(switches).toHaveLength(5)
-  })
-
-  it('toggle states reflect notification prefs', () => {
-    render(<MoreMenu {...baseProps} />)
-    const switches = screen.getAllByRole('switch')
-    // inApp: true, briefings: true, goals: false, reminders: true, proactive: true
-    expect(switches[0]).toBeChecked() // inApp
-    expect(switches[1]).toBeChecked() // briefings
-    expect(switches[2]).not.toBeChecked() // goals
-    expect(switches[3]).toBeChecked() // reminders
-    expect(switches[4]).toBeChecked() // proactive
   })
 })
