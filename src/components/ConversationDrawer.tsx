@@ -1,12 +1,17 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'motion/react'
 import { SPRING, DURATION } from '../constants/motion'
-import { IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconCheck, IconShare, IconDownload, IconBookOpen, IconChevronRight, IconFolderPlus, IconFolder } from './KernelIcons'
+import {
+  IconPlus, IconTrash, IconClose, IconSearch, IconPencil, IconShare,
+  IconDownload, IconBookOpen, IconChevronRight, IconFolderPlus, IconFolder,
+  IconStar, IconStarFilled, IconArchive, IconUnarchive,
+} from './KernelIcons'
 import { supabase } from '../engine/SupabaseClient'
 import { updateConversationTitle } from '../engine/SupabaseClient'
 import type { DBConversation } from '../engine/SupabaseClient'
 import type { Folder } from '../hooks/useFolders'
+import type { DrawerTab } from '../hooks/useDrawerTabs'
 
 interface ConversationDrawerProps {
   isOpen: boolean
@@ -32,6 +37,21 @@ interface ConversationDrawerProps {
   onRenameFolder?: (id: string, name: string) => void
   onDeleteFolder?: (id: string) => void
   onMoveToFolder?: (convId: string, folderId: string | null) => void
+  // Star / Archive
+  onStar?: (id: string) => void
+  onUnstar?: (id: string) => void
+  onArchive?: (id: string) => void
+  onUnarchive?: (id: string) => void
+  // Archive view
+  showArchive?: boolean
+  onOpenArchive?: () => void
+  onCloseArchive?: () => void
+  onLoadArchive?: () => void
+  archivedConversations?: DBConversation[]
+  // Tabs
+  activeTab?: DrawerTab
+  onTabChange?: (tab: DrawerTab) => void
+  sharedConversations?: DBConversation[]
 }
 
 function relativeTime(dateStr: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
@@ -105,9 +125,22 @@ export function ConversationDrawer({
   onRenameFolder,
   onDeleteFolder,
   onMoveToFolder,
+  onStar,
+  onUnstar,
+  onArchive,
+  onUnarchive,
+  showArchive,
+  onOpenArchive,
+  onCloseArchive,
+  onLoadArchive,
+  archivedConversations,
+  activeTab = 'yours',
+  onTabChange,
+  sharedConversations,
 }: ConversationDrawerProps) {
   const { t } = useTranslation('common')
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const bottomSearchRef = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<{ conv_id: string; content: string }[]>([])
   const [searching, setSearching] = useState(false)
@@ -125,6 +158,9 @@ export function ConversationDrawer({
   const [moveMenuConvId, setMoveMenuConvId] = useState<string | null>(null)
   const [dragOverFolderId, setDragOverFolderId] = useState<string | null>(null)
 
+  // Archive search
+  const [archiveSearch, setArchiveSearch] = useState('')
+
   const hasFolders = folders && folders.length > 0
 
   // Clean up debounce timer on unmount
@@ -135,7 +171,7 @@ export function ConversationDrawer({
   // Auto-focus search input when opened via Cmd+K
   useEffect(() => {
     if (isOpen && autoFocusSearch) {
-      requestAnimationFrame(() => searchInputRef.current?.focus())
+      requestAnimationFrame(() => bottomSearchRef.current?.focus())
     }
   }, [isOpen, autoFocusSearch])
 
@@ -252,12 +288,17 @@ export function ConversationDrawer({
     setFolderRenameValue('')
   }, [folderRenameValue, onRenameFolder])
 
+  // Choose which conversation list to show based on active tab
+  const tabConversations = activeTab === 'shared'
+    ? (sharedConversations || [])
+    : conversations
+
   const tagFiltered = selectedTags && selectedTags.length > 0 && getConvTags
-    ? conversations.filter(c => {
+    ? tabConversations.filter(c => {
         const convTags = getConvTags(c.id)
         return selectedTags.some(t => convTags.includes(t))
       })
-    : conversations
+    : tabConversations
 
   const filteredConversations = searchQuery.trim().length >= 2
     ? tagFiltered.filter(c =>
@@ -265,6 +306,31 @@ export function ConversationDrawer({
         searchResults.some(r => r.conv_id === c.id)
       )
     : tagFiltered
+
+  // Split starred vs recents (on yours and folders tabs)
+  const starredConversations = useMemo(() =>
+    activeTab !== 'shared'
+      ? filteredConversations.filter(c => c.starred_at != null).sort((a, b) =>
+          new Date(b.starred_at!).getTime() - new Date(a.starred_at!).getTime()
+        )
+      : [],
+    [filteredConversations, activeTab],
+  )
+
+  const recentConversations = useMemo(() =>
+    activeTab !== 'shared'
+      ? filteredConversations.filter(c => c.starred_at == null)
+      : filteredConversations,
+    [filteredConversations, activeTab],
+  )
+
+  // Filtered archived conversations
+  const filteredArchived = useMemo(() => {
+    if (!archivedConversations) return []
+    if (!archiveSearch.trim()) return archivedConversations
+    const q = archiveSearch.toLowerCase()
+    return archivedConversations.filter(c => c.title.toLowerCase().includes(q))
+  }, [archivedConversations, archiveSearch])
 
   // Desktop drag handlers for moving conversations to folders
   const handleConvDragStart = useCallback((e: React.DragEvent, convId: string) => {
@@ -293,107 +359,153 @@ export function ConversationDrawer({
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
-  const renderConvItem = (conv: DBConversation, inFolder?: boolean) => {
+  const renderConvItem = (conv: DBConversation, opts?: { inArchive?: boolean }) => {
     const matchSnippet = searchResults.find(r => r.conv_id === conv.id)
     const isRenaming = renamingId === conv.id
+    const isStarred = conv.starred_at != null
+    const inArchive = opts?.inArchive
+    const isMoveOpen = moveMenuConvId === conv.id
     return (
-      <div
-        key={conv.id}
-        className={`conv-item ${activeId === conv.id ? 'conv-item--active' : ''}`}
-        onClick={() => { if (!isRenaming) { onSelect(conv.id); setSearchQuery(''); setSearchResults([]); onClose(); } }}
-        draggable={!isMobile && !!onMoveToFolder}
-        onDragStart={(e) => handleConvDragStart(e, conv.id)}
-      >
-        <div className="conv-item-content">
-          {isRenaming ? (
-            <form className="conv-rename-form" onSubmit={(e) => { e.preventDefault(); handleRename(conv.id) }} onClick={e => e.stopPropagation()}>
-              <input
-                className="conv-rename-input"
-                value={renameValue}
-                onChange={e => setRenameValue(e.target.value)}
-                autoFocus
-                onKeyDown={e => { if (e.key === 'Escape') setRenamingId(null) }}
-                onBlur={() => handleRename(conv.id)}
-              />
-            </form>
-          ) : (
-            <span className="conv-item-title">
-              {searchQuery.trim().length >= 2 ? highlightMatch(conv.title, searchQuery) : conv.title}
-            </span>
-          )}
-          {matchSnippet && !isRenaming && (
-            <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
-          )}
-          {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
-          {!isRenaming && getConvTags && (() => {
-            const convTags = getConvTags(conv.id)
-            return convTags.length > 0 ? (
-              <div className="ka-conv-tags">
-                {convTags.map(tag => <span key={tag} className="ka-conv-tag-badge">{tag}</span>)}
-              </div>
-            ) : null
-          })()}
-        </div>
-        {!isRenaming && (
-          <div className="conv-item-actions">
-            {/* Move to folder */}
-            {onMoveToFolder && hasFolders && (
-              <div style={{ position: 'relative' }}>
+      <div key={conv.id} className={`conv-item-wrapper${isMoveOpen ? ' conv-item-wrapper--expanded' : ''}`}>
+        <div
+          className={`conv-item${activeId === conv.id ? ' conv-item--active' : ''}${isStarred ? ' conv-item--starred' : ''}`}
+          onClick={() => {
+            if (!isRenaming) {
+              onSelect(conv.id)
+              setSearchQuery('')
+              setSearchResults([])
+              onCloseArchive?.()
+              onClose()
+            }
+          }}
+          draggable={!isMobile && !!onMoveToFolder && !inArchive}
+          onDragStart={(e) => handleConvDragStart(e, conv.id)}
+        >
+          <div className="conv-item-content">
+            {isRenaming ? (
+              <form className="conv-rename-form" onSubmit={(e) => { e.preventDefault(); handleRename(conv.id) }} onClick={e => e.stopPropagation()}>
+                <input
+                  className="conv-rename-input"
+                  value={renameValue}
+                  onChange={e => setRenameValue(e.target.value)}
+                  autoFocus
+                  onKeyDown={e => { if (e.key === 'Escape') setRenamingId(null) }}
+                  onBlur={() => handleRename(conv.id)}
+                />
+              </form>
+            ) : (
+              <span className="conv-item-title">
+                {searchQuery.trim().length >= 2 ? highlightMatch(conv.title, searchQuery) : conv.title}
+              </span>
+            )}
+            {matchSnippet && !isRenaming && (
+              <span className="conv-item-snippet">{highlightMatch(matchSnippet.content.slice(0, 80), searchQuery)}...</span>
+            )}
+            {!isRenaming && <span className="conv-item-time">{relativeTime(conv.updated_at, t)}</span>}
+            {!isRenaming && getConvTags && (() => {
+              const convTags = getConvTags(conv.id)
+              return convTags.length > 0 ? (
+                <div className="ka-conv-tags">
+                  {convTags.map(tag => <span key={tag} className="ka-conv-tag-badge">{tag}</span>)}
+                </div>
+              ) : null
+            })()}
+          </div>
+          {!isRenaming && (
+            <div className="conv-item-right">
+              {/* Always-visible folder button */}
+              {!inArchive && onMoveToFolder && hasFolders && (
                 <button
-                  className="conv-item-action"
-                  onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(moveMenuConvId === conv.id ? null : conv.id) }}
+                  className={`conv-item-folder-btn${isMoveOpen ? ' conv-item-folder-btn--active' : ''}`}
+                  onClick={(e) => { e.stopPropagation(); setMoveMenuConvId(isMoveOpen ? null : conv.id) }}
                   aria-label="Move to folder"
                 >
-                  <IconFolder size={13} />
+                  <IconFolder size={14} />
                 </button>
-                {moveMenuConvId === conv.id && (
-                  <div className="conv-folder-menu" onClick={e => e.stopPropagation()}>
-                    {conv.folder_id && (
-                      <button className="conv-folder-menu-item" onClick={() => { onMoveToFolder(conv.id, null); setMoveMenuConvId(null) }}>
-                        Remove from folder
-                      </button>
-                    )}
-                    {folders!.filter(f => f.id !== conv.folder_id).map(f => (
-                      <button key={f.id} className="conv-folder-menu-item" onClick={() => { onMoveToFolder(conv.id, f.id); setMoveMenuConvId(null) }}>
-                        {f.name}
-                      </button>
-                    ))}
-                  </div>
+              )}
+              <IconChevronRight size={14} className="conv-item-chevron" />
+              <div className="conv-item-actions">
+                {/* Star / Unstar */}
+                {!inArchive && onStar && onUnstar && (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); isStarred ? onUnstar(conv.id) : onStar(conv.id) }}
+                    aria-label={isStarred ? t('conversations.unstar') : t('conversations.star')}
+                  >
+                    {isStarred ? <IconStarFilled size={13} /> : <IconStar size={13} />}
+                  </button>
                 )}
+                {/* Archive / Unarchive */}
+                {inArchive && onUnarchive ? (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); onUnarchive(conv.id) }}
+                    aria-label={t('conversations.unarchive')}
+                  >
+                    <IconUnarchive size={13} />
+                  </button>
+                ) : onArchive && (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); onArchive(conv.id) }}
+                    aria-label={t('conversations.archiveAction')}
+                  >
+                    <IconArchive size={13} />
+                  </button>
+                )}
+                {!inArchive && onShare && (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
+                    aria-label={t('aria.shareableLink')}
+                  >
+                    <IconShare size={13} />
+                  </button>
+                )}
+                {!inArchive && onTag && (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); onTag(conv.id) }}
+                    aria-label="Tag"
+                  >
+                    <IconBookOpen size={13} />
+                  </button>
+                )}
+                {!inArchive && (
+                  <button
+                    className="conv-item-action"
+                    onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
+                    aria-label={t('aria.editMessage')}
+                  >
+                    <IconPencil size={13} />
+                  </button>
+                )}
+                <button
+                  className="conv-item-action conv-item-action--delete"
+                  onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
+                  aria-label={t('delete')}
+                >
+                  <IconTrash size={13} />
+                </button>
               </div>
-            )}
-            {onShare && (
-              <button
-                className="conv-item-action"
-                onClick={(e) => { e.stopPropagation(); onShare(conv.id) }}
-                aria-label={t('aria.shareableLink')}
-              >
-                <IconShare size={13} />
+            </div>
+          )}
+        </div>
+        {/* Inline folder picker — expands below the conversation */}
+        {isMoveOpen && onMoveToFolder && hasFolders && (
+          <div className="conv-move-folders" onClick={e => e.stopPropagation()}>
+            {conv.folder_id && (
+              <button className="conv-move-folder-item" onClick={() => { onMoveToFolder(conv.id, null); setMoveMenuConvId(null) }}>
+                <IconClose size={12} />
+                <span>Remove from folder</span>
               </button>
             )}
-            {onTag && (
-              <button
-                className="conv-item-action"
-                onClick={(e) => { e.stopPropagation(); onTag(conv.id) }}
-                aria-label="Tag"
-              >
-                <IconBookOpen size={13} />
+            {folders!.filter(f => f.id !== conv.folder_id).map(f => (
+              <button key={f.id} className="conv-move-folder-item" onClick={() => { onMoveToFolder(conv.id, f.id); setMoveMenuConvId(null) }}>
+                <IconFolder size={12} />
+                <span>{f.name}</span>
               </button>
-            )}
-            <button
-              className="conv-item-action"
-              onClick={(e) => { e.stopPropagation(); setRenamingId(conv.id); setRenameValue(conv.title) }}
-              aria-label={t('aria.editMessage')}
-            >
-              <IconPencil size={13} />
-            </button>
-            <button
-              className="conv-item-action conv-item-action--delete"
-              onClick={(e) => { e.stopPropagation(); onDelete(conv.id); }}
-              aria-label={t('delete')}
-            >
-              <IconTrash size={13} />
-            </button>
+            ))}
           </div>
         )}
       </div>
@@ -464,19 +576,19 @@ export function ConversationDrawer({
         </div>
         {!isCollapsed && folderConvs.length > 0 && (
           <div className="conv-folder-items">
-            {folderConvs.map(c => renderConvItem(c, true))}
+            {folderConvs.map(c => renderConvItem(c))}
           </div>
         )}
       </div>
     )
   }
 
-  // Split conversations by folder
+  // Split conversations by folder (only for Folders tab)
   const folderConvsMap = new Map<string, DBConversation[]>()
   const uncategorized: DBConversation[] = []
-  if (hasFolders) {
+  if (hasFolders && activeTab === 'folders') {
     for (const f of folders!) folderConvsMap.set(f.id, [])
-    for (const c of filteredConversations) {
+    for (const c of recentConversations) {
       if (c.folder_id && folderConvsMap.has(c.folder_id)) {
         folderConvsMap.get(c.folder_id)!.push(c)
       } else {
@@ -496,6 +608,39 @@ export function ConversationDrawer({
   }
 
   const isSearching = searchQuery.trim().length >= 2
+
+  const renderRecentsContent = () => {
+    if (isSearching) {
+      return filteredConversations.map(conv => renderConvItem(conv))
+    }
+
+    // Folders tab: only folders and their contents
+    if (activeTab === 'folders') {
+      if (!hasFolders) {
+        return <div className="conv-empty">{t('conversations.empty')}</div>
+      }
+      return (
+        <>
+          {folders!.map(folder =>
+            renderFolderSection(folder, folderConvsMap.get(folder.id) || [])
+          )}
+        </>
+      )
+    }
+
+    // Yours tab: flat date-grouped
+    if (activeTab === 'yours') {
+      return groupConversations(recentConversations).map(({ group, items }) => (
+        <div key={group} className="conv-date-group">
+          <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
+          {items.map(conv => renderConvItem(conv))}
+        </div>
+      ))
+    }
+
+    // Shared tab: flat list
+    return filteredConversations.map(conv => renderConvItem(conv))
+  }
 
   return (
     <AnimatePresence>
@@ -522,39 +667,57 @@ export function ConversationDrawer({
             onDragEnd={handleDragEnd}
             style={{ x: dragX }}
           >
+            {/* Header */}
             <div className="conv-drawer-header">
-              <span className="conv-drawer-title">{t('conversations.title', { count: conversations.length })}</span>
-              <button className="conv-drawer-close" onClick={onClose} aria-label={t('close')}>
-                <IconClose size={18} />
-              </button>
+              <span className="conv-drawer-title">Chats</span>
+              <div className="conv-drawer-header-actions">
+                {onOpenArchive && (
+                  <button
+                    className="conv-drawer-archive-btn"
+                    onClick={() => { onLoadArchive?.(); onOpenArchive() }}
+                    aria-label={t('conversations.archive')}
+                  >
+                    <IconArchive size={16} />
+                  </button>
+                )}
+                {onCreateFolder && (
+                  <button className="conv-drawer-archive-btn" onClick={() => setCreatingFolder(true)} aria-label="New folder">
+                    <IconFolderPlus size={16} />
+                  </button>
+                )}
+                {onImport && (
+                  <button className="conv-drawer-archive-btn" onClick={() => { onImport(); onClose(); }} aria-label="Import conversation">
+                    <IconDownload size={14} />
+                  </button>
+                )}
+              </div>
             </div>
 
-            <div className="conv-search">
-              <IconSearch size={14} className="conv-search-icon" />
-              <input
-                ref={searchInputRef}
-                className="conv-search-input"
-                data-testid="conv-search"
-                type="search"
-                aria-label={t('conversations.searchPlaceholder')}
-                placeholder={t('conversations.searchPlaceholder')}
-                value={searchQuery}
-                onChange={e => handleSearch(e.target.value)}
-              />
-              {searchQuery && (
-                <button className="conv-search-clear" onClick={clearSearch} aria-label={t('conversations.clearSearch')}>
-                  <IconClose size={12} />
+            {/* Tab bar */}
+            {onTabChange && (
+              <div className="conv-tabs">
+                <button
+                  className={`conv-tab${activeTab === 'yours' ? ' conv-tab--active' : ''}`}
+                  onClick={() => onTabChange('yours')}
+                >
+                  {t('conversations.yours')}
                 </button>
-              )}
-            </div>
-            {isSearching && !searching && (
-              <div className="conv-search-count">
-                {filteredConversations.length > 0
-                  ? t('conversations.resultCount', { count: filteredConversations.length })
-                  : t('conversations.noResults')}
+                <button
+                  className={`conv-tab${activeTab === 'folders' ? ' conv-tab--active' : ''}`}
+                  onClick={() => onTabChange('folders')}
+                >
+                  {t('conversations.folders')}
+                </button>
+                <button
+                  className={`conv-tab${activeTab === 'shared' ? ' conv-tab--active' : ''}`}
+                  onClick={() => onTabChange('shared')}
+                >
+                  {t('conversations.shared')}
+                </button>
               </div>
             )}
 
+            {/* Tag filter */}
             {allTags && allTags.length > 0 && onToggleTag && (
               <div className="ka-tag-filter-bar">
                 {allTags.map(tag => (
@@ -568,23 +731,6 @@ export function ConversationDrawer({
                 ))}
               </div>
             )}
-
-            <div className="conv-action-row">
-              <button className="conv-new-btn" data-testid="new-chat-btn" onClick={() => { onNewChat(); onClose(); }}>
-                <IconPlus size={16} />
-                {t('conversations.newChat')}
-              </button>
-              {onCreateFolder && (
-                <button className="conv-new-folder-btn" onClick={() => setCreatingFolder(true)} aria-label="New folder">
-                  <IconFolderPlus size={16} />
-                </button>
-              )}
-              {onImport && (
-                <button className="conv-import-btn" onClick={() => { onImport(); onClose(); }} aria-label="Import conversation">
-                  <IconDownload size={14} />
-                </button>
-              )}
-            </div>
 
             {/* Create folder inline form */}
             {creatingFolder && (
@@ -603,6 +749,7 @@ export function ConversationDrawer({
               </div>
             )}
 
+            {/* Main conversation list */}
             <div className="conv-list">
               {isLoading && conversations.length === 0 && (
                 <>
@@ -615,38 +762,33 @@ export function ConversationDrawer({
                 </>
               )}
 
-              {isSearching
-                ? /* Search mode: flat list, no folders */
-                  filteredConversations.map(conv => renderConvItem(conv))
-                : hasFolders && !isSearching
-                  ? /* Folder mode: folders first, then uncategorized */
-                    <>
-                      {folders!.map(folder =>
-                        renderFolderSection(folder, folderConvsMap.get(folder.id) || [])
-                      )}
-                      {/* Uncategorized conversations (date-grouped) */}
-                      <div
-                        className={`conv-folder-uncategorized${dragOverFolderId === '__uncategorized' ? ' conv-folder--drag-over' : ''}`}
-                        onDragOver={(e) => handleFolderDragOver(e, '__uncategorized')}
-                        onDragLeave={handleFolderDragLeave}
-                        onDrop={(e) => handleFolderDrop(e, null)}
-                      >
-                        {groupConversations(uncategorized).map(({ group, items }) => (
-                          <div key={group} className="conv-date-group">
-                            <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-                            {items.map(conv => renderConvItem(conv))}
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  : /* No folders: date-grouped */
-                    groupConversations(filteredConversations).map(({ group, items }) => (
-                      <div key={group} className="conv-date-group">
-                        <div className="conv-date-label">{t(DATE_GROUP_KEYS[group])}</div>
-                        {items.map(conv => renderConvItem(conv))}
-                      </div>
-                    ))
-              }
+              {/* Starred section */}
+              {starredConversations.length > 0 && !isSearching && (
+                <div className="conv-section">
+                  <div className="conv-section-label">{t('conversations.starred')}</div>
+                  {starredConversations.map(conv => renderConvItem(conv))}
+                </div>
+              )}
+
+              {/* Recents section */}
+              {(recentConversations.length > 0 || isSearching || activeTab !== 'yours') && (
+                <div className="conv-section">
+                  {activeTab === 'yours' && !isSearching && (
+                    <div className="conv-section-label">{t('conversations.recents')}</div>
+                  )}
+                  {renderRecentsContent()}
+                </div>
+              )}
+
+              {/* Search result count */}
+              {isSearching && !searching && (
+                <div className="conv-search-count">
+                  {filteredConversations.length > 0
+                    ? t('conversations.resultCount', { count: filteredConversations.length })
+                    : t('conversations.noResults')}
+                </div>
+              )}
+
               {filteredConversations.length === 0 && searchQuery && (
                 <div className="conv-empty">
                   <span>{searching ? t('conversations.searching') : t('conversations.noMatches')}</span>
@@ -657,10 +799,82 @@ export function ConversationDrawer({
                   )}
                 </div>
               )}
-              {conversations.length === 0 && !searchQuery && (
+              {tabConversations.length === 0 && !searchQuery && (
                 <div className="conv-empty">{t('conversations.empty')}</div>
               )}
             </div>
+
+            {/* Bottom bar: search + new chat FAB */}
+            <div className="conv-bottom-bar">
+              <div className="conv-bottom-search">
+                <IconSearch size={14} className="conv-search-icon" />
+                <input
+                  ref={bottomSearchRef}
+                  className="conv-bottom-search-input"
+                  data-testid="conv-search"
+                  type="search"
+                  aria-label={t('conversations.searchPlaceholder')}
+                  placeholder={t('conversations.searchPlaceholder')}
+                  value={searchQuery}
+                  onChange={e => handleSearch(e.target.value)}
+                />
+                {searchQuery && (
+                  <button className="conv-search-clear" onClick={clearSearch} aria-label={t('conversations.clearSearch')}>
+                    <IconClose size={12} />
+                  </button>
+                )}
+              </div>
+              <button
+                className="conv-new-chat-fab"
+                data-testid="new-chat-btn"
+                onClick={() => { onNewChat(); onClose() }}
+                aria-label={t('conversations.newChat')}
+              >
+                <IconPlus size={20} />
+              </button>
+            </div>
+
+            {/* Archive overlay */}
+            <AnimatePresence>
+              {showArchive && (
+                <motion.div
+                  className="conv-archive-overlay"
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={SPRING.DEFAULT}
+                >
+                  <div className="conv-archive-header">
+                    <button className="conv-drawer-close" onClick={onCloseArchive} aria-label={t('close')}>
+                      <IconClose size={18} />
+                    </button>
+                    <span className="conv-drawer-title">{t('conversations.archive')}</span>
+                  </div>
+                  <div className="conv-search" style={{ margin: '0 12px 8px' }}>
+                    <IconSearch size={14} className="conv-search-icon" />
+                    <input
+                      className="conv-search-input"
+                      type="search"
+                      placeholder={t('conversations.searchPlaceholder')}
+                      value={archiveSearch}
+                      onChange={e => setArchiveSearch(e.target.value)}
+                    />
+                    {archiveSearch && (
+                      <button className="conv-search-clear" onClick={() => setArchiveSearch('')} aria-label={t('conversations.clearSearch')}>
+                        <IconClose size={12} />
+                      </button>
+                    )}
+                  </div>
+                  <div className="conv-list">
+                    {filteredArchived.length === 0 ? (
+                      <div className="conv-archive-empty">{t('conversations.noArchived')}</div>
+                    ) : (
+                      filteredArchived.map(conv => renderConvItem(conv, { inArchive: true }))
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.aside>
         </>
       )}

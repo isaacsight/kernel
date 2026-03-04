@@ -58,7 +58,18 @@
     "yesterday": "Yesterday",
     "thisWeek": "This week",
     "thisMonth": "This month",
-    "earlier": "Earlier"
+    "earlier": "Earlier",
+    "starred": "Starred",
+    "recents": "Recents",
+    "yours": "Yours",
+    "folders": "Folders",
+    "shared": "Shared",
+    "archive": "Archive",
+    "noArchived": "No archived conversations",
+    "star": "Star",
+    "unstar": "Unstar",
+    "archiveAction": "Archive",
+    "unarchive": "Unarchive"
   },
   "relativeTime": {
     "justNow": "just now",

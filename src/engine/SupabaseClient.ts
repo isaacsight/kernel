@@ -67,6 +67,8 @@ export interface DBConversation {
   user_id: string;
   title: string;
   folder_id: string | null;
+  starred_at: string | null;
+  archived_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -226,15 +228,102 @@ export async function createConversation(
   return data;
 }
 
-export async function getUserConversations(userId: string): Promise<(DBConversation & { metadata?: Record<string, unknown> })[]> {
-  const { data, error } = await supabase
+export async function getUserConversations(
+  userId: string,
+  { includeArchived = false }: { includeArchived?: boolean } = {},
+): Promise<(DBConversation & { metadata?: Record<string, unknown> })[]> {
+  let query = supabase
     .from('conversations')
-    .select('*, metadata, folder_id')
+    .select('*, metadata, folder_id, starred_at, archived_at')
     .eq('user_id', userId)
     .order('updated_at', { ascending: false });
 
+  if (!includeArchived) {
+    query = query.is('archived_at', null);
+  }
+
+  const { data, error } = await query;
   if (error) console.error('Error fetching conversations:', error);
-  return (data || []).map(d => ({ ...d, folder_id: d.folder_id ?? null }));
+  return (data || []).map(d => ({
+    ...d,
+    folder_id: d.folder_id ?? null,
+    starred_at: d.starred_at ?? null,
+    archived_at: d.archived_at ?? null,
+  }));
+}
+
+export async function getArchivedConversations(userId: string): Promise<DBConversation[]> {
+  const { data, error } = await supabase
+    .from('conversations')
+    .select('*, folder_id, starred_at, archived_at')
+    .eq('user_id', userId)
+    .not('archived_at', 'is', null)
+    .order('archived_at', { ascending: false });
+  if (error) console.error('Error fetching archived conversations:', error);
+  return (data || []).map(d => ({ ...d, folder_id: d.folder_id ?? null, starred_at: d.starred_at ?? null, archived_at: d.archived_at ?? null }));
+}
+
+export async function starConversation(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('conversations')
+    .update({ starred_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) console.error('Error starring conversation:', error);
+}
+
+export async function unstarConversation(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('conversations')
+    .update({ starred_at: null })
+    .eq('id', id);
+  if (error) console.error('Error unstarring conversation:', error);
+}
+
+export async function archiveConversation(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('conversations')
+    .update({ archived_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) console.error('Error archiving conversation:', error);
+}
+
+export async function unarchiveConversation(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('conversations')
+    .update({ archived_at: null })
+    .eq('id', id);
+  if (error) console.error('Error unarchiving conversation:', error);
+}
+
+export async function getWorkspaceConversations(workspaceId: string): Promise<DBConversation[]> {
+  const { data, error } = await supabase
+    .from('conversations')
+    .select('*, folder_id, starred_at, archived_at')
+    .eq('workspace_id', workspaceId)
+    .is('archived_at', null)
+    .order('updated_at', { ascending: false });
+  if (error) console.error('Error fetching workspace conversations:', error);
+  return (data || []).map(d => ({ ...d, folder_id: d.folder_id ?? null, starred_at: d.starred_at ?? null, archived_at: d.archived_at ?? null }));
+}
+
+export async function getSharedWithMeConversations(userId: string): Promise<DBConversation[]> {
+  const { data, error } = await supabase
+    .from('live_share_participants')
+    .select('share:live_shares!inner(conversation_id)')
+    .eq('user_id', userId);
+  if (error || !data) {
+    console.error('Error fetching shared conversations:', error);
+    return [];
+  }
+  const convIds = data.map((d: any) => d.share?.conversation_id).filter(Boolean) as string[];
+  if (convIds.length === 0) return [];
+  const { data: convs, error: convErr } = await supabase
+    .from('conversations')
+    .select('*, folder_id, starred_at, archived_at')
+    .in('id', convIds)
+    .order('updated_at', { ascending: false });
+  if (convErr) console.error('Error fetching shared conversations:', convErr);
+  return (convs || []).map(d => ({ ...d, folder_id: d.folder_id ?? null, starred_at: d.starred_at ?? null, archived_at: d.archived_at ?? null }));
 }
 
 // ─── Conversation Folders ────────────────────────────────

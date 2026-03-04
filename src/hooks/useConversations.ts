@@ -1,10 +1,15 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import {
   getUserConversations,
+  getArchivedConversations,
   getChannelMessages,
   getLastAgentId,
   createConversation,
   deleteConversation,
+  starConversation,
+  unstarConversation,
+  archiveConversation,
+  unarchiveConversation,
   type DBConversation,
 } from '../engine/SupabaseClient'
 import {
@@ -128,6 +133,47 @@ export function useConversations(
     await loadConversations()
   }, [activeConversationId, loadConversations])
 
+  // ─── Star / Archive ──────────────────────────────────
+  const [archivedConversations, setArchivedConversations] = useState<DBConversation[]>([])
+  const [archiveLoaded, setArchiveLoaded] = useState(false)
+
+  const handleStarConversation = useCallback(async (convId: string) => {
+    const now = new Date().toISOString()
+    setConversations(prev => prev.map(c => c.id === convId ? { ...c, starred_at: now } : c))
+    await starConversation(convId)
+  }, [])
+
+  const handleUnstarConversation = useCallback(async (convId: string) => {
+    setConversations(prev => prev.map(c => c.id === convId ? { ...c, starred_at: null } : c))
+    await unstarConversation(convId)
+  }, [])
+
+  const handleArchiveConversation = useCallback(async (convId: string) => {
+    const conv = conversations.find(c => c.id === convId)
+    const now = new Date().toISOString()
+    setConversations(prev => prev.filter(c => c.id !== convId))
+    if (conv) setArchivedConversations(prev => [{ ...conv, archived_at: now }, ...prev])
+    if (activeConversationId === convId) {
+      setMessagesRef.current([])
+      setActiveConversationId(null)
+    }
+    await archiveConversation(convId)
+  }, [conversations, activeConversationId])
+
+  const handleUnarchiveConversation = useCallback(async (convId: string) => {
+    const conv = archivedConversations.find(c => c.id === convId)
+    setArchivedConversations(prev => prev.filter(c => c.id !== convId))
+    if (conv) setConversations(prev => [{ ...conv, archived_at: null }, ...prev])
+    await unarchiveConversation(convId)
+  }, [archivedConversations])
+
+  const loadArchivedConversations = useCallback(async () => {
+    if (!userId || archiveLoaded) return
+    const archived = await getArchivedConversations(userId)
+    setArchivedConversations(archived)
+    setArchiveLoaded(true)
+  }, [userId, archiveLoaded])
+
   const activeConversation = conversations.find(c => c.id === activeConversationId)
 
   return {
@@ -137,5 +183,9 @@ export function useConversations(
     convsLoading, msgsLoading, loadingAgentId,
     loadConversations, switchConversation, handleNewChat, handleDeleteConversation,
     createConversation,
+    // Star / Archive
+    handleStarConversation, handleUnstarConversation,
+    handleArchiveConversation, handleUnarchiveConversation,
+    archivedConversations, loadArchivedConversations,
   }
 }

@@ -15,7 +15,8 @@ import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { forkSharedConversation, updateConversationMetadata, getConversationMetadata } from '../engine/SupabaseClient'
+import { forkSharedConversation, updateConversationMetadata, getConversationMetadata, getSharedWithMeConversations } from '../engine/SupabaseClient'
+import type { DBConversation } from '../engine/SupabaseClient'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
@@ -36,6 +37,7 @@ import { useServiceWorkerUpdate } from '../hooks/useServiceWorkerUpdate'
 import { useCrisisDetection } from '../hooks/useCrisisDetection'
 import { useMessageUsage } from '../hooks/useMessageUsage'
 import { useFolders } from '../hooks/useFolders'
+import { useDrawerTabs } from '../hooks/useDrawerTabs'
 import { useLiveShare } from '../hooks/useLiveShare'
 import { useVoiceInput } from '../hooks/useVoiceInput'
 import { useVoiceOutput } from '../hooks/useVoiceOutput'
@@ -291,6 +293,17 @@ function EngineChat() {
 
   // ─── Workspace ─────────────────────────────────────────
   const workspaceHook = useWorkspace(user?.id ?? null)
+
+  // ─── Drawer tabs ─────────────────────────────────────
+  const drawerTabs = useDrawerTabs()
+  const [sharedConversations, setSharedConversations] = useState<DBConversation[]>([])
+
+  // Load shared conversations on tab switch
+  useEffect(() => {
+    if (drawerTabs.activeTab === 'shared' && user?.id) {
+      getSharedWithMeConversations(user.id).then(setSharedConversations).catch(() => {})
+    }
+  }, [drawerTabs.activeTab, user?.id])
 
   // ─── Voice I/O (hooks that don't depend on chatEngine) ──
   const voiceInput = useVoiceInput()
@@ -827,6 +840,18 @@ function EngineChat() {
           await folderHook.moveConversation(convId, folderId)
           convs.setConversations(prev => prev.map(c => c.id === convId ? { ...c, folder_id: folderId } : c))
         }}
+        onStar={convs.handleStarConversation}
+        onUnstar={convs.handleUnstarConversation}
+        onArchive={convs.handleArchiveConversation}
+        onUnarchive={convs.handleUnarchiveConversation}
+        showArchive={drawerTabs.showArchive}
+        onOpenArchive={drawerTabs.openArchive}
+        onCloseArchive={drawerTabs.closeArchive}
+        onLoadArchive={convs.loadArchivedConversations}
+        archivedConversations={convs.archivedConversations}
+        activeTab={drawerTabs.activeTab}
+        onTabChange={drawerTabs.setActiveTab}
+        sharedConversations={sharedConversations}
       />
 
       {/* Header */}
@@ -879,25 +904,6 @@ function EngineChat() {
                     <button className="ka-header-menu-item" onClick={() => { msgActions.handleExportConversation(); panels.setHeaderMenuOpen(false) }}>
                       <IconExport size={16} /> {t('menu.exportMarkdown')}
                     </button>
-                    {folderHook.folders.length > 0 && convs.activeConversation && (
-                      <div className="ka-header-menu-folder-group">
-                        <div className="ka-header-menu-sublabel"><IconFolder size={14} /> Move to folder</div>
-                        {folderHook.folders.map(f => (
-                          <button
-                            key={f.id}
-                            className={`ka-header-menu-item ka-header-menu-item--sub${convs.activeConversation?.folder_id === f.id ? ' ka-header-menu-item--active' : ''}`}
-                            onClick={async () => {
-                              const targetId = convs.activeConversation?.folder_id === f.id ? null : f.id
-                              await folderHook.moveConversation(convs.activeConversation!.id, targetId)
-                              convs.setConversations(prev => prev.map(c => c.id === convs.activeConversation!.id ? { ...c, folder_id: targetId } : c))
-                              panels.setHeaderMenuOpen(false)
-                            }}
-                          >
-                            {f.name}{convs.activeConversation?.folder_id === f.id ? ' ✓' : ''}
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </>
                 )}
                 <div className="ka-header-menu-divider" />

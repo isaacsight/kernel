@@ -15154,6 +15154,350 @@ h4 {
     color: #ef4444;
 }
 
+/* ─── Conv item wrapper (item + inline folder picker) ──── */
+
+.conv-item-wrapper--expanded {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--radius-sm);
+}
+
+[data-theme="dark"] .conv-item-wrapper--expanded {
+    background: rgba(196, 168, 130, 0.04);
+}
+
+/* ─── Conv item right (chevron + actions wrapper) ───────── */
+
+.conv-item-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.conv-item-chevron {
+    opacity: 0.25;
+    flex-shrink: 0;
+    transition: opacity var(--duration-fast);
+}
+
+.conv-item:hover .conv-item-chevron {
+    opacity: 0;
+}
+
+/* ─── Always-visible folder button ──────────────────────── */
+
+.conv-item-folder-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--rubin-slate);
+    opacity: 0.3;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--duration-fast);
+}
+
+.conv-item-folder-btn:hover,
+.conv-item-folder-btn--active {
+    opacity: 0.8;
+    background: var(--rubin-ivory-dark);
+}
+
+[data-theme="dark"] .conv-item-folder-btn:hover,
+[data-theme="dark"] .conv-item-folder-btn--active {
+    background: rgba(196, 168, 130, 0.1);
+}
+
+/* ─── Inline folder picker (below conv item) ────────────── */
+
+.conv-move-folders {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px 8px 24px;
+    gap: 1px;
+}
+
+.conv-move-folder-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 10px;
+    border: none;
+    background: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    color: var(--rubin-slate);
+    cursor: pointer;
+    transition: background var(--duration-fast);
+    text-align: left;
+}
+
+.conv-move-folder-item:hover {
+    background: rgba(107, 91, 149, 0.08);
+}
+
+[data-theme="dark"] .conv-move-folder-item {
+    color: #E4DFD5;
+}
+
+[data-theme="dark"] .conv-move-folder-item:hover {
+    background: rgba(196, 168, 130, 0.08);
+}
+
+/* ─── Drawer tabs (Yours / Team / Shared) ───────────────── */
+
+.conv-tabs {
+    display: flex;
+    gap: 2px;
+    margin: 8px 16px 4px;
+    padding: 3px;
+    background: var(--rubin-ivory-med);
+    border-radius: var(--radius-md);
+}
+
+.conv-tab {
+    flex: 1;
+    padding: 7px 0;
+    border: none;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rubin-slate);
+    opacity: 0.5;
+    cursor: pointer;
+    border-radius: calc(var(--radius-md) - 2px);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.conv-tab:hover {
+    opacity: 0.75;
+}
+
+.conv-tab--active {
+    background: var(--rubin-ivory);
+    opacity: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .conv-tabs {
+    background: #262320;
+}
+
+[data-theme="dark"] .conv-tab--active {
+    background: #3A3630;
+    color: #E4DFD5;
+}
+
+/* ─── Section labels (STARRED / RECENTS) ───────────────── */
+
+.conv-section {
+    margin-bottom: var(--space-xs);
+}
+
+.conv-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--rubin-slate);
+    opacity: 0.4;
+    padding: var(--space-md) var(--space-md) var(--space-xs);
+}
+
+[data-theme="dark"] .conv-section-label {
+    color: var(--dark-text, #E4DFD5);
+    opacity: 0.35;
+}
+
+/* ─── Starred indicator ───────────────────────────────── */
+
+.conv-item--starred {
+    position: relative;
+}
+
+.conv-item--starred::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--rubin-primary, #6B5B95);
+    opacity: 0.6;
+}
+
+/* ─── Bottom bar (search + new chat FAB) ────────────── */
+
+.conv-bottom-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px 12px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--rubin-ivory-dark);
+    background: var(--rubin-ivory);
+    transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
+}
+
+[data-theme="dark"] .conv-bottom-bar {
+    background: #1C1A18;
+    border-color: #3A3630;
+}
+
+.conv-bottom-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--rubin-ivory-med);
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-full);
+}
+
+[data-theme="dark"] .conv-bottom-search {
+    background: #262320;
+    border-color: #4A4138;
+}
+
+.conv-bottom-search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    color: var(--rubin-slate);
+    outline: none;
+}
+
+.conv-bottom-search-input::placeholder {
+    opacity: 0.35;
+}
+
+[data-theme="dark"] .conv-bottom-search-input {
+    color: #E4DFD5;
+}
+
+.conv-new-chat-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.conv-new-chat-fab:hover {
+    opacity: 0.85;
+}
+
+[data-theme="dark"] .conv-new-chat-fab {
+    background: #E4DFD5;
+    color: #1C1A18;
+}
+
+/* ─── Archive overlay ──────────────────────────────── */
+
+.conv-archive-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--rubin-ivory);
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    transition: background-color var(--duration-normal) var(--ease-out);
+}
+
+[data-theme="dark"] .conv-archive-overlay {
+    background: #1C1A18;
+}
+
+.conv-archive-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rubin-ivory-dark);
+}
+
+[data-theme="dark"] .conv-archive-header {
+    border-color: #3A3630;
+}
+
+.conv-archive-empty {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-md);
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    opacity: 0.4;
+    font-style: italic;
+}
+
+/* ─── Drawer header actions row ───────────────────── */
+
+.conv-drawer-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.conv-drawer-archive-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.4;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.conv-drawer-archive-btn:hover {
+    opacity: 1;
+}
+
+/* ─── Mobile overrides for new drawer elements ────── */
+
+@media (max-width: 767px) {
+    .conv-tabs {
+        margin: 8px 12px 4px;
+    }
+
+    .conv-tab {
+        padding: 10px 0;
+        font-size: 0.7rem;
+    }
+
+    .conv-bottom-bar {
+        padding: 8px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .conv-new-chat-fab {
+        width: 44px;
+        height: 44px;
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════
    Dark Mode
    ═══════════════════════════════════════════════════════════ */
