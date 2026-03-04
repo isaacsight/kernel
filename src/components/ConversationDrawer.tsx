@@ -144,18 +144,6 @@ export function ConversationDrawer({
       )
     : conversations
 
-  const starredConversations = useMemo(() =>
-    filteredConversations.filter(c => c.starred_at != null).sort((a, b) =>
-      new Date(b.starred_at!).getTime() - new Date(a.starred_at!).getTime()
-    ),
-    [filteredConversations],
-  )
-
-  const recentConversations = useMemo(() =>
-    filteredConversations.filter(c => c.starred_at == null),
-    [filteredConversations],
-  )
-
   const filteredArchived = useMemo(() => {
     if (!archivedConversations) return []
     if (!archiveSearch.trim()) return archivedConversations
@@ -270,24 +258,10 @@ export function ConversationDrawer({
                 </>
               )}
 
-              {/* Starred section */}
-              {starredConversations.length > 0 && !isSearching && (
+              {/* Conversations — flat list */}
+              {filteredConversations.length > 0 && (
                 <div className="conv-section">
-                  <div className="conv-section-label">{t('conversations.starred')}</div>
-                  {starredConversations.map(conv => renderConvItem(conv))}
-                </div>
-              )}
-
-              {/* Recents — flat list, no date grouping */}
-              {(recentConversations.length > 0 || isSearching) && (
-                <div className="conv-section">
-                  {!isSearching && starredConversations.length > 0 && (
-                    <div className="conv-section-label">{t('conversations.recents')}</div>
-                  )}
-                  {isSearching
-                    ? filteredConversations.map(conv => renderConvItem(conv))
-                    : recentConversations.map(conv => renderConvItem(conv))
-                  }
+                  {filteredConversations.map(conv => renderConvItem(conv))}
                 </div>
               )}
 

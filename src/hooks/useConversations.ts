@@ -6,8 +6,6 @@ import {
   getLastAgentId,
   createConversation,
   deleteConversation,
-  starConversation,
-  unstarConversation,
   archiveConversation,
   unarchiveConversation,
   type DBConversation,
@@ -137,17 +135,6 @@ export function useConversations(
   const [archivedConversations, setArchivedConversations] = useState<DBConversation[]>([])
   const [archiveLoaded, setArchiveLoaded] = useState(false)
 
-  const handleStarConversation = useCallback(async (convId: string) => {
-    const now = new Date().toISOString()
-    setConversations(prev => prev.map(c => c.id === convId ? { ...c, starred_at: now } : c))
-    await starConversation(convId)
-  }, [])
-
-  const handleUnstarConversation = useCallback(async (convId: string) => {
-    setConversations(prev => prev.map(c => c.id === convId ? { ...c, starred_at: null } : c))
-    await unstarConversation(convId)
-  }, [])
-
   const handleArchiveConversation = useCallback(async (convId: string) => {
     const conv = conversations.find(c => c.id === convId)
     const now = new Date().toISOString()
@@ -183,8 +170,7 @@ export function useConversations(
     convsLoading, msgsLoading, loadingAgentId,
     loadConversations, switchConversation, handleNewChat, handleDeleteConversation,
     createConversation,
-    // Star / Archive
-    handleStarConversation, handleUnstarConversation,
+    // Archive
     handleArchiveConversation, handleUnarchiveConversation,
     archivedConversations, loadArchivedConversations,
   }

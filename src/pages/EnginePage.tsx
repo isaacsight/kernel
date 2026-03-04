@@ -11,7 +11,6 @@ import {
 } from '../components/KernelIcons'
 import { SPRING, TRANSITION } from '../constants/motion'
 import { BottomTabBar } from '../components/BottomTabBar'
-import { NotificationBell } from '../components/NotificationBell'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
@@ -848,7 +847,6 @@ function EngineChat() {
               onClick={() => { msgActions.setShowShareModal(true) }}
             />
           )}
-          {user && <NotificationBell userId={user.id} onProactiveClick={(text) => chatEngine.injectProactiveMessage(text)} />}
           <Suspense fallback={null}><ProviderStatusDot /></Suspense>
           <button className="ka-header-icon-btn" data-testid="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'eink' : 'light')} aria-label={t('aria.toggleTheme', { ns: 'common' })}>
             {theme === 'dark' ? <IconSun size={16} /> : theme === 'eink' ? <IconBookOpen size={16} /> : <IconMoon size={16} />}
