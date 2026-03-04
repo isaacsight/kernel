@@ -2715,12 +2715,18 @@ h4 {
     padding: var(--space-xl);
 }
 
-.ka-gen-image-lightbox-close {
+.ka-gen-image-lightbox-actions {
     position: absolute;
     top: calc(var(--space-lg) + env(safe-area-inset-top, 0px));
     right: calc(var(--space-lg) + env(safe-area-inset-right, 0px));
-    width: 40px;
-    height: 40px;
+    display: flex;
+    gap: var(--space-sm);
+    z-index: 1;
+}
+
+.ka-gen-image-lightbox-btn {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: none;
     background: rgba(255, 255, 255, 0.15);
@@ -2730,10 +2736,9 @@ h4 {
     justify-content: center;
     cursor: pointer;
     transition: background var(--duration-fast) var(--ease-out);
-    z-index: 1;
 }
 
-.ka-gen-image-lightbox-close:hover {
+.ka-gen-image-lightbox-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
