@@ -186,6 +186,7 @@ function intentFromClassification(c: ClassificationResult): IntentType {
     writer: 'build', analyst: 'evaluate', aesthete: 'build',
     guardian: 'evaluate', curator: 'converse', strategist: 'evaluate',
     infrastructure: 'build', quant: 'build', investigator: 'reason',
+    oracle: 'reason', chronist: 'converse', sage: 'converse',
   }
   return map[c.agentId] || 'converse'
 }

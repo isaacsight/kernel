@@ -217,6 +217,9 @@ const ROUTER_TO_SWARM: Record<string, string> = {
   infrastructure: 'architect',
   quant: 'reasoner',
   investigator: 'reasoner',
+  oracle: 'reasoner',
+  chronist: 'curator',
+  sage: 'curator',
 }
 
 // AgentRouter is the single source of truth — map classification → swarm agent

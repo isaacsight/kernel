@@ -69,6 +69,21 @@ What frameworks do they reach for?`,
 How is this person changing over time? What were they interested in before
 that they've moved past? What's emerging that they haven't named yet?
 What's the trajectory?`,
+
+  oracle: `You are the Kernel's eye for FORESIGHT.
+What will this person need next? What patterns predict their upcoming
+questions, projects, or decisions? What blind spots are forming?
+Look at momentum, not just position.`,
+
+  chronist: `You are the Kernel's eye for TRAJECTORY.
+How is this person changing over time — not just what they discuss, but
+how they think? Is their reasoning getting sharper? Are they shifting
+domains? What phase of growth are they in?`,
+
+  sage: `You are the Kernel's eye for IDENTITY.
+What are this person's core values and beliefs? What do they stand for?
+What contradictions live in them? What aspirations pull them forward?
+See the person beneath the questions.`,
 }
 
 const FACET_NAMES: Record<string, string> = {
@@ -78,6 +93,9 @@ const FACET_NAMES: Record<string, string> = {
   writer: 'Writer',
   analyst: 'Analyst',
   curator: 'Curator',
+  oracle: 'Oracle',
+  chronist: 'Chronist',
+  sage: 'Sage',
 }
 
 const FACET_DIMENSIONS: Record<string, string> = {
@@ -87,6 +105,9 @@ const FACET_DIMENSIONS: Record<string, string> = {
   writer: 'voice',
   analyst: 'judgment',
   curator: 'arc',
+  oracle: 'foresight',
+  chronist: 'trajectory',
+  sage: 'identity',
 }
 
 export const FACET_AGENT_IDS = Object.keys(FACET_LENSES)

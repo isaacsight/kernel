@@ -743,6 +743,9 @@ export interface DBUserMemory {
   convergence_insights?: unknown[];
   last_convergence?: string | null;
   loom_state?: Record<string, unknown>;
+  user_theory?: Record<string, unknown>;
+  growth_state?: Record<string, unknown>;
+  identity_graph?: unknown[];
 }
 
 export async function getUserMemory(userId: string): Promise<DBUserMemory | null> {
@@ -817,6 +820,65 @@ export async function upsertLoomState(
       updated_at: new Date().toISOString(),
     });
   if (error) console.error('Error upserting loom state:', error);
+}
+
+// ─── User Theory (predictive model) ──────────────────────
+
+export async function getUserTheory(userId: string): Promise<Record<string, unknown> | null> {
+  const { data, error } = await supabase
+    .from('user_memory')
+    .select('user_theory')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) console.error('Error fetching user theory:', error);
+  return data?.user_theory as Record<string, unknown> | null;
+}
+
+export async function upsertUserTheory(
+  userId: string,
+  userTheory: Record<string, unknown>,
+) {
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert({
+      user_id: userId,
+      user_theory: userTheory,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) console.error('Error upserting user theory:', error);
+}
+
+// ─── Growth State (relationship maturity) ────────────────
+
+export async function upsertGrowthState(
+  userId: string,
+  growthState: Record<string, unknown>,
+) {
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert({
+      user_id: userId,
+      growth_state: growthState,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) console.error('Error upserting growth state:', error);
+}
+
+// ─── Identity Graph (values, beliefs, traits) ────────────
+
+export async function upsertIdentityGraph(
+  userId: string,
+  identityGraph: unknown[],
+) {
+  const { error } = await supabase
+    .from('user_memory')
+    .upsert({
+      user_id: userId,
+      identity_graph: identityGraph,
+      updated_at: new Date().toISOString(),
+    });
+  if (error) console.error('Error upserting identity graph:', error);
 }
 
 // ─── Engine State (world model + lasting memory) ─────────

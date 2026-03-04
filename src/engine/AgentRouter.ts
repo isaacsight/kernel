@@ -2,7 +2,7 @@
 import { getBackgroundProvider } from './providers/registry'
 
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage'
   confidence: number
   complexity: number
   needsResearch: boolean
@@ -54,6 +54,9 @@ Agents:
 - infrastructure: Data center architecture, hardware, bare metal, cooling, network latency, reverse-engineering physical systems
 - quant: Algorithmic trading, financial engineering, arbitrage, backtesting, smart contracts, "how to trade X"
 - investigator: OSINT, deep research, tracing metadata, forensics, connecting disparate data points
+- oracle: Predictive insights, "what should I...", "what am I missing", proactive suggestions, anticipating needs, decision support, forecasting
+- chronist: Personal evolution, "how have I changed", trajectory, past conversations, personal growth over time, temporal reflection
+- sage: Deep identity, "who am I", "my values", self-understanding, beliefs, aspirations, meaning, philosophical self-reflection
 
 Also determine:
 - complexity: 0.0-1.0 score for how intellectually demanding the task is. 0.0-0.35 = simple (greetings, simple factual, casual chat, straightforward questions). 0.35-0.8 = moderate (most tasks). 0.85-1.0 = very hard (complex multi-step reasoning, intricate code architecture, nuanced philosophical analysis, tasks requiring exceptional depth)
@@ -75,6 +78,9 @@ const KEYWORD_MAP: Record<string, string[]> = {
   researcher: ['research', 'explain', 'what is', 'tell me about', 'how does', 'why does', 'history of', 'compare', 'define', 'source', 'study', 'evidence', 'data', 'fact', 'statistics', 'who invented', 'when was', 'where is', 'difference between'],
   analyst: ['analyze', 'evaluate', 'strategy', 'pros and cons', 'decision', 'business', 'roi', 'market', 'swot', 'risk', 'forecast', 'metric', 'assessment', 'benchmark', 'tradeoff', 'trade-off'],
   kernel: ['hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening', 'good night', 'how are you', "what's up", 'sup', 'yo', 'gm', 'bye', 'goodbye', 'see you', 'appreciate it'],
+  oracle: ['predict', 'anticipate', 'forecast', 'foresight', 'what should i', 'what am i missing', 'what will happen', 'what comes next', 'proactive', 'blind spot', 'suggest next'],
+  chronist: ['how have i changed', 'my evolution', 'trajectory', 'over time', 'used to', 'growth', 'arc', 'how i was', 'looking back', 'my journey'],
+  sage: ['my values', 'who am i', 'my identity', 'my beliefs', 'self-understanding', 'what do i stand for', 'my purpose', 'what matters to me', 'my aspirations', 'meaning of'],
 }
 
 // High-signal single keywords that are nearly unambiguous (no 2-hit requirement)
@@ -83,6 +89,9 @@ const HIGH_SIGNAL_KEYWORDS: Record<string, string[]> = {
   writer: ['poem', 'essay', 'proofread', 'copywriting', 'ghostwrite', 'screenplay'],
   researcher: ['research', 'what is', 'tell me about', 'who invented', 'history of', 'difference between'],
   kernel: ['hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening', 'good night', 'how are you'],
+  oracle: ['what am i missing', 'what should i', 'blind spot', 'predict'],
+  chronist: ['how have i changed', 'my evolution', 'my journey', 'looking back'],
+  sage: ['who am i', 'my values', 'my identity', 'what do i stand for'],
 }
 
 const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?(picture|image|illustration|artwork|logo|icon|visual|graphic)|make\s+(me\s+)?(an?\s+)?(logo|image|picture|illustration|icon|visual|graphic)|illustrate|design\s+me)\b/i
@@ -286,7 +295,7 @@ export async function classifyIntent(
     })
 
     // Validate the result
-    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator']
+    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage']
     if (!validAgents.includes(result.agentId)) {
       const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       _lastClassification = fallback

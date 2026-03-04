@@ -39,6 +39,9 @@ import {
   upsertUserGoal,
   updateConversationMetadata,
   getConversationMetadata,
+  upsertUserTheory,
+  upsertGrowthState,
+  upsertIdentityGraph,
   supabase,
   type DBCollectiveInsight,
 } from '../engine/SupabaseClient'
@@ -59,6 +62,9 @@ import { processMasterAgent, needsOrchestration, type MasterAgentResult } from '
 import { useMasterStore } from '../stores/masterStore'
 import type { EnginePlan } from '../engine/master/types'
 import { buildContextPreamble } from '../engine/ContextPreamble'
+import { computeGrowthStage, getThresholds, formatGrowthForPrompt, emptyGrowthState, serializeGrowthState, deserializeGrowthState, type GrowthState } from '../engine/GrowthStage'
+import { extractIdentityEntities, applyIdentityDecay, formatIdentityForPrompt, serializeIdentityGraph, deserializeIdentityGraph, type IdentityEntity } from '../engine/IdentityGraph'
+import { shouldCalibrate, recordOutcomeForTheory, calibrateTheory, formatTheoryForPrompt, emptyUserTheory, serializeUserTheory, deserializeUserTheory, type UserTheoryState } from '../engine/UserTheory'
 
 // Register all built-in engines once at module load
 let enginesRegistered = false
@@ -243,6 +249,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   const temporalEntriesRef = useRef<TemporalEntry[]>([])
   const temporalPatternsRef = useRef<TemporalPattern[]>([])
 
+  // Identity Intelligence refs (Oracle, Chronist, Sage)
+  const userTheoryRef = useRef<UserTheoryState>(emptyUserTheory())
+  const growthStateRef = useRef<GrowthState>(emptyGrowthState())
+  const identityEntitiesRef = useRef<IdentityEntity[]>([])
+
   const [kgEntities, setKGEntities] = useState<KGEntity[]>([])
   const [kgRelations, setKGRelations] = useState<KGRelation[]>([])
   const kgEntitiesRef = useRef<KGEntity[]>([])
@@ -359,6 +370,17 @@ export function useChatEngine(params: UseChatEngineParams) {
               convergenceCount: ((mem.convergence_insights || []) as unknown[]).length > 0 ? 1 : 0,
             }
             setUserMirror(mirror)
+          }
+
+          // Load Identity Intelligence data (Oracle/Chronist/Sage)
+          if (memRecord.user_theory) {
+            userTheoryRef.current = deserializeUserTheory(memRecord.user_theory as Record<string, unknown>)
+          }
+          if (memRecord.growth_state) {
+            growthStateRef.current = deserializeGrowthState(memRecord.growth_state as Record<string, unknown>)
+          }
+          if (memRecord.identity_graph) {
+            identityEntitiesRef.current = deserializeIdentityGraph(memRecord.identity_graph)
           }
 
           // Stale profile re-bootstrap: if profile hasn't been updated in 14+ days
@@ -504,6 +526,16 @@ export function useChatEngine(params: UseChatEngineParams) {
         recordOutcome(loomRef.current, outcome).then(didSynthesize => {
           if (didSynthesize) console.log('[Loom] Pattern synthesis complete')
           upsertLoomState(userId, serializeLoomState(loomRef.current) as Record<string, unknown>)
+
+          // UserTheory calibration — every 5 Loom outcomes
+          userTheoryRef.current = recordOutcomeForTheory(userTheoryRef.current)
+          if (shouldCalibrate(userTheoryRef.current)) {
+            calibrateTheory(userTheoryRef.current, loomRef.current.outcomes.slice(-15)).then(theory => {
+              userTheoryRef.current = theory
+              upsertUserTheory(userId, serializeUserTheory(theory) as Record<string, unknown>)
+              console.log(`[UserTheory] Calibrated: mode=${theory.currentMode}, length=${theory.preferredResponseLength}`)
+            }).catch(err => console.warn('[UserTheory] Calibration failed:', err))
+          }
         }).catch(err => console.warn('[Loom] Record outcome failed:', err))
       }
       pendingOutcomeRef.current = null
@@ -870,6 +902,21 @@ export function useChatEngine(params: UseChatEngineParams) {
     const kgBlock = kgText
       ? `\n\n## Knowledge Graph\nStructured facts and relationships you've learned:\n\n${kgText}`
       : ''
+
+    // Identity Intelligence blocks (Oracle, Chronist, Sage)
+    const theoryText = formatTheoryForPrompt(userTheoryRef.current)
+    const theoryBlock = theoryText
+      ? `\n\n## User Theory\nPredictive model of this user's current state:\n\n${theoryText}`
+      : ''
+    const growthText = formatGrowthForPrompt(growthStateRef.current)
+    const growthBlock = growthText
+      ? `\n\n## Relationship Stage\n${growthText}`
+      : ''
+    const identityText = formatIdentityForPrompt(identityEntitiesRef.current)
+    const identityBlock = identityText
+      ? `\n\n## Identity\nWhat you know about who this person is:\n\n${identityText}`
+      : ''
+
     const knowledgeText = formatForPrompt(knowledgeItems)
     const knowledgeBlock = knowledgeText
       ? `\n\n## Your Knowledge Base\nRelevant knowledge from your conversations, documents, and research:\n\n${knowledgeText}`
@@ -1005,7 +1052,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       isFree: !params.isPro,
     })
 
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}${contextPreamble}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}${contextPreamble}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${theoryBlock}${growthBlock}${identityBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
@@ -1137,7 +1184,7 @@ export function useChatEngine(params: UseChatEngineParams) {
                 },
               },
               memory: userMemoryRef.current,
-              systemBlocks: `${memoryBlock}${temporalBlock}${openingBlock}${callbackBlock}${confidenceBlock}${repairBlock}${emotionalContextBlock}${turnTakingBlock}${mirrorBlock}${selfBlock}${kgBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${crisisBlock}`,
+              systemBlocks: `${memoryBlock}${temporalBlock}${openingBlock}${callbackBlock}${confidenceBlock}${repairBlock}${emotionalContextBlock}${turnTakingBlock}${mirrorBlock}${selfBlock}${kgBlock}${theoryBlock}${growthBlock}${identityBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${crisisBlock}`,
             },
           )
           // Update kernel message with agent info
@@ -1683,6 +1730,33 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
                 updatedMirror.lastConvergence ? new Date(updatedMirror.lastConvergence).toISOString() : null,
               )
             }).catch(err => console.warn('[Convergence] Facet extraction failed:', err))
+
+            // GrowthStage recomputation — pure computation, no API calls
+            const newGrowth = computeGrowthStage(
+              growthStateRef.current.conversationCount + 1,
+              growthStateRef.current.firstSeenAt || Date.now(),
+              Object.values(userMemoryRef.current).filter(v =>
+                (Array.isArray(v) && v.length > 0) || (typeof v === 'string' && v.length > 0)
+              ).length,
+              userMirrorRef.current.insights.length,
+              kgEntitiesRef.current.length,
+            )
+            if (newGrowth.stage !== growthStateRef.current.stage) {
+              console.log(`[GrowthStage] Transition: ${growthStateRef.current.stage} → ${newGrowth.stage}`)
+            }
+            growthStateRef.current = newGrowth
+            upsertGrowthState(userId, serializeGrowthState(newGrowth) as Record<string, unknown>).catch(() => {})
+
+            // Identity extraction — only at growing+ stage, every N messages
+            const thresholds = getThresholds(growthStateRef.current.stage)
+            if (thresholds.identityExtractionEnabled && currentMsgCount % thresholds.identityExtractionInterval === 0) {
+              const decayed = applyIdentityDecay(identityEntitiesRef.current)
+              extractIdentityEntities(recentMsgs, decayed).then(entities => {
+                identityEntitiesRef.current = entities
+                upsertIdentityGraph(userId, serializeIdentityGraph(entities) as unknown[]).catch(() => {})
+                console.log(`[IdentityGraph] ${entities.length} entities (stage: ${growthStateRef.current.stage})`)
+              }).catch(err => console.warn('[IdentityGraph] Extraction failed:', err))
+            }
 
             // Goal progress extraction
             const activeGoals = userGoalsRef.current.filter(g => g.status === 'active')
