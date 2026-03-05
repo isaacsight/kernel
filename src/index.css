@@ -18795,6 +18795,332 @@ h4 {
 
 /* ─── Legal Pages ─────────────────────────────────────── */
 
+/* ═══════════════════════════════════════════════════════════
+   Pricing Page
+   ═══════════════════════════════════════════════════════════ */
+
+.ka-pricing-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-family: var(--font-prose);
+    color: var(--rubin-slate, #1F1E1D);
+}
+
+.ka-pricing-hero {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.ka-pricing-hero h1 {
+    font-family: var(--font-serif, 'EB Garamond', serif);
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.ka-pricing-subtitle {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    opacity: 0.5;
+    margin: 0;
+}
+
+.ka-pricing-section {
+    margin-bottom: 56px;
+}
+
+.ka-pricing-section-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 4px;
+    color: var(--rubin-primary, #6B5B95);
+}
+
+.ka-pricing-section-desc {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    opacity: 0.5;
+    margin: 0 0 24px;
+}
+
+.ka-pricing-link {
+    color: var(--rubin-primary, #6B5B95);
+    text-decoration: none;
+}
+
+.ka-pricing-link:hover {
+    text-decoration: underline;
+}
+
+/* Plan cards */
+.ka-pricing-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.ka-pricing-card {
+    border: 1px solid var(--rubin-ivory-dark, #e0ddd8);
+    border-radius: var(--radius-md, 10px);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ka-pricing-card--highlight {
+    border-color: var(--rubin-primary, #6B5B95);
+    box-shadow: 0 2px 20px rgba(107, 91, 149, 0.12);
+}
+
+.ka-pricing-card-header {
+    margin-bottom: 20px;
+}
+
+.ka-pricing-card-header h3 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+    color: var(--rubin-primary, #6B5B95);
+}
+
+.ka-pricing-card-price {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.ka-pricing-card-period {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.4;
+}
+
+.ka-pricing-card-annual {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.4;
+    margin-top: 4px;
+}
+
+.ka-pricing-card-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    opacity: 0.5;
+    margin: 8px 0 0;
+}
+
+.ka-pricing-card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ka-pricing-card-features li {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--rubin-slate);
+}
+
+.ka-pricing-card-features li svg {
+    color: var(--rubin-primary, #6B5B95);
+    flex-shrink: 0;
+}
+
+.ka-pricing-card-cta {
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    border: 1px solid var(--rubin-ivory-dark, #e0ddd8);
+    border-radius: var(--radius-sm, 6px);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--rubin-slate);
+    transition: all 0.15s;
+}
+
+.ka-pricing-card-cta:hover {
+    border-color: var(--rubin-primary);
+    color: var(--rubin-primary);
+}
+
+.ka-pricing-card-cta--primary {
+    background: var(--rubin-primary, #6B5B95);
+    border-color: var(--rubin-primary, #6B5B95);
+    color: #fff;
+}
+
+.ka-pricing-card-cta--primary:hover {
+    opacity: 0.9;
+    color: #fff;
+}
+
+/* API pricing table */
+.ka-pricing-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ka-pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.ka-pricing-table th {
+    text-align: center;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--rubin-ivory-dark, #e0ddd8);
+    vertical-align: bottom;
+}
+
+.ka-pricing-table-tier {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rubin-primary, #6B5B95);
+    margin-bottom: 4px;
+}
+
+.ka-pricing-table-price {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.ka-pricing-table-price span {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.4;
+}
+
+.ka-pricing-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--rubin-ivory-dark, #e0ddd8);
+    text-align: center;
+}
+
+.ka-pricing-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ka-pricing-table tbody tr:hover {
+    background: rgba(107, 91, 149, 0.03);
+}
+
+.ka-pricing-table svg {
+    color: var(--rubin-primary, #6B5B95);
+}
+
+.ka-pricing-overage-note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--rubin-slate);
+    opacity: 0.6;
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(107, 91, 149, 0.04);
+    border-radius: var(--radius-sm, 6px);
+}
+
+.ka-pricing-overage-note strong {
+    opacity: 1;
+    color: var(--rubin-slate);
+}
+
+/* FAQ */
+.ka-pricing-faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.ka-pricing-faq-grid h4 {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 6px;
+}
+
+.ka-pricing-faq-grid p {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: 0.6;
+    margin: 0;
+}
+
+.ka-pricing-footer {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    opacity: 0.4;
+    margin-top: 40px;
+}
+
+.ka-pricing-footer a {
+    color: var(--rubin-primary, #6B5B95);
+}
+
+/* Dark mode */
+[data-theme="dark"] .ka-pricing-page {
+    color: var(--dark-text, #E8E0D4);
+}
+
+[data-theme="dark"] .ka-pricing-card {
+    border-color: var(--dark-border, #3A3630);
+    background: var(--dark-bg-elevated, #252320);
+}
+
+[data-theme="dark"] .ka-pricing-card--highlight {
+    border-color: var(--rubin-primary, #6B5B95);
+}
+
+[data-theme="dark"] .ka-pricing-card-cta {
+    border-color: var(--dark-border, #3A3630);
+    color: var(--dark-text, #E8E0D4);
+}
+
+[data-theme="dark"] .ka-pricing-table th {
+    border-color: var(--dark-border, #3A3630);
+}
+
+[data-theme="dark"] .ka-pricing-table td {
+    border-color: var(--dark-border-subtle, #2E2C28);
+}
+
+[data-theme="dark"] .ka-pricing-table tbody tr:hover {
+    background: rgba(107, 91, 149, 0.06);
+}
+
+[data-theme="dark"] .ka-pricing-overage-note {
+    background: rgba(107, 91, 149, 0.08);
+}
+
 .ka-legal-page {
     max-width: 680px;
     margin: 0 auto;

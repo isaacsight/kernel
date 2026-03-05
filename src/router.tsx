@@ -19,6 +19,7 @@ const AuthorProfilePage = lazyRetry(() => import('./pages/AuthorProfilePage').th
 const LiveSharePage = lazyRetry(() => import('./pages/LiveSharePage').then(m => ({ default: m.LiveSharePage })))
 const WorkspaceAdminPage = lazyRetry(() => import('./pages/WorkspaceAdminPage').then(m => ({ default: m.WorkspaceAdminPage })))
 const ApiDocsPage = lazyRetry(() => import('./pages/ApiDocsPage').then(m => ({ default: m.ApiDocsPage })))
+const PricingPage = lazyRetry(() => import('./pages/PricingPage').then(m => ({ default: m.PricingPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -106,6 +107,11 @@ export const router = createHashRouter([
       { path: 'workspace/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <WorkspaceAdminPage />
+        </Suspense>
+      ) },
+      { path: 'pricing', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <PricingPage />
         </Suspense>
       ) },
       { path: 'api-docs', element: withErrorBoundary(
