@@ -72,7 +72,8 @@ export function prompt(): string {
 }
 
 /** Main ASCII art banner — shown on REPL startup */
-export function banner(): string {
+export function banner(version?: string): string {
+  const v = version ? ` v${version}` : ''
   const art = [
     '',
     `  ${AMETHYST('██╗  ██╗')}${chalk.dim(':')}${AMETHYST('██████╗  ██████╗ ████████╗')}`,
@@ -83,8 +84,8 @@ export function banner(): string {
     `  ${AMETHYST('╚═╝  ╚═╝')} ${AMETHYST('╚═════╝  ╚═════╝    ╚═╝')}`,
     '',
     `  ${chalk.dim('─────────────────────────────────────')}`,
-    `  ${AMETHYST_DIM('Kernel Matrix Terminal Agent')}`,
-    `  ${chalk.dim('17 agents · multi-model · local-first')}`,
+    `  ${AMETHYST_DIM(`Kernel${v}`)}`,
+    `  ${chalk.dim('Build anything · multi-model · local-first')}`,
     `  ${chalk.dim('─────────────────────────────────────')}`,
     '',
   ]

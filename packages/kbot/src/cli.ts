@@ -31,6 +31,7 @@ import {
   printGoodbye,
   divider,
 } from './ui.js'
+import { checkForUpdate } from './updater.js'
 
 const VERSION = '1.3.1'
 
@@ -95,13 +96,17 @@ async function main(): Promise<void> {
   const byokActive = isByokEnabled()
   const apiKey = getApiKey()
   if (!apiKey && !byokActive) {
-    console.log(banner())
+    console.log(banner(VERSION))
     printInfo('No API key found. Let\'s connect you to the Matrix.')
     printInfo('Or run `kbot byok` to use your own Anthropic API key.')
     console.log()
     await authFlow()
     return
   }
+
+  // Auto-update check (non-blocking, max once per hour)
+  const updateMsg = checkForUpdate(VERSION)
+  if (updateMsg) printSuccess(updateMsg)
 
   // Register tools
   await registerAllTools()
@@ -254,7 +259,7 @@ async function startRepl(
   context: ProjectContext,
   tier: string,
 ): Promise<void> {
-  console.log(banner())
+  console.log(banner(VERSION))
 
   // Show connection info
   const byok = isByokEnabled()
@@ -283,53 +288,72 @@ async function startRepl(
 
   rl.prompt()
 
-  rl.on('line', async (line) => {
+  let processing = false
+
+  rl.on('line', (line) => {
     const input = line.trim()
     if (!input) {
       rl.prompt()
       return
     }
 
-    // Slash commands
-    if (input.startsWith('/')) {
-      try {
-        await handleSlashCommand(input, agentOpts, rl)
-      } catch (err) {
-        printError(err instanceof Error ? err.message : String(err))
+    if (processing) return
+    processing = true
+    rl.pause()
+
+    const handle = async () => {
+      // Slash commands
+      if (input.startsWith('/')) {
+        try {
+          await handleSlashCommand(input, agentOpts, rl)
+        } catch (err) {
+          printError(err instanceof Error ? err.message : String(err))
+        }
+      } else {
+        // Run agent
+        try {
+          const response = await runAgent(input, agentOpts)
+          printResponse(response.agent, response.content)
+
+          // Usage footer — only show tool calls if any, no model/cost
+          if (response.usage && response.toolCalls > 0) {
+            printInfo(`${response.toolCalls} tool calls`)
+          }
+        } catch (err) {
+          printError(err instanceof Error ? err.message : String(err))
+        }
       }
+
+      console.log()
+      processing = false
+      rl.resume()
       rl.prompt()
-      return
     }
 
-    // Run agent
-    try {
-      const response = await runAgent(input, agentOpts)
-      printResponse(response.agent, response.content)
-
-      if (response.usage) {
-        const { input_tokens, output_tokens, cost_usd } = response.usage
-        printInfo(`${response.agent} · ${response.model} · ${input_tokens + output_tokens} tokens · $${cost_usd.toFixed(4)}${response.toolCalls > 0 ? ` · ${response.toolCalls} tool calls` : ''}`)
-      } else if (response.agent === 'local') {
-        // Local execution — no tokens used, already printed by agent.ts
-      }
-    } catch (err) {
-      printError(err instanceof Error ? err.message : String(err))
-    }
-
-    console.log()
-    rl.prompt()
+    handle()
   })
 
   // Ctrl+C: don't exit immediately — just cancel current input and re-prompt
+  let sigintCount = 0
   rl.on('SIGINT', () => {
+    sigintCount++
+    if (sigintCount >= 2) {
+      printGoodbye()
+      process.exit(0)
+    }
     console.log() // newline after ^C
     printInfo('Press Ctrl+C again or type /quit to exit.')
     rl.prompt()
+    // Reset after 2 seconds
+    setTimeout(() => { sigintCount = 0 }, 2000)
   })
 
-  rl.on('close', () => {
-    printGoodbye()
-    process.exit(0)
+  // Keep process alive until readline closes
+  return new Promise<void>((resolve) => {
+    rl.on('close', () => {
+      printGoodbye()
+      resolve()
+    })
   })
 }
 

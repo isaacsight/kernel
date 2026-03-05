@@ -90,13 +90,13 @@ export function registerFileTools(): void {
       try {
         // Use find for simple patterns, or shell glob expansion
         const result = execSync(
-          `find ${cwd} -path '*/${pattern}' -type f 2>/dev/null | head -50`,
+          `find "${cwd}" -path '*/${pattern}' -type f 2>/dev/null | head -50`,
           { encoding: 'utf-8', timeout: 10000 }
         ).trim()
         if (!result) {
           // Fallback to using shell expansion
           const result2 = execSync(
-            `ls -1 ${cwd}/${pattern} 2>/dev/null | head -50`,
+            `ls -1 "${cwd}"/${pattern} 2>/dev/null | head -50`,
             { encoding: 'utf-8', timeout: 10000 }
           ).trim()
           return result2 || 'No files found'
@@ -125,8 +125,8 @@ export function registerFileTools(): void {
       try {
         // Prefer ripgrep, fall back to grep
         const cmd = existsSync('/usr/bin/rg') || existsSync('/usr/local/bin/rg') || existsSync('/opt/homebrew/bin/rg')
-          ? `rg -n --max-count 30 ${typeFlag} '${pattern.replace(/'/g, "\\'")}' ${searchPath} 2>/dev/null`
-          : `grep -rn --include='*.${args.type || '*'}' '${pattern.replace(/'/g, "\\'")}' ${searchPath} 2>/dev/null | head -30`
+          ? `rg -n --max-count 30 ${typeFlag} '${pattern.replace(/'/g, "\\'")}' "${searchPath}" 2>/dev/null`
+          : `grep -rn --include='*.${args.type || '*'}' '${pattern.replace(/'/g, "\\'")}' "${searchPath}" 2>/dev/null | head -30`
 
         const result = execSync(cmd, { encoding: 'utf-8', timeout: 15000 }).trim()
         return result || 'No matches found'
@@ -146,7 +146,7 @@ export function registerFileTools(): void {
     async execute(args) {
       const dir = args.path ? String(args.path) : '.'
       try {
-        const result = execSync(`ls -la ${dir} 2>/dev/null | head -50`, {
+        const result = execSync(`ls -la "${dir}" 2>/dev/null | head -50`, {
           encoding: 'utf-8', timeout: 5000,
         }).trim()
         return result || 'Empty directory'

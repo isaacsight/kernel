@@ -45,7 +45,6 @@ const COPY: Record<string, { title: string; description: string }> = {
 
 export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProps) {
   const copy = COPY[feature] || COPY.monthly_limit
-  const isMaxUpsell = feature === 'pro_monthly_limit'
 
   return (
     <div className="ka-upgrade-prompt">
@@ -55,41 +54,20 @@ export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProp
       <h3 className="ka-upgrade-prompt-title">{copy.title}</h3>
       <p className="ka-upgrade-prompt-desc">{copy.description}</p>
       <div className="ka-upgrade-prompt-actions">
-        {isMaxUpsell ? (
-          <>
-            <button
-              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--max"
-              onClick={() => onUpgrade('max_monthly')}
-              disabled={loading}
-            >
-              Go Max — $49/mo
-            </button>
-            <button
-              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
-              onClick={() => onUpgrade('max_annual')}
-              disabled={loading}
-            >
-              $490/yr — save $98
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--primary"
-              onClick={() => onUpgrade('pro_monthly')}
-              disabled={loading}
-            >
-              Go Pro — $29/mo
-            </button>
-            <button
-              className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
-              onClick={() => onUpgrade('pro_annual')}
-              disabled={loading}
-            >
-              $290/yr — save $58
-            </button>
-          </>
-        )}
+        <button
+          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--primary"
+          onClick={() => onUpgrade('pro_monthly')}
+          disabled={loading}
+        >
+          Go Pro — $39/mo
+        </button>
+        <button
+          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
+          onClick={() => onUpgrade('pro_annual')}
+          disabled={loading}
+        >
+          $390/yr — save $78
+        </button>
       </div>
     </div>
   )

@@ -337,28 +337,15 @@ export default function AccountSettingsPanel({
             {(isPro || isMax) && (
               <button className="ka-settings-link-btn" onClick={onManageSubscription} style={{ marginTop: 8 }}>{t('subscription.manage')}</button>
             )}
-            {!isMax && (
+            {!isPro && !isMax && (
               <div className="ka-plan-grid" style={{ padding: '12px 0 0' }}>
-                {!isPro && (
-                  <>
-                    <button className="ka-plan-card" onClick={() => onUpgrade('pro_monthly')}>
-                      <span className="ka-plan-card-name">Pro</span>
-                      <span className="ka-plan-card-price">$29<span className="ka-plan-card-period">/mo</span></span>
-                    </button>
-                    <button className="ka-plan-card" onClick={() => onUpgrade('pro_annual')}>
-                      <span className="ka-plan-card-name">Pro</span>
-                      <span className="ka-plan-card-price">$290<span className="ka-plan-card-period">/yr</span></span>
-                      <span className="ka-plan-card-badge">Save 17%</span>
-                    </button>
-                  </>
-                )}
-                <button className="ka-plan-card" onClick={() => onUpgrade('max_monthly')}>
-                  <span className="ka-plan-card-name">Max</span>
-                  <span className="ka-plan-card-price">$49<span className="ka-plan-card-period">/mo</span></span>
+                <button className="ka-plan-card" onClick={() => onUpgrade('pro_monthly')}>
+                  <span className="ka-plan-card-name">Pro</span>
+                  <span className="ka-plan-card-price">$39<span className="ka-plan-card-period">/mo</span></span>
                 </button>
-                <button className="ka-plan-card" onClick={() => onUpgrade('max_annual')}>
-                  <span className="ka-plan-card-name">Max</span>
-                  <span className="ka-plan-card-price">$490<span className="ka-plan-card-period">/yr</span></span>
+                <button className="ka-plan-card" onClick={() => onUpgrade('pro_annual')}>
+                  <span className="ka-plan-card-name">Pro</span>
+                  <span className="ka-plan-card-price">$390<span className="ka-plan-card-period">/yr</span></span>
                   <span className="ka-plan-card-badge">Save 17%</span>
                 </button>
               </div>

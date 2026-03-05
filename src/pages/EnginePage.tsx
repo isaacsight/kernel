@@ -66,6 +66,7 @@ const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m
 const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
 const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
 const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPanel').then(m => ({ default: m.ImageGalleryPanel })))
+const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard').then(m => ({ default: m.UsageDashboard })))
 const TagModal = lazyRetry(() => import('../components/TagModal').then(m => ({ default: m.TagModal })))
 
 // ─── Main Page ──────────────────────────────────────────
@@ -621,7 +622,7 @@ function EngineChat() {
   }, [isDrawerOpen])
 
   // ─── Back button support ─────────────────────────────
-  const anyPanelOpen = panels.showProjectPanel || panels.showImageGallery || panels.showAccountSettings
+  const anyPanelOpen = panels.showProjectPanel || panels.showImageGallery || panels.showAccountSettings || panels.showUsageDashboard
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -797,6 +798,19 @@ function EngineChat() {
               />
             </Suspense>
           </BottomSheet>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showUsageDashboard && (
+          <Suspense fallback={<PanelShimmer />}>
+            <UsageDashboard
+              onClose={() => panels.closePanel('usage')}
+              onUpgrade={() => billing.handleUpgrade()}
+              isPro={isPro}
+              monthlyLimit={planLimits.messagesPerMonth}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 

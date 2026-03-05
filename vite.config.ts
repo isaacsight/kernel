@@ -7,6 +7,7 @@ import path from 'path'
 export default defineConfig({
     define: {
         __BUILD_TIME__: JSON.stringify(Date.now().toString(36)),
+        __APP_VERSION__: JSON.stringify('1.3.1'),
     },
     plugins: [
         react(),

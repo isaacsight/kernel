@@ -32,7 +32,7 @@ function getGitInfo(): { isGitRepo: boolean; root?: string; branch?: string } {
 function getFileTree(root: string): string {
   try {
     return execSync(
-      `find ${root} -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/.next/*' -not -path '*/build/*' -type f | head -100`,
+      `find "${root}" -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/.next/*' -not -path '*/build/*' -type f | head -100`,
       { encoding: 'utf-8', timeout: 10000 }
     ).trim()
   } catch {

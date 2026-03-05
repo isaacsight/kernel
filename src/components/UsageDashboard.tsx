@@ -74,8 +74,8 @@ function UsageGauge({ current, limit }: { current: number; limit: number }) {
         />
       </svg>
       <div className="ka-usage-gauge-text">
-        <span className="ka-usage-gauge-count">{current}</span>
-        <span className="ka-usage-gauge-label">of {limit}</span>
+        <span className="ka-usage-gauge-count">{Math.round(pct)}%</span>
+        <span className="ka-usage-gauge-label">{current} / {limit}</span>
       </div>
     </div>
   )

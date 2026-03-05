@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
-import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconCrown } from './KernelIcons'
+import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconCrown, IconChart } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import type { ThemeMode } from '../hooks/useTheme'
 import type { PlanId } from '../config/planLimits'
@@ -34,6 +34,7 @@ const LANGUAGES = [
 
 export type MoreAction =
   | 'account-settings'
+  | 'usage'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -54,10 +55,8 @@ interface PlanOption {
 }
 
 const PLANS: PlanOption[] = [
-  { id: 'pro_monthly', name: 'Pro', price: '$29', period: '/mo' },
-  { id: 'pro_annual', name: 'Pro', price: '$290', period: '/yr', badge: 'Save 17%' },
-  { id: 'max_monthly', name: 'Max', price: '$49', period: '/mo' },
-  { id: 'max_annual', name: 'Max', price: '$490', period: '/yr', badge: 'Save 17%' },
+  { id: 'pro_monthly', name: 'Pro', price: '$39', period: '/mo' },
+  { id: 'pro_annual', name: 'Pro', price: '$390', period: '/yr', badge: 'Save 17%' },
 ]
 
 interface MoreMenuProps {
@@ -171,6 +170,10 @@ export function MoreMenu({ isOpen, onClose, onSelect, onUpgrade, isPro, isSubscr
               <span>{t('menu.manageSubscription', { defaultValue: 'Manage Subscription' })}</span>
             </button>
           )}
+          <button className="ka-more-menu-item" onClick={() => { onSelect('usage'); onClose() }}>
+            <IconChart size={18} />
+            <span>{t('menu.usage', 'Usage')}</span>
+          </button>
           <button className="ka-more-menu-item" onClick={() => { onSelect('account-settings'); onClose() }}>
             <IconSettings size={18} />
             <span>{t('menu.accountSettings')}</span>
@@ -179,6 +182,7 @@ export function MoreMenu({ isOpen, onClose, onSelect, onUpgrade, isPro, isSubscr
             <IconLogOut size={18} />
             <span>{t('menu.signOut')}</span>
           </button>
+          <div className="ka-more-menu-version">Kernel v{typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '1.3'}</div>
         </div>
       </motion.div>
     </>

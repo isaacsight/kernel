@@ -278,7 +278,8 @@ export async function runAgent(
 You have local tools (file read/write/edit, grep, git, bash) that execute for FREE on the user's machine.
 Prefer local tools over asking the user to do things manually.
 Be thorough in your FIRST response — aim to solve the task in one shot.
-Only use web_search when the user explicitly asks for current information.`
+Only use web_search when the user explicitly asks for current information.
+IMPORTANT: Always quote file paths in bash commands — directories may contain spaces. Use "double quotes" around all paths.`
   const systemContext = [contextSnippet, memorySnippet, efficiencyNote].filter(Boolean).join('\n')
 
   let toolCallCount = 0
