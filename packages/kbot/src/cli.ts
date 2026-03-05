@@ -260,24 +260,6 @@ async function startRepl(
   tier: string,
 ): Promise<void> {
   console.log(banner(VERSION))
-
-  // Show connection info
-  const byok = isByokEnabled()
-  const agentCount = byok || tier === 'growth' || tier === 'enterprise' ? 17 : 5
-  if (byok) {
-    const provider = getByokProvider()
-    const providerConfig = PROVIDERS[provider]
-    printSuccess(`BYOK mode — ${providerConfig.name} (no message limits)`)
-  }
-  console.log(matrixConnect(byok ? 'byok' : tier, agentCount))
-
-  if (context.isGitRepo) {
-    printInfo(`Project: ${context.repoRoot?.split('/').pop() || 'unknown'} (${context.language || 'unknown'})`)
-    printInfo(`Branch: ${context.branch || 'unknown'}`)
-    console.log()
-  }
-
-  printInfo('Type a message, or /help for commands.')
   console.log()
 
   const rl = createInterface({
