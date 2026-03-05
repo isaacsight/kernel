@@ -42,6 +42,11 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import * as fs from 'fs'
+import { exec } from 'child_process'
+import { promisify } from 'util'
+
+const execAsync = promisify(exec)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -67,6 +72,9 @@ if (!SERVICE_KEY) {
   console.error('Missing SUPABASE_SERVICE_KEY in .env (needed for proxy auth)')
   process.exit(1)
 }
+
+const PROJECT_ROOT = resolve(__dirname, '..')
+const ADMIN_DISCORD_IDS = (process.env.DISCORD_ADMIN_IDS || '').split(',').filter(Boolean)
 
 // ─── Constants ───────────────────────────────────────────────
 const COLORS = {
@@ -167,6 +175,7 @@ interface ClassificationResult {
   needsResearch: boolean
   isMultiStep: boolean
   needsSwarm: boolean
+  needsCodeFix: boolean
 }
 
 const CLASSIFICATION_SYSTEM = `You are an intent classifier. Given a user message and context, route to the best specialist.
@@ -182,9 +191,10 @@ Also determine:
 - needsResearch: true for multi-step web research ("research X", "deep dive into...")
 - isMultiStep: true for 3+ distinct operations building on each other
 - needsSwarm: true for questions needing multiple specialist perspectives
+- needsCodeFix: true if the user wants to fix, change, update, modify, add, or remove something on the kernel.chat website/app/codebase (e.g. "fix the button color", "change the landing page", "update the CSS")
 
 Respond with ONLY valid JSON:
-{"agentId": "kernel", "confidence": 0.9, "needsResearch": false, "isMultiStep": false, "needsSwarm": false}`
+{"agentId": "kernel", "confidence": 0.9, "needsResearch": false, "isMultiStep": false, "needsSwarm": false, "needsCodeFix": false}`
 
 // ─── Attachment helpers ──────────────────────────────────────
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
@@ -265,8 +275,43 @@ async function callClaude(
   return text
 }
 
+// deno-lint-ignore no-explicit-any
+async function callClaudeRaw(
+  messages: { role: string; content: string | unknown[] }[],
+  system: string,
+  model: 'sonnet' | 'haiku' = 'sonnet',
+  maxTokens = 8192,
+  options?: { tools?: unknown[] }
+): Promise<{ content: any[]; stop_reason: string; text: string }> {
+  const body: Record<string, unknown> = {
+    mode: 'text',
+    model,
+    system,
+    max_tokens: maxTokens,
+    messages,
+  }
+  if (options?.tools) body.tools = options.tools
+
+  const res = await fetch(PROXY_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      apikey: SERVICE_KEY,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error(`Claude proxy error (${res.status}): ${err}`)
+  }
+
+  return res.json()
+}
+
 async function classifyIntent(message: string, context: string): Promise<ClassificationResult> {
-  const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, needsResearch: false, isMultiStep: false, needsSwarm: false }
+  const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, needsResearch: false, isMultiStep: false, needsSwarm: false, needsCodeFix: false }
   try {
     const prompt = context
       ? `Recent conversation:\n${context}\n\nNew message:\n${message}`
@@ -290,6 +335,7 @@ async function classifyIntent(message: string, context: string): Promise<Classif
       needsResearch: !!result.needsResearch,
       isMultiStep: !!result.isMultiStep,
       needsSwarm: !!result.needsSwarm,
+      needsCodeFix: !!result.needsCodeFix,
     }
   } catch {
     return fallback
@@ -1313,6 +1359,294 @@ async function evaluateAmbient(channelId: string, channel: TextChannel): Promise
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  CODE AGENT — Read, edit, build, and deploy the site from Discord
+// ═══════════════════════════════════════════════════════════════
+
+const CODE_AGENT_TOOLS = [
+  {
+    name: 'read_file',
+    description: 'Read a file from the Kernel project. Returns file contents.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Relative path from project root (e.g. "src/index.css", "src/router.tsx")' }
+      },
+      required: ['path']
+    }
+  },
+  {
+    name: 'list_files',
+    description: 'List files in a directory, optionally matching a name pattern.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        directory: { type: 'string', description: 'Directory relative to project root (default: "src")' },
+        pattern: { type: 'string', description: 'Filename pattern (e.g. "*.tsx", "*.css", "Button*")' }
+      },
+      required: []
+    }
+  },
+  {
+    name: 'search_code',
+    description: 'Search for text or regex across the codebase. Returns matching lines with file paths and line numbers.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        pattern: { type: 'string', description: 'Search pattern (text or regex)' },
+        include: { type: 'string', description: 'File pattern to restrict search (e.g. "*.tsx", "*.css")' }
+      },
+      required: ['pattern']
+    }
+  },
+  {
+    name: 'edit_file',
+    description: 'Replace exact text in a file. old_string must match exactly (including whitespace/indentation).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Relative file path' },
+        old_string: { type: 'string', description: 'Exact text to find' },
+        new_string: { type: 'string', description: 'Replacement text' }
+      },
+      required: ['path', 'old_string', 'new_string']
+    }
+  },
+  {
+    name: 'create_file',
+    description: 'Create a new file or completely overwrite an existing one.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Relative file path' },
+        content: { type: 'string', description: 'File content to write' }
+      },
+      required: ['path', 'content']
+    }
+  },
+  {
+    name: 'run_command',
+    description: 'Run an allowed shell command in the project directory. Allowed: npm run (build/deploy), npx tsc, npx vitest, git commands, npx supabase functions deploy.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        command: { type: 'string', description: 'Shell command to run' }
+      },
+      required: ['command']
+    }
+  },
+]
+
+const ALLOWED_CMD_PREFIXES = [
+  'npm run build', 'npm run deploy', 'npm run dev',
+  'npx tsc', 'npx vitest', 'npx supabase functions deploy',
+  'git status', 'git diff', 'git add', 'git commit', 'git push', 'git log', 'git stash', 'git checkout',
+  'ls ', 'cat ', 'head ', 'tail ', 'wc ',
+  'npm install', 'npm i ',
+]
+
+function isCommandAllowed(cmd: string): boolean {
+  const trimmed = cmd.trim()
+  return ALLOWED_CMD_PREFIXES.some(p => trimmed.startsWith(p))
+}
+
+function resolveSafePath(relativePath: string): string | null {
+  const abs = resolve(PROJECT_ROOT, relativePath)
+  if (!abs.startsWith(PROJECT_ROOT)) return null
+  // Block .env files only (secrets)
+  if (abs.endsWith('.env')) return null
+  return abs
+}
+
+function shellEscape(s: string): string {
+  return "'" + s.replace(/'/g, "'\\''") + "'"
+}
+
+async function executeCodeTool(name: string, input: Record<string, string>): Promise<string> {
+  try {
+    switch (name) {
+      case 'read_file': {
+        const abs = resolveSafePath(input.path)
+        if (!abs) return 'Error: Path not allowed (traversal or .env file)'
+        if (!fs.existsSync(abs)) return `Error: File not found: ${input.path}`
+        const content = fs.readFileSync(abs, 'utf-8')
+        if (content.length > 80000) {
+          return content.slice(0, 80000) + `\n\n[... truncated, file is ${content.length} chars total]`
+        }
+        return content
+      }
+
+      case 'list_files': {
+        const dir = input.directory || 'src'
+        const abs = resolveSafePath(dir)
+        if (!abs) return 'Error: Path not allowed'
+        const pattern = input.pattern || '*'
+        const { stdout } = await execAsync(
+          `find ${shellEscape(abs)} -name ${shellEscape(pattern)} -type f -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' | sort | head -100`,
+          { cwd: PROJECT_ROOT, timeout: 10000 }
+        )
+        return stdout.split('\n').map(p => p.replace(PROJECT_ROOT + '/', '')).filter(Boolean).join('\n') || 'No files found'
+      }
+
+      case 'search_code': {
+        const includeArg = input.include ? `--include=${shellEscape(input.include)}` : ''
+        const cmd = `grep -rn --color=never --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist ${includeArg} -- ${shellEscape(input.pattern)} . 2>/dev/null | head -100`
+        const { stdout } = await execAsync(cmd, { cwd: PROJECT_ROOT, timeout: 15000 }).catch(e => ({ stdout: (e as any).stdout || '' }))
+        return stdout.trim() || 'No matches found'
+      }
+
+      case 'edit_file': {
+        const abs = resolveSafePath(input.path)
+        if (!abs) return 'Error: Path not allowed'
+        if (!fs.existsSync(abs)) return `Error: File not found: ${input.path}`
+        const content = fs.readFileSync(abs, 'utf-8')
+        if (!content.includes(input.old_string)) {
+          return 'Error: old_string not found in file. Make sure it matches exactly including whitespace and indentation.'
+        }
+        const count = content.split(input.old_string).length - 1
+        if (count > 1) {
+          return `Error: old_string found ${count} times. Provide more surrounding context to make it unique.`
+        }
+        fs.writeFileSync(abs, content.replace(input.old_string, input.new_string), 'utf-8')
+        return `OK: Edited ${input.path}`
+      }
+
+      case 'create_file': {
+        const abs = resolveSafePath(input.path)
+        if (!abs) return 'Error: Path not allowed'
+        const dir = dirname(abs)
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+        fs.writeFileSync(abs, input.content, 'utf-8')
+        return `OK: Created ${input.path}`
+      }
+
+      case 'run_command': {
+        if (!isCommandAllowed(input.command)) {
+          return `Error: Command not allowed. Allowed prefixes: ${ALLOWED_CMD_PREFIXES.slice(0, 8).join(', ')}...`
+        }
+        const { stdout, stderr } = await execAsync(input.command, {
+          cwd: PROJECT_ROOT,
+          timeout: 180000, // 3 min for builds
+          maxBuffer: 10 * 1024 * 1024,
+        })
+        const output = (stdout + (stderr ? '\nSTDERR:\n' + stderr : '')).trim()
+        if (output.length > 40000) {
+          return output.slice(-40000) + '\n[... truncated to last 40000 chars]'
+        }
+        return output || '(command completed with no output)'
+      }
+
+      default:
+        return `Unknown tool: ${name}`
+    }
+  } catch (err: any) {
+    return `Error: ${err.message || String(err)}`
+  }
+}
+
+const CODE_AGENT_SYSTEM = `You are a code agent for the kernel.chat web application.
+You have full read and write access to the entire Kernel project.
+
+PROJECT STRUCTURE:
+- src/index.css — Design system tokens & all CSS (~246KB)
+- src/pages/ — Route pages (EnginePage.tsx is main app)
+- src/components/ — React components (kernel-agent/ for chat UI, ui/ for shared)
+- src/engine/ — AI engine (AIEngine.ts, AgentRouter.ts, ClaudeClient.ts, etc.)
+- src/hooks/ — React hooks (useChatEngine.ts, useFolders.ts, etc.)
+- src/router.tsx — Hash router config
+- src/main.tsx — App entry (auth, Sentry, PostHog)
+- src/stores/ — Zustand stores
+- src/agents/ — Agent definitions
+- supabase/functions/ — Edge functions (claude-proxy, stripe-webhook, etc.)
+- supabase/migrations/ — Database migrations
+- tools/ — CLI tools, MCP servers, Discord bot
+
+DESIGN SYSTEM (Rubin):
+- Typography: EB Garamond (serif), Courier Prime (monospace)
+- Colors: Ivory #FAF9F6 bg, Slate #1F1E1D text, Amethyst #6B5B95 primary
+- Zero Tailwind — all vanilla CSS with ka- prefix
+- Dark mode: warm brown tokens (--dark-bg, --dark-text, etc.)
+- CSS custom properties in :root
+
+RULES:
+- Be surgical — only change what's needed to fix the issue
+- After making edits, ALWAYS run "npm run build" to verify no type/build errors
+- If the build passes, commit with a clear message and deploy with "npm run deploy"
+- For git commits, stage specific files (not git add -A)
+- If you break something, fix it before finishing
+- Never edit .env files
+- Report what you changed when done`
+
+async function runCodeAgent(
+  task: string,
+  sendUpdate: (msg: string) => Promise<void>,
+  maxIterations = 25,
+): Promise<string> {
+  const messages: { role: string; content: string | unknown[] }[] = [
+    { role: 'user', content: task }
+  ]
+
+  await sendUpdate('Analyzing the issue...')
+
+  for (let i = 0; i < maxIterations; i++) {
+    const response = await callClaudeRaw(
+      messages, CODE_AGENT_SYSTEM, 'sonnet', 8192, { tools: CODE_AGENT_TOOLS }
+    )
+
+    messages.push({ role: 'assistant', content: response.content })
+
+    if (response.stop_reason !== 'tool_use') {
+      return response.text || 'Done.'
+    }
+
+    const toolUseBlocks = response.content.filter((c: any) => c.type === 'tool_use')
+    const toolResults: unknown[] = []
+
+    for (const block of toolUseBlocks) {
+      const toolName = block.name as string
+      const toolInput = block.input as Record<string, string>
+
+      const preview = toolName === 'edit_file'
+        ? `Editing \`${toolInput.path}\``
+        : toolName === 'read_file'
+        ? `Reading \`${toolInput.path}\``
+        : toolName === 'create_file'
+        ? `Creating \`${toolInput.path}\``
+        : toolName === 'search_code'
+        ? `Searching for \`${toolInput.pattern}\``
+        : toolName === 'list_files'
+        ? `Listing \`${toolInput.directory || 'src'}/${toolInput.pattern || '*'}\``
+        : toolName === 'run_command'
+        ? `\`${toolInput.command}\``
+        : toolName
+
+      await sendUpdate(`Step ${i + 1}: ${preview}`).catch(() => {})
+
+      const result = await executeCodeTool(toolName, toolInput)
+      toolResults.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: result,
+      })
+    }
+
+    messages.push({ role: 'user', content: toolResults })
+  }
+
+  return 'Reached maximum iterations. Check the changes manually.'
+}
+
+function isAdmin(discordUserId: string, guildMember?: any): boolean {
+  // Explicit admin list takes priority
+  if (ADMIN_DISCORD_IDS.length > 0) {
+    return ADMIN_DISCORD_IDS.includes(discordUserId)
+  }
+  // Fall back to guild admin permissions
+  if (guildMember?.permissions?.has?.('Administrator')) return true
+  // In DMs with no admin list set, allow (assumes operator)
+  return true
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  SLASH COMMANDS
 // ═══════════════════════════════════════════════════════════════
 
@@ -1369,6 +1703,11 @@ const slashCommands = [
   new SlashCommandBuilder()
     .setName('help')
     .setDescription('See what Kernel can do'),
+
+  new SlashCommandBuilder()
+    .setName('fix')
+    .setDescription('Fix something on kernel.chat (admin only)')
+    .addStringOption(opt => opt.setName('issue').setDescription('Describe what needs to be fixed').setRequired(true)),
 ]
 
 async function registerSlashCommands(clientId: string) {
@@ -1407,6 +1746,61 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
     return
   }
 
+  // ── /fix ──
+  if (commandName === 'fix') {
+    const issue = interaction.options.getString('issue', true)
+    const member = interaction.inGuild() ? interaction.member : null
+
+    if (!isAdmin(interaction.user.id, member)) {
+      await interaction.reply({ content: 'Only admins can use `/fix`.', ephemeral: true })
+      return
+    }
+
+    await interaction.reply({
+      embeds: [makeEmbed({
+        title: 'Starting fix',
+        description: `**Issue:** ${issue}\n\nI'll investigate and fix this. Watch the thread for progress.`,
+        color: COLORS.coder,
+      })],
+    })
+
+    try {
+      const reply = await interaction.fetchReply()
+      const thread = await (reply as Message).startThread({
+        name: `Fix: ${issue.slice(0, 80)}`,
+        autoArchiveDuration: 60,
+      })
+
+      const sendUpdate = async (msg: string) => {
+        try { await thread.send(msg) } catch { /* thread may be archived */ }
+      }
+
+      const result = await runCodeAgent(issue, sendUpdate)
+      const chunks = splitMessage(result)
+      for (const chunk of chunks) {
+        await thread.send({
+          embeds: [makeEmbed({
+            title: 'Fix complete',
+            description: chunk,
+            color: COLORS.coder,
+          })],
+        })
+      }
+    } catch (err: any) {
+      console.error('[/fix] Error:', err)
+      try {
+        await interaction.followUp({
+          embeds: [makeEmbed({
+            title: 'Fix failed',
+            description: err.message || 'Unknown error',
+            color: COLORS.error,
+          })],
+        })
+      } catch { /* follow-up expired */ }
+    }
+    return
+  }
+
   // ── /help ──
   if (commandName === 'help') {
     const embed = makeEmbed({
@@ -1425,6 +1819,7 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
           '`/share` — Share a conversation',
           '`/link` — Connect your kernel.chat account',
           '`/ambient on|off` — Toggle ambient presence',
+          '`/fix` — Fix something on kernel.chat (admin)',
         ].join('\n'), inline: false },
         { name: 'Ambient presence', value: 'I listen to the conversation and occasionally speak up when I have a genuine connection to make, a callback to something you said before, or an insight the room hasn\'t considered. Toggle with `/ambient`.', inline: false },
         { name: 'Reactions', value: 'React to any message with:\n🧠 — I\'ll give my perspective\n🔍 — I\'ll research the topic', inline: false },
@@ -2110,7 +2505,25 @@ client.on('messageCreate', async (msg: Message) => {
     // Route to pipeline
     const sendTypingFn = async () => { if ('sendTyping' in ch) await (ch as TextChannel).sendTyping() }
     let response: string
-    if (classification.needsResearch && isPro) {
+
+    // Code fix: detected by classifier, admin-only
+    if (classification.needsCodeFix && isAdmin(msg.author.id, msg.member)) {
+      await sendTypingFn()
+      // Create a thread for progress updates
+      let thread: ThreadChannel | null = null
+      try {
+        thread = await msg.startThread({
+          name: `Fix: ${textContent.slice(0, 80)}`,
+          autoArchiveDuration: 60,
+        })
+      } catch { /* can't create thread, will reply inline */ }
+
+      const sendUpdate = thread
+        ? async (m: string) => { try { await thread!.send(m) } catch {} }
+        : async (_m: string) => { await sendTypingFn() }
+
+      response = await runCodeAgent(textContent, sendUpdate)
+    } else if (classification.needsResearch && isPro) {
       await sendTypingFn()
       response = await discordDeepResearch(textContent, memory, { sendTyping: sendTypingFn })
     } else if (classification.needsSwarm && isPro) {
