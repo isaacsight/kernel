@@ -211,16 +211,21 @@ serve(async (req: Request) => {
     try {
       const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
 
-      // 1. Report overage usage to Stripe for keys near window expiry
+      // 1. Report overage usage to Stripe via Billing Meters API
       if (stripeKey) {
-        const windowCutoff = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // within 24h of expiry
+        // Meter event names by tier (must match Stripe meter config)
+        const METER_EVENTS: Record<string, string> = {
+          pro: 'api_pro_overage_message',
+          growth: 'api_growth_overage_message',
+        }
+
         const { data: overageKeys } = await supabase
           .from('api_keys')
-          .select('id, user_id, overage_count, overage_rate_millicents, stripe_item_id, monthly_window_start, last_overage_reported_at')
+          .select('id, user_id, tier, overage_count, overage_rate_millicents, stripe_subscription_id, monthly_window_start, last_overage_reported_at')
           .eq('status', 'active')
           .eq('overage_enabled', true)
           .gt('overage_count', 0)
-          .not('stripe_item_id', 'is', null)
+          .not('stripe_subscription_id', 'is', null)
 
         if (overageKeys && overageKeys.length > 0) {
           for (const key of overageKeys) {
@@ -230,24 +235,35 @@ serve(async (req: Request) => {
               if (Date.now() - lastReported < 4 * 60 * 60 * 1000) continue
             }
 
+            const eventName = METER_EVENTS[key.tier]
+            if (!eventName) continue
+
+            // Look up Stripe customer from subscription
             try {
-              // Report metered usage to Stripe
-              const usageRes = await fetch('https://api.stripe.com/v1/subscription_items/' + key.stripe_item_id + '/usage_records', {
+              const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${key.stripe_subscription_id}`, {
+                headers: { Authorization: `Bearer ${stripeKey}` },
+              })
+              if (!subRes.ok) continue
+              const sub = await subRes.json()
+              const customerId = sub.customer
+
+              // Send meter event to Stripe
+              const meterRes = await fetch('https://api.stripe.com/v1/billing/meter_events', {
                 method: 'POST',
                 headers: {
                   Authorization: `Bearer ${stripeKey}`,
                   'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `quantity=${key.overage_count}&action=set&timestamp=${Math.floor(Date.now() / 1000)}`,
+                body: `event_name=${eventName}&payload[value]=${key.overage_count}&payload[stripe_customer_id]=${customerId}`,
               })
 
-              if (usageRes.ok) {
+              if (meterRes.ok) {
                 await supabase.from('api_keys')
                   .update({ last_overage_reported_at: new Date().toISOString() })
                   .eq('id', key.id)
                 overageReported++
               } else {
-                console.warn(`[overage] Stripe usage report failed for key ${key.id}:`, await usageRes.text())
+                console.warn(`[overage] Stripe meter event failed for key ${key.id}:`, await meterRes.text())
               }
             } catch (stripeErr) {
               console.warn(`[overage] Failed to report usage for key ${key.id}:`, stripeErr)
