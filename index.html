@@ -1,134 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link rel="stylesheet" crossorigin href="/assets/index-DEz8YXPs.css">
+  <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
+  <body>
+    <div class="wrapper">
+      <div class="calculator">
+        <div class="display">
+          <div class="expression" id="expression"></div>
+          <div class="result" id="result">0</div>
+        </div>
+        <div class="buttons">
+          <!-- Row 1 -->
+          <button class="btn btn-utility span-2" id="btn-clear">AC</button>
+          <button class="btn btn-utility" id="btn-sign">+/−</button>
+          <button class="btn btn-operator" data-op="/">÷</button>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <!-- CSP disabled: iOS Safari has issues with wildcard connect-src (*.supabase.co) -->
-  <!-- TODO: re-enable with explicit origins once verified on iOS -->
-  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.sentry.io https://api.anthropic.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self';" /> -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#1F1E1D" />
-  <meta name="description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
-  <link rel="apple-touch-icon" href="/logo-mark-192.png" />
-  <title>Kernel — AI That Learns You</title>
-  <link rel="canonical" href="https://kernel.chat/" />
+          <!-- Row 2 -->
+          <button class="btn btn-number" data-num="7">7</button>
+          <button class="btn btn-number" data-num="8">8</button>
+          <button class="btn btn-number" data-num="9">9</button>
+          <button class="btn btn-operator" data-op="*">×</button>
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Kernel",
-    "url": "https://kernel.chat",
-    "description": "A personal AI that learns who you are, remembers what matters, and gets better with every conversation.",
-    "applicationCategory": "Productivity",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
+          <!-- Row 3 -->
+          <button class="btn btn-number" data-num="4">4</button>
+          <button class="btn btn-number" data-num="5">5</button>
+          <button class="btn btn-number" data-num="6">6</button>
+          <button class="btn btn-operator" data-op="-">−</button>
 
-  <!-- Social / Open Graph -->
-  <meta property="og:title" content="Kernel — AI That Learns You" />
-  <meta property="og:description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://kernel.chat/concepts/og-card-bg.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Kernel — AI That Learns You" />
-  <meta name="twitter:description" content="A personal AI that learns who you are, remembers what matters, and gets better with every conversation." />
-  <meta name="twitter:image" content="https://kernel.chat/concepts/og-card-bg.png" />
+          <!-- Row 4 -->
+          <button class="btn btn-number" data-num="1">1</button>
+          <button class="btn btn-number" data-num="2">2</button>
+          <button class="btn btn-number" data-num="3">3</button>
+          <button class="btn btn-operator" data-op="+">+</button>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://eoxxpyixdieprsxlpwcs.supabase.co">
-  <!-- Non-blocking font load: media="print" prevents render-blocking, onload swaps to "all" -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></noscript>
-  <script type="module" crossorigin src="/assets/index-BPGPfLJd.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-react-C1MACuvJ.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-i18n-DBJnNzII.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-ui-BpP1nP3I.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-supabase-yKjPlrCh.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-B5ntGLx5.css">
-<link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
-
-<body>
-  <div id="root">
-    <!-- Inline loading indicator — visible instantly while JS loads -->
-    <div id="splash" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#FAF9F6;font-family:Georgia,'Times New Roman',serif;color:#1F1E1D">
-      <div style="opacity:.35;font-size:15px;letter-spacing:.08em">kernel</div>
+          <!-- Row 5 -->
+          <button class="btn btn-number span-2" data-num="0">0</button>
+          <button class="btn btn-number" data-num=".">.</button>
+          <button class="btn btn-equals" id="btn-equals">=</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <noscript><h1>Kernel — A personal AI that learns you</h1></noscript>
-  <script>
-    // Recovery: if the app JS fails to load (stale SW cache after deploy),
-    // clear all caches, unregister SW, and reload.
-    // Debounce: only run once per recovery attempt.
-    var _recovering = false;
-    function _kernelRecover() {
-      if (_recovering) return;
-      _recovering = true;
-      var count = parseInt(sessionStorage.getItem('_rc') || '0', 10);
-      if (count >= 3) {
-        // Exhausted retries — show manual reload that nukes everything
-        var splash = document.getElementById('splash');
-        if (splash) {
-          splash.innerHTML = '<div style="text-align:center;max-width:280px">'
-            + '<div style="opacity:.35;font-size:15px;letter-spacing:.08em;margin-bottom:24px">kernel</div>'
-            + '<div style="font-size:14px;opacity:.6;margin-bottom:16px">Updating — one moment.</div>'
-            + '<button onclick="sessionStorage.clear();location.reload()" style="font-family:inherit;font-size:14px;padding:10px 24px;border:1px solid #1F1E1D;border-radius:8px;background:none;color:#1F1E1D;cursor:pointer">Reload</button>'
-            + '</div>';
-        }
-        return;
-      }
-      sessionStorage.setItem('_rc', String(count + 1));
-      // Wait for BOTH SW unregister AND cache clear before reloading
-      var swDone = Promise.resolve();
-      if ('serviceWorker' in navigator) {
-        swDone = navigator.serviceWorker.getRegistrations().then(function(regs) {
-          return Promise.all(regs.map(function(r) { return r.unregister(); }));
-        }).catch(function() {});
-      }
-      var cacheDone = caches.keys().then(function(names) {
-        return Promise.all(names.map(function(n) { return caches.delete(n); }));
-      }).catch(function() {});
-      Promise.all([swDone, cacheDone]).then(function() {
-        var url = new URL(location.href);
-        url.searchParams.set('_cb', Date.now().toString(36));
-        location.replace(url.toString());
-      });
-    }
-    // Catch JS asset load errors (404 on hashed bundles)
-    // e.target.src catches <script> load failures; e.filename catches runtime errors
-    window.addEventListener('error', function(e) {
-      var src = (e.target && e.target.src) || e.filename || '';
-      if (/assets\/.*\.(js|css)/.test(src)) _kernelRecover();
-    }, true);
-    // Backup: stuck splash screen (8s — enough for slow 3G, fast enough to not frustrate)
-    setTimeout(function() {
-      var root = document.getElementById('root');
-      if (root && root.querySelector('#splash')) _kernelRecover();
-    }, 8000);
-    // Clear recovery counter on successful load
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        if (!document.getElementById('splash')) sessionStorage.removeItem('_rc');
-      }, 2000);
-    });
-  </script>
-</body>
-
+    <script src="calculator.js"></script>
+  </body>
 </html>
