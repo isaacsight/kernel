@@ -13,7 +13,7 @@ export function PrivacyPage() {
       </button>
 
       <h1>Privacy Policy</h1>
-      <p className="ka-legal-updated">Last updated: February 26, 2026</p>
+      <p className="ka-legal-updated">Last updated: March 4, 2026</p>
 
       <p>
         Kernel is a personal AI built by Isaac Hernandez. This policy explains what we collect,
@@ -79,11 +79,23 @@ export function PrivacyPage() {
         purposes, which are automatically purged after 90 days.
       </p>
 
+      <h3>API Keys and Usage Metering</h3>
+      <p>
+        If you use the Kernel API, we store your API key hash (not the full key), key prefix,
+        associated tier, and usage metadata including: monthly message counts, token consumption
+        (input and output), per-agent usage breakdowns, overage counts, and billing window
+        timestamps. This data is used for rate limiting, quota enforcement, overage billing,
+        and the <code>/usage</code> endpoint. API usage records are reported to Stripe periodically
+        for metered billing on paid tiers.
+      </p>
+
       <h3>Payment Information</h3>
       <p>
-        If you subscribe to Kernel Pro, payment processing is handled entirely by Stripe. We do
-        not store your credit card number, bank account, or other payment credentials. We receive
-        your subscription status, customer ID, and billing email from Stripe.
+        If you subscribe to Kernel Pro or a paid API tier, payment processing is handled entirely
+        by Stripe. We do not store your credit card number, bank account, or other payment
+        credentials. We receive your subscription status, customer ID, billing email, and metered
+        usage totals from Stripe. For API overage billing, we report aggregated message counts to
+        Stripe&rsquo;s Billing Meters API, which appear as line items on your invoice.
       </p>
 
       <h2>2. The Mirror: Multi-Agent Perception</h2>
@@ -140,7 +152,8 @@ export function PrivacyPage() {
         <li><strong>Core service:</strong> Generating personalized AI responses to your messages</li>
         <li><strong>Memory:</strong> Building and maintaining your user profile, knowledge graph, and perception facets so Kernel improves over time</li>
         <li><strong>Goals and briefings:</strong> Tracking goals you set and generating daily briefings tailored to your interests</li>
-        <li><strong>Payments:</strong> Processing Pro subscriptions through Stripe</li>
+        <li><strong>Payments:</strong> Processing Pro subscriptions and API tier billing through Stripe, including metered overage charges</li>
+        <li><strong>API metering:</strong> Tracking per-key message counts, token usage, and overage for quota enforcement, billing, and usage alerts</li>
         <li><strong>Security:</strong> Rate limiting, audit logging, and abuse prevention</li>
         <li><strong>Service improvement:</strong> Understanding aggregate usage patterns to improve Kernel (we do not use individual conversations for this)</li>
       </ul>
@@ -261,6 +274,7 @@ export function PrivacyPage() {
         <li><strong>Perception facets and insights:</strong> Retained until you reset your memory or delete your account</li>
         <li><strong>Audit logs:</strong> Automatically purged after 90 days</li>
         <li><strong>Rate limit records:</strong> Automatically purged after expiration</li>
+        <li><strong>API usage records:</strong> Monthly counters reset on each 30-day billing window. Overage counts are reset after reporting to Stripe. Historical usage logs are retained for billing dispute purposes.</li>
         <li><strong>Shared conversations:</strong> Public links remain accessible until you delete the conversation</li>
         <li><strong>Account data after deletion:</strong> When you delete your account, all associated data is permanently removed from our database. Backups may retain data for up to 30 days before being purged.</li>
       </ul>

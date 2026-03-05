@@ -13,7 +13,7 @@ export function TermsPage() {
       </button>
 
       <h1>Terms of Service</h1>
-      <p className="ka-legal-updated">Last updated: February 26, 2026</p>
+      <p className="ka-legal-updated">Last updated: March 4, 2026</p>
 
       <p>
         By using Kernel, you agree to these terms. Kernel is operated by Isaac Hernandez.
@@ -140,11 +140,78 @@ export function TermsPage() {
       <h2>10. Free Tier Limits</h2>
 
       <p>
-        Free accounts are limited to 20 messages per 24-hour rolling window. This limit resets
-        automatically. Kernel Pro removes this limit.
+        Free accounts are limited to 20 messages per 24-hour rolling window on the web app. This
+        limit resets automatically. Kernel Pro removes this limit for web usage.
       </p>
 
-      <h2>11. Service Availability</h2>
+      <h2>11. Kernel API</h2>
+
+      <p>
+        The Kernel API allows developers to access Kernel&rsquo;s intelligence layer programmatically.
+        API access requires an API key, which can be generated from your account settings. API keys
+        are prefixed with <code>kn_live_</code> and must be kept confidential. You are responsible
+        for all usage that occurs under your API key.
+      </p>
+
+      <h3>API Tiers and Pricing</h3>
+
+      <p>
+        The API is available at four tiers, each with a monthly message quota:
+      </p>
+
+      <ul>
+        <li><strong>Free:</strong> 50 messages per month (hard cap, no overage)</li>
+        <li><strong>Pro ($39/month):</strong> 1,500 messages per month, then $0.03 per additional message</li>
+        <li><strong>Growth ($249/month):</strong> 10,000 messages per month, then $0.025 per additional message</li>
+        <li><strong>Enterprise (custom pricing):</strong> Unlimited messages</li>
+      </ul>
+
+      <h3>Overage Billing</h3>
+
+      <p>
+        For paid API tiers (Pro and Growth), usage beyond the included monthly quota is billed as
+        overage at the per-message rate listed above. Overage charges are metered and reported to
+        Stripe, and will appear on your next invoice as a separate line item. Free-tier API keys
+        are hard-capped and will receive a 403 error when the monthly limit is reached &mdash; no
+        overage charges apply.
+      </p>
+
+      <h3>Spending Ceilings</h3>
+
+      <p>
+        You may set an optional monthly spending ceiling on your API key to limit overage charges.
+        When the ceiling is reached, further API requests will be rejected (403) until the next
+        billing window. This ceiling only applies to overage charges, not to your base subscription
+        fee. If no ceiling is set, overage charges are unlimited.
+      </p>
+
+      <h3>Usage Metering</h3>
+
+      <p>
+        API usage is tracked per key, including message counts, token consumption, and per-agent
+        breakdowns. Usage data is available via the <code>/usage</code> endpoint. Metered usage
+        is reported to Stripe periodically (approximately every four hours) for billing purposes.
+        Monthly quotas reset on a rolling 30-day window from the date of key creation.
+      </p>
+
+      <h3>Usage Alerts</h3>
+
+      <p>
+        We send in-app notifications when you reach 80% and 100% of your base monthly quota.
+        These alerts are informational &mdash; paid-tier API keys will continue to function past
+        the base quota (with overage billing) unless a spending ceiling is hit.
+      </p>
+
+      <h3>API Key Responsibility</h3>
+
+      <p>
+        You are solely responsible for securing your API keys. Do not share keys publicly, embed
+        them in client-side code, or commit them to version control. If you believe a key has been
+        compromised, rotate it immediately through account settings. We are not responsible for
+        charges incurred from unauthorized use of your API key.
+      </p>
+
+      <h2>12. Service Availability</h2>
 
       <p>
         We strive to keep Kernel available and reliable, but we do not guarantee uninterrupted
@@ -154,7 +221,7 @@ export function TermsPage() {
         liable for any loss or damage resulting from service interruptions.
       </p>
 
-      <h2>12. Limitation of Liability</h2>
+      <h2>13. Limitation of Liability</h2>
 
       <p>
         We provide Kernel &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of any kind,
@@ -181,7 +248,7 @@ export function TermsPage() {
         such damages.
       </p>
 
-      <h2>13. Indemnification</h2>
+      <h2>14. Indemnification</h2>
 
       <p>
         You agree to indemnify, defend, and hold harmless Isaac Hernandez and Kernel from and
@@ -197,14 +264,14 @@ export function TermsPage() {
         <li>Any content you submit to the service</li>
       </ul>
 
-      <h2>14. Data Deletion</h2>
+      <h2>15. Data Deletion</h2>
 
       <p>
         You can delete your conversations, memory, knowledge graph, goals, or your entire account
         at any time through account settings. Deletion is permanent and cannot be undone.
       </p>
 
-      <h2>15. Changes to These Terms</h2>
+      <h2>16. Changes to These Terms</h2>
 
       <p>
         We may update these terms as Kernel evolves. When we make material changes, we will notify
@@ -214,7 +281,7 @@ export function TermsPage() {
         of the updated terms.
       </p>
 
-      <h2>16. Governing Law</h2>
+      <h2>17. Governing Law</h2>
 
       <p>
         These terms are governed by and construed in accordance with the laws of the State of
@@ -224,7 +291,7 @@ export function TermsPage() {
         and you consent to the personal jurisdiction of such courts.
       </p>
 
-      <h2>17. Dispute Resolution</h2>
+      <h2>18. Dispute Resolution</h2>
 
       <p>
         <strong>Informal Resolution First:</strong> Before initiating any formal proceeding, you
@@ -254,7 +321,7 @@ export function TermsPage() {
         infringement or unauthorized access to the service.
       </p>
 
-      <h2>18. Severability</h2>
+      <h2>19. Severability</h2>
 
       <p>
         If any provision of these terms is found to be unenforceable or invalid by a court of
@@ -262,7 +329,7 @@ export function TermsPage() {
         and the remaining provisions shall remain in full force and effect.
       </p>
 
-      <h2>19. Entire Agreement</h2>
+      <h2>20. Entire Agreement</h2>
 
       <p>
         These terms, together with the <a href="#/privacy">Privacy Policy</a>, constitute the
@@ -271,7 +338,7 @@ export function TermsPage() {
         to the service.
       </p>
 
-      <h2>20. Contact</h2>
+      <h2>21. Contact</h2>
 
       <p>
         Questions: <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>
