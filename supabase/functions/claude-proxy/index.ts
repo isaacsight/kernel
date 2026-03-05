@@ -385,6 +385,7 @@ async function logUsageAndCheckThreshold(
   inputTokens: number,
   outputTokens: number,
   feature: string = 'chat',
+  apiKeyId?: string | null,
 ): Promise<void> {
   if (inputTokens === 0 && outputTokens === 0) return
 
@@ -405,7 +406,15 @@ async function logUsageAndCheckThreshold(
       output_tokens: outputTokens,
       estimated_cost_usd: cost,
       feature,
+      ...(apiKeyId ? { api_key_id: apiKeyId } : {}),
     })
+
+    // Increment API key message count if this is an API key request
+    if (apiKeyId) {
+      svc.rpc('increment_api_message_count', { p_key_id: apiKeyId })
+        .then(() => {})
+        .catch((err: unknown) => console.warn('[claude-proxy] increment_api_message_count error:', err))
+    }
 
     // Check daily aggregate for threshold alert
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
@@ -598,7 +607,7 @@ async function handleAnthropic(
           reader.releaseLock()
           controller.close()
           if (userId) {
-            logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+            logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
               .catch(err => console.error('[usage-tracking] Stream error:', err))
           }
         }
@@ -620,12 +629,18 @@ async function handleAnthropic(
   if (userId) {
     const inputTokens = result.usage?.input_tokens ?? 0
     const outputTokens = result.usage?.output_tokens ?? 0
-    logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+    logUsageAndCheckThreshold(userId, 'anthropic', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
       .catch(err => console.error('[usage-tracking] Error:', err))
   }
 
   return new Response(
-    JSON.stringify({ text: textContent }),
+    JSON.stringify({
+      text: textContent,
+      content: result.content,
+      usage: result.usage,
+      model: result.model,
+      stop_reason: result.stop_reason,
+    }),
     { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
   )
 }
@@ -699,7 +714,7 @@ async function handleOpenAI(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'openai', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+      logUsageAndCheckThreshold(userId, 'openai', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -769,7 +784,7 @@ async function handleOpenAI(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'openai', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
+          logUsageAndCheckThreshold(userId, 'openai', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat', payload._api_key_id)
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -857,7 +872,7 @@ async function handleGemini(
     if (userId) {
       const inputTokens = result.usageMetadata?.promptTokenCount ?? 0
       const outputTokens = result.usageMetadata?.candidatesTokenCount ?? 0
-      logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+      logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -929,7 +944,7 @@ async function handleGemini(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
+          logUsageAndCheckThreshold(userId, 'gemini', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat', payload._api_key_id)
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -1009,7 +1024,7 @@ async function handleNvidia(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+      logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -1078,7 +1093,7 @@ async function handleNvidia(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
+          logUsageAndCheckThreshold(userId, 'nvidia', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat', payload._api_key_id)
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -1158,7 +1173,7 @@ async function handleGroq(
     if (userId) {
       const inputTokens = result.usage?.prompt_tokens ?? 0
       const outputTokens = result.usage?.completion_tokens ?? 0
-      logUsageAndCheckThreshold(userId, 'groq', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat')
+      logUsageAndCheckThreshold(userId, 'groq', resolvedModel, inputTokens, outputTokens, payload.feature || 'chat', payload._api_key_id)
         .catch(err => console.error('[usage-tracking] Error:', err))
     }
 
@@ -1231,7 +1246,7 @@ async function handleGroq(
         reader.releaseLock()
         controller.close()
         if (userId) {
-          logUsageAndCheckThreshold(userId, 'groq', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat')
+          logUsageAndCheckThreshold(userId, 'groq', resolvedModel, streamInputTokens, streamOutputTokens, payload.feature || 'chat', payload._api_key_id)
             .catch(err => console.error('[usage-tracking] Stream error:', err))
         }
       }
@@ -1285,9 +1300,53 @@ serve(async (req: Request) => {
     const isServiceCall = (serviceRoleKey && token === serviceRoleKey) || (botSecret && token === botSecret)
 
     let user: { id: string; app_metadata?: Record<string, unknown> } | null = null
+    let isApiKeyRequest = false
 
     if (isServiceCall) {
       user = { id: 'service-bot', app_metadata: { is_admin: true } }
+    } else if (token.startsWith('kn_live_')) {
+      // ── API Key auth path ──
+      const keyHash = Array.from(
+        new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token)))
+      ).map(b => b.toString(16).padStart(2, '0')).join('')
+
+      const apiSvc = createClient(supabaseUrl, serviceRoleKey!, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      const { data: keyData, error: keyErr } = await apiSvc.rpc('validate_api_key', { p_key_hash: keyHash })
+
+      if (keyErr || !keyData || keyData.length === 0) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid API key' }),
+          { status: 401, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      const apiKey = keyData[0]
+      if (apiKey.monthly_limit_exceeded) {
+        return new Response(
+          JSON.stringify({
+            error: 'Monthly message limit exceeded',
+            monthly_message_count: apiKey.monthly_message_count,
+            monthly_message_limit: apiKey.monthly_message_limit,
+            monthly_window_start: apiKey.monthly_window_start,
+          }),
+          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+
+      user = {
+        id: apiKey.key_user_id,
+        app_metadata: {
+          api_key_id: apiKey.key_id,
+          api_key_tier: apiKey.key_tier,
+          swarm_enabled: apiKey.swarm_enabled,
+          all_agents_enabled: apiKey.all_agents_enabled,
+        },
+      }
+      isApiKeyRequest = true
+      // Use open CORS for API key requests
+      CORS_HEADERS['Access-Control-Allow-Origin'] = '*'
     } else {
       const supabase = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!)
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(token)
@@ -1310,13 +1369,27 @@ serve(async (req: Request) => {
     }
     const payload = JSON.parse(rawBody) as ProxyPayload
 
+    // Stamp API key ID onto payload so it flows through to logUsageAndCheckThreshold
+    if (isApiKeyRequest && user.app_metadata?.api_key_id) {
+      payload._api_key_id = user.app_metadata.api_key_id as string
+    }
+
     // ── Grace Shield: check limit WITHOUT charging (charge on success) ───
     const isAdmin = !!user.app_metadata?.is_admin
     let planId: PlanId = 'free'
     let isPaidUser = false
     let isFreeUser = false
     let isMaxUser = false
-    if (!isServiceCall && !isAdmin) {
+
+    // API key requests bypass user-level subscription checks — they have their own limits
+    if (isApiKeyRequest) {
+      const apiTier = user.app_metadata?.api_key_tier as string
+      // Map API key tier to plan tier for feature gating
+      isPaidUser = true
+      isFreeUser = false
+      isMaxUser = apiTier === 'enterprise'
+      planId = apiTier === 'enterprise' ? 'max_monthly' : apiTier === 'growth' ? 'pro_monthly' : 'pro_monthly'
+    } else if (!isServiceCall && !isAdmin) {
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })

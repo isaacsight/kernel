@@ -18519,6 +18519,82 @@ h4 {
     opacity: 1;
 }
 
+/* ─── API Docs Page ──────────────────────────────────── */
+.ka-docs-page {
+    max-width: 760px;
+}
+.ka-docs-subtitle {
+    font-size: 17px;
+    opacity: 0.7;
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+.ka-docs-section {
+    margin-bottom: 40px;
+}
+.ka-docs-code {
+    font-family: var(--font-meta);
+    font-size: 13px;
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 12px 0 16px;
+}
+[data-theme="dark"] .ka-docs-code {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.ka-docs-page code {
+    font-family: var(--font-meta);
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+[data-theme="dark"] .ka-docs-page code {
+    background: rgba(255, 255, 255, 0.08);
+}
+.ka-docs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0 16px;
+}
+.ka-docs-table th {
+    font-family: var(--font-meta);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    opacity: 0.6;
+}
+.ka-docs-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="dark"] .ka-docs-table th {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+[data-theme="dark"] .ka-docs-table td {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+.ka-docs-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+    opacity: 0.6;
+}
+[data-theme="dark"] .ka-docs-footer {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
 /* ─── Terms Agreement (LoginGate) ─────────────────────── */
 
 .ka-gate-legal {
