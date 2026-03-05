@@ -139,6 +139,27 @@ serve(async (req: Request) => {
           }
           const defaults = tierDefaults[apiTier] || tierDefaults.free
 
+          // Look up subscription to find the metered item ID
+          let meteredItemId: string | null = null
+          const stripeKey2 = Deno.env.get('STRIPE_SECRET_KEY')
+          if (stripeKey2 && session.subscription) {
+            try {
+              const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${session.subscription}`, {
+                headers: { Authorization: `Bearer ${stripeKey2}` },
+              })
+              if (subRes.ok) {
+                const sub = await subRes.json()
+                // Find the metered line item (usage_type === 'metered')
+                const meteredItem = sub.items?.data?.find((item: any) =>
+                  item.price?.recurring?.usage_type === 'metered'
+                )
+                if (meteredItem) meteredItemId = meteredItem.id
+              }
+            } catch (e) {
+              console.error('Failed to fetch subscription for metered item:', e)
+            }
+          }
+
           // Find most recent active key for this user and update it
           const { data: activeKey } = await supabase.from('api_keys')
             .select('id')
@@ -153,14 +174,14 @@ serve(async (req: Request) => {
                 .update({
                   tier: apiTier,
                   stripe_subscription_id: session.subscription,
-                  stripe_item_id: session.metadata?.stripe_item_id || null,
+                  stripe_item_id: meteredItemId,
                   ...defaults,
                 })
                 .eq('id', activeKey.id)
             : { error: { message: 'No active API key found' } }
 
           if (apiErr) console.error('API key tier update error:', apiErr)
-          else console.log(`API key updated to ${apiTier} for user ${userId}`)
+          else console.log(`API key updated to ${apiTier} for user ${userId} (metered item: ${meteredItemId})`)
           break
         }
 

@@ -18,6 +18,21 @@ interface CheckoutPayload {
   price_id?: string
   success_url: string
   cancel_url: string
+  // API subscription fields
+  type?: 'web' | 'api'
+  api_tier?: 'pro' | 'growth'
+}
+
+// API tier pricing — base + metered overage
+const API_TIER_PRICES: Record<string, { base_price_id: string; overage_price_id: string }> = {
+  pro: {
+    base_price_id: 'price_1T7PITIWIar0uqwKgOv8fVQY',
+    overage_price_id: 'price_1T7PJ5IWIar0uqwKUoLaqmgo',
+  },
+  growth: {
+    base_price_id: 'price_1T7PJLIWIar0uqwKSG1BrHOn',
+    overage_price_id: 'price_1T7PJLIWIar0uqwKbeyO1lhf',
+  },
 }
 
 serve(async (req: Request) => {
@@ -70,17 +85,7 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as CheckoutPayload
-    const { mode = 'subscription', plan, price_id, success_url, cancel_url } = payload
-
-    // Resolve plan → price ID
-    const PRICE_MAP: Record<string, string | undefined> = {
-      pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
-      pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
-      max_monthly: Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID'),
-      max_annual: Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID'),
-    }
-    const selectedPlan = plan || 'pro_monthly'
-    const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
+    const { mode = 'subscription', plan, price_id, success_url, cancel_url, type = 'web', api_tier } = payload
 
     // Build Stripe Checkout Session params
     const params = new URLSearchParams()
@@ -92,29 +97,58 @@ serve(async (req: Request) => {
     // Link Stripe checkout to Supabase user (from verified JWT)
     params.set('client_reference_id', user_id)
     params.set('metadata[supabase_user_id]', user_id)
-    if (mode === 'subscription') {
-      params.set('subscription_data[metadata][supabase_user_id]', user_id)
-      params.set('subscription_data[metadata][plan]', selectedPlan)
-    }
 
-    if (resolvedPriceId) {
-      // Use Stripe dashboard price (monthly or annual)
-      params.set('line_items[0][price]', resolvedPriceId)
+    if (type === 'api' && api_tier && api_tier in API_TIER_PRICES) {
+      // ── API subscription: base price + metered overage ──
+      const tierPrices = API_TIER_PRICES[api_tier]
+
+      // Line item 0: base subscription
+      params.set('line_items[0][price]', tierPrices.base_price_id)
       params.set('line_items[0][quantity]', '1')
+
+      // Line item 1: metered overage (no quantity — usage-based)
+      params.set('line_items[1][price]', tierPrices.overage_price_id)
+
+      // Subscription metadata for webhook processing
+      params.set('metadata[type]', 'api')
+      params.set('metadata[api_tier]', api_tier)
+      params.set('subscription_data[metadata][supabase_user_id]', user_id)
+      params.set('subscription_data[metadata][type]', 'api')
+      params.set('subscription_data[metadata][api_tier]', api_tier)
     } else {
-      // Fallback: create inline subscription
-      const isMax = selectedPlan.startsWith('max_')
-      const isAnnual = selectedPlan.endsWith('_annual')
-      params.set('line_items[0][price_data][currency]', 'usd')
-      params.set('line_items[0][price_data][unit_amount]', isMax ? (isAnnual ? '49000' : '4900') : (isAnnual ? '29000' : '2900'))
-      params.set('line_items[0][price_data][product_data][name]', isMax ? 'Kernel Max' : 'Kernel Pro')
-      params.set('line_items[0][price_data][product_data][description]', isMax
-        ? 'Generous messaging, 25 agent calls/day, 100 extended thinking/mo, and 50 file analyses/mo.'
-        : 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
-      if (mode === 'subscription') {
-        params.set('line_items[0][price_data][recurring][interval]', isAnnual ? 'year' : 'month')
+      // ── Web subscription (existing flow) ──
+      const PRICE_MAP: Record<string, string | undefined> = {
+        pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
+        pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
+        max_monthly: Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID'),
+        max_annual: Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID'),
       }
-      params.set('line_items[0][quantity]', '1')
+      const selectedPlan = plan || 'pro_monthly'
+      const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
+
+      if (mode === 'subscription') {
+        params.set('subscription_data[metadata][supabase_user_id]', user_id)
+        params.set('subscription_data[metadata][plan]', selectedPlan)
+      }
+
+      if (resolvedPriceId) {
+        params.set('line_items[0][price]', resolvedPriceId)
+        params.set('line_items[0][quantity]', '1')
+      } else {
+        // Fallback: create inline subscription
+        const isMax = selectedPlan.startsWith('max_')
+        const isAnnual = selectedPlan.endsWith('_annual')
+        params.set('line_items[0][price_data][currency]', 'usd')
+        params.set('line_items[0][price_data][unit_amount]', isMax ? (isAnnual ? '49000' : '4900') : (isAnnual ? '29000' : '2900'))
+        params.set('line_items[0][price_data][product_data][name]', isMax ? 'Kernel Max' : 'Kernel Pro')
+        params.set('line_items[0][price_data][product_data][description]', isMax
+          ? 'Generous messaging, 25 agent calls/day, 100 extended thinking/mo, and 50 file analyses/mo.'
+          : 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
+        if (mode === 'subscription') {
+          params.set('line_items[0][price_data][recurring][interval]', isAnnual ? 'year' : 'month')
+        }
+        params.set('line_items[0][quantity]', '1')
+      }
     }
 
     const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
