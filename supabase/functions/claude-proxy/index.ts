@@ -414,6 +414,15 @@ async function logUsageAndCheckThreshold(
       svc.rpc('increment_api_message_count', { p_key_id: apiKeyId })
         .then(() => {})
         .catch((err: unknown) => console.warn('[claude-proxy] increment_api_message_count error:', err))
+    } else {
+      // Web overage: increment if paid user is past their plan limit
+      svc.rpc('increment_web_overage', { p_user_id: userId })
+        .then(({ data }) => {
+          if (data?.[0]?.new_overage_count > 0) {
+            console.log(`[web-overage] User ${userId} overage count: ${data[0].new_overage_count}`)
+          }
+        })
+        .catch((err: unknown) => console.warn('[claude-proxy] increment_web_overage error:', err))
     }
 
     // Check daily aggregate for threshold alert
@@ -1324,15 +1333,21 @@ serve(async (req: Request) => {
 
       const apiKey = keyData[0]
       if (apiKey.monthly_limit_exceeded) {
-        return new Response(
-          JSON.stringify({
-            error: 'Monthly message limit exceeded',
-            monthly_message_count: apiKey.monthly_message_count,
-            monthly_message_limit: apiKey.monthly_message_limit,
-            monthly_window_start: apiKey.monthly_window_start,
-          }),
-          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
+        // Allow overage-enabled keys through unless spending ceiling is hit
+        if (!apiKey.overage_enabled || apiKey.spending_ceiling_hit) {
+          return new Response(
+            JSON.stringify({
+              error: apiKey.spending_ceiling_hit
+                ? 'Monthly spending ceiling reached'
+                : 'Monthly message limit exceeded',
+              monthly_message_count: apiKey.monthly_message_count,
+              monthly_message_limit: apiKey.monthly_message_limit,
+              monthly_window_start: apiKey.monthly_window_start,
+              ...(apiKey.spending_ceiling_hit ? { max_monthly_spend_cents: apiKey.max_monthly_spend_cents } : {}),
+            }),
+            { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        }
       }
 
       user = {
@@ -1397,10 +1412,15 @@ serve(async (req: Request) => {
       // ── Wave 1: Subscription query (need plan info for all limit checks) ──
       const { data: sub } = await svc
         .from('subscriptions')
-        .select('status, plan')
+        .select('status, plan, overage_enabled, overage_count, max_monthly_spend_cents, overage_rate_millicents')
         .eq('user_id', user.id)
         .in('status', ACTIVE_STATUSES)
         .maybeSingle()
+
+      const webOverageEnabled = sub?.overage_enabled === true
+      const webSpendingCeilingHit = webOverageEnabled
+        && sub?.max_monthly_spend_cents != null
+        && (sub.overage_count * sub.overage_rate_millicents) >= (sub.max_monthly_spend_cents * 10)
 
       planId = resolvePlanId(sub)
       isPaidUser = planId !== 'free'
@@ -1460,7 +1480,7 @@ serve(async (req: Request) => {
             .eq('user_id', user.id)
             .maybeSingle()
           const used = mem?.daily_message_count ?? 0
-          if (used >= limits.messagesPerDay) {
+          if (used >= limits.messagesPerDay && !(webOverageEnabled && !webSpendingCeilingHit)) {
             const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
             return new Response(
               JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used }),
@@ -1468,33 +1488,36 @@ serve(async (req: Request) => {
             )
           }
         } else if (limitCheck?.daily_count >= limits.messagesPerDay) {
-          const resetTime = limitCheck.resets_at
-            ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-            : 'soon'
-          if (isFreeUser) {
-            svc.from('notifications').insert({
-              user_id: user.id,
-              title: 'Daily messages used',
-              body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
-              type: 'info',
-            }).then(() => { }).catch(() => { })
-            const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
-            fetch(notifUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
-              body: JSON.stringify({
-                channel: 'push', user_id: user.id,
-                title: 'Your messages reset ' + resetTime,
-                body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
+          // Allow paid users with overage through (unless spending ceiling hit)
+          if (!(webOverageEnabled && !webSpendingCeilingHit)) {
+            const resetTime = limitCheck.resets_at
+              ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+              : 'soon'
+            if (isFreeUser) {
+              svc.from('notifications').insert({
+                user_id: user.id,
+                title: 'Daily messages used',
+                body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
                 type: 'info',
-              }),
-            }).catch(() => { })
+              }).then(() => { }).catch(() => { })
+              const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
+              fetch(notifUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
+                body: JSON.stringify({
+                  channel: 'push', user_id: user.id,
+                  title: 'Your messages reset ' + resetTime,
+                  body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
+                  type: 'info',
+                }),
+              }).catch(() => { })
+            }
+            const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
+            return new Response(
+              JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+              { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
           }
-          const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
-          return new Response(
-            JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
-            { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-          )
         }
       }
 
@@ -1517,16 +1540,19 @@ serve(async (req: Request) => {
       } else {
         const monthCheck = monthlyResult.data
         if (monthCheck && monthCheck.monthly_count >= limits.messagesPerMonth) {
-          return new Response(
-            JSON.stringify({
-              error: 'monthly_limit_reached',
-              limit: limits.messagesPerMonth,
-              used: monthCheck.monthly_count,
-              resets_at: monthCheck.resets_at,
-              plan: planId,
-            }),
-            { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-          )
+          // Allow paid users with overage through (unless spending ceiling hit)
+          if (!(webOverageEnabled && !webSpendingCeilingHit)) {
+            return new Response(
+              JSON.stringify({
+                error: 'monthly_limit_reached',
+                limit: limits.messagesPerMonth,
+                used: monthCheck.monthly_count,
+                resets_at: monthCheck.resets_at,
+                plan: planId,
+              }),
+              { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+            )
+          }
         }
       }
 

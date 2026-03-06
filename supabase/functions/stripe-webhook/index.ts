@@ -215,6 +215,15 @@ serve(async (req: Request) => {
           }
         }
 
+        // Overage config based on plan
+        const isMaxPlan = plan.startsWith('max_')
+        const overageConfig = plan === 'free' ? {} : {
+          overage_enabled: true,
+          overage_rate_millicents: isMaxPlan ? 25 : 30,
+          overage_count: 0,
+          last_reported_overage_count: 0,
+        }
+
         const { error } = await supabase.from('subscriptions').upsert({
           user_id: userId,
           stripe_customer_id: session.customer,
@@ -223,10 +232,11 @@ serve(async (req: Request) => {
           plan,
           current_period_end: trialEnd, // Trial end or null (invoice.paid sets real period)
           updated_at: new Date().toISOString(),
+          ...overageConfig,
         }, { onConflict: 'user_id' })
 
         if (error) console.error('Upsert error (checkout.session.completed):', error)
-        else console.log(`Subscription activated for user ${userId}`)
+        else console.log(`Subscription activated for user ${userId} (overage: ${overageConfig.overage_enabled ? 'enabled' : 'disabled'})`)
 
         // Send welcome email
         const customerEmail = session.customer_details?.email || session.customer_email

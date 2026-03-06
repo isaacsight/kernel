@@ -221,7 +221,7 @@ serve(async (req: Request) => {
 
         const { data: overageKeys } = await supabase
           .from('api_keys')
-          .select('id, user_id, tier, overage_count, overage_rate_millicents, stripe_subscription_id, monthly_window_start, last_overage_reported_at')
+          .select('id, user_id, tier, overage_count, last_reported_overage_count, overage_rate_millicents, stripe_subscription_id, monthly_window_start, last_overage_reported_at')
           .eq('status', 'active')
           .eq('overage_enabled', true)
           .gt('overage_count', 0)
@@ -229,10 +229,15 @@ serve(async (req: Request) => {
 
         if (overageKeys && overageKeys.length > 0) {
           for (const key of overageKeys) {
-            // Skip if already reported recently (within last 4 hours)
+            // Delta = new overage messages since last report
+            const lastReported = key.last_reported_overage_count ?? 0
+            const delta = key.overage_count - lastReported
+            if (delta <= 0) continue // nothing new to report
+
+            // Skip if reported within last hour (runs every scheduler tick)
             if (key.last_overage_reported_at) {
-              const lastReported = new Date(key.last_overage_reported_at).getTime()
-              if (Date.now() - lastReported < 4 * 60 * 60 * 1000) continue
+              const lastTime = new Date(key.last_overage_reported_at).getTime()
+              if (Date.now() - lastTime < 60 * 60 * 1000) continue
             }
 
             const eventName = METER_EVENTS[key.tier]
@@ -247,26 +252,94 @@ serve(async (req: Request) => {
               const sub = await subRes.json()
               const customerId = sub.customer
 
-              // Send meter event to Stripe
+              // Send meter event with DELTA (not cumulative) to Stripe
               const meterRes = await fetch('https://api.stripe.com/v1/billing/meter_events', {
                 method: 'POST',
                 headers: {
                   Authorization: `Bearer ${stripeKey}`,
                   'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `event_name=${eventName}&payload[value]=${key.overage_count}&payload[stripe_customer_id]=${customerId}`,
+                body: `event_name=${eventName}&payload[value]=${delta}&payload[stripe_customer_id]=${customerId}`,
               })
 
               if (meterRes.ok) {
+                // Update both the timestamp and the last reported count
                 await supabase.from('api_keys')
-                  .update({ last_overage_reported_at: new Date().toISOString() })
+                  .update({
+                    last_overage_reported_at: new Date().toISOString(),
+                    last_reported_overage_count: key.overage_count,
+                  })
                   .eq('id', key.id)
                 overageReported++
+                console.log(`[overage] Reported ${delta} overage messages for key ${key.id} (total: ${key.overage_count})`)
               } else {
                 console.warn(`[overage] Stripe meter event failed for key ${key.id}:`, await meterRes.text())
               }
             } catch (stripeErr) {
               console.warn(`[overage] Failed to report usage for key ${key.id}:`, stripeErr)
+            }
+          }
+        }
+      }
+
+      // 1b. Report WEB overage usage to Stripe
+      if (stripeKey) {
+        const WEB_METER_EVENTS: Record<string, string> = {
+          pro_monthly: 'web_pro_overage_message',
+          pro_annual: 'web_pro_overage_message',
+          max_monthly: 'web_max_overage_message',
+          max_annual: 'web_max_overage_message',
+        }
+
+        const { data: overageSubs } = await supabase
+          .from('subscriptions')
+          .select('user_id, plan, overage_count, last_reported_overage_count, overage_rate_millicents, stripe_subscription_id, stripe_customer_id, last_overage_reported_at')
+          .in('status', ['active', 'trialing'])
+          .eq('overage_enabled', true)
+          .gt('overage_count', 0)
+          .not('stripe_subscription_id', 'is', null)
+
+        if (overageSubs && overageSubs.length > 0) {
+          for (const sub of overageSubs) {
+            const lastReported = sub.last_reported_overage_count ?? 0
+            const delta = sub.overage_count - lastReported
+            if (delta <= 0) continue
+
+            if (sub.last_overage_reported_at) {
+              const lastTime = new Date(sub.last_overage_reported_at).getTime()
+              if (Date.now() - lastTime < 60 * 60 * 1000) continue
+            }
+
+            const eventName = WEB_METER_EVENTS[sub.plan]
+            if (!eventName) continue
+
+            try {
+              const customerId = sub.stripe_customer_id
+              if (!customerId) continue
+
+              const meterRes = await fetch('https://api.stripe.com/v1/billing/meter_events', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${stripeKey}`,
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `event_name=${eventName}&payload[value]=${delta}&payload[stripe_customer_id]=${customerId}`,
+              })
+
+              if (meterRes.ok) {
+                await supabase.from('subscriptions')
+                  .update({
+                    last_overage_reported_at: new Date().toISOString(),
+                    last_reported_overage_count: sub.overage_count,
+                  })
+                  .eq('user_id', sub.user_id)
+                overageReported++
+                console.log(`[web-overage] Reported ${delta} overage messages for user ${sub.user_id} (total: ${sub.overage_count})`)
+              } else {
+                console.warn(`[web-overage] Stripe meter event failed for user ${sub.user_id}:`, await meterRes.text())
+              }
+            } catch (stripeErr) {
+              console.warn(`[web-overage] Failed to report usage for user ${sub.user_id}:`, stripeErr)
             }
           }
         }
