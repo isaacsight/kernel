@@ -121,7 +121,7 @@ export function TermsPage() {
       <p>
         Upon termination, your right to use Kernel ceases immediately. We may, at our discretion,
         delete your account data. If you believe your account was suspended in error, contact us
-        at <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>.
+        at <a href="mailto:support@kernel.chat">support@kernel.chat</a>.
       </p>
 
       <p>
@@ -169,11 +169,15 @@ export function TermsPage() {
       <h3>Overage Billing</h3>
 
       <p>
-        For paid API tiers (Pro and Growth), usage beyond the included monthly quota is billed as
-        overage at the per-message rate listed above. Overage charges are metered and reported to
-        Stripe, and will appear on your next invoice as a separate line item. Free-tier API keys
-        are hard-capped and will receive a 403 error when the monthly limit is reached &mdash; no
-        overage charges apply.
+        Overage billing applies to both the web chat and the API for paid plans. When you exceed
+        your included monthly message quota, additional messages are billed at a per-message rate:
+        Pro plans at $0.03 per message, Max/Growth plans at $0.025 per message. These charges are
+        metered and reported to Stripe, and will appear on your next invoice as a separate line item.
+      </p>
+
+      <p>
+        On the web, you will be prompted to confirm before overage charges begin. Free-tier users
+        are hard-capped and will not incur overage charges.
       </p>
 
       <h3>Spending Ceilings</h3>
@@ -295,7 +299,7 @@ export function TermsPage() {
 
       <p>
         <strong>Informal Resolution First:</strong> Before initiating any formal proceeding, you
-        agree to contact us at <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a> and
+        agree to contact us at <a href="mailto:support@kernel.chat">support@kernel.chat</a> and
         attempt to resolve the dispute informally for at least thirty (30) days.
       </p>
 
@@ -341,7 +345,7 @@ export function TermsPage() {
       <h2>21. Contact</h2>
 
       <p>
-        Questions: <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>
+        Questions: <a href="mailto:support@kernel.chat">support@kernel.chat</a>
       </p>
     </div>
   )

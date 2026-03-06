@@ -1,9 +1,15 @@
 import { useState, useCallback } from 'react'
-import { getAccessToken, refreshSession } from '../engine/SupabaseClient'
+import { supabase } from '../engine/SupabaseClient'
 import type { PlanId } from '../config/planLimits'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
+
+/** Get a guaranteed-fresh access token by forcing a session refresh */
+async function getFreshToken(): Promise<string | null> {
+  const { data: { session } } = await supabase.auth.refreshSession()
+  return session?.access_token || null
+}
 
 async function callCheckout(token: string, plan: string) {
   return fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
@@ -39,16 +45,15 @@ export function useBilling(
     if (!user?.email || upgradeLoading) return
     setUpgradeLoading(true)
     try {
-      let token = await getAccessToken()
-      let res = await callCheckout(token!, plan)
-
-      // If 401, refresh token and retry once
-      if (res.status === 401) {
-        console.warn('[Billing] Token expired, refreshing...')
-        await refreshSession()
-        token = await getAccessToken()
-        res = await callCheckout(token!, plan)
+      // Force a fresh token — prevents stale JWT 401s
+      const token = await getFreshToken()
+      if (!token) {
+        showToast('Session expired. Please sign in again.')
+        setUpgradeLoading(false)
+        return
       }
+
+      const res = await callCheckout(token, plan)
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
@@ -72,7 +77,8 @@ export function useBilling(
     setPortalError('')
     setPortalLoading(true)
     try {
-      const token = await getAccessToken()
+      const token = await getFreshToken()
+      if (!token) { setPortalError('Session expired. Please sign in again.'); return }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/create-portal`, {
         method: 'POST',
         headers: {
@@ -110,7 +116,8 @@ export function useBilling(
     if (!user || deleteLoading) return
     setDeleteLoading(true)
     try {
-      const token = await getAccessToken()
+      const token = await getFreshToken()
+      if (!token) { showToast('Session expired. Please sign in again.'); return }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
         method: 'POST',
         headers: {

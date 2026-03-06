@@ -10999,6 +10999,64 @@ h4 {
 
 /* ─── Upgrade Prompt (reusable) ─────────────────────────── */
 
+.ka-overage-prompt {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+.ka-overage-prompt-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin: 0 0 var(--space-sm);
+}
+
+.ka-overage-prompt-desc {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0 0 var(--space-lg);
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.ka-overage-prompt-desc strong {
+    opacity: 1;
+    font-weight: 600;
+}
+
+.ka-overage-prompt-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.ka-overage-prompt-btn {
+    padding: 10px 24px;
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    width: 220px;
+    border: none;
+}
+
+.ka-overage-prompt-btn--primary {
+    background: var(--rubin-slate);
+    color: var(--rubin-ivory);
+}
+
+.ka-overage-prompt-btn--secondary {
+    background: transparent;
+    color: var(--rubin-slate);
+    border: 1px solid var(--rubin-border);
+}
+
 .ka-upgrade-prompt {
     text-align: center;
     padding: var(--space-xl) var(--space-lg);
@@ -18754,6 +18812,707 @@ h4 {
 .ka-settings-danger-btn--sm {
     font-size: 0.78rem;
     padding: var(--space-xs) var(--space-md);
+}
+
+/* ─── API Keys Section ───────────────────────────── */
+.ka-api-keys-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    user-select: none;
+}
+.ka-api-keys-chevron {
+    margin-left: auto;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+    color: var(--rubin-text-secondary, #6B6966);
+}
+.ka-api-keys-chevron--open {
+    transform: rotate(90deg);
+}
+.ka-api-keys-banner {
+    background: rgba(107, 91, 149, 0.08);
+    border: 1px solid rgba(107, 91, 149, 0.25);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+}
+[data-theme="dark"] .ka-api-keys-banner {
+    background: rgba(107, 91, 149, 0.15);
+    border-color: rgba(107, 91, 149, 0.35);
+}
+.ka-api-keys-banner-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    color: var(--rubin-primary, #6B5B95);
+    margin: 0 0 var(--space-xs);
+    font-weight: 700;
+}
+.ka-api-keys-banner-key {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+}
+.ka-api-keys-secret {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    background: rgba(0, 0, 0, 0.05);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    word-break: break-all;
+    flex: 1;
+    line-height: 1.4;
+}
+[data-theme="dark"] .ka-api-keys-secret {
+    background: rgba(255, 255, 255, 0.06);
+}
+.ka-api-keys-copy-btn {
+    background: none;
+    border: 1px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs);
+    cursor: pointer;
+    color: var(--rubin-text-secondary, #6B6966);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+.ka-api-keys-copy-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+[data-theme="dark"] .ka-api-keys-copy-btn {
+    border-color: var(--dark-border, #3D3530);
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-api-keys-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+.ka-api-keys-item {
+    border: 1px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+}
+[data-theme="dark"] .ka-api-keys-item {
+    border-color: var(--dark-border, #3D3530);
+}
+.ka-api-keys-item--revoked {
+    opacity: 0.5;
+}
+.ka-api-keys-item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: 2px;
+}
+.ka-api-keys-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.ka-api-keys-tier {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--rubin-text-secondary, #6B6966);
+}
+.ka-api-keys-tier--pro { background: rgba(107, 91, 149, 0.12); color: var(--rubin-primary, #6B5B95); }
+.ka-api-keys-tier--growth { background: rgba(91, 139, 160, 0.12); color: #5B8BA0; }
+.ka-api-keys-tier--enterprise { background: rgba(107, 142, 107, 0.12); color: #6B8E6B; }
+[data-theme="dark"] .ka-api-keys-tier { background: rgba(255, 255, 255, 0.08); }
+[data-theme="dark"] .ka-api-keys-tier--pro { background: rgba(107, 91, 149, 0.2); }
+[data-theme="dark"] .ka-api-keys-tier--growth { background: rgba(91, 139, 160, 0.2); }
+[data-theme="dark"] .ka-api-keys-tier--enterprise { background: rgba(107, 142, 107, 0.2); }
+.ka-api-keys-revoked {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    color: #C06060;
+    text-transform: uppercase;
+}
+.ka-api-keys-prefix {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    display: block;
+    margin-bottom: 4px;
+}
+[data-theme="dark"] .ka-api-keys-prefix {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-api-keys-meta {
+    display: flex;
+    gap: var(--space-md);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin-bottom: var(--space-xs);
+}
+[data-theme="dark"] .ka-api-keys-meta {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-api-keys-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+}
+.ka-api-keys-action-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    background: none;
+    border: 1px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-sm);
+    padding: 2px 8px;
+    cursor: pointer;
+    color: var(--rubin-text, #1F1E1D);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.ka-api-keys-action-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+.ka-api-keys-action-btn--danger {
+    color: #C06060;
+    border-color: rgba(192, 96, 96, 0.3);
+}
+.ka-api-keys-action-btn--danger:hover {
+    background: rgba(192, 96, 96, 0.06);
+}
+[data-theme="dark"] .ka-api-keys-action-btn {
+    border-color: var(--dark-border, #3D3530);
+    color: var(--dark-text, #F5F0EB);
+}
+[data-theme="dark"] .ka-api-keys-action-btn--danger {
+    color: #E08080;
+    border-color: rgba(224, 128, 128, 0.3);
+}
+.ka-api-keys-confirm {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: #C06060;
+}
+.ka-api-keys-create {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+.ka-api-keys-create .ka-gate-input {
+    flex: 1;
+}
+.ka-api-keys-empty {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin: 0 0 var(--space-sm);
+}
+[data-theme="dark"] .ka-api-keys-empty {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-api-keys-loading {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin: var(--space-xs) 0 0;
+}
+.ka-api-keys-upgrade {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--rubin-border, #E8E5E0);
+}
+[data-theme="dark"] .ka-api-keys-upgrade {
+    border-color: var(--dark-border, #3D3530);
+}
+.ka-api-keys-upgrade-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rubin-text-secondary, #6B6966);
+    display: block;
+    margin-bottom: var(--space-sm);
+}
+.ka-api-keys-tier-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+}
+@media (max-width: 600px) {
+    .ka-api-keys-tier-cards {
+        grid-template-columns: 1fr;
+    }
+}
+.ka-api-keys-tier-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-sm) var(--space-xs);
+    border: 1px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-md);
+    background: none;
+    font-family: inherit;
+    cursor: default;
+    text-align: center;
+}
+.ka-api-keys-tier-card--active {
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ka-api-keys-tier-card--active:hover {
+    border-color: var(--rubin-primary, #6B5B95);
+    background: rgba(107, 91, 149, 0.04);
+}
+[data-theme="dark"] .ka-api-keys-tier-card {
+    border-color: var(--dark-border, #3D3530);
+}
+[data-theme="dark"] .ka-api-keys-tier-card--active:hover {
+    border-color: var(--rubin-primary, #6B5B95);
+    background: rgba(107, 91, 149, 0.1);
+}
+.ka-api-keys-tier-card-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.ka-api-keys-tier-card-price {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+.ka-api-keys-tier-card-price span {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+.ka-api-keys-tier-card-detail {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    color: var(--rubin-text-secondary, #6B6966);
+}
+[data-theme="dark"] .ka-api-keys-tier-card-detail {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+
+/* ─── Unified Billing ────────────────────────────── */
+.ka-billing-plans-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+.ka-billing-plan-current {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-md);
+    border: 1.5px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-md);
+    background: rgba(107, 91, 149, 0.03);
+    transition: border-color 0.15s ease;
+}
+.ka-billing-plan-current--active {
+    border-left: 3px solid var(--rubin-primary, #6B5B95);
+}
+[data-theme="dark"] .ka-billing-plan-current {
+    border-color: var(--dark-border, #3D3530);
+    background: rgba(107, 91, 149, 0.08);
+}
+[data-theme="dark"] .ka-billing-plan-current--active {
+    border-left-color: var(--rubin-primary, #6B5B95);
+}
+.ka-billing-plan-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+.ka-billing-plan-header svg {
+    color: var(--rubin-primary, #6B5B95);
+    flex-shrink: 0;
+}
+.ka-billing-plan-label {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--rubin-slate, #1F1E1D);
+}
+[data-theme="dark"] .ka-billing-plan-label {
+    color: var(--dark-text, #E8E0D4);
+}
+.ka-billing-tier-pill {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px 8px;
+    border-radius: var(--radius-full, 999px);
+    margin-left: auto;
+}
+.ka-billing-tier-pill--free {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--rubin-text-secondary, #6B6966);
+}
+.ka-billing-tier-pill--pro {
+    background: rgba(107, 91, 149, 0.12);
+    color: var(--rubin-primary, #6B5B95);
+}
+.ka-billing-tier-pill--max {
+    background: rgba(184, 134, 11, 0.12);
+    color: #B8860B;
+}
+.ka-billing-tier-pill--admin {
+    background: rgba(34, 197, 94, 0.12);
+    color: #16A34A;
+}
+.ka-billing-tier-pill--growth {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3B82F6;
+}
+[data-theme="dark"] .ka-billing-tier-pill--free {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--dark-text-secondary, #A8A29E);
+}
+.ka-billing-plan-usage-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin-top: 2px;
+}
+.ka-billing-plan-upgrade-hint {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin-top: 2px;
+}
+/* Usage bar */
+.ka-billing-usage-bar {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+.ka-billing-usage-bar--key {
+    margin-top: 6px;
+}
+[data-theme="dark"] .ka-billing-usage-bar {
+    background: rgba(255, 255, 255, 0.08);
+}
+.ka-billing-usage-fill {
+    height: 100%;
+    background: var(--rubin-primary, #6B5B95);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+.ka-billing-usage-fill--warning {
+    background: var(--kernel-warning, #F59E0B);
+}
+.ka-billing-usage-fill--critical {
+    background: var(--rubin-error, #DC2626);
+}
+/* Manage billing button */
+.ka-billing-manage-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-meta);
+    font-size: 0.72rem;
+    padding: 6px 14px;
+    border: 1px solid var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--rubin-slate, #1F1E1D);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    margin-bottom: var(--space-sm);
+}
+.ka-billing-manage-btn:hover {
+    background: rgba(107, 91, 149, 0.06);
+    border-color: var(--rubin-primary, #6B5B95);
+}
+[data-theme="dark"] .ka-billing-manage-btn {
+    border-color: var(--dark-border, #3D3530);
+    color: var(--dark-text, #E8E0D4);
+}
+[data-theme="dark"] .ka-billing-manage-btn:hover {
+    background: rgba(107, 91, 149, 0.12);
+}
+/* Upgrade label */
+.ka-billing-upgrade-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rubin-text-secondary, #6B6966);
+    display: block;
+    margin: var(--space-md) 0 var(--space-sm);
+}
+/* Upgrade grid */
+.ka-billing-upgrade-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+@media (max-width: 480px) {
+    .ka-billing-upgrade-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.ka-billing-upgrade-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border: 1.5px solid var(--rubin-primary, #6B5B95);
+    border-radius: var(--radius-md);
+    background: rgba(107, 91, 149, 0.04);
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.ka-billing-upgrade-card:hover {
+    background: rgba(107, 91, 149, 0.08);
+    box-shadow: var(--shadow-sm);
+}
+.ka-billing-upgrade-card:active {
+    transform: scale(0.98);
+}
+.ka-billing-upgrade-card--secondary {
+    border-color: var(--rubin-border, #E8E5E0);
+    background: none;
+}
+.ka-billing-upgrade-card--secondary:hover {
+    border-color: var(--rubin-primary, #6B5B95);
+    background: rgba(107, 91, 149, 0.04);
+}
+.ka-billing-upgrade-card--max {
+    border-color: #B8860B;
+    background: rgba(184, 134, 11, 0.04);
+}
+.ka-billing-upgrade-card--max:hover {
+    background: rgba(184, 134, 11, 0.08);
+}
+.ka-billing-upgrade-card--max.ka-billing-upgrade-card--secondary {
+    border-color: var(--rubin-border, #E8E5E0);
+    background: none;
+}
+.ka-billing-upgrade-card--max.ka-billing-upgrade-card--secondary:hover {
+    border-color: #B8860B;
+    background: rgba(184, 134, 11, 0.04);
+}
+[data-theme="dark"] .ka-billing-upgrade-card {
+    background: rgba(107, 91, 149, 0.1);
+    border-color: var(--rubin-primary, #6B5B95);
+}
+[data-theme="dark"] .ka-billing-upgrade-card--secondary {
+    border-color: var(--dark-border, #3D3530);
+    background: none;
+}
+[data-theme="dark"] .ka-billing-upgrade-card--max {
+    border-color: #B8860B;
+    background: rgba(184, 134, 11, 0.1);
+}
+[data-theme="dark"] .ka-billing-upgrade-card--max.ka-billing-upgrade-card--secondary {
+    border-color: var(--dark-border, #3D3530);
+    background: none;
+}
+.ka-billing-upgrade-card-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: 4px;
+}
+.ka-billing-upgrade-card-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--rubin-slate, #1F1E1D);
+}
+[data-theme="dark"] .ka-billing-upgrade-card-name {
+    color: var(--dark-text, #E8E0D4);
+}
+.ka-billing-upgrade-card-badge {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--rubin-primary, #6B5B95);
+    background: rgba(107, 91, 149, 0.1);
+    padding: 1px 6px;
+    border-radius: var(--radius-full, 999px);
+}
+.ka-billing-upgrade-card--max .ka-billing-upgrade-card-badge {
+    color: #B8860B;
+    background: rgba(184, 134, 11, 0.1);
+}
+.ka-billing-upgrade-card-price {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--rubin-slate, #1F1E1D);
+    margin-bottom: 6px;
+}
+.ka-billing-upgrade-card-price span {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.6;
+}
+[data-theme="dark"] .ka-billing-upgrade-card-price {
+    color: var(--dark-text, #E8E0D4);
+}
+.ka-billing-upgrade-card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.ka-billing-upgrade-card-features li {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.62rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    padding-left: 12px;
+    position: relative;
+}
+.ka-billing-upgrade-card-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--rubin-primary, #6B5B95);
+    font-size: 0.58rem;
+}
+.ka-billing-upgrade-card--max .ka-billing-upgrade-card-features li::before {
+    color: #B8860B;
+}
+.ka-billing-upgrade-card-cta {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--rubin-primary, #6B5B95);
+    margin-top: auto;
+}
+.ka-billing-upgrade-card--max .ka-billing-upgrade-card-cta {
+    color: #B8860B;
+}
+/* API locked message for free users */
+.ka-billing-api-locked {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    margin-top: var(--space-sm);
+    border: 1px dashed var(--rubin-border, #E8E5E0);
+    border-radius: var(--radius-md);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: var(--rubin-text-secondary, #6B6966);
+}
+.ka-billing-api-locked svg {
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+[data-theme="dark"] .ka-billing-api-locked {
+    border-color: var(--dark-border, #3D3530);
+    color: var(--dark-text-secondary, #A8A29E);
+}
+/* API key usage percentage */
+.ka-api-keys-meta-pct {
+    font-weight: 700;
+    color: var(--rubin-primary, #6B5B95);
+}
+.ka-api-keys-meta-pct--warning {
+    color: var(--kernel-warning, #F59E0B);
+}
+.ka-api-keys-meta-pct--critical {
+    color: var(--rubin-error, #DC2626);
+}
+.ka-billing-api-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    cursor: pointer;
+    user-select: none;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: var(--space-sm) 0;
+    margin-top: var(--space-xs);
+    border-top: 1px solid var(--rubin-border, #E8E5E0);
+}
+[data-theme="dark"] .ka-billing-api-toggle {
+    border-color: var(--dark-border, #3D3530);
+}
+.ka-billing-api-body {
+    padding-top: var(--space-xs);
+}
+.ka-billing-quickstart {
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(107, 91, 149, 0.04);
+    border: 1px solid rgba(107, 91, 149, 0.15);
+    border-radius: var(--radius-md);
+}
+[data-theme="dark"] .ka-billing-quickstart {
+    background: rgba(107, 91, 149, 0.1);
+    border-color: rgba(107, 91, 149, 0.25);
+}
+.ka-billing-quickstart-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rubin-primary, #6B5B95);
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-weight: 700;
+}
+.ka-billing-quickstart-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+.ka-billing-code-block {
+    display: block;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    background: rgba(0, 0, 0, 0.05);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+[data-theme="dark"] .ka-billing-code-block {
+    background: rgba(255, 255, 255, 0.06);
+}
+.ka-billing-quickstart-hint {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    margin-top: var(--space-xs);
+}
+.ka-billing-quickstart-or {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    display: block;
+    margin: var(--space-sm) 0 var(--space-xs);
 }
 
 /* ─── Login Gate — Reset Sent State ───────────────── */

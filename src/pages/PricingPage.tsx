@@ -25,7 +25,7 @@ const TIERS = [
     annual: '$390/yr',
     description: 'Full power for individuals',
     features: [
-      'Unlimited messages',
+      '1,000+ messages/mo, then $0.03/msg',
       'All 17 specialist agents',
       'Extended thinking',
       'Document & image analysis',
@@ -200,9 +200,9 @@ export function PricingPage() {
         </div>
 
         <div className="ka-pricing-overage-note">
-          <strong>How overage works:</strong> Paid tiers include a base message quota.
-          After your quota, each additional message is billed at your tier's overage rate via Stripe metered billing.
-          Set a monthly spending ceiling in your dashboard to stay in control.
+          <strong>How overage works:</strong> Paid plans include a base message quota for both web and API.
+          After your quota, each additional message is billed at your plan's overage rate via Stripe metered billing.
+          You'll be prompted before overage charges begin on the web. Set a spending ceiling in your dashboard to stay in control.
         </div>
       </section>
 

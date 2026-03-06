@@ -238,7 +238,7 @@ export function PrivacyPage() {
       <p>
         We maintain data processing agreements (DPAs) with our sub-processors where required.
         A current list of sub-processors is available upon request by contacting us
-        at <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>.
+        at <a href="mailto:support@kernel.chat">support@kernel.chat</a>.
       </p>
 
       <h2>8. International Data Transfers</h2>
@@ -304,7 +304,7 @@ export function PrivacyPage() {
 
       <p>
         No system is perfectly secure. If you discover a vulnerability, please report it to{' '}
-        <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>.
+        <a href="mailto:support@kernel.chat">support@kernel.chat</a>.
       </p>
 
       <h2>11. Data Breach Notification</h2>
@@ -345,7 +345,7 @@ export function PrivacyPage() {
 
       <p>
         To exercise any of these rights, use the in-app tools (account settings, deletion controls)
-        or contact us at <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a>. We will
+        or contact us at <a href="mailto:support@kernel.chat">support@kernel.chat</a>. We will
         respond to requests within 30 days.
       </p>
 
@@ -418,7 +418,7 @@ export function PrivacyPage() {
 
       <p>
         If you believe a child has created an account, please contact us immediately
-        at <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a> and we will take
+        at <a href="mailto:support@kernel.chat">support@kernel.chat</a> and we will take
         prompt action.
       </p>
 
@@ -439,7 +439,7 @@ export function PrivacyPage() {
         For questions about this policy, your data, or to exercise your rights:
       </p>
       <p>
-        <strong>Email:</strong> <a href="mailto:isaacsight@gmail.com">isaacsight@gmail.com</a><br />
+        <strong>Email:</strong> <a href="mailto:support@kernel.chat">support@kernel.chat</a><br />
         <strong>Operator:</strong> Isaac Hernandez<br />
         <strong>Service:</strong> Kernel (kernel.chat)<br />
         <strong>Response time:</strong> We aim to respond to all privacy-related requests within 30 days

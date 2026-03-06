@@ -175,6 +175,7 @@ export function useChatEngine(params: UseChatEngineParams) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
+  const [showOveragePrompt, setShowOveragePrompt] = useState(false)
   const [isThinking, setIsThinking] = useState(false)
   const [thinkingAgent, setThinkingAgent] = useState<string | null>(null)
   const [researchProgress, setResearchProgress] = useState<ResearchProgress | null>(null)
@@ -1827,8 +1828,19 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
         setShowUpgradeWall(true)
         guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
       } else if (err instanceof MonthlyLimitError) {
-        setShowUpgradeWall(true)
-        guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
+        // Paid users with overage: show overage prompt instead of upgrade wall
+        const overageAccepted = localStorage.getItem('kernel_overage_accepted')
+        if (isPro && !overageAccepted) {
+          setShowOveragePrompt(true)
+          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
+        } else if (isPro && overageAccepted) {
+          // Already accepted overage — this shouldn't happen since proxy allows through,
+          // but handle gracefully by retrying
+          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
+        } else {
+          setShowUpgradeWall(true)
+          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
+        }
       } else if (err instanceof FairUseLimitError) {
         const resetDate = err.resetsAt ? new Date(err.resetsAt).toLocaleDateString([], { month: 'long', day: 'numeric' }) : 'the 1st of next month'
         guardedSetMessages(prev => prev.map(m => m.id === kernelId
@@ -2068,5 +2080,6 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
     currentThinking, thinkingStartRef,
     activeDocument, hasActiveDocument: !!activeDocument, clearDocument,
     injectProactiveMessage,
+    showOveragePrompt, setShowOveragePrompt,
   }
 }

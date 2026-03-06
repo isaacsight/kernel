@@ -26,6 +26,7 @@ import { usePanelManager } from '../hooks/usePanelManager'
 import { useConversations } from '../hooks/useConversations'
 import { useMessageActions } from '../hooks/useMessageActions'
 import { useBilling } from '../hooks/useBilling'
+import { OveragePrompt } from '../components/OveragePrompt'
 import { useChatEngine } from '../hooks/useChatEngine'
 import { useEntityEvolution } from '../hooks/useEntityEvolution'
 import { useMiniPhone } from '../hooks/useMiniPhone'
@@ -1272,6 +1273,28 @@ function EngineChat() {
                 {t('upgrade.maxAnnualButton')}
               </button>
               <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>{t('upgrade.maybeLater')}</button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Overage Prompt */}
+      <AnimatePresence>
+        {chatEngine.showOveragePrompt && (
+          <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
+              <OveragePrompt
+                limit={planLimits.messagesPerMonth}
+                overageRate={isMax ? 25 : 30}
+                onAccept={() => {
+                  localStorage.setItem('kernel_overage_accepted', 'true')
+                  chatEngine.setShowOveragePrompt(false)
+                  // Re-send the last user message
+                  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
+                  if (lastUserMsg) chatEngine.sendMessage(lastUserMsg.content)
+                }}
+                onDecline={() => chatEngine.setShowOveragePrompt(false)}
+              />
             </motion.div>
           </motion.div>
         )}

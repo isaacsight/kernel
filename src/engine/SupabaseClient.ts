@@ -6,7 +6,19 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprs
 // The .env value takes precedence at build time; this is only a safety net.
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || '';
 
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey, {
+if (!supabaseKey) {
+  console.error(
+    '[Kernel] VITE_SUPABASE_KEY is missing. The app cannot connect to Supabase. ' +
+    'Ensure the environment variable is set at build time.'
+  );
+}
+
+// Use a placeholder key when env var is missing so createClient doesn't throw
+// at module load time. All network requests will fail with 401, but the app
+// will render and show an appropriate error state instead of a white screen.
+const safeKey = supabaseKey || 'missing-key-placeholder';
+
+export const supabase: SupabaseClient = createClient(supabaseUrl, safeKey, {
   auth: {
     flowType: 'implicit', // Implicit puts tokens in hash fragment — no code_verifier to lose on mobile redirects
     detectSessionInUrl: false, // We handle URL detection manually in main.tsx (hash router would clobber it)
@@ -945,7 +957,7 @@ export async function invokeMCPTool(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${session.access_token}`,
-      'apikey': supabaseKey,
+      'apikey': safeKey,
     },
     body: JSON.stringify({
       serverUrl,
@@ -1191,7 +1203,7 @@ export async function updateWorkflowRun(id: string, updates: Partial<DBWorkflowR
 // Falls back to the anon key if no session exists (should not happen for gated routes).
 export async function getAccessToken(): Promise<string> {
   const { data: { session } } = await supabase.auth.getSession()
-  return session?.access_token || supabaseKey
+  return session?.access_token || safeKey
 }
 
 export async function refreshSession(): Promise<void> {
