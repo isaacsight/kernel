@@ -26,7 +26,7 @@ export interface AuthState {
 
   signInWithProvider: (provider: Provider) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
+  signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null; confirmationPending: boolean }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   updatePassword: (password: string, nonce?: string) => Promise<{ error: string | null }>;
   updateEmail: (email: string, nonce?: string) => Promise<{ error: string | null }>;
@@ -243,8 +243,12 @@ export function useAuth(): AuthState {
   }, []);
 
   const signUpWithEmail = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    return { error: error?.message ?? null };
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } });
+    if (error) return { error: error.message, confirmationPending: false };
+    // When email confirmation is enabled, signUp succeeds but session is null
+    const confirmationPending = !data.session;
+    return { error: null, confirmationPending };
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {

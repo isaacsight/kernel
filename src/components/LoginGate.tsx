@@ -19,6 +19,7 @@ export function LoginGate() {
   const [successMsg, setSuccessMsg] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
+  const [confirmEmailSent, setConfirmEmailSent] = useState(false)
   const [resetEmailSent, setResetEmailSent] = useState(false)
   const [resetCooldown, setResetCooldown] = useState(0)
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -54,10 +55,14 @@ export function LoginGate() {
     setError('')
     setSuccessMsg('')
     try {
-      const result = isSignUp
-        ? await signUpWithEmail(email.trim(), password)
-        : await signInWithEmail(email.trim(), password)
-      if (result.error) setError(result.error)
+      if (isSignUp) {
+        const result = await signUpWithEmail(email.trim(), password)
+        if (result.error) { setError(result.error) }
+        else if (result.confirmationPending) { setConfirmEmailSent(true) }
+      } else {
+        const result = await signInWithEmail(email.trim(), password)
+        if (result.error) setError(result.error)
+      }
     } catch {
       setError(t('modal.error'))
     } finally {
@@ -195,8 +200,19 @@ export function LoginGate() {
               exit={{ opacity: 0, y: 30 }}
               transition={TRANSITION.CARD}
             >
-              {/* Password Reset Sent State */}
-              {resetEmailSent ? (
+              {/* Email Confirmation Sent State */}
+              {confirmEmailSent ? (
+                <div className="ka-gate-reset-sent">
+                  <div className="ka-gate-reset-icon"><IconMail size={36} /></div>
+                  <h2 className="ka-gate-title">Check your email</h2>
+                  <p className="ka-gate-reset-desc">
+                    We sent a confirmation link to <strong>{email}</strong>. Click the link to activate your account.
+                  </p>
+                  <button className="ka-gate-submit" onClick={() => { setConfirmEmailSent(false); setIsSignUp(false); setPassword('') }}>
+                    Back to sign in
+                  </button>
+                </div>
+              ) : resetEmailSent ? (
                 <div className="ka-gate-reset-sent">
                   <div className="ka-gate-reset-icon"><IconMail size={36} /></div>
                   <h2 className="ka-gate-title">{t('modal.resetSentTitle')}</h2>
