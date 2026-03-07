@@ -10638,7 +10638,287 @@ h4 {
 
 
 /* ═══════════════════════════════════════════════════════════
-   Landing Page
+   Terminal Gate (Login)
+   ═══════════════════════════════════════════════════════════ */
+
+.terminal-gate {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1;
+}
+
+.terminal-window {
+    width: 100%;
+    max-width: 520px;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #222;
+}
+
+.terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.terminal-dot--red { background: #ff5f57; }
+.terminal-dot--yellow { background: #febc2e; }
+.terminal-dot--green { background: #28c840; }
+
+.terminal-header-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #555;
+    letter-spacing: 0.08em;
+    margin-right: 40px; /* offset for dots */
+}
+
+.terminal-body {
+    padding: 32px 32px 40px;
+}
+
+.terminal-boot {
+    margin-bottom: 24px;
+}
+
+.terminal-line {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #4a4;
+    line-height: 1.8;
+}
+
+.terminal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.terminal-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #e0e0e0;
+    letter-spacing: 0.06em;
+    margin: 0 0 8px;
+}
+
+.terminal-desc {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0 0 28px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.terminal-oauth {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.terminal-oauth-btn {
+    padding: 10px 16px;
+    min-height: 40px;
+    background: transparent;
+    color: #aaa;
+    border: 1px solid #333;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.terminal-oauth-btn:hover {
+    border-color: #555;
+    color: #ddd;
+}
+
+.terminal-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin: 16px 0;
+}
+
+.terminal-divider::before,
+.terminal-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #222;
+}
+
+.terminal-divider span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: #444;
+}
+
+.terminal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.terminal-input {
+    padding: 10px 14px;
+    background: #0a0a0a;
+    color: #ddd;
+    border: 1px solid #222;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.terminal-input:focus {
+    border-color: #444;
+}
+
+.terminal-input::placeholder {
+    color: #444;
+}
+
+.terminal-submit {
+    padding: 10px 16px;
+    min-height: 40px;
+    background: #e0e0e0;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    margin-top: 4px;
+}
+
+.terminal-submit:hover {
+    opacity: 0.85;
+}
+
+.terminal-submit:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.terminal-error {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #e55;
+    margin: 12px 0 0;
+    text-align: center;
+}
+
+.terminal-footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.terminal-link-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.15s;
+}
+
+.terminal-link-btn:hover {
+    color: #999;
+}
+
+.terminal-link-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.terminal-legal {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: #333;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.terminal-legal a {
+    color: #555;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.terminal-legal a:hover {
+    color: #888;
+}
+
+.terminal-notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    max-width: 320px;
+}
+
+.terminal-notice svg {
+    color: #4a4;
+}
+
+.terminal-notice p {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.terminal-notice strong {
+    color: #ccc;
+}
+
+.terminal-notice-actions {
+    display: flex;
+    gap: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Landing Page (legacy)
    ═══════════════════════════════════════════════════════════ */
 
 .landing {

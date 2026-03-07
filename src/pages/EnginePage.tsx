@@ -59,7 +59,6 @@ const AccountSettingsPanel = lazyRetry(() => import('../components/AccountSettin
 const SetNewPasswordModal = lazyRetry(() => import('../components/SetNewPasswordModal').then(m => ({ default: m.SetNewPasswordModal })))
 const ShareModal = lazyRetry(() => import('../components/ShareModal').then(m => ({ default: m.ShareModal })))
 const ImportConversationModal = lazyRetry(() => import('../components/ImportConversationModal').then(m => ({ default: m.ImportConversationModal })))
-const OnboardingFlow = lazyRetry(() => import('../components/OnboardingFlow').then(m => ({ default: m.OnboardingFlow })))
 const MoreMenu = lazyRetry(() => import('../components/MoreMenu').then(m => ({ default: m.MoreMenu })))
 const ProviderStatusBanner = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusBanner })))
 const ProviderStatusDot = lazyRetry(() => import('../components/ProviderStatus').then(m => ({ default: m.ProviderStatusDot })))
@@ -86,24 +85,7 @@ export function EnginePage() {
   return <EnginePageAuthed user={user!} />
 }
 
-function EnginePageAuthed({ user }: { user: NonNullable<ReturnType<typeof useAuthContext>['user']> }) {
-  const onboardingKey = `kernel-onboarded-${user.id}`
-  const [onboarded, setOnboarded] = useState(() => localStorage.getItem(onboardingKey) === 'true')
-
-  if (!onboarded) {
-    return (
-      <Suspense fallback={<div className="ka-loading-splash" />}>
-        <OnboardingFlow
-          userName={user.email || undefined}
-          onComplete={() => {
-            localStorage.setItem(onboardingKey, 'true')
-            setOnboarded(true)
-          }}
-        />
-      </Suspense>
-    )
-  }
-
+function EnginePageAuthed({ user: _user }: { user: NonNullable<ReturnType<typeof useAuthContext>['user']> }) {
   return <EngineChat />
 }
 
