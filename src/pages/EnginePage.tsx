@@ -185,8 +185,9 @@ function DeleteAccountModal({ show, loading, isSubscribed, onConfirm, onCancel }
 function EngineChat() {
   const { t } = useTranslation('home')
   const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription, planId, planLimits } = useAuthContext()
-  const isPro = isSubscribed || isAdmin
-  const isMax = planId.startsWith('max_')
+  // Usage-based model: all authenticated users get full access
+  const isPro = true
+  const isMax = false
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -837,7 +838,6 @@ function EngineChat() {
             />
           )}
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
-          {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
           {liveShare.state.isActive && (
             <LiveShareBadge
               participants={liveShare.state.participants}
@@ -1217,70 +1217,7 @@ function EngineChat() {
         </div>
       )}
 
-      {/* Upgrade Wall */}
-      <AnimatePresence>
-        {billing.showUpgradeWall && (
-          <motion.div className="ka-upgrade-overlay" data-testid="upgrade-wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <img className="ka-upgrade-emblem" src={`${import.meta.env.BASE_URL}concepts/emblem-kernel.svg`} alt="" aria-hidden="true" />
-              <h2 className="ka-upgrade-title">{t('upgrade.title', { limit: effectiveLimit })}</h2>
-              {billing.freeLimitResetsAt ? (
-                <p className="ka-upgrade-subtitle">{t('upgrade.resetsAt', { time: new Date(billing.freeLimitResetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) })}</p>
-              ) : (
-                <p className="ka-upgrade-subtitle">{t('upgrade.subtitle')}</p>
-              )}
-              {memoryHighlights && (
-                <div className="ka-upgrade-learned">
-                  <p className="ka-upgrade-learned-title">{t('upgrade.learnedTitle')}</p>
-                  <ul className="ka-upgrade-learned-list">
-                    {memoryHighlights.interests.map(i => <li key={i}>{i}</li>)}
-                    {memoryHighlights.facts.map(f => <li key={f}>{f}</li>)}
-                  </ul>
-                  <p className="ka-upgrade-learned-cta">{t('upgrade.learnedCta')}</p>
-                </div>
-              )}
-              <ul className="ka-upgrade-features">
-                <li>{t('upgrade.features.unlimitedMessages')}</li><li>{t('upgrade.features.deepResearch')}</li><li>{t('upgrade.features.multiAgent')}</li><li>{t('upgrade.features.multiStep')}</li><li>{t('upgrade.features.persistentMemory')}</li>
-              </ul>
-              <button className="ka-upgrade-btn" onClick={() => billing.handleUpgrade('pro_monthly')} disabled={billing.upgradeLoading}>
-                {billing.upgradeLoading ? t('upgrade.buttonLoading') : t('upgrade.button')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--annual" onClick={() => billing.handleUpgrade('pro_annual')} disabled={billing.upgradeLoading}>
-                {t('upgrade.annualButton')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--max" onClick={() => billing.handleUpgrade('max_monthly')} disabled={billing.upgradeLoading}>
-                {t('upgrade.maxButton')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--max-annual" onClick={() => billing.handleUpgrade('max_annual')} disabled={billing.upgradeLoading}>
-                {t('upgrade.maxAnnualButton')}
-              </button>
-              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>{t('upgrade.maybeLater')}</button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Overage Prompt */}
-      <AnimatePresence>
-        {chatEngine.showOveragePrompt && (
-          <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
-              <OveragePrompt
-                limit={planLimits.messagesPerMonth}
-                overageRate={isMax ? 25 : 30}
-                onAccept={() => {
-                  localStorage.setItem('kernel_overage_accepted', 'true')
-                  chatEngine.setShowOveragePrompt(false)
-                  // Re-send the last user message
-                  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
-                  if (lastUserMsg) chatEngine.sendMessage(lastUserMsg.content)
-                }}
-                onDecline={() => chatEngine.setShowOveragePrompt(false)}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Usage-based: no upgrade wall or overage prompt needed */}
 
       {/* Share Modal */}
       <AnimatePresence>
@@ -1357,23 +1294,7 @@ function EngineChat() {
         />
       </Suspense>
 
-      {/* Free-tier message counter */}
-      {!isPro && !billing.showUpgradeWall && (() => {
-        const remaining = effectiveLimit - chatEngine.messageCountRef.current
-        const urgency = remaining < 5 ? 'critical' : remaining <= 10 ? 'warning' : 'normal'
-        return remaining > 0 ? (
-          <div className={`ka-msg-counter ka-msg-counter--${urgency}`}>
-            {t('messagesLeft', { count: remaining })}
-          </div>
-        ) : null
-      })()}
-
-      {/* Message usage counter */}
-      {!messageUsage.loading && !isAdmin && (
-        <div className={`ka-usage-counter${messageUsage.used >= messageUsage.limit ? ' ka-usage-counter--limit' : messageUsage.used >= messageUsage.limit * 0.7 ? ' ka-usage-counter--warn' : ''}`}>
-          {messageUsage.used} / {messageUsage.limit}
-        </div>
-      )}
+      {/* Usage-based: no message counters needed */}
 
       {/* Input bar */}
       <form ref={inputBarRef} className="ka-input-bar" onSubmit={chatEngine.handleSubmit}>
