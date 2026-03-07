@@ -45,9 +45,28 @@ export class FairUseLimitError extends Error {
     }
 }
 
+export class NoCreditError extends Error {
+    balanceCents: number
+    constructor(balanceCents: number = 0) {
+        super('Credit balance is empty')
+        this.name = 'NoCreditError'
+        this.balanceCents = balanceCents
+    }
+}
+
 // ─── Handle error responses from proxy ──────────────────────
 
 function handleErrorResponse(status: number, body: string): never {
+    if (status === 402) {
+        try {
+            const parsed = JSON.parse(body)
+            if (parsed.error === 'no_credits') {
+                throw new NoCreditError(parsed.balance_cents ?? 0)
+            }
+        } catch (e) {
+            if (e instanceof NoCreditError) throw e
+        }
+    }
     if (status === 403) {
         try {
             const parsed = JSON.parse(body)

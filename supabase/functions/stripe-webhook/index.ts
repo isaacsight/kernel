@@ -100,16 +100,28 @@ serve(async (req: Request) => {
           break
         }
 
-        // Handle one-time image credit purchases
+        // Handle one-time payments (credit packs, image credits)
         if (session.mode === 'payment') {
-          const credits = parseInt(session.metadata?.credits || '0', 10)
-          if (credits > 0 && userId) {
+          // Credit pack purchase
+          const creditsCents = parseInt(session.metadata?.credits_cents || '0', 10)
+          if (creditsCents > 0 && userId) {
+            const { error: creditErr } = await supabase.rpc('add_credits', {
+              p_user_id: userId,
+              p_amount_cents: creditsCents,
+            })
+            if (creditErr) console.error('Failed to add credits:', creditErr)
+            else console.log(`Added ${creditsCents}¢ credits for user ${userId}`)
+          }
+
+          // Legacy: image credit purchases
+          const imageCredits = parseInt(session.metadata?.credits || '0', 10)
+          if (imageCredits > 0 && userId) {
             const { error: creditErr } = await supabase.rpc('add_image_credits', {
               p_user_id: userId,
-              p_amount: credits,
+              p_amount: imageCredits,
             })
             if (creditErr) console.error('Failed to add image credits:', creditErr)
-            else console.log(`Added ${credits} image credits for user ${userId}`)
+            else console.log(`Added ${imageCredits} image credits for user ${userId}`)
           }
 
           // Store Stripe customer ID for future off-session charges (auto-reload)

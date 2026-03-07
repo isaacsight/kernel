@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getEngine, type EngineState, type EngineEvent } from '../engine/AIEngine'
-import { claudeStreamChat, claudeText, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, FairUseLimitError, PlatformRefundError, type ContentBlock } from '../engine/ClaudeClient'
+import { claudeStreamChat, claudeText, RateLimitError, FreeLimitError, ProLimitError, ImageLimitError, MonthlyLimitError, FileLimitError, FairUseLimitError, PlatformRefundError, NoCreditError, type ContentBlock } from '../engine/ClaudeClient'
 import { fileToBase64 } from '../engine/fileUtils'
 import { getSpecialist, EXPLAIN_MODE_SUFFIX } from '../agents/specialists'
 import { classifyIntent, buildRecentContext, resolveModelFromClassification } from '../engine/AgentRouter'
@@ -132,7 +132,7 @@ interface UseChatEngineParams {
   createConversation: (userId: string, title: string) => Promise<{ id: string } | null>
   conversations: { id: string; title: string; updated_at: string }[]
   showToast: (msg: string) => void
-  setShowUpgradeWall: (v: boolean) => void
+  setShowUpgradeWall?: (v: boolean) => void
   setFreeLimitResetsAt?: (v: string | null) => void
   signOut: () => void
   attachedFiles: File[]
@@ -167,6 +167,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     attachedFiles, setAttachedFiles, handleNewChat,
     isPro = false,
     crisisActive = false, crisisSeverity = null,
+    onShowCreditModal,
   } = params
 
   const engine = getEngine()
@@ -1823,24 +1824,24 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
         })
       }
     } catch (err) {
-      if (err instanceof FreeLimitError) {
-        setFreeLimitResetsAt?.(err.resetsAt)
-        setShowUpgradeWall(true)
-        guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
+      if (err instanceof NoCreditError) {
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: '*Your credit balance is empty. Add credits to continue using the Kernel.*' }
+          : m
+        ))
+        onShowCreditModal?.()
+      } else if (err instanceof FreeLimitError) {
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: '*Your credit balance is empty. Add credits to continue.*' }
+          : m
+        ))
+        onShowCreditModal?.()
       } else if (err instanceof MonthlyLimitError) {
-        // Paid users with overage: show overage prompt instead of upgrade wall
-        const overageAccepted = localStorage.getItem('kernel_overage_accepted')
-        if (isPro && !overageAccepted) {
-          setShowOveragePrompt(true)
-          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
-        } else if (isPro && overageAccepted) {
-          // Already accepted overage — this shouldn't happen since proxy allows through,
-          // but handle gracefully by retrying
-          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
-        } else {
-          setShowUpgradeWall(true)
-          guardedSetMessages(prev => prev.filter(m => m.id !== kernelId))
-        }
+        guardedSetMessages(prev => prev.map(m => m.id === kernelId
+          ? { ...m, content: '*Your credit balance is empty. Add credits to continue.*' }
+          : m
+        ))
+        onShowCreditModal?.()
       } else if (err instanceof FairUseLimitError) {
         const resetDate = err.resetsAt ? new Date(err.resetsAt).toLocaleDateString([], { month: 'long', day: 'numeric' }) : 'the 1st of next month'
         guardedSetMessages(prev => prev.map(m => m.id === kernelId
@@ -1855,10 +1856,10 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
         ))
       } else if (err instanceof FileLimitError) {
         guardedSetMessages(prev => prev.map(m => m.id === kernelId
-          ? { ...m, content: `*File analysis is a Pro feature. Upgrade to analyze images and documents.*` }
+          ? { ...m, content: `*Your credit balance is empty. Add credits to analyze files.*` }
           : m
         ))
-        setShowUpgradeWall(true)
+        onShowCreditModal?.()
       } else if (err instanceof ImageLimitError) {
         guardedSetMessages(prev => prev.map(m => m.id === kernelId
           ? { ...m, content: `*You've used all ${err.limit} free image analyses for today.${err.resetsAt ? ` Resets at ${new Date(err.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''} Upgrade to Pro for more image analysis.*` }

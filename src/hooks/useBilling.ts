@@ -1,9 +1,17 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../engine/SupabaseClient'
-import type { PlanId } from '../config/planLimits'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || ''
+
+export type CreditPack = 'starter' | 'standard' | 'pro' | 'max'
+
+export const CREDIT_PACKS: Record<CreditPack, { label: string; price: string; cents: number }> = {
+  starter:  { label: '$5',   price: '$5',   cents: 500 },
+  standard: { label: '$20',  price: '$20',  cents: 2000 },
+  pro:      { label: '$50',  price: '$50',  cents: 5000 },
+  max:      { label: '$100', price: '$100', cents: 10000 },
+}
 
 /** Get a guaranteed-fresh access token by forcing a session refresh */
 async function getFreshToken(): Promise<string | null> {
@@ -11,41 +19,32 @@ async function getFreshToken(): Promise<string | null> {
   return session?.access_token || null
 }
 
-async function callCheckout(token: string, plan: string) {
-  return fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      apikey: SUPABASE_KEY,
-    },
-    body: JSON.stringify({
-      mode: 'subscription',
-      plan,
-      success_url: `${window.location.origin}${window.location.pathname}#/?checkout=complete`,
-      cancel_url: window.location.href,
-    }),
-  })
-}
-
 export function useBilling(
   user: { id: string; email?: string } | null,
   showToast: (msg: string) => void,
   signOut: () => void,
 ) {
-  const [showUpgradeWall, setShowUpgradeWall] = useState(false)
-  const [freeLimitResetsAt, setFreeLimitResetsAt] = useState<string | null>(null)
+  const [creditBalance, setCreditBalance] = useState<number>(0)
   const [upgradeLoading, setUpgradeLoading] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
-  const handleUpgrade = useCallback(async (plan: PlanId = 'pro_monthly') => {
+  // Load credit balance from Supabase
+  const refreshBalance = useCallback(async () => {
+    if (!user?.id) return
+    const { data } = await supabase.rpc('check_credit_balance', { p_user_id: user.id })
+    if (data?.balance_cents != null) {
+      setCreditBalance(data.balance_cents)
+    }
+  }, [user?.id])
+
+  // Buy a credit pack (one-time Stripe checkout)
+  const handleBuyCredits = useCallback(async (pack: CreditPack = 'starter') => {
     if (!user?.email || upgradeLoading) return
     setUpgradeLoading(true)
     try {
-      // Force a fresh token — prevents stale JWT 401s
       const token = await getFreshToken()
       if (!token) {
         showToast('Session expired. Please sign in again.')
@@ -53,17 +52,29 @@ export function useBilling(
         return
       }
 
-      const res = await callCheckout(token, plan)
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_KEY,
+        },
+        body: JSON.stringify({
+          mode: 'payment',
+          credit_pack: pack,
+          success_url: `${window.location.origin}${window.location.pathname}#/?credits=added`,
+          cancel_url: window.location.href,
+        }),
+      })
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
-        console.error('[Billing] Checkout error:', res.status, data)
         throw new Error(data?.error || data?.details || `Checkout failed (${res.status})`)
       }
       const { url } = await res.json()
       if (url) window.location.href = url
     } catch (err) {
-      console.error('[Billing] handleUpgrade error:', err)
+      console.error('[Billing] handleBuyCredits error:', err)
       showToast(err instanceof Error && err.message !== 'Failed to fetch'
         ? err.message
         : 'Unable to start checkout. Please try again.')
@@ -136,11 +147,11 @@ export function useBilling(
   }, [user, deleteLoading, signOut, showToast])
 
   return {
-    showUpgradeWall, setShowUpgradeWall, freeLimitResetsAt, setFreeLimitResetsAt,
+    creditBalance, setCreditBalance, refreshBalance,
     upgradeLoading,
     portalLoading, portalError, setPortalError,
     showDeleteConfirm, setShowDeleteConfirm,
     deleteLoading,
-    handleUpgrade, handleManageSubscription, handleDeleteAccount,
+    handleBuyCredits, handleManageSubscription, handleDeleteAccount,
   }
 }

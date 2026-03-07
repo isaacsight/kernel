@@ -251,8 +251,13 @@ function EngineChat() {
   const billing = useBilling(user, showToast, signOut)
 
   const newChatRef = useRef<() => void>(() => { })
+  // Load credit balance on mount
+  useEffect(() => {
+    billing.refreshBalance()
+  }, [billing.refreshBalance])
+
   const panels = usePanelManager({
-    handleUpgrade: billing.handleUpgrade,
+    handleUpgrade: () => billing.handleBuyCredits('standard'),
     handleManageSubscription: billing.handleManageSubscription,
     signOut,
     setShowDeleteConfirm: billing.setShowDeleteConfirm,
@@ -309,8 +314,8 @@ function EngineChat() {
     createConversation: convs.createConversation,
     conversations: convs.conversations,
     showToast,
-    setShowUpgradeWall: billing.setShowUpgradeWall,
-    setFreeLimitResetsAt: billing.setFreeLimitResetsAt,
+    setShowUpgradeWall: undefined,
+    setFreeLimitResetsAt: undefined,
     signOut,
     attachedFiles: fileAttachments.attachedFiles,
     setAttachedFiles: fileAttachments.setAttachedFiles,
@@ -464,29 +469,18 @@ function EngineChat() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Post-checkout: detect ?checkout=complete and poll for Pro status
+  // Post-credit-purchase: detect ?credits=added and refresh credit balance
   useEffect(() => {
     const hash = window.location.hash
-    if (!hash.includes('checkout=complete')) return
-    let attempts = 0
-    const maxAttempts = 15
-    const poll = setInterval(async () => {
-      attempts++
-      const isPro = await refreshSubscription()
-      if (isPro || attempts >= maxAttempts) {
-        clearInterval(poll)
-        if (isPro) {
-          billing.setShowUpgradeWall(false)
-          showToast(t('welcomeToPro'))
-        }
-        const cleanHash = hash.replace(/[?&]checkout=complete/, '').replace(/\?$/, '')
-        window.location.hash = cleanHash || '#/'
-      }
-    }, 2000)
-    return () => clearInterval(poll)
-  }, [refreshSubscription, billing, showToast])
+    if (!hash.includes('credits=added')) return
+    billing.refreshBalance().then(() => {
+      showToast('Credits added to your balance')
+    })
+    const cleanHash = hash.replace(/[?&]credits=added/, '').replace(/\?$/, '')
+    window.location.hash = cleanHash || '#/'
+  }, [showToast, billing])
 
-  // Post-credit-purchase: detect ?credits=purchased and refresh credit balance
+  // Legacy: detect ?credits=purchased for image credit purchases
   useEffect(() => {
     const hash = window.location.hash
     if (!hash.includes('credits=purchased')) return
@@ -775,7 +769,7 @@ function EngineChat() {
                 planId={planId}
                 onClose={() => panels.closePanel('account-settings')}
                 onToast={showToast}
-                onUpgrade={(plan) => billing.handleUpgrade(plan)}
+                onUpgrade={() => billing.handleBuyCredits('standard')}
                 onManageSubscription={billing.handleManageSubscription}
                 onSignOut={signOut}
                 onDeleteAccount={() => billing.setShowDeleteConfirm(true)}
@@ -790,7 +784,7 @@ function EngineChat() {
           <Suspense fallback={<PanelShimmer />}>
             <UsageDashboard
               onClose={() => panels.closePanel('usage')}
-              onUpgrade={() => billing.handleUpgrade()}
+              onUpgrade={() => billing.handleBuyCredits('standard')}
               isPro={isPro}
               monthlyLimit={planLimits.messagesPerMonth}
             />
@@ -1384,7 +1378,7 @@ function EngineChat() {
       <AnimatePresence>
         {panels.showMoreMenu && (
           <Suspense fallback={null}>
-            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('settings')} onSelect={panels.handleSettingsAction} onUpgrade={billing.handleUpgrade} upgradeLoading={billing.upgradeLoading} isPro={isPro} isSubscribed={isSubscribed} isAdmin={isAdmin} theme={theme} onSetTheme={setTheme} />
+            <MoreMenu isOpen={panels.showMoreMenu} onClose={() => panels.closePanel('settings')} onSelect={panels.handleSettingsAction} onUpgrade={() => billing.handleBuyCredits('standard')} upgradeLoading={billing.upgradeLoading} isPro={isPro} isSubscribed={isSubscribed} isAdmin={isAdmin} theme={theme} onSetTheme={setTheme} />
           </Suspense>
         )}
       </AnimatePresence>

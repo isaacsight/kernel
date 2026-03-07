@@ -1,6 +1,5 @@
 // Supabase Edge Function: create-checkout
-// Creates a Stripe Checkout session for Kernel Pro subscription ($29/mo or $290/yr).
-// Now accepts user_id to correlate Stripe → Supabase user via client_reference_id.
+// Creates a Stripe Checkout session for credit pack purchases or API subscriptions.
 //
 // Deploy: npx supabase functions deploy create-checkout --project-ref eoxxpyixdieprsxlpwcs
 // Secrets: STRIPE_SECRET_KEY
@@ -14,16 +13,27 @@ import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface CheckoutPayload {
   mode?: 'subscription' | 'payment'
-  plan?: 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual'
-  price_id?: string
   success_url: string
   cancel_url: string
-  // API subscription fields
+  // Credit pack purchase
+  credit_pack?: 'starter' | 'standard' | 'pro' | 'max'
+  // API subscription fields (preserved for API key billing)
   type?: 'web' | 'api'
   api_tier?: 'pro' | 'growth'
+  // Legacy fields (ignored)
+  plan?: string
+  price_id?: string
 }
 
-// API tier pricing — base + metered overage
+// Credit pack definitions: amount in cents
+const CREDIT_PACKS: Record<string, { amount_cents: number; price_cents: number; label: string }> = {
+  starter:  { amount_cents: 500,   price_cents: 500,   label: '$5 Credit Pack' },
+  standard: { amount_cents: 2000,  price_cents: 2000,  label: '$20 Credit Pack' },
+  pro:      { amount_cents: 5000,  price_cents: 5000,  label: '$50 Credit Pack' },
+  max:      { amount_cents: 10000, price_cents: 10000, label: '$100 Credit Pack' },
+}
+
+// API tier pricing — base + metered overage (preserved)
 const API_TIER_PRICES: Record<string, { base_price_id: string; overage_price_id: string }> = {
   pro: {
     base_price_id: 'price_1T7PITIWIar0uqwKgOv8fVQY',
@@ -85,12 +95,11 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as CheckoutPayload
-    const { mode = 'subscription', plan, price_id, success_url, cancel_url, type = 'web', api_tier } = payload
+    const { success_url, cancel_url, type = 'web', api_tier, credit_pack } = payload
 
     // Build Stripe Checkout Session params
     const params = new URLSearchParams()
     params.set('customer_email', email)
-    params.set('mode', mode)
     params.set('success_url', success_url)
     params.set('cancel_url', cancel_url)
 
@@ -100,55 +109,37 @@ serve(async (req: Request) => {
 
     if (type === 'api' && api_tier && api_tier in API_TIER_PRICES) {
       // ── API subscription: base price + metered overage ──
+      params.set('mode', 'subscription')
       const tierPrices = API_TIER_PRICES[api_tier]
-
-      // Line item 0: base subscription
       params.set('line_items[0][price]', tierPrices.base_price_id)
       params.set('line_items[0][quantity]', '1')
-
-      // Line item 1: metered overage (no quantity — usage-based)
       params.set('line_items[1][price]', tierPrices.overage_price_id)
-
-      // Subscription metadata for webhook processing
       params.set('metadata[type]', 'api')
       params.set('metadata[api_tier]', api_tier)
       params.set('subscription_data[metadata][supabase_user_id]', user_id)
       params.set('subscription_data[metadata][type]', 'api')
       params.set('subscription_data[metadata][api_tier]', api_tier)
     } else {
-      // ── Web subscription (existing flow) ──
-      const PRICE_MAP: Record<string, string | undefined> = {
-        pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
-        pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
-        max_monthly: Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID'),
-        max_annual: Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID'),
-      }
-      const selectedPlan = plan || 'pro_monthly'
-      const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
-
-      if (mode === 'subscription') {
-        params.set('subscription_data[metadata][supabase_user_id]', user_id)
-        params.set('subscription_data[metadata][plan]', selectedPlan)
+      // ── Credit pack purchase (one-time payment) ──
+      params.set('mode', 'payment')
+      const packId = credit_pack || 'starter'
+      const pack = CREDIT_PACKS[packId]
+      if (!pack) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid credit pack', valid_packs: Object.keys(CREDIT_PACKS) }),
+          { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
       }
 
-      if (resolvedPriceId) {
-        params.set('line_items[0][price]', resolvedPriceId)
-        params.set('line_items[0][quantity]', '1')
-      } else {
-        // Fallback: create inline subscription
-        const isMax = selectedPlan.startsWith('max_')
-        const isAnnual = selectedPlan.endsWith('_annual')
-        params.set('line_items[0][price_data][currency]', 'usd')
-        params.set('line_items[0][price_data][unit_amount]', isMax ? (isAnnual ? '49000' : '4900') : (isAnnual ? '29000' : '2900'))
-        params.set('line_items[0][price_data][product_data][name]', isMax ? 'Kernel Max' : 'Kernel Pro')
-        params.set('line_items[0][price_data][product_data][description]', isMax
-          ? 'Generous messaging, 25 agent calls/day, 100 extended thinking/mo, and 50 file analyses/mo.'
-          : 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
-        if (mode === 'subscription') {
-          params.set('line_items[0][price_data][recurring][interval]', isAnnual ? 'year' : 'month')
-        }
-        params.set('line_items[0][quantity]', '1')
-      }
+      params.set('line_items[0][price_data][currency]', 'usd')
+      params.set('line_items[0][price_data][unit_amount]', pack.price_cents.toString())
+      params.set('line_items[0][price_data][product_data][name]', pack.label)
+      params.set('line_items[0][price_data][product_data][description]',
+        `${(pack.amount_cents / 100).toFixed(0)} credits for Kernel API usage. Pay only for what you use.`)
+      params.set('line_items[0][quantity]', '1')
+      params.set('metadata[type]', 'credits')
+      params.set('metadata[credit_pack]', packId)
+      params.set('metadata[credits_cents]', pack.amount_cents.toString())
     }
 
     const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -178,7 +169,7 @@ serve(async (req: Request) => {
     logAudit(svcAudit, {
       actorId: user_id, eventType: 'payment.checkout', action: 'create-checkout',
       source: 'create-checkout', status: 'success', statusCode: 200,
-      metadata: { mode },
+      metadata: { type, credit_pack },
       ip: getClientIP(req), userAgent: getUA(req),
     })
 

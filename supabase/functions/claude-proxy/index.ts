@@ -1405,158 +1405,34 @@ serve(async (req: Request) => {
       isMaxUser = apiTier === 'enterprise'
       planId = apiTier === 'enterprise' ? 'max_monthly' : apiTier === 'growth' ? 'pro_monthly' : 'pro_monthly'
     } else if (!isServiceCall && !isAdmin) {
+      // ── Usage-based: check credit balance before processing ──
       const svc = createClient(supabaseUrl, serviceRoleKey!, {
         auth: { persistSession: false, autoRefreshToken: false },
       })
 
-      // ── Wave 1: Subscription query (need plan info for all limit checks) ──
-      const { data: sub } = await svc
-        .from('subscriptions')
-        .select('status, plan, overage_enabled, overage_count, max_monthly_spend_cents, overage_rate_millicents')
-        .eq('user_id', user.id)
-        .in('status', ACTIVE_STATUSES)
-        .maybeSingle()
+      // All authenticated users get full access — gated only by credit balance
+      planId = 'pro_annual'
+      isPaidUser = true
+      isFreeUser = false
+      isMaxUser = false
 
-      const webOverageEnabled = sub?.overage_enabled === true
-      const webSpendingCeilingHit = webOverageEnabled
-        && sub?.max_monthly_spend_cents != null
-        && (sub.overage_count * sub.overage_rate_millicents) >= (sub.max_monthly_spend_cents * 10)
+      // Check credit balance
+      const { data: balanceCheck } = await svc.rpc('check_credit_balance', { p_user_id: user.id })
+      const balance = balanceCheck?.balance_cents ?? 0
 
-      planId = resolvePlanId(sub)
-      isPaidUser = planId !== 'free'
-      isFreeUser = planId === 'free'
-      isMaxUser = planId.startsWith('max_')
-      const limits = PLAN_LIMITS[planId]
-      const tier: Tier = isMaxUser ? 'max' : isPaidUser ? 'paid' : 'free'
-
-      // Count files in payload (needed for file limit check)
-      let fileCount = 0
-      if (payload.messages) {
-        for (const m of payload.messages) {
-          if (Array.isArray(m.content)) {
-            for (const block of m.content as any[]) {
-              if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
-            }
-          }
-        }
-      }
-
-      // Quick sync check: files blocked for free tier (no DB needed)
-      if (fileCount > 0 && limits.filesPerMonth === 0) {
+      if (balance <= 0) {
         return new Response(
-          JSON.stringify({ error: 'files_pro_only', message: 'File analysis is a Pro feature.' }),
-          { status: 403, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          JSON.stringify({
+            error: 'no_credits',
+            message: 'Your credit balance is empty. Please add credits to continue.',
+            balance_cents: 0,
+          }),
+          { status: 402, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
         )
       }
 
-      // ── Wave 2: All limit checks in parallel ──────────────
-      const [dailyLimitResult, monthlyResult, rateLimitResult, costResult, fileLimitResult] = await Promise.all([
-        // Daily message limit
-        svc.rpc('check_message_limit', { p_user_id: user.id })
-          .then(({ data, error }) => ({ data, error })),
-        // Monthly message limit (different RPC for max tier)
-        isMaxUser
-          ? svc.rpc('check_max_fair_use', { p_user_id: user.id }).then(({ data }) => ({ type: 'max' as const, data }))
-          : svc.rpc('check_monthly_message_limit', { p_user_id: user.id }).then(({ data }) => ({ type: 'standard' as const, data })),
-        // Rate limiting
-        checkRL(svc, user.id, 'claude-proxy', tier),
-        // Daily cost limit
-        checkDailyCostLimit(user.id),
-        // File limit (only if files attached)
-        fileCount > 0
-          ? svc.rpc('check_monthly_file_limit', { p_user_id: user.id }).then(({ data }) => data)
-          : Promise.resolve(null),
-      ])
-
-      // ── Evaluate daily message limit ──────────────────────
-      {
-        const { data: limitCheck, error: limitErr } = dailyLimitResult
-        if (limitErr) {
-          console.error('[grace-shield] check_message_limit error:', limitErr.message)
-          // Fallback to direct read
-          const { data: mem } = await svc
-            .from('user_memory')
-            .select('daily_message_count')
-            .eq('user_id', user.id)
-            .maybeSingle()
-          const used = mem?.daily_message_count ?? 0
-          if (used >= limits.messagesPerDay && !(webOverageEnabled && !webSpendingCeilingHit)) {
-            const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
-            return new Response(
-              JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used }),
-              { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
-          }
-        } else if (limitCheck?.daily_count >= limits.messagesPerDay) {
-          // Allow paid users with overage through (unless spending ceiling hit)
-          if (!(webOverageEnabled && !webSpendingCeilingHit)) {
-            const resetTime = limitCheck.resets_at
-              ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-              : 'soon'
-            if (isFreeUser) {
-              svc.from('notifications').insert({
-                user_id: user.id,
-                title: 'Daily messages used',
-                body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
-                type: 'info',
-              }).then(() => { }).catch(() => { })
-              const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
-              fetch(notifUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
-                body: JSON.stringify({
-                  channel: 'push', user_id: user.id,
-                  title: 'Your messages reset ' + resetTime,
-                  body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
-                  type: 'info',
-                }),
-              }).catch(() => { })
-            }
-            const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
-            return new Response(
-              JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
-              { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
-          }
-        }
-      }
-
-      // ── Evaluate monthly message limit ────────────────────
-      if (monthlyResult.type === 'max') {
-        const fairUse = monthlyResult.data
-        if (fairUse?.blocked) {
-          return new Response(
-            JSON.stringify({
-              error: 'fair_use_limit',
-              message: "You've reached your fair use limit for this month.",
-              resets_at: fairUse.resets_at,
-            }),
-            { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-          )
-        }
-        if (fairUse && fairUse.monthly_count >= 3000) {
-          svc.rpc('set_usage_flag', { p_user_id: user.id, p_flag: 'high' }).catch(() => {})
-        }
-      } else {
-        const monthCheck = monthlyResult.data
-        if (monthCheck && monthCheck.monthly_count >= limits.messagesPerMonth) {
-          // Allow paid users with overage through (unless spending ceiling hit)
-          if (!(webOverageEnabled && !webSpendingCeilingHit)) {
-            return new Response(
-              JSON.stringify({
-                error: 'monthly_limit_reached',
-                limit: limits.messagesPerMonth,
-                used: monthCheck.monthly_count,
-                resets_at: monthCheck.resets_at,
-                plan: planId,
-              }),
-              { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
-          }
-        }
-      }
-
-      // ── Evaluate rate limit ───────────────────────────────
+      // Rate limiting (all users get 'paid' tier)
+      const rateLimitResult = await checkRL(svc, user.id, 'claude-proxy', 'paid')
       if (!rateLimitResult.allowed) {
         logAudit(svc, {
           actorId: user.id, eventType: 'edge_function.call', action: 'claude-proxy',
@@ -1566,26 +1442,14 @@ serve(async (req: Request) => {
         return rateLimitResponse(rateLimitResult, CORS_HEADERS)
       }
 
-      // ── Evaluate daily cost limit ─────────────────────────
+      // Daily cost safety limit (still enforced per-user)
+      const costResult = await checkDailyCostLimit(user.id)
       if (costResult.blocked) {
         return new Response(
           JSON.stringify({
             error: 'daily_cost_limit_reached',
             daily_cost_usd: costResult.dailyCost.toFixed(2),
             limit_usd: DAILY_COST_HARD_LIMIT.toFixed(2),
-          }),
-          { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-        )
-      }
-
-      // ── Evaluate file limit ───────────────────────────────
-      if (fileCount > 0 && fileLimitResult && fileLimitResult.monthly_count + fileCount > limits.filesPerMonth) {
-        return new Response(
-          JSON.stringify({
-            error: 'monthly_file_limit_reached',
-            limit: limits.filesPerMonth,
-            used: fileLimitResult.monthly_count,
-            resets_at: fileLimitResult.resets_at,
           }),
           { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
         )
@@ -1641,8 +1505,8 @@ serve(async (req: Request) => {
       )
     }
 
-    // ── Cap max_tokens server-side (plan-aware) ─────────────
-    const planTokenCap = (!isServiceCall && !isAdmin) ? PLAN_LIMITS[planId].maxTokens : MAX_TOKENS_CAP
+    // ── Cap max_tokens server-side ─────────────
+    const planTokenCap = MAX_TOKENS_CAP
     const effectiveTokensCap = payload.thinking?.type === 'enabled'
       ? planTokenCap + (payload.thinking.budget_tokens || 0)
       : planTokenCap
@@ -1650,33 +1514,8 @@ serve(async (req: Request) => {
       payload.max_tokens = Math.min(payload.max_tokens, effectiveTokensCap)
     }
 
-    // ── Enforce model tiers: free users locked to fast tier ─
-    if (!isServiceCall && !isPaidUser && !isAdmin) {
-      payload.tier = 'fast'
-      const allowedFreeModels = new Set([
-        'haiku', 'gpt-4o-mini', 'gemini-2.0-flash',
-        ...Object.values(TIER_MODELS).map(t => t.fast),
-      ])
-      if (payload.model && !allowedFreeModels.has(payload.model as string)) {
-        payload.model = undefined
-      }
-      // Web search available for all users
-      // Disable extended thinking for free users (Pro only)
-      payload.thinking = undefined
-    }
-    // ── Extended thinking monthly limit (Pro users) ─────────
-    if (!isServiceCall && !isAdmin && isPaidUser && payload.thinking?.type === 'enabled') {
-      const limits = PLAN_LIMITS[planId]
-      if (limits.etPerMonth > 0) {
-        const svcET = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
-        const { data: etCheck } = await svcET.rpc('check_monthly_et_limit', { p_user_id: user.id })
-        if (etCheck && etCheck.monthly_count >= limits.etPerMonth) {
-          // Silently strip thinking instead of blocking the message
-          payload.thinking = undefined
-          console.log(`[proxy] ET monthly limit reached for user=${user.id}, stripping thinking`)
-        }
-      }
-    }
+    // Usage-based: all authenticated users can use any model/tier
+    // No free-tier restrictions or extended thinking limits
 
     // Determine provider (default: anthropic for backward compat)
     const provider: Provider = (payload.provider as Provider) || 'anthropic'
@@ -1741,46 +1580,43 @@ serve(async (req: Request) => {
       } catch { return null }
     }
 
-    // Charge message AFTER success (Grace Shield)
+    // Deduct credits AFTER success based on actual token cost
     async function chargeMessageOnSuccess(): Promise<void> {
       if (isServiceCall || isAdmin) return
-      if (!isFreeUser && !isPaidUser) return
+      if (isApiKeyRequest) return // API keys have their own billing
       try {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
-        // Daily counter
-        await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
-        // Monthly counter (Max uses calendar-month RPC, others use rolling window)
-        if (isMaxUser) {
-          await svcCharge.rpc('increment_max_message_count', { p_user_id: user.id })
-        } else {
-          await svcCharge.rpc('increment_monthly_message_count', { p_user_id: user.id })
-        }
+        // Cost is already calculated and logged by logUsageAndCheckThreshold.
+        // We need to deduct the cost from the user's credit balance.
+        // The cost in USD needs to be converted to microcents for the RPC.
+        // This is called after the response is complete, so we can read the
+        // usage from the most recent usage_logs entry.
+        const { data: lastUsage } = await svcCharge
+          .from('usage_logs')
+          .select('estimated_cost_usd')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
 
-        // Monthly file counter
-        let fileCount = 0
-        if (payload.messages) {
-          for (const m of payload.messages) {
-            if (Array.isArray(m.content)) {
-              for (const block of m.content as any[]) {
-                if (block.type === 'image' || block.type === 'image_url' || block.type === 'document') fileCount++
-              }
+        if (lastUsage?.estimated_cost_usd) {
+          // Convert USD to microcents: $0.01 = 10000 microcents
+          const costMicrocents = Math.round(lastUsage.estimated_cost_usd * 1_000_000)
+          const { data: deductResult } = await svcCharge.rpc('deduct_credits', {
+            p_user_id: user.id,
+            p_cost_microcents: costMicrocents,
+          })
+          if (deductResult?.success) {
+            console.log(`[credits] Deducted ${deductResult.charged_cents}¢ for user=${user.id}, balance=${deductResult.balance_cents}¢`)
+            if (deductResult.low_balance) {
+              console.log(`[credits] Low balance warning for user=${user.id}: ${deductResult.balance_cents}¢`)
             }
+          } else {
+            console.warn(`[credits] Deduction failed for user=${user.id}: ${deductResult?.error}`)
           }
         }
-        if (fileCount > 0) {
-          for (let i = 0; i < fileCount; i++) {
-            await svcCharge.rpc('increment_monthly_file_count', { p_user_id: user.id })
-          }
-        }
-
-        // Monthly ET counter (if thinking was used in this request)
-        if (payload.thinking?.type === 'enabled') {
-          await svcCharge.rpc('increment_monthly_et_count', { p_user_id: user.id })
-        }
-
-        console.log(`[grace-shield] Charged message post-success for user=${user.id} plan=${planId}`)
       } catch (err) {
-        console.error('[grace-shield] Post-success charge failed:', err)
+        console.error('[credits] Post-success charge failed:', err)
       }
     }
 

@@ -103,6 +103,15 @@ export class FileLimitError extends Error {
   }
 }
 
+export class NoCreditError extends Error {
+  balanceCents: number
+  constructor(balanceCents: number = 0) {
+    super('Credit balance is empty')
+    this.name = 'NoCreditError'
+    this.balanceCents = balanceCents
+  }
+}
+
 type Model = 'opus' | 'sonnet' | 'haiku'
 
 // Re-export ContentBlock from provider types for backward compat
@@ -156,6 +165,16 @@ async function callProxy(mode: 'json' | 'text' | 'stream', prompt: string, opts?
 
   if (!res.ok) {
     const err = await res.text()
+    if (res.status === 402) {
+      try {
+        const body = JSON.parse(err)
+        if (body.error === 'no_credits') {
+          throw new NoCreditError(body.balance_cents ?? 0)
+        }
+      } catch (e) {
+        if (e instanceof NoCreditError) throw e
+      }
+    }
     if (res.status === 403) {
       try {
         const body = JSON.parse(err)
