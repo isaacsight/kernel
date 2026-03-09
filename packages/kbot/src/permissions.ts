@@ -21,21 +21,24 @@ let currentMode: PermissionMode = 'normal'
 
 /** Patterns that always require confirmation in normal mode */
 const DESTRUCTIVE_PATTERNS: Array<{ pattern: RegExp; reason: string }> = [
-  { pattern: /^git\s+push/, reason: 'Pushes code to remote — visible to others' },
-  { pattern: /^git\s+reset\s+--hard/, reason: 'Discards all uncommitted changes' },
-  { pattern: /^git\s+checkout\s+--\s/, reason: 'Discards file changes' },
-  { pattern: /^git\s+branch\s+-[dD]\s/, reason: 'Deletes a git branch' },
-  { pattern: /^git\s+push\s+.*--force/, reason: 'Force push — can overwrite remote history' },
-  { pattern: /^rm\s+-rf?\s+[^.]/, reason: 'Recursive delete' },
-  { pattern: /^docker\s+rm\s+-f/, reason: 'Force removes Docker containers' },
-  { pattern: /^docker\s+system\s+prune/, reason: 'Removes unused Docker data' },
-  { pattern: /^kubectl\s+delete/, reason: 'Deletes Kubernetes resources' },
-  { pattern: /^npm\s+publish/, reason: 'Publishes package to npm' },
-  { pattern: /^npx\s+supabase\s+functions\s+deploy/, reason: 'Deploys edge function to production' },
-  { pattern: /^npx\s+supabase\s+db\s+push/, reason: 'Pushes database migrations to production' },
+  { pattern: /^git\s+push/i, reason: 'Pushes code to remote — visible to others' },
+  { pattern: /^git\s+reset\s+--hard/i, reason: 'Discards all uncommitted changes' },
+  { pattern: /^git\s+checkout\s+--\s/i, reason: 'Discards file changes' },
+  { pattern: /^git\s+branch\s+-[dD]\s/i, reason: 'Deletes a git branch' },
+  { pattern: /^git\s+push\s+.*--force/i, reason: 'Force push — can overwrite remote history' },
+  { pattern: /^rm\s+-rf?\s+[^.]/i, reason: 'Recursive delete' },
+  { pattern: /^docker\s+rm\s+-f/i, reason: 'Force removes Docker containers' },
+  { pattern: /^docker\s+system\s+prune/i, reason: 'Removes unused Docker data' },
+  { pattern: /^kubectl\s+delete/i, reason: 'Deletes Kubernetes resources' },
+  { pattern: /^npm\s+publish/i, reason: 'Publishes package to npm' },
+  { pattern: /^npx\s+supabase\s+functions\s+deploy/i, reason: 'Deploys edge function to production' },
+  { pattern: /^npx\s+supabase\s+db\s+push/i, reason: 'Pushes database migrations to production' },
   { pattern: /DROP\s+TABLE/i, reason: 'Drops a database table' },
   { pattern: /TRUNCATE/i, reason: 'Truncates a database table' },
   { pattern: /DELETE\s+FROM/i, reason: 'Deletes database rows' },
+  // Catch piped/chained destructive commands
+  { pattern: /[|;]\s*rm\s+-rf/i, reason: 'Piped recursive delete' },
+  { pattern: /[|;]\s*git\s+push/i, reason: 'Piped git push' },
 ]
 
 /** Set the permission mode */

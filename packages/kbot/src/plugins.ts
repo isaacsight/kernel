@@ -11,7 +11,7 @@
 //     execute: async (args) => `Hello, ${args.name}!`,
 //   }
 
-import { existsSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, mkdirSync, writeFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { pathToFileURL } from 'node:url'
@@ -55,6 +55,17 @@ export function ensurePluginsDir(): string {
 export async function loadPlugins(verbose = false): Promise<PluginManifest[]> {
   ensurePluginsDir()
 
+  // Security: reject plugins if directory is world/group-writable
+  try {
+    const dirStat = statSync(PLUGINS_DIR)
+    if ((dirStat.mode & 0o022) !== 0) {
+      if (verbose) console.error('  ⚠ Plugin directory is writable by others — skipping plugins for security')
+      return []
+    }
+  } catch {
+    return []
+  }
+
   const files = readdirSync(PLUGINS_DIR).filter(f =>
     PLUGIN_EXTENSIONS.some(ext => f.endsWith(ext))
   )
@@ -62,6 +73,22 @@ export async function loadPlugins(verbose = false): Promise<PluginManifest[]> {
   if (files.length === 0) return []
 
   for (const file of files) {
+    // Security: reject plugin files that are group/world-writable
+    try {
+      const fileStat = statSync(join(PLUGINS_DIR, file))
+      if ((fileStat.mode & 0o022) !== 0) {
+        loadedPlugins.push({
+          name: file.replace(/\.[^.]+$/, ''),
+          file,
+          toolCount: 0,
+          loadedAt: new Date().toISOString(),
+          error: 'Skipped: file is writable by others (security)',
+        })
+        continue
+      }
+    } catch {
+      continue
+    }
     const filePath = join(PLUGINS_DIR, file)
     const manifest: PluginManifest = {
       name: file.replace(/\.[^.]+$/, ''),
