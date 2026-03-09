@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion } from 'motion/react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { IconArrowLeft, IconUsers, IconChats, IconBrain, IconTrendingUp, IconCrown, IconActivity, IconDownload, IconTrash, IconShieldCheck, IconShieldOff, IconSearch, IconRefresh, IconChevronRight } from '../components/KernelIcons'
+import { IconArrowLeft, IconUsers, IconChats, IconBrain, IconTrendingUp, IconCrown, IconActivity, IconDownload, IconTrash, IconShieldCheck, IconShieldOff, IconSearch, IconRefresh, IconChevronRight, IconStar } from '../components/KernelIcons'
 import { useAuthContext } from '../providers/AuthProvider'
 import { supabase } from '../engine/SupabaseClient'
 
@@ -15,6 +15,110 @@ interface UserRow {
   messageCount: number
   memoryProfile?: Record<string, unknown>
   kgEntityCount?: number
+}
+
+interface ConversationRow {
+  id: string
+  title: string | null
+  created_at: string
+  updated_at: string
+}
+
+interface MessageRow {
+  id: string
+  agent_id: string
+  content: string
+  created_at: string
+}
+
+interface StorageUsage {
+  userId: string
+  email: string
+  totalBytes: number
+  fileCount: number
+}
+
+interface ScoreSummary {
+  user_id: string
+  email: string
+  total_submissions: number
+  avg_score: number | null
+  avg_project: number | null
+  avg_session: number | null
+  avg_work: number | null
+  latest_score_at: string
+}
+
+interface ScoreEntry {
+  id: string
+  user_id: string
+  email: string
+  conversation_id: string | null
+  score_type: string
+  score: number
+  notes: string | null
+  created_at: string
+}
+
+interface ParsedScoreNotes {
+  categories: { e: number; rd: number; qa: number; p: number; d: number; l: number }
+  market: { label: string; multiplier: number }
+  relevance: { label: string; multiplier: number }
+  rd: { complexity: string; multiplier: number }
+  webMultiplier: number
+  tier: string
+  total: number
+  tax: number
+  stripeFee: number
+  subtotal: number
+}
+
+function parseScoreNotes(notes: string | null): ParsedScoreNotes | null {
+  if (!notes) return null
+  const parts = notes.split(' | ').map(s => s.trim())
+  if (parts.length < 6) return null
+  try {
+    // "E15 RD12 QA14 P10 D8 L7"
+    const catMatch = parts[0].match(/E(\d+)\s+RD(\d+)\s+QA(\d+)\s+P(\d+)\s+D(\d+)\s+L(\d+)/)
+    if (!catMatch) return null
+    // "Finance & Banking ×1.8"
+    const marketMatch = parts[1].match(/^(.+?)\s+×([\d.]+)$/)
+    // "Focused ×1.28"
+    const relMatch = parts[2].match(/^(.+?)\s+×([\d.]+)$/)
+    // "Significant R&D ×1.25"
+    const rdMatch = parts[3].match(/^(.+?)\s+×([\d.]+)$/)
+    // "Web ×1.1"
+    const webMatch = parts[4].match(/×([\d.]+)/)
+    // "Premium $34,267"
+    const tierMatch = parts[5].match(/^(\w+)\s+\$([\d,]+)$/)
+    // "tax$2997 fee$1024 sub$34267" (optional 7th segment)
+    let tax = 0, stripeFee = 0, subtotal = 0
+    if (parts[6]) {
+      const taxMatch = parts[6].match(/tax\$(\d+)/)
+      const feeMatch = parts[6].match(/fee\$(\d+)/)
+      const subMatch = parts[6].match(/sub\$(\d+)/)
+      tax = +(taxMatch?.[1] || 0)
+      stripeFee = +(feeMatch?.[1] || 0)
+      subtotal = +(subMatch?.[1] || 0)
+    }
+    return {
+      categories: {
+        e: +catMatch[1], rd: +catMatch[2], qa: +catMatch[3],
+        p: +catMatch[4], d: +catMatch[5], l: +catMatch[6],
+      },
+      market: { label: marketMatch?.[1] || '—', multiplier: +(marketMatch?.[2] || 1) },
+      relevance: { label: relMatch?.[1] || '—', multiplier: +(relMatch?.[2] || 1) },
+      rd: { complexity: rdMatch?.[1] || '—', multiplier: +(rdMatch?.[2] || 1) },
+      webMultiplier: +(webMatch?.[1] || 1),
+      tier: tierMatch?.[1] || '—',
+      total: +(tierMatch?.[2]?.replace(/,/g, '') || 0),
+      tax,
+      stripeFee,
+      subtotal,
+    }
+  } catch {
+    return null
+  }
 }
 
 interface Stats {
@@ -56,6 +160,19 @@ export function AdminPage() {
   const [userKGEntities, setUserKGEntities] = useState<any[]>([])
   const [modQueue, setModQueue] = useState<any[]>([])
   const [modLoading, setModLoading] = useState(false)
+  const [userConversations, setUserConversations] = useState<ConversationRow[]>([])
+  const [selectedConvId, setSelectedConvId] = useState<string | null>(null)
+  const [convMessages, setConvMessages] = useState<MessageRow[]>([])
+  const [convsLoading, setConvsLoading] = useState(false)
+  const [storageUsage, setStorageUsage] = useState<StorageUsage[]>([])
+  const [scoreSummaries, setScoreSummaries] = useState<ScoreSummary[]>([])
+  const [scoreEntries, setScoreEntries] = useState<ScoreEntry[]>([])
+  const [scoresExpanded, setScoresExpanded] = useState(false)
+  const [sendingFile, setSendingFile] = useState(false)
+  const [sendFileStatus, setSendFileStatus] = useState<string | null>(null)
+  // Invoicing: minimum score to bill, margin multiplier
+  const INVOICE_THRESHOLD = 70 // minimum avg score to invoice (must hit 70+)
+  const MARGIN_MULTIPLIER = 3  // 3x markup on ideas marketplace
 
   if (!isAdmin) return <Navigate to="/" replace />
 
@@ -156,6 +273,41 @@ export function AdminPage() {
     const totalSigs = sigCount ?? 0
     const totalHelpful = helpfulCount ?? 0
 
+    // Storage usage per user
+    try {
+      const { data: fileRows } = await supabase
+        .from('user_files')
+        .select('user_id, size_bytes')
+      if (fileRows && fileRows.length > 0) {
+        const byUser: Record<string, { totalBytes: number; fileCount: number }> = {}
+        for (const f of fileRows) {
+          if (!byUser[f.user_id]) byUser[f.user_id] = { totalBytes: 0, fileCount: 0 }
+          byUser[f.user_id].totalBytes += f.size_bytes
+          byUser[f.user_id].fileCount++
+        }
+        const userMap = new Map(authUsers.map(u => [u.id, u.email]))
+        const usage: StorageUsage[] = Object.entries(byUser)
+          .map(([uid, v]) => ({ userId: uid, email: userMap.get(uid) || uid.slice(0, 8), ...v }))
+          .sort((a, b) => b.totalBytes - a.totalBytes)
+        setStorageUsage(usage)
+      } else {
+        setStorageUsage([])
+      }
+    } catch { setStorageUsage([]) }
+
+    // Client scores
+    try {
+      const [{ data: summaries }, { data: entries }] = await Promise.all([
+        supabase.rpc('get_client_score_summary'),
+        supabase.rpc('get_all_client_scores'),
+      ])
+      setScoreSummaries(summaries || [])
+      setScoreEntries(entries || [])
+    } catch {
+      setScoreSummaries([])
+      setScoreEntries([])
+    }
+
     setUsers(authUsers)
     setInsights(insightsData || [])
     setActivity(activityEntries)
@@ -195,6 +347,32 @@ export function AdminPage() {
       .then(({ data }) => setUserKGEntities(data || []))
   }, [selectedUser?.id])
 
+  // Fetch conversations for selected user
+  const fetchUserConversations = useCallback(async (userId: string) => {
+    setConvsLoading(true)
+    setSelectedConvId(null)
+    setConvMessages([])
+    const { data } = await supabase
+      .from('conversations')
+      .select('id, title, created_at, updated_at')
+      .eq('user_id', userId)
+      .order('updated_at', { ascending: false })
+      .limit(50)
+    setUserConversations(data || [])
+    setConvsLoading(false)
+  }, [])
+
+  // Fetch messages for selected conversation
+  const fetchConvMessages = useCallback(async (convId: string) => {
+    const { data } = await supabase
+      .from('messages')
+      .select('id, agent_id, content, created_at')
+      .eq('channel_id', convId)
+      .order('created_at', { ascending: true })
+      .limit(200)
+    setConvMessages(data || [])
+  }, [])
+
   // ── Admin Actions ──
   const grantSubscription = async (userId: string) => {
     await supabase.from('subscriptions').upsert({
@@ -227,6 +405,114 @@ export function AdminPage() {
     await supabase.from('knowledge_graph_relations').delete().eq('user_id', userId)
     fetchData()
     setSelectedUser(null)
+  }
+
+  // ── Stripe Invoice ──
+  const createStripeInvoice = async (
+    targetUserId: string,
+    email: string,
+    amount: number,
+    tier: string,
+    parsed: ParsedScoreNotes | null,
+  ) => {
+    if (!confirm(`Create Stripe invoice for ${email}?\n\nAmount: $${amount.toLocaleString()} (${tier} Tier)\n\nThis will send a real invoice via Stripe.`)) return
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-invoice`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_KEY || '',
+          },
+          body: JSON.stringify({
+            target_user_id: targetUserId,
+            email,
+            amount_cents: amount * 100,
+            description: `Kernel ${tier} Tier — Project Invoice`,
+            metadata: parsed ? {
+              tier,
+              market: parsed.market.label,
+              market_mult: parsed.market.multiplier,
+              relevance: parsed.relevance.label,
+              rd: parsed.rd.complexity,
+              subtotal: parsed.subtotal,
+              tax: parsed.tax,
+              stripe_fee: parsed.stripeFee,
+            } : {},
+          }),
+        },
+      )
+      const result = await res.json()
+      if (result.success) {
+        const openDashboard = confirm(`Draft invoice created for ${email}.\n\nInvoice ID: ${result.invoice_id}\n\nOpen Stripe dashboard to review and send?`)
+        if (openDashboard) {
+          window.open(result.dashboard_url, '_blank')
+        }
+      } else {
+        alert(`Invoice failed: ${result.error}`)
+      }
+    } catch (err) {
+      alert(`Invoice error: ${String(err)}`)
+    }
+  }
+
+  // ── Send File to User ──
+  const sendFileToUser = async (targetUserId: string) => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.onchange = async () => {
+      const file = input.files?.[0]
+      if (!file) return
+      if (file.size > 50 * 1024 * 1024) {
+        setSendFileStatus('File too large (50MB max)')
+        return
+      }
+      setSendingFile(true)
+      setSendFileStatus(null)
+      try {
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = () => {
+            const result = reader.result as string
+            resolve(result.split(',')[1]) // strip data:...;base64,
+          }
+          reader.onerror = reject
+          reader.readAsDataURL(file)
+        })
+        const { data: { session } } = await supabase.auth.getSession()
+        const res = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-send-file`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session?.access_token}`,
+              apikey: import.meta.env.VITE_SUPABASE_KEY || '',
+            },
+            body: JSON.stringify({
+              target_user_id: targetUserId,
+              filename: file.name,
+              mime_type: file.type || 'application/octet-stream',
+              file_base64: base64,
+            }),
+          },
+        )
+        const result = await res.json()
+        if (result.success) {
+          setSendFileStatus(`Sent "${file.name}" to ${result.target_email} (Inbox folder)`)
+        } else {
+          setSendFileStatus(`Error: ${result.error}`)
+        }
+      } catch (err) {
+        setSendFileStatus(`Failed: ${String(err)}`)
+      } finally {
+        setSendingFile(false)
+      }
+    }
+    input.click()
   }
 
   // ── Moderation Queue ──
@@ -338,7 +624,32 @@ export function AdminPage() {
             <MetricCard icon={<IconChats size={18} />} label="Messages" value={stats.messages} />
             <MetricCard icon={<IconBrain size={18} />} label="KG Entities" value={stats.kgEntities} />
             <MetricCard icon={<IconActivity size={18} />} label="Helpful Rate" value={`${stats.helpfulRate}%`} />
+            {scoreSummaries.length > 0 && (
+              <MetricCard
+                icon={<IconStar size={18} />}
+                label="Avg Score"
+                value={Math.round(scoreSummaries.reduce((sum, s) => sum + (s.avg_score ?? 0), 0) / scoreSummaries.length)}
+                accent
+              />
+            )}
           </div>
+
+          {/* Storage Warning — users approaching 100GB */}
+          {storageUsage.some(u => u.totalBytes > 80 * 1024 * 1024 * 1024) && (
+            <div style={{
+              background: '#f5e6e0', border: '1px solid #d4a0a0', borderRadius: 8,
+              padding: '12px 16px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8
+            }}>
+              <span style={{ fontSize: 18 }}>&#9888;</span>
+              <span style={{ fontFamily: 'Courier Prime, monospace', fontSize: 13 }}>
+                <strong>Storage alert:</strong>{' '}
+                {storageUsage.filter(u => u.totalBytes > 80 * 1024 * 1024 * 1024).map(u =>
+                  `${u.email} (${formatBytes(u.totalBytes)})`
+                ).join(', ')}{' '}
+                approaching 100GB
+              </span>
+            </div>
+          )}
 
           {/* Main Content */}
           <div className="admin-grid">
@@ -398,6 +709,19 @@ export function AdminPage() {
                     <span>Joined {new Date(selectedUser.created_at).toLocaleDateString()}</span>
                   </div>
 
+                  {/* Storage Usage */}
+                  {(() => {
+                    const su = storageUsage.find(s => s.userId === selectedUser.id)
+                    return su ? (
+                      <div className="admin-detail-meta mono" style={{ marginTop: 8 }}>
+                        <span style={su.totalBytes > 80 * 1024 * 1024 * 1024 ? { color: '#c53030', fontWeight: 700 } : {}}>
+                          {formatBytes(su.totalBytes)} storage
+                        </span>
+                        <span>{su.fileCount} files</span>
+                      </div>
+                    ) : null
+                  })()}
+
                   {/* Admin Actions */}
                   <div className="admin-user-actions">
                     {selectedUser.subscription === 'active' ? (
@@ -412,7 +736,27 @@ export function AdminPage() {
                     <button className="admin-action-btn admin-action-btn--danger" onClick={() => deleteUserConversations(selectedUser.id)}>
                       <IconTrash size={14} /> Delete Data
                     </button>
+                    <button
+                      className="admin-action-btn"
+                      onClick={() => sendFileToUser(selectedUser.id)}
+                      disabled={sendingFile}
+                    >
+                      <IconDownload size={14} style={{ transform: 'rotate(180deg)' }} />
+                      {sendingFile ? 'Sending...' : 'Send File'}
+                    </button>
                   </div>
+                  {sendFileStatus && (
+                    <div style={{
+                      fontFamily: 'Courier Prime, monospace', fontSize: 11,
+                      padding: '6px 10px', marginTop: 6, borderRadius: 6,
+                      background: sendFileStatus.startsWith('Error') || sendFileStatus.startsWith('Failed')
+                        ? 'rgba(160,80,80,0.08)' : 'rgba(90,122,90,0.08)',
+                      color: sendFileStatus.startsWith('Error') || sendFileStatus.startsWith('Failed')
+                        ? '#a05050' : '#5a7a5a',
+                    }}>
+                      {sendFileStatus}
+                    </div>
+                  )}
 
                   {/* User's KG Entities */}
                   {userKGEntities.length > 0 && (
@@ -432,6 +776,73 @@ export function AdminPage() {
                       </div>
                     </div>
                   )}
+
+                  {/* View Conversations */}
+                  <div style={{ marginTop: 16 }}>
+                    <button
+                      className="admin-action-btn"
+                      onClick={() => fetchUserConversations(selectedUser.id)}
+                      disabled={convsLoading}
+                    >
+                      <IconChats size={14} /> {convsLoading ? 'Loading...' : 'View Conversations'}
+                    </button>
+
+                    {userConversations.length > 0 && (
+                      <div style={{ marginTop: 12 }}>
+                        <h4 className="mono" style={{ marginBottom: 8, opacity: 0.5, fontSize: 11 }}>
+                          CONVERSATIONS ({userConversations.length})
+                        </h4>
+                        <div style={{ maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {userConversations.map(c => (
+                            <div
+                              key={c.id}
+                              className={`admin-user-row${selectedConvId === c.id ? ' selected' : ''}`}
+                              onClick={() => { setSelectedConvId(c.id); fetchConvMessages(c.id) }}
+                              style={{ padding: '8px 12px', cursor: 'pointer' }}
+                            >
+                              <div className="admin-user-info">
+                                <span className="admin-user-email" style={{ fontSize: 13 }}>
+                                  {c.title || 'Untitled'}
+                                </span>
+                                <span className="admin-user-meta mono">
+                                  {new Date(c.updated_at).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Message thread */}
+                    {selectedConvId && convMessages.length > 0 && (
+                      <div style={{ marginTop: 12, maxHeight: 400, overflowY: 'auto', border: '1px solid var(--rubin-border, #e5e5e5)', borderRadius: 8, padding: 12 }}>
+                        <h4 className="mono" style={{ marginBottom: 8, opacity: 0.5, fontSize: 11 }}>
+                          MESSAGES ({convMessages.length})
+                        </h4>
+                        {convMessages.map(m => (
+                          <div
+                            key={m.id}
+                            style={{
+                              padding: '8px 12px',
+                              marginBottom: 6,
+                              borderRadius: 6,
+                              background: m.agent_id === 'user' ? 'rgba(107,91,149,0.06)' : 'rgba(0,0,0,0.02)',
+                              borderLeft: m.agent_id === 'user' ? '3px solid #6B5B95' : '3px solid rgba(0,0,0,0.1)',
+                            }}
+                          >
+                            <div className="mono" style={{ fontSize: 10, opacity: 0.5, marginBottom: 4 }}>
+                              {m.agent_id === 'user' ? 'User' : m.agent_id} · {new Date(m.created_at).toLocaleTimeString()}
+                            </div>
+                            <div style={{ fontSize: 13, lineHeight: 1.5, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                              {(m.content || '').slice(0, 2000)}
+                              {(m.content || '').length > 2000 && '... (truncated)'}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
                   {selectedUser.memoryProfile && Object.keys(selectedUser.memoryProfile).length > 0 ? (
                     <div className="admin-memory">
@@ -558,10 +969,226 @@ export function AdminPage() {
               </div>
             )}
           </div>
+          {/* Client Scores — Invoicing Dashboard */}
+          <div className="admin-panel" style={{ marginTop: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 className="mono admin-panel-title">
+                <IconStar size={14} style={{ marginRight: 6, opacity: 0.6 }} />
+                CLIENT SCORES
+              </h3>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="admin-action-btn" onClick={() => setScoresExpanded(!scoresExpanded)}>
+                  {scoresExpanded ? 'Summary' : 'All Scores'}
+                </button>
+                <button className="admin-action-btn" onClick={exportScoresCSV} title="Export scores CSV">
+                  <IconDownload size={14} /> Export
+                </button>
+              </div>
+            </div>
+
+            {/* Invoicing threshold bar */}
+            {scoreSummaries.length > 0 && (
+              <div style={{
+                display: 'flex', gap: 16, alignItems: 'center',
+                padding: '12px 16px', marginBottom: 12,
+                background: 'rgba(107,91,149,0.04)', borderRadius: 8,
+                fontFamily: 'Courier Prime, monospace', fontSize: 11,
+              }}>
+                <span style={{ opacity: 0.6 }}>INVOICE THRESHOLD: <strong>{INVOICE_THRESHOLD}/100</strong></span>
+                <span style={{ opacity: 0.6 }}>MARGIN: <strong>{MARGIN_MULTIPLIER}x</strong></span>
+                <span style={{ color: '#5a7a5a' }}>
+                  {scoreSummaries.filter(s => (s.avg_score ?? 0) >= INVOICE_THRESHOLD).length} billable
+                </span>
+                <span style={{ color: '#a05050' }}>
+                  {scoreSummaries.filter(s => (s.avg_score ?? 0) < INVOICE_THRESHOLD).length} below threshold
+                </span>
+              </div>
+            )}
+
+            {scoreSummaries.length === 0 ? (
+              <p style={{ opacity: 0.4, fontStyle: 'italic', padding: 16 }}>
+                No client scores yet. Clients type <code style={{ fontFamily: 'Courier Prime, monospace', background: 'rgba(0,0,0,0.04)', padding: '2px 6px', borderRadius: 3 }}>kernel.hat</code> to submit.
+              </p>
+            ) : scoresExpanded ? (
+              /* All individual scores */
+              <div className="admin-scores-detail">
+                {scoreEntries.map(entry => {
+                  const parsed = parseScoreNotes(entry.notes)
+                  return (
+                    <div key={entry.id} className="admin-score-row">
+                      <div
+                        className="admin-score-value"
+                        style={{ color: getScoreColor(entry.score) }}
+                      >
+                        {entry.score}
+                      </div>
+                      <div className="admin-score-info">
+                        <div className="admin-score-info-email">{entry.email}</div>
+                        <div className="admin-score-info-meta">
+                          {entry.score_type} · {new Date(entry.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                      {parsed ? (
+                        <div className="admin-score-pricing-inline">
+                          <span className="admin-score-pricing-total-sm">${parsed.total.toLocaleString()}</span>
+                          <span className="admin-score-pricing-tier-sm">{parsed.tier}</span>
+                          <span className="admin-score-pricing-mult-sm" title={parsed.market.label}>Mkt ×{parsed.market.multiplier}</span>
+                          <span className="admin-score-pricing-mult-sm" title={parsed.relevance.label}>Rel ×{parsed.relevance.multiplier}</span>
+                          <span className="admin-score-pricing-mult-sm" title={parsed.rd.complexity}>R&D ×{parsed.rd.multiplier}</span>
+                          <span className="admin-score-pricing-mult-sm">Web ×{parsed.webMultiplier}</span>
+                        </div>
+                      ) : entry.notes ? (
+                        <div className="admin-score-note" title={entry.notes}>{entry.notes}</div>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              /* Summary cards per client */
+              <div className="admin-scores-summary">
+                {scoreSummaries.map(s => {
+                  const latestEntry = scoreEntries.find(e => e.user_id === s.user_id)
+                  const parsed = latestEntry ? parseScoreNotes(latestEntry.notes) : null
+                  return (
+                    <div key={s.user_id} className="admin-score-card">
+                      <div className="admin-score-card-header">
+                        <span className="admin-score-email">{s.email}</span>
+                        <span
+                          className="admin-score-avg"
+                          style={{ color: getScoreColor(s.avg_score ?? 0) }}
+                        >
+                          {s.avg_score ?? '—'}
+                        </span>
+                      </div>
+                      <div className="admin-score-breakdown">
+                        <div className="admin-score-type">
+                          PROJECT
+                          <span style={{ color: getScoreColor(s.avg_project ?? 0) }}>
+                            {s.avg_project ?? '—'}
+                          </span>
+                        </div>
+                        <div className="admin-score-type">
+                          SESSION
+                          <span style={{ color: getScoreColor(s.avg_session ?? 0) }}>
+                            {s.avg_session ?? '—'}
+                          </span>
+                        </div>
+                        <div className="admin-score-type">
+                          WORK
+                          <span style={{ color: getScoreColor(s.avg_work ?? 0) }}>
+                            {s.avg_work ?? '—'}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Full pricing breakdown from latest score */}
+                      {parsed && (
+                        <div className="admin-score-pricing">
+                          <div className="admin-score-pricing-total">
+                            ${parsed.total.toLocaleString()}
+                            <span className="admin-score-pricing-tier">{parsed.tier}</span>
+                          </div>
+                          <div className="admin-score-pricing-grid">
+                            <div className="admin-score-pricing-item">
+                              <span className="admin-score-pricing-label">Market</span>
+                              <span>{parsed.market.label}</span>
+                              <span className="admin-score-pricing-mult">×{parsed.market.multiplier}</span>
+                            </div>
+                            <div className="admin-score-pricing-item">
+                              <span className="admin-score-pricing-label">Relevance</span>
+                              <span>{parsed.relevance.label}</span>
+                              <span className="admin-score-pricing-mult">×{parsed.relevance.multiplier}</span>
+                            </div>
+                            <div className="admin-score-pricing-item">
+                              <span className="admin-score-pricing-label">R&D</span>
+                              <span>{parsed.rd.complexity}</span>
+                              <span className="admin-score-pricing-mult">×{parsed.rd.multiplier}</span>
+                            </div>
+                            <div className="admin-score-pricing-item">
+                              <span className="admin-score-pricing-label">Web Rate</span>
+                              <span>Live check</span>
+                              <span className="admin-score-pricing-mult">×{parsed.webMultiplier}</span>
+                            </div>
+                          </div>
+                          {parsed.tax > 0 && (
+                            <div className="admin-score-pricing-item" style={{ gridColumn: '1 / -1' }}>
+                              <span className="admin-score-pricing-label">Tax</span>
+                              <span>${parsed.tax.toLocaleString()}</span>
+                              <span className="admin-score-pricing-label">Stripe</span>
+                              <span>${parsed.stripeFee.toLocaleString()}</span>
+                              <span className="admin-score-pricing-label">Subtotal</span>
+                              <span>${parsed.subtotal.toLocaleString()}</span>
+                            </div>
+                          )}
+                          <div className="admin-score-pricing-cats">
+                            <span>E{parsed.categories.e}</span>
+                            <span>RD{parsed.categories.rd}</span>
+                            <span>QA{parsed.categories.qa}</span>
+                            <span>P{parsed.categories.p}</span>
+                            <span>D{parsed.categories.d}</span>
+                            <span>L{parsed.categories.l}</span>
+                          </div>
+                        </div>
+                      )}
+                      <div className="admin-score-meta">
+                        {s.total_submissions} submissions · last {relativeTime(s.latest_score_at)}
+                        {(s.avg_score ?? 0) >= INVOICE_THRESHOLD ? (
+                          <>
+                            <span style={{ color: '#5a7a5a', fontWeight: 700, marginLeft: 8 }}>BILLABLE</span>
+                            <button
+                              className="admin-action-btn admin-action-btn--accent"
+                              style={{ marginLeft: 8, padding: '2px 8px', fontSize: 10 }}
+                              onClick={() => createStripeInvoice(s.user_id, s.email, parsed?.total ?? 0, parsed?.tier ?? 'Standard', parsed)}
+                            >
+                              Invoice via Stripe
+                            </button>
+                          </>
+                        ) : (
+                          <span style={{ color: '#a05050', marginLeft: 8 }}>BELOW THRESHOLD</span>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </>
       )}
     </div>
   )
+
+  function exportScoresCSV() {
+    // Summary sheet with invoicing status + pricing
+    const summaryHeader = 'email,avg_score,avg_project,avg_session,avg_work,submissions,billable,status,latest_cost,tier,market,market_mult,relevance,rel_mult,rd_complexity,rd_mult,web_mult'
+    const summaryRows = scoreSummaries.map(s => {
+      const billable = (s.avg_score ?? 0) >= INVOICE_THRESHOLD
+      const latestEntry = scoreEntries.find(e => e.user_id === s.user_id)
+      const parsed = latestEntry ? parseScoreNotes(latestEntry.notes) : null
+      const p = parsed
+      return `${s.email},${s.avg_score ?? ''},${s.avg_project ?? ''},${s.avg_session ?? ''},${s.avg_work ?? ''},${s.total_submissions},${billable},${billable ? 'INVOICE' : 'BELOW_THRESHOLD'},${p ? p.total : ''},"${p?.tier || ''}","${p?.market.label || ''}",${p?.market.multiplier || ''},"${p?.relevance.label || ''}",${p?.relevance.multiplier || ''},"${p?.rd.complexity || ''}",${p?.rd.multiplier || ''},${p?.webMultiplier || ''}`
+    })
+    // Detail sheet with parsed pricing
+    const detailHeader = '\n\nemail,score_type,score,cost,tier,market,market_mult,relevance,rel_mult,rd,rd_mult,web_mult,date'
+    const detailRows = scoreEntries.map(e => {
+      const p = parseScoreNotes(e.notes)
+      return `${e.email},${e.score_type},${e.score},${p ? p.total : ''},"${p?.tier || ''}","${p?.market.label || ''}",${p?.market.multiplier || ''},"${p?.relevance.label || ''}",${p?.relevance.multiplier || ''},"${p?.rd.complexity || ''}",${p?.rd.multiplier || ''},${p?.webMultiplier || ''},${e.created_at}`
+    })
+    const csv = ['INVOICE SUMMARY', summaryHeader, ...summaryRows, detailHeader, ...detailRows].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `kernel-invoice-scores-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+}
+
+function getScoreColor(score: number): string {
+  if (score >= 80) return '#5a7a5a'
+  if (score >= 60) return '#8B7355'
+  if (score >= 40) return '#B8875C'
+  return '#a05050'
 }
 
 // ─── Helpers ────────────────────────────────────────
@@ -576,6 +1203,13 @@ function relativeTime(dateStr: string): string {
   if (hrs < 24) return `${hrs}h`
   const days = Math.floor(hrs / 24)
   return `${days}d`
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
 }
 
 function MetricCard({ icon, label, value, accent }: {

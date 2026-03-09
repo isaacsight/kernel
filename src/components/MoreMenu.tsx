@@ -1,9 +1,8 @@
 import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
-import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconCrown, IconChart } from './KernelIcons'
+import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconChart } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import type { ThemeMode } from '../hooks/useTheme'
-import type { PlanId } from '../config/planLimits'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -46,33 +45,20 @@ const THEMES: { id: ThemeMode; icon: typeof IconSun; labelKey: string }[] = [
   { id: 'eink', icon: IconBookOpen, labelKey: 'menu.themeEink' },
 ]
 
-interface PlanOption {
-  id: PlanId
-  name: string
-  price: string
-  period: string
-  badge?: string
-}
-
-const PLANS: PlanOption[] = [
-  { id: 'pro_monthly', name: 'Pro', price: '$39', period: '/mo' },
-  { id: 'pro_annual', name: 'Pro', price: '$390', period: '/yr', badge: 'Save 17%' },
-]
-
 interface MoreMenuProps {
   isOpen: boolean
   onClose: () => void
   onSelect: (action: MoreAction) => void
-  onUpgrade: (plan: PlanId) => void
-  isPro: boolean
+  onUpgrade?: () => void
+  isPro?: boolean
   isSubscribed?: boolean
-  isAdmin: boolean
+  isAdmin?: boolean
   upgradeLoading?: boolean
   theme?: ThemeMode
   onSetTheme?: (t: ThemeMode) => void
 }
 
-export function MoreMenu({ isOpen, onClose, onSelect, onUpgrade, isPro, isSubscribed, upgradeLoading, theme, onSetTheme }: MoreMenuProps) {
+export function MoreMenu({ isOpen, onClose, onSelect, theme, onSetTheme }: MoreMenuProps) {
   const { t, i18n } = useTranslation('home')
   const dragControls = useDragControls()
   if (!isOpen) return null
@@ -136,40 +122,8 @@ export function MoreMenu({ isOpen, onClose, onSelect, onUpgrade, isPro, isSubscr
             </select>
           </div>
 
-          {!isPro && (
-            <>
-              <div className="ka-more-menu-divider" />
-              <div className="ka-more-menu-label">
-                <IconCrown size={14} />
-                Upgrade
-              </div>
-              <div className="ka-plan-grid">
-                {PLANS.map(plan => (
-                  <button
-                    key={plan.id}
-                    className="ka-plan-card"
-                    disabled={upgradeLoading}
-                    onClick={() => { onUpgrade(plan.id); onClose() }}
-                  >
-                    <span className="ka-plan-card-name">{plan.name}</span>
-                    <span className="ka-plan-card-price">
-                      {plan.price}<span className="ka-plan-card-period">{plan.period}</span>
-                    </span>
-                    {plan.badge && <span className="ka-plan-card-badge">{plan.badge}</span>}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
-          {isSubscribed && (
-            <button className="ka-more-menu-item" onClick={() => { onSelect('manage-subscription'); onClose() }}>
-              <IconCrown size={18} />
-              <span>{t('menu.manageSubscription', { defaultValue: 'Manage Subscription' })}</span>
-            </button>
-          )}
           <button className="ka-more-menu-item" onClick={() => { onSelect('usage'); onClose() }}>
             <IconChart size={18} />
             <span>{t('menu.usage', 'Usage')}</span>

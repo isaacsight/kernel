@@ -52,6 +52,8 @@ import {
   serializeState, fetchUrlContent,
 } from '../components/ChatHelpers'
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
+import { isScoreTrigger, calculateClientScore, saveClientScore, formatScoreMessage } from '../engine/clientScoring'
+import { autoSaveArtifact, autoSaveGeneratedImage } from '../engine/chatFolderAutoSave'
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
 import { generateImage, ImageCreditError, ImageGenLimitError, type ImageGenResult, type PreviousImage, type ReferenceImage } from '../engine/imageGen'
@@ -263,6 +265,9 @@ export function useChatEngine(params: UseChatEngineParams) {
   const userGoalsRef = useRef<UserGoal[]>([])
   userGoalsRef.current = userGoals
 
+  // User files manifest — cached list of stored files for AI context
+  const userFilesRef = useRef<{ filename: string; mime_type: string; size_bytes: number; folder: string | null }[]>([])
+
   // Today's briefing for home screen
   const [todayBriefing, setTodayBriefing] = useState<{ id: string; title: string; content: string } | null>(null)
 
@@ -447,6 +452,35 @@ export function useChatEngine(params: UseChatEngineParams) {
     getUserGoals(userId).then(setUserGoals).catch(err => console.warn('[Goals] Failed to load:', err))
   }, [userId])
 
+  // Load user files manifest for AI context
+  useEffect(() => {
+    (async () => {
+      try {
+        // Fetch all folders first for name lookup
+        const { data: folders } = await supabase
+          .from('user_file_folders')
+          .select('id, name')
+          .eq('user_id', userId)
+        const folderMap = new Map((folders || []).map(f => [f.id, f.name]))
+        // Fetch all files
+        const { data: files } = await supabase
+          .from('user_files')
+          .select('filename, mime_type, size_bytes, folder_id')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(200)
+        userFilesRef.current = (files || []).map(f => ({
+          filename: f.filename,
+          mime_type: f.mime_type,
+          size_bytes: f.size_bytes,
+          folder: f.folder_id ? folderMap.get(f.folder_id) || null : null,
+        }))
+      } catch (err) {
+        console.warn('[UserFiles] Failed to load file manifest:', err)
+      }
+    })()
+  }, [userId])
+
   // Load collective insights
   useEffect(() => {
     getCollectiveInsights(10).then(setCollectiveInsights).catch(() => { })
@@ -488,7 +522,55 @@ export function useChatEngine(params: UseChatEngineParams) {
     if (isStreaming || (!content.trim() && attachedFiles.length === 0)) return
 
     const trimmed = content.trim()
+
+    // Secret scoring trigger — calculate score and show in chat
+    if (isScoreTrigger(trimmed)) {
+      setInput('')
+      setIsThinking(true)
+      try {
+        const score = await calculateClientScore(userId)
+        const scoreMsg: ChatMessage = {
+          id: `score_${Date.now()}`,
+          role: 'kernel',
+          content: formatScoreMessage(score),
+          timestamp: Date.now(),
+          agentId: 'kernel',
+          agentName: 'Kernel',
+        }
+        setMessages(prev => [...prev, scoreMsg])
+        // Save to DB for admin invoicing
+        saveClientScore(userId, score, activeConversationId || undefined)
+      } catch {
+        // silent — don't reveal scoring system
+      } finally {
+        setIsThinking(false)
+      }
+      return
+    }
+
+    // Client-side daily limit guard — prevents race condition where rapid sends bypass backend check
+    if (!isPro && params.planLimits) {
+      const limit = params.planLimits.messagesPerDay
+      if (messageCountRef.current >= limit) {
+        setShowUpgradeWall(true)
+        return
+      }
+    }
+
     const filesToSend = [...attachedFiles]
+
+    // Refresh user files manifest (lightweight, non-blocking if it fails)
+    try {
+      const [{ data: folders }, { data: files }] = await Promise.all([
+        supabase.from('user_file_folders').select('id, name').eq('user_id', userId),
+        supabase.from('user_files').select('filename, mime_type, size_bytes, folder_id').eq('user_id', userId).order('created_at', { ascending: false }).limit(200),
+      ])
+      const folderMap = new Map((folders || []).map(f => [f.id, f.name]))
+      userFilesRef.current = (files || []).map(f => ({
+        filename: f.filename, mime_type: f.mime_type, size_bytes: f.size_bytes,
+        folder: f.folder_id ? folderMap.get(f.folder_id) || null : null,
+      }))
+    } catch { /* non-critical */ }
 
     // Loom — resolve pending outcome from previous response
     const pending = pendingOutcomeRef.current
@@ -618,7 +700,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     })()
 
     // Knowledge retrieval — runs in parallel with classification (Pro only)
-    const knowledgeTopN = params.planLimits?.knowledgeAutoRetrieval || 0
+    const knowledgeTopN = (params.planLimits as any)?.knowledgeAutoRetrieval || 0
     const knowledgePromise: Promise<import('../engine/knowledge/types').RetrievalResult[]> = (async () => {
       if (!knowledgeTopN || !userId) return []
       try {
@@ -938,6 +1020,24 @@ export function useChatEngine(params: UseChatEngineParams) {
           return manifest ? `\n\n${manifest}` : ''
         })()
       : ''
+    // User files manifest — let the AI know what files the user has stored
+    const userFilesBlock = userFilesRef.current.length > 0
+      ? (() => {
+          const formatSize = (b: number) => b < 1024 ? `${b} B` : b < 1024 * 1024 ? `${(b / 1024).toFixed(1)} KB` : `${(b / (1024 * 1024)).toFixed(1)} MB`
+          const byFolder = new Map<string, string[]>()
+          for (const f of userFilesRef.current) {
+            const key = f.folder || '(root)'
+            if (!byFolder.has(key)) byFolder.set(key, [])
+            byFolder.get(key)!.push(`${f.filename} (${f.mime_type}, ${formatSize(f.size_bytes)})`)
+          }
+          const lines: string[] = []
+          for (const [folder, files] of byFolder) {
+            if (folder !== '(root)') lines.push(`📁 ${folder}/`)
+            for (const file of files) lines.push(folder === '(root)' ? `- ${file}` : `  - ${file}`)
+          }
+          return `\n\n## User's Stored Files\nThe user has ${userFilesRef.current.length} file(s) saved in their account. You can reference these when relevant:\n${lines.join('\n')}`
+        })()
+      : ''
     // Crisis mode — reinforce protocol with formatted resources
     const crisisBlock = crisisActive
       ? `\n\n## CRISIS MODE ACTIVE\nThe user may be in emotional distress. Lead with empathy. Acknowledge their pain before anything else.\n\nResources to weave naturally into your response:\n${formatCrisisResourcesForPrompt()}\n\nDo NOT recite resources mechanically. Be a person first.`
@@ -1053,7 +1153,7 @@ export function useChatEngine(params: UseChatEngineParams) {
       isFree: !params.isPro,
     })
 
-    const systemPrompt = `${specialist.systemPrompt}${explainBlock}${contextPreamble}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${theoryBlock}${growthBlock}${identityBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${crisisBlock}`
+    const systemPrompt = `${specialist.systemPrompt}${explainBlock}${contextPreamble}\n\n---\n\n${snapshot}${memoryBlock}${callbackBlock}${openingBlock}${temporalBlock}${emotionalContextBlock}${turnTakingBlock}${repairBlock}${confidenceBlock}${mirrorBlock}${craftBlock}${selfBlock}${kgBlock}${theoryBlock}${growthBlock}${identityBlock}${knowledgeBlock}${goalBlock}${collectiveBlock}${recentConvsBlock}${summaryBlock}${crossConvBlock}${unresolvedBlock}${conversationContextBlock}${docCitationBlock}${projectManifest}${userFilesBlock}${crisisBlock}`
 
     const kernelId = `kernel_${Date.now()}`
     guardedSetMessages(prev => [...prev, {
@@ -1354,6 +1454,8 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
             user_id: userId,
             ...(result.image_url && { attachments: [{ url: result.image_url, type: result.mimeType, name: `kernel-image.${(result.mimeType || 'image/png').split('/')[1] || 'png'}` }] }),
           })
+          // Auto-save generated image to Chat/Gallery
+          autoSaveGeneratedImage(userId, result.image, result.mimeType, effectivePrompt)
           // Show toast if auto-reload was triggered
           if (result.auto_reloaded && result.reloaded_credits) {
             const packName = result.reloaded_pack
@@ -1812,7 +1914,7 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
             }).catch((err) => console.warn('[KG] Extraction failed:', err))
 
             // Knowledge Engine ingestion — extract knowledge items (Pro only)
-            if (params.planLimits?.knowledgeItems && params.planLimits.knowledgeItems > 0) {
+            if ((params.planLimits as any)?.knowledgeItems && (params.planLimits as any).knowledgeItems > 0) {
               const convTitle = params.conversations.find(c => c.id === convId)?.title
               ingestFromConversation(recentMsgs, userId, convId, convTitle)
                 .then(count => { if (count > 0) console.log(`[KnowledgeEngine] Ingested ${count} items`) })

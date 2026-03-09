@@ -41,7 +41,7 @@ export function useBilling(
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
-  const handleUpgrade = useCallback(async (plan: PlanId = 'pro_monthly') => {
+  const handleUpgrade = useCallback(async (plan: string = 'free') => {
     if (!user?.email || upgradeLoading) return
     setUpgradeLoading(true)
     try {

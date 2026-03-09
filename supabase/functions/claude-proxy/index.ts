@@ -409,21 +409,14 @@ async function logUsageAndCheckThreshold(
       ...(apiKeyId ? { api_key_id: apiKeyId } : {}),
     })
 
-    // Increment API key message count if this is an API key request
-    if (apiKeyId) {
-      svc.rpc('increment_api_message_count', { p_key_id: apiKeyId })
-        .then(() => {})
-        .catch((err: unknown) => console.warn('[claude-proxy] increment_api_message_count error:', err))
-    } else {
-      // Web overage: increment if paid user is past their plan limit
-      svc.rpc('increment_web_overage', { p_user_id: userId })
-        .then(({ data }) => {
-          if (data?.[0]?.new_overage_count > 0) {
-            console.log(`[web-overage] User ${userId} overage count: ${data[0].new_overage_count}`)
-          }
-        })
-        .catch((err: unknown) => console.warn('[claude-proxy] increment_web_overage error:', err))
-    }
+    // Unified overage: increment if paid user is past their plan limit (covers web + API)
+    svc.rpc('increment_web_overage', { p_user_id: userId })
+      .then(({ data }) => {
+        if (data?.[0]?.new_overage_count > 0) {
+          console.log(`[overage] User ${userId} overage count: ${data[0].new_overage_count}`)
+        }
+      })
+      .catch((err: unknown) => console.warn('[claude-proxy] increment_web_overage error:', err))
 
     // Check daily aggregate for threshold alert
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
@@ -1395,6 +1388,7 @@ serve(async (req: Request) => {
     let isPaidUser = false
     let isFreeUser = false
     let isMaxUser = false
+    let skipAtomicDaily = false
 
     // API key requests bypass user-level subscription checks — they have their own limits
     if (isApiKeyRequest) {
@@ -1450,10 +1444,16 @@ serve(async (req: Request) => {
       }
 
       // ── Wave 2: All limit checks in parallel ──────────────
+      // For daily limit: use atomic check-and-increment to prevent race conditions
+      // where rapid concurrent requests all pass the check before any increment.
+      // Paid users with overage bypass the atomic check (they're allowed to exceed).
+      skipAtomicDaily = webOverageEnabled && !webSpendingCeilingHit
       const [dailyLimitResult, monthlyResult, rateLimitResult, costResult, fileLimitResult] = await Promise.all([
-        // Daily message limit
-        svc.rpc('check_message_limit', { p_user_id: user.id })
-          .then(({ data, error }) => ({ data, error })),
+        // Daily message limit — atomic check + increment (or read-only for overage users)
+        skipAtomicDaily
+          ? svc.rpc('check_message_limit', { p_user_id: user.id }).then(({ data, error }) => ({ data, error, atomic: false as const }))
+          : svc.rpc('check_and_increment_message', { p_user_id: user.id, p_limit: limits.messagesPerDay })
+              .then(({ data, error }) => ({ data, error, atomic: true as const })),
         // Monthly message limit (different RPC for max tier)
         isMaxUser
           ? svc.rpc('check_max_fair_use', { p_user_id: user.id }).then(({ data }) => ({ type: 'max' as const, data }))
@@ -1470,9 +1470,9 @@ serve(async (req: Request) => {
 
       // ── Evaluate daily message limit ──────────────────────
       {
-        const { data: limitCheck, error: limitErr } = dailyLimitResult
+        const { data: limitCheck, error: limitErr, atomic: wasAtomic } = dailyLimitResult
         if (limitErr) {
-          console.error('[grace-shield] check_message_limit error:', limitErr.message)
+          console.error('[grace-shield] daily limit check error:', limitErr.message)
           // Fallback to direct read
           const { data: mem } = await svc
             .from('user_memory')
@@ -1480,44 +1480,45 @@ serve(async (req: Request) => {
             .eq('user_id', user.id)
             .maybeSingle()
           const used = mem?.daily_message_count ?? 0
-          if (used >= limits.messagesPerDay && !(webOverageEnabled && !webSpendingCeilingHit)) {
+          if (used >= limits.messagesPerDay && !skipAtomicDaily) {
             const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
             return new Response(
               JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used }),
               { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
             )
           }
-        } else if (limitCheck?.daily_count >= limits.messagesPerDay) {
-          // Allow paid users with overage through (unless spending ceiling hit)
-          if (!(webOverageEnabled && !webSpendingCeilingHit)) {
-            const resetTime = limitCheck.resets_at
-              ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-              : 'soon'
-            if (isFreeUser) {
-              svc.from('notifications').insert({
-                user_id: user.id,
-                title: 'Daily messages used',
-                body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
+        } else if (wasAtomic && limitCheck?.allowed === false) {
+          // Atomic RPC rejected — at or over limit
+          const resetTime = limitCheck.resets_at
+            ? new Date(limitCheck.resets_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+            : 'soon'
+          if (isFreeUser) {
+            svc.from('notifications').insert({
+              user_id: user.id,
+              title: 'Daily messages used',
+              body: `You've used all ${limits.messagesPerDay} free messages. They reset at ${resetTime}.`,
+              type: 'info',
+            }).then(() => { }).catch(() => { })
+            const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
+            fetch(notifUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
+              body: JSON.stringify({
+                channel: 'push', user_id: user.id,
+                title: 'Your messages reset ' + resetTime,
+                body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
                 type: 'info',
-              }).then(() => { }).catch(() => { })
-              const notifUrl = `${supabaseUrl}/functions/v1/send-notification`
-              fetch(notifUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${serviceRoleKey}` },
-                body: JSON.stringify({
-                  channel: 'push', user_id: user.id,
-                  title: 'Your messages reset ' + resetTime,
-                  body: `Your ${limits.messagesPerDay} daily messages will be available again at ${resetTime}.`,
-                  type: 'info',
-                }),
-              }).catch(() => { })
-            }
-            const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
-            return new Response(
-              JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
-              { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-            )
+              }),
+            }).catch(() => { })
           }
+          const errKey = isFreeUser ? 'free_limit_reached' : 'pro_limit_reached'
+          return new Response(
+            JSON.stringify({ error: errKey, limit: limits.messagesPerDay, used: limitCheck.daily_count, resets_at: limitCheck.resets_at }),
+            { status: isFreeUser ? 403 : 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+          )
+        } else if (!wasAtomic && limitCheck?.daily_count >= limits.messagesPerDay) {
+          // Non-atomic (overage users) — just informational, already bypassed
+          console.log(`[grace-shield] overage user ${user.id} at ${limitCheck.daily_count}/${limits.messagesPerDay} — allowed via overage`)
         }
       }
 
@@ -1742,13 +1743,17 @@ serve(async (req: Request) => {
     }
 
     // Charge message AFTER success (Grace Shield)
+    // Note: daily counter already incremented by atomic check_and_increment_message
+    // for non-overage users. Overage users and monthly counters still need incrementing.
     async function chargeMessageOnSuccess(): Promise<void> {
       if (isServiceCall || isAdmin) return
       if (!isFreeUser && !isPaidUser) return
       try {
         const svcCharge = createClient(supabaseUrl, serviceRoleKey!, { auth: { persistSession: false, autoRefreshToken: false } })
-        // Daily counter
-        await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
+        // Daily counter — only for overage users (non-overage already incremented atomically)
+        if (skipAtomicDaily) {
+          await svcCharge.rpc('increment_message_count', { p_user_id: user.id })
+        }
         // Monthly counter (Max uses calendar-month RPC, others use rolling window)
         if (isMaxUser) {
           await svcCharge.rpc('increment_max_message_count', { p_user_id: user.id })

@@ -66,9 +66,6 @@ export function usePanelManager(callbacks: {
         callbacks.setIsDrawerOpen(true)
         break
       case 'files':
-        closeOtherPanels('project')
-        setShowProjectPanel(true)
-        break
       case 'gallery':
         closeOtherPanels('image-gallery')
         setShowImageGallery(true)

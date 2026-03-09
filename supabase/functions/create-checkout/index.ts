@@ -1,8 +1,12 @@
 // Supabase Edge Function: create-checkout
-// Creates a Stripe Checkout session for Kernel Pro subscription ($29/mo or $290/yr).
-// Now accepts user_id to correlate Stripe → Supabase user via client_reference_id.
+// Creates a Stripe Checkout session for message pack purchases (one-time payments).
 //
-// Deploy: npx supabase functions deploy create-checkout --project-ref eoxxpyixdieprsxlpwcs
+// Packs:
+//   100 messages  = $15
+//   500 messages  = $50
+//   2,000 messages = $150
+//
+// Deploy: npx supabase functions deploy create-checkout --project-ref eoxxpyixdieprsxlpwcs --no-verify-jwt
 // Secrets: STRIPE_SECRET_KEY
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
@@ -13,27 +17,16 @@ import { requireContentType } from '../_shared/validate.ts'
 import { checkRateLimit, rateLimitResponse } from '../_shared/rate-limit.ts'
 
 interface CheckoutPayload {
-  mode?: 'subscription' | 'payment'
-  plan?: 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual'
-  price_id?: string
+  pack: 'pack_100' | 'pack_500' | 'pack_2000'
   success_url: string
   cancel_url: string
-  // API subscription fields
-  type?: 'web' | 'api'
-  api_tier?: 'pro' | 'growth'
 }
 
-// API tier pricing — base + metered overage
-const API_TIER_PRICES: Record<string, { base_price_id: string; overage_price_id: string }> = {
-  pro: {
-    base_price_id: 'price_1T7PITIWIar0uqwKgOv8fVQY',
-    overage_price_id: 'price_1T7PJ5IWIar0uqwKUoLaqmgo',
-  },
-  growth: {
-    base_price_id: 'price_1T7PJLIWIar0uqwKSG1BrHOn',
-    overage_price_id: 'price_1T7PJLIWIar0uqwKbeyO1lhf',
-  },
-}
+const MESSAGE_PACKS = {
+  pack_100: { messages: 100, amount: 1500, name: '100 Messages', description: '100 Kernel messages — never expire' },
+  pack_500: { messages: 500, amount: 5000, name: '500 Messages', description: '500 Kernel messages — never expire' },
+  pack_2000: { messages: 2000, amount: 15000, name: '2,000 Messages', description: '2,000 Kernel messages — never expire' },
+} as const
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -43,11 +36,10 @@ serve(async (req: Request) => {
   const CORS_HEADERS = { ...corsHeaders(req), ...SECURITY_HEADERS }
 
   try {
-    // ── Content-type check ──────────────────────────────
     const ctErr = requireContentType(req)
     if (ctErr) return ctErr(CORS_HEADERS)
 
-    // ── Auth: verify JWT ────────────────────────────────
+    // Auth: verify JWT
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) {
       return new Response(
@@ -65,11 +57,10 @@ serve(async (req: Request) => {
       )
     }
 
-    // Derive email and user_id from verified JWT — never trust the client body
     const email = user.email!
     const user_id = user.id
 
-    // ── Rate limit: 5 per hour ────────────────────────
+    // Rate limit: 5 per hour
     const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
@@ -85,71 +76,37 @@ serve(async (req: Request) => {
     }
 
     const payload = (await req.json()) as CheckoutPayload
-    const { mode = 'subscription', plan, price_id, success_url, cancel_url, type = 'web', api_tier } = payload
+    const { pack, success_url, cancel_url } = payload
 
-    // Build Stripe Checkout Session params
+    if (!pack || !(pack in MESSAGE_PACKS)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid pack. Use: pack_100, pack_500, or pack_2000' }),
+        { status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      )
+    }
+
+    const packInfo = MESSAGE_PACKS[pack]
+
+    // Build Stripe Checkout (one-time payment)
     const params = new URLSearchParams()
     params.set('customer_email', email)
-    params.set('mode', mode)
+    params.set('mode', 'payment')
     params.set('success_url', success_url)
     params.set('cancel_url', cancel_url)
-
-    // Link Stripe checkout to Supabase user (from verified JWT)
     params.set('client_reference_id', user_id)
     params.set('metadata[supabase_user_id]', user_id)
+    params.set('metadata[pack]', pack)
+    params.set('metadata[messages]', String(packInfo.messages))
+    params.set('payment_intent_data[metadata][supabase_user_id]', user_id)
+    params.set('payment_intent_data[metadata][pack]', pack)
+    params.set('payment_intent_data[metadata][messages]', String(packInfo.messages))
 
-    if (type === 'api' && api_tier && api_tier in API_TIER_PRICES) {
-      // ── API subscription: base price + metered overage ──
-      const tierPrices = API_TIER_PRICES[api_tier]
-
-      // Line item 0: base subscription
-      params.set('line_items[0][price]', tierPrices.base_price_id)
-      params.set('line_items[0][quantity]', '1')
-
-      // Line item 1: metered overage (no quantity — usage-based)
-      params.set('line_items[1][price]', tierPrices.overage_price_id)
-
-      // Subscription metadata for webhook processing
-      params.set('metadata[type]', 'api')
-      params.set('metadata[api_tier]', api_tier)
-      params.set('subscription_data[metadata][supabase_user_id]', user_id)
-      params.set('subscription_data[metadata][type]', 'api')
-      params.set('subscription_data[metadata][api_tier]', api_tier)
-    } else {
-      // ── Web subscription (existing flow) ──
-      const PRICE_MAP: Record<string, string | undefined> = {
-        pro_monthly: Deno.env.get('STRIPE_MONTHLY_PRICE_ID'),
-        pro_annual: Deno.env.get('STRIPE_ANNUAL_PRICE_ID'),
-        max_monthly: Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID'),
-        max_annual: Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID'),
-      }
-      const selectedPlan = plan || 'pro_monthly'
-      const resolvedPriceId = price_id || PRICE_MAP[selectedPlan]
-
-      if (mode === 'subscription') {
-        params.set('subscription_data[metadata][supabase_user_id]', user_id)
-        params.set('subscription_data[metadata][plan]', selectedPlan)
-      }
-
-      if (resolvedPriceId) {
-        params.set('line_items[0][price]', resolvedPriceId)
-        params.set('line_items[0][quantity]', '1')
-      } else {
-        // Fallback: create inline subscription
-        const isMax = selectedPlan.startsWith('max_')
-        const isAnnual = selectedPlan.endsWith('_annual')
-        params.set('line_items[0][price_data][currency]', 'usd')
-        params.set('line_items[0][price_data][unit_amount]', isMax ? (isAnnual ? '49000' : '4900') : (isAnnual ? '29000' : '2900'))
-        params.set('line_items[0][price_data][product_data][name]', isMax ? 'Kernel Max' : 'Kernel Pro')
-        params.set('line_items[0][price_data][product_data][description]', isMax
-          ? 'Generous messaging, 25 agent calls/day, 100 extended thinking/mo, and 50 file analyses/mo.'
-          : 'Full access to Kernel — memory, goals, briefings, extended thinking, voice, and file analysis.')
-        if (mode === 'subscription') {
-          params.set('line_items[0][price_data][recurring][interval]', isAnnual ? 'year' : 'month')
-        }
-        params.set('line_items[0][quantity]', '1')
-      }
-    }
+    // Inline price (no need for pre-created Stripe products)
+    params.set('line_items[0][price_data][currency]', 'usd')
+    params.set('line_items[0][price_data][unit_amount]', String(packInfo.amount))
+    params.set('line_items[0][price_data][product_data][name]', packInfo.name)
+    params.set('line_items[0][price_data][product_data][description]', packInfo.description)
+    params.set('line_items[0][quantity]', '1')
 
     const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
@@ -171,14 +128,10 @@ serve(async (req: Request) => {
 
     const session = await response.json()
 
-    // Audit log
-    const svcAudit = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    })
-    logAudit(svcAudit, {
+    logAudit(svc, {
       actorId: user_id, eventType: 'payment.checkout', action: 'create-checkout',
       source: 'create-checkout', status: 'success', statusCode: 200,
-      metadata: { mode },
+      metadata: { pack, messages: packInfo.messages },
       ip: getClientIP(req), userAgent: getUA(req),
     })
 

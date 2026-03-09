@@ -1,4 +1,4 @@
-import { IconHome, IconChats, IconFileCode, IconImage, IconSettings } from './KernelIcons'
+import { IconHome, IconChats, IconFolder, IconSettings } from './KernelIcons'
 import { useMiniPhone } from '../hooks/useMiniPhone'
 
 export type TabId = 'home' | 'chats' | 'files' | 'gallery' | 'settings'
@@ -12,8 +12,7 @@ interface Tab {
 const TABS: Tab[] = [
   { id: 'home', label: 'Home', icon: IconHome },
   { id: 'chats', label: 'Chats', icon: IconChats },
-  { id: 'files', label: 'Files', icon: IconFileCode },
-  { id: 'gallery', label: 'Gallery', icon: IconImage },
+  { id: 'files', label: 'Files', icon: IconFolder },
   { id: 'settings', label: 'Settings', icon: IconSettings },
 ]
 

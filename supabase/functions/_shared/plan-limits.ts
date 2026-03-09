@@ -26,7 +26,7 @@ export interface PlanLimits {
 
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: {
-    messagesPerMonth: 40, messagesPerDay: 10, maxTokens: 500,
+    messagesPerMonth: 30, messagesPerDay: 10, maxTokens: 500,
     memory: false, goals: false, briefings: false,
     briefingHistoryDays: 3, etPerMonth: 0,
     filesPerMonth: 0, historyDays: 3,
@@ -46,7 +46,7 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     platformWorkflowsPerMonth: 5,
   },
   pro_annual: {
-    messagesPerMonth: 1500, messagesPerDay: 100, maxTokens: 8192,
+    messagesPerMonth: 1000, messagesPerDay: 100, maxTokens: 8192,
     memory: true, goals: true, briefings: true,
     briefingHistoryDays: null, etPerMonth: 45,
     filesPerMonth: 10, historyDays: null,
@@ -56,7 +56,7 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     platformWorkflowsPerMonth: 8,
   },
   max_monthly: {
-    messagesPerMonth: 6000, messagesPerDay: 200, maxTokens: 8192,
+    messagesPerMonth: 6000, messagesPerDay: 500, maxTokens: 8192,
     memory: true, goals: true, briefings: true,
     briefingHistoryDays: null, etPerMonth: 100,
     filesPerMonth: 50, historyDays: null,
@@ -66,7 +66,7 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     platformWorkflowsPerMonth: 30,
   },
   max_annual: {
-    messagesPerMonth: 6000, messagesPerDay: 200, maxTokens: 8192,
+    messagesPerMonth: 6000, messagesPerDay: 500, maxTokens: 8192,
     memory: true, goals: true, briefings: true,
     briefingHistoryDays: null, etPerMonth: 100,
     filesPerMonth: 50, historyDays: null,

@@ -460,7 +460,7 @@ export interface DBSubscription {
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   status: 'active' | 'trialing' | 'canceled' | 'past_due' | 'inactive';
-  plan: 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual';
+  plan: 'pro' | 'max' | 'growth' | 'pro_monthly' | 'pro_annual' | 'max_monthly' | 'max_annual';
   current_period_end: string | null;
   created_at: string;
   updated_at: string;

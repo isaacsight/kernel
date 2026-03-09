@@ -140,8 +140,9 @@ export function TermsPage() {
       <h2>10. Free Tier Limits</h2>
 
       <p>
-        Free accounts are limited to 20 messages per 24-hour rolling window on the web app. This
-        limit resets automatically. Kernel Pro removes this limit for web usage.
+        Free accounts are limited to 30 messages per month across web and CLI. This
+        limit resets at the start of each billing cycle. Paid plans (Pro and Max) include higher quotas
+        with per-message overage billing after the quota is exceeded.
       </p>
 
       <h2>11. Kernel API</h2>
@@ -153,25 +154,25 @@ export function TermsPage() {
         for all usage that occurs under your API key.
       </p>
 
-      <h3>API Tiers and Pricing</h3>
+      <h3>Plans and Pricing</h3>
 
       <p>
-        The API is available at four tiers, each with a monthly message quota:
+        Kernel is available at three tiers. Your subscription covers both the web app (kernel.chat),
+        K:BOT CLI, and the API with a single shared message pool:
       </p>
 
       <ul>
-        <li><strong>Free:</strong> 50 messages per month (hard cap, no overage)</li>
-        <li><strong>Pro ($39/month):</strong> 1,500 messages per month, then $0.03 per additional message</li>
-        <li><strong>Growth ($249/month):</strong> 10,000 messages per month, then $0.025 per additional message</li>
-        <li><strong>Enterprise (custom pricing):</strong> Unlimited messages</li>
+        <li><strong>Free:</strong> 30 messages per month (hard cap, no overage)</li>
+        <li><strong>Pro ($39/month):</strong> 1,000 messages per month, then $0.05 per additional message</li>
+        <li><strong>Max ($249/month):</strong> 6,000 messages per month, then $0.04 per additional message</li>
       </ul>
 
       <h3>Overage Billing</h3>
 
       <p>
-        Overage billing applies to both the web chat and the API for paid plans. When you exceed
+        Overage billing applies to both the web chat and the API/CLI for paid plans. When you exceed
         your included monthly message quota, additional messages are billed at a per-message rate:
-        Pro plans at $0.03 per message, Max/Growth plans at $0.025 per message. These charges are
+        Pro plans at $0.05 per message, Max plans at $0.04 per message. These charges are
         metered and reported to Stripe, and will appear on your next invoice as a separate line item.
       </p>
 

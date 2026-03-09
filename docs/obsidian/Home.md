@@ -1,11 +1,11 @@
 ---
 tags: [kernel, index, home]
-updated: "2026-03-06"
+updated: "2026-03-08"
 ---
 
 # Kernel — Project Home
 
-**Kernel** is a sovereign AI personal assistant platform. One subscription, three surfaces: web app, CLI agent, and REST API — all sharing a unified intelligence layer with persistent memory.
+**Kernel** is a free AI personal assistant at [kernel.chat](https://kernel.chat). 10 messages per day, persistent memory, 17 specialist agents, file storage with AI access.
 
 **Live:** [kernel.chat](https://kernel.chat)
 **Repo:** [isaacsight/kernel](https://github.com/isaacsight/kernel)
@@ -19,20 +19,19 @@ updated: "2026-03-06"
 - [[Architecture Overview]] — Stack, directory map, data flow
 - [[Memory System]] — How Kernel remembers users
 - [[Agent System]] — 17 specialists, routing, swarm orchestration
-- [[Billing System]] — Unified billing across all surfaces
+- [[Billing System]] — Free-only (paid tiers archived)
+- [[Admin System]] — Admin agent, client scoring, Stripe invoicing
 
 ### Guides
 - [[Collaborator Onboarding]] — Getting started for new team members
 - [[Deployment Guide]] — How to build, deploy, and manage
-- [[Environment Setup]] — Env vars, secrets, Stripe config
+- [[Environment Setup]] — Env vars, secrets, config
 
 ### Status
 - [[Current Status]] — What's done, what's pending
 - [[Decision Log]] — Key architectural decisions with rationale
-- [[Backlog]] — Prioritized work items
 
 ### Reference
-- [[API Reference]] — REST API endpoints and tiers
 - [[Design System]] — Rubin tokens, typography, color palette
 - [[Test Accounts]] — Credentials for testing
 

@@ -26,6 +26,11 @@ const FEATURES: FeatureCard[] = [
     descKey: 'login.feature3Desc',
     palette: { particle: '#B8875C', link: '#A0768C', field: '#D4A774' }, // writer
   },
+  {
+    titleKey: 'login.feature4Title',
+    descKey: 'login.feature4Desc',
+    palette: { particle: '#6B8E6B', link: '#5B8BA0', field: '#6B5B95' }, // conversations
+  },
 ]
 
 function FeatureCardItem({ feature, index }: { feature: FeatureCard; index: number }) {

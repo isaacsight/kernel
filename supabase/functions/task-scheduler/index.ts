@@ -205,90 +205,19 @@ serve(async (req: Request) => {
       console.warn('Subscription expiration failed (non-blocking):', subErr)
     }
 
-    // ── API Overage: report usage to Stripe + spending alerts ──
+    // ── Unified Overage: report usage to Stripe + spending alerts ──
+    // All overage now tracked on subscriptions table (web + API unified)
     let overageReported = 0
     let alertsSent = 0
     try {
       const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
 
-      // 1. Report overage usage to Stripe via Billing Meters API
       if (stripeKey) {
-        // Meter event names by tier (must match Stripe meter config)
         const METER_EVENTS: Record<string, string> = {
-          pro: 'api_pro_overage_message',
-          growth: 'api_growth_overage_message',
-        }
-
-        const { data: overageKeys } = await supabase
-          .from('api_keys')
-          .select('id, user_id, tier, overage_count, last_reported_overage_count, overage_rate_millicents, stripe_subscription_id, monthly_window_start, last_overage_reported_at')
-          .eq('status', 'active')
-          .eq('overage_enabled', true)
-          .gt('overage_count', 0)
-          .not('stripe_subscription_id', 'is', null)
-
-        if (overageKeys && overageKeys.length > 0) {
-          for (const key of overageKeys) {
-            // Delta = new overage messages since last report
-            const lastReported = key.last_reported_overage_count ?? 0
-            const delta = key.overage_count - lastReported
-            if (delta <= 0) continue // nothing new to report
-
-            // Skip if reported within last hour (runs every scheduler tick)
-            if (key.last_overage_reported_at) {
-              const lastTime = new Date(key.last_overage_reported_at).getTime()
-              if (Date.now() - lastTime < 60 * 60 * 1000) continue
-            }
-
-            const eventName = METER_EVENTS[key.tier]
-            if (!eventName) continue
-
-            // Look up Stripe customer from subscription
-            try {
-              const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${key.stripe_subscription_id}`, {
-                headers: { Authorization: `Bearer ${stripeKey}` },
-              })
-              if (!subRes.ok) continue
-              const sub = await subRes.json()
-              const customerId = sub.customer
-
-              // Send meter event with DELTA (not cumulative) to Stripe
-              const meterRes = await fetch('https://api.stripe.com/v1/billing/meter_events', {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${stripeKey}`,
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `event_name=${eventName}&payload[value]=${delta}&payload[stripe_customer_id]=${customerId}`,
-              })
-
-              if (meterRes.ok) {
-                // Update both the timestamp and the last reported count
-                await supabase.from('api_keys')
-                  .update({
-                    last_overage_reported_at: new Date().toISOString(),
-                    last_reported_overage_count: key.overage_count,
-                  })
-                  .eq('id', key.id)
-                overageReported++
-                console.log(`[overage] Reported ${delta} overage messages for key ${key.id} (total: ${key.overage_count})`)
-              } else {
-                console.warn(`[overage] Stripe meter event failed for key ${key.id}:`, await meterRes.text())
-              }
-            } catch (stripeErr) {
-              console.warn(`[overage] Failed to report usage for key ${key.id}:`, stripeErr)
-            }
-          }
-        }
-      }
-
-      // 1b. Report WEB overage usage to Stripe
-      if (stripeKey) {
-        const WEB_METER_EVENTS: Record<string, string> = {
-          pro_monthly: 'web_pro_overage_message',
-          pro_annual: 'web_pro_overage_message',
-          max_monthly: 'web_max_overage_message',
-          max_annual: 'web_max_overage_message',
+          pro_monthly: 'kernel_pro_overage',
+          pro_annual: 'kernel_pro_overage',
+          max_monthly: 'kernel_max_overage',
+          max_annual: 'kernel_max_overage',
         }
 
         const { data: overageSubs } = await supabase
@@ -310,7 +239,7 @@ serve(async (req: Request) => {
               if (Date.now() - lastTime < 60 * 60 * 1000) continue
             }
 
-            const eventName = WEB_METER_EVENTS[sub.plan]
+            const eventName = METER_EVENTS[sub.plan]
             if (!eventName) continue
 
             try {
@@ -334,48 +263,64 @@ serve(async (req: Request) => {
                   })
                   .eq('user_id', sub.user_id)
                 overageReported++
-                console.log(`[web-overage] Reported ${delta} overage messages for user ${sub.user_id} (total: ${sub.overage_count})`)
+                console.log(`[overage] Reported ${delta} overage messages for user ${sub.user_id} (total: ${sub.overage_count})`)
               } else {
-                console.warn(`[web-overage] Stripe meter event failed for user ${sub.user_id}:`, await meterRes.text())
+                console.warn(`[overage] Stripe meter event failed for user ${sub.user_id}:`, await meterRes.text())
               }
             } catch (stripeErr) {
-              console.warn(`[web-overage] Failed to report usage for user ${sub.user_id}:`, stripeErr)
+              console.warn(`[overage] Failed to report usage for user ${sub.user_id}:`, stripeErr)
             }
           }
         }
       }
 
-      // 2. Spending alerts at 80% and 100% of base quota
-      const { data: alertKeys } = await supabase
-        .from('api_keys')
-        .select('id, user_id, monthly_message_count, monthly_message_limit, alert_80_sent, alert_100_sent')
-        .eq('status', 'active')
-        .in('tier', ['pro', 'growth'])
+      // Spending alerts at 80% and 100% of base quota (unified on subscriptions)
+      const PLAN_LIMITS: Record<string, number> = {
+        pro_monthly: 1000, pro_annual: 1000,
+        max_monthly: 6000, max_annual: 6000,
+      }
 
-      if (alertKeys && alertKeys.length > 0) {
-        for (const key of alertKeys) {
-          const pct = key.monthly_message_count / key.monthly_message_limit
+      const { data: alertSubs } = await supabase
+        .from('subscriptions')
+        .select('user_id, plan, alert_80_sent, alert_100_sent')
+        .in('status', ['active', 'trialing'])
+        .eq('overage_enabled', true)
+
+      if (alertSubs && alertSubs.length > 0) {
+        for (const sub of alertSubs) {
+          const limit = PLAN_LIMITS[sub.plan]
+          if (!limit) continue
+
+          // Get unified message count from user_memory
+          const { data: mem } = await supabase
+            .from('user_memory')
+            .select('monthly_message_count')
+            .eq('user_id', sub.user_id)
+            .maybeSingle()
+
+          const count = mem?.monthly_message_count ?? 0
+          const pct = count / limit
           const notifications: Array<{ user_id: string; title: string; body: string; type: string }> = []
 
-          if (pct >= 0.8 && !key.alert_80_sent) {
+          if (pct >= 0.8 && !sub.alert_80_sent) {
             notifications.push({
-              user_id: key.user_id,
-              title: 'API usage at 80%',
-              body: `You've used ${key.monthly_message_count} of ${key.monthly_message_limit} included messages. Overage billing will apply after the limit.`,
+              user_id: sub.user_id,
+              title: 'Usage at 80%',
+              body: `You've used ${count} of ${limit} included messages. Overage billing will apply after the limit.`,
               type: 'warning',
             })
-            await supabase.from('api_keys').update({ alert_80_sent: true }).eq('id', key.id)
+            await supabase.from('subscriptions').update({ alert_80_sent: true }).eq('user_id', sub.user_id)
             alertsSent++
           }
 
-          if (pct >= 1.0 && !key.alert_100_sent) {
+          if (pct >= 1.0 && !sub.alert_100_sent) {
             notifications.push({
-              user_id: key.user_id,
-              title: 'API base quota reached',
-              body: `You've used all ${key.monthly_message_limit} included messages. Additional messages will be billed at the overage rate.`,
+              user_id: sub.user_id,
+              title: 'Base quota reached',
+              body: `You've used all ${limit} included messages. Additional messages will be billed at the overage rate.`,
               type: 'warning',
             })
-            await supabase.from('api_keys').update({ alert_100_sent: true }).eq('id', key.id)
+            await supabase.from('subscriptions').update({ alert_100_sent: true }).eq('user_id', sub.user_id)
             alertsSent++
           }
 

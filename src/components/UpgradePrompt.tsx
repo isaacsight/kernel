@@ -1,74 +1,29 @@
 // ─── UpgradePrompt ──────────────────────────────────────
 //
-// Reusable contextual upgrade CTA for free users.
-// Shows feature-specific copy with monthly + annual options.
+// Shown when free users hit their daily message limit.
 
-import { IconCrown } from './KernelIcons'
-import type { PlanId } from '../config/planLimits'
+import { IconAlertCircle } from './KernelIcons'
 
 interface UpgradePromptProps {
-  feature: 'memory' | 'goals' | 'briefings' | 'monthly_limit' | 'daily_limit' | 'files' | 'pro_monthly_limit'
-  onUpgrade: (plan: PlanId) => void
+  feature: 'daily_limit' | string
+  onUpgrade?: () => void
   loading?: boolean
 }
 
-const COPY: Record<string, { title: string; description: string }> = {
-  memory: {
-    title: 'Kernel Pro remembers you',
-    description: 'So you never start from scratch. Your interests, preferences, and context — all carried forward.',
-  },
-  goals: {
-    title: 'Goals are a Pro feature',
-    description: 'Upgrade to let Kernel hold you accountable with goals, milestones, and streaks.',
-  },
-  briefings: {
-    title: 'Discussing your briefing is a Pro feature',
-    description: 'Upgrade to think through your day with Kernel — go deeper on any topic.',
-  },
-  monthly_limit: {
-    title: 'You\'ve used your free messages',
-    description: 'Pro gives you 100 messages per day, memory that learns you, and full briefings.',
-  },
-  daily_limit: {
-    title: 'You\'ve used your 10 free messages today',
-    description: 'Upgrade for up to 200 messages per day plus memory, goals, and extended thinking.',
-  },
-  files: {
-    title: 'File analysis is a Pro feature',
-    description: 'Upgrade to analyze images, PDFs, and documents with Kernel.',
-  },
-  pro_monthly_limit: {
-    title: 'You\'ve hit your Pro message limit',
-    description: 'Go Max for generous messaging with no visible cap, plus 100 extended thinking and 50 file analyses per month.',
-  },
-}
-
-export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProps) {
-  const copy = COPY[feature] || COPY.monthly_limit
+export function UpgradePrompt({ feature }: UpgradePromptProps) {
+  const isLimit = feature === 'daily_limit'
 
   return (
     <div className="ka-upgrade-prompt">
       <div className="ka-upgrade-prompt-icon">
-        <IconCrown size={20} />
+        <IconAlertCircle size={20} />
       </div>
-      <h3 className="ka-upgrade-prompt-title">{copy.title}</h3>
-      <p className="ka-upgrade-prompt-desc">{copy.description}</p>
-      <div className="ka-upgrade-prompt-actions">
-        <button
-          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--primary"
-          onClick={() => onUpgrade('pro_monthly')}
-          disabled={loading}
-        >
-          Go Pro — $39/mo
-        </button>
-        <button
-          className="ka-upgrade-prompt-btn ka-upgrade-prompt-btn--secondary"
-          onClick={() => onUpgrade('pro_annual')}
-          disabled={loading}
-        >
-          $390/yr — save $78
-        </button>
-      </div>
+      <h3 className="ka-upgrade-prompt-title">
+        {isLimit ? "You've used your 10 messages today" : 'Limit reached'}
+      </h3>
+      <p className="ka-upgrade-prompt-desc">
+        Come back tomorrow for 10 more free messages.
+      </p>
     </div>
   )
 }

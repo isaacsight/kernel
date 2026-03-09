@@ -1,6 +1,6 @@
 ---
 tags: [kernel, architecture, reference]
-updated: "2026-03-06"
+updated: "2026-03-08"
 ---
 
 # Architecture Overview
@@ -17,7 +17,7 @@ updated: "2026-03-06"
 | AI | Claude API via `supabase/functions/claude-proxy/` |
 | CLI | K:BOT (`packages/kbot/`) — TypeScript, runs locally |
 | Deployment | GitHub Pages (frontend), Supabase (backend) |
-| Payments | Stripe (subscriptions + metered overage billing) |
+| Payments | Stripe (client invoicing only — no subscriptions) |
 | Domain | kernel.chat (custom domain on GH Pages) |
 
 ## Three Surfaces, One Brain
@@ -59,13 +59,13 @@ src/
 │   ├── ClaudeClient.ts  # Unified Claude API client
 │   └── SupabaseClient.ts # DB operations
 ├── components/       # React components (ka-* CSS prefix)
-├── hooks/            # React hooks (auth, billing, chat, voice)
+├── hooks/            # React hooks (auth, chat, voice, user files)
 ├── pages/            # Route pages (hash router)
 ├── config/           # Plan limits, motion constants
 └── index.css         # Design system tokens (~246KB)
 
 supabase/
-├── functions/        # Edge functions (claude-proxy, stripe-webhook, etc.)
+├── functions/        # Edge functions (claude-proxy, admin-invoice, admin-send-file, etc.)
 └── migrations/       # Database migrations (074+)
 
 packages/kbot/        # CLI agent
@@ -76,8 +76,9 @@ packages/kbot/        # CLI agent
 │   └── memory.ts     # Local persistent memory
 
 tools/                # MCP servers + utilities
-├── obsidian-mcp.ts   # Obsidian ↔ Kernel sync
+├── obsidian-mcp.ts      # Obsidian ↔ Kernel sync
 ├── kernel-agents-mcp.ts # Agent team coordination
+├── kernel-admin-mcp.ts  # Admin operations (users, invoicing, file sends)
 ├── kernel-tools-mcp.ts  # Dev utilities
 └── stripe-setup-unified.sh # Stripe billing setup
 ```
@@ -89,4 +90,6 @@ tools/                # MCP servers + utilities
 - **Bottom-sheet panels** — All settings/info panels use bottom-sheet pattern
 - **File routing guard** — `hasFileContent` check: images/PDFs always go direct to Claude (never through swarm/workflow)
 - **sessionStorage bridge** — Onboarding writes first message, useChatEngine consumes it
-- **Fail-open rate limiting** — Postgres RPC with fallback to allow on error
+- **Atomic rate limiting** — `check_and_increment_message` RPC with `FOR UPDATE` row lock (fail-open on error)
+- **User files manifest** — Stored files injected into system prompt so AI can reference them
+- **Unified Files panel** — Single "Files" tab replaces separate Gallery + Project Files

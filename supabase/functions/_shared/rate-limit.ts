@@ -56,8 +56,8 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   'engagement':            { free: 30,paid: 30,pro: 60,  max: 120, windowSeconds: 60 },
   'author-profile':        { free: 30,paid: 30,pro: 60,  max: 60,  windowSeconds: 60 },
   'project-files':         { free: 0, paid: 10,pro: 30,  max: 60,  windowSeconds: 60 },
-  'kernel-api':            { free: 0, paid: 60,pro: 120, max: 180, windowSeconds: 60 },
-  'api-keys':              { free: 0, paid: 10,pro: 10,  max: 10,  windowSeconds: 60 },
+  'kernel-api':            { free: 10,paid: 60,pro: 120, max: 180, windowSeconds: 60 },
+  'api-keys':              { free: 10,paid: 10,pro: 10,  max: 10,  windowSeconds: 60 },
 }
 
 /**

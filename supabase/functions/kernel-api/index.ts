@@ -86,9 +86,8 @@ async function authenticateApiKey(req: Request): Promise<
 /** Map API key tier to rate-limit tier */
 function tierToRateLimitTier(apiTier: string): Tier {
   switch (apiTier) {
-    case 'enterprise': return 'max'
-    case 'growth': return 'pro'
-    case 'pro': return 'paid'
+    case 'max': case 'enterprise': return 'max'
+    case 'pro': case 'growth': return 'pro'
     case 'free': return 'free'
     default: return 'paid'
   }
@@ -419,9 +418,9 @@ Respond with ONLY valid JSON: {"agent_id": "...", "confidence": 0.0-1.0, "comple
         const auth = await authenticateApiKey(req)
         if ('error' in auth) return auth.error
 
-        // Swarm requires growth+ tier
+        // Swarm requires pro+ tier
         if (!auth.key.swarm_enabled) {
-          return new Response(JSON.stringify({ error: 'Swarm (multi-agent) requires Growth tier or higher' }), {
+          return new Response(JSON.stringify({ error: 'Swarm (multi-agent) requires Pro tier or higher' }), {
             status: 403, headers: { 'Content-Type': 'application/json', ...CORS },
           })
         }
@@ -524,8 +523,12 @@ Create a unified, well-structured response that:
         // Log routing signal for the primary agent
         logRoutingSignal(auth.svc, message, agentIds[0], 1.0, source)
 
-        // Increment message count (swarm counts as 1 message)
-        await auth.svc.rpc('increment_api_message_count', { p_key_id: auth.key.key_id }).catch(() => {})
+        // Increment unified message count (swarm counts as 1 message)
+        await Promise.all([
+          auth.svc.rpc('increment_message_count', { p_user_id: auth.key.key_user_id }).catch(() => null),
+          auth.svc.rpc('increment_monthly_message_count', { p_user_id: auth.key.key_user_id }).catch(() => null),
+          auth.svc.rpc('increment_web_overage', { p_user_id: auth.key.key_user_id }).catch(() => null),
+        ])
 
         await logAudit(auth.svc, {
           actorId: auth.key.key_user_id, eventType: 'edge_function.call', action: 'kernel-api.swarm',
@@ -662,12 +665,12 @@ Create a unified, well-structured response that:
           }
         }
 
-        // Build Claude tools array if tools requested
+        // Build Claude tools array if tools requested — use client-provided schemas if available
         const claudeTools = requestedTools && Array.isArray(requestedTools)
           ? requestedTools.map(t => ({
               name: t.name,
               description: t.description,
-              input_schema: { type: 'object' as const, properties: {} },
+              input_schema: t.input_schema || { type: 'object' as const, properties: {} },
             }))
           : undefined
 
@@ -742,11 +745,23 @@ Create a unified, well-structured response that:
         const outputTokens = usage.output_tokens || 0
         const costUsd = (inputTokens * 3.0 / 1_000_000) + (outputTokens * 15.0 / 1_000_000)
 
+        // Externalize agent IDs — never expose internal names like "kernel"
+        const externalAgentId = agentId === 'kernel' ? 'assistant' : agentId
+
         const response: Record<string, unknown> = {
           id: crypto.randomUUID(),
-          agent: agentId,
+          agent: externalAgentId,
           model: proxyData.model || 'claude-sonnet-4-6',
           usage: { input_tokens: inputTokens, output_tokens: outputTokens, cost_usd: Math.round(costUsd * 1_000_000) / 1_000_000 },
+          // Account-level usage metadata — consumed by kbot CLI for metering display
+          account_usage: {
+            messages_used: auth.key.monthly_message_count,
+            messages_limit: auth.key.monthly_message_limit,
+            tier: auth.key.key_tier,
+            overage_enabled: auth.key.overage_enabled,
+            overage_count: auth.key.overage_count,
+            overage_rate_cents: auth.key.overage_rate_millicents / 10,
+          },
         }
 
         // If tool calls present, return them for the client to execute
@@ -767,10 +782,16 @@ Create a unified, well-structured response that:
           response.classification = classification
         }
 
-        // Track message count + token usage
+        // Track message count (unified pool via user_memory) + token usage (per-key)
         const totalTokens = inputTokens + outputTokens
-        const [msgResult] = await Promise.all([
-          auth.svc.rpc('increment_api_message_count', { p_key_id: auth.key.key_id }).then(r => r.data?.[0] || null).catch(() => null),
+        const [, , overageResult] = await Promise.all([
+          // Daily counter (shared pool)
+          auth.svc.rpc('increment_message_count', { p_user_id: auth.key.key_user_id }).catch(() => null),
+          // Monthly counter (shared pool)
+          auth.svc.rpc('increment_monthly_message_count', { p_user_id: auth.key.key_user_id }).catch(() => null),
+          // Overage (on subscription, not api_key)
+          auth.svc.rpc('increment_web_overage', { p_user_id: auth.key.key_user_id }).then(r => r.data?.[0] || null).catch(() => null),
+          // Token tracking (still per-key for safety net)
           totalTokens > 0 ? auth.svc.rpc('increment_api_token_usage', { p_key_id: auth.key.key_id, p_tokens: totalTokens }).catch(() => {}) : Promise.resolve(),
           logAudit(auth.svc, {
             actorId: auth.key.key_user_id, eventType: 'edge_function.call', action: 'kernel-api.chat',
@@ -781,10 +802,10 @@ Create a unified, well-structured response that:
         ])
 
         // Add overage info to response when in overage
-        if (msgResult && msgResult.is_overage) {
+        if (overageResult && overageResult.new_overage_count > 0) {
           response.overage = {
             is_overage: true,
-            overage_count: msgResult.new_overage_count,
+            overage_count: overageResult.new_overage_count,
             rate_per_message_cents: auth.key.overage_rate_millicents / 10,
           }
         }

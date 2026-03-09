@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, getMySubscription } from '../engine/SupabaseClient';
 import type { User, Session, Provider, UserIdentity } from '@supabase/supabase-js';
-import { PLAN_LIMITS, resolvePlanId, type PlanId, type PlanLimits } from '../config/planLimits';
+import { PLAN_LIMITS, type PlanId, type PlanLimits } from '../config/planLimits';
 
 // Admin is determined by Supabase app_metadata.is_admin (set via dashboard or service role).
 // To make a user admin: Supabase Dashboard → Auth → Users → Edit → app_metadata: {"is_admin": true}
@@ -44,9 +44,9 @@ export function useAuth(): AuthState {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed] = useState(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
-  const [planId, setPlanId] = useState<PlanId>('free');
+  const planId: PlanId = 'free';
 
   const isAdmin = checkIsAdmin(user);
 
@@ -55,21 +55,9 @@ export function useAuth(): AuthState {
   userRef.current = user;
   const mountedRef = useRef(true);
 
+  // No paid tiers — always free
   const checkSubscription = useCallback(async (): Promise<boolean> => {
-    if (checkIsAdmin(userRef.current)) {
-      if (mountedRef.current) {
-        setPlanId('pro_annual');
-        setIsSubscribed(true);
-      }
-      return true;
-    }
-    const sub = await getMySubscription();
-    const resolved = resolvePlanId(sub);
-    if (mountedRef.current) {
-      setPlanId(resolved);
-      setIsSubscribed(resolved !== 'free');
-    }
-    return resolved !== 'free';
+    return false;
   }, []);
 
   // Initialize auth — handle token_hash recovery, PKCE callback, or existing session
@@ -216,7 +204,7 @@ export function useAuth(): AuthState {
       if (s?.user) {
         checkSubscription();
       } else {
-        setIsSubscribed(false);
+        // no paid tiers
       }
       setIsLoading(false);
     });
@@ -264,7 +252,7 @@ export function useAuth(): AuthState {
   }, []);
 
   const signOut = useCallback(async () => {
-    setIsSubscribed(false);
+    // no paid tiers
     localStorage.removeItem(RECOVERY_FLAG);
     try {
       await supabase.auth.signOut();
@@ -348,8 +336,8 @@ export function useAuth(): AuthState {
     isSubscribed: isSubscribed || isAdmin,
     isAdmin,
     isPasswordRecovery,
-    planId: isAdmin ? 'pro_annual' as PlanId : planId,
-    planLimits: PLAN_LIMITS[isAdmin ? 'pro_annual' : planId],
+    planId,
+    planLimits: PLAN_LIMITS.free,
     signInWithProvider,
     signInWithEmail,
     signUpWithEmail,

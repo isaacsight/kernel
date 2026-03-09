@@ -140,7 +140,7 @@ kbot                    # interactive REPL`}</pre>
       {/* ── POST /swarm ── */}
       <section className="ka-docs-section">
         <h2>POST /swarm</h2>
-        <p>Multi-agent collaboration. Multiple agents contribute in parallel, then a synthesis model combines their perspectives. Requires Growth tier or higher.</p>
+        <p>Multi-agent collaboration. Multiple agents contribute in parallel, then a synthesis model combines their perspectives. Requires Max tier or higher.</p>
 
         <h3>Request</h3>
         <pre className="ka-docs-code">{`{
@@ -210,8 +210,8 @@ kbot                    # interactive REPL`}</pre>
         <h2>GET /usage</h2>
         <p>Get monthly usage statistics for your API key, including per-agent breakdown.</p>
         <pre className="ka-docs-code">{`{
-  "tier": "growth",
-  "monthly_messages": { "count": 1247, "limit": 20000 },
+  "tier": "max",
+  "monthly_messages": { "count": 1247, "limit": 6000 },
   "monthly_window_start": "2026-03-01T00:00:00Z",
   "per_agent": {
     "coder": { "messages": 523, "input_tokens": 125000, "output_tokens": 890000, "cost_usd": 13.72 },
@@ -255,9 +255,9 @@ kbot                    # interactive REPL`}</pre>
               <td>30/min</td>
             </tr>
             <tr>
-              <td>Growth</td>
+              <td>Max</td>
               <td>$249/mo</td>
-              <td>10,000</td>
+              <td>6,000</td>
               <td>All 17</td>
               <td>Yes</td>
               <td>+ Browser</td>
@@ -287,7 +287,7 @@ kbot                    # interactive REPL`}</pre>
             <tr><td>401</td><td>Invalid API key</td><td>Key is missing, malformed, or revoked</td></tr>
             <tr><td>403</td><td>Monthly limit exceeded</td><td>Monthly message quota exhausted</td></tr>
             <tr><td>403</td><td>Enterprise required</td><td>Feature requires Enterprise tier</td></tr>
-            <tr><td>403</td><td>Swarm requires Growth</td><td>/swarm endpoint requires Growth tier</td></tr>
+            <tr><td>403</td><td>Swarm requires Max</td><td>/swarm endpoint requires Max tier</td></tr>
             <tr><td>429</td><td>Rate limited</td><td>Per-minute rate limit exceeded. Check Retry-After header.</td></tr>
             <tr><td>400</td><td>Invalid request</td><td>Missing required fields or invalid agent ID</td></tr>
             <tr><td>502</td><td>Upstream error</td><td>AI provider returned an error</td></tr>

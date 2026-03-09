@@ -46,6 +46,7 @@ import { WorkspaceSwitcher } from '../components/WorkspaceSwitcher'
 import { useWorkspace } from '../hooks/useWorkspace'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
+import { autoSaveArtifact } from '../engine/chatFolderAutoSave'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
@@ -67,6 +68,7 @@ const ProjectPanel = lazyRetry(() => import('../components/ProjectPanel').then(m
 const ImageCreditModal = lazyRetry(() => import('../components/ImageCreditModal').then(m => ({ default: m.ImageCreditModal })))
 const GeneratedImageCard = lazyRetry(() => import('../components/GeneratedImageCard').then(m => ({ default: m.GeneratedImageCard })))
 const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPanel').then(m => ({ default: m.ImageGalleryPanel })))
+const FilesPanel = lazyRetry(() => import('../components/FilesPanel').then(m => ({ default: m.FilesPanel })))
 const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard').then(m => ({ default: m.UsageDashboard })))
 const TagModal = lazyRetry(() => import('../components/TagModal').then(m => ({ default: m.TagModal })))
 
@@ -204,7 +206,6 @@ function EngineChat() {
   const { t } = useTranslation('home')
   const { user, isAdmin, isSubscribed, isPasswordRecovery, updatePassword, updateEmail, updateProfile, clearPasswordRecovery, signOut, refreshSubscription, planId, planLimits } = useAuthContext()
   const isPro = isSubscribed || isAdmin
-  const isMax = planId.startsWith('max_')
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [drawerSearchFocus, setDrawerSearchFocus] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -397,7 +398,9 @@ function EngineChat() {
     const messageId = latestKernelMsg?.id || `msg_${Date.now()}`
     registerProjectFile(convId, filename, language, content, messageId)
     if (isPro) syncToCloud(convId, filename)
-  }, [convs.activeConversationId, registerProjectFile, isPro, syncToCloud])
+    // Auto-save artifact to Chat/Artifacts folder
+    if (user) autoSaveArtifact(user.id, filename, content)
+  }, [convs.activeConversationId, registerProjectFile, isPro, syncToCloud, user])
 
   // Load project files from cloud when conversation changes (Pro only)
   const prevConvIdRef = useRef<string | null>(null)
@@ -767,14 +770,9 @@ function EngineChat() {
         {panels.showImageGallery && user && (
           <BottomSheet onClose={() => panels.closePanel('image-gallery')}>
             <Suspense fallback={<PanelShimmer />}>
-              <ImageGalleryPanel
+              <FilesPanel
                 userId={user.id}
                 onClose={() => panels.closePanel('image-gallery')}
-                onUseAsStartingPoint={(_imageUrl, _mimeType, prompt) => {
-                  chatEngine.setInput(`Refine this image: ${prompt ? prompt + ' — ' : ''}`)
-                  chatEngine.inputRef.current?.focus()
-                  panels.closePanel('image-gallery')
-                }}
               />
             </Suspense>
           </BottomSheet>
@@ -787,13 +785,9 @@ function EngineChat() {
             <Suspense fallback={<PanelShimmer />}>
               <AccountSettingsPanel
                 user={user}
-                isPro={isPro}
                 isAdmin={isAdmin}
-                planId={planId}
                 onClose={() => panels.closePanel('account-settings')}
                 onToast={showToast}
-                onUpgrade={(plan) => billing.handleUpgrade(plan)}
-                onManageSubscription={billing.handleManageSubscription}
                 onSignOut={signOut}
                 onDeleteAccount={() => billing.setShowDeleteConfirm(true)}
               />
@@ -807,9 +801,9 @@ function EngineChat() {
           <Suspense fallback={<PanelShimmer />}>
             <UsageDashboard
               onClose={() => panels.closePanel('usage')}
-              onUpgrade={() => billing.handleUpgrade()}
-              isPro={isPro}
-              monthlyLimit={planLimits.messagesPerMonth}
+              onUpgrade={() => {}}
+              isPro={false}
+              monthlyLimit={planLimits.messagesPerDay * 30}
             />
           </Suspense>
         )}
@@ -855,7 +849,6 @@ function EngineChat() {
             />
           )}
           {isAdmin && <span className="ka-admin-badge"><IconShield size={12} /> {t('admin')}</span>}
-          {!isAdmin && isSubscribed && <span className={isMax ? 'ka-max-badge' : 'ka-pro-badge'}><IconCrown size={12} /> {isMax ? t('max') : t('pro')}</span>}
           {liveShare.state.isActive && (
             <LiveShareBadge
               participants={liveShare.state.participants}
@@ -900,11 +893,8 @@ function EngineChat() {
                   <IconArchive size={16} /> {t('conversations.archive', { ns: 'common' })}
                 </button>
                 <div className="ka-header-menu-divider" />
-                <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowProjectPanel(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconFileText size={16} /> {t('menu.projectFiles')}
-                </button>
                 <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowImageGallery(true); panels.setHeaderMenuOpen(false) }}>
-                  <IconImage size={16} /> {t('menu.imageGallery')}
+                  <IconFolder size={16} /> Files
                 </button>
                 <div className="ka-header-menu-divider" />
                 <button className="ka-header-menu-item" onClick={() => { panels.closeAllPanels(); panels.setShowAccountSettings(true); panels.setHeaderMenuOpen(false) }}>
@@ -1257,22 +1247,7 @@ function EngineChat() {
                   <p className="ka-upgrade-learned-cta">{t('upgrade.learnedCta')}</p>
                 </div>
               )}
-              <ul className="ka-upgrade-features">
-                <li>{t('upgrade.features.unlimitedMessages')}</li><li>{t('upgrade.features.deepResearch')}</li><li>{t('upgrade.features.multiAgent')}</li><li>{t('upgrade.features.multiStep')}</li><li>{t('upgrade.features.persistentMemory')}</li>
-              </ul>
-              <button className="ka-upgrade-btn" onClick={() => billing.handleUpgrade('pro_monthly')} disabled={billing.upgradeLoading}>
-                {billing.upgradeLoading ? t('upgrade.buttonLoading') : t('upgrade.button')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--annual" onClick={() => billing.handleUpgrade('pro_annual')} disabled={billing.upgradeLoading}>
-                {t('upgrade.annualButton')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--max" onClick={() => billing.handleUpgrade('max_monthly')} disabled={billing.upgradeLoading}>
-                {t('upgrade.maxButton')}
-              </button>
-              <button className="ka-upgrade-btn ka-upgrade-btn--max-annual" onClick={() => billing.handleUpgrade('max_annual')} disabled={billing.upgradeLoading}>
-                {t('upgrade.maxAnnualButton')}
-              </button>
-              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>{t('upgrade.maybeLater')}</button>
+              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>Come back tomorrow</button>
             </motion.div>
           </motion.div>
         )}
@@ -1284,8 +1259,8 @@ function EngineChat() {
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
               <OveragePrompt
-                limit={planLimits.messagesPerMonth}
-                overageRate={isMax ? 25 : 30}
+                limit={planLimits.messagesPerDay * 30}
+                overageRate={30}
                 onAccept={() => {
                   localStorage.setItem('kernel_overage_accepted', 'true')
                   chatEngine.setShowOveragePrompt(false)

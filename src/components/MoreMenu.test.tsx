@@ -73,8 +73,7 @@ describe('MoreMenu', () => {
   it('shows upgrade plans for free users', () => {
     render(<MoreMenu {...baseProps} isPro={false} />)
     expect(screen.getByText('Upgrade')).toBeInTheDocument()
-    expect(screen.getAllByText('Pro')).toHaveLength(2) // monthly + annual
-    expect(screen.getAllByText('Max')).toHaveLength(2)
+    expect(screen.getAllByText('Pro')).toHaveLength(1)
   })
 
   it('hides upgrade plans for Pro users', () => {
@@ -86,7 +85,7 @@ describe('MoreMenu', () => {
     render(<MoreMenu {...baseProps} isPro={false} />)
     const proButtons = screen.getAllByText('Pro')
     fireEvent.click(proButtons[0].closest('button')!)
-    expect(baseProps.onUpgrade).toHaveBeenCalledWith('pro_monthly')
+    expect(baseProps.onUpgrade).toHaveBeenCalledWith('pro')
     expect(baseProps.onClose).toHaveBeenCalled()
   })
 

@@ -132,9 +132,9 @@ serve(async (req: Request) => {
         if (session.metadata?.type === 'api') {
           const apiTier = session.metadata?.api_tier || 'free'
           const tierDefaults: Record<string, { monthly_message_limit: number; rate_limit_per_min: number; swarm_enabled: boolean; all_agents_enabled: boolean; streaming_enabled: boolean; monthly_token_budget: number; overage_enabled: boolean; overage_rate_millicents: number }> = {
-            free:       { monthly_message_limit: 50,     rate_limit_per_min: 10,  swarm_enabled: false, all_agents_enabled: false, streaming_enabled: false, monthly_token_budget: 100000,    overage_enabled: false, overage_rate_millicents: 0 },
-            pro:        { monthly_message_limit: 1500,   rate_limit_per_min: 30,  swarm_enabled: false, all_agents_enabled: false, streaming_enabled: true,  monthly_token_budget: 3000000,   overage_enabled: true,  overage_rate_millicents: 30 },
-            growth:     { monthly_message_limit: 10000,  rate_limit_per_min: 120, swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 25000000,  overage_enabled: true,  overage_rate_millicents: 25 },
+            free:       { monthly_message_limit: 30,     rate_limit_per_min: 10,  swarm_enabled: false, all_agents_enabled: false, streaming_enabled: false, monthly_token_budget: 100000,    overage_enabled: false, overage_rate_millicents: 0 },
+            pro:        { monthly_message_limit: 1000,   rate_limit_per_min: 60,  swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 3000000,   overage_enabled: true,  overage_rate_millicents: 50 },
+            max:        { monthly_message_limit: 6000,   rate_limit_per_min: 180, swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 25000000,  overage_enabled: true,  overage_rate_millicents: 40 },
             enterprise: { monthly_message_limit: 999999, rate_limit_per_min: 180, swarm_enabled: true,  all_agents_enabled: true,  streaming_enabled: true,  monthly_token_budget: 999999999, overage_enabled: false, overage_rate_millicents: 0 },
           }
           const defaults = tierDefaults[apiTier] || tierDefaults.free
@@ -219,7 +219,7 @@ serve(async (req: Request) => {
         const isMaxPlan = plan.startsWith('max_')
         const overageConfig = plan === 'free' ? {} : {
           overage_enabled: true,
-          overage_rate_millicents: isMaxPlan ? 25 : 30,
+          overage_rate_millicents: isMaxPlan ? 40 : 50,
           overage_count: 0,
           last_reported_overage_count: 0,
         }
@@ -426,15 +426,22 @@ serve(async (req: Request) => {
           break
         }
 
+        const cancelUpdate = {
+          status: 'canceled',
+          overage_enabled: false,
+          overage_count: 0,
+          updated_at: new Date().toISOString(),
+        }
+
         if (userId) {
           const { error } = await supabase.from('subscriptions')
-            .update({ status: 'canceled', updated_at: new Date().toISOString() })
+            .update(cancelUpdate)
             .eq('user_id', userId)
 
           if (error) console.error('Update error (subscription.deleted):', error)
         } else {
           const { error } = await supabase.from('subscriptions')
-            .update({ status: 'canceled', updated_at: new Date().toISOString() })
+            .update(cancelUpdate)
             .eq('stripe_subscription_id', sub.id)
 
           if (error) console.error('Update error (subscription.deleted fallback):', error)

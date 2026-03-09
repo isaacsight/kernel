@@ -17,7 +17,8 @@
         "discord": "npx tsx tools/discord-bot.ts",
         "cap:sync": "npx cap sync",
         "cap:ios": "npm run build && npx cap sync ios && npx cap open ios",
-        "cap:android": "npm run build && npx cap sync android && npx cap open android"
+        "cap:android": "npm run build && npx cap sync android && npx cap open android",
+        "inbox": "npx tsx tools/inbox-sync.ts"
     },
     "homepage": "https://kernel.chat",
     "dependencies": {

@@ -20,7 +20,7 @@ const PROJECT_ROOT = process.cwd()
 const MEMORY_DIR = join(PROJECT_ROOT, '.claude', 'agents', 'memory')
 const GENERATED_DIR = join(PROJECT_ROOT, 'tools', 'generated')
 
-const VALID_AGENTS = ['qa', 'designer', 'performance', 'security', 'devops', 'product'] as const
+const VALID_AGENTS = ['qa', 'designer', 'performance', 'security', 'devops', 'product', 'admin'] as const
 type AgentName = (typeof VALID_AGENTS)[number]
 
 // ── Helpers ──────────────────────────────────────────────────

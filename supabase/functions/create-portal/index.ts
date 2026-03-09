@@ -78,7 +78,8 @@ serve(async (req: Request) => {
     let customerId: string | null = null
 
     // ── Strategy 1: Direct customer ID from DB ──
-    if (sub?.stripe_customer_id) {
+    // Skip fake/comped customer IDs that aren't real Stripe customers
+    if (sub?.stripe_customer_id && sub.stripe_customer_id.startsWith('cus_')) {
       customerId = sub.stripe_customer_id
       console.log('Strategy 1 (DB customer_id):', customerId)
     }
@@ -153,9 +154,38 @@ serve(async (req: Request) => {
       }
     }
 
+    // ── Strategy 5: Create a new Stripe customer (comped/test accounts) ──
     if (!customerId) {
-      console.error('All strategies failed for user', user.id, userEmail)
-      return jsonResponse({ error: `No Stripe customer found for ${userEmail}. Contact support.` }, 404)
+      console.log('All lookup strategies failed — creating Stripe customer for', userEmail)
+      const createParams = new URLSearchParams()
+      createParams.set('email', userEmail)
+      createParams.set('metadata[supabase_user_id]', user.id)
+      const createRes = await fetch('https://api.stripe.com/v1/customers', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${stripeKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: createParams.toString(),
+      })
+      if (createRes.ok) {
+        const newCustomer = await createRes.json()
+        customerId = newCustomer.id
+        console.log('Strategy 5 (created customer):', customerId)
+
+        // Backfill DB
+        if (sub) {
+          await adminClient
+            .from('subscriptions')
+            .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
+            .eq('user_id', user.id)
+            .in('status', ['active', 'trialing'])
+        }
+      } else {
+        const errText = await createRes.text().catch(() => 'unknown error')
+        console.error('Failed to create Stripe customer:', errText)
+        return jsonResponse({ error: 'Unable to set up billing. Please try again.' }, 500)
+      }
     }
 
     console.log('Creating portal session for customer:', customerId)
