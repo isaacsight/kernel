@@ -1,102 +1,142 @@
 ---
 tags: [kernel, architecture, kbot, cli]
-updated: "2026-03-06"
+updated: "2026-03-08"
 ---
 
 # K:BOT — Terminal Agent
 
-K:BOT is Kernel's CLI agent. It gives developers and power users access to the full Kernel agent system from their terminal, with local tool execution and multi-model support.
+K:BOT is Kernel's open-source CLI agent. Local-first AI from the terminal — 14 providers, 60+ tools, BYOK (bring your own key). An 8th grader can use it.
 
-## What It Is
+**npm:** `@kernel.chat/kbot` v2.3.1
+**Install:** `npm install -g @kernel.chat/kbot`
 
-A local-first AI coding agent that connects to the Kernel platform. Think of it as Claude Code but with Kernel's 17 specialist agents, persistent memory, and unified billing.
+## Quick Start
 
 ```bash
-npm install -g kbot
-kbot auth              # Paste your API key
-kbot "build me a React app"
+npm install -g @kernel.chat/kbot
+kbot
 ```
+
+First run auto-detects Ollama/env vars, or walks through a guided 2-option setup. No AI experience needed.
 
 ## Key Capabilities
 
 | Feature | Description |
 |---------|------------|
-| **17 Agents** | Same specialists as web (kernel, researcher, coder, writer, analyst + 12 more) |
-| **Local Tools** | Bash execution, file read/write/edit, git operations, code search |
-| **Multi-Model** | Anthropic (default), OpenAI, Google, NVIDIA, Ollama (offline) |
-| **BYOK** | Bring Your Own Key — no message limits when using personal API keys |
-| **Memory** | Local persistent memory at `~/.kbot/memory/context.md` |
-| **Streaming** | Real-time streaming responses (Pro+) |
-| **Swarm** | Multi-agent parallel collaboration (Max tier) |
+| **17 Agents** | kernel, researcher, coder, writer, analyst + 12 more |
+| **60+ Tools** | Bash, file I/O, git, code search, GitHub, web fetch, notebooks, sandboxes |
+| **14 Providers** | Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, Ollama, OpenClaw |
+| **BYOK** | Bring Your Own Key — you pay your provider directly, $0 from Kernel |
+| **Local-first** | Ollama auto-detection, fully private, $0 cost |
+| **Streaming** | Real-time token streaming + extended thinking display |
+| **Pipe composable** | `cat file | kbot "explain"`, `--json`, stdout/stderr separation |
+| **Diff previews** | Colored diffs before file changes (in `--safe` mode) |
+| **Sessions** | Save/resume conversations |
+| **Computer use** | Screenshots, mouse, keyboard (opt-in `--computer-use`) |
 
 ## Architecture
 
 ```
 packages/kbot/
 ├── src/
-│   ├── agent.ts       # Core agent loop (message → route → tools → respond)
-│   ├── cli.ts         # REPL, command parsing, plan display
-│   ├── auth.ts        # API key management (kn_live_* keys)
-│   ├── context.ts     # Project context gathering (git, package.json, etc.)
-│   ├── memory.ts      # Local persistent memory (markdown)
-│   ├── streaming.ts   # SSE streaming support
-│   ├── ui.ts          # Terminal UI (colors, spinners, banners)
-│   ├── tools/
-│   │   ├── bash.ts    # Shell command execution
-│   │   ├── files.ts   # File read/write/edit/create
-│   │   ├── git.ts     # Git operations
-│   │   ├── search.ts  # Grep/glob code search
-│   │   ├── fetch.ts   # HTTP fetching
-│   │   ├── github.ts  # GitHub API integration
-│   │   └── ...
+│   ├── agent.ts       # Core agent loop (message → tools → respond)
+│   ├── cli.ts         # REPL, flags, guided setup, slash commands
+│   ├── auth.ts        # BYOK key management, 14 provider configs
+│   ├── context.ts     # Project context (git, package.json, etc.)
+│   ├── memory.ts      # Persistent memory (markdown)
+│   ├── streaming.ts   # SSE streaming (Anthropic + OpenAI compat)
+│   ├── ui.ts          # Terminal UI (stderr/stdout separation, NO_COLOR)
+│   ├── permissions.ts # Permission system (permissive/normal/strict)
+│   ├── learning.ts    # Self-training, keyword extraction, stats
 │   ├── planner.ts     # Multi-step task decomposition
-│   ├── permissions.ts # Tool permission system
-│   ├── hooks.ts       # Pre/post tool hooks
-│   └── sessions.ts    # Conversation session management
+│   ├── sessions.ts    # Session save/resume
+│   ├── plugins.ts     # User plugins from ~/.kbot/plugins/
+│   ├── matrix.ts      # Custom agent creation, mimic profiles
+│   ├── tools/
+│   │   ├── files.ts   # Read/write/edit/glob/grep + diff previews
+│   │   ├── bash.ts    # Shell command execution
+│   │   ├── git.ts     # Git operations
+│   │   ├── search.ts  # Web search (Perplexity, DuckDuckGo)
+│   │   ├── github.ts  # GitHub API (issues, PRs, repos)
+│   │   ├── computer.ts # Screenshot, mouse, keyboard (opt-in)
+│   │   ├── sandbox.ts # Docker sandboxed execution
+│   │   ├── notebook.ts # Jupyter notebook support
+│   │   ├── subagent.ts # Spawn sub-agents for parallel work
+│   │   ├── worktree.ts # Git worktree isolation
+│   │   └── ...        # 60+ total
+│   └── ide/           # IDE integrations (MCP server, LSP bridge)
 ```
 
-## How It Connects to the Platform
+## CLI Design (2026 Patterns)
 
-1. User authenticates with `kbot auth` → stores `kn_live_*` API key locally
-2. Every message goes to `kernel.chat/api/chat` (the `kernel-api` edge function)
-3. `validate_api_key()` RPC resolves the user's subscription tier from the `subscriptions` table
-4. Message counts go to the same shared pool (`user_memory.monthly_message_count`)
-5. Same overage billing as web — unified across surfaces
+Follows clig.dev guidelines, Claude Code patterns, gh CLI conventions:
 
-## Billing (Unified)
+- **stderr vs stdout** — Status (spinners, errors) → stderr. Content (responses) → stdout. Pipe-safe.
+- **NO_COLOR** — Respects `NO_COLOR` env var and non-TTY detection.
+- **Context-aware prompt** — Shows directory: `packages/kbot ❯`
+- **Conversational errors** — "Ollama isn't running. Open the Ollama app or run: ollama serve"
+- **Smart tool filtering** — Casual messages get 0 tools, local models get 10 core tools, cloud gets 60+.
 
-K:BOT shares the same message pool as kernel.chat:
+## Auto-Setup Flow
 
-| Tier | Messages/mo | Overage | Rate Limit |
-|------|-------------|---------|------------|
-| Free | 30 | Hard cap | 10/min |
-| Pro | 1,000 | $0.05/msg | 60/min |
-| Max | 6,000 | $0.04/msg | 180/min |
+When no provider is configured:
 
-**BYOK mode:** When using your own API key (Anthropic, OpenAI, etc.), there are no message limits and no charges from Kernel. The user pays their provider directly.
+1. **Check env vars** — Scans for `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, etc. Auto-configures instantly.
+2. **Check local** — Pings Ollama + OpenClaw in parallel. Auto-configures if running.
+3. **Guided setup** — "Pick 1 or 2": Free & Private (Ollama) or Cloud AI (paste API key).
 
-## Commands
+## CLI Flags
 
-| Command | What it does |
-|---------|-------------|
-| `kbot "prompt"` | One-shot message |
-| `kbot` | Interactive REPL |
-| `kbot auth` | Set API key |
-| `kbot upgrade` | Open pricing page |
-| `kbot billing` | Show plan/usage info |
+| Flag | Purpose |
+|------|---------|
+| `-p, --pipe` | Raw text output for scripting |
+| `--json` | JSON output (`{content, agent, model, usage}`) |
+| `-y, --yes` | Skip all confirmations |
+| `-q, --quiet` | No banners, spinners, status |
+| `-t, --thinking` | Show AI reasoning steps |
+| `--safe` | Confirm destructive ops + diff previews |
+| `--strict` | Confirm ALL operations |
+| `--computer-use` | Enable screenshot/mouse/keyboard tools |
+
+## REPL Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/clear` | Reset conversation |
+| `/save [name]` | Save session |
+| `/resume <id>` | Resume saved session |
+| `/model <name>` | Switch AI model |
 | `/agent <name>` | Switch specialist |
-| `/model <name>` | Switch model |
-| `/ollama` | Switch to local Ollama |
-| `/think` | Toggle extended thinking |
-| `/plan` | Toggle planning mode |
+| `/ollama [model]` | Switch to local Ollama |
+| `/remember <…>` | Teach kbot a fact |
+| `/thinking` | Toggle reasoning display |
+
+## Sub-commands
+
+| Command | Purpose |
+|---------|---------|
+| `kbot auth` / `kbot byok` | Set up API key |
+| `kbot ollama` | Configure local Ollama |
+| `kbot pull` | Download Ollama models |
+| `kbot doctor` | Diagnose setup |
+| `kbot ide mcp` | Start MCP server for IDEs |
+
+## Pipe Composability
+
+```bash
+cat error.log | kbot "explain this error"     # Stdin as context
+echo "what is 2+2" | kbot                      # Stdin-only
+kbot "summarize" > summary.txt                 # Stdout piping
+kbot --json "fix the bug" | jq .content        # JSON mode
+kbot -q "list files" 2>/dev/null               # Suppress status
+```
 
 ## Development
 
 ```bash
 cd packages/kbot
-npm run build          # Build CLI
-npm link               # Link globally for testing
-kbot --help
+npm run build          # tsc + chmod +x dist/cli.js
+npm run dev            # Run with tsx (no build)
+npm run typecheck      # Type-check only
+npm publish --access public  # Publish to npm
 ```
-
-The CLI is a standalone npm package in the monorepo at `packages/kbot/`. It shares no frontend code — it's pure Node.js/TypeScript with its own dependencies.

@@ -5,9 +5,10 @@ updated: "2026-03-08"
 
 # Kernel — Project Home
 
-**Kernel** is a free AI personal assistant at [kernel.chat](https://kernel.chat). 10 messages per day, persistent memory, 17 specialist agents, file storage with AI access.
+**Kernel** is a free AI personal assistant at [kernel.chat](https://kernel.chat). 10 messages per day, persistent memory, 17 specialist agents, file storage with AI access. Also available as a CLI: `npm install -g @kernel.chat/kbot`.
 
-**Live:** [kernel.chat](https://kernel.chat)
+**Web:** [kernel.chat](https://kernel.chat)
+**CLI:** `npm install -g @kernel.chat/kbot`
 **Repo:** [isaacsight/kernel](https://github.com/isaacsight/kernel)
 **Created by:** Isaac Hernandez / Antigravity Group
 
@@ -17,6 +18,7 @@ updated: "2026-03-08"
 
 ### Architecture
 - [[Architecture Overview]] — Stack, directory map, data flow
+- [[K-BOT CLI]] — Terminal agent (npm: `@kernel.chat/kbot` v2.3.1)
 - [[Memory System]] — How Kernel remembers users
 - [[Agent System]] — 17 specialists, routing, swarm orchestration
 - [[Billing System]] — Free-only (paid tiers archived)

@@ -25,6 +25,19 @@ Key architectural and product decisions, with rationale.
 | ~~Option C pricing (Free 30, Pro 1000, Max 6000)~~ | ~~~50-54% gross margin~~ | Removed |
 | ~~Overage at $0.05/$0.04 per message~~ | ~~40%/25% margins~~ | Removed |
 
+## K:BOT CLI (March 8)
+
+| Decision | Rationale |
+|----------|-----------|
+| **Published to npm as `@kernel.chat/kbot`** | One command install: `npm install -g @kernel.chat/kbot`. Scoped to org. |
+| **BYOK-only, no Kernel billing** | Users bring their own API key. $0 from Kernel. Simplifies everything. |
+| **stderr/stdout separation** | clig.dev best practice. Status → stderr, content → stdout. Enables pipe composability. |
+| **Guided setup for first-timers** | Auto-detect cascade (env vars → Ollama → OpenClaw → wizard). No AI experience needed. |
+| **Smart tool filtering** | Casual messages: 0 tools. Local 7B models: 10 core tools. Cloud: full 60+. Prevents small model confusion. |
+| **Diff-before-apply** | Shows colored diff previews in `--safe`/`--strict` mode. Trust-building for AI code agents. |
+| **Permissive by default** | Default mode is autonomous (no confirmations). Users opt-in to safety with `--safe`/`--strict`. |
+| **`chmod +x` in build script** | `tsc` doesn't preserve permissions. `npm run build` = `tsc && chmod +x dist/cli.js`. Fixed permission denied on install. |
+
 ## Architecture
 
 | Decision | Rationale |

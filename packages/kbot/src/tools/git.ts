@@ -65,7 +65,7 @@ export function registerGitTools(): void {
       message: { type: 'string', description: 'Commit message', required: true },
       files: { type: 'array', description: 'Files to stage before committing. If empty, commits already-staged files.' },
     },
-    tier: 'starter',
+    tier: 'free',
     async execute(args) {
       const message = String(args.message)
       const files = Array.isArray(args.files) ? args.files.map(String) : []
@@ -85,7 +85,7 @@ export function registerGitTools(): void {
       name: { type: 'string', description: 'Branch name', required: true },
       create: { type: 'boolean', description: 'Create a new branch (default: false)' },
     },
-    tier: 'starter',
+    tier: 'free',
     async execute(args) {
       const name = String(args.name)
       const create = args.create ? '-b' : ''
@@ -100,7 +100,7 @@ export function registerGitTools(): void {
       remote: { type: 'string', description: 'Remote name (default: origin)' },
       branch: { type: 'string', description: 'Branch name (default: current branch)' },
     },
-    tier: 'starter',
+    tier: 'free',
     async execute(args) {
       const remote = args.remote ? String(args.remote) : 'origin'
       const branch = args.branch ? String(args.branch) : ''

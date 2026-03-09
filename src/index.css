@@ -10907,6 +10907,176 @@ h4 {
     margin: 0;
 }
 
+/* ─── K:BOT CLI Section ─────────────────────────────────── */
+
+.landing-kbot-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    max-width: 900px;
+    width: 100%;
+    padding: 64px 24px;
+    border-top: 1px solid var(--rubin-ivory-dark);
+    align-items: start;
+}
+
+.landing-kbot-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border: 1px solid var(--rubin-sepia);
+    border-radius: var(--radius-full);
+    color: var(--rubin-slate);
+    opacity: 0.6;
+    margin-bottom: var(--space-md);
+}
+
+.landing-kbot-title {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--space-md);
+    color: var(--rubin-slate);
+}
+
+.landing-kbot-subtitle {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    opacity: 0.7;
+    margin: 0 0 var(--space-xl);
+}
+
+.landing-kbot-features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.landing-kbot-feat {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    opacity: 0.8;
+}
+
+.landing-kbot-feat-icon {
+    color: var(--rubin-primary);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    width: 12px;
+    text-align: center;
+}
+
+/* Terminal mock */
+.landing-kbot-terminal {
+    border: 1px solid var(--rubin-ivory-dark);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #1C1A18;
+    box-shadow: var(--shadow-md);
+}
+
+.landing-kbot-term-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px 14px;
+    background: #262320;
+    border-bottom: 1px solid #36322E;
+}
+
+.landing-kbot-term-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.landing-kbot-term-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.landing-kbot-term-dots span:nth-child(1) { background: #F87171; }
+.landing-kbot-term-dots span:nth-child(2) { background: #FBBF24; }
+.landing-kbot-term-dots span:nth-child(3) { background: #4ADE80; }
+
+.landing-kbot-term-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #706C66;
+    margin-left: auto;
+}
+
+.landing-kbot-term-body {
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: #e8e6e3;
+    min-height: 240px;
+}
+
+.landing-kbot-term-line {
+    white-space: pre;
+    min-height: 1.7em;
+}
+
+.landing-kbot-term-prefix {
+    color: #A78BFA;
+}
+
+.landing-kbot-term-text {
+    color: #e8e6e3;
+}
+
+.landing-kbot-cursor {
+    color: #A78BFA;
+    animation: kbot-blink 0.8s step-end infinite;
+}
+
+@keyframes kbot-blink {
+    50% { opacity: 0; }
+}
+
+.landing-kbot-term-art {
+    color: #A78BFA;
+    opacity: 0.7;
+    font-size: 0.65rem;
+    line-height: 1.4;
+    white-space: pre;
+    padding: 4px 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .landing-kbot-section {
+    border-top-color: var(--dark-border-subtle);
+}
+
+[data-theme="dark"] .landing-kbot-badge {
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .landing-kbot-title {
+    color: var(--dark-text);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .landing-kbot-section {
+        grid-template-columns: 1fr;
+        padding: 48px 20px;
+    }
+}
+
 /* Pricing */
 .landing-pricing {
     display: flex;
@@ -18767,6 +18937,97 @@ h4 {
 }
 [data-theme="dark"] .ka-settings-section-desc {
     color: var(--dark-text-secondary, #A8A29E);
+}
+
+/* K:BOT CLI install in account settings */
+.ka-settings-kbot-install {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.ka-settings-kbot-cmd {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    background: #1C1A18;
+    color: #e8e6e3;
+    border-radius: var(--radius-sm);
+    border: 1px solid #36322E;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.ka-settings-kbot-copy {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 10px 14px;
+    background: var(--rubin-ivory-dark);
+    border: 1px solid var(--rubin-sepia);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--rubin-slate);
+    transition: background var(--duration-quick);
+    white-space: nowrap;
+}
+
+.ka-settings-kbot-copy:hover {
+    background: var(--rubin-sepia);
+}
+
+[data-theme="dark"] .ka-settings-kbot-copy {
+    background: var(--dark-bg-elevated);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+.ka-settings-kbot-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-md);
+}
+
+.ka-settings-kbot-step {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    line-height: 1.5;
+}
+
+.ka-settings-kbot-step code {
+    background: var(--rubin-ivory-dark);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+}
+
+[data-theme="dark"] .ka-settings-kbot-step {
+    color: var(--dark-text-secondary, #A8A29E);
+}
+
+[data-theme="dark"] .ka-settings-kbot-step code {
+    background: var(--dark-bg-elevated);
+}
+
+.ka-settings-kbot-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.75rem;
+}
+
+.ka-settings-kbot-sep {
+    color: var(--rubin-sepia);
+}
+
+.ka-settings-kbot-local {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--rubin-text-secondary, #6B6966);
+    opacity: 0.7;
 }
 
 .ka-settings-reset-item {

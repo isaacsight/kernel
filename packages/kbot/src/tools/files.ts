@@ -1,9 +1,85 @@
 // K:BOT File Tools — Read, write, edit, glob, grep
 // All operations are local — zero API calls.
+// Supports diff-before-apply in normal/strict modes.
 
-import { readFileSync, writeFileSync, existsSync, statSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
+import { dirname, basename } from 'node:path'
+import chalk from 'chalk'
 import { registerTool } from './index.js'
+import { getPermissionMode } from '../permissions.js'
+
+/** Show a colored diff preview to stderr and return true if user approves */
+async function showDiffPreview(path: string, oldContent: string, newContent: string): Promise<boolean> {
+  const mode = getPermissionMode()
+  if (mode === 'permissive') return true // Auto-approve
+
+  const oldLines = oldContent.split('\n')
+  const newLines = newContent.split('\n')
+
+  // Simple diff — show changed/added/removed lines (max 30 lines shown)
+  process.stderr.write(`\n  ${chalk.bold(basename(path))} ${chalk.dim('— proposed changes:')}\n`)
+  process.stderr.write(`  ${chalk.dim('─'.repeat(50))}\n`)
+
+  let diffLines = 0
+  const maxShow = 30
+
+  // For small files or complete rewrites, show new content preview
+  if (oldContent === '' || oldLines.length <= 5) {
+    for (const line of newLines.slice(0, maxShow)) {
+      process.stderr.write(`  ${chalk.green('+')} ${line}\n`)
+      diffLines++
+    }
+    if (newLines.length > maxShow) {
+      process.stderr.write(`  ${chalk.dim(`  +${newLines.length - maxShow} more lines`)}\n`)
+    }
+  } else {
+    // Show a context diff
+    let i = 0, j = 0
+    while (i < oldLines.length || j < newLines.length) {
+      if (diffLines >= maxShow) {
+        const remaining = Math.max(oldLines.length - i, newLines.length - j)
+        if (remaining > 0) process.stderr.write(`  ${chalk.dim(`  +${remaining} more lines`)}\n`)
+        break
+      }
+      if (i < oldLines.length && j < newLines.length && oldLines[i] === newLines[j]) {
+        // Same line — skip (only show context around changes)
+        i++; j++
+        continue
+      }
+      // Show removed lines
+      if (i < oldLines.length && (j >= newLines.length || oldLines[i] !== newLines[j])) {
+        process.stderr.write(`  ${chalk.red('-')} ${oldLines[i]}\n`)
+        i++; diffLines++
+      }
+      // Show added lines
+      if (j < newLines.length && (i >= oldLines.length || oldLines[i - 1] !== newLines[j])) {
+        process.stderr.write(`  ${chalk.green('+')} ${newLines[j]}\n`)
+        j++; diffLines++
+      }
+    }
+  }
+
+  process.stderr.write(`  ${chalk.dim('─'.repeat(50))}\n`)
+
+  // In strict mode, always confirm. In normal mode, confirm for overwrites.
+  if (mode === 'strict' || (mode === 'normal' && oldContent !== '')) {
+    const { createInterface } = await import('node:readline')
+    const rl = createInterface({ input: process.stdin, output: process.stderr })
+    const answer = await new Promise<string>((resolve) => {
+      rl.question(`  ${chalk.bold('Apply?')} ${chalk.dim('[Y/n]')} `, (a) => {
+        resolve(a.trim().toLowerCase())
+        rl.close()
+      })
+    })
+    if (answer === 'n' || answer === 'no') {
+      process.stderr.write(`  ${chalk.red('✗')} Skipped\n`)
+      return false
+    }
+  }
+
+  return true
+}
 
 export function registerFileTools(): void {
   registerTool({
@@ -44,6 +120,13 @@ export function registerFileTools(): void {
     async execute(args) {
       const path = String(args.path)
       const content = String(args.content)
+      const existing = existsSync(path) ? readFileSync(path, 'utf-8') : ''
+
+      // Diff preview in normal/strict mode
+      const approved = await showDiffPreview(path, existing, content)
+      if (!approved) return `Skipped: write to ${path} was denied by user`
+
+      mkdirSync(dirname(path), { recursive: true })
       writeFileSync(path, content)
       return `Written ${content.length} bytes to ${path}`
     },
@@ -71,6 +154,11 @@ export function registerFileTools(): void {
       if (count > 1) return `Error: old_string found ${count} times — must be unique. Add more context.`
 
       const updated = content.replace(old_string, new_string)
+
+      // Diff preview in normal/strict mode
+      const approved = await showDiffPreview(path, old_string, new_string)
+      if (!approved) return `Skipped: edit to ${path} was denied by user`
+
       writeFileSync(path, updated)
       return `Edited ${path}: replaced 1 occurrence`
     },
@@ -133,6 +221,28 @@ export function registerFileTools(): void {
       } catch {
         return 'No matches found'
       }
+    },
+  })
+
+  registerTool({
+    name: 'multi_file_write',
+    description: 'Write multiple files in one call. Auto-creates parent directories. Ideal for scaffolding projects.',
+    parameters: {
+      files: { type: 'array', description: 'Array of {path, content} objects. Each file will be created/overwritten.', required: true },
+    },
+    tier: 'free',
+    async execute(args) {
+      const files = args.files as Array<{ path: string; content: string }>
+      if (!Array.isArray(files) || files.length === 0) return 'Error: files must be a non-empty array of {path, content}'
+      const results: string[] = []
+      for (const f of files) {
+        const path = String(f.path)
+        const content = String(f.content)
+        mkdirSync(dirname(path), { recursive: true })
+        writeFileSync(path, content)
+        results.push(`  ${path} (${content.length} bytes)`)
+      }
+      return `Written ${files.length} files:\n${results.join('\n')}`
     },
   })
 

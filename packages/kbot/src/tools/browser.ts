@@ -1,6 +1,6 @@
 // K:BOT Browser Tool — Playwright-based web browsing
 // Requires: npx playwright install (run once)
-// Available at Growth tier and above
+// Available to all users
 
 import { registerTool } from './index.js'
 
@@ -40,7 +40,7 @@ export function registerBrowserTools(): void {
     parameters: {
       url: { type: 'string', description: 'URL to navigate to', required: true },
     },
-    tier: 'growth',
+    tier: 'free',
     async execute(args) {
       const url = String(args.url)
       const page = await getPage()
@@ -57,7 +57,7 @@ export function registerBrowserTools(): void {
     name: 'browser_snapshot',
     description: 'Get the current page\'s accessibility tree (structured text representation).',
     parameters: {},
-    tier: 'growth',
+    tier: 'free',
     async execute() {
       const page = await getPage()
       const snapshot = await page.accessibility.snapshot()
@@ -71,7 +71,7 @@ export function registerBrowserTools(): void {
     parameters: {
       selector: { type: 'string', description: 'CSS selector of element to click', required: true },
     },
-    tier: 'growth',
+    tier: 'free',
     async execute(args) {
       const page = await getPage()
       await page.click(String(args.selector), { timeout: 10_000 })
@@ -86,7 +86,7 @@ export function registerBrowserTools(): void {
       selector: { type: 'string', description: 'CSS selector of input element', required: true },
       text: { type: 'string', description: 'Text to type', required: true },
     },
-    tier: 'growth',
+    tier: 'free',
     async execute(args) {
       const page = await getPage()
       await page.fill(String(args.selector), String(args.text))
@@ -100,7 +100,7 @@ export function registerBrowserTools(): void {
     parameters: {
       fullPage: { type: 'boolean', description: 'Capture full page (default: false)' },
     },
-    tier: 'growth',
+    tier: 'free',
     async execute(args) {
       const page = await getPage()
       const buffer = await page.screenshot({
@@ -115,7 +115,7 @@ export function registerBrowserTools(): void {
     name: 'browser_close',
     description: 'Close the browser instance.',
     parameters: {},
-    tier: 'growth',
+    tier: 'free',
     async execute() {
       await closeBrowser()
       return 'Browser closed'

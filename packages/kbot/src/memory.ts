@@ -84,6 +84,66 @@ export function clearHistory(): void {
 
 /** Get the previous_messages array for the API */
 export function getPreviousMessages(): Array<{ role: string; content: string }> {
-  // Send last 6 turns to keep token usage efficient
-  return sessionHistory.slice(-6).map(t => ({ role: t.role, content: t.content }))
+  // Send last 16 turns (8 exchanges) — enough context to maintain coherent conversation
+  return sessionHistory.slice(-16).map(t => ({ role: t.role, content: t.content }))
+}
+
+/** Compact/compress conversation history into a summary.
+ *  Keeps the last 4 turns verbatim, summarizes everything before.
+ *  This extends session length without losing context.
+ */
+export function compactHistory(): { before: number; after: number; summary: string } {
+  const before = sessionHistory.length
+  if (before <= 4) {
+    return { before, after: before, summary: 'History too short to compact.' }
+  }
+
+  // Keep last 4 turns verbatim
+  const keepVerbatim = sessionHistory.slice(-4)
+  const toSummarize = sessionHistory.slice(0, -4)
+
+  // Build a summary of the older turns
+  const summaryParts: string[] = ['Conversation summary (compacted):']
+  const userMessages: string[] = []
+  const assistantTopics: string[] = []
+
+  for (const turn of toSummarize) {
+    if (turn.role === 'user') {
+      userMessages.push(turn.content.slice(0, 100))
+    } else {
+      // Extract first line or first 100 chars as topic
+      const firstLine = turn.content.split('\n')[0].slice(0, 100)
+      assistantTopics.push(firstLine)
+    }
+  }
+
+  if (userMessages.length > 0) {
+    summaryParts.push(`User asked about: ${userMessages.join('; ')}`)
+  }
+  if (assistantTopics.length > 0) {
+    summaryParts.push(`Topics covered: ${assistantTopics.join('; ')}`)
+  }
+
+  const summaryText = summaryParts.join('\n')
+
+  // Replace history with summary + recent turns
+  sessionHistory = [
+    { role: 'assistant', content: summaryText },
+    ...keepVerbatim,
+  ]
+
+  return {
+    before,
+    after: sessionHistory.length,
+    summary: `Compacted ${before} turns → ${sessionHistory.length} (${before - sessionHistory.length} turns summarized)`,
+  }
+}
+
+/** Restore session history from a saved session */
+export function restoreHistory(turns: ConversationTurn[]): void {
+  sessionHistory = [...turns]
+  // Keep manageable size
+  if (sessionHistory.length > 20) {
+    sessionHistory = sessionHistory.slice(-20)
+  }
 }

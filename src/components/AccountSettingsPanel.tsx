@@ -343,6 +343,44 @@ export default function AccountSettingsPanel({
         </div>
       </div>
 
+      {/* ═══ K:BOT CLI ═══ */}
+      <div className="ka-settings-section">
+        <h3 className="ka-settings-section-header">K:BOT CLI</h3>
+        <div className="ka-settings-section-body">
+          <p className="ka-settings-section-desc">
+            Open-source terminal AI agent. 14 providers, 60+ tools, local-first execution.
+          </p>
+          <div className="ka-settings-kbot-install">
+            <code className="ka-settings-kbot-cmd">npm install -g @anthropic/kbot</code>
+            <button
+              className="ka-settings-kbot-copy"
+              onClick={() => {
+                navigator.clipboard.writeText('npm install -g @anthropic/kbot')
+                onToast('Copied to clipboard')
+              }}
+            >
+              Copy
+            </button>
+          </div>
+          <div className="ka-settings-kbot-steps">
+            <span className="ka-settings-kbot-step">1. Install globally with npm</span>
+            <span className="ka-settings-kbot-step">2. Run <code>kbot auth</code> to connect your API key</span>
+            <span className="ka-settings-kbot-step">3. Run <code>kbot</code> to start — or <code>kbot "prompt"</code> for one-shot</span>
+          </div>
+          <div className="ka-settings-kbot-links">
+            <a href="https://github.com/isaacsight/kbot" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
+              GitHub
+            </a>
+            <span className="ka-settings-kbot-sep">·</span>
+            <a href="https://npmjs.com/package/@anthropic/kbot" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
+              npm
+            </a>
+            <span className="ka-settings-kbot-sep">·</span>
+            <span className="ka-settings-kbot-local">Free with Ollama — no API key needed</span>
+          </div>
+        </div>
+      </div>
+
       {/* Export Data */}
       <div className="ka-settings-section">
         <h3 className="ka-settings-section-header">{t('exportData.heading')}</h3>

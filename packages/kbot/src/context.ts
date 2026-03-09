@@ -1,9 +1,13 @@
 // K:BOT Context — Codebase awareness for smarter responses
 // Gathers local project context to send with API requests.
 // This reduces token waste: the agent knows your project structure upfront.
+//
+// OPTIMIZED: All shell commands run with short timeouts.
+// File tree uses `ls` fallback when `find` is slow.
+// Stack detection is pure filesystem (no shell needed).
 
 import { execSync } from 'node:child_process'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join, basename } from 'node:path'
 
 export interface ProjectContext {
@@ -15,29 +19,56 @@ export interface ProjectContext {
   packageManager?: string
   fileTree: string
   recentChanges?: string
+  /** Contents of .kbot.md or KBOT.md (like CLAUDE.md) */
+  projectInstructions?: string
+}
+
+/** Run a shell command with a tight timeout — returns empty string on failure */
+function quickExec(cmd: string, timeoutMs = 2000): string {
+  try {
+    return execSync(cmd, { encoding: 'utf-8', timeout: timeoutMs, stdio: ['pipe', 'pipe', 'pipe'] }).trim()
+  } catch {
+    return ''
+  }
 }
 
 /** Detect if we're in a git repository */
 function getGitInfo(): { isGitRepo: boolean; root?: string; branch?: string } {
-  try {
-    const root = execSync('git rev-parse --show-toplevel', { encoding: 'utf-8', timeout: 5000 }).trim()
-    const branch = execSync('git branch --show-current', { encoding: 'utf-8', timeout: 5000 }).trim()
-    return { isGitRepo: true, root, branch }
-  } catch {
-    return { isGitRepo: false }
-  }
+  const root = quickExec('git rev-parse --show-toplevel', 1500)
+  if (!root) return { isGitRepo: false }
+  const branch = quickExec('git branch --show-current', 1000)
+  return { isGitRepo: true, root, branch }
 }
 
-/** Get a compact file tree (max depth 3) */
+/** Get a compact file tree — fast approach using readdirSync instead of find */
 function getFileTree(root: string): string {
-  try {
-    return execSync(
-      `find "${root}" -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/.next/*' -not -path '*/build/*' -type f | head -100`,
-      { encoding: 'utf-8', timeout: 10000 }
-    ).trim()
-  } catch {
-    return ''
+  const skipDirs = new Set(['node_modules', '.git', 'dist', '.next', 'build', '__pycache__', '.venv', 'target', 'vendor'])
+  const files: string[] = []
+  const maxFiles = 80
+
+  function walk(dir: string, depth: number): void {
+    if (depth > 3 || files.length >= maxFiles) return
+    try {
+      const entries = readdirSync(dir, { withFileTypes: true })
+      for (const entry of entries) {
+        if (files.length >= maxFiles) return
+        if (entry.name.startsWith('.') && entry.isDirectory()) continue
+        if (skipDirs.has(entry.name)) continue
+
+        const fullPath = join(dir, entry.name)
+        const relPath = fullPath.replace(root + '/', '')
+
+        if (entry.isDirectory()) {
+          walk(fullPath, depth + 1)
+        } else {
+          files.push(relPath)
+        }
+      }
+    } catch { /* permission denied, etc. */ }
   }
+
+  walk(root, 0)
+  return files.join('\n')
 }
 
 /** Detect project language and framework from package.json or other config files */
@@ -85,15 +116,29 @@ function detectStack(root: string): { language?: string; framework?: string; pac
   return result
 }
 
-/** Get recent git changes for context */
-function getRecentChanges(): string {
-  try {
-    return execSync('git diff --stat HEAD~3 2>/dev/null || echo "No recent changes"', {
-      encoding: 'utf-8', timeout: 5000,
-    }).trim()
-  } catch {
-    return ''
+/** Load .kbot.md or KBOT.md project instructions (like CLAUDE.md convention) */
+function loadProjectInstructions(root: string): string | undefined {
+  const candidates = [
+    join(root, '.kbot.md'),
+    join(root, 'KBOT.md'),
+    join(root, '.kbot', 'instructions.md'),
+  ]
+
+  for (const path of candidates) {
+    if (existsSync(path)) {
+      try {
+        const content = readFileSync(path, 'utf-8')
+        return content.slice(0, 8192) // Cap at 8KB
+      } catch { continue }
+    }
   }
+
+  return undefined
+}
+
+/** Get recent git changes for context — fast with tight timeout */
+function getRecentChanges(): string {
+  return quickExec('git diff --stat HEAD~3 2>/dev/null', 1500)
 }
 
 /** Gather full project context. Called once at startup and cached. */
@@ -112,6 +157,7 @@ export function gatherContext(): ProjectContext {
     packageManager: stack.packageManager,
     fileTree,
     recentChanges: git.isGitRepo ? getRecentChanges() : undefined,
+    projectInstructions: loadProjectInstructions(root),
   }
 }
 
@@ -137,6 +183,10 @@ export function formatContextForPrompt(ctx: ProjectContext): string {
 
   if (ctx.recentChanges) {
     parts.push(`\nRecent changes:\n${ctx.recentChanges}`)
+  }
+
+  if (ctx.projectInstructions) {
+    parts.push(`\n[Project Instructions (.kbot.md)]\n${ctx.projectInstructions}`)
   }
 
   return parts.join('\n')

@@ -7,6 +7,7 @@ import { IconClose, IconMail } from './KernelIcons'
 import { ParticleGrid } from './ParticleGrid'
 import { LandingHero } from './LandingHero'
 import { LandingFeatures } from './LandingFeatures'
+import { LandingKbot } from './LandingKbot'
 import { VARIANT, TRANSITION } from '../constants/motion'
 
 export function LoginGate() {
@@ -108,6 +109,9 @@ export function LoginGate() {
 
       {/* Features — 3 agent cards with mini ParticleGrids */}
       <LandingFeatures />
+
+      {/* K:BOT CLI — open source terminal agent */}
+      <LandingKbot />
 
       {/* Auth Modal */}
       <AnimatePresence>

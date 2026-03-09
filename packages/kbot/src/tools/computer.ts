@@ -1,5 +1,5 @@
 // K:BOT Computer Use Tool — Screenshot, click, type on the desktop
-// Enterprise tier only. Requires explicit opt-in via --computer-use flag.
+// Requires explicit opt-in via --computer-use flag.
 // Uses native OS commands (screencapture on macOS, etc.)
 
 import { execSync } from 'node:child_process'
@@ -15,7 +15,7 @@ export function registerComputerTools(): void {
     name: 'screenshot',
     description: 'Capture a screenshot of the entire screen. Returns base64-encoded PNG. Requires --computer-use flag.',
     parameters: {},
-    tier: 'enterprise',
+    tier: 'free',
     async execute() {
       const tmpPath = join(tmpdir(), `kbot-screenshot-${Date.now()}.png`)
 
@@ -50,7 +50,7 @@ export function registerComputerTools(): void {
       y: { type: 'number', description: 'Y coordinate', required: true },
       button: { type: 'string', description: 'Mouse button: left, right, middle (default: left)' },
     },
-    tier: 'enterprise',
+    tier: 'free',
     async execute(args) {
       const x = Number(args.x)
       const y = Number(args.y)
@@ -91,7 +91,7 @@ export function registerComputerTools(): void {
     parameters: {
       text: { type: 'string', description: 'Text to type', required: true },
     },
-    tier: 'enterprise',
+    tier: 'free',
     async execute(args) {
       const text = String(args.text)
 
@@ -122,7 +122,7 @@ export function registerComputerTools(): void {
     parameters: {
       key: { type: 'string', description: 'Key name: enter, tab, escape, space, backspace, cmd+c, ctrl+v, etc.', required: true },
     },
-    tier: 'enterprise',
+    tier: 'free',
     async execute(args) {
       const key = String(args.key).toLowerCase()
 

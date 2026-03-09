@@ -2,7 +2,12 @@
 // All execution is local — zero API calls.
 
 import { execSync } from 'node:child_process'
+import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { registerTool } from './index.js'
+
+/** Persistent working directory across bash calls within the session */
+let sessionCwd = process.cwd()
 
 /** Dangerous command patterns that are blocked by default */
 const BLOCKED_PATTERNS = [
@@ -38,7 +43,7 @@ export function registerBashTools(): void {
       command: { type: 'string', description: 'The shell command to execute', required: true },
       timeout: { type: 'number', description: 'Timeout in milliseconds (default: 120000, max: 600000)' },
     },
-    tier: 'starter',
+    tier: 'free',
     async execute(args) {
       const command = String(args.command)
       const timeout = Math.min(
@@ -52,13 +57,35 @@ export function registerBashTools(): void {
         return `Error: Command blocked for safety. ${check.reason}`
       }
 
+      // Detect cd commands and update sessionCwd
+      const cdMatch = command.match(/^\s*cd\s+(.+?)(?:\s*&&|$)/)
+      if (cdMatch) {
+        const target = cdMatch[1].replace(/^['"]|['"]$/g, '').replace(/^~/, process.env.HOME || '')
+        const resolved = resolve(sessionCwd, target)
+        if (existsSync(resolved)) {
+          sessionCwd = resolved
+        }
+      }
+
       try {
         const result = execSync(command, {
           encoding: 'utf-8',
           timeout,
+          cwd: sessionCwd,
           maxBuffer: 10 * 1024 * 1024, // 10MB
           stdio: ['pipe', 'pipe', 'pipe'],
         })
+
+        // If the command was a standalone cd, update cwd from the shell
+        if (/^\s*cd\s/.test(command) && !command.includes('&&') && !command.includes(';')) {
+          try {
+            const newCwd = execSync(`cd ${JSON.stringify(sessionCwd)} && ${command} && pwd`, {
+              encoding: 'utf-8', timeout: 5000,
+            }).trim()
+            if (newCwd && existsSync(newCwd)) sessionCwd = newCwd
+          } catch { /* keep current cwd */ }
+        }
+
         return result.trim() || '(no output)'
       } catch (err: unknown) {
         const e = err as { stderr?: string; stdout?: string; status?: number; message?: string }

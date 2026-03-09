@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K:BOT — Open Source Terminal AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1F1E1D;
+            color: #FAF9F6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 48px 20px;
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .header .accent {
+            color: #6B5B95;
+        }
+        .header p {
+            font-size: 0.95rem;
+            color: rgba(250, 249, 246, 0.6);
+            line-height: 1.5;
+        }
+        .card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #FAF9F6;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .card:hover {
+            border-color: #6B5B95;
+            background: rgba(107, 91, 149, 0.06);
+        }
+        .card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .card-sub {
+            font-size: 0.8rem;
+            color: rgba(250, 249, 246, 0.45);
+        }
+        .card-price {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6B5B95;
+            white-space: nowrap;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin: 4px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 8px;
+        }
+        .footer code {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.1rem;
+            color: #6B5B95;
+            background: rgba(107, 91, 149, 0.12);
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+        .footer p {
+            font-size: 0.75rem;
+            color: rgba(250, 249, 246, 0.3);
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>K<span class="accent">:</span>BOT</h1>
+            <p>Open source terminal AI<br>17 agents. 13 providers. Runs locally.</p>
+        </div>
+
+        <a href="https://github.com/isaacsight/kernel" class="card">
+            <div class="card-text">
+                <span class="card-title">Get K:BOT</span>
+                <span class="card-sub">GitHub — MIT License</span>
+            </div>
+            <span class="card-price">Free</span>
+        </a>
+
+        <a href="https://kernel.chat" class="card">
+            <div class="card-text">
+                <span class="card-title">kernel.chat</span>
+                <span class="card-sub">Full platform — web + Pro tier</span>
+            </div>
+        </a>
+
+        <hr class="divider">
+
+        <a href="https://theaisignal.beehiiv.com" class="card">
+            <div class="card-text">
+                <span class="card-title">The AI Signal</span>
+                <span class="card-sub">Weekly AI news for builders</span>
+            </div>
+            <span class="card-price">Free</span>
+        </a>
+
+        <a href="https://kbot.gumroad.com/l/local-ai-setup-guide" class="card">
+            <div class="card-text">
+                <span class="card-title">The Local AI Setup Guide</span>
+                <span class="card-sub">Ollama + K:BOT + the $0 stack</span>
+            </div>
+            <span class="card-price">$9</span>
+        </a>
+
+        <a href="https://kbot.gumroad.com/l/50-ai-prompts" class="card">
+            <div class="card-text">
+                <span class="card-title">50 AI Prompts for Developers</span>
+                <span class="card-sub">Senior engineer tested, ready to paste</span>
+            </div>
+            <span class="card-price">$5</span>
+        </a>
+
+        <hr class="divider">
+
+        <a href="https://x.com/kbot_ai" class="card">
+            <div class="card-text">
+                <span class="card-title">X (Twitter)</span>
+                <span class="card-sub">Daily AI news and commentary</span>
+            </div>
+        </a>
+
+        <a href="https://tiktok.com/@kbot.ai" class="card">
+            <div class="card-text">
+                <span class="card-title">TikTok</span>
+                <span class="card-sub">AI demos and tutorials</span>
+            </div>
+        </a>
+
+        <div class="footer">
+            <code>npx kbot</code>
+            <p>Built by Antigravity Group</p>
+        </div>
+    </div>
+</body>
+</html>
