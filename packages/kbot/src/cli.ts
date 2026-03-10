@@ -45,7 +45,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.3.1'
+const VERSION = '2.4.0'
 
 async function main(): Promise<void> {
   const program = new Command()
