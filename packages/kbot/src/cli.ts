@@ -114,6 +114,28 @@ async function main(): Promise<void> {
       printInfo('  kbot ide acp    — IntelliJ, WebStorm, PyCharm, GoLand, Android Studio')
     })
 
+  // ── Serve: Universal HTTP API for any LLM ──
+  program
+    .command('serve')
+    .description('Start HTTP API server — lets any LLM (Claude, OpenAI, Gemini, Ollama) drive K:BOT\'s tools')
+    .option('--port <port>', 'Port to listen on', '7437')
+    .option('--token <token>', 'Require bearer token for auth')
+    .option('--cors <origin>', 'CORS allowed origin', '*')
+    .option('--tier <tier>', 'API tier (free, pro, growth, enterprise)', 'free')
+    .option('-a, --agent <agent>', 'Default agent for /v1/chat')
+    .option('-q, --quiet', 'Minimal output')
+    .action(async (opts: { port?: string; token?: string; cors?: string; tier?: string; agent?: string; quiet?: boolean }) => {
+      const { startServe } = await import('./serve.js')
+      await startServe({
+        port: opts.port ? parseInt(opts.port, 10) : undefined,
+        token: opts.token,
+        cors: opts.cors,
+        tier: opts.tier,
+        agent: opts.agent,
+        quiet: opts.quiet,
+      })
+    })
+
   program
     .command('byok')
     .description('Bring Your Own Key — configure your LLM API key (14 providers)')
