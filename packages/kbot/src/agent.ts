@@ -31,6 +31,10 @@ import {
   shouldAutoTrain, selfTrain,
 } from './learning.js'
 import { getMemoryPrompt, addTurn, getPreviousMessages } from './memory.js'
+import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
+import { learnedRoute, recordRoute } from './learned-router.js'
+import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
+import { saveEmbeddingCache } from './embeddings.js'
 import { createSpinner, printToolCall, printToolResult, printResponse, printError, printInfo, printWarn } from './ui.js'
 import { parseMultimodalMessage, toAnthropicContent, toOpenAIContent, toGeminiParts, type ParsedMessage } from './multimodal.js'
 import { streamAnthropicResponse, streamOpenAIResponse, type StreamState } from './streaming.js'
@@ -43,9 +47,6 @@ const MAX_TOOL_LOOPS = 75
 /** Maximum cumulative cost (USD) before auto-stopping tool loops */
 const MAX_COST_CEILING = 1.00
 
-/** Cached system prompt — rebuilt only when context changes, not every iteration */
-let _cachedSystemPrompt: string | null = null
-let _cachedSystemPromptKey: string | null = null
 
 export interface AgentOptions {
   agent?: string
@@ -618,6 +619,14 @@ export async function runAgent(
     }
   }
 
+  // Step 1.7: Learned routing — try cached route before defaulting
+  if (!options.agent) {
+    const route = learnedRoute(message)
+    if (route && route.confidence >= 0.6) {
+      options.agent = route.agent
+    }
+  }
+
   const tier = options.tier || 'free'
   const allTools = getToolDefinitionsForApi(tier)
   const casual = isCasualMessage(message)
@@ -641,15 +650,7 @@ export async function runAgent(
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
 
-  // Cache key to avoid rebuilding identical system prompts
-  const cacheKey = `${options.agent || ''}:${contextSnippet.length}:${memorySnippet.length}`
-
-  let systemContext: string
-  if (_cachedSystemPromptKey === cacheKey && _cachedSystemPrompt) {
-    // Reuse cached base prompt, only update learning context (changes per message)
-    systemContext = learningContext ? `${learningContext}\n\n${_cachedSystemPrompt}` : _cachedSystemPrompt
-  } else {
-    const preContext = `You are K:BOT, an AI that lives in the user's terminal. Talk naturally — be direct, concise, and conversational. You're like a skilled colleague, not a corporate chatbot.
+  const PERSONA = `You are K:BOT, an AI that lives in the user's terminal. Talk naturally — be direct, concise, and conversational. You're like a skilled colleague, not a corporate chatbot.
 
 Conversation style:
 - Be casual and natural. Use short sentences. Don't over-explain.
@@ -669,11 +670,16 @@ How you work with tools:
 
 Always quote file paths that contain spaces. Never reference internal system names.`
 
-    const matrixPrefix = matrixPrompt ? `[Agent Persona]\n${matrixPrompt}\n\nIMPORTANT: Stay in character as defined above. Your responses should reflect this agent's expertise and perspective.\n` : ''
-    _cachedSystemPrompt = [matrixPrefix, contextSnippet, memorySnippet, preContext].filter(Boolean).join('\n')
-    _cachedSystemPromptKey = cacheKey
-    systemContext = learningContext ? `${learningContext}\n\n${_cachedSystemPrompt}` : _cachedSystemPrompt
-  }
+  // Prompt caching — split into stable (cacheable) and dynamic sections
+  const promptSections = createPromptSections({
+    persona: PERSONA,
+    matrixPrompt: matrixPrompt || undefined,
+    contextSnippet: contextSnippet || undefined,
+    memorySnippet: memorySnippet || undefined,
+    learningContext: learningContext || undefined,
+  })
+  const provider = byokProvider || 'anthropic'
+  const { text: systemContext } = buildCacheablePrompt(promptSections, provider)
 
   let toolCallCount = 0
   let lastResponse: any = null
@@ -699,7 +705,6 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
     try {
       // ── BYOK: Call provider directly with tool-use support ──
-      const provider = byokProvider || 'anthropic'
       const speed = options.model === 'haiku' || options.model === 'fast' ? 'fast' : 'default'
       const model = getProviderModel(provider, speed, originalMessage)
 
@@ -709,12 +714,23 @@ Always quote file paths that contain spaces. Never reference internal system nam
         input_schema: t.input_schema,
       }))
 
-      // Build messages: session history + original user message + loop context
-      const messages: ProviderMessage[] = [
+      // Build messages with RLM-style context management
+      const rawMessages: ProviderMessage[] = [
         ...getPreviousMessages(),
         { role: 'user', content: message },
         ...loopMessages,
       ]
+
+      // Auto-compact conversation history if it's getting too long
+      const asTurns: ConversationTurn[] = rawMessages.map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }))
+      const { turns: compactedTurns } = autoCompact(asTurns)
+      const messages: ProviderMessage[] = compactedTurns.map(t => ({
+        role: t.role,
+        content: t.content,
+      }))
 
       spinner?.stop()
 
@@ -808,6 +824,10 @@ Always quote file paths that contain spaces. Never reference internal system nam
               techTerms: extractKeywords(originalMessage),
             })
 
+            // Record routing decision for learned router
+            const routeMethod = learnedRoute(originalMessage)?.method || 'llm'
+            recordRoute(originalMessage, lastResponse.agent || 'kernel', routeMethod, true)
+
             // Deep learning — extract knowledge, detect corrections, update project memory
             learnFromExchange(originalMessage, content, toolSequenceLog, process.cwd())
 
@@ -817,6 +837,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
                 stack: extractKeywords(originalMessage),
               })
             }
+
+            // Save embedding cache
+            try { saveEmbeddingCache() } catch { /* non-critical */ }
 
             // Auto self-training trigger
             if (shouldAutoTrain()) {
@@ -875,10 +898,11 @@ Always quote file paths that contain spaces. Never reference internal system nam
         : `Using tools: ${toolCalls.map(tc => tc.name).join(', ')}`
       loopMessages.push({ role: 'assistant', content: assistantSummary })
 
-      // 2. Include tool results so the AI sees what happened
+      // 2. Include tool results — compress large outputs to preserve context budget
       const toolResultSummary = results.map(r => {
         const status = r.error ? '[ERROR] ' : ''
-        return `${r.tool_call_id} (${toolCalls.find(tc => tc.id === r.tool_call_id)?.name || 'unknown'}): ${status}${r.result}`
+        const compressed = r.result.length > 4000 ? compressToolResult(r.result) : r.result
+        return `${r.tool_call_id} (${toolCalls.find(tc => tc.id === r.tool_call_id)?.name || 'unknown'}): ${status}${compressed}`
       }).join('\n\n')
       loopMessages.push({ role: 'user', content: `Tool results:\n${toolResultSummary}` })
     } catch (err) {
