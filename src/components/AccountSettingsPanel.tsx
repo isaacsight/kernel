@@ -351,11 +351,11 @@ export default function AccountSettingsPanel({
             Open-source terminal AI agent. Bring your own API keys — your models, your data, no middleman.
           </p>
           <div className="ka-settings-kbot-install">
-            <code className="ka-settings-kbot-cmd">npm install -g @anthropic/kbot</code>
+            <code className="ka-settings-kbot-cmd">npm i -g @kernel.chat/kbot</code>
             <button
               className="ka-settings-kbot-copy"
               onClick={() => {
-                navigator.clipboard.writeText('npm install -g @anthropic/kbot')
+                navigator.clipboard.writeText('npm i -g @kernel.chat/kbot')
                 onToast('Copied to clipboard')
               }}
             >
@@ -367,12 +367,36 @@ export default function AccountSettingsPanel({
             <span className="ka-settings-kbot-step">2. Run <code>kbot auth</code> to connect your API key</span>
             <span className="ka-settings-kbot-step">3. Run <code>kbot</code> to start — or <code>kbot "prompt"</code> for one-shot</span>
           </div>
+          <div className="ka-settings-kbot-steps" style={{ marginTop: 8 }}>
+            <span className="ka-settings-kbot-step" style={{ fontWeight: 500 }}>Cloud Sync</span>
+            <span className="ka-settings-kbot-step">Sync your kbot learning data across machines:</span>
+          </div>
+          <div className="ka-settings-kbot-install">
+            <code className="ka-settings-kbot-cmd" style={{ fontSize: '0.8em' }}>kbot cloud --token YOUR_TOKEN</code>
+            <button
+              className="ka-settings-kbot-copy"
+              onClick={async () => {
+                try {
+                  const { getAccessToken } = await import('../engine/SupabaseClient')
+                  const token = await getAccessToken()
+                  if (token) {
+                    navigator.clipboard.writeText(`kbot cloud --token ${token}`)
+                    onToast('Token command copied — paste in your terminal')
+                  }
+                } catch {
+                  onToast('Sign in to get your sync token')
+                }
+              }}
+            >
+              Copy with token
+            </button>
+          </div>
           <div className="ka-settings-kbot-links">
-            <a href="https://github.com/isaacsight/kbot" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
+            <a href="https://github.com/isaacsight/kernel" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
               GitHub
             </a>
             <span className="ka-settings-kbot-sep">·</span>
-            <a href="https://npmjs.com/package/@anthropic/kbot" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
+            <a href="https://npmjs.com/package/@kernel.chat/kbot" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
               npm
             </a>
             <span className="ka-settings-kbot-sep">·</span>

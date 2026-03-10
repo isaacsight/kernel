@@ -107,7 +107,7 @@ export function LandingKbot() {
         <div className="landing-kbot-term-body">
           {visible && (
             <>
-              <TermLine text="npm install -g @anthropic/kbot" prefix="$ " delay={300} />
+              <TermLine text="npm i -g @kernel.chat/kbot" prefix="$ " delay={300} />
               <TermLine text="kbot auth" prefix="$ " delay={1400} />
               <TermLine text="✓ Anthropic (Claude) connected" delay={2200} />
               <TermLine text="" delay={2600} />
