@@ -52,7 +52,7 @@ import {
   serializeState, fetchUrlContent,
 } from '../components/ChatHelpers'
 import { isPlatformShareLink, importConversation, formatImportedContext, detectPlatformUrl } from '../engine/conversationImport'
-import { isScoreTrigger, calculateClientScore, saveClientScore, formatScoreMessage } from '../engine/clientScoring'
+import { isScoreTrigger, isPointsTrigger, calculateClientScore, saveClientScore, formatScoreMessage, calculatePoints, formatPointsMessage } from '../engine/clientScoring'
 import { autoSaveArtifact, autoSaveGeneratedImage } from '../engine/chatFolderAutoSave'
 import { transcribeAudio } from '../engine/transcribe'
 import { formatCrisisResourcesForPrompt } from '../engine/CrisisDetector'
@@ -528,18 +528,32 @@ export function useChatEngine(params: UseChatEngineParams) {
       setInput('')
       setIsThinking(true)
       try {
-        const score = await calculateClientScore(userId)
-        const scoreMsg: ChatMessage = {
-          id: `score_${Date.now()}`,
-          role: 'kernel',
-          content: formatScoreMessage(score),
-          timestamp: Date.now(),
-          agentId: 'kernel',
-          agentName: 'Kernel',
+        if (isPointsTrigger(trimmed)) {
+          // kernel.point — show points breakdown (requires kernel.hat score)
+          const points = await calculatePoints(userId)
+          const pointsMsg: ChatMessage = {
+            id: `points_${Date.now()}`,
+            role: 'kernel',
+            content: formatPointsMessage(points),
+            timestamp: Date.now(),
+            agentId: 'kernel',
+            agentName: 'Kernel',
+          }
+          setMessages(prev => [...prev, pointsMsg])
+        } else {
+          // kernel.hat — full score + billing
+          const score = await calculateClientScore(userId)
+          const scoreMsg: ChatMessage = {
+            id: `score_${Date.now()}`,
+            role: 'kernel',
+            content: formatScoreMessage(score),
+            timestamp: Date.now(),
+            agentId: 'kernel',
+            agentName: 'Kernel',
+          }
+          setMessages(prev => [...prev, scoreMsg])
+          saveClientScore(userId, score, activeConversationId || undefined)
         }
-        setMessages(prev => [...prev, scoreMsg])
-        // Save to DB for admin invoicing
-        saveClientScore(userId, score, activeConversationId || undefined)
       } catch {
         // silent — don't reveal scoring system
       } finally {

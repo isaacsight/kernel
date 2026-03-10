@@ -8296,11 +8296,12 @@ h4 {
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--rubin-ivory);
-    transition: border-color var(--duration-fast);
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
 }
 
 .ka-artifact:hover {
     border-color: var(--rubin-accent);
+    box-shadow: 0 2px 12px rgba(107, 91, 149, 0.08);
 }
 
 .ka-artifact-header {
@@ -8310,6 +8311,12 @@ h4 {
     padding: 12px 14px;
     cursor: pointer;
     gap: var(--space-md);
+    /* ParticleGrid-inspired: subtle gradient left border accent */
+    border-left: 3px solid transparent;
+    background-image: linear-gradient(var(--rubin-ivory), var(--rubin-ivory)),
+                      linear-gradient(180deg, #6B5B95, #A0768C, #B8875C);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
 }
 
 .ka-artifact-file-info {
@@ -8365,9 +8372,9 @@ h4 {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--rubin-accent);
-    background: rgba(139, 115, 85, 0.1);
-    padding: 2px 6px;
+    color: #6B5B95;
+    background: rgba(107, 91, 149, 0.1);
+    padding: 2px 8px;
     border-radius: var(--radius-full);
 }
 
@@ -8551,6 +8558,13 @@ h4 {
     border-color: var(--dark-border-subtle);
 }
 
+[data-theme="dark"] .ka-artifact-header {
+    background-image: linear-gradient(var(--dark-bg-surface), var(--dark-bg-surface)),
+                      linear-gradient(180deg, #6B5B95, #A0768C, #B8875C);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
 [data-theme="dark"] .ka-artifact:hover {
     border-color: var(--rubin-accent);
 }
@@ -8622,6 +8636,74 @@ h4 {
 [data-theme="dark"] .ka-artifact-download-all:hover {
     border-color: var(--rubin-accent);
     color: var(--rubin-accent);
+}
+
+/* ── Artifact mobile responsive ──────────────────────────── */
+
+@media (max-width: 600px) {
+    .ka-artifact {
+        margin: 8px -4px;
+        border-radius: var(--radius-sm);
+    }
+    .ka-artifact-header {
+        padding: 10px 12px;
+        gap: var(--space-sm);
+    }
+    .ka-artifact-filename {
+        font-size: 12px;
+        max-width: 180px;
+    }
+    .ka-artifact-actions {
+        padding: 0 10px 10px;
+        gap: 5px;
+    }
+    .ka-artifact-action {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-height: 36px;
+    }
+    .ka-artifact-lines {
+        display: none;
+    }
+    .ka-artifact-markdown-preview {
+        padding: 12px 14px;
+        max-height: 400px;
+        font-size: 14px;
+    }
+    .ka-code-pre {
+        font-size: 0.7rem;
+        padding: 10px;
+    }
+    /* Scroll hint for code blocks on mobile */
+    .ka-code-pre::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 24px;
+        background: linear-gradient(to right, transparent, var(--rubin-ivory));
+        pointer-events: none;
+        opacity: 0.8;
+    }
+    .ka-code-block {
+        position: relative;
+    }
+}
+
+@media (max-width: 380px) {
+    .ka-artifact-filename {
+        max-width: 140px;
+        font-size: 11px;
+    }
+    .ka-artifact-lang {
+        font-size: 9px;
+        padding: 1px 5px;
+    }
+    .ka-artifact-action {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
 }
 
 /* ─── Guardian Review Badge ────────────────────────────── */

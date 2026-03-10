@@ -24,9 +24,15 @@ import { supabase } from './SupabaseClient'
 import { claudeText } from './ClaudeClient'
 
 export const SCORING_TRIGGER = 'kernel.hat'
+export const POINTS_TRIGGER = 'kernel.point'
 
 export function isScoreTrigger(input: string): boolean {
-  return input.trim().toLowerCase() === SCORING_TRIGGER
+  const lower = input.trim().toLowerCase()
+  return lower === SCORING_TRIGGER || lower === POINTS_TRIGGER
+}
+
+export function isPointsTrigger(input: string): boolean {
+  return input.trim().toLowerCase() === POINTS_TRIGGER
 }
 
 // ─── Pricing Constants ──────────────────────────────
@@ -670,6 +676,159 @@ export function formatScoreMessage(score: ScoreBreakdown): string {
     '',
     `*${score.details.messageCount} messages · ${score.details.conversationCount} conversations · ${score.details.fileCount} files · ${score.details.entityCount} insights*`,
   )
+
+  return lines.join('\n')
+}
+
+
+// ─── kernel.point — Points System ───────────────────
+// Points are earned per conversation interaction. Cost per point
+// is derived from the most recent kernel.hat score/billing.
+// kernel.point only works if a kernel.hat score exists.
+
+export interface PointsBreakdown {
+  totalPoints: number
+  costPerPoint: number
+  totalCost: number
+  messagePoints: number
+  filePoints: number
+  depthPoints: number
+  qualityBonus: number
+  hasScore: boolean
+  score: number
+  tier: string
+}
+
+/** Calculate points from user activity — requires a kernel.hat score first */
+export async function calculatePoints(userId: string): Promise<PointsBreakdown> {
+  // Check if user has a kernel.hat score
+  const { data: scores } = await supabase
+    .from('client_scores')
+    .select('score, created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  const latestScore = scores?.[0]
+  if (!latestScore) {
+    return {
+      totalPoints: 0, costPerPoint: 0, totalCost: 0,
+      messagePoints: 0, filePoints: 0, depthPoints: 0, qualityBonus: 0,
+      hasScore: false, score: 0, tier: 'None',
+    }
+  }
+
+  // Get activity since the score was recorded
+  const scoredAt = latestScore.created_at
+
+  const [
+    { count: msgsSince },
+    { count: filesSince },
+    { count: helpfulSince },
+    { count: convsSince },
+  ] = await Promise.all([
+    supabase.from('messages').select('id', { count: 'exact', head: true })
+      .eq('user_id', userId).eq('agent_id', 'user').gte('created_at', scoredAt),
+    supabase.from('user_files').select('id', { count: 'exact', head: true })
+      .eq('user_id', userId).gte('created_at', scoredAt),
+    supabase.from('response_signals').select('id', { count: 'exact', head: true })
+      .eq('user_id', userId).eq('response_quality', 'helpful').gte('created_at', scoredAt),
+    supabase.from('conversations').select('id', { count: 'exact', head: true })
+      .eq('user_id', userId).gte('created_at', scoredAt),
+  ])
+
+  const messages = msgsSince ?? 0
+  const files = filesSince ?? 0
+  const helpful = helpfulSince ?? 0
+  const convs = convsSince ?? 0
+
+  // Point rules:
+  // 1 point per message sent
+  // 3 points per file created
+  // 2 points per conversation started (depth bonus)
+  // Quality bonus: +1 point per helpful signal
+  const messagePoints = messages
+  const filePoints = files * 3
+  const depthPoints = convs * 2
+  const qualityBonus = helpful
+  const totalPoints = messagePoints + filePoints + depthPoints + qualityBonus
+
+  // Cost per point from most recent kernel.hat billing
+  const score = latestScore.score ?? 0
+  const billable = score >= BILLING_THRESHOLD
+
+  // Reconstruct cost from score (simplified — same formula as kernel.hat)
+  const scoreComponent = score * SCORE_RATE
+  const rawCost = BASE_PROJECT_FEE + scoreComponent
+  const tier = score >= ELITE_THRESHOLD ? 'Elite' :
+    score >= PREMIUM_THRESHOLD ? 'Premium' :
+    score >= 60 ? 'Standard' : 'Starter'
+  const totalCost = billable ? rawCost : 0
+  const costPerPoint = totalPoints > 0 && totalCost > 0
+    ? Math.round(totalCost / totalPoints)
+    : 0
+
+  return {
+    totalPoints, costPerPoint, totalCost,
+    messagePoints, filePoints, depthPoints, qualityBonus,
+    hasScore: true, score, tier,
+  }
+}
+
+/** Format points breakdown for display in chat */
+export function formatPointsMessage(points: PointsBreakdown): string {
+  if (!points.hasScore) {
+    return [
+      '## kernel.point',
+      '',
+      'No score found. Run **kernel.hat** first to generate your project score.',
+      '',
+      '*Points track your ongoing work after scoring. The score sets your rate.*',
+    ].join('\n')
+  }
+
+  const bar = (val: number, max: number) => {
+    const filled = Math.min(10, Math.round((val / Math.max(max, 1)) * 10))
+    return '\u2588'.repeat(filled) + '\u2591'.repeat(10 - filled)
+  }
+
+  const maxCategory = Math.max(points.messagePoints, points.filePoints, points.depthPoints, points.qualityBonus, 1)
+
+  const lines = [
+    `## kernel.point — **${points.totalPoints} points**`,
+    '',
+    `*${points.tier} tier · Score ${points.score}/100*`,
+    '',
+    '| Activity | Points | |',
+    '|---|---|---|',
+    `| Messages sent | ${points.messagePoints} | ${bar(points.messagePoints, maxCategory)} |`,
+    `| Files created (×3) | ${points.filePoints} | ${bar(points.filePoints, maxCategory)} |`,
+    `| Conversations (×2) | ${points.depthPoints} | ${bar(points.depthPoints, maxCategory)} |`,
+    `| Quality signals | ${points.qualityBonus} | ${bar(points.qualityBonus, maxCategory)} |`,
+    '',
+  ]
+
+  if (points.costPerPoint > 0) {
+    lines.push(
+      '---',
+      '',
+      `**Cost per point: ${fmt$(points.costPerPoint)}**`,
+      '',
+      `| | |`,
+      `|---|---|`,
+      `| Total points | ${points.totalPoints} |`,
+      `| Base project cost | ${fmt$(points.totalCost)} |`,
+      `| Cost ÷ points | ${fmt$(points.costPerPoint)}/pt |`,
+    )
+  } else {
+    lines.push(
+      '---',
+      '',
+      points.totalPoints > 0
+        ? `**${points.totalPoints} points earned** — score below billing threshold (${BILLING_THRESHOLD}), no cost assigned yet.`
+        : '*Start working to earn points. Each message, file, and conversation adds to your total.*',
+    )
+  }
 
   return lines.join('\n')
 }
