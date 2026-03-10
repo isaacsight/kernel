@@ -12,11 +12,11 @@ describe('BottomTabBar', () => {
 
   beforeEach(() => vi.clearAllMocks())
 
-  it('renders all 5 tabs with correct ARIA roles', () => {
+  it('renders all 4 tabs with correct ARIA roles', () => {
     render(<BottomTabBar activeTab="home" onTabChange={onTabChange} />)
 
     const tabs = screen.getAllByRole('tab')
-    expect(tabs).toHaveLength(5)
+    expect(tabs).toHaveLength(4)
     expect(screen.getByRole('tablist')).toHaveAttribute('aria-label', 'Main navigation')
   })
 
@@ -36,8 +36,8 @@ describe('BottomTabBar', () => {
     const user = userEvent.setup()
     render(<BottomTabBar activeTab="home" onTabChange={onTabChange} />)
 
-    await user.click(screen.getByRole('tab', { name: 'Gallery' }))
-    expect(onTabChange).toHaveBeenCalledWith('gallery')
+    await user.click(screen.getByRole('tab', { name: 'Files' }))
+    expect(onTabChange).toHaveBeenCalledWith('files')
 
     await user.click(screen.getByRole('tab', { name: 'Settings' }))
     expect(onTabChange).toHaveBeenCalledWith('settings')
@@ -64,6 +64,5 @@ describe('BottomTabBar', () => {
     expect(screen.getByRole('tab', { name: 'Chats' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Settings' })).toBeInTheDocument()
     expect(screen.queryByRole('tab', { name: 'Files' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('tab', { name: 'Gallery' })).not.toBeInTheDocument()
   })
 })

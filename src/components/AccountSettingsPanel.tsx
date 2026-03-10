@@ -348,7 +348,7 @@ export default function AccountSettingsPanel({
         <h3 className="ka-settings-section-header">K:BOT CLI</h3>
         <div className="ka-settings-section-body">
           <p className="ka-settings-section-desc">
-            Open-source terminal AI agent. 14 providers, 60+ tools, local-first execution.
+            Open-source terminal AI agent. Bring your own API keys — your models, your data, no middleman.
           </p>
           <div className="ka-settings-kbot-install">
             <code className="ka-settings-kbot-cmd">npm install -g @anthropic/kbot</code>
@@ -376,7 +376,7 @@ export default function AccountSettingsPanel({
               npm
             </a>
             <span className="ka-settings-kbot-sep">·</span>
-            <span className="ka-settings-kbot-local">Free with Ollama — no API key needed</span>
+            <span className="ka-settings-kbot-local">BYOK — or run free with local models</span>
           </div>
         </div>
       </div>

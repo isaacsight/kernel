@@ -1,13 +1,11 @@
 // K:BOT Tool Registry Tests
-import { describe, it, beforeEach } from 'node:test'
-import assert from 'node:assert/strict'
+import { describe, it, expect } from 'vitest'
 import {
   registerTool, getTool, getAllTools, getToolsForTier,
   executeTool, getToolMetrics, getToolDefinitionsForApi,
   type ToolDefinition,
 } from './index.js'
 
-// Helper to create a test tool
 function makeTool(overrides: Partial<ToolDefinition> = {}): ToolDefinition {
   return {
     name: 'test_tool',
@@ -25,20 +23,19 @@ describe('Tool Registry', () => {
   it('registers and retrieves tools', () => {
     const tool = makeTool({ name: 'reg_test' })
     registerTool(tool)
-    assert.equal(getTool('reg_test')?.name, 'reg_test')
+    expect(getTool('reg_test')?.name).toBe('reg_test')
   })
 
   it('returns undefined for unknown tools', () => {
-    assert.equal(getTool('nonexistent_tool_xyz'), undefined)
+    expect(getTool('nonexistent_tool_xyz')).toBeUndefined()
   })
 
   it('getAllTools returns registered tools', () => {
     registerTool(makeTool({ name: 'all_test_1' }))
     registerTool(makeTool({ name: 'all_test_2' }))
-    const tools = getAllTools()
-    const names = tools.map(t => t.name)
-    assert.ok(names.includes('all_test_1'))
-    assert.ok(names.includes('all_test_2'))
+    const names = getAllTools().map(t => t.name)
+    expect(names).toContain('all_test_1')
+    expect(names).toContain('all_test_2')
   })
 })
 
@@ -48,27 +45,24 @@ describe('Tier Gating', () => {
     registerTool(makeTool({ name: 'tier_pro', tier: 'pro' }))
     registerTool(makeTool({ name: 'tier_enterprise', tier: 'enterprise' }))
 
-    const freeTools = getToolsForTier('free')
-    const freeNames = freeTools.map(t => t.name)
-    assert.ok(freeNames.includes('tier_free'))
-    assert.ok(!freeNames.includes('tier_pro'))
-    assert.ok(!freeNames.includes('tier_enterprise'))
+    const freeNames = getToolsForTier('free').map(t => t.name)
+    expect(freeNames).toContain('tier_free')
+    expect(freeNames).not.toContain('tier_pro')
+    expect(freeNames).not.toContain('tier_enterprise')
   })
 
   it('pro tier gets free + pro tools', () => {
-    const proTools = getToolsForTier('pro')
-    const proNames = proTools.map(t => t.name)
-    assert.ok(proNames.includes('tier_free'))
-    assert.ok(proNames.includes('tier_pro'))
-    assert.ok(!proNames.includes('tier_enterprise'))
+    const proNames = getToolsForTier('pro').map(t => t.name)
+    expect(proNames).toContain('tier_free')
+    expect(proNames).toContain('tier_pro')
+    expect(proNames).not.toContain('tier_enterprise')
   })
 
   it('enterprise tier gets all tools', () => {
-    const entTools = getToolsForTier('enterprise')
-    const entNames = entTools.map(t => t.name)
-    assert.ok(entNames.includes('tier_free'))
-    assert.ok(entNames.includes('tier_pro'))
-    assert.ok(entNames.includes('tier_enterprise'))
+    const entNames = getToolsForTier('enterprise').map(t => t.name)
+    expect(entNames).toContain('tier_free')
+    expect(entNames).toContain('tier_pro')
+    expect(entNames).toContain('tier_enterprise')
   })
 })
 
@@ -80,10 +74,9 @@ describe('Tool Execution', () => {
       name: 'exec_test',
       arguments: { input: 'hello' },
     })
-    assert.equal(result.result, 'result: hello')
-    assert.equal(result.error, undefined)
-    assert.ok(typeof result.duration_ms === 'number')
-    assert.ok(result.duration_ms! >= 0)
+    expect(result.result).toBe('result: hello')
+    expect(result.error).toBeUndefined()
+    expect(result.duration_ms).toBeGreaterThanOrEqual(0)
   })
 
   it('returns error for unknown tools', async () => {
@@ -92,8 +85,8 @@ describe('Tool Execution', () => {
       name: 'totally_unknown_tool',
       arguments: {},
     })
-    assert.ok(result.error)
-    assert.ok(result.result.includes('Unknown tool'))
+    expect(result.error).toBe(true)
+    expect(result.result).toContain('Unknown tool')
   })
 
   it('handles tool execution errors', async () => {
@@ -106,14 +99,14 @@ describe('Tool Execution', () => {
       name: 'error_tool',
       arguments: {},
     })
-    assert.ok(result.error)
-    assert.ok(result.result.includes('kaboom'))
+    expect(result.error).toBe(true)
+    expect(result.result).toContain('kaboom')
   })
 
   it('times out long-running tools', async () => {
     registerTool(makeTool({
       name: 'slow_tool',
-      timeout: 100, // 100ms timeout
+      timeout: 100,
       execute: async () => {
         await new Promise(resolve => setTimeout(resolve, 5000))
         return 'should not reach'
@@ -124,8 +117,8 @@ describe('Tool Execution', () => {
       name: 'slow_tool',
       arguments: {},
     })
-    assert.ok(result.error)
-    assert.ok(result.result.includes('timed out'))
+    expect(result.error).toBe(true)
+    expect(result.result).toContain('timed out')
   })
 
   it('truncates large results', async () => {
@@ -140,8 +133,8 @@ describe('Tool Execution', () => {
       name: 'big_tool',
       arguments: {},
     })
-    assert.ok(result.result.length < bigResult.length)
-    assert.ok(result.result.includes('truncated'))
+    expect(result.result.length).toBeLessThan(bigResult.length)
+    expect(result.result).toContain('truncated')
   })
 })
 
@@ -152,10 +145,10 @@ describe('Tool Metrics', () => {
     await executeTool({ id: 'm2', name: 'metrics_test', arguments: { input: 'b' } })
 
     const m = getToolMetrics('metrics_test')
-    assert.equal(m.length, 1)
-    assert.equal(m[0].calls, 2)
-    assert.equal(m[0].errors, 0)
-    assert.ok(m[0].avgDurationMs >= 0)
+    expect(m.length).toBe(1)
+    expect(m[0].calls).toBe(2)
+    expect(m[0].errors).toBe(0)
+    expect(m[0].avgDurationMs).toBeGreaterThanOrEqual(0)
   })
 
   it('tracks error metrics', async () => {
@@ -166,7 +159,7 @@ describe('Tool Metrics', () => {
     await executeTool({ id: 'e1', name: 'err_metrics', arguments: {} })
 
     const m = getToolMetrics('err_metrics')
-    assert.equal(m[0].errors, 1)
+    expect(m[0].errors).toBe(1)
   })
 })
 
@@ -175,9 +168,9 @@ describe('API Definitions', () => {
     registerTool(makeTool({ name: 'schema_test', tier: 'free' }))
     const defs = getToolDefinitionsForApi('free')
     const def = defs.find(d => d.name === 'schema_test')
-    assert.ok(def)
-    assert.equal(def!.input_schema.type, 'object')
-    assert.ok(def!.input_schema.properties.input)
-    assert.ok(def!.input_schema.required?.includes('input'))
+    expect(def).toBeTruthy()
+    expect(def!.input_schema.type).toBe('object')
+    expect(def!.input_schema.properties.input).toBeTruthy()
+    expect(def!.input_schema.required).toContain('input')
   })
 })

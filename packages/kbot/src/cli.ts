@@ -42,6 +42,7 @@ import {
   setQuiet,
 } from './ui.js'
 import { checkForUpdate, selfUpdate } from './updater.js'
+import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
 const VERSION = '2.3.1'
@@ -149,6 +150,66 @@ async function main(): Promise<void> {
         else if (msg.startsWith('Permission') || msg.startsWith('Update failed') || msg.startsWith('Could not')) printError(msg)
         else printInfo(msg)
       })
+    })
+
+  program
+    .command('cloud')
+    .description('Connect to kernel.chat for cloud sync across machines')
+    .option('--token <token>', 'Set your kernel.chat token (JWT or API key)')
+    .option('--off', 'Disable cloud sync')
+    .option('--status', 'Show cloud sync status')
+    .option('--push', 'Force push local data to cloud')
+    .option('--pull', 'Force pull cloud data to local')
+    .action(async (opts: { token?: string; off?: boolean; status?: boolean; push?: boolean; pull?: boolean }) => {
+      if (opts.off) {
+        setCloudToken('')
+        printSuccess('Cloud sync disabled.')
+        return
+      }
+      if (opts.status) {
+        const enabled = isCloudSyncEnabled()
+        const token = getCloudToken()
+        if (enabled) {
+          const masked = token!.startsWith('kn_live_')
+            ? `kn_live_...${token!.slice(-4)}`
+            : `jwt...${token!.slice(-8)}`
+          printInfo(`Cloud sync: enabled (${masked})`)
+        } else {
+          printInfo('Cloud sync: not configured')
+          printInfo('Connect: kbot cloud --token <your-token>')
+        }
+        return
+      }
+      if (opts.push) {
+        const { pushToCloud } = await import('./cloud-sync.js')
+        printInfo('Pushing learning data to cloud...')
+        const ok = await pushToCloud()
+        if (ok) printSuccess('Pushed to cloud.')
+        else printError('Push failed. Check your token.')
+        return
+      }
+      if (opts.pull) {
+        const { pullFromCloud } = await import('./cloud-sync.js')
+        printInfo('Pulling learning data from cloud...')
+        const result = await pullFromCloud()
+        if (result.synced) printSuccess('Pulled from cloud.')
+        else if (result.source === 'local') printInfo('Local data is already up to date.')
+        else printError('Pull failed. Check your token.')
+        return
+      }
+      if (opts.token) {
+        setCloudToken(opts.token)
+        printSuccess('Cloud sync enabled. Your learning data will sync across machines.')
+        return
+      }
+      // No options — show usage
+      printInfo('Cloud sync — persist learning data across machines via kernel.chat')
+      printInfo('')
+      printInfo('  kbot cloud --token <token>   Connect to kernel.chat')
+      printInfo('  kbot cloud --status          Show sync status')
+      printInfo('  kbot cloud --push            Force push to cloud')
+      printInfo('  kbot cloud --pull            Force pull from cloud')
+      printInfo('  kbot cloud --off             Disable sync')
     })
 
   program
@@ -452,8 +513,8 @@ async function main(): Promise<void> {
     }
   }
 
-  // Parallel startup: register tools, gather context, and check updates simultaneously
-  const [, context] = await Promise.all([
+  // Parallel startup: register tools, gather context, check updates, and cloud sync
+  const [, context, , syncMsg] = await Promise.all([
     registerAllTools({ computerUse: opts.computerUse }),
     Promise.resolve(gatherContext()),
     // Non-blocking update check — fire and forget
@@ -463,7 +524,10 @@ async function main(): Promise<void> {
         if (msg) printSuccess(msg)
       } catch { /* non-critical */ }
     }),
+    // Cloud sync — pull latest learning data if available
+    syncOnStartup().catch(() => null),
   ])
+  if (syncMsg) printInfo(syncMsg)
 
   const config = loadConfig()
   const tier = 'free'
@@ -901,6 +965,9 @@ async function startRepl(
             const tools = response.toolCalls > 0 ? ` · ${response.toolCalls} tools` : ''
             printInfo(`${tokens} tokens${tools} · ${cost}`)
           }
+
+          // Schedule cloud sync push (debounced — batches writes)
+          schedulePush()
         } catch (err) {
           printError(err instanceof Error ? err.message : String(err))
         }
@@ -938,8 +1005,9 @@ async function startRepl(
   // Keep process alive until readline closes
   return new Promise<void>((resolve) => {
     rl.on('close', () => {
-      // Flush all pending learning writes before exit
+      // Flush all pending learning writes and cloud sync before exit
       flushPendingWrites()
+      flushCloudSync()
       printGoodbye()
       resolve()
       process.exit(0)

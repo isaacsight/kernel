@@ -223,6 +223,8 @@ export interface KbotConfig {
   byok_key?: string
   byok_enabled?: boolean
   byok_provider?: ByokProvider
+  // Cloud sync — kernel.chat account token (JWT or kn_live_* API key)
+  kernel_token?: string
 }
 
 function ensureDir(): void {

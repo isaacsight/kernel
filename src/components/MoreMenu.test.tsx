@@ -23,7 +23,7 @@ vi.mock('react-i18next', () => ({
         'menu.themeEink': 'E-ink',
         'menu.accountSettings': 'Account Settings',
         'menu.signOut': 'Sign Out',
-        'menu.manageSubscription': 'Manage Subscription',
+        'menu.usage': 'Usage',
         'language': 'Language',
         'account': 'Account',
       }
@@ -38,9 +38,6 @@ describe('MoreMenu', () => {
     isOpen: true,
     onClose: vi.fn(),
     onSelect: vi.fn(),
-    onUpgrade: vi.fn(),
-    isPro: false,
-    isAdmin: false,
   }
 
   beforeEach(() => vi.clearAllMocks())
@@ -70,39 +67,11 @@ describe('MoreMenu', () => {
     expect(onSetTheme).toHaveBeenCalledWith('dark')
   })
 
-  it('shows upgrade plans for free users', () => {
-    render(<MoreMenu {...baseProps} isPro={false} />)
-    expect(screen.getByText('Upgrade')).toBeInTheDocument()
-    expect(screen.getAllByText('Pro')).toHaveLength(1)
-  })
-
-  it('hides upgrade plans for Pro users', () => {
-    render(<MoreMenu {...baseProps} isPro={true} />)
-    expect(screen.queryByText('Upgrade')).not.toBeInTheDocument()
-  })
-
-  it('calls onUpgrade and onClose when plan card clicked', () => {
-    render(<MoreMenu {...baseProps} isPro={false} />)
-    const proButtons = screen.getAllByText('Pro')
-    fireEvent.click(proButtons[0].closest('button')!)
-    expect(baseProps.onUpgrade).toHaveBeenCalledWith('pro')
-    expect(baseProps.onClose).toHaveBeenCalled()
-  })
-
-  it('always shows Account Settings and Sign Out', () => {
+  it('always shows Account Settings, Usage, and Sign Out', () => {
     render(<MoreMenu {...baseProps} />)
     expect(screen.getByText('Account Settings')).toBeInTheDocument()
+    expect(screen.getByText('Usage')).toBeInTheDocument()
     expect(screen.getByText('Sign Out')).toBeInTheDocument()
-  })
-
-  it('shows Manage Subscription when subscribed', () => {
-    render(<MoreMenu {...baseProps} isPro={true} isSubscribed={true} />)
-    expect(screen.getByText('Manage Subscription')).toBeInTheDocument()
-  })
-
-  it('hides Manage Subscription when not subscribed', () => {
-    render(<MoreMenu {...baseProps} isPro={false} />)
-    expect(screen.queryByText('Manage Subscription')).not.toBeInTheDocument()
   })
 
   it('calls onSelect and onClose when Account Settings clicked', () => {

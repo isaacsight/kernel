@@ -62,14 +62,14 @@ export function LandingKbot() {
         <span className="landing-kbot-badge">Open Source</span>
         <h2 className="landing-kbot-title">K:BOT</h2>
         <p className="landing-kbot-subtitle">
-          Terminal AI agent. 14 providers, 60+ tools, local-first.
-          Bring your own key or run fully offline with Ollama.
+          Your keys. Your data. Your models. An open-source terminal AI agent
+          that connects to any provider — no middleman, no markup.
         </p>
 
         <div className="landing-kbot-features">
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">●</span>
-            <span>14 AI providers — Claude, GPT, Gemini, Grok, DeepSeek, Ollama &amp; more</span>
+            <span>Bring your own key — Claude, GPT, Gemini, Grok, DeepSeek, Mistral &amp; more</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">◆</span>
@@ -81,7 +81,7 @@ export function LandingKbot() {
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">⚡</span>
-            <span>Local-first — simple ops run instantly, zero API calls</span>
+            <span>Run local models with Ollama — fully offline, zero cost</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">✎</span>

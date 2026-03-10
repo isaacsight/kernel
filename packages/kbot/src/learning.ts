@@ -34,10 +34,12 @@ function loadJSON<T>(path: string, fallback: T): T {
 
 /** Debounced async file writer — batches multiple writes into one per file */
 const pendingWrites = new Map<string, NodeJS.Timeout>()
+const dirtyFiles = new Set<string>()
 const WRITE_DEBOUNCE_MS = 500
 
 function saveJSON(path: string, data: unknown): void {
   ensureDir()
+  dirtyFiles.add(path)
   // Cancel any pending write for this file
   const existing = pendingWrites.get(path)
   if (existing) clearTimeout(existing)
@@ -45,6 +47,7 @@ function saveJSON(path: string, data: unknown): void {
   // Debounce — only write after 500ms of no new saves to this file
   const timer = setTimeout(() => {
     pendingWrites.delete(path)
+    dirtyFiles.delete(path)
     writeFile(path, JSON.stringify(data, null, 2), (err) => {
       if (err) { /* non-critical — learning data can be regenerated */ }
     })
@@ -59,21 +62,29 @@ function saveJSONSync(path: string, data: unknown): void {
   writeFileSync(path, JSON.stringify(data, null, 2))
 }
 
-/** Flush all pending writes immediately (call on exit) */
+/** Flush all pending writes immediately (call on exit) — only saves dirty files */
 export function flushPendingWrites(): void {
   for (const [path, timer] of pendingWrites.entries()) {
     clearTimeout(timer)
     pendingWrites.delete(path)
-    // Read the latest data reference — we need to save what's in memory
   }
-  // Save current state of all mutable data
+  // Only save files that were actually modified (dirty tracking)
+  const fileMap: Array<[string, unknown]> = [
+    [PATTERNS_FILE, patterns],
+    [SOLUTIONS_FILE, solutions],
+    [PROFILE_FILE, profile],
+    [KNOWLEDGE_FILE, knowledge],
+    [CORRECTIONS_FILE, corrections],
+    [PROJECTS_FILE, projects],
+    [join(LEARN_DIR, 'tech-freq.json'), techStackFrequency],
+  ]
   try {
-    writeFileSync(PATTERNS_FILE, JSON.stringify(patterns, null, 2))
-    writeFileSync(SOLUTIONS_FILE, JSON.stringify(solutions, null, 2))
-    writeFileSync(PROFILE_FILE, JSON.stringify(profile, null, 2))
-    writeFileSync(KNOWLEDGE_FILE, JSON.stringify(knowledge, null, 2))
-    writeFileSync(CORRECTIONS_FILE, JSON.stringify(corrections, null, 2))
-    writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 2))
+    for (const [path, data] of fileMap) {
+      if (dirtyFiles.has(path)) {
+        writeFileSync(path, JSON.stringify(data, null, 2))
+        dirtyFiles.delete(path)
+      }
+    }
   } catch { /* best-effort */ }
 }
 
@@ -263,10 +274,12 @@ export function findSolutions(message: string, maxResults: number = 3): CachedSo
     .slice(0, maxResults)
     .map(s => s.solution)
 
-  // Update reuse counts separately (don't mutate during search)
+  // Update reuse counts after search is complete (deferred side-effect)
   if (results.length > 0) {
-    for (const s of results) s.reuses++
-    saveJSON(SOLUTIONS_FILE, solutions)
+    setImmediate(() => {
+      for (const s of results) s.reuses++
+      saveJSON(SOLUTIONS_FILE, solutions)
+    })
   }
 
   return results
@@ -575,14 +588,16 @@ export function findKnowledge(message: string, maxResults: number = 5): Knowledg
     .slice(0, maxResults)
     .map(s => s.entry)
 
-  // Update reference counts separately (don't mutate during search)
+  // Update reference counts after search is complete (deferred side-effect)
   if (results.length > 0) {
-    const now = new Date().toISOString()
-    for (const entry of results) {
-      entry.references++
-      entry.lastUsed = now
-    }
-    saveJSON(KNOWLEDGE_FILE, knowledge)
+    setImmediate(() => {
+      const now = new Date().toISOString()
+      for (const entry of results) {
+        entry.references++
+        entry.lastUsed = now
+      }
+      saveJSON(KNOWLEDGE_FILE, knowledge)
+    })
   }
 
   return results

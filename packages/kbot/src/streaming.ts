@@ -218,6 +218,7 @@ export async function streamOpenAIResponse(
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(300_000), // 5 min timeout for stream initiation
   })
 
   if (!res.ok) {
@@ -231,10 +232,16 @@ export async function streamOpenAIResponse(
 
   const decoder = new TextDecoder()
   let buffer = ''
+  const CHUNK_TIMEOUT = 60_000 // 60s between chunks before giving up
 
   try {
     while (true) {
-      const { done, value } = await reader.read()
+      // Timeout if no data received for 60 seconds (server hung)
+      const readPromise = reader.read()
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Stream stalled — no data for 60s')), CHUNK_TIMEOUT)
+      )
+      const { done, value } = await Promise.race([readPromise, timeoutPromise])
       if (done) break
 
       buffer += decoder.decode(value, { stream: true })
