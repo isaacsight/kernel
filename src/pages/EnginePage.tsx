@@ -124,6 +124,8 @@ const AGENT_PALETTES: Record<string, { particle: string; link: string; field: st
   guardian: { particle: '#10B981', link: '#6EE7B7', field: '#A7F3D0' },
   curator: { particle: '#8B5CF6', link: '#A78BFA', field: '#C4B5FD' },
   strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },
+  hacker: { particle: '#00FF41', link: '#33FF66', field: '#80FFA0' },
+  operator: { particle: '#FF6B35', link: '#FF8F66', field: '#FFB899' },
 }
 
 function agentPalette(idOrName: string): { particle: string; link: string; field: string } {
