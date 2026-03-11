@@ -16,6 +16,7 @@ updated: "2026-03-08"
 | Backend | Supabase (Auth, Postgres, Edge Functions, Storage) |
 | AI | Claude API via `supabase/functions/claude-proxy/` |
 | CLI | K:BOT (`packages/kbot/`) — TypeScript, runs locally |
+| Local AI | OpenClaw — sandboxed macOS user, Ollama gateway on localhost:18789 |
 | Deployment | GitHub Pages (frontend), Supabase (backend) |
 | Payments | Stripe (client invoicing only — no subscriptions) |
 | Domain | kernel.chat (custom domain on GH Pages) |
@@ -76,6 +77,7 @@ packages/kbot/        # CLI agent
 │   └── memory.ts     # Local persistent memory
 
 tools/                # MCP servers + utilities
+├── openclaw-mcp.ts      # OpenClaw local AI (19 tools, sandboxed)
 ├── obsidian-mcp.ts      # Obsidian ↔ Kernel sync
 ├── kernel-agents-mcp.ts # Agent team coordination
 ├── kernel-admin-mcp.ts  # Admin operations (users, invoicing, file sends)

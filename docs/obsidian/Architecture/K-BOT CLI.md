@@ -7,7 +7,7 @@ updated: "2026-03-08"
 
 K:BOT is Kernel's open-source CLI agent. Local-first AI from the terminal — 14 providers, 60+ tools, BYOK (bring your own key). An 8th grader can use it.
 
-**npm:** `@kernel.chat/kbot` v2.3.1
+**npm:** `@kernel.chat/kbot` v2.5.0
 **Install:** `npm install -g @kernel.chat/kbot`
 
 ## Quick Start
@@ -23,7 +23,7 @@ First run auto-detects Ollama/env vars, or walks through a guided 2-option setup
 
 | Feature | Description |
 |---------|------------|
-| **17 Agents** | kernel, researcher, coder, writer, analyst + 12 more |
+| **20 Agents** | kernel, researcher, coder, writer, analyst + 15 more |
 | **60+ Tools** | Bash, file I/O, git, code search, GitHub, web fetch, notebooks, sandboxes |
 | **14 Providers** | Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, Ollama, OpenClaw |
 | **BYOK** | Bring Your Own Key — you pay your provider directly, $0 from Kernel |

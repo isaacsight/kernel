@@ -5,7 +5,7 @@ updated: "2026-03-08"
 
 # Kernel — Project Home
 
-**Kernel** is a free AI personal assistant at [kernel.chat](https://kernel.chat). 10 messages per day, persistent memory, 17 specialist agents, file storage with AI access. Also available as a CLI: `npm install -g @kernel.chat/kbot`.
+**Kernel** is a free AI personal assistant at [kernel.chat](https://kernel.chat). 10 messages per day, persistent memory, 20 specialist agents, file storage with AI access. Also available as a CLI: `npm install -g @kernel.chat/kbot`.
 
 **Web:** [kernel.chat](https://kernel.chat)
 **CLI:** `npm install -g @kernel.chat/kbot`
@@ -18,9 +18,10 @@ updated: "2026-03-08"
 
 ### Architecture
 - [[Architecture Overview]] — Stack, directory map, data flow
-- [[K-BOT CLI]] — Terminal agent (npm: `@kernel.chat/kbot` v2.3.1)
+- [[K-BOT CLI]] — Terminal agent (npm: `@kernel.chat/kbot` v2.5.0)
+- [[OpenClaw]] — Sandboxed local AI gateway (separate macOS user)
 - [[Memory System]] — How Kernel remembers users
-- [[Agent System]] — 17 specialists, routing, swarm orchestration
+- [[Agent System]] — 20 specialists, routing, swarm orchestration
 - [[Billing System]] — Free-only (paid tiers archived)
 - [[Admin System]] — Admin agent, client scoring, Stripe invoicing
 

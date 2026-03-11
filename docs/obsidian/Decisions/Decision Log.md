@@ -38,6 +38,17 @@ Key architectural and product decisions, with rationale.
 | **Permissive by default** | Default mode is autonomous (no confirmations). Users opt-in to safety with `--safe`/`--strict`. |
 | **`chmod +x` in build script** | `tsc` doesn't preserve permissions. `npm run build` = `tsc && chmod +x dist/cli.js`. Fixed permission denied on install. |
 
+## OpenClaw (March 2026)
+
+| Decision | Rationale |
+|----------|-----------|
+| **Separate macOS user account** | Full OS-level isolation. OpenClaw can't read admin files, env vars, or secrets. |
+| **sandbox-exec policy** | macOS sandbox prevents filesystem/network escape even if code is compromised |
+| **Localhost-only networking** | Gateway at 127.0.0.1:18789. No outbound internet from sandboxed user. |
+| **MCP server has no fs/path imports** | Defense in depth — even the Claude Code integration is text-in, text-out only |
+| **Gateway token authentication** | Prevents unauthorized local processes from using the AI gateway |
+| **Graceful degradation in kbot** | If OpenClaw gateway is offline, tools return helpful message instead of crashing |
+
 ## Architecture
 
 | Decision | Rationale |
