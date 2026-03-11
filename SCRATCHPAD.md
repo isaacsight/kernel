@@ -118,34 +118,77 @@ EnginePage renders:
 - Tool-use decision trees as state machines, not free-form reasoning
 - Intent-based defense reduces misuse by 74%+
 
-### Research: Pushing Operator Agent Further
+### Research: Pushing Operator Agent Further (Deep Dive)
 
-#### State of Autonomous AI Agents (2025-2026)
-- **OpenAI Operator**: Browser-based agent that navigates websites, fills forms, completes multi-step web tasks
-- **Anthropic Computer Use**: Claude controls mouse/keyboard to interact with any desktop application
-- **Google Project Mariner**: Chrome extension agent for web task automation
-- **Rabbit R1 / Humane AI Pin**: Hardware agents that learn app interactions via demonstration
+#### Competitive Landscape (2025-2026)
+- **OpenAI Operator → ChatGPT Agent**: CUA model (GPT-4o vision + RL for GUI interaction), deprecated standalone Aug 2025, folded into unified ChatGPT Agent running on virtual computer. Key insight: merging "deep research" (info gathering) + "operator" (action taking) into one agent > keeping separate.
+- **Anthropic Computer Use → Claude Cowork**: Screenshot + mouse/keyboard control. Cowork (Jan 2026) extends to autonomous file management in designated local dirs. Opus 4.6 has 14.5-hour autonomy horizon per METR benchmarks.
+- **Google Project Mariner**: Chrome extension for web task automation
+- **Architecture convergence**: Both leaders give AI a virtual computer (browser/desktop) to use standard GUIs vs. requiring custom APIs. More flexible but slower.
+
+#### 5-Level Autonomy Model (Industry Standard)
+| Level | User Role | Agent Behavior |
+|-------|-----------|----------------|
+| 1 | Operator | User drives; agent suggests |
+| 2 | Collaborator | Agent drafts; user edits |
+| 3 | Consultant | Agent acts; user spot-checks |
+| 4 | Approver | Agent acts autonomously; user approves high-stakes |
+| 5 | Observer | Full autonomy; user monitors dashboards |
+
+**Progressive trust**: Anthropic data from Claude Code shows auto-approve usage rises from ~20% (<50 sessions) to 40%+ (750+ sessions). Trust is built gradually.
 
 #### Delegation Patterns That Work
-1. **Tiered Autonomy**: Low-risk (drafting) = full auto. Medium-risk (sending) = draft + confirm. High-risk (financial) = draft + explicit approval.
-2. **Checkpoint Architecture**: Agent executes autonomously but creates checkpoints. User can review async. Agent continues unless stopped.
-3. **Implicit Approval**: "If I don't respond in 10 minutes, send it." Time-gated delegation.
-4. **Style Matching**: The agent should learn the user's writing patterns from their message history — sentence length, vocabulary, emoji usage, formality level.
+1. **Risk-tiered actions**: Autonomous for low-risk (read/draft), checkpoint for medium (send), approval gate for high (financial/irreversible)
+2. **Sandbox-then-promote**: Agent works in draft/staging; human reviews before anything goes live
+3. **Reversibility as design principle**: Prefer reversible actions; require approval for irreversible
+4. **Implicit approval**: "If I don't respond in 10 min, send it" — time-gated delegation
 
-#### High-Value Capabilities to Add
-1. **Communication Autopilot**: Draft + send emails/messages matching user's voice. Pull from MemoryAgent to know relationships, tone preferences per recipient.
-2. **Decision Engine**: For ambiguous choices, use user's value hierarchy (from Sage agent's identity graph) to decide. Log reasoning for later review.
-3. **Workflow Templates**: Repeatable multi-step processes the user can trigger with a phrase: "handle my morning routine" → check email, summarize, draft responses, flag urgent.
-4. **Delegation Confidence Score**: For each action, internally rate "how confident am I this is what the user wants?" If below threshold, ask. Above = execute.
-5. **Post-Action Reports**: After autonomous execution, provide a structured "Here's what I did" summary with undo options where possible.
-6. **Context Handoff**: When Operator needs specialized knowledge, it should seamlessly invoke other specialists (e.g., call Hacker for security questions during a workflow).
+#### Communication Automation (Ranked by Value)
+1. **Inbox triage & prioritization** — 25% reduction in email processing time (Worklytics data)
+2. **Draft replies in user's voice** — Lindy.ai, Shortwave already do this
+3. **Meeting scheduling** — Calendar-aware, handles back-and-forth until confirmed
+4. **Follow-up automation** — Auto-nudge after N days with no reply
+5. **Thread summarization** — Condensing long threads into actionable summaries
 
-#### Safety Guardrails
-- Never send communications without at least one confirmed example of the user's style to that recipient
-- Financial actions always require explicit confirmation
-- Destructive actions (delete, cancel, unsubscribe) require confirmation
-- Maintain audit log of all autonomous actions
-- "Undo window" — 30-second delay before sending, during which user can cancel
+**Critical gap**: 87% of marketing teams use AI for email, but only 6% qualify as high performers. Bottleneck = effective implementation (voice matching + context awareness), not tool availability.
+
+#### Workflow Architecture Patterns
+| Pattern | Best For |
+|---------|----------|
+| **Orchestrator-Worker** | Complex tasks — Operator decomposes, delegates to specialists |
+| **Prompt Chaining** | Well-defined linear tasks |
+| **ReAct** | Exploratory tasks requiring adaptation |
+| **Parallelization** | Multi-source research, code review |
+| **Evaluator-Optimizer** | Quality-critical outputs |
+
+**Key insight**: 80% of agent workflow work is data engineering, governance, and integration — not prompt engineering. Orchestrator-worker with sub-agents is the winning architecture.
+
+#### Voice/Style Matching Techniques
+1. **Corpus ingestion** — Feed emails, Slack, blog posts → build personal language model (Personal.ai, Lindy.ai)
+2. **Style vector extraction** — Extract formality, sentence length distribution, vocabulary, greeting/closing patterns, emoji usage, response latency
+3. **Contextual adaptation** — Adjust tone per recipient and relationship (boss vs. colleague vs. friend)
+4. **Continuous learning** — MindBank AI, Viven.ai ingest every digital interaction to build evolving persona model
+
+#### Safety Guardrails (Field-Proven)
+- **39% of companies** reported agents accessing unintended systems (2025)
+- **32%** saw agents allowing inappropriate data downloads
+- **Action cascades**: small reasoning errors trigger expensive loops or catastrophic irreversible actions
+
+**Proven patterns:**
+1. **Safety Agent** — Dedicated policy-enforcement agent evaluates every action before execution
+2. **Layered defense**: Input validation → action-level permissions → output filtering → runtime anomaly detection
+3. **Risk-tiered oversight**: Low=auto, Medium=async approval, High=sync dual-approval, Prohibited=hardcoded deny
+4. **Blast radius containment**: Sandbox execution, rate limiting, auto-rollback, budget/spending caps
+5. **Confidence-based escalation**: Low confidence → ask human. High confidence → execute.
+6. **Audit trail**: Full log of every action with timestamps + undo capability
+
+**Critical principle**: Guardrails must be living systems, not static rules. Evolve alongside agent capabilities.
+
+#### Digital Twin Ethics
+- Distinguish **delegation** (agent acts on your behalf, clear attribution) from **impersonation** (pretends to be you, no disclosure)
+- MIT Media Lab: use OAuth 2.0 On-Behalf-Of tokens so downstream systems know it's an agent
+- Every action traceable to original user
+- Voice/style cloning without consent has emerging legal implications
 
 ### Pending / Next Steps
 
