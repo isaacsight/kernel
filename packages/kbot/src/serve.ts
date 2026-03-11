@@ -1,0 +1,183 @@
+// K:BOT Serve — HTTP server that exposes all tools over REST
+//
+// Usage:
+//   kbot serve                    # Start on default port 7437
+//   kbot serve --port 3000        # Custom port
+//   kbot serve --token mysecret   # Require auth token
+//
+// Endpoints:
+//   GET  /health          — Health check
+//   GET  /tools           — List all registered tools (schemas only)
+//   POST /tools/:name     — Execute a tool by name
+//   POST /execute         — Execute a tool { name, args }
+//   GET  /metrics         — Tool execution metrics
+
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
+import { registerAllTools, getAllTools, executeTool, getToolDefinitionsForApi, getToolMetrics } from './tools/index.js'
+import { printInfo, printSuccess, printError } from './ui.js'
+
+interface ServeOptions {
+  port: number
+  token?: string
+  computerUse?: boolean
+}
+
+function cors(res: ServerResponse): void {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+}
+
+function json(res: ServerResponse, status: number, data: unknown): void {
+  cors(res)
+  res.writeHead(status, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify(data))
+}
+
+function readBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = []
+    req.on('data', (c) => chunks.push(c))
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')))
+    req.on('error', reject)
+  })
+}
+
+export async function startServe(options: ServeOptions): Promise<void> {
+  // Register all tools before starting
+  printInfo('Registering tools...')
+  await registerAllTools({ computerUse: options.computerUse })
+  const tools = getAllTools()
+  printSuccess(`${tools.length} tools registered`)
+
+  const server = createServer(async (req, res) => {
+    // CORS preflight
+    if (req.method === 'OPTIONS') {
+      cors(res)
+      res.writeHead(204)
+      res.end()
+      return
+    }
+
+    // Auth check
+    if (options.token) {
+      const auth = req.headers.authorization
+      const bearerToken = auth?.startsWith('Bearer ') ? auth.slice(7) : null
+      const queryToken = new URL(req.url || '/', `http://localhost`).searchParams.get('token')
+      if (bearerToken !== options.token && queryToken !== options.token) {
+        json(res, 401, { error: 'Unauthorized' })
+        return
+      }
+    }
+
+    const url = new URL(req.url || '/', `http://localhost:${options.port}`)
+    const path = url.pathname
+
+    try {
+      // GET /health
+      if (path === '/health' && req.method === 'GET') {
+        json(res, 200, {
+          status: 'ok',
+          version: '2.4.0',
+          tools: tools.length,
+          uptime: process.uptime(),
+        })
+        return
+      }
+
+      // GET /tools — list all tools with schemas
+      if (path === '/tools' && req.method === 'GET') {
+        const tier = url.searchParams.get('tier') || 'free'
+        const schemas = getToolDefinitionsForApi(tier)
+        json(res, 200, { tools: schemas, count: schemas.length })
+        return
+      }
+
+      // GET /metrics — tool execution metrics
+      if (path === '/metrics' && req.method === 'GET') {
+        json(res, 200, { metrics: getToolMetrics() })
+        return
+      }
+
+      // POST /execute — execute a tool
+      if (path === '/execute' && req.method === 'POST') {
+        const body = JSON.parse(await readBody(req))
+        const { name, args } = body as { name: string; args?: Record<string, unknown> }
+
+        if (!name) {
+          json(res, 400, { error: 'Missing "name" field' })
+          return
+        }
+
+        const result = await executeTool({
+          id: `serve_${Date.now()}`,
+          name,
+          arguments: args || {},
+        })
+
+        json(res, result.error ? 500 : 200, {
+          result: result.result,
+          error: result.error || false,
+          duration_ms: result.duration_ms,
+        })
+        return
+      }
+
+      // POST /tools/:name — execute tool by URL path
+      const toolMatch = path.match(/^\/tools\/([a-z_]+)$/)
+      if (toolMatch && req.method === 'POST') {
+        const toolName = toolMatch[1]
+        let args: Record<string, unknown> = {}
+        try {
+          const rawBody = await readBody(req)
+          if (rawBody.trim()) args = JSON.parse(rawBody)
+        } catch { /* empty body is fine */ }
+
+        const result = await executeTool({
+          id: `serve_${Date.now()}`,
+          name: toolName,
+          arguments: args,
+        })
+
+        json(res, result.error ? 500 : 200, {
+          result: result.result,
+          error: result.error || false,
+          duration_ms: result.duration_ms,
+        })
+        return
+      }
+
+      // 404
+      json(res, 404, { error: 'Not found' })
+    } catch (err) {
+      json(res, 500, { error: err instanceof Error ? err.message : 'Internal error' })
+    }
+  })
+
+  server.listen(options.port, () => {
+    printSuccess(`K:BOT serve running on http://localhost:${options.port}`)
+    printInfo(`  GET  /health       — Health check`)
+    printInfo(`  GET  /tools        — List ${tools.length} tools`)
+    printInfo(`  POST /execute      — Execute a tool`)
+    printInfo(`  POST /tools/:name  — Execute by name`)
+    printInfo(`  GET  /metrics      — Execution metrics`)
+    if (options.token) {
+      printInfo(`  Auth: Bearer token required`)
+    }
+    printInfo('')
+    printInfo('Connect from kernel.chat:')
+    printInfo(`  connectKbot('http://localhost:${options.port}')`)
+  })
+
+  // Graceful shutdown
+  const shutdown = () => {
+    printInfo('\nShutting down K:BOT serve...')
+    server.close()
+    process.exit(0)
+  }
+  process.on('SIGINT', shutdown)
+  process.on('SIGTERM', shutdown)
+
+  // Keep process alive
+  await new Promise(() => {})
+}

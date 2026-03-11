@@ -47,6 +47,7 @@ import { useWorkspace } from '../hooks/useWorkspace'
 import { CrisisBanner } from '../components/CrisisBanner'
 import { useProjectStore } from '../stores/projectStore'
 import { autoSaveArtifact } from '../engine/chatFolderAutoSave'
+import { autoConnectKbot } from '../engine/tools'
 import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
@@ -253,6 +254,9 @@ function EngineChat() {
     window.addEventListener('offline', goOffline)
     return () => { window.removeEventListener('online', goOnline); window.removeEventListener('offline', goOffline) }
   }, [])
+
+  // Auto-connect to K:BOT if env var is set
+  useEffect(() => { autoConnectKbot() }, [])
 
   // Close lightbox on Escape
   useEffect(() => {

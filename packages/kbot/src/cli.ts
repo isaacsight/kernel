@@ -45,7 +45,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.4.0'
+const VERSION = '2.5.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -384,6 +384,21 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('serve')
+    .description('Start HTTP server — expose all 60+ tools for kernel.chat or any client')
+    .option('-p, --port <port>', 'Port to listen on', '7437')
+    .option('--token <token>', 'Require auth token for all requests')
+    .option('--computer-use', 'Enable computer use tools')
+    .action(async (opts: { port: string; token?: string; computerUse?: boolean }) => {
+      const { startServe } = await import('./serve.js')
+      await startServe({
+        port: parseInt(opts.port, 10),
+        token: opts.token,
+        computerUse: opts.computerUse,
+      })
+    })
+
+  program
     .command('openclaw')
     .description('Use OpenClaw gateway as AI provider')
     .option('--token <token>', 'Gateway auth token')
@@ -412,7 +427,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()

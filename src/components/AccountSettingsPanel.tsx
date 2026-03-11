@@ -391,6 +391,27 @@ export default function AccountSettingsPanel({
               Copy with token
             </button>
           </div>
+          <div className="ka-settings-kbot-steps" style={{ marginTop: 8 }}>
+            <span className="ka-settings-kbot-step" style={{ fontWeight: 500 }}>Connect Terminal</span>
+            <span className="ka-settings-kbot-step">Run K:BOT tools from this browser — start the server locally:</span>
+          </div>
+          <div className="ka-settings-kbot-install">
+            <code className="ka-settings-kbot-cmd" style={{ fontSize: '0.8em' }}>kbot serve</code>
+            <button
+              className="ka-settings-kbot-copy"
+              onClick={async () => {
+                try {
+                  const { connectKbot } = await import('../engine/tools')
+                  const result = await connectKbot('http://localhost:7437')
+                  onToast(`Connected — ${result.tools} tools from K:BOT v${result.version}`)
+                } catch {
+                  onToast('K:BOT not running. Start with: kbot serve')
+                }
+              }}
+            >
+              Connect
+            </button>
+          </div>
           <div className="ka-settings-kbot-links">
             <a href="https://github.com/isaacsight/kernel" target="_blank" rel="noopener noreferrer" className="ka-settings-text-btn">
               GitHub
