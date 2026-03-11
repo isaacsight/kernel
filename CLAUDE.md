@@ -157,6 +157,7 @@ Required env vars (see `.env.example`):
 - `documenter.md` — Documentation writer (JSDoc, README, changelog)
 - `architect.md` — Architecture advisor
 - `deployer.md` — Deployment specialist
+- `hacker.md` — Red team / offensive security (exploit attempts, auth bypass, SSRF, XSS)
 
 ### Session Memory
 
@@ -174,7 +175,7 @@ Required env vars (see `.env.example`):
 
 ### Overview
 
-An autonomous team of 6 specialist agents that can test, review, secure, optimize, and ship the platform. Agents have persistent memory, coordinate via handoffs, and can propose new tools.
+An autonomous team of 7 specialist agents that can test, review, secure, optimize, red-team, and ship the platform. Agents have persistent memory, coordinate via handoffs, and can propose new tools.
 
 ### Agents (`.claude/agents/`)
 
@@ -184,6 +185,7 @@ An autonomous team of 6 specialist agents that can test, review, secure, optimiz
 | Designer | `designer.md` | Rubin design system enforcement, a11y, dark mode |
 | Performance | `performance.md` | Bundle budgets, dependency audit, latency monitoring |
 | Security | `security.md` | Vulnerability scanning, secrets detection, auth verification |
+| Hacker | `hacker.md` | Red team — offensive exploit attempts, auth bypass, SSRF, XSS, privilege escalation |
 | DevOps | `devops.md` | Deploy pipeline, health checks, rollback procedures |
 | Product | `product.md` | UX evaluation, feature discovery, mobile-first testing |
 
