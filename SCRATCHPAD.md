@@ -8,22 +8,27 @@
 
 ### Accomplished This Session
 
-#### New Specialist Agents: Hacker + Operator
+#### New Specialist Agents: Hacker + Operator + Dreamer
 
-Added two new specialist agents to the Kernel platform:
+Added three new specialist agents to the Kernel platform:
 
 **Hacker** (`⚡` · `#00FF41` matrix green)
 - Offensive security, exploit analysis, CTFs, reverse engineering
 - Creative system manipulation — finding loopholes, unconventional paths
-- Files modified: `specialists.ts`, `AgentRouter.ts`, `EnginePage.tsx`
 
 **Operator** (`⬡` · `#FF6B35` burnt orange)
 - Full delegation — acts AS the user with complete autonomy
 - Writes communications in user's voice, makes decisions on their behalf
 - Multi-step workflow execution without hand-holding
 
+**Dreamer** (`☾` · `#7B68EE` medium slate blue-violet)
+- Dream interpretation — sleep dreams as data (Jungian, emotional processing, personal symbolism)
+- Vision engineering — gap analysis between current reality and aspirational futures
+- Creative worldbuilding — co-architect impossible things
+- 3am conversation energy — wonder, possibility, the irrational honored
+
 **Changes made:**
-1. `src/agents/specialists.ts` — Added both specialist definitions with system prompts
+1. `src/agents/specialists.ts` — Added all three specialist definitions with system prompts
 2. `src/engine/AgentRouter.ts` — Added to type union, classification system prompt, KEYWORD_MAP, HIGH_SIGNAL_KEYWORDS, validAgents
 3. `src/pages/EnginePage.tsx` — Added AGENT_PALETTES entries for ParticleGrid theming
 
@@ -208,10 +213,17 @@ EnginePage renders:
 - [ ] **Post-action reports** — structured "here's what I did" with undo options
 - [ ] **Safety guardrails** — financial/destructive actions always confirm, 30s undo window
 
+#### Dreamer — Priority Enhancements
+- [ ] **Dream journal integration** — persistent dream log that builds patterns over time
+- [ ] **Symbol database** — common dream symbols with personal override layer from user history
+- [ ] **Vision-to-plan pipeline** — convert aspirational visions into TaskPlanner-compatible step sequences
+- [ ] **Worldbuilding toolkit** — structured templates for fiction universes, game worlds, speculative scenarios
+- [ ] **Dream-to-image bridge** — auto-trigger image gen from vivid dream descriptions
+
 #### Housekeeping
-- [ ] **Both: Add emblem SVGs** — `concepts/emblem-hacker.svg` and `concepts/emblem-operator.svg`
-- [ ] **Both: Add to useColorCycle.ts** — light/dark palette entries for background cycling
-- [ ] **Test: Add keyword classification tests** — verify routing for both new agents
+- [ ] **All three: Add emblem SVGs** — `concepts/emblem-hacker.svg`, `concepts/emblem-operator.svg`, `concepts/emblem-dreamer.svg`
+- [ ] **All three: Add to useColorCycle.ts** — light/dark palette entries for background cycling
+- [ ] **Test: Add keyword classification tests** — verify routing for all three new agents
 
 ---
 
