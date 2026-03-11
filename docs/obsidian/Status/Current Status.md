@@ -1,14 +1,15 @@
 ---
 tags: [kernel, status]
-updated: "2026-03-10"
+updated: "2026-03-11"
 ---
 
-# Current Status — March 10, 2026
+# Current Status — March 11, 2026
 
 ## What's Live
 
 ### kernel.chat (Web App)
 - Full PWA with 20 specialist agents
+- **Agent picker** in input bar — force-route to any of 10 featured agents
 - **Free only — 10 messages per day**, no paid tiers
 - Memory system with warmth tracking + knowledge graph
 - Convergence (6 facet lenses)
@@ -23,7 +24,19 @@ updated: "2026-03-10"
 - **Atomic rate limiting** — prevents free-tier users from exceeding daily limit
 - E2E test suite (28 Playwright tests)
 
-## Just Completed (March 10 — 3 New Agents)
+## Just Completed (March 11)
+
+1. **Agent picker UI** — dropdown in input bar, 10 featured agents, bypasses Groq classifier when selected
+2. **`kbot agents` command** — lists all built-in agents + presets with detail view
+3. **Forced agent routing** — `forcedAgentId` override in useChatEngine skips classification at confidence 1.0
+4. **Hacker sub-agent** (`.claude/agents/hacker.md`) — red team specialist with research-backed anti-hallucination protocol
+   - 4-phase protocol: Recon → Exploit → Analyze → Report
+   - Provenance tags (`[TOOL]`, `[INFERENCE]`, `[ASSUMPTION]`) on every finding
+   - Self-verification step, tool-first reasoning, closed-world tool list
+5. **Rate limit fix** — client-side guard was using lifetime `message_count` instead of `daily_message_count`
+6. **Ollama models** — llava:13b downloading (phi4, gemma3, deepseek-r1, qwen2.5-coder already pulled)
+
+## March 10 — 3 New Agents
 
 1. **Hacker agent** (⚡ `#00FF41`) — Offensive security, CTFs, exploit chains, red teaming, bug bounties
 2. **Operator agent** (⬡ `#FF6B35`) — Full task delegation, autonomous plan-execute-verify loops

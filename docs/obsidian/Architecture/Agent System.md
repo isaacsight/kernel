@@ -1,6 +1,6 @@
 ---
 tags: [kernel, architecture, agents]
-updated: "2026-03-10"
+updated: "2026-03-11"
 ---
 
 # Agent System — 20 Specialists
@@ -51,6 +51,27 @@ updated: "2026-03-10"
 | `panel-architect` | Architecture perspective | `index.ts` |
 | `panel-researcher` | Research perspective | `index.ts` |
 | `panel-contrarian` | Devil's advocate | `index.ts` |
+
+## Claude Code Sub-Agents (7)
+
+| Agent | File | Role |
+|-------|------|------|
+| QA | `.claude/agents/qa.md` | Build verification, screenshot regression, bug reports |
+| Designer | `.claude/agents/designer.md` | Rubin design system enforcement, a11y, dark mode |
+| Performance | `.claude/agents/performance.md` | Bundle budgets, dependency audit, latency monitoring |
+| Security | `.claude/agents/security.md` | Defensive — vulnerability scanning, secrets detection, auth verification |
+| Hacker | `.claude/agents/hacker.md` | Offensive — red team exploit attempts, auth bypass, SSRF, XSS, privilege escalation |
+| DevOps | `.claude/agents/devops.md` | Deploy pipeline, health checks, rollback procedures |
+| Product | `.claude/agents/product.md` | UX evaluation, feature discovery, mobile-first testing |
+
+### Hacker Agent Anti-Hallucination Protocol
+
+Built from research on agent hallucination (Liu 2023, Dhuliawala 2023, Du 2023):
+- **4-phase protocol**: Recon → Exploit → Analyze → Report (data collection separated from interpretation)
+- **Provenance tags**: `[TOOL]`, `[INFERENCE]`, `[ASSUMPTION]` on every finding
+- **Self-verification step**: re-reads findings, downgrades unsubstantiated claims
+- **Tool-first reasoning**: run command FIRST, then analyze (prevents confirmation bias)
+- **Closed-world tool list**: explicit "you have NO other tools"
 
 ## Key Design Rules
 
