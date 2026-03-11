@@ -4,7 +4,131 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-03, continued)
+## Current Session (2026-03-10)
+
+### Accomplished This Session
+
+#### New Specialist Agents: Hacker + Operator
+
+Added two new specialist agents to the Kernel platform:
+
+**Hacker** (`⚡` · `#00FF41` matrix green)
+- Offensive security, exploit analysis, CTFs, reverse engineering
+- Creative system manipulation — finding loopholes, unconventional paths
+- Files modified: `specialists.ts`, `AgentRouter.ts`, `EnginePage.tsx`
+
+**Operator** (`⬡` · `#FF6B35` burnt orange)
+- Full delegation — acts AS the user with complete autonomy
+- Writes communications in user's voice, makes decisions on their behalf
+- Multi-step workflow execution without hand-holding
+
+**Changes made:**
+1. `src/agents/specialists.ts` — Added both specialist definitions with system prompts
+2. `src/engine/AgentRouter.ts` — Added to type union, classification system prompt, KEYWORD_MAP, HIGH_SIGNAL_KEYWORDS, validAgents
+3. `src/pages/EnginePage.tsx` — Added AGENT_PALETTES entries for ParticleGrid theming
+
+**No changes needed (auto-wired):**
+- SwarmOrchestrator — uses `Object.values(SPECIALISTS)`, so new agents are automatically in the swarm pool
+- MemoryAgent — global context, applies to all agents automatically
+- Admin panel — reads agentId from messages, works automatically
+- Agent override selector in Controls — uses `getAllSpecialists()`
+
+### Architecture Reference (for next session)
+
+**Full agent flow:**
+```
+User Message → AgentRouter.classifyIntent()
+  ├→ classifyLocal() [keyword fast-path, <1ms]
+  ├→ Background provider API [ambiguous fallback, ~1s]
+  └→ Returns ClassificationResult {agentId, confidence, complexity, ...}
+       ↓
+AgentSelection.selectAgent()
+  ├→ Check manual agentOverride
+  ├→ specialistToAgent() — wraps Specialist → Agent type
+  └→ Returns selected Agent with systemPrompt
+       ↓
+AIEngine.act()
+  ├→ Build context from perception + attention + user memory
+  ├→ Inject system prompt + artifact rules
+  └→ Stream response via provider
+       ↓
+EnginePage renders:
+  ├→ ParticleGrid avatar (AGENT_PALETTES color)
+  ├→ Agent badge (name + color)
+  └→ Message content
+```
+
+**Key files to touch when adding agents:**
+| File | What to change |
+|------|----------------|
+| `src/agents/specialists.ts` | Add to SPECIALISTS object |
+| `src/engine/AgentRouter.ts` | Type union + CLASSIFICATION_SYSTEM + KEYWORD_MAP + HIGH_SIGNAL_KEYWORDS + validAgents |
+| `src/pages/EnginePage.tsx` | Add to AGENT_PALETTES |
+
+### Research: Pushing Hacker Agent Further
+
+#### What Top AI Security Tools Do
+- **HackerGPT**: Fine-tuned on security data, integrates with pentesting tools (Nmap, subfinder, Katana), has web search for CVE lookups
+- **PentestGPT**: Multi-step pentesting guidance with context retention across attack phases (recon → exploit → post-exploit)
+- **BurpGPT**: Burp Suite extension that analyzes HTTP traffic in real-time, identifies vulns in request/response pairs
+
+#### High-Value Capabilities to Add
+1. **CTF Mode**: Structured approach per category — binary exploitation, web, crypto, forensics, reverse engineering. Step-by-step methodology prompts.
+2. **Vulnerability Chain Builder**: Given a system description, enumerate attack surfaces and chain exploits (input validation flaw → SQLi → privilege escalation → data exfil)
+3. **Payload Generation**: Template-based payloads for common vuln classes (XSS, SQLi, command injection, SSRF, XXE) — always with remediation advice
+4. **CVE Research Integration**: Use web search to pull latest CVEs, CVSS scores, PoC availability for any software/version
+5. **Creative Hacking Beyond Security**: Growth hacking (viral loops, referral exploits), process hacking (bureaucracy shortcuts), system gaming (algorithm manipulation, SEO, platform arbitrage)
+6. **Reverse Engineering Mode**: Binary analysis guidance, decompiler output interpretation, protocol reverse engineering
+
+#### What Makes It Useful vs. Gimmick
+- Must provide ACTIONABLE output (actual commands, scripts, payloads) not just theory
+- Must maintain context across multi-step attacks (recon findings → exploit selection → post-exploit)
+- Must know when to use web search for current CVE data vs. relying on training data
+- Must always pair offensive techniques with defensive recommendations
+
+### Research: Pushing Operator Agent Further
+
+#### State of Autonomous AI Agents (2025-2026)
+- **OpenAI Operator**: Browser-based agent that navigates websites, fills forms, completes multi-step web tasks
+- **Anthropic Computer Use**: Claude controls mouse/keyboard to interact with any desktop application
+- **Google Project Mariner**: Chrome extension agent for web task automation
+- **Rabbit R1 / Humane AI Pin**: Hardware agents that learn app interactions via demonstration
+
+#### Delegation Patterns That Work
+1. **Tiered Autonomy**: Low-risk (drafting) = full auto. Medium-risk (sending) = draft + confirm. High-risk (financial) = draft + explicit approval.
+2. **Checkpoint Architecture**: Agent executes autonomously but creates checkpoints. User can review async. Agent continues unless stopped.
+3. **Implicit Approval**: "If I don't respond in 10 minutes, send it." Time-gated delegation.
+4. **Style Matching**: The agent should learn the user's writing patterns from their message history — sentence length, vocabulary, emoji usage, formality level.
+
+#### High-Value Capabilities to Add
+1. **Communication Autopilot**: Draft + send emails/messages matching user's voice. Pull from MemoryAgent to know relationships, tone preferences per recipient.
+2. **Decision Engine**: For ambiguous choices, use user's value hierarchy (from Sage agent's identity graph) to decide. Log reasoning for later review.
+3. **Workflow Templates**: Repeatable multi-step processes the user can trigger with a phrase: "handle my morning routine" → check email, summarize, draft responses, flag urgent.
+4. **Delegation Confidence Score**: For each action, internally rate "how confident am I this is what the user wants?" If below threshold, ask. Above = execute.
+5. **Post-Action Reports**: After autonomous execution, provide a structured "Here's what I did" summary with undo options where possible.
+6. **Context Handoff**: When Operator needs specialized knowledge, it should seamlessly invoke other specialists (e.g., call Hacker for security questions during a workflow).
+
+#### Safety Guardrails
+- Never send communications without at least one confirmed example of the user's style to that recipient
+- Financial actions always require explicit confirmation
+- Destructive actions (delete, cancel, unsubscribe) require confirmation
+- Maintain audit log of all autonomous actions
+- "Undo window" — 30-second delay before sending, during which user can cancel
+
+### Pending / Next Steps
+
+- [ ] **Hacker: Add CTF mode toggle** — structured methodology prompts per CTF category
+- [ ] **Hacker: Web search integration** — auto-search CVE databases when software versions mentioned
+- [ ] **Operator: Tiered autonomy system** — low/medium/high risk classification for actions
+- [ ] **Operator: Style matching from memory** — pull user's writing patterns from MemoryAgent
+- [ ] **Operator: Delegation confidence scoring** — internal threshold for ask vs. execute
+- [ ] **Both: Add emblem SVGs** — `concepts/emblem-hacker.svg` and `concepts/emblem-operator.svg`
+- [ ] **Both: Add to useColorCycle.ts** — light/dark palette entries for background cycling
+- [ ] **Test: Add keyword classification tests** — verify routing for both new agents
+
+---
+
+## Previous Session (2026-03-03, continued)
 
 ### Accomplished This Session
 
