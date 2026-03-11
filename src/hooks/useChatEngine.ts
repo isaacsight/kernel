@@ -356,7 +356,11 @@ export function useChatEngine(params: UseChatEngineParams) {
         if (hasContent) {
           let profile = p as unknown as UserMemoryProfile
           setUserMemory(profile)
-          messageCountRef.current = mem.message_count
+          // Use daily count, but reset if the 24h window has expired
+          const dailyCount = (mem as any).daily_message_count ?? 0
+          const windowStart = (mem as any).daily_window_start
+          const windowExpired = !windowStart || (Date.now() - new Date(windowStart).getTime() > 24 * 60 * 60 * 1000)
+          messageCountRef.current = windowExpired ? 0 : dailyCount
 
           // Load temporal patterns if present
           const memRecord = mem as unknown as Record<string, unknown>
