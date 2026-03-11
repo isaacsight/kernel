@@ -65,26 +65,58 @@ EnginePage renders:
 | `src/engine/AgentRouter.ts` | Type union + CLASSIFICATION_SYSTEM + KEYWORD_MAP + HIGH_SIGNAL_KEYWORDS + validAgents |
 | `src/pages/EnginePage.tsx` | Add to AGENT_PALETTES |
 
-### Research: Pushing Hacker Agent Further
+### Research: Pushing Hacker Agent Further (Deep Dive)
 
-#### What Top AI Security Tools Do
-- **HackerGPT**: Fine-tuned on security data, integrates with pentesting tools (Nmap, subfinder, Katana), has web search for CVE lookups
-- **PentestGPT**: Multi-step pentesting guidance with context retention across attack phases (recon → exploit → post-exploit)
-- **BurpGPT**: Burp Suite extension that analyzes HTTP traffic in real-time, identifies vulns in request/response pairs
+#### Competitive Landscape
+- **HackerGPT**: Fine-tuned on security data, integrates with pentesting tools (Nmap, subfinder, Katana), semantic search on hacking data
+- **PentestGPT**: Multi-step pentesting with context retention across attack phases (recon → exploit → post-exploit)
+- **BurpGPT**: Burp Suite extension, finds "bespoke vulnerabilities" via NLP context understanding (not just pattern matching)
+- **Guardian AI**: 19 integrated security tools with async parallel execution
+- **HexStrike AI**: 150+ tools via MCP — AI autonomously selects and runs them
+- **Kali Linux + Claude**: MCP integration — "port scan scanme.nmap.org" returns real results
+
+#### CTF AI Performance (State of the Art)
+- Hack The Box AI vs. Human CTF: 5/8 AI teams solved 19/20 challenges (95% solve rate) vs 403 human teams
+- CAI framework: Top-10 ranking in Dragos OT CTF 2025 (32/34 challenges)
+- CTFAgent two-stage RAG: 80%+ improvement, top 23.6% of ~7,000 teams in picoCTF 2024
+- **Key limitation**: AI struggles with binary artifacts (ELF, PCAPs, PNGs) — 95/120 picoCTF challenges embed auxiliary files
+
+#### AI Suitability by CTF Category
+| Category | AI Strength | Notes |
+|----------|-------------|-------|
+| Web Exploitation | Excellent | Pattern matching, automated payload gen, fingerprinting |
+| Cryptography | Excellent | Cipher identification, known attacks, math analysis |
+| OSINT | Excellent | Data correlation, search automation, pattern recognition |
+| Forensics | Good (with tooling) | PCAP analysis, file carving, stego — needs binary handling |
+| Reverse Engineering | Good | Decompilation analysis, pattern recognition in assembly |
+| Binary Exploitation | Moderate | Known vuln classes work, novel heap exploits struggle |
 
 #### High-Value Capabilities to Add
-1. **CTF Mode**: Structured approach per category — binary exploitation, web, crypto, forensics, reverse engineering. Step-by-step methodology prompts.
-2. **Vulnerability Chain Builder**: Given a system description, enumerate attack surfaces and chain exploits (input validation flaw → SQLi → privilege escalation → data exfil)
-3. **Payload Generation**: Template-based payloads for common vuln classes (XSS, SQLi, command injection, SSRF, XXE) — always with remediation advice
-4. **CVE Research Integration**: Use web search to pull latest CVEs, CVSS scores, PoC availability for any software/version
-5. **Creative Hacking Beyond Security**: Growth hacking (viral loops, referral exploits), process hacking (bureaucracy shortcuts), system gaming (algorithm manipulation, SEO, platform arbitrage)
-6. **Reverse Engineering Mode**: Binary analysis guidance, decompiler output interpretation, protocol reverse engineering
+1. **Tool Execution Layer**: Generate ready-to-run command sequences (nmap, gobuster, sqlmap, nuclei, subfinder) with proper flags and chaining — not just generic advice
+2. **Recon Methodology Engine**: target → subdomain enum → port scan → service fingerprint → vuln scan → exploit suggestion → report. Each step feeds the next.
+3. **CTF Solver Mode**: Specialized reasoning per category with RAG over common techniques/writeups
+4. **Vulnerability Chain Builder**: Given system description → enumerate attack surfaces → chain exploits (input validation → SQLi → privesc → exfil)
+5. **CVE Research Integration**: Web search for latest CVEs, CVSS scores, PoC availability for any software/version
+6. **Hacker Lens for Non-Security Domains**:
+   - Growth hacking: viral loops, referral exploits, conversion optimization
+   - Process hacking: bureaucracy shortcuts, workflow optimization
+   - System gaming: algorithm manipulation, SEO, platform arbitrage, loyalty program optimization
+   - Information arbitrage: connecting disparate public data sources
+7. **OSINT Pipeline**: Structured intelligence gathering for people, companies, domains, infrastructure
 
-#### What Makes It Useful vs. Gimmick
-- Must provide ACTIONABLE output (actual commands, scripts, payloads) not just theory
-- Must maintain context across multi-step attacks (recon findings → exploit selection → post-exploit)
-- Must know when to use web search for current CVE data vs. relying on training data
-- Must always pair offensive techniques with defensive recommendations
+#### What Makes It Real vs. Gimmick
+- **Tool execution, not just advice** — Stanford's ARTEMIS found 9 real vulns across 8,000 devices, 82% valid findings
+- **Pattern matching is the killer feature** — AI solved CTF challenges in 6 steps by recognizing response fingerprints
+- **Human-AI hybrid model** — HackerOne Hai cut validation from 20 min to 5 min by pre-processing
+- **Automate drudgery first** — recon, scanning, report gen, triage deliver immediate value
+- **"Hunger" gap** — AI executes logic but doesn't pursue outcomes obsessively like human hackers
+
+#### Prompt Engineering Insights
+- Ethical framing WITH capability preservation (HackerGPT model)
+- Logic-first prompts: "Determine safety context → then provide technical analysis"
+- Spotlighting for untrusted data: separate analyzed content from agent instructions (prevent prompt injection through analyzed payloads)
+- Tool-use decision trees as state machines, not free-form reasoning
+- Intent-based defense reduces misuse by 74%+
 
 ### Research: Pushing Operator Agent Further
 
@@ -117,11 +149,23 @@ EnginePage renders:
 
 ### Pending / Next Steps
 
-- [ ] **Hacker: Add CTF mode toggle** — structured methodology prompts per CTF category
-- [ ] **Hacker: Web search integration** — auto-search CVE databases when software versions mentioned
-- [ ] **Operator: Tiered autonomy system** — low/medium/high risk classification for actions
-- [ ] **Operator: Style matching from memory** — pull user's writing patterns from MemoryAgent
-- [ ] **Operator: Delegation confidence scoring** — internal threshold for ask vs. execute
+#### Hacker — Priority Enhancements
+- [ ] **Recon methodology engine** — structured workflow: target → subdomain → port scan → fingerprint → vuln scan → exploit → report
+- [ ] **CTF solver mode** — specialized reasoning per category (web, crypto, forensics, RE, binary), RAG over common techniques
+- [ ] **Tool command generation** — ready-to-run sequences for nmap, gobuster, sqlmap, nuclei, subfinder (not generic advice)
+- [ ] **CVE web search integration** — auto-search when software versions mentioned
+- [ ] **Hacker lens for non-security** — growth hacking, process hacking, system gaming prompts
+- [ ] **OSINT pipeline** — structured intelligence gathering workflows
+
+#### Operator — Priority Enhancements
+- [ ] **Tiered autonomy system** — low/medium/high risk classification for actions
+- [ ] **Style matching from memory** — pull user's writing patterns from MemoryAgent
+- [ ] **Delegation confidence scoring** — internal threshold for ask vs. execute
+- [ ] **Workflow templates** — repeatable multi-step processes triggered by phrases
+- [ ] **Post-action reports** — structured "here's what I did" with undo options
+- [ ] **Safety guardrails** — financial/destructive actions always confirm, 30s undo window
+
+#### Housekeeping
 - [ ] **Both: Add emblem SVGs** — `concepts/emblem-hacker.svg` and `concepts/emblem-operator.svg`
 - [ ] **Both: Add to useColorCycle.ts** — light/dark palette entries for background cycling
 - [ ] **Test: Add keyword classification tests** — verify routing for both new agents
