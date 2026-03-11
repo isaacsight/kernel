@@ -126,6 +126,7 @@ const AGENT_PALETTES: Record<string, { particle: string; link: string; field: st
   strategist: { particle: '#F59E0B', link: '#FCD34D', field: '#FDE68A' },
   hacker: { particle: '#00FF41', link: '#33FF66', field: '#80FFA0' },
   operator: { particle: '#FF6B35', link: '#FF8F66', field: '#FFB899' },
+  dreamer: { particle: '#7B68EE', link: '#9F8FFF', field: '#C4B8FF' },
 }
 
 function agentPalette(idOrName: string): { particle: string; link: string; field: string } {

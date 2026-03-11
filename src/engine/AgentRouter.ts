@@ -2,7 +2,7 @@
 import { getBackgroundProvider } from './providers/registry'
 
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'operator'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'operator' | 'dreamer'
   confidence: number
   complexity: number
   needsResearch: boolean
@@ -59,6 +59,7 @@ Agents:
 - sage: Deep identity, "who am I", "my values", self-understanding, beliefs, aspirations, meaning, philosophical self-reflection
 - hacker: Cybersecurity, pentesting, CTFs, exploit analysis, vulnerability research, reverse engineering, creative system manipulation, finding loopholes, unconventional approaches, "hack", "exploit", "bypass"
 - operator: Full delegation, "handle this", "take care of it", "do it for me", autonomous task execution, acting as the user, managing workflows end-to-end, writing emails/messages on behalf of the user
+- dreamer: Dreams, dream interpretation, visions, aspirations, "I had a dream", nightmares, sleep experiences, lucid dreaming, worldbuilding, future visioning, imagination, "what if", creative speculation, manifesting, subconscious
 
 Also determine:
 - complexity: 0.0-1.0 score for how intellectually demanding the task is. 0.0-0.35 = simple (greetings, simple factual, casual chat, straightforward questions). 0.35-0.8 = moderate (most tasks). 0.85-1.0 = very hard (complex multi-step reasoning, intricate code architecture, nuanced philosophical analysis, tasks requiring exceptional depth)
@@ -85,6 +86,7 @@ const KEYWORD_MAP: Record<string, string[]> = {
   sage: ['my values', 'who am i', 'my identity', 'my beliefs', 'self-understanding', 'what do i stand for', 'my purpose', 'what matters to me', 'my aspirations', 'meaning of'],
   hacker: ['hack', 'exploit', 'vulnerability', 'pentest', 'ctf', 'reverse engineer', 'bypass', 'injection', 'payload', 'shell', 'privilege escalation', 'brute force', 'xss', 'sqli', 'buffer overflow', 'decompile', 'crack', 'loophole', 'attack surface', 'red team'],
   operator: ['handle this', 'take care of', 'do it for me', 'just do it', 'delegate', 'on my behalf', 'act as me', 'send this', 'manage this', 'take over', 'you decide', 'handle it', 'run this for me'],
+  dreamer: ['dream', 'dreamed', 'dreamt', 'nightmare', 'vision', 'lucid', 'subconscious', 'manifest', 'worldbuild', 'imagine', 'aspiration', 'envision', 'sleep', 'what if we', 'what if i', 'future vision', 'i had a dream', 'last night i'],
 }
 
 // High-signal single keywords that are nearly unambiguous (no 2-hit requirement)
@@ -98,6 +100,7 @@ const HIGH_SIGNAL_KEYWORDS: Record<string, string[]> = {
   sage: ['who am i', 'my values', 'my identity', 'what do i stand for'],
   hacker: ['pentest', 'ctf', 'exploit', 'reverse engineer', 'privilege escalation', 'attack surface', 'red team'],
   operator: ['handle this', 'take care of', 'do it for me', 'handle it', 'take over', 'on my behalf'],
+  dreamer: ['i had a dream', 'lucid dreaming', 'nightmare', 'dream interpretation', 'future vision', 'worldbuild', 'subconscious'],
 }
 
 const IMAGE_GEN_PATTERNS = /\b(draw|generate\s+(an?\s+)?image|create\s+(an?\s+)?(picture|image|illustration|artwork|logo|icon|visual|graphic)|make\s+(me\s+)?(an?\s+)?(logo|image|picture|illustration|icon|visual|graphic)|illustrate|design\s+me)\b/i
@@ -301,7 +304,7 @@ export async function classifyIntent(
     })
 
     // Validate the result
-    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage', 'hacker', 'operator']
+    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage', 'hacker', 'operator', 'dreamer']
     if (!validAgents.includes(result.agentId)) {
       const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       _lastClassification = fallback
