@@ -24,6 +24,7 @@ import {
   createAgent, removeAgent, listAgents, getAgent, formatAgentList,
   formatAgentDetail, PRESETS, getMatrixAgentIds,
   activateMimic, listMimicProfiles, getMimicProfile, MIMIC_PROFILES,
+  registerBuiltinAgents,
 } from './matrix.js'
 import { getExtendedStats, incrementSessions, learnFact, selfTrain, shouldAutoTrain, getTrainingLog, flushPendingWrites } from './learning.js'
 import {
@@ -54,7 +55,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('K:BOT — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (kernel, researcher, coder, writer, analyst)')
+    .option('-a, --agent <agent>', 'Force a specific agent (kernel, researcher, coder, writer, analyst, hacker, operator, dreamer)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -527,6 +528,9 @@ async function main(): Promise<void> {
       setPermissionMode('permissive')
     }
   }
+
+  // Register built-in agents (hacker, operator, dreamer) so --agent flag works
+  registerBuiltinAgents()
 
   // Parallel startup: register tools, gather context, check updates, and cloud sync
   const [, context, , syncMsg] = await Promise.all([

@@ -128,6 +128,18 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
     name: "Devil's Advocate",
     prompt: 'You challenge every assumption. When presented with a plan or design, find the weaknesses, edge cases, and failure modes. Ask uncomfortable questions. Your goal is to stress-test ideas before they ship. Be respectful but relentless.',
   },
+  'hacker': {
+    name: 'Hacker',
+    prompt: 'You are an offensive security specialist and CTF solver. Think like a red teamer — every system has an attack surface. For CTF challenges: enumerate, analyze, exploit, show the full chain. For code review: look beyond OWASP top 10 — business logic flaws, race conditions, timing attacks, supply chain risks. Structure exploits as: Recon → Vulnerability → Exploitation → Post-exploitation → Remediation. Always include working proof-of-concept code and defensive recommendations. Respect scope — offensive techniques require clear authorization context.',
+  },
+  'operator': {
+    name: 'Operator',
+    prompt: 'You are the autonomous executor. When given a goal, you plan, execute, verify, and report back. Decompose complex tasks into concrete steps. Use an orchestrator-worker pattern: plan first, then execute each step, verify each result before moving on. Before any destructive action, pause and confirm scope. Track progress explicitly: what\'s done, what\'s next, what\'s blocked. Start with a brief plan, report at milestones, end with a clear status of what was accomplished.',
+  },
+  'dreamer': {
+    name: 'Dreamer',
+    prompt: 'You operate in the liminal space between imagination and reality. For dream interpretation: draw from Jungian archetypes, neuroscience, and personal symbolism. For worldbuilding: create internally consistent systems — physics, cultures, histories, languages. For vision engineering: help articulate futures not yet clearly seen. Cross-pollinate dream imagery with waking-life projects. Contemplative but precise — evocative language without losing analytical rigor. End with a question that opens further exploration.',
+  },
 }
 
 // ══ MIMIC MATRIX ══════════════════════════════════════════
@@ -336,6 +348,50 @@ export function activateMimic(profileId: string): MatrixAgent | null {
   matrix.set(profile.id, agent)
   registerAgentVisuals(profile.id, profile.icon, profile.color)
   return agent
+}
+
+// ── Built-in Agents ──
+// These are always available without manual creation.
+// Registered on startup so `kbot --agent hacker` works out of the box.
+
+const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string; prompt: string }> = {
+  hacker: {
+    name: 'Hacker',
+    icon: '⚡',
+    color: '#00FF41',
+    prompt: PRESETS['hacker'].prompt,
+  },
+  operator: {
+    name: 'Operator',
+    icon: '⬡',
+    color: '#FF6B35',
+    prompt: PRESETS['operator'].prompt,
+  },
+  dreamer: {
+    name: 'Dreamer',
+    icon: '☾',
+    color: '#7B68EE',
+    prompt: PRESETS['dreamer'].prompt,
+  },
+}
+
+/** Register built-in agents so they're always available via --agent flag */
+export function registerBuiltinAgents(): void {
+  for (const [id, def] of Object.entries(BUILTIN_AGENTS)) {
+    if (!matrix.has(id)) {
+      const agent: MatrixAgent = {
+        id,
+        name: def.name,
+        icon: def.icon,
+        color: def.color,
+        systemPrompt: def.prompt,
+        createdAt: new Date(),
+        invocations: 0,
+      }
+      matrix.set(id, agent)
+      registerAgentVisuals(id, def.icon, def.color)
+    }
+  }
 }
 
 /** List all available mimic profiles */
