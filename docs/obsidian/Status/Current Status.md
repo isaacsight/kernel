@@ -1,14 +1,14 @@
 ---
 tags: [kernel, status]
-updated: "2026-03-08"
+updated: "2026-03-10"
 ---
 
-# Current Status — March 8, 2026
+# Current Status — March 10, 2026
 
 ## What's Live
 
 ### kernel.chat (Web App)
-- Full PWA with 17 specialist agents
+- Full PWA with 20 specialist agents
 - **Free only — 10 messages per day**, no paid tiers
 - Memory system with warmth tracking + knowledge graph
 - Convergence (6 facet lenses)
@@ -23,7 +23,16 @@ updated: "2026-03-08"
 - **Atomic rate limiting** — prevents free-tier users from exceeding daily limit
 - E2E test suite (28 Playwright tests)
 
-## Just Completed (March 8 Evening — K:BOT v2.3)
+## Just Completed (March 10 — 3 New Agents)
+
+1. **Hacker agent** (⚡ `#00FF41`) — Offensive security, CTFs, exploit chains, red teaming, bug bounties
+2. **Operator agent** (⬡ `#FF6B35`) — Full task delegation, autonomous plan-execute-verify loops
+3. **Dreamer agent** (☾ `#7B68EE`) — Dream interpretation, worldbuilding, vision engineering
+4. **All 3 wired into**: AgentRouter (keywords + Groq classifier), ParticleGrid palettes, SwarmOrchestrator pool
+5. **K:BOT integration** — Built-in agents (`kbot --agent hacker/operator/dreamer`), Matrix presets, auto-registered on startup
+6. **Agent count**: 17 → 20 specialists
+
+## March 8 Evening — K:BOT v2.3
 
 1. **K:BOT v2.3.1 published to npm** — `npm install -g @kernel.chat/kbot` now works
 2. **Guided first-run setup** — Auto-detects Ollama/env vars, or 2-option wizard (local vs cloud). No AI knowledge needed.

@@ -1,9 +1,9 @@
 ---
 tags: [kernel, architecture, agents]
-updated: "2026-03-06"
+updated: "2026-03-10"
 ---
 
-# Agent System — 17 Specialists
+# Agent System — 20 Specialists
 
 ## Flow: User Message → Response
 
@@ -22,14 +22,17 @@ updated: "2026-03-06"
 | `writer` | Content creation | `#B8875C` (warm brown) | `specialists.ts` |
 | `analyst` | Strategy & evaluation | `#A0768C` (mauve) | `specialists.ts` |
 
-## Extended Specialists (4, swarm-accessible)
+## Extended Specialists (7, swarm-accessible)
 
-| ID | Role |
-|---|---|
-| `aesthete` | Visual design & aesthetics |
-| `guardian` | Security & safety |
-| `curator` | Knowledge curation |
-| `strategist` | Business strategy |
+| ID | Icon | Role | Color |
+|---|---|---|---|
+| `aesthete` | ✨ | Visual design & aesthetics | `#F472B6` (pink) |
+| `guardian` | 🛡️ | Security & safety | `#10B981` (emerald) |
+| `curator` | 📚 | Knowledge curation | `#8B5CF6` (purple) |
+| `strategist` | ♟️ | Business strategy | `#F59E0B` (amber) |
+| `hacker` | ⚡ | Offensive security, CTFs, red teaming | `#00FF41` (matrix green) |
+| `operator` | ⬡ | Full delegation, autonomous execution | `#FF6B35` (burnt orange) |
+| `dreamer` | ☾ | Dream engineering, worldbuilding, vision | `#7B68EE` (slate violet) |
 
 ## Swarm Agents (5)
 
