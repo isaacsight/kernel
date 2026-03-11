@@ -52,6 +52,7 @@ import { lazyRetry } from '../utils/lazyRetry'
 import { KernelLoading } from '../components/KernelLoading'
 import { ParticleGrid } from '../components/ParticleGrid'
 import { ThinkingBlock } from '../components/ThinkingBlock'
+import { AgentPicker } from '../components/AgentPicker'
 import { WorkflowTimeline } from '../components/WorkflowTimeline'
 import { ContentPipeline } from '../components/ContentPipeline'
 
@@ -1397,6 +1398,8 @@ function EngineChat() {
             <IconAttach size={18} />
           </button>
         )}
+
+        <AgentPicker selectedAgent={chatEngine.forcedAgentId} onSelect={chatEngine.setForcedAgentId} disabled={isStreaming} />
 
         <textarea
           ref={chatEngine.inputRef}

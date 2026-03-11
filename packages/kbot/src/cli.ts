@@ -24,7 +24,7 @@ import {
   createAgent, removeAgent, listAgents, getAgent, formatAgentList,
   formatAgentDetail, PRESETS, getMatrixAgentIds,
   activateMimic, listMimicProfiles, getMimicProfile, MIMIC_PROFILES,
-  registerBuiltinAgents,
+  registerBuiltinAgents, formatBuiltinAgentList, formatBuiltinAgentDetail,
 } from './matrix.js'
 import { getExtendedStats, incrementSessions, learnFact, selfTrain, shouldAutoTrain, getTrainingLog, flushPendingWrites } from './learning.js'
 import {
@@ -419,6 +419,26 @@ async function main(): Promise<void> {
     })
 
 
+  program
+    .command('agents [name]')
+    .description('List all available agents, or show details for one')
+    .action(async (name?: string) => {
+      registerBuiltinAgents()
+      if (name) {
+        const detail = formatBuiltinAgentDetail(name)
+        if (detail) {
+          console.log(detail)
+        } else {
+          printError(`Agent "${name}" not found.`)
+          printInfo('Run `kbot agents` to see all available agents.')
+        }
+      } else {
+        console.log(formatBuiltinAgentList())
+        console.log()
+        printInfo('Use: kbot --agent <name> "prompt"')
+      }
+    })
+
   program.parse(process.argv)
 
   const opts = program.opts()
@@ -428,7 +448,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()

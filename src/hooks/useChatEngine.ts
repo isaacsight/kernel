@@ -271,6 +271,11 @@ export function useChatEngine(params: UseChatEngineParams) {
   // Today's briefing for home screen
   const [todayBriefing, setTodayBriefing] = useState<{ id: string; title: string; content: string } | null>(null)
 
+  // Forced agent override — user explicitly selected an agent via picker
+  const [forcedAgentId, setForcedAgentId] = useState<string | null>(null)
+  const forcedAgentRef = useRef<string | null>(null)
+  forcedAgentRef.current = forcedAgentId
+
   // Refs
   const latestKernelContentRef = useRef<string>('')
   const sendMessageRef = useRef<(content: string) => Promise<void>>(async () => { })
@@ -707,15 +712,26 @@ export function useChatEngine(params: UseChatEngineParams) {
     // Compute memory text once — reused for both routing and system prompt
     // Relevance-aware: filters items by query + recent context
     const memoryText = formatMemoryForPrompt(userMemoryRef.current, trimmed, recentCtx)
-    const classifyPromise: Promise<import('../engine/AgentRouter').ClassificationResult> = (async () => {
-      try {
-        const loomRoutingCtx = buildRoutingContext(loomRef.current)
-        return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, memoryText || undefined)
-      } catch (err) {
-        console.error('[engine] classifyIntent failed:', err)
-        return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
-      }
-    })()
+    // Agent override — user explicitly selected an agent via picker
+    const overrideAgent = forcedAgentRef.current
+    if (overrideAgent) setForcedAgentId(null) // reset after consuming
+
+    const classifyPromise: Promise<import('../engine/AgentRouter').ClassificationResult> = overrideAgent
+      ? Promise.resolve({
+          agentId: overrideAgent as import('../engine/AgentRouter').ClassificationResult['agentId'],
+          confidence: 1.0, complexity: 0.5, needsSwarm: false, needsResearch: false,
+          isMultiStep: false, needsImageGen: false, needsImageRefinement: false,
+          needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false,
+        })
+      : (async () => {
+          try {
+            const loomRoutingCtx = buildRoutingContext(loomRef.current)
+            return await classifyIntent(trimmed, recentCtx, filesToSend.length > 0, loomRoutingCtx || undefined, memoryText || undefined)
+          } catch (err) {
+            console.error('[engine] classifyIntent failed:', err)
+            return { agentId: 'kernel' as const, confidence: 0.5, complexity: 0.3, needsSwarm: false, needsResearch: false, isMultiStep: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
+          }
+        })()
 
     // Knowledge retrieval — runs in parallel with classification (Pro only)
     const knowledgeTopN = (params.planLimits as any)?.knowledgeAutoRetrieval || 0
@@ -2201,5 +2217,6 @@ Output ONLY the image prompt, nothing else. Keep it under 200 words.`,
     activeDocument, hasActiveDocument: !!activeDocument, clearDocument,
     injectProactiveMessage,
     showOveragePrompt, setShowOveragePrompt,
+    forcedAgentId, setForcedAgentId,
   }
 }

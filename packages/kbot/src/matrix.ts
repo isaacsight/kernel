@@ -394,6 +394,52 @@ export function registerBuiltinAgents(): void {
   }
 }
 
+/** Format built-in agents for display */
+export function formatBuiltinAgentList(): string {
+  const builtins = Object.entries(BUILTIN_AGENTS).map(([id, def]) => {
+    const color = chalk.hex(def.color)
+    return `  ${color(def.icon)} ${color(def.name)} ${chalk.dim(`(${id})`)} — ${chalk.dim(PRESETS[id]?.prompt.slice(0, 80) + '...')}`
+  })
+  const customs = listAgents().filter(a => !BUILTIN_AGENTS[a.id as keyof typeof BUILTIN_AGENTS])
+  const customLines = customs.map(a => {
+    const color = chalk.hex(a.color)
+    return `  ${color(a.icon)} ${color(a.name)} ${chalk.dim(`(${a.id})`)} — ${chalk.dim(a.systemPrompt.slice(0, 80) + '...')}`
+  })
+  let out = chalk.bold('Built-in Agents:\n') + builtins.join('\n')
+  if (customLines.length > 0) {
+    out += '\n\n' + chalk.bold('Custom Agents (this session):\n') + customLines.join('\n')
+  }
+  // Also show presets
+  const presetIds = Object.keys(PRESETS).filter(id => !BUILTIN_AGENTS[id as keyof typeof BUILTIN_AGENTS])
+  if (presetIds.length > 0) {
+    const presetLines = presetIds.map(id => {
+      const p = PRESETS[id]
+      return `  ${chalk.dim('◇')} ${p.name} ${chalk.dim(`(${id})`)} — ${chalk.dim(p.prompt.slice(0, 80) + '...')}`
+    })
+    out += '\n\n' + chalk.bold('Presets (spawn with: /matrix create <id>):\n') + presetLines.join('\n')
+  }
+  return out
+}
+
+/** Format a single built-in agent detail */
+export function formatBuiltinAgentDetail(id: string): string | null {
+  const builtin = BUILTIN_AGENTS[id as keyof typeof BUILTIN_AGENTS]
+  const preset = PRESETS[id]
+  const agent = getAgent(id)
+  if (!builtin && !preset && !agent) return null
+  const name = builtin?.name || preset?.name || agent?.name || id
+  const icon = builtin?.icon || agent?.icon || '◇'
+  const color = builtin?.color || agent?.color || '#888888'
+  const prompt = builtin?.prompt || preset?.prompt || agent?.systemPrompt || 'No description'
+  const c = chalk.hex(color)
+  return [
+    `  ${c(icon)} ${c(name)} ${chalk.dim(`(${id})`)}`,
+    `  ${chalk.dim('Color:')} ${color}`,
+    `  ${chalk.dim('System Prompt:')}`,
+    `  ${prompt}`,
+  ].join('\n')
+}
+
 /** List all available mimic profiles */
 export function listMimicProfiles(): MimicProfile[] {
   return Object.values(MIMIC_PROFILES)

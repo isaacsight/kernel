@@ -4,9 +4,58 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-03, continued)
+## Current Session (2026-03-09)
 
 ### Accomplished This Session
+
+#### K:BOT Major Update + Security Audit + Cloud Engine
+
+**K:BOT CLI Improvements:**
+- Particle grid ASCII art banner — terminal translation of kernel.chat's ParticleGrid visual identity
+- Updated all 14 providers with `models` arrays (full model catalogs)
+- Updated defaults: OpenAI → gpt-4.1, Google → gemini-2.5-pro
+- Added missing models: claude-opus-4-6, o3, o4-mini, deepseek-reasoner, codestral, sonar-reasoning
+- Ollama: 30+ open-weight models listed, improved task-based routing (deepseek-r1, qwen2.5-coder:32b, gemma3:27b)
+- Silent auto-update system: checks npm on startup → installs in background → zero user action
+- `kbot update` explicit command for manual updates
+- `kbot-engine` edge function — cloud backend for kbot CLI (proxy, sync, route, usage, health, models)
+
+**Security Audit — PASS (0 P0, 0 P1):**
+- Full platform scan: 0 secrets in src/, 46/46 edge functions auth-verified, 0 eval/Function
+- K:BOT security hardening: fixed shell injection in glob/grep, plugin directory permission checks, case-insensitive destructive patterns + piped command detection
+- npm audit: 0 critical, 0 prod vulnerabilities (17 dev-only)
+
+**kernel.chat Landing Page:**
+- K:BOT CLI section with animated terminal mockup and install instructions
+- Account settings: K:BOT install card with copy-to-clipboard command
+
+**kbot-engine Edge Function:**
+- `/proxy` — multi-provider LLM proxy (Anthropic, OpenAI, Google, Groq)
+- `/sync` — persist learning data across machines (kbot_memory table)
+- `/route` — fast agent classification via Groq
+- `/usage` — usage tracking
+- `/health` + `/models` — provider status and model catalog
+- Migration 077: kbot_memory table with RLS
+
+**Deployments (completed this session continuation):**
+- kbot-engine edge function deployed — healthy (200 OK, Anthropic + Groq live)
+- kbot_memory table created on remote (RLS, indexes, grants applied)
+- All migrations 073-078 verified applied on remote
+- Repaired migration history (5 orphaned remote versions marked reverted)
+
+**Model Downloads (in progress):**
+- qwen2.5-coder:14b, deepseek-r1:14b, gemma3:12b, phi4:14b, llava:13b — downloading sequentially, network stable at ~3.8 MB/s
+
+### Pending
+- Wire kbot CLI to connect to kbot-engine for cloud sync
+- User asked about "best option for new user" re: Ollama — consider updating landing copy to clarify free local vs cloud options
+- Verify all 5 Ollama models downloaded successfully
+
+---
+
+## Previous Session (2026-03-03, continued)
+
+### Accomplished
 
 #### 6-Phase Platform Expansion — ALL PHASES COMPLETE
 

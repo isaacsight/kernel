@@ -7807,6 +7807,44 @@ h4 {
     pointer-events: none;
 }
 
+/* ─── Agent Picker ─── */
+.ka-agent-picker { position: relative; display: flex; align-items: center; }
+.ka-agent-picker-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; padding: 6px 8px; border-radius: var(--radius-sm);
+    color: var(--rubin-text-secondary, #666);
+    transition: color 0.15s, background 0.15s;
+}
+.ka-agent-picker-btn:hover { background: var(--rubin-bg-hover, rgba(0,0,0,0.04)); }
+.ka-agent-picker-btn--active { font-weight: 600; }
+.ka-agent-picker-dropdown {
+    position: absolute; bottom: 100%; left: 0;
+    margin-bottom: 8px; min-width: 220px;
+    background: var(--rubin-bg, #FAF9F6); border: 1px solid var(--rubin-border, #e0ddd8);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-lg, 0 8px 24px rgba(0,0,0,0.12));
+    z-index: 100; padding: 4px 0;
+    max-height: 320px; overflow-y: auto;
+}
+.ka-agent-picker-item {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 8px 12px; border: none; background: none;
+    cursor: pointer; text-align: left; font-family: inherit; font-size: 13px;
+    transition: background 0.1s;
+}
+.ka-agent-picker-item:hover { background: var(--rubin-bg-hover, rgba(0,0,0,0.04)); }
+.ka-agent-picker-item--active { background: var(--rubin-bg-active, rgba(107,91,149,0.08)); }
+.ka-agent-picker-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.ka-agent-picker-label { font-weight: 500; white-space: nowrap; }
+.ka-agent-picker-desc { color: var(--rubin-text-secondary, #888); font-size: 11px; margin-left: auto; }
+
+/* Dark mode */
+[data-theme="dark"] .ka-agent-picker-dropdown {
+    background: var(--dark-bg-elevated, #2a2520); border-color: var(--dark-border, #3d3530);
+}
+[data-theme="dark"] .ka-agent-picker-btn:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .ka-agent-picker-item:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .ka-agent-picker-item--active { background: rgba(107,91,149,0.15); }
+
 /* File chips above input bar */
 .ka-file-chips {
     display: flex;
