@@ -69,7 +69,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       tools: [
         {
           name: 'kbot_chat',
-          description: 'Send a message to K:BOT and get an agent response. Supports 17 specialist agents with automatic routing.',
+          description: 'Send a message to K:BOT and get an agent response. Supports 37 specialist agents with automatic routing.',
           inputSchema: {
             type: 'object' as const,
             properties: {

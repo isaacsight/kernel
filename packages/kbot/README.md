@@ -1,6 +1,22 @@
-# K:BOT
+<p align="center">
+  <strong>K:BOT</strong><br>
+  Open-source terminal AI agent. 37 specialists, 60+ tools, 14 providers, local-first.
+</p>
 
-Open-source terminal AI agent. 17 specialists, 60+ tools, 14 providers, local-first.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/v/@kernel.chat/kbot?color=6B5B95&label=npm" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/dw/@kernel.chat/kbot?color=6B5B95" alt="npm downloads"></a>
+  <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
+  <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
+</p>
+
+## Why K:BOT?
+
+- **14 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, and 8 more
+- **Runs fully offline** — `kbot ollama` for $0 local AI, no data leaves your machine
+- **Learns your patterns** — remembers what worked, gets faster over time
+- **37 specialist agents** — auto-routes to the right expert for each task
+- **MCP server built in** — plug kbot into any IDE as a tool provider
 
 ## Quick Start
 
@@ -24,17 +40,28 @@ kbot
 kbot "fix the auth bug in src/auth.ts"
 kbot "create a react component for user profiles"
 kbot "deploy to production"
+kbot -p "generate a migration for user roles" > migration.sql
 ```
+
+## Specialists (37)
+
+Auto-routed or manual with `kbot --agent <name>`:
+
+**Core**: kernel, researcher, coder, writer, analyst
+**Extended**: aesthete, guardian, curator, strategist, infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter
+**Domain**: physicist, mathematician, biologist, economist, psychologist, engineer, medic, linguist, ethicist, educator, diplomat
+**Systems**: session, scholar, auditor, benchmarker, synthesizer, debugger
 
 ## Features
 
-- **14 Providers**: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, Ollama, OpenClaw
-- **60+ Tools**: File ops, bash, git, GitHub, web search, Jupyter notebooks, Docker sandbox, background tasks, MCP consumption, and more
-- **Local-First**: Simple operations (file reads, git, grep) execute locally without API calls
-- **Learning Engine**: Caches successful patterns, solutions, and user preferences — gets faster over time
-- **Custom Agents**: Create on-the-fly specialist agents or use built-in presets
-- **Hooks & Plugins**: Extend with pre/post tool hooks and custom plugins
-- **IDE Integration**: MCP server for VS Code, Cursor, Zed, Neovim
+- **60+ Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker sandbox, browser, MCP client
+- **Local-First** — File reads, git, grep run instantly without an API call
+- **Learning Engine** — Patterns, solutions, and user preferences cached across sessions
+- **Mimic Matrix** — Code like Claude Code, Cursor, Copilot, Next.js, React, Rust, Python
+- **Autonomous Planner** — Complex tasks get broken into steps, executed, and verified
+- **Subagent System** — Parallel workers for research, coding, and analysis
+- **Hooks & Plugins** — Pre/post tool hooks and custom plugins
+- **Sessions** — Save, resume, and share conversations
 
 ## Providers
 
@@ -43,10 +70,36 @@ kbot "deploy to production"
 | Anthropic (Claude) | $3-15/M tokens | `ANTHROPIC_API_KEY` |
 | OpenAI (GPT) | $2.5-10/M tokens | `OPENAI_API_KEY` |
 | Google (Gemini) | $0.15-0.60/M tokens | `GOOGLE_API_KEY` |
+| Mistral | $0.25-2/M tokens | `MISTRAL_API_KEY` |
+| xAI (Grok) | $3-15/M tokens | `XAI_API_KEY` |
+| DeepSeek | $0.14-2.19/M tokens | `DEEPSEEK_API_KEY` |
+| Groq | $0.05-0.27/M tokens | `GROQ_API_KEY` |
 | Ollama (Local) | **Free** | `ollama serve` |
 | OpenClaw (Local) | **Free** | `openclaw-cmd start` |
 
-Set any provider's env var and K:BOT auto-detects it. Or run `kbot auth` for interactive setup.
+All 14 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
+
+## MCP Server (IDE Integration)
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "kbot": { "command": "kbot", "args": ["ide", "mcp"] }
+    }
+  }
+}
+```
+
+Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools including `kbot_chat`, `kbot_plan`, `kbot_bash`, `kbot_read_file`, `kbot_edit_file`, `kbot_search`, `kbot_github`, and more.
+
+## HTTP Server
+
+```bash
+kbot serve --port 7437 --token mysecret
+```
+
+REST API exposing all 60+ tools for any LLM or automation pipeline.
 
 ## Commands
 
@@ -56,39 +109,32 @@ Set any provider's env var and K:BOT auto-detects it. Or run `kbot auth` for int
 | `kbot "prompt"` | One-shot execution |
 | `kbot auth` | Configure API key |
 | `kbot ollama` | Set up local Ollama |
-| `kbot usage` | Show usage stats |
-| `/save` | Save current session |
-| `/resume` | Resume a saved session |
-| `/matrix` | Manage custom agents |
-| `/plugins` | Manage plugins |
-| `/compact` | Compress conversation history |
-
-## Architecture
-
-```
-User Message
-    │
-    ├─ Local-first check (file reads, git, grep → instant, $0)
-    │
-    ├─ Complexity detection → Autonomous planner (multi-step)
-    │
-    └─ Provider API call → Tool execution loop
-        │
-        ├─ Permission check (destructive ops require confirmation)
-        ├─ Pre/post hooks
-        ├─ Tool execution (local, with timeout)
-        └─ Learning (async, patterns + solutions + profile)
-```
+| `kbot serve` | Start HTTP server |
+| `kbot ide mcp` | Start MCP server |
+| `/agent <name>` | Switch specialist |
+| `/mimic <profile>` | Adopt a coding style |
+| `/plan <task>` | Autonomous plan + execute |
+| `/save` / `/resume` | Session management |
 
 ## Security
 
 - API keys encrypted at rest (AES-256-CBC)
-- Config file restricted to owner (chmod 600)
-- Destructive operations require user confirmation
-- Bash tool blocks dangerous commands (rm -rf /, fork bombs, etc.)
-- Tool execution timeout prevents hangs (5 min default)
-- Result truncation prevents memory exhaustion (50KB default)
+- Destructive operations require confirmation
+- Bash tool blocks dangerous commands
+- Tool execution timeout (5 min)
+- Config restricted to owner (chmod 600)
+
+## Web Companion
+
+[kernel.chat](https://kernel.chat) — same 37 agents with a visual interface. Free (20 msgs/day).
+
+## Links
+
+- **Web**: [kernel.chat](https://kernel.chat)
+- **npm**: [@kernel.chat/kbot](https://www.npmjs.com/package/@kernel.chat/kbot)
+- **GitHub**: [isaacsight/kernel](https://github.com/isaacsight/kernel)
+- **Issues**: [Report a bug](https://github.com/isaacsight/kernel/issues)
 
 ## License
 
-MIT — Antigravity Group
+[MIT](../../LICENSE) — [Antigravity Group](https://antigravitygroup.co)
