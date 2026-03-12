@@ -948,6 +948,18 @@ async function startRepl(
 
   const sessionCount = incrementSessions()
 
+  // Return-visit greeting — show kbot's growth
+  if (sessionCount > 1) {
+    const stats = getExtendedStats()
+    const parts: string[] = []
+    if (stats.patternsCount > 0) parts.push(`${stats.patternsCount} patterns learned`)
+    if (stats.solutionsCount > 0) parts.push(`${stats.solutionsCount} solutions cached`)
+    if (stats.knowledgeCount > 0) parts.push(`${stats.knowledgeCount} facts remembered`)
+    if (parts.length > 0) {
+      printInfo(`Session ${stats.sessions} · ${parts.join(' · ')}`)
+    }
+  }
+
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -1017,12 +1029,33 @@ async function startRepl(
             printResponse(response.agent, response.content)
           }
 
-          // Usage footer — subtle, compact like Claude Code
-          if (response.usage) {
-            const tokens = response.usage.input_tokens + response.usage.output_tokens
-            const cost = response.usage.cost_usd === 0 ? 'free' : `$${response.usage.cost_usd.toFixed(4)}`
-            const tools = response.toolCalls > 0 ? ` · ${response.toolCalls} tools` : ''
-            printInfo(`${tokens} tokens${tools} · ${cost}`)
+          // Mentor footer — teach the user what kbot did (agent, tools, cost)
+          {
+            const parts: string[] = []
+
+            // Show which agent handled it (teaches routing)
+            if (response.agent && response.agent !== 'kernel') {
+              parts.push(`${response.agent} agent`)
+            }
+
+            if (response.toolCalls > 0) {
+              parts.push(`${response.toolCalls} tool${response.toolCalls > 1 ? 's' : ''} used`)
+            }
+
+            if (response.usage) {
+              const tokens = response.usage.input_tokens + response.usage.output_tokens
+              const cost = response.usage.cost_usd === 0 ? 'free' : `$${response.usage.cost_usd.toFixed(4)}`
+              parts.push(`${tokens} tokens · ${cost}`)
+            }
+
+            if (parts.length > 0) {
+              printInfo(parts.join(' · '))
+            }
+
+            // On first 5 sessions, teach what just happened
+            if (sessionCount <= 5 && response.agent && response.agent !== 'kernel') {
+              printInfo(chalk.dim(`  I picked the ${response.agent} agent for this. You can also say /agent ${response.agent} to use it directly.`))
+            }
           }
 
           // Schedule cloud sync push (debounced — batches writes)
@@ -1172,6 +1205,50 @@ async function handleSlashCommand(
     case 'help':
       printHelp()
       break
+
+    case 'tutorial': {
+      console.log()
+      console.log(chalk.bold('  Let\'s build something together. Pick a track:'))
+      console.log()
+      console.log(`  ${chalk.bold('1.')} ${chalk.hex('#4ADE80')('Build a website')}     — Create an HTML page from scratch`)
+      console.log(`  ${chalk.bold('2.')} ${chalk.hex('#60A5FA')('Fix a bug')}           — Find and fix a problem in code`)
+      console.log(`  ${chalk.bold('3.')} ${chalk.hex('#FB923C')('Write a script')}      — Automate something with Python or JavaScript`)
+      console.log(`  ${chalk.bold('4.')} ${chalk.hex('#F472B6')('Research a topic')}    — Deep-dive into any subject`)
+      console.log(`  ${chalk.bold('5.')} ${chalk.hex('#A78BFA')('Explore this project')} — Understand the code in this folder`)
+      console.log()
+      console.log(chalk.dim('  Pick a number, or just type what you want to build.'))
+      console.log()
+
+      const tutorialInput = await new Promise<string>((resolve) => {
+        rl.question('  Your choice: ', (answer) => resolve(answer.trim()))
+      })
+
+      const tutorialPrompts: Record<string, string> = {
+        '1': 'Create a simple, beautiful HTML page with a heading, a paragraph about me, and some CSS styling. Save it as index.html. Walk me through what each part does.',
+        '2': 'Look at the files in this directory. Find any issues, bugs, or things that could be improved. Explain what you found and fix the most important one.',
+        '3': 'Write a short script that lists all files in the current directory, sorted by size. Use the language that makes the most sense for this project. Explain each line.',
+        '4': 'I want to understand how AI agents work. Research this topic and explain it simply — what are agents, how do they think, and what tools do they use? Give real examples.',
+        '5': 'Explore this project directory. What language is it written in? What does it do? What are the most important files? Give me a quick tour.',
+      }
+
+      const prompt = tutorialPrompts[tutorialInput] || tutorialInput
+      if (prompt) {
+        console.log()
+        printInfo('Great choice! Let me work on that...')
+        console.log()
+        try {
+          const response = await runAgent(prompt, opts)
+          if (!response.streamed) {
+            printResponse(response.agent, response.content)
+          }
+          console.log()
+          printInfo(chalk.dim('That\'s the basics! Keep asking questions — I learn from every conversation.'))
+        } catch (err) {
+          printError(err instanceof Error ? err.message : String(err))
+        }
+      }
+      break
+    }
 
     case 'agent':
       if (args[0]) {

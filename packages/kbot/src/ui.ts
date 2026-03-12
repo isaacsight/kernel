@@ -269,6 +269,7 @@ export function printHelp(): void {
     `  ${chalk.white('/resume')} ${DIM('<id>')}     Pick up where you left off`,
     `  ${chalk.white('/clear')}             Start fresh`,
     `  ${chalk.white('/remember')} ${DIM('<…>')}   Teach kbot something it will remember`,
+    `  ${chalk.white('/tutorial')}           Guided walkthrough — build something step by step`,
     `  ${chalk.white('/quit')}              Exit`,
     '',
     `  ${chalk.bold('Customize')}`,
