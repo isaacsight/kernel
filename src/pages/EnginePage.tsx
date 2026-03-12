@@ -14,7 +14,8 @@ import { BottomTabBar } from '../components/BottomTabBar'
 import { KERNEL_TOPICS } from '../agents/kernel'
 import { getSpecialist, getAllSpecialists } from '../agents/specialists'
 import { useAuthContext } from '../providers/AuthProvider'
-import { forkSharedConversation, updateConversationMetadata, getConversationMetadata } from '../engine/SupabaseClient'
+import { forkSharedConversation, updateConversationMetadata, getConversationMetadata, upsertUserMemory } from '../engine/SupabaseClient'
+import { emptyProfile } from '../engine/MemoryAgent'
 import { ConversationDrawer } from '../components/ConversationDrawer'
 import { MessageContent, Linkify } from '../components/MessageContent'
 import { ACCEPTED_FILES, downloadFile, EventFeed, isAudioFile, isImageFile } from '../components/ChatHelpers'
@@ -825,14 +826,17 @@ function EngineChat() {
               <MemoryPanel
                 userMemory={chatEngine.userMemory}
                 onDeleteItem={(category, index) => {
-                  const updated = { ...chatEngine.userMemory }
-                  const arr = [...(updated[category] as string[])]
-                  arr.splice(index, 1)
-                  ;(updated as Record<string, unknown>)[category] = arr
+                  const current = chatEngine.userMemory
+                  const arr = current[category]
+                  if (!Array.isArray(arr)) return
+                  const updated = { ...current, [category]: arr.filter((_, i) => i !== index) }
                   chatEngine.setUserMemory(updated)
+                  if (userId) upsertUserMemory(userId, updated as unknown as Record<string, unknown>)
                 }}
                 onClearAll={() => {
-                  chatEngine.setUserMemory({ interests: [], communication_style: '', goals: [], facts: [], preferences: [] })
+                  const cleared = emptyProfile()
+                  chatEngine.setUserMemory(cleared)
+                  if (userId) upsertUserMemory(userId, cleared as unknown as Record<string, unknown>)
                 }}
                 onClose={() => panels.closePanel('memory')}
               />
