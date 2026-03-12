@@ -38,7 +38,16 @@
     "system": "Järjestelmä",
     "communications": "Viestintä",
     "adaptiveSystem": "Mukautuva järjestelmä",
-    "usage": "Käyttö"
+    "usage": "Käyttö",
+    "mirror": "Peili",
+    "projectFiles": "Projektitiedostot",
+    "imageGallery": "Kuvagalleria",
+    "knowledgeBase": "Tietokanta",
+    "social": "Sosiaalinen media",
+    "platformEngine": "Sisällön käsittely",
+    "explore": "Tutki",
+    "accountSettings": "Tilin asetukset",
+    "notifProactive": "Ennakoivat oivallukset"
   },
   "admin": "Ylläpito",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "Siirry Prohon — $29/kk",
     "annualButton": "$290/vuosi — säästä $58",
     "buttonLoading": "Avataan kassaa...",
-    "maybeLater": "Ehkä myöhemmin"
+    "maybeLater": "Ehkä myöhemmin",
+    "learnedTitle": "Mitä Kernel oppi sinusta",
+    "learnedCta": "Palaa huomenna ja jatka keskustelua.",
+    "maxButton": "Valitse Max — 49 $/kk",
+    "maxAnnualButton": "490 $/vuosi — säästä 98 $"
   },
   "deleteConfirm": {
     "title": "Poistetaanko tilisi?",
@@ -85,5 +98,95 @@
     "cancel": "Peruuta"
   },
   "messagesRemaining": "{{count}} viestiä jäljellä",
-  "lastFreeMessage": "Viimeinen ilmainen viesti"
+  "lastFreeMessage": "Viimeinen ilmainen viesti",
+  "menuSection": {
+    "ai": "AI & Agentit",
+    "content": "Sisältö & Tietämys",
+    "insights": "Oivallukset & Tavoitteet",
+    "system": "Asetukset & Järjestelmä"
+  },
+  "usage": {
+    "title": "Käyttö",
+    "loading": "Ladataan käyttötietoja...",
+    "retry": "Yritä uudelleen",
+    "last30days": "Viimeiset 30 päivää",
+    "onPace": "Tahtiin {{projected}} / {{limit}} viestiä",
+    "overLimit": "Ylittämässä {{limit}} viestirajaasi",
+    "byFeature": "Ominaisuusittain",
+    "dailyTrend": "30 päivän trendi",
+    "recommendation": "Suositus",
+    "upgrade": "Päivitä"
+  },
+  "entity": {
+    "evolved": "Kehittynyt {{tier}} -tasolle",
+    "streak": "Päivä {{count}}",
+    "goalCheckIn": "Tarkista: {{title}}",
+    "mood": {
+      "happy": "onnellinen",
+      "excited": "innoissaan",
+      "content": "tyytyväinen",
+      "sad": "surullinen",
+      "sleepy": "unelias",
+      "lonely": "yksinäinen",
+      "bored": "tylsistynyt"
+    }
+  },
+  "entityInfo": {
+    "mood": "Tunnelma",
+    "streak": "Putki",
+    "days": "päivää",
+    "focus": "Keskittyminen"
+  },
+  "nudge": {
+    "insights": "Olet käynyt joitain keskusteluja – Kernel on löytänyt toistuvia teemoja siitä, mistä puhut.",
+    "knowledge": "Tietokarttasi kasvaa – katso yhteyksiä, jotka Kernel on kartoittanut keskustelujesi perusteella.",
+    "stats": "Suoristit tavoitteen – tarkista tilastosi nähdäksesi, kuinka käyttösi kehittyy.",
+    "workflows": "Olet käyttänyt Kernelia säännöllisesti – työnkulut voivat automatisoida toistuvat tehtäväsi.",
+    "showMe": "Näytä minulle",
+    "notNow": "Ei nyt"
+  },
+  "valuePreview": {
+    "message": "Pro-jäsenet saavat päivittäisiä yhteenvedon, syvällistä tutkimusta ja pysyvää muistia.",
+    "gotIt": "Ymmärretty"
+  },
+  "messagesLeft": "{{count}} viestiä jäljellä",
+  "agentWhy": {
+    "label": "Miksi?"
+  },
+  "thinking": {
+    "label": "Laajennettu ajattelu",
+    "duration": "Ajattelu kesti {{seconds}}s",
+    "streaming": "Ajattelee...",
+    "toggle": "Aktivoi laajennettu ajattelu",
+    "tooltip": "Pohdi syvemmin ennen vastaamista"
+  },
+  "explain": {
+    "toggle": "Aktivoi selitys-tila",
+    "tooltip": "Selitys-tila — vaiheittainen koodi"
+  },
+  "document": {
+    "active": "Analysoidaan: {{name}}",
+    "clear": "Tyhjennä dokumentti",
+    "contextHint": "Kysy lisäkysymyksiä tästä dokumentista"
+  },
+  "proactive": {
+    "noticed": "Kernel huomasi...",
+    "notification": "Kernelillä on sinulle havainto",
+    "explore": "Tutustutaanpa tähän"
+  },
+  "tour": {
+    "entity": "Tämä on sinun Kernel-entiteettisi. Se kehittyy chattailun myötä — napauta sitä nähdäksesi sen mielialan, putken ja kasvutason.",
+    "moreMenu": "Napauta tästä Kernelin kaikkien ominaisuuksien löytämiseksi: agentit, tietopohja, oivallukset ja paljon muuta.",
+    "inputBar": "Aloita keskustelu täällä. Liitä tiedostoja, vaihda selitys-tila päälle tai sano vain hei.",
+    "gotIt": "Ymmärretty",
+    "skip": "Ohita opastus"
+  },
+  "workflow": {
+    "planning": "Suunnittelee vaiheita...",
+    "executing": "Suorittaa: {{step}}",
+    "complete": "Työnkulku valmis",
+    "failed": "Vaihe epäonnistui: {{step}}",
+    "cancel": "Peruuta työnkulku",
+    "cancelled": "Työnkulku peruttu"
+  }
 }

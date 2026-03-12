@@ -38,7 +38,16 @@
     "system": "Sistema",
     "communications": "Comunicações",
     "adaptiveSystem": "Sistema adaptativo",
-    "usage": "Uso"
+    "usage": "Uso",
+    "mirror": "O Espelho",
+    "projectFiles": "Arquivos do projeto",
+    "imageGallery": "Galeria de imagens",
+    "knowledgeBase": "Base de conhecimento",
+    "social": "Redes sociais",
+    "platformEngine": "Pipeline de conteúdo",
+    "explore": "Explorar",
+    "accountSettings": "Configurações da conta",
+    "notifProactive": "Insights proativos"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "Seja Pro — $29/mês",
     "annualButton": "$290/ano — economize $58",
     "buttonLoading": "Abrindo pagamento...",
-    "maybeLater": "Talvez depois"
+    "maybeLater": "Talvez depois",
+    "learnedTitle": "O que o Kernel aprendeu sobre você",
+    "learnedCta": "Volte amanhã e continue a conversa.",
+    "maxButton": "Vá para Max — $49/mês",
+    "maxAnnualButton": "$490/ano — economize $98"
   },
   "deleteConfirm": {
     "title": "Excluir sua conta?",
@@ -85,5 +98,95 @@
     "cancel": "Cancelar"
   },
   "messagesRemaining": "{{count}} mensagens restantes",
-  "lastFreeMessage": "Última mensagem gratuita"
+  "lastFreeMessage": "Última mensagem gratuita",
+  "menuSection": {
+    "ai": "IA e Agentes",
+    "content": "Conteúdo & Conhecimento",
+    "insights": "Insights & Objetivos",
+    "system": "Configurações & Sistema"
+  },
+  "usage": {
+    "title": "Uso",
+    "loading": "Carregando dados de uso...",
+    "retry": "Tentar novamente",
+    "last30days": "Últimos 30 dias",
+    "onPace": "No ritmo para {{projected}} de {{limit}} mensagens",
+    "overLimit": "No ritmo para exceder seu limite de {{limit}} mensagens",
+    "byFeature": "Por funcionalidade",
+    "dailyTrend": "Tendência dos últimos 30 dias",
+    "recommendation": "Recomendação",
+    "upgrade": "Atualizar"
+  },
+  "entity": {
+    "evolved": "Evoluiu para {{tier}}",
+    "streak": "Dia {{count}}",
+    "goalCheckIn": "Check-in: {{title}}",
+    "mood": {
+      "happy": "feliz",
+      "excited": "animado",
+      "content": "satisfeito",
+      "sad": "triste",
+      "sleepy": "com sono",
+      "lonely": "sozinho",
+      "bored": "entediado"
+    }
+  },
+  "entityInfo": {
+    "mood": "Humor",
+    "streak": "Sequência",
+    "days": "dias",
+    "focus": "Foco"
+  },
+  "nudge": {
+    "insights": "Você teve algumas conversas agora — Kernel tem encontrado padrões no que você fala.",
+    "knowledge": "Seu grafo de conhecimento está crescendo — veja as conexões que Kernel mapeou a partir de suas conversas.",
+    "stats": "Você completou uma meta — verifique suas estatísticas para ver como seu uso está evoluindo.",
+    "workflows": "Você tem usado Kernel regularmente — fluxos de trabalho podem automatizar suas tarefas recorrentes.",
+    "showMe": "Mostrar-me",
+    "notNow": "Não agora"
+  },
+  "valuePreview": {
+    "message": "Assinantes Pro recebem briefings diários, pesquisa aprofundada e memória persistente.",
+    "gotIt": "Entendido"
+  },
+  "messagesLeft": "{{count}} mensagens restantes",
+  "agentWhy": {
+    "label": "Por quê?"
+  },
+  "thinking": {
+    "label": "Pensando profundamente",
+    "duration": "Pensou por {{seconds}}s",
+    "streaming": "Pensando...",
+    "toggle": "Ativar pensamento profundo",
+    "tooltip": "Pense mais profundamente antes de responder"
+  },
+  "explain": {
+    "toggle": "Ativar modo explicar",
+    "tooltip": "Modo explicar — código passo a passo"
+  },
+  "document": {
+    "active": "Analisando: {{name}}",
+    "clear": "Limpar documento",
+    "contextHint": "Faça perguntas de acompanhamento sobre este documento"
+  },
+  "proactive": {
+    "noticed": "Kernel notou...",
+    "notification": "Kernel tem uma observação para você",
+    "explore": "Vamos explorar isso"
+  },
+  "tour": {
+    "entity": "Esta é a sua entidade Kernel. Ela evolui à medida que você conversa — toque para ver o humor, sequência e nível de crescimento.",
+    "moreMenu": "Toque aqui para todos os recursos do Kernel: agentes, base de conhecimento, insights e muito mais.",
+    "inputBar": "Comece uma conversa aqui. Anexe arquivos, alterne o modo de explicação ou simplesmente diga olá.",
+    "gotIt": "Entendido",
+    "skip": "Pular tour"
+  },
+  "workflow": {
+    "planning": "Planejando etapas...",
+    "executing": "Executando: {{step}}",
+    "complete": "Fluxo de trabalho completo",
+    "failed": "Etapa falhou: {{step}}",
+    "cancel": "Cancelar fluxo de trabalho",
+    "cancelled": "Fluxo de trabalho cancelado"
+  }
 }

@@ -73,6 +73,7 @@ const ImageGalleryPanel = lazyRetry(() => import('../components/ImageGalleryPane
 const FilesPanel = lazyRetry(() => import('../components/FilesPanel').then(m => ({ default: m.FilesPanel })))
 const UsageDashboard = lazyRetry(() => import('../components/UsageDashboard').then(m => ({ default: m.UsageDashboard })))
 const TagModal = lazyRetry(() => import('../components/TagModal').then(m => ({ default: m.TagModal })))
+const MemoryPanel = lazyRetry(() => import('../components/MemoryPanel').then(m => ({ default: m.MemoryPanel })))
 
 // ─── Main Page ──────────────────────────────────────────
 
@@ -634,7 +635,7 @@ function EngineChat() {
   }, [isDrawerOpen])
 
   // ─── Back button support ─────────────────────────────
-  const anyPanelOpen = panels.showProjectPanel || panels.showImageGallery || panels.showAccountSettings || panels.showUsageDashboard
+  const anyPanelOpen = panels.showProjectPanel || panels.showImageGallery || panels.showAccountSettings || panels.showUsageDashboard || panels.showMemoryPanel
   const anyOverlayOpen = anyPanelOpen || isDrawerOpen || panels.showMoreMenu
   const closeTopOverlay = useCallback(() => {
     if (panels.showMoreMenu) { panels.setShowMoreMenu(false); panels.setActiveTab('home') }
@@ -814,6 +815,29 @@ function EngineChat() {
               monthlyLimit={planLimits.messagesPerDay * 30}
             />
           </Suspense>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {panels.showMemoryPanel && (
+          <BottomSheet onClose={() => panels.closePanel('memory')}>
+            <Suspense fallback={<PanelShimmer />}>
+              <MemoryPanel
+                userMemory={chatEngine.userMemory}
+                onDeleteItem={(category, index) => {
+                  const updated = { ...chatEngine.userMemory }
+                  const arr = [...(updated[category] as string[])]
+                  arr.splice(index, 1)
+                  ;(updated as Record<string, unknown>)[category] = arr
+                  chatEngine.setUserMemory(updated)
+                }}
+                onClearAll={() => {
+                  chatEngine.setUserMemory({ interests: [], communication_style: '', goals: [], facts: [], preferences: [] })
+                }}
+                onClose={() => panels.closePanel('memory')}
+              />
+            </Suspense>
+          </BottomSheet>
         )}
       </AnimatePresence>
 
