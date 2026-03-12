@@ -1,205 +1,236 @@
 {
-    "goals": {
-        "title": "Objetivos",
-        "emptyTitle": "Defina seu Primeiro Objetivo",
-        "emptyDesc": "Acompanhe o que importa — o Kernel verifica seu progresso automaticamente.",
-        "createGoal": "Criar Objetivo",
-        "addGoal": "Adicionar Objetivo",
-        "completed": "Concluídos ({{count}})",
-        "target": "Meta: {{date}}",
-        "priority": {
-            "low": "Baixa",
-            "medium": "Média",
-            "high": "Alta"
-        },
-        "frequency": {
-            "daily": "Check-in diário",
-            "weekly": "Semanal",
-            "biweekly": "Quinzenal",
-            "monthly": "Mensal"
-        },
-        "errors": {
-            "addFailed": "Falha ao adicionar objetivo",
-            "updateFailed": "Falha ao atualizar etapa",
-            "completeFailed": "Falha ao concluir objetivo",
-            "deleteFailed": "Falha ao excluir objetivo"
-        },
-        "deleteConfirm": "Excluir este objetivo? Isso não pode ser desfeito."
+  "goals": {
+    "title": "Objetivos",
+    "emptyTitle": "Defina seu Primeiro Objetivo",
+    "emptyDesc": "Acompanhe o que importa — o Kernel verifica seu progresso automaticamente.",
+    "createGoal": "Criar Objetivo",
+    "addGoal": "Adicionar Objetivo",
+    "completed": "Concluídos ({{count}})",
+    "target": "Meta: {{date}}",
+    "priority": {
+      "low": "Baixa",
+      "medium": "Média",
+      "high": "Alta"
     },
-    "workflows": {
-        "title": "Fluxos de Trabalho",
-        "loading": "Carregando fluxos...",
-        "emptyTitle": "Crie seu Primeiro Fluxo de Trabalho",
-        "emptyDesc": "Automatize tarefas de várias etapas — o Kernel as executa exatamente como você as projetou.",
-        "newWorkflow": "Novo Fluxo de Trabalho",
-        "createWorkflow": "Criar Fluxo de Trabalho",
-        "runCount_one": "Executado {{count}} vez",
-        "runCount_other": "Executado {{count}} vezes",
-        "errors": {
-            "saveFailed": "Falha ao salvar fluxo de trabalho",
-            "deleteFailed": "Falha ao excluir fluxo de trabalho"
-        },
-        "deleteConfirm": "Excluir este fluxo de trabalho? Isso não pode ser desfeito."
+    "frequency": {
+      "daily": "Check-in diário",
+      "weekly": "Semanal",
+      "biweekly": "Quinzenal",
+      "monthly": "Mensal"
     },
-    "scheduled": {
-        "title": "Tarefas Agendadas",
-        "loading": "Carregando tarefas...",
-        "emptyTitle": "Agende sua Primeira Tarefa",
-        "emptyDesc": "Configure e esqueça — o Kernel executa tarefas no seu cronograma.",
-        "createTask": "Criar Tarefa",
-        "schedule": "Agendar",
-        "taskTypes": {
-            "reminder": "Lembrete",
-            "workflow": "Executar Fluxo",
-            "briefing": "Briefing Diário",
-            "goalCheckin": "Check-in de Objetivo"
-        },
-        "presets": {
-            "daily": "Diário",
-            "weekdays": "Dias úteis",
-            "weekly": "Semanal (Seg)",
-            "once": "Uma vez"
-        },
-        "channels": {
-            "inApp": "No app",
-            "email": "E-mail",
-            "discord": "Discord"
-        },
-        "errors": {
-            "createFailed": "Falha ao criar tarefa agendada",
-            "updateFailed": "Falha ao atualizar tarefa",
-            "deleteFailed": "Falha ao excluir tarefa"
-        },
-        "deleteConfirm": "Excluir esta tarefa agendada?"
+    "errors": {
+      "addFailed": "Falha ao adicionar objetivo",
+      "updateFailed": "Falha ao atualizar etapa",
+      "completeFailed": "Falha ao concluir objetivo",
+      "deleteFailed": "Falha ao excluir objetivo"
     },
-    "briefings": {
-        "title": "Briefings",
-        "generateTooltip": "Gerar um novo briefing com base em seus interesses e atividade recente",
-        "generating": "Gerando...",
-        "newBriefing": "Novo briefing",
-        "phases": {
-            "planning": "Planejamento",
-            "researching": "Pesquisando",
-            "writing": "Escrevendo"
-        },
-        "loading": "Carregando briefings...",
-        "emptyTitle": "Seu briefing diário",
-        "emptyDesc": "Receba um resumo personalizado de notícias e insights adaptado aos seus interesses e objetivos.",
-        "generateFirst": "Gerar seu primeiro briefing",
-        "errorTitle": "Este briefing não pôde ser gerado",
-        "errorDesc": "A etapa de pesquisa não retornou dados suficientes para criar um resumo útil. Isso pode acontecer se o serviço de busca estiver temporariamente indisponível.",
-        "readTime": "Leitura de {{count}} min",
-        "wordCount": "{{count}} palavras",
-        "topicsCovered": "Tópicos abordados",
-        "continueReading": "Continuar lendo",
-        "readFull": "Ler briefing completo",
-        "goDeeper": "Aprofundar no chat",
-        "saveAsGoal": "Salvar insights como objetivo",
-        "errors": {
-            "generateFailed": "Falha ao gerar briefing"
-        },
-        "toast": {
-            "generated": "Briefing gerado",
-            "removed": "Briefing removido"
-        }
+    "deleteConfirm": "Excluir este objetivo? Isso não pode ser desfeito.",
+    "loading": "Carregando objetivos...",
+    "titlePlaceholder": "O que você está buscando?",
+    "descPlaceholder": "Adicione alguns detalhes (opcional)..."
+  },
+  "workflows": {
+    "title": "Fluxos de Trabalho",
+    "loading": "Carregando fluxos...",
+    "emptyTitle": "Crie seu Primeiro Fluxo de Trabalho",
+    "emptyDesc": "Automatize tarefas de várias etapas — o Kernel as executa exatamente como você as projetou.",
+    "newWorkflow": "Novo Fluxo de Trabalho",
+    "createWorkflow": "Criar Fluxo de Trabalho",
+    "runCount_one": "Executado {{count}} vez",
+    "runCount_other": "Executado {{count}} vezes",
+    "errors": {
+      "saveFailed": "Falha ao salvar fluxo de trabalho",
+      "deleteFailed": "Falha ao excluir fluxo de trabalho"
     },
-    "stats": {
-        "title": "Suas Estatísticas",
-        "loading": "Carregando...",
-        "loadError": "Não foi possível carregar as estatísticas.",
-        "messages": "Mensagens",
-        "conversations": "Conversas",
-        "entities": "Entidades",
-        "helpful": "Úteis",
-        "agentUsage": "Uso do Agente",
-        "topTopics": "Principais Tópicos",
-        "activity": "Atividade",
-        "memberSince": "Membro desde {{date}}"
+    "deleteConfirm": "Excluir este fluxo de trabalho? Isso não pode ser desfeito."
+  },
+  "scheduled": {
+    "title": "Tarefas Agendadas",
+    "loading": "Carregando tarefas...",
+    "emptyTitle": "Agende sua Primeira Tarefa",
+    "emptyDesc": "Configure e esqueça — o Kernel executa tarefas no seu cronograma.",
+    "createTask": "Criar Tarefa",
+    "schedule": "Agendar",
+    "taskTypes": {
+      "reminder": "Lembrete",
+      "workflow": "Executar Fluxo",
+      "briefing": "Briefing Diário",
+      "goalCheckin": "Check-in de Objetivo"
     },
-    "kg": {
-        "title": "O que o Kernel sabe",
-        "emptyTitle": "O Kernel ainda não aprendeu nada.",
-        "emptyHint": "Continue conversando — ele identifica pessoas, projetos e conceitos que você menciona.",
-        "entitiesCount": "{{count}} entidades",
-        "connectionsCount": "{{count}} conexões",
-        "confident": "{{value}}% de confiança",
-        "mentioned": "mencionado {{count}}x",
-        "types": {
-            "person": "Pessoas",
-            "company": "Empresas",
-            "project": "Projetos",
-            "concept": "Conceitos",
-            "preference": "Preferências",
-            "location": "Locais"
-        }
+    "presets": {
+      "daily": "Diário",
+      "weekdays": "Dias úteis",
+      "weekly": "Semanal (Seg)",
+      "once": "Uma vez"
     },
-    "insights": {
-        "title": "Percepções",
-        "sections": {
-            "world": "Você",
-            "beliefs": "Crenças",
-            "memory": "Memória",
-            "reflections": "Qualidade",
-            "agents": "Agentes"
-        },
-        "howISeeYou": "Como eu te vejo",
-        "apparentGoal": "Objetivo aparente",
-        "situation": "Situação atual",
-        "conviction": "Convicção",
-        "whatIBelieve": "O que eu acredito",
-        "noBeliefsYet": "Nenhuma crença formada ainda. Continue conversando — vou aprender o que importa para você.",
-        "challengeBelief": "Questionar esta crença",
-        "dismissBelief": "Descartar esta crença",
-        "myMemory": "Minha memória de você",
-        "noMemoryYet": "Ainda sem memória. Eu aprendo sobre você enquanto conversamos.",
-        "commStyle": "Estilo de comunicação",
-        "memory": {
-            "interests": "Interesses",
-            "goals": "Objetivos",
-            "facts": "Sobre você",
-            "preferences": "Preferências"
-        },
-        "performance": "Meu desempenho",
-        "noReflectionsYet": "Nenhuma reflexão ainda. Começarei a avaliar a qualidade após algumas conversas.",
-        "avgQuality": "qualidade média (últimas 20)",
-        "dims": {
-            "substance": "Substância",
-            "coherence": "Coerência",
-            "relevance": "Relevância",
-            "brevity": "Brevidade",
-            "craft": "Ofício"
-        },
-        "recentLessons": "Lições recentes",
-        "patternNotes": "Notas de padrões",
-        "agentPerformance": "Desempenho dos agentes",
-        "noAgentDataYet": "Nenhum dado de agentes ainda.",
-        "quality": "Qualidade",
-        "usage": "Uso",
-        "challengedStat": "{{count}}x contestada",
-        "reinforcedStat": "{{count}}x reforçada",
-        "challengeAction": "contestar"
+    "channels": {
+      "inApp": "No app",
+      "email": "E-mail",
+      "discord": "Discord"
     },
-    "share": {
-        "title": "Compartilhar conversa",
-        "checking": "Verificando link existente...",
-        "existingLink": "Esta conversa já possui um link público.",
-        "anyoneCanView": "Qualquer pessoa com este link pode ver esta conversa.",
-        "revokeLink": "Revogar link",
-        "revoking": "Revogando...",
-        "createDesc": "Crie um link público que qualquer pessoa possa ver. Não é necessário login.",
-        "linkExpires": "O link expira em:",
-        "never": "Nunca",
-        "hours24": "24 horas",
-        "days7": "7 dias",
-        "days30": "30 dias",
-        "createLink": "Criar link de compartilhamento",
-        "creating": "Criando...",
-        "errors": {
-            "createFailed": "Falha ao criar link de compartilhamento",
-            "revokeFailed": "Falha ao revogar link"
-        },
-        "toast": {
-            "revoked": "Link de compartilhamento revogado"
-        }
+    "errors": {
+      "createFailed": "Falha ao criar tarefa agendada",
+      "updateFailed": "Falha ao atualizar tarefa",
+      "deleteFailed": "Falha ao excluir tarefa"
+    },
+    "deleteConfirm": "Excluir esta tarefa agendada?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Gerar um novo briefing com base em seus interesses e atividade recente",
+    "generating": "Gerando...",
+    "newBriefing": "Novo briefing",
+    "phases": {
+      "planning": "Planejamento",
+      "researching": "Pesquisando",
+      "writing": "Escrevendo"
+    },
+    "loading": "Carregando briefings...",
+    "emptyTitle": "Seu briefing diário",
+    "emptyDesc": "Receba um resumo personalizado de notícias e insights adaptado aos seus interesses e objetivos.",
+    "generateFirst": "Gerar seu primeiro briefing",
+    "errorTitle": "Este briefing não pôde ser gerado",
+    "errorDesc": "A etapa de pesquisa não retornou dados suficientes para criar um resumo útil. Isso pode acontecer se o serviço de busca estiver temporariamente indisponível.",
+    "readTime": "Leitura de {{count}} min",
+    "wordCount": "{{count}} palavras",
+    "topicsCovered": "Tópicos abordados",
+    "continueReading": "Continuar lendo",
+    "readFull": "Ler briefing completo",
+    "goDeeper": "Aprofundar no chat",
+    "saveAsGoal": "Salvar insights como objetivo",
+    "errors": {
+      "generateFailed": "Falha ao gerar briefing"
+    },
+    "toast": {
+      "generated": "Briefing gerado",
+      "removed": "Briefing removido"
     }
+  },
+  "stats": {
+    "title": "Suas Estatísticas",
+    "loading": "Carregando...",
+    "loadError": "Não foi possível carregar as estatísticas.",
+    "messages": "Mensagens",
+    "conversations": "Conversas",
+    "entities": "Entidades",
+    "helpful": "Úteis",
+    "agentUsage": "Uso do Agente",
+    "topTopics": "Principais Tópicos",
+    "activity": "Atividade",
+    "memberSince": "Membro desde {{date}}"
+  },
+  "kg": {
+    "title": "O que o Kernel sabe",
+    "emptyTitle": "O Kernel ainda não aprendeu nada.",
+    "emptyHint": "Continue conversando — ele identifica pessoas, projetos e conceitos que você menciona.",
+    "entitiesCount": "{{count}} entidades",
+    "connectionsCount": "{{count}} conexões",
+    "confident": "{{value}}% de confiança",
+    "mentioned": "mencionado {{count}}x",
+    "types": {
+      "person": "Pessoas",
+      "company": "Empresas",
+      "project": "Projetos",
+      "concept": "Conceitos",
+      "preference": "Preferências",
+      "location": "Locais"
+    }
+  },
+  "insights": {
+    "title": "Percepções",
+    "sections": {
+      "world": "Você",
+      "beliefs": "Crenças",
+      "memory": "Memória",
+      "reflections": "Qualidade",
+      "agents": "Agentes"
+    },
+    "howISeeYou": "Como eu te vejo",
+    "apparentGoal": "Objetivo aparente",
+    "situation": "Situação atual",
+    "conviction": "Convicção",
+    "whatIBelieve": "O que eu acredito",
+    "noBeliefsYet": "Nenhuma crença formada ainda. Continue conversando — vou aprender o que importa para você.",
+    "challengeBelief": "Questionar esta crença",
+    "dismissBelief": "Descartar esta crença",
+    "myMemory": "Minha memória de você",
+    "noMemoryYet": "Ainda sem memória. Eu aprendo sobre você enquanto conversamos.",
+    "commStyle": "Estilo de comunicação",
+    "memory": {
+      "interests": "Interesses",
+      "goals": "Objetivos",
+      "facts": "Sobre você",
+      "preferences": "Preferências"
+    },
+    "performance": "Meu desempenho",
+    "noReflectionsYet": "Nenhuma reflexão ainda. Começarei a avaliar a qualidade após algumas conversas.",
+    "avgQuality": "qualidade média (últimas 20)",
+    "dims": {
+      "substance": "Substância",
+      "coherence": "Coerência",
+      "relevance": "Relevância",
+      "brevity": "Brevidade",
+      "craft": "Ofício"
+    },
+    "recentLessons": "Lições recentes",
+    "patternNotes": "Notas de padrões",
+    "agentPerformance": "Desempenho dos agentes",
+    "noAgentDataYet": "Nenhum dado de agentes ainda.",
+    "quality": "Qualidade",
+    "usage": "Uso",
+    "challengedStat": "{{count}}x contestada",
+    "reinforcedStat": "{{count}}x reforçada",
+    "challengeAction": "contestar"
+  },
+  "share": {
+    "title": "Compartilhar conversa",
+    "checking": "Verificando link existente...",
+    "existingLink": "Esta conversa já possui um link público.",
+    "anyoneCanView": "Qualquer pessoa com este link pode ver esta conversa.",
+    "revokeLink": "Revogar link",
+    "revoking": "Revogando...",
+    "createDesc": "Crie um link público que qualquer pessoa possa ver. Não é necessário login.",
+    "linkExpires": "O link expira em:",
+    "never": "Nunca",
+    "hours24": "24 horas",
+    "days7": "7 dias",
+    "days30": "30 dias",
+    "createLink": "Criar link de compartilhamento",
+    "creating": "Criando...",
+    "errors": {
+      "createFailed": "Falha ao criar link de compartilhamento",
+      "revokeFailed": "Falha ao revogar link"
+    },
+    "toast": {
+      "revoked": "Link de compartilhamento revogado"
+    },
+    "shareableLink": "Link compartilhável",
+    "copyLink": "Copiar link",
+    "copied": "Copiado",
+    "copiedAnnounce": "Link copiado para a área de transferência",
+    "shareVia": "Compartilhar via...",
+    "limitReached": "Você atingiu seu limite diário de {{limit}} links compartilhados. Faça o upgrade para Pro para mais compartilhamentos.",
+    "limitHint": "{{used}}/{{limit}} links usados hoje",
+    "dailyCount": "{{used}}/{{limit}} compartilhamentos gratuitos usados hoje"
+  },
+  "mirror": {
+    "title": "O Espelho",
+    "emptyTitle": "O espelho ainda está se formando.",
+    "emptyDesc": "Continue conversando — os agentes do Kernel estão aprendendo a te ver de diferentes ângulos.",
+    "convergenceTitle": "O que o espelho vê",
+    "convergenceDesc": "Percepções que só surgem quando vários agentes comparam informações.",
+    "facetsTitle": "Perspectivas dos agentes",
+    "facetsDesc": "Cada agente observa uma dimensão diferente de quem você é.",
+    "observations": "observações",
+    "patterns": "Padrões",
+    "convergenceCount": "Convergência em {{count}} vezes",
+    "dimensions": {
+      "relationship": "Relacionamento",
+      "curiosity": "Curiosidade",
+      "craft": "Habilidade",
+      "voice": "Voz",
+      "judgment": "Julgamento",
+      "arc": "Arc"
+    }
+  }
 }

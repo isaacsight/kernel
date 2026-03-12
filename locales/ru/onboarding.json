@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Продолжить",
-  "skipIntro": "Пропустить вступление"
+  "skipIntro": "Пропустить вступление",
+  "greeting": "Привет. Я Kernel.",
+  "greetingUser": "Привет, {{name}}. Я Kernel.",
+  "tagline": "Спроси меня о чём угодно. Я разберусь с остальным.",
+  "placeholder": "Чем ты сейчас занимаешься?"
 }

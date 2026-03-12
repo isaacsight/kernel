@@ -7,10 +7,27 @@
     "addGoal": "目標を追加",
     "completed": "完了 ({{count}})",
     "target": "目標日: {{date}}",
-    "priority": { "low": "低", "medium": "中", "high": "高" },
-    "frequency": { "daily": "毎日チェックイン", "weekly": "毎週", "biweekly": "隔週", "monthly": "毎月" },
-    "errors": { "addFailed": "目標の追加に失敗しました", "updateFailed": "マイルストーンの更新に失敗しました", "completeFailed": "目標の完了に失敗しました", "deleteFailed": "目標の削除に失敗しました" },
-    "deleteConfirm": "この目標を削除しますか？この操作は元に戻せません。"
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "frequency": {
+      "daily": "毎日チェックイン",
+      "weekly": "毎週",
+      "biweekly": "隔週",
+      "monthly": "毎月"
+    },
+    "errors": {
+      "addFailed": "目標の追加に失敗しました",
+      "updateFailed": "マイルストーンの更新に失敗しました",
+      "completeFailed": "目標の完了に失敗しました",
+      "deleteFailed": "目標の削除に失敗しました"
+    },
+    "deleteConfirm": "この目標を削除しますか？この操作は元に戻せません。",
+    "loading": "目標を読み込んでいます...",
+    "titlePlaceholder": "何を目標にしていますか？",
+    "descPlaceholder": "詳細を追加 (任意)..."
   },
   "workflows": {
     "title": "ワークフロー",
@@ -21,7 +38,10 @@
     "createWorkflow": "ワークフローを作成",
     "runCount_one": "{{count}} 回実行",
     "runCount_other": "{{count}} 回実行",
-    "errors": { "saveFailed": "ワークフローの保存に失敗しました", "deleteFailed": "ワークフローの削除に失敗しました" },
+    "errors": {
+      "saveFailed": "ワークフローの保存に失敗しました",
+      "deleteFailed": "ワークフローの削除に失敗しました"
+    },
     "deleteConfirm": "このワークフローを削除しますか？この操作は元に戻せません。"
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "設定したら忘れるだけ — Kernel がスケジュール通りにタスクを実行します。",
     "createTask": "タスクを作成",
     "schedule": "スケジュール",
-    "taskTypes": { "reminder": "リマインダー", "workflow": "ワークフロー実行", "briefing": "デイリーブリーフィング", "goalCheckin": "目標チェックイン" },
-    "presets": { "daily": "毎日", "weekdays": "平日", "weekly": "毎週（月曜日）", "once": "1回" },
-    "channels": { "inApp": "アプリ内", "email": "メール", "discord": "Discord" },
-    "errors": { "createFailed": "スケジュール済みタスクの作成に失敗しました", "updateFailed": "タスクの更新に失敗しました", "deleteFailed": "タスクの削除に失敗しました" },
+    "taskTypes": {
+      "reminder": "リマインダー",
+      "workflow": "ワークフロー実行",
+      "briefing": "デイリーブリーフィング",
+      "goalCheckin": "目標チェックイン"
+    },
+    "presets": {
+      "daily": "毎日",
+      "weekdays": "平日",
+      "weekly": "毎週（月曜日）",
+      "once": "1回"
+    },
+    "channels": {
+      "inApp": "アプリ内",
+      "email": "メール",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "スケジュール済みタスクの作成に失敗しました",
+      "updateFailed": "タスクの更新に失敗しました",
+      "deleteFailed": "タスクの削除に失敗しました"
+    },
     "deleteConfirm": "このスケジュール済みタスクを削除しますか？"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "興味と最近のアクティビティに基づいて新しいブリーフィングを生成",
     "generating": "生成中...",
     "newBriefing": "新しいブリーフィング",
-    "phases": { "planning": "計画中", "researching": "リサーチ中", "writing": "執筆中" },
+    "phases": {
+      "planning": "計画中",
+      "researching": "リサーチ中",
+      "writing": "執筆中"
+    },
     "loading": "ブリーフィングを読み込み中...",
     "emptyTitle": "デイリーブリーフィング",
     "emptyDesc": "興味と目標に合わせたパーソナライズされたニュースとインサイトのサマリーを取得。",
@@ -56,8 +98,13 @@
     "readFull": "全文を読む",
     "goDeeper": "チャットで深掘り",
     "saveAsGoal": "要点を目標として保存",
-    "errors": { "generateFailed": "ブリーフィングの生成に失敗しました" },
-    "toast": { "generated": "ブリーフィングが生成されました", "removed": "ブリーフィングが削除されました" }
+    "errors": {
+      "generateFailed": "ブリーフィングの生成に失敗しました"
+    },
+    "toast": {
+      "generated": "ブリーフィングが生成されました",
+      "removed": "ブリーフィングが削除されました"
+    }
   },
   "stats": {
     "title": "あなたの統計",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} コネクション",
     "confident": "{{value}}% の確信度",
     "mentioned": "{{count}} 回言及",
-    "types": { "person": "人物", "company": "企業", "project": "プロジェクト", "concept": "コンセプト", "preference": "嗜好", "location": "場所" }
+    "types": {
+      "person": "人物",
+      "company": "企業",
+      "project": "プロジェクト",
+      "concept": "コンセプト",
+      "preference": "嗜好",
+      "location": "場所"
+    }
   },
   "insights": {
     "title": "インサイト",
@@ -143,7 +197,40 @@
     "days30": "30 日",
     "createLink": "共有リンクを作成",
     "creating": "作成中...",
-    "errors": { "createFailed": "共有リンクの作成に失敗しました", "revokeFailed": "リンクの取り消しに失敗しました" },
-    "toast": { "revoked": "共有リンクが取り消されました" }
+    "errors": {
+      "createFailed": "共有リンクの作成に失敗しました",
+      "revokeFailed": "リンクの取り消しに失敗しました"
+    },
+    "toast": {
+      "revoked": "共有リンクが取り消されました"
+    },
+    "shareableLink": "共有可能なリンク",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました",
+    "copiedAnnounce": "リンクをクリップボードにコピーしました",
+    "shareVia": "～経由で共有",
+    "limitReached": "共有リンクの1日の上限である {{limit}} に達しました。より多くの共有のためにProにアップグレードしてください。",
+    "limitHint": "{{used}}/{{limit}} リンクを今日使用しました",
+    "dailyCount": "{{used}}/{{limit}} 無料共有を今日使用しました"
+  },
+  "mirror": {
+    "title": "ミラー",
+    "emptyTitle": "ミラーはまだ形成中です。",
+    "emptyDesc": "Kernelのエージェントが、さまざまな角度からあなたを見ているため、話してください。",
+    "convergenceTitle": "ミラーが見ているもの",
+    "convergenceDesc": "複数のエージェントが情報を共有することで生まれる、ユニークな洞察。",
+    "facetsTitle": "エージェントの視点",
+    "facetsDesc": "各エージェントが、あなたという人物の異なる側面を観察します。",
+    "observations": "観察",
+    "patterns": "パターン",
+    "convergenceCount": "合意 {{count}} 回",
+    "dimensions": {
+      "relationship": "関係性",
+      "curiosity": "好奇心",
+      "craft": "技能",
+      "voice": "表現",
+      "judgment": "判断力",
+      "arc": "成長"
+    }
   }
 }

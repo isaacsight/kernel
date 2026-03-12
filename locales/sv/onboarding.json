@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Fortsätt",
-  "skipIntro": "Hoppa över intro"
+  "skipIntro": "Hoppa över intro",
+  "greeting": "Hej. Jag är Kernel.",
+  "greetingUser": "Hej, {{name}}. Jag är Kernel.",
+  "tagline": "Fråga mig vad som helst. Jag löser resten.",
+  "placeholder": "Vad jobbar du med?"
 }

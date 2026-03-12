@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "متابعة",
-  "skipIntro": "تخطي المقدمة"
+  "skipIntro": "تخطي المقدمة",
+  "greeting": "مرحباً. أنا Kernel.",
+  "greetingUser": "مرحباً، {{name}}. أنا Kernel.",
+  "tagline": "اسألني أي شيء. سأقوم بالباقي.",
+  "placeholder": "ما الذي تعمل عليه؟"
 }

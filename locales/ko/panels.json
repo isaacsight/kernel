@@ -7,10 +7,27 @@
     "addGoal": "목표 추가",
     "completed": "완료됨 ({{count}})",
     "target": "목표일: {{date}}",
-    "priority": { "low": "낮음", "medium": "보통", "high": "높음" },
-    "frequency": { "daily": "매일 체크인", "weekly": "매주", "biweekly": "격주", "monthly": "매월" },
-    "errors": { "addFailed": "목표 추가에 실패했습니다", "updateFailed": "마일스톤 업데이트에 실패했습니다", "completeFailed": "목표 완료에 실패했습니다", "deleteFailed": "목표 삭제에 실패했습니다" },
-    "deleteConfirm": "이 목표를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+    "priority": {
+      "low": "낮음",
+      "medium": "보통",
+      "high": "높음"
+    },
+    "frequency": {
+      "daily": "매일 체크인",
+      "weekly": "매주",
+      "biweekly": "격주",
+      "monthly": "매월"
+    },
+    "errors": {
+      "addFailed": "목표 추가에 실패했습니다",
+      "updateFailed": "마일스톤 업데이트에 실패했습니다",
+      "completeFailed": "목표 완료에 실패했습니다",
+      "deleteFailed": "목표 삭제에 실패했습니다"
+    },
+    "deleteConfirm": "이 목표를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "loading": "목표 불러중...",
+    "titlePlaceholder": "무엇을 향해 노력하고 있나요?",
+    "descPlaceholder": "자세한 내용을 추가해 주세요 (선택 사항)..."
   },
   "workflows": {
     "title": "워크플로",
@@ -21,7 +38,10 @@
     "createWorkflow": "워크플로 만들기",
     "runCount_one": "{{count}}회 실행됨",
     "runCount_other": "{{count}}회 실행됨",
-    "errors": { "saveFailed": "워크플로 저장에 실패했습니다", "deleteFailed": "워크플로 삭제에 실패했습니다" },
+    "errors": {
+      "saveFailed": "워크플로 저장에 실패했습니다",
+      "deleteFailed": "워크플로 삭제에 실패했습니다"
+    },
     "deleteConfirm": "이 워크플로를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "설정 후 잊으세요 — Kernel이 일정에 맞춰 작업을 실행합니다.",
     "createTask": "작업 만들기",
     "schedule": "예약",
-    "taskTypes": { "reminder": "리마인더", "workflow": "워크플로 실행", "briefing": "일일 브리핑", "goalCheckin": "목표 체크인" },
-    "presets": { "daily": "매일", "weekdays": "평일", "weekly": "매주 (월요일)", "once": "1회" },
-    "channels": { "inApp": "앱 내", "email": "이메일", "discord": "Discord" },
-    "errors": { "createFailed": "예약된 작업 생성에 실패했습니다", "updateFailed": "작업 업데이트에 실패했습니다", "deleteFailed": "작업 삭제에 실패했습니다" },
+    "taskTypes": {
+      "reminder": "리마인더",
+      "workflow": "워크플로 실행",
+      "briefing": "일일 브리핑",
+      "goalCheckin": "목표 체크인"
+    },
+    "presets": {
+      "daily": "매일",
+      "weekdays": "평일",
+      "weekly": "매주 (월요일)",
+      "once": "1회"
+    },
+    "channels": {
+      "inApp": "앱 내",
+      "email": "이메일",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "예약된 작업 생성에 실패했습니다",
+      "updateFailed": "작업 업데이트에 실패했습니다",
+      "deleteFailed": "작업 삭제에 실패했습니다"
+    },
     "deleteConfirm": "이 예약된 작업을 삭제하시겠습니까?"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "관심사와 최근 활동을 기반으로 새 브리핑 생성",
     "generating": "생성 중...",
     "newBriefing": "새 브리핑",
-    "phases": { "planning": "계획 중", "researching": "조사 중", "writing": "작성 중" },
+    "phases": {
+      "planning": "계획 중",
+      "researching": "조사 중",
+      "writing": "작성 중"
+    },
     "loading": "브리핑 로딩 중...",
     "emptyTitle": "일일 브리핑",
     "emptyDesc": "관심사와 목표에 맞춘 개인화된 뉴스 및 인사이트 요약을 받아보세요.",
@@ -56,8 +98,13 @@
     "readFull": "전체 브리핑 읽기",
     "goDeeper": "채팅에서 더 깊이 탐구",
     "saveAsGoal": "핵심 내용을 목표로 저장",
-    "errors": { "generateFailed": "브리핑 생성에 실패했습니다" },
-    "toast": { "generated": "브리핑이 생성되었습니다", "removed": "브리핑이 삭제되었습니다" }
+    "errors": {
+      "generateFailed": "브리핑 생성에 실패했습니다"
+    },
+    "toast": {
+      "generated": "브리핑이 생성되었습니다",
+      "removed": "브리핑이 삭제되었습니다"
+    }
   },
   "stats": {
     "title": "내 통계",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}}개 연결",
     "confident": "{{value}}% 확신도",
     "mentioned": "{{count}}회 언급",
-    "types": { "person": "사람", "company": "회사", "project": "프로젝트", "concept": "개념", "preference": "선호", "location": "장소" }
+    "types": {
+      "person": "사람",
+      "company": "회사",
+      "project": "프로젝트",
+      "concept": "개념",
+      "preference": "선호",
+      "location": "장소"
+    }
   },
   "insights": {
     "title": "인사이트",
@@ -143,7 +197,40 @@
     "days30": "30일",
     "createLink": "공유 링크 만들기",
     "creating": "생성 중...",
-    "errors": { "createFailed": "공유 링크 생성에 실패했습니다", "revokeFailed": "링크 철회에 실패했습니다" },
-    "toast": { "revoked": "공유 링크가 철회되었습니다" }
+    "errors": {
+      "createFailed": "공유 링크 생성에 실패했습니다",
+      "revokeFailed": "링크 철회에 실패했습니다"
+    },
+    "toast": {
+      "revoked": "공유 링크가 철회되었습니다"
+    },
+    "shareableLink": "공유 가능한 링크",
+    "copyLink": "링크 복사",
+    "copied": "복사됨",
+    "copiedAnnounce": "링크가 클립보드에 복사되었습니다",
+    "shareVia": "다음으로 공유...",
+    "limitReached": "오늘 공유 가능한 링크 한도가 {{limit}}개에 도달했습니다. 더 많은 공유를 위해 Pro로 업그레이드하세요.",
+    "limitHint": "{{used}}/{{limit}} 링크가 오늘 사용되었습니다",
+    "dailyCount": "{{used}}/{{limit}} 무료 공유가 오늘 사용되었습니다"
+  },
+  "mirror": {
+    "title": "거울",
+    "emptyTitle": "거울이 아직 만들어지고 있습니다.",
+    "emptyDesc": "계속 말씀해 주세요 — Kernel의 에이전트들이 당신을 다양한 각도에서 이해하도록 배우고 있습니다.",
+    "convergenceTitle": "거울이 보는 것",
+    "convergenceDesc": "여러 에이전트들이 의견을 교환할 때만 나타나는 통찰력입니다.",
+    "facetsTitle": "에이전트 관점",
+    "facetsDesc": "각 에이전트는 당신의 다양한 측면을 관찰합니다.",
+    "observations": "관찰",
+    "patterns": "패턴",
+    "convergenceCount": "{{count}}번 융합됨",
+    "dimensions": {
+      "relationship": "관계",
+      "curiosity": "호기심",
+      "craft": "기술",
+      "voice": "목소리",
+      "judgment": "판단",
+      "arc": "궤적"
+    }
   }
 }

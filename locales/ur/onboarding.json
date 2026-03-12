@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "جاری رکھیں",
-  "skipIntro": "تعارف چھوڑ دیں"
+  "skipIntro": "تعارف چھوڑ دیں",
+  "greeting": "ہیلو۔ میں کرنل ہوں۔",
+  "greetingUser": "ہیلو، {{name}}۔ میں کرنل ہوں۔",
+  "tagline": "مجھے کچھ بھی پوچھیں۔ میں باقی سب دیکھ بھال کروں گا۔",
+  "placeholder": "آپ کیا کر رہے ہیں؟"
 }

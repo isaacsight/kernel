@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "המשך",
-  "skipIntro": "דלג על ההקדמה"
+  "skipIntro": "דלג על ההקדמה",
+  "greeting": "היי. אני קרנל.",
+  "greetingUser": "היי, {{name}}. אני קרנל.",
+  "tagline": "שאלי אותי כל דבר. אני אדאג לשאר.",
+  "placeholder": "מה אתה עובד עליו?"
 }

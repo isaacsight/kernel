@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "जारी रखें",
-  "skipIntro": "परिचय छोड़ें"
+  "skipIntro": "परिचय छोड़ें",
+  "greeting": "नमस्ते। मैं Kernel हूँ।",
+  "greetingUser": "नमस्ते, {{name}}। मैं Kernel हूँ।",
+  "tagline": "मुझसे कुछ भी पूछो। मैं बाकी सब कर दूँगा।",
+  "placeholder": "आप क्या कर रहे हैं?"
 }

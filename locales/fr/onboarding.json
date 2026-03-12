@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Continuer",
-  "skipIntro": "Passer l'introduction"
+  "skipIntro": "Passer l'introduction",
+  "greeting": "Salut. Je suis Kernel.",
+  "greetingUser": "Salut, {{name}}. Je suis Kernel.",
+  "tagline": "Posez-moi n'importe quelle question. Je m'occupe du reste.",
+  "placeholder": "Sur quoi travaillez-vous ?"
 }

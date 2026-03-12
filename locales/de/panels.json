@@ -24,7 +24,10 @@
       "completeFailed": "Ziel konnte nicht abgeschlossen werden",
       "deleteFailed": "Ziel konnte nicht gelöscht werden"
     },
-    "deleteConfirm": "Dieses Ziel löschen? Dies kann nicht rückgängig gemacht werden."
+    "deleteConfirm": "Dieses Ziel löschen? Dies kann nicht rückgängig gemacht werden.",
+    "loading": "Ziele werden geladen...",
+    "titlePlaceholder": "Was möchtest du erreichen?",
+    "descPlaceholder": "Füge Details hinzu (optional)..."
   },
   "workflows": {
     "title": "Arbeitsabläufe",
@@ -200,6 +203,34 @@
     },
     "toast": {
       "revoked": "Teilen-Link widerrufen"
+    },
+    "shareableLink": "Teilbarer Link",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert",
+    "copiedAnnounce": "Link in die Zwischenablage kopiert",
+    "shareVia": "Teilen über...",
+    "limitReached": "Du hast dein tägliches Limit von {{limit}} geteilten Links erreicht. Upgrade auf Pro für mehr Möglichkeiten.",
+    "limitHint": "{{used}}/{{limit}} Links heute verwendet",
+    "dailyCount": "{{used}}/{{limit}} kostenlose Shares heute verwendet"
+  },
+  "mirror": {
+    "title": "Der Spiegel",
+    "emptyTitle": "Der Spiegel formiert sich noch.",
+    "emptyDesc": "Sprich weiter – Kernels Agenten lernen, dich aus verschiedenen Perspektiven zu verstehen.",
+    "convergenceTitle": "Was der Spiegel sieht",
+    "convergenceDesc": "Einblicke, die nur entstehen, wenn mehrere Agenten ihre Notizen vergleichen.",
+    "facetsTitle": "Agentenperspektiven",
+    "facetsDesc": "Jeder Agent beobachtet eine andere Dimension Ihrer Person.",
+    "observations": "Beobachtungen",
+    "patterns": "Muster",
+    "convergenceCount": "Abgestimmt {{count}} mal",
+    "dimensions": {
+      "relationship": "Beziehung",
+      "curiosity": "Neugier",
+      "craft": "Handwerk",
+      "voice": "Stimme",
+      "judgment": "Urteilsvermögen",
+      "arc": "Bogen"
     }
   }
 }

@@ -1,0 +1,124 @@
+{
+  "title": "Accountinstellingen",
+  "profile": {
+    "heading": "Profiel",
+    "displayName": "Weergavenaam",
+    "displayNamePlaceholder": "Uw naam",
+    "username": "Gebruikersnaam",
+    "usernamePlaceholder": "@gebruikersnaam",
+    "avatar": "Profiel foto",
+    "avatarChange": "Wijzigen",
+    "save": "Profiel opslaan",
+    "saved": "Profiel opgeslagen",
+    "resetProfile": "Profiel resetten",
+    "profileReset": "Profiel terugzetten naar standaardwaarden",
+    "usernameTaken": "Deze gebruikersnaam is al in gebruik",
+    "displayNameTaken": "Deze weergavenaam is al in gebruik",
+    "available": "Beschikbaar"
+  },
+  "security": {
+    "heading": "Wijzig inloggegevens",
+    "credentialsHeading": "E-mail & wachtwoord",
+    "verifyIdentity": "Verifieer om wijzigingen aan te brengen",
+    "verifyHint": "Er wordt een verificatiecode naar je e-mail gestuurd voordat je inloggegevens wijzigt",
+    "sendCode": "Verzend verificatiecode",
+    "codePlaceholder": "Voer 6-cijferige code in",
+    "codeRequired": "Voer de verificatiecode in die je per e-mail hebt ontvangen",
+    "verificationRequired": "Verzend eerst een verificatiecode",
+    "codeSent": "Code verzonden — bekijk je e-mail",
+    "verify": "Verifieer code",
+    "verified": "Identiteit geverifieerd — je kunt nu wijzigingen aanbrengen",
+    "resendCode": "Verzend code opnieuw",
+    "resendIn": "Opnieuw verzenden in {{seconds}}s",
+    "changeEmail": "E-mail wijzigen",
+    "emailPlaceholder": "Nieuw e-mailadres",
+    "emailSubmit": "E-mail bijwerken",
+    "emailConfirmationSent": "Bevestigingsmail verstuurd naar je nieuwe adres",
+    "changePassword": "Wachtwoord wijzigen",
+    "setPassword": "Stel een wachtwoord in",
+    "newPasswordPlaceholder": "Nieuw wachtwoord",
+    "confirmPasswordPlaceholder": "Wachtwoord bevestigen",
+    "passwordSubmit": "Wachtwoord bijwerken",
+    "passwordChanged": "Wachtwoord bijgewerkt",
+    "tooShort": "Wachtwoord moet minimaal 8 tekens bevatten",
+    "mismatch": "Wachtwoorden komen niet overeen",
+    "strength": {
+      "weak": "Zwak",
+      "fair": "Redelijk",
+      "strong": "Sterk"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Gekoppelde accounts",
+    "connected": "Verbonden",
+    "connect": "Verbinden",
+    "disconnect": "Verwijderen",
+    "cannotUnlinkLast": "Je kunt je enige inlogmethode niet verwijderen",
+    "unlinked": "Account verwijderd",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Abonnement",
+    "free": "Gratis abonnement",
+    "pro": "Pro abonnement",
+    "max": "Max abonnement",
+    "admin": "Admin",
+    "upgrade": "Upgrade naar Pro",
+    "upgradeMonthly": "Pro — $29/maand",
+    "upgradeAnnual": "Pro — €270/jr",
+    "upgradeMax": "Max — €49/maand",
+    "upgradeMaxAnnual": "Max — €490/jr",
+    "manage": "Abonnement beheren"
+  },
+  "exportData": {
+    "heading": "Data exporteren",
+    "description": "Download een volledige kopie van al je data in JSON-formaat.",
+    "button": "Mijn data exporteren",
+    "success": "Export succesvol gedownload",
+    "rateLimited": "Export weer beschikbaar over {{hours}} uur"
+  },
+  "resetData": {
+    "heading": "Data resetten",
+    "description": "Selectief je data wissen zonder je account te verwijderen. Dit kan niet ongedaan gemaakt worden.",
+    "scopes": {
+      "conversations": "Conversaties",
+      "memory": "Geheugen",
+      "knowledge": "Kennisgrafiek",
+      "goals": "Doelen",
+      "preferences": "Voorkeuren",
+      "all": "Alles"
+    },
+    "scopeDesc": {
+      "conversations": "Verwijder alle gesprekken en berichten",
+      "memory": "Maak geleerde profielen en procedures leeg",
+      "knowledge": "Verwijder alle entiteiten en relaties",
+      "goals": "Verwijder alle doelen en mijlpalen",
+      "preferences": "Reset briefings en metadata",
+      "all": "Maak alle gegevens leeg en begin opnieuw"
+    },
+    "confirm": {
+      "conversations": "Dit verwijdert permanent al je gesprekken en berichten. Doorgaan?",
+      "memory": "Dit wist alles wat Kernel over je geleerd heeft. Doorgaan?",
+      "knowledge": "Dit verwijdert alle kennisgrafiek-entiteiten en hun verbindingen. Doorgaan?",
+      "goals": "Dit verwijdert al je doelen en voortgangsregistratie. Doorgaan?",
+      "preferences": "Dit reset je briefings en metadata-voorkeuren. Doorgaan?",
+      "all": "Dit wist ALLE je gegevens - gesprekken, geheugen, kennis, doelen en voorkeuren. Je account en abonnement blijven behouden. Doorgaan?"
+    },
+    "confirmBtn": "Ja, reset",
+    "cancel": "Annuleren",
+    "success": "{{scope}} succesvol gewist",
+    "done": "Datareset voltooid"
+  },
+  "danger": {
+    "heading": "Account",
+    "signOut": "Uitloggen",
+    "signOutDesc": "Log uit van uw account op dit apparaat",
+    "deleteAccount": "Account verwijderen",
+    "deleteDesc": "Verwijder permanent uw account en alle gegevens"
+  }
+}
