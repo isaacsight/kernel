@@ -38,16 +38,7 @@
     "system": "Systeem",
     "communications": "Communicatie",
     "adaptiveSystem": "Adaptief systeem",
-    "usage": "Gebruik",
-    "mirror": "De Spiegel",
-    "projectFiles": "Projectbestanden",
-    "imageGallery": "Afbeeldingen galerij",
-    "knowledgeBase": "Kennisbank",
-    "social": "Sociale media",
-    "platformEngine": "Content pipeline",
-    "explore": "Ontdekken",
-    "accountSettings": "Accountinstellingen",
-    "notifProactive": "Proactieve inzichten"
+    "usage": "Gebruik"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -71,11 +62,7 @@
     "button": "Ga Pro — $29/mnd",
     "annualButton": "$290/jaar — bespaar $58",
     "buttonLoading": "Checkout openen...",
-    "maybeLater": "Misschien later",
-    "learnedTitle": "Wat Kernel over jou heeft geleerd",
-    "learnedCta": "Kom morgen terug en ga verder met het gesprek.",
-    "maxButton": "Ga Max — €49/maand",
-    "maxAnnualButton": "€490/jaar — bespaar €98"
+    "maybeLater": "Misschien later"
   },
   "deleteConfirm": {
     "title": "Je account verwijderen?",
@@ -98,95 +85,5 @@
     "cancel": "Annuleren"
   },
   "messagesRemaining": "{{count}} berichten resterend",
-  "lastFreeMessage": "Laatste gratis bericht",
-  "menuSection": {
-    "ai": "AI & Agents",
-    "content": "Content & Kennis",
-    "insights": "Inzichten & Doelen",
-    "system": "Instellingen & Systeem"
-  },
-  "usage": {
-    "title": "Gebruik",
-    "loading": "Gebruikgegevens aan het laden...",
-    "retry": "Opnieuw proberen",
-    "last30days": "Laatste 30 dagen",
-    "onPace": "Op schema voor {{projected}} van {{limit}} berichten",
-    "overLimit": "Op schema om je {{limit}} berichtenlimiet te overschrijden",
-    "byFeature": "Per functie",
-    "dailyTrend": "30-daagse trend",
-    "recommendation": "Aanbeveling",
-    "upgrade": "Upgraden"
-  },
-  "entity": {
-    "evolved": "Geëvolueerd naar {{tier}}",
-    "streak": "Dag {{count}}",
-    "goalCheckIn": "Check-in: {{title}}",
-    "mood": {
-      "happy": "blij",
-      "excited": "enthousiast",
-      "content": "tevreden",
-      "sad": "verdrietig",
-      "sleepy": "slaperig",
-      "lonely": "eenzaam",
-      "bored": "verveeld"
-    }
-  },
-  "entityInfo": {
-    "mood": "Stemming",
-    "streak": "Streak",
-    "days": "dagen",
-    "focus": "Focus"
-  },
-  "nudge": {
-    "insights": "Je hebt inmiddels een paar gesprekken gevoerd - Kernel vindt patronen in waar je over praat.",
-    "knowledge": "Je kennisgrafiek groeit - bekijk de verbindingen die Kernel in kaart heeft gebracht vanuit je gesprekken.",
-    "stats": "Je hebt een doel bereikt - bekijk je statistieken om te zien hoe je gebruik evolueert.",
-    "workflows": "Je gebruikt Kernel regelmatig - workflows kunnen je terugkerende taken automatiseren.",
-    "showMe": "Laat me zien",
-    "notNow": "Niet nu"
-  },
-  "valuePreview": {
-    "message": "Pro-leden ontvangen dagelijkse briefings, diepgaand onderzoek en persistent geheugen.",
-    "gotIt": "Begrepen"
-  },
-  "messagesLeft": "{{count}} berichten over",
-  "agentWhy": {
-    "label": "Waarom?"
-  },
-  "thinking": {
-    "label": "Uitgebreid nadenken",
-    "duration": "Nagedacht over {{seconds}}s",
-    "streaming": "Denkt na...",
-    "toggle": "Schakel uitgebreid nadenken in",
-    "tooltip": "Denk dieper na voordat je antwoordt"
-  },
-  "explain": {
-    "toggle": "Schakel uitlegmodus in",
-    "tooltip": "Uitlegmodus — stapsgewijze code"
-  },
-  "document": {
-    "active": "Analyseert: {{name}}",
-    "clear": "Document wissen",
-    "contextHint": "Stel vervolgvragen over dit document"
-  },
-  "proactive": {
-    "noticed": "Kernel heeft iets opgemerkt...",
-    "notification": "Kernel heeft een observatie voor je",
-    "explore": "Laten we dit verkennen"
-  },
-  "tour": {
-    "entity": "Dit is je Kernel entiteit. Deze evolueert naarmate je chat — tik erop om de stemming, reeks en groeilaag te zien.",
-    "moreMenu": "Tik hier voor alle functies van Kernel: agents, kennisbank, inzichten en meer.",
-    "inputBar": "Start hier een gesprek. Voeg bestanden toe, schakel uitlegmodus in of zeg gewoon hallo.",
-    "gotIt": "Begrepen",
-    "skip": "Rondleiding overslaan"
-  },
-  "workflow": {
-    "planning": "Stappen plannen...",
-    "executing": "Uitvoeren: {{step}}",
-    "complete": "Workflow voltooid",
-    "failed": "Stap mislukt: {{step}}",
-    "cancel": "Workflow annuleren",
-    "cancelled": "Workflow geannuleerd"
-  }
+  "lastFreeMessage": "Laatste gratis bericht"
 }

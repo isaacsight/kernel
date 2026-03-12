@@ -38,16 +38,7 @@
     "system": "System",
     "communications": "Kommunikation",
     "adaptiveSystem": "Adaptives System",
-    "usage": "Nutzung",
-    "mirror": "Der Spiegel",
-    "projectFiles": "Projektdateien",
-    "imageGallery": "Bildergalerie",
-    "knowledgeBase": "Wissensdatenbank",
-    "social": "Soziale Medien",
-    "platformEngine": "Inhalts-Pipeline",
-    "explore": "Erkunden",
-    "accountSettings": "Kontoeinstellungen",
-    "notifProactive": "Proaktive Erkenntnisse"
+    "usage": "Nutzung"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -71,11 +62,7 @@
     "button": "Pro werden — $29/Mo.",
     "annualButton": "$290/Jahr — $58 sparen",
     "buttonLoading": "Kasse wird geöffnet...",
-    "maybeLater": "Vielleicht später",
-    "learnedTitle": "Was Kernel über dich gelernt hat",
-    "learnedCta": "Komm morgen zurück und setze das Gespräch fort.",
-    "maxButton": "Zu Max — 49 $/Monat",
-    "maxAnnualButton": "490 $/Jahr — spare 98 $"
+    "maybeLater": "Vielleicht später"
   },
   "deleteConfirm": {
     "title": "Konto löschen?",
@@ -98,95 +85,5 @@
     "cancel": "Abbrechen"
   },
   "messagesRemaining": "{{count}} Nachrichten übrig",
-  "lastFreeMessage": "Letzte kostenlose Nachricht",
-  "menuSection": {
-    "ai": "KI & Agenten",
-    "content": "Inhalte & Wissen",
-    "insights": "Erkenntnisse & Ziele",
-    "system": "Einstellungen & System"
-  },
-  "usage": {
-    "title": "Verwendung",
-    "loading": "Lade Nutzungsdaten...",
-    "retry": "Wiederholen",
-    "last30days": "Letzte 30 Tage",
-    "onPace": "Auf dem Weg zu {{projected}} von {{limit}} Nachrichten",
-    "overLimit": "Auf dem Weg, Ihre {{limit}} Nachrichten-Obergrenze zu überschreiten",
-    "byFeature": "Nach Funktion",
-    "dailyTrend": "30-Tage-Trend",
-    "recommendation": "Empfehlung",
-    "upgrade": "Verbessern"
-  },
-  "entity": {
-    "evolved": "Hat sich zu {{tier}} entwickelt",
-    "streak": "Tag {{count}}",
-    "goalCheckIn": "Check-in: {{title}}",
-    "mood": {
-      "happy": "glücklich",
-      "excited": "aufgeregt",
-      "content": "zufrieden",
-      "sad": "traurig",
-      "sleepy": "schläfrig",
-      "lonely": "einsam",
-      "bored": "langweilig"
-    }
-  },
-  "entityInfo": {
-    "mood": "Stimmung",
-    "streak": "Serie",
-    "days": "Tage",
-    "focus": "Fokus"
-  },
-  "nudge": {
-    "insights": "Du hattest schon ein paar Gespräche – Kernel findet Muster in dem, worüber du sprichst.",
-    "knowledge": "Dein Wissensgraph wächst – sieh dir die Verbindungen an, die Kernel aus deinen Gesprächen abgeleitet hat.",
-    "stats": "Du hast ein Ziel erreicht – schau dir deine Statistiken an, um zu sehen, wie sich deine Nutzung entwickelt.",
-    "workflows": "Du benutzt Kernel regelmäßig – Workflows können deine wiederkehrenden Aufgaben automatisieren.",
-    "showMe": "Zeig mir",
-    "notNow": "Später"
-  },
-  "valuePreview": {
-    "message": "Pro-Mitglieder erhalten tägliche Briefings, tiefgehende Recherchen und ausdauernden Speicher.",
-    "gotIt": "Verstanden"
-  },
-  "messagesLeft": "{{count}} Nachrichten übrig",
-  "agentWhy": {
-    "label": "Warum?"
-  },
-  "thinking": {
-    "label": "Erweitertes Nachdenken",
-    "duration": "Nachgedacht für {{seconds}}s",
-    "streaming": "Denkt nach...",
-    "toggle": "Erweitertes Nachdenken aktivieren/deaktivieren",
-    "tooltip": "Denke tiefer, bevor du antwortest"
-  },
-  "explain": {
-    "toggle": "Erläuterungsmodus aktivieren/deaktivieren",
-    "tooltip": "Erläuterungsmodus — schrittweise Code-Erklärung"
-  },
-  "document": {
-    "active": "Analysiert: {{name}}",
-    "clear": "Dokument löschen",
-    "contextHint": "Stelle Folgefragen zu diesem Dokument"
-  },
-  "proactive": {
-    "noticed": "Kernel hat bemerkt...",
-    "notification": "Kernel hat eine Beobachtung für dich",
-    "explore": "Lass uns das genauer ansehen"
-  },
-  "tour": {
-    "entity": "Dies ist deine Kernel-Entität. Sie entwickelt sich weiter, während du chattest – tippe sie an, um ihre Stimmung, Streak und Wachstumsebene zu sehen.",
-    "moreMenu": "Tippe hier für alle Funktionen von Kernel: Agenten, Wissensdatenbank, Insights und mehr.",
-    "inputBar": "Starte hier eine Konversation. Füge Dateien hinzu, aktiviere den Erklärungsmodus oder sage einfach Hallo.",
-    "gotIt": "Verstanden",
-    "skip": "Tour überspringen"
-  },
-  "workflow": {
-    "planning": "Plane Schritte...",
-    "executing": "Ausführen: {{step}}",
-    "complete": "Workflow abgeschlossen",
-    "failed": "Schritt fehlgeschlagen: {{step}}",
-    "cancel": "Workflow abbrechen",
-    "cancelled": "Workflow abgebrochen"
-  }
+  "lastFreeMessage": "Letzte kostenlose Nachricht"
 }
