@@ -1255,7 +1255,7 @@ function EngineChat() {
                   <p className="ka-upgrade-learned-cta">{t('upgrade.learnedCta')}</p>
                 </div>
               )}
-              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>Come back tomorrow</button>
+              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>You've used your 10 messages today — come back tomorrow!</button>
             </motion.div>
           </motion.div>
         )}

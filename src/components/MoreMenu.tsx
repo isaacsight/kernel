@@ -1,6 +1,6 @@
 import { motion, useDragControls } from 'motion/react'
 import { SPRING } from '../constants/motion'
-import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconChart } from './KernelIcons'
+import { IconSettings, IconLogOut, IconGlobe, IconSun, IconMoon, IconBookOpen, IconChart, IconBrain } from './KernelIcons'
 import { useTranslation } from 'react-i18next'
 import type { ThemeMode } from '../hooks/useTheme'
 
@@ -34,6 +34,7 @@ const LANGUAGES = [
 export type MoreAction =
   | 'account-settings'
   | 'usage'
+  | 'memory'
   | 'upgrade'
   | 'manage-subscription'
   | 'sign-out'
@@ -124,6 +125,10 @@ export function MoreMenu({ isOpen, onClose, onSelect, theme, onSetTheme }: MoreM
 
           <div className="ka-more-menu-divider" />
           <div className="ka-more-menu-label">{t('account', { ns: 'common' })}</div>
+          <button className="ka-more-menu-item" onClick={() => { onSelect('memory'); onClose() }}>
+            <IconBrain size={18} />
+            <span>{t('menu.memory', 'Memory')}</span>
+          </button>
           <button className="ka-more-menu-item" onClick={() => { onSelect('usage'); onClose() }}>
             <IconChart size={18} />
             <span>{t('menu.usage', 'Usage')}</span>

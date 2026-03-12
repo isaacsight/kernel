@@ -14,11 +14,26 @@ const config: CapacitorConfig = {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
     },
+    StatusBar: {
+      style: 'DARK',
+      backgroundColor: '#FAF9F6',
+    },
+    SplashScreen: {
+      launchAutoHide: true,
+      launchShowDuration: 2000,
+      backgroundColor: '#FAF9F6',
+      showSpinner: false,
+    },
+    Keyboard: {
+      resize: 'body',
+      resizeOnFullScreen: true,
+    },
   },
   ios: {
     scheme: 'Kernel',
     contentInset: 'automatic',
     backgroundColor: '#FAF9F6',
+    preferredContentMode: 'mobile',
   },
   android: {
     backgroundColor: '#FAF9F6',

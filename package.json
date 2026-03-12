@@ -18,7 +18,15 @@
         "cap:sync": "npx cap sync",
         "cap:ios": "npm run build && npx cap sync ios && npx cap open ios",
         "cap:android": "npm run build && npx cap sync android && npx cap open android",
-        "inbox": "npx tsx tools/inbox-sync.ts"
+        "inbox": "npx tsx tools/inbox-sync.ts",
+        "daemon": "npx tsx tools/openclaw-daemon.ts",
+        "daemon:stats": "npx tsx tools/openclaw-stats.ts",
+        "daemon:log": "tail -f tools/daemon-reports/daemon.log",
+        "daemon:start": "launchctl load ~/Library/LaunchAgents/com.kernel.openclaw-daemon.plist",
+        "daemon:stop": "launchctl unload ~/Library/LaunchAgents/com.kernel.openclaw-daemon.plist",
+        "search": "npx tsx tools/semantic-search.ts",
+        "icons": "npx tsx tools/generate-app-icons.ts",
+        "splash": "npx tsx tools/generate-splash.ts"
     },
     "homepage": "https://kernel.chat",
     "dependencies": {

@@ -33,7 +33,8 @@
     "voiceInput": "Spracheingabe",
     "sendMessage": "Send message",
     "stopGenerating": "Generierung stoppen",
-    "shareableLink": "Teilbarer Konversationslink"
+    "shareableLink": "Teilbarer Konversationslink",
+    "toggleTheme": "Thema umschalten"
   },
   "time": {
     "overdue": "überfällig",
@@ -50,12 +51,65 @@
     "yesterday": "Gestern",
     "thisWeek": "Diese Woche",
     "thisMonth": "Diesen Monat",
-    "earlier": "Früher"
+    "earlier": "Früher",
+    "title": "Gespräche ({{count}})",
+    "searchPlaceholder": "Gespräche durchsuchen...",
+    "newChat": "Neues Gespräch",
+    "searching": "Suchen...",
+    "noMatches": "Keine Ergebnisse gefunden",
+    "noResults": "Keine Ergebnisse",
+    "resultCount": "{{count}} Ergebnisse",
+    "clearSearch": "Suche löschen",
+    "empty": "Noch keine Gespräche",
+    "starred": "Gespeichert",
+    "recents": "Letzte",
+    "yours": "Deine",
+    "folders": "Ordner",
+    "team": "Team",
+    "shared": "Gemeinsam genutzt",
+    "archive": "Archiv",
+    "noArchived": "Keine archivierten Gespräche",
+    "star": "Stern",
+    "unstar": "Stern entfernen",
+    "archiveAction": "Archivieren",
+    "unarchive": "Entarchivieren"
   },
   "language": "Sprache",
   "offline": "Du bist offline. Zwischengespeicherte Unterhaltungen werden angezeigt.",
   "pwa": {
     "installPrompt": "Füge Kernel zu deinem Startbildschirm hinzu für das beste Erlebnis.",
     "install": "Installieren"
+  },
+  "relativeTime": {
+    "justNow": "vor kurzem",
+    "minutesAgo": "{{count}}m",
+    "hoursAgo": "{{count}}h",
+    "daysAgo": "{{count}}d"
+  },
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "download": "Herunterladen",
+  "preview": "Vorschau",
+  "code": "Code",
+  "downloadAllFiles": "Alle {{count}} Dateien herunterladen",
+  "combinedPreview": "Live-Vorschau",
+  "previewTruncated": "Vorschau auf {{lines}} Zeilen gekürzt — zum vollständigen Anzeigen herunterladen",
+  "fullscreen": "Vollbild",
+  "console": "Konsole",
+  "errors": "Fehler",
+  "previewMobile": "Mobile-Vorschau (375px)",
+  "previewTablet": "Tablet-Vorschau (768px)",
+  "previewDesktop": "Desktop-Vorschau (volle Breite)",
+  "previewFailed": "Vorschau konnte keinen sichtbaren Inhalt darstellen",
+  "line": "{{count}} Zeile",
+  "lines": "{{count}} Zeilen",
+  "errorTitle": "Etwas ist schief gelaufen",
+  "errorDefault": "Es ist etwas auf unserer Seite schief gelaufen. Versuchen Sie es noch einmal.",
+  "tryAgain": "Erneut versuchen",
+  "tags": {
+    "title": "Gespräch mit Tags",
+    "addTag": "Tag hinzufügen...",
+    "save": "Speichern",
+    "suggested": "Vorschläge"
   }
 }

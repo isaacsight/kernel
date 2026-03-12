@@ -33,7 +33,10 @@ export function useBilling(
   showToast: (msg: string) => void,
   signOut: () => void,
 ) {
-  const [showUpgradeWall, setShowUpgradeWall] = useState(false)
+  // Upgrade wall disabled — Kernel is free (10 msgs/day). Set to true to re-enable.
+  const UPGRADES_ENABLED = false
+  const [showUpgradeWall, _setShowUpgradeWall] = useState(false)
+  const setShowUpgradeWall = UPGRADES_ENABLED ? _setShowUpgradeWall : () => {}
   const [freeLimitResetsAt, setFreeLimitResetsAt] = useState<string | null>(null)
   const [upgradeLoading, setUpgradeLoading] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)

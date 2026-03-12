@@ -13,9 +13,9 @@ export function PricingPage() {
       </button>
 
       <div className="ka-pricing-hero">
-        <h1>Kernel is free</h1>
+        <h1>Kernel is free to use</h1>
         <p className="ka-pricing-subtitle">
-          10 messages per day. No credit card. No subscriptions.
+          Chat 10 times a day. No credit card. No catch.
         </p>
       </div>
 
@@ -27,24 +27,24 @@ export function PricingPage() {
               <div className="ka-pricing-card-price">
                 $0
               </div>
-              <p className="ka-pricing-card-desc">Everything included</p>
+              <p className="ka-pricing-card-desc">Everything you need to get started</p>
             </div>
             <ul className="ka-pricing-card-features">
-              <li>10 messages per day</li>
-              <li>All specialist agents</li>
-              <li>Web search</li>
-              <li>Memory</li>
-              <li>Conversation history</li>
+              <li>10 messages every day</li>
+              <li>5 expert AI helpers</li>
+              <li>Search the web for answers</li>
+              <li>Remembers who you are</li>
+              <li>All your chats saved</li>
             </ul>
             <a href="#/" className="ka-pricing-card-cta ka-pricing-card-cta--primary">
-              Get started
+              Start chatting for free
             </a>
           </div>
         </div>
       </section>
 
       <div className="ka-pricing-footer">
-        <p>Questions? Email <a href="mailto:hello@kernel.chat">hello@kernel.chat</a></p>
+        <p>Got questions? Send us an email at <a href="mailto:hello@kernel.chat">hello@kernel.chat</a></p>
       </div>
     </div>
   )

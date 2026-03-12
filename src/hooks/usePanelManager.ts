@@ -14,6 +14,7 @@ export function usePanelManager(callbacks: {
   const [showImageGallery, setShowImageGallery] = useState(false)
   const [showAccountSettings, setShowAccountSettings] = useState(false)
   const [showUsageDashboard, setShowUsageDashboard] = useState(false)
+  const [showMemoryPanel, setShowMemoryPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false)
@@ -23,17 +24,19 @@ export function usePanelManager(callbacks: {
     setShowImageGallery(false)
     setShowAccountSettings(false)
     setShowUsageDashboard(false)
+    setShowMemoryPanel(false)
     setActiveTab('home')
     setShowMoreMenu(false)
   }, [])
 
-  type PanelId = 'project' | 'image-gallery' | 'account-settings' | 'usage' | 'settings' | 'drawer'
+  type PanelId = 'project' | 'image-gallery' | 'account-settings' | 'usage' | 'memory' | 'settings' | 'drawer'
 
   const closeOtherPanels = useCallback((except?: string) => {
     if (except !== 'project') setShowProjectPanel(false)
     if (except !== 'image-gallery') setShowImageGallery(false)
     if (except !== 'account-settings') setShowAccountSettings(false)
     if (except !== 'usage') setShowUsageDashboard(false)
+    if (except !== 'memory') setShowMemoryPanel(false)
     if (except !== 'drawer') callbacks.setIsDrawerOpen(false)
     if (except !== 'settings') setShowMoreMenu(false)
   }, [callbacks])
@@ -44,6 +47,7 @@ export function usePanelManager(callbacks: {
       case 'image-gallery': setShowImageGallery(false); break
       case 'account-settings': setShowAccountSettings(false); break
       case 'usage': setShowUsageDashboard(false); break
+      case 'memory': setShowMemoryPanel(false); break
       case 'settings': setShowMoreMenu(false); break
       case 'drawer': callbacks.setIsDrawerOpen(false); break
     }
@@ -89,6 +93,10 @@ export function usePanelManager(callbacks: {
         closeOtherPanels('usage')
         setShowUsageDashboard(true)
         break
+      case 'memory':
+        closeOtherPanels('memory')
+        setShowMemoryPanel(true)
+        break
       case 'upgrade':
         callbacks.handleUpgrade()
         break
@@ -109,6 +117,7 @@ export function usePanelManager(callbacks: {
     showImageGallery, setShowImageGallery,
     showAccountSettings, setShowAccountSettings,
     showUsageDashboard, setShowUsageDashboard,
+    showMemoryPanel, setShowMemoryPanel,
     activeTab, setActiveTab,
     showMoreMenu, setShowMoreMenu,
     headerMenuOpen, setHeaderMenuOpen,

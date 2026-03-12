@@ -33,7 +33,8 @@
     "voiceInput": "Stemmeindtastning",
     "sendMessage": "Send message",
     "stopGenerating": "Stop generering",
-    "shareableLink": "Delbart samtalelink"
+    "shareableLink": "Delbart samtalelink",
+    "toggleTheme": "Skift tema"
   },
   "time": {
     "overdue": "forsinket",
@@ -50,12 +51,65 @@
     "yesterday": "I går",
     "thisWeek": "Denne uge",
     "thisMonth": "Denne måned",
-    "earlier": "Tidligere"
+    "earlier": "Tidligere",
+    "title": "Samtaler ({{count}})",
+    "searchPlaceholder": "Søg i samtaler...",
+    "newChat": "Ny Besked",
+    "searching": "Søger...",
+    "noMatches": "Ingen resultater fundet",
+    "noResults": "Ingen resultater",
+    "resultCount": "{{count}} resultater",
+    "clearSearch": "Ryd søgning",
+    "empty": "Ingen samtaler endnu",
+    "starred": "Stjernemarkerede",
+    "recents": "Nylige",
+    "yours": "Dine",
+    "folders": "Mapper",
+    "team": "Team",
+    "shared": "Delte",
+    "archive": "Arkiv",
+    "noArchived": "Ingen arkiverede samtaler",
+    "star": "Stjerne",
+    "unstar": "Fjern stjerne",
+    "archiveAction": "Arkivér",
+    "unarchive": "Afarkivér"
   },
   "language": "Sprog",
   "offline": "Du er offline. Viser cachede samtaler.",
   "pwa": {
     "installPrompt": "Tilføj Kernel til din startskærm for den bedste oplevelse.",
     "install": "Installér"
+  },
+  "relativeTime": {
+    "justNow": "lige nu",
+    "minutesAgo": "{{count}}m siden",
+    "hoursAgo": "{{count}}t siden",
+    "daysAgo": "{{count}}d siden"
+  },
+  "copy": "Kopiér",
+  "copied": "Kopieret",
+  "download": "Download",
+  "preview": "Vis forhåndsvisning",
+  "code": "Kode",
+  "downloadAllFiles": "Download alle {{count}} filer",
+  "combinedPreview": "Live visning",
+  "previewTruncated": "Visning forkortet til {{lines}} linjer - download for hele filen",
+  "fullscreen": "Fuldt skærmbillede",
+  "console": "Konsol",
+  "errors": "fejl",
+  "previewMobile": "Mobil visning (375px)",
+  "previewTablet": "Tablet visning (768px)",
+  "previewDesktop": "Desktop visning (fuld bredde)",
+  "previewFailed": "Visning kunne ikke gengive synligt indhold",
+  "line": "{{count}} linje",
+  "lines": "{{count}} linjer",
+  "errorTitle": "Der er sket en fejl",
+  "errorDefault": "Der er opstået et problem på vores side. Prøv at opfriske siden.",
+  "tryAgain": "Prøv igen",
+  "tags": {
+    "title": "Tag samtalen",
+    "addTag": "Tilføj tag...",
+    "save": "Gem",
+    "suggested": "Forslag"
   }
 }

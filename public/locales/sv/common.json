@@ -33,7 +33,8 @@
     "voiceInput": "Röstinmatning",
     "sendMessage": "Send message",
     "stopGenerating": "Sluta generera",
-    "shareableLink": "Delbar länk till konversation"
+    "shareableLink": "Delbar länk till konversation",
+    "toggleTheme": "Växla tema"
   },
   "time": {
     "overdue": "försenad",
@@ -50,12 +51,65 @@
     "yesterday": "Igår",
     "thisWeek": "Denna vecka",
     "thisMonth": "Denna månad",
-    "earlier": "Tidigare"
+    "earlier": "Tidigare",
+    "title": "Konversationer ({{count}})",
+    "searchPlaceholder": "Sök i konversationer...",
+    "newChat": "Ny chatt",
+    "searching": "Söker...",
+    "noMatches": "Inga matchningar hittades",
+    "noResults": "Inga resultat",
+    "resultCount": "{{count}} resultat",
+    "clearSearch": "Rensa sökning",
+    "empty": "Inga konversationer ännu",
+    "starred": "Sparade",
+    "recents": "Nyligen",
+    "yours": "Dina",
+    "folders": "Mappar",
+    "team": "Team",
+    "shared": "Delade",
+    "archive": "Arkiv",
+    "noArchived": "Inga arkiverade konversationer",
+    "star": "Stjärna",
+    "unstar": "Ta bort stjärna",
+    "archiveAction": "Arkivera",
+    "unarchive": "Avarkivera"
   },
   "language": "Språk",
   "offline": "Du är offline. Visar cachade konversationer.",
   "pwa": {
     "installPrompt": "Lägg till Kernel på din hemskärm för bästa upplevelse.",
     "install": "Installera"
+  },
+  "relativeTime": {
+    "justNow": "nyss",
+    "minutesAgo": "{{count}}m sedan",
+    "hoursAgo": "{{count}}h sedan",
+    "daysAgo": "{{count}}d sedan"
+  },
+  "copy": "Kopiera",
+  "copied": "Kopierat",
+  "download": "Ladda ner",
+  "preview": "Förhandsvisning",
+  "code": "Kod",
+  "downloadAllFiles": "Ladda ner alla {{count}} filer",
+  "combinedPreview": "Förhandsvisning",
+  "previewTruncated": "Förhandsvisningen är avkortad till {{lines}} rader — ladda ner filen för fullständig visning",
+  "fullscreen": "Helskärm",
+  "console": "Konsol",
+  "errors": "fel",
+  "previewMobile": "Mobilförhandsvisning (375px)",
+  "previewTablet": "Surfplatteförhandsvisning (768px)",
+  "previewDesktop": "Datorförhandsvisning (full bredd)",
+  "previewFailed": "Förhandsvisningen kunde inte rendera synligt innehåll",
+  "line": "{{count}} rad",
+  "lines": "{{count}} rader",
+  "errorTitle": "Något gick fel",
+  "errorDefault": "Något gick sönder på vår sida. Försök att uppdatera.",
+  "tryAgain": "Försök igen",
+  "tags": {
+    "title": "Tagga konversation",
+    "addTag": "Lägg till tag...",
+    "save": "Spara",
+    "suggested": "Förslag"
   }
 }

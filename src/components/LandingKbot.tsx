@@ -62,30 +62,30 @@ export function LandingKbot() {
         <span className="landing-kbot-badge">Open Source</span>
         <h2 className="landing-kbot-title">K:BOT</h2>
         <p className="landing-kbot-subtitle">
-          Your keys. Your data. Your models. An open-source terminal AI agent
-          that connects to any provider — no middleman, no markup.
+          Use your own AI keys. Your data stays yours. A free tool that runs
+          right in your terminal and works with any AI — Claude, GPT, Gemini, and more.
         </p>
 
         <div className="landing-kbot-features">
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">●</span>
-            <span>Bring your own key — Claude, GPT, Gemini, Grok, DeepSeek, Mistral &amp; more</span>
+            <span>Use your own AI key — works with Claude, GPT, Gemini, Grok, DeepSeek, and more</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">◆</span>
-            <span>60+ tools — files, git, web search, GitHub, Docker sandboxes</span>
+            <span>60+ built-in tools — manage files, search the web, use GitHub, and more</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">▸</span>
-            <span>17 specialist agents with auto-routing</span>
+            <span>17 smart helpers that pick the right one for your question</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">⚡</span>
-            <span>Run local models with Ollama — fully offline, zero cost</span>
+            <span>Run AI on your own computer — works offline, totally free</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">✎</span>
-            <span>Learning engine — caches patterns, reduces token usage over time</span>
+            <span>Gets faster over time — learns your patterns so it uses less power</span>
           </div>
         </div>
       </motion.div>

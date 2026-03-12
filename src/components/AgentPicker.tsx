@@ -16,7 +16,8 @@ export function AgentPicker({ selectedAgent, onSelect, disabled }: AgentPickerPr
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      const target = e.target as Node | null
+      if (ref.current && target && !ref.current.contains(target)) setOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)

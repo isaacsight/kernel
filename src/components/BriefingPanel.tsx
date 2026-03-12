@@ -81,6 +81,13 @@ function isBriefingFailed(b: Briefing): boolean {
   return b.content.startsWith('Unable to generate briefing')
 }
 
+function getGreeting(): string {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning! Here\'s what\'s happening'
+  if (hour < 17) return 'Good afternoon! Here\'s your update'
+  return 'Good evening! Here\'s what you missed'
+}
+
 export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast, onGoDeeper, onAddGoal, isPro = true, historyDays, onUpgrade }: BriefingPanelProps) {
   const { t } = useTranslation('panels')
   const [briefings, setBriefings] = useState<Briefing[]>([])
@@ -167,7 +174,7 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
       <div className="ka-panel-header">
         <h2 className="ka-panel-title">
           <IconNewspaper size={18} aria-hidden="true" />
-          {t('briefings.title')}
+          {getGreeting()}
         </h2>
         <div className="ka-brief-header-actions">
           <button
@@ -211,8 +218,8 @@ export function BriefingPanel({ userId, userMemory, kgEntities, onClose, onToast
       ) : briefings.length === 0 && !generating ? (
         <div className="ka-brief-empty">
           <img className="ka-empty-state-illustration" src={`${import.meta.env.BASE_URL}concepts/empty-briefings.svg`} alt="" aria-hidden="true" />
-          <h3 className="ka-brief-empty-title">{t('briefings.emptyTitle')}</h3>
-          <p>{t('briefings.emptyDesc')}</p>
+          <h3 className="ka-brief-empty-title">No briefing yet</h3>
+          <p>Keep chatting and I'll have something for you tomorrow morning!</p>
           <button className="ka-brief-empty-cta" onClick={handleGenerate}>
             {t('briefings.generateFirst')}
           </button>

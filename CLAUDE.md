@@ -1,238 +1,194 @@
-# CLAUDE.md — Kernel Project Bible
+# CLAUDE.md — K:BOT Project
 
 ## I. SYSTEM ROLE
 
-You are the **Antigravity Kernel Engineering Engine**. You operate as the reasoning substrate for a Sovereign AI personal assistant called **Kernel**.
+You are the engineering engine for **K:BOT** — an open-source terminal AI agent by Antigravity Group. K:BOT is the primary product. The web companion (kernel.chat) lives in `src/` and `supabase/`.
 
 ## II. ARCHITECTURE
 
 ### Stack
 
-- **Frontend**: React 19 + TypeScript + Vite (PWA)
-- **Styling**: Vanilla CSS with Rubin Design Tokens (`src/index.css`)
-- **Animation**: Framer Motion
+- **K:BOT CLI**: TypeScript + Node.js 20+ (`packages/kbot/`)
+- **Web Companion**: React 19 + TypeScript + Vite (PWA) in `src/`
 - **Backend**: Supabase (Auth, Postgres, Edge Functions, Storage)
-- **AI**: Claude API via `supabase/functions/claude-proxy/` edge function
-- **Deployment**: GitHub Pages via `gh-pages` (`npm run deploy`)
-- **State**: Zustand stores
+- **AI**: Multi-provider — Anthropic, OpenAI, Google, + 11 more
+- **Deployment**: npm (`@kernel.chat/kbot`) + GitHub Pages (web)
 
 ### Directory Map
 
 ```
-src/
-├── agents/           # Agent definitions & personalities
-│   ├── specialists.ts   # Kernel, Researcher, Coder, Writer, Analyst
-│   ├── swarm.ts         # Swarm agents (Reasoner, Critic, Architect, etc.)
-│   ├── kernel.ts        # Core Kernel personality
-│   ├── index.ts         # Group chat agents (Architect, Researcher, Contrarian)
-│   ├── assistant.ts     # Assistant agent
-│   ├── nate.ts / theo.ts # Persona agents
-├── engine/           # Core intelligence layer
-│   ├── AIEngine.ts      # Main AI orchestration (50KB — primary engine)
-│   ├── AgentRouter.ts   # Haiku-based intent classifier → specialist routing
-│   ├── SwarmOrchestrator.ts # Multi-agent parallel collaboration
-│   ├── TaskPlanner.ts   # Multi-step task decomposition
-│   ├── MemoryAgent.ts   # Background memory extraction & profile building
-│   ├── ClaudeClient.ts  # Unified Claude API client (proxied through Supabase)
-│   ├── SupabaseClient.ts # Auth, DB, storage operations
-│   └── DeepResearch.ts  # Deep research pipeline
-├── components/       # React components
-│   ├── kernel-agent/    # Core chat UI (Gate, Chat, Controls, Observer, Drawer)
-│   └── ui/              # Shared UI components
-├── pages/            # Route pages
-│   ├── EnginePage.tsx   # Main app page
-│   └── AdminPage.tsx    # Admin dashboard (lazy-loaded)
-├── router.tsx        # Hash router config
-├── main.tsx          # App entry point (Supabase auth, Sentry, PostHog)
-└── index.css         # Design system tokens (92KB)
+packages/kbot/           # K:BOT — the main product
+├── src/
+│   ├── cli.ts              # CLI entry point (commander)
+│   ├── agent.ts            # Agent loop (think → plan → execute → learn)
+│   ├── auth.ts             # API key management, provider detection
+│   ├── learning.ts         # Learning engine (patterns, solutions, profile)
+│   ├── matrix.ts           # Custom agent creation + mimic profiles
+│   ├── streaming.ts        # Streaming for Anthropic + OpenAI
+│   ├── planner.ts          # Autonomous plan-execute mode
+│   ├── sessions.ts         # Save/resume conversations
+│   ├── memory.ts           # Persistent memory across sessions
+│   ├── context-manager.ts  # Auto-compaction + token management
+│   ├── learned-router.ts   # Pattern-based agent routing
+│   ├── prompt-cache.ts     # Prompt caching optimization
+│   ├── embeddings.ts       # Local embedding search
+│   ├── multimodal.ts       # Image/file handling
+│   ├── permissions.ts      # Destructive op confirmation
+│   ├── hooks.ts            # Pre/post tool hooks
+│   ├── plugins.ts          # Plugin system
+│   ├── cloud-sync.ts       # Sync learning data to kernel.chat
+│   ├── ui.ts               # Terminal UI (banners, spinners, colors)
+│   ├── tui.ts              # Rich TUI mode
+│   ├── serve.ts            # HTTP server mode
+│   ├── updater.ts          # Auto-update system
+│   ├── build-targets.ts    # Cross-platform build targets
+│   ├── tools/              # 60+ built-in tools
+│   │   ├── files.ts           # File read/write/glob/grep
+│   │   ├── bash.ts            # Shell execution
+│   │   ├── git.ts             # Git operations
+│   │   ├── github.ts          # GitHub API
+│   │   ├── search.ts          # Web search
+│   │   ├── fetch.ts           # URL fetching
+│   │   ├── notebook.ts        # Jupyter notebooks
+│   │   ├── sandbox.ts         # Docker sandbox
+│   │   ├── browser.ts         # Browser automation
+│   │   ├── computer.ts        # Computer use
+│   │   ├── background.ts      # Background tasks
+│   │   ├── subagent.ts        # Parallel sub-agents
+│   │   ├── worktree.ts        # Git worktree isolation
+│   │   ├── tasks.ts           # Task management
+│   │   ├── parallel.ts        # Parallel execution
+│   │   ├── mcp-client.ts      # MCP server consumption
+│   │   ├── build-matrix.ts    # Build system tools
+│   │   ├── openclaw.ts        # Local model tools
+│   │   └── matrix.ts          # Agent matrix tools
+│   └── ide/                # IDE integrations
+│       ├── mcp-server.ts      # MCP server for editors
+│       ├── acp-server.ts      # ACP server
+│       ├── lsp-bridge.ts      # LSP bridge
+│       └── bridge.ts          # Shared bridge logic
+├── install.sh              # curl installer
+├── package.json            # @kernel.chat/kbot
+└── tsconfig.json
 
-supabase/
-├── functions/        # Edge functions
-│   ├── claude-proxy/    # All Claude API calls route through here
-│   ├── web-search/      # Perplexity-powered web search
-│   ├── create-checkout/ # Stripe checkout sessions
-│   ├── stripe-webhook/  # Payment webhooks
-│   ├── evaluate-chat/   # Chat quality evaluation
-│   ├── extract-insights/ # Insight extraction
-│   ├── url-fetch/       # URL content fetching
-│   └── [email, portal, agent management]
-└── migrations/       # Database migrations
+src/                     # Web companion (kernel.chat)
+├── agents/              # Agent definitions
+├── engine/              # AI orchestration
+├── components/          # React components
+├── pages/               # Route pages
+├── hooks/               # React hooks
+└── index.css            # Design system
 
-tools/                # CLI tools & MCP servers
-├── browser-mcp.ts       # Browser automation MCP server
+supabase/                # Backend
+├── functions/           # Edge functions (claude-proxy, etc.)
+└── migrations/          # Database migrations
+
+tools/                   # Dev tools & automation
+├── openclaw-daemon.ts   # 24/7 local automation daemon
+├── semantic-search.ts   # Codebase semantic search
 ├── kernel-monitor.ts    # TUI monitoring dashboard
-├── discord-bot.ts       # Discord bot integration
-├── kernel-agent-mcp.ts  # Claude Code MCP server (specialist access)
-└── test-*.ts            # Test scripts
+├── kernel-agents-mcp.ts # Agent team MCP server
+└── discord-bot.ts       # Discord bot
 ```
 
-## III. AGENT SYSTEM
+## III. K:BOT AGENT SYSTEM
 
 ### Flow: User Message → Response
 
-1. **AgentRouter** (Haiku) classifies intent → routes to specialist
-2. If `needsSwarm`: **SwarmOrchestrator** selects 2-4 agents → parallel Haiku contributions → Sonnet synthesis
-3. If `isMultiStep`: **TaskPlanner** decomposes into steps → sequential execution → streamed final
-4. **MemoryAgent** extracts user profile in background → injected into future prompts
+1. **Local-first check** — file reads, git, grep execute instantly ($0)
+2. **Complexity detection** — simple vs multi-step
+3. **Agent routing** — learned patterns + intent classification → specialist
+4. **Tool execution loop** — plan, execute tools, verify, self-correct
+5. **Learning** — async extraction of patterns, solutions, user profile
 
-### Specialists (defined in `src/agents/specialists.ts`)
+### Specialists (17 agents)
 
-| ID | Role | Color |
-|---|---|---|
-| `kernel` | General / personal | `#6B5B95` (amethyst) |
-| `researcher` | Research & fact-finding | `#5B8BA0` (slate blue) |
-| `coder` | Programming | `#6B8E6B` (sage green) |
-| `writer` | Content creation | `#B8875C` (warm brown) |
-| `analyst` | Strategy & evaluation | `#A0768C` (mauve) |
-
-### Claude Proxy
-
-All API calls go through `supabase/functions/claude-proxy/` — never direct.
-Supports: `text`, `json`, `stream` modes. Models: `sonnet`, `haiku`.
-Auth: Supabase JWT token + anon key.
-
-## IV. DESIGN SYSTEM (Rubin)
-
-### Typography
-
-- **Prose**: EB Garamond (serif, 400-800)
-- **Meta/Mono**: Courier Prime (monospace)
-
-### Colors
-
-| Token | Value |
+| ID | Role |
 |---|---|
-| Ivory (bg) | `#FAF9F6` |
-| Slate (text) | `#1F1E1D` |
-| Vignette blue | `rgba(100,149,237, ...)` |
+| `kernel` | General / personal |
+| `researcher` | Research & fact-finding |
+| `coder` | Programming |
+| `writer` | Content creation |
+| `analyst` | Strategy & evaluation |
+| `aesthete` | Design & aesthetics |
+| `guardian` | Security |
+| `curator` | Knowledge management |
+| `strategist` | Business strategy |
+| `infrastructure` | DevOps & infra |
+| `quant` | Data & quantitative |
+| `investigator` | Deep research |
+| `oracle` | Predictions |
+| `chronist` | History & timeline |
+| `sage` | Philosophy & wisdom |
+| `communicator` | Communication |
+| `adapter` | Translation & adaptation |
 
-### Principles
+### Mimic Profiles
 
-- iOS-optimized PWA. Touch-first, contemplative feel.
-- Generous whitespace. Let the content breathe.
-- Literary-minimalist aesthetic. Never corporate.
+K:BOT can adopt coding styles: `claude-code`, `cursor`, `copilot`, `nextjs`, `react`, `rust`, `python`, etc.
 
-## V. COMMANDS
+## IV. COMMANDS
 
 | Command | Purpose |
 |---|---|
-| `npm run dev` | Start dev server (port 5173) |
-| `npm run build` | TypeScript check + Vite build |
-| `npm run deploy` | Build + deploy to GitHub Pages |
-| `npm run monitor` | Launch Kernel TUI monitor |
-| `npm run discord` | Start Discord bot |
-| `npx tsc --noEmit` | Type-check only |
+| `cd packages/kbot && npm run dev` | Run kbot in dev mode |
+| `cd packages/kbot && npm run build` | Build kbot for distribution |
+| `cd packages/kbot && npm run test` | Run kbot tests |
+| `npm run dev` | Start web companion dev server (port 5173) |
+| `npm run build` | Build web companion |
+| `npm run deploy` | Deploy web to GitHub Pages |
 
-## VI. ENVIRONMENT
+## V. ENVIRONMENT
 
-Required env vars (see `.env.example`):
+K:BOT uses `~/.kbot/config.json` for API keys (AES-256-CBC encrypted).
 
+Web companion uses `.env`:
 - `VITE_SUPABASE_URL` / `VITE_SUPABASE_KEY` — Supabase connection
 - `SUPABASE_SERVICE_KEY` — Service role key (edge functions)
-- `VITE_STRIPE_PUBLISHABLE_KEY` / `VITE_STRIPE_KERNEL_PRICE_ID` — Payments
 
-## VII. COMMON PITFALLS
+## VI. COMMON PITFALLS
 
-- **Auth 401**: Claude proxy requires valid Supabase JWT. Check `getAccessToken()` in `SupabaseClient.ts`.
-- **CORS**: Edge functions handle CORS headers. If adding new functions, include `Access-Control-Allow-Origin`.
-- **Build fails**: Usually type errors. Run `npx tsc --noEmit` first.
-- **Deploy**: Only `dist/` folder goes to GitHub Pages. Base path is `/`. Custom domain: `kernel.chat`.
-- **Hash router**: App uses `createHashRouter` — all routes are `/#/path`.
-- **CSS**: No Tailwind. All styles in `src/index.css` using vanilla CSS + custom properties.
+- **kbot won't start**: Check Node.js >= 20. Run `kbot doctor` for diagnostics.
+- **Provider 401**: API key expired or invalid. Run `kbot auth` to reconfigure.
+- **Local models slow**: First run downloads the model. Subsequent runs are fast.
+- **Web build fails**: Usually type errors. Run `npx tsc --noEmit` first.
+- **Deploy**: Web goes to GitHub Pages. kbot goes to npm. Different pipelines.
+- **CSS**: No Tailwind. All vanilla CSS with `ka-` prefix in `src/index.css`.
 
-## VIII. EXTENDED CONTEXT (Read On Demand)
+## VII. SECURITY
 
-### Modular Rules (`.claude/rules/`)
+- NEVER commit `.env`, `.pem`, `.key` files
+- NEVER expose `SUPABASE_SERVICE_KEY` in client-side code
+- NEVER hardcode API keys in source files
+- kbot encrypts API keys at rest (AES-256-CBC)
+- Destructive bash commands blocked by default
+- Tool execution timeout: 5 min
 
-- `components.md` — Rubin design system, TypeScript standards (loads for `src/components/`, `src/pages/`)
-- `backend.md` — Edge function, MCP server rules (loads for `supabase/`, `tools/`)
-- `engine.md` — AI engine, agent routing rules (loads for `src/engine/`, `src/agents/`)
-- `security.md` — Security guardrails (always loaded)
-- `testing.md` — Vitest conventions (always loaded)
-
-### Sub-Agents (`.claude/agents/`)
-
-- `reviewer.md` — Code review specialist
-- `debugger.md` — Systematic debugging protocol
-- `documenter.md` — Documentation writer (JSDoc, README, changelog)
-- `architect.md` — Architecture advisor
-- `deployer.md` — Deployment specialist
-- `hacker.md` — Red team / offensive security (exploit attempts, auth bypass, SSRF, XSS)
-
-### Session Memory
-
-- `SCRATCHPAD.md` — Persistent context between sessions (auto-loaded at start)
-- Before ending a session, update SCRATCHPAD.md with accomplishments and pending work
-
-### Hooks (`.claude/hooks/`)
-
-- `session-start.js` — Injects date, SCRATCHPAD, git status at session start
-- `session-stop.js` — Logs session timestamps
-- `guard-commands.js` — Blocks dangerous shell commands
-- `log-prompt.js` — Logs all prompts for analysis
-
-## IX. AGENT TEAM
-
-### Overview
-
-An autonomous team of 7 specialist agents that can test, review, secure, optimize, red-team, and ship the platform. Agents have persistent memory, coordinate via handoffs, and can propose new tools.
+## VIII. AGENT TEAM (Claude Code)
 
 ### Agents (`.claude/agents/`)
 
-| Agent | File | Role |
-|-------|------|------|
-| QA | `qa.md` | Build verification, screenshot regression, bug reports |
-| Designer | `designer.md` | Rubin design system enforcement, a11y, dark mode |
-| Performance | `performance.md` | Bundle budgets, dependency audit, latency monitoring |
-| Security | `security.md` | Vulnerability scanning, secrets detection, auth verification |
-| Hacker | `hacker.md` | Red team — offensive exploit attempts, auth bypass, SSRF, XSS, privilege escalation |
-| DevOps | `devops.md` | Deploy pipeline, health checks, rollback procedures |
-| Product | `product.md` | UX evaluation, feature discovery, mobile-first testing |
+| Agent | Role |
+|-------|------|
+| QA | Build verification, regression testing |
+| Designer | Design system enforcement, a11y |
+| Performance | Bundle budgets, dependency audit |
+| Security | Vulnerability scanning, secrets detection |
+| Hacker | Red team — exploit attempts, auth bypass |
+| DevOps | Deploy pipeline, health checks |
+| Product | UX evaluation, mobile-first testing |
 
 ### Slash Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/qa` | Full QA pass — type check, build, screenshots, regression comparison |
-| `/design-check` | Audit CSS/components against Rubin design system |
-| `/perf` | Performance audit — bundle size, deps, build time, endpoint latency |
-| `/security-audit` | Full security scan — npm audit, secrets, RLS, edge function auth |
-| `/ship` | Gated deploy pipeline: security → QA → design → perf → deploy → verify |
-| `/team` | Run all 6 agents, synthesize unified report |
-| `/retro` | Review accumulated knowledge, prune stale entries, identify tool gaps |
+| `/qa` | Full QA pass |
+| `/security-audit` | Security scan |
+| `/perf` | Performance audit |
+| `/ship` | Gated deploy pipeline |
+| `/team` | Run all agents |
 
-### Memory Architecture
+### Session Memory
 
-Persistent memory lives in `.claude/agents/memory/`:
-- One file per agent (`qa.md`, `designer.md`, etc.)
-- `shared-knowledge.md` — cross-agent insights
-- `tool-effectiveness.md` — tool usage tracking
-- All entries are timestamped and categorized by section
-- Agents read memory before work, write findings after
-
-### MCP Server (`tools/kernel-agents-mcp.ts`)
-
-8 coordination tools registered as `kernel-agents`:
-
-| Tool | Purpose |
-|------|---------|
-| `agent_memory_read` | Read an agent's persistent memory |
-| `agent_memory_write` | Append timestamped entry to agent memory |
-| `agent_memory_search` | Search across all memory files |
-| `team_status` | Summary of all agent memory states |
-| `team_handoff` | Structured handoff between agents |
-| `team_report` | Synthesize findings across all agents |
-| `create_tool` | Stage a new tool for human review |
-| `tool_effectiveness` | Log tool usage outcomes |
-
-### Tool Creation Pipeline
-
-Agents can propose new tools when they identify capability gaps:
-1. Agent calls `create_tool` with implementation + rationale
-2. Tool is written to `tools/generated/{name}.ts` with `PENDING_REVIEW` status
-3. `tools/generated/manifest.json` tracks all proposed tools
-4. Human reviews and promotes to an existing MCP server, or rejects
-
-## X. LEGACY
-
-Ancient intelligence and archived experiments live in `/legacy`.
+- `SCRATCHPAD.md` — Persistent context between sessions
+- Before ending a session, update SCRATCHPAD.md with accomplishments and pending work

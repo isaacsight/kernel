@@ -33,7 +33,8 @@
     "voiceInput": "Entrée vocale",
     "sendMessage": "Send message",
     "stopGenerating": "Arrêter la génération",
-    "shareableLink": "Lien de partage de conversation"
+    "shareableLink": "Lien de partage de conversation",
+    "toggleTheme": "Basculer le thème"
   },
   "time": {
     "overdue": "en retard",
@@ -50,12 +51,65 @@
     "yesterday": "Hier",
     "thisWeek": "Cette semaine",
     "thisMonth": "Ce mois",
-    "earlier": "Plus ancien"
+    "earlier": "Plus ancien",
+    "title": "Conversations ({{count}})",
+    "searchPlaceholder": "Rechercher dans les conversations...",
+    "newChat": "Nouvelle conversation",
+    "searching": "Recherche en cours...",
+    "noMatches": "Aucune correspondance trouvée",
+    "noResults": "Aucun résultat",
+    "resultCount": "{{count}} résultats",
+    "clearSearch": "Effacer la recherche",
+    "empty": "Pas de conversations pour le moment",
+    "starred": "Étoilées",
+    "recents": "Récents",
+    "yours": "Les vôtres",
+    "folders": "Dossiers",
+    "team": "Équipe",
+    "shared": "Partagé",
+    "archive": "Archivé",
+    "noArchived": "Aucune conversation archivée",
+    "star": "Étoile",
+    "unstar": "Enlever l'étoile",
+    "archiveAction": "Archiver",
+    "unarchive": "Désarchiver"
   },
   "language": "Langue",
   "offline": "Vous êtes hors ligne. Affichage des conversations en cache.",
   "pwa": {
     "installPrompt": "Ajoutez Kernel à votre écran d'accueil pour la meilleure expérience.",
     "install": "Installer"
+  },
+  "relativeTime": {
+    "justNow": "il y a un instant",
+    "minutesAgo": "{{count}}m",
+    "hoursAgo": "{{count}}h",
+    "daysAgo": "{{count}}j"
+  },
+  "copy": "Copier",
+  "copied": "Copié",
+  "download": "Télécharger",
+  "preview": "Aperçu",
+  "code": "Code",
+  "downloadAllFiles": "Télécharger les {{count}} fichiers",
+  "combinedPreview": "Aperçu en direct",
+  "previewTruncated": "Aperçu tronqué à {{lines}} lignes — téléchargez le fichier complet",
+  "fullscreen": "Plein écran",
+  "console": "Console",
+  "errors": "erreurs",
+  "previewMobile": "Aperçu Mobile (375px)",
+  "previewTablet": "Aperçu Tablette (768px)",
+  "previewDesktop": "Aperçu Ordinateur (largeur totale)",
+  "previewFailed": "L'aperçu n'a pas pu afficher le contenu visible",
+  "line": "{{count}} ligne",
+  "lines": "{{count}} lignes",
+  "errorTitle": "Quelque chose a mal tourné",
+  "errorDefault": "Quelque chose a cassé de notre côté. Veuillez actualiser.",
+  "tryAgain": "Réessayer",
+  "tags": {
+    "title": "Étiqueter la conversation",
+    "addTag": "Ajouter une étiquette...",
+    "save": "Enregistrer",
+    "suggested": "Suggestions"
   }
 }

@@ -33,7 +33,8 @@
     "voiceInput": "Entrada de voz",
     "sendMessage": "Send message",
     "stopGenerating": "Detener generación",
-    "shareableLink": "Enlace para compartir la conversación"
+    "shareableLink": "Enlace para compartir la conversación",
+    "toggleTheme": "Cambiar tema"
   },
   "time": {
     "overdue": "vencido",
@@ -50,12 +51,65 @@
     "yesterday": "Ayer",
     "thisWeek": "Esta semana",
     "thisMonth": "Este mes",
-    "earlier": "Anterior"
+    "earlier": "Anterior",
+    "title": "Conversaciones ({{count}})",
+    "searchPlaceholder": "Buscar en conversaciones...",
+    "newChat": "Nuevo Chat",
+    "searching": "Buscando...",
+    "noMatches": "No se encontraron coincidencias",
+    "noResults": "Sin resultados",
+    "resultCount": "{{count}} resultados",
+    "clearSearch": "Limpiar búsqueda",
+    "empty": "Aún no hay conversaciones",
+    "starred": "Estrelladas",
+    "recents": "Recientes",
+    "yours": "Tus",
+    "folders": "Carpetas",
+    "team": "Equipo",
+    "shared": "Compartido",
+    "archive": "Archivo",
+    "noArchived": "No hay conversaciones archivadas",
+    "star": "Estrellar",
+    "unstar": "Desestrellar",
+    "archiveAction": "Archivar",
+    "unarchive": "Desarchivar"
   },
   "language": "Idioma",
   "offline": "Estás sin conexión. Viendo conversaciones guardadas.",
   "pwa": {
     "installPrompt": "Agrega Kernel a tu pantalla de inicio para la mejor experiencia.",
     "install": "Instalar"
+  },
+  "relativeTime": {
+    "justNow": "hace un momento",
+    "minutesAgo": "{{count}}m atrás",
+    "hoursAgo": "{{count}}h atrás",
+    "daysAgo": "{{count}}d atrás"
+  },
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "download": "Descargar",
+  "preview": "Vista previa",
+  "code": "Código",
+  "downloadAllFiles": "Descargar {{count}} archivos",
+  "combinedPreview": "Vista previa en vivo",
+  "previewTruncated": "Vista previa truncada a {{lines}} líneas — descarga para ver el archivo completo",
+  "fullscreen": "Pantalla completa",
+  "console": "Consola",
+  "errors": "errores",
+  "previewMobile": "Vista previa móvil (375px)",
+  "previewTablet": "Vista previa en tableta (768px)",
+  "previewDesktop": "Vista previa en escritorio (ancho completo)",
+  "previewFailed": "No se pudo renderizar la vista previa con contenido visible",
+  "line": "{{count}} línea",
+  "lines": "{{count}} líneas",
+  "errorTitle": "Algo salió mal",
+  "errorDefault": "Algo falló en nuestro lado. Intenta actualizar.",
+  "tryAgain": "Intentarlo de nuevo",
+  "tags": {
+    "title": "Conversación etiquetada",
+    "addTag": "Añadir etiqueta...",
+    "save": "Guardar",
+    "suggested": "Sugerencias"
   }
 }
