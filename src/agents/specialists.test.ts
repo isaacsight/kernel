@@ -24,6 +24,42 @@ describe('SPECIALISTS', () => {
     expect(p.systemPrompt).toContain(':filename.ext')
   })
 
+  it('includes the session specialist', () => {
+    const s = SPECIALISTS.session
+    expect(s.id).toBe('session')
+    expect(s.name).toBe('Session')
+    expect(s.systemPrompt).toContain('Session Management')
+    expect(s.systemPrompt).toContain('Context Continuity')
+    expect(s.systemPrompt).toContain(':filename.ext')
+  })
+
+  it('includes the scholar specialist', () => {
+    const s = SPECIALISTS.scholar
+    expect(s.id).toBe('scholar')
+    expect(s.name).toBe('Scholar')
+    expect(s.systemPrompt).toContain('Literature Review')
+    expect(s.systemPrompt).toContain('Academic Research')
+    expect(s.systemPrompt).toContain(':filename.ext')
+  })
+
+  it('includes the auditor specialist', () => {
+    const s = SPECIALISTS.auditor
+    expect(s.id).toBe('auditor')
+    expect(s.name).toBe('Auditor')
+    expect(s.systemPrompt).toContain('Code Review')
+    expect(s.systemPrompt).toContain('Architecture Analysis')
+    expect(s.systemPrompt).toContain(':filename.ext')
+  })
+
+  it('includes the benchmarker specialist', () => {
+    const s = SPECIALISTS.benchmarker
+    expect(s.id).toBe('benchmarker')
+    expect(s.name).toBe('Benchmarker')
+    expect(s.systemPrompt).toContain('Benchmarking')
+    expect(s.systemPrompt).toContain('Competitive Intelligence')
+    expect(s.systemPrompt).toContain(':filename.ext')
+  })
+
   it('each specialist has required fields', () => {
     for (const s of Object.values(SPECIALISTS)) {
       expect(s.id).toBeTruthy()
@@ -51,6 +87,22 @@ describe('getSpecialist', () => {
   it('returns physicist by ID', () => {
     const physicist = getSpecialist('physicist')
     expect(physicist.name).toBe('Physicist')
+  })
+
+  it('returns session agent by ID', () => {
+    expect(getSpecialist('session').name).toBe('Session')
+  })
+
+  it('returns scholar agent by ID', () => {
+    expect(getSpecialist('scholar').name).toBe('Scholar')
+  })
+
+  it('returns auditor agent by ID', () => {
+    expect(getSpecialist('auditor').name).toBe('Auditor')
+  })
+
+  it('returns benchmarker agent by ID', () => {
+    expect(getSpecialist('benchmarker').name).toBe('Benchmarker')
   })
 
   it('falls back to kernel for unknown ID', () => {
