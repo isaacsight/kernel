@@ -784,12 +784,13 @@ async function byokFlow(): Promise<void> {
 async function guidedSetup(): Promise<{ local: boolean } | null> {
   console.log(banner(VERSION))
   console.log()
-  console.log(chalk.bold('  Welcome! Let\'s get you set up.'))
+  console.log(chalk.bold('  Hey! I\'m K:BOT — your AI assistant for the terminal.'))
   console.log()
-  console.log(chalk.dim('  K:BOT needs an AI brain to work. You have two options:'))
+  console.log(chalk.dim('  I can write code, answer questions, search the web, manage git,'))
+  console.log(chalk.dim('  and a lot more. First, I need an AI brain. Pick one:'))
   console.log()
-  console.log(`  ${chalk.bold('1.')} ${chalk.hex('#6B8E6B')('Free & Private')} — Run AI on your computer (no account needed)`)
-  console.log(`  ${chalk.bold('2.')} ${chalk.hex('#5B8BA0')('Cloud AI')} — Use an API key from OpenAI, Google, Anthropic, etc.`)
+  console.log(`  ${chalk.bold('1.')} ${chalk.hex('#6B8E6B')('Free & Private')} — Run AI on your computer (no account, no cost)`)
+  console.log(`  ${chalk.bold('2.')} ${chalk.hex('#5B8BA0')('Cloud AI')} — Use an API key (OpenAI, Google, Anthropic, etc.)`)
   console.log()
 
   const rl = createInterface({ input: process.stdin, output: process.stdout })
@@ -953,9 +954,28 @@ async function startRepl(
     prompt: kbotPrompt(),
   })
 
-  // First time? Show a gentle hint
+  // First time? Show a friendly walkthrough
   if (sessionCount <= 1) {
-    printInfo('Try: "hello" or "create a python script" or /help')
+    console.log()
+    console.log(chalk.dim('  ┌─────────────────────────────────────────────┐'))
+    console.log(chalk.dim('  │') + chalk.bold('  Welcome! Here are some things you can try: ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │                                             │'))
+    console.log(chalk.dim('  │') + '  "explain this project"                    ' + chalk.dim('  │'))
+    console.log(chalk.dim('  │') + '  "write a function that sorts names"       ' + chalk.dim('  │'))
+    console.log(chalk.dim('  │') + '  "find all TODO comments in this repo"     ' + chalk.dim('  │'))
+    console.log(chalk.dim('  │') + '  "what files are in this directory?"        ' + chalk.dim('  │'))
+    console.log(chalk.dim('  │                                             │'))
+    console.log(chalk.dim('  │') + chalk.dim('  Type /help for more commands.              ') + chalk.dim(' │'))
+    console.log(chalk.dim('  └─────────────────────────────────────────────┘'))
+    console.log()
+  } else if (sessionCount <= 3) {
+    // Second and third time — show a quick tip they might not know
+    const tips = [
+      'Tip: kbot picks the right specialist for you. Try asking about science, code, or writing.',
+      'Tip: Type /save to keep this conversation. /resume to pick it up later.',
+      'Tip: kbot learns from you. The more you use it, the better it gets.',
+    ]
+    printInfo(tips[Math.min(sessionCount - 1, tips.length - 1)])
   }
 
   console.log()
@@ -1586,7 +1606,8 @@ async function handleSlashCommand(
       break
 
     default:
-      printError(`Unknown command: /${cmd}. Type /help for available commands.`)
+      printError(`I don't know "/${cmd}". Here are some you can try:`)
+      printInfo('  /save — save this chat  |  /agent — pick a specialist  |  /help — see everything')
   }
 }
 
