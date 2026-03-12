@@ -705,10 +705,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
     try {
       // ── BYOK: Call provider directly with tool-use support ──
+      // If user passed an explicit model name (not a speed alias), use it directly
+      const isExplicitModel = options.model && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(options.model)
       const speed = options.model === 'haiku' || options.model === 'fast' ? 'fast' : 'default'
-      const model = getProviderModel(provider, speed, originalMessage)
+      const model = isExplicitModel ? options.model! : getProviderModel(provider, speed, originalMessage)
 
-      const byokTools = tools.map(t => ({
+      // Ollama models don't reliably support function calling — skip tool defs
+      const byokTools = provider === 'ollama' ? [] : tools.map(t => ({
         name: t.name,
         description: t.description,
         input_schema: t.input_schema,

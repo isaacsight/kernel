@@ -630,6 +630,73 @@ server.tool(
   })
 )
 
+// ═══════════════════════════════════════════════════════════════
+// K:BOT AGENT — route messages through kbot's specialist agents
+// ═══════════════════════════════════════════════════════════════
+
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+const execFileAsync = promisify(execFile)
+
+async function callKbot(
+  message: string,
+  opts: { agent?: string; model?: string } = {}
+): Promise<{ content: string; agent: string; model: string }> {
+  const args = ['--quiet', '--pipe', '--json']
+  if (opts.agent) args.push('--agent', opts.agent)
+  if (opts.model) args.push('--model', opts.model)
+  args.push(message)
+
+  const { stdout } = await execFileAsync('kbot', args, {
+    timeout: 120_000,
+    env: { ...process.env, NODE_NO_WARNINGS: '1' },
+  })
+
+  // kbot --json prints text then a JSON line — grab the last line
+  const lines = stdout.trim().split('\n')
+  const jsonLine = lines[lines.length - 1]
+  try {
+    const data = JSON.parse(jsonLine)
+    return { content: data.content || stdout, agent: data.agent || 'auto', model: data.model || 'unknown' }
+  } catch {
+    return { content: stdout.trim(), agent: 'auto', model: 'unknown' }
+  }
+}
+
+server.tool(
+  'local_kbot',
+  'Send a message to K:BOT agent. Routes to the best specialist (coder, researcher, writer, analyst, hacker, etc.) or specify one. Uses local Ollama models — $0 cost. Great for getting a second opinion, delegating subtasks, or accessing K:BOT specialist knowledge.',
+  {
+    message: z.string().describe('The message or task for K:BOT'),
+    agent: z.string().optional().describe('Force a specific agent: kernel, researcher, coder, writer, analyst, hacker, operator, dreamer (default: auto-route)'),
+    model: z.string().optional().describe('Override model (default: auto-selects best local model)'),
+  },
+  safeHandler(async ({ message, agent, model }) => {
+    const result = await callKbot(message, { agent, model })
+    return {
+      content: [{
+        type: 'text' as const,
+        text: `[K:BOT · ${result.agent} · ${result.model} · $0]\n\n${result.content}`,
+      }],
+    }
+  })
+)
+
+server.tool(
+  'local_kbot_agents',
+  'List all available K:BOT specialist agents with descriptions.',
+  {},
+  safeHandler(async () => {
+    const { stdout } = await execFileAsync('kbot', ['agents'], {
+      timeout: 10_000,
+      env: { ...process.env, NODE_NO_WARNINGS: '1' },
+    })
+    return {
+      content: [{ type: 'text' as const, text: `[K:BOT Agents]\n\n${stdout.trim()}` }],
+    }
+  })
+)
+
 // ── Start ───────────────────────────────────────────────────
 const transport = new StdioServerTransport()
 await server.connect(transport)

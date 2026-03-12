@@ -181,8 +181,8 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     name: 'Ollama (Local)',
     apiUrl: 'http://localhost:11434/v1/chat/completions',
     apiStyle: 'openai',
-    defaultModel: 'qwen2.5-coder:7b',
-    fastModel: 'llama3.1:8b',
+    defaultModel: 'gemma3:12b',
+    fastModel: 'qwen2.5-coder:7b',
     inputCost: 0,
     outputCost: 0,
     authHeader: 'bearer',  // Ollama ignores auth but needs valid header
@@ -444,6 +444,11 @@ export function selectOllamaModel(message: string, availableModels?: string[]): 
         if (isModelAvailable(model, available)) return model
       }
     }
+  }
+  // No keyword match — prefer the largest available model
+  const preferredFallbacks = ['gemma3:27b', 'phi4:14b', 'gemma3:12b', 'deepseek-r1:14b', 'qwen2.5-coder:14b', 'mistral:7b', 'llama3.1:8b']
+  for (const model of preferredFallbacks) {
+    if (isModelAvailable(model, available)) return model
   }
   return PROVIDERS.ollama.defaultModel
 }
