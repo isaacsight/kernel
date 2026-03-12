@@ -40,11 +40,11 @@
     "adaptiveSystem": "Mukautuva järjestelmä",
     "usage": "Käyttö",
     "mirror": "Peili",
-    "projectFiles": "Projektiotiedostot",
+    "projectFiles": "Projektitiedostot",
     "imageGallery": "Kuvagalleria",
-    "knowledgeBase": "Tietopankki",
+    "knowledgeBase": "Tietokanta",
     "social": "Sosiaalinen media",
-    "platformEngine": "Sisällön tuotantoputki",
+    "platformEngine": "Sisällön käsittely",
     "explore": "Tutki",
     "accountSettings": "Tilin asetukset",
     "notifProactive": "Ennakoivat oivallukset"
@@ -72,8 +72,8 @@
     "annualButton": "$290/vuosi — säästä $58",
     "buttonLoading": "Avataan kassaa...",
     "maybeLater": "Ehkä myöhemmin",
-    "learnedTitle": "Mitä Kernel on oppinut sinusta",
-    "learnedCta": "Tule takaisin huomenna ja jatka keskustelua.",
+    "learnedTitle": "Mitä Kernel oppi sinusta",
+    "learnedCta": "Palaa huomenna ja jatka keskustelua.",
     "maxButton": "Valitse Max — 49 $/kk",
     "maxAnnualButton": "490 $/vuosi — säästä 98 $"
   },
@@ -101,7 +101,7 @@
   "lastFreeMessage": "Viimeinen ilmainen viesti",
   "menuSection": {
     "ai": "AI & Agentit",
-    "content": "Sisältö & Tietous",
+    "content": "Sisältö & Tietämys",
     "insights": "Oivallukset & Tavoitteet",
     "system": "Asetukset & Järjestelmä"
   },
@@ -110,9 +110,9 @@
     "loading": "Ladataan käyttötietoja...",
     "retry": "Yritä uudelleen",
     "last30days": "Viimeiset 30 päivää",
-    "onPace": "Tahtiasi {{projected}} / {{limit}} viestiä",
-    "overLimit": "Ylität todennäköisesti {{limit}} viestirajan",
-    "byFeature": "Ominaisuuden mukaan",
+    "onPace": "Tahtiin {{projected}} / {{limit}} viestiä",
+    "overLimit": "Ylittämässä {{limit}} viestirajaasi",
+    "byFeature": "Ominaisuusittain",
     "dailyTrend": "30 päivän trendi",
     "recommendation": "Suositus",
     "upgrade": "Päivitä"
@@ -128,7 +128,7 @@
       "sad": "surullinen",
       "sleepy": "unelias",
       "lonely": "yksinäinen",
-      "bored": "ikävä"
+      "bored": "tylsistynyt"
     }
   },
   "entityInfo": {
@@ -139,14 +139,14 @@
   },
   "nudge": {
     "insights": "Olet käynyt joitain keskusteluja – Kernel on löytänyt toistuvia teemoja siitä, mistä puhut.",
-    "knowledge": "Tietokantaasi kasvaa – katso Kernelin kartoittamia yhteyksiä keskustelujesi perusteella.",
-    "stats": "Olet saavuttanut tavoitteen – tarkista tilastosi nähdäksesi, miten käytöstäsi kehittyy.",
-    "workflows": "Olet käyttänyt Kernelia säännöllisesti – työnkulut voivat automatisoida toistuvia tehtäviäsi.",
+    "knowledge": "Tietokarttasi kasvaa – katso yhteyksiä, jotka Kernel on kartoittanut keskustelujesi perusteella.",
+    "stats": "Suoristit tavoitteen – tarkista tilastosi nähdäksesi, kuinka käyttösi kehittyy.",
+    "workflows": "Olet käyttänyt Kernelia säännöllisesti – työnkulut voivat automatisoida toistuvat tehtäväsi.",
     "showMe": "Näytä minulle",
     "notNow": "Ei nyt"
   },
   "valuePreview": {
-    "message": "Pro-jäsenet saavat päivittäisiä tiedotuksia, syvällistä tutkimusta ja jatkuvaa muistia.",
+    "message": "Pro-jäsenet saavat päivittäisiä yhteenvedon, syvällistä tutkimusta ja pysyvää muistia.",
     "gotIt": "Ymmärretty"
   },
   "messagesLeft": "{{count}} viestiä jäljellä",
@@ -154,19 +154,19 @@
     "label": "Miksi?"
   },
   "thinking": {
-    "label": "Laajennettu pohdinta",
-    "duration": "Pohdittiin {{seconds}} s",
-    "streaming": "Pohditaan...",
-    "toggle": "Ota laajennettu pohdinta käyttöön",
-    "tooltip": "Pohdi syvemmin ennen vastausta"
+    "label": "Laajennettu ajattelu",
+    "duration": "Ajattelu kesti {{seconds}}s",
+    "streaming": "Ajattelee...",
+    "toggle": "Aktivoi laajennettu ajattelu",
+    "tooltip": "Pohdi syvemmin ennen vastaamista"
   },
   "explain": {
-    "toggle": "Ota selitys-tila käyttöön",
+    "toggle": "Aktivoi selitys-tila",
     "tooltip": "Selitys-tila — vaiheittainen koodi"
   },
   "document": {
     "active": "Analysoidaan: {{name}}",
-    "clear": "Tyhjennä asiakirja",
+    "clear": "Tyhjennä dokumentti",
     "contextHint": "Kysy lisäkysymyksiä tästä dokumentista"
   },
   "proactive": {
@@ -175,15 +175,15 @@
     "explore": "Tutustutaanpa tähän"
   },
   "tour": {
-    "entity": "Tämä on Kernel-entiteettisi. Se kehittyy keskustelujesi mukana – napauta nähdäksesi sen mielialan, putken ja kasvutason.",
-    "moreMenu": "Napauta tästä nähdäksesi kaikki Kernelin ominaisuudet: agentit, tietopohja, oivallukset ja paljon muuta.",
-    "inputBar": "Aloita keskustelu tässä. Lisää tiedostoja, vaihda selitys-tila päälle tai vain sano hei.",
+    "entity": "Tämä on sinun Kernel-entiteettisi. Se kehittyy chattailun myötä — napauta sitä nähdäksesi sen mielialan, putken ja kasvutason.",
+    "moreMenu": "Napauta tästä Kernelin kaikkien ominaisuuksien löytämiseksi: agentit, tietopohja, oivallukset ja paljon muuta.",
+    "inputBar": "Aloita keskustelu täällä. Liitä tiedostoja, vaihda selitys-tila päälle tai sano vain hei.",
     "gotIt": "Ymmärretty",
     "skip": "Ohita opastus"
   },
   "workflow": {
-    "planning": "Suunnitteillaan vaiheita...",
-    "executing": "Suoritetaan: {{step}}",
+    "planning": "Suunnittelee vaiheita...",
+    "executing": "Suorittaa: {{step}}",
     "complete": "Työnkulku valmis",
     "failed": "Vaihe epäonnistui: {{step}}",
     "cancel": "Peruuta työnkulku",
