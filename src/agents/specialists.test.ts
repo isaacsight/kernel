@@ -12,6 +12,18 @@ describe('SPECIALISTS', () => {
     expect(ids).toContain('analyst')
   })
 
+  it('includes the physicist specialist', () => {
+    expect(Object.keys(SPECIALISTS)).toContain('physicist')
+    const p = SPECIALISTS.physicist
+    expect(p.id).toBe('physicist')
+    expect(p.name).toBe('Physicist')
+    expect(p.color).toMatch(/^#[0-9A-Fa-f]{6}$/)
+    expect(p.systemPrompt).toContain('Quantum Mechanics')
+    expect(p.systemPrompt).toContain('Relativity')
+    expect(p.systemPrompt).toContain('Classical Mechanics')
+    expect(p.systemPrompt).toContain(':filename.ext')
+  })
+
   it('each specialist has required fields', () => {
     for (const s of Object.values(SPECIALISTS)) {
       expect(s.id).toBeTruthy()
@@ -34,6 +46,11 @@ describe('getSpecialist', () => {
   it('returns specialist by ID', () => {
     const coder = getSpecialist('coder')
     expect(coder.name).toBe('Coder')
+  })
+
+  it('returns physicist by ID', () => {
+    const physicist = getSpecialist('physicist')
+    expect(physicist.name).toBe('Physicist')
   })
 
   it('falls back to kernel for unknown ID', () => {
