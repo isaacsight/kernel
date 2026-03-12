@@ -1,0 +1,124 @@
+{
+  "title": "הגדרות חשבון",
+  "profile": {
+    "heading": "פרופיל",
+    "displayName": "שם תצוגה",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "שם משתמש",
+    "usernamePlaceholder": "@{{username}}",
+    "avatar": "תמונת פרופיל",
+    "avatarChange": "שנה",
+    "save": "שמור פרופיל",
+    "saved": "פרופיל נשמר",
+    "resetProfile": "איפוס פרופיל",
+    "profileReset": "פרופיל הוחזר להגדרות ברירת מחדל",
+    "usernameTaken": "שם משתמש זה כבר בשימוש",
+    "displayNameTaken": "שם תצוגה זה כבר בשימוש",
+    "available": "זמין"
+  },
+  "security": {
+    "heading": "עריכת פרטי גישה",
+    "credentialsHeading": "דוא\"ל וסיסמה",
+    "verifyIdentity": "אמת את זהותך כדי לבצע שינויים",
+    "verifyHint": "קוד אימות יישלח לכתובת הדוא\"ל שלך לפני עריכת פרטי הגישה",
+    "sendCode": "שליחת קוד אימות",
+    "codePlaceholder": "הזן קוד בן 6 ספרות",
+    "codeRequired": "הזן את קוד האימות שקיבלת בדוא\"ל",
+    "verificationRequired": "שלח קוד אימות קודם",
+    "codeSent": "קוד נשלח - בדוק את הדוא\"ל שלך",
+    "verify": "אמת קוד",
+    "verified": "זהותך אומתה - תוכל כעת לבצע שינויים",
+    "resendCode": "שליחה מחדש של הקוד",
+    "resendIn": "שליחה מחדש בעוד {{seconds}} שניות",
+    "changeEmail": "שנה דוא\"ל",
+    "emailPlaceholder": "כתובת דוא\"ל חדשה",
+    "emailSubmit": "עדכון כתובת דוא\"ל",
+    "emailConfirmationSent": "נשלחה הודעת אישור לכתובת הדוא\"ל החדשה שלך",
+    "changePassword": "שנה סיסמה",
+    "setPassword": "קבע סיסמה",
+    "newPasswordPlaceholder": "סיסמה חדשה",
+    "confirmPasswordPlaceholder": "אשר סיסמה",
+    "passwordSubmit": "עדכון סיסמה",
+    "passwordChanged": "הסיסמה עודכנה",
+    "tooShort": "הסיסמה חייבת להכיל לפחות 8 תווים",
+    "mismatch": "הסיסמאות לא תואמות",
+    "strength": {
+      "weak": "חלשה",
+      "fair": "בינונית",
+      "strong": "חזקה"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "חשבונות מקושרים",
+    "connected": "מחובר",
+    "connect": "התחברות",
+    "disconnect": "ניתוק",
+    "cannotUnlinkLast": "לא ניתן להסיר את אמצעי הכניסה היחיד שלך",
+    "unlinked": "החשבון הופסק",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "מנוי",
+    "free": "תוכנית חינמית",
+    "pro": "תוכנית Pro",
+    "max": "תוכנית Max",
+    "admin": "מנהל",
+    "upgrade": "שדרג ל-Pro",
+    "upgradeMonthly": "Pro — $29/חודש",
+    "upgradeAnnual": "פרו — $290/שנה",
+    "upgradeMax": "מקסימום — $49/חודש",
+    "upgradeMaxAnnual": "מקסימום — $490/שנה",
+    "manage": "ניהול מנוי"
+  },
+  "exportData": {
+    "heading": "ייצוא נתונים",
+    "description": "הורד עותק מלא של כל הנתונים שלך בפורמט JSON.",
+    "button": "ייצוא הנתונים שלי",
+    "success": "ייצוא בוצע",
+    "rateLimited": "הייצוא יהיה זמין שוב בעוד {{hours}} שעות"
+  },
+  "resetData": {
+    "heading": "איפוס נתונים",
+    "description": "נקה את הנתונים שלך בצורה סלקטיבית מבלי למחוק את החשבון שלך. פעולה זו אינה ניתנת לשחזור.",
+    "scopes": {
+      "conversations": "שיחות",
+      "memory": "זיכרון",
+      "knowledge": "גרף ידע",
+      "goals": "מטרות",
+      "preferences": "העדפות",
+      "all": "הכל"
+    },
+    "scopeDesc": {
+      "conversations": "מחק את כל השיחות וההודעות",
+      "memory": "נקה פרופיל ונהלים שנלמדו",
+      "knowledge": "הסר את כל הישויות והקשרים",
+      "goals": "מחק את כל המטרות והאבנים הדרך",
+      "preferences": "אפס את הבהרות והמטא-דאטה",
+      "all": "נקה את כל הנתונים והתחל מחדש"
+    },
+    "confirm": {
+      "conversations": "זה ימחק לצמיתות את כל השיחות וההודעות שלך. להמשיך?",
+      "memory": "זה ימחק את כל מה ש-Kernel למד עליך. להמשיך?",
+      "knowledge": "זה יסיר את כל ישויות גרף הידע וחיבורים שלהם. להמשיך?",
+      "goals": "זה ימחק את כל המטרות שלך ומעקב התקדמות. להמשיך?",
+      "preferences": "זה יאפס את העדפות הבהרות ומטא-הנתונים שלך. להמשיך?",
+      "all": "זה ינקה את כל הנתונים שלך - שיחות, זיכרון, ידע, מטרות והעדפות. החשבון והמנוי שלך יישארו ללא שינוי. להמשיך?"
+    },
+    "confirmBtn": "כן, אפס",
+    "cancel": "ביטול",
+    "success": "{{scope}} נקה בהצלחה",
+    "done": "איפוס נתונים הסתיים"
+  },
+  "danger": {
+    "heading": "חשבון",
+    "signOut": "התנתק",
+    "signOutDesc": "התנתק מהחשבון שלך במכשיר זה",
+    "deleteAccount": "מחק חשבון",
+    "deleteDesc": "מחק לצמיתות את החשבון ואת כל הנתונים"
+  }
+}

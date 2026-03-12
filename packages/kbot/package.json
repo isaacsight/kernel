@@ -1,8 +1,17 @@
 {
   "name": "@kernel.chat/kbot",
   "version": "2.5.0",
-  "description": "K:BOT — Open-source terminal AI agent. 17 specialists, 60+ tools, 14 providers, local-first.",
+  "description": "K:BOT — Open-source terminal AI agent. 37 specialists, 60+ tools, 14 providers, local-first.",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/kbot"
+  },
+  "homepage": "https://kernel.chat",
+  "bugs": {
+    "url": "https://github.com/isaacsight/kernel/issues"
+  },
   "bin": {
     "kbot": "./dist/cli.js"
   },
@@ -14,7 +23,7 @@
     "test": "tsx --test src/**/*.test.ts",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["ai", "cli", "agent", "kernel", "terminal"],
+  "keywords": ["ai", "cli", "agent", "kernel", "terminal", "llm", "mcp", "ollama", "anthropic", "openai", "coding-agent", "local-first", "multi-model", "openclaw"],
   "author": "Antigravity Group",
   "license": "MIT",
   "dependencies": {

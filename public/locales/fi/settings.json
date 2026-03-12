@@ -1,0 +1,124 @@
+{
+  "title": "Tilin asetukset",
+  "profile": {
+    "heading": "Profiili",
+    "displayName": "Nimi",
+    "displayNamePlaceholder": "Sinun nimesi",
+    "username": "Käyttäjätunnus",
+    "usernamePlaceholder": "@käyttäjätunnus",
+    "avatar": "Profiilikuva",
+    "avatarChange": "Vaihda",
+    "save": "Tallenna profiili",
+    "saved": "Profiili tallennettu",
+    "resetProfile": "Palauta profiili",
+    "profileReset": "Profiili palautettu oletusasetuksiin",
+    "usernameTaken": "Tämä käyttäjätunnus on jo käytössä",
+    "displayNameTaken": "Tämä nimi on jo käytössä",
+    "available": "Vapaa"
+  },
+  "security": {
+    "heading": "Muokkaa tunnistetietoja",
+    "credentialsHeading": "Sähköposti ja salasana",
+    "verifyIdentity": "Vahvista henkilöllisyytesi muutosten tekemiseksi",
+    "verifyHint": "Vahvistuskoodi lähetetään sähköpostiisi ennen tunnistetietojen muokkausta",
+    "sendCode": "Lähetä vahvistuskoodi",
+    "codePlaceholder": "Syötä 6-numeroinen koodi",
+    "codeRequired": "Syötä sähköpostitse lähetetty vahvistuskoodi",
+    "verificationRequired": "Lähetä ensin vahvistuskoodi",
+    "codeSent": "Koodi lähetetty — tarkista sähköpostisi",
+    "verify": "Vahvista koodi",
+    "verified": "Henkilöllisyys vahvistettu — voit nyt tehdä muutoksia",
+    "resendCode": "Lähetä koodi uudelleen",
+    "resendIn": "Lähetä uudelleen {{seconds}}s:n kuluttua",
+    "changeEmail": "Vaihda sähköpostiosoite",
+    "emailPlaceholder": "Uusi sähköpostiosoite",
+    "emailSubmit": "Päivitä sähköposti",
+    "emailConfirmationSent": "Vahvistussähköposti lähetetty uudelle osoitteellesi",
+    "changePassword": "Vaihda salasana",
+    "setPassword": "Aseta salasana",
+    "newPasswordPlaceholder": "Uusi salasana",
+    "confirmPasswordPlaceholder": "Vahvista salasana",
+    "passwordSubmit": "Päivitä salasana",
+    "passwordChanged": "Salasana päivitetty",
+    "tooShort": "Salasanan on oltava vähintään 8 merkkiä",
+    "mismatch": "Salasanat eivät täsmää",
+    "strength": {
+      "weak": "Heikko",
+      "fair": "Kohtalainen",
+      "strong": "Vahva"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Yhdistetyt tilisi",
+    "connected": "Yhdistetty",
+    "connect": "Yhdistä",
+    "disconnect": "Katkaise yhteys",
+    "cannotUnlinkLast": "Et voi poistaa ainoaa sisäänkirjautumistapaasi",
+    "unlinked": "Tili irrotettu",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Tilaus",
+    "free": "Ilmainen tilaus",
+    "pro": "Pro-tilaus",
+    "max": "Max-tilaus",
+    "admin": "Ylläpitäjä",
+    "upgrade": "Päivitä Pro-tilaukseen",
+    "upgradeMonthly": "Pro — 29 $/kk",
+    "upgradeAnnual": "Pro — 290 $ / vuosi",
+    "upgradeMax": "Max — 49 $ / kk",
+    "upgradeMaxAnnual": "Max — 490 $ / vuosi",
+    "manage": "Hallinnoi tilaustasi"
+  },
+  "exportData": {
+    "heading": "Vie data",
+    "description": "Lataa täydellinen kopio kaikista tiedoistasi JSON-muodossa.",
+    "button": "Vie omat tietoni",
+    "success": "Vienti ladattu",
+    "rateLimited": "Vienti saatavilla uudelleen {{hours}} tuntia"
+  },
+  "resetData": {
+    "heading": "Nollaa data",
+    "description": "Tyhjennä valikoivasti tietosi ilman tilin poistamista. Tätä ei voi peruuttaa.",
+    "scopes": {
+      "conversations": "Keskustelut",
+      "memory": "Muisti",
+      "knowledge": "Tietokanta",
+      "goals": "Tavoitteet",
+      "preferences": "Asetukset",
+      "all": "Kaikki"
+    },
+    "scopeDesc": {
+      "conversations": "Poista kaikki keskustelut ja viestit",
+      "memory": "Tyhjennä opittu profiili ja toimenpiteet",
+      "knowledge": "Poista kaikki entiteetit ja suhteet",
+      "goals": "Poista kaikki tavoitteet ja virstanpylväät",
+      "preferences": "Nollaa ohjeet ja metatiedot",
+      "all": "Tyhjennä kaikki tiedot ja aloita alusta"
+    },
+    "confirm": {
+      "conversations": "Tämä poistaa pysyvästi kaikki keskustelusi ja viestisi. Jatka?",
+      "memory": "Tämä poistaa kaiken, mitä Kernel on oppinut sinusta. Jatka?",
+      "knowledge": "Tämä poistaa kaikki tietokantaentiteetit ja niiden yhteydet. Jatka?",
+      "goals": "Tämä poistaa kaikki tavoitteesi ja edistymisen seurannan. Jatka?",
+      "preferences": "Tämä nollaa ohjeidesi ja metatietojesi asetukset. Jatka?",
+      "all": "Tämä tyhjentää KAIKKI tietosi – keskustelut, muisti, tietämys, tavoitteet ja asetukset. Tilisi ja tilauksesi pysyvät ennallaan. Jatka?"
+    },
+    "confirmBtn": "Kyllä, nollaa",
+    "cancel": "Peruuta",
+    "success": "{{scope}} tyhjennetty onnistuneesti",
+    "done": "Tietojen nollaus valmis"
+  },
+  "danger": {
+    "heading": "Tili",
+    "signOut": "Kirjaudu ulos",
+    "signOutDesc": "Kirjaudu ulos tililtäsi tällä laitteella",
+    "deleteAccount": "Poista tili",
+    "deleteDesc": "Poista tilisi ja kaikki tiedot pysyvästi"
+  }
+}

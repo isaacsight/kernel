@@ -1,0 +1,124 @@
+{
+  "title": "Hesap ayarları",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Görünen ad",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "Kullanıcı adı",
+    "usernamePlaceholder": "@{{username}}",
+    "avatar": "Profil fotoğrafı",
+    "avatarChange": "Değiştir",
+    "save": "Profili kaydet",
+    "saved": "Profil kaydedildi",
+    "resetProfile": "Profili sıfırla",
+    "profileReset": "Profil varsayılanlara sıfırlandı",
+    "usernameTaken": "Bu kullanıcı adı zaten alınmış",
+    "displayNameTaken": "Bu görünen ad zaten alınmış",
+    "available": "Mevcut"
+  },
+  "security": {
+    "heading": "Kimlik bilgilerini düzenle",
+    "credentialsHeading": "E-posta & şifre",
+    "verifyIdentity": "Değişiklikler yapabilmek için kimliğinizi doğrulayın",
+    "verifyHint": "Kimlik bilgilerini düzenlemeden önce e-posta adresinize bir doğrulama kodu gönderilecektir",
+    "sendCode": "Doğrulama kodu gönder",
+    "codePlaceholder": "6 haneli kodu girin",
+    "codeRequired": "E-postanızdan gelen doğrulama kodunu girin",
+    "verificationRequired": "Öncelikle bir doğrulama kodu gönderin",
+    "codeSent": "Kod gönderildi — e-postanızı kontrol edin",
+    "verify": "Kodu doğrula",
+    "verified": "Kimlik doğrulandı — şimdi değişiklik yapabilirsiniz",
+    "resendCode": "Kodu yeniden gönder",
+    "resendIn": "Yeniden gönderme {{seconds}}s içinde",
+    "changeEmail": "E-postayı değiştir",
+    "emailPlaceholder": "Yeni e-posta adresi",
+    "emailSubmit": "E-postayı güncelle",
+    "emailConfirmationSent": "Yeni adresinize onay e-postası gönderildi",
+    "changePassword": "Şifreyi değiştir",
+    "setPassword": "Şifre belirle",
+    "newPasswordPlaceholder": "Yeni şifre",
+    "confirmPasswordPlaceholder": "Şifreyi doğrula",
+    "passwordSubmit": "Şifreyi güncelle",
+    "passwordChanged": "Şifre güncellendi",
+    "tooShort": "Şifre en az 8 karakter uzunluğunda olmalıdır",
+    "mismatch": "Şifreler eşleşmiyor",
+    "strength": {
+      "weak": "Zayıf",
+      "fair": "Orta",
+      "strong": "Güçlü"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Bağlı hesaplar",
+    "connected": "Bağlı",
+    "connect": "Bağlan",
+    "disconnect": "Ayrıl",
+    "cannotUnlinkLast": "Tek giriş yönteminizi kaldıramazsınız",
+    "unlinked": "Hesap bağlantısı kesildi",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Abonelik",
+    "free": "Ücretsiz plan",
+    "pro": "Pro plan",
+    "max": "Max plan",
+    "admin": "Yönetici",
+    "upgrade": "Pro'ya yükselt",
+    "upgradeMonthly": "Pro — 29$/ay",
+    "upgradeAnnual": "Pro — 290$/yıl",
+    "upgradeMax": "Max — 49$/ay",
+    "upgradeMaxAnnual": "Max — 490$/yıl",
+    "manage": "Aboneliği yönet"
+  },
+  "exportData": {
+    "heading": "Verileri dışa aktar",
+    "description": "Verilerinizin tamamının bir kopyasını JSON formatında indirin.",
+    "button": "Verilerimi dışa aktar",
+    "success": "Dışa aktarım tamamlandı",
+    "rateLimited": "{{hours}} saat sonra tekrar kullanıma hazır"
+  },
+  "resetData": {
+    "heading": "Verileri sıfırla",
+    "description": "Hesabınızı silmeden verilerinizi seçerek silin. Bu işlem geri alınamaz.",
+    "scopes": {
+      "conversations": "Sohbetler",
+      "memory": "Bellek",
+      "knowledge": "Bilgi grafiği",
+      "goals": "Hedefler",
+      "preferences": "Tercihler",
+      "all": "Her Şey"
+    },
+    "scopeDesc": {
+      "conversations": "Tüm konuşmaları ve mesajları sil",
+      "memory": "Öğrenilen profili ve prosedürleri temizle",
+      "knowledge": "Tüm varlıkları ve ilişkileri kaldır",
+      "goals": "Tüm hedefleri ve kilometre taşlarını sil",
+      "preferences": "Özetleri ve meta verileri sıfırla",
+      "all": "Tüm verileri temizle ve sıfırdan başla"
+    },
+    "confirm": {
+      "conversations": "Bu, tüm konuşmalarınızı ve mesajlarınızı kalıcı olarak silecektir. Devam etmek istiyor musunuz?",
+      "memory": "Kernel sizin hakkınızda öğrendiği her şeyi silecektir. Devam etmek istiyor musunuz?",
+      "knowledge": "Bu, tüm bilgi grafiği varlıklarını ve bağlantılarını kaldıracaktır. Devam etmek istiyor musunuz?",
+      "goals": "Bu, tüm hedeflerinizi ve ilerleme takibinizi silecektir. Devam etmek istiyor musunuz?",
+      "preferences": "Bu, özet ve meta veri tercihlerinizi sıfırlayacaktır. Devam etmek istiyor musunuz?",
+      "all": "Bu, TÜM verilerinizi - konuşmaları, hafızayı, bilgiyi, hedefleri ve tercihleri - temizleyecektir. Hesabınız ve aboneliğiniz sağlam kalacaktır. Devam etmek istiyor musunuz?"
+    },
+    "confirmBtn": "Evet, sıfırla",
+    "cancel": "İptal",
+    "success": "{{scope}} başarıyla silindi",
+    "done": "Veri sıfırlama tamamlandı"
+  },
+  "danger": {
+    "heading": "Hesap",
+    "signOut": "Çıkış yap",
+    "signOutDesc": "Bu cihazdaki hesabınızdan çıkış yapın",
+    "deleteAccount": "Hesabı sil",
+    "deleteDesc": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin"
+  }
+}

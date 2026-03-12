@@ -1,0 +1,124 @@
+{
+  "title": "Ustawienia konta",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Imię i nazwisko",
+    "displayNamePlaceholder": "Twoje imię i nazwisko",
+    "username": "Nazwa użytkownika",
+    "usernamePlaceholder": "@nazwa_użytkownika",
+    "avatar": "Zdjęcie profilowe",
+    "avatarChange": "Zmień",
+    "save": "Zapisz profil",
+    "saved": "Profil zapisany",
+    "resetProfile": "Zresetuj profil",
+    "profileReset": "Profil zresetowano do ustawień domyślnych",
+    "usernameTaken": "Ta nazwa użytkownika jest już zajęta",
+    "displayNameTaken": "To imię i nazwisko jest już zajęte",
+    "available": "Dostępne"
+  },
+  "security": {
+    "heading": "Edytuj dane uwierzytelniające",
+    "credentialsHeading": "Adres e-mail i hasło",
+    "verifyIdentity": "Zweryfikuj, aby dokonać zmian",
+    "verifyHint": "Kod weryfikacyjny zostanie wysłany na Twój adres e-mail przed edycją danych uwierzytelniających",
+    "sendCode": "Wyślij kod weryfikacyjny",
+    "codePlaceholder": "Wprowadź 6-cyfrowy kod",
+    "codeRequired": "Wprowadź kod weryfikacyjny z Twojej skrzynki e-mail",
+    "verificationRequired": "Najpierw wyślij kod weryfikacyjny",
+    "codeSent": "Kod wysłany — sprawdź swoją skrzynkę e-mail",
+    "verify": "Zweryfikuj kod",
+    "verified": "Tożsamość zweryfikowana — możesz teraz dokonać zmian",
+    "resendCode": "Ponownie wyślij kod",
+    "resendIn": "Ponowne wysłanie za {{seconds}}s",
+    "changeEmail": "Zmień adres e-mail",
+    "emailPlaceholder": "Nowy adres e-mail",
+    "emailSubmit": "Zaktualizuj adres e-mail",
+    "emailConfirmationSent": "Wysłano e-mail z potwierdzeniem na nowy adres",
+    "changePassword": "Zmień hasło",
+    "setPassword": "Ustaw hasło",
+    "newPasswordPlaceholder": "Nowe hasło",
+    "confirmPasswordPlaceholder": "Potwierdź hasło",
+    "passwordSubmit": "Zaktualizuj hasło",
+    "passwordChanged": "Hasło zaktualizowane",
+    "tooShort": "Hasło musi mieć co najmniej 8 znaków",
+    "mismatch": "Hasła nie pasują do siebie",
+    "strength": {
+      "weak": "Słabe",
+      "fair": "Dobre",
+      "strong": "Silne"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Połączone konta",
+    "connected": "Połączone",
+    "connect": "Połącz",
+    "disconnect": "Rozłącz",
+    "cannotUnlinkLast": "Nie można usunąć jedynej metody logowania",
+    "unlinked": "Konto rozłączone",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Subskrypcja",
+    "free": "Plan darmowy",
+    "pro": "Plan Pro",
+    "max": "Plan Max",
+    "admin": "Administrator",
+    "upgrade": "Zaktualizuj do Pro",
+    "upgradeMonthly": "Pro — 29$/mies.",
+    "upgradeAnnual": "Pro — 290 USD/rok",
+    "upgradeMax": "Max — 49 USD/miesiąc",
+    "upgradeMaxAnnual": "Max — 490 USD/rok",
+    "manage": "Zarządzaj subskrypcją"
+  },
+  "exportData": {
+    "heading": "Eksport danych",
+    "description": "Pobierz pełną kopię wszystkich Twoich danych w formacie JSON.",
+    "button": "Eksportuj moje dane",
+    "success": "Eksport pobrany",
+    "rateLimited": "Eksport ponownie dostępny za {{hours}} godzin"
+  },
+  "resetData": {
+    "heading": "Reset danych",
+    "description": "Selektywnie usuń swoje dane bez usuwania konta. Ta operacja jest nieodwracalna.",
+    "scopes": {
+      "conversations": "Rozmowy",
+      "memory": "Pamięć",
+      "knowledge": "Graf wiedzy",
+      "goals": "Cele",
+      "preferences": "Ustawienia",
+      "all": "Wszystko"
+    },
+    "scopeDesc": {
+      "conversations": "Usuń wszystkie rozmowy i wiadomości",
+      "memory": "Wyczyść profil i procedury, które Kernel zapamiętał",
+      "knowledge": "Usuń wszystkie encje i relacje z bazy wiedzy",
+      "goals": "Usuń wszystkie cele i kamienie milowe",
+      "preferences": "Zresetuj instrukcje i metadane",
+      "all": "Wyczyść wszystkie dane i zacznij od nowa"
+    },
+    "confirm": {
+      "conversations": "To trwale usunie wszystkie Twoje rozmowy i wiadomości. Czy chcesz kontynuować?",
+      "memory": "To usunie wszystko, czego Kernel się o Tobie nauczył. Czy chcesz kontynuować?",
+      "knowledge": "To usunie wszystkie encje i połączenia z grafu wiedzy. Czy chcesz kontynuować?",
+      "goals": "To usunie wszystkie Twoje cele i śledzenie postępów. Czy chcesz kontynuować?",
+      "preferences": "To zresetuje Twoje preferencje dotyczące instrukcji i metadanych. Czy chcesz kontynuować?",
+      "all": "To usunie WSZYSTKIE Twoje dane - rozmowy, pamięć, wiedzę, cele i preferencje. Twoje konto i subskrypcja pozostaną nienaruszone. Czy chcesz kontynuować?"
+    },
+    "confirmBtn": "Tak, zresetuj",
+    "cancel": "Anuluj",
+    "success": "{{scope}} wyczyszczono pomyślnie",
+    "done": "Reset danych zakończony"
+  },
+  "danger": {
+    "heading": "Konto",
+    "signOut": "Wyloguj się",
+    "signOutDesc": "Wyloguj się ze swojego konta na tym urządzeniu",
+    "deleteAccount": "Usuń konto",
+    "deleteDesc": "Trwale usuń swoje konto i wszystkie dane"
+  }
+}
