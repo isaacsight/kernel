@@ -38,7 +38,16 @@
     "system": "시스템",
     "communications": "커뮤니케이션",
     "adaptiveSystem": "적응형 시스템",
-    "usage": "사용량"
+    "usage": "사용량",
+    "mirror": "미러",
+    "projectFiles": "프로젝트 파일",
+    "imageGallery": "이미지 갤러리",
+    "knowledgeBase": "지식 기반",
+    "social": "소셜 미디어",
+    "platformEngine": "콘텐츠 파이프라인",
+    "explore": "탐색",
+    "accountSettings": "계정 설정",
+    "notifProactive": "사전 알림"
   },
   "admin": "관리자",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "Pro 시작하기 — $29/월",
     "annualButton": "$290/년 — $58 절약",
     "buttonLoading": "결제 페이지를 여는 중...",
-    "maybeLater": "나중에 하기"
+    "maybeLater": "나중에 하기",
+    "learnedTitle": "Kernel이 당신에 대해 학습한 내용",
+    "learnedCta": "내일 다시 돌아와 대화를 계속하세요.",
+    "maxButton": "Max로 업그레이드 - $49/월",
+    "maxAnnualButton": "$490/년 - $98 절약"
   },
   "deleteConfirm": {
     "title": "계정을 삭제하시겠습니까?",
@@ -85,5 +98,95 @@
     "cancel": "취소"
   },
   "messagesRemaining": "남은 메시지 {{count}}개",
-  "lastFreeMessage": "마지막 무료 메시지"
+  "lastFreeMessage": "마지막 무료 메시지",
+  "menuSection": {
+    "ai": "AI 및 에이전트",
+    "content": "콘텐츠 및 지식",
+    "insights": "인사이트 및 목표",
+    "system": "설정 및 시스템"
+  },
+  "usage": {
+    "title": "사용량",
+    "loading": "사용량 데이터를 불러오는 중...",
+    "retry": "다시 시도",
+    "last30days": "최근 30일",
+    "onPace": "{{projected}} 중 {{limit}} 건의 메시지를 예상하는 속도입니다.",
+    "overLimit": "{{limit}} 건의 메시지 제한을 초과하는 속도입니다.",
+    "byFeature": "기능별",
+    "dailyTrend": "30일 동안의 추세",
+    "recommendation": "추천",
+    "upgrade": "업그레이드"
+  },
+  "entity": {
+    "evolved": "{{tier}}로 진화했습니다.",
+    "streak": "{{count}}일 연속",
+    "goalCheckIn": "체크인: {{title}}",
+    "mood": {
+      "happy": "기쁨",
+      "excited": "흥분",
+      "content": "만족",
+      "sad": "슬픔",
+      "sleepy": "졸림",
+      "lonely": "외로움",
+      "bored": "지루함"
+    }
+  },
+  "entityInfo": {
+    "mood": "기분",
+    "streak": "연속 기록",
+    "days": "일",
+    "focus": "집중"
+  },
+  "nudge": {
+    "insights": "몇 번의 대화가 있었네요 — Kernel은 사용자의 대화 내용을 분석하여 패턴을 발견하고 있습니다.",
+    "knowledge": "사용자의 지식 그래프가 확장되고 있습니다 — Kernel이 매핑한 연결을 확인해 보세요.",
+    "stats": "목표를 달성했습니다 — 사용량 변화를 확인하기 위해 통계를 확인하세요.",
+    "workflows": "Kernel을 꾸준히 사용하고 계십니다 — 워크플로우는 반복적인 작업을 자동화할 수 있습니다.",
+    "showMe": "보기",
+    "notNow": "나중에"
+  },
+  "valuePreview": {
+    "message": "프로 멤버는 매일 브리핑, 심층 연구, 지속적인 메모리를 제공받습니다.",
+    "gotIt": "알겠습니다"
+  },
+  "messagesLeft": "{{count}} 개의 메시지 남음",
+  "agentWhy": {
+    "label": "왜?"
+  },
+  "thinking": {
+    "label": "고민 중",
+    "duration": "{{seconds}}초 동안 생각 중",
+    "streaming": "생각 중...",
+    "toggle": "고민 모드 전환",
+    "tooltip": "답변하기 전에 더 깊이 생각하기"
+  },
+  "explain": {
+    "toggle": "설명 모드 전환",
+    "tooltip": "설명 모드 - 단계별 코드"
+  },
+  "document": {
+    "active": "분석 중: {{name}}",
+    "clear": "문서 지우기",
+    "contextHint": "이 문서에 대한 후속 질문을 해보세요."
+  },
+  "proactive": {
+    "noticed": "Kernel이 알아차렸어요...",
+    "notification": "Kernel이 관찰 사항이 있습니다.",
+    "explore": "자, 이것을 알아봐요."
+  },
+  "tour": {
+    "entity": "이것은 당신의 Kernel 엔티티입니다. 채팅을 통해 진화하며, 기분, 스트릭, 성장 레벨을 보려면 탭하세요.",
+    "moreMenu": "Kernel의 모든 기능: 에이전트, 지식 베이스, 인사이트 등을 보려면 여기를 탭하세요.",
+    "inputBar": "여기에서 대화를 시작하세요. 파일을 첨부하거나 설명 모드를 전환하거나 안녕하세요라고 말할 수 있습니다.",
+    "gotIt": "알겠어요",
+    "skip": "투어 건너뛰기"
+  },
+  "workflow": {
+    "planning": "단계를 계획 중...",
+    "executing": "실행 중: {{step}}",
+    "complete": "워크플로우 완료",
+    "failed": "단계 실패: {{step}}",
+    "cancel": "워크플로우 취소",
+    "cancelled": "워크플로우 취소됨"
+  }
 }

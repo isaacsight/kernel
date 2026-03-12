@@ -38,7 +38,16 @@
     "system": "النظام",
     "communications": "الاتصالات",
     "adaptiveSystem": "النظام التكيفي",
-    "usage": "الاستخدام"
+    "usage": "الاستخدام",
+    "mirror": "المرآة",
+    "projectFiles": "ملفات المشروع",
+    "imageGallery": "معرض الصور",
+    "knowledgeBase": "قاعدة المعرفة",
+    "social": "وسائل التواصل الاجتماعي",
+    "platformEngine": "مسار المحتوى",
+    "explore": "استكشف",
+    "accountSettings": "إعدادات الحساب",
+    "notifProactive": "رؤى استباقية"
   },
   "admin": "مسؤول",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "اشترك في Pro — $29/شهريًا",
     "annualButton": "$290/سنويًا — وفّر $58",
     "buttonLoading": "جاري فتح الدفع...",
-    "maybeLater": "ربما لاحقاً"
+    "maybeLater": "ربما لاحقاً",
+    "learnedTitle": "ماذا تعلم Kernel عنك",
+    "learnedCta": "عد غدًا واستمر في المحادثة.",
+    "maxButton": "انتقل إلى Max - 49 دولارًا/شهريًا",
+    "maxAnnualButton": "490 دولارًا/سنويًا - وفر 98 دولارًا"
   },
   "deleteConfirm": {
     "title": "حذف حسابك؟",
@@ -85,5 +98,95 @@
     "cancel": "إلغاء"
   },
   "messagesRemaining": "تبقت {{count}} رسائل",
-  "lastFreeMessage": "آخر رسالة مجانية"
+  "lastFreeMessage": "آخر رسالة مجانية",
+  "menuSection": {
+    "ai": "الذكاء الاصطناعي والوكلاء",
+    "content": "المحتوى والمعرفة",
+    "insights": "الرؤى والأهداف",
+    "system": "الإعدادات والنظام"
+  },
+  "usage": {
+    "title": "الاستخدام",
+    "loading": "جاري تحميل بيانات الاستخدام...",
+    "retry": "إعادة المحاولة",
+    "last30days": "آخر 30 يومًا",
+    "onPace": "على المسار الصحيح لاستخدام {{projected}} من {{limit}} رسالة",
+    "overLimit": "على المسار لتجاوز حد الرسائل البالغ {{limit}}",
+    "byFeature": "حسب الميزة",
+    "dailyTrend": "اتجاه لمدة 30 يومًا",
+    "recommendation": "توصية",
+    "upgrade": "الترقية"
+  },
+  "entity": {
+    "evolved": "تطورت إلى {{tier}}",
+    "streak": "اليوم {{count}}",
+    "goalCheckIn": "تسجيل الدخول: {{title}}",
+    "mood": {
+      "happy": "سعيد",
+      "excited": "متحمس",
+      "content": "راض",
+      "sad": "حزين",
+      "sleepy": "نعسان",
+      "lonely": "وحيد",
+      "bored": "ممل"
+    }
+  },
+  "entityInfo": {
+    "mood": "المزاج",
+    "streak": "السلسلة",
+    "days": "أيام",
+    "focus": "التركيز"
+  },
+  "nudge": {
+    "insights": "لقد أجريتَ عدة محادثات الآن — Kernel يكتشف أنماطًا فيما تتحدث عنه.",
+    "knowledge": "رسم بياني للمعرفة الخاص بك يتزايد — انظر إلى الاتصالات التي قام Kernel بتعيينها من محادثاتك.",
+    "stats": "لقد أكملتَ هدفًا — تحقق من إحصائياتك لمعرفة كيف يتطور استخدامك.",
+    "workflows": "لقد كنت تستخدم Kernel بانتظام — يمكن أن تقوم سير العمل بأتمتة مهامك المتكررة.",
+    "showMe": "أرني",
+    "notNow": "ليس الآن"
+  },
+  "valuePreview": {
+    "message": "يحصل أعضاء Pro على موجزات يومية وأبحاث متعمقة وذاكرة دائمة.",
+    "gotIt": "فهمت"
+  },
+  "messagesLeft": "{{count}} رسائل متبقية",
+  "agentWhy": {
+    "label": "لماذا؟"
+  },
+  "thinking": {
+    "label": "تفكير متعمق",
+    "duration": "فكر لـ {{seconds}} ثانية",
+    "streaming": "يفكر...",
+    "toggle": "تفعيل التفكير المتعمق",
+    "tooltip": "فكر بعمق قبل الإجابة"
+  },
+  "explain": {
+    "toggle": "تفعيل وضع الشرح",
+    "tooltip": "وضع الشرح - كود خطوة بخطوة"
+  },
+  "document": {
+    "active": "التحليل: {{name}}",
+    "clear": "مسح المستند",
+    "contextHint": "اطرح أسئلة إضافية حول هذا المستند"
+  },
+  "proactive": {
+    "noticed": "لاحظ Kernel...",
+    "notification": "لدى Kernel ملاحظة لك",
+    "explore": "لنستكشف هذا"
+  },
+  "tour": {
+    "entity": "هذه هي الكيان الخاص بك في Kernel. تتطور مع المحادثة - انقر لرؤية حالته وسلسلة النمو ومستوى النمو.",
+    "moreMenu": "انقر هنا للحصول على جميع ميزات Kernel: وكلاء، وقاعدة المعرفة، والرؤى، والمزيد.",
+    "inputBar": "ابدأ محادثة هنا. أرفق ملفات، أو قم بتشغيل وضع الشرح، أو فقط قل مرحباً.",
+    "gotIt": "فهمت",
+    "skip": "تخطي الجولة"
+  },
+  "workflow": {
+    "planning": "تخطيط الخطوات...",
+    "executing": "جاري التنفيذ: {{step}}",
+    "complete": "اكتمل سير العمل",
+    "failed": "فشل الخطوة: {{step}}",
+    "cancel": "إلغاء سير العمل",
+    "cancelled": "تم إلغاء سير العمل"
+  }
 }

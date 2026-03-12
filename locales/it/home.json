@@ -38,7 +38,16 @@
     "system": "Sistema",
     "communications": "Comunicazioni",
     "adaptiveSystem": "Sistema adattivo",
-    "usage": "Utilizzo"
+    "usage": "Utilizzo",
+    "mirror": "Lo Specchio",
+    "projectFiles": "File di progetto",
+    "imageGallery": "Galleria immagini",
+    "knowledgeBase": "Knowledge base",
+    "social": "Social media",
+    "platformEngine": "Pipeline di contenuti",
+    "explore": "Esplora",
+    "accountSettings": "Impostazioni account",
+    "notifProactive": "Suggerimenti proattivi"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "Passa a Pro — $29/mese",
     "annualButton": "$290/anno — risparmia $58",
     "buttonLoading": "Apertura checkout...",
-    "maybeLater": "Forse più tardi"
+    "maybeLater": "Forse più tardi",
+    "learnedTitle": "Cosa Kernel ha imparato su di te",
+    "learnedCta": "Torna domani e continua la conversazione.",
+    "maxButton": "Vai a Max — $49/mo",
+    "maxAnnualButton": "$490/yr — risparmia $98"
   },
   "deleteConfirm": {
     "title": "Eliminare il tuo account?",
@@ -85,5 +98,95 @@
     "cancel": "Annulla"
   },
   "messagesRemaining": "{{count}} messaggi rimanenti",
-  "lastFreeMessage": "Ultimo messaggio gratuito"
+  "lastFreeMessage": "Ultimo messaggio gratuito",
+  "menuSection": {
+    "ai": "AI & Agenti",
+    "content": "Contenuti & Knowledge",
+    "insights": "Approfondimenti & Obiettivi",
+    "system": "Impostazioni & Sistema"
+  },
+  "usage": {
+    "title": "Utilizzo",
+    "loading": "Caricamento dati di utilizzo...",
+    "retry": "Riprova",
+    "last30days": "Ultimi 30 giorni",
+    "onPace": "In linea per {{projected}} di {{limit}} messaggi",
+    "overLimit": "In linea per superare il tuo limite di {{limit}} messaggi",
+    "byFeature": "Per funzionalità",
+    "dailyTrend": "Tendenza degli ultimi 30 giorni",
+    "recommendation": "Raccomandazione",
+    "upgrade": "Aggiorna"
+  },
+  "entity": {
+    "evolved": "Evoluto a {{tier}}",
+    "streak": "Giorno {{count}}",
+    "goalCheckIn": "Verifica: {{title}}",
+    "mood": {
+      "happy": "felice",
+      "excited": "eccitato",
+      "content": "soddisfatto",
+      "sad": "triste",
+      "sleepy": "assonnato",
+      "lonely": "solo",
+      "bored": "noioso"
+    }
+  },
+  "entityInfo": {
+    "mood": "Umore",
+    "streak": "Serie",
+    "days": "giorni",
+    "focus": "Focus"
+  },
+  "nudge": {
+    "insights": "Ora hai avuto alcune conversazioni: Kernel sta trovando schemi su ciò di cui parli.",
+    "knowledge": "Il tuo grafico della conoscenza sta crescendo: vedi le connessioni che Kernel ha mappato dalle tue conversazioni.",
+    "stats": "Hai completato un obiettivo: controlla le tue statistiche per vedere come sta evolvendo il tuo utilizzo.",
+    "workflows": "Utilizzi Kernel regolarmente: i flussi di lavoro possono automatizzare le tue attività ricorrenti.",
+    "showMe": "Mostrami",
+    "notNow": "Non ora"
+  },
+  "valuePreview": {
+    "message": "Gli abbonati Pro ricevono briefing giornalieri, ricerche approfondite e memoria persistente.",
+    "gotIt": "Ok"
+  },
+  "messagesLeft": "{{count}} messaggi rimanenti",
+  "agentWhy": {
+    "label": "Perché?"
+  },
+  "thinking": {
+    "label": "Pensando...",
+    "duration": "Pensiero per {{seconds}}s",
+    "streaming": "Pensando...",
+    "toggle": "Attiva ragionamento approfondito",
+    "tooltip": "Ragiona più a fondo prima di rispondere"
+  },
+  "explain": {
+    "toggle": "Attiva modalità spiegazione",
+    "tooltip": "Modalità spiegazione: codice passo dopo passo"
+  },
+  "document": {
+    "active": "Analisi: {{name}}",
+    "clear": "Cancella documento",
+    "contextHint": "Fai domande di approfondimento su questo documento"
+  },
+  "proactive": {
+    "noticed": "Kernel ha notato...",
+    "notification": "Kernel ha un'osservazione per te",
+    "explore": "Esploriamo questo"
+  },
+  "tour": {
+    "entity": "Questa è la tua entità Kernel. Si evolve man mano che parli: toccala per vedere il suo umore, la sua serie e il livello di crescita.",
+    "moreMenu": "Tocca qui per tutte le funzionalità di Kernel: agenti, knowledge base, approfondimenti e altro.",
+    "inputBar": "Inizia una conversazione qui. Allega file, attiva la modalità spiegazione o semplicemente di' ciao.",
+    "gotIt": "Capito",
+    "skip": "Salta il tour"
+  },
+  "workflow": {
+    "planning": "Pianificazione dei passaggi...",
+    "executing": "Esecuzione: {{step}}",
+    "complete": "Flusso di lavoro completato",
+    "failed": "Passaggio fallito: {{step}}",
+    "cancel": "Annulla flusso di lavoro",
+    "cancelled": "Flusso di lavoro annullato"
+  }
 }

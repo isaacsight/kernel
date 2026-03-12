@@ -38,7 +38,16 @@
     "system": "系统",
     "communications": "通讯",
     "adaptiveSystem": "自适应系统",
-    "usage": "使用情况"
+    "usage": "使用情况",
+    "mirror": "镜像",
+    "projectFiles": "项目文件",
+    "imageGallery": "图片库",
+    "knowledgeBase": "知识库",
+    "social": "社交媒体",
+    "platformEngine": "内容流水线",
+    "explore": "探索",
+    "accountSettings": "账户设置",
+    "notifProactive": "主动洞察"
   },
   "admin": "Admin",
   "pro": "Pro",
@@ -62,7 +71,11 @@
     "button": "升级 Pro — $29/月",
     "annualButton": "$290/年 — 节省 $58",
     "buttonLoading": "正在打开结账...",
-    "maybeLater": "以后再说"
+    "maybeLater": "以后再说",
+    "learnedTitle": "Kernel 了解了你的情况",
+    "learnedCta": "明天回来继续对话。",
+    "maxButton": "开启 Max — 每月 $49",
+    "maxAnnualButton": "$490/年 — 节省 $98"
   },
   "deleteConfirm": {
     "title": "删除你的账户？",
@@ -85,5 +98,95 @@
     "cancel": "取消"
   },
   "messagesRemaining": "剩余 {{count}} 条消息",
-  "lastFreeMessage": "最后一条免费消息"
+  "lastFreeMessage": "最后一条免费消息",
+  "menuSection": {
+    "ai": "AI 与代理",
+    "content": "内容与知识",
+    "insights": "洞察与目标",
+    "system": "设置与系统"
+  },
+  "usage": {
+    "title": "使用情况",
+    "loading": "正在加载使用数据...",
+    "retry": "重试",
+    "last30days": "最近30天",
+    "onPace": "预计将达到 {{projected}} / {{limit}} 条消息",
+    "overLimit": "预计将超出您的 {{limit}} 条消息限制",
+    "byFeature": "按功能",
+    "dailyTrend": "30天趋势",
+    "recommendation": "推荐",
+    "upgrade": "升级"
+  },
+  "entity": {
+    "evolved": "已升级到 {{tier}}",
+    "streak": "第 {{count}} 天",
+    "goalCheckIn": "签到：{{title}}",
+    "mood": {
+      "happy": "开心",
+      "excited": "激动",
+      "content": "满足",
+      "sad": "伤心",
+      "sleepy": "困倦",
+      "lonely": "孤独",
+      "bored": "无聊"
+    }
+  },
+  "entityInfo": {
+    "mood": "情绪",
+    "streak": "连贯性",
+    "days": "天数",
+    "focus": "专注"
+  },
+  "nudge": {
+    "insights": "您已经进行了一些对话——Kernel 正在发现您谈论的内容中的模式。",
+    "knowledge": "您的知识图谱正在增长——查看 Kernel 从您的对话中绘制的连接。",
+    "stats": "您已完成一个目标——检查您的统计数据，了解您的使用情况如何发展。",
+    "workflows": "您一直在定期使用 Kernel — 工作流程可以自动化您的重复性任务。",
+    "showMe": "展示给我",
+    "notNow": "现在不选"
+  },
+  "valuePreview": {
+    "message": "Pro 会员可以获得每日简报、深入研究和持久记忆。",
+    "gotIt": "知道了"
+  },
+  "messagesLeft": "{{count}} 消息剩余",
+  "agentWhy": {
+    "label": "为什么？"
+  },
+  "thinking": {
+    "label": "深度思考",
+    "duration": "思考了 {{seconds}} 秒",
+    "streaming": "正在思考...",
+    "toggle": "开启深度思考",
+    "tooltip": "在回答前进行更深入的思考"
+  },
+  "explain": {
+    "toggle": "开启解释模式",
+    "tooltip": "解释模式 — 逐步代码"
+  },
+  "document": {
+    "active": "正在分析: {{name}}",
+    "clear": "清除文档",
+    "contextHint": "针对此文档提问"
+  },
+  "proactive": {
+    "noticed": "Kernel 发现...",
+    "notification": "Kernel 给你带来一个观察",
+    "explore": "让我们来探索一下"
+  },
+  "tour": {
+    "entity": "这是你的 Kernel 实体。它会随着你的聊天而发展——点击查看它的心情、连胜和成长等级。",
+    "moreMenu": "点击此处查看 Kernel 的所有功能：代理、知识库、洞察等等。",
+    "inputBar": "在这里开始对话。附加文件、切换解释模式或只是打个招呼。",
+    "gotIt": "明白了",
+    "skip": "跳过教程"
+  },
+  "workflow": {
+    "planning": "规划步骤...",
+    "executing": "执行：{{step}}",
+    "complete": "工作流程完成",
+    "failed": "步骤失败：{{step}}",
+    "cancel": "取消工作流程",
+    "cancelled": "工作流程已取消"
+  }
 }
