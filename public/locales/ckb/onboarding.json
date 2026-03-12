@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "بەردەوامبە",
-  "skipIntro": "بازدان لە ناساندن"
+  "skipIntro": "بازدان لە ناساندن",
+  "greeting": "سڵاو. من Kernel-م.",
+  "greetingUser": "سڵاو، {{name}}! من Kernel-م.",
+  "tagline": "هەر شتێك بپرسە. من بەشەکانی تری دەخەوێمەڕێ.",
+  "placeholder": "لەگەڵ چی دەکار دەکەیت؟"
 }

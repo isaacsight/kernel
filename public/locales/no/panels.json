@@ -7,10 +7,27 @@
     "addGoal": "Legg til mål",
     "completed": "Fullført ({{count}})",
     "target": "Mål: {{date}}",
-    "priority": { "low": "Lav", "medium": "Middels", "high": "Høy" },
-    "frequency": { "daily": "Daglig innsjekk", "weekly": "Ukentlig", "biweekly": "Annenhver uke", "monthly": "Månedlig" },
-    "errors": { "addFailed": "Kunne ikke legge til mål", "updateFailed": "Kunne ikke oppdatere milepæl", "completeFailed": "Kunne ikke fullføre mål", "deleteFailed": "Kunne ikke slette mål" },
-    "deleteConfirm": "Slette dette målet? Dette kan ikke angres."
+    "priority": {
+      "low": "Lav",
+      "medium": "Middels",
+      "high": "Høy"
+    },
+    "frequency": {
+      "daily": "Daglig innsjekk",
+      "weekly": "Ukentlig",
+      "biweekly": "Annenhver uke",
+      "monthly": "Månedlig"
+    },
+    "errors": {
+      "addFailed": "Kunne ikke legge til mål",
+      "updateFailed": "Kunne ikke oppdatere milepæl",
+      "completeFailed": "Kunne ikke fullføre mål",
+      "deleteFailed": "Kunne ikke slette mål"
+    },
+    "deleteConfirm": "Slette dette målet? Dette kan ikke angres.",
+    "loading": "Laster inn mål...",
+    "titlePlaceholder": "Hva jobber du mot?",
+    "descPlaceholder": "Legg til detaljer (valgfritt)..."
   },
   "workflows": {
     "title": "Arbeidsflyter",
@@ -21,7 +38,10 @@
     "createWorkflow": "Opprett arbeidsflyt",
     "runCount_one": "Kjørt {{count}} gang",
     "runCount_other": "Kjørt {{count}} ganger",
-    "errors": { "saveFailed": "Kunne ikke lagre arbeidsflyt", "deleteFailed": "Kunne ikke slette arbeidsflyt" },
+    "errors": {
+      "saveFailed": "Kunne ikke lagre arbeidsflyt",
+      "deleteFailed": "Kunne ikke slette arbeidsflyt"
+    },
     "deleteConfirm": "Slette denne arbeidsflyten? Dette kan ikke angres."
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "Sett det opp og glem det — Kernel kjører oppgaver etter din timeplan.",
     "createTask": "Opprett oppgave",
     "schedule": "Tidsplan",
-    "taskTypes": { "reminder": "Påminnelse", "workflow": "Kjør arbeidsflyt", "briefing": "Daglig oppsummering", "goalCheckin": "Målinnsjekk" },
-    "presets": { "daily": "Daglig", "weekdays": "Hverdager", "weekly": "Ukentlig (man)", "once": "En gang" },
-    "channels": { "inApp": "I appen", "email": "E-post", "discord": "Discord" },
-    "errors": { "createFailed": "Kunne ikke opprette planlagt oppgave", "updateFailed": "Kunne ikke oppdatere oppgave", "deleteFailed": "Kunne ikke slette oppgave" },
+    "taskTypes": {
+      "reminder": "Påminnelse",
+      "workflow": "Kjør arbeidsflyt",
+      "briefing": "Daglig oppsummering",
+      "goalCheckin": "Målinnsjekk"
+    },
+    "presets": {
+      "daily": "Daglig",
+      "weekdays": "Hverdager",
+      "weekly": "Ukentlig (man)",
+      "once": "En gang"
+    },
+    "channels": {
+      "inApp": "I appen",
+      "email": "E-post",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Kunne ikke opprette planlagt oppgave",
+      "updateFailed": "Kunne ikke oppdatere oppgave",
+      "deleteFailed": "Kunne ikke slette oppgave"
+    },
     "deleteConfirm": "Slette denne planlagte oppgaven?"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "Generer en ny oppsummering basert på dine interesser og nylig aktivitet",
     "generating": "Genererer...",
     "newBriefing": "Ny oppsummering",
-    "phases": { "planning": "Planlegger", "researching": "Forsker", "writing": "Skriver" },
+    "phases": {
+      "planning": "Planlegger",
+      "researching": "Forsker",
+      "writing": "Skriver"
+    },
     "loading": "Laster oppsummeringer...",
     "emptyTitle": "Din daglige oppsummering",
     "emptyDesc": "Få en personlig nyhets- og innsiktsammendrag skreddersydd til dine interesser og mål.",
@@ -56,8 +98,13 @@
     "readFull": "Les hele oppsummeringen",
     "goDeeper": "Gå dypere i chat",
     "saveAsGoal": "Lagre konklusjoner som mål",
-    "errors": { "generateFailed": "Kunne ikke generere oppsummering" },
-    "toast": { "generated": "Oppsummering generert", "removed": "Oppsummering fjernet" }
+    "errors": {
+      "generateFailed": "Kunne ikke generere oppsummering"
+    },
+    "toast": {
+      "generated": "Oppsummering generert",
+      "removed": "Oppsummering fjernet"
+    }
   },
   "stats": {
     "title": "Din statistikk",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} forbindelser",
     "confident": "{{value}}% sikker",
     "mentioned": "{{count}}x nevnt",
-    "types": { "person": "Personer", "company": "Selskaper", "project": "Prosjekter", "concept": "Konsepter", "preference": "Preferanser", "location": "Steder" }
+    "types": {
+      "person": "Personer",
+      "company": "Selskaper",
+      "project": "Prosjekter",
+      "concept": "Konsepter",
+      "preference": "Preferanser",
+      "location": "Steder"
+    }
   },
   "insights": {
     "title": "Innsikt",
@@ -143,7 +197,40 @@
     "days30": "30 dager",
     "createLink": "Opprett delingslenke",
     "creating": "Oppretter...",
-    "errors": { "createFailed": "Kunne ikke opprette delingslenke", "revokeFailed": "Kunne ikke tilbakekalle lenke" },
-    "toast": { "revoked": "Delingslenke tilbakekalt" }
+    "errors": {
+      "createFailed": "Kunne ikke opprette delingslenke",
+      "revokeFailed": "Kunne ikke tilbakekalle lenke"
+    },
+    "toast": {
+      "revoked": "Delingslenke tilbakekalt"
+    },
+    "shareableLink": "Delbar lenke",
+    "copyLink": "Kopier lenke",
+    "copied": "Kopiert",
+    "copiedAnnounce": "Lenke kopiert til utklippstavlen",
+    "shareVia": "Del via...",
+    "limitReached": "Du har nådd din daglige grense på {{limit}} delte lenker. Oppgrader til Pro for mer deling.",
+    "limitHint": "{{used}}/{{limit}} lenker brukt i dag",
+    "dailyCount": "{{used}}/{{limit}} gratis delinger brukt i dag"
+  },
+  "mirror": {
+    "title": "Speilet",
+    "emptyTitle": "Speilet er fortsatt under forming.",
+    "emptyDesc": "Fortsett å snakke – Kernels agenter lærer å se deg fra forskjellige vinkler.",
+    "convergenceTitle": "Hva speilet ser",
+    "convergenceDesc": "Innsikter som bare oppstår når flere agenter sammenligner notater.",
+    "facetsTitle": "Agentperspektiver",
+    "facetsDesc": "Hver agent observerer en annen dimensjon av hvem du er.",
+    "observations": "observasjoner",
+    "patterns": "Mønstre",
+    "convergenceCount": "Konvergert {{count}} ganger",
+    "dimensions": {
+      "relationship": "Relasjon",
+      "curiosity": "Nysgjerrighet",
+      "craft": "Håndverk",
+      "voice": "Stemme",
+      "judgment": "Dømmekraft",
+      "arc": "Bue"
+    }
   }
 }

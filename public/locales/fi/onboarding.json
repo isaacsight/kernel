@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Jatka",
-  "skipIntro": "Ohita esittely"
+  "skipIntro": "Ohita esittely",
+  "greeting": "Hei. Olen Kernel.",
+  "greetingUser": "Hei, {{name}}. Olen Kernel.",
+  "tagline": "Kysy mitä tahansa. Minä hoidan loput.",
+  "placeholder": "Mitä olet tekemässä?"
 }

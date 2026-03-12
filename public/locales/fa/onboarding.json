@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "ادامه",
-  "skipIntro": "رد کردن مقدمه"
+  "skipIntro": "رد کردن مقدمه",
+  "greeting": "سلام. من کرنل هستم.",
+  "greetingUser": "سلام، {{name}}. من کرنل هستم.",
+  "tagline": "هر سوالی داری بپرس. بقیه کارها رو من انجام میدم.",
+  "placeholder": "چه کاری در حال انجام هستی؟"
 }

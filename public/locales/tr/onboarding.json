@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Devam",
-  "skipIntro": "Girişi atla"
+  "skipIntro": "Girişi atla",
+  "greeting": "Merhaba. Ben Kernel.",
+  "greetingUser": "Merhaba, {{name}}. Ben Kernel.",
+  "tagline": "Bana ne sorarsan sor. Kalanını ben hallederim.",
+  "placeholder": "Şu anda ne üzerinde çalışıyorsun?"
 }

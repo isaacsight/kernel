@@ -7,10 +7,27 @@
     "addGoal": "Hedef Ekle",
     "completed": "Tamamlanan ({{count}})",
     "target": "Hedef: {{date}}",
-    "priority": { "low": "Düşük", "medium": "Orta", "high": "Yüksek" },
-    "frequency": { "daily": "Günlük kontrol", "weekly": "Haftalık", "biweekly": "İki haftalık", "monthly": "Aylık" },
-    "errors": { "addFailed": "Hedef eklenemedi", "updateFailed": "Kilometre taşı güncellenemedi", "completeFailed": "Hedef tamamlanamadı", "deleteFailed": "Hedef silinemedi" },
-    "deleteConfirm": "Bu hedef silinsin mi? Bu geri alınamaz."
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek"
+    },
+    "frequency": {
+      "daily": "Günlük kontrol",
+      "weekly": "Haftalık",
+      "biweekly": "İki haftalık",
+      "monthly": "Aylık"
+    },
+    "errors": {
+      "addFailed": "Hedef eklenemedi",
+      "updateFailed": "Kilometre taşı güncellenemedi",
+      "completeFailed": "Hedef tamamlanamadı",
+      "deleteFailed": "Hedef silinemedi"
+    },
+    "deleteConfirm": "Bu hedef silinsin mi? Bu geri alınamaz.",
+    "loading": "Hedefler yükleniyor...",
+    "titlePlaceholder": "Ne üzerinde çalışıyorsunuz?",
+    "descPlaceholder": "Detay ekleyin (isteğe bağlı)..."
   },
   "workflows": {
     "title": "İş Akışları",
@@ -21,7 +38,10 @@
     "createWorkflow": "İş Akışı Oluştur",
     "runCount_one": "{{count}} kez çalıştırıldı",
     "runCount_other": "{{count}} kez çalıştırıldı",
-    "errors": { "saveFailed": "İş akışı kaydedilemedi", "deleteFailed": "İş akışı silinemedi" },
+    "errors": {
+      "saveFailed": "İş akışı kaydedilemedi",
+      "deleteFailed": "İş akışı silinemedi"
+    },
     "deleteConfirm": "Bu iş akışı silinsin mi? Bu geri alınamaz."
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "Ayarlayın ve unutun — Kernel görevleri programınıza göre çalıştırır.",
     "createTask": "Görev Oluştur",
     "schedule": "Zamanlama",
-    "taskTypes": { "reminder": "Hatırlatma", "workflow": "İş Akışı Çalıştır", "briefing": "Günlük Brifing", "goalCheckin": "Hedef Kontrolü" },
-    "presets": { "daily": "Günlük", "weekdays": "Hafta içi", "weekly": "Haftalık (Pzt)", "once": "Bir kez" },
-    "channels": { "inApp": "Uygulama içi", "email": "E-posta", "discord": "Discord" },
-    "errors": { "createFailed": "Zamanlanmış görev oluşturulamadı", "updateFailed": "Görev güncellenemedi", "deleteFailed": "Görev silinemedi" },
+    "taskTypes": {
+      "reminder": "Hatırlatma",
+      "workflow": "İş Akışı Çalıştır",
+      "briefing": "Günlük Brifing",
+      "goalCheckin": "Hedef Kontrolü"
+    },
+    "presets": {
+      "daily": "Günlük",
+      "weekdays": "Hafta içi",
+      "weekly": "Haftalık (Pzt)",
+      "once": "Bir kez"
+    },
+    "channels": {
+      "inApp": "Uygulama içi",
+      "email": "E-posta",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Zamanlanmış görev oluşturulamadı",
+      "updateFailed": "Görev güncellenemedi",
+      "deleteFailed": "Görev silinemedi"
+    },
     "deleteConfirm": "Bu zamanlanmış görev silinsin mi?"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "İlgi alanlarınıza ve son etkinliğinize göre yeni bir brifing oluşturun",
     "generating": "Oluşturuluyor...",
     "newBriefing": "Yeni brifing",
-    "phases": { "planning": "Planlama", "researching": "Araştırma", "writing": "Yazma" },
+    "phases": {
+      "planning": "Planlama",
+      "researching": "Araştırma",
+      "writing": "Yazma"
+    },
     "loading": "Brifingleri yükleniyor...",
     "emptyTitle": "Günlük brifinginiz",
     "emptyDesc": "İlgi alanlarınıza ve hedeflerinize göre kişiselleştirilmiş haber ve içgörü özeti alın.",
@@ -56,8 +98,13 @@
     "readFull": "Tam brifingi oku",
     "goDeeper": "Sohbette derinleş",
     "saveAsGoal": "Çıkarımları hedef olarak kaydet",
-    "errors": { "generateFailed": "Brifing oluşturulamadı" },
-    "toast": { "generated": "Brifing oluşturuldu", "removed": "Brifing kaldırıldı" }
+    "errors": {
+      "generateFailed": "Brifing oluşturulamadı"
+    },
+    "toast": {
+      "generated": "Brifing oluşturuldu",
+      "removed": "Brifing kaldırıldı"
+    }
   },
   "stats": {
     "title": "İstatistikleriniz",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} bağlantı",
     "confident": "{{value}}% güvenilir",
     "mentioned": "{{count}} kez bahsedildi",
-    "types": { "person": "Kişiler", "company": "Şirketler", "project": "Projeler", "concept": "Kavramlar", "preference": "Tercihler", "location": "Konumlar" }
+    "types": {
+      "person": "Kişiler",
+      "company": "Şirketler",
+      "project": "Projeler",
+      "concept": "Kavramlar",
+      "preference": "Tercihler",
+      "location": "Konumlar"
+    }
   },
   "insights": {
     "title": "İçgörüler",
@@ -143,7 +197,40 @@
     "days30": "30 gün",
     "createLink": "Paylaşım bağlantısı oluştur",
     "creating": "Oluşturuluyor...",
-    "errors": { "createFailed": "Paylaşım bağlantısı oluşturulamadı", "revokeFailed": "Bağlantı iptal edilemedi" },
-    "toast": { "revoked": "Paylaşım bağlantısı iptal edildi" }
+    "errors": {
+      "createFailed": "Paylaşım bağlantısı oluşturulamadı",
+      "revokeFailed": "Bağlantı iptal edilemedi"
+    },
+    "toast": {
+      "revoked": "Paylaşım bağlantısı iptal edildi"
+    },
+    "shareableLink": "Paylaşılabilir bağlantı",
+    "copyLink": "Bağlantıyı kopyala",
+    "copied": "Kopyalandı",
+    "copiedAnnounce": "Bağlantı panoya kopyalandı",
+    "shareVia": "Şu şekilde paylaş...",
+    "limitReached": "Günlük {{limit}} adet paylaşılan bağlantı sınırına ulaştınız. Daha fazla paylaşım için Pro'ya yükseltin.",
+    "limitHint": "{{used}}/{{limit}} bağlantı bugün kullanıldı",
+    "dailyCount": "{{used}}/{{limit}} ücretsiz paylaşım bugün kullanıldı"
+  },
+  "mirror": {
+    "title": "Ayna",
+    "emptyTitle": "Ayna henüz oluşuyor.",
+    "emptyDesc": "Konuşmaya devam edin — Kernel'ın ajanları sizi farklı açılardan görmeyi öğreniyor.",
+    "convergenceTitle": "Ayna ne görüyor",
+    "convergenceDesc": "Sadece birden fazla ajanın notlarını karşılaştırmasıyla ortaya çıkan içgörüler.",
+    "facetsTitle": "Ajan bakış açıları",
+    "facetsDesc": "Her ajan, sizi tanımlayan farklı bir boyutu gözlemler.",
+    "observations": "gözlemler",
+    "patterns": "Desenler",
+    "convergenceCount": "{{count}} kez birleşti",
+    "dimensions": {
+      "relationship": "İlişki",
+      "curiosity": "Merak",
+      "craft": "Beceri",
+      "voice": "Ses",
+      "judgment": "Yargı",
+      "arc": "Yol"
+    }
   }
 }

@@ -1,0 +1,124 @@
+{
+  "title": "Configuración de la cuenta",
+  "profile": {
+    "heading": "Perfil",
+    "displayName": "Nombre visible",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "Nombre de usuario",
+    "usernamePlaceholder": "{{@username}}",
+    "avatar": "Foto de perfil",
+    "avatarChange": "Cambiar",
+    "save": "Guardar perfil",
+    "saved": "Perfil guardado",
+    "resetProfile": "Restablecer perfil",
+    "profileReset": "Perfil restablecido a los valores predeterminados",
+    "usernameTaken": "Este nombre de usuario ya está en uso",
+    "displayNameTaken": "Este nombre visible ya está en uso",
+    "available": "Disponible"
+  },
+  "security": {
+    "heading": "Editar credenciales",
+    "credentialsHeading": "Correo electrónico y contraseña",
+    "verifyIdentity": "Verifica para realizar cambios",
+    "verifyHint": "Se enviará un código de verificación a tu correo electrónico antes de editar las credenciales",
+    "sendCode": "Enviar código de verificación",
+    "codePlaceholder": "Ingresa código de 6 dígitos",
+    "codeRequired": "Ingresa el código de verificación de tu correo electrónico",
+    "verificationRequired": "Envía un código de verificación primero",
+    "codeSent": "Código enviado — revisa tu correo electrónico",
+    "verify": "Verificar código",
+    "verified": "Identidad verificada — ahora puedes realizar cambios",
+    "resendCode": "Reenviar código",
+    "resendIn": "Reenviar en {{seconds}}s",
+    "changeEmail": "Cambiar correo electrónico",
+    "emailPlaceholder": "Nueva dirección de correo electrónico",
+    "emailSubmit": "Actualizar correo electrónico",
+    "emailConfirmationSent": "Correo electrónico de confirmación enviado a tu nueva dirección",
+    "changePassword": "Cambiar contraseña",
+    "setPassword": "Establecer una contraseña",
+    "newPasswordPlaceholder": "Nueva contraseña",
+    "confirmPasswordPlaceholder": "Confirmar contraseña",
+    "passwordSubmit": "Actualizar contraseña",
+    "passwordChanged": "Contraseña actualizada",
+    "tooShort": "La contraseña debe tener al menos 8 caracteres",
+    "mismatch": "Las contraseñas no coinciden",
+    "strength": {
+      "weak": "Débil",
+      "fair": "Regular",
+      "strong": "Fuerte"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Cuentas vinculadas",
+    "connected": "Conectada",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "cannotUnlinkLast": "No se puede eliminar tu único método de inicio de sesión",
+    "unlinked": "Cuenta desconectada",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Suscripción",
+    "free": "Plan gratuito",
+    "pro": "Plan Pro",
+    "max": "Plan Max",
+    "admin": "Admin",
+    "upgrade": "Actualizar a Pro",
+    "upgradeMonthly": "Pro — $29/mes",
+    "upgradeAnnual": "Pro — $290/yr",
+    "upgradeMax": "Max — $49/mo",
+    "upgradeMaxAnnual": "Max — $490/yr",
+    "manage": "Administrar suscripción"
+  },
+  "exportData": {
+    "heading": "Exportar datos",
+    "description": "Descarga una copia completa de todos tus datos en formato JSON.",
+    "button": "Exportar mis datos",
+    "success": "Exportación descargada",
+    "rateLimited": "La exportación estará disponible de nuevo en {{hours}} horas"
+  },
+  "resetData": {
+    "heading": "Restablecer datos",
+    "description": "Borra selectivamente tus datos sin eliminar tu cuenta. Esto no se puede deshacer.",
+    "scopes": {
+      "conversations": "Conversaciones",
+      "memory": "Memoria",
+      "knowledge": "Gráfico de conocimiento",
+      "goals": "Objetivos",
+      "preferences": "Preferencias",
+      "all": "Todo"
+    },
+    "scopeDesc": {
+      "conversations": "Elimina todas las conversaciones y mensajes",
+      "memory": "Borra el perfil y los procedimientos aprendidos",
+      "knowledge": "Elimina todas las entidades y relaciones",
+      "goals": "Elimina todas las metas y hitos",
+      "preferences": "Restablece los briefings y metadatos",
+      "all": "Borra todos los datos y empieza de nuevo"
+    },
+    "confirm": {
+      "conversations": "¿Esto eliminará permanentemente todas tus conversaciones y mensajes? ¿Continuar?",
+      "memory": "¿Esto borrará todo lo que Kernel ha aprendido sobre ti? ¿Continuar?",
+      "knowledge": "¿Esto eliminará todas las entidades y sus conexiones en el grafo de conocimiento? ¿Continuar?",
+      "goals": "¿Esto eliminará todas tus metas y el seguimiento del progreso? ¿Continuar?",
+      "preferences": "¿Esto restablecerá tus preferencias de briefings y metadatos? ¿Continuar?",
+      "all": "¿Esto borrará TODOS tus datos: conversaciones, memoria, conocimiento, metas y preferencias. Tu cuenta y suscripción permanecerán intactas. ¿Continuar?"
+    },
+    "confirmBtn": "Sí, restablecer",
+    "cancel": "Cancelar",
+    "success": "{{scope}} borrados exitosamente",
+    "done": "Restablecimiento de datos completado"
+  },
+  "danger": {
+    "heading": "Cuenta",
+    "signOut": "Cerrar sesión",
+    "signOutDesc": "Cerrar sesión de tu cuenta en este dispositivo",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteDesc": "Eliminar permanentemente tu cuenta y todos los datos"
+  }
+}

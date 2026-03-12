@@ -24,7 +24,10 @@
       "completeFailed": "No se pudo completar el objetivo",
       "deleteFailed": "No se pudo eliminar el objetivo"
     },
-    "deleteConfirm": "¿Eliminar este objetivo? Esto no se puede deshacer."
+    "deleteConfirm": "¿Eliminar este objetivo? Esto no se puede deshacer.",
+    "loading": "Cargando objetivos...",
+    "titlePlaceholder": "¿En qué estás trabajando?",
+    "descPlaceholder": "Añade algunos detalles (opcional)..."
   },
   "workflows": {
     "title": "Flujos de Trabajo",
@@ -200,6 +203,34 @@
     },
     "toast": {
       "revoked": "Enlace para compartir revocado"
+    },
+    "shareableLink": "Enlace compartible",
+    "copyLink": "Copiar enlace",
+    "copied": "Copiado",
+    "copiedAnnounce": "Enlace copiado al portapapeles",
+    "shareVia": "Compartir vía...",
+    "limitReached": "Has alcanzado tu límite diario de {{limit}} enlaces compartidos. Actualiza a Pro para obtener más.",
+    "limitHint": "{{used}}/{{limit}} enlaces utilizados hoy",
+    "dailyCount": "{{used}}/{{limit}} comparticiones gratuitas utilizadas hoy"
+  },
+  "mirror": {
+    "title": "El Espejo",
+    "emptyTitle": "El espejo aún se está formando.",
+    "emptyDesc": "Sigue hablando: los agentes de Kernel están aprendiendo a verte desde diferentes ángulos.",
+    "convergenceTitle": "Lo que ve el espejo",
+    "convergenceDesc": "Perspectivas que solo surgen cuando múltiples agentes comparan notas.",
+    "facetsTitle": "Perspectivas de los agentes",
+    "facetsDesc": "Cada agente observa una dimensión diferente de quién eres.",
+    "observations": "observaciones",
+    "patterns": "Patrones",
+    "convergenceCount": "Convergido {{count}} veces",
+    "dimensions": {
+      "relationship": "Relación",
+      "curiosity": "Curiosidad",
+      "craft": "Artesanía",
+      "voice": "Voz",
+      "judgment": "Juicio",
+      "arc": "Arco"
     }
   }
 }

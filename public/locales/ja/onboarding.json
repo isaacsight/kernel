@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "続ける",
-  "skipIntro": "イントロをスキップ"
+  "skipIntro": "イントロをスキップ",
+  "greeting": "こんにちは。カーネルです。",
+  "greetingUser": "こんにちは、{{name}}。カーネルです。",
+  "tagline": "何でも聞いてください。後は私が対応します。",
+  "placeholder": "何に取り組んでいますか？"
 }

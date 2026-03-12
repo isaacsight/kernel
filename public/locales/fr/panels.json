@@ -24,7 +24,10 @@
       "completeFailed": "Impossible de terminer l'objectif",
       "deleteFailed": "Impossible de supprimer l'objectif"
     },
-    "deleteConfirm": "Supprimer cet objectif ? Cette action est irréversible."
+    "deleteConfirm": "Supprimer cet objectif ? Cette action est irréversible.",
+    "loading": "Chargement des objectifs...",
+    "titlePlaceholder": "Vers quoi travaillez-vous ?",
+    "descPlaceholder": "Ajoutez des détails (facultatif)..."
   },
   "workflows": {
     "title": "Flux de Travail",
@@ -200,6 +203,34 @@
     },
     "toast": {
       "revoked": "Lien de partage révoqué"
+    },
+    "shareableLink": "Lien partageable",
+    "copyLink": "Copier le lien",
+    "copied": "Copié",
+    "copiedAnnounce": "Lien copié dans le presse-papiers",
+    "shareVia": "Partager via...",
+    "limitReached": "Vous avez atteint votre limite quotidienne de {{limit}} liens partagés. Passez à Pro pour plus de partages.",
+    "limitHint": "{{used}}/{{limit}} liens utilisés aujourd'hui",
+    "dailyCount": "{{used}}/{{limit}} partages gratuits utilisés aujourd’hui"
+  },
+  "mirror": {
+    "title": "Le Miroir",
+    "emptyTitle": "Le miroir est encore en formation.",
+    "emptyDesc": "Continuez à parler — les agents de Kernel apprennent à vous voir sous différents angles.",
+    "convergenceTitle": "Ce que voit le miroir",
+    "convergenceDesc": "Des éclaircissements qui ne se révèlent qu'avec la comparaison des notes de plusieurs agents.",
+    "facetsTitle": "Perspectives des agents",
+    "facetsDesc": "Chaque agent observe une dimension différente de votre personne.",
+    "observations": "observations",
+    "patterns": "Schémas",
+    "convergenceCount": "Convergent {{count}} fois",
+    "dimensions": {
+      "relationship": "Relationnel",
+      "curiosity": "Curiosité",
+      "craft": "Créativité",
+      "voice": "Voix",
+      "judgment": "Jugement",
+      "arc": "Évolution"
     }
   }
 }

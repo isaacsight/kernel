@@ -7,10 +7,27 @@
     "addGoal": "新增目標",
     "completed": "已完成 ({{count}})",
     "target": "目標日期：{{date}}",
-    "priority": { "low": "低", "medium": "中", "high": "高" },
-    "frequency": { "daily": "每日檢視", "weekly": "每週", "biweekly": "每兩週", "monthly": "每月" },
-    "errors": { "addFailed": "新增目標失敗", "updateFailed": "更新里程碑失敗", "completeFailed": "完成目標失敗", "deleteFailed": "刪除目標失敗" },
-    "deleteConfirm": "刪除此目標？此操作無法復原。"
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "frequency": {
+      "daily": "每日檢視",
+      "weekly": "每週",
+      "biweekly": "每兩週",
+      "monthly": "每月"
+    },
+    "errors": {
+      "addFailed": "新增目標失敗",
+      "updateFailed": "更新里程碑失敗",
+      "completeFailed": "完成目標失敗",
+      "deleteFailed": "刪除目標失敗"
+    },
+    "deleteConfirm": "刪除此目標？此操作無法復原。",
+    "loading": "正在載入目標...",
+    "titlePlaceholder": "您正在努力實現什麼？",
+    "descPlaceholder": "新增一些細節（可選）..."
   },
   "workflows": {
     "title": "工作流程",
@@ -21,7 +38,10 @@
     "createWorkflow": "建立工作流程",
     "runCount_one": "已執行 {{count}} 次",
     "runCount_other": "已執行 {{count}} 次",
-    "errors": { "saveFailed": "儲存工作流程失敗", "deleteFailed": "刪除工作流程失敗" },
+    "errors": {
+      "saveFailed": "儲存工作流程失敗",
+      "deleteFailed": "刪除工作流程失敗"
+    },
     "deleteConfirm": "刪除此工作流程？此操作無法復原。"
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "設定後就不用管——Kernel 會按照你的排程執行任務。",
     "createTask": "建立任務",
     "schedule": "排程",
-    "taskTypes": { "reminder": "提醒", "workflow": "執行工作流程", "briefing": "每日簡報", "goalCheckin": "目標檢視" },
-    "presets": { "daily": "每日", "weekdays": "工作日", "weekly": "每週（週一）", "once": "一次" },
-    "channels": { "inApp": "應用程式內", "email": "電子郵件", "discord": "Discord" },
-    "errors": { "createFailed": "建立排程任務失敗", "updateFailed": "更新任務失敗", "deleteFailed": "刪除任務失敗" },
+    "taskTypes": {
+      "reminder": "提醒",
+      "workflow": "執行工作流程",
+      "briefing": "每日簡報",
+      "goalCheckin": "目標檢視"
+    },
+    "presets": {
+      "daily": "每日",
+      "weekdays": "工作日",
+      "weekly": "每週（週一）",
+      "once": "一次"
+    },
+    "channels": {
+      "inApp": "應用程式內",
+      "email": "電子郵件",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "建立排程任務失敗",
+      "updateFailed": "更新任務失敗",
+      "deleteFailed": "刪除任務失敗"
+    },
     "deleteConfirm": "刪除此排程任務？"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "根據你的興趣和近期活動生成新簡報",
     "generating": "生成中...",
     "newBriefing": "新簡報",
-    "phases": { "planning": "規劃中", "researching": "研究中", "writing": "撰寫中" },
+    "phases": {
+      "planning": "規劃中",
+      "researching": "研究中",
+      "writing": "撰寫中"
+    },
     "loading": "正在載入簡報...",
     "emptyTitle": "你的每日簡報",
     "emptyDesc": "獲取根據你的興趣和目標量身打造的個人化新聞和洞察摘要。",
@@ -56,8 +98,13 @@
     "readFull": "閱讀完整簡報",
     "goDeeper": "在對話中深入探討",
     "saveAsGoal": "將重點儲存為目標",
-    "errors": { "generateFailed": "生成簡報失敗" },
-    "toast": { "generated": "簡報已生成", "removed": "簡報已移除" }
+    "errors": {
+      "generateFailed": "生成簡報失敗"
+    },
+    "toast": {
+      "generated": "簡報已生成",
+      "removed": "簡報已移除"
+    }
   },
   "stats": {
     "title": "你的統計數據",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} 個連結",
     "confident": "{{value}}% 信心度",
     "mentioned": "提及 {{count}} 次",
-    "types": { "person": "人物", "company": "公司", "project": "專案", "concept": "概念", "preference": "偏好", "location": "地點" }
+    "types": {
+      "person": "人物",
+      "company": "公司",
+      "project": "專案",
+      "concept": "概念",
+      "preference": "偏好",
+      "location": "地點"
+    }
   },
   "insights": {
     "title": "洞察",
@@ -143,7 +197,40 @@
     "days30": "30 天",
     "createLink": "建立分享連結",
     "creating": "建立中...",
-    "errors": { "createFailed": "建立分享連結失敗", "revokeFailed": "撤銷連結失敗" },
-    "toast": { "revoked": "分享連結已撤銷" }
+    "errors": {
+      "createFailed": "建立分享連結失敗",
+      "revokeFailed": "撤銷連結失敗"
+    },
+    "toast": {
+      "revoked": "分享連結已撤銷"
+    },
+    "shareableLink": "可分享連結",
+    "copyLink": "複製連結",
+    "copied": "已複製",
+    "copiedAnnounce": "連結已複製到剪貼簿",
+    "shareVia": "透過...分享",
+    "limitReached": "您已達到每日分享連結的限制 {{limit}} 個。升級至 Pro 以獲得更多分享。",
+    "limitHint": "{{used}}/{{limit}} 個連結今天已使用",
+    "dailyCount": "{{used}}/{{limit}} 個免費分享今天已使用"
+  },
+  "mirror": {
+    "title": "鏡像",
+    "emptyTitle": "鏡像仍在成形中。",
+    "emptyDesc": "持續對話 — Kernel 的代理正在學習從不同角度看待您。",
+    "convergenceTitle": "鏡像所見",
+    "convergenceDesc": "只有當多個代理比較筆記時才會產生的洞見。",
+    "facetsTitle": "代理觀點",
+    "facetsDesc": "每個代理觀察您不同面向的特質。",
+    "observations": "觀察",
+    "patterns": "模式",
+    "convergenceCount": "匯聚 {{count}} 次",
+    "dimensions": {
+      "relationship": "關係",
+      "curiosity": "好奇心",
+      "craft": "工藝",
+      "voice": "聲音",
+      "judgment": "判斷力",
+      "arc": "弧度"
+    }
   }
 }

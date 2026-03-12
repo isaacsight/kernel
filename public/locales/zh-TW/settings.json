@@ -1,0 +1,124 @@
+{
+  "title": "帳戶設定",
+  "profile": {
+    "heading": "個人資料",
+    "displayName": "顯示名稱",
+    "displayNamePlaceholder": "您的姓名",
+    "username": "使用者名稱",
+    "usernamePlaceholder": "@使用者名稱",
+    "avatar": "個人照片",
+    "avatarChange": "變更",
+    "save": "儲存個人資料",
+    "saved": "個人資料已儲存",
+    "resetProfile": "重設個人資料",
+    "profileReset": "個人資料已重設為預設值",
+    "usernameTaken": "這個使用者名稱已被使用",
+    "displayNameTaken": "這個顯示名稱已被使用",
+    "available": "可用"
+  },
+  "security": {
+    "heading": "編輯憑證",
+    "credentialsHeading": "電子郵件 & 密碼",
+    "verifyIdentity": "驗證以進行變更",
+    "verifyHint": "編輯憑證前，我們會將驗證碼發送到您的電子郵件",
+    "sendCode": "發送驗證碼",
+    "codePlaceholder": "輸入 6 位數字驗證碼",
+    "codeRequired": "從您的電子郵件中輸入驗證碼",
+    "verificationRequired": "首先發送驗證碼",
+    "codeSent": "驗證碼已發送 — 請檢查您的電子郵件",
+    "verify": "驗證碼",
+    "verified": "身份已驗證 — 您現在可以進行變更",
+    "resendCode": "重新發送驗證碼",
+    "resendIn": "重新發送 {{seconds}} 秒後",
+    "changeEmail": "更改電子郵件",
+    "emailPlaceholder": "新的電子郵件地址",
+    "emailSubmit": "更新電子郵件",
+    "emailConfirmationSent": "確認郵件已發送到您的新地址",
+    "changePassword": "變更密碼",
+    "setPassword": "設定密碼",
+    "newPasswordPlaceholder": "新密碼",
+    "confirmPasswordPlaceholder": "確認密碼",
+    "passwordSubmit": "更新密碼",
+    "passwordChanged": "密碼已更新",
+    "tooShort": "密碼長度至少為 8 個字元",
+    "mismatch": "密碼不相符",
+    "strength": {
+      "weak": "弱",
+      "fair": "普通",
+      "strong": "強"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "已連結的帳戶",
+    "connected": "已連接",
+    "connect": "連接",
+    "disconnect": "斷開",
+    "cannotUnlinkLast": "無法移除您唯一的登入方式",
+    "unlinked": "已斷開帳戶",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "訂閱",
+    "free": "免費方案",
+    "pro": "專業方案",
+    "max": "極致方案",
+    "admin": "管理員",
+    "upgrade": "升級至專業方案",
+    "upgradeMonthly": "專業方案 — 每月 $29",
+    "upgradeAnnual": "Pro — $290/年",
+    "upgradeMax": "Max — $49/月",
+    "upgradeMaxAnnual": "Max — $490/年",
+    "manage": "管理訂閱"
+  },
+  "exportData": {
+    "heading": "匯出資料",
+    "description": "下載您所有資料的完整副本，格式為 JSON。",
+    "button": "匯出我的資料",
+    "success": "匯出成功",
+    "rateLimited": "匯出 {{hours}} 小時後可再次使用"
+  },
+  "resetData": {
+    "heading": "重置資料",
+    "description": "選擇性地清除您的資料，而不會刪除您的帳戶。此動作不可逆轉。",
+    "scopes": {
+      "conversations": "對話",
+      "memory": "記憶",
+      "knowledge": "知識圖譜",
+      "goals": "目標",
+      "preferences": "偏好設定",
+      "all": "全部"
+    },
+    "scopeDesc": {
+      "conversations": "刪除所有對話和訊息",
+      "memory": "清除 Kernel 學習的個人檔案和流程",
+      "knowledge": "移除所有實體和關係",
+      "goals": "刪除所有目標和里程碑",
+      "preferences": "重置簡報和元數據",
+      "all": "清除所有資料並重新開始"
+    },
+    "confirm": {
+      "conversations": "這將永久刪除您所有的對話和訊息。繼續?",
+      "memory": "這將清除 Kernel 關於您的所有學習資料。繼續?",
+      "knowledge": "這將移除所有知識圖譜中的實體及其連接。繼續?",
+      "goals": "這將刪除您所有的目標和進度追蹤。繼續?",
+      "preferences": "這將重置您的簡報和元數據偏好設定。繼續?",
+      "all": "這將清除您所有的資料 - 對話、記憶體、知識、目標和偏好設定。您的帳戶和訂閱將保持不變。繼續?"
+    },
+    "confirmBtn": "是，重置",
+    "cancel": "取消",
+    "success": "{{scope}} 已成功清除",
+    "done": "數據重置完成"
+  },
+  "danger": {
+    "heading": "帳戶",
+    "signOut": "登出",
+    "signOutDesc": "登出您在此設備上的帳戶",
+    "deleteAccount": "刪除帳戶",
+    "deleteDesc": "永久刪除您的帳戶和所有數據"
+  }
+}

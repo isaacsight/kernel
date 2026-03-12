@@ -26,6 +26,8 @@ export function useVoiceInput(): UseVoiceInputReturn {
   const chunksRef = useRef<Blob[]>([])
   const modeRef = useRef<'speech-api' | 'media-recorder' | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
+  const restartCountRef = useRef(0)
+  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Check if Web Speech API is available
   const hasSpeechAPI = typeof window !== 'undefined' && (
@@ -35,6 +37,10 @@ export function useVoiceInput(): UseVoiceInputReturn {
   const isSupported = hasSpeechAPI || hasMediaRecorder
 
   const cleanup = useCallback(() => {
+    if (restartTimerRef.current) {
+      clearTimeout(restartTimerRef.current)
+      restartTimerRef.current = null
+    }
     if (recognitionRef.current) {
       try { recognitionRef.current.stop() } catch { /* noop */ }
       recognitionRef.current = null
@@ -49,6 +55,7 @@ export function useVoiceInput(): UseVoiceInputReturn {
     }
     chunksRef.current = []
     modeRef.current = null
+    restartCountRef.current = 0
   }, [])
 
   // Cleanup on unmount
@@ -62,6 +69,8 @@ export function useVoiceInput(): UseVoiceInputReturn {
     recognition.lang = navigator.language || 'en-US'
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
+      // Reset restart counter on successful recognition
+      restartCountRef.current = 0
       let interim = ''
       let final = ''
       for (let i = 0; i < event.results.length; i++) {
@@ -78,21 +87,41 @@ export function useVoiceInput(): UseVoiceInputReturn {
 
     recognition.onerror = (e: Event) => {
       const err = e as SpeechRecognitionErrorEvent
+      // Fatal errors — tear down completely
       if (err.error === 'not-allowed') {
         setError('Microphone access denied')
-      } else if (err.error === 'no-speech') {
-        // Silence — not an error, just stop
-      } else {
+        setIsRecording(false)
+        cleanup()
+        return
+      }
+      if (err.error === 'aborted') {
+        setIsRecording(false)
+        cleanup()
+        return
+      }
+      // Recoverable errors — let onend handle restart
+      if (err.error !== 'no-speech') {
         setError(`Speech recognition error: ${err.error}`)
       }
-      setIsRecording(false)
-      cleanup()
     }
 
     recognition.onend = () => {
       // If still in recording state, user didn't explicitly stop — auto-restart
       if (modeRef.current === 'speech-api' && recognitionRef.current) {
-        try { recognition.start() } catch { /* noop */ }
+        restartCountRef.current++
+        // Cap restarts to prevent infinite loops
+        if (restartCountRef.current > 50) {
+          setError('Voice connection lost — tap to retry')
+          setIsRecording(false)
+          cleanup()
+          return
+        }
+        // Small delay to avoid rapid reconnection storms
+        restartTimerRef.current = setTimeout(() => {
+          if (modeRef.current === 'speech-api' && recognitionRef.current) {
+            try { recognition.start() } catch { /* noop */ }
+          }
+        }, 300)
       }
     }
 

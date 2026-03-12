@@ -7,10 +7,27 @@
     "addGoal": "Tilføj mål",
     "completed": "Fuldført ({{count}})",
     "target": "Mål: {{date}}",
-    "priority": { "low": "Lav", "medium": "Middel", "high": "Høj" },
-    "frequency": { "daily": "Daglig check-in", "weekly": "Ugentlig", "biweekly": "Hver anden uge", "monthly": "Månedlig" },
-    "errors": { "addFailed": "Kunne ikke tilføje mål", "updateFailed": "Kunne ikke opdatere milepæl", "completeFailed": "Kunne ikke fuldføre mål", "deleteFailed": "Kunne ikke slette mål" },
-    "deleteConfirm": "Slet dette mål? Dette kan ikke fortrydes."
+    "priority": {
+      "low": "Lav",
+      "medium": "Middel",
+      "high": "Høj"
+    },
+    "frequency": {
+      "daily": "Daglig check-in",
+      "weekly": "Ugentlig",
+      "biweekly": "Hver anden uge",
+      "monthly": "Månedlig"
+    },
+    "errors": {
+      "addFailed": "Kunne ikke tilføje mål",
+      "updateFailed": "Kunne ikke opdatere milepæl",
+      "completeFailed": "Kunne ikke fuldføre mål",
+      "deleteFailed": "Kunne ikke slette mål"
+    },
+    "deleteConfirm": "Slet dette mål? Dette kan ikke fortrydes.",
+    "loading": "Indlæser mål...",
+    "titlePlaceholder": "Hvad arbejder du hen imod?",
+    "descPlaceholder": "Tilføj detaljer (valgfrit)..."
   },
   "workflows": {
     "title": "Arbejdsgange",
@@ -21,7 +38,10 @@
     "createWorkflow": "Opret arbejdsgang",
     "runCount_one": "Kørt {{count}} gang",
     "runCount_other": "Kørt {{count}} gange",
-    "errors": { "saveFailed": "Kunne ikke gemme arbejdsgang", "deleteFailed": "Kunne ikke slette arbejdsgang" },
+    "errors": {
+      "saveFailed": "Kunne ikke gemme arbejdsgang",
+      "deleteFailed": "Kunne ikke slette arbejdsgang"
+    },
     "deleteConfirm": "Slet denne arbejdsgang? Dette kan ikke fortrydes."
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "Sæt det op og glem det — Kernel kører opgaver efter din tidsplan.",
     "createTask": "Opret opgave",
     "schedule": "Tidsplan",
-    "taskTypes": { "reminder": "Påmindelse", "workflow": "Kør arbejdsgang", "briefing": "Daglig briefing", "goalCheckin": "Mål check-in" },
-    "presets": { "daily": "Daglig", "weekdays": "Hverdage", "weekly": "Ugentlig (man)", "once": "Én gang" },
-    "channels": { "inApp": "I appen", "email": "E-mail", "discord": "Discord" },
-    "errors": { "createFailed": "Kunne ikke oprette planlagt opgave", "updateFailed": "Kunne ikke opdatere opgave", "deleteFailed": "Kunne ikke slette opgave" },
+    "taskTypes": {
+      "reminder": "Påmindelse",
+      "workflow": "Kør arbejdsgang",
+      "briefing": "Daglig briefing",
+      "goalCheckin": "Mål check-in"
+    },
+    "presets": {
+      "daily": "Daglig",
+      "weekdays": "Hverdage",
+      "weekly": "Ugentlig (man)",
+      "once": "Én gang"
+    },
+    "channels": {
+      "inApp": "I appen",
+      "email": "E-mail",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Kunne ikke oprette planlagt opgave",
+      "updateFailed": "Kunne ikke opdatere opgave",
+      "deleteFailed": "Kunne ikke slette opgave"
+    },
     "deleteConfirm": "Slet denne planlagte opgave?"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "Generér en ny briefing baseret på dine interesser og nylig aktivitet",
     "generating": "Genererer...",
     "newBriefing": "Ny briefing",
-    "phases": { "planning": "Planlægger", "researching": "Undersøger", "writing": "Skriver" },
+    "phases": {
+      "planning": "Planlægger",
+      "researching": "Undersøger",
+      "writing": "Skriver"
+    },
     "loading": "Indlæser briefinger...",
     "emptyTitle": "Din daglige briefing",
     "emptyDesc": "Få et personligt nyheds- og indsigtsresumé skræddersyet til dine interesser og mål.",
@@ -56,8 +98,13 @@
     "readFull": "Læs hele briefingen",
     "goDeeper": "Gå dybere i chat",
     "saveAsGoal": "Gem konklusioner som mål",
-    "errors": { "generateFailed": "Kunne ikke generere briefing" },
-    "toast": { "generated": "Briefing genereret", "removed": "Briefing fjernet" }
+    "errors": {
+      "generateFailed": "Kunne ikke generere briefing"
+    },
+    "toast": {
+      "generated": "Briefing genereret",
+      "removed": "Briefing fjernet"
+    }
   },
   "stats": {
     "title": "Din statistik",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} forbindelser",
     "confident": "{{value}}% sikker",
     "mentioned": "{{count}}x nævnt",
-    "types": { "person": "Personer", "company": "Virksomheder", "project": "Projekter", "concept": "Koncepter", "preference": "Præferencer", "location": "Steder" }
+    "types": {
+      "person": "Personer",
+      "company": "Virksomheder",
+      "project": "Projekter",
+      "concept": "Koncepter",
+      "preference": "Præferencer",
+      "location": "Steder"
+    }
   },
   "insights": {
     "title": "Indsigter",
@@ -143,7 +197,40 @@
     "days30": "30 dage",
     "createLink": "Opret delingslink",
     "creating": "Opretter...",
-    "errors": { "createFailed": "Kunne ikke oprette delingslink", "revokeFailed": "Kunne ikke tilbagekalde link" },
-    "toast": { "revoked": "Delingslink tilbagekaldt" }
+    "errors": {
+      "createFailed": "Kunne ikke oprette delingslink",
+      "revokeFailed": "Kunne ikke tilbagekalde link"
+    },
+    "toast": {
+      "revoked": "Delingslink tilbagekaldt"
+    },
+    "shareableLink": "Delbar link",
+    "copyLink": "Kopiér link",
+    "copied": "Kopié",
+    "copiedAnnounce": "Link kopieret til udklipsholder",
+    "shareVia": "Del via...",
+    "limitReached": "Du har nået din daglige grænse på {{limit}} delte links. Opgrader til Pro for flere delinger.",
+    "limitHint": "{{used}}/{{limit}} links brugt i dag",
+    "dailyCount": "{{used}}/{{limit}} gratis delinger brugt i dag"
+  },
+  "mirror": {
+    "title": "Spejlet",
+    "emptyTitle": "Spejlet er stadig ved at forme sig.",
+    "emptyDesc": "Fortsæt med at tale – Kernels agenter lærer at se dig fra forskellige vinkler.",
+    "convergenceTitle": "Hvad spejlet ser",
+    "convergenceDesc": "Indsigter, der kun opstår, når flere agenter sammenligner noter.",
+    "facetsTitle": "Agentperspektiver",
+    "facetsDesc": "Hver agent observerer en anden dimension af, hvem du er.",
+    "observations": "observationer",
+    "patterns": "Mønstre",
+    "convergenceCount": "Konvergeret {{count}} gange",
+    "dimensions": {
+      "relationship": "Relation",
+      "curiosity": "Nysgerrighed",
+      "craft": "Håndværk",
+      "voice": "Stemme",
+      "judgment": "Dømmekraft",
+      "arc": "Bue"
+    }
   }
 }

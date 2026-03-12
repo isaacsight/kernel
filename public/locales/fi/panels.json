@@ -7,10 +7,27 @@
     "addGoal": "Lisää tavoite",
     "completed": "Valmis ({{count}})",
     "target": "Tavoite: {{date}}",
-    "priority": { "low": "Matala", "medium": "Keskitaso", "high": "Korkea" },
-    "frequency": { "daily": "Päivittäinen tarkistus", "weekly": "Viikoittain", "biweekly": "Joka toinen viikko", "monthly": "Kuukausittain" },
-    "errors": { "addFailed": "Tavoitteen lisääminen epäonnistui", "updateFailed": "Välitavoitteen päivittäminen epäonnistui", "completeFailed": "Tavoitteen viimeistely epäonnistui", "deleteFailed": "Tavoitteen poistaminen epäonnistui" },
-    "deleteConfirm": "Poistetaanko tämä tavoite? Tätä ei voi kumota."
+    "priority": {
+      "low": "Matala",
+      "medium": "Keskitaso",
+      "high": "Korkea"
+    },
+    "frequency": {
+      "daily": "Päivittäinen tarkistus",
+      "weekly": "Viikoittain",
+      "biweekly": "Joka toinen viikko",
+      "monthly": "Kuukausittain"
+    },
+    "errors": {
+      "addFailed": "Tavoitteen lisääminen epäonnistui",
+      "updateFailed": "Välitavoitteen päivittäminen epäonnistui",
+      "completeFailed": "Tavoitteen viimeistely epäonnistui",
+      "deleteFailed": "Tavoitteen poistaminen epäonnistui"
+    },
+    "deleteConfirm": "Poistetaanko tämä tavoite? Tätä ei voi kumota.",
+    "loading": "Ladataan tavoitteita...",
+    "titlePlaceholder": "Mitä olet tekemässä?",
+    "descPlaceholder": "Lisää yksityiskohtia (valinnainen)..."
   },
   "workflows": {
     "title": "Työnkulut",
@@ -21,7 +38,10 @@
     "createWorkflow": "Luo työnkulku",
     "runCount_one": "Suoritettu {{count}} kerran",
     "runCount_other": "Suoritettu {{count}} kertaa",
-    "errors": { "saveFailed": "Työnkulun tallentaminen epäonnistui", "deleteFailed": "Työnkulun poistaminen epäonnistui" },
+    "errors": {
+      "saveFailed": "Työnkulun tallentaminen epäonnistui",
+      "deleteFailed": "Työnkulun poistaminen epäonnistui"
+    },
     "deleteConfirm": "Poistetaanko tämä työnkulku? Tätä ei voi kumota."
   },
   "scheduled": {
@@ -31,10 +51,28 @@
     "emptyDesc": "Aseta ja unohda — Kernel suorittaa tehtävät aikataulusi mukaan.",
     "createTask": "Luo tehtävä",
     "schedule": "Aikataulu",
-    "taskTypes": { "reminder": "Muistutus", "workflow": "Suorita työnkulku", "briefing": "Päivittäinen katsaus", "goalCheckin": "Tavoitetarkistus" },
-    "presets": { "daily": "Päivittäin", "weekdays": "Arkipäivisin", "weekly": "Viikoittain (ma)", "once": "Kerran" },
-    "channels": { "inApp": "Sovelluksessa", "email": "Sähköposti", "discord": "Discord" },
-    "errors": { "createFailed": "Ajastetun tehtävän luominen epäonnistui", "updateFailed": "Tehtävän päivittäminen epäonnistui", "deleteFailed": "Tehtävän poistaminen epäonnistui" },
+    "taskTypes": {
+      "reminder": "Muistutus",
+      "workflow": "Suorita työnkulku",
+      "briefing": "Päivittäinen katsaus",
+      "goalCheckin": "Tavoitetarkistus"
+    },
+    "presets": {
+      "daily": "Päivittäin",
+      "weekdays": "Arkipäivisin",
+      "weekly": "Viikoittain (ma)",
+      "once": "Kerran"
+    },
+    "channels": {
+      "inApp": "Sovelluksessa",
+      "email": "Sähköposti",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Ajastetun tehtävän luominen epäonnistui",
+      "updateFailed": "Tehtävän päivittäminen epäonnistui",
+      "deleteFailed": "Tehtävän poistaminen epäonnistui"
+    },
     "deleteConfirm": "Poistetaanko tämä ajastettu tehtävä?"
   },
   "briefings": {
@@ -42,7 +80,11 @@
     "generateTooltip": "Luo uusi katsaus kiinnostuksen kohteidesi ja viimeaikaisen toimintasi perusteella",
     "generating": "Luodaan...",
     "newBriefing": "Uusi katsaus",
-    "phases": { "planning": "Suunnittelee", "researching": "Tutkii", "writing": "Kirjoittaa" },
+    "phases": {
+      "planning": "Suunnittelee",
+      "researching": "Tutkii",
+      "writing": "Kirjoittaa"
+    },
     "loading": "Ladataan katsauksia...",
     "emptyTitle": "Päivittäinen katsauksesi",
     "emptyDesc": "Saat henkilökohtaisen uutis- ja oivalluskatsauksen räätälöitynä kiinnostuksen kohteisiisi ja tavoitteisiisi.",
@@ -56,8 +98,13 @@
     "readFull": "Lue koko katsaus",
     "goDeeper": "Syvenny chatissa",
     "saveAsGoal": "Tallenna johtopäätökset tavoitteeksi",
-    "errors": { "generateFailed": "Katsauksen luominen epäonnistui" },
-    "toast": { "generated": "Katsaus luotu", "removed": "Katsaus poistettu" }
+    "errors": {
+      "generateFailed": "Katsauksen luominen epäonnistui"
+    },
+    "toast": {
+      "generated": "Katsaus luotu",
+      "removed": "Katsaus poistettu"
+    }
   },
   "stats": {
     "title": "Tilastosi",
@@ -80,7 +127,14 @@
     "connectionsCount": "{{count}} yhteyttä",
     "confident": "{{value}}% varma",
     "mentioned": "{{count}}x mainittu",
-    "types": { "person": "Ihmiset", "company": "Yritykset", "project": "Projektit", "concept": "Käsitteet", "preference": "Mieltymykset", "location": "Sijainnit" }
+    "types": {
+      "person": "Ihmiset",
+      "company": "Yritykset",
+      "project": "Projektit",
+      "concept": "Käsitteet",
+      "preference": "Mieltymykset",
+      "location": "Sijainnit"
+    }
   },
   "insights": {
     "title": "Näkemykset",
@@ -143,7 +197,40 @@
     "days30": "30 päivää",
     "createLink": "Luo jakolinkki",
     "creating": "Luodaan...",
-    "errors": { "createFailed": "Jakolinkin luominen epäonnistui", "revokeFailed": "Linkin peruuttaminen epäonnistui" },
-    "toast": { "revoked": "Jakolinkki peruutettu" }
+    "errors": {
+      "createFailed": "Jakolinkin luominen epäonnistui",
+      "revokeFailed": "Linkin peruuttaminen epäonnistui"
+    },
+    "toast": {
+      "revoked": "Jakolinkki peruutettu"
+    },
+    "shareableLink": "Jaettava linkki",
+    "copyLink": "Kopioi linkki",
+    "copied": "Kopioitu",
+    "copiedAnnounce": "Linkki kopioitu leikepöydälle",
+    "shareVia": "Jaa käyttäen...",
+    "limitReached": "Olet saavuttanut päivittäisen {{limit}} jaetun linkin rajan. Päivitä Pro-versioon saadaksesi lisää jakoja.",
+    "limitHint": "{{used}}/{{limit}} linkkiä käytetty tänään",
+    "dailyCount": "{{used}}/{{limit}} ilmaista jakoa käytetty tänään"
+  },
+  "mirror": {
+    "title": "Peili",
+    "emptyTitle": "Peili on vielä rakenteilla.",
+    "emptyDesc": "Jatka puhumista — Kernelin agentit oppivat näkemään sinut eri näkökulmista.",
+    "convergenceTitle": "Mitä peili näkee",
+    "convergenceDesc": "Oivalluksia, jotka nousevat esiin vasta kun useat agentit vertailevat havaintojaan.",
+    "facetsTitle": "Agenttien näkökulmat",
+    "facetsDesc": "Jokainen agentti tarkkailee eri ulottuvuutta siitä, kuka sinä olet.",
+    "observations": "havainnot",
+    "patterns": "Mallit",
+    "convergenceCount": "Yhtynyt {{count}} kertaa",
+    "dimensions": {
+      "relationship": "Suhde",
+      "curiosity": "Uteliaisuus",
+      "craft": "Taito",
+      "voice": "Ääni",
+      "judgment": "Arviointi",
+      "arc": "Kaari"
+    }
   }
 }

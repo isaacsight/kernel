@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "继续",
-  "skipIntro": "跳过介绍"
+  "skipIntro": "跳过介绍",
+  "greeting": "你好。我是 Kernel。",
+  "greetingUser": "你好，{{name}}。我是 Kernel。",
+  "tagline": "问我任何问题。剩下的交给我。",
+  "placeholder": "你正在做什么？"
 }

@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "Doorgaan",
-  "skipIntro": "Introductie overslaan"
+  "skipIntro": "Introductie overslaan",
+  "greeting": "Hoi. Ik ben Kernel.",
+  "greetingUser": "Hoi, {{name}}. Ik ben Kernel.",
+  "tagline": "Vraag me alles. Ik regel de rest.",
+  "placeholder": "Waar ben je mee bezig?"
 }

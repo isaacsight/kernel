@@ -39,5 +39,9 @@
     "skipToChat": "Skip to chat"
   },
   "continue": "계속",
-  "skipIntro": "소개 건너뛰기"
+  "skipIntro": "소개 건너뛰기",
+  "greeting": "안녕하세요. 저는 커널입니다.",
+  "greetingUser": "안녕하세요, {{name}}. 저는 커널입니다.",
+  "tagline": "궁금한 게 있다면 무엇이든 물어보세요. 나머지는 제가 알아서 하겠습니다.",
+  "placeholder": "무엇을 하고 계신가요?"
 }
