@@ -33,7 +33,8 @@
     "voiceInput": "आवाज़ इनपुट",
     "sendMessage": "Send message",
     "stopGenerating": "जनरेशन रोकें",
-    "shareableLink": "साझा करने योग्य बातचीत लिंक"
+    "shareableLink": "साझा करने योग्य बातचीत लिंक",
+    "toggleTheme": "थीम बदलें"
   },
   "time": {
     "overdue": "अतिदेय",
@@ -50,12 +51,65 @@
     "yesterday": "कल",
     "thisWeek": "इस सप्ताह",
     "thisMonth": "इस महीने",
-    "earlier": "पहले"
+    "earlier": "पहले",
+    "title": "बातचीतें ({{count}})",
+    "searchPlaceholder": "बातचीतें खोजें...",
+    "newChat": "नया चैट",
+    "searching": "खोज जारी है...",
+    "noMatches": "कोई मेल नहीं मिला",
+    "noResults": "कोई परिणाम नहीं",
+    "resultCount": "{{count}} परिणाम",
+    "clearSearch": "खोज साफ़ करें",
+    "empty": "अभी तक कोई बातचीत नहीं",
+    "starred": "तारांकित",
+    "recents": "हाल ही की",
+    "yours": "आपका",
+    "folders": "फ़ोल्डर",
+    "team": "टीम",
+    "shared": "साझा किया गया",
+    "archive": "संग्रहित",
+    "noArchived": "कोई संग्रहीत वार्तालाप नहीं",
+    "star": "तारांकित करें",
+    "unstar": "तारांकन हटाएं",
+    "archiveAction": "संग्रहित करें",
+    "unarchive": "संग्रहण हटाएं"
   },
   "language": "भाषा",
   "offline": "आप ऑफ़लाइन हैं। कैश की गई बातचीत देख रहे हैं।",
   "pwa": {
     "installPrompt": "सर्वोत्तम अनुभव के लिए Kernel को अपनी होम स्क्रीन पर जोड़ें।",
     "install": "इंस्टॉल करें"
+  },
+  "relativeTime": {
+    "justNow": "अभी",
+    "minutesAgo": "{{count}}m पहले",
+    "hoursAgo": "{{count}}h पहले",
+    "daysAgo": "{{count}}d पहले"
+  },
+  "copy": "कॉपी करें",
+  "copied": "कॉपी किया गया",
+  "download": "डाउनलोड करें",
+  "preview": "पूर्वावलोकन",
+  "code": "कोड",
+  "downloadAllFiles": "{{count}} फ़ाइलें डाउनलोड करें",
+  "combinedPreview": "लाइव पूर्वावलोकन",
+  "previewTruncated": "{{lines}} लाइनों पर पूर्वावलोकन छोटा किया गया — पूर्ण फ़ाइल के लिए डाउनलोड करें",
+  "fullscreen": "पूर्ण स्क्रीन",
+  "console": "कंसोल",
+  "errors": "त्रुटियाँ",
+  "previewMobile": "मोबाइल पूर्वावलोकन (375px)",
+  "previewTablet": "टैबलेट पूर्वावलोकन (768px)",
+  "previewDesktop": "डेस्कटॉप पूर्वावलोकन (पूरी चौड़ाई)",
+  "previewFailed": "पूर्वावलोकन दृश्यमान सामग्री प्रस्तुत करने में विफल रहा",
+  "line": "{{count}} पंक्ति",
+  "lines": "{{count}} पंक्तियाँ",
+  "errorTitle": "कुछ गलत हुआ",
+  "errorDefault": "हमारी तरफ़ कुछ टूट गया। ताज़ा करने की कोशिश करें।",
+  "tryAgain": "फिर से कोशिश करें",
+  "tags": {
+    "title": "बातचीत को टैग करें",
+    "addTag": "टैग जोड़ें...",
+    "save": "सहेजें",
+    "suggested": "सुझाव"
   }
 }

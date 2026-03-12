@@ -108,11 +108,11 @@
     "gotIt": "Got it"
   },
   "upgrade": {
-    "title": "You've used your {{limit}} free messages",
-    "subtitle": "Pro gives you 100 messages per day, memory that learns you, and full briefings.",
-    "resetsAt": "Your messages reset at {{time}}. Upgrade for up to 200 messages per day.",
+    "title": "You've used your {{limit}} messages for today",
+    "subtitle": "Your messages will reset tomorrow. Kernel will remember you when you come back!",
+    "resetsAt": "Your messages reset at {{time}}. See you then!",
     "learnedTitle": "What Kernel learned about you",
-    "learnedCta": "Upgrade to keep your memory growing.",
+    "learnedCta": "Come back tomorrow and keep the conversation going.",
     "features": {
       "unlimitedMessages": "100 messages per day",
       "deepResearch": "Extended thinking (30/mo)",

@@ -33,7 +33,8 @@
     "voiceInput": "ورودی صوتی",
     "sendMessage": "Send message",
     "stopGenerating": "توقف تولید",
-    "shareableLink": "لینک قابل اشتراک‌گذاری گفتگو"
+    "shareableLink": "لینک قابل اشتراک‌گذاری گفتگو",
+    "toggleTheme": "تغییر تم"
   },
   "time": {
     "overdue": "تأخیر یافته",
@@ -50,12 +51,65 @@
     "yesterday": "دیروز",
     "thisWeek": "این هفته",
     "thisMonth": "این ماه",
-    "earlier": "قبلاً"
+    "earlier": "قبلاً",
+    "title": "مکالمات ({{count}})",
+    "searchPlaceholder": "جستجو در مکالمات...",
+    "newChat": "چت جدید",
+    "searching": "در حال جستجو...",
+    "noMatches": "هیچ تطابقی یافت نشد",
+    "noResults": "نتیجه‌ای یافت نشد",
+    "resultCount": "{{count}} نتیجه",
+    "clearSearch": "پاک کردن جستجو",
+    "empty": "هنوز هیچ مکالمه‌ای وجود ندارد",
+    "starred": "ستاره‌دار شده",
+    "recents": "آخرین‌ها",
+    "yours": "شما",
+    "folders": "پوشه‌ها",
+    "team": "تیم",
+    "shared": "اشتراکی",
+    "archive": "آرشیو",
+    "noArchived": "هیچ مکالمه‌ای در آرشیو وجود ندارد",
+    "star": "ستاره",
+    "unstar": "حذف ستاره",
+    "archiveAction": "آرشیو",
+    "unarchive": "بازگرداندن از آرشیو"
   },
   "language": "زبان",
   "offline": "آفلاین هستید. مشاهده مکالمات ذخیره‌شده.",
   "pwa": {
     "installPrompt": "Kernel را به صفحه اصلی خود اضافه کنید.",
     "install": "نصب"
+  },
+  "relativeTime": {
+    "justNow": "همین حالا",
+    "minutesAgo": "{{count}}دقیقه پیش",
+    "hoursAgo": "{{count}}ساعت پیش",
+    "daysAgo": "{{count}}روز پیش"
+  },
+  "copy": "کپی",
+  "copied": "کپی شد",
+  "download": "دانلود",
+  "preview": "پیش‌نمایش",
+  "code": "کد",
+  "downloadAllFiles": "دانلود همه {{count}} فایل",
+  "combinedPreview": "پیش‌نمایش زنده",
+  "previewTruncated": "پیش‌نمایش در {{lines}} خط کوتاه شده است — برای مشاهده کامل فایل دانلود کنید",
+  "fullscreen": "صفحه تمام‌صفحه",
+  "console": "کنسول",
+  "errors": "خطاها",
+  "previewMobile": "پیش‌نمایش موبایل (375px)",
+  "previewTablet": "پیش‌نمایش تبلت (768px)",
+  "previewDesktop": "پیش‌نمایش دسکتاپ (عرض کامل)",
+  "previewFailed": "پیش‌نمایش قادر به رندر محتوای قابل مشاهده نبود",
+  "line": "{{count}} خط",
+  "lines": "{{count}} خط",
+  "errorTitle": "چیزی اشتباه شد",
+  "errorDefault": "چیزی از سمت ما خراب شد. سعی کنید صفحه را رفرش کنید.",
+  "tryAgain": "دوباره تلاش کن",
+  "tags": {
+    "title": "گفتگوی برچسب‌دار",
+    "addTag": "اضافه کردن برچسب...",
+    "save": "ذخیره",
+    "suggested": "پیشنهادات"
   }
 }

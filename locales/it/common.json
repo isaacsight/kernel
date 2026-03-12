@@ -33,7 +33,8 @@
     "voiceInput": "Input vocale",
     "sendMessage": "Send message",
     "stopGenerating": "Interrompi generazione",
-    "shareableLink": "Link condivisibile della conversazione"
+    "shareableLink": "Link condivisibile della conversazione",
+    "toggleTheme": "Cambia tema"
   },
   "time": {
     "overdue": "scaduto",
@@ -50,12 +51,65 @@
     "yesterday": "Ieri",
     "thisWeek": "Questa settimana",
     "thisMonth": "Questo mese",
-    "earlier": "Precedente"
+    "earlier": "Precedente",
+    "title": "Conversazioni ({{count}})",
+    "searchPlaceholder": "Cerca conversazioni...",
+    "newChat": "Nuova Chat",
+    "searching": "Ricerca in corso...",
+    "noMatches": "Nessuna corrispondenza trovata",
+    "noResults": "Nessun risultato",
+    "resultCount": "{{count}} risultati",
+    "clearSearch": "Cancella ricerca",
+    "empty": "Nessuna conversazione per ora",
+    "starred": "Preferiti",
+    "recents": "Recenti",
+    "yours": "Tuo",
+    "folders": "Cartelle",
+    "team": "Team",
+    "shared": "Condivisi",
+    "archive": "Archivio",
+    "noArchived": "Nessuna conversazione archiviata",
+    "star": "Segnala",
+    "unstar": "Rimuovi segnalazione",
+    "archiveAction": "Archivia",
+    "unarchive": "Ripristina"
   },
   "language": "Lingua",
   "offline": "Sei offline. Visualizzazione conversazioni memorizzate.",
   "pwa": {
     "installPrompt": "Aggiungi Kernel alla schermata principale per la migliore esperienza.",
     "install": "Installa"
+  },
+  "relativeTime": {
+    "justNow": "ora",
+    "minutesAgo": "{{count}}m fa",
+    "hoursAgo": "{{count}}h fa",
+    "daysAgo": "{{count}}g fa"
+  },
+  "copy": "Copia",
+  "copied": "Copiato",
+  "download": "Scarica",
+  "preview": "Anteprima",
+  "code": "Codice",
+  "downloadAllFiles": "Scarica tutti i {{count}} file",
+  "combinedPreview": "Anteprima in tempo reale",
+  "previewTruncated": "Anteprima troncata a {{lines}} linee — scarica per il file completo",
+  "fullscreen": "Schermo intero",
+  "console": "Console",
+  "errors": "errori",
+  "previewMobile": "Anteprima mobile (375px)",
+  "previewTablet": "Anteprima tablet (768px)",
+  "previewDesktop": "Anteprima desktop (larghezza intera)",
+  "previewFailed": "Impossibile visualizzare l'anteprima del contenuto.",
+  "line": "{{count}} linea",
+  "lines": "{{count}} linee",
+  "errorTitle": "Qualcosa è andato storto",
+  "errorDefault": "Si è verificato un problema da parte nostra. Riprova ad aggiornare.",
+  "tryAgain": "Riprova",
+  "tags": {
+    "title": "Tagga conversazione",
+    "addTag": "Aggiungi tag...",
+    "save": "Salva",
+    "suggested": "Suggerimenti"
   }
 }

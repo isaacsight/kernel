@@ -33,7 +33,8 @@
     "voiceInput": "وائس ان پٹ",
     "sendMessage": "Send message",
     "stopGenerating": "جنریٹ کرنا بند کریں",
-    "shareableLink": "گفتگو کا شیئر کرنے کے قابل لنک"
+    "shareableLink": "گفتگو کا شیئر کرنے کے قابل لنک",
+    "toggleTheme": "تھیم تبدیل کریں"
   },
   "time": {
     "overdue": "تاخیر شدہ",
@@ -50,12 +51,65 @@
     "yesterday": "کل",
     "thisWeek": "اس ہفتے",
     "thisMonth": "اس مہینے",
-    "earlier": "پہلے"
+    "earlier": "پہلے",
+    "title": "گفتگویں ({{count}})",
+    "searchPlaceholder": "گفتگوئں وچ تلاش کریں...",
+    "newChat": "نوي چیٹ",
+    "searching": "تلاش ہو رہی ہے...",
+    "noMatches": "کوئی میچ نہیں ملا",
+    "noResults": "کوئی نتیجہ نہیں",
+    "resultCount": "{{count}} نتائج",
+    "clearSearch": "تلاش صاف کریں",
+    "empty": "ابھی کوئی گفتگو نہیں",
+    "starred": "ستارہ زدہ",
+    "recents": "حال ہی میں",
+    "yours": "آپ کی",
+    "folders": "فولڈرز",
+    "team": "جماعت",
+    "shared": "شیئر کیا گیا",
+    "archive": "آرکائیو",
+    "noArchived": "آرکائیو کرنے کے کوئی مکالمے نہیں",
+    "star": "ستارہ",
+    "unstar": "ستارہ ہٹائیں",
+    "archiveAction": "آرکائیو کریں",
+    "unarchive": "آرکائیو سے نکالیں"
   },
   "language": "زبان",
   "offline": "آپ آف لائن ہیں۔ محفوظ شدہ گفتگو دکھائی جا رہی ہیں۔",
   "pwa": {
     "installPrompt": "بہترین تجربے کے لیے Kernel کو اپنی ہوم اسکرین پر شامل کریں۔",
     "install": "انسٹال"
+  },
+  "relativeTime": {
+    "justNow": " ابھی",
+    "minutesAgo": "{{count}}منٹ پہلے",
+    "hoursAgo": "{{count}} گھنٹے پہلے",
+    "daysAgo": "{{count}} دن پہلے"
+  },
+  "copy": "نقل کریں",
+  "copied": "نقل کر لیا",
+  "download": "ڈاؤن لوڈ کریں",
+  "preview": "پیش نظارہ",
+  "code": "کوڈ",
+  "downloadAllFiles": "{{count}} فائلوں کو ڈاؤن لوڈ کریں",
+  "combinedPreview": "براہِ راست پیش نظارہ",
+  "previewTruncated": "پیش نظارہ {{lines}} لائنز پر کٹ گیا - مکمل فائل کے لیے ڈاؤن لوڈ کریں",
+  "fullscreen": "پوری سکرین",
+  "console": "کنSOLE",
+  "errors": "غلطیاں",
+  "previewMobile": "موبائل پیش نظارہ (375px)",
+  "previewTablet": "ٹیبلٹ پیش نظارہ (768px)",
+  "previewDesktop": "ڈیسک ٹاپ پیش نظارہ (پورے عرض)",
+  "previewFailed": "پیش نظارہ ظاہر کرنے کے قابل نہیں تھا",
+  "line": "{{count}} لائن",
+  "lines": "{{count}} لائنز",
+  "errorTitle": "کوئی گڑبڑ ہوئی",
+  "errorDefault": "ہمارے طرف سے کچھ ٹوٹ گیا۔ تازہ دم کرنے کی کوشش کریں۔",
+  "tryAgain": " دوبارہ کوشش کریں",
+  "tags": {
+    "title": "گفتگو کو ٹیگ کریں",
+    "addTag": "ٹیگ شامل کریں...",
+    "save": "بحفظ کریں",
+    "suggested": "تجویزیں"
   }
 }

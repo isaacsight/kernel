@@ -33,7 +33,8 @@
     "voiceInput": "وەرگرتنی دەنگ",
     "sendMessage": "Send message",
     "stopGenerating": "وەستان لە دروستکردن",
-    "shareableLink": "لینکی گفتوگۆی شیاوی هاوبەشکردن"
+    "shareableLink": "لینکی گفتوگۆی شیاوی هاوبەشکردن",
+    "toggleTheme": "گۆڕینی بابەت"
   },
   "time": {
     "overdue": "دواکەوتووە",
@@ -50,12 +51,65 @@
     "yesterday": "دوێنێ",
     "thisWeek": "ئەم هەفتەیە",
     "thisMonth": "ئەم مانگە",
-    "earlier": "پێشتر"
+    "earlier": "پێشتر",
+    "title": "شێوان ({{count}})",
+    "searchPlaceholder": "گەیشتەرەوە شێوان...",
+    "newChat": "چەتە تازە",
+    "searching": "لگەیشتەرەوە...",
+    "noMatches": "هیچ نەدۆزرا",
+    "noResults": "هیچ ئەنجام نەهات",
+    "resultCount": "{{count}} ئەنجام",
+    "clearSearch": "پاککردنی گەڕان",
+    "empty": "هیچ شێوان نییە",
+    "starred": "ستێرە",
+    "recents": "نوێنەر",
+    "yours": "خۆی",
+    "folders": "پوشتن",
+    "team": "کۆمەڵ",
+    "shared": "Parêştirin",
+    "archive": "Arxiv",
+    "noArchived": "Tu hevpeyvînên arîv ne",
+    "star": "Astire",
+    "unstar": "Ji astirê derxist",
+    "archiveAction": "Arxiv bike",
+    "unarchive": "Ji arîvê derxist"
   },
   "language": "زمان",
   "offline": "ئۆفلاین. بینینی گفتوگۆکانی پاشەکەوتکراو.",
   "pwa": {
     "installPrompt": "Kernel بخە سەر شاشەی سەرەکی بۆ باشترین ئەزموون.",
     "install": "دامەزراندن"
+  },
+  "relativeTime": {
+    "justNow": "niha",
+    "minutesAgo": "{{count}}m temu",
+    "hoursAgo": "{{count}}h temu",
+    "daysAgo": "{{count}}d temu"
+  },
+  "copy": "Pûç bike",
+  "copied": "Pûç kir",
+  "download": "Dast pê bike",
+  "preview": "Biner",
+  "code": "كۆد",
+  "downloadAllFiles": "دانانی هەموو {{count}} فایڵ",
+  "combinedPreview": " پێشخۆيێن هەلبه‌زێن",
+  "previewTruncated": " پێشخۆيێن كوتايشتن ب {{lines}} رێز - بۆ فایڵێ كۆمەڵه‌كان دانه‌",
+  "fullscreen": "پێكاكێن زۆر گه‌وره‌",
+  "console": "كۆنڕۆل",
+  "errors": "خۆتبه‌ژيێن",
+  "previewMobile": "پێشخۆيێن مۆبایل (٣٧٥px)",
+  "previewTablet": "پێشخۆيێن ته‌بلێت (٧٦٨px)",
+  "previewDesktop": "پێشخۆيێن ده‌سكتاپ (ناوەڕاستی تەواو)",
+  "previewFailed": " پێشخۆيێن نەتوانێت ده‌رنه‌خستنێن به‌شدارێن ديده‌",
+  "line": "{{count}} رێز",
+  "lines": "{{count}} رێزێن",
+  "errorTitle": "خۆشه‌ويستان بكوێت",
+  "errorDefault": "خۆيێن وه‌رگه‌شتێ شوێن كه‌وته‌. سه‌رته‌قێتێن تازه‌ دانه‌.",
+  "tryAgain": "دواكه‌ بگەڕێنه‌وه‌",
+  "tags": {
+    "title": "گفتوگۆی ته‌گ بکه‌",
+    "addTag": "ته‌گ زیاد بکه‌...",
+    "save": "پاراستن",
+    "suggested": "پیشنهادات"
   }
 }

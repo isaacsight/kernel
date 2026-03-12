@@ -33,7 +33,8 @@
     "voiceInput": "Äänisyöte",
     "sendMessage": "Send message",
     "stopGenerating": "Lopeta luonti",
-    "shareableLink": "Jaettava keskustelulinkki"
+    "shareableLink": "Jaettava keskustelulinkki",
+    "toggleTheme": "Vaihda teema"
   },
   "time": {
     "overdue": "myöhässä",
@@ -50,12 +51,65 @@
     "yesterday": "Eilen",
     "thisWeek": "Tällä viikolla",
     "thisMonth": "Tässä kuussa",
-    "earlier": "Aiemmin"
+    "earlier": "Aiemmin",
+    "title": "Keskustelut ({{count}})",
+    "searchPlaceholder": "Hae keskusteluja...",
+    "newChat": "Uusi keskustelu",
+    "searching": "Hae...",
+    "noMatches": "Ei osumia",
+    "noResults": "Ei tuloksia",
+    "resultCount": "{{count}} tulosta",
+    "clearSearch": "Tyhjennä haku",
+    "empty": "Ei keskusteluja vielä",
+    "starred": "Tähdetyt",
+    "recents": "Viimeisimmät",
+    "yours": "Omasi",
+    "folders": "Kansiot",
+    "team": "Tiimi",
+    "shared": "Jaettu",
+    "archive": "Arkisto",
+    "noArchived": "Ei arkistoituja keskusteluja",
+    "star": "Tähdennä",
+    "unstar": "Poista tähti",
+    "archiveAction": "Arkistoi",
+    "unarchive": "Poista arkistosta"
   },
   "language": "Kieli",
   "offline": "Olet offline. Näytetään välimuistissa olevat keskustelut.",
   "pwa": {
     "installPrompt": "Lisää Kernel aloitusnäytöllesi parasta kokemusta varten.",
     "install": "Asenna"
+  },
+  "relativeTime": {
+    "justNow": "juuri nyt",
+    "minutesAgo": "{{count}}min sitten",
+    "hoursAgo": "{{count}}tuntia sitten",
+    "daysAgo": "{{count}}päivää sitten"
+  },
+  "copy": "Kopioi",
+  "copied": "Kopioitu",
+  "download": "Lataa",
+  "preview": "Esikatselu",
+  "code": "Koodi",
+  "downloadAllFiles": "Lataa kaikki {{count}} tiedostoa",
+  "combinedPreview": "Esikatselu",
+  "previewTruncated": "Esikatselu katkaistu {{lines}} riviin — lataa koko tiedosto",
+  "fullscreen": "Koko näyttö",
+  "console": "Konsoli",
+  "errors": "virheet",
+  "previewMobile": "Mobiiliesikatselu (375px)",
+  "previewTablet": "Tablettiesikatselu (768px)",
+  "previewDesktop": "Työpöytäesikatselu (täysi leveys)",
+  "previewFailed": "Esikatselua ei voitu renderöidä näkyvää sisältöä",
+  "line": "{{count}} rivi",
+  "lines": "{{count}} riviä",
+  "errorTitle": "Jotain meni pieleen",
+  "errorDefault": "Jotain rikkoontui meidän puolellamme. Yritä päivittää.",
+  "tryAgain": "Yritä uudelleen",
+  "tags": {
+    "title": "Tunniste keskustelulle",
+    "addTag": "Lisää tunniste...",
+    "save": "Tallenna",
+    "suggested": "Ehdotukset"
   }
 }

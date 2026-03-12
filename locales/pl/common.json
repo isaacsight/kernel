@@ -33,7 +33,8 @@
     "voiceInput": "Wprowadzanie głosowe",
     "sendMessage": "Send message",
     "stopGenerating": "Zatrzymaj generowanie",
-    "shareableLink": "Link do udostępnienia rozmowy"
+    "shareableLink": "Link do udostępnienia rozmowy",
+    "toggleTheme": "Przełącz motyw"
   },
   "time": {
     "overdue": "po terminie",
@@ -50,12 +51,65 @@
     "yesterday": "Wczoraj",
     "thisWeek": "Ten tydzień",
     "thisMonth": "Ten miesiąc",
-    "earlier": "Wcześniej"
+    "earlier": "Wcześniej",
+    "title": "Rozmowy ({{count}})",
+    "searchPlaceholder": "Wyszukiwanie rozmów...",
+    "newChat": "Nowa rozmowa",
+    "searching": "Wyszukiwanie...",
+    "noMatches": "Brak dopasowań",
+    "noResults": "Brak wyników",
+    "resultCount": "{{count}} wyników",
+    "clearSearch": "Wyczyść wyszukiwanie",
+    "empty": "Brak rozmów jeszcze",
+    "starred": "Oznaczone",
+    "recents": "Ostatnie",
+    "yours": "Twoje",
+    "folders": "Foldery",
+    "team": "Zespoł",
+    "shared": "Wspólne",
+    "archive": "Archiwum",
+    "noArchived": "Brak zarchiwizowanych rozmów",
+    "star": "Ustaw gwiazdę",
+    "unstar": "Usuń gwiazdę",
+    "archiveAction": "Archiwizuj",
+    "unarchive": "Dezaktywuj archiwum"
   },
   "language": "Język",
   "offline": "Jesteś offline. Wyświetlanie zapisanych rozmów.",
   "pwa": {
     "installPrompt": "Dodaj Kernel do ekranu głównego dla najlepszego doświadczenia.",
     "install": "Zainstaluj"
+  },
+  "relativeTime": {
+    "justNow": "teraz",
+    "minutesAgo": "{{count}}m temu",
+    "hoursAgo": "{{count}}h temu",
+    "daysAgo": "{{count}}d temu"
+  },
+  "copy": "Kopiuj",
+  "copied": "Skopiowano",
+  "download": "Pobierz",
+  "preview": "Podgląd",
+  "code": "Kod",
+  "downloadAllFiles": "Pobierz wszystkie {{count}} plików",
+  "combinedPreview": "Podgląd na żywo",
+  "previewTruncated": "Podgląd obcięty do {{lines}} linii — pobierz, aby zobaczyć cały plik",
+  "fullscreen": "Pełny ekran",
+  "console": "Konsola",
+  "errors": "błędy",
+  "previewMobile": "Podgląd na urządzeniach mobilnych (375px)",
+  "previewTablet": "Podgląd na tabletach (768px)",
+  "previewDesktop": "Podgląd na komputerach (pełna szerokość)",
+  "previewFailed": "Nie udało się wyrenderować widocznej zawartości podglądu",
+  "line": "{{count}} linia",
+  "lines": "{{count}} linii",
+  "errorTitle": "Coś poszło nie tak",
+  "errorDefault": "Coś się zepsuło po naszej stronie. Spróbuj odświeżyć.",
+  "tryAgain": "Spróbuj ponownie",
+  "tags": {
+    "title": "Oznaczaj rozmowy",
+    "addTag": "Dodaj tag...",
+    "save": "Zapisz",
+    "suggested": "Sugestie"
   }
 }

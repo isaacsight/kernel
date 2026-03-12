@@ -33,7 +33,8 @@
     "voiceInput": "음성 입력",
     "sendMessage": "Send message",
     "stopGenerating": "생성 중지",
-    "shareableLink": "공유 가능한 대화 링크"
+    "shareableLink": "공유 가능한 대화 링크",
+    "toggleTheme": "테마 전환"
   },
   "time": {
     "overdue": "기한 초과",
@@ -50,12 +51,65 @@
     "yesterday": "어제",
     "thisWeek": "이번 주",
     "thisMonth": "이번 달",
-    "earlier": "이전"
+    "earlier": "이전",
+    "title": "대화 ({{count}})",
+    "searchPlaceholder": "대화 검색...",
+    "newChat": "새로운 채팅",
+    "searching": "검색 중...",
+    "noMatches": "일치하는 항목이 없습니다",
+    "noResults": "결과 없음",
+    "resultCount": "{{count}} 건의 결과",
+    "clearSearch": "검색 지우기",
+    "empty": "대화가 아직 없습니다",
+    "starred": "별표",
+    "recents": "최근",
+    "yours": "내 메시지",
+    "folders": "폴더",
+    "team": "팀",
+    "shared": "공유됨",
+    "archive": "보관함",
+    "noArchived": "보관된 대화 내용이 없습니다.",
+    "star": "별표",
+    "unstar": "별표 해제",
+    "archiveAction": "보관",
+    "unarchive": "보관 해제"
   },
   "language": "언어",
   "offline": "오프라인입니다. 캐시된 대화를 표시합니다.",
   "pwa": {
     "installPrompt": "최고의 경험을 위해 Kernel을 홈 화면에 추가하세요.",
     "install": "설치"
+  },
+  "relativeTime": {
+    "justNow": "방금",
+    "minutesAgo": "{{count}}분 전",
+    "hoursAgo": "{{count}}시간 전",
+    "daysAgo": "{{count}}일 전"
+  },
+  "copy": "복사",
+  "copied": "복사 완료",
+  "download": "다운로드",
+  "preview": "미리보기",
+  "code": "코드",
+  "downloadAllFiles": "{{count}}개의 파일 모두 다운로드",
+  "combinedPreview": "실시간 미리보기",
+  "previewTruncated": "{{lines}} 줄에서 잘림 - 전체 파일을 다운로드하여 확인하세요",
+  "fullscreen": "전체 화면",
+  "console": "콘솔",
+  "errors": "오류",
+  "previewMobile": "모바일 미리보기 (375px)",
+  "previewTablet": "태블릿 미리보기 (768px)",
+  "previewDesktop": "데스크톱 미리보기 (전체 너비)",
+  "previewFailed": "내용을 표시하는 데 실패했습니다",
+  "line": "{{count}} 번째 줄",
+  "lines": "{{count}} 줄",
+  "errorTitle": "오류가 발생했습니다",
+  "errorDefault": "저희 서버에서 문제가 발생했습니다. 새로 고침을 시도해 주세요.",
+  "tryAgain": "다시 시도하기",
+  "tags": {
+    "title": "대화 태그",
+    "addTag": "태그 추가...",
+    "save": "저장",
+    "suggested": "추천"
   }
 }

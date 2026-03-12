@@ -33,7 +33,8 @@
     "voiceInput": "Entrada de voz",
     "sendMessage": "Send message",
     "stopGenerating": "Parar geração",
-    "shareableLink": "Link compartilhável da conversa"
+    "shareableLink": "Link compartilhável da conversa",
+    "toggleTheme": "Alternar tema"
   },
   "time": {
     "overdue": "atrasado",
@@ -50,12 +51,65 @@
     "yesterday": "Ontem",
     "thisWeek": "Esta semana",
     "thisMonth": "Este mês",
-    "earlier": "Anterior"
+    "earlier": "Anterior",
+    "title": "Conversas ({{count}})",
+    "searchPlaceholder": "Pesquisar conversas...",
+    "newChat": "Nova Conversa",
+    "searching": "Pesquisando...",
+    "noMatches": "Nenhuma correspondência encontrada",
+    "noResults": "Nenhum resultado",
+    "resultCount": "{{count}} resultados",
+    "clearSearch": "Limpar pesquisa",
+    "empty": "Nenhuma conversa ainda",
+    "starred": "Favoritos",
+    "recents": "Recentes",
+    "yours": "Suas",
+    "folders": "Pastas",
+    "team": "Equipe",
+    "shared": "Compartilhados",
+    "archive": "Arquivados",
+    "noArchived": "Nenhuma conversa arquivada",
+    "star": "Estrelar",
+    "unstar": "Remover estrela",
+    "archiveAction": "Arquivar",
+    "unarchive": "Desarquivar"
   },
   "language": "Idioma",
   "offline": "Você está offline. Exibindo conversas em cache.",
   "pwa": {
     "installPrompt": "Adicione o Kernel à tela inicial para a melhor experiência.",
     "install": "Instalar"
+  },
+  "relativeTime": {
+    "justNow": "agora mesmo",
+    "minutesAgo": "{{count}}m atrás",
+    "hoursAgo": "{{count}}h atrás",
+    "daysAgo": "{{count}}d atrás"
+  },
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "download": "Baixar",
+  "preview": "Visualizar",
+  "code": "Código",
+  "downloadAllFiles": "Baixar todos os {{count}} arquivos",
+  "combinedPreview": "Visualização em Tempo Real",
+  "previewTruncated": "Visualização truncada em {{lines}} linhas — baixe para ver o arquivo completo",
+  "fullscreen": "Tela Cheia",
+  "console": "Console",
+  "errors": "erros",
+  "previewMobile": "Visualização para celular (375px)",
+  "previewTablet": "Visualização para tablet (768px)",
+  "previewDesktop": "Visualização para desktop (largura total)",
+  "previewFailed": "A visualização não conseguiu renderizar o conteúdo visível",
+  "line": "{{count}} linha",
+  "lines": "{{count}} linhas",
+  "errorTitle": "Algo deu errado",
+  "errorDefault": "Algo deu errado do nosso lado. Tente atualizar.",
+  "tryAgain": "Tentar novamente",
+  "tags": {
+    "title": "Conversa com tags",
+    "addTag": "Adicionar tag...",
+    "save": "Salvar",
+    "suggested": "Sugestões"
   }
 }

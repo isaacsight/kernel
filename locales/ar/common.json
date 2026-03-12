@@ -33,7 +33,8 @@
     "voiceInput": "إدخال صوتي",
     "sendMessage": "Send message",
     "stopGenerating": "إيقاف التوليد",
-    "shareableLink": "رابط المحادثة القابل للمشاركة"
+    "shareableLink": "رابط المحادثة القابل للمشاركة",
+    "toggleTheme": "تبديل المظهر"
   },
   "time": {
     "overdue": "متأخر",
@@ -50,12 +51,65 @@
     "yesterday": "أمس",
     "thisWeek": "هذا الأسبوع",
     "thisMonth": "هذا الشهر",
-    "earlier": "سابقاً"
+    "earlier": "سابقاً",
+    "title": "المحادثات ({{count}})",
+    "searchPlaceholder": "ابحث في المحادثات...",
+    "newChat": "محادثة جديدة",
+    "searching": "جاري البحث...",
+    "noMatches": "لم يتم العثور على نتائج",
+    "noResults": "لا توجد نتائج",
+    "resultCount": "{{count}} نتيجة",
+    "clearSearch": "مسح البحث",
+    "empty": "لا توجد محادثات حتى الآن",
+    "starred": "مفضلة",
+    "recents": "حديثة",
+    "yours": "خاصة بك",
+    "folders": "مجلدات",
+    "team": "فريق",
+    "shared": "مشاركة",
+    "archive": "أرشيف",
+    "noArchived": "لا توجد محادثات مؤرشفة",
+    "star": "تثبيت",
+    "unstar": "إزالة التثبيت",
+    "archiveAction": "أرشفة",
+    "unarchive": "إلغاء الأرشفة"
   },
   "language": "اللغة",
   "offline": "أنت غير متصل. عرض المحادثات المخزنة مؤقتاً.",
   "pwa": {
     "installPrompt": "أضف Kernel إلى شاشتك الرئيسية للحصول على أفضل تجربة.",
     "install": "تثبيت"
+  },
+  "relativeTime": {
+    "justNow": "الآن",
+    "minutesAgo": "{{count}} دقيقة مضت",
+    "hoursAgo": "{{count}} ساعة مضت",
+    "daysAgo": "{{count}} يوم مضى"
+  },
+  "copy": "نسخ",
+  "copied": "تم النسخ",
+  "download": "تنزيل",
+  "preview": "معاينة",
+  "code": "رمز",
+  "downloadAllFiles": "تنزيل كل {{count}} ملف",
+  "combinedPreview": "معاينة مباشرة",
+  "previewTruncated": "المعاينة مقطوعة عند {{lines}} سطر - قم بالتنزيل للحصول على الملف كاملاً",
+  "fullscreen": "شاشة كاملة",
+  "console": "وحدة التحكم",
+  "errors": "أخطاء",
+  "previewMobile": "معاينة الجوال (375 بكسل)",
+  "previewTablet": "معاينة الجهاز اللوحي (768 بكسل)",
+  "previewDesktop": "معاينة سطح المكتب (عرض كامل)",
+  "previewFailed": "تعذر عرض المعاينة للمحتوى المرئي",
+  "line": "{{count}} سطر",
+  "lines": "{{count}} أسطر",
+  "errorTitle": "حدث خطأ ما",
+  "errorDefault": "حدث خلل من جانبنا. حاول التحديث.",
+  "tryAgain": "حاول مرة أخرى",
+  "tags": {
+    "title": "تسمية المحادثة",
+    "addTag": "أضف تسمية...",
+    "save": "حفظ",
+    "suggested": "اقتراحات"
   }
 }

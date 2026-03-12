@@ -33,7 +33,8 @@
     "voiceInput": "Spraakinvoer",
     "sendMessage": "Send message",
     "stopGenerating": "Stop met genereren",
-    "shareableLink": "Deelbare gesprekslink"
+    "shareableLink": "Deelbare gesprekslink",
+    "toggleTheme": "Schakel thema om"
   },
   "time": {
     "overdue": "achterstallig",
@@ -50,12 +51,65 @@
     "yesterday": "Gisteren",
     "thisWeek": "Deze week",
     "thisMonth": "Deze maand",
-    "earlier": "Eerder"
+    "earlier": "Eerder",
+    "title": "Gesprekken ({{count}})",
+    "searchPlaceholder": "Zoek in gesprekken...",
+    "newChat": "Nieuw gesprek",
+    "searching": "Zoeken...",
+    "noMatches": "Geen overeenkomsten gevonden",
+    "noResults": "Geen resultaten",
+    "resultCount": "{{count}} resultaten",
+    "clearSearch": "Zoekopdracht wissen",
+    "empty": "Nog geen gesprekken",
+    "starred": "Sterren",
+    "recents": "Recente",
+    "yours": "Van jou",
+    "folders": "Mappen",
+    "team": "Team",
+    "shared": "Gedeeld",
+    "archive": "Gearchiveerd",
+    "noArchived": "Geen gearchiveerde gesprekken",
+    "star": "Ster",
+    "unstar": "Ster verwijderen",
+    "archiveAction": "Archiveren",
+    "unarchive": "De-archiveren"
   },
   "language": "Taal",
   "offline": "Je bent offline. Opgeslagen gesprekken worden weergegeven.",
   "pwa": {
     "installPrompt": "Voeg Kernel toe aan je startscherm voor de beste ervaring.",
     "install": "Installeren"
+  },
+  "relativeTime": {
+    "justNow": "zojuist",
+    "minutesAgo": "{{count}}m geleden",
+    "hoursAgo": "{{count}}u geleden",
+    "daysAgo": "{{count}}d geleden"
+  },
+  "copy": "Kopiëren",
+  "copied": "Gekopiëerd",
+  "download": "Downloaden",
+  "preview": "Voorbeeld bekijken",
+  "code": "Code",
+  "downloadAllFiles": "Download alle {{count}} bestanden",
+  "combinedPreview": "Live Voorbeeld",
+  "previewTruncated": "Voorbeeld is afgekapt bij {{lines}} regels — download voor het volledige bestand",
+  "fullscreen": "Volledig scherm",
+  "console": "Console",
+  "errors": "fouten",
+  "previewMobile": "Mobiel voorbeeld (375px)",
+  "previewTablet": "Tablet voorbeeld (768px)",
+  "previewDesktop": "Desktop voorbeeld (volledige breedte)",
+  "previewFailed": "Voorbeeld kon geen zichtbare inhoud weergeven",
+  "line": "{{count}} regel",
+  "lines": "{{count}} regels",
+  "errorTitle": "Er is iets fout gegaan",
+  "errorDefault": "Er is iets misgegaan aan onze kant. Probeer de pagina te vernieuwen.",
+  "tryAgain": "Probeer het opnieuw",
+  "tags": {
+    "title": "Gesprek taggen",
+    "addTag": "Tag toevoegen...",
+    "save": "Opslaan",
+    "suggested": "Suggesties"
   }
 }
