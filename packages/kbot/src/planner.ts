@@ -16,6 +16,7 @@ import { executeTool, getTool, type ToolCall } from './tools/index.js'
 import { gatherContext, formatContextForPrompt } from './context.js'
 import { addTurn } from './memory.js'
 import { createSpinner, printInfo, printSuccess, printError, printWarn } from './ui.js'
+import { TaskLedger, type StepResult } from './task-ledger.js'
 import chalk from 'chalk'
 
 const AMETHYST = chalk.hex('#6B5B95')
@@ -181,6 +182,17 @@ export async function executePlan(
 ): Promise<Plan> {
   plan.status = 'executing'
 
+  // Initialize dual-ledger orchestration
+  const ledger = new TaskLedger()
+  ledger.setPlan(plan.steps.map(s => ({
+    index: s.id - 1,
+    description: s.description,
+    agent: s.tool ? undefined : 'coder',
+    tools: s.tool ? [s.tool] : undefined,
+    status: 'pending',
+    dependsOn: s.dependsOn?.map(d => d - 1),
+  })))
+
   // Group steps by dependency layers for parallel execution
   const executed = new Set<number>()
 
@@ -266,9 +278,27 @@ export async function executePlan(
         }
       }
 
+      // Record step result in the task ledger
+      const stepResult: StepResult = {
+        result: step.status === 'done' ? 'success' : 'failure',
+        output: step.result?.slice(0, 200),
+        error: step.error,
+        toolsUsed: step.tool ? [step.tool] : [],
+        tokensUsed: 0,
+        costUsd: 0,
+      }
+      ledger.updateStep(step.id - 1, stepResult)
+
       executed.add(step.id)
       onStepComplete?.(step)
     }))
+
+    // Check if the ledger recommends replanning
+    if (ledger.shouldReplan()) {
+      printWarn('Task ledger recommends replanning — too many failures or high cost.')
+      printInfo(ledger.getProgressSummary())
+      break
+    }
   }
 
   // Final status
@@ -282,6 +312,9 @@ export async function executePlan(
   } else {
     printWarn(`Plan finished with errors: ${done.length} done, ${failed.length} failed`)
   }
+
+  // Log ledger summary
+  printInfo(ledger.getProgressSummary())
 
   return plan
 }

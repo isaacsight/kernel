@@ -40,6 +40,9 @@ import { parseMultimodalMessage, toAnthropicContent, toOpenAIContent, toGeminiPa
 import { streamAnthropicResponse, streamOpenAIResponse, type StreamState } from './streaming.js'
 import { checkPermission } from './permissions.js'
 import { runPreToolHook, runPostToolHook } from './hooks.js'
+import { getRepoMapForContext } from './repo-map.js'
+import { recordSuccess, recordFailure } from './provider-fallback.js'
+import { isSelfEvalEnabled, evaluateResponse } from './self-eval.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -585,16 +588,22 @@ async function callProvider(
   options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number },
 ): Promise<ProviderResult> {
   const p = getProvider(provider)
+  const startTime = Date.now()
 
   try {
+    let result: ProviderResult
     switch (p.apiStyle) {
-      case 'anthropic': return await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options)
-      case 'google':    return await callGemini(apiKey, p.apiUrl, model, systemContext, messages)
-      case 'cohere':    return await callCohere(apiKey, p.apiUrl, model, systemContext, messages)
-      case 'openai':    return await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools)
-      default:          return await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools)
+      case 'anthropic': result = await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options); break
+      case 'google':    result = await callGemini(apiKey, p.apiUrl, model, systemContext, messages); break
+      case 'cohere':    result = await callCohere(apiKey, p.apiUrl, model, systemContext, messages); break
+      case 'openai':    result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
+      default:          result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
     }
+    recordSuccess(provider, Date.now() - startTime)
+    return result
   } catch (err) {
+    recordFailure(provider, err instanceof Error ? err : new Error(String(err)))
+
     // Auto-retry with fallback model for local providers
     if (isLocalProvider(provider) && model !== p.fastModel) {
       const errMsg = err instanceof Error ? err.message : String(err)
@@ -721,11 +730,22 @@ How you work with tools:
 
 Always quote file paths that contain spaces. Never reference internal system names.`
 
+  // Inject repo map for code-related tasks (helps AI navigate the codebase)
+  let repoMapSnippet = ''
+  if (!casual && !isLocal) {
+    try {
+      const map = await getRepoMapForContext()
+      if (map && map.length > 100) {
+        repoMapSnippet = `\n\nRepository structure:\n${map}`
+      }
+    } catch { /* repo map is non-critical */ }
+  }
+
   // Prompt caching — split into stable (cacheable) and dynamic sections
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: contextSnippet || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet || undefined,
     memorySnippet: memorySnippet || undefined,
     learningContext: learningContext || undefined,
   })
@@ -845,7 +865,22 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
       // Text response → done
       if (lastResponse.type === 'text' || !lastResponse.tool_calls || lastResponse.tool_calls.length === 0) {
-        const content = lastResponse.content || ''
+        let content = lastResponse.content || ''
+
+        // Self-evaluation — score response and log quality signal
+        if (isSelfEvalEnabled() && content.length > 50) {
+          try {
+            const evalResult = await evaluateResponse(originalMessage, content)
+            if (evalResult.shouldRetry && evalResult.feedback) {
+              printWarn(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
+              // Inject feedback and let the loop continue
+              loopMessages.push({ role: 'assistant', content })
+              loopMessages.push({ role: 'user', content: `Your previous response scored low on quality. Feedback: ${evalResult.feedback}\n\nPlease try again with a better response.` })
+              continue
+            }
+          } catch { /* self-eval errors are non-critical */ }
+        }
+
         addTurn({ role: 'user', content: originalMessage })
         addTurn({ role: 'assistant', content })
 

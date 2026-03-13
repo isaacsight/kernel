@@ -66,6 +66,7 @@ async function main(): Promise<void> {
     .option('--computer-use', 'Enable computer use tools')
     .option('-t, --thinking', 'Show AI reasoning steps')
     .option('--thinking-budget <tokens>', 'Thinking token budget (default: 10000)')
+    .option('--self-eval', 'Enable self-evaluation loop (score and retry low-quality responses)')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
     .argument('[prompt...]', 'One-shot prompt')
@@ -607,6 +608,12 @@ async function main(): Promise<void> {
     tier,
     thinking: opts.thinking || false,
     thinkingBudget: opts.thinkingBudget ? (parseInt(opts.thinkingBudget, 10) || 10000) : undefined,
+  }
+
+  // Enable self-evaluation if requested
+  if (opts.selfEval) {
+    const { setSelfEvalEnabled } = await import('./self-eval.js')
+    setSelfEvalEnabled(true)
   }
 
   // Pipe mode: echo "prompt" | kbot -p  OR  kbot -p "prompt"
@@ -1450,6 +1457,37 @@ async function handleSlashCommand(
       printSuccess(`Extended thinking: ${opts.thinking ? 'ON' : 'OFF'}`)
       if (opts.thinking) printInfo('AI will show reasoning steps before responding.')
       break
+
+    case 'self-eval':
+    case 'selfeval': {
+      const { isSelfEvalEnabled, setSelfEvalEnabled } = await import('./self-eval.js')
+      const newState = !isSelfEvalEnabled()
+      setSelfEvalEnabled(newState)
+      printSuccess(`Self-evaluation: ${newState ? 'ON' : 'OFF'}`)
+      if (newState) printInfo('Responses will be scored for quality and retried if below threshold.')
+      break
+    }
+
+    case 'health':
+    case 'providers': {
+      const { getProviderHealth } = await import('./provider-fallback.js')
+      const health = getProviderHealth()
+      const active = health.filter(h => h.lastSuccess || h.lastFailure)
+      if (active.length === 0) {
+        printInfo('No provider calls recorded yet.')
+      } else {
+        console.log()
+        printInfo('Provider Health:')
+        for (const h of active) {
+          const status = h.isHealthy ? chalk.green('healthy') : chalk.red('unhealthy')
+          const latency = h.avgLatencyMs ? `${h.avgLatencyMs}ms` : '-'
+          const failures = h.consecutiveFailures > 0 ? chalk.yellow(` (${h.consecutiveFailures} failures)`) : ''
+          printInfo(`  ${h.provider}: ${status} · ${latency}${failures}`)
+        }
+        console.log()
+      }
+      break
+    }
 
     case 'plan': {
       const planTask = args.join(' ')
