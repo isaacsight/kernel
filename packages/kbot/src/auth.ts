@@ -2,9 +2,10 @@
 // Stores config in ~/.kbot/config.json
 //
 // BYOK (Bring Your Own Key) — open-source, local-first.
-// Supported: Anthropic, OpenAI, Google, Mistral, xAI (Grok), DeepSeek,
-//            Groq, Together AI, Fireworks, Perplexity, Cohere, NVIDIA NIM,
-//            Ollama (local), OpenClaw (local)
+// 19 providers: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek,
+//   Groq, Together AI, Fireworks, Perplexity, Cohere, NVIDIA NIM,
+//   SambaNova, Cerebras, OpenRouter,
+//   Ollama (local), LM Studio (local), Jan (local), OpenClaw (local)
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
@@ -29,6 +30,11 @@ export type ByokProvider =
   | 'perplexity'   // Perplexity (search-augmented)
   | 'cohere'       // Cohere (Command R)
   | 'nvidia'       // NVIDIA NIM (Llama, Nemotron)
+  | 'sambanova'    // SambaNova Cloud (ultra-fast inference)
+  | 'cerebras'     // Cerebras (wafer-scale inference)
+  | 'openrouter'   // OpenRouter (any model, any provider)
+  | 'lmstudio'     // LM Studio (local GUI + server)
+  | 'jan'          // Jan (local, open-source AI)
   | 'ollama'       // Ollama (local open-weight models)
   | 'openclaw'     // OpenClaw gateway (local AI assistant)
 
@@ -177,6 +183,59 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     authHeader: 'bearer',
     models: ['nvidia/llama-3.3-nemotron-super-49b-v1', 'nvidia/llama-3.1-nemotron-nano-8b-v1', 'nvidia/llama-3.1-nemotron-70b-instruct'],
   },
+  sambanova: {
+    name: 'SambaNova Cloud',
+    apiUrl: 'https://api.sambanova.ai/v1/chat/completions',
+    apiStyle: 'openai',
+    defaultModel: 'Meta-Llama-3.3-70B-Instruct',
+    fastModel: 'Meta-Llama-3.1-8B-Instruct',
+    inputCost: 0.50,
+    outputCost: 1.00,
+    authHeader: 'bearer',
+    models: ['Meta-Llama-3.3-70B-Instruct', 'Meta-Llama-3.1-8B-Instruct', 'Meta-Llama-3.1-405B-Instruct', 'DeepSeek-R1', 'Qwen2.5-72B-Instruct', 'Qwen2.5-Coder-32B-Instruct'],
+  },
+  cerebras: {
+    name: 'Cerebras',
+    apiUrl: 'https://api.cerebras.ai/v1/chat/completions',
+    apiStyle: 'openai',
+    defaultModel: 'llama-3.3-70b',
+    fastModel: 'llama-3.1-8b',
+    inputCost: 0.60,
+    outputCost: 0.60,
+    authHeader: 'bearer',
+    models: ['llama-3.3-70b', 'llama-3.1-8b', 'deepseek-r1-distill-llama-70b'],
+  },
+  openrouter: {
+    name: 'OpenRouter',
+    apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
+    apiStyle: 'openai',
+    defaultModel: 'anthropic/claude-sonnet-4-6',
+    fastModel: 'anthropic/claude-haiku-4-5-20251001',
+    inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
+    outputCost: 15.0,
+    authHeader: 'bearer',
+    models: ['anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+  },
+  lmstudio: {
+    name: 'LM Studio (Local)',
+    apiUrl: 'http://localhost:1234/v1/chat/completions',
+    apiStyle: 'openai',
+    defaultModel: 'loaded-model',  // LM Studio serves whatever model is loaded
+    fastModel: 'loaded-model',
+    inputCost: 0,
+    outputCost: 0,
+    authHeader: 'bearer',
+  },
+  jan: {
+    name: 'Jan (Local)',
+    apiUrl: 'http://localhost:1337/v1/chat/completions',
+    apiStyle: 'openai',
+    defaultModel: 'loaded-model',  // Jan serves whatever model is active
+    fastModel: 'loaded-model',
+    inputCost: 0,
+    outputCost: 0,
+    authHeader: 'bearer',
+  },
   ollama: {
     name: 'Ollama (Local)',
     apiUrl: 'http://localhost:11434/v1/chat/completions',
@@ -308,6 +367,7 @@ export function getDefaultAgent(): string {
 const KEY_PREFIXES: Array<{ prefix: string; provider: ByokProvider }> = [
   { prefix: 'sk-ant-',  provider: 'anthropic' },
   { prefix: 'sk-proj-', provider: 'openai' },    // OpenAI project keys
+  { prefix: 'sk-or-v1-', provider: 'openrouter' }, // OpenRouter keys
   { prefix: 'sk-or-',   provider: 'openai' },    // OpenAI org keys
   { prefix: 'AIza',     provider: 'google' },
   { prefix: 'gsk_',     provider: 'groq' },
@@ -345,18 +405,21 @@ const ENV_KEYS: Array<{ env: string; provider: ByokProvider }> = [
   { env: 'PERPLEXITY_API_KEY',  provider: 'perplexity' },
   { env: 'COHERE_API_KEY',      provider: 'cohere' },
   { env: 'NVIDIA_API_KEY',      provider: 'nvidia' },
+  { env: 'SAMBANOVA_API_KEY',   provider: 'sambanova' },
+  { env: 'CEREBRAS_API_KEY',    provider: 'cerebras' },
+  { env: 'OPENROUTER_API_KEY',  provider: 'openrouter' },
   { env: 'OLLAMA_API_KEY',      provider: 'ollama' },
   { env: 'OPENCLAW_API_KEY',    provider: 'openclaw' },
 ]
 
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export function isLocalProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'openclaw'
+  return provider === 'ollama' || provider === 'openclaw' || provider === 'lmstudio' || provider === 'jan'
 }
 
 /** Check if a provider needs no API key at all */
 export function isKeylessProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama'
+  return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan'
 }
 
 /** Check if BYOK mode is enabled (via env var or config) */
@@ -658,6 +721,105 @@ export async function setupOllama(model?: string): Promise<boolean> {
   }
   saveConfig(config)
   return true
+}
+
+/** Check if LM Studio is running locally (default port 1234) */
+export async function isLmStudioRunning(): Promise<boolean> {
+  try {
+    const res = await fetch('http://localhost:1234/v1/models', { signal: AbortSignal.timeout(2000) })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+/** Check if Jan is running locally (default port 1337) */
+export async function isJanRunning(): Promise<boolean> {
+  try {
+    const res = await fetch('http://localhost:1337/v1/models', { signal: AbortSignal.timeout(2000) })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+/** Set up LM Studio as the active provider */
+export async function setupLmStudio(): Promise<boolean> {
+  const running = await isLmStudioRunning()
+  if (!running) return false
+
+  // Try to get the loaded model name
+  try {
+    const res = await fetch('http://localhost:1234/v1/models', { signal: AbortSignal.timeout(3000) })
+    if (res.ok) {
+      const data = await res.json()
+      const models = (data.data || []).map((m: any) => m.id)
+      if (models.length > 0) {
+        PROVIDERS.lmstudio.defaultModel = models[0]
+        PROVIDERS.lmstudio.fastModel = models[0]
+        PROVIDERS.lmstudio.models = models
+      }
+    }
+  } catch { /* use defaults */ }
+
+  const config = loadConfig() || {
+    default_model: 'auto' as const,
+    default_agent: 'auto' as const,
+  }
+
+  config.byok_enabled = true
+  config.byok_provider = 'lmstudio'
+  config.byok_key = 'local'
+  saveConfig(config)
+  return true
+}
+
+/** Set up Jan as the active provider */
+export async function setupJan(): Promise<boolean> {
+  const running = await isJanRunning()
+  if (!running) return false
+
+  // Try to get the active model name
+  try {
+    const res = await fetch('http://localhost:1337/v1/models', { signal: AbortSignal.timeout(3000) })
+    if (res.ok) {
+      const data = await res.json()
+      const models = (data.data || []).map((m: any) => m.id)
+      if (models.length > 0) {
+        PROVIDERS.jan.defaultModel = models[0]
+        PROVIDERS.jan.fastModel = models[0]
+        PROVIDERS.jan.models = models
+      }
+    }
+  } catch { /* use defaults */ }
+
+  const config = loadConfig() || {
+    default_model: 'auto' as const,
+    default_agent: 'auto' as const,
+  }
+
+  config.byok_enabled = true
+  config.byok_provider = 'jan'
+  config.byok_key = 'local'
+  saveConfig(config)
+  return true
+}
+
+/** Detect any running local AI runtime (Ollama, LM Studio, Jan, OpenClaw) */
+export async function detectLocalRuntime(): Promise<ByokProvider | null> {
+  const checks = await Promise.allSettled([
+    isOllamaRunning().then(ok => ok ? 'ollama' as const : null),
+    isLmStudioRunning().then(ok => ok ? 'lmstudio' as const : null),
+    isJanRunning().then(ok => ok ? 'jan' as const : null),
+    fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(2000) })
+      .then(r => r.ok ? 'openclaw' as const : null)
+      .catch(() => null),
+  ])
+
+  for (const result of checks) {
+    if (result.status === 'fulfilled' && result.value) return result.value
+  }
+  return null
 }
 
 /** Set up OpenClaw as the active provider */

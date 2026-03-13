@@ -1,7 +1,7 @@
 ---
 name: kbot
-description: Open-source terminal AI agent with 37 specialists and 60+ tools.
-version: 2.5.0
+description: Open-source terminal AI agent with 37 specialists, 85 tools, and 19 providers.
+version: 2.6.0
 metadata:
   openclaw:
     requires:
@@ -47,12 +47,12 @@ kbot ollama
 ## Features
 
 - **37 specialist agents** with intent-based routing (kernel, researcher, coder, writer, analyst, physicist, mathematician, debugger, and 29 more)
-- **60+ built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, sub-agents)
-- **14 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, Ollama, OpenClaw)
+- **85 built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, linting, testing, sub-agents)
+- **19 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, SambaNova, Cerebras, OpenRouter, Ollama, LM Studio, Jan, OpenClaw)
 - **Learning engine** that adapts to your coding patterns, solutions, and preferences
 - **MCP server** for IDE integration (VS Code, Cursor, Windsurf, Zed, Neovim)
 - **HTTP server mode** for REST API access to all tools
-- **Local-first** with Ollama and OpenClaw support ($0 cost)
+- **Local-first** with Ollama, LM Studio, Jan, and OpenClaw support ($0 cost)
 - **Mimic profiles** to adopt coding styles (claude-code, cursor, copilot, etc.)
 - **Persistent memory** across sessions
 - **Autonomous planning** for complex multi-step tasks
@@ -82,7 +82,7 @@ Exposes 14 tools: `kbot_chat`, `kbot_plan`, `kbot_bash`, `kbot_read_file`, `kbot
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 60+ tools for any LLM or automation pipeline.
+REST API exposing all 85 tools for any LLM or automation pipeline.
 
 ## Links
 

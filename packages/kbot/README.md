@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 37 specialists, 60+ tools, 14 providers, local-first.
+  Open-source terminal AI agent. 37 specialists, 85 tools, 19 providers, local-first.
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
 
 ## Why K:BOT?
 
-- **14 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, and 8 more
+- **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
 - **Runs fully offline** — `kbot ollama` for $0 local AI, no data leaves your machine
 - **Learns your patterns** — remembers what worked, gets faster over time
 - **37 specialist agents** — auto-routes to the right expert for each task
@@ -68,16 +68,26 @@ Auto-routed or manual with `kbot --agent <name>`:
 | Provider | Cost | Setup |
 |----------|------|-------|
 | Anthropic (Claude) | $3-15/M tokens | `ANTHROPIC_API_KEY` |
-| OpenAI (GPT) | $2.5-10/M tokens | `OPENAI_API_KEY` |
-| Google (Gemini) | $0.15-0.60/M tokens | `GOOGLE_API_KEY` |
-| Mistral | $0.25-2/M tokens | `MISTRAL_API_KEY` |
+| OpenAI (GPT) | $2-8/M tokens | `OPENAI_API_KEY` |
+| Google (Gemini) | $1.25-10/M tokens | `GOOGLE_API_KEY` |
+| Mistral | $2-6/M tokens | `MISTRAL_API_KEY` |
 | xAI (Grok) | $3-15/M tokens | `XAI_API_KEY` |
-| DeepSeek | $0.14-2.19/M tokens | `DEEPSEEK_API_KEY` |
-| Groq | $0.05-0.27/M tokens | `GROQ_API_KEY` |
+| DeepSeek | $0.27-1.10/M tokens | `DEEPSEEK_API_KEY` |
+| Groq | $0.59-0.79/M tokens | `GROQ_API_KEY` |
+| Together AI | $0.88/M tokens | `TOGETHER_API_KEY` |
+| Fireworks AI | $0.90/M tokens | `FIREWORKS_API_KEY` |
+| Perplexity | $3-15/M tokens | `PERPLEXITY_API_KEY` |
+| Cohere | $2.5-10/M tokens | `COHERE_API_KEY` |
+| NVIDIA NIM | $0.80-1.20/M tokens | `NVIDIA_API_KEY` |
+| SambaNova | $0.50-1/M tokens | `SAMBANOVA_API_KEY` |
+| Cerebras | $0.60/M tokens | `CEREBRAS_API_KEY` |
+| OpenRouter | varies by model | `OPENROUTER_API_KEY` |
 | Ollama (Local) | **Free** | `ollama serve` |
+| LM Studio (Local) | **Free** | Open LM Studio → Start Server |
+| Jan (Local) | **Free** | Open Jan → Enable API Server |
 | OpenClaw (Local) | **Free** | `openclaw-cmd start` |
 
-All 14 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
+All 19 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
 
 ## MCP Server (IDE Integration)
 

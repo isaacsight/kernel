@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 37 specialists, 60+ tools, 14 providers, local-first.
+  Open-source terminal AI agent. 37 specialists, 85 tools, 19 providers, local-first.
 </p>
 
 <p align="center">
@@ -18,8 +18,8 @@ npx @kernel.chat/kbot
 
 Most terminal AI agents lock you into one provider, one model, one way of working. K:BOT doesn't.
 
-- **14 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, Groq, and 7 more. Switch with one command.
-- **Runs fully offline** — `kbot ollama` for $0 local AI. No data leaves your machine.
+- **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, Groq, SambaNova, Cerebras, OpenRouter, and more. Switch with one command.
+- **Runs fully offline** — Ollama, LM Studio, or Jan for $0 local AI. No data leaves your machine.
 - **Learns your patterns** — remembers what worked, adapts to your coding style, gets faster over time.
 - **37 specialist agents** — auto-routes your request to the right expert (coder, researcher, debugger, physicist, economist, and 32 more).
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
@@ -167,7 +167,7 @@ Use kbot as a tool provider inside any MCP-compatible IDE:
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 60+ tools. Any LLM or automation pipeline that can make HTTP calls can use kbot as a backend.
+REST API exposing all 85 tools. Any LLM or automation pipeline that can make HTTP calls can use kbot as a backend.
 
 ## Security
 

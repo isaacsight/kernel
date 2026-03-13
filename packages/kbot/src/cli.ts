@@ -11,7 +11,7 @@
 
 import { createInterface } from 'node:readline'
 import { Command } from 'commander'
-import { loadConfig, setupByok, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, type ByokProvider } from './auth.js'
+import { loadConfig, setupByok, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
 import { registerAllTools } from './tools/index.js'
@@ -117,7 +117,7 @@ async function main(): Promise<void> {
 
   program
     .command('byok')
-    .description('Bring Your Own Key — configure your LLM API key (14 providers)')
+    .description('Bring Your Own Key — configure your LLM API key (19 providers)')
     .option('--off', 'Disable BYOK mode')
     .action(async (opts: { off?: boolean }) => {
       if (opts.off) {
@@ -386,7 +386,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 60+ tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 85 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
@@ -464,9 +464,10 @@ async function main(): Promise<void> {
       printSuccess(`Auto-detected ${PROVIDERS[envDetected].name} from environment.`)
     }
 
-    // Priority 2: Check local providers in PARALLEL (both at once, use whichever responds first)
+    // Priority 2: Check local providers in PARALLEL (all at once, use whichever responds first)
     if (!byokActive) {
-      const [ollamaResult, openclawResult] = await Promise.allSettled([
+      const { isLmStudioRunning, isJanRunning, setupLmStudio, setupJan } = await import('./auth.js')
+      const [ollamaResult, lmstudioResult, janResult, openclawResult] = await Promise.allSettled([
         // Check Ollama
         (async () => {
           const up = await isOllamaRunning()
@@ -475,6 +476,20 @@ async function main(): Promise<void> {
           if (models.length === 0) return null
           const ok = await setupOllama()
           return ok ? { provider: 'ollama' as const, models: models.length } : null
+        })(),
+        // Check LM Studio
+        (async () => {
+          const up = await isLmStudioRunning()
+          if (!up) return null
+          const ok = await setupLmStudio()
+          return ok ? { provider: 'lmstudio' as const } : null
+        })(),
+        // Check Jan
+        (async () => {
+          const up = await isJanRunning()
+          if (!up) return null
+          const ok = await setupJan()
+          return ok ? { provider: 'jan' as const } : null
         })(),
         // Check OpenClaw
         (async () => {
@@ -487,14 +502,24 @@ async function main(): Promise<void> {
         })(),
       ])
 
-      // Prefer Ollama if both available (more models, more control)
+      // Prefer Ollama > LM Studio > Jan > OpenClaw
       const ollamaOk = ollamaResult.status === 'fulfilled' && ollamaResult.value
+      const lmstudioOk = lmstudioResult.status === 'fulfilled' && lmstudioResult.value
+      const janOk = janResult.status === 'fulfilled' && janResult.value
       const openclawOk = openclawResult.status === 'fulfilled' && openclawResult.value
 
       if (ollamaOk) {
         byokActive = true
         localActive = true
         printSuccess(`Auto-configured Ollama (${ollamaOk.models} models). Ready — $0 cost!`)
+      } else if (lmstudioOk) {
+        byokActive = true
+        localActive = true
+        printSuccess('Auto-configured LM Studio. Ready — $0 cost!')
+      } else if (janOk) {
+        byokActive = true
+        localActive = true
+        printSuccess('Auto-configured Jan. Ready — $0 cost!')
       } else if (openclawOk) {
         byokActive = true
         localActive = true
@@ -526,6 +551,9 @@ async function main(): Promise<void> {
       { env: 'PERPLEXITY_API_KEY', provider: 'perplexity' },
       { env: 'COHERE_API_KEY', provider: 'cohere' },
       { env: 'NVIDIA_API_KEY', provider: 'nvidia' },
+      { env: 'SAMBANOVA_API_KEY', provider: 'sambanova' },
+      { env: 'CEREBRAS_API_KEY', provider: 'cerebras' },
+      { env: 'OPENROUTER_API_KEY', provider: 'openrouter' },
     ]
     for (const { env, provider } of envKeys) {
       if (process.env[env]) return provider
