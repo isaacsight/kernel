@@ -1,6 +1,6 @@
 # Kernel Engine — Full Evaluation
 
-> Complete architectural evaluation of the Antigravity Kernel engine: every file, every system, every trade-off.
+> Complete architectural evaluation of the kernel.chat engine: every file, every system, every trade-off.
 >
 > **Last updated:** 2026-02-16 (post-P0 fixes: Supabase state sync + discussion guardrails)
 

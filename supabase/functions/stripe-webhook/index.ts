@@ -251,9 +251,9 @@ serve(async (req: Request) => {
                   Authorization: `Bearer ${resendKey}`,
                 },
                 body: JSON.stringify({
-                  from: 'Antigravity Kernel <notifications@yourdomain.com>',
+                  from: 'kernel.chat <notifications@yourdomain.com>',
                   to: [customerEmail],
-                  subject: 'Welcome to the Antigravity Kernel',
+                  subject: 'Welcome to the kernel.chat',
                   html: `
                     <div style="font-family: Georgia, 'EB Garamond', serif; max-width: 600px; margin: 0 auto; padding: 2.5rem; color: #1F1E1D; background: #FAF9F6;">
                       <div style="text-align: center; margin-bottom: 2rem;">
@@ -266,7 +266,7 @@ serve(async (req: Request) => {
                       <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 1.5rem 0;" />
 
                       <p style="font-size: 15px; line-height: 1.8;">
-                        You now have full access to the Antigravity Kernel — a personal AI that remembers you, thinks with you, and gets better over time.
+                        You now have full access to the kernel.chat — a personal AI that remembers you, thinks with you, and gets better over time.
                       </p>
 
                       <div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #e5e5e0;">
@@ -285,7 +285,7 @@ serve(async (req: Request) => {
                       </div>
 
                       <hr style="border: none; border-top: 1px solid #e5e5e0; margin: 2rem 0 1rem;" />
-                      <p style="font-size: 11px; opacity: 0.3; font-family: 'Courier New', monospace; text-align: center;">Antigravity Kernel &mdash; A cognitive architecture by Isaac Hernandez</p>
+                      <p style="font-size: 11px; opacity: 0.3; font-family: 'Courier New', monospace; text-align: center;">kernel.chat &mdash; A cognitive architecture by Isaac Hernandez</p>
                     </div>
                   `,
                 }),

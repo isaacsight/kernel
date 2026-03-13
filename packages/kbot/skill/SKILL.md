@@ -21,7 +21,7 @@ metadata:
 
 # K:BOT
 
-Open-source terminal AI agent by Antigravity Group. Bring your own key, pick your model, run locally.
+Open-source terminal AI agent by kernel.chat group. Bring your own key, pick your model, run locally.
 
 ## Install
 

@@ -44,7 +44,7 @@ https://kernel.chat
 https://kernel.chat
 
 ## Copyright
-2026 Antigravity Group
+2026 kernel.chat group
 
 ## Required Screenshots
 

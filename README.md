@@ -204,4 +204,4 @@ The web app source lives in `src/` with a Supabase backend in `supabase/`.
 
 ## License
 
-[MIT](LICENSE) — [Antigravity Group](https://antigravitygroup.co)
+[MIT](LICENSE) — [kernel.chat group](https://kernel.chat)

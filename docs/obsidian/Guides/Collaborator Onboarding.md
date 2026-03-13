@@ -71,5 +71,5 @@ npx playwright test # E2E tests (28 tests, needs preview server)
 ## Communication
 
 - Supabase project ref: `eoxxpyixdieprsxlpwcs`
-- Stripe account: Antigravity Group
+- Stripe account: kernel.chat group
 - Email: api@kernel.chat

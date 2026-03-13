@@ -147,4 +147,4 @@ REST API exposing all 60+ tools for any LLM or automation pipeline.
 
 ## License
 
-[MIT](../../LICENSE) — [Antigravity Group](https://antigravitygroup.co)
+[MIT](../../LICENSE) — [kernel.chat group](https://kernel.chat)

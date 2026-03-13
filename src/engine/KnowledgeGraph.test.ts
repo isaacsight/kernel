@@ -55,7 +55,7 @@ describe('formatGraphForPrompt', () => {
   it('formats entities grouped by type with relations', () => {
     const entities: KGEntity[] = [
       makeEntity({ id: 'e1', name: 'React', entity_type: 'concept' }),
-      makeEntity({ id: 'e2', name: 'Antigravity', entity_type: 'company' }),
+      makeEntity({ id: 'e2', name: 'kernel.chat', entity_type: 'company' }),
     ]
     const relations: KGRelation[] = [{
       id: 'r1',
@@ -69,7 +69,7 @@ describe('formatGraphForPrompt', () => {
     const result = formatGraphForPrompt(entities, relations)
     expect(result).toContain('React')
     expect(result).toContain('concept')
-    expect(result).toContain('Antigravity')
+    expect(result).toContain('kernel.chat')
     expect(result).toContain('company')
     expect(result).toContain('uses')
   })

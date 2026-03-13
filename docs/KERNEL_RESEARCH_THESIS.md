@@ -3,7 +3,7 @@
 
 **Prepared for**: Angel Daniel Vasquez (av151318)
 **Principal Investigator**: Isaac Hernandez
-**Institution**: Antigravity Group
+**Institution**: kernel.chat group
 **Date**: March 2026
 
 ---

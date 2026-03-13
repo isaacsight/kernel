@@ -10,7 +10,7 @@ updated: "2026-03-08"
 **Web:** [kernel.chat](https://kernel.chat)
 **CLI:** `npm install -g @kernel.chat/kbot`
 **Repo:** [isaacsight/kernel](https://github.com/isaacsight/kernel)
-**Created by:** Isaac Hernandez / Antigravity Group
+**Created by:** Isaac Hernandez / kernel.chat group
 
 ---
 

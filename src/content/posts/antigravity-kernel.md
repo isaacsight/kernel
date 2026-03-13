@@ -1,17 +1,17 @@
 ---
-title: "The Antigravity Kernel: Architecture of a Cognitive AI Engine"
+title: "The kernel.chat: Architecture of a Cognitive AI Engine"
 date: "2025-02-14"
 tags: ["architecture", "ai-engine", "thesis"]
 ---
 
-# The Antigravity Kernel
+# The kernel.chat
 ## A White Paper on Cognitive AI Engine Architecture
 
 ---
 
 ### Abstract
 
-This paper describes the architecture of the Antigravity Kernel, a client-side AI engine designed not as a wrapper around language model APIs, but as a *cognitive architecture* — a system that perceives, attends, reasons, decides, acts, and reflects. The engine maintains a persistent world model (beliefs, convictions, situation awareness), three-tiered memory (ephemeral, working, lasting), and an attention mechanism that determines salience. Every cycle closes with self-reflection that updates the world model, creating a feedback loop where the engine learns from its own output.
+This paper describes the architecture of the kernel.chat, a client-side AI engine designed not as a wrapper around language model APIs, but as a *cognitive architecture* — a system that perceives, attends, reasons, decides, acts, and reflects. The engine maintains a persistent world model (beliefs, convictions, situation awareness), three-tiered memory (ephemeral, working, lasting), and an attention mechanism that determines salience. Every cycle closes with self-reflection that updates the world model, creating a feedback loop where the engine learns from its own output.
 
 The thesis is simple: **an AI engine should not just generate responses — it should think about thinking.**
 
@@ -349,7 +349,7 @@ Working Memory updated          UI shows live state
 
 ### VII. Conclusion
 
-The Antigravity Kernel is a thesis: that the interesting part of an AI engine is not the API call, but everything that happens around it. The perception that extracts signal from noise. The attention that decides what matters. The world model that maintains coherence across sessions. The reflection that turns output into learning. The conviction that rises and falls with the quality of thought.
+The kernel.chat is a thesis: that the interesting part of an AI engine is not the API call, but everything that happens around it. The perception that extracts signal from noise. The attention that decides what matters. The world model that maintains coherence across sessions. The reflection that turns output into learning. The conviction that rises and falls with the quality of thought.
 
 An AI engine should think about thinking. This one does.
 

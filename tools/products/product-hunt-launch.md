@@ -26,7 +26,7 @@ Local-first. Run `npx kbot` then `/ollama`. K:BOT auto-detects your installed mo
 
 Extensible. Create custom agents with `/matrix create`. Install community plugins from `~/.kbot/plugins/`. Connect to external MCP servers for databases, APIs, and more.
 
-Built by Antigravity Group. Part of the Kernel ecosystem (kernel.chat). MIT licensed.
+Built by kernel.chat group. Part of the Kernel ecosystem (kernel.chat). MIT licensed.
 
 **3 Key Features:**
 

@@ -236,7 +236,7 @@ export function exportToHTML(sessionId: string): string {
   </div>
 
   <div class="footer">
-    Exported from K:BOT by Antigravity Group
+    Exported from K:BOT by kernel.chat group
   </div>
 </div>
 </body>

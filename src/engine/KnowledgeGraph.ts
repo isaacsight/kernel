@@ -2,7 +2,7 @@
 //
 // Extracts structured entities and relationships from conversations.
 // Runs alongside MemoryAgent — MemoryAgent handles style/preferences,
-// KG handles entities/relationships ("Isaac works at Antigravity").
+// KG handles entities/relationships ("Isaac works at kernel.chat").
 
 import { getProvider } from './providers/registry'
 import type { Message } from '../types'

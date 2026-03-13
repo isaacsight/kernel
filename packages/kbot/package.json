@@ -39,7 +39,7 @@
     "multi-model",
     "openclaw"
   ],
-  "author": "Antigravity Group",
+  "author": "kernel.chat group",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

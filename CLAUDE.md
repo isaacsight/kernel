@@ -2,7 +2,7 @@
 
 ## I. SYSTEM ROLE
 
-You are the engineering engine for **K:BOT** — an open-source terminal AI agent by Antigravity Group. K:BOT is the primary product. The web companion (kernel.chat) lives in `src/` and `supabase/`.
+You are the engineering engine for **K:BOT** — an open-source terminal AI agent by kernel.chat group. K:BOT is the primary product. The web companion (kernel.chat) lives in `src/` and `supabase/`.
 
 ## II. ARCHITECTURE
 

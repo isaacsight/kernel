@@ -287,5 +287,5 @@ Every ~3 messages, each active facet extracts observations:
 
 ---
 
-*Published by Antigravity Group. February 2026.*
+*Published by kernel.chat group. February 2026.*
 *Architecture reference describes the Kernel sovereign AI platform — kernel.chat*
