@@ -1,7 +1,7 @@
 ---
 name: kbot
-description: Open-source terminal AI agent with 37 specialists, 85 tools, and 19 providers.
-version: 2.6.0
+description: Open-source terminal AI agent with 37 specialists, 93 tools, and 19 providers.
+version: 2.7.0
 metadata:
   openclaw:
     requires:
@@ -82,7 +82,7 @@ Exposes 14 tools: `kbot_chat`, `kbot_plan`, `kbot_bash`, `kbot_read_file`, `kbot
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 85 tools for any LLM or automation pipeline.
+REST API exposing all 93 tools for any LLM or automation pipeline.
 
 ## Links
 

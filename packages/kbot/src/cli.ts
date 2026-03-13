@@ -46,7 +46,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.6.0'
+const VERSION = '2.7.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -387,7 +387,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 85 tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 93 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
