@@ -156,18 +156,27 @@ export async function executeTool(call: ToolCall): Promise<ToolResult> {
   const startTime = Date.now()
 
   try {
-    // Race tool execution against timeout
-    const result = await Promise.race([
-      tool.execute(call.arguments),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error(`Tool '${call.name}' timed out after ${timeout / 1000}s`)), timeout)
-      ),
-    ])
+    // Execute tool with AbortController-based timeout (prevents leaked promises)
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeout)
+    try {
+      const result = await Promise.race([
+        tool.execute(call.arguments),
+        new Promise<never>((_, reject) => {
+          controller.signal.addEventListener('abort', () =>
+            reject(new Error(`Tool '${call.name}' timed out after ${timeout / 1000}s`))
+          )
+        }),
+      ])
 
-    const durationMs = Date.now() - startTime
-    const truncated = truncateResult(result, maxResult)
-    recordMetrics(call.name, durationMs, false)
-    return { tool_call_id: call.id, result: truncated, duration_ms: durationMs }
+      clearTimeout(timer)
+      const durationMs = Date.now() - startTime
+      const truncated = truncateResult(result, maxResult)
+      recordMetrics(call.name, durationMs, false)
+      return { tool_call_id: call.id, result: truncated, duration_ms: durationMs }
+    } finally {
+      clearTimeout(timer)
+    }
   } catch (err) {
     const durationMs = Date.now() - startTime
     recordMetrics(call.name, durationMs, true)

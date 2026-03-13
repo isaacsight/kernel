@@ -251,10 +251,21 @@ export async function streamOpenAIResponse(
     while (true) {
       // Timeout if no data received for 60 seconds (server hung)
       const readPromise = reader.read()
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Stream stalled — no data for 60s')), CHUNK_TIMEOUT)
-      )
-      const { done, value } = await Promise.race([readPromise, timeoutPromise])
+      const chunkTimer = setTimeout(() => {
+        streamCancelled = true
+        reader.cancel().catch(() => {})
+      }, CHUNK_TIMEOUT)
+      let readResult: ReadableStreamReadResult<Uint8Array>
+      try {
+        readResult = await readPromise
+      } catch {
+        clearTimeout(chunkTimer)
+        if (streamCancelled) throw new Error('Stream stalled — no data for 60s')
+        throw new Error('Stream read failed')
+      }
+      clearTimeout(chunkTimer)
+      if (streamCancelled) throw new Error('Stream stalled — no data for 60s')
+      const { done, value } = readResult
       if (done) break
 
       buffer += decoder.decode(value, { stream: true })

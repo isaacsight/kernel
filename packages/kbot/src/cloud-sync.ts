@@ -26,14 +26,18 @@ function loadSyncState(): SyncState {
     if (existsSync(SYNC_STATE_FILE)) {
       return JSON.parse(readFileSync(SYNC_STATE_FILE, 'utf-8'))
     }
-  } catch { /* fresh state */ }
+  } catch (err) {
+    if (process.env.KBOT_DEBUG) console.error('[cloud-sync] load state failed:', (err as Error).message)
+  }
   return { lastPush: '', lastPull: '', cloudUpdatedAt: '' }
 }
 
 function saveSyncState(state: SyncState): void {
   try {
     writeFileSync(SYNC_STATE_FILE, JSON.stringify(state, null, 2))
-  } catch { /* non-critical */ }
+  } catch (err) {
+    if (process.env.KBOT_DEBUG) console.error('[cloud-sync] save state failed:', (err as Error).message)
+  }
 }
 
 /** Get the kernel.chat token from config */
@@ -60,7 +64,9 @@ function loadLocalData(): { patterns: unknown; solutions: unknown; profile: unkn
     const path = join(LEARN_DIR, file)
     try {
       if (existsSync(path)) return JSON.parse(readFileSync(path, 'utf-8'))
-    } catch { /* return default */ }
+    } catch (err) {
+      if (process.env.KBOT_DEBUG) console.error(`[cloud-sync] load ${file} failed:`, (err as Error).message)
+    }
     return file.endsWith('.json') ? (file.includes('patterns') || file.includes('solutions') || file.includes('knowledge') ? [] : {}) : {}
   }
   return {
@@ -119,7 +125,8 @@ export async function pullFromCloud(): Promise<{ synced: boolean; source: 'cloud
     }
 
     return { synced: false, source: 'local' }
-  } catch {
+  } catch (err) {
+    if (process.env.KBOT_DEBUG) console.error('[cloud-sync] pull failed:', (err as Error).message)
     return { synced: false, source: 'none' }
   }
 }

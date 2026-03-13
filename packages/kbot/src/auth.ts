@@ -15,6 +15,13 @@ import { createCipheriv, createDecipheriv, randomBytes, createHash } from 'node:
 const KBOT_DIR = join(homedir(), '.kbot')
 const CONFIG_PATH = join(KBOT_DIR, 'config.json')
 
+// ── Local runtime host defaults (configurable via env vars) ──
+
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434'
+const LMSTUDIO_HOST = process.env.LMSTUDIO_HOST || 'http://localhost:1234'
+const JAN_HOST = process.env.JAN_HOST || 'http://localhost:1337'
+const OPENCLAW_HOST = process.env.OPENCLAW_HOST || 'http://127.0.0.1:18789'
+
 // ── All supported providers ──
 
 export type ByokProvider =
@@ -218,7 +225,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
   },
   lmstudio: {
     name: 'LM Studio (Local)',
-    apiUrl: 'http://localhost:1234/v1/chat/completions',
+    apiUrl: `${LMSTUDIO_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
     defaultModel: 'loaded-model',  // LM Studio serves whatever model is loaded
     fastModel: 'loaded-model',
@@ -228,7 +235,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
   },
   jan: {
     name: 'Jan (Local)',
-    apiUrl: 'http://localhost:1337/v1/chat/completions',
+    apiUrl: `${JAN_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
     defaultModel: 'loaded-model',  // Jan serves whatever model is active
     fastModel: 'loaded-model',
@@ -238,7 +245,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
   },
   ollama: {
     name: 'Ollama (Local)',
-    apiUrl: 'http://localhost:11434/v1/chat/completions',
+    apiUrl: `${OLLAMA_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
     defaultModel: 'gemma3:12b',
     fastModel: 'qwen2.5-coder:7b',
@@ -265,7 +272,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
   },
   openclaw: {
     name: 'OpenClaw (Local)',
-    apiUrl: 'http://127.0.0.1:18789/v1/chat/completions',
+    apiUrl: `${OPENCLAW_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
     defaultModel: 'openclaw:main',
     fastModel: 'openclaw:main',
@@ -681,7 +688,7 @@ export function disableByok(): void {
 /** Check if Ollama is running locally */
 export async function isOllamaRunning(): Promise<boolean> {
   try {
-    const res = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(2000) })
+    const res = await fetch(`${OLLAMA_HOST}/api/tags`, { signal: AbortSignal.timeout(2000) })
     return res.ok
   } catch {
     return false
@@ -691,7 +698,7 @@ export async function isOllamaRunning(): Promise<boolean> {
 /** List available Ollama models */
 export async function listOllamaModels(): Promise<string[]> {
   try {
-    const res = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(`${OLLAMA_HOST}/api/tags`, { signal: AbortSignal.timeout(3000) })
     if (!res.ok) return []
     const data = await res.json()
     return (data.models || []).map((m: any) => m.name)
@@ -726,7 +733,7 @@ export async function setupOllama(model?: string): Promise<boolean> {
 /** Check if LM Studio is running locally (default port 1234) */
 export async function isLmStudioRunning(): Promise<boolean> {
   try {
-    const res = await fetch('http://localhost:1234/v1/models', { signal: AbortSignal.timeout(2000) })
+    const res = await fetch(`${LMSTUDIO_HOST}/v1/models`, { signal: AbortSignal.timeout(2000) })
     return res.ok
   } catch {
     return false
@@ -736,7 +743,7 @@ export async function isLmStudioRunning(): Promise<boolean> {
 /** Check if Jan is running locally (default port 1337) */
 export async function isJanRunning(): Promise<boolean> {
   try {
-    const res = await fetch('http://localhost:1337/v1/models', { signal: AbortSignal.timeout(2000) })
+    const res = await fetch(`${JAN_HOST}/v1/models`, { signal: AbortSignal.timeout(2000) })
     return res.ok
   } catch {
     return false
@@ -750,7 +757,7 @@ export async function setupLmStudio(): Promise<boolean> {
 
   // Try to get the loaded model name
   try {
-    const res = await fetch('http://localhost:1234/v1/models', { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(`${LMSTUDIO_HOST}/v1/models`, { signal: AbortSignal.timeout(3000) })
     if (res.ok) {
       const data = await res.json()
       const models = (data.data || []).map((m: any) => m.id)
@@ -781,7 +788,7 @@ export async function setupJan(): Promise<boolean> {
 
   // Try to get the active model name
   try {
-    const res = await fetch('http://localhost:1337/v1/models', { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(`${JAN_HOST}/v1/models`, { signal: AbortSignal.timeout(3000) })
     if (res.ok) {
       const data = await res.json()
       const models = (data.data || []).map((m: any) => m.id)
@@ -811,7 +818,7 @@ export async function detectLocalRuntime(): Promise<ByokProvider | null> {
     isOllamaRunning().then(ok => ok ? 'ollama' as const : null),
     isLmStudioRunning().then(ok => ok ? 'lmstudio' as const : null),
     isJanRunning().then(ok => ok ? 'jan' as const : null),
-    fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(2000) })
+    fetch(`${OPENCLAW_HOST}/health`, { signal: AbortSignal.timeout(2000) })
       .then(r => r.ok ? 'openclaw' as const : null)
       .catch(() => null),
   ])
@@ -825,7 +832,7 @@ export async function detectLocalRuntime(): Promise<ByokProvider | null> {
 /** Set up OpenClaw as the active provider */
 export async function setupOpenClaw(token?: string): Promise<boolean> {
   try {
-    const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(`${OPENCLAW_HOST}/health`, { signal: AbortSignal.timeout(3000) })
     if (!res.ok) return false
   } catch {
     return false

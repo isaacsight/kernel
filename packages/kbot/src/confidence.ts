@@ -38,7 +38,9 @@ function saveJSON(path: string, data: unknown): void {
   ensureDir()
   try {
     writeFileSync(path, JSON.stringify(data, null, 2), 'utf-8')
-  } catch { /* silently fail — non-critical persistence */ }
+  } catch (err) {
+    if (process.env.KBOT_DEBUG) console.error('[confidence] save failed:', (err as Error).message)
+  }
 }
 
 // ══════════════════════════════════════════════════════════════════

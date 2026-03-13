@@ -67,7 +67,7 @@ function detectServer(filePath: string, options?: LspBridgeOptions): string[] | 
     execSync(`which ${serverCmd[0]}`, { stdio: 'ignore', timeout: 3000 })
     return serverCmd
   } catch {
-    return null
+    return null // Server binary not in PATH — expected for languages without LSP installed
   }
 }
 
@@ -98,8 +98,9 @@ function parseMessages(data: string): LspMessage[] {
 
     try {
       messages.push(JSON.parse(body))
-    } catch {
-      // Skip malformed messages
+    } catch (err) {
+      // Skip malformed JSON-RPC messages — log for debugging
+      if (process.env.KBOT_DEBUG) console.error('[lsp-bridge] malformed message:', (err as Error).message)
     }
 
     remaining = remaining.slice(bodyStart + contentLength)
@@ -162,7 +163,8 @@ export async function getDiagnostics(
             lsp?.stdin?.write(encodeMessage({ jsonrpc: '2.0', method: 'exit', params: null }))
             lsp?.kill()
           }, 200)
-        } catch {
+        } catch (err) {
+          if (process.env.KBOT_DEBUG) console.error('[lsp-bridge] cleanup error:', (err as Error).message)
           lsp.kill()
         }
       }
@@ -177,7 +179,8 @@ export async function getDiagnostics(
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: findProjectRoot(absPath),
       })
-    } catch {
+    } catch (err) {
+      if (process.env.KBOT_DEBUG) console.error('[lsp-bridge] spawn failed:', (err as Error).message)
       resolve([])
       return
     }

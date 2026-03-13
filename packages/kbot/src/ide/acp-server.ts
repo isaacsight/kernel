@@ -106,8 +106,8 @@ export async function startAcpServer(config: BridgeConfig = {}): Promise<void> {
       try {
         const msg: AcpMessage = JSON.parse(body)
         handleMessage(msg)
-      } catch {
-        // Skip malformed messages
+      } catch (err) {
+        if (process.env.KBOT_DEBUG) console.error('[acp-server] malformed message:', (err as Error).message)
       }
     }
   }
