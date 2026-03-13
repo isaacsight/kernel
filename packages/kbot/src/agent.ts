@@ -47,6 +47,40 @@ const MAX_TOOL_LOOPS = 75
 /** Maximum cumulative cost (USD) before auto-stopping tool loops */
 const MAX_COST_CEILING = 1.00
 
+/** Maximum response body size (bytes) to prevent OOM on huge local model responses */
+const MAX_RESPONSE_BODY = 10 * 1024 * 1024  // 10MB
+
+/** Read a fetch Response body with a size cap. Throws if body exceeds limit. */
+async function safeReadBody(res: Response, maxBytes: number = MAX_RESPONSE_BODY): Promise<string> {
+  // If Content-Length is available and too big, reject immediately
+  const cl = res.headers.get('content-length')
+  if (cl && parseInt(cl, 10) > maxBytes) {
+    // Drain the body to prevent connection leaks
+    await res.body?.cancel()
+    throw new Error(`Response too large (${Math.round(parseInt(cl, 10) / 1024 / 1024)}MB). Max: ${Math.round(maxBytes / 1024 / 1024)}MB.`)
+  }
+
+  const reader = res.body?.getReader()
+  if (!reader) return '{}'
+
+  const decoder = new TextDecoder()
+  let text = ''
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      text += decoder.decode(value, { stream: true })
+      if (text.length > maxBytes) {
+        await reader.cancel()
+        throw new Error(`Response exceeded ${Math.round(maxBytes / 1024 / 1024)}MB limit. Use a model with shorter output or a more specific prompt.`)
+      }
+    }
+  } finally {
+    reader.releaseLock()
+  }
+  return text
+}
+
 
 export interface AgentOptions {
   agent?: string
@@ -185,11 +219,12 @@ async function callAnthropic(
   })
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `Anthropic error: ${res.status}`)
+    const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
+    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    throw new Error(err.message || `Anthropic error: ${res.status}`)
   }
 
-  const data = await res.json()
+  const data = JSON.parse(await safeReadBody(res))
   const contentBlocks = data.content || []
   const text = contentBlocks.filter((b: any) => b.type === 'text').map((b: any) => b.text).join('')
   const thinkingText = contentBlocks.filter((b: any) => b.type === 'thinking').map((b: any) => b.thinking).join('')
@@ -247,11 +282,12 @@ async function callOpenAICompat(
   })
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `API error: ${res.status}`)
+    const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
+    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    throw new Error(err.message || `API error: ${res.status}`)
   }
 
-  const data = await res.json()
+  const data = JSON.parse(await safeReadBody(res))
   const choice = data.choices?.[0] || {}
   let content = choice.message?.content || ''
   const u = data.usage || {}
@@ -363,11 +399,12 @@ async function callGemini(
   })
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `Gemini error: ${res.status}`)
+    const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
+    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    throw new Error(err.message || `Gemini error: ${res.status}`)
   }
 
-  const data = await res.json()
+  const data = JSON.parse(await safeReadBody(res))
   const content = data.candidates?.[0]?.content?.parts?.map((p: any) => p.text)?.join('') || ''
   const um = data.usageMetadata || {}
   return { content, model, usage: { input_tokens: um.promptTokenCount || 0, output_tokens: um.candidatesTokenCount || 0 } }
@@ -392,11 +429,12 @@ async function callCohere(
   })
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `Cohere error: ${res.status}`)
+    const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
+    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    throw new Error(err.message || `Cohere error: ${res.status}`)
   }
 
-  const data = await res.json()
+  const data = JSON.parse(await safeReadBody(res))
   const content = data.message?.content?.[0]?.text || ''
   const u = data.usage?.tokens || {}
   return { content, model, usage: { input_tokens: u.input_tokens || 0, output_tokens: u.output_tokens || 0 } }

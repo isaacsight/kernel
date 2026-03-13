@@ -12,6 +12,9 @@ import chalk from 'chalk'
 const ACCENT_DIM = chalk.hex('#7C6CB0')
 const THINKING_COLOR = chalk.dim.italic
 
+/** Max accumulated content size during streaming (5MB) to prevent OOM */
+const MAX_STREAM_CONTENT = 5 * 1024 * 1024
+
 /** Streaming event types from Claude API */
 export interface StreamEvent {
   type: string
@@ -167,6 +170,13 @@ export async function streamAnthropicResponse(
             process.stdout.write(text)
           }
         })
+
+        // Guard against OOM from unbounded content/thinking accumulation
+        if (state.content.length + state.thinking.length > MAX_STREAM_CONTENT) {
+          process.stderr.write('\n  [Response truncated — exceeded 5MB]\n')
+          reader.releaseLock()
+          return state
+        }
       }
     }
   } finally {
@@ -272,6 +282,13 @@ export async function streamOpenAIResponse(
           }
           state.content += text
           process.stdout.write(text)
+
+          // Guard against OOM from unbounded content accumulation
+          if (state.content.length > MAX_STREAM_CONTENT) {
+            process.stderr.write('\n  [Response truncated — exceeded 5MB]\n')
+            await reader.cancel()
+            return state
+          }
         }
 
         // Tool call deltas
