@@ -36,8 +36,20 @@ It's MIT licensed, runs on Node 20+, and installs in one line:
 Local-first: simple ops (file reads, git, grep) never hit an API. Complex tasks
 go through a plan→execute→verify→learn loop with up to 75 tool iterations.
 
-v2.7.0 just shipped with repo maps (Aider-style context), provider fallback
+v2.9.1 just shipped with repo maps (Aider-style context), provider fallback
 (19 providers deep), self-evaluation, and a Magentic-One-style task ledger.
+
+New in v2.9.1:
+- Confidence calibration — agents know what they know (and what they don't)
+- Agent handoff protocol with shared blackboard memory
+- Temporal reasoning — checkpoints, backtracking, anticipation
+- Abductive & counterfactual reasoning
+- Meta-planning — agents adapt their own strategies mid-task
+- Architect mode — dual-agent plan-review-implement loop
+- Graph memory — knowledge graph with entity extraction
+- LSP integration — go-to-definition, find-references via language servers
+- E2B cloud sandbox for safe code execution
+- MCP-native plugin system
 
 Also has a web companion at kernel.chat with the same agents.
 
@@ -120,9 +132,10 @@ MIT: https://github.com/isaacsight/kernel
 2. Solution: K:BOT — BYOK, 37 specialists, learning engine, offline mode
 3. Demo: show one-shot, interactive, pipe mode, MCP
 4. Architecture: local-first check → complexity detection → agent routing → tool loop → learning
-5. Comparison table (same as README)
-6. How to try it: `npx @kernel.chat/kbot`
-7. What's next: OpenClaw skills registry, more specialists, voice mode
+5. v2.9.1 highlights: confidence calibration, agent handoff with blackboard memory, temporal reasoning, abductive & counterfactual reasoning, meta-planning, architect mode, graph memory, LSP integration, E2B cloud sandbox, MCP-native plugin system
+6. Comparison table (same as README)
+7. How to try it: `npx @kernel.chat/kbot`
+8. What's next: OpenClaw skills registry, more specialists, voice mode
 
 ---
 
@@ -208,14 +221,14 @@ Star it if it's useful ⭐
 
 ## 6. GitHub Discussion (Announcements)
 
-**Title**: K:BOT v2.7.0 — 37 Specialists, MCP Server, Learning Engine
+**Title**: K:BOT v2.9.1 — 37 Specialists, MCP Server, Learning Engine
 
 **Body**:
 ```
-K:BOT is now at v2.7.0 with 37 specialist agents, full MCP server integration,
+K:BOT is now at v2.9.1 with 37 specialist agents, full MCP server integration,
 and a learning engine that adapts to your workflow.
 
-New in v2.7.0:
+New in v2.9.1:
 - 37 specialist agents (was 17) covering code, research, science, math, ethics, and more
 - Aider-style repo map — auto-indexes your codebase for smarter context
 - LiteLLM-style provider fallback — auto-failover across 19 providers
@@ -223,6 +236,16 @@ New in v2.7.0:
 - Active memory tools — the agent can save/search/update its own knowledge
 - Task ledger — Magentic-One-style planning with auto-replan on failure
 - Improved Ollama support — auto-detects models, skips tool defs for local models
+- Confidence calibration — agents know what they know (and what they don't)
+- Agent handoff protocol with shared blackboard memory
+- Temporal reasoning — checkpoints, backtracking, anticipation
+- Abductive & counterfactual reasoning
+- Meta-planning — agents adapt their own strategies mid-task
+- Architect mode — dual-agent plan-review-implement loop
+- Graph memory — knowledge graph with entity extraction
+- LSP integration — go-to-definition, find-references via language servers
+- E2B cloud sandbox for safe code execution
+- MCP-native plugin system
 - 151 tools (was 60+), 19 providers (was 14)
 - MIT license, MCP server, HTTP server mode
 
