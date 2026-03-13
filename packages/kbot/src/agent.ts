@@ -741,11 +741,24 @@ Always quote file paths that contain spaces. Never reference internal system nam
     } catch { /* repo map is non-critical */ }
   }
 
+  // Inject graph memory context (relevant entities/relationships)
+  let graphSnippet = ''
+  if (!casual) {
+    try {
+      const { toContext, load: loadGraph } = await import('./graph-memory.js')
+      loadGraph()
+      const ctx = toContext(300)
+      if (ctx && ctx.length > 20) {
+        graphSnippet = `\n\nKnowledge graph:\n${ctx}`
+      }
+    } catch { /* graph memory is non-critical */ }
+  }
+
   // Prompt caching — split into stable (cacheable) and dynamic sections
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: (contextSnippet || '') + repoMapSnippet || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet || undefined,
     memorySnippet: memorySnippet || undefined,
     learningContext: learningContext || undefined,
   })
@@ -919,6 +932,15 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
             // Deep learning — extract knowledge, detect corrections, update project memory
             learnFromExchange(originalMessage, content, toolSequenceLog, process.cwd())
+
+            // Graph memory — extract entities and relationships (async, non-blocking)
+            import('./graph-memory.js').then(({ extractEntities, autoConnect, save: saveGraph }) => {
+              try {
+                const newNodes = extractEntities(originalMessage, content)
+                for (const node of newNodes) autoConnect(node.id)
+                if (newNodes.length > 0) saveGraph()
+              } catch { /* graph memory is non-critical */ }
+            }).catch(() => { /* import failure is non-critical */ })
 
             // Track project context
             if (toolSequenceLog.length > 0) {

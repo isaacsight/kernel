@@ -16,9 +16,12 @@ CREATE TABLE IF NOT EXISTS kbot_memory (
 -- RLS: users can only read/write their own memory
 ALTER TABLE kbot_memory ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY kbot_memory_own ON kbot_memory
-  FOR ALL USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY kbot_memory_own ON kbot_memory
+    FOR ALL USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Index for fast lookups
 CREATE INDEX IF NOT EXISTS idx_kbot_memory_updated ON kbot_memory(updated_at DESC);

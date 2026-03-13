@@ -4,58 +4,100 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-11)
+## Current Session (2026-03-13)
 
 ### Accomplished This Session
 
-#### Repo Cleanup — Refocused on K:BOT
+#### 5 New Modules Built, Wired & Published
+All 5 modules created by parallel background agents, integrated into codebase, audited, and shipped:
 
-- Deleted 229 root-level QA screenshots (.png)
-- Deleted random scripts (calculator.js, auto_trader.py, nim_script.py, create_dolphin_pdf.py, trade.sh, etc.)
-- Deleted root PDFs (Unified_Pricing_Infrastructure_Theory_Whitepaper.pdf, _Intelligence_Thesis_MortgagePrice_Pro.pdf)
-- Deleted stale directories: `agent/` (Python), `memory/`, `specs/`, `test-results/`, `playwright-report/`, `cloudflare/`, `android/`, `ios/`
-- Deleted 14 web-platform-only markdown docs (INVESTOR_SUMMARY.md, THESIS.md, WHITEPAPER.md, etc.)
-- Deleted `legacy/` (8.5GB of untracked archived code)
-- Rewrote root README.md — now K:BOT-focused with full feature docs
-- Rewrote CLAUDE.md — K:BOT is primary product, web companion is secondary
-- Repo went from ~9.5GB → ~1GB (mostly node_modules)
+1. **Repo Map** (`src/repo-map.ts`) — Aider-style codebase indexer
+   - File tree walking with TS/JS/Python symbol extraction
+   - 60s cache, 8KB output cap, respects .gitignore
+   - Injected into system prompt for non-casual tasks
 
-#### OpenClaw Daemon Status (from earlier session)
+2. **Provider Fallback** (`src/provider-fallback.ts`) — LiteLLM-style failover
+   - 3-level failback: retry → same-tier → cross-tier
+   - Per-provider health tracking (latency/failure metrics, 5-min window)
+   - 4 tiers: premium, standard, fast, local
 
-- 24/7 background daemon running 7 tasks via launchd (every 15 min)
-- 311 files embedded via nomic-embed-text
-- 3 test scaffolds generated, 3 JSDoc specs, daily digests
-- i18n sync pipeline incomplete (no output files generated)
-- Code quality scans found 1 real bug (AgentPicker null cast), 4 false positives
+3. **Self-Evaluation** (`src/self-eval.ts`) — Ragas-inspired quality gate
+   - Faithfulness + relevancy scoring
+   - Auto-retry on low quality scores
+   - Toggleable via `--self-eval` flag or `/self-eval` REPL command
 
-#### Prior Session (2026-03-09): K:BOT v2.5.0
+4. **Active Memory Tools** (`src/tools/memory-tools.ts`) — Letta/MemGPT-style
+   - 4 agent-callable tools: memory_save, memory_search, memory_forget, memory_update
+   - JSON storage in `~/.kbot/memory/{category}/`
+   - Categories: fact, preference, pattern, solution
 
-- 14 providers with full model catalogs
-- Silent auto-update system
-- kbot-engine edge function deployed
-- Security audit passed (0 P0, 0 P1)
-- Custom Ollama Modelfiles (kernel:latest, kernel-coder:latest)
-- OpenClaw daemon + semantic search CLI
+5. **Task Ledger** (`src/task-ledger.ts`) — Magentic-One dual-ledger
+   - Facts/guesses/plan/progress tracking
+   - Auto-replan on: 2+ consecutive failures, >$0.50 cost, >3 tool loops
+   - Integrated into planner.ts
+
+#### Integration Points
+- `agent.ts`: repo map in system prompt, provider health tracking, self-eval quality gate
+- `planner.ts`: task ledger initialization, progress tracking, replan triggers
+- `tools/index.ts`: memory tools + browser tools registered
+- `cli.ts`: `--self-eval` flag, `/self-eval`, `/health`, `/providers` REPL commands
+
+#### Security Fixes (P2)
+- `computer.ts`: Hardened AppleScript escaping (strips control chars, escapes backslashes)
+- `.gitignore`: Added `*.pem` and `*.key` patterns
+- OOM prevention: safeReadBody() with byte-level streaming caps
+
+#### Version 2.7.0 Published to npm
+- Version bumped across: `cli.ts`, `package.json`, `acp-server.ts`, `SKILL.md`
+- Tool count updated: 85 → 93 across all files
+- `npm publish --access public` — **v2.7.0 live on npm registry**
+- Auto-updater will notify existing users
+
+#### QA + Security Audit Passed
+- Full QA: typecheck clean, build clean
+- Security audit: 3 P2 findings, all fixed
+- OpenClaw local AI review: MINOR FIXES rating, no bugs
+
+#### Commits Pushed
+- `8d8fe659` — i18n translations for 24 languages
+- `25e23d5b` — kbot local model support, OpenClaw MCP
+- `05bb00bc` — 37 specialist agents
+- `02b5ba57` — session, scholar, auditor, benchmarker agents
+- `83bc3d7a` — physicist specialist agent
+- `2f858c0b` — v2.7.0: repo map, provider fallback, self-eval, memory tools, task ledger
+
+### Previous Session (2026-03-12)
+- Online presence audit (0 stars, 1043 npm downloads)
+- Launch preparation (READMEs, LICENSE, SKILL.md, launch drafts)
+- CI fix (visual regression tests)
+- Version 2.6.0 prep (never published — jumped to 2.7.0)
+- i18n expansion (11 new locales)
 
 ### Pending
-
-- **Wire MemoryPanel into EnginePage.tsx** — component built, hook wired, needs rendering with data props
-- **Build Ollama models** — run `bash tools/setup-kernel-models.sh`
-- **Deploy updated frontend** — changes are local, not yet on kernel.chat
-- **Activate test scaffolds** — review daemon-generated .scaffold files, rename to real tests
-- **Fix i18n sync** — daemon pipeline starts but produces no output
-- **Create migration 079** — morning briefings (briefing_type + sections columns)
-- **Generate app icons** — scripts ready, need source 1024x1024 PNG
+- **ClawHub publish** — needs `npm i -g clawhub && clawhub login && clawhub publish`
+- **Launch posts** — drafts ready in `tools/launch-drafts.md`, start posting per schedule
+- **Terminal demo GIF** — highest-impact missing asset for README (use asciinema or vhs)
+- **Apply migration 079** — `npx supabase db push`
+- **Capacitor native shells** — need Xcode/Android Studio
+- **awesome-openclaw-skills PR** — blocked until skill gains traction on ClawHub
+- **Roadmap features** — E2B sandbox, MCP-native plugins, LSP integration, architect/editor mode, graph memory
 
 ## Key Decisions
-
 - **Repo identity**: K:BOT is the primary product. kernel.chat web app is the "companion."
-- **Free tier**: 10 msgs/day, no subscription push. UPGRADES_ENABLED = false in useBilling.ts.
+- **Free tier**: 20 msgs/day, no subscription push. UPGRADES_ENABLED = false in useBilling.ts.
 - **8th-grade copy**: All user-facing text written simply, no jargon.
 - **Zero Tailwind**: All vanilla CSS with `ka-` prefix.
 - **Edge function deploys**: ALWAYS use `--no-verify-jwt` flag.
+- **Launch strategy**: Spread posts across 5 days (Thu-Tue). Twitter/X first, then HN, then Reddit, then Dev.to.
+
+## Download Stats (as of 2026-03-13)
+- **Lifetime**: ~1,100+ downloads (9 days since first publish)
+- **Launch day (Mar 4)**: 670
+- **v2.3.0 day (Mar 9)**: 187
+- **v2.5.0 day (Mar 11)**: 95
+- **v2.7.0 published (Mar 13)**: tracking
+- **Pattern**: Spikes on release days, flat between
 
 ## Test Accounts
-
 - **Free**: `kernel-test-bot@antigravitygroup.co` / `KernelTest2026!`
 - **Pro**: `kernel-pro-test@antigravitygroup.co` / `KernelProTest2026`

@@ -46,7 +46,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.7.0'
+const VERSION = '2.8.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -67,6 +67,7 @@ async function main(): Promise<void> {
     .option('-t, --thinking', 'Show AI reasoning steps')
     .option('--thinking-budget <tokens>', 'Thinking token budget (default: 10000)')
     .option('--self-eval', 'Enable self-evaluation loop (score and retry low-quality responses)')
+    .option('--architect', 'Architect mode — plan-review-implement with dual agents')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
     .argument('[prompt...]', 'One-shot prompt')
@@ -387,7 +388,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 93 tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 119 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
@@ -704,6 +705,12 @@ async function main(): Promise<void> {
         toolCalls: response.toolCalls,
         usage: response.usage,
       }) + '\n')
+      return
+    }
+    // Architect mode: plan-review-implement with dual agents
+    if (opts.architect) {
+      const { runArchitectMode } = await import('./architect.js')
+      await runArchitectMode(message, agentOpts)
       return
     }
     agentOpts.stream = true // Force streaming for faster one-shot
@@ -1485,6 +1492,42 @@ async function handleSlashCommand(
           printInfo(`  ${h.provider}: ${status} · ${latency}${failures}`)
         }
         console.log()
+      }
+      break
+    }
+
+    case 'architect': {
+      const archTask = args.join(' ')
+      if (!archTask) {
+        printError('Usage: /architect <task description>')
+        printInfo('Example: /architect refactor the auth system to use JWT')
+      } else {
+        const { runArchitectMode } = await import('./architect.js')
+        await runArchitectMode(archTask, opts)
+      }
+      break
+    }
+
+    case 'graph': {
+      const graphArgs = args.join(' ')
+      if (!graphArgs) {
+        const { getGraph } = await import('./graph-memory.js')
+        const graph = getGraph()
+        printInfo(`Graph: ${graph.nodes.size} nodes, ${graph.edges.length} edges`)
+        if (graph.nodes.size > 0) {
+          const { toContext } = await import('./graph-memory.js')
+          printInfo(toContext(500))
+        }
+      } else {
+        const { findNode } = await import('./graph-memory.js')
+        const results = findNode(graphArgs)
+        if (results.length === 0) {
+          printInfo('No matching nodes found.')
+        } else {
+          for (const n of results.slice(0, 10)) {
+            printInfo(`  [${n.type}:${n.name}] (${n.accessCount} accesses)`)
+          }
+        }
       }
       break
     }

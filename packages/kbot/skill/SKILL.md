@@ -1,7 +1,7 @@
 ---
 name: kbot
-description: Open-source terminal AI agent with 37 specialists, 93 tools, and 19 providers.
-version: 2.7.0
+description: Open-source terminal AI agent with 37 specialists, 119 tools, and 19 providers.
+version: 2.8.0
 metadata:
   openclaw:
     requires:
@@ -47,15 +47,22 @@ kbot ollama
 ## Features
 
 - **37 specialist agents** with intent-based routing (kernel, researcher, coder, writer, analyst, physicist, mathematician, debugger, and 29 more)
-- **85 built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, linting, testing, sub-agents)
+- **119 built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, E2B cloud sandbox, LSP intelligence, linting, testing, sub-agents)
 - **19 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, SambaNova, Cerebras, OpenRouter, Ollama, LM Studio, Jan, OpenClaw)
 - **Learning engine** that adapts to your coding patterns, solutions, and preferences
+- **Graph memory** — knowledge graph with entity extraction and relationship reasoning
+- **Architect mode** — dual-agent plan-review-implement loop for complex refactors
+- **Provider fallback** — auto-failover across 19 providers when one goes down
+- **Self-evaluation** — responses scored for quality and auto-retried if low
+- **Repo map** — Aider-style codebase indexing for automatic context injection
 - **MCP server** for IDE integration (VS Code, Cursor, Windsurf, Zed, Neovim)
+- **MCP-native plugins** — extend kbot with MCP server plugins
+- **LSP integration** — go-to-definition, find-references, hover, rename via language servers
 - **HTTP server mode** for REST API access to all tools
 - **Local-first** with Ollama, LM Studio, Jan, and OpenClaw support ($0 cost)
 - **Mimic profiles** to adopt coding styles (claude-code, cursor, copilot, etc.)
 - **Persistent memory** across sessions
-- **Autonomous planning** for complex multi-step tasks
+- **Autonomous planning** with Magentic-One-style task ledger
 
 ## MCP Integration
 
@@ -82,7 +89,7 @@ Exposes 14 tools: `kbot_chat`, `kbot_plan`, `kbot_bash`, `kbot_read_file`, `kbot
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 93 tools for any LLM or automation pipeline.
+REST API exposing all 119 tools for any LLM or automation pipeline.
 
 ## Links
 
