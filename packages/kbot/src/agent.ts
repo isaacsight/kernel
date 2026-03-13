@@ -110,6 +110,8 @@ export interface AgentOptions {
   thinkingBudget?: number
   /** Pre-parsed multimodal content (images from CLI) */
   multimodal?: ParsedMessage
+  /** Skip planner re-entry (prevents infinite loop when planner calls runAgent) */
+  skipPlanner?: boolean
 }
 
 
@@ -656,7 +658,7 @@ export async function runAgent(
   }
 
   // Step 1.5: Complexity detection — auto-plan complex tasks
-  if (isComplexTask(message) && !message.startsWith('/plan')) {
+  if (isComplexTask(message) && !message.startsWith('/plan') && !options.skipPlanner) {
     printInfo('Complex task detected. Using autonomous planner...')
     try {
       const { autonomousExecute, formatPlanSummary } = await import('./planner.js')

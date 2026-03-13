@@ -105,6 +105,7 @@ Output your plan as JSON:`
   const response = await runAgent(planPrompt, {
     ...agentOpts,
     agent: 'coder', // Use coder agent for planning
+    skipPlanner: true, // Prevent re-entering planner from within planner
   })
 
   // Parse the JSON plan from the response
@@ -244,7 +245,7 @@ export async function executePlan(
         } else {
           const response = await runAgent(
             `You are executing step ${step.id} of a plan. The step is: "${step.description}"\n\nExecute this step now using your tools. Be precise and verify your work.`,
-            agentOpts,
+            { ...agentOpts, skipPlanner: true },
           )
           step.result = response.content
           step.status = 'done'
@@ -267,7 +268,7 @@ export async function executePlan(
         try {
           const fixResponse = await runAgent(
             `Step ${step.id} ("${step.description}") failed with error:\n${step.error}\n\nAnalyze the error and try a different approach.`,
-            agentOpts,
+            { ...agentOpts, skipPlanner: true },
           )
           step.result = fixResponse.content
           step.status = 'done'
