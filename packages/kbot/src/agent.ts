@@ -55,7 +55,6 @@ async function safeReadBody(res: Response, maxBytes: number = MAX_RESPONSE_BODY)
   // If Content-Length is available and too big, reject immediately
   const cl = res.headers.get('content-length')
   if (cl && parseInt(cl, 10) > maxBytes) {
-    // Drain the body to prevent connection leaks
     await res.body?.cancel()
     throw new Error(`Response too large (${Math.round(parseInt(cl, 10) / 1024 / 1024)}MB). Max: ${Math.round(maxBytes / 1024 / 1024)}MB.`)
   }
@@ -63,22 +62,36 @@ async function safeReadBody(res: Response, maxBytes: number = MAX_RESPONSE_BODY)
   const reader = res.body?.getReader()
   if (!reader) return '{}'
 
-  const decoder = new TextDecoder()
-  let text = ''
+  // Accumulate raw chunks and track bytes (not string length — UTF-8 can be multi-byte)
+  const chunks: Uint8Array[] = []
+  let bytesRead = 0
+  let cancelled = false
+
   try {
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
-      text += decoder.decode(value, { stream: true })
-      if (text.length > maxBytes) {
+      bytesRead += value.length
+      if (bytesRead > maxBytes) {
+        cancelled = true
         await reader.cancel()
         throw new Error(`Response exceeded ${Math.round(maxBytes / 1024 / 1024)}MB limit. Use a model with shorter output or a more specific prompt.`)
       }
+      chunks.push(value)
     }
   } finally {
-    reader.releaseLock()
+    if (!cancelled) reader.releaseLock()
   }
-  return text
+
+  // Decode all chunks at once (more efficient than incremental string concat)
+  const decoder = new TextDecoder()
+  const merged = new Uint8Array(bytesRead)
+  let offset = 0
+  for (const chunk of chunks) {
+    merged.set(chunk, offset)
+    offset += chunk.length
+  }
+  return decoder.decode(merged)
 }
 
 

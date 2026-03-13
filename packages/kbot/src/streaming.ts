@@ -120,6 +120,7 @@ export async function streamAnthropicResponse(
   const decoder = new TextDecoder()
   let buffer = ''
   let thinkingLineCount = 0
+  let streamCancelled = false
 
   try {
     while (true) {
@@ -174,13 +175,14 @@ export async function streamAnthropicResponse(
         // Guard against OOM from unbounded content/thinking accumulation
         if (state.content.length + state.thinking.length > MAX_STREAM_CONTENT) {
           process.stderr.write('\n  [Response truncated — exceeded 5MB]\n')
-          reader.releaseLock()
+          streamCancelled = true
+          await reader.cancel()
           return state
         }
       }
     }
   } finally {
-    reader.releaseLock()
+    if (!streamCancelled) reader.releaseLock()
   }
 
   // Final newline after streamed content
@@ -242,6 +244,7 @@ export async function streamOpenAIResponse(
 
   const decoder = new TextDecoder()
   let buffer = ''
+  let streamCancelled = false
   const CHUNK_TIMEOUT = 60_000 // 60s between chunks before giving up
 
   try {
@@ -286,6 +289,7 @@ export async function streamOpenAIResponse(
           // Guard against OOM from unbounded content accumulation
           if (state.content.length > MAX_STREAM_CONTENT) {
             process.stderr.write('\n  [Response truncated — exceeded 5MB]\n')
+            streamCancelled = true
             await reader.cancel()
             return state
           }
@@ -324,7 +328,7 @@ export async function streamOpenAIResponse(
       }
     }
   } finally {
-    reader.releaseLock()
+    if (!streamCancelled) reader.releaseLock()
   }
 
   if (state.content) {
