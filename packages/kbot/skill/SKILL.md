@@ -1,7 +1,7 @@
 ---
 name: kbot
 description: Open-source terminal AI agent with 37 specialists, 151 tools, and 19 providers.
-version: 2.10.0
+version: 2.10.1
 license: MIT
 metadata:
   openclaw:
@@ -42,7 +42,7 @@ kbot "fix the auth bug in login.ts"
 kbot --agent researcher "compare React vs Svelte"
 
 # Local models (free, private)
-kbot ollama
+kbot local
 ```
 
 ## Features

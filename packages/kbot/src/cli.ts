@@ -46,7 +46,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.10.0'
+const VERSION = '2.10.1'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -215,39 +215,44 @@ async function main(): Promise<void> {
       printInfo('  kbot cloud --off             Disable sync')
     })
 
-  program
-    .command('ollama')
-    .description('Use Ollama for local AI models (no API key needed)')
-    .option('--model <model>', 'Set default Ollama model')
-    .option('--list', 'List available Ollama models')
-    .option('--off', 'Disable Ollama mode')
-    .action(async (opts: { model?: string; list?: boolean; off?: boolean }) => {
-      if (opts.off) {
-        disableByok()
-        printSuccess('Ollama disabled. Provider disabled.')
-        return
-      }
-      if (opts.list) {
-        const running = await isOllamaRunning()
-        if (!running) { printError('Ollama is not running. Start it with: ollama serve'); return }
-        const models = await listOllamaModels()
-        if (models.length === 0) { printError('No models found. Pull one with: ollama pull llama3.1:8b'); return }
-        printInfo('Available Ollama models:')
-        for (const m of models) printInfo(`  • ${m}`)
-        return
-      }
+  // `kbot local` — primary command for local models
+  // `kbot local` — backwards-compatible alias
+  const localAction = async (opts: { model?: string; list?: boolean; off?: boolean }) => {
+    if (opts.off) {
+      disableByok()
+      printSuccess('Local AI disabled.')
+      return
+    }
+    if (opts.list) {
       const running = await isOllamaRunning()
-      if (!running) { printError('Ollama is not running. Start it with: ollama serve'); return }
-      const ok = await setupOllama(opts.model)
-      if (ok) {
-        const models = await listOllamaModels()
-        printSuccess(`Ollama enabled! Using local models (${models.length} available). $0 cost.`)
-        printInfo(`Default model: ${opts.model || PROVIDERS.ollama.defaultModel}`)
-        printInfo('Switch models: kbot ollama --model <name>')
-      } else {
-        printError('Failed to connect to Ollama. Is it running? Try: ollama serve')
-      }
-    })
+      if (!running) { printError('No local runtime found. Install Ollama: https://ollama.com'); return }
+      const models = await listOllamaModels()
+      if (models.length === 0) { printError('No models found. Pull one with: ollama pull llama3.1:8b'); return }
+      printInfo('Available local models:')
+      for (const m of models) printInfo(`  • ${m}`)
+      return
+    }
+    const running = await isOllamaRunning()
+    if (!running) { printError('No local runtime found. Install Ollama: https://ollama.com'); return }
+    const ok = await setupOllama(opts.model)
+    if (ok) {
+      const models = await listOllamaModels()
+      printSuccess(`Local AI enabled! ${models.length} models available. $0 cost.`)
+      printInfo(`Default model: ${opts.model || PROVIDERS.ollama.defaultModel}`)
+      printInfo('Switch models: kbot local --model <name>')
+    } else {
+      printError('Failed to connect to local runtime. Is Ollama running? Try: ollama serve')
+    }
+  }
+  const localOpts = (cmd: Command) => cmd
+    .option('--model <model>', 'Set default local model')
+    .option('--list', 'List available local models')
+    .option('--off', 'Disable local mode')
+
+  localOpts(program.command('local').description('Use local AI models — no API key, $0 cost, fully private'))
+    .action(localAction)
+  localOpts(program.command('ollama').description('Alias for: kbot local'))
+    .action(localAction)
 
   program
     .command('doctor')
@@ -325,7 +330,7 @@ async function main(): Promise<void> {
         printSuccess('Ready to go! Run: kbot')
       } else {
         printInfo('Get started with one of:')
-        printInfo('  kbot ollama    — Free local AI')
+        printInfo('  kbot local    — Free local AI')
         printInfo('  kbot byok      — Use your own API key')
       }
       process.stderr.write('\n')
@@ -556,7 +561,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1905,17 +1910,18 @@ async function handleSlashCommand(
       break
     }
 
+    case 'local':
     case 'ollama': {
       if (args[0] === 'off') {
         disableByok()
-        printSuccess('Ollama disabled. Provider disabled.')
+        printSuccess('Local AI disabled.')
         break
       }
       const running = await isOllamaRunning()
-      if (!running) { printError('Ollama not running. Start with: ollama serve'); break }
+      if (!running) { printError('No local runtime found. Install Ollama: https://ollama.com'); break }
       if (args[0] === 'list') {
         const models = await listOllamaModels()
-        printInfo('Available Ollama models:')
+        printInfo('Available local models:')
         for (const m of models) printInfo(`  • ${m}`)
         break
       }
@@ -1923,10 +1929,10 @@ async function handleSlashCommand(
       const ok = await setupOllama(model)
       if (ok) {
         const models = await listOllamaModels()
-        printSuccess(`Ollama enabled! ${models.length} models available. $0 cost.`)
+        printSuccess(`Local AI enabled! ${models.length} models available. $0 cost.`)
         printInfo(`Default: ${model || PROVIDERS.ollama.defaultModel}`)
       } else {
-        printError('Failed to connect to Ollama.')
+        printError('Failed to connect to local runtime.')
       }
       break
     }
@@ -1983,7 +1989,7 @@ async function handleSlashCommand(
         printInfo('No provider configured. Run: kbot byok')
       }
       printInfo('')
-      printInfo('Switch: /ollama [model] | /openclaw | kbot byok')
+      printInfo('Switch: /local [model] | /openclaw | kbot byok')
       break
     }
 

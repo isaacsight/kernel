@@ -40,7 +40,7 @@ Enter
 Sleep 3s
 
 # Local mode
-Type "kbot ollama"
+Type "kbot local"
 Enter
 Sleep 2s
 

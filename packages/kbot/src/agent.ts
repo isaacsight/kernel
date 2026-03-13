@@ -632,7 +632,7 @@ export async function runAgent(
   const byokProvider = getByokProvider()
   const isLocal = byokProvider ? isLocalProvider(byokProvider) : false
   if (!apiKey && !isLocal) {
-    throw new Error('No LLM API key configured. Run `kbot byok` to set up, or `kbot ollama` for local models.')
+    throw new Error('No LLM API key configured. Run `kbot byok` to set up, or `kbot local` for local models.')
   }
 
   // Step 0a: Warm Ollama model cache if using local provider

@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 37 specialists, 85 tools, 19 providers, local-first.
+  Open-source terminal AI agent. 37 specialists, 153 tools, 19 providers, local-first.
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
 ## Why K:BOT?
 
 - **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
-- **Runs fully offline** — `kbot ollama` for $0 local AI, no data leaves your machine
+- **Runs fully offline** — `kbot local` for $0 local AI, no data leaves your machine
 - **Learns your patterns** — remembers what worked, gets faster over time
 - **37 specialist agents** — auto-routes to the right expert for each task
 - **MCP server built in** — plug kbot into any IDE as a tool provider
@@ -28,7 +28,7 @@ npm install -g @kernel.chat/kbot
 kbot auth
 
 # Or use a local model (no API key needed)
-kbot ollama
+kbot local
 
 # Start chatting
 kbot
@@ -118,7 +118,7 @@ REST API exposing all 60+ tools for any LLM or automation pipeline.
 | `kbot` | Interactive REPL |
 | `kbot "prompt"` | One-shot execution |
 | `kbot auth` | Configure API key |
-| `kbot ollama` | Set up local Ollama |
+| `kbot local` | Use local AI models (Ollama, LM Studio, Jan) |
 | `kbot serve` | Start HTTP server |
 | `kbot ide mcp` | Start MCP server |
 | `/agent <name>` | Switch specialist |
