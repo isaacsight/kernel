@@ -208,6 +208,11 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     { registerLspTools },
     { registerMcpPluginTools },
     { registerGraphMemoryTools },
+    { registerConfidenceTools },
+    { registerAgentProtocolTools },
+    { registerTemporalTools },
+    { registerReasoningTools },
+    { registerIntentionalityTools },
   ] = await Promise.all([
     import('./files.js'),
     import('./bash.js'),
@@ -233,6 +238,11 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     import('./lsp-tools.js'),
     import('../mcp-plugins.js'),
     import('../graph-memory.js'),
+    import('../confidence.js'),
+    import('../agent-protocol.js'),
+    import('../temporal.js'),
+    import('../reasoning.js'),
+    import('../intentionality.js'),
   ])
 
   // Register all tools (synchronous, fast)
@@ -260,6 +270,11 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
   registerLspTools()
   registerMcpPluginTools()
   registerGraphMemoryTools()
+  registerConfidenceTools()
+  registerAgentProtocolTools()
+  registerTemporalTools()
+  registerReasoningTools()
+  registerIntentionalityTools()
 
   // Computer use tools — opt-in only via --computer-use flag
   if (opts?.computerUse) {

@@ -46,7 +46,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.8.0'
+const VERSION = '2.9.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -388,7 +388,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 119 tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 151 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
@@ -1492,6 +1492,151 @@ async function handleSlashCommand(
           printInfo(`  ${h.provider}: ${status} · ${latency}${failures}`)
         }
         console.log()
+      }
+      break
+    }
+
+    case 'confidence': {
+      const task = args.join(' ') || 'general task'
+      const { estimateConfidence, reportConfidence } = await import('./confidence.js')
+      const score = estimateConfidence(task, process.cwd())
+      printInfo(reportConfidence(score))
+      break
+    }
+
+    case 'skills': {
+      const { getSkillProfile } = await import('./confidence.js')
+      const profile = getSkillProfile()
+      printInfo('Strengths:')
+      for (const s of profile.strengths.slice(0, 5)) printInfo(`  ✓ ${s.domain} (${Math.round(s.successRate * 100)}% success, ${s.sampleSize} tasks)`)
+      if (profile.weaknesses.length > 0) {
+        printInfo('Weaknesses:')
+        for (const w of profile.weaknesses.slice(0, 5)) printInfo(`  ✗ ${w.domain} (${Math.round(w.successRate * 100)}% success)`)
+      }
+      if (profile.unknown.length > 0) printInfo(`Unknown: ${profile.unknown.join(', ')}`)
+      break
+    }
+
+    case 'effort': {
+      const task = args.join(' ')
+      if (!task) { printError('Usage: /effort <task description>'); break }
+      const { estimateEffort } = await import('./confidence.js')
+      const est = estimateEffort(task)
+      printInfo(`Complexity: ${est.complexity}`)
+      printInfo(`Tool calls: ${est.toolCalls.min}-${est.toolCalls.max} (expected: ${est.toolCalls.expected})`)
+      printInfo(`Cost: $${est.estimatedCostUsd.min.toFixed(3)}-$${est.estimatedCostUsd.max.toFixed(3)}`)
+      printInfo(`Breakdown: ${est.breakdown}`)
+      break
+    }
+
+    case 'handoff': {
+      const { getActiveHandoffs } = await import('./agent-protocol.js')
+      const handoffs = getActiveHandoffs()
+      if (handoffs.length === 0) printInfo('No active handoffs.')
+      else for (const h of handoffs) printInfo(`  [${h.priority}] ${h.from} → ${h.to}: ${h.reason}`)
+      break
+    }
+
+    case 'blackboard': {
+      const { blackboardQuery } = await import('./agent-protocol.js')
+      const entries = blackboardQuery()
+      if (entries.length === 0) printInfo('Blackboard is empty.')
+      else for (const e of entries) printInfo(`  [${e.type}] ${e.key} = ${JSON.stringify(e.value).slice(0, 60)} (by ${e.author})`)
+      break
+    }
+
+    case 'trust': {
+      const { getTrustReport } = await import('./agent-protocol.js')
+      const report = getTrustReport()
+      printInfo(report)
+      break
+    }
+
+    case 'checkpoint': {
+      const desc = args.join(' ')
+      if (desc) {
+        const { createCheckpoint } = await import('./temporal.js')
+        createCheckpoint(desc, { filesModified: [], toolsUsed: [], decisions: [] })
+        printSuccess(`Checkpoint saved: ${desc}`)
+      } else {
+        const { getCheckpoints } = await import('./temporal.js')
+        const cps = getCheckpoints()
+        if (cps.length === 0) printInfo('No checkpoints.')
+        else for (const cp of cps) printInfo(`  [${cp.id}] step ${cp.step}: ${cp.description}`)
+      }
+      break
+    }
+
+    case 'anticipate': {
+      const { anticipateNext } = await import('./temporal.js')
+      const predictions = anticipateNext([], args.join(' ') || 'general')
+      if (predictions.length === 0) printInfo('No predictions.')
+      else for (const p of predictions) printInfo(`  ${Math.round(p.confidence * 100)}% — ${p.prediction}`)
+      break
+    }
+
+    case 'identity': {
+      const { getIdentity, getPersonalitySummary } = await import('./temporal.js')
+      const id = getIdentity()
+      printInfo(`Sessions: ${id.totalSessions} · Messages: ${id.totalMessages} · Tools: ${id.totalToolCalls}`)
+      printInfo(getPersonalitySummary())
+      break
+    }
+
+    case 'hypothesize': {
+      const obs = args.join(' ')
+      if (!obs) { printError('Usage: /hypothesize <error or observation>'); break }
+      const { generateHypotheses } = await import('./reasoning.js')
+      const result = generateHypotheses(obs, process.cwd())
+      for (const h of result.hypotheses.slice(0, 5)) {
+        printInfo(`  ${Math.round(h.likelihood * 100)}% — ${h.explanation}`)
+        if (h.testAction) printInfo(`       Test: ${h.testAction}`)
+      }
+      break
+    }
+
+    case 'counterfactual': {
+      const parts = args.join(' ').split(' vs ')
+      if (parts.length < 2) { printError('Usage: /counterfactual <approach A> vs <approach B>'); break }
+      const { exploreCounterfactual } = await import('./reasoning.js')
+      const cf = exploreCounterfactual(parts[0].trim(), parts[1].trim(), process.cwd())
+      printInfo(`Recommendation: ${cf.recommendation}`)
+      printInfo(`Benefits: ${cf.tradeoffs.benefits.join(', ')}`)
+      printInfo(`Risks: ${cf.tradeoffs.risks.join(', ')}`)
+      break
+    }
+
+    case 'strategy': {
+      const task = args.join(' ')
+      if (!task) { printError('Usage: /strategy <task description>'); break }
+      const { selectStrategy } = await import('./reasoning.js')
+      const result = selectStrategy(task, process.cwd())
+      printInfo(`Strategy: ${result.chosenStrategy}`)
+      printInfo(`Reasoning: ${result.reasoning}`)
+      if (result.adaptations.length > 0) printInfo(`Adaptations: ${result.adaptations.join(', ')}`)
+      printInfo(`Fallback: ${result.fallbackStrategy}`)
+      break
+    }
+
+    case 'drives': {
+      const { getDriveState } = await import('./intentionality.js')
+      const state = getDriveState()
+      for (const d of state.drives) {
+        const bar = '█'.repeat(Math.round(d.currentSatisfaction * 10)) + '░'.repeat(10 - Math.round(d.currentSatisfaction * 10))
+        printInfo(`  ${d.name}: ${bar} ${Math.round(d.currentSatisfaction * 100)}% (weight: ${d.weight.toFixed(1)})`)
+      }
+      if (state.frustrated) printInfo('  ⚠ Frustrated — multiple drives below threshold')
+      if (state.motivated) printInfo('  ✓ Motivated — all drives healthy')
+      break
+    }
+
+    case 'motivation': {
+      const { getMotivation, getMotivationSummary, suggestFromMotivation } = await import('./intentionality.js')
+      printInfo(getMotivationSummary())
+      const suggestions = suggestFromMotivation()
+      if (suggestions.length > 0) {
+        printInfo('Suggestions:')
+        for (const s of suggestions) printInfo(`  → ${s}`)
       }
       break
     }

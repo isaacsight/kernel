@@ -74,13 +74,9 @@ All 5 modules created by parallel background agents, integrated into codebase, a
 - i18n expansion (11 new locales)
 
 ### Pending
-- **ClawHub publish** — needs `npm i -g clawhub && clawhub login && clawhub publish`
-- **Launch posts** — drafts ready in `tools/launch-drafts.md`, start posting per schedule
-- **Terminal demo GIF** — highest-impact missing asset for README (use asciinema or vhs)
-- **Apply migration 079** — `npx supabase db push`
-- **Capacitor native shells** — need Xcode/Android Studio
+- **iOS Capacitor sync** — Homebrew Ruby installed, need to install CocoaPods then `npx cap sync ios`
+- **Launch posts** — drafts ready in `tools/launch-drafts.md`, start posting per 5-day schedule
 - **awesome-openclaw-skills PR** — blocked until skill gains traction on ClawHub
-- **Roadmap features** — E2B sandbox, MCP-native plugins, LSP integration, architect/editor mode, graph memory
 
 ## Key Decisions
 - **Repo identity**: K:BOT is the primary product. kernel.chat web app is the "companion."

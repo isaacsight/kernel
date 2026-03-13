@@ -1,7 +1,7 @@
 ---
 name: kbot
-description: Open-source terminal AI agent with 37 specialists, 119 tools, and 19 providers.
-version: 2.8.0
+description: Open-source terminal AI agent with 37 specialists, 151 tools, and 19 providers.
+version: 2.9.0
 license: MIT
 metadata:
   openclaw:
@@ -64,6 +64,13 @@ kbot ollama
 - **Mimic profiles** to adopt coding styles (claude-code, cursor, copilot, etc.)
 - **Persistent memory** across sessions
 - **Autonomous planning** with Magentic-One-style task ledger
+- **Confidence calibration** — agents know what they know and don't know
+- **Agent handoff protocol** — structured task delegation between specialists
+- **Shared blackboard** — working memory visible to all agents in a session
+- **Temporal reasoning** — checkpoints, backtracking, anticipation
+- **Abductive & counterfactual reasoning** — hypothesis generation and what-if analysis
+- **Meta-planning** — agents evaluate and adapt their own strategies
+- **Intentionality** — quality drives, outcome preferences, intrinsic motivation
 
 ## MCP Integration
 
@@ -90,7 +97,7 @@ Exposes 14 tools: `kbot_chat`, `kbot_plan`, `kbot_bash`, `kbot_read_file`, `kbot
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 119 tools for any LLM or automation pipeline.
+REST API exposing all 151 tools for any LLM or automation pipeline.
 
 ## Links
 

@@ -27,7 +27,7 @@ What makes it different from Claude Code / Aider / OpenCode:
 - Self-evaluation: responses get quality-scored, auto-retried if low
 - Provider fallback: if one API is down, auto-switches to another
 - Built-in MCP server — plug it into VS Code, Cursor, or any MCP-compatible IDE
-- 119 tools including web search, Docker sandbox, browser automation, sub-agents
+- 151 tools including web search, Docker sandbox, browser automation, sub-agents
 
 It's MIT licensed, runs on Node 20+, and installs in one line:
 
@@ -64,7 +64,7 @@ learning engine that remembers what worked.
 
 What I think is cool about it:
 - 19 AI providers or fully offline with Ollama ($0, no data leaves your machine)
-- 119 tools (file ops, bash, git, GitHub, web search, Docker sandbox, browser)
+- 151 tools (file ops, bash, git, GitHub, web search, Docker sandbox, browser)
 - Pipe mode: `kbot -p "generate a migration" > migration.sql`
 - MCP server built in — use it inside VS Code, Cursor, or Zed
 - Learning engine caches patterns and adapts to your style over time
@@ -84,7 +84,7 @@ Would love feedback from folks who live in the terminal.
 
 **Title**:
 ```
-Built an open-source terminal AI agent that runs fully offline with Ollama — 37 specialists, 119 tools, $0
+Built an open-source terminal AI agent that runs fully offline with Ollama — 37 specialists, 151 tools, $0
 ```
 
 **Body**:
@@ -97,7 +97,7 @@ OpenClaw gateway integration for local model tools (explain, review, refactor,
 test gen, etc.).
 
 The agent loop is the same whether you're using Claude Sonnet or llama3.1:8b —
-37 specialist agents, 119 tools, learning engine, autonomous planner, sessions.
+37 specialist agents, 151 tools, learning engine, autonomous planner, sessions.
 
 Currently tested with: llama3.1:8b, gemma3:12b, qwen2.5-coder:14b, deepseek-r1:14b,
 phi4:14b, mistral:7b
@@ -131,7 +131,7 @@ MIT: https://github.com/isaacsight/kernel
 ```
 🧵 I built K:BOT — an open-source terminal AI agent.
 
-37 specialist agents. 119 tools. 19 AI providers. Runs offline with Ollama.
+37 specialist agents. 151 tools. 19 AI providers. Runs offline with Ollama.
 
 npm i -g @kernel.chat/kbot
 
@@ -162,7 +162,7 @@ No other terminal agent does this.
 
 kbot ollama
 
-Auto-detects local models. Same 37 agents, same 119 tools. Zero API cost.
+Auto-detects local models. Same 37 agents, same 151 tools. Zero API cost.
 Your code never leaves your machine.
 ```
 
@@ -223,7 +223,7 @@ New in v2.7.0:
 - Active memory tools — the agent can save/search/update its own knowledge
 - Task ledger — Magentic-One-style planning with auto-replan on failure
 - Improved Ollama support — auto-detects models, skips tool defs for local models
-- 119 tools (was 60+), 19 providers (was 14)
+- 151 tools (was 60+), 19 providers (was 14)
 - MIT license, MCP server, HTTP server mode
 
 Try it: `npm i -g @kernel.chat/kbot`
