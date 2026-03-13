@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "description": "K:BOT — Open-source terminal AI agent. 37 specialists, 151 tools, 19 providers, local-first.",
   "type": "module",
   "repository": {

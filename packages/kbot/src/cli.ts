@@ -46,7 +46,7 @@ import { checkForUpdate, selfUpdate } from './updater.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.9.1'
+const VERSION = '2.10.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -441,6 +441,112 @@ async function main(): Promise<void> {
       }
     })
 
+  program
+    .command('watch [path]')
+    .description('Watch files for changes and analyze them in real-time')
+    .option('-e, --extensions <exts>', 'File extensions to watch (comma-separated)', 'ts,js,tsx,jsx,py,rs,go')
+    .option('--no-analyze', 'Disable file analysis on changes')
+    .action(async (watchPath?: string, watchOpts?: { extensions?: string; analyze?: boolean }) => {
+      const { startWatch } = await import('./watch.js')
+      const extensions = watchOpts?.extensions?.split(',').map(e => `.${e.trim()}`) || undefined
+      await startWatch(watchPath || process.cwd(), {
+        extensions,
+        analyze: watchOpts?.analyze !== false,
+      })
+    })
+
+  program
+    .command('voice')
+    .description('Start kbot with voice mode (text-to-speech output)')
+    .option('-v, --voice <name>', 'TTS voice name (macOS: Alex, Samantha, etc.)')
+    .option('-r, --rate <wpm>', 'Speech rate in words per minute', '200')
+    .action(async (voiceOpts: { voice?: string; rate?: string }) => {
+      const { initVoice } = await import('./voice.js')
+      const state = initVoice({
+        voice: voiceOpts.voice,
+        rate: voiceOpts.rate ? parseInt(voiceOpts.rate, 10) : undefined,
+        tts: true,
+      })
+      if (state.enabled) {
+        printSuccess(`Voice mode enabled — ${state.voice} at ${state.rate} wpm`)
+        // Store voice state globally for the REPL to use
+        ;(globalThis as Record<string, unknown>).__kbot_voice = state
+      } else {
+        printError('Voice mode not available on this platform')
+      }
+    })
+
+  program
+    .command('export <session>')
+    .description('Export a saved session to markdown, JSON, or HTML')
+    .option('-f, --format <format>', 'Output format: md, json, html', 'md')
+    .option('-o, --output <path>', 'Output file path (defaults to stdout)')
+    .action(async (sessionId: string, exportOpts: { format?: string; output?: string }) => {
+      const { exportSession } = await import('./export.js')
+      const format = (exportOpts.format || 'md') as 'md' | 'json' | 'html'
+      try {
+        const result = exportSession(sessionId, format, exportOpts.output)
+        if (exportOpts.output) {
+          printSuccess(`Exported session to ${exportOpts.output}`)
+        } else {
+          process.stdout.write(result)
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+      }
+    })
+
+  program
+    .command('plugins')
+    .description('Manage kbot plugins')
+    .argument('[action]', 'Action: list, search, install, uninstall, update')
+    .argument('[target]', 'Plugin name, query, or URL')
+    .action(async (action?: string, target?: string) => {
+      const { searchPlugins, installPlugin, uninstallPlugin, listInstalled, updatePlugin, formatRegistryResults, formatInstalledList } = await import('./marketplace.js')
+      switch (action) {
+        case 'search': {
+          if (!target) { printError('Usage: kbot plugins search <query>'); return }
+          const results = await searchPlugins(target)
+          console.log(formatRegistryResults(results))
+          break
+        }
+        case 'install': {
+          if (!target) { printError('Usage: kbot plugins install <name>'); return }
+          printInfo(`Installing ${target}...`)
+          try {
+            const installed = await installPlugin(target)
+            printSuccess(`Installed ${installed.name} v${installed.version}`)
+          } catch (err) {
+            printError(err instanceof Error ? err.message : String(err))
+          }
+          break
+        }
+        case 'uninstall': {
+          if (!target) { printError('Usage: kbot plugins uninstall <name>'); return }
+          const ok = uninstallPlugin(target)
+          if (ok) printSuccess(`Uninstalled ${target}`)
+          else printError(`Plugin not found: ${target}`)
+          break
+        }
+        case 'update': {
+          if (!target) { printError('Usage: kbot plugins update <name>'); return }
+          const updated = await updatePlugin(target)
+          if (updated) printSuccess(`Updated ${updated.name} to v${updated.version}`)
+          else printError(`Plugin not found or update failed: ${target}`)
+          break
+        }
+        default: {
+          const plugins = listInstalled()
+          console.log(formatInstalledList(plugins))
+          if (plugins.length === 0) {
+            printInfo('')
+            printInfo('  kbot plugins search <query>  — Find plugins')
+            printInfo('  kbot plugins install <name>  — Install a plugin')
+          }
+        }
+      }
+    })
+
   program.parse(process.argv)
 
   const opts = program.opts()
@@ -450,7 +556,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1930,6 +2036,77 @@ async function handleSlashCommand(
     }
 
 
+
+    case 'watch': {
+      const { startWatch } = await import('./watch.js')
+      const watchPath = args[0] || process.cwd()
+      printInfo(`Watching ${watchPath} for changes... (Ctrl+C to stop)`)
+      await startWatch(watchPath)
+      break
+    }
+
+    case 'voice': {
+      const { initVoice, listVoices, formatVoiceStatus } = await import('./voice.js')
+      if (args[0] === 'off') {
+        ;(globalThis as Record<string, unknown>).__kbot_voice = undefined
+        printSuccess('Voice mode disabled.')
+      } else if (args[0] === 'list') {
+        const voices = listVoices()
+        printInfo(`Available voices: ${voices.join(', ')}`)
+      } else {
+        const voiceState = (globalThis as Record<string, unknown>).__kbot_voice
+        if (voiceState) {
+          printInfo(formatVoiceStatus(voiceState as any))
+        } else {
+          const state = initVoice({ voice: args[0], tts: true })
+          ;(globalThis as Record<string, unknown>).__kbot_voice = state
+          printSuccess(formatVoiceStatus(state))
+        }
+      }
+      break
+    }
+
+    case 'export': {
+      const { exportSession } = await import('./export.js')
+      const format = (args[1] || 'md') as 'md' | 'json' | 'html'
+      if (!args[0]) {
+        printError('Usage: /export <session-id> [md|json|html] [output-path]')
+        break
+      }
+      try {
+        const result = exportSession(args[0], format, args[2])
+        if (args[2]) {
+          printSuccess(`Exported to ${args[2]}`)
+        } else {
+          console.log(result)
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+      }
+      break
+    }
+
+    case 'plugins': {
+      const { formatPluginList } = await import('./plugins.js')
+      printInfo(formatPluginList())
+      break
+    }
+
+    case 'test':
+    case 'tests': {
+      const { executeTool: execTool } = await import('./tools/index.js')
+      printInfo('Running tests...')
+      const result = await execTool({ id: 'repl', name: 'run_tests', arguments: { path: args[0] || process.cwd() } })
+      console.log(result.result)
+      break
+    }
+
+    case 'rate-limit':
+    case 'ratelimit': {
+      const { formatRateLimitStatus } = await import('./rate-limiter.js')
+      console.log(formatRateLimitStatus())
+      break
+    }
 
     case 'quit':
     case 'exit':

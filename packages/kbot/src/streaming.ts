@@ -15,6 +15,23 @@ const THINKING_COLOR = chalk.dim.italic
 /** Max accumulated content size during streaming (5MB) to prevent OOM */
 const MAX_STREAM_CONTENT = 5 * 1024 * 1024
 
+/** Max retries for transient streaming failures */
+const MAX_STREAM_RETRIES = 3
+
+/** Retry delays in ms (exponential backoff) */
+const RETRY_DELAYS = [1000, 2000, 4000]
+
+/** Check if an error is retryable (network/server, not auth/validation) */
+function isRetryableError(status: number): boolean {
+  return status === 429 || status === 500 || status === 502 || status === 503 || status === 529
+}
+
+/** Sleep with optional stderr progress message */
+async function retrySleep(ms: number, attempt: number): Promise<void> {
+  process.stderr.write(`  ${chalk.dim(`⟳ Retry ${attempt}/${MAX_STREAM_RETRIES} in ${ms / 1000}s...`)}\n`)
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 /** Streaming event types from Claude API */
 export interface StreamEvent {
   type: string
@@ -98,19 +115,48 @@ export async function streamAnthropicResponse(
 
   if (tools && tools.length > 0) body.tools = tools
 
-  const res = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify(body),
-  })
+  let res: Response | undefined
+  let lastError: Error | undefined
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `Anthropic streaming error: ${res.status}`)
+  for (let attempt = 0; attempt <= MAX_STREAM_RETRIES; attempt++) {
+    try {
+      res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(300_000),
+      })
+
+      if (res.ok) break
+
+      const errBody = await res.json().catch(() => ({ error: { message: `HTTP ${res!.status}` } }))
+      lastError = new Error(errBody.error?.message || `Anthropic streaming error: ${res.status}`)
+
+      if (isRetryableError(res.status) && attempt < MAX_STREAM_RETRIES) {
+        const retryAfter = res.headers.get('retry-after')
+        const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : RETRY_DELAYS[attempt]
+        await retrySleep(delay, attempt + 1)
+        continue
+      }
+
+      throw lastError
+    } catch (err) {
+      if (err instanceof TypeError && attempt < MAX_STREAM_RETRIES) {
+        // Network error (DNS, connection refused, etc.)
+        lastError = err as Error
+        await retrySleep(RETRY_DELAYS[attempt], attempt + 1)
+        continue
+      }
+      throw err
+    }
+  }
+
+  if (!res || !res.ok) {
+    throw lastError || new Error('Anthropic streaming failed after retries')
   }
 
   const state = createStreamState()
@@ -223,19 +269,46 @@ export async function streamOpenAIResponse(
     }))
   }
 
-  const res = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(300_000), // 5 min timeout for stream initiation
-  })
+  let res: Response | undefined
+  let lastError: Error | undefined
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-    throw new Error(err.error?.message || `API streaming error: ${res.status}`)
+  for (let attempt = 0; attempt <= MAX_STREAM_RETRIES; attempt++) {
+    try {
+      res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(300_000),
+      })
+
+      if (res.ok) break
+
+      const errBody = await res.json().catch(() => ({ error: { message: `HTTP ${res!.status}` } }))
+      lastError = new Error(errBody.error?.message || `API streaming error: ${res.status}`)
+
+      if (isRetryableError(res.status) && attempt < MAX_STREAM_RETRIES) {
+        const retryAfter = res.headers.get('retry-after')
+        const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : RETRY_DELAYS[attempt]
+        await retrySleep(delay, attempt + 1)
+        continue
+      }
+
+      throw lastError
+    } catch (err) {
+      if (err instanceof TypeError && attempt < MAX_STREAM_RETRIES) {
+        lastError = err as Error
+        await retrySleep(RETRY_DELAYS[attempt], attempt + 1)
+        continue
+      }
+      throw err
+    }
+  }
+
+  if (!res || !res.ok) {
+    throw lastError || new Error('API streaming failed after retries')
   }
 
   const state = createStreamState()

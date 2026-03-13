@@ -92,6 +92,31 @@ export function extractKeyContext(text: string): KeyContext {
   }
 }
 
+/** Priority score for a turn (higher = more important to preserve) */
+function turnPriority(turn: ConversationTurn): number {
+  let score = 0
+  const content = turn.content
+
+  // User corrections are highest priority
+  if (turn.role === 'user' && /^(?:no[,.]?\s|actually|that's wrong|instead|don't|never|always)\b/i.test(content.trim())) {
+    score += 10
+  }
+
+  // Error discussions are important
+  if (/\b(?:error|fail|bug|fix|broke|crash)\b/i.test(content)) score += 3
+
+  // Code changes are important
+  if (content.includes('```') || /\b(?:wrote|created|edited|updated|deleted)\b/i.test(content)) score += 2
+
+  // File paths indicate concrete work
+  if (/(?:\.ts|\.js|\.py|\.rs|\.go)\b/.test(content)) score += 1
+
+  // Short user messages (commands/confirmations) are low priority
+  if (turn.role === 'user' && content.length < 20) score -= 1
+
+  return score
+}
+
 /** Summarize a conversation turn into a compact bullet point */
 function summarizeTurn(turn: ConversationTurn): string {
   const ctx = extractKeyContext(turn.content)
@@ -135,18 +160,23 @@ export function foldContext(
 
   if (olderTurns.length === 0) return recentTurns
 
-  // Summarize older turns, but preserve corrections
+  // Score all older turns by priority, preserve high-priority ones verbatim
+  const scored = olderTurns.map((turn, i) => ({ turn, index: i, priority: turnPriority(turn) }))
+  scored.sort((a, b) => b.priority - a.priority)
+
+  // Preserve turns with priority >= 5 (corrections, critical errors)
+  const preserveThreshold = 5
+  const preservedSet = new Set(scored.filter(s => s.priority >= preserveThreshold).map(s => s.index))
+
   const summaryLines: string[] = ['[Context Summary — earlier conversation]']
   const preservedTurns: ConversationTurn[] = []
 
-  for (const turn of olderTurns) {
-    // Always preserve user corrections verbatim
-    if (turn.role === 'user' && /^(?:no[,.]?\s|actually|that's wrong|instead|don't|never|always)\b/i.test(turn.content.trim())) {
+  for (let i = 0; i < olderTurns.length; i++) {
+    const turn = olderTurns[i]
+    if (preservedSet.has(i)) {
       preservedTurns.push(turn)
       continue
     }
-
-    // Summarize everything else
     summaryLines.push(`• ${summarizeTurn(turn)}`)
   }
 
