@@ -203,6 +203,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     { registerOpenClawTools },
     { registerQualityTools },
     { registerMemoryTools },
+    { registerBrowserTools },
   ] = await Promise.all([
     import('./files.js'),
     import('./bash.js'),
@@ -223,6 +224,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     import('./openclaw.js'),
     import('./quality.js'),
     import('./memory-tools.js'),
+    import('./browser.js'),
   ])
 
   // Register all tools (synchronous, fast)
@@ -245,6 +247,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
   registerOpenClawTools()
   registerQualityTools()
   registerMemoryTools()
+  registerBrowserTools()
 
   // Computer use tools — opt-in only via --computer-use flag
   if (opts?.computerUse) {

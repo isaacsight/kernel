@@ -96,10 +96,10 @@ export function registerComputerTools(): void {
       const text = String(args.text)
 
       if (platform === 'darwin') {
-        // Escape for AppleScript
-        const escaped = text.replace(/"/g, '\\"').replace(/'/g, "\\'")
+        // Escape for AppleScript — strip control chars, escape backslashes and quotes
+        const escaped = text.replace(/[\x00-\x1f\x7f]/g, '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/'/g, "'\\''")
         try {
-          execSync(`osascript -e 'tell application "System Events" to keystroke "${escaped}"'`, { timeout: 10_000 })
+          execSync(`osascript -e 'tell application "System Events" to keystroke "` + escaped + `"'`, { timeout: 10_000 })
           return `Typed: ${text.slice(0, 50)}${text.length > 50 ? '...' : ''}`
         } catch {
           return 'Error: Typing requires accessibility permissions'
