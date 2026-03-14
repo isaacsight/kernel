@@ -290,7 +290,7 @@ export function printHelp(): void {
     `  ${chalk.white('/compact')}           Compress conversation (saves tokens)`,
     `  ${chalk.white('/dashboard')}         See usage stats and learning data`,
     '',
-    `  ${DIM('39 specialist agents. 158 tools. Type anything to get started.')}`,
+    `  ${DIM('39 specialist agents. 167 tools. Type anything to get started.')}`,
     '',
   ]
   status(lines.join('\n'))

@@ -1607,6 +1607,25 @@ async function handleSlashCommand(
       break
     }
 
+    case 'map-elites':
+    case 'elites':
+    case 'qd': {
+      const { initArchive, getArchiveStats, getArchiveCoverage } = await import('./quality-diversity.js')
+      initArchive()
+      const stats = getArchiveStats()
+      printInfo(`MAP-Elites Archive: ${stats.totalElites} elites, ${(stats.coverage * 100).toFixed(0)}% coverage, avg fitness ${stats.avgFitness.toFixed(3)}`)
+      console.log()
+      console.log(getArchiveCoverage())
+      if (stats.topElites.length > 0) {
+        console.log()
+        printInfo('Top elites:')
+        for (const e of stats.topElites.slice(0, 5)) {
+          printInfo(`  fitness=${e.fitness.toFixed(3)} tools=${e.pattern.toolSequence.join('→')} uses=${e.metadata.uses}`)
+        }
+      }
+      break
+    }
+
     case 'confidence': {
       const task = args.join(' ') || 'general task'
       const { estimateConfidence, reportConfidence } = await import('./confidence.js')

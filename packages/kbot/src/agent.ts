@@ -954,6 +954,24 @@ Always quote file paths that contain spaces. Never reference internal system nam
             // Save embedding cache
             try { saveEmbeddingCache() } catch { /* non-critical */ }
 
+            // MAP-Elites quality-diversity archive update
+            import('./quality-diversity.js').then(({ initArchive, learnFromOutcome }) => {
+              try {
+                initArchive()
+                // Use self-eval overall score (default 0.7 if not evaluated)
+                const evalScore = lastResponse.usage?.evalScore ?? 0.7
+                const successRate = toolCallCount > 0 ? 1.0 : 0.8
+                learnFromOutcome(
+                  originalMessage,
+                  toolSequenceLog,
+                  { overall: evalScore },
+                  successRate,
+                  totalTokens,
+                  0, // retryCount
+                )
+              } catch { /* quality-diversity is non-critical */ }
+            }).catch(() => { /* import failure is non-critical */ })
+
             // Auto self-training trigger
             if (shouldAutoTrain()) {
               try { selfTrain() } catch { /* silent */ }
