@@ -2,9 +2,7 @@ class Kbot < Formula
   desc "Local-first AI agent for your terminal with 39 specialists and 167 tools"
   homepage "https://kernel.chat"
   url "https://registry.npmjs.org/@kernel.chat/kbot/-/kbot-2.13.1.tgz"
-  # TODO: Replace with actual checksum from:
-  #   curl -sL https://registry.npmjs.org/@kernel.chat/kbot/-/kbot-2.13.1.tgz | shasum -a 256
-  sha256 ""
+  sha256 "6eb45fff3aad056e69e15bcb16876824d5f342eb16894d5f9ecf2ac6e4ebeab5"
   license "MIT"
 
   depends_on "node@20"
