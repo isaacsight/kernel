@@ -189,6 +189,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and 
 - **Docker**: [isaacsight/kbot](https://hub.docker.com/r/isaacsight/kbot)
 - **MCP Registry**: `kbot` ([mcp-server.json](mcp-server.json))
 - **Issues**: [Report a bug](https://github.com/isaacsight/kernel/issues)
+- **Email**: [support@kernel.chat](mailto:support@kernel.chat)
+- **X/Twitter**: [@isaacsight](https://x.com/isaacsight)
 
 ## License
 
