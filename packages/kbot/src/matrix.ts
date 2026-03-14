@@ -6,6 +6,7 @@
 import chalk from 'chalk'
 import { registerAgentVisuals } from './ui.js'
 import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
+import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
 
 export interface MatrixAgent {
   id: string
@@ -144,6 +145,10 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
   'creative': {
     name: CREATIVE_PRESET.name,
     prompt: CREATIVE_PRESET.prompt,
+  },
+  'developer': {
+    name: DEVELOPER_PRESET.name,
+    prompt: DEVELOPER_PRESET.prompt,
   },
 }
 
@@ -383,6 +388,12 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     icon: CREATIVE_BUILTIN.icon,
     color: CREATIVE_BUILTIN.color,
     prompt: CREATIVE_BUILTIN.prompt,
+  },
+  developer: {
+    name: DEVELOPER_BUILTIN.name,
+    icon: DEVELOPER_BUILTIN.icon,
+    color: DEVELOPER_BUILTIN.color,
+    prompt: DEVELOPER_BUILTIN.prompt,
   },
 }
 

@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 38 specialists, 158 tools, 19 providers, local-first.
+  Open-source terminal AI agent. 39 specialists, 158 tools, 19 providers, local-first.
 </p>
 
 <p align="center">

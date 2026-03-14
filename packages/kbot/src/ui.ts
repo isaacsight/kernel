@@ -42,6 +42,7 @@ const AGENT_COLORS: Record<string, (text: string) => string> = {
   curator: chalk.hex('#708090'),
   strategist: chalk.hex('#DAA520'),
   creative: chalk.hex('#E879F9'),
+  developer: chalk.hex('#38BDF8'),
   local: DIM,
 }
 
@@ -58,7 +59,7 @@ export function agentIcon(agentId: string): string {
   // Simple, consistent — no exotic unicode
   const icons: Record<string, string> = {
     kernel: '●', researcher: '◆', coder: '▸', writer: '✎',
-    analyst: '◇', creative: '✧', local: '⚡',
+    analyst: '◇', creative: '✧', developer: '⚙', local: '⚡',
   }
   return icons[agentId] || '●'
 }
@@ -289,7 +290,7 @@ export function printHelp(): void {
     `  ${chalk.white('/compact')}           Compress conversation (saves tokens)`,
     `  ${chalk.white('/dashboard')}         See usage stats and learning data`,
     '',
-    `  ${DIM('38 specialist agents. 158 tools. Type anything to get started.')}`,
+    `  ${DIM('39 specialist agents. 158 tools. Type anything to get started.')}`,
     '',
   ]
   status(lines.join('\n'))
