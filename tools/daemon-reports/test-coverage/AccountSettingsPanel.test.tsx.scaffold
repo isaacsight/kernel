@@ -1,0 +1,107 @@
+// Scaffold for: src/components/AccountSettingsPanel.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-03-14T19:22:28.239Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import AccountSettingsPanel from './AccountSettingsPanel'
+import { User } from '@supabase/supabase-js'
+import { useTranslation } from 'react-i18next'
+
+vi.mock('react-i18next', () => ({
+  useTranslation: vi.fn(),
+}))
+
+vi.mock('../hooks/useAccountSettings')
+vi.mock('../hooks/useIdentityRecovery')
+vi.mock('../providers/AuthProvider')
+
+const mockUser: User = {
+  id: 'user-id',
+  email: 'test@example.com',
+  app_metadata: {},
+  user_metadata: {},
+}
+
+describe('AccountSettingsPanel', () => {
+  beforeEach(() => {
+    (useTranslation as vi.Mock).mockReturnValue({
+      t: (key: string) => key,
+    })
+  })
+
+  it('renders the component with basic information', () => {
+    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    expect(screen.getByText('settings.title')).toBeInTheDocument()
+    expect(screen.getByText('test@example.com')).toBeInTheDocument()
+  })
+
+  it('renders the avatar with initials if no avatar URL is provided', () => {
+    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    expect(screen.getByText('TE')).toBeInTheDocument()
+  })
+
+  it('renders the admin badge if isAdmin is true', () => {
+    render(<AccountSettingsPanel user={mockUser} isAdmin={true} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    expect(screen.getByText('subscription.admin')).toBeInTheDocument()
+  })
+
+  it('handles sending verification code', async () => {
+    const mockIdentity = {
+      initiate: vi.fn().mockResolvedValue({ requestId: 'req-id' }),
+      sendChallenge: vi.fn(),
+      loading: false,
+    }
+    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
+
+    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    const sendCodeButton = screen.getByText('security.sendCode')
+    await sendCodeButton.click()
+
+    expect(mockIdentity.initiate).toHaveBeenCalledWith('password_reset')
+    expect(mockIdentity.sendChallenge).toHaveBeenCalledWith('req-id')
+  })
+
+  it('handles verifying code', async () => {
+    const mockIdentity = {
+      request: { requestId: 'req-id' },
+      verify: vi.fn().mockResolvedValue(true),
+    }
+    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
+
+    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    const verificationInput = screen.getByPlaceholderText('security.codePlaceholder')
+    verificationInput.value = '123456'
+    await verificationInput.dispatchEvent(new Event('change'))
+
+    const verifyCodeButton = screen.getByText('security.verifyCode')
+    await verifyCodeButton.click()
+
+    expect(mockIdentity.verify).toHaveBeenCalledWith('req-id', '123456')
+  })
+
+  it('resends code when handleResendCode is called', async () => {
+    const mockIdentity = {
+      initiate: vi.fn().mockResolvedValue({ requestId: 'req-id' }),
+      sendChallenge: vi.fn(),
+      loading: false,
+    }
+    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
+
+    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+
+    const resendCodeButton = screen.getByText('security.resendCode')
+    await resendCodeButton.click()
+
+    expect(mockIdentity.initiate).toHaveBeenCalledWith('password_reset')
+    expect(mockIdentity.sendChallenge).toHaveBeenCalledWith('req-id')
+  })
+})
+```

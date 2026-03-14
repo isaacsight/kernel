@@ -1,0 +1,100 @@
+// Scaffold for: src/components/BriefingPanel.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-03-14T19:23:33.725Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { BriefingPanel } from './BriefingPanel'
+
+vi.mock('../engine/SupabaseClient', () => ({
+  supabase: {
+    from: vi.fn().mockReturnThis(),
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    order: vi.fn().mockReturnThis(),
+    limit: vi.fn().mockReturnThis(),
+    gte: vi.fn().mockReturnThis(),
+    insert: vi.fn().mockReturnThis(),
+    delete: vi.fn().mockReturnThis(),
+    update: vi.fn().mockReturnThis(),
+  },
+}))
+
+vi.mock('../engine/BriefingGenerator', () => ({
+  generateBriefing: vi.fn(),
+}))
+
+vi.mock('react-i18next', () => ({
+  useTranslation: vi.fn(() => ({ t: (key) => key })),
+}))
+
+describe('BriefingPanel', () => {
+  const mockProps = {
+    userId: 'test-user-id',
+    userMemory: null,
+    kgEntities: [],
+    onClose: vi.fn(),
+    onToast: vi.fn(),
+    isPro: true,
+    historyDays: null,
+  }
+
+  it('renders the component', () => {
+    render(<BriefingPanel {...mockProps} />)
+    expect(screen.getByText('panels:title')).toBeInTheDocument()
+  })
+
+  it('loads briefings on mount', async () => {
+    const mockData = [{ id: '1', content: 'Test briefing' }]
+    vi.mocked(supabase.from).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      then: vi.fn((callback) => callback({ data: mockData })),
+    })
+
+    render(<BriefingPanel {...mockProps} />)
+    await screen.findByText('Test briefing')
+  })
+
+  it('generates a briefing', async () => {
+    const mockBriefing = { id: '2', content: 'Generated briefing' }
+    vi.mocked(generateBriefing).mockResolvedValue(mockBriefing)
+    vi.mocked(supabase.from).mockReturnValue({
+      insert: vi.fn().mockReturnThis(),
+      then: vi.fn((callback) => callback({ data: [mockBriefing] })),
+    })
+
+    render(<BriefingPanel {...mockProps} />)
+    fireEvent.click(screen.getByText('panels:generate'))
+    await screen.findByText('Generated briefing')
+  })
+
+  it('handles briefing generation failure', async () => {
+    const mockError = new Error('Failed to generate briefing')
+    vi.mocked(generateBriefing).mockRejectedValue(mockError)
+
+    render(<BriefingPanel {...mockProps} />)
+    fireEvent.click(screen.getByText('panels:generate'))
+    await screen.findByText('briefings.errors.generateFailed')
+  })
+
+  it('deletes a briefing', async () => {
+    const mockData = [{ id: '1', content: 'Test briefing' }]
+    vi.mocked(supabase.from).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      then: vi.fn((callback) => callback({ data: mockData })),
+    })
+
+    render(<BriefingPanel {...mockProps} briefings={mockData} />)
+    fireEvent.click(screen.getByTestId('delete-briefing-1'))
+    await screen.findByText('briefings.toast.removed')
+  })
+})
+```

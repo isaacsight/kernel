@@ -6,8 +6,7 @@ Undocumented exports: createEngine, getEngine
 
 ```typescript
 /**
- * Creates and returns an instance of the kernel.chat engine.
- * The engine provides methods to perceive input, run discussions, and manage beliefs.
+ * Creates and initializes a new engine instance.
  *
  * @returns An object containing methods to interact with the engine.
  */
@@ -69,75 +68,157 @@ export function createEngine(): {
         const newVersion = await syncEngineState(
           currentUserId,
           state.worldModel as unknown as Record<string, unknown>,
-          state.lasting as unknown as Record<string, unknown>,
+          state.lasting as unknown as Record<string, unknown>
         );
-        if (newVersion > supabaseVersion) {
-          const { worldModel, lasting } = await getEngineState(currentUserId);
-          state.worldModel = worldModel;
-          state.lasting = lasting;
-          supabaseVersion = newVersion;
-          notifyListeners();
-        }
+        supabaseVersion = newVersion;
       } catch (error) {
-        console.error('Failed to sync engine state with Supabase:', error);
+        console.error('Failed to sync engine state to Supabase:', error);
       }
     }, 5000);
   }
 
+  // ── Engine Methods ─────────────────────────────────────
+
   function notifyListeners(): void {
-    listeners.forEach(listener => listener(state));
+    for (const listener of listeners) {
+      listener(state);
+    }
   }
 
-  // ── Engine Methods ──────────────────────────────────────
+  async function perceive(input: string): Promise<void> {
+    if (aborted) return;
+    state.phase = 'perceiving';
+    state.ephemeral.currentInput = input;
+    const perception = await _perceiveInput(input);
+    state.ephemeral.perception = perception;
+    notifyListeners();
+    // Continue with the rest of the cognitive cycle...
+  }
+
+  async function runDiscussion(topic: string): Promise<void> {
+    if (aborted) return;
+    state.phase = 'running discussion';
+    state.working.topic = topic;
+    await _runDiscussion(topic);
+    notifyListeners();
+  }
+
+  function injectHumanMessage(content: string): void {
+    if (aborted) return;
+    state.ephemeral.currentInput = content;
+    // Process the human message...
+    notifyListeners();
+  }
+
+  function addBelief(content: string, confidence: number): void {
+    const newBelief = formBelief(content, confidence);
+    state.worldModel.beliefs.push(newBelief);
+    notifyListeners();
+  }
+
+  function challengeBelief(beliefId: string): void {
+    challengeBeliefById(state.worldModel, beliefId);
+    notifyListeners();
+  }
+
+  function removeBelief(beliefId: string): void {
+    const index = state.worldModel.beliefs.findIndex(b => b.id === beliefId);
+    if (index !== -1) {
+      state.worldModel.beliefs.splice(index, 1);
+      notifyListeners();
+    }
+  }
+
+  function setConviction(value: number, reason: string): void {
+    shiftConviction(state.worldModel, value, reason);
+    notifyListeners();
+  }
+
+  function overrideNextAgent(agent: Agent | null): void {
+    agentOverride = agent;
+  }
+
+  function pruneReflections(minQuality: number): number {
+    const initialCount = state.lasting.reflections.length;
+    state.lasting.reflections = state.lasting.reflections.filter(r => r.quality >= minQuality);
+    return initialCount - state.lasting.reflections.length;
+  }
+
+  function setUserId(userId: string | null): void {
+    currentUserId = userId;
+    if (userId) {
+      loadFromSupabase();
+    }
+  }
+
+  async function loadFromSupabase(): Promise<void> {
+    if (!currentUserId) return;
+    try {
+      const { worldModel, lastingMemory } = await getEngineState(currentUserId);
+      state.worldModel = worldModel;
+      state.lasting = lastingMemory;
+      notifyListeners();
+    } catch (error) {
+      console.error('Failed to load engine state from Supabase:', error);
+    }
+  }
+
+  function setToolCallbacks(callbacks: ToolLoopCallbacks): void {
+    // Implement tool callback setting logic...
+  }
+
+  function stop(): void {
+    aborted = true;
+  }
+
+  function reset(): void {
+    state = {
+      phase: 'idle',
+      ephemeral: createEmptyEphemeral(),
+      working: {
+        conversationHistory: [],
+        topic: '',
+        turnCount: 0,
+        agentSequence: [],
+        emotionalTone: 0,
+        coherenceScore: 1,
+        threadSummary: '',
+        unresolvedQuestions: [],
+      },
+      lasting: loadLastingMemory(),
+      worldModel: loadWorldModel(),
+      isOnline: true,
+      cycleCount: 0,
+    };
+    notifyListeners();
+  }
 
   return {
-    getState: () => state,
-    subscribe: (listener) => {
-      listeners.add(listener);
-      return () => listeners.delete(listener);
-    },
-    perceive: async (input) => {
-      // Implementation of perceive method
-    },
-    runDiscussion: async (topic) => {
-      // Implementation of runDiscussion method
-    },
-    injectHumanMessage: (content) => {
-      // Implementation of injectHumanMessage method
-    },
-    addBelief: (content, confidence) => {
-      // Implementation of addBelief method
-    },
-    challengeBelief: (beliefId) => {
-      // Implementation of challengeBelief method
-    },
-    removeBelief: (beliefId) => {
-      // Implementation of removeBelief method
-    },
-    setConviction: (value, reason) => {
-      // Implementation of setConviction method
-    },
-    overrideNextAgent: (agent) => {
-      // Implementation of overrideNextAgent method
-    },
-    pruneReflections: (minQuality) => {
-      // Implementation of pruneReflections method
-    },
-    setUserId: (userId) => {
-      // Implementation of setUserId method
-    },
-    loadFromSupabase: async () => {
-      // Implementation of loadFromSupabase method
-    },
-    setToolCallbacks: (callbacks) => {
-      // Implementation of setToolCallbacks method
-    },
-    stop: () => {
-      // Implementation of stop method
-    },
-    reset: () => {
-      // Implementation of reset method
-    },
+    getState,
+    subscribe,
+    perceive,
+    runDiscussion,
+    injectHumanMessage,
+    addBelief,
+    challengeBelief,
+    removeBelief,
+    setConviction,
+    overrideNextAgent,
+    pruneReflections,
+    setUserId,
+    loadFromSupabase,
+    setToolCallbacks,
+    stop,
+    reset,
   };
+}
+
+/**
+ * Retrieves the current engine state.
+ *
+ * @returns The current engine state.
+ */
+export function getEngine(): EngineState {
+  // Implementation of getting the engine state
 }
 ```

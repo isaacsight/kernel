@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 39 specialists, 167 tools, 19 providers, local-first.
+  Open-source terminal AI agent. 39 specialists, 167 tools, 19 providers, local-first. The first CLI agent that evolves its own source code.
 </p>
 
 <p align="center">
@@ -15,7 +15,9 @@
 - **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
 - **Runs fully offline** — `kbot local` for $0 local AI, no data leaves your machine
 - **Learns your patterns** — remembers what worked, gets faster over time
-- **37 specialist agents** — auto-routes to the right expert for each task
+- **39 specialist agents** — auto-routes to the right expert for each task
+- **Self-evolving** — diagnoses its own weaknesses and improves its own code (`/evolve`)
+- **Shell completions** — tab completion for bash, zsh, and fish (`kbot completions zsh`)
 - **MCP server built in** — plug kbot into any IDE as a tool provider
 
 ## Quick Start
@@ -34,6 +36,14 @@ kbot local
 kbot
 ```
 
+## What's New in v2.13.0
+
+- **Self-evolution engine** — K:BOT diagnoses weaknesses, proposes code changes, validates them (typecheck + tests), and applies improvements automatically (`/evolve`)
+- **Shell completions** — Tab completion for bash, zsh, fish (`kbot completions zsh >> ~/.zshrc`)
+- **Interactive tutorial** — Step-by-step walkthrough for new users (`/tutorial`)
+- **Changelog generator** — Auto-generate release notes from git history (`kbot changelog`)
+- **Doctor diagnostics** — 10-point health check for your setup (`kbot doctor`)
+
 ## One-Shot Mode
 
 ```bash
@@ -43,18 +53,19 @@ kbot "deploy to production"
 kbot -p "generate a migration for user roles" > migration.sql
 ```
 
-## Specialists (37)
+## Specialists (39)
 
 Auto-routed or manual with `kbot --agent <name>`:
 
 **Core**: kernel, researcher, coder, writer, analyst
 **Extended**: aesthete, guardian, curator, strategist, infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter
 **Domain**: physicist, mathematician, biologist, economist, psychologist, engineer, medic, linguist, ethicist, educator, diplomat
+**Creative**: creative, developer, hacker, operator, dreamer
 **Systems**: session, scholar, auditor, benchmarker, synthesizer, debugger
 
 ## Features
 
-- **60+ Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker sandbox, browser, MCP client
+- **167 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker sandbox, browser, MCP client
 - **Local-First** — File reads, git, grep run instantly without an API call
 - **Learning Engine** — Patterns, solutions, and user preferences cached across sessions
 - **Mimic Matrix** — Code like Claude Code, Cursor, Copilot, Next.js, React, Rust, Python
@@ -109,7 +120,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 60+ tools for any LLM or automation pipeline.
+REST API exposing all 167 tools for any LLM or automation pipeline.
 
 ## Commands
 
@@ -136,7 +147,7 @@ REST API exposing all 60+ tools for any LLM or automation pipeline.
 
 ## Web Companion
 
-[kernel.chat](https://kernel.chat) — same 37 agents with a visual interface. Free (20 msgs/day).
+[kernel.chat](https://kernel.chat) — same 39 agents with a visual interface. Free (20 msgs/day).
 
 ## Links
 

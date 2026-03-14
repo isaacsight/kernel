@@ -1,0 +1,74 @@
+// Scaffold for: src/components/AgentPicker.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-03-14T19:22:55.662Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { getAllSpecialists, type Specialist } from '../agents/specialists'
+
+vi.mock('../agents/specialists', () => ({
+  getAllSpecialists: vi.fn(),
+}))
+
+const mockSpecialists: Specialist[] = [
+  { id: 'kernel', name: 'Kernel', icon: '\u2694\uFE0F', color: '#FF5733' },
+  { id: 'researcher', name: 'Researcher', icon: '\u1F4DA', color: '#33FF57' },
+  // Add more mock specialists as needed
+]
+
+getAllSpecialists.mockReturnValue(mockSpecialists)
+
+describe('AgentPicker', () => {
+  const onSelect = vi.fn()
+  const defaultProps = {
+    selectedAgent: null,
+    onSelect,
+  }
+
+  it('renders the component with default props', () => {
+    render(<AgentPicker {...defaultProps} />)
+    expect(screen.getByRole('button', { name: /Choose agent/i })).toBeInTheDocument()
+  })
+
+  it('displays the selected agent when provided', () => {
+    const selectedAgent = 'kernel'
+    render(<AgentPicker {...defaultProps} selectedAgent={selectedAgent} />)
+    expect(screen.getByRole('button', { name: /Choose agent/i }).textContent).toBe('\u2694\uFE0F')
+  })
+
+  it('opens the dropdown when button is clicked', () => {
+    render(<AgentPicker {...defaultProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /Choose agent/i }))
+    expect(screen.getByText(/Auto-route \(default\)/i)).toBeInTheDocument()
+  })
+
+  it('closes the dropdown when clicking outside', () => {
+    render(<AgentPicker {...defaultProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /Choose agent/i }))
+    fireEvent.click(document.body)
+    expect(screen.queryByText(/Auto-route \(default\)/i)).not.toBeInTheDocument()
+  })
+
+  it('calls onSelect with null when "Auto" is selected', () => {
+    render(<AgentPicker {...defaultProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /Choose agent/i }))
+    fireEvent.click(screen.getByText(/Auto/i))
+    expect(onSelect).toHaveBeenCalledWith(null)
+  })
+
+  it('calls onSelect with the correct specialist ID when a featured agent is selected', () => {
+    render(<AgentPicker {...defaultProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /Choose agent/i }))
+    const researcherButton = screen.getByText(/Researcher/i)
+    fireEvent.click(researcherButton)
+    expect(onSelect).toHaveBeenCalledWith('researcher')
+  })
+
+  it('disables the button when disabled prop is true', () => {
+    render(<AgentPicker {...defaultProps} disabled={true} />)
+    expect(screen.getByRole('button', { name: /Choose agent/i })).toBeDisabled()
+  })
+})
+```

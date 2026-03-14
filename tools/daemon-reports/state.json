@@ -1,0 +1,1278 @@
+{
+  "lastProcessedCommit": "e96eb20c970b1c1037b48f5cf56f9c7029272740",
+  "lastRunTimestamps": {
+    "gitReview": "2026-03-14T20:08:36.569Z",
+    "codeQuality": "2026-03-14T17:04:53.418Z",
+    "dailyDigest": "2026-03-14T06:10:15.636Z",
+    "documentation": "2026-03-14T19:21:48.015Z",
+    "testCoverage": "2026-03-14T19:23:33.727Z",
+    "embeddings": "2026-03-14T18:49:59.206Z",
+    "i18nSync": "2026-03-14T15:04:46.552Z"
+  },
+  "embeddingIndex": {
+    "src/App.tsx": {
+      "hash": "29be63489ed1",
+      "updatedAt": "2026-03-12T06:06:54.663Z"
+    },
+    "src/agents/index.ts": {
+      "hash": "62f9c60a6650",
+      "updatedAt": "2026-03-12T06:06:54.746Z"
+    },
+    "src/agents/kernel.ts": {
+      "hash": "907ef1f7dcff",
+      "updatedAt": "2026-03-12T06:06:54.807Z"
+    },
+    "src/agents/specialists.ts": {
+      "hash": "2aa1712fb0e6",
+      "updatedAt": "2026-03-12T17:54:01.657Z"
+    },
+    "src/agents/swarm.ts": {
+      "hash": "ee829d771978",
+      "updatedAt": "2026-03-12T06:06:54.870Z"
+    },
+    "src/components/AccountSettingsPanel.tsx": {
+      "hash": "cb52ca5e099b",
+      "updatedAt": "2026-03-12T06:06:54.901Z"
+    },
+    "src/components/AdaptivePanel.tsx": {
+      "hash": "e423043c262c",
+      "updatedAt": "2026-03-12T06:06:54.938Z"
+    },
+    "src/components/AgentBuilderPanel.tsx": {
+      "hash": "5a5d92c37b4d",
+      "updatedAt": "2026-03-12T06:06:54.975Z"
+    },
+    "src/components/AgentLibraryPanel.tsx": {
+      "hash": "1992ac45eff7",
+      "updatedAt": "2026-03-12T06:06:55.009Z"
+    },
+    "src/components/AgentPicker.tsx": {
+      "hash": "85600b6efd5e",
+      "updatedAt": "2026-03-12T17:54:01.700Z"
+    },
+    "src/components/AgentWorkflowBuilder.tsx": {
+      "hash": "b8d1c794ab1a",
+      "updatedAt": "2026-03-12T06:06:55.081Z"
+    },
+    "src/components/ArchitecturePanel.tsx": {
+      "hash": "a1822a241ee5",
+      "updatedAt": "2026-03-12T06:06:55.117Z"
+    },
+    "src/components/AuthorProfilePanel.tsx": {
+      "hash": "acc74067c8ea",
+      "updatedAt": "2026-03-12T06:06:55.149Z"
+    },
+    "src/components/BackgroundAgentsPanel.tsx": {
+      "hash": "a26e66a65e08",
+      "updatedAt": "2026-03-12T06:06:55.180Z"
+    },
+    "src/components/BookmarksPanel.tsx": {
+      "hash": "c9ee2c945e75",
+      "updatedAt": "2026-03-12T06:06:55.213Z"
+    },
+    "src/components/BottomTabBar.test.tsx": {
+      "hash": "401fe0a735e0",
+      "updatedAt": "2026-03-12T06:06:55.249Z"
+    },
+    "src/components/BottomTabBar.tsx": {
+      "hash": "082069fabf37",
+      "updatedAt": "2026-03-12T06:06:55.280Z"
+    },
+    "src/components/BriefingPanel.tsx": {
+      "hash": "fc63dbe8f555",
+      "updatedAt": "2026-03-12T17:54:01.743Z"
+    },
+    "src/components/ChatHelpers.tsx": {
+      "hash": "6f186eb8076f",
+      "updatedAt": "2026-03-12T06:06:55.369Z"
+    },
+    "src/components/CloudSyncBadge.tsx": {
+      "hash": "17e0ec761aa1",
+      "updatedAt": "2026-03-12T06:06:55.395Z"
+    },
+    "src/components/CommunicationPanel.tsx": {
+      "hash": "2e64d1510646",
+      "updatedAt": "2026-03-12T06:06:55.428Z"
+    },
+    "src/components/ContentPipeline.tsx": {
+      "hash": "80b66b2daa12",
+      "updatedAt": "2026-03-12T06:06:55.462Z"
+    },
+    "src/components/ConversationDrawer.tsx": {
+      "hash": "f5c60ee9866d",
+      "updatedAt": "2026-03-12T06:06:55.494Z"
+    },
+    "src/components/CrisisBanner.tsx": {
+      "hash": "e749de7e549d",
+      "updatedAt": "2026-03-12T06:06:55.526Z"
+    },
+    "src/components/DesignPanel.tsx": {
+      "hash": "3cc15277ca14",
+      "updatedAt": "2026-03-12T06:06:55.558Z"
+    },
+    "src/components/ErrorBoundary.tsx": {
+      "hash": "e9aafbe98c10",
+      "updatedAt": "2026-03-12T06:06:55.589Z"
+    },
+    "src/components/FeatureTooltip.tsx": {
+      "hash": "740b05e28130",
+      "updatedAt": "2026-03-12T06:06:55.626Z"
+    },
+    "src/components/FilePreview.tsx": {
+      "hash": "9e7fbae64359",
+      "updatedAt": "2026-03-12T06:06:55.660Z"
+    },
+    "src/components/FilesPanel.tsx": {
+      "hash": "cf29f46f82cf",
+      "updatedAt": "2026-03-12T06:06:55.698Z"
+    },
+    "src/components/GeneratedImageCard.tsx": {
+      "hash": "23e10ee813c7",
+      "updatedAt": "2026-03-12T06:06:55.733Z"
+    },
+    "src/components/GoalsPanel.tsx": {
+      "hash": "4fda0f3e62e3",
+      "updatedAt": "2026-03-12T06:06:55.766Z"
+    },
+    "src/components/GuardianBadge.tsx": {
+      "hash": "cdab5911678e",
+      "updatedAt": "2026-03-12T06:06:55.802Z"
+    },
+    "src/components/ImageCreditModal.tsx": {
+      "hash": "ae552ef4ae10",
+      "updatedAt": "2026-03-12T06:06:55.836Z"
+    },
+    "src/components/ImageGalleryPanel.tsx": {
+      "hash": "4e45a04c519e",
+      "updatedAt": "2026-03-12T06:06:55.871Z"
+    },
+    "src/components/ImportConversationModal.tsx": {
+      "hash": "881542e1c53f",
+      "updatedAt": "2026-03-12T06:06:55.904Z"
+    },
+    "src/components/InsightsPanel.tsx": {
+      "hash": "b7b08d1f6e7f",
+      "updatedAt": "2026-03-12T06:06:55.939Z"
+    },
+    "src/components/KernelIcons.tsx": {
+      "hash": "cd2e1b2dcd42",
+      "updatedAt": "2026-03-12T06:06:55.983Z"
+    },
+    "src/components/KernelLoading.tsx": {
+      "hash": "e8dc884b7bad",
+      "updatedAt": "2026-03-12T06:06:56.013Z"
+    },
+    "src/components/KnowledgePanel.tsx": {
+      "hash": "b846dd434975",
+      "updatedAt": "2026-03-12T06:06:56.048Z"
+    },
+    "src/components/LandingFeatures.tsx": {
+      "hash": "7fd5c828ca3c",
+      "updatedAt": "2026-03-12T06:06:56.081Z"
+    },
+    "src/components/LandingHero.tsx": {
+      "hash": "a0bc3b90bb80",
+      "updatedAt": "2026-03-12T06:06:56.114Z"
+    },
+    "src/components/LandingKbot.tsx": {
+      "hash": "457bfb55cf5a",
+      "updatedAt": "2026-03-12T17:54:01.795Z"
+    },
+    "src/components/Layout.tsx": {
+      "hash": "a74fe75cfa69",
+      "updatedAt": "2026-03-12T06:06:56.171Z"
+    },
+    "src/components/LiveShareBadge.tsx": {
+      "hash": "5e84bb7dcd4d",
+      "updatedAt": "2026-03-12T06:06:56.194Z"
+    },
+    "src/components/LoginGate.tsx": {
+      "hash": "b0ed6909b17e",
+      "updatedAt": "2026-03-12T06:06:56.226Z"
+    },
+    "src/components/MasterPlanPanel.tsx": {
+      "hash": "a4a7aa7d2b1c",
+      "updatedAt": "2026-03-12T06:06:56.264Z"
+    },
+    "src/components/MediaRenderer.tsx": {
+      "hash": "672d4874b8fd",
+      "updatedAt": "2026-03-12T06:06:56.308Z"
+    },
+    "src/components/MessageContent.test.ts": {
+      "hash": "fe62448de4c9",
+      "updatedAt": "2026-03-12T06:06:56.355Z"
+    },
+    "src/components/MessageContent.tsx": {
+      "hash": "206ee7834a0c",
+      "updatedAt": "2026-03-12T06:06:56.399Z"
+    },
+    "src/components/MirrorPanel.tsx": {
+      "hash": "68c338e954e4",
+      "updatedAt": "2026-03-12T06:06:56.437Z"
+    },
+    "src/components/MoreMenu.test.tsx": {
+      "hash": "6cb5b2502cba",
+      "updatedAt": "2026-03-12T06:06:56.476Z"
+    },
+    "src/components/MoreMenu.tsx": {
+      "hash": "3f5152cf693d",
+      "updatedAt": "2026-03-12T17:54:01.881Z"
+    },
+    "src/components/MyContentPanel.tsx": {
+      "hash": "6ad5a6cabc9b",
+      "updatedAt": "2026-03-12T06:06:56.555Z"
+    },
+    "src/components/NotificationBell.test.tsx": {
+      "hash": "f67a0115afd1",
+      "updatedAt": "2026-03-12T06:06:56.598Z"
+    },
+    "src/components/NotificationBell.tsx": {
+      "hash": "79c83152eb22",
+      "updatedAt": "2026-03-12T06:06:56.635Z"
+    },
+    "src/components/OnboardingFlow.test.tsx": {
+      "hash": "f9fa5d69f8ab",
+      "updatedAt": "2026-03-12T06:06:56.683Z"
+    },
+    "src/components/OnboardingFlow.tsx": {
+      "hash": "f909e6bd77c5",
+      "updatedAt": "2026-03-12T06:06:56.716Z"
+    },
+    "src/components/OveragePrompt.tsx": {
+      "hash": "e98be70e0ea2",
+      "updatedAt": "2026-03-12T06:06:56.744Z"
+    },
+    "src/components/ParticleGrid.tsx": {
+      "hash": "c544b85d9097",
+      "updatedAt": "2026-03-12T06:06:56.785Z"
+    },
+    "src/components/PlatformPanel.tsx": {
+      "hash": "4dbdfbf821e2",
+      "updatedAt": "2026-03-12T06:06:56.819Z"
+    },
+    "src/components/ProjectPanel.tsx": {
+      "hash": "cfb60fa68fb6",
+      "updatedAt": "2026-03-12T06:06:56.858Z"
+    },
+    "src/components/ProviderStatus.tsx": {
+      "hash": "feeb0a5aab34",
+      "updatedAt": "2026-03-12T06:06:56.894Z"
+    },
+    "src/components/PublishPanel.tsx": {
+      "hash": "4477b53109f6",
+      "updatedAt": "2026-03-12T06:06:56.932Z"
+    },
+    "src/components/RoutingInsightsPanel.tsx": {
+      "hash": "26d1e18237d0",
+      "updatedAt": "2026-03-12T06:06:56.963Z"
+    },
+    "src/components/SandboxPanel.tsx": {
+      "hash": "bc0b4d793832",
+      "updatedAt": "2026-03-12T06:06:56.997Z"
+    },
+    "src/components/ScheduledTasksPanel.tsx": {
+      "hash": "1f69bbcb08fd",
+      "updatedAt": "2026-03-12T06:06:57.034Z"
+    },
+    "src/components/ScoringModal.tsx": {
+      "hash": "2bacf0993706",
+      "updatedAt": "2026-03-12T06:06:57.073Z"
+    },
+    "src/components/SetNewPasswordModal.tsx": {
+      "hash": "618ed6440cfb",
+      "updatedAt": "2026-03-12T06:06:57.107Z"
+    },
+    "src/components/ShareModal.tsx": {
+      "hash": "c2da776846a2",
+      "updatedAt": "2026-03-12T06:06:57.142Z"
+    },
+    "src/components/SocialAdaptPanel.tsx": {
+      "hash": "79e73721f4b4",
+      "updatedAt": "2026-03-12T06:06:57.176Z"
+    },
+    "src/components/SocialAnalyticsCard.tsx": {
+      "hash": "6da6f4034371",
+      "updatedAt": "2026-03-12T06:06:57.213Z"
+    },
+    "src/components/SocialCallbackPage.tsx": {
+      "hash": "3c5aa7dc7840",
+      "updatedAt": "2026-03-12T06:06:57.246Z"
+    },
+    "src/components/SocialMediaPanel.tsx": {
+      "hash": "e5624bf30c45",
+      "updatedAt": "2026-03-12T06:06:57.282Z"
+    },
+    "src/components/SubscriptionGate.tsx": {
+      "hash": "625f5f1050d1",
+      "updatedAt": "2026-03-12T06:06:57.318Z"
+    },
+    "src/components/SystemPanel.tsx": {
+      "hash": "ec803b3fc12b",
+      "updatedAt": "2026-03-12T06:06:57.360Z"
+    },
+    "src/components/TagModal.tsx": {
+      "hash": "ce42d0523a90",
+      "updatedAt": "2026-03-12T06:06:57.396Z"
+    },
+    "src/components/ThinkingBlock.tsx": {
+      "hash": "5eaab4667e08",
+      "updatedAt": "2026-03-12T06:06:57.436Z"
+    },
+    "src/components/UpgradePrompt.tsx": {
+      "hash": "f5a0476cfaa0",
+      "updatedAt": "2026-03-12T06:06:57.460Z"
+    },
+    "src/components/UsageDashboard.tsx": {
+      "hash": "2153860e25cf",
+      "updatedAt": "2026-03-12T06:06:57.497Z"
+    },
+    "src/components/VoiceLoopOverlay.tsx": {
+      "hash": "f9daae7262a5",
+      "updatedAt": "2026-03-12T06:06:57.533Z"
+    },
+    "src/components/WorkflowBuilder.tsx": {
+      "hash": "77737a5b19e3",
+      "updatedAt": "2026-03-12T06:06:57.573Z"
+    },
+    "src/components/WorkflowTimeline.tsx": {
+      "hash": "b5cf04d61fa2",
+      "updatedAt": "2026-03-12T06:06:57.611Z"
+    },
+    "src/components/WorkflowsPanel.tsx": {
+      "hash": "5490a0931605",
+      "updatedAt": "2026-03-12T06:06:57.646Z"
+    },
+    "src/components/WorkspaceSwitcher.tsx": {
+      "hash": "8cfed8a571f8",
+      "updatedAt": "2026-03-12T06:06:57.681Z"
+    },
+    "src/components/discovery/AuthorCard.tsx": {
+      "hash": "eae88cb3f7e8",
+      "updatedAt": "2026-03-12T06:06:57.716Z"
+    },
+    "src/components/discovery/EngagementButtons.tsx": {
+      "hash": "4396d86df395",
+      "updatedAt": "2026-03-12T06:06:57.751Z"
+    },
+    "src/components/discovery/FeedCard.tsx": {
+      "hash": "1ddb25959109",
+      "updatedAt": "2026-03-12T06:06:57.790Z"
+    },
+    "src/components/discovery/FeedTabs.tsx": {
+      "hash": "9e4f26505567",
+      "updatedAt": "2026-03-12T06:06:57.818Z"
+    },
+    "src/components/discovery/SearchBar.tsx": {
+      "hash": "f0155ea03f58",
+      "updatedAt": "2026-03-12T06:06:57.849Z"
+    },
+    "src/components/discovery/TopicGrid.tsx": {
+      "hash": "9acca3992a07",
+      "updatedAt": "2026-03-12T06:06:57.872Z"
+    },
+    "src/components/kernel-agent/ApprovalCard.tsx": {
+      "hash": "763c66b2f23f",
+      "updatedAt": "2026-03-12T06:06:57.905Z"
+    },
+    "src/components/kernel-agent/KGPanel.tsx": {
+      "hash": "07198e63f218",
+      "updatedAt": "2026-03-12T06:06:57.942Z"
+    },
+    "src/components/kernel-agent/KernelAgentChat.tsx": {
+      "hash": "1150d215f329",
+      "updatedAt": "2026-03-12T06:06:57.976Z"
+    },
+    "src/components/kernel-agent/KernelAgentControls.tsx": {
+      "hash": "76e3f510c7b3",
+      "updatedAt": "2026-03-12T06:06:58.012Z"
+    },
+    "src/components/kernel-agent/KernelAgentDrawer.tsx": {
+      "hash": "95389c894ebb",
+      "updatedAt": "2026-03-12T06:06:58.048Z"
+    },
+    "src/components/kernel-agent/KernelAgentGate.tsx": {
+      "hash": "7f9dc5fce555",
+      "updatedAt": "2026-03-12T06:06:58.083Z"
+    },
+    "src/components/kernel-agent/KernelAgentObserver.tsx": {
+      "hash": "cbdf8c5e8d1d",
+      "updatedAt": "2026-03-12T06:06:58.120Z"
+    },
+    "src/components/kernel-agent/KernelAgentPill.tsx": {
+      "hash": "381177d75cf3",
+      "updatedAt": "2026-03-12T06:06:58.153Z"
+    },
+    "src/components/kernel-agent/KernelAgentProvider.tsx": {
+      "hash": "b53a1dd8861b",
+      "updatedAt": "2026-03-12T06:06:58.174Z"
+    },
+    "src/components/kernel-agent/StatsPanel.tsx": {
+      "hash": "0fcaf4bbde67",
+      "updatedAt": "2026-03-12T06:06:58.210Z"
+    },
+    "src/components/kernel-agent/index.ts": {
+      "hash": "69a910d64515",
+      "updatedAt": "2026-03-12T06:06:58.239Z"
+    },
+    "src/config/planLimits.ts": {
+      "hash": "76c8a9b91f48",
+      "updatedAt": "2026-03-12T06:06:58.257Z"
+    },
+    "src/constants/motion.ts": {
+      "hash": "ba7bd20023d5",
+      "updatedAt": "2026-03-12T06:06:58.293Z"
+    },
+    "src/engine/AIEngine.ts": {
+      "hash": "1d77514f22dc",
+      "updatedAt": "2026-03-12T06:06:58.320Z"
+    },
+    "src/engine/AdaptiveEngine.ts": {
+      "hash": "6110a72769fb",
+      "updatedAt": "2026-03-12T06:06:58.355Z"
+    },
+    "src/engine/AgentEngine.ts": {
+      "hash": "7ca1b7d2be6d",
+      "updatedAt": "2026-03-12T06:06:58.392Z"
+    },
+    "src/engine/AgentReflection.ts": {
+      "hash": "8c3f7d3f27ed",
+      "updatedAt": "2026-03-12T06:06:58.426Z"
+    },
+    "src/engine/AgentRouter.test.ts": {
+      "hash": "e84e4ed64198",
+      "updatedAt": "2026-03-12T06:06:58.460Z"
+    },
+    "src/engine/AgentRouter.ts": {
+      "hash": "12d4ad1211d3",
+      "updatedAt": "2026-03-12T06:06:58.491Z"
+    },
+    "src/engine/AgentSelection.test.ts": {
+      "hash": "a1c82f325b92",
+      "updatedAt": "2026-03-12T06:06:58.524Z"
+    },
+    "src/engine/AgentSelection.ts": {
+      "hash": "f27ad10ccb76",
+      "updatedAt": "2026-03-12T06:06:58.556Z"
+    },
+    "src/engine/AgenticWorkflow.ts": {
+      "hash": "2fb2a9f8df24",
+      "updatedAt": "2026-03-12T06:06:58.596Z"
+    },
+    "src/engine/AlgorithmEngine.ts": {
+      "hash": "5216d2f5be0e",
+      "updatedAt": "2026-03-12T06:06:58.632Z"
+    },
+    "src/engine/ArchitectureEngine.ts": {
+      "hash": "4326e870a1f7",
+      "updatedAt": "2026-03-12T06:06:58.667Z"
+    },
+    "src/engine/AutonomousEngine.ts": {
+      "hash": "48423ad3b8d5",
+      "updatedAt": "2026-03-12T06:06:58.702Z"
+    },
+    "src/engine/BriefingGenerator.ts": {
+      "hash": "66b1d6003d3e",
+      "updatedAt": "2026-03-12T06:06:58.737Z"
+    },
+    "src/engine/ClaudeClient.ts": {
+      "hash": "79e849b51cdf",
+      "updatedAt": "2026-03-12T06:06:58.770Z"
+    },
+    "src/engine/CommunicationEngine.ts": {
+      "hash": "edc4df430051",
+      "updatedAt": "2026-03-12T06:06:58.801Z"
+    },
+    "src/engine/ComputerEngine.ts": {
+      "hash": "52e1afa01c81",
+      "updatedAt": "2026-03-12T06:06:58.835Z"
+    },
+    "src/engine/ContentEngine.ts": {
+      "hash": "74634222f1a8",
+      "updatedAt": "2026-03-12T06:06:58.872Z"
+    },
+    "src/engine/ContextPreamble.ts": {
+      "hash": "a35e56574190",
+      "updatedAt": "2026-03-12T06:06:58.905Z"
+    },
+    "src/engine/Convergence.ts": {
+      "hash": "1a8f9809b0ed",
+      "updatedAt": "2026-03-12T06:06:58.938Z"
+    },
+    "src/engine/ConversationSummarizer.ts": {
+      "hash": "9843cfe0f924",
+      "updatedAt": "2026-03-12T06:06:58.975Z"
+    },
+    "src/engine/CrisisDetector.test.ts": {
+      "hash": "ff680759d482",
+      "updatedAt": "2026-03-12T06:06:59.015Z"
+    },
+    "src/engine/CrisisDetector.ts": {
+      "hash": "f7e0406455a3",
+      "updatedAt": "2026-03-12T06:06:59.076Z"
+    },
+    "src/engine/DeepResearch.ts": {
+      "hash": "1be19359c43c",
+      "updatedAt": "2026-03-12T06:06:59.110Z"
+    },
+    "src/engine/DesignEngine.ts": {
+      "hash": "33d1a5f9d44a",
+      "updatedAt": "2026-03-12T06:06:59.152Z"
+    },
+    "src/engine/DiffEngine.ts": {
+      "hash": "f3f4ca3e6077",
+      "updatedAt": "2026-03-12T06:06:59.196Z"
+    },
+    "src/engine/DiscussionMode.ts": {
+      "hash": "a6727dd1f270",
+      "updatedAt": "2026-03-12T06:06:59.236Z"
+    },
+    "src/engine/GoalTracker.test.ts": {
+      "hash": "35793754692c",
+      "updatedAt": "2026-03-12T06:06:59.275Z"
+    },
+    "src/engine/GoalTracker.ts": {
+      "hash": "d596d9819ad7",
+      "updatedAt": "2026-03-12T06:06:59.315Z"
+    },
+    "src/engine/GrowthStage.ts": {
+      "hash": "70391b3bd017",
+      "updatedAt": "2026-03-12T06:06:59.343Z"
+    },
+    "src/engine/GuardianReview.ts": {
+      "hash": "e683e8a5a26e",
+      "updatedAt": "2026-03-12T06:06:59.379Z"
+    },
+    "src/engine/IdentityGraph.ts": {
+      "hash": "aa77f46671e2",
+      "updatedAt": "2026-03-12T06:06:59.412Z"
+    },
+    "src/engine/KnowledgeEngine.ts": {
+      "hash": "19ffa6b4bf69",
+      "updatedAt": "2026-03-12T06:06:59.446Z"
+    },
+    "src/engine/KnowledgeGraph.test.ts": {
+      "hash": "9b66c18ef739",
+      "updatedAt": "2026-03-14T02:37:56.660Z"
+    },
+    "src/engine/KnowledgeGraph.ts": {
+      "hash": "66fdb143e793",
+      "updatedAt": "2026-03-14T02:37:56.704Z"
+    },
+    "src/engine/Loom.ts": {
+      "hash": "f6a9195ed491",
+      "updatedAt": "2026-03-12T06:06:59.551Z"
+    },
+    "src/engine/MasterAgent.ts": {
+      "hash": "357dce27206b",
+      "updatedAt": "2026-03-12T06:06:59.582Z"
+    },
+    "src/engine/MemoryAgent.test.ts": {
+      "hash": "66cc0eb70e0f",
+      "updatedAt": "2026-03-12T06:06:59.619Z"
+    },
+    "src/engine/MemoryAgent.ts": {
+      "hash": "d3ab9774cb07",
+      "updatedAt": "2026-03-12T06:06:59.650Z"
+    },
+    "src/engine/NewAgents.test.ts": {
+      "hash": "affbe6aef9a5",
+      "updatedAt": "2026-03-12T06:06:59.683Z"
+    },
+    "src/engine/OfflineCache.test.ts": {
+      "hash": "9e23142b8381",
+      "updatedAt": "2026-03-12T06:06:59.725Z"
+    },
+    "src/engine/OfflineCache.ts": {
+      "hash": "dd973256d184",
+      "updatedAt": "2026-03-12T06:06:59.761Z"
+    },
+    "src/engine/PlatformEngine.ts": {
+      "hash": "d999b0c3e781",
+      "updatedAt": "2026-03-12T06:06:59.791Z"
+    },
+    "src/engine/PricingEngine.ts": {
+      "hash": "04bc4cb35ef5",
+      "updatedAt": "2026-03-12T06:06:59.822Z"
+    },
+    "src/engine/ProceduralMemory.ts": {
+      "hash": "f242a70c780e",
+      "updatedAt": "2026-03-12T06:06:59.860Z"
+    },
+    "src/engine/Scheduler.test.ts": {
+      "hash": "ec2d4461664b",
+      "updatedAt": "2026-03-12T06:06:59.898Z"
+    },
+    "src/engine/Scheduler.ts": {
+      "hash": "706ce5b28a3d",
+      "updatedAt": "2026-03-12T06:06:59.933Z"
+    },
+    "src/engine/SupabaseClient.ts": {
+      "hash": "2cd0e815c1bd",
+      "updatedAt": "2026-03-12T06:06:59.969Z"
+    },
+    "src/engine/SwarmOrchestrator.ts": {
+      "hash": "451b8e35698e",
+      "updatedAt": "2026-03-12T06:07:00.005Z"
+    },
+    "src/engine/SystemEngine.ts": {
+      "hash": "be7cc0cba00c",
+      "updatedAt": "2026-03-12T06:07:00.040Z"
+    },
+    "src/engine/TaskPlanner.ts": {
+      "hash": "d8bfa0095cdb",
+      "updatedAt": "2026-03-12T06:07:00.072Z"
+    },
+    "src/engine/TemporalPatterns.ts": {
+      "hash": "7550c310fa2d",
+      "updatedAt": "2026-03-12T06:07:00.106Z"
+    },
+    "src/engine/UserTheory.ts": {
+      "hash": "599f88942f45",
+      "updatedAt": "2026-03-12T06:07:00.139Z"
+    },
+    "src/engine/WorldModel.test.ts": {
+      "hash": "8fb052156296",
+      "updatedAt": "2026-03-12T06:07:00.177Z"
+    },
+    "src/engine/WorldModel.ts": {
+      "hash": "68f8e192c538",
+      "updatedAt": "2026-03-12T06:07:00.215Z"
+    },
+    "src/engine/adaptive/types.ts": {
+      "hash": "48c5bda87954",
+      "updatedAt": "2026-03-12T06:07:00.253Z"
+    },
+    "src/engine/agent/types.ts": {
+      "hash": "553d26ed44e7",
+      "updatedAt": "2026-03-12T06:07:00.279Z"
+    },
+    "src/engine/architecture/types.ts": {
+      "hash": "83ac73da08bb",
+      "updatedAt": "2026-03-12T06:07:00.305Z"
+    },
+    "src/engine/attention.test.ts": {
+      "hash": "1e674502be8d",
+      "updatedAt": "2026-03-12T06:07:00.342Z"
+    },
+    "src/engine/attention.ts": {
+      "hash": "1c8ac8926205",
+      "updatedAt": "2026-03-12T06:07:00.375Z"
+    },
+    "src/engine/autonomous/types.ts": {
+      "hash": "18c737652ef5",
+      "updatedAt": "2026-03-12T06:07:00.400Z"
+    },
+    "src/engine/chatFolderAutoSave.ts": {
+      "hash": "6915634ff115",
+      "updatedAt": "2026-03-12T06:07:00.435Z"
+    },
+    "src/engine/clientScoring.ts": {
+      "hash": "ac47a48eec8f",
+      "updatedAt": "2026-03-12T06:07:00.471Z"
+    },
+    "src/engine/communication/types.ts": {
+      "hash": "a0d5f66f7961",
+      "updatedAt": "2026-03-12T06:07:00.500Z"
+    },
+    "src/engine/computer/types.ts": {
+      "hash": "b6e32bad5a4e",
+      "updatedAt": "2026-03-12T06:07:00.532Z"
+    },
+    "src/engine/content/types.ts": {
+      "hash": "fa93b46bbe7f",
+      "updatedAt": "2026-03-12T06:07:00.568Z"
+    },
+    "src/engine/conversationImport.ts": {
+      "hash": "4822d56b6b0e",
+      "updatedAt": "2026-03-12T06:07:00.606Z"
+    },
+    "src/engine/design/types.ts": {
+      "hash": "b02cd631809d",
+      "updatedAt": "2026-03-12T06:07:00.631Z"
+    },
+    "src/engine/fileUtils.ts": {
+      "hash": "894f90672e49",
+      "updatedAt": "2026-03-12T06:07:00.652Z"
+    },
+    "src/engine/imageGen.ts": {
+      "hash": "5e673db2cbb6",
+      "updatedAt": "2026-03-12T06:07:00.684Z"
+    },
+    "src/engine/knowledge/chunker.ts": {
+      "hash": "36ef652f63b2",
+      "updatedAt": "2026-03-12T06:07:00.715Z"
+    },
+    "src/engine/knowledge/ingester.ts": {
+      "hash": "e8eb71bbee82",
+      "updatedAt": "2026-03-12T06:07:00.749Z"
+    },
+    "src/engine/knowledge/retriever.ts": {
+      "hash": "90b9c3d7ad0b",
+      "updatedAt": "2026-03-12T06:07:00.786Z"
+    },
+    "src/engine/knowledge/types.ts": {
+      "hash": "86ea37e56003",
+      "updatedAt": "2026-03-12T06:07:00.818Z"
+    },
+    "src/engine/master/registry.ts": {
+      "hash": "afec538869fd",
+      "updatedAt": "2026-03-12T06:07:00.854Z"
+    },
+    "src/engine/master/types.ts": {
+      "hash": "b4fff487f170",
+      "updatedAt": "2026-03-12T06:07:00.887Z"
+    },
+    "src/engine/perception.test.ts": {
+      "hash": "5c478bb88359",
+      "updatedAt": "2026-03-12T06:07:00.923Z"
+    },
+    "src/engine/perception.ts": {
+      "hash": "96e2c1a211c4",
+      "updatedAt": "2026-03-12T06:07:00.959Z"
+    },
+    "src/engine/platform/types.ts": {
+      "hash": "14989f04adba",
+      "updatedAt": "2026-03-12T06:07:00.992Z"
+    },
+    "src/engine/pricing/types.ts": {
+      "hash": "895c7d2f80a8",
+      "updatedAt": "2026-03-12T06:07:01.023Z"
+    },
+    "src/engine/providers/anthropic.ts": {
+      "hash": "a1356a4aa967",
+      "updatedAt": "2026-03-12T06:07:01.049Z"
+    },
+    "src/engine/providers/gemini.ts": {
+      "hash": "c0c1d60fdaea",
+      "updatedAt": "2026-03-12T06:07:01.075Z"
+    },
+    "src/engine/providers/groq.ts": {
+      "hash": "0917b438c6b4",
+      "updatedAt": "2026-03-12T06:07:01.102Z"
+    },
+    "src/engine/providers/nvidia.ts": {
+      "hash": "353747257148",
+      "updatedAt": "2026-03-12T06:07:01.129Z"
+    },
+    "src/engine/providers/ollama.ts": {
+      "hash": "b88c79306556",
+      "updatedAt": "2026-03-12T06:07:01.163Z"
+    },
+    "src/engine/providers/openai.ts": {
+      "hash": "4322e857b5fb",
+      "updatedAt": "2026-03-12T06:07:01.198Z"
+    },
+    "src/engine/providers/proxy.ts": {
+      "hash": "c40d4db16319",
+      "updatedAt": "2026-03-12T06:07:01.231Z"
+    },
+    "src/engine/providers/registry.ts": {
+      "hash": "b7ce25c39c8a",
+      "updatedAt": "2026-03-12T06:07:01.276Z"
+    },
+    "src/engine/providers/types.ts": {
+      "hash": "d1feb24c671c",
+      "updatedAt": "2026-03-12T06:07:01.316Z"
+    },
+    "src/engine/reflection.test.ts": {
+      "hash": "445a93961d82",
+      "updatedAt": "2026-03-12T06:07:01.352Z"
+    },
+    "src/engine/reflection.ts": {
+      "hash": "1681bb270347",
+      "updatedAt": "2026-03-12T06:07:01.391Z"
+    },
+    "src/engine/security.test.ts": {
+      "hash": "3629fd72b8af",
+      "updatedAt": "2026-03-12T06:07:01.437Z"
+    },
+    "src/engine/social/types.ts": {
+      "hash": "2f00365efa81",
+      "updatedAt": "2026-03-12T06:07:01.468Z"
+    },
+    "src/engine/system/types.ts": {
+      "hash": "1830d95433fe",
+      "updatedAt": "2026-03-12T06:07:01.491Z"
+    },
+    "src/engine/textAnalysis.test.ts": {
+      "hash": "f18537847bee",
+      "updatedAt": "2026-03-12T06:07:01.526Z"
+    },
+    "src/engine/textAnalysis.ts": {
+      "hash": "c80fe569036a",
+      "updatedAt": "2026-03-12T06:07:01.564Z"
+    },
+    "src/engine/tools/approval.ts": {
+      "hash": "85ab1128f56a",
+      "updatedAt": "2026-03-12T06:07:01.595Z"
+    },
+    "src/engine/tools/executor.ts": {
+      "hash": "3a936dbaa773",
+      "updatedAt": "2026-03-12T06:07:01.636Z"
+    },
+    "src/engine/tools/index.ts": {
+      "hash": "67013c07656e",
+      "updatedAt": "2026-03-12T06:07:01.657Z"
+    },
+    "src/engine/tools/kbot-bridge.ts": {
+      "hash": "d83fdaab1d4c",
+      "updatedAt": "2026-03-12T06:07:01.693Z"
+    },
+    "src/engine/tools/mcp.ts": {
+      "hash": "69adca8c77ef",
+      "updatedAt": "2026-03-12T06:07:01.718Z"
+    },
+    "src/engine/tools/memory.ts": {
+      "hash": "83a7299210e6",
+      "updatedAt": "2026-03-12T06:07:01.746Z"
+    },
+    "src/engine/tools/registry.test.ts": {
+      "hash": "39cca2385bdb",
+      "updatedAt": "2026-03-12T06:07:01.782Z"
+    },
+    "src/engine/tools/registry.ts": {
+      "hash": "aced2cf7f7cb",
+      "updatedAt": "2026-03-12T06:07:01.808Z"
+    },
+    "src/engine/tools/toolRAG.test.ts": {
+      "hash": "acaa3ec1fec0",
+      "updatedAt": "2026-03-12T06:07:01.847Z"
+    },
+    "src/engine/tools/toolRAG.ts": {
+      "hash": "4e30ac2741b2",
+      "updatedAt": "2026-03-12T06:07:01.880Z"
+    },
+    "src/engine/tools/types.ts": {
+      "hash": "5c30c1cf4dc7",
+      "updatedAt": "2026-03-12T06:07:01.902Z"
+    },
+    "src/engine/transcribe.ts": {
+      "hash": "cd1dbc82756d",
+      "updatedAt": "2026-03-12T06:07:01.928Z"
+    },
+    "src/engine/types.ts": {
+      "hash": "2d0f51a1fb77",
+      "updatedAt": "2026-03-12T06:07:01.965Z"
+    },
+    "src/hooks/useAccountSettings.ts": {
+      "hash": "38de04498f4f",
+      "updatedAt": "2026-03-12T06:07:01.997Z"
+    },
+    "src/hooks/useAdaptiveEngine.ts": {
+      "hash": "2cc65ff696cf",
+      "updatedAt": "2026-03-12T06:07:02.028Z"
+    },
+    "src/hooks/useAgentEngine.ts": {
+      "hash": "8e9fcfd637ae",
+      "updatedAt": "2026-03-12T06:07:02.061Z"
+    },
+    "src/hooks/useApiKeys.ts": {
+      "hash": "ad6929648db4",
+      "updatedAt": "2026-03-12T06:07:02.097Z"
+    },
+    "src/hooks/useAuth.ts": {
+      "hash": "d7c573cf961c",
+      "updatedAt": "2026-03-12T06:07:02.131Z"
+    },
+    "src/hooks/useAutonomousEngine.ts": {
+      "hash": "9eb5e86b3057",
+      "updatedAt": "2026-03-12T06:07:02.162Z"
+    },
+    "src/hooks/useBilling.ts": {
+      "hash": "edff07f20da4",
+      "updatedAt": "2026-03-12T17:54:01.997Z"
+    },
+    "src/hooks/useChatEngine.ts": {
+      "hash": "3563f1ef32df",
+      "updatedAt": "2026-03-12T17:54:02.057Z"
+    },
+    "src/hooks/useColorCycle.ts": {
+      "hash": "29eaca59bfa7",
+      "updatedAt": "2026-03-12T06:07:02.266Z"
+    },
+    "src/hooks/useCommunicationEngine.ts": {
+      "hash": "94c3d7e421c6",
+      "updatedAt": "2026-03-12T06:07:02.298Z"
+    },
+    "src/hooks/useCompanionMood.test.ts": {
+      "hash": "2f57079a8e0d",
+      "updatedAt": "2026-03-12T06:07:02.336Z"
+    },
+    "src/hooks/useCompanionMood.ts": {
+      "hash": "b3340a69378f",
+      "updatedAt": "2026-03-12T06:07:02.368Z"
+    },
+    "src/hooks/useComputerEngine.ts": {
+      "hash": "6c862008821d",
+      "updatedAt": "2026-03-12T06:07:02.401Z"
+    },
+    "src/hooks/useContentEngine.ts": {
+      "hash": "0a62900ae65d",
+      "updatedAt": "2026-03-12T06:07:02.448Z"
+    },
+    "src/hooks/useConversations.ts": {
+      "hash": "02416fbb1a97",
+      "updatedAt": "2026-03-12T06:07:02.478Z"
+    },
+    "src/hooks/useCrisisDetection.ts": {
+      "hash": "5ff1e58c2e89",
+      "updatedAt": "2026-03-12T06:07:02.503Z"
+    },
+    "src/hooks/useDarkMode.test.ts": {
+      "hash": "87d841798155",
+      "updatedAt": "2026-03-12T06:07:02.538Z"
+    },
+    "src/hooks/useDarkMode.ts": {
+      "hash": "a50283a9dd74",
+      "updatedAt": "2026-03-12T06:07:02.561Z"
+    },
+    "src/hooks/useDiscovery.ts": {
+      "hash": "022a9d76430f",
+      "updatedAt": "2026-03-12T06:07:02.595Z"
+    },
+    "src/hooks/useDrawerTabs.ts": {
+      "hash": "cf65adfe6f99",
+      "updatedAt": "2026-03-12T06:07:02.614Z"
+    },
+    "src/hooks/useEntityEvolution.test.ts": {
+      "hash": "50ffcb86bd92",
+      "updatedAt": "2026-03-12T06:07:02.654Z"
+    },
+    "src/hooks/useEntityEvolution.ts": {
+      "hash": "9d70ab8fc345",
+      "updatedAt": "2026-03-12T06:07:02.696Z"
+    },
+    "src/hooks/useFeatureDiscovery.ts": {
+      "hash": "447146bc295c",
+      "updatedAt": "2026-03-12T06:07:02.740Z"
+    },
+    "src/hooks/useFeatureTour.ts": {
+      "hash": "c4306be80b61",
+      "updatedAt": "2026-03-12T06:07:02.768Z"
+    },
+    "src/hooks/useFileAttachments.ts": {
+      "hash": "9e2f3913e5ca",
+      "updatedAt": "2026-03-12T06:07:02.801Z"
+    },
+    "src/hooks/useFolders.ts": {
+      "hash": "b3526041c8f7",
+      "updatedAt": "2026-03-12T06:07:02.837Z"
+    },
+    "src/hooks/useIdentityRecovery.ts": {
+      "hash": "5997e81f8eba",
+      "updatedAt": "2026-03-12T06:07:02.873Z"
+    },
+    "src/hooks/useKernel.ts": {
+      "hash": "6b1a781103f1",
+      "updatedAt": "2026-03-12T06:07:02.904Z"
+    },
+    "src/hooks/useKernelAgent.ts": {
+      "hash": "f08b430d2a6d",
+      "updatedAt": "2026-03-12T06:07:02.940Z"
+    },
+    "src/hooks/useKeyboardHeight.ts": {
+      "hash": "d8dfd6e27ba1",
+      "updatedAt": "2026-03-12T06:07:02.965Z"
+    },
+    "src/hooks/useKnowledgeEngine.ts": {
+      "hash": "295fbe0c1e25",
+      "updatedAt": "2026-03-12T06:07:02.996Z"
+    },
+    "src/hooks/useLiveShare.ts": {
+      "hash": "d07487801a78",
+      "updatedAt": "2026-03-12T06:07:03.030Z"
+    },
+    "src/hooks/useMasterAgent.ts": {
+      "hash": "89bc39c7484d",
+      "updatedAt": "2026-03-12T06:07:03.062Z"
+    },
+    "src/hooks/useMessageActions.ts": {
+      "hash": "d17dc746d54c",
+      "updatedAt": "2026-03-12T06:07:03.094Z"
+    },
+    "src/hooks/useMessageUsage.ts": {
+      "hash": "635945b0b29e",
+      "updatedAt": "2026-03-12T06:07:03.121Z"
+    },
+    "src/hooks/useMiniPhone.ts": {
+      "hash": "b6541f7669b2",
+      "updatedAt": "2026-03-12T06:07:03.142Z"
+    },
+    "src/hooks/useNativePush.ts": {
+      "hash": "8abcecffb030",
+      "updatedAt": "2026-03-12T06:07:03.173Z"
+    },
+    "src/hooks/useNotificationPrefs.test.ts": {
+      "hash": "8fc6f4eba011",
+      "updatedAt": "2026-03-12T06:07:03.208Z"
+    },
+    "src/hooks/useNotificationPrefs.ts": {
+      "hash": "9c928ebe19d3",
+      "updatedAt": "2026-03-12T06:07:03.236Z"
+    },
+    "src/hooks/useOverlayHistory.ts": {
+      "hash": "4366df42e8ff",
+      "updatedAt": "2026-03-12T06:07:03.275Z"
+    },
+    "src/hooks/usePWAInstall.test.ts": {
+      "hash": "7b0d07dbb7e1",
+      "updatedAt": "2026-03-12T06:07:03.311Z"
+    },
+    "src/hooks/usePWAInstall.ts": {
+      "hash": "d06ced289147",
+      "updatedAt": "2026-03-12T06:07:03.337Z"
+    },
+    "src/hooks/usePanelManager.ts": {
+      "hash": "76c485469d4d",
+      "updatedAt": "2026-03-12T17:54:02.141Z"
+    },
+    "src/hooks/usePlatformEngine.ts": {
+      "hash": "0227124ea6a3",
+      "updatedAt": "2026-03-12T06:07:03.398Z"
+    },
+    "src/hooks/usePricingEngine.ts": {
+      "hash": "75fb13ef6d02",
+      "updatedAt": "2026-03-12T06:07:03.422Z"
+    },
+    "src/hooks/useProviderHealth.ts": {
+      "hash": "bc2983e14da8",
+      "updatedAt": "2026-03-12T06:07:03.454Z"
+    },
+    "src/hooks/useScrollTracking.ts": {
+      "hash": "c346353fd46c",
+      "updatedAt": "2026-03-12T06:07:03.479Z"
+    },
+    "src/hooks/useServiceWorkerUpdate.ts": {
+      "hash": "59eb93e4bd87",
+      "updatedAt": "2026-03-12T06:07:03.511Z"
+    },
+    "src/hooks/useSocialCallback.ts": {
+      "hash": "4fa53f27963b",
+      "updatedAt": "2026-03-12T06:07:03.545Z"
+    },
+    "src/hooks/useSocialMedia.ts": {
+      "hash": "277d53517efc",
+      "updatedAt": "2026-03-12T06:07:03.583Z"
+    },
+    "src/hooks/useTheme.ts": {
+      "hash": "60c73289d3cd",
+      "updatedAt": "2026-03-12T06:07:03.614Z"
+    },
+    "src/hooks/useToast.ts": {
+      "hash": "b6b22f06fbe9",
+      "updatedAt": "2026-03-12T06:07:03.631Z"
+    },
+    "src/hooks/useUserFiles.ts": {
+      "hash": "e65107a9a59d",
+      "updatedAt": "2026-03-12T06:07:03.669Z"
+    },
+    "src/hooks/useVoiceInput.ts": {
+      "hash": "f01c424f12f8",
+      "updatedAt": "2026-03-13T02:02:14.768Z"
+    },
+    "src/hooks/useVoiceLoop.ts": {
+      "hash": "28a31c19d256",
+      "updatedAt": "2026-03-12T06:07:03.737Z"
+    },
+    "src/hooks/useVoiceOutput.ts": {
+      "hash": "03d1cc3684f5",
+      "updatedAt": "2026-03-12T06:07:03.775Z"
+    },
+    "src/hooks/useWebPush.ts": {
+      "hash": "4a46eb4efc5f",
+      "updatedAt": "2026-03-12T06:07:03.808Z"
+    },
+    "src/hooks/useWorkspace.ts": {
+      "hash": "b3c7050a41a7",
+      "updatedAt": "2026-03-12T06:07:03.840Z"
+    },
+    "src/i18n.ts": {
+      "hash": "00dea5777c83",
+      "updatedAt": "2026-03-12T06:07:03.875Z"
+    },
+    "src/main.tsx": {
+      "hash": "4a81e50122af",
+      "updatedAt": "2026-03-12T06:07:03.913Z"
+    },
+    "src/pages/AdminPage.tsx": {
+      "hash": "cba32cb05a1c",
+      "updatedAt": "2026-03-12T06:07:03.946Z"
+    },
+    "src/pages/ApiDocsPage.tsx": {
+      "hash": "0e72099b85e1",
+      "updatedAt": "2026-03-12T06:07:03.981Z"
+    },
+    "src/pages/AuthorProfilePage.tsx": {
+      "hash": "b90d8da83f62",
+      "updatedAt": "2026-03-12T06:07:04.017Z"
+    },
+    "src/pages/BriefingPage.tsx": {
+      "hash": "9677cc33098f",
+      "updatedAt": "2026-03-12T06:07:04.057Z"
+    },
+    "src/pages/EnginePage.tsx": {
+      "hash": "01b3199eca1c",
+      "updatedAt": "2026-03-12T17:54:02.195Z"
+    },
+    "src/pages/ExplorePage.tsx": {
+      "hash": "95bc8ab18b7f",
+      "updatedAt": "2026-03-12T06:07:04.123Z"
+    },
+    "src/pages/LiveSharePage.tsx": {
+      "hash": "e6f91fb188db",
+      "updatedAt": "2026-03-12T06:07:04.155Z"
+    },
+    "src/pages/PricingPage.tsx": {
+      "hash": "755fcbd85936",
+      "updatedAt": "2026-03-12T17:54:02.235Z"
+    },
+    "src/pages/PrivacyPage.tsx": {
+      "hash": "76b9bd6a9bf8",
+      "updatedAt": "2026-03-12T06:07:04.227Z"
+    },
+    "src/pages/PublishedContentPage.tsx": {
+      "hash": "3896b08826e1",
+      "updatedAt": "2026-03-12T06:07:04.266Z"
+    },
+    "src/pages/SharedConversationPage.tsx": {
+      "hash": "57b498e5b7fb",
+      "updatedAt": "2026-03-12T06:07:04.298Z"
+    },
+    "src/pages/TerminalPage.tsx": {
+      "hash": "3b4821b779e6",
+      "updatedAt": "2026-03-12T06:07:04.332Z"
+    },
+    "src/pages/TermsPage.tsx": {
+      "hash": "2ec9a23ed454",
+      "updatedAt": "2026-03-12T06:07:04.363Z"
+    },
+    "src/pages/WorkspaceAdminPage.tsx": {
+      "hash": "ea48459805b3",
+      "updatedAt": "2026-03-12T06:07:04.398Z"
+    },
+    "src/providers/AuthProvider.tsx": {
+      "hash": "938b80aa5081",
+      "updatedAt": "2026-03-12T06:07:04.417Z"
+    },
+    "src/router.tsx": {
+      "hash": "3669521d9066",
+      "updatedAt": "2026-03-12T06:07:04.454Z"
+    },
+    "src/setupTests.ts": {
+      "hash": "2c271435e60d",
+      "updatedAt": "2026-03-12T06:07:04.477Z"
+    },
+    "src/stores/adaptiveStore.ts": {
+      "hash": "fade50181b2b",
+      "updatedAt": "2026-03-12T06:07:04.509Z"
+    },
+    "src/stores/agentStore.ts": {
+      "hash": "e872a309c355",
+      "updatedAt": "2026-03-12T06:07:04.542Z"
+    },
+    "src/stores/autonomousStore.ts": {
+      "hash": "1ccc9e8517a9",
+      "updatedAt": "2026-03-12T06:07:04.574Z"
+    },
+    "src/stores/communicationStore.ts": {
+      "hash": "f6a01e7c9654",
+      "updatedAt": "2026-03-12T06:07:04.607Z"
+    },
+    "src/stores/companionStore.ts": {
+      "hash": "f54de5f5ce76",
+      "updatedAt": "2026-03-12T06:07:04.638Z"
+    },
+    "src/stores/computerStore.ts": {
+      "hash": "a53d4c389154",
+      "updatedAt": "2026-03-12T06:07:04.671Z"
+    },
+    "src/stores/contentStore.ts": {
+      "hash": "726c7d366942",
+      "updatedAt": "2026-03-12T06:07:04.702Z"
+    },
+    "src/stores/discoveryStore.ts": {
+      "hash": "b1884150cc0e",
+      "updatedAt": "2026-03-12T06:07:04.735Z"
+    },
+    "src/stores/knowledgeStore.ts": {
+      "hash": "2cd9e130306a",
+      "updatedAt": "2026-03-12T06:07:04.761Z"
+    },
+    "src/stores/masterStore.ts": {
+      "hash": "820f059e6e05",
+      "updatedAt": "2026-03-12T06:07:04.792Z"
+    },
+    "src/stores/platformStore.ts": {
+      "hash": "e34409877e60",
+      "updatedAt": "2026-03-12T06:07:04.824Z"
+    },
+    "src/stores/pricingStore.ts": {
+      "hash": "2aaa61bcea62",
+      "updatedAt": "2026-03-12T06:07:04.848Z"
+    },
+    "src/stores/projectStore.test.ts": {
+      "hash": "ba526372b5c4",
+      "updatedAt": "2026-03-12T06:07:04.891Z"
+    },
+    "src/stores/projectStore.ts": {
+      "hash": "eace5ea83945",
+      "updatedAt": "2026-03-12T06:07:04.928Z"
+    },
+    "src/stores/socialStore.ts": {
+      "hash": "e2ee3ed681ea",
+      "updatedAt": "2026-03-12T06:07:04.964Z"
+    },
+    "src/sw.ts": {
+      "hash": "050eb59db7e3",
+      "updatedAt": "2026-03-12T06:07:04.996Z"
+    },
+    "src/types/index.ts": {
+      "hash": "8464725b319e",
+      "updatedAt": "2026-03-12T06:07:05.017Z"
+    },
+    "src/utils/briefingHelpers.test.ts": {
+      "hash": "6df634b43ea8",
+      "updatedAt": "2026-03-12T06:07:05.052Z"
+    },
+    "src/utils/briefingHelpers.ts": {
+      "hash": "1e9d83a949c5",
+      "updatedAt": "2026-03-12T06:07:05.085Z"
+    },
+    "src/utils/lazyRetry.ts": {
+      "hash": "13445b3676a6",
+      "updatedAt": "2026-03-12T06:07:05.113Z"
+    },
+    "src/utils/markdown.ts": {
+      "hash": "0bb095540869",
+      "updatedAt": "2026-03-12T06:07:05.154Z"
+    },
+    "src/utils/platform.ts": {
+      "hash": "dd62eb411437",
+      "updatedAt": "2026-03-12T06:07:05.177Z"
+    },
+    "src/vite-env.d.ts": {
+      "hash": "9c9983449a16",
+      "updatedAt": "2026-03-12T06:07:05.201Z"
+    },
+    "src/agents/kernel.test.ts": {
+      "hash": "d3d7efab6050",
+      "updatedAt": "2026-03-12T17:54:01.573Z"
+    },
+    "src/agents/specialists.test.ts": {
+      "hash": "2affea62c605",
+      "updatedAt": "2026-03-12T17:54:01.611Z"
+    },
+    "src/components/MemoryPanel.tsx": {
+      "hash": "18cf0edf0d2a",
+      "updatedAt": "2026-03-12T17:54:01.834Z"
+    }
+  },
+  "i18nProgress": {},
+  "stats": {
+    "totalRuns": 169,
+    "totalTokens": 320549,
+    "lastOllamaStatus": "up",
+    "errorsToday": 0,
+    "lastErrorDate": "2026-03-14"
+  }
+}

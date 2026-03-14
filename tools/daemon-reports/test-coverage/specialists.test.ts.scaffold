@@ -1,0 +1,69 @@
+// Scaffold for: src/agents/specialists.ts
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-03-12T06:05:59.445Z
+// Model: qwen2.5-coder:14b
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { PERSONALITY_PREAMBLE, EXPLAIN_MODE_SUFFIX, ARTIFACT_RULES, SPECIALISTS } from './yourFileName' // Replace with actual file name
+
+describe('PERSONALITY_PREAMBLE', () => {
+  it('should contain the correct personality rules', () => {
+    expect(PERSONALITY_PREAMBLE).toContain('You are the Kernel — a personal AI at kernel.chat.')
+    expect(PERSONALITY_PREAMBLE).toContain('YOUR VOICE:')
+    expect(PERSONALITY_PREAMBLE).toContain('ATTUNEMENT RULES:')
+  })
+})
+
+describe('EXPLAIN_MODE_SUFFIX', () => {
+  it('should contain the correct explain mode rules', () => {
+    expect(EXPLAIN_MODE_SUFFIX).toContain('EXPLAIN MODE IS ACTIVE — LEARNING-FIRST GENERATION')
+    expect(EXPLAIN_MODE_SUFFIX).toContain('1. BEFORE the code:')
+    expect(EXPLAIN_MODE_SUFFIX).toContain('2. INSIDE the code:')
+    expect(EXPLAIN_MODE_SUFFIX).toContain('3. AFTER the code:')
+  })
+})
+
+describe('ARTIFACT_RULES', () => {
+  it('should contain the correct artifact rules', () => {
+    expect(ARTIFACT_RULES).toContain('FILE ARTIFACTS — MANDATORY OUTPUT FORMAT:')
+    expect(ARTIFACT_RULES).toContain('Every complete file MUST use `language:filename.ext` as the opening fence.')
+    expect(ARTIFACT_RULES).toContain('WRONG: Describing a file without producing it.')
+  })
+})
+
+describe('SPECIALISTS', () => {
+  it('should have the correct kernel specialist', () => {
+    expect(SPECIALISTS.kernel).toEqual({
+      id: 'kernel',
+      name: 'Kernel',
+      icon: 'K',
+      emblem: 'concepts/emblem-kernel.svg',
+      color: '#6B5B95',
+      systemPrompt: KERNEL_AGENT.systemPrompt,
+    })
+  })
+
+  it('should have the correct researcher specialist', () => {
+    expect(SPECIALISTS.researcher).toEqual({
+      id: 'researcher',
+      name: 'Researcher',
+      icon: 'R',
+      emblem: 'concepts/emblem-researcher.svg',
+      color: '#5B8BA0',
+      systemPrompt: expect.any(String),
+    })
+  })
+
+  it('should have the correct coder specialist', () => {
+    expect(SPECIALISTS.coder).toEqual({
+      id: 'coder',
+      name: 'Coder',
+      icon: 'C',
+      emblem: 'concepts/emblem-coder.svg',
+      color: '#6B8E6B',
+      systemPrompt: expect.any(String),
+    })
+  })
+})
+```
