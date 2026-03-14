@@ -43,10 +43,11 @@ import {
   setQuiet,
 } from './ui.js'
 import { checkForUpdate, selfUpdate } from './updater.js'
+import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.11.0'
+const VERSION = '2.13.0'
 
 async function main(): Promise<void> {
   const program = new Command()
@@ -258,82 +259,11 @@ async function main(): Promise<void> {
     .command('doctor')
     .description('Diagnose your kbot setup — check everything is working')
     .action(async () => {
+      const { runDoctor, formatDoctorReport } = await import('./doctor.js')
       process.stderr.write('\n')
       printInfo('K:BOT Doctor — Checking your setup...')
-      process.stderr.write('\n')
-
-      // 1. Check BYOK provider
-      const config = loadConfig()
-      if (config?.byok_enabled && config?.byok_provider) {
-        const p = PROVIDERS[config.byok_provider]
-        printSuccess(`BYOK provider: ${p?.name || config.byok_provider}`)
-      }
-
-      // 3. Check Ollama
-      const ollamaUp = await isOllamaRunning()
-      if (ollamaUp) {
-        const models = await listOllamaModels()
-        printSuccess(`Ollama: running (${models.length} models)`)
-        for (const m of models) printInfo(`    ${m}`)
-      } else {
-        printInfo('  Ollama: not running (optional — run: ollama serve)')
-      }
-
-      // 4. Check OpenClaw
-      try {
-        const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(2000) })
-        if (res.ok) {
-          printSuccess('OpenClaw: gateway running at 127.0.0.1:18789')
-        } else {
-          printInfo('  OpenClaw: gateway not responding (optional)')
-        }
-      } catch {
-        printInfo('  OpenClaw: gateway offline (optional — run: openclaw-cmd start)')
-      }
-
-      // 5. Check Docker (for sandbox tools)
-      try {
-        const { execSync } = await import('node:child_process')
-        execSync('docker info', { timeout: 5000, stdio: 'pipe' })
-        printSuccess('Docker: running (sandbox execution available)')
-      } catch {
-        printInfo('  Docker: not running (optional — needed for sandbox_run)')
-      }
-
-      // 6. Check git
-      try {
-        const { execSync } = await import('node:child_process')
-        const ver = execSync('git --version', { encoding: 'utf-8', timeout: 3000 }).trim()
-        printSuccess(`Git: ${ver}`)
-      } catch {
-        printError('Git: not found (needed for git tools)')
-      }
-
-      // 7. Check Node.js version
-      printSuccess(`Node.js: ${process.version}`)
-
-      // 8. Check config directory
-      const { existsSync } = await import('node:fs')
-      const { homedir } = await import('node:os')
-      const { join } = await import('node:path')
-      const kbotDir = join(homedir(), '.kbot')
-      if (existsSync(kbotDir)) {
-        printSuccess(`Config: ${kbotDir}`)
-      } else {
-        printInfo(`  Config directory will be created at: ${kbotDir}`)
-      }
-
-      process.stderr.write('\n')
-      // Summary
-      const hasProvider = !!((config?.byok_enabled && config?.byok_provider) || ollamaUp)
-      if (hasProvider) {
-        printSuccess('Ready to go! Run: kbot')
-      } else {
-        printInfo('Get started with one of:')
-        printInfo('  kbot local    — Free local AI')
-        printInfo('  kbot byok      — Use your own API key')
-      }
-      process.stderr.write('\n')
+      const report = await runDoctor()
+      process.stderr.write(formatDoctorReport(report))
     })
 
   program
@@ -552,6 +482,30 @@ async function main(): Promise<void> {
       }
     })
 
+  program
+    .command('changelog')
+    .description('Generate a changelog from git history (outputs markdown to stdout)')
+    .option('--since <ref>', 'Git ref to start from (tag, commit, branch)')
+    .action(async (changelogOpts: { since?: string }) => {
+      const { generateChangelog } = await import('./changelog.js')
+      const md = generateChangelog({ since: changelogOpts.since, format: 'markdown' })
+      process.stdout.write(md)
+    })
+
+  program
+    .command('completions')
+    .description('Generate shell tab-completion script (bash, zsh, fish)')
+    .argument('<shell>', 'Shell type: bash, zsh, or fish')
+    .action(async (shell: string) => {
+      const validShells = ['bash', 'zsh', 'fish'] as const
+      if (!validShells.includes(shell as typeof validShells[number])) {
+        printError(`Unknown shell: ${shell}. Use: bash, zsh, or fish`)
+        process.exit(1)
+      }
+      const { generateCompletions } = await import('./completions.js')
+      process.stdout.write(generateCompletions(shell as 'bash' | 'zsh' | 'fish'))
+    })
+
   program.parse(process.argv)
 
   const opts = program.opts()
@@ -561,7 +515,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1360,46 +1314,7 @@ async function handleSlashCommand(
       break
 
     case 'tutorial': {
-      console.log()
-      console.log(chalk.bold('  Let\'s build something together. Pick a track:'))
-      console.log()
-      console.log(`  ${chalk.bold('1.')} ${chalk.hex('#4ADE80')('Build a website')}     — Create an HTML page from scratch`)
-      console.log(`  ${chalk.bold('2.')} ${chalk.hex('#60A5FA')('Fix a bug')}           — Find and fix a problem in code`)
-      console.log(`  ${chalk.bold('3.')} ${chalk.hex('#FB923C')('Write a script')}      — Automate something with Python or JavaScript`)
-      console.log(`  ${chalk.bold('4.')} ${chalk.hex('#F472B6')('Research a topic')}    — Deep-dive into any subject`)
-      console.log(`  ${chalk.bold('5.')} ${chalk.hex('#A78BFA')('Explore this project')} — Understand the code in this folder`)
-      console.log()
-      console.log(chalk.dim('  Pick a number, or just type what you want to build.'))
-      console.log()
-
-      const tutorialInput = await new Promise<string>((resolve) => {
-        rl.question('  Your choice: ', (answer) => resolve(answer.trim()))
-      })
-
-      const tutorialPrompts: Record<string, string> = {
-        '1': 'Create a simple, beautiful HTML page with a heading, a paragraph about me, and some CSS styling. Save it as index.html. Walk me through what each part does.',
-        '2': 'Look at the files in this directory. Find any issues, bugs, or things that could be improved. Explain what you found and fix the most important one.',
-        '3': 'Write a short script that lists all files in the current directory, sorted by size. Use the language that makes the most sense for this project. Explain each line.',
-        '4': 'I want to understand how AI agents work. Research this topic and explain it simply — what are agents, how do they think, and what tools do they use? Give real examples.',
-        '5': 'Explore this project directory. What language is it written in? What does it do? What are the most important files? Give me a quick tour.',
-      }
-
-      const prompt = tutorialPrompts[tutorialInput] || tutorialInput
-      if (prompt) {
-        console.log()
-        printInfo('Great choice! Let me work on that...')
-        console.log()
-        try {
-          const response = await runAgent(prompt, opts)
-          if (!response.streamed) {
-            printResponse(response.agent, response.content)
-          }
-          console.log()
-          printInfo(chalk.dim('That\'s the basics! Keep asking questions — I learn from every conversation.'))
-        } catch (err) {
-          printError(err instanceof Error ? err.message : String(err))
-        }
-      }
+      await runTutorial(rl)
       break
     }
 
@@ -1621,6 +1536,49 @@ async function handleSlashCommand(
         printInfo('Top elites:')
         for (const e of stats.topElites.slice(0, 5)) {
           printInfo(`  fitness=${e.fitness.toFixed(3)} tools=${e.pattern.toolSequence.join('→')} uses=${e.metadata.uses}`)
+        }
+      }
+      break
+    }
+
+    case 'evolve': {
+      const sub = args[0]
+      if (sub === 'status') {
+        const { formatEvolutionStatus } = await import('./evolution.js')
+        console.log(formatEvolutionStatus())
+      } else if (sub === 'diagnose') {
+        const { diagnose, formatDiagnosis } = await import('./evolution.js')
+        const weaknesses = diagnose()
+        console.log(formatDiagnosis(weaknesses))
+      } else if (sub === 'log') {
+        const { getEvolutionLog } = await import('./evolution.js')
+        const log = getEvolutionLog()
+        if (log.length === 0) {
+          printInfo('No evolution cycles recorded yet. Run /evolve to start one.')
+        } else {
+          for (const cycle of log.slice(-5)) {
+            const applied = cycle.results.filter(r => r.status === 'applied').length
+            const rolled = cycle.results.filter(r => r.status === 'rolled-back').length
+            printInfo(`${cycle.id}  ${cycle.status}  applied=${applied} rolled-back=${rolled}  ${cycle.startedAt}`)
+          }
+        }
+      } else {
+        // Run a full evolution cycle
+        printInfo('Starting evolution cycle...')
+        const { diagnose, formatDiagnosis, runEvolutionCycle } = await import('./evolution.js')
+        const weaknesses = diagnose()
+        console.log(formatDiagnosis(weaknesses))
+        if (weaknesses.length > 0) {
+          printInfo('Proposing improvements...')
+          const cycle = await runEvolutionCycle()
+          for (const r of cycle.results) {
+            const icon = r.status === 'applied' ? '✓' : r.status === 'rolled-back' ? '✗' : '○'
+            const msg = `${icon} ${r.weakness.area}: ${r.reason.slice(0, 80)}`
+            if (r.status === 'applied') printSuccess(msg)
+            else if (r.status === 'rolled-back') printError(msg)
+            else printInfo(msg)
+          }
+          printInfo(`Cycle ${cycle.id} ${cycle.status}`)
         }
       }
       break
@@ -1929,6 +1887,14 @@ async function handleSlashCommand(
       break
     }
 
+    case 'changelog': {
+      const { generateChangelog } = await import('./changelog.js')
+      const since = args[0] || undefined
+      const output = generateChangelog({ since, format: 'terminal' })
+      console.log(output)
+      break
+    }
+
     case 'local':
     case 'ollama': {
       if (args[0] === 'off') {
@@ -2130,6 +2096,14 @@ async function handleSlashCommand(
     case 'ratelimit': {
       const { formatRateLimitStatus } = await import('./rate-limiter.js')
       console.log(formatRateLimitStatus())
+      break
+    }
+
+    case 'doctor': {
+      const { runDoctor, formatDoctorReport } = await import('./doctor.js')
+      printInfo('Running diagnostics...')
+      const doctorReport = await runDoctor()
+      process.stderr.write(formatDoctorReport(doctorReport))
       break
     }
 
