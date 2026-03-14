@@ -1,7 +1,7 @@
 ---
 name: kbot
 description: Open-source terminal AI agent with 39 specialists, 167 tools, and 19 providers.
-version: 2.13.0
+version: 2.13.1
 license: MIT
 metadata:
   openclaw:

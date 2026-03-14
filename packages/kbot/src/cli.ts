@@ -47,7 +47,7 @@ import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
 import chalk from 'chalk'
 
-const VERSION = '2.13.0'
+const VERSION = '2.13.1'
 
 async function main(): Promise<void> {
   const program = new Command()
