@@ -1,0 +1,50 @@
+{
+  "name": "kbot",
+  "displayName": "K:BOT",
+  "description": "Open-source terminal AI agent with 39 specialists, 167 tools, and 19 providers. Self-evolving, local-first.",
+  "version": "2.13.1",
+  "author": "kernel.chat group",
+  "license": "MIT",
+  "homepage": "https://kernel.chat",
+  "repository": "https://github.com/isaacsight/kernel",
+  "npm": "@kernel.chat/kbot",
+  "command": "kbot",
+  "args": ["ide", "mcp"],
+  "transport": "stdio",
+  "tools": [
+    "kbot_chat",
+    "kbot_plan",
+    "kbot_bash",
+    "kbot_read_file",
+    "kbot_edit_file",
+    "kbot_write_file",
+    "kbot_search",
+    "kbot_github",
+    "kbot_glob",
+    "kbot_grep",
+    "kbot_agent",
+    "kbot_remember",
+    "kbot_diagnostics",
+    "kbot_status"
+  ],
+  "categories": [
+    "ai-agent",
+    "code-generation",
+    "developer-tools",
+    "terminal"
+  ],
+  "install": {
+    "npm": "npm install -g @kernel.chat/kbot",
+    "brew": "brew install kbot"
+  },
+  "configuration": {
+    "mcp": {
+      "servers": {
+        "kbot": {
+          "command": "kbot",
+          "args": ["ide", "mcp"]
+        }
+      }
+    }
+  }
+}

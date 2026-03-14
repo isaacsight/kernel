@@ -1,0 +1,91 @@
+# K:BOT GitHub Action — AI Code Review on Pull Requests
+#
+# Automatically reviews every PR with kbot's `coder` agent.
+# Requires an ANTHROPIC_API_KEY secret in your repository settings.
+#
+# Setup:
+#   1. Go to Settings > Secrets and variables > Actions
+#   2. Add ANTHROPIC_API_KEY as a repository secret
+#   3. Copy this file to .github/workflows/kbot-review.yml
+#   4. Push and open a PR to test
+#
+# Supports any provider — swap ANTHROPIC_API_KEY for OPENAI_API_KEY,
+# GOOGLE_AI_KEY, etc. kbot auto-detects which provider to use.
+
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    name: K:BOT Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for accurate diffs
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install K:BOT
+        run: npm install -g @kernel.chat/kbot
+
+      - name: Review PR diff
+        run: |
+          # Get the diff between base and head
+          git diff origin/${{ github.base_ref }}...HEAD > /tmp/pr-diff.txt
+
+          # Run kbot review
+          kbot --agent coder --pipe --yes \
+            "Review this pull request diff. Focus on:
+             1. Bugs and logic errors
+             2. Security concerns
+             3. Performance issues
+             4. Code style and best practices
+
+             Be concise. Only flag real issues, not style nitpicks.
+
+             $(cat /tmp/pr-diff.txt)"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+  # Optional: run security audit on PRs that touch auth or config files
+  security:
+    name: K:BOT Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: |
+      contains(github.event.pull_request.title, 'auth') ||
+      contains(github.event.pull_request.title, 'security')
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm install -g @kernel.chat/kbot
+
+      - name: Security audit
+        run: |
+          kbot --agent guardian --pipe --yes \
+            "Audit this repository for security vulnerabilities.
+             Check for: hardcoded secrets, SQL injection, XSS,
+             insecure dependencies, and auth bypass vectors."
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

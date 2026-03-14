@@ -1,0 +1,105 @@
+name: 'K:BOT AI Agent'
+description: 'Run K:BOT in CI/CD pipelines for code review, generation, analysis, and more.'
+author: 'kernel.chat group'
+
+branding:
+  icon: 'terminal'
+  color: 'purple'
+
+inputs:
+  prompt:
+    description: 'The prompt to send to kbot'
+    required: true
+  agent:
+    description: 'Specialist agent to use (kernel, researcher, coder, writer, analyst, guardian, etc.)'
+    required: false
+    default: 'coder'
+  provider:
+    description: 'AI provider (anthropic, openai, google, mistral, deepseek, groq, etc.)'
+    required: false
+  api-key:
+    description: 'API key for the AI provider. Pass via secrets. Auto-detected from provider if not set.'
+    required: false
+  model:
+    description: 'Override AI model (e.g., sonnet, haiku, gpt-4o)'
+    required: false
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '20'
+  kbot-version:
+    description: 'K:BOT version to install (npm version spec)'
+    required: false
+    default: 'latest'
+
+outputs:
+  response:
+    description: 'The kbot response text'
+    value: ${{ steps.run-kbot.outputs.response }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install K:BOT
+      shell: bash
+      run: npm install -g "@kernel.chat/kbot@${{ inputs.kbot-version }}"
+
+    - name: Run K:BOT
+      id: run-kbot
+      shell: bash
+      env:
+        # Pass all user inputs via env vars to prevent script injection
+        INPUT_PROMPT: ${{ inputs.prompt }}
+        INPUT_AGENT: ${{ inputs.agent }}
+        INPUT_MODEL: ${{ inputs.model }}
+        INPUT_PROVIDER: ${{ inputs.provider }}
+        INPUT_API_KEY: ${{ inputs.api-key }}
+        KBOT_CI: 'true'
+        NO_COLOR: '1'
+      run: |
+        # Map the API key to the correct provider env var.
+        # kbot auto-detects the provider from these env vars.
+        if [ -n "$INPUT_API_KEY" ]; then
+          case "$INPUT_PROVIDER" in
+            openai)      export OPENAI_API_KEY="$INPUT_API_KEY" ;;
+            google)      export GOOGLE_API_KEY="$INPUT_API_KEY" ;;
+            mistral)     export MISTRAL_API_KEY="$INPUT_API_KEY" ;;
+            xai)         export XAI_API_KEY="$INPUT_API_KEY" ;;
+            deepseek)    export DEEPSEEK_API_KEY="$INPUT_API_KEY" ;;
+            groq)        export GROQ_API_KEY="$INPUT_API_KEY" ;;
+            together)    export TOGETHER_API_KEY="$INPUT_API_KEY" ;;
+            openrouter)  export OPENROUTER_API_KEY="$INPUT_API_KEY" ;;
+            fireworks)   export FIREWORKS_API_KEY="$INPUT_API_KEY" ;;
+            perplexity)  export PERPLEXITY_API_KEY="$INPUT_API_KEY" ;;
+            cohere)      export COHERE_API_KEY="$INPUT_API_KEY" ;;
+            nvidia)      export NVIDIA_API_KEY="$INPUT_API_KEY" ;;
+            sambanova)   export SAMBANOVA_API_KEY="$INPUT_API_KEY" ;;
+            cerebras)    export CEREBRAS_API_KEY="$INPUT_API_KEY" ;;
+            *)           export ANTHROPIC_API_KEY="$INPUT_API_KEY" ;;
+          esac
+        fi
+
+        # Build the kbot command arguments
+        KBOT_ARGS=(--pipe --quiet -y --agent "$INPUT_AGENT")
+
+        if [ -n "$INPUT_MODEL" ]; then
+          KBOT_ARGS+=(--model "$INPUT_MODEL")
+        fi
+
+        # Run kbot and capture output
+        RESPONSE=$(kbot "${KBOT_ARGS[@]}" "$INPUT_PROMPT" 2>/dev/null) || true
+
+        # Write response to GITHUB_OUTPUT (multiline-safe delimiter)
+        {
+          echo "response<<KBOT_EOF"
+          echo "$RESPONSE"
+          echo "KBOT_EOF"
+        } >> "$GITHUB_OUTPUT"
+
+        # Also print to the workflow log
+        echo "$RESPONSE"

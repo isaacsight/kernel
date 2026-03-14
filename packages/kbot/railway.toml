@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npx @kernel.chat/kbot serve --port $PORT"
+healthcheckPath = "/health"
+restartPolicyType = "on_failure"

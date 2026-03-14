@@ -1,0 +1,12 @@
+run = "npx @kernel.chat/kbot"
+entrypoint = "index.js"
+language = "nodejs"
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+NODE_VERSION = "20"
+
+[deployment]
+run = ["sh", "-c", "npx @kernel.chat/kbot"]

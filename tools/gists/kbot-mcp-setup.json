@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/model-context-protocol/main/schema/mcp-config.json",
+
+  "_comment": [
+    "K:BOT MCP Server Configuration",
+    "",
+    "Gives your editor access to all 167 K:BOT tools: file operations, git,",
+    "GitHub, web search, browser automation, sub-agents, and more.",
+    "",
+    "Works with: VS Code, Cursor, Windsurf, Zed, Neovim (via mcp.nvim)",
+    "",
+    "Setup:",
+    "  1. Install kbot:  npm install -g @kernel.chat/kbot",
+    "  2. Configure key:  kbot auth",
+    "  3. Copy this file to your editor's MCP config location (see below)",
+    "  4. Restart the editor",
+    "",
+    "Config locations:",
+    "  VS Code:   .vscode/mcp.json (in workspace) or settings.json",
+    "  Cursor:    .cursor/mcp.json (in workspace)",
+    "  Windsurf:  .windsurf/mcp.json (in workspace)",
+    "  Zed:       settings.json > context_servers",
+    ""
+  ],
+
+  "mcp": {
+    "servers": {
+      "kbot": {
+        "command": "kbot",
+        "args": ["ide", "mcp"],
+        "env": {}
+      }
+    }
+  }
+}

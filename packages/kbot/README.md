@@ -7,7 +7,10 @@
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/v/@kernel.chat/kbot?color=6B5B95&label=npm" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/dw/@kernel.chat/kbot?color=6B5B95" alt="npm downloads"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
+  <a href="https://github.com/isaacsight/kernel"><img src="https://img.shields.io/github/stars/isaacsight/kernel?color=6B5B95&style=flat" alt="GitHub stars"></a>
   <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
+  <a href="https://hub.docker.com/r/isaacsight/kbot"><img src="https://img.shields.io/badge/docker-kbot-6B5B95" alt="Docker"></a>
+  <a href="https://github.com/isaacsight/kernel/blob/main/packages/kbot/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-6B5B95" alt="PRs Welcome"></a>
 </p>
 
 ## Why K:BOT?
@@ -20,12 +23,22 @@
 - **Shell completions** — tab completion for bash, zsh, and fish (`kbot completions zsh`)
 - **MCP server built in** — plug kbot into any IDE as a tool provider
 
+## Install
+
+```bash
+# npm (recommended)
+npm install -g @kernel.chat/kbot
+
+# Docker
+docker run -it isaacsight/kbot
+
+# curl
+curl -fsSL https://raw.githubusercontent.com/isaacsight/kernel/main/packages/kbot/install.sh | bash
+```
+
 ## Quick Start
 
 ```bash
-# Install globally
-npm install -g @kernel.chat/kbot
-
 # Set up with your API key (auto-detects provider)
 kbot auth
 
@@ -122,6 +135,21 @@ kbot serve --port 7437 --token mysecret
 
 REST API exposing all 167 tools for any LLM or automation pipeline.
 
+## Use Everywhere
+
+| Environment | How |
+|-------------|-----|
+| **Terminal** | `npm install -g @kernel.chat/kbot` |
+| **Docker** | `docker run -it isaacsight/kbot` |
+| **VS Code / Cursor** | MCP server: `kbot ide mcp` |
+| **JetBrains IDEs** | ACP server: `kbot ide acp` |
+| **Neovim / Zed** | MCP server config |
+| **GitHub Actions** | See `action.yml` in repo |
+| **REST API** | `kbot serve --port 7437` |
+| **Railway** | One-click deploy with `railway.toml` |
+| **Replit** | Import repo, auto-configured |
+| **CI/CD** | `npx @kernel.chat/kbot "review this diff"` |
+
 ## Commands
 
 | Command | Description |
@@ -149,11 +177,17 @@ REST API exposing all 167 tools for any LLM or automation pipeline.
 
 [kernel.chat](https://kernel.chat) — same 39 agents with a visual interface. Free (20 msgs/day).
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and adding specialist agents.
+
 ## Links
 
 - **Web**: [kernel.chat](https://kernel.chat)
 - **npm**: [@kernel.chat/kbot](https://www.npmjs.com/package/@kernel.chat/kbot)
 - **GitHub**: [isaacsight/kernel](https://github.com/isaacsight/kernel)
+- **Docker**: [isaacsight/kbot](https://hub.docker.com/r/isaacsight/kbot)
+- **MCP Registry**: `kbot` ([mcp-server.json](mcp-server.json))
 - **Issues**: [Report a bug](https://github.com/isaacsight/kernel/issues)
 
 ## License

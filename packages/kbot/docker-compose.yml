@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  kbot:
+    build: .
+    stdin_open: true
+    tty: true
+    volumes:
+      - kbot-data:/root/.kbot
+      - .:/workspace
+    working_dir: /workspace
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+
+  kbot-server:
+    build: .
+    command: ["serve", "--port", "7437"]
+    ports:
+      - "7437:7437"
+    volumes:
+      - kbot-data:/root/.kbot
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - KBOT_SERVER_TOKEN=${KBOT_SERVER_TOKEN:-}
+
+  kbot-local:
+    build: .
+    command: ["local"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - kbot-data:/root/.kbot
+    network_mode: host  # Access Ollama on localhost
+
+volumes:
+  kbot-data:
