@@ -8,7 +8,16 @@
 
 ### Accomplished This Session
 
-#### 5 New Modules Built, Wired & Published
+#### v2.10.0 → v2.10.1 Published
+- **6 new feature modules**: test runner, watch mode, voice mode, export, plugin marketplace, rate limiter
+- **Streaming hardening**: retry with exponential backoff (1s/2s/4s) for 429/5xx errors
+- **Smarter context management**: priority scoring preserves high-value turns during compaction
+- **80 tests across 6 files** (vitest)
+- **Rebrand**: "Antigravity Group" → "kernel.chat group" across entire codebase
+- **Rename**: `kbot ollama` → `kbot local` (with backwards-compatible alias)
+- **Published**: v2.10.0 and v2.10.1 to npm, pushed to GitHub
+
+#### 5 New Modules Built, Wired & Published (prior session)
 All 5 modules created by parallel background agents, integrated into codebase, audited, and shipped:
 
 1. **Repo Map** (`src/repo-map.ts`) — Aider-style codebase indexer
@@ -74,8 +83,9 @@ All 5 modules created by parallel background agents, integrated into codebase, a
 - i18n expansion (11 new locales)
 
 ### Pending
+- **Fix kbot API key** — User's Anthropic key shows "invalid x-api-key". Run `kbot auth` to reconfigure.
+- **Launch posts** — drafts ready in `tools/launch-drafts.md`, update to reflect `kbot local` naming
 - **iOS Capacitor sync** — Homebrew Ruby installed, need to install CocoaPods then `npx cap sync ios`
-- **Launch posts** — drafts ready in `tools/launch-drafts.md`, start posting per 5-day schedule
 - **awesome-openclaw-skills PR** — blocked until skill gains traction on ClawHub
 
 ## Key Decisions

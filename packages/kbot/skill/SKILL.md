@@ -1,6 +1,6 @@
 ---
 name: kbot
-description: Open-source terminal AI agent with 37 specialists, 151 tools, and 19 providers.
+description: Open-source terminal AI agent with 38 specialists, 158 tools, and 19 providers.
 version: 2.10.1
 license: MIT
 metadata:
@@ -47,7 +47,7 @@ kbot local
 
 ## Features
 
-- **37 specialist agents** with intent-based routing (kernel, researcher, coder, writer, analyst, physicist, mathematician, debugger, and 29 more)
+- **38 specialist agents** with intent-based routing (kernel, researcher, coder, writer, analyst, creative, physicist, mathematician, debugger, and 29 more)
 - **119 built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, E2B cloud sandbox, LSP intelligence, linting, testing, sub-agents)
 - **19 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, SambaNova, Cerebras, OpenRouter, Ollama, LM Studio, Jan, OpenClaw)
 - **Learning engine** that adapts to your coding patterns, solutions, and preferences

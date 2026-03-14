@@ -14,6 +14,7 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { CREATIVE_KEYWORDS, CREATIVE_PATTERNS } from './agents/creative.js'
 
 const ROUTER_DIR = join(homedir(), '.kbot', 'memory')
 const HISTORY_FILE = join(ROUTER_DIR, 'routing-history.json')
@@ -125,6 +126,7 @@ const AGENT_KEYWORDS: Record<string, string[]> = {
     'hey', 'hello', 'hi', 'thanks', 'help', 'what', 'how', 'why',
     'general', 'chat', 'talk', 'opinion', 'think', 'feel', 'advice',
   ],
+  creative: CREATIVE_KEYWORDS,
 }
 
 // ── Category patterns (broader than keywords) ──
@@ -137,6 +139,7 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp; agent: string; confidence: num
   { pattern: /\b(research|find|compare|benchmark|alternative|best)\b/i, agent: 'researcher', confidence: 0.6 },
   { pattern: /\b(write|draft|blog|post|article|email|newsletter|readme)\b/i, agent: 'writer', confidence: 0.65 },
   { pattern: /\b(analyze|strategy|plan|architecture|review|audit|evaluate)\b/i, agent: 'analyst', confidence: 0.6 },
+  ...CREATIVE_PATTERNS,
 ]
 
 /**

@@ -202,6 +202,7 @@ export function getAgents(): Array<{ id: string; name: string; description: stri
     { id: 'guardian', name: 'Guardian', description: 'Security specialist' },
     { id: 'curator', name: 'Curator', description: 'Knowledge curation specialist' },
     { id: 'strategist', name: 'Strategist', description: 'Strategic planning specialist' },
+    { id: 'creative', name: 'Creative', description: 'Generative art, creative coding & procedural generation specialist' },
   ]
 }
 

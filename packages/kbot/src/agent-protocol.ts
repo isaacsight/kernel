@@ -494,7 +494,7 @@ export function registerAgentProtocolTools(): void {
     description: 'Create a handoff to transfer work to another agent. Includes context, artifacts, and priority. The receiving agent can accept or reject. Use this when a task is better suited for a different specialist.',
     parameters: {
       from: { type: 'string', description: 'Agent ID initiating the handoff', required: true },
-      to: { type: 'string', description: 'Target agent ID to hand off to (e.g., coder, researcher, writer, analyst, guardian)', required: true },
+      to: { type: 'string', description: 'Target agent ID to hand off to (e.g., coder, researcher, writer, analyst, guardian, creative)', required: true },
       reason: { type: 'string', description: 'Why this handoff is needed', required: true },
       context: { type: 'string', description: 'What the receiving agent needs to know to continue the work', required: true },
       artifacts: { type: 'string', description: 'Comma-separated file paths or data keys to pass along' },

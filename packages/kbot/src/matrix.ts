@@ -5,6 +5,7 @@
 
 import chalk from 'chalk'
 import { registerAgentVisuals } from './ui.js'
+import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 
 export interface MatrixAgent {
   id: string
@@ -139,6 +140,10 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
   'dreamer': {
     name: 'Dreamer',
     prompt: 'You operate in the liminal space between imagination and reality. For dream interpretation: draw from Jungian archetypes, neuroscience, and personal symbolism. For worldbuilding: create internally consistent systems — physics, cultures, histories, languages. For vision engineering: help articulate futures not yet clearly seen. Cross-pollinate dream imagery with waking-life projects. Contemplative but precise — evocative language without losing analytical rigor. End with a question that opens further exploration.',
+  },
+  'creative': {
+    name: CREATIVE_PRESET.name,
+    prompt: CREATIVE_PRESET.prompt,
   },
 }
 
@@ -372,6 +377,12 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     icon: '☾',
     color: '#7B68EE',
     prompt: PRESETS['dreamer'].prompt,
+  },
+  creative: {
+    name: CREATIVE_BUILTIN.name,
+    icon: CREATIVE_BUILTIN.icon,
+    color: CREATIVE_BUILTIN.color,
+    prompt: CREATIVE_BUILTIN.prompt,
   },
 }
 

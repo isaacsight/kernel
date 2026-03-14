@@ -40,7 +40,7 @@ export function registerSubagentTools(): void {
     description: 'Spawn a specialist subagent to handle a task. The subagent runs independently with its own context and tools. Returns the subagent ID — use agent_result to get the output.',
     parameters: {
       prompt: { type: 'string', description: 'Task for the subagent to perform', required: true },
-      agent: { type: 'string', description: 'Specialist agent to use: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist (default: auto)' },
+      agent: { type: 'string', description: 'Specialist agent to use: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, creative (default: auto)' },
       background: { type: 'boolean', description: 'Run in background (true) or wait for result (false, default)' },
     },
     tier: 'free',

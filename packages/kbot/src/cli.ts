@@ -55,7 +55,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('K:BOT — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (kernel, researcher, coder, writer, analyst, hacker, operator, dreamer)')
+    .option('-a, --agent <agent>', 'Force a specific agent (kernel, researcher, coder, writer, analyst, creative, hacker, operator, dreamer)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -1409,7 +1409,7 @@ async function handleSlashCommand(
         printSuccess(`Agent set to: ${args[0]}`)
       } else {
         printInfo(`Current agent: ${opts.agent || 'auto'}`)
-        printInfo('Built-in: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist')
+        printInfo('Built-in: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, creative')
         const matrixIds = getMatrixAgentIds()
         if (matrixIds.length > 0) {
           printInfo(`Matrix: ${matrixIds.join(', ')}`)
