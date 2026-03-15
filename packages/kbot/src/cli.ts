@@ -10,6 +10,8 @@
 //   $ kbot usage                  # Show usage stats
 
 import { createInterface } from 'node:readline'
+import { existsSync } from 'node:fs'
+import { join, basename } from 'node:path'
 import { Command } from 'commander'
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, type AgentOptions } from './agent.js'
@@ -1141,6 +1143,77 @@ async function guidedSetup(): Promise<{ local: boolean } | null> {
   return null
 }
 
+/** Scan cwd for project signals and return contextual example prompts */
+async function detectProjectSuggestions(): Promise<string[]> {
+  const cwd = process.cwd()
+  const dir = basename(cwd)
+  const has = (f: string) => existsSync(join(cwd, f))
+
+  // Detect project type and return relevant suggestions
+  if (has('package.json')) {
+    const suggestions = [`"explain this project"`, `"find bugs in src/"`]
+    if (has('tsconfig.json')) {
+      suggestions.push(`"write tests for the main module"`)
+    } else {
+      suggestions.push(`"add TypeScript to this project"`)
+    }
+    if (has('.github')) {
+      suggestions.push(`"review my CI pipeline"`)
+    } else {
+      suggestions.push(`"set up GitHub Actions CI"`)
+    }
+    return suggestions
+  }
+
+  if (has('Cargo.toml')) {
+    return [
+      `"explain the crate structure"`,
+      `"find unsafe blocks in src/"`,
+      `"write tests for lib.rs"`,
+      `"check for common Rust pitfalls"`,
+    ]
+  }
+
+  if (has('pyproject.toml') || has('setup.py') || has('requirements.txt')) {
+    return [
+      `"explain this Python project"`,
+      `"find potential bugs in the code"`,
+      `"add type hints to the main module"`,
+      `"write pytest tests"`,
+    ]
+  }
+
+  if (has('go.mod')) {
+    return [
+      `"explain the package structure"`,
+      `"find error handling issues"`,
+      `"write table-driven tests"`,
+      `"check for goroutine leaks"`,
+    ]
+  }
+
+  if (has('Dockerfile') || has('docker-compose.yml') || has('docker-compose.yaml')) {
+    return [
+      `"review my Docker setup"`,
+      `"optimize the Dockerfile"`,
+      `"add health checks"`,
+      `"set up multi-stage builds"`,
+    ]
+  }
+
+  if (has('.git')) {
+    return [
+      `"explain this project"`,
+      `"summarize recent changes"`,
+      `"find TODO comments"`,
+      `"search arxiv for transformer architectures"`,
+    ]
+  }
+
+  // No project detected — show general capabilities
+  return []
+}
+
 async function startRepl(
   agentOpts: AgentOptions,
   context: ProjectContext,
@@ -1186,28 +1259,41 @@ async function startRepl(
     prompt: kbotPrompt(),
   })
 
-  // First time? Show a friendly walkthrough
+  // First time? Show what kbot can do + project context
   if (sessionCount <= 1) {
+    // Auto-detect project and show relevant suggestions
+    const suggestions = await detectProjectSuggestions()
     console.log()
-    console.log(chalk.dim('  ┌─────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  Welcome! Here are some things you can try: ') + chalk.dim(' │'))
-    console.log(chalk.dim('  │                                             │'))
-    console.log(chalk.dim('  │') + '  "explain this project"                    ' + chalk.dim('  │'))
-    console.log(chalk.dim('  │') + '  "write a function that sorts names"       ' + chalk.dim('  │'))
-    console.log(chalk.dim('  │') + '  "find all TODO comments in this repo"     ' + chalk.dim('  │'))
-    console.log(chalk.dim('  │') + '  "what files are in this directory?"        ' + chalk.dim('  │'))
-    console.log(chalk.dim('  │                                             │'))
-    console.log(chalk.dim('  │') + chalk.dim('  Type /help for more commands.              ') + chalk.dim(' │'))
-    console.log(chalk.dim('  └─────────────────────────────────────────────┘'))
+    console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
+    console.log(chalk.dim('  │') + chalk.bold('  39 agents. 216 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │                                                 │'))
+    if (suggestions.length > 0) {
+      for (const s of suggestions.slice(0, 4)) {
+        console.log(chalk.dim('  │') + `  ${s}`.padEnd(49) + chalk.dim('  │'))
+      }
+    } else {
+      console.log(chalk.dim('  │') + '  "explain this project"                        ' + chalk.dim('  │'))
+      console.log(chalk.dim('  │') + '  "find bugs in src/"                           ' + chalk.dim('  │'))
+      console.log(chalk.dim('  │') + '  "write tests for auth.ts"                     ' + chalk.dim('  │'))
+      console.log(chalk.dim('  │') + '  "search arxiv for transformer architectures"  ' + chalk.dim('  │'))
+    }
+    console.log(chalk.dim('  │                                                 │'))
+    console.log(chalk.dim('  │') + chalk.dim('  /help — commands  ·  /agent — specialists       ') + chalk.dim(' │'))
+    if (!localActive && byokActive) {
+      console.log(chalk.dim('  │') + chalk.dim('  kbot auth — switch provider or add API key      ') + chalk.dim(' │'))
+    }
+    console.log(chalk.dim('  └─────────────────────────────────────────────────┘'))
     console.log()
-  } else if (sessionCount <= 3) {
-    // Second and third time — show a quick tip they might not know
+  } else if (sessionCount <= 5) {
+    // Sessions 2-5: rotate useful tips they might not know
     const tips = [
+      'Tip: Use your own API key for unlimited messages — run kbot auth',
       'Tip: kbot picks the right specialist for you. Try asking about science, code, or writing.',
       'Tip: Type /save to keep this conversation. /resume to pick it up later.',
       'Tip: kbot learns from you. The more you use it, the better it gets.',
+      'Tip: Run models locally for $0 — kbot local --embedded (no Ollama needed)',
     ]
-    printInfo(tips[Math.min(sessionCount - 1, tips.length - 1)])
+    printInfo(tips[Math.min(sessionCount - 2, tips.length - 1)])
   }
 
   console.log()
