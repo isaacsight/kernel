@@ -51,8 +51,8 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   },
 }
 
-/** Statuses that grant Pro access (active subscription or trial period). */
-export const ACTIVE_STATUSES = ['active', 'trialing']
+/** Statuses that grant Pro access. past_due keeps access during Stripe's retry grace period. */
+export const ACTIVE_STATUSES = ['active', 'trialing', 'past_due']
 
 export function resolvePlanId(sub: { status: string; plan?: string } | null): PlanId {
   if (!sub || !ACTIVE_STATUSES.includes(sub.status)) return 'free'

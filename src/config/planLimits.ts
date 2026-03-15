@@ -52,6 +52,6 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
 }
 
 export function resolvePlanId(sub: { status: string; plan?: string } | null): PlanId {
-  if (!sub || !['active', 'trialing'].includes(sub.status)) return 'free'
+  if (!sub || !['active', 'trialing', 'past_due'].includes(sub.status)) return 'free'
   return 'pro_monthly'
 }

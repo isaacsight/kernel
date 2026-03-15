@@ -361,10 +361,12 @@ serve(async (req: Request) => {
       case 'customer.subscription.updated': {
         const sub = event.data.object
         const userId = sub.metadata?.supabase_user_id
-        const status = sub.cancel_at_period_end ? 'canceled'
-          : sub.status === 'active' ? 'active'
+        // cancel_at_period_end: user stays active until period ends, then gets deleted event
+        const status = sub.status === 'active' ? 'active'
           : sub.status === 'trialing' ? 'trialing'
-          : 'past_due'
+          : sub.status === 'past_due' ? 'past_due'
+          : sub.status === 'canceled' ? 'canceled'
+          : 'inactive'
         const subPeriodEnd = safeEpochToISO(sub.current_period_end)
         // Extract plan from metadata or price ID
         let plan = sub.metadata?.plan || 'pro_monthly'
@@ -441,6 +443,51 @@ serve(async (req: Request) => {
             .eq('stripe_subscription_id', sub.id)
 
           if (error) console.error('Update error (subscription.deleted fallback):', error)
+        }
+        break
+      }
+
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object
+        const subId = invoice.subscription
+        if (!subId) break
+
+        const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
+        let userId: string | null = null
+
+        if (stripeKey) {
+          const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subId}`, {
+            headers: { Authorization: `Bearer ${stripeKey}` },
+          })
+          if (subRes.ok) {
+            const sub = await subRes.json()
+            userId = sub.metadata?.supabase_user_id || null
+          }
+        }
+
+        const pastDueUpdate = {
+          status: 'past_due',
+          updated_at: new Date().toISOString(),
+        }
+
+        if (userId) {
+          const { error } = await supabase.from('subscriptions')
+            .update(pastDueUpdate)
+            .eq('user_id', userId)
+          if (error) console.error('Update error (invoice.payment_failed):', error)
+
+          // Notify the user
+          await supabase.from('notifications').insert({
+            user_id: userId,
+            title: 'Payment failed',
+            body: 'We couldn\'t charge your card. Update your payment method to keep Pro access.',
+            type: 'error',
+          })
+        } else {
+          const { error } = await supabase.from('subscriptions')
+            .update(pastDueUpdate)
+            .eq('stripe_subscription_id', subId)
+          if (error) console.error('Update error (invoice.payment_failed fallback):', error)
         }
         break
       }
