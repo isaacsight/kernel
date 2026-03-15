@@ -381,6 +381,193 @@ async function main(): Promise<void> {
       process.stderr.write(formatDoctorReport(report))
     })
 
+  // `kbot oss` — Open source contribution & academic research workflows
+  const ossCmd = program
+    .command('oss')
+    .description('Open source tools — find issues, audit repos, search arXiv, generate citations, check reproducibility')
+
+  ossCmd
+    .command('find [topic]')
+    .description('Find open source issues to contribute to')
+    .option('-l, --language <lang>', 'Language filter (typescript, python, rust, etc.)')
+    .option('--label <label>', 'Issue label (default: "good first issue")')
+    .option('--mentored', 'Only show mentored / first-timers-only issues')
+    .action(async (topic: string | undefined, opts: { language?: string; label?: string; mentored?: boolean }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const toolName = opts.mentored ? 'find_mentored_issues' : 'find_issues'
+      const result = await executeTool({
+        id: 'cli', name: toolName,
+        arguments: { language: opts.language, label: opts.label, topic, limit: 10 },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('audit <repo>')
+    .description('Comprehensive health audit of a GitHub repository')
+    .action(async (repo: string) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'audit_repo_health', arguments: { repo } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('repro [repo]')
+    .description('Audit reproducibility of a research repository')
+    .action(async (repo?: string) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'audit_reproducibility', arguments: { repo } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('arxiv <query>')
+    .description('Search arXiv for academic papers')
+    .option('-c, --category <cat>', 'arXiv category (cs.AI, cs.LG, math.NA, etc.)')
+    .option('-n, --max <n>', 'Max results', '5')
+    .action(async (query: string, opts: { category?: string; max?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'arxiv_search',
+        arguments: { query, category: opts.category, max_results: parseInt(opts.max || '5', 10) },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('cite [repo]')
+    .description('Generate CITATION.cff for a repository')
+    .option('--doi <doi>', 'DOI if published')
+    .option('--title <title>', 'Software title')
+    .action(async (repo: string | undefined, opts: { doi?: string; title?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'generate_citation',
+        arguments: { repo, doi: opts.doi, title: opts.title },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('research <topic>')
+    .description('Find open-source research software by topic')
+    .option('-l, --language <lang>', 'Language filter')
+    .action(async (topic: string, opts: { language?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'find_research_repos',
+        arguments: { topic, language: opts.language },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('papers <query>')
+    .description('Find academic papers with open-source code')
+    .action(async (query: string) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'find_papers_with_code', arguments: { query } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('scaffold <name>')
+    .description('Scaffold a research repository structure')
+    .option('-l, --language <lang>', 'Primary language (python, r, julia)')
+    .option('-t, --type <type>', 'Project type (paper, library, benchmark, dataset)')
+    .action(async (name: string, opts: { language?: string; type?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'scaffold_research_repo',
+        arguments: { name, language: opts.language, type: opts.type },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('license')
+    .description('Check license compatibility of project dependencies')
+    .option('--project-license <license>', 'Your project license (auto-detected if omitted)')
+    .action(async (opts: { projectLicense?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'check_license_compatibility',
+        arguments: { project_license: opts.projectLicense },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('deps')
+    .description('Audit dependencies for outdated/vulnerable packages')
+    .option('--focus <focus>', 'Focus: outdated, security, or all')
+    .action(async (opts: { focus?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'audit_dependencies', arguments: { focus: opts.focus } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('changelog')
+    .description('Generate changelog from git commit history')
+    .option('--since <ref>', 'Starting ref (tag, branch, SHA)')
+    .option('--format <fmt>', 'Format: markdown or keep-a-changelog')
+    .action(async (opts: { since?: string; format?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'generate_changelog',
+        arguments: { since: opts.since, format: opts.format },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('stats <repo>')
+    .description('Community health metrics for a GitHub repository')
+    .action(async (repo: string) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'community_stats', arguments: { repo } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('sync')
+    .description('Sync forked repo with upstream')
+    .option('--upstream <remote>', 'Upstream remote or owner/repo')
+    .option('--branch <branch>', 'Branch to sync')
+    .option('--rebase', 'Use rebase instead of merge')
+    .action(async (opts: { upstream?: string; branch?: string; rebase?: boolean }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'sync_fork',
+        arguments: { upstream: opts.upstream, branch: opts.branch, strategy: opts.rebase ? 'rebase' : 'merge' },
+      })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('log')
+    .description('List your kbot-assisted open source contributions')
+    .action(async () => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'list_contributions', arguments: {} })
+      console.log(result.result)
+    })
+
   program
     .command('pull')
     .description('Download recommended Ollama models for local AI')
