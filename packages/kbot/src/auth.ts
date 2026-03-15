@@ -509,8 +509,7 @@ async function getAvailableOllamaModels(): Promise<string[]> {
 
 /** Check if a model name matches any available model (handles tag variants) */
 function isModelAvailable(model: string, available: string[]): boolean {
-  const base = model.split(':')[0]
-  return available.some(m => m === model || m.startsWith(base + ':'))
+  return available.some(m => m === model || m === model.split(':')[0] + ':latest')
 }
 
 /** Select the best Ollama model for a given message, only from available models */
