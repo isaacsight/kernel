@@ -29,23 +29,72 @@ Comprehensive list of registries, directories, platforms, and communities to max
 - [ ] **PulseMCP** — [pulsemcp.com](https://pulsemcp.com/)
   - MCP ecosystem directory and analytics
 
-## 3. AI Agent Directories
+## 3. AI Agent & Tool Directories
 
 - [ ] **Toolify.ai** — [toolify.ai](https://www.toolify.ai/)
-  - AI tools directory, high traffic
+  - AI tools directory, strong early-adopter audience
   - Submit: toolify.ai/submit
 
-- [ ] **Futurepedia** — [futurepedia.io](https://www.futurepedia.io/)
-  - AI tool directory with 5000+ tools listed
+- [ ] **FutureTools** — [futuretools.io](https://futuretools.io/)
+  - Authoritative AI directory by Matt Wolfe; free submission
 
 - [ ] **There's An AI For That** — [theresanaiforthat.com](https://theresanaiforthat.com/)
-  - Popular AI tool discovery platform
+  - 12,000+ AI tools; strong filtering
 
 - [ ] **AI Tool Directory** — [aitoolsdirectory.com](https://aitoolsdirectory.com/)
-  - Curated AI tool listings
+  - Featured placements available
+
+- [ ] **TopAI.tools** — [topai.tools](https://topai.tools/)
+  - Curated; integrates with Product Hunt
+
+- [ ] **ListMyAI** — [listmyai.net](https://listmyai.net/)
+  - Fast-growing; quality curation
+
+- [ ] **TheAISurf** — [theaisurf.com](https://theaisurf.com/)
+  - In-depth reviews, comparisons, ratings
+
+- [ ] **AI Scout** — [aiscout.net](https://aiscout.net/)
+  - Visual browsing; popular with solo devs
 
 - [ ] **SaaS Hub** — [saashub.com](https://www.saashub.com/)
   - Software alternatives directory
+
+- [ ] **AlternativeTo** — [alternativeto.net](https://alternativeto.net/)
+  - "Alternatives to X" discovery — position as alt to Claude Code, Aider, Cursor
+
+## 3b. Product Launch Platforms
+
+- [ ] **Product Hunt** — [producthunt.com](https://producthunt.com/)
+  - Tag with AI categories; still dominant for developer tools
+
+- [ ] **DevHunt** — [devhunt.org](https://devhunt.org/)
+  - Dev tool launchpad; open-source, uses GitHub PRs for listings
+
+- [ ] **BetaList** — [betalist.com](https://betalist.com/)
+  - Early adopter feedback; submit 2-3 weeks before main launch
+
+- [ ] **Indie Hackers** — [indiehackers.com](https://indiehackers.com/)
+  - Long-term engagement; share the build journey
+
+- [ ] **Microlaunch** — [microlaunch.net](https://microlaunch.net/)
+  - Extended launch cycle (ranks over a month)
+
+## 3c. Developer Tool Directories
+
+- [ ] **Console.dev** — [console.dev](https://console.dev/)
+  - Curated newsletter/directory for dev tools
+
+- [ ] **StackShare** — [stackshare.io](https://stackshare.io/)
+  - Tech stack discovery platform
+
+- [ ] **LibHunt** — [libhunt.com](https://libhunt.com/)
+  - Curated trending open-source projects
+
+- [ ] **OSS Gallery** — [oss.gallery](https://oss.gallery/)
+  - Open-source project showcase
+
+- [ ] **GitHub Explore** — [github.com/explore](https://github.com/explore)
+  - Submit via trending + topic optimization
 
 ## 4. Awesome Lists (GitHub)
 
@@ -59,6 +108,8 @@ Submit K:BOT to these curated lists via PR:
 - [ ] **[awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps)** — LLM apps with RAG, agents, MCP
 - [ ] **[awesome-cli-apps-in-a-csv](https://github.com/toolleeo/awesome-cli-apps-in-a-csv)** — Largest CLI app list
 - [ ] **[awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers)** — MCP server directory
+- [ ] **[awesome-cli-agents](https://github.com/phamquiluan/awesome-cli-agents)** — CLI tools + AI in terminal
+- [ ] **[awesome-agent-skills](https://github.com/philipbankier/awesome-agent-skills)** — Skills/plugins for AI agents
 - [ ] **[awesome-open-source](https://github.com/corneliusweiss/awesome-open-source)** — Open source projects
 - [ ] **[awesome-research-software](https://github.com/thecodedog/awesome-research-software)** — Research software
 - [ ] **[awesome-scientific-computing](https://github.com/nschloe/awesome-scientific-computing)** — Scientific computing tools
@@ -154,14 +205,29 @@ Submit K:BOT to these curated lists via PR:
 
 ## 8. GitHub Optimization
 
-### Topics (add to repo settings)
+### Topics (add to repo settings — max 20)
 
 ```
-ai-agent terminal cli open-source academic research scientific-computing
-arxiv citation reproducibility data-science machine-learning local-first
-llm mcp multi-model code-assistant research-software bioinformatics
-open-science developer-tools typescript ollama claude openai
-computational-science
+ai-agent
+ai-coding-agent
+ai-coding-assistant
+cli
+terminal
+developer-tools
+typescript
+nodejs
+llm
+mcp
+open-source
+academic-research
+scientific-computing
+local-first
+multi-provider
+arxiv
+research-software
+open-science
+agentic-ai
+vibe-coding
 ```
 
 ### Repository Settings
@@ -216,31 +282,47 @@ The FAIR principles (Findable, Accessible, Interoperable, Reusable) for research
 ### Week 1 — Immediate (no approval needed)
 1. Enable Zenodo-GitHub integration (get DOI on next release)
 2. Archive on Software Heritage (Save Code Now)
-3. Submit to awesome-cli-coding-agents, awesome-ai-agents
-4. Add GitHub topics
-5. Create social preview image
+3. Submit to awesome-cli-coding-agents, awesome-ai-agents, awesome-ai-cli
+4. Add GitHub topics (20 topics listed above)
+5. Create social preview image (1280x640, logo + tagline + differentiators)
 6. Enable GitHub Discussions
+7. Submit to Official MCP Registry
+8. Submit to DevHunt (uses GitHub PRs)
 
 ### Week 2 — Announcements
-7. Hacker News "Show HN" post
-8. Reddit posts (r/opensource, r/commandline, r/LocalLLaMA)
-9. Dev.to launch article
-10. Submit to MCP Registry
+9. Hacker News "Show HN: K:BOT — Open-source terminal AI agent for researchers"
+10. Reddit posts: r/opensource, r/commandline, r/LocalLLaMA, r/node, r/artificial, r/MachineLearning, r/datascience, r/scientificcomputing
+11. Dev.to launch article (tags: #opensource, #ai, #cli, #research)
+12. Hashnode cross-post
+13. Product Hunt launch (schedule for Tuesday–Thursday for best visibility)
+14. BetaList submission
 
-### Week 3 — Registries
-11. Submit to Toolify.ai, Futurepedia, TAAFT
-12. Submit to OpenSSF Best Practices
-13. Submit to FAIR software assessment
-14. Submit to Research Software Directory
+### Week 3 — Directories & Registries
+15. Submit to FutureTools, Toolify, TAAFT, TopAI, ListMyAI
+16. Submit to Console.dev, StackShare, LibHunt, OSS Gallery
+17. Submit to AlternativeTo (as alternative to Claude Code, Aider, Cursor)
+18. Submit to OpenSSF Best Practices
+19. Run FAIR software assessment (fair-software.eu)
+20. Submit to Research Software Directory
+
+### Week 4 — More Awesome Lists & Communities
+21. Submit to remaining awesome lists (8 more)
+22. Submit to SaaS Hub, AI Scout, TheAISurf
+23. Engage in MCP community Discord/forums
+24. Share on Indie Hackers with build story
 
 ### Month 2 — Academic
-15. Prepare JOSS paper draft
-16. Engage RSE community (US-RSE, UK RSE)
-17. Submit to SciCodes consortium
-18. Apply for NumFOCUS affiliated status
+25. Prepare JOSS paper draft
+26. Engage RSE community (US-RSE, UK RSE mailing lists + Slack)
+27. Submit to SciCodes consortium
+28. Apply for NumFOCUS affiliated status
+29. Contact Software Sustainability Institute
+30. Submit to swMath (mathematical software)
 
 ### Ongoing
-19. Monitor and respond to awesome list PRs
-20. Engage in MCP community
-21. Submit to new registries as they emerge
-22. Track citations and DOI usage
+31. Monitor and respond to awesome list PRs
+32. Publish monthly on Dev.to / Medium about new features
+33. Engage in MCP community
+34. Submit to new registries as they emerge
+35. Track citations and DOI usage via Zenodo
+36. Respond to every GitHub issue within 48 hours (signals active maintenance)
