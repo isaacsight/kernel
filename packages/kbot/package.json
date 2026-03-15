@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "2.14.0",
+  "version": "2.14.1",
   "description": "Local-first AI agent for your terminal. 39 specialists, 172 tools, 19 providers. Self-evolving, learns your patterns, runs offline with Ollama. Open-source Claude Code alternative.",
   "type": "module",
   "repository": {

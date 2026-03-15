@@ -776,6 +776,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const originalMessage = message
   let cumulativeCostUsd = 0
 
+  // ── Gödel limits: detect undecidable loops and hand off to human ──
+  const loopDetector = new LoopDetector({
+    maxToolRepeats: 5,
+    maxCostUsd: MAX_COST_CEILING,
+    maxTokens: 50000,
+    similarityThreshold: 0.85,
+  })
+
+  // ── Entropy scorer: information-theoretic context management ──
+  const entropyScorer = new EntropyScorer()
+
   // Loop messages track the full conversation within a multi-tool execution.
   // This includes assistant responses (with tool-use reasoning) and tool results,
   // so the AI maintains context across tool iterations.
@@ -786,6 +797,26 @@ Always quote file paths that contain spaces. Never reference internal system nam
     if (cumulativeCostUsd > MAX_COST_CEILING) {
       printWarn(`Cost ceiling reached ($${cumulativeCostUsd.toFixed(2)} > $${MAX_COST_CEILING}). Stopping tool loop.`)
       break
+    }
+
+    // ── Gödel check: detect stuck loops before burning more tokens ──
+    if (i > 2) {
+      const decidability = loopDetector.check()
+      if (!decidability.decidable) {
+        const msg = decidability.pattern
+          ? `Loop detected (${decidability.pattern}): ${decidability.evidence}`
+          : decidability.evidence
+        if (decidability.recommendation === 'handoff') {
+          printWarn(`${msg}\nHanding off to you — I need your input to continue.`)
+          break
+        } else if (decidability.recommendation === 'decompose') {
+          printWarn(`${msg}\nBreaking this into smaller steps...`)
+          break
+        } else if (decidability.recommendation === 'simplify') {
+          printInfo(`${msg} Trying a different approach...`)
+          loopMessages.push({ role: 'user', content: `Your approach isn't working. Try a completely different strategy. ${decidability.evidence}` })
+        }
+      }
     }
     // Don't use spinner when streaming (conflicts with stdout)
     const useSpinner = !options.stream
@@ -813,13 +844,21 @@ Always quote file paths that contain spaces. Never reference internal system nam
         ...loopMessages,
       ]
 
-      // Auto-compact conversation history if it's getting too long
+      // Auto-compact conversation history — entropy-aware compression
+      // Drops low-novelty turns first, preserves high-information turns
       const asTurns: ConversationTurn[] = rawMessages.map(m => ({
         role: m.role as 'user' | 'assistant',
         content: m.content,
       }))
       const { turns: compactedTurns } = autoCompact(asTurns)
-      const messages: ProviderMessage[] = compactedTurns.map(t => ({
+
+      // Second pass: entropy-based eviction of redundant turns
+      const entropyFiltered = compactedTurns.filter((turn, idx) => {
+        if (idx >= compactedTurns.length - 6) return true // always keep recent 6
+        return !entropyScorer.shouldEvict(turn, compactedTurns.slice(0, idx))
+      })
+
+      const messages: ProviderMessage[] = entropyFiltered.map(t => ({
         role: t.role,
         content: t.content,
       }))
@@ -848,6 +887,11 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
       const iterationCost = estimateCost(provider, result.usage.input_tokens, result.usage.output_tokens)
       cumulativeCostUsd += iterationCost
+
+      // ── Feed Gödel detector with cost/token data ──
+      loopDetector.recordCost(iterationCost)
+      loopDetector.recordTokens(result.usage.input_tokens + result.usage.output_tokens)
+      if (result.content) loopDetector.recordOutput(result.content)
 
       if (result.tool_calls && result.tool_calls.length > 0) {
         lastResponse = {
@@ -885,13 +929,30 @@ Always quote file paths that contain spaces. Never reference internal system nam
       if (lastResponse.type === 'text' || !lastResponse.tool_calls || lastResponse.tool_calls.length === 0) {
         let content = lastResponse.content || ''
 
-        // Self-evaluation — score response and log quality signal
+        // ── Error correction: classify + fix errors by type (always active) ──
+        if (content.length > 50 && i < MAX_TOOL_LOOPS - 2) {
+          try {
+            const { classifyError: classify } = await import('./error-correction.js')
+            const classification = await classify(originalMessage, content)
+            if (classification && classification.confidence > 0.7) {
+              const { applyCorrection } = await import('./error-correction.js')
+              const correctionPrompt = applyCorrection(
+                originalMessage, content, classification.errorType, classification.evidence,
+              )
+              printWarn(`Error correction: ${classification.errorType} (${(classification.confidence * 100).toFixed(0)}%) — retrying with fix...`)
+              loopMessages.push({ role: 'assistant', content })
+              loopMessages.push({ role: 'user', content: correctionPrompt })
+              continue
+            }
+          } catch { /* error correction is non-critical */ }
+        }
+
+        // Self-evaluation — optional additional quality gate
         if (isSelfEvalEnabled() && content.length > 50) {
           try {
             const evalResult = await evaluateResponse(originalMessage, content)
             if (evalResult.shouldRetry && evalResult.feedback) {
               printWarn(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
-              // Inject feedback and let the loop continue
               loopMessages.push({ role: 'assistant', content })
               loopMessages.push({ role: 'user', content: `Your previous response scored low on quality. Feedback: ${evalResult.feedback}\n\nPlease try again with a better response.` })
               continue
@@ -1020,6 +1081,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
         const result = await executeTool(call)
         results.push(result)
         printToolResult(result.result, result.error)
+
+        // ── Feed Gödel detector with tool call data ──
+        loopDetector.recordToolCall(
+          call.name,
+          JSON.stringify(call.arguments || {}),
+          result.result.slice(0, 500),
+        )
 
         // Post-tool hook
         runPostToolHook(call.name, call.arguments || {}, result.result, options.agent || 'kernel')
