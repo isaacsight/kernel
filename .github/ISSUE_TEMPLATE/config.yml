@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Discord Community
+    url: https://discord.gg/kernel-chat
+    about: Chat with the community and get help
+  - name: Documentation
+    url: https://github.com/isaacsight/kernel#readme
+    about: Read the docs before opening an issue

@@ -1,0 +1,75 @@
+name: Discord Notifications
+
+on:
+  release:
+    types: [published]
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened, merged]
+
+jobs:
+  notify-release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_RELEASES_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🚀 ${{ github.event.release.tag_name }} Released\",
+                \"description\": \"${{ github.event.release.name }}\",
+                \"url\": \"${{ github.event.release.html_url }}\",
+                \"color\": 4437377,
+                \"fields\": [
+                  {\"name\": \"Install\", \"value\": \"\`npm install -g @kernel.chat/kbot\`\", \"inline\": true},
+                  {\"name\": \"Changelog\", \"value\": \"[View on GitHub](${{ github.event.release.html_url }})\", \"inline\": true}
+                ],
+                \"footer\": {\"text\": \"K:BOT by kernel.chat\"}
+              }]
+            }"
+
+  notify-issue:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"📋 New Issue: ${{ github.event.issue.title }}\",
+                \"url\": \"${{ github.event.issue.html_url }}\",
+                \"color\": 16744448,
+                \"fields\": [
+                  {\"name\": \"Author\", \"value\": \"${{ github.event.issue.user.login }}\", \"inline\": true},
+                  {\"name\": \"Labels\", \"value\": \"${{ join(github.event.issue.labels.*.name, ', ') }}\", \"inline\": true}
+                ]
+              }]
+            }"
+
+  notify-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🔀 PR: ${{ github.event.pull_request.title }}\",
+                \"url\": \"${{ github.event.pull_request.html_url }}\",
+                \"color\": 5025616,
+                \"fields\": [
+                  {\"name\": \"Author\", \"value\": \"${{ github.event.pull_request.user.login }}\", \"inline\": true},
+                  {\"name\": \"Status\", \"value\": \"${{ github.event.action }}\", \"inline\": true}
+                ]
+              }]
+            }"

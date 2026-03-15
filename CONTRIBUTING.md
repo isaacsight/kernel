@@ -1,23 +1,42 @@
 # Contributing to K:BOT
 
-Thanks for your interest in contributing to K:BOT. Here's how to get started.
+Thanks for your interest in contributing to K:BOT! Every contribution helps make terminal AI better for everyone.
 
-## Setup
+## Quick Start
 
 ```bash
-git clone https://github.com/isaacsight/kernel.git
-cd kernel/packages/kbot
+# 1. Fork and clone
+gh repo fork isaacsight/kernel --clone
+cd kernel
+
+# 2. Install dependencies
 npm install
-npm run dev    # Run in dev mode
+cd packages/kbot && npm install
+
+# 3. Build
+npm run build
+
+# 4. Run in dev mode
+npm run dev
+
+# 5. Run tests
+npm run test
 ```
 
-## Development
+## What Can I Work On?
+
+- **Good first issues**: Look for the [`good-first-issue`](https://github.com/isaacsight/kernel/labels/good-first-issue) label
+- **Help wanted**: Check the [`help-wanted`](https://github.com/isaacsight/kernel/labels/help-wanted) label
+- **Bug fixes**: Reproduce and fix any open bug
+- **Documentation**: README improvements, inline docs, examples
+- **New tools**: Add tools to `packages/kbot/src/tools/`
+- **New specialists**: Add agent definitions
+- **Tests**: Improve test coverage (vitest)
+
+Or use kbot itself to find opportunities:
 
 ```bash
-npm run dev          # Run kbot with hot reload (tsx)
-npm run build        # Compile TypeScript
-npm run test         # Run tests
-npm run typecheck    # Type-check only
+kbot contribute isaacsight/kernel  # Scan for quick wins
 ```
 
 ## Project Structure
@@ -30,64 +49,88 @@ packages/kbot/src/
 ├── learning.ts      # Learning engine
 ├── matrix.ts        # Custom agent creation + mimic profiles
 ├── planner.ts       # Autonomous plan-execute mode
-├── tools/           # 60+ built-in tools
+├── tools/           # 228 built-in tools
 │   ├── files.ts     # File read/write/glob/grep
 │   ├── bash.ts      # Shell execution
 │   ├── git.ts       # Git operations
+│   ├── audit.ts     # Repository audit tools
+│   ├── documents.ts # CSV/data tools
+│   ├── contribute.ts# Open source contribution
+│   ├── research.ts  # arXiv, PyPI, HuggingFace, etc.
+│   ├── containers.ts# Docker, Terraform, etc.
+│   ├── creative.ts  # VFX, shaders, procedural
 │   └── ...          # Many more
 └── ide/             # IDE integrations (MCP, ACP, LSP)
 ```
 
 ## Adding a New Tool
 
-1. Create or edit a file in `src/tools/`
-2. Use `registerTool()` with name, description, parameters, tier, and execute function
-3. Register it in `src/tools/index.ts`
+1. Create or edit a file in `packages/kbot/src/tools/`
+2. Export a `registerXxxTools()` function that calls `registerTool()`
+3. Import and call it from `packages/kbot/src/tools/index.ts`
+4. Each tool needs: `name`, `description`, `parameters` (JSON Schema), `execute` function
+5. Add tests
 
 Example:
 
 ```typescript
-import { registerTool } from './index.js'
+import { registerTool } from './index.js';
 
-registerTool({
-  name: 'my_tool',
-  description: 'What this tool does',
-  parameters: {
-    input: { type: 'string', description: 'The input', required: true },
-  },
-  tier: 'free',
-  async execute(args) {
-    // Do something
-    return `Result: ${args.input}`
-  },
-})
+export function registerMyTools() {
+  registerTool({
+    name: 'my_tool',
+    description: 'Does something useful',
+    parameters: {
+      type: 'object',
+      properties: {
+        input: { type: 'string', description: 'The input' }
+      },
+      required: ['input']
+    },
+    execute: async (args: Record<string, unknown>) => {
+      const input = String(args.input);
+      return { result: `Processed: ${input}` };
+    }
+  });
+}
 ```
 
-## Adding a New Specialist Agent
+## Adding a New Specialist
 
-Edit `src/agents/specialists.ts` (for the web companion) or the agent routing in `src/matrix.ts` (for kbot CLI). Each specialist needs:
+1. Add the agent definition in the agent routing system
+2. Define its personality, capabilities, and tool access
+3. Add routing keywords so the intent classifier can find it
+4. Test with: `kbot "/agent your-specialist-name" "test prompt"`
 
-- Unique ID
-- Name and description
-- System prompt with DOMAINS, APPROACH, PERSONALITY, FORMAT sections
-- PERSONALITY_PREAMBLE and ARTIFACT_RULES inherited
+## Code Style
 
-## Guidelines
-
-- **TypeScript strict mode** — no `any` types, no `@ts-ignore`
-- **Tests** — new utilities should have at least 1 test
-- **No Tailwind** — web companion uses vanilla CSS with `ka-` prefix
-- **Security** — never commit secrets, never use `eval()`, validate inputs
+- **TypeScript** — strict mode, no `any` unless truly necessary
+- **ESM** — `import`/`export`, not `require`
+- **Vanilla CSS** — `ka-` prefix, no Tailwind (web companion only)
+- **Naming** — camelCase for functions/variables, PascalCase for types/components
+- **Tests** — Vitest, colocated with source (`*.test.ts`)
 - **Keep it lean** — kbot has only 8 runtime dependencies. Don't add heavy libraries.
 
-## Pull Requests
+## Commit Messages
 
-1. Fork the repo
-2. Create a branch (`git checkout -b feat/my-feature`)
-3. Make your changes
-4. Run `npm run typecheck && npm run test`
-5. Commit with a clear message
-6. Open a PR against `main`
+Use conventional commits:
+
+```
+feat: add new csv export tool
+fix: correct model selection for Ollama tags
+docs: update README with Docker instructions
+test: add tests for audit scoring
+chore: bump version to 2.19.1
+```
+
+## Pull Request Guidelines
+
+- **One concern per PR** — don't mix features with refactors
+- **Describe what and why** — not just what changed, but why
+- **Link issues** — use `Fixes #123` or `Closes #123`
+- **Screenshots** for UI changes (web companion)
+- **Test evidence** — show that your changes work
+- Run `npm run build && npm run test && npx tsc --noEmit` before submitting
 
 ## Reporting Issues
 
@@ -100,4 +143,10 @@ Open an issue at [github.com/isaacsight/kernel/issues](https://github.com/isaacs
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+
+## Questions?
+
+- Open a [GitHub Discussion](https://github.com/isaacsight/kernel/discussions)
+- Join our [Discord](https://discord.gg/kernel-chat) *(coming soon)*
+- Email: hello@kernel.chat

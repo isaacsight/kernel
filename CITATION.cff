@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use K:BOT in your research, please cite it as below."
+type: software
+title: "K:BOT — Universal Terminal AI Agent"
+version: 2.19.0
+date-released: "2026-03-15"
+url: "https://kernel.chat"
+repository-code: "https://github.com/isaacsight/kernel"
+license: MIT
+authors:
+  - family-names: Hernandez
+    given-names: Isaac
+    alias: isaacsight
+keywords:
+  - ai-agent
+  - cli
+  - terminal
+  - llm
+  - multi-model
+  - local-first
+  - self-evolving
+  - developer-tools
+abstract: >-
+  K:BOT is a universal AI agent for the terminal with 39 specialist agents,
+  228 tools, and 20 AI providers. It features an embedded llama.cpp inference
+  engine, persistent memory, self-evolving capabilities, and local-first
+  architecture. K:BOT covers every code ecosystem from your terminal —
+  from research and VFX to audit, documentation, and open source contribution.
