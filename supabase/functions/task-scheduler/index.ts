@@ -229,12 +229,7 @@ serve(async (req: Request) => {
           for (const sub of overageSubs) {
             const lastReported = sub.last_reported_overage_count ?? 0
             const delta = sub.overage_count - lastReported
-            if (delta <= 0) continue
-
-            if (sub.last_overage_reported_at) {
-              const lastTime = new Date(sub.last_overage_reported_at).getTime()
-              if (Date.now() - lastTime < 60 * 60 * 1000) continue
-            }
+            if (delta <= 0) continue // Already reported in real-time by claude-proxy
 
             const eventName = METER_EVENTS[sub.plan]
             if (!eventName) continue
