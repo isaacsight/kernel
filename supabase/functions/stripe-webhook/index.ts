@@ -204,10 +204,7 @@ serve(async (req: Request) => {
               if (stripeSub.trial_end) trialEnd = safeEpochToISO(stripeSub.trial_end)
               // Fallback: check price ID if no metadata
               if (!stripeSub.metadata?.plan) {
-                const priceId = stripeSub.items?.data?.[0]?.price?.id
-                if (priceId === Deno.env.get('STRIPE_ANNUAL_PRICE_ID')) plan = 'pro_annual'
-                else if (priceId === Deno.env.get('STRIPE_MAX_MONTHLY_PRICE_ID')) plan = 'max_monthly'
-                else if (priceId === Deno.env.get('STRIPE_MAX_ANNUAL_PRICE_ID')) plan = 'max_annual'
+                plan = 'pro_monthly'
               }
             }
           } catch (e) {
@@ -215,11 +212,10 @@ serve(async (req: Request) => {
           }
         }
 
-        // Overage config based on plan
-        const isMaxPlan = plan.startsWith('max_')
+        // Overage config — Pro = $0.10/msg (100 millicents)
         const overageConfig = plan === 'free' ? {} : {
           overage_enabled: true,
-          overage_rate_millicents: isMaxPlan ? 40 : 50,
+          overage_rate_millicents: 100,
           overage_count: 0,
           last_reported_overage_count: 0,
         }
