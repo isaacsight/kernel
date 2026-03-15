@@ -1,0 +1,12 @@
+{
+  "name": "isaacsight/kernel",
+  "description": "K:BOT — Local-first AI agent for your terminal. 39 specialists, 167 tools, 19 providers. Self-evolving, runs offline. Open-source.",
+  "accepts": [
+    {
+      "network": "eip155:8453",
+      "asset": "USDC",
+      "address": "YOUR_WALLET_ADDRESS"
+    }
+  ],
+  "resources": []
+}
