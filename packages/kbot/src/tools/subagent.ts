@@ -211,24 +211,24 @@ export function registerSubagentTools(): void {
     },
   })
 
-  // ── OpenClaw Delegation ──
-  // Delegate tasks to the local OpenClaw gateway as a parallel AI worker.
-  // OpenClaw runs in its own sandboxed user space with local models.
+  // ── K:BOT Local Delegation ──
+  // Delegate tasks to the local K:BOT Local gateway as a parallel AI worker.
+  // K:BOT Local runs in its own sandboxed user space with local models.
 
   registerTool({
-    name: 'openclaw_delegate',
-    description: 'Delegate a task to OpenClaw, a local AI assistant running in an isolated user space with its own models. Use this for parallel work — OpenClaw can research, code, or analyze while you handle other parts. Returns OpenClaw\'s response. Costs $0 (uses local models).',
+    name: 'kbot_local_delegate',
+    description: 'Delegate a task to K:BOT Local, a local AI assistant running in an isolated user space with its own models. Use this for parallel work — K:BOT Local can research, code, or analyze while you handle other parts. Returns K:BOT Local\'s response. Costs $0 (uses local models).',
     parameters: {
-      prompt: { type: 'string', description: 'Task for OpenClaw to perform', required: true },
-      model: { type: 'string', description: 'Model to use (default: openclaw:main). Options: qwen2.5-coder:7b, llama3.1:8b, mistral:7b, deepseek-coder-v2:16b, phi4:14b, gemma3:12b, nemotron-mini, nemotron-3-nano, codellama:13b, starcoder2:7b, codegemma:7b' },
+      prompt: { type: 'string', description: 'Task for K:BOT Local to perform', required: true },
+      model: { type: 'string', description: 'Model to use (default: kbot-local:main). Options: qwen2.5-coder:7b, llama3.1:8b, mistral:7b, deepseek-coder-v2:16b, phi4:14b, gemma3:12b, nemotron-mini, nemotron-3-nano, codellama:13b, starcoder2:7b, codegemma:7b' },
     },
     tier: 'free',
     async execute(args) {
       const prompt = String(args.prompt)
-      const model = args.model ? String(args.model) : 'openclaw:main'
+      const model = args.model ? String(args.model) : 'kbot-local:main'
       const config = loadConfig()
-      const token = config?.byok_provider === 'openclaw' ? config?.byok_key : null
-      const gatewayToken = token || process.env.OPENCLAW_API_KEY || 'local'
+      const token = config?.byok_provider === 'kbot-local' ? config?.byok_key : null
+      const gatewayToken = token || process.env.KBOT_LOCAL_API_KEY || 'local'
 
       try {
         const res = await fetch('http://127.0.0.1:18789/v1/chat/completions', {
@@ -247,33 +247,33 @@ export function registerSubagentTools(): void {
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-          return `OpenClaw error: ${err.error?.message || res.status}. Is the gateway running? Start with: openclaw-cmd start`
+          return `K:BOT Local error: ${err.error?.message || res.status}. Is the gateway running? Start with: kbot gateway start`
         }
 
         const data = await res.json()
-        const content = data.choices?.[0]?.message?.content || 'No response from OpenClaw'
+        const content = data.choices?.[0]?.message?.content || 'No response from K:BOT Local'
         const usage = data.usage || {}
-        return `[OpenClaw · ${data.model || model} · ${(usage.prompt_tokens || 0) + (usage.completion_tokens || 0)} tokens · $0]\n\n${content}`
+        return `[K:BOT Local · ${data.model || model} · ${(usage.prompt_tokens || 0) + (usage.completion_tokens || 0)} tokens · $0]\n\n${content}`
       } catch (err) {
         if (err instanceof Error && err.name === 'TimeoutError') {
-          return 'OpenClaw timed out after 120s. The task may be too complex for the current model.'
+          return 'K:BOT Local timed out after 120s. The task may be too complex for the current model.'
         }
-        return `OpenClaw connection failed: ${err instanceof Error ? err.message : String(err)}. Start gateway with: openclaw-cmd start`
+        return `K:BOT Local connection failed: ${err instanceof Error ? err.message : String(err)}. Start gateway with: kbot gateway start`
       }
     },
   })
 
   registerTool({
-    name: 'openclaw_status',
-    description: 'Check if OpenClaw gateway is running and what models are available.',
+    name: 'kbot_local_status',
+    description: 'Check if K:BOT Local gateway is running and what models are available.',
     parameters: {},
     tier: 'free',
     async execute() {
       try {
         const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(3000) })
-        if (!res.ok) return 'OpenClaw gateway: not responding'
+        if (!res.ok) return 'K:BOT Local gateway: not responding'
         const health = await res.json().catch(() => ({}))
-        const lines = ['OpenClaw gateway: running']
+        const lines = ['K:BOT Local gateway: running']
         if (health.version) lines.push(`  Version: ${health.version}`)
         if (health.uptime) lines.push(`  Uptime: ${health.uptime}`)
 
@@ -289,7 +289,7 @@ export function registerSubagentTools(): void {
 
         return lines.join('\n')
       } catch {
-        return 'OpenClaw gateway: offline. Start with: openclaw-cmd start'
+        return 'K:BOT Local gateway: offline. Start with: kbot gateway start'
       }
     },
   })

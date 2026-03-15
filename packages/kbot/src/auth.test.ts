@@ -43,14 +43,14 @@ describe('Provider Detection', () => {
 describe('Provider Properties', () => {
   it('identifies local providers', () => {
     expect(isLocalProvider('ollama')).toBe(true)
-    expect(isLocalProvider('openclaw')).toBe(true)
+    expect(isLocalProvider('kbot-local')).toBe(true)
     expect(isLocalProvider('anthropic')).toBe(false)
     expect(isLocalProvider('openai')).toBe(false)
   })
 
   it('identifies keyless providers', () => {
     expect(isKeylessProvider('ollama')).toBe(true)
-    expect(isKeylessProvider('openclaw')).toBe(false)
+    expect(isKeylessProvider('kbot-local')).toBe(false)
     expect(isKeylessProvider('anthropic')).toBe(false)
   })
 
@@ -69,8 +69,8 @@ describe('Provider Properties', () => {
   it('local providers have zero cost', () => {
     expect(PROVIDERS.ollama.inputCost).toBe(0)
     expect(PROVIDERS.ollama.outputCost).toBe(0)
-    expect(PROVIDERS.openclaw.inputCost).toBe(0)
-    expect(PROVIDERS.openclaw.outputCost).toBe(0)
+    expect(PROVIDERS['kbot-local'].inputCost).toBe(0)
+    expect(PROVIDERS['kbot-local'].outputCost).toBe(0)
   })
 })
 
@@ -83,7 +83,7 @@ describe('Cost Estimation', () => {
 
   it('returns zero for local providers', () => {
     expect(estimateCost('ollama', 10000, 5000)).toBe(0)
-    expect(estimateCost('openclaw', 10000, 5000)).toBe(0)
+    expect(estimateCost('kbot-local', 10000, 5000)).toBe(0)
   })
 })
 

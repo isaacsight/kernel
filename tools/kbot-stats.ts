@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 // ═══════════════════════════════════════════════════════════════════════
-// OpenClaw Stats — Token usage dashboard for the daemon
+// K:BOT Stats — Token usage dashboard for the daemon
 // Shows: lifetime tokens, per-task breakdown, cost savings, recent activity
 // Run: npm run daemon:stats
 // ═══════════════════════════════════════════════════════════════════════
@@ -42,7 +42,7 @@ function getLogLines(n: number): string[] {
 
 function main(): void {
   console.log('\n╔══════════════════════════════════════════════════════════╗')
-  console.log('║          OpenClaw Daemon — Token Usage Dashboard        ║')
+  console.log('║           K:BOT Daemon — Token Usage Dashboard           ║')
   console.log('║                    100% Free (Local Ollama)             ║')
   console.log('╚══════════════════════════════════════════════════════════╝\n')
 

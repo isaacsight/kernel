@@ -17,7 +17,7 @@ const PROVIDER_LIMITS: Record<string, { rpm: number; tpm: number }> = {
   ollama: { rpm: 999, tpm: 999_999 },  // local, no real limit
   lmstudio: { rpm: 999, tpm: 999_999 },
   jan: { rpm: 999, tpm: 999_999 },
-  openclaw: { rpm: 999, tpm: 999_999 },
+  'kbot-local': { rpm: 999, tpm: 999_999 },
 }
 
 interface TokenBucket {

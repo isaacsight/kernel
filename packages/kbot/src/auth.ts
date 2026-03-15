@@ -5,7 +5,7 @@
 // 19 providers: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek,
 //   Groq, Together AI, Fireworks, Perplexity, Cohere, NVIDIA NIM,
 //   SambaNova, Cerebras, OpenRouter,
-//   Ollama (local), LM Studio (local), Jan (local), OpenClaw (local)
+//   Ollama (local), LM Studio (local), Jan (local), K:BOT Local (local)
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
@@ -20,7 +20,7 @@ const CONFIG_PATH = join(KBOT_DIR, 'config.json')
 const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434'
 const LMSTUDIO_HOST = process.env.LMSTUDIO_HOST || 'http://localhost:1234'
 const JAN_HOST = process.env.JAN_HOST || 'http://localhost:1337'
-const OPENCLAW_HOST = process.env.OPENCLAW_HOST || 'http://127.0.0.1:18789'
+const KBOT_LOCAL_HOST = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789'
 
 // ── All supported providers ──
 
@@ -43,7 +43,7 @@ export type ByokProvider =
   | 'lmstudio'     // LM Studio (local GUI + server)
   | 'jan'          // Jan (local, open-source AI)
   | 'ollama'       // Ollama (local open-weight models)
-  | 'openclaw'     // OpenClaw gateway (local AI assistant)
+  | 'kbot-local'   // K:BOT Local gateway (local AI assistant)
   | 'embedded'     // Embedded llama.cpp (no external service needed)
 
 export interface ProviderConfig {
@@ -271,12 +271,12 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
       'tinyllama:1.1b', 'phi3:mini', 'gemma:2b',
     ],
   },
-  openclaw: {
-    name: 'OpenClaw (Local)',
-    apiUrl: `${OPENCLAW_HOST}/v1/chat/completions`,
+  'kbot-local': {
+    name: 'K:BOT Local',
+    apiUrl: `${KBOT_LOCAL_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
-    defaultModel: 'openclaw:main',
-    fastModel: 'openclaw:main',
+    defaultModel: 'kbot-local:main',
+    fastModel: 'kbot-local:main',
     inputCost: 0,
     outputCost: 0,
     authHeader: 'bearer',
@@ -427,12 +427,12 @@ const ENV_KEYS: Array<{ env: string; provider: ByokProvider }> = [
   { env: 'CEREBRAS_API_KEY',    provider: 'cerebras' },
   { env: 'OPENROUTER_API_KEY',  provider: 'openrouter' },
   { env: 'OLLAMA_API_KEY',      provider: 'ollama' },
-  { env: 'OPENCLAW_API_KEY',    provider: 'openclaw' },
+  { env: 'KBOT_LOCAL_API_KEY',   provider: 'kbot-local' },
 ]
 
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export function isLocalProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'openclaw' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
+  return provider === 'ollama' || provider === 'kbot-local' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
 }
 
 /** Check if a provider needs no API key at all */
@@ -471,8 +471,8 @@ export function getByokKey(): string | null {
   // Keyless providers (Ollama) don't need real API keys
   const config = loadConfig()
   if (config?.byok_provider && isKeylessProvider(config.byok_provider)) return 'local'
-  // OpenClaw needs its gateway token
-  if (config?.byok_provider === 'openclaw' && config?.byok_key) return config.byok_key
+  // K:BOT Local needs its gateway token
+  if (config?.byok_provider === 'kbot-local' && config?.byok_key) return config.byok_key
 
   for (const { env } of ENV_KEYS) {
     const val = process.env[env]
@@ -831,14 +831,14 @@ export async function setupJan(): Promise<boolean> {
   return true
 }
 
-/** Detect any running local AI runtime (Ollama, LM Studio, Jan, OpenClaw) */
+/** Detect any running local AI runtime (Ollama, LM Studio, Jan, K:BOT Local) */
 export async function detectLocalRuntime(): Promise<ByokProvider | null> {
   const checks = await Promise.allSettled([
     isOllamaRunning().then(ok => ok ? 'ollama' as const : null),
     isLmStudioRunning().then(ok => ok ? 'lmstudio' as const : null),
     isJanRunning().then(ok => ok ? 'jan' as const : null),
-    fetch(`${OPENCLAW_HOST}/health`, { signal: AbortSignal.timeout(2000) })
-      .then(r => r.ok ? 'openclaw' as const : null)
+    fetch(`${KBOT_LOCAL_HOST}/health`, { signal: AbortSignal.timeout(2000) })
+      .then(r => r.ok ? 'kbot-local' as const : null)
       .catch(() => null),
   ])
 
@@ -848,10 +848,10 @@ export async function detectLocalRuntime(): Promise<ByokProvider | null> {
   return null
 }
 
-/** Set up OpenClaw as the active provider */
-export async function setupOpenClaw(token?: string): Promise<boolean> {
+/** Set up K:BOT Local as the active provider */
+export async function setupKbotLocal(token?: string): Promise<boolean> {
   try {
-    const res = await fetch(`${OPENCLAW_HOST}/health`, { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(`${KBOT_LOCAL_HOST}/health`, { signal: AbortSignal.timeout(3000) })
     if (!res.ok) return false
   } catch {
     return false
@@ -863,7 +863,7 @@ export async function setupOpenClaw(token?: string): Promise<boolean> {
   }
 
   config.byok_enabled = true
-  config.byok_provider = 'openclaw'
+  config.byok_provider = 'kbot-local'
   config.byok_key = token || 'local'
   saveConfig(config)
   return true

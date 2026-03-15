@@ -16,7 +16,7 @@ export const TIERS = {
   premium:  ['anthropic', 'openai', 'google', 'xai'] as ByokProvider[],
   standard: ['mistral', 'deepseek', 'cohere', 'perplexity', 'openrouter'] as ByokProvider[],
   fast:     ['groq', 'together', 'fireworks', 'sambanova', 'cerebras', 'nvidia'] as ByokProvider[],
-  local:    ['ollama', 'lmstudio', 'jan', 'openclaw'] as ByokProvider[],
+  local:    ['ollama', 'lmstudio', 'jan', 'kbot-local'] as ByokProvider[],
 } as const
 
 export type Tier = keyof typeof TIERS

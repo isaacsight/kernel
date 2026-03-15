@@ -270,7 +270,7 @@ async function callAnthropic(
 }
 
 /** OpenAI-compatible Chat Completions API
- *  Works with: OpenAI, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Ollama, OpenClaw
+ *  Works with: OpenAI, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Ollama, K:BOT Local
  */
 async function callOpenAICompat(
   apiKey: string, apiUrl: string, model: string,
@@ -289,7 +289,7 @@ async function callOpenAICompat(
     }))
   }
 
-  // Local providers (Ollama, OpenClaw) may not need auth headers
+  // Local providers (Ollama, K:BOT Local) may not need auth headers
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (apiKey && apiKey !== 'local') {
     headers['Authorization'] = `Bearer ${apiKey}`
@@ -1172,9 +1172,9 @@ export async function runAndPrint(
         printInfo('Open the Ollama app or run: ollama serve')
         return
       }
-      if (config?.byok_provider === 'openclaw') {
-        printError('OpenClaw gateway isn\'t running.')
-        printInfo('Start it: openclaw-cmd start')
+      if (config?.byok_provider === 'kbot-local') {
+        printError('K:BOT Local gateway isn\'t running.')
+        printInfo('Start it: kbot gateway start')
         return
       }
       printError('Can\'t reach the AI provider.')

@@ -12,7 +12,7 @@ const SUBCOMMANDS = [
   'byok',
   'local',
   'ollama',
-  'openclaw',
+  'kbot-local',
   'serve',
   'ide',
   'agents',
@@ -111,7 +111,7 @@ const _SLASH_COMMANDS = [
   '/build',
   '/local',
   '/ollama',
-  '/openclaw',
+  '/kbot-local',
   '/models',
   '/provider',
   '/mimic',
@@ -268,7 +268,7 @@ _kbot() {
     'byok:Bring Your Own Key'
     'local:Use local AI models'
     'ollama:Alias for local'
-    'openclaw:Use OpenClaw gateway'
+    'kbot-local:Use K:BOT Local gateway'
     'serve:Start HTTP server'
     'ide:Start IDE protocol server'
     'agents:List available agents'
@@ -367,10 +367,10 @@ _kbot() {
           _arguments \\
             '--off[Disable provider]'
           ;;
-        openclaw)
+        kbot-local)
           _arguments \\
             '--token[Gateway auth token]:token:' \\
-            '--off[Disable OpenClaw]'
+            '--off[Disable K:BOT Local]'
           ;;
         watch)
           _arguments \\
@@ -407,7 +407,7 @@ function generateFish(): string {
     byok: 'Bring Your Own Key',
     local: 'Use local AI models',
     ollama: 'Alias for local',
-    openclaw: 'Use OpenClaw gateway',
+    'kbot-local': 'Use K:BOT Local gateway',
     serve: 'Start HTTP server',
     ide: 'Start IDE protocol server',
     agents: 'List available agents',

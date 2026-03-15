@@ -124,7 +124,7 @@ Auto-routed or manual with `kbot --agent <name>`:
 | Ollama (Local) | **Free** | `ollama serve` |
 | LM Studio (Local) | **Free** | Open LM Studio → Start Server |
 | Jan (Local) | **Free** | Open Jan → Enable API Server |
-| OpenClaw (Local) | **Free** | `openclaw-cmd start` |
+| K:BOT Local | **Free** | `kbot gateway start` |
 
 All 19 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
 

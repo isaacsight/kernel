@@ -184,7 +184,7 @@ async function checkProviderReachable(): Promise<CheckResult> {
   // For local providers, check their health endpoints
   if (isLocalProvider(provider)) {
     try {
-      const url = provider === 'openclaw'
+      const url = provider === 'kbot-local'
         ? providerConfig.apiUrl.replace('/v1/chat/completions', '/health')
         : providerConfig.apiUrl.replace('/v1/chat/completions', '/v1/models')
 
@@ -240,17 +240,17 @@ async function checkLocalRuntimes(): Promise<CheckResult> {
     if (res.ok) runtimes.push('Jan')
   } catch { /* not running */ }
 
-  // OpenClaw (default port 18789)
+  // K:BOT Local (default port 18789)
   try {
-    const openclawHost = process.env.OPENCLAW_HOST || 'http://127.0.0.1:18789'
-    const res = await fetch(`${openclawHost}/health`, { signal: AbortSignal.timeout(2000) })
-    if (res.ok) runtimes.push('OpenClaw')
+    const kbotLocalHost = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789'
+    const res = await fetch(`${kbotLocalHost}/health`, { signal: AbortSignal.timeout(2000) })
+    if (res.ok) runtimes.push('K:BOT Local')
   } catch { /* not running */ }
 
   if (runtimes.length > 0) {
     return { name: 'Local runtimes', status: 'pass', message: runtimes.join(', ') }
   }
-  return { name: 'Local runtimes', status: 'warn', message: 'none detected (Ollama, LM Studio, Jan, OpenClaw)' }
+  return { name: 'Local runtimes', status: 'warn', message: 'none detected (Ollama, LM Studio, Jan, K:BOT Local)' }
 }
 
 function checkGit(): CheckResult {

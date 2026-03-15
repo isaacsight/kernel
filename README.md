@@ -31,7 +31,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 | AI providers | 14 | 1 | 6 | 75+ |
 | Specialist agents | 37 | 0 | 0 | 0 |
 | Learning engine | Yes | No | No | No |
-| Offline mode | Ollama + OpenClaw | No | Ollama | Ollama |
+| Offline mode | Ollama + K:BOT Local | No | Ollama | Ollama |
 | MCP server | Yes | N/A | No | No |
 | Web companion | kernel.chat | No | No | No |
 | Open source | MIT | Source available | Apache 2.0 | MIT |
@@ -124,7 +124,7 @@ K:BOT auto-routes to the right agent for each task. Or pick one manually with `-
 | Cohere | $0.50-15/M tokens | `COHERE_API_KEY` |
 | NVIDIA NIM | $0.10-0.40/M tokens | `NVIDIA_API_KEY` |
 | Ollama (Local) | **Free** | `ollama serve` |
-| OpenClaw (Local) | **Free** | `openclaw-cmd start` |
+| K:BOT Local | **Free** | `kbot gateway start` |
 
 Set any provider's env var and K:BOT auto-detects it. Or run `kbot auth` for interactive setup.
 

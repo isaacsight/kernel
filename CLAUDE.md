@@ -60,7 +60,7 @@ packages/kbot/           # K:BOT — the main product
 │   │   ├── parallel.ts        # Parallel execution
 │   │   ├── mcp-client.ts      # MCP server consumption
 │   │   ├── build-matrix.ts    # Build system tools
-│   │   ├── openclaw.ts        # Local model tools
+│   │   ├── kbot-local.ts       # Local model tools
 │   │   └── matrix.ts          # Agent matrix tools
 │   └── ide/                # IDE integrations
 │       ├── mcp-server.ts      # MCP server for editors
@@ -84,7 +84,7 @@ supabase/                # Backend
 └── migrations/          # Database migrations
 
 tools/                   # Dev tools & automation
-├── openclaw-daemon.ts   # 24/7 local automation daemon
+├── kbot-daemon.ts       # 24/7 local automation daemon
 ├── semantic-search.ts   # Codebase semantic search
 ├── kernel-monitor.ts    # TUI monitoring dashboard
 ├── kernel-agents-mcp.ts # Agent team MCP server

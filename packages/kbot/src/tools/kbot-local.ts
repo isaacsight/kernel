@@ -1,23 +1,23 @@
-// K:BOT OpenClaw Local AI Tools
+// K:BOT Local AI Tools
 //
-// Integrates OpenClaw's local AI capabilities as kbot tools.
+// Integrates K:BOT Local's AI capabilities as kbot tools.
 // These run entirely on the user's machine — no cloud API needed.
 //
 // ENHANCEMENTS (v2.3):
-//   - Configurable gateway URL via OPENCLAW_URL env var
+//   - Configurable gateway URL via KBOT_LOCAL_URL env var
 //   - Health check with graceful degradation (tools skip if gateway offline)
 //   - Connection status caching (recheck every 60s)
 
 import { registerTool } from './index.js'
 
-const OPENCLAW_BASE = process.env.OPENCLAW_URL || 'http://127.0.0.1:18789'
+const KBOT_LOCAL_BASE = process.env.KBOT_LOCAL_URL || 'http://127.0.0.1:18789'
 
 /** Connection health state */
 let _gatewayOnline: boolean | null = null  // null = unknown
 let _lastHealthCheck = 0
 const HEALTH_CHECK_INTERVAL = 60_000 // 60 seconds
 
-/** Check if OpenClaw gateway is reachable (cached) */
+/** Check if K:BOT Local gateway is reachable (cached) */
 async function isGatewayOnline(): Promise<boolean> {
   const now = Date.now()
   if (_gatewayOnline !== null && (now - _lastHealthCheck) < HEALTH_CHECK_INTERVAL) {
@@ -25,7 +25,7 @@ async function isGatewayOnline(): Promise<boolean> {
   }
 
   try {
-    const res = await fetch(`${OPENCLAW_BASE}/health`, {
+    const res = await fetch(`${KBOT_LOCAL_BASE}/health`, {
       signal: AbortSignal.timeout(3000),
     })
     _gatewayOnline = res.ok
@@ -36,8 +36,8 @@ async function isGatewayOnline(): Promise<boolean> {
   return _gatewayOnline
 }
 
-/** Call an OpenClaw endpoint with graceful degradation */
-async function callOpenClaw(
+/** Call a K:BOT Local endpoint with graceful degradation */
+async function callKbotLocal(
   endpoint: string,
   payload: Record<string, unknown>,
   timeout = 120_000,
@@ -45,11 +45,11 @@ async function callOpenClaw(
   // Quick health check — skip if gateway known to be offline
   const online = await isGatewayOnline()
   if (!online) {
-    return `OpenClaw gateway is offline. Start it with: openclaw-cmd start\nOr set OPENCLAW_URL env var if running on a different port.`
+    return `K:BOT Local gateway is offline. Start it with: kbot gateway start\nOr set KBOT_LOCAL_URL env var if running on a different port.`
   }
 
   try {
-    const res = await fetch(`${OPENCLAW_BASE}/v1/${endpoint}`, {
+    const res = await fetch(`${KBOT_LOCAL_BASE}/v1/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -58,25 +58,25 @@ async function callOpenClaw(
 
     if (!res.ok) {
       const err = await res.text().catch(() => `HTTP ${res.status}`)
-      return `Error: OpenClaw ${endpoint} failed — ${err}`
+      return `Error: K:BOT Local ${endpoint} failed — ${err}`
     }
 
     const data = await res.json()
     return data.result || data.output || data.text || JSON.stringify(data, null, 2)
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') {
-      return `Error: OpenClaw ${endpoint} timed out after ${timeout / 1000}s`
+      return `Error: K:BOT Local ${endpoint} timed out after ${timeout / 1000}s`
     }
     // Mark gateway as offline for next check
     _gatewayOnline = false
     _lastHealthCheck = Date.now()
-    return `Error: OpenClaw gateway not reachable at ${OPENCLAW_BASE}. Start it with: openclaw-cmd start`
+    return `Error: K:BOT Local gateway not reachable at ${KBOT_LOCAL_BASE}. Start it with: kbot gateway start`
   }
 }
 
-export function registerOpenClawTools(): void {
+export function registerKbotLocalTools(): void {
   registerTool({
-    name: 'openclaw_explain',
+    name: 'kbot_local_explain',
     description: '[Local AI] Explain code using a local model. No API costs.',
     parameters: {
       code: { type: 'string', description: 'The code to explain', required: true },
@@ -84,12 +84,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('explain', { code: String(args.code), language: args.language })
+      return callKbotLocal('explain', { code: String(args.code), language: args.language })
     },
   })
 
   registerTool({
-    name: 'openclaw_review',
+    name: 'kbot_local_review',
     description: '[Local AI] Review code for bugs, security issues, and style.',
     parameters: {
       code: { type: 'string', description: 'The code to review', required: true },
@@ -97,12 +97,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('review', { code: String(args.code), focus: args.focus || 'all' })
+      return callKbotLocal('review', { code: String(args.code), focus: args.focus || 'all' })
     },
   })
 
   registerTool({
-    name: 'openclaw_refactor',
+    name: 'kbot_local_refactor',
     description: '[Local AI] Suggest code refactoring improvements.',
     parameters: {
       code: { type: 'string', description: 'The code to refactor', required: true },
@@ -110,12 +110,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('refactor', { code: String(args.code), goal: args.goal || 'readability' })
+      return callKbotLocal('refactor', { code: String(args.code), goal: args.goal || 'readability' })
     },
   })
 
   registerTool({
-    name: 'openclaw_test_gen',
+    name: 'kbot_local_test_gen',
     description: '[Local AI] Generate test cases for code.',
     parameters: {
       code: { type: 'string', description: 'The code to test', required: true },
@@ -123,12 +123,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('test_gen', { code: String(args.code), framework: args.framework })
+      return callKbotLocal('test_gen', { code: String(args.code), framework: args.framework })
     },
   })
 
   registerTool({
-    name: 'openclaw_ask',
+    name: 'kbot_local_ask',
     description: '[Local AI] Ask a question to local AI. No cloud API needed.',
     parameters: {
       question: { type: 'string', description: 'The question to ask', required: true },
@@ -136,12 +136,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('ask', { question: String(args.question), context: args.context })
+      return callKbotLocal('ask', { question: String(args.question), context: args.context })
     },
   })
 
   registerTool({
-    name: 'openclaw_diagram',
+    name: 'kbot_local_diagram',
     description: '[Local AI] Generate Mermaid diagrams from description or code.',
     parameters: {
       input: { type: 'string', description: 'Description or code to diagram', required: true },
@@ -149,12 +149,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('diagram', { input: String(args.input), type: args.type || 'auto' })
+      return callKbotLocal('diagram', { input: String(args.input), type: args.type || 'auto' })
     },
   })
 
   registerTool({
-    name: 'openclaw_regex',
+    name: 'kbot_local_regex',
     description: '[Local AI] Build or explain regex patterns.',
     parameters: {
       input: { type: 'string', description: 'Description OR regex to explain', required: true },
@@ -162,12 +162,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('regex', { input: String(args.input), mode: args.mode || 'auto' })
+      return callKbotLocal('regex', { input: String(args.input), mode: args.mode || 'auto' })
     },
   })
 
   registerTool({
-    name: 'openclaw_sql',
+    name: 'kbot_local_sql',
     description: '[Local AI] Write or explain SQL queries.',
     parameters: {
       input: { type: 'string', description: 'Natural language OR SQL to explain', required: true },
@@ -175,12 +175,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('sql', { input: String(args.input), dialect: args.dialect || 'postgres' })
+      return callKbotLocal('sql', { input: String(args.input), dialect: args.dialect || 'postgres' })
     },
   })
 
   registerTool({
-    name: 'openclaw_shell',
+    name: 'kbot_local_shell',
     description: '[Local AI] Explain shell commands or build them from description.',
     parameters: {
       input: { type: 'string', description: 'Command to explain OR description to build', required: true },
@@ -188,12 +188,12 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('shell_explain', { input: String(args.input), mode: args.mode || 'auto' })
+      return callKbotLocal('shell_explain', { input: String(args.input), mode: args.mode || 'auto' })
     },
   })
 
   registerTool({
-    name: 'openclaw_summarize',
+    name: 'kbot_local_summarize',
     description: '[Local AI] Summarize text or code.',
     parameters: {
       text: { type: 'string', description: 'Text or code to summarize', required: true },
@@ -201,7 +201,7 @@ export function registerOpenClawTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      return callOpenClaw('summarize', { text: String(args.text), length: args.length || 'medium' })
+      return callKbotLocal('summarize', { text: String(args.text), length: args.length || 'medium' })
     },
   })
 }

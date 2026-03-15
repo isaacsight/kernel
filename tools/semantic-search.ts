@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 // ═══════════════════════════════════════════════════════════════
 // Semantic Search — find code by meaning, not just keywords
-// Uses the embedding index built by the OpenClaw daemon
+// Uses the embedding index built by the K:BOT daemon
 // Usage: npm run search -- "how does agent routing work"
 // ═══════════════════════════════════════════════════════════════
 
@@ -78,7 +78,7 @@ async function main() {
   // Check embeddings exist
   if (!existsSync(EMB_DIR)) {
     console.log(`\n${YELLOW}No embedding index found.${RESET}`)
-    console.log(`The OpenClaw daemon builds this automatically. Run: ${CYAN}npm run daemon${RESET}\n`)
+    console.log(`The K:BOT daemon builds this automatically. Run: ${CYAN}npm run daemon${RESET}\n`)
     process.exit(1)
   }
 

@@ -155,7 +155,7 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
 // ══ MIMIC MATRIX ══════════════════════════════════════════
 // Create agents that mimic the style, workflow, and conventions of
 // specific tools, frameworks, teams, and coding philosophies.
-// This is kbot's intelligence layer that OpenClaw doesn't have.
+// This is kbot's intelligence layer that K:BOT Local doesn't have.
 
 export interface MimicProfile {
   id: string

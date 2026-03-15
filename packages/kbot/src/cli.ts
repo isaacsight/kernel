@@ -13,7 +13,7 @@ import { createInterface } from 'node:readline'
 import { existsSync } from 'node:fs'
 import { join, basename } from 'node:path'
 import { Command } from 'commander'
-import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
+import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
 import { registerAllTools } from './tools/index.js'
@@ -452,21 +452,21 @@ async function main(): Promise<void> {
     })
 
   program
-    .command('openclaw')
-    .description('Use OpenClaw gateway as AI provider')
+    .command('kbot-local')
+    .description('Use K:BOT Local gateway as AI provider')
     .option('--token <token>', 'Gateway auth token')
-    .option('--off', 'Disable OpenClaw mode')
+    .option('--off', 'Disable K:BOT Local mode')
     .action(async (opts: { token?: string; off?: boolean }) => {
       if (opts.off) {
         disableByok()
-        printSuccess('OpenClaw disabled. Provider disabled.')
+        printSuccess('K:BOT Local disabled. Provider disabled.')
         return
       }
-      const ok = await setupOpenClaw(opts.token)
+      const ok = await setupKbotLocal(opts.token)
       if (ok) {
-        printSuccess('OpenClaw enabled! Connected to local gateway at 127.0.0.1:18789.')
+        printSuccess('K:BOT Local enabled! Connected to local gateway at 127.0.0.1:18789.')
       } else {
-        printError('Cannot connect to OpenClaw gateway. Start it first.')
+        printError('Cannot connect to K:BOT Local gateway. Start it first.')
       }
     })
 
@@ -728,7 +728,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'openclaw', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -747,7 +747,7 @@ async function main(): Promise<void> {
     // Priority 2: Check local providers in PARALLEL (all at once, use whichever responds first)
     if (!byokActive) {
       const { isLmStudioRunning, isJanRunning, setupLmStudio, setupJan } = await import('./auth.js')
-      const [ollamaResult, lmstudioResult, janResult, openclawResult] = await Promise.allSettled([
+      const [ollamaResult, lmstudioResult, janResult, kbotLocalResult] = await Promise.allSettled([
         // Check Ollama
         (async () => {
           const up = await isOllamaRunning()
@@ -771,22 +771,22 @@ async function main(): Promise<void> {
           const ok = await setupJan()
           return ok ? { provider: 'jan' as const } : null
         })(),
-        // Check OpenClaw
+        // Check K:BOT Local
         (async () => {
           try {
             const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(1500) })
             if (!res.ok) return null
-            const ok = await setupOpenClaw()
-            return ok ? { provider: 'openclaw' as const } : null
+            const ok = await setupKbotLocal()
+            return ok ? { provider: 'kbot-local' as const } : null
           } catch { return null }
         })(),
       ])
 
-      // Prefer Ollama > LM Studio > Jan > OpenClaw
+      // Prefer Ollama > LM Studio > Jan > K:BOT Local
       const ollamaOk = ollamaResult.status === 'fulfilled' && ollamaResult.value
       const lmstudioOk = lmstudioResult.status === 'fulfilled' && lmstudioResult.value
       const janOk = janResult.status === 'fulfilled' && janResult.value
-      const openclawOk = openclawResult.status === 'fulfilled' && openclawResult.value
+      const kbotLocalOk = kbotLocalResult.status === 'fulfilled' && kbotLocalResult.value
 
       if (ollamaOk) {
         byokActive = true
@@ -800,10 +800,10 @@ async function main(): Promise<void> {
         byokActive = true
         localActive = true
         printSuccess('Auto-configured Jan. Ready — $0 cost!')
-      } else if (openclawOk) {
+      } else if (kbotLocalOk) {
         byokActive = true
         localActive = true
-        printSuccess('Auto-configured OpenClaw gateway. Ready — $0 cost!')
+        printSuccess('Auto-configured K:BOT Local gateway. Ready — $0 cost!')
       }
     }
 
@@ -965,7 +965,7 @@ async function main(): Promise<void> {
   }
 
   // One-shot mode: kbot "fix the bug" — always stream for speed
-  if (promptArgs.length > 0 && !['byok', 'auth', 'ide', 'ollama', 'openclaw', 'pull', 'doctor'].includes(promptArgs[0])) {
+  if (promptArgs.length > 0 && !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor'].includes(promptArgs[0])) {
     if (!opts.pipe) console.log(bannerCompact())
     let message = promptArgs.join(' ')
     // If stdin was piped in, prepend it as context
@@ -1032,7 +1032,7 @@ async function byokFlow(): Promise<void> {
   printInfo('  Mistral AI            xAI (Grok)         DeepSeek')
   printInfo('  Groq                  Together AI        Fireworks AI')
   printInfo('  Perplexity            Cohere             NVIDIA NIM')
-  printInfo('  Ollama (local, free)  OpenClaw (local gateway)')
+  printInfo('  Ollama (local, free)  K:BOT Local (local gateway)')
   console.log()
   printInfo('Paste your API key (auto-detected by prefix):')
   console.log()
@@ -1328,8 +1328,8 @@ async function startRepl(
     if (provider === 'ollama') {
       const models = await warmOllamaModelCache()
       printInfo(`Ollama · ${models.length} models · free`)
-    } else if (provider === 'openclaw') {
-      printInfo('OpenClaw · local · free')
+    } else if (provider === 'kbot-local') {
+      printInfo('K:BOT Local · local · free')
     }
   } else if (byokActive) {
     const config = loadConfig()
@@ -2219,17 +2219,17 @@ async function handleSlashCommand(
       break
     }
 
-    case 'openclaw': {
+    case 'kbot-local': {
       if (args[0] === 'off') {
         disableByok()
-        printSuccess('OpenClaw disabled.')
+        printSuccess('K:BOT Local disabled.')
         break
       }
-      const ok = await setupOpenClaw(args[0])
+      const ok = await setupKbotLocal(args[0])
       if (ok) {
-        printSuccess('OpenClaw gateway connected at 127.0.0.1:18789')
+        printSuccess('K:BOT Local gateway connected at 127.0.0.1:18789')
       } else {
-        printError('Cannot connect to OpenClaw gateway.')
+        printError('Cannot connect to K:BOT Local gateway.')
       }
       break
     }
@@ -2271,7 +2271,7 @@ async function handleSlashCommand(
         printInfo('No provider configured. Run: kbot byok')
       }
       printInfo('')
-      printInfo('Switch: /local [model] | /openclaw | kbot byok')
+      printInfo('Switch: /local [model] | /kbot-local | kbot byok')
       break
     }
 

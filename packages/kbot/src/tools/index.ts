@@ -209,7 +209,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     { registerBuildMatrixTools },
     { registerSubagentTools },
     { registerWorktreeTools },
-    { registerOpenClawTools },
+    { registerKbotLocalTools },
     { registerQualityTools },
     { registerMemoryTools },
     { registerBrowserTools },
@@ -249,7 +249,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     import('./build-matrix.js'),
     import('./subagent.js'),
     import('./worktree.js'),
-    import('./openclaw.js'),
+    import('./kbot-local.js'),
     import('./quality.js'),
     import('./memory-tools.js'),
     import('./browser.js'),
@@ -291,7 +291,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
   registerBuildMatrixTools()
   registerSubagentTools()
   registerWorktreeTools()
-  registerOpenClawTools()
+  registerKbotLocalTools()
   registerQualityTools()
   registerMemoryTools()
   registerBrowserTools()
