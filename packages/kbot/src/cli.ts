@@ -547,6 +547,32 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('share [session]')
+    .description('Share a conversation as a GitHub Gist — get a public link')
+    .option('-t, --title <title>', 'Title for the shared conversation')
+    .option('--private', 'Create a secret (unlisted) gist')
+    .action(async (sessionId?: string, shareOpts?: { title?: string; private?: boolean }) => {
+      const { shareConversation } = await import('./share.js')
+      try {
+        const result = await shareConversation(sessionId, {
+          title: shareOpts?.title,
+          public: !shareOpts?.private,
+        })
+        if (result.method === 'gist') {
+          printSuccess(`Shared! ${result.url}`)
+          printInfo('Link copied to clipboard.')
+        } else if (result.method === 'clipboard') {
+          printSuccess('Conversation copied to clipboard as markdown.')
+          printInfo('Paste it anywhere — GitHub, Discord, Twitter, etc.')
+        } else {
+          process.stdout.write(result.markdown)
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+      }
+    })
+
+  program
     .command('plugins')
     .description('Manage kbot plugins')
     .argument('[action]', 'Action: list, search, install, uninstall, update')
@@ -2252,6 +2278,29 @@ async function handleSlashCommand(
           ;(globalThis as Record<string, unknown>).__kbot_voice = state
           printSuccess(formatVoiceStatus(state))
         }
+      }
+      break
+    }
+
+    case 'share': {
+      const { shareConversation } = await import('./share.js')
+      try {
+        const sessionId = args[0] || undefined
+        const result = await shareConversation(sessionId, {
+          title: args.slice(1).join(' ') || undefined,
+        })
+        if (result.method === 'gist') {
+          printSuccess(`Shared! ${result.url}`)
+          printInfo('Link copied to clipboard.')
+        } else if (result.method === 'clipboard') {
+          printSuccess('Conversation copied to clipboard as markdown.')
+          printInfo('Paste it anywhere — GitHub, Discord, Twitter, etc.')
+          printInfo('For a shareable link, install GitHub CLI: brew install gh')
+        } else {
+          console.log(result.markdown)
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
       }
       break
     }

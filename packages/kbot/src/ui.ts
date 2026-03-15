@@ -269,6 +269,7 @@ export function printHelp(): void {
     `  ${DIM('─'.repeat(50))}`,
     `  ${chalk.white('/save')} ${DIM('[name]')}     Save this conversation`,
     `  ${chalk.white('/resume')} ${DIM('<id>')}     Pick up where you left off`,
+    `  ${chalk.white('/share')} ${DIM('[id]')}      Share as GitHub Gist — get a public link`,
     `  ${chalk.white('/clear')}             Start fresh`,
     `  ${chalk.white('/remember')} ${DIM('<…>')}   Teach kbot something it will remember`,
     `  ${chalk.white('/tutorial')}           Guided walkthrough — build something step by step`,
