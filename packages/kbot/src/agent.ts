@@ -43,6 +43,9 @@ import { runPreToolHook, runPostToolHook } from './hooks.js'
 import { getRepoMapForContext } from './repo-map.js'
 import { recordSuccess, recordFailure } from './provider-fallback.js'
 import { isSelfEvalEnabled, evaluateResponse } from './self-eval.js'
+import { withErrorCorrection } from './error-correction.js'
+import { EntropyScorer } from './entropy-context.js'
+import { LoopDetector } from './godel-limits.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
