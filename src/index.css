@@ -7376,9 +7376,11 @@ h4 {
 }
 .ka-usage-counter--warn { color: #B8860B; }
 .ka-usage-counter--limit { color: var(--rubin-error, #C0392B); font-weight: 600; }
+.ka-usage-overage { color: var(--rubin-error, #C0392B); font-weight: 600; }
 [data-theme="dark"] .ka-usage-counter { color: #A09A90; }
 [data-theme="dark"] .ka-usage-counter--warn { color: #D4A017; }
 [data-theme="dark"] .ka-usage-counter--limit { color: #E57373; }
+[data-theme="dark"] .ka-usage-overage { color: #E57373; }
 
 .ka-input-bar {
     display: flex;

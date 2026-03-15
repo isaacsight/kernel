@@ -35,7 +35,7 @@ interface AccountSettingsPanelProps {
 }
 
 export default function AccountSettingsPanel({
-  user, isAdmin, onClose, onToast, onSignOut, onDeleteAccount,
+  user, isPro, isAdmin, planId, onClose, onToast, onUpgrade, onManageSubscription, onSignOut, onDeleteAccount,
 }: AccountSettingsPanelProps) {
   const { t } = useTranslation('settings')
   const auth = useAuthContext()
@@ -329,17 +329,29 @@ export default function AccountSettingsPanel({
 
       {/* ═══ Plan ═══ */}
       <div className="ka-settings-section">
-        <h3 className="ka-settings-section-header">Plan</h3>
+        <h3 className="ka-settings-section-header">{t('subscription.heading')}</h3>
         <div className="ka-settings-section-body">
           <div className="ka-billing-plan-current">
             <div className="ka-billing-plan-header">
               <IconMessageCircle size={16} />
-              <span className="ka-billing-plan-label">Free</span>
+              <span className="ka-billing-plan-label">
+                {isAdmin ? t('subscription.admin') : isPro ? t('subscription.pro') : t('subscription.free')}
+              </span>
             </div>
             <span className="ka-billing-plan-upgrade-hint">
-              10 messages per day
+              {isPro ? '200 messages per month' : '10 messages per month'}
             </span>
           </div>
+          {!isPro && !isAdmin && onUpgrade && (
+            <button className="ka-gate-submit" onClick={onUpgrade} style={{ marginTop: 8 }}>
+              {t('subscription.upgradeMonthly')}
+            </button>
+          )}
+          {isPro && onManageSubscription && (
+            <button className="ka-gate-submit" onClick={onManageSubscription} style={{ marginTop: 8 }}>
+              {t('subscription.manage')}
+            </button>
+          )}
         </div>
       </div>
 

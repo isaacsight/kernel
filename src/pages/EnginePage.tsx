@@ -795,9 +795,13 @@ function EngineChat() {
             <Suspense fallback={<PanelShimmer />}>
               <AccountSettingsPanel
                 user={user}
+                isPro={isPro}
                 isAdmin={isAdmin}
+                planId={planId}
                 onClose={() => panels.closePanel('account-settings')}
                 onToast={showToast}
+                onUpgrade={() => billing.handleUpgrade('pro_monthly')}
+                onManageSubscription={billing.handleManageSubscription}
                 onSignOut={signOut}
                 onDeleteAccount={() => billing.setShowDeleteConfirm(true)}
               />
@@ -1406,6 +1410,9 @@ function EngineChat() {
       {!messageUsage.loading && !isAdmin && (
         <div className={`ka-usage-counter${messageUsage.used >= messageUsage.limit ? ' ka-usage-counter--limit' : messageUsage.used >= messageUsage.limit * 0.7 ? ' ka-usage-counter--warn' : ''}`}>
           {messageUsage.used} / {messageUsage.limit}
+          {isPro && messageUsage.used > messageUsage.limit && (
+            <span className="ka-usage-overage"> · ${((messageUsage.used - messageUsage.limit) * 0.10).toFixed(2)} overage</span>
+          )}
         </div>
       )}
 
