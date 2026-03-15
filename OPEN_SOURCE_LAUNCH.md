@@ -261,6 +261,30 @@ Submit K:BOT to these curated lists via PR:
 - [ ] **CZI Open Science** — [chanzuckerberg.com/science](https://chanzuckerberg.com/science/)
   - Chan Zuckerberg Initiative supports open science tools
 
+- [ ] **DOECODE** — [osti.gov/doecode](https://www.osti.gov/doecode/)
+  - US Department of Energy software registry
+
+- [ ] **CodeOcean** — [codeocean.com](https://codeocean.com/)
+  - Reproducible compute capsules — host K:BOT demo
+
+- [ ] **FigShare** — [figshare.com](https://figshare.com/)
+  - General research outputs with DOI
+
+- [ ] **HAL** — [hal.science](https://hal.science/)
+  - French scholarly archive (large EU audience)
+
+- [ ] **B2FIND (EUDAT)** — [b2find.eudat.eu](https://b2find.eudat.eu/)
+  - European research data/software discovery
+
+- [ ] **The Lens** — [lens.org](https://www.lens.org/)
+  - Open scholarly and patent metadata
+
+- [ ] **Scientific Python Tools** — [tools.scientific-python.org](https://tools.scientific-python.org/)
+  - Scientific Python ecosystem directory
+
+- [ ] **Semantic Scholar** — [semanticscholar.org](https://www.semanticscholar.org/)
+  - AI-powered paper search — discovers software via citations
+
 ## 6. Metadata Standards (Implemented)
 
 - [x] **CITATION.cff** — Standard for software citation
@@ -274,8 +298,31 @@ Submit K:BOT to these curated lists via PR:
 - [x] **Zenodo metadata (.zenodo.json)** — Enriches DOI metadata
   - `.zenodo.json` already in repo root
 
+- [ ] **SWHID** — Software Heritage Identifier (ISO/IEC 18670)
+  - Content-addressable permanent identifier
+  - Automatically assigned when archived in Software Heritage
+
+- [ ] **RRID** — Research Resource Identifier (via SciCrunch)
+  - Used by 1000+ journals for citing research resources
+  - Apply at [scicrunch.org](https://scicrunch.org/)
+
 - [ ] **.well-known/mcp.json** — MCP server discovery (2026 roadmap)
   - Planned for MCP spec evolution
+
+### Metadata Synchronization Tools
+
+- [ ] **somesy** — [github.com/Materials-Data-Science-and-Informatics/somesy](https://github.com/Materials-Data-Science-and-Informatics/somesy)
+  - CLI that syncs CITATION.cff, codemeta.json, package.json from single source
+  - Recommended as pre-commit hook
+
+- [ ] **codemeta-harvester** — [github.com/proycon/codemeta-harvester](https://github.com/proycon/codemeta-harvester)
+  - Aggregates schema.org metadata from repos and services
+
+- [ ] **SOMEF** — [github.com/KnowledgeCaptureAndDiscovery/somef](https://github.com/KnowledgeCaptureAndDiscovery/somef)
+  - Automatically extracts software metadata from READMEs
+
+- [ ] **Zenodo Upload GitHub Action** — [github.com/marketplace/actions/zenodo-upload](https://github.com/marketplace/actions/zenodo-upload)
+  - Automates DOI minting on GitHub releases
 
 ## 7. Open Source Platforms & Communities
 
@@ -297,9 +344,16 @@ Submit K:BOT to these curated lists via PR:
 
 ### Community Engagement
 
-- [ ] **Research Software Engineering (RSE)** — [society-rse.org](https://society-rse.org/)
-  - UK RSE, US-RSE, DE-RSE communities
-  - Mailing lists and Slack channels
+- [ ] **Research Software Engineering (RSE)** — International RSE community
+  - [Society of RSE (UK)](https://society-rse.org/) — Original RSE association
+  - [US-RSE](https://us-rse.org/) — United States RSE association
+  - [DE-RSE](https://de-rse.org/) — Germany
+  - [NL-RSE](https://nl-rse.org/) — Netherlands
+  - [Nordic-RSE](https://nordic-rse.org/) — Nordics
+  - [RSE Asia](https://rse-asia.github.io/) — Asia
+  - [RSE-AUNZ](https://rse-aunz.github.io/) — Australia/New Zealand
+  - [International Council](https://researchsoftware.org/council.html) — Global coordination
+  - All have mailing lists and Slack channels
 
 - [ ] **NumFOCUS** — [numfocus.org](https://numfocus.org/)
   - Umbrella org for open-source scientific computing (NumPy, Pandas, Jupyter)
@@ -315,8 +369,23 @@ Submit K:BOT to these curated lists via PR:
 - [ ] **Open Source Initiative (OSI)** — [opensource.org](https://opensource.org/)
   - MIT license already OSI-approved
 
+- [ ] **Research Software Alliance (ReSA)** — [researchsoft.org](https://www.researchsoft.org/)
+  - International advocacy for research software
+  - Maintains Research Software Funding Opportunities Database
+
+- [ ] **Center for Open Science (COS)** — [cos.io](https://www.cos.io/)
+  - Open science infrastructure and advocacy
+
 - [ ] **Linux Foundation** — [linuxfoundation.org](https://www.linuxfoundation.org/)
   - For long-term governance options
+
+### RSE Events (Submit Talks / Demos)
+
+- [ ] **RSECon26** — September 9-11, 2026, Sheffield, UK
+- [ ] **International RSE Day** — Second Thursday of October
+- [ ] **SciPy Conference** — Annual scientific Python gathering
+- [ ] **JupyterCon** — Jupyter ecosystem conference
+- [ ] **PyCon** — Python conference (research track)
 
 ## 8. GitHub Optimization
 
@@ -391,6 +460,22 @@ The FAIR principles (Findable, Accessible, Interoperable, Reusable) for research
 
 - [ ] **howfairis** — [github.com/fair-software/howfairis](https://github.com/fair-software/howfairis)
   - Automated FAIR compliance checker for GitHub repos
+
+- [ ] **FAIRsoft (OpenEBench)** — [openebench.bsc.es](https://openebench.bsc.es/)
+  - Quantitative FAIRness scoring (43,000+ life sciences tools evaluated)
+
+- [ ] **FAIRshare** — [docs.fairshareapp.io](https://docs.fairshareapp.io/)
+  - Desktop app for step-by-step FAIR compliance
+
+- [ ] **Netherlands eScience Center self-assessment** — [fair-software.nl](https://fair-software.nl/)
+  - Checklist for FAIR software
+
+### Key References
+
+- Barker et al., ["Introducing the FAIR Principles for research software"](https://www.nature.com/articles/s41597-022-01710-x), *Scientific Data* (2022)
+- [The Turing Way](https://book.the-turing-way.org/) — Community handbook for reproducible data science
+- [Research Software Citation for Developers](https://cite.research-software.org/developers/)
+- [RSQKit (EVERSE)](https://everse.software/RSQKit/) — Curated best practices for research software quality
 
 ## 10. Priority Execution Order
 
