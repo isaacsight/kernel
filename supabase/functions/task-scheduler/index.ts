@@ -215,9 +215,6 @@ serve(async (req: Request) => {
       if (stripeKey) {
         const METER_EVENTS: Record<string, string> = {
           pro_monthly: 'kernel_pro_overage',
-          pro_annual: 'kernel_pro_overage',
-          max_monthly: 'kernel_max_overage',
-          max_annual: 'kernel_max_overage',
         }
 
         const { data: overageSubs } = await supabase
@@ -276,8 +273,7 @@ serve(async (req: Request) => {
 
       // Spending alerts at 80% and 100% of base quota (unified on subscriptions)
       const PLAN_LIMITS: Record<string, number> = {
-        pro_monthly: 1000, pro_annual: 1000,
-        max_monthly: 6000, max_annual: 6000,
+        pro_monthly: 200,
       }
 
       const { data: alertSubs } = await supabase
