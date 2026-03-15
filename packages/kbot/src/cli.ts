@@ -438,7 +438,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 151 tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 214 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
@@ -1363,7 +1363,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  39 agents. 216 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  11 agents. 214 tools. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

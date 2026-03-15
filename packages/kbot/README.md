@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Universal AI agent for your terminal. 39 specialists, 216 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
+  Universal AI agent for your terminal. 5 built-in agents + 6 presets, 214 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 - **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
 - **Runs fully offline** — `kbot local` for $0 local AI, no data leaves your machine
 - **Learns your patterns** — remembers what worked, gets faster over time
-- **39 specialist agents** — auto-routes to the right expert for each task
+- **11 specialist agents** (5 built-in + 6 presets) — auto-routes to the right expert for each task
 - **Self-evolving** — diagnoses its own weaknesses and improves its own code (`/evolve`)
 - **Shell completions** — tab completion for bash, zsh, and fish (`kbot completions zsh`)
 - **MCP server built in** — plug kbot into any IDE as a tool provider
@@ -81,7 +81,7 @@ kbot "deploy to production"
 kbot -p "generate a migration for user roles" > migration.sql
 ```
 
-## Specialists (39)
+## Specialists (11)
 
 Auto-routed or manual with `kbot --agent <name>`:
 
@@ -93,7 +93,7 @@ Auto-routed or manual with `kbot --agent <name>`:
 
 ## Features
 
-- **208 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
+- **214 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
 - **Local-First** — File reads, git, grep run instantly without an API call
 - **Learning Engine** — Patterns, solutions, and user preferences cached across sessions
 - **Mimic Matrix** — Code like Claude Code, Cursor, Copilot, Next.js, React, Rust, Python
@@ -148,7 +148,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 216 tools for any LLM or automation pipeline.
+REST API exposing all 214 tools for any LLM or automation pipeline.
 
 ## Use Everywhere
 
@@ -190,7 +190,7 @@ REST API exposing all 216 tools for any LLM or automation pipeline.
 
 ## Web Companion
 
-[kernel.chat](https://kernel.chat) — same 39 agents with a visual interface. Free (20 msgs/day).
+[kernel.chat](https://kernel.chat) — visual interface with 39 agents. Free (20 msgs/day).
 
 ## Contributing
 

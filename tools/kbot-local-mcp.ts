@@ -1,10 +1,10 @@
 #!/usr/bin/env npx tsx
-// OpenClaw MCP Server — gives Claude Code access to local Ollama models
+// K:BOT Local MCP Server — gives Claude Code access to local AI models via K:BOT
 // Delegate tasks to local AI for $0: code review, research, quick completions
 // Models run on your machine via Ollama — no API costs
 //
 // ── SECURITY BOUNDARY ──────────────────────────────────────────
-// OpenClaw is SANDBOXED. It may ONLY communicate with localhost Ollama.
+// K:BOT Local is SANDBOXED. It may ONLY communicate with localhost Ollama.
 // It has NO access to:
 //   - Supabase (no client, no service key, no database)
 //   - Stripe or any payment systems
@@ -24,7 +24,7 @@ const OLLAMA_URL = 'http://localhost:11434' as const
 function assertLocalhost(url: string): void {
   const parsed = new URL(url)
   if (parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1') {
-    throw new Error(`Security: OpenClaw may only connect to localhost, not ${parsed.hostname}`)
+    throw new Error(`Security: K:BOT Local may only connect to localhost, not ${parsed.hostname}`)
   }
 }
 
@@ -149,7 +149,7 @@ function safeHandler(fn: (...args: any[]) => Promise<any>) {
       return await fn(...args)
     } catch (err) {
       return {
-        content: [{ type: 'text' as const, text: `OpenClaw error: ${err instanceof Error ? err.message : String(err)}` }],
+        content: [{ type: 'text' as const, text: `K:BOT Local error: ${err instanceof Error ? err.message : String(err)}` }],
         isError: true,
       }
     }
@@ -158,8 +158,8 @@ function safeHandler(fn: (...args: any[]) => Promise<any>) {
 
 // ── MCP Server ──────────────────────────────────────────────
 const server = new McpServer({
-  name: 'openclaw',
-  version: '2.0.0',
+  name: 'kbot-local',
+  version: '2.19.0',
 })
 
 // ═══════════════════════════════════════════════════════════════

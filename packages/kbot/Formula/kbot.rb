@@ -1,5 +1,5 @@
 class Kbot < Formula
-  desc "Local-first AI agent for your terminal with 39 specialists and 167 tools"
+  desc "Local-first AI agent for your terminal with 11 specialist agents and 214 tools"
   homepage "https://kernel.chat"
   url "https://registry.npmjs.org/@kernel.chat/kbot/-/kbot-2.13.1.tgz"
   sha256 "6eb45fff3aad056e69e15bcb16876824d5f342eb16894d5f9ecf2ac6e4ebeab5"

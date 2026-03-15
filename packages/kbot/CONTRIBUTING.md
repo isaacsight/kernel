@@ -24,7 +24,7 @@ npm run dev        # run in dev mode (tsx)
 
 - `src/cli.ts` — CLI entry point (Commander.js)
 - `src/agent.ts` — Agent loop (think → plan → execute → learn)
-- `src/tools/` — 167 built-in tools
+- `src/tools/` — 214 built-in tools
 - `src/ide/` — MCP + ACP servers for IDE integration
 - `src/agents/` — Specialist agent definitions
 

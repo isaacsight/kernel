@@ -293,7 +293,7 @@ function formatAuditReport(result: AuditResult): string {
   lines.push(
     '---',
     '',
-    `*Audited by [K:BOT](https://www.npmjs.com/package/@kernel.chat/kbot) — 39 specialists, 216 tools, 20 AI providers*`,
+    `*Audited by [K:BOT](https://www.npmjs.com/package/@kernel.chat/kbot) — 11 specialist agents, 214 tools, 20 AI providers*`,
     `*Install: \`npm install -g @kernel.chat/kbot\` | [GitHub](https://github.com/isaacsight/kernel)*`,
   )
 

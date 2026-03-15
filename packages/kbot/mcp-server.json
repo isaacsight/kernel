@@ -1,7 +1,7 @@
 {
   "name": "kbot",
   "displayName": "K:BOT",
-  "description": "Open-source terminal AI agent with 39 specialists, 167 tools, and 19 providers. Self-evolving, local-first.",
+  "description": "Open-source terminal AI agent with 11 specialist agents, 214 tools, and 19 providers. Self-evolving, local-first.",
   "version": "2.13.1",
   "author": "kernel.chat group",
   "license": "MIT",
