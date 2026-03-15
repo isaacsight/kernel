@@ -108,22 +108,19 @@
     "gotIt": "Got it"
   },
   "upgrade": {
-    "title": "You've used your {{limit}} messages for today",
-    "subtitle": "Your messages will reset tomorrow. Kernel will remember you when you come back!",
-    "resetsAt": "Your messages reset at {{time}}. See you then!",
+    "title": "You've used your {{limit}} free messages this month",
+    "subtitle": "Upgrade to Pro for 200 messages a month, convergence, file analysis, and more.",
+    "resetsAt": "Your free messages reset on {{time}}.",
     "learnedTitle": "What Kernel learned about you",
-    "learnedCta": "Come back tomorrow and keep the conversation going.",
+    "learnedCta": "Upgrade to keep the conversation going.",
     "features": {
-      "unlimitedMessages": "100 messages per day",
-      "deepResearch": "Extended thinking (30/mo)",
-      "multiAgent": "File analysis (10/mo)",
+      "unlimitedMessages": "200 messages per month",
+      "deepResearch": "Extended thinking",
+      "multiAgent": "File & image analysis",
       "multiStep": "Goals & agentic workflows",
-      "persistentMemory": "Memory + proactive briefings"
+      "persistentMemory": "Memory + convergence"
     },
-    "button": "Go Pro \u2014 $29/mo",
-    "annualButton": "$290/yr \u2014 save $58",
-    "maxButton": "Go Max \u2014 $49/mo",
-    "maxAnnualButton": "$490/yr \u2014 save $98",
+    "button": "Upgrade to Pro \u2014 $15/mo",
     "buttonLoading": "Opening checkout...",
     "maybeLater": "Maybe later"
   },

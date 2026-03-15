@@ -1283,7 +1283,12 @@ function EngineChat() {
                   <p className="ka-upgrade-learned-cta">{t('upgrade.learnedCta')}</p>
                 </div>
               )}
-              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>You've used your 10 messages today — come back tomorrow!</button>
+              <button className="ka-upgrade-cta" onClick={() => billing.handleUpgrade('pro_monthly')}>
+                {billing.upgradeLoading ? 'Loading...' : 'Upgrade to Pro — $15/month'}
+              </button>
+              <button className="ka-upgrade-dismiss" onClick={() => billing.setShowUpgradeWall(false)}>
+                Maybe later
+              </button>
             </motion.div>
           </motion.div>
         )}
