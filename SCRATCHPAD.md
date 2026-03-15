@@ -4,9 +4,28 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-14)
+## Current Session (2026-03-15)
 
 ### Accomplished This Session
+
+#### K:BOT v2.16.0 — VFX & Creative Production Tools
+- **8 new Houdini-inspired tools**: vex_generate, shader_generate, ffmpeg_process, imagemagick, blender_run, texture_generate, color_palette, audio_visualize
+- **VEX code generation**: 8 procedural effect templates (noise, curl_noise, scatter, wave, fractal, vortex, erosion, growth)
+- **GLSL shaders**: 7 fragment shaders (water, fire, plasma, raymarching, bloom, film_grain, dissolve)
+- **FFmpeg**: 11 video operations (encode, extract_frames, gif, timelapse, stabilize, grayscale, reverse, speed, trim, audio_extract, thumbnail)
+- **ImageMagick**: 13 image operations with v7/v6 fallback
+- **Blender**: Background-mode Python script execution for 3D generation
+- **Procedural textures**: Pure Python texture generator (perlin, marble, wood, brick, hexagon, voronoi, checkerboard)
+- **Color palettes**: HSL color harmony (complementary, analogous, triadic, split_complementary, tetradic, monochromatic)
+- **Audio visualization**: FFmpeg showcqt, waveform, spectrum, vectorscope video generation
+- **62 → 72 npm keywords**: added vfx, shader, glsl, houdini, ffmpeg, imagemagick, blender, procedural, creative-coding, audio-visualization
+- **Published**: v2.16.0 to npm, Docker `isaacsight/kbot:2.16.0` pushed
+- **README**: updated What's New section for v2.16.0
+
+#### Previous Session (2026-03-14) — Billing Hardening & npm Categories
+- 28 research + container tools (v2.15.0–2.15.2)
+- 62 npm keywords covering all homepage categories
+- Obsidian vault synced
 
 #### Billing Hardening — Overage Removed Entirely
 - **Overage bypass vulnerability fixed** — removed `skipAtomicDaily`, `webOverageEnabled`, `webSpendingCeilingHit` from claude-proxy
@@ -55,11 +74,17 @@
 - **Edge function deploys**: ALWAYS use `--no-verify-jwt` flag.
 
 ## K:BOT Current State
-- **npm version**: 2.13.1 (`@kernel.chat/kbot`)
+- **npm version**: 2.16.0 (`@kernel.chat/kbot`)
 - **Specialists**: 39 agents
-- **Tools**: 167
+- **Tools**: 216
 - **Providers**: 19
-- **Downloads**: ~1,100+ lifetime (9 days since first publish)
+- **Keywords**: 72 (npm discoverability)
+- **Downloads**: ~1,594/month, 855/week (accelerating)
+- **Docker**: `isaacsight/kbot:2.16.0` on Docker Hub
+- **Reality core**: error correction, entropy context, emergent swarms, Gödel limits, simulation — all always-on
+- **Research tools**: arXiv, Semantic Scholar, Papers With Code, HuggingFace, PyPI, CRAN, Cargo, NASA, DOI
+- **Container tools**: Docker build/run/ps/logs/compose, API testing, data queries, math, LaTeX, Terraform
+- **VFX tools**: Houdini VEX, GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures, color palettes, audio viz
 
 ## Test Accounts
 - **Free**: `kernel-test-bot@antigravitygroup.co` / `KernelTest2026!`
