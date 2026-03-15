@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Universal AI agent for your terminal. 39 specialists, 216 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
+  Universal AI agent for your terminal. 39 specialists, 228+ tools, 20 providers. Open source, academic research, scientific computing, every code ecosystem. arXiv search, CITATION.cff, reproducibility audits, license checks. Self-evolving, local-first, zero lock-in.
 </p>
 
 <p align="center">
@@ -15,12 +15,13 @@
 
 ## Why K:BOT?
 
-- **19 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
+- **20 providers, zero lock-in** — Claude, GPT, Gemini, Mistral, Grok, DeepSeek, SambaNova, Cerebras, OpenRouter, and more
 - **Runs fully offline** — `kbot local` for $0 local AI, no data leaves your machine
+- **Open source & academic tools** — arXiv search, CITATION.cff, reproducibility audits, research repo scaffolding
 - **Learns your patterns** — remembers what worked, gets faster over time
 - **39 specialist agents** — auto-routes to the right expert for each task
+- **228+ tools** — file ops, git, GitHub, web search, Jupyter, Docker, scientific computing, and more
 - **Self-evolving** — diagnoses its own weaknesses and improves its own code (`/evolve`)
-- **Shell completions** — tab completion for bash, zsh, and fish (`kbot completions zsh`)
 - **MCP server built in** — plug kbot into any IDE as a tool provider
 
 ## Install
@@ -53,13 +54,64 @@ kbot local --embedded
 kbot
 ```
 
-## What's New in v2.17.0
+## What's New in v2.19.0
 
-- **Embedded inference engine** — Run GGUF models directly in kbot. No Ollama, no external service. Close your laptop, deploy anywhere.
-- **`kbot models`** — Download, list, and manage GGUF models from HuggingFace
-- **20 providers** — Embedded llama.cpp joins Anthropic, OpenAI, Google, Ollama, and 15 more
-- **Auto-fallback** — If Ollama isn't running, kbot automatically uses embedded models
-- **GPU-accelerated** — Metal (Mac), CUDA (Linux/Windows), Vulkan
+### Open Source & Academic Research Tools
+
+K:BOT is now a complete open-source contribution and research workflow engine:
+
+```bash
+# Search arXiv for papers
+kbot oss arxiv "transformer attention mechanism" --category cs.AI
+
+# Find research software repos
+kbot oss research machine-learning --language python
+
+# Generate CITATION.cff for your project
+kbot oss cite
+
+# Audit a repo's reproducibility
+kbot oss repro
+
+# Comprehensive repo health audit (A-F grading)
+kbot oss audit owner/repo
+
+# Find mentored issues for newcomers
+kbot oss find --mentored --language typescript
+
+# Generate changelog from git history
+kbot oss changelog
+
+# Check license compatibility
+kbot oss license
+
+# Audit dependencies for vulnerabilities
+kbot oss deps
+
+# Scaffold a research repository
+kbot oss scaffold my-research --language python --type paper
+
+# Find papers with open-source code
+kbot oss papers "diffusion models"
+
+# Community health metrics
+kbot oss stats owner/repo
+
+# Sync fork with upstream
+kbot oss sync --upstream owner/repo
+
+# Track your contributions
+kbot oss log
+```
+
+### Also new
+
+- **Repo health audit** — A-F scoring across documentation, community, CI/CD, security, maintenance
+- **Contribution tracking** — every `prepare_contribution` and `submit_contribution` logged
+- **Mentored issue finder** — find issues with active mentorship across GitHub
+- **228+ tools** — 24 new open-source and academic tools
+
+### Previous: Embedded Inference (v2.17)
 
 ```bash
 # Download a model (one-time, ~5 GB)
@@ -67,9 +119,6 @@ kbot models pull llama3.1-8b
 
 # Enable embedded mode — no external service needed
 kbot local --embedded
-
-# Or just use kbot — it auto-detects everything
-kbot
 ```
 
 ## One-Shot Mode
@@ -93,7 +142,9 @@ Auto-routed or manual with `kbot --agent <name>`:
 
 ## Features
 
-- **208 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
+- **228+ Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
+- **Open Source Suite** — Find issues, audit repos, generate changelogs, check licenses, track contributions
+- **Academic Research** — arXiv search, CITATION.cff, reproducibility audits, research repo scaffolding, papers-with-code
 - **Local-First** — File reads, git, grep run instantly without an API call
 - **Learning Engine** — Patterns, solutions, and user preferences cached across sessions
 - **Mimic Matrix** — Code like Claude Code, Cursor, Copilot, Next.js, React, Rust, Python
@@ -126,7 +177,7 @@ Auto-routed or manual with `kbot --agent <name>`:
 | Jan (Local) | **Free** | Open Jan → Enable API Server |
 | OpenClaw (Local) | **Free** | `openclaw-cmd start` |
 
-All 19 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
+All 20 providers auto-detected via env vars. Or run `kbot auth` for interactive setup.
 
 ## MCP Server (IDE Integration)
 
@@ -148,7 +199,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 216 tools for any LLM or automation pipeline.
+REST API exposing all 228+ tools for any LLM or automation pipeline.
 
 ## Use Everywhere
 
@@ -173,6 +224,11 @@ REST API exposing all 216 tools for any LLM or automation pipeline.
 | `kbot "prompt"` | One-shot execution |
 | `kbot auth` | Configure API key |
 | `kbot local` | Use local AI models (Ollama, LM Studio, Jan) |
+| `kbot oss` | Open source tools (find, audit, arxiv, cite, etc.) |
+| `kbot oss arxiv <query>` | Search arXiv papers |
+| `kbot oss cite` | Generate CITATION.cff |
+| `kbot oss repro` | Audit reproducibility |
+| `kbot oss find` | Find issues to contribute to |
 | `kbot serve` | Start HTTP server |
 | `kbot ide mcp` | Start MCP server |
 | `/agent <name>` | Switch specialist |
@@ -195,6 +251,12 @@ REST API exposing all 216 tools for any LLM or automation pipeline.
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and adding specialist agents.
+
+- [Code of Conduct](../../CODE_OF_CONDUCT.md)
+- [Security Policy](../../SECURITY.md)
+- [Governance](../../GOVERNANCE.md)
+- [Roadmap](../../ROADMAP.md)
+- [Contributors](../../CONTRIBUTORS.md)
 
 ## Links
 
