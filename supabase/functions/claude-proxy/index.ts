@@ -409,37 +409,8 @@ async function logUsageAndCheckThreshold(
       ...(apiKeyId ? { api_key_id: apiKeyId } : {}),
     })
 
-    // Unified overage: increment if paid user is past their plan limit (covers web + API)
-    // Reports to Stripe billing meter immediately (no hourly delay)
+    // Internal overage tracking (no Stripe billing — Pro users are hard-capped at 200/month)
     svc.rpc('increment_web_overage', { p_user_id: userId })
-      .then(async ({ data }) => {
-        if (data?.[0]?.new_overage_count > 0) {
-          const customerId = data[0].stripe_customer_id
-          console.log(`[overage] User ${userId} overage count: ${data[0].new_overage_count}`)
-
-          // Report 1 overage message to Stripe billing meter immediately
-          if (customerId) {
-            const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
-            if (stripeKey) {
-              try {
-                const meterRes = await fetch('https://api.stripe.com/v1/billing/meter_events', {
-                  method: 'POST',
-                  headers: {
-                    Authorization: `Bearer ${stripeKey}`,
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                  },
-                  body: `event_name=kernel_pro_overage&payload[value]=1&payload[stripe_customer_id]=${customerId}`,
-                })
-                if (!meterRes.ok) {
-                  console.warn(`[overage] Stripe meter event failed for ${userId}:`, await meterRes.text())
-                }
-              } catch (stripeErr) {
-                console.warn(`[overage] Stripe meter report failed for ${userId}:`, stripeErr)
-              }
-            }
-          }
-        }
-      })
       .catch((err: unknown) => console.warn('[claude-proxy] increment_web_overage error:', err))
 
     // Check daily aggregate for threshold alert

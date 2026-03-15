@@ -1410,9 +1410,6 @@ function EngineChat() {
       {!messageUsage.loading && !isAdmin && (
         <div className={`ka-usage-counter${messageUsage.used >= messageUsage.limit ? ' ka-usage-counter--limit' : messageUsage.used >= messageUsage.limit * 0.7 ? ' ka-usage-counter--warn' : ''}`}>
           {messageUsage.used} / {messageUsage.limit}
-          {isPro && messageUsage.used > messageUsage.limit && (
-            <span className="ka-usage-overage"> · ${((messageUsage.used - messageUsage.limit) * 0.10).toFixed(2)} overage</span>
-          )}
         </div>
       )}
 

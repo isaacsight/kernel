@@ -1,5 +1,5 @@
 // Plan limits — single source of truth for the 2-tier subscription system.
-// Free: 10 msgs/month (Haiku). Pro: 200 msgs/month (Sonnet), $0.10 overage.
+// Free: 10 msgs/month (Haiku). Pro: 200 msgs/month (Sonnet), hard-capped.
 // Frontend mirror: src/config/planLimits.ts (must stay in sync)
 
 export type PlanId = 'free' | 'pro_monthly'
@@ -47,7 +47,7 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     socialAccountsMax: 3, socialPostsPerMonth: 30,
     knowledgeItems: 5000, knowledgeDocsPerMonth: 20, knowledgeAutoRetrieval: 5, knowledgeQueries: true,
     platformWorkflowsPerMonth: 5,
-    overageRateCents: 10, // $0.10 per message
+    overageRateCents: 0,
   },
 }
 

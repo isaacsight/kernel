@@ -212,10 +212,10 @@ serve(async (req: Request) => {
           }
         }
 
-        // Overage config — Pro = $0.10/msg (100 millicents)
+        // Overage disabled — Pro users are hard-capped at 200 messages/month
         const overageConfig = plan === 'free' ? {} : {
-          overage_enabled: true,
-          overage_rate_millicents: 100,
+          overage_enabled: false,
+          overage_rate_millicents: 0,
           overage_count: 0,
           last_reported_overage_count: 0,
         }

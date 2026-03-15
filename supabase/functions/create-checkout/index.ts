@@ -117,12 +117,6 @@ serve(async (req: Request) => {
       params.set('line_items[0][price_data][product_data][description]', planInfo.description)
       params.set('line_items[0][quantity]', '1')
 
-      // Line item 2: Metered overage ($0.10/message after 200)
-      const overagePriceId = Deno.env.get('STRIPE_OVERAGE_PRICE_ID')
-      if (overagePriceId) {
-        params.set('line_items[1][price]', overagePriceId)
-      }
-
     } else {
       // ─── One-time message pack checkout ────────────────────
       const pack = payload.pack

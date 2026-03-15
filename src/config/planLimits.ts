@@ -1,4 +1,4 @@
-// Plan limits — Free (10 msgs/month) + Pro ($15/month, 200 msgs/month, $0.10 overage).
+// Plan limits — Free (10 msgs/month) + Pro ($15/month, 200 msgs/month, hard-capped).
 
 export type PlanId = 'free' | 'pro_monthly'
 
@@ -47,7 +47,7 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     research: true,
     extendedThinking: true,
     webSearch: true,
-    overageRate: 10, // $0.10
+    overageRate: 0,
   },
 }
 
