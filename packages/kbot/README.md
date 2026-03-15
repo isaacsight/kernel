@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Open-source terminal AI agent. 39 specialists, 167 tools, 19 providers, local-first. The first CLI agent that evolves its own source code.
+  Universal AI agent for your terminal. 39 specialists, 208 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
 </p>
 
 <p align="center">
@@ -49,13 +49,17 @@ kbot local
 kbot
 ```
 
-## What's New in v2.13.0
+## What's New in v2.15.0
 
-- **Self-evolution engine** — K:BOT diagnoses weaknesses, proposes code changes, validates them (typecheck + tests), and applies improvements automatically (`/evolve`)
-- **Shell completions** — Tab completion for bash, zsh, fish (`kbot completions zsh >> ~/.zshrc`)
-- **Interactive tutorial** — Step-by-step walkthrough for new users (`/tutorial`)
-- **Changelog generator** — Auto-generate release notes from git history (`kbot changelog`)
-- **Doctor diagnostics** — 10-point health check for your setup (`kbot doctor`)
+- **208 tools** — 28 new tools covering academic, scientific, and infrastructure ecosystems
+- **Research tools** — Search arXiv, Semantic Scholar, Papers With Code, HuggingFace, NASA, DOI resolver
+- **Package bridges** — PyPI, CRAN (R), Cargo (Rust) search and inspection from your terminal
+- **Docker management** — Build, run, stop, logs, images, compose up/down
+- **API testing** — REST/GraphQL endpoint testing with timing and structured output
+- **Data processing** — SQL-like queries on CSV/JSON/TSV files
+- **Math & LaTeX** — Symbolic math evaluation and LaTeX rendering
+- **Infrastructure** — Terraform plan, license checker, dependency graph analysis
+- **Reality-inspired core** — Error correction, entropy-based context, emergent swarms, Gödel loop detection, simulation engine — all wired into the agent loop
 
 ## One-Shot Mode
 
@@ -78,7 +82,7 @@ Auto-routed or manual with `kbot --agent <name>`:
 
 ## Features
 
-- **167 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker sandbox, browser, MCP client
+- **208 Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
 - **Local-First** — File reads, git, grep run instantly without an API call
 - **Learning Engine** — Patterns, solutions, and user preferences cached across sessions
 - **Mimic Matrix** — Code like Claude Code, Cursor, Copilot, Next.js, React, Rust, Python
@@ -133,7 +137,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 167 tools for any LLM or automation pipeline.
+REST API exposing all 208 tools for any LLM or automation pipeline.
 
 ## Use Everywhere
 

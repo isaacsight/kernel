@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "Universal AI agent for your terminal. 39 specialists, 208 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, learns your patterns, runs offline with Ollama.",
   "type": "module",
   "repository": {
