@@ -11,7 +11,7 @@
 
 import { createInterface } from 'node:readline'
 import { Command } from 'commander'
-import { loadConfig, setupByok, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
+import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupOpenClaw, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
 import { registerAllTools } from './tools/index.js'
@@ -217,13 +217,37 @@ async function main(): Promise<void> {
     })
 
   // `kbot local` — primary command for local models
-  // `kbot local` — backwards-compatible alias
-  const localAction = async (opts: { model?: string; list?: boolean; off?: boolean }) => {
+  // Supports both Ollama (external service) and embedded (in-process llama.cpp)
+  const localAction = async (opts: { model?: string; list?: boolean; off?: boolean; embedded?: boolean }) => {
     if (opts.off) {
       disableByok()
       printSuccess('Local AI disabled.')
       return
     }
+
+    // Embedded mode — runs models directly, no Ollama needed
+    if (opts.embedded) {
+      const { listLocalModels, isEmbeddedAvailable } = await import('./inference.js')
+      const available = await isEmbeddedAvailable()
+      if (!available) {
+        printError('node-llama-cpp not installed. Run: npm install -g node-llama-cpp')
+        return
+      }
+      const models = listLocalModels()
+      if (models.length === 0) {
+        printInfo('No models downloaded yet. Pull one:')
+        printInfo('  kbot models pull llama3.1-8b')
+        printInfo('  kbot models pull qwen2.5-coder-7b')
+        printInfo('  kbot models pull deepseek-r1-8b')
+        return
+      }
+      // Configure embedded provider
+      setupEmbedded()
+      printSuccess(`Embedded engine enabled! ${models.length} model${models.length === 1 ? '' : 's'} ready. $0 cost. No external service needed.`)
+      for (const m of models) printInfo(`  • ${m.name} (${m.size})`)
+      return
+    }
+
     if (opts.list) {
       const running = await isOllamaRunning()
       if (!running) { printError('No local runtime found. Install Ollama: https://ollama.com'); return }
@@ -234,7 +258,20 @@ async function main(): Promise<void> {
       return
     }
     const running = await isOllamaRunning()
-    if (!running) { printError('No local runtime found. Install Ollama: https://ollama.com'); return }
+    if (!running) {
+      // Auto-fallback to embedded if available
+      const { listLocalModels, isEmbeddedAvailable } = await import('./inference.js')
+      const embAvailable = await isEmbeddedAvailable()
+      const embModels = listLocalModels()
+      if (embAvailable && embModels.length > 0) {
+        setupEmbedded()
+        printSuccess(`No Ollama found — using embedded engine. ${embModels.length} model${embModels.length === 1 ? '' : 's'} ready.`)
+        return
+      }
+      printError('No local runtime found. Install Ollama: https://ollama.com')
+      printInfo('Or use embedded mode: kbot local --embedded')
+      return
+    }
     const ok = await setupOllama(opts.model)
     if (ok) {
       const models = await listOllamaModels()
@@ -249,11 +286,85 @@ async function main(): Promise<void> {
     .option('--model <model>', 'Set default local model')
     .option('--list', 'List available local models')
     .option('--off', 'Disable local mode')
+    .option('--embedded', 'Use embedded llama.cpp engine (no Ollama needed)')
 
   localOpts(program.command('local').description('Use local AI models — no API key, $0 cost, fully private'))
     .action(localAction)
   localOpts(program.command('ollama').description('Alias for: kbot local'))
     .action(localAction)
+
+  // `kbot models` — manage GGUF models for embedded inference
+  const modelsCmd = program.command('models').description('Manage local GGUF models for embedded inference')
+
+  modelsCmd
+    .command('list')
+    .description('List downloaded models')
+    .action(async () => {
+      const { listLocalModels, ensureModelsDir } = await import('./inference.js')
+      ensureModelsDir()
+      const models = listLocalModels()
+      if (models.length === 0) {
+        printInfo('No models downloaded. Pull one:')
+        printInfo('  kbot models pull llama3.1-8b')
+        printInfo('  kbot models pull qwen2.5-coder-7b')
+        printInfo('  kbot models pull deepseek-r1-8b')
+        return
+      }
+      printInfo(`${models.length} model${models.length === 1 ? '' : 's'}:`)
+      for (const m of models) {
+        printInfo(`  • ${m.name}  ${m.size}  (${m.modified})`)
+      }
+    })
+
+  modelsCmd
+    .command('pull <name>')
+    .description('Download a model (preset name or HuggingFace URI)')
+    .action(async (name: string) => {
+      const { downloadModel, DEFAULT_MODELS } = await import('./inference.js')
+      const preset = DEFAULT_MODELS[name]
+      if (preset) {
+        printInfo(`Downloading ${name} (${preset.description}) — ${preset.size}...`)
+      } else {
+        printInfo(`Downloading ${name}...`)
+      }
+      try {
+        const modelPath = await downloadModel(name, (pct) => {
+          process.stderr.write(`\r  Progress: ${pct}%`)
+        })
+        process.stderr.write('\n')
+        printSuccess(`Model ready: ${modelPath}`)
+        printInfo('Enable embedded mode: kbot local --embedded')
+      } catch (err) {
+        printError(`Download failed: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    })
+
+  modelsCmd
+    .command('remove <name>')
+    .description('Remove a downloaded model')
+    .action(async (name: string) => {
+      const { removeModel } = await import('./inference.js')
+      if (removeModel(name)) {
+        printSuccess(`Removed model matching "${name}"`)
+      } else {
+        printError(`No model found matching "${name}"`)
+      }
+    })
+
+  modelsCmd
+    .command('catalog')
+    .description('Show available models for download')
+    .action(async () => {
+      const { DEFAULT_MODELS } = await import('./inference.js')
+      printInfo('Available models:')
+      for (const [name, info] of Object.entries(DEFAULT_MODELS)) {
+        printInfo(`  • ${name}  ${info.size}`)
+        printInfo(`    ${info.description}`)
+      }
+      printInfo('')
+      printInfo('Download: kbot models pull <name>')
+      printInfo('Or use any HuggingFace GGUF: kbot models pull hf:user/repo:file.gguf')
+    })
 
   program
     .command('doctor')

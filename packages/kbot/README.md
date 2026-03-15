@@ -45,21 +45,32 @@ kbot auth
 # Or use a local model (no API key needed)
 kbot local
 
+# Or run models directly — no Ollama needed
+kbot models pull llama3.1-8b
+kbot local --embedded
+
 # Start chatting
 kbot
 ```
 
-## What's New in v2.16.0
+## What's New in v2.17.0
 
-- **216 tools** — 8 new VFX & creative production tools inspired by Houdini
-- **VEX code generation** — Procedural noise, curl noise, scatter, wave, fractal, vortex, erosion, differential growth
-- **GLSL shaders** — Water, fire, plasma, raymarching, bloom, film grain, dissolve effects
-- **FFmpeg processing** — Encode, extract frames, GIF, timelapse, stabilize, reverse, speed, trim
-- **ImageMagick** — Resize, crop, blur, sharpen, sepia, posterize, edge detection, compositing
-- **Blender scripting** — Run Python scripts in Blender background mode for 3D generation
-- **Procedural textures** — Generate perlin, marble, wood, brick, hexagon, voronoi patterns
-- **Color palettes** — HSL color harmony generation (complementary, analogous, triadic, tetradic)
-- **Audio visualization** — Waveform, spectrum, vectorscope, showcqt video generation
+- **Embedded inference engine** — Run GGUF models directly in kbot. No Ollama, no external service. Close your laptop, deploy anywhere.
+- **`kbot models`** — Download, list, and manage GGUF models from HuggingFace
+- **20 providers** — Embedded llama.cpp joins Anthropic, OpenAI, Google, Ollama, and 15 more
+- **Auto-fallback** — If Ollama isn't running, kbot automatically uses embedded models
+- **GPU-accelerated** — Metal (Mac), CUDA (Linux/Windows), Vulkan
+
+```bash
+# Download a model (one-time, ~5 GB)
+kbot models pull llama3.1-8b
+
+# Enable embedded mode — no external service needed
+kbot local --embedded
+
+# Or just use kbot — it auto-detects everything
+kbot
+```
 
 ## One-Shot Mode
 

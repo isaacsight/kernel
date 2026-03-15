@@ -597,12 +597,30 @@ async function callProvider(
 
   try {
     let result: ProviderResult
-    switch (p.apiStyle) {
-      case 'anthropic': result = await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options); break
-      case 'google':    result = await callGemini(apiKey, p.apiUrl, model, systemContext, messages); break
-      case 'cohere':    result = await callCohere(apiKey, p.apiUrl, model, systemContext, messages); break
-      case 'openai':    result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
-      default:          result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
+
+    // Embedded inference — runs in-process via node-llama-cpp, no HTTP
+    if (provider === 'embedded') {
+      const { chatCompletion } = await import('./inference.js')
+      const embResult = await chatCompletion(
+        systemContext,
+        messages.map(m => ({ role: m.role, content: m.content })),
+        tools,
+      )
+      result = {
+        content: embResult.content,
+        model: embResult.model,
+        usage: embResult.usage,
+        tool_calls: embResult.tool_calls,
+        stop_reason: embResult.stop_reason,
+      }
+    } else {
+      switch (p.apiStyle) {
+        case 'anthropic': result = await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options); break
+        case 'google':    result = await callGemini(apiKey, p.apiUrl, model, systemContext, messages); break
+        case 'cohere':    result = await callCohere(apiKey, p.apiUrl, model, systemContext, messages); break
+        case 'openai':    result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
+        default:          result = await callOpenAICompat(apiKey, p.apiUrl, model, systemContext, messages, tools); break
+      }
     }
     recordSuccess(provider, Date.now() - startTime)
     return result

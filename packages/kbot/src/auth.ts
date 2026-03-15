@@ -44,6 +44,7 @@ export type ByokProvider =
   | 'jan'          // Jan (local, open-source AI)
   | 'ollama'       // Ollama (local open-weight models)
   | 'openclaw'     // OpenClaw gateway (local AI assistant)
+  | 'embedded'     // Embedded llama.cpp (no external service needed)
 
 export interface ProviderConfig {
   name: string             // Display name
@@ -280,6 +281,16 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     outputCost: 0,
     authHeader: 'bearer',
   },
+  embedded: {
+    name: 'Embedded (llama.cpp)',
+    apiUrl: 'embedded://local',  // Not a real URL — inference runs in-process
+    apiStyle: 'openai',          // Compatibility marker — actually uses direct API
+    defaultModel: 'auto',        // Auto-selects best available GGUF model
+    fastModel: 'auto',
+    inputCost: 0,
+    outputCost: 0,
+    authHeader: 'bearer',
+  },
 }
 
 export interface KbotConfig {
@@ -421,12 +432,12 @@ const ENV_KEYS: Array<{ env: string; provider: ByokProvider }> = [
 
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export function isLocalProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'openclaw' || provider === 'lmstudio' || provider === 'jan'
+  return provider === 'ollama' || provider === 'openclaw' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
 }
 
 /** Check if a provider needs no API key at all */
 export function isKeylessProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan'
+  return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
 }
 
 /** Check if BYOK mode is enabled (via env var or config) */
@@ -673,6 +684,15 @@ export async function setupByok(key: string, provider?: ByokProvider): Promise<b
   config.byok_provider = detectedProvider
   saveConfig(config)
   return true
+}
+
+/** Set up embedded provider directly (no key verification needed) */
+export function setupEmbedded(): void {
+  const config = loadConfig() || { default_model: 'auto' as const, default_agent: 'auto' as const }
+  config.byok_key = 'local'
+  config.byok_enabled = true
+  config.byok_provider = 'embedded'
+  saveConfig(config)
 }
 
 /** Disable BYOK mode */
