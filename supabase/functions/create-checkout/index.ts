@@ -109,13 +109,19 @@ serve(async (req: Request) => {
       params.set('subscription_data[metadata][supabase_user_id]', user_id)
       params.set('subscription_data[metadata][plan]', plan)
 
-      // Inline recurring price
+      // Line item 1: Base subscription ($15/month)
       params.set('line_items[0][price_data][currency]', 'usd')
       params.set('line_items[0][price_data][unit_amount]', String(planInfo.amount))
       params.set('line_items[0][price_data][recurring][interval]', planInfo.interval)
       params.set('line_items[0][price_data][product_data][name]', planInfo.name)
       params.set('line_items[0][price_data][product_data][description]', planInfo.description)
       params.set('line_items[0][quantity]', '1')
+
+      // Line item 2: Metered overage ($0.10/message after 200)
+      const overagePriceId = Deno.env.get('STRIPE_OVERAGE_PRICE_ID')
+      if (overagePriceId) {
+        params.set('line_items[1][price]', overagePriceId)
+      }
 
     } else {
       // ─── One-time message pack checkout ────────────────────
