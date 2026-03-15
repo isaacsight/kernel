@@ -573,6 +573,78 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('audit <repo>')
+    .description('Full audit of any GitHub repository — security, quality, docs, DevOps')
+    .option('--share', 'Share the audit report as a GitHub Gist')
+    .action(async (repo: string, auditOpts: { share?: boolean }) => {
+      const { auditRepo, formatAuditReport } = await import('./tools/audit.js')
+      printInfo(`Auditing ${repo}...`)
+      try {
+        const result = await auditRepo(repo)
+        const report = formatAuditReport(result)
+        console.log(report)
+        if (auditOpts.share) {
+          const { shareConversation } = await import('./share.js')
+          // Save as a pseudo-conversation for sharing
+          printInfo('Sharing audit report...')
+          try {
+            const { createGist } = await import('./share.js')
+            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `K:BOT Audit: ${repo}`, true)
+            if (url?.startsWith('http')) printSuccess(`Shared! ${url}`)
+          } catch { printInfo('Could not create Gist. Install GitHub CLI: brew install gh') }
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+      }
+    })
+
+  program
+    .command('contribute [repo]')
+    .description('Find open source issues and prepare contributions')
+    .option('-l, --language <lang>', 'Filter by programming language')
+    .option('--label <label>', 'Issue label (default: "good first issue")')
+    .option('-i, --issue <number>', 'Specific issue number to work on')
+    .action(async (repo?: string, contribOpts?: { language?: string; label?: string; issue?: string }) => {
+      if (!repo) {
+        // Search for issues
+        const { registerContributeTools } = await import('./tools/contribute.js')
+        const { executeTool } = await import('./tools/index.js')
+        printInfo('Searching for contribution opportunities...')
+        const result = await executeTool({
+          id: 'cli',
+          name: 'find_issues',
+          arguments: {
+            language: contribOpts?.language || '',
+            label: contribOpts?.label || 'good first issue',
+          },
+        })
+        console.log(result.result)
+      } else if (contribOpts?.issue) {
+        // Prepare contribution for specific issue
+        printInfo(`Preparing contribution for ${repo}#${contribOpts.issue}...`)
+        const { registerContributeTools } = await import('./tools/contribute.js')
+        const { executeTool } = await import('./tools/index.js')
+        const result = await executeTool({
+          id: 'cli',
+          name: 'prepare_contribution',
+          arguments: { repo, issue: Number(contribOpts.issue) },
+        })
+        console.log(result.result)
+      } else {
+        // Scan for quick wins
+        const { registerContributeTools } = await import('./tools/contribute.js')
+        const { executeTool } = await import('./tools/index.js')
+        printInfo(`Scanning ${repo} for contribution opportunities...`)
+        const result = await executeTool({
+          id: 'cli',
+          name: 'find_quick_wins',
+          arguments: { repo },
+        })
+        console.log(result.result)
+      }
+    })
+
+  program
     .command('plugins')
     .description('Manage kbot plugins')
     .argument('[action]', 'Action: list, search, install, uninstall, update')
