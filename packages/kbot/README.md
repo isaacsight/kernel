@@ -10,6 +10,7 @@
   <a href="https://github.com/isaacsight/kernel"><img src="https://img.shields.io/github/stars/isaacsight/kernel?color=6B5B95&style=flat" alt="GitHub stars"></a>
   <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
   <a href="https://hub.docker.com/r/isaacsight/kbot"><img src="https://img.shields.io/badge/docker-kbot-6B5B95" alt="Docker"></a>
+  <a href="https://discord.gg/pYJn3hBqnz"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/packages/kbot/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-6B5B95" alt="PRs Welcome"></a>
 </p>
 

@@ -291,6 +291,12 @@ export function printHelp(): void {
     `  ${chalk.white('/compact')}           Compress conversation (saves tokens)`,
     `  ${chalk.white('/dashboard')}         See usage stats and learning data`,
     '',
+    `  ${chalk.bold('Community')}`,
+    `  ${DIM('─'.repeat(50))}`,
+    `  ${CYAN('https://discord.gg/pYJn3hBqnz')}  ${DIM('Discord')}`,
+    `  ${CYAN('https://kernel.chat')}             ${DIM('Web companion')}`,
+    `  ${CYAN('https://github.com/isaacsight/kernel')} ${DIM('GitHub')}`,
+    '',
     `  ${DIM('11 specialist agents. 214 tools. Type anything to get started.')}`,
     '',
   ]
