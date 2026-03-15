@@ -1,17 +1,17 @@
 // ─── OveragePrompt ──────────────────────────────────────
 //
-// Shown when a paid user hits their monthly message limit.
-// Asks them to accept overage billing before continuing.
+// Shown when a Pro user hits their 200 monthly messages.
+// Asks them to accept overage billing ($0.10/msg) before continuing.
 
 interface OveragePromptProps {
   limit: number
-  overageRate: number // millicents (e.g. 30 = $0.03)
+  overageRate: number // cents (e.g. 10 = $0.10)
   onAccept: () => void
   onDecline: () => void
 }
 
 export function OveragePrompt({ limit, overageRate, onAccept, onDecline }: OveragePromptProps) {
-  const rateFormatted = `$${(overageRate / 10).toFixed(overageRate % 10 === 0 ? 1 : 2)}`
+  const rateFormatted = `$${(overageRate / 100).toFixed(2)}`
 
   return (
     <div className="ka-overage-prompt">

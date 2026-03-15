@@ -33,8 +33,8 @@ export function useBilling(
   showToast: (msg: string) => void,
   signOut: () => void,
 ) {
-  // Upgrade wall disabled — Kernel is free (10 msgs/day). Set to true to re-enable.
-  const UPGRADES_ENABLED = false
+  // Upgrade wall — set to true to show Pro upgrade prompts.
+  const UPGRADES_ENABLED = true
   const [showUpgradeWall, _setShowUpgradeWall] = useState(false)
   const setShowUpgradeWall = UPGRADES_ENABLED ? _setShowUpgradeWall : () => {}
   const [freeLimitResetsAt, setFreeLimitResetsAt] = useState<string | null>(null)

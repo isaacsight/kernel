@@ -222,7 +222,7 @@ function EngineChat() {
   const dragCounterRef = useRef(0)
   const [showCreditModal, setShowCreditModal] = useState(false)
   const [imageCredits, setImageCredits] = useState(0)
-  const messageUsage = useMessageUsage(user?.id, planLimits.messagesPerDay)
+  const messageUsage = useMessageUsage(user?.id, planLimits.messagesPerMonth)
 
   // Conversation tags
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -457,8 +457,8 @@ function EngineChat() {
     prevGoalsDoneRef.current = done
   }, [chatEngine.userGoals]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Daily message limit from plan
-  const effectiveLimit = planLimits.messagesPerDay
+  // Monthly message limit from plan
+  const effectiveLimit = planLimits.messagesPerMonth
 
   // Memory highlights for upgrade wall
   const memoryHighlights = useMemo(() => {
@@ -813,7 +813,7 @@ function EngineChat() {
               onClose={() => panels.closePanel('usage')}
               onUpgrade={() => {}}
               isPro={false}
-              monthlyLimit={planLimits.messagesPerDay * 30}
+              monthlyLimit={planLimits.messagesPerMonth}
             />
           </Suspense>
         )}
@@ -1295,8 +1295,8 @@ function EngineChat() {
           <motion.div className="ka-upgrade-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="ka-upgrade-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}>
               <OveragePrompt
-                limit={planLimits.messagesPerDay * 30}
-                overageRate={30}
+                limit={planLimits.messagesPerMonth}
+                overageRate={planLimits.overageRate}
                 onAccept={() => {
                   localStorage.setItem('kernel_overage_accepted', 'true')
                   chatEngine.setShowOveragePrompt(false)

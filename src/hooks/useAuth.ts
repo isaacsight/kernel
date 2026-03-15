@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase, getMySubscription } from '../engine/SupabaseClient';
 import type { User, Session, Provider, UserIdentity } from '@supabase/supabase-js';
-import { PLAN_LIMITS, type PlanId, type PlanLimits } from '../config/planLimits';
+import { PLAN_LIMITS, resolvePlanId, type PlanId, type PlanLimits } from '../config/planLimits'
 
 // Admin is determined by Supabase app_metadata.is_admin (set via dashboard or service role).
 // To make a user admin: Supabase Dashboard → Auth → Users → Edit → app_metadata: {"is_admin": true}
@@ -44,9 +44,9 @@ export function useAuth(): AuthState {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
-  const planId: PlanId = 'free';
+  const [planId, setPlanId] = useState<PlanId>('free');
 
   const isAdmin = checkIsAdmin(user);
 
@@ -55,22 +55,23 @@ export function useAuth(): AuthState {
   userRef.current = user;
   const mountedRef = useRef(true);
 
-  // No paid tiers — always free
   const checkSubscription = useCallback(async (): Promise<boolean> => {
-    return false;
+    if (!userRef.current) return false;
+    try {
+      const sub = await getMySubscription();
+      const resolved = resolvePlanId(sub);
+      const active = resolved !== 'free';
+      if (mountedRef.current) {
+        setIsSubscribed(active);
+        setPlanId(resolved);
+      }
+      return active;
+    } catch {
+      return false;
+    }
   }, []);
 
   // Initialize auth — handle token_hash recovery, PKCE callback, or existing session
-  //
-  // Recovery flow (token_hash strategy — cross-device safe):
-  //   1. User clicks "Forgot password?" → resetPasswordForEmail sends email
-  //   2. Email links to: https://kernel.chat/?token_hash=xxx&type=recovery
-  //   3. App detects token_hash → calls verifyOtp() → creates session
-  //   4. SetNewPasswordModal appears
-  //
-  // Fallback (legacy PKCE — same-browser only):
-  //   Email links through Supabase /auth/v1/verify → redirects with ?code=xxx
-  //   App exchanges code for session using code_verifier from localStorage
   useEffect(() => {
     let mounted = true;
     const params = new URLSearchParams(window.location.search);
@@ -186,16 +187,12 @@ export function useAuth(): AuthState {
         setIsPasswordRecovery(true);
         localStorage.removeItem(RECOVERY_FLAG);
       }
-      // If user signs in manually while recovery flag is pending
-      // (e.g., PKCE failed, user logged in with password/OAuth)
       if (event === 'SIGNED_IN' && localStorage.getItem(RECOVERY_FLAG)) {
         console.log('[Auth] User signed in with pending recovery — showing modal');
         localStorage.removeItem(RECOVERY_FLAG);
         setIsPasswordRecovery(true);
       }
       setSession(s);
-      // Always update user on USER_UPDATED (metadata may have changed);
-      // for other events, only update if ID changed to prevent re-render loops
       if (event === 'USER_UPDATED') {
         setUser(s?.user ?? null);
       } else {
@@ -204,7 +201,8 @@ export function useAuth(): AuthState {
       if (s?.user) {
         checkSubscription();
       } else {
-        // no paid tiers
+        setIsSubscribed(false);
+        setPlanId('free');
       }
       setIsLoading(false);
     });
@@ -234,15 +232,12 @@ export function useAuth(): AuthState {
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
     const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } });
     if (error) return { error: error.message, confirmationPending: false };
-    // When email confirmation is enabled, signUp succeeds but session is null
     const confirmationPending = !data.session;
     return { error: null, confirmationPending };
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
-    // Store a recovery flag so we can show the modal when the redirect lands,
-    // even if Supabase strips query params or the PKCE exchange fails.
     localStorage.setItem(RECOVERY_FLAG, 'true');
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
     if (error) {
@@ -252,16 +247,16 @@ export function useAuth(): AuthState {
   }, []);
 
   const signOut = useCallback(async () => {
-    // no paid tiers
     localStorage.removeItem(RECOVERY_FLAG);
     try {
       await supabase.auth.signOut();
     } catch (err) {
       console.warn('[Auth] signOut error (clearing state anyway):', err);
     }
-    // Always clear state even if signOut throws (stale session edge case)
     setUser(null);
     setSession(null);
+    setIsSubscribed(false);
+    setPlanId('free');
   }, []);
 
   const updatePassword = useCallback(async (password: string, nonce?: string) => {
@@ -286,7 +281,6 @@ export function useAuth(): AuthState {
   }, []);
 
   const updateProfile = useCallback(async (data: { display_name?: string; username?: string; avatar_url?: string }) => {
-    // Use RPC for atomic uniqueness enforcement (user_profiles table)
     const { data: result, error: rpcError } = await supabase.rpc('update_user_profile', {
       p_display_name: data.display_name ?? null,
       p_username: data.username ?? null,
@@ -294,7 +288,6 @@ export function useAuth(): AuthState {
     });
     if (rpcError) return { error: rpcError.message };
     if (result?.error) return { error: result.error as string };
-    // Refresh user object to pick up metadata changes
     const { data: refreshed } = await supabase.auth.getUser();
     if (refreshed.user) setUser(refreshed.user);
     return { error: null };
@@ -317,7 +310,6 @@ export function useAuth(): AuthState {
   const unlinkIdentity = useCallback(async (identity: UserIdentity) => {
     const { error } = await supabase.auth.unlinkIdentity(identity);
     if (!error) {
-      // Refresh user to get updated identities
       const { data } = await supabase.auth.getUser();
       if (data.user) setUser(data.user);
     }
@@ -337,7 +329,7 @@ export function useAuth(): AuthState {
     isAdmin,
     isPasswordRecovery,
     planId,
-    planLimits: PLAN_LIMITS.free,
+    planLimits: PLAN_LIMITS[planId],
     signInWithProvider,
     signInWithEmail,
     signUpWithEmail,

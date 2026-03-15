@@ -361,11 +361,13 @@ export function useChatEngine(params: UseChatEngineParams) {
         if (hasContent) {
           let profile = p as unknown as UserMemoryProfile
           setUserMemory(profile)
-          // Use daily count, but reset if the 24h window has expired
-          const dailyCount = (mem as any).daily_message_count ?? 0
-          const windowStart = (mem as any).daily_window_start
-          const windowExpired = !windowStart || (Date.now() - new Date(windowStart).getTime() > 24 * 60 * 60 * 1000)
-          messageCountRef.current = windowExpired ? 0 : dailyCount
+          // Use monthly count, reset if new month
+          const monthlyCount = (mem as any).monthly_message_count ?? 0
+          const windowStart = (mem as any).monthly_window_start
+          const now = new Date()
+          const ws = windowStart ? new Date(windowStart) : null
+          const sameMonth = ws && ws.getMonth() === now.getMonth() && ws.getFullYear() === now.getFullYear()
+          messageCountRef.current = sameMonth ? monthlyCount : 0
 
           // Load temporal patterns if present
           const memRecord = mem as unknown as Record<string, unknown>
@@ -571,9 +573,9 @@ export function useChatEngine(params: UseChatEngineParams) {
       return
     }
 
-    // Client-side daily limit guard — prevents race condition where rapid sends bypass backend check
+    // Client-side monthly limit guard — prevents race condition where rapid sends bypass backend check
     if (!isPro && params.planLimits) {
-      const limit = params.planLimits.messagesPerDay
+      const limit = params.planLimits.messagesPerMonth
       if (messageCountRef.current >= limit) {
         setShowUpgradeWall(true)
         return
@@ -1177,7 +1179,7 @@ export function useChatEngine(params: UseChatEngineParams) {
     const contextPreamble = buildContextPreamble({
       memory: userMemoryRef.current,
       mirror: userMirrorRef.current,
-      usage: params.planLimits ? { used: messagesRef.current.filter(m => m.role === 'user').length, limit: params.planLimits.messagesPerDay } : null,
+      usage: params.planLimits ? { used: messagesRef.current.filter(m => m.role === 'user').length, limit: params.planLimits.messagesPerMonth } : null,
       agentName: specialist.name,
       turnCount: engine.getState().working.turnCount,
       recentTopics: params.conversations
