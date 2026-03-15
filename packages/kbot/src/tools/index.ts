@@ -228,6 +228,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     { registerMagentaTools },
     { registerResearchTools },
     { registerContainerTools },
+    { registerVfxTools },
   ] = await Promise.all([
     import('./files.js'),
     import('./bash.js'),
@@ -264,6 +265,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
     import('./magenta-plugin.js'),
     import('./research.js'),
     import('./containers.js'),
+    import('./vfx.js'),
   ])
 
   // Register all tools (synchronous, fast)
@@ -302,6 +304,7 @@ export async function registerAllTools(opts?: { computerUse?: boolean }): Promis
   registerMagentaTools()
   registerResearchTools()
   registerContainerTools()
+  registerVfxTools()
 
   // Computer use tools — opt-in only via --computer-use flag
   if (opts?.computerUse) {

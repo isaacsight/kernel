@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  Universal AI agent for your terminal. 39 specialists, 208 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
+  Universal AI agent for your terminal. 39 specialists, 216 tools, 19 providers. Covers every code ecosystem — npm, PyPI, CRAN, Cargo, HuggingFace, arXiv, Docker, and more. Self-evolving, local-first.
 </p>
 
 <p align="center">
@@ -49,17 +49,17 @@ kbot local
 kbot
 ```
 
-## What's New in v2.15.0
+## What's New in v2.16.0
 
-- **208 tools** — 28 new tools covering academic, scientific, and infrastructure ecosystems
-- **Research tools** — Search arXiv, Semantic Scholar, Papers With Code, HuggingFace, NASA, DOI resolver
-- **Package bridges** — PyPI, CRAN (R), Cargo (Rust) search and inspection from your terminal
-- **Docker management** — Build, run, stop, logs, images, compose up/down
-- **API testing** — REST/GraphQL endpoint testing with timing and structured output
-- **Data processing** — SQL-like queries on CSV/JSON/TSV files
-- **Math & LaTeX** — Symbolic math evaluation and LaTeX rendering
-- **Infrastructure** — Terraform plan, license checker, dependency graph analysis
-- **Reality-inspired core** — Error correction, entropy-based context, emergent swarms, Gödel loop detection, simulation engine — all wired into the agent loop
+- **216 tools** — 8 new VFX & creative production tools inspired by Houdini
+- **VEX code generation** — Procedural noise, curl noise, scatter, wave, fractal, vortex, erosion, differential growth
+- **GLSL shaders** — Water, fire, plasma, raymarching, bloom, film grain, dissolve effects
+- **FFmpeg processing** — Encode, extract frames, GIF, timelapse, stabilize, reverse, speed, trim
+- **ImageMagick** — Resize, crop, blur, sharpen, sepia, posterize, edge detection, compositing
+- **Blender scripting** — Run Python scripts in Blender background mode for 3D generation
+- **Procedural textures** — Generate perlin, marble, wood, brick, hexagon, voronoi patterns
+- **Color palettes** — HSL color harmony generation (complementary, analogous, triadic, tetradic)
+- **Audio visualization** — Waveform, spectrum, vectorscope, showcqt video generation
 
 ## One-Shot Mode
 
@@ -137,7 +137,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes 14 tools
 kbot serve --port 7437 --token mysecret
 ```
 
-REST API exposing all 208 tools for any LLM or automation pipeline.
+REST API exposing all 216 tools for any LLM or automation pipeline.
 
 ## Use Everywhere
 
