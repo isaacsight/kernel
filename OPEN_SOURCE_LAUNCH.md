@@ -27,7 +27,27 @@ Comprehensive list of registries, directories, platforms, and communities to max
   - MCP server discovery directory
 
 - [ ] **PulseMCP** — [pulsemcp.com](https://pulsemcp.com/)
-  - MCP ecosystem directory and analytics
+  - 10,390+ MCP servers indexed
+  - Direct submit: [pulsemcp.com/submit](https://pulsemcp.com/submit)
+
+- [ ] **mcp.so** — [mcp.so](https://mcp.so/)
+  - 18,548+ MCP servers — largest MCP directory
+  - Strong SEO — ranks for "MCP server" searches
+
+- [ ] **mcpservers.org** — [mcpservers.org](https://mcpservers.org/)
+  - Community-curated MCP server list
+
+- [ ] **MCP Server Finder** — MCP discovery platform
+  - Categorized MCP server browser
+
+- [ ] **MCP Directory** — [mcpdirectory.com](https://mcpdirectory.com/)
+  - Searchable MCP server directory
+
+- [ ] **mcpserver.directory** — [mcpserver.directory](https://mcpserver.directory/)
+  - Alternative MCP directory with categories
+
+- [ ] **Portkey MCP Gateway** — [portkey.ai](https://portkey.ai/)
+  - MCP gateway/proxy — list K:BOT as compatible server
 
 ## 3. AI Agent & Tool Directories
 
@@ -61,6 +81,57 @@ Comprehensive list of registries, directories, platforms, and communities to max
 
 - [ ] **AlternativeTo** — [alternativeto.net](https://alternativeto.net/)
   - "Alternatives to X" discovery — position as alt to Claude Code, Aider, Cursor
+
+### AI Agent-Specific Directories
+
+- [ ] **AI Agents Directory** — [aiagentsdirectory.com](https://aiagentsdirectory.com/)
+  - Dedicated AI agent listing platform
+
+- [ ] **AI Agent Store** — [aiagentstore.ai](https://aiagentstore.ai/)
+  - AI agent marketplace/discovery
+
+- [ ] **AI Agents List** — [aiagentslist.com](https://aiagentslist.com/)
+  - Curated list of AI agents
+
+- [ ] **Agent.ai** — [agent.ai](https://agent.ai/)
+  - AI agent platform and directory
+
+- [ ] **AgentOps** — [agentops.ai](https://agentops.ai/)
+  - Agent observability — integrate SDK for visibility
+
+- [ ] **e2b.dev** — [e2b.dev](https://e2b.dev/)
+  - AI agent sandbox platform — K:BOT already has E2B tools
+
+### Open Source Alternative Directories
+
+- [ ] **OpenAlternative** — [openalternative.co](https://openalternative.co/)
+  - Open-source alternatives to proprietary tools
+  - Position as alt to Cursor, GitHub Copilot
+
+- [ ] **opensourcealternative.to** — [opensourcealternative.to](https://opensourcealternative.to/)
+  - Discover open source alternatives
+
+- [ ] **OSS Software** — Open source software directory
+  - Broad audience for OSS discovery
+
+### AI Coding Tool Directories & Comparison Sites
+
+- [ ] **Qodo (formerly CodiumAI)** — [qodo.ai](https://qodo.ai/)
+  - AI coding tools comparison and reviews
+
+- [ ] **Faros AI** — Developer analytics — get K:BOT listed in comparisons
+
+- [ ] **LogRocket Blog** — AI coding tools roundups — pitch for inclusion
+
+- [ ] **Gartner Peer Insights** — Enterprise AI tool reviews
+
+### Meta-Directories (Bulk Submission)
+
+- [ ] **best-of-ai/ai-directories** — [github.com/best-of-ai/ai-directories](https://github.com/best-of-ai/ai-directories)
+  - Master list of AI directories — submit to all at once
+
+- [ ] **ozgrozer/top-ai-directories** — [github.com/ozgrozer/top-ai-directories](https://github.com/ozgrozer/top-ai-directories)
+  - Curated list of top AI tool directories
 
 ## 3b. Product Launch Platforms
 
@@ -114,6 +185,28 @@ Submit K:BOT to these curated lists via PR:
 - [ ] **[awesome-research-software](https://github.com/thecodedog/awesome-research-software)** — Research software
 - [ ] **[awesome-scientific-computing](https://github.com/nschloe/awesome-scientific-computing)** — Scientific computing tools
 
+### AI Coding & Agentic Development Lists
+
+- [ ] **[awesome-code-ai](https://github.com/sourcegraph/awesome-code-ai)** — Sourcegraph's AI coding tools list
+- [ ] **[awesome-agentic-devtools](https://github.com/anthropics/awesome-agentic-devtools)** — Anthropic's agentic dev tools list
+- [ ] **[awesome-ai-coding-tools](https://github.com/thedaviddias/awesome-ai-coding-tools)** — AI coding assistants
+- [ ] **[awesome-ai-devtools](https://github.com/jamesmurdza/awesome-ai-devtools)** — AI developer tools
+- [ ] **[awesome-generative-ai](https://github.com/steven2358/awesome-generative-ai)** — Generative AI tools and resources
+- [ ] **[awesome-local-ai](https://github.com/janhq/awesome-local-ai)** — Local AI tools and models
+- [ ] **[awesome-self-hosted](https://github.com/awesome-selfhosted/awesome-selfhosted)** — Self-hosted software (K:BOT serve mode)
+- [ ] **[awesome-developer-experience](https://github.com/developer-experience/awesome-developer-experience)** — DX tools
+- [ ] **[awesome-terminals](https://github.com/cdleon/awesome-terminals)** — Terminal tools and emulators
+- [ ] **[awesome-nodejs](https://github.com/sindresorhus/awesome-nodejs)** — Node.js packages and resources
+
+### Domain-Specific Research Lists
+
+- [ ] **[awesome-bioinformatics](https://github.com/danielecook/Awesome-Bioinformatics)** — Bioinformatics tools
+- [ ] **[awesome-datascience](https://github.com/academic/awesome-datascience)** — Data science resources
+- [ ] **[awesome-machine-learning](https://github.com/josephmisiti/awesome-machine-learning)** — ML frameworks and tools
+- [ ] **[awesome-python-data-science](https://github.com/krzjoa/awesome-python-data-science)** — Python data science
+- [ ] **[awesome-math](https://github.com/rossant/awesome-math)** — Mathematics resources
+- [ ] **[awesome-physics](https://github.com/wbierbower/awesome-physics)** — Physics tools
+
 ## 5. Academic & Research Software Registries
 
 - [ ] **JOSS (Journal of Open Source Software)** — [joss.theoj.org](https://joss.theoj.org)
@@ -145,6 +238,28 @@ Submit K:BOT to these curated lists via PR:
 
 - [ ] **Astrophysics Source Code Library (ASCL)** — [ascl.net](https://ascl.net/)
   - If we add astronomy-specific tools
+
+- [ ] **bio.tools** — [bio.tools](https://bio.tools/)
+  - ELIXIR registry for bioinformatics tools
+  - biotoolsSchema metadata standard
+
+- [ ] **SciCrunch** — [scicrunch.org](https://scicrunch.org/)
+  - Research resource identification (RRID)
+  - Get an RRID for K:BOT for citation tracking
+
+- [ ] **re3data** — [re3data.org](https://www.re3data.org/)
+  - Registry of research data repositories
+  - For K:BOT's data query/transform tools
+
+- [ ] **Papers With Code** — [paperswithcode.com](https://paperswithcode.com/)
+  - Link K:BOT's `kbot oss papers` tool
+  - Submit as a tool for the platform
+
+- [ ] **Hugging Face Spaces** — [huggingface.co/spaces](https://huggingface.co/spaces)
+  - Host a K:BOT demo as a Gradio/Streamlit space
+
+- [ ] **CZI Open Science** — [chanzuckerberg.com/science](https://chanzuckerberg.com/science/)
+  - Chan Zuckerberg Initiative supports open science tools
 
 ## 6. Metadata Standards (Implemented)
 
@@ -286,43 +401,68 @@ The FAIR principles (Findable, Accessible, Interoperable, Reusable) for research
 4. Add GitHub topics (20 topics listed above)
 5. Create social preview image (1280x640, logo + tagline + differentiators)
 6. Enable GitHub Discussions
-7. Submit to Official MCP Registry
+7. Submit to Official MCP Registry + Smithery.ai + Glama.ai
 8. Submit to DevHunt (uses GitHub PRs)
+9. Submit to mcp.so, PulseMCP, mcpservers.org (all 7 MCP directories)
+10. Submit to OpenAlternative + opensourcealternative.to
 
 ### Week 2 — Announcements
-9. Hacker News "Show HN: K:BOT — Open-source terminal AI agent for researchers"
-10. Reddit posts: r/opensource, r/commandline, r/LocalLLaMA, r/node, r/artificial, r/MachineLearning, r/datascience, r/scientificcomputing
-11. Dev.to launch article (tags: #opensource, #ai, #cli, #research)
-12. Hashnode cross-post
-13. Product Hunt launch (schedule for Tuesday–Thursday for best visibility)
-14. BetaList submission
+11. Hacker News "Show HN: K:BOT — Open-source terminal AI agent for researchers"
+12. Reddit posts: r/opensource, r/commandline, r/LocalLLaMA, r/node, r/artificial, r/MachineLearning, r/datascience, r/scientificcomputing
+13. Dev.to launch article (tags: #opensource, #ai, #cli, #research)
+14. Hashnode cross-post
+15. Product Hunt launch (schedule for Tuesday–Thursday for best visibility)
+16. BetaList submission
+17. Microlaunch submission (month-long ranking)
 
-### Week 3 — Directories & Registries
-15. Submit to FutureTools, Toolify, TAAFT, TopAI, ListMyAI
-16. Submit to Console.dev, StackShare, LibHunt, OSS Gallery
-17. Submit to AlternativeTo (as alternative to Claude Code, Aider, Cursor)
-18. Submit to OpenSSF Best Practices
-19. Run FAIR software assessment (fair-software.eu)
-20. Submit to Research Software Directory
-
-### Week 4 — More Awesome Lists & Communities
-21. Submit to remaining awesome lists (8 more)
+### Week 3 — AI & Tool Directories
+18. Submit to FutureTools, Toolify, TAAFT, TopAI, ListMyAI
+19. Submit to Console.dev, StackShare, LibHunt, OSS Gallery
+20. Submit to AlternativeTo (as alternative to Claude Code, Aider, Cursor)
+21. Submit to AI Agents Directory, AI Agent Store, AI Agents List, Agent.ai
 22. Submit to SaaS Hub, AI Scout, TheAISurf
-23. Engage in MCP community Discord/forums
-24. Share on Indie Hackers with build story
+23. Use meta-directories (best-of-ai/ai-directories, ozgrozer/top-ai-directories) for bulk submission
 
-### Month 2 — Academic
-25. Prepare JOSS paper draft
-26. Engage RSE community (US-RSE, UK RSE mailing lists + Slack)
-27. Submit to SciCodes consortium
-28. Apply for NumFOCUS affiliated status
-29. Contact Software Sustainability Institute
-30. Submit to swMath (mathematical software)
+### Week 4 — Awesome Lists Blitz
+24. Submit to awesome-code-ai, awesome-agentic-devtools, awesome-ai-coding-tools
+25. Submit to awesome-ai-devtools, awesome-generative-ai, awesome-local-ai
+26. Submit to awesome-self-hosted, awesome-nodejs, awesome-terminals
+27. Submit to awesome-bioinformatics, awesome-datascience, awesome-machine-learning
+28. Submit to awesome-math, awesome-physics, awesome-python-data-science
+29. Submit to remaining original awesome lists (agent-skills, open-source, research-software, scientific-computing)
+
+### Month 2 — Academic & Standards
+30. Submit to OpenSSF Best Practices
+31. Run FAIR software assessment (fair-software.eu)
+32. Submit to Research Software Directory
+33. Prepare JOSS paper draft
+34. Engage RSE community (US-RSE, UK RSE mailing lists + Slack)
+35. Submit to SciCodes consortium
+36. Apply for NumFOCUS affiliated status
+37. Contact Software Sustainability Institute
+38. Submit to swMath (mathematical software)
+39. Submit to bio.tools (ELIXIR bioinformatics registry)
+40. Get RRID from SciCrunch for citation tracking
+41. Submit to Papers With Code as a tool
+42. Host demo on Hugging Face Spaces
+
+### Month 3 — Community & Benchmarks
+43. Set up Discord community server
+44. Publish SWE-bench evaluation results
+45. Publish HumanEval benchmark results
+46. Create terminal recording demos (asciinema/VHS)
+47. Submit to Gartner Peer Insights
+48. Engage in MCP community Discord/forums
+49. Share on Indie Hackers with build story
+50. Apply for CZI Open Science funding
 
 ### Ongoing
-31. Monitor and respond to awesome list PRs
-32. Publish monthly on Dev.to / Medium about new features
-33. Engage in MCP community
-34. Submit to new registries as they emerge
-35. Track citations and DOI usage via Zenodo
-36. Respond to every GitHub issue within 48 hours (signals active maintenance)
+51. Monitor and respond to awesome list PRs
+52. Publish monthly on Dev.to / Medium about new features
+53. Engage in MCP community
+54. Submit to new registries as they emerge
+55. Track citations and DOI usage via Zenodo
+56. Respond to every GitHub issue within 48 hours (signals active maintenance)
+57. Run SWE-bench evaluations on each major release
+58. Update all directory listings on major releases
+59. Publish quarterly competitive benchmarks

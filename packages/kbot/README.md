@@ -107,12 +107,47 @@ kbot oss sync --upstream owner/repo
 kbot oss log
 ```
 
+### Benchmarks & Evaluation
+
+```bash
+# Run HumanEval (function-level code generation)
+kbot bench humaneval --model claude-sonnet-4-20250514
+
+# Run SWE-bench (real-world GitHub issue resolution)
+kbot bench swebench --split lite
+
+# Multi-language coding benchmark
+kbot bench polyglot --languages python,rust,typescript
+
+# View results over time
+kbot bench results
+
+# Compare K:BOT with other agents
+kbot bench compare aider
+```
+
+### Auto-Context & Repo Mapping
+
+```bash
+# Find relevant files for a task
+kbot context "fix the auth bug"
+
+# Generate structural map of repo
+kbot map --language typescript
+
+# Map specific directory
+kbot map src/tools --depth 2
+```
+
 ### Also new
 
 - **Repo health audit** — A-F scoring across documentation, community, CI/CD, security, maintenance
 - **Contribution tracking** — every `prepare_contribution` and `submit_contribution` logged
 - **Mentored issue finder** — find issues with active mentorship across GitHub
-- **228+ tools** — 24 new open-source and academic tools
+- **234+ tools** — 30 new open-source, academic, and benchmark tools
+- **Benchmark suite** — SWE-bench, HumanEval, polyglot for reproducible evaluation
+- **Auto-context** — Automatically finds relevant files (like Aider's repo-map)
+- **Repo map** — Structural map of any codebase (functions, classes, exports)
 
 ### Previous: Embedded Inference (v2.17)
 
@@ -143,9 +178,27 @@ Auto-routed or manual with `kbot --agent <name>`:
 **Creative**: creative, developer, hacker, operator, dreamer
 **Systems**: session, scholar, auditor, benchmarker, synthesizer, debugger
 
+## K:BOT vs. The Competition
+
+| Feature | K:BOT | Claude Code | Aider | Cursor | OpenHands |
+|---------|-------|-------------|-------|--------|-----------|
+| **Open Source** | MIT | Closed | Apache-2 | Closed | MIT |
+| **AI Providers** | 20 | 1 | 3 | 1 | 5 |
+| **Built-in Tools** | 234+ | ~15 | ~10 | ~10 | ~20 |
+| **Specialist Agents** | 39 | 0 | 0 | 0 | 0 |
+| **Learning Engine** | 5-layer | No | No | No | No |
+| **Local/Offline** | Embedded | No | No | No | No |
+| **Academic Tools** | arXiv, cite | No | No | No | No |
+| **MCP + ACP Server** | Both | MCP only | No | No | No |
+| **Plugin System** | Yes | No | No | Yes | No |
+| **Benchmarks** | Built-in | No | External | No | External |
+| **Cost** | Free + BYOK | $20/mo | Free + BYOK | $20/mo | Free + BYOK |
+
 ## Features
 
-- **228+ Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform
+- **234+ Tools** — File ops, bash, git, GitHub, web search, Jupyter, Docker, browser, MCP, PyPI, CRAN, Cargo, arXiv, HuggingFace, NASA, API testing, data queries, math, LaTeX, Terraform, benchmarks
+- **Benchmark Suite** — SWE-bench, HumanEval, polyglot benchmarks for reproducible evaluation
+- **Auto-Context** — Automatically finds relevant files for any task (repo-map)
 - **Open Source Suite** — Find issues, audit repos, generate changelogs, check licenses, track contributions
 - **Academic Research** — arXiv search, CITATION.cff, reproducibility audits, research repo scaffolding, papers-with-code
 - **Local-First** — File reads, git, grep run instantly without an API call
@@ -232,6 +285,12 @@ REST API exposing all 228+ tools for any LLM or automation pipeline.
 | `kbot oss cite` | Generate CITATION.cff |
 | `kbot oss repro` | Audit reproducibility |
 | `kbot oss find` | Find issues to contribute to |
+| `kbot bench humaneval` | Run HumanEval benchmark |
+| `kbot bench swebench` | Run SWE-bench evaluation |
+| `kbot bench polyglot` | Multi-language benchmark |
+| `kbot bench compare` | Compare with other agents |
+| `kbot context <query>` | Auto-find relevant files |
+| `kbot map [path]` | Structural repo map |
 | `kbot serve` | Start HTTP server |
 | `kbot ide mcp` | Start MCP server |
 | `/agent <name>` | Switch specialist |

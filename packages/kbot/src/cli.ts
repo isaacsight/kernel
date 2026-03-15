@@ -559,12 +559,141 @@ async function main(): Promise<void> {
     })
 
   ossCmd
+    .command('presence')
+    .description('Check open-source presence and discoverability')
+    .option('--name <name>', 'Package name on npm/PyPI')
+    .action(async (opts: { name?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'oss_presence', arguments: { name: opts.name } })
+      console.log(result.result)
+    })
+
+  ossCmd
+    .command('discover')
+    .description('Discover registries and directories to list your project')
+    .option('-c, --category <cat>', 'Category: ai-agent, cli-tool, research-software, mcp-server, developer-tool, all')
+    .action(async (opts: { category?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'oss_discover', arguments: { category: opts.category } })
+      console.log(result.result)
+    })
+
+  ossCmd
     .command('log')
     .description('List your kbot-assisted open source contributions')
     .action(async () => {
       await registerAllTools()
       const { executeTool } = await import('./tools/index.js')
       const result = await executeTool({ id: 'cli', name: 'list_contributions', arguments: {} })
+      console.log(result.result)
+    })
+
+  // `kbot bench` — Benchmark and evaluation suite
+  const benchCmd = program
+    .command('bench')
+    .description('Run coding benchmarks — SWE-bench, HumanEval, polyglot. Prove K:BOT\'s capabilities.')
+
+  benchCmd
+    .command('humaneval')
+    .description('Run HumanEval benchmark (164 Python function completion tasks)')
+    .option('-m, --model <model>', 'AI model to benchmark')
+    .option('-n, --limit <n>', 'Number of problems', '164')
+    .action(async (opts: { model?: string; limit?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'bench_humaneval',
+        arguments: { model: opts.model, limit: parseInt(opts.limit || '164', 10) },
+      })
+      console.log(result.result)
+    })
+
+  benchCmd
+    .command('swebench')
+    .description('Run SWE-bench evaluation (real-world GitHub issue resolution)')
+    .option('-s, --split <split>', 'Split: lite, verified, or full', 'lite')
+    .option('-n, --limit <n>', 'Max instances', '10')
+    .option('-m, --model <model>', 'AI model to use')
+    .action(async (opts: { split?: string; limit?: string; model?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'bench_swebench',
+        arguments: { split: opts.split, limit: parseInt(opts.limit || '10', 10), model: opts.model },
+      })
+      console.log(result.result)
+    })
+
+  benchCmd
+    .command('polyglot')
+    .description('Run polyglot benchmark (multi-language code generation)')
+    .option('-l, --languages <langs>', 'Comma-separated languages')
+    .option('-n, --limit <n>', 'Problems per language', '5')
+    .action(async (opts: { languages?: string; limit?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'bench_polyglot',
+        arguments: { languages: opts.languages, limit: parseInt(opts.limit || '5', 10) },
+      })
+      console.log(result.result)
+    })
+
+  benchCmd
+    .command('results')
+    .description('View benchmark results and track progress')
+    .option('-b, --benchmark <name>', 'Filter by benchmark')
+    .option('-m, --model <model>', 'Filter by model')
+    .action(async (opts: { benchmark?: string; model?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'bench_results',
+        arguments: { benchmark: opts.benchmark, model: opts.model },
+      })
+      console.log(result.result)
+    })
+
+  benchCmd
+    .command('compare [agent]')
+    .description('Compare K:BOT with other AI coding agents')
+    .action(async (agent?: string) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({ id: 'cli', name: 'compare_agents', arguments: { agent } })
+      console.log(result.result)
+    })
+
+  // `kbot context` — Auto-context and repo mapping
+  program
+    .command('context <query>')
+    .description('Auto-find relevant files for a task (like Aider\'s repo-map)')
+    .option('-f, --file <file>', 'Starting file')
+    .option('-n, --max <n>', 'Max files', '10')
+    .action(async (query: string, opts: { file?: string; max?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'auto_context',
+        arguments: { query, file: opts.file, max_files: parseInt(opts.max || '10', 10) },
+      })
+      console.log(result.result)
+    })
+
+  program
+    .command('map [path]')
+    .description('Generate structural map of repository (functions, classes, exports)')
+    .option('-d, --depth <n>', 'Max directory depth', '3')
+    .option('-l, --language <lang>', 'Filter by language (ts, py, rs, go)')
+    .action(async (path: string | undefined, opts: { depth?: string; language?: string }) => {
+      await registerAllTools()
+      const { executeTool } = await import('./tools/index.js')
+      const result = await executeTool({
+        id: 'cli', name: 'repo_map',
+        arguments: { path: path || '.', depth: parseInt(opts.depth || '3', 10), language: opts.language },
+      })
       console.log(result.result)
     })
 

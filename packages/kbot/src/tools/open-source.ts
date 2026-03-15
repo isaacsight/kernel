@@ -976,4 +976,228 @@ export function registerOpenSourceTools(): void {
       return lines.join('\n')
     },
   })
+
+  // ── Open Source Presence Tracker ──────────────────────────────────
+  registerTool({
+    name: 'oss_presence',
+    description: 'Check the open-source presence and discoverability of a project. Scans package registries, awesome lists, directories, and community platforms to find where a project is listed and where it should be.',
+    parameters: {
+      repo: { type: 'string', description: 'GitHub owner/repo (default: detect from current directory)', required: false },
+      name: { type: 'string', description: 'Package name on npm/PyPI (default: detect from package.json)', required: false },
+    },
+    tier: 'free',
+    timeout: 60_000,
+    async execute(args) {
+      const cwd = process.cwd()
+      let repo = args.repo ? String(args.repo) : ''
+      let pkgName = args.name ? String(args.name) : ''
+
+      // Auto-detect from git remote
+      if (!repo) {
+        try {
+          const remote = execSync('git remote get-url origin 2>/dev/null', { encoding: 'utf-8', timeout: 3000 }).trim()
+          const m = remote.match(/github\.com[/:](.+?)(?:\.git)?$/)
+          if (m) repo = m[1]
+        } catch { /* not a git repo */ }
+      }
+
+      // Auto-detect package name
+      if (!pkgName) {
+        try {
+          const pkg = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf-8'))
+          pkgName = pkg.name || ''
+        } catch { /* no package.json */ }
+      }
+
+      const checks: { platform: string; url: string; status: string; priority: string }[] = []
+
+      // Package registries
+      if (pkgName) {
+        try {
+          const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}`, { signal: AbortSignal.timeout(5000) })
+          checks.push({ platform: 'npm', url: `https://npmjs.com/package/${pkgName}`, status: res.ok ? 'Listed' : 'Not found', priority: 'P0' })
+        } catch {
+          checks.push({ platform: 'npm', url: '', status: 'Check failed', priority: 'P0' })
+        }
+      }
+
+      if (repo) {
+        // GitHub
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}`, { headers: HEADERS, signal: AbortSignal.timeout(5000) })
+          if (res.ok) {
+            const data = await res.json() as { stargazers_count: number; topics: string[]; description: string; has_discussions: boolean }
+            checks.push({ platform: 'GitHub', url: `https://github.com/${repo}`, status: `Listed (${data.stargazers_count} stars, ${(data.topics || []).length} topics)`, priority: 'P0' })
+            if ((data.topics || []).length < 10) {
+              checks.push({ platform: 'GitHub Topics', url: `https://github.com/${repo}/settings`, status: `Only ${(data.topics || []).length} topics — add more for discoverability`, priority: 'P1' })
+            }
+            if (!data.has_discussions) {
+              checks.push({ platform: 'GitHub Discussions', url: `https://github.com/${repo}/settings`, status: 'Not enabled — enable for community engagement', priority: 'P1' })
+            }
+          }
+        } catch { /* API failed */ }
+
+        // Docker Hub
+        const dockerName = repo.split('/').pop() || ''
+        try {
+          const res = await fetch(`https://hub.docker.com/v2/repositories/${repo.split('/')[0]}/${dockerName}/`, { signal: AbortSignal.timeout(5000) })
+          checks.push({ platform: 'Docker Hub', url: `https://hub.docker.com/r/${repo.split('/')[0]}/${dockerName}`, status: res.ok ? 'Listed' : 'Not found', priority: 'P1' })
+        } catch {
+          checks.push({ platform: 'Docker Hub', url: '', status: 'Check failed', priority: 'P1' })
+        }
+      }
+
+      // Metadata files
+      const metaFiles = [
+        { file: 'CITATION.cff', name: 'CITATION.cff', priority: 'P0' },
+        { file: 'codemeta.json', name: 'CodeMeta', priority: 'P0' },
+        { file: '.zenodo.json', name: 'Zenodo metadata', priority: 'P0' },
+        { file: 'CONTRIBUTING.md', name: 'Contributing guide', priority: 'P0' },
+        { file: 'CODE_OF_CONDUCT.md', name: 'Code of Conduct', priority: 'P1' },
+        { file: 'SECURITY.md', name: 'Security Policy', priority: 'P1' },
+        { file: 'GOVERNANCE.md', name: 'Governance', priority: 'P2' },
+        { file: '.github/FUNDING.yml', name: 'Funding config', priority: 'P2' },
+        { file: '.github/ISSUE_TEMPLATE', name: 'Issue templates', priority: 'P1' },
+        { file: '.github/PULL_REQUEST_TEMPLATE.md', name: 'PR template', priority: 'P1' },
+        { file: 'ROADMAP.md', name: 'Public roadmap', priority: 'P2' },
+        { file: 'CHANGELOG.md', name: 'Changelog', priority: 'P1' },
+      ]
+
+      for (const meta of metaFiles) {
+        const exists = existsSync(join(cwd, meta.file))
+        checks.push({
+          platform: meta.name,
+          url: meta.file,
+          status: exists ? 'Present' : 'Missing',
+          priority: meta.priority,
+        })
+      }
+
+      // Directories to check (manual verification needed)
+      const directories = [
+        { name: 'MCP Registry', url: 'https://registry.modelcontextprotocol.io/', priority: 'P0' },
+        { name: 'Smithery.ai', url: 'https://smithery.ai/', priority: 'P0' },
+        { name: 'mcp.so', url: 'https://mcp.so/', priority: 'P0' },
+        { name: 'PulseMCP', url: 'https://pulsemcp.com/', priority: 'P1' },
+        { name: 'Product Hunt', url: 'https://producthunt.com/', priority: 'P1' },
+        { name: 'AlternativeTo', url: 'https://alternativeto.net/', priority: 'P1' },
+        { name: 'OpenAlternative', url: 'https://openalternative.co/', priority: 'P1' },
+        { name: 'Zenodo (DOI)', url: 'https://zenodo.org/', priority: 'P0' },
+        { name: 'Software Heritage', url: 'https://archive.softwareheritage.org/', priority: 'P0' },
+        { name: 'JOSS', url: 'https://joss.theoj.org/', priority: 'P2' },
+        { name: 'OpenSSF Best Practices', url: 'https://bestpractices.coreinfrastructure.org/', priority: 'P1' },
+        { name: 'StackShare', url: 'https://stackshare.io/', priority: 'P2' },
+        { name: 'Hacker News', url: 'https://news.ycombinator.com/', priority: 'P1' },
+      ]
+
+      for (const dir of directories) {
+        checks.push({ platform: dir.name, url: dir.url, status: 'Verify manually', priority: dir.priority })
+      }
+
+      // Build report
+      const listed = checks.filter(c => c.status === 'Listed' || c.status === 'Present' || c.status.startsWith('Listed'))
+      const missing = checks.filter(c => c.status === 'Missing' || c.status === 'Not found')
+      const manual = checks.filter(c => c.status === 'Verify manually')
+
+      const lines: string[] = [
+        `# Open Source Presence Report`,
+        ``,
+        `Repository: ${repo || 'unknown'} | Package: ${pkgName || 'unknown'}`,
+        ``,
+        `## Status: ${listed.length} confirmed / ${missing.length} missing / ${manual.length} to verify`,
+        ``,
+        `### Confirmed Present`,
+        `| Platform | Status | Priority |`,
+        `|----------|--------|----------|`,
+      ]
+      for (const c of listed) {
+        lines.push(`| ${c.platform} | ${c.status} | ${c.priority} |`)
+      }
+
+      if (missing.length > 0) {
+        lines.push(``, `### Missing (Action Required)`, `| Platform | File/URL | Priority |`, `|----------|----------|----------|`)
+        for (const c of missing) {
+          lines.push(`| ${c.platform} | ${c.url} | ${c.priority} |`)
+        }
+      }
+
+      lines.push(``, `### Verify Manually`, `| Platform | URL | Priority |`, `|----------|-----|----------|`)
+      for (const c of manual) {
+        lines.push(`| ${c.platform} | ${c.url} | ${c.priority} |`)
+      }
+
+      lines.push(``, `---`, `Run \`kbot oss presence\` periodically to track your discoverability.`)
+      return lines.join('\n')
+    },
+  })
+
+  // ── Open Source Discovery Engine ──────────────────────────────────
+  registerTool({
+    name: 'oss_discover',
+    description: 'Discover open-source registries, directories, and platforms where a project can be listed. Returns actionable submission links for maximum visibility.',
+    parameters: {
+      category: { type: 'string', description: 'Project category: ai-agent, cli-tool, research-software, mcp-server, developer-tool, or all', required: false },
+    },
+    tier: 'free',
+    async execute(args) {
+      const category = String(args.category || 'all').toLowerCase()
+
+      const registries: { name: string; url: string; submit: string; category: string[]; description: string }[] = [
+        // MCP Registries
+        { name: 'MCP Registry (Official)', url: 'https://registry.modelcontextprotocol.io/', submit: 'https://github.com/modelcontextprotocol/registry', category: ['mcp-server'], description: 'Official MCP server registry' },
+        { name: 'Smithery.ai', url: 'https://smithery.ai/', submit: 'https://smithery.ai/', category: ['mcp-server'], description: 'MCP marketplace (auto-imports from GitHub)' },
+        { name: 'mcp.so', url: 'https://mcp.so/', submit: 'https://mcp.so/', category: ['mcp-server'], description: '18,548+ MCP servers indexed' },
+        { name: 'PulseMCP', url: 'https://pulsemcp.com/', submit: 'https://pulsemcp.com/submit', category: ['mcp-server'], description: '10,390+ servers, direct submit' },
+        { name: 'Glama.ai', url: 'https://glama.ai/mcp', submit: 'https://glama.ai/mcp', category: ['mcp-server'], description: 'MCP discovery directory' },
+
+        // AI Directories
+        { name: 'Toolify.ai', url: 'https://toolify.ai/', submit: 'https://toolify.ai/submit', category: ['ai-agent', 'developer-tool'], description: 'AI tools directory' },
+        { name: 'FutureTools', url: 'https://futuretools.io/', submit: 'https://futuretools.io/submit-a-tool', category: ['ai-agent'], description: 'Authoritative AI directory' },
+        { name: "There's An AI For That", url: 'https://theresanaiforthat.com/', submit: 'https://theresanaiforthat.com/submit', category: ['ai-agent'], description: '12,000+ AI tools' },
+        { name: 'AI Agents Directory', url: 'https://aiagentsdirectory.com/', submit: 'https://aiagentsdirectory.com/', category: ['ai-agent'], description: 'Dedicated AI agent directory' },
+
+        // Developer Tool Directories
+        { name: 'Product Hunt', url: 'https://producthunt.com/', submit: 'https://producthunt.com/posts/new', category: ['all'], description: 'Product launch platform' },
+        { name: 'DevHunt', url: 'https://devhunt.org/', submit: 'https://devhunt.org/', category: ['developer-tool', 'cli-tool'], description: 'Dev tool launchpad (GitHub PRs)' },
+        { name: 'Console.dev', url: 'https://console.dev/', submit: 'https://console.dev/submit', category: ['developer-tool', 'cli-tool'], description: 'Curated dev tool newsletter' },
+        { name: 'AlternativeTo', url: 'https://alternativeto.net/', submit: 'https://alternativeto.net/manage/', category: ['all'], description: 'Software alternatives directory' },
+        { name: 'OpenAlternative', url: 'https://openalternative.co/', submit: 'https://openalternative.co/', category: ['all'], description: 'Open source alternatives' },
+        { name: 'StackShare', url: 'https://stackshare.io/', submit: 'https://stackshare.io/', category: ['developer-tool'], description: 'Tech stack discovery' },
+
+        // Academic/Research
+        { name: 'Zenodo', url: 'https://zenodo.org/', submit: 'https://zenodo.org/account/settings/github/', category: ['research-software'], description: 'DOI minting for software' },
+        { name: 'Software Heritage', url: 'https://archive.softwareheritage.org/', submit: 'https://archive.softwareheritage.org/browse/origin/save/', category: ['research-software'], description: 'Universal software archive' },
+        { name: 'JOSS', url: 'https://joss.theoj.org/', submit: 'https://joss.readthedocs.io/en/latest/submitting.html', category: ['research-software'], description: 'Peer-reviewed software journal' },
+        { name: 'Research Software Directory', url: 'https://research-software-directory.org/', submit: 'https://research-software-directory.org/', category: ['research-software'], description: 'NL eScience Center registry' },
+        { name: 'Papers With Code', url: 'https://paperswithcode.com/', submit: 'https://paperswithcode.com/', category: ['research-software', 'ai-agent'], description: 'Papers + code platform' },
+
+        // Open Source Platforms
+        { name: 'OSS Gallery', url: 'https://oss.gallery/', submit: 'https://oss.gallery/', category: ['all'], description: 'Open source showcase' },
+        { name: 'LibHunt', url: 'https://libhunt.com/', submit: 'https://libhunt.com/', category: ['all'], description: 'Trending open source' },
+        { name: 'SaaS Hub', url: 'https://saashub.com/', submit: 'https://saashub.com/', category: ['all'], description: 'Software alternatives' },
+      ]
+
+      const filtered = category === 'all'
+        ? registries
+        : registries.filter(r => r.category.includes(category) || r.category.includes('all'))
+
+      const lines: string[] = [
+        `# Open Source Discovery Engine`,
+        ``,
+        `Category: ${category} | Found: ${filtered.length} registries`,
+        ``,
+        `| Registry | Submit URL | Description |`,
+        `|----------|-----------|-------------|`,
+      ]
+
+      for (const r of filtered) {
+        lines.push(`| [${r.name}](${r.url}) | [Submit](${r.submit}) | ${r.description} |`)
+      }
+
+      lines.push(``, `---`)
+      lines.push(`Categories: ai-agent, cli-tool, research-software, mcp-server, developer-tool, all`)
+      lines.push(`Run: \`kbot oss discover --category ai-agent\``)
+      return lines.join('\n')
+    },
+  })
 }
