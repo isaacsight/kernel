@@ -11,6 +11,9 @@
   <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
   <a href="https://hub.docker.com/r/isaacsight/kbot"><img src="https://img.shields.io/badge/docker-kbot-6B5B95" alt="Docker"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/packages/kbot/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-6B5B95" alt="PRs Welcome"></a>
+  <a href="https://codemeta.github.io/"><img src="https://img.shields.io/badge/CodeMeta-2.0-6B5B95" alt="CodeMeta"></a>
+  <a href="https://registry.modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-server-6B5B95" alt="MCP Server"></a>
+  <a href="https://fair-software.eu/"><img src="https://img.shields.io/badge/FAIR-software-6B5B95" alt="FAIR Software"></a>
 </p>
 
 ## Why K:BOT?
@@ -265,7 +268,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and 
 - **GitHub**: [isaacsight/kernel](https://github.com/isaacsight/kernel)
 - **Docker**: [isaacsight/kbot](https://hub.docker.com/r/isaacsight/kbot)
 - **MCP Registry**: `kbot` ([mcp-server.json](mcp-server.json))
+- **Cite**: [CITATION.cff](../../CITATION.cff) — cite K:BOT in your research
+- **CodeMeta**: [codemeta.json](../../codemeta.json) — machine-readable software metadata
 - **Issues**: [Report a bug](https://github.com/isaacsight/kernel/issues)
+- **Roadmap**: [ROADMAP.md](../../ROADMAP.md) — public roadmap
 - **Email**: [support@kernel.chat](mailto:support@kernel.chat)
 - **X/Twitter**: [@isaacsight](https://x.com/isaacsight)
 

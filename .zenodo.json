@@ -1,0 +1,65 @@
+{
+  "title": "K:BOT — Universal AI Agent for Your Terminal",
+  "description": "Open-source terminal AI agent with 39 specialists, 228+ tools, and 20 AI providers. Academic research tools including arXiv search, CITATION.cff generation, reproducibility auditing, and research repository scaffolding. Self-evolving, local-first, zero vendor lock-in.",
+  "upload_type": "software",
+  "license": "MIT",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "kernel.chat group",
+      "affiliation": "kernel.chat"
+    }
+  ],
+  "keywords": [
+    "ai-agent",
+    "terminal",
+    "cli",
+    "open-source",
+    "academic-research",
+    "scientific-computing",
+    "arxiv",
+    "citation",
+    "reproducibility",
+    "machine-learning",
+    "local-first",
+    "llm",
+    "mcp",
+    "research-software",
+    "open-science",
+    "data-science",
+    "developer-tools",
+    "code-assistant",
+    "multi-model",
+    "computational-science"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://www.npmjs.com/package/@kernel.chat/kbot",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://kernel.chat",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://hub.docker.com/r/isaacsight/kbot",
+      "relation": "isVariantFormOf",
+      "scheme": "url"
+    }
+  ],
+  "subjects": [
+    {
+      "term": "Software Engineering",
+      "scheme": "url",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh89003285"
+    },
+    {
+      "term": "Artificial Intelligence",
+      "scheme": "url",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh85008180"
+    }
+  ],
+  "notes": "K:BOT is part of the kernel.chat open-source ecosystem. It supports 20 AI providers including local-only inference via embedded llama.cpp. All tools execute locally — only AI reasoning touches the API."
+}

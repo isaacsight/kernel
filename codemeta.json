@@ -1,0 +1,83 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "K:BOT",
+  "description": "Universal AI agent for your terminal. 39 specialists, 228+ tools, 20 AI providers. Open source, academic research, scientific computing. arXiv search, CITATION.cff generation, reproducibility audits, research repo scaffolding. Self-evolving, local-first, zero lock-in.",
+  "identifier": "@kernel.chat/kbot",
+  "codeRepository": "https://github.com/isaacsight/kernel",
+  "issueTracker": "https://github.com/isaacsight/kernel/issues",
+  "license": "https://spdx.org/licenses/MIT",
+  "version": "2.19.0",
+  "dateCreated": "2024-01-01",
+  "dateModified": "2026-03-15",
+  "datePublished": "2026-03-15",
+  "programmingLanguage": [
+    "TypeScript",
+    "JavaScript"
+  ],
+  "operatingSystem": [
+    "Linux",
+    "macOS",
+    "Windows"
+  ],
+  "runtimePlatform": "Node.js >= 20",
+  "softwareRequirements": [
+    "Node.js >= 20"
+  ],
+  "applicationCategory": [
+    "Developer Tools",
+    "Scientific Computing",
+    "Research Software",
+    "Artificial Intelligence"
+  ],
+  "keywords": [
+    "ai-agent",
+    "terminal",
+    "cli",
+    "open-source",
+    "academic-research",
+    "scientific-computing",
+    "arxiv",
+    "citation",
+    "reproducibility",
+    "data-science",
+    "machine-learning",
+    "local-first",
+    "llm",
+    "mcp",
+    "multi-model",
+    "code-assistant",
+    "research-software",
+    "bioinformatics",
+    "computational-science",
+    "open-science"
+  ],
+  "developmentStatus": "active",
+  "isPartOf": "https://kernel.chat",
+  "referencePublication": "https://www.npmjs.com/package/@kernel.chat/kbot",
+  "author": [
+    {
+      "@type": "Organization",
+      "name": "kernel.chat group",
+      "url": "https://kernel.chat"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Isaac",
+      "familyName": "Sight",
+      "url": "https://github.com/isaacsight"
+    }
+  ],
+  "softwareHelp": "https://github.com/isaacsight/kernel/blob/main/packages/kbot/README.md",
+  "contIntegration": "https://github.com/isaacsight/kernel/actions",
+  "buildInstructions": "https://github.com/isaacsight/kernel/blob/main/packages/kbot/CONTRIBUTING.md",
+  "downloadUrl": "https://www.npmjs.com/package/@kernel.chat/kbot",
+  "installUrl": "https://raw.githubusercontent.com/isaacsight/kernel/main/packages/kbot/install.sh",
+  "relatedLink": [
+    "https://kernel.chat",
+    "https://hub.docker.com/r/isaacsight/kbot",
+    "https://registry.modelcontextprotocol.io/"
+  ]
+}

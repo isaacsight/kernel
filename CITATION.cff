@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use K:BOT in your research, please cite it as below."
+title: "K:BOT"
+type: software
+version: "2.19.0"
+date-released: "2026-03-15"
+repository-code: "https://github.com/isaacsight/kernel"
+url: "https://kernel.chat"
+license: MIT
+abstract: "Universal AI agent for your terminal. 39 specialists, 228+ tools, 20 AI providers. Open-source academic research tools including arXiv search, CITATION.cff generation, reproducibility auditing, and research repository scaffolding. Self-evolving, local-first, zero vendor lock-in."
+keywords:
+  - ai-agent
+  - terminal
+  - cli
+  - open-source
+  - academic-research
+  - scientific-computing
+  - arxiv
+  - citation
+  - reproducibility
+  - machine-learning
+  - local-first
+  - research-software
+  - open-science
+  - mcp
+authors:
+  - name: "kernel.chat group"
+    website: "https://kernel.chat"
