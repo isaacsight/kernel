@@ -249,7 +249,9 @@ export async function executeHandoff(
   chain: string[] = [],
 ): Promise<HandoffResult> {
   // Enforce max depth
-  if (chain.length >= MAX_HANDOFF_DEPTH) {
+  // chain contains [from, to, from, to, ...] — each handoff adds 2 entries
+  const handoffCount = Math.floor(chain.length / 2)
+  if (handoffCount >= MAX_HANDOFF_DEPTH) {
     printWarn(
       `[handoff] Maximum chain depth (${MAX_HANDOFF_DEPTH}) reached: ${chain.join(' -> ')}. ` +
       `Stopping at ${chain[chain.length - 1]}.`
@@ -279,7 +281,8 @@ export async function executeHandoff(
 
     // Check if the receiving agent also wants to hand off
     const nextHandoff = detectHandoff(handoff.to, result.content, query)
-    if (nextHandoff && newChain.length < MAX_HANDOFF_DEPTH * 2) {
+    const newHandoffCount = Math.floor(newChain.length / 2)
+    if (nextHandoff && newHandoffCount < MAX_HANDOFF_DEPTH) {
       // Prevent cycles: don't hand off back to an agent already in the chain
       if (newChain.includes(nextHandoff.to)) {
         printInfo(`[handoff] Cycle detected (${nextHandoff.to} already in chain). Stopping.`)

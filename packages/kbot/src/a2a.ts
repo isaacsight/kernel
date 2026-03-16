@@ -19,7 +19,7 @@ import { randomUUID } from 'node:crypto'
 import type { Server, IncomingMessage, ServerResponse } from 'node:http'
 import { runAgent, type AgentOptions, type AgentResponse } from './agent.js'
 import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
-import { loadConfig } from './auth.js'
+import { timingSafeEqual } from 'node:crypto'
 
 // ── Package metadata ──
 
@@ -65,6 +65,7 @@ export interface A2ATask {
   result?: A2AMessage
   history?: A2AMessage[]
   metadata?: Record<string, unknown>
+  createdAt: string
 }
 
 /** Task status per A2A lifecycle */
@@ -103,6 +104,21 @@ const DEFAULT_PORT = 7437
 // ── In-memory task store ──
 
 const tasks = new Map<string, A2ATask>()
+const MAX_TASKS = 1000
+const TASK_TTL_MS = 60 * 60 * 1000 // 1 hour
+
+function pruneTasks(): void {
+  if (tasks.size <= MAX_TASKS) return
+  const now = Date.now()
+  for (const [id, task] of tasks) {
+    if (now - new Date(task.createdAt).getTime() > TASK_TTL_MS) tasks.delete(id)
+  }
+  // If still over limit, drop oldest
+  if (tasks.size > MAX_TASKS) {
+    const oldest = [...tasks.keys()].slice(0, tasks.size - MAX_TASKS)
+    for (const id of oldest) tasks.delete(id)
+  }
+}
 
 // ── Skill mapping ──
 
@@ -205,16 +221,19 @@ export function buildAgentCard(endpointUrl?: string): AgentCard {
 
 /** Create a new A2A task from an incoming message */
 function createTask(message: A2AMessage, metadata?: Record<string, unknown>): A2ATask {
+  const now = new Date().toISOString()
   const task: A2ATask = {
     id: randomUUID(),
     status: {
       state: 'submitted',
-      timestamp: new Date().toISOString(),
+      timestamp: now,
     },
     message,
     history: [],
     metadata,
+    createdAt: now,
   }
+  pruneTasks()
   tasks.set(task.id, task)
   return task
 }
@@ -284,10 +303,21 @@ function sendJson(res: ServerResponse, status: number, data: unknown): void {
   res.end(JSON.stringify(data))
 }
 
+const MAX_BODY_SIZE = 1024 * 1024 // 1 MB
+
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = []
-    req.on('data', (c: Buffer) => chunks.push(c))
+    let size = 0
+    req.on('data', (c: Buffer) => {
+      size += c.length
+      if (size > MAX_BODY_SIZE) {
+        req.destroy()
+        reject(new Error('Request body too large'))
+        return
+      }
+      chunks.push(c)
+    })
     req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')))
     req.on('error', reject)
   })
@@ -331,7 +361,9 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
     if (options.token && path.startsWith('/a2a/')) {
       const auth = req.headers.authorization
       const bearerToken = auth?.startsWith('Bearer ') ? auth.slice(7) : null
-      if (bearerToken !== options.token) {
+      const tokenBuf = Buffer.from(options.token)
+      const bearerBuf = Buffer.from(bearerToken || '')
+      if (tokenBuf.length !== bearerBuf.length || !timingSafeEqual(tokenBuf, bearerBuf)) {
         sendJson(res, 401, { error: 'Unauthorized' })
         return true
       }

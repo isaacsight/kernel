@@ -88,7 +88,7 @@ const DESTRUCTIVE_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
   { pattern: /mkfs\./i, label: 'mkfs (format filesystem)' },
   { pattern: /dd\s+if=.*of=\/dev\//i, label: 'dd to raw device' },
   { pattern: /chmod\s+-R\s+777/i, label: 'chmod -R 777' },
-  { pattern: /:(){ :|:& };:/i, label: 'fork bomb' },
+  { pattern: /:\(\)\s*\{.*\|.*&\s*\}/, label: 'fork bomb' },
 ]
 
 /** PII patterns for detection */
