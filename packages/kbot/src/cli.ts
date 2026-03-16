@@ -60,7 +60,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('K:BOT — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (kernel, researcher, coder, writer, analyst, creative, developer, hacker, operator, dreamer)')
+    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 22)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -132,7 +132,7 @@ async function main(): Promise<void> {
 
   program
     .command('byok')
-    .description('Bring Your Own Key — configure your LLM API key (19 providers)')
+    .description('Bring Your Own Key — configure your LLM API key (20 providers)')
     .option('--off', 'Disable BYOK mode')
     .action(async (opts: { off?: boolean }) => {
       if (opts.off) {
@@ -446,7 +446,7 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 214 tools for kernel.chat or any client')
+    .description('Start HTTP server — expose all 223 tools for kernel.chat or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
@@ -1035,12 +1035,13 @@ async function byokFlow(): Promise<void> {
   printInfo('Use your own LLM API key. You pay the provider directly for tokens.')
   printInfo('Kernel routing + tools + collective intelligence are free.')
   console.log()
-  printInfo('Supported providers (14):')
+  printInfo('Supported providers (20):')
   printInfo('  Anthropic (Claude)    OpenAI (GPT)       Google (Gemini)')
   printInfo('  Mistral AI            xAI (Grok)         DeepSeek')
   printInfo('  Groq                  Together AI        Fireworks AI')
   printInfo('  Perplexity            Cohere             NVIDIA NIM')
-  printInfo('  Ollama (local, free)  K:BOT Local (local gateway)')
+  printInfo('  SambaNova             Cerebras           OpenRouter')
+  printInfo('  Ollama (local, free)  LM Studio (local)  Embedded llama.cpp')
   console.log()
   printInfo('Paste your API key (auto-detected by prefix):')
   console.log()
@@ -1103,7 +1104,7 @@ async function byokFlow(): Promise<void> {
   console.log()
   printSuccess(`BYOK mode enabled — ${providerConfig.name}`)
   printInfo('You pay the provider directly. No message limits. No restrictions.')
-  printInfo('All 81 tools + 17 agents + learning system = yours.')
+  printInfo('All 223 tools + 22 agents + learning system = yours.')
   console.log()
   printSuccess('Ready. Run `kbot` to start.')
 }
@@ -1371,7 +1372,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  11 agents. 214 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  22 agents. 223 tools. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

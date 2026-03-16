@@ -297,7 +297,7 @@ export function printHelp(): void {
     `  ${CYAN('https://kernel.chat')}             ${DIM('Web companion')}`,
     `  ${CYAN('https://github.com/isaacsight/kernel')} ${DIM('GitHub')}`,
     '',
-    `  ${DIM('11 specialist agents. 214 tools. Type anything to get started.')}`,
+    `  ${DIM('22 specialist agents. 223 tools. Type anything to get started.')}`,
     '',
   ]
   status(lines.join('\n'))
