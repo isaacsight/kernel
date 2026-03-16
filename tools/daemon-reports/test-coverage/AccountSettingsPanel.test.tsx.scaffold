@@ -1,107 +1,155 @@
 // Scaffold for: src/components/AccountSettingsPanel.tsx
 // Review and rename to .test.ts/.test.tsx to activate
-// Generated: 2026-03-14T19:22:28.239Z
+// Generated: 2026-03-15T16:08:56.076Z
 // Model: kernel-coder:latest
 
 ```typescript
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import AccountSettingsPanel from './AccountSettingsPanel'
 import { User } from '@supabase/supabase-js'
-import { useTranslation } from 'react-i18next'
+import { useAccountSettings } from '../hooks/useAccountSettings'
+import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
+import { useAuthContext } from '../providers/AuthProvider'
 
 vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn(),
+  useTranslation: vi.fn().mockReturnValue({ t: (key) => key }),
 }))
 
-vi.mock('../hooks/useAccountSettings')
-vi.mock('../hooks/useIdentityRecovery')
-vi.mock('../providers/AuthProvider')
+vi.mock('../hooks/useAccountSettings', () => ({
+  useAccountSettings: vi.fn(),
+}))
+
+vi.mock('../hooks/useIdentityRecovery', () => ({
+  useIdentityRecovery: vi.fn(),
+}))
+
+vi.mock('../providers/AuthProvider', () => ({
+  useAuthContext: vi.fn().mockReturnValue({
+    updateEmail: vi.fn(),
+    updatePassword: vi.fn(),
+    updateProfile: vi.fn(),
+    getUserIdentities: vi.fn(),
+    linkIdentity: vi.fn(),
+    unlinkIdentity: vi.fn(),
+  }),
+}))
 
 const mockUser: User = {
-  id: 'user-id',
+  id: '123',
   email: 'test@example.com',
-  app_metadata: {},
-  user_metadata: {},
-}
+} as User
 
 describe('AccountSettingsPanel', () => {
-  beforeEach(() => {
-    (useTranslation as vi.Mock).mockReturnValue({
-      t: (key: string) => key,
+  it('renders the component with user information', () => {
+    useAccountSettings.mockReturnValue({
+      displayName: 'Test User',
+      avatarUrl: '',
+      uploadAvatar: vi.fn(),
     })
-  })
 
-  it('renders the component with basic information', () => {
-    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
 
-    expect(screen.getByText('settings.title')).toBeInTheDocument()
+    expect(screen.getByText('Test User')).toBeInTheDocument()
     expect(screen.getByText('test@example.com')).toBeInTheDocument()
   })
 
-  it('renders the avatar with initials if no avatar URL is provided', () => {
-    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
-
-    expect(screen.getByText('TE')).toBeInTheDocument()
-  })
-
-  it('renders the admin badge if isAdmin is true', () => {
-    render(<AccountSettingsPanel user={mockUser} isAdmin={true} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
-
-    expect(screen.getByText('subscription.admin')).toBeInTheDocument()
-  })
-
-  it('handles sending verification code', async () => {
-    const mockIdentity = {
-      initiate: vi.fn().mockResolvedValue({ requestId: 'req-id' }),
+  it('calls handleSendCode when send code button is clicked', async () => {
+    const identity = {
+      initiate: vi.fn().mockResolvedValue({ requestId: '123' }),
       sendChallenge: vi.fn(),
       loading: false,
+      request: null,
     }
-    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
+    useIdentityRecovery.mockReturnValue(identity)
 
-    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
 
     const sendCodeButton = screen.getByText('security.sendCode')
-    await sendCodeButton.click()
+    await fireEvent.click(sendCodeButton)
 
-    expect(mockIdentity.initiate).toHaveBeenCalledWith('password_reset')
-    expect(mockIdentity.sendChallenge).toHaveBeenCalledWith('req-id')
+    expect(identity.initiate).toHaveBeenCalledWith('password_reset')
+    expect(identity.sendChallenge).toHaveBeenCalledWith('123')
   })
 
-  it('handles verifying code', async () => {
-    const mockIdentity = {
-      request: { requestId: 'req-id' },
+  it('calls handleVerifyCode when verify code button is clicked', async () => {
+    const identity = {
+      request: { requestId: '123' },
       verify: vi.fn().mockResolvedValue(true),
-    }
-    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
-
-    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
-
-    const verificationInput = screen.getByPlaceholderText('security.codePlaceholder')
-    verificationInput.value = '123456'
-    await verificationInput.dispatchEvent(new Event('change'))
-
-    const verifyCodeButton = screen.getByText('security.verifyCode')
-    await verifyCodeButton.click()
-
-    expect(mockIdentity.verify).toHaveBeenCalledWith('req-id', '123456')
-  })
-
-  it('resends code when handleResendCode is called', async () => {
-    const mockIdentity = {
-      initiate: vi.fn().mockResolvedValue({ requestId: 'req-id' }),
-      sendChallenge: vi.fn(),
       loading: false,
     }
-    (useIdentityRecovery as vi.Mock).mockReturnValue(mockIdentity)
+    useIdentityRecovery.mockReturnValue(identity)
 
-    render(<AccountSettingsPanel user={mockUser} onClose={() => {}} onToast={() => {}} onSignOut={() => {}} onDeleteAccount={() => {}} />)
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
 
-    const resendCodeButton = screen.getByText('security.resendCode')
-    await resendCodeButton.click()
+    const verifyCodeInput = screen.getByRole('textbox')
+    fireEvent.change(verifyCodeInput, { target: { value: '123456' } })
 
-    expect(mockIdentity.initiate).toHaveBeenCalledWith('password_reset')
-    expect(mockIdentity.sendChallenge).toHaveBeenCalledWith('req-id')
+    const verifyCodeButton = screen.getByText('security.verifyCode')
+    await fireEvent.click(verifyCodeButton)
+
+    expect(identity.verify).toHaveBeenCalledWith('123', '123456')
+  })
+
+  it('renders admin tier badge when isAdmin is true', () => {
+    useAccountSettings.mockReturnValue({
+      displayName: 'Test User',
+      avatarUrl: '',
+      uploadAvatar: vi.fn(),
+    })
+
+    render(<AccountSettingsPanel user={mockUser} isAdmin={true} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
+
+    expect(screen.getByText('subscription.admin')).toBeInTheDocument()
+    const shieldIcon = screen.getByRole('img', { name: 'shield' })
+    expect(shieldIcon).toBeInTheDocument()
+  })
+
+  it('calls onClose when close button is clicked', () => {
+    const onClose = vi.fn()
+
+    render(<AccountSettingsPanel user={mockUser} onClose={onClose} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
+
+    const closeButton = screen.getByRole('button', { name: 'close' })
+    fireEvent.click(closeButton)
+
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('calls onSignOut when sign out button is clicked', () => {
+    const onSignOut = vi.fn()
+
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={onSignOut} onDeleteAccount={vi.fn()} />)
+
+    const signOutButton = screen.getByRole('button', { name: 'signOut' })
+    fireEvent.click(signOutButton)
+
+    expect(onSignOut).toHaveBeenCalled()
+  })
+
+  it('calls onDeleteAccount when delete account button is clicked', () => {
+    const onDeleteAccount = vi.fn()
+
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={onDeleteAccount} />)
+
+    const deleteAccountButton = screen.getByRole('button', { name: 'deleteAccount' })
+    fireEvent.click(deleteAccountButton)
+
+    expect(onDeleteAccount).toHaveBeenCalled()
+  })
+
+  it('disables send code button when identity is loading', () => {
+    useIdentityRecovery.mockReturnValue({
+      initiate: vi.fn(),
+      sendChallenge: vi.fn(),
+      loading: true,
+      request: null,
+    })
+
+    render(<AccountSettingsPanel user={mockUser} onClose={vi.fn()} onToast={vi.fn()} onSignOut={vi.fn()} onDeleteAccount={vi.fn()} />)
+
+    const sendCodeButton = screen.getByText('security.sendCode')
+    expect(sendCodeButton).toBeDisabled()
   })
 })
 ```

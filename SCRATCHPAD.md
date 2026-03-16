@@ -164,5 +164,4 @@
 - **VFX tools**: Houdini VEX, GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures, color palettes, audio viz
 
 ## Test Accounts
-- **Free**: `kernel-test-bot@antigravitygroup.co` / `KernelTest2026!`
-- **Pro**: `kernel-pro-test@antigravitygroup.co` / `KernelProTest2026`
+- See `.env` or password manager for test credentials (removed from tracked files)

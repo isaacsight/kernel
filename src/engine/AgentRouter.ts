@@ -2,7 +2,7 @@
 import { getBackgroundProvider } from './providers/registry'
 
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'operator' | 'dreamer'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'engineer' | 'operator' | 'dreamer'
   confidence: number
   complexity: number
   needsResearch: boolean
@@ -58,6 +58,7 @@ Agents:
 - chronist: Personal evolution, "how have I changed", trajectory, past conversations, personal growth over time, temporal reflection
 - sage: Deep identity, "who am I", "my values", self-understanding, beliefs, aspirations, meaning, philosophical self-reflection
 - hacker: Offensive security, CTFs, penetration testing, vulnerability analysis, exploits, reverse engineering, red teaming, bug bounties
+- engineer: Autonomous software engineering, system operations, "build this feature and test it", complex architecture refactoring, executing multi-step coding tasks, full application development
 - operator: Full task delegation, autonomous execution, "just do it", "handle this", "take care of", multi-step execution, project management
 - dreamer: Dreams, visions, worldbuilding, imagination, creative frontiers, dream interpretation, fiction, mythology, fantasy, speculative futures
 
@@ -85,6 +86,7 @@ const KEYWORD_MAP: Record<string, string[]> = {
   chronist: ['how have i changed', 'my evolution', 'trajectory', 'over time', 'used to', 'growth', 'arc', 'how i was', 'looking back', 'my journey'],
   sage: ['my values', 'who am i', 'my identity', 'my beliefs', 'self-understanding', 'what do i stand for', 'my purpose', 'what matters to me', 'my aspirations', 'meaning of'],
   hacker: ['hack', 'exploit', 'vulnerability', 'ctf', 'penetration', 'pentest', 'reverse engineer', 'decompile', 'payload', 'injection', 'xss', 'csrf', 'buffer overflow', 'privilege escalation', 'red team', 'bug bounty', 'malware', 'forensics'],
+  engineer: ['engineer', 'architecture', 'refactor', 'system design', 'autonomous agent', 'full stack', 'test suite', 'build feature'],
   operator: ['handle this', 'take care of', 'just do it', 'do everything', 'full delegation', 'autonomous', 'run the whole', 'manage this', 'execute the plan', 'make it happen'],
   dreamer: ['dream', 'dreamed', 'dreaming', 'nightmare', 'vision', 'worldbuild', 'imagine', 'mythology', 'fantasy world', 'lucid', 'subconscious', 'archetype', 'symbol'],
 }
@@ -99,6 +101,7 @@ const HIGH_SIGNAL_KEYWORDS: Record<string, string[]> = {
   chronist: ['how have i changed', 'my evolution', 'my journey', 'looking back'],
   sage: ['who am i', 'my values', 'my identity', 'what do i stand for'],
   hacker: ['ctf', 'pentest', 'exploit', 'reverse engineer', 'red team', 'bug bounty'],
+  engineer: ['system design', 'infrastructure architecture', 'complex refactoring', 'full stack build', 'test suite'],
   operator: ['handle this', 'take care of', 'just do it', 'make it happen'],
   dreamer: ['dream', 'nightmare', 'worldbuild', 'lucid', 'archetype'],
 }
@@ -304,7 +307,7 @@ export async function classifyIntent(
     })
 
     // Validate the result
-    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage', 'hacker', 'operator', 'dreamer']
+    const validAgents = ['kernel', 'researcher', 'coder', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage', 'hacker', 'engineer', 'operator', 'dreamer']
     if (!validAgents.includes(result.agentId)) {
       const fallback: ClassificationResult = { agentId: 'kernel', confidence: 0, complexity: 0.5, needsResearch: false, isMultiStep: false, needsSwarm: false, needsImageGen: false, needsImageRefinement: false, needsPlatformEngine: false, needsContentEngine: false, needsAlgorithm: false, needsKnowledgeQuery: false }
       _lastClassification = fallback

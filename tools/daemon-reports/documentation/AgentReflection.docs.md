@@ -50,9 +50,9 @@ export interface ReflectionFinding {
 }
 
 /**
- * Constant array containing all reflection questions.
+ * An array containing all reflection questions.
  */
 export const ALL_REFLECTION_QUESTIONS: ReflectionQuestion[] = [
-  // ... (questions array content)
+  // ... (questions omitted for brevity)
 ]
 ```

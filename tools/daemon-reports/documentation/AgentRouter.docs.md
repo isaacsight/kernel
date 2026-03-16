@@ -24,7 +24,7 @@ export interface ClassificationResult {
 }
 
 /**
- * Provides context for model routing decisions.
+ * Provides context for model routing based on the message and conversation.
  */
 export interface ModelRoutingContext {
   messageWordCount?: number
@@ -34,9 +34,10 @@ export interface ModelRoutingContext {
 
 /**
  * Auto-selects a model based on task complexity, message length, and conversation depth.
+ * 
  * @param c - The classification result containing intent details.
- * @param ctx - Optional context about the current conversation.
- * @returns The selected model ('sonnet' or 'haiku').
+ * @param ctx - Optional context about the message and conversation.
+ * @returns The selected model as either 'sonnet' or 'haiku'.
  */
 export function resolveModelFromClassification(
   c: ClassificationResult,

@@ -332,15 +332,20 @@ async function callOpenAICompat(
     }))
   }
 
-  // Fallback: Small local models (7B) sometimes emit tool calls as raw JSON in content
-  // instead of structured tool_calls. Parse these so tools still work with Ollama.
+  // Fallback: Local models sometimes emit tool calls as raw JSON, tool_code blocks,
+  // or natural language descriptions instead of structured tool_calls.
+  // Parse these so tools still work with Ollama and other local providers.
   if (!result.tool_calls && content && tools && tools.length > 0) {
     const toolNames = tools.map(t => (t as any).function?.name || t.name).filter(Boolean)
     const parsed = tryParseInlineToolCalls(content, toolNames)
     if (parsed.length > 0) {
       result.tool_calls = parsed
-      // Remove the raw JSON from the displayed content
-      result.content = content.replace(/```(?:json)?\s*\{[\s\S]*?\}\s*```/g, '').replace(/\{[\s\S]*?"name"\s*:\s*"[a-z_]+[\s\S]*?\}/g, '').trim()
+      // Remove parsed tool invocations from displayed content
+      result.content = content
+        .replace(/```(?:json)?\s*\{[\s\S]*?\}\s*```/g, '')
+        .replace(/```(?:tool_code|tool_call)\s*\n[\s\S]*?```/g, '')
+        .replace(/\{[\s\S]*?"name"\s*:\s*"[a-z_]+[\s\S]*?\}/g, '')
+        .trim()
     }
   }
 
@@ -371,8 +376,146 @@ function tryParseInlineToolCalls(
       if (parsed) calls.push(parsed)
     }
   }
+  if (calls.length > 0) return calls
+
+  // Pattern 3: tool_code / tool_call blocks — Ollama models sometimes emit these
+  // ```tool_code\nbash -c "echo hello"\n```  or  ```tool_call\nread_file path.ts\n```
+  const toolCodePattern = /```(?:tool_code|tool_call)\s*\n([\s\S]*?)```/g
+  while ((match = toolCodePattern.exec(content)) !== null) {
+    const block = match[1].trim()
+    const parsed = parseToolCodeBlock(block, knownTools)
+    if (parsed) calls.push(parsed)
+  }
+  if (calls.length > 0) return calls
+
+  // Pattern 4: Natural language tool invocations — "I'll use write_file to create..."
+  // followed by arguments like paths and content in code blocks
+  for (const toolName of knownTools) {
+    const nlPattern = new RegExp(
+      `(?:use|call|invoke|execute|run)\\s+(?:the\\s+)?(?:\`)?${toolName}(?:\`)?`,
+      'i',
+    )
+    if (nlPattern.test(content)) {
+      const parsed = parseNaturalLanguageTool(content, toolName, knownTools)
+      if (parsed) calls.push(parsed)
+    }
+  }
 
   return calls
+}
+
+/** Parse a tool_code block into a tool call (e.g. `bash -c "echo hello"` or `write_file path content`) */
+function parseToolCodeBlock(block: string, knownTools: string[]): ProviderToolCall | null {
+  const lines = block.split('\n')
+  const firstLine = lines[0].trim()
+
+  // Direct tool name at start: "read_file src/index.ts"
+  for (const tool of knownTools) {
+    if (firstLine.startsWith(tool + ' ') || firstLine === tool) {
+      const args = firstLine.slice(tool.length).trim()
+      return {
+        id: `inline_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: tool,
+        arguments: buildArgsFromToolCode(tool, args, lines.slice(1).join('\n')),
+      }
+    }
+  }
+
+  // Bare shell commands → route to bash tool
+  if (knownTools.includes('bash')) {
+    // Common shell patterns: command at start of line
+    const shellPattern = /^(?:cd|ls|cat|mkdir|cp|mv|rm|echo|git|npm|npx|node|python|pip|cargo|go|make|curl|wget|find|grep|sed|awk|chmod|chown|touch|tar|unzip)\b/
+    if (shellPattern.test(firstLine)) {
+      return {
+        id: `inline_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: 'bash',
+        arguments: { command: block },
+      }
+    }
+  }
+
+  return null
+}
+
+/** Build structured args from a tool_code invocation */
+function buildArgsFromToolCode(
+  tool: string, argStr: string, restContent: string,
+): Record<string, unknown> {
+  switch (tool) {
+    case 'read_file':
+    case 'list_directory':
+      return { path: argStr || '.' }
+    case 'write_file':
+      return { path: argStr, content: restContent }
+    case 'bash':
+      return { command: argStr || restContent }
+    case 'grep':
+      // "grep pattern path"
+      const gparts = argStr.split(/\s+/, 2)
+      return { pattern: gparts[0] || argStr, path: gparts[1] || '.' }
+    case 'git_status':
+    case 'git_diff':
+    case 'git_log':
+      return {}
+    case 'git_commit':
+      return { message: argStr || restContent }
+    case 'web_search':
+      return { query: argStr || restContent }
+    default:
+      return argStr ? { input: argStr } : {}
+  }
+}
+
+/** Extract tool arguments from natural language descriptions */
+function parseNaturalLanguageTool(
+  content: string, toolName: string, _knownTools: string[],
+): ProviderToolCall | null {
+  // Look for file paths and code blocks following the tool mention
+  const pathMatch = content.match(/(?:file|path)\s*[:=]?\s*[`"']([^`"'\n]+)[`"']/i)
+    || content.match(/(?:to|at|in)\s+[`"']([^`"'\n]+\.\w+)[`"']/i)
+    || content.match(/[`"']((?:\.\/|\/|src\/|packages\/)[^`"'\n]+)[`"']/i)
+  const codeMatch = content.match(/```\w*\n([\s\S]*?)```/)
+
+  const path = pathMatch?.[1]
+  const code = codeMatch?.[1]
+
+  const args: Record<string, unknown> = {}
+
+  switch (toolName) {
+    case 'write_file':
+      if (path) args.path = path
+      if (code) args.content = code
+      if (!path) return null // need at least a path
+      break
+    case 'read_file':
+    case 'list_directory':
+      if (path) args.path = path
+      else return null
+      break
+    case 'bash':
+      if (code) args.command = code.trim()
+      else return null
+      break
+    case 'grep':
+      if (path) args.path = path
+      const patternMatch = content.match(/(?:for|pattern)\s*[:=]?\s*[`"']([^`"'\n]+)[`"']/i)
+      if (patternMatch) args.pattern = patternMatch[1]
+      else return null
+      break
+    case 'web_search':
+      const queryMatch = content.match(/(?:search|query|look up)\s+(?:for\s+)?[`"']([^`"'\n]+)[`"']/i)
+      if (queryMatch) args.query = queryMatch[1]
+      else return null
+      break
+    default:
+      return null
+  }
+
+  return {
+    id: `inline_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    name: toolName,
+    arguments: args,
+  }
 }
 
 function tryParseToolJson(json: string, knownTools: string[]): ProviderToolCall | null {
@@ -899,8 +1042,10 @@ Always quote file paths that contain spaces. Never reference internal system nam
       const speed = options.model === 'haiku' || options.model === 'fast' ? 'fast' : 'default'
       const model = isExplicitModel ? options.model! : getProviderModel(provider, speed, originalMessage)
 
-      // Ollama models don't reliably support function calling — skip tool defs
-      const byokTools = provider === 'ollama' ? [] : tools.map(t => ({
+      // Send tool definitions to ALL providers — including Ollama.
+      // Modern Ollama models (llama3.1+, qwen2.5, gemma3) support function calling.
+      // For models that don't, the inline tool-call parser catches JSON/text patterns.
+      const byokTools = tools.map(t => ({
         name: t.name,
         description: t.description,
         input_schema: t.input_schema,
