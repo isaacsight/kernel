@@ -113,7 +113,7 @@ export function registerMcpClientTools(): void {
     parameters: {
       name: { type: 'string', description: 'Unique name for this connection (e.g., "supabase", "filesystem")', required: true },
       command: { type: 'string', description: 'Command to launch the MCP server (e.g., "npx -y @supabase/mcp-server")', required: true },
-      args: { type: 'array', description: 'Additional arguments for the command' },
+      args: { type: 'array', description: 'Additional arguments for the command', items: { type: 'string' } },
       env: { type: 'object', description: 'Environment variables to set for the server process' },
     },
     tier: 'free',

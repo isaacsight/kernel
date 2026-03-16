@@ -45,7 +45,7 @@ export function registerTaskTools(): void {
       subject: { type: 'string', description: 'Brief task title in imperative form (e.g., "Fix auth bug")', required: true },
       description: { type: 'string', description: 'Detailed description of what needs to be done' },
       activeForm: { type: 'string', description: 'Present continuous form for spinner display (e.g., "Fixing auth bug")' },
-      blockedBy: { type: 'array', description: 'Task IDs that must complete before this one can start' },
+      blockedBy: { type: 'array', description: 'Task IDs that must complete before this one can start', items: { type: 'string' } },
     },
     tier: 'free',
     async execute(args) {
@@ -85,7 +85,7 @@ export function registerTaskTools(): void {
       status: { type: 'string', description: 'New status: pending, in_progress, completed, blocked' },
       subject: { type: 'string', description: 'Updated subject' },
       description: { type: 'string', description: 'Updated description' },
-      addBlockedBy: { type: 'array', description: 'Task IDs to add as blockers' },
+      addBlockedBy: { type: 'array', description: 'Task IDs to add as blockers', items: { type: 'string' } },
     },
     tier: 'free',
     async execute(args) {

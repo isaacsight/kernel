@@ -104,6 +104,7 @@ export function registerSubagentTools(): void {
         type: 'array',
         description: 'Array of { prompt, agent } objects. Each becomes a parallel subagent.',
         required: true,
+        items: { type: 'object', properties: { prompt: { type: 'string' }, agent: { type: 'string' } } },
       },
     },
     tier: 'free',

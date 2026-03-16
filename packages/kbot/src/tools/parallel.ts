@@ -17,6 +17,7 @@ export function registerParallelTools(): void {
         type: 'array',
         description: 'Array of tool calls: [{ name: "read_file", arguments: { path: "..." } }, ...]',
         required: true,
+        items: { type: 'object', properties: { name: { type: 'string' }, arguments: { type: 'object' } } },
       },
     },
     tier: 'free',

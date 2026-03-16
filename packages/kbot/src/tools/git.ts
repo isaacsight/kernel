@@ -4,6 +4,11 @@
 import { execSync } from 'node:child_process'
 import { registerTool } from './index.js'
 
+/** Escape a string for safe single-quote shell embedding */
+function esc(s: string): string {
+  return `'${s.replace(/'/g, "'\\''")}'`
+}
+
 function git(command: string, timeout = 30_000): string {
   try {
     return execSync(`git ${command}`, {
@@ -38,7 +43,7 @@ export function registerGitTools(): void {
     tier: 'free',
     async execute(args) {
       const staged = args.staged ? '--cached' : ''
-      const path = args.path ? `-- ${args.path}` : ''
+      const path = args.path ? `-- ${esc(String(args.path))}` : ''
       return git(`diff ${staged} ${path}`.trim()) || 'No changes'
     },
   })
@@ -63,7 +68,7 @@ export function registerGitTools(): void {
     description: 'Create a git commit with the specified message. Stages specified files first.',
     parameters: {
       message: { type: 'string', description: 'Commit message', required: true },
-      files: { type: 'array', description: 'Files to stage before committing. If empty, commits already-staged files.' },
+      files: { type: 'array', description: 'Files to stage before committing. If empty, commits already-staged files.', items: { type: 'string' } },
     },
     tier: 'free',
     async execute(args) {
@@ -71,14 +76,11 @@ export function registerGitTools(): void {
       const files = Array.isArray(args.files) ? args.files.map(String) : []
 
       if (files.length > 0) {
-        // Quote each filename to prevent shell injection
-        const quoted = files.map(f => `'${String(f).replace(/'/g, "'\\''")}'`).join(' ')
+        const quoted = files.map(f => esc(String(f))).join(' ')
         git(`add -- ${quoted}`)
       }
 
-      // Use -- to prevent message from being interpreted as flags
-      const safeMsg = message.replace(/'/g, "'\\''")
-      return git(`commit -m '${safeMsg}'`)
+      return git(`commit -m ${esc(message)}`)
     },
   })
 
@@ -91,7 +93,7 @@ export function registerGitTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const name = String(args.name)
+      const name = esc(String(args.name))
       const create = args.create ? '-b' : ''
       return git(`checkout ${create} ${name}`.trim())
     },
@@ -106,8 +108,8 @@ export function registerGitTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const remote = args.remote ? String(args.remote) : 'origin'
-      const branch = args.branch ? String(args.branch) : ''
+      const remote = esc(args.remote ? String(args.remote) : 'origin')
+      const branch = args.branch ? esc(String(args.branch)) : ''
       return git(`push ${remote} ${branch}`.trim(), 60_000)
     },
   })

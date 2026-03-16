@@ -432,7 +432,7 @@ export function registerBuildMatrixTools(): void {
     name: 'build_matrix',
     description: 'Build for multiple targets simultaneously. Runs builds in parallel using Docker containers where possible.',
     parameters: {
-      targets: { type: 'array', description: 'Array of target IDs to build (e.g., ["ios", "android", "pwa"])', required: true },
+      targets: { type: 'array', description: 'Array of target IDs to build (e.g., ["ios", "android", "pwa"])', required: true, items: { type: 'string' } },
       config: { type: 'string', description: 'Build config: debug or release (default: release)' },
       path: { type: 'string', description: 'Project directory' },
     },

@@ -17,6 +17,8 @@ export interface ToolDefinition {
     description: string
     required?: boolean
     default?: unknown
+    items?: Record<string, unknown>
+    properties?: Record<string, unknown>
   }>
   execute: (args: Record<string, unknown>) => Promise<string>
   /** Tier required: 'free' | 'pro' | 'growth' | 'enterprise' */

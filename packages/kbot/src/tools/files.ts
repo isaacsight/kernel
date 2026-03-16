@@ -247,7 +247,7 @@ export function registerFileTools(): void {
     name: 'multi_file_write',
     description: 'Write multiple files in one call. Auto-creates parent directories. Ideal for scaffolding projects.',
     parameters: {
-      files: { type: 'array', description: 'Array of {path, content} objects. Each file will be created/overwritten.', required: true },
+      files: { type: 'array', description: 'Array of {path, content} objects. Each file will be created/overwritten.', required: true, items: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } } } },
     },
     tier: 'free',
     async execute(args) {

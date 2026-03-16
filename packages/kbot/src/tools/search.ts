@@ -83,7 +83,7 @@ export function registerSearchTools(): void {
     description: 'Deep research — searches the web, fetches multiple URLs, and synthesizes a comprehensive answer. Use for complex questions that need multiple sources.',
     parameters: {
       topic: { type: 'string', description: 'The topic or question to research thoroughly', required: true },
-      urls: { type: 'array', description: 'Optional: specific URLs to include in the research' },
+      urls: { type: 'array', description: 'Optional: specific URLs to include in the research', items: { type: 'string' } },
     },
     tier: 'free',
     async execute(args) {
