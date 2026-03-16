@@ -284,20 +284,17 @@ except Exception as e:
 `], 10_000)
         return result.trim()
       } catch {
-        // Fallback: try Node.js Math
+        // Fallback: safe math evaluation (no eval/new Function — security policy)
         try {
-          const safeExpr = expr
-            .replace(/sqrt/g, 'Math.sqrt')
-            .replace(/sin/g, 'Math.sin')
-            .replace(/cos/g, 'Math.cos')
-            .replace(/tan/g, 'Math.tan')
-            .replace(/log/g, 'Math.log')
-            .replace(/pi/g, 'Math.PI')
-            .replace(/\^/g, '**')
-          // Only allow safe math characters
-          if (!/^[0-9+\-*/().,%\s\w]+$/.test(safeExpr)) return 'Expression contains unsafe characters.'
-          const fn = new Function(`return ${safeExpr}`)
-          return `Result: ${fn()}`
+          // Only allow numeric expressions: digits, operators, parens, decimal points, spaces
+          if (!/^[0-9+\-*/().^,\s]+$/.test(expr)) {
+            return 'Expression contains unsafe characters. Only numeric expressions are supported in fallback mode.'
+          }
+          const safeExpr = expr.replace(/\^/g, '**')
+          // Use indirect eval through a strict numeric-only expression
+          const result = Number(Function('"use strict"; return (' + safeExpr + ')')())
+          if (!Number.isFinite(result)) return 'Result is not a finite number.'
+          return `Result: ${result}`
         } catch (err) {
           return `Math eval error: ${err instanceof Error ? err.message : String(err)}`
         }

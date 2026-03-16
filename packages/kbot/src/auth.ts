@@ -2,10 +2,11 @@
 // Stores config in ~/.kbot/config.json
 //
 // BYOK (Bring Your Own Key) — open-source, local-first.
-// 19 providers: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek,
+// 20 providers: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek,
 //   Groq, Together AI, Fireworks, Perplexity, Cohere, NVIDIA NIM,
 //   SambaNova, Cerebras, OpenRouter,
-//   Ollama (local), LM Studio (local), Jan (local), K:BOT Local (local)
+//   Ollama (local), LM Studio (local), Jan (local), K:BOT Local (local),
+//   Embedded llama.cpp (local)
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'

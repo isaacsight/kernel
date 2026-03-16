@@ -162,8 +162,11 @@ export function registerContributeTools(): void {
         execSync(`cd "${repoDir}" && gh repo fork "${repo}" --clone=false 2>/dev/null || true`, {
           encoding: 'utf-8', timeout: 30000,
         })
-        execSync(`cd "${repoDir}" && git add -A && git commit -m "${commitMsg.replace(/"/g, '\\"')}"`, {
+        // Use -- to prevent option injection, write commit msg via stdin to avoid shell injection
+        execSync(`cd "${repoDir}" && git add -A`, { encoding: 'utf-8', timeout: 10000 })
+        execSync(`cd "${repoDir}" && git commit --file=-`, {
           encoding: 'utf-8', timeout: 10000,
+          input: commitMsg,
         })
         execSync(`cd "${repoDir}" && gh repo fork "${repo}" --remote=true 2>/dev/null || true`, {
           encoding: 'utf-8', timeout: 30000,
@@ -177,11 +180,10 @@ export function registerContributeTools(): void {
           encoding: 'utf-8', timeout: 30000,
         })
 
-        const safeTitle = String(args.title).replace(/"/g, '\\"')
-        const safePrBody = prBody.replace(/"/g, '\\"')
+        // Use env vars to safely pass user input without shell injection
         const prUrl = execSync(
-          `cd "${repoDir}" && gh pr create --repo "${repo}" --title "${safeTitle}" --body "${safePrBody}"`,
-          { encoding: 'utf-8', timeout: 30000 },
+          `cd "${repoDir}" && gh pr create --repo "$KBOT_PR_REPO" --title "$KBOT_PR_TITLE" --body "$KBOT_PR_BODY"`,
+          { encoding: 'utf-8', timeout: 30000, env: { ...process.env, KBOT_PR_REPO: repo, KBOT_PR_TITLE: String(args.title), KBOT_PR_BODY: prBody } },
         ).trim()
 
         return `PR created! ${prUrl}\n\nEvery contribution makes kbot visible to new developers.`

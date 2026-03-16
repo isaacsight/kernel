@@ -2,61 +2,58 @@
 #
 # Install: brew install vhs
 # Record:  cd packages/kbot && vhs demo.tape
-# Output:  demo.gif (for README)
+# Output:  demo.gif (for README, HN, Reddit)
+#
+# IMPORTANT: This is a scripted demo. kbot must be installed globally
+# and have a valid API key configured before recording.
 
 Output demo.gif
 
 Set Shell "zsh"
-Set FontSize 16
+Set FontSize 15
 Set Width 900
 Set Height 500
 Set Theme "Catppuccin Mocha"
 Set Padding 20
-Set TypingSpeed 50ms
+Set TypingSpeed 40ms
 
-# Title
-Type "# K:BOT — Open-source terminal AI agent"
+# ── Scene 1: One-shot (show it just works) ──
+Type "kbot 'what does this project do?'"
 Enter
-Sleep 1s
+Sleep 5s
 
-# Install
-Type "npm i -g @kernel.chat/kbot"
+# ── Scene 2: Agent routing (show specialist selection) ──
+Type "kbot 'review src/auth.ts for security issues'"
 Enter
-Sleep 2s
+Sleep 5s
 
-# One-shot mode
-Type "kbot 'explain the auth flow in this project'"
-Enter
-Sleep 4s
-
-# Show agent routing
-Type "kbot --agent researcher 'compare React 19 vs Svelte 5'"
+# ── Scene 3: Pipe mode (composable with Unix) ──
+Type "kbot -p 'generate a user roles migration' > migration.sql && cat migration.sql"
 Enter
 Sleep 4s
 
-# Pipe mode
-Type "kbot -p 'generate a user migration' > migration.sql"
+# ── Scene 4: Audit a repo (show real utility) ──
+Type "kbot audit isaacsight/kernel --share"
 Enter
-Sleep 3s
+Sleep 5s
 
-# Local mode
-Type "kbot local"
-Enter
-Sleep 2s
-
-# Interactive
+# ── Scene 5: Interactive REPL ──
 Type "kbot"
 Enter
 Sleep 2s
-Type "/agent coder"
-Enter
-Sleep 1s
-Type "fix the type error in auth.ts"
+Type "find all TODO comments in this project"
 Enter
 Sleep 4s
-Type "/save"
+Type "/save demo-session"
 Enter
 Sleep 1s
-Type "exit"
+Type "/quit"
 Enter
 Sleep 1s
+
+# ── Outro ──
+Type "# 22 agents. 223 tools. 20 providers. Runs offline."
+Enter
+Type "# npm i -g @kernel.chat/kbot"
+Enter
+Sleep 3s

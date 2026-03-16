@@ -269,9 +269,11 @@ export class EmergentSwarm {
           this.contributions[keep].role.strengths.push(
             ...this.contributions[drop].role.strengths,
           )
+          // Capture role ID before splice invalidates the index
+          const dropRoleId = this.contributions[drop].role.id
           this.contributions.splice(drop, 1)
           this.state.roles = this.state.roles.filter(
-            r => r.id !== this.contributions[drop]?.role.id,
+            r => r.id !== dropRoleId,
           )
           this.state.adaptations++
           if (this.state.adaptations >= MAX_ADAPTATIONS) return

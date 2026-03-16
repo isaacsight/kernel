@@ -32,7 +32,7 @@ export function formatShareMarkdown(
   const lines: string[] = [
     `# ${name}`,
     '',
-    `> Generated with [K:BOT](${KBOT_URL}) — 11 specialist agents, 214 tools, 20 AI providers`,
+    `> Generated with [K:BOT](${KBOT_URL}) — 22 specialist agents, 223 tools, 20 AI providers`,
     `> Agent: \`${agent}\` | Date: ${date}`,
     '',
     '---',

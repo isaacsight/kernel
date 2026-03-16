@@ -13,8 +13,12 @@
 //   GET  /metrics         — Tool execution metrics
 
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
+import { createRequire } from 'node:module'
 import { registerAllTools, getAllTools, executeTool, getToolDefinitionsForApi, getToolMetrics } from './tools/index.js'
 import { printInfo, printSuccess, printError } from './ui.js'
+
+const __require = createRequire(import.meta.url)
+const VERSION = (__require('../package.json') as { version: string }).version
 
 interface ServeOptions {
   port: number
@@ -78,7 +82,7 @@ export async function startServe(options: ServeOptions): Promise<void> {
       if (path === '/health' && req.method === 'GET') {
         json(res, 200, {
           status: 'ok',
-          version: '2.4.0',
+          version: VERSION,
           tools: tools.length,
           uptime: process.uptime(),
         })

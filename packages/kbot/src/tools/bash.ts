@@ -11,16 +11,24 @@ let sessionCwd = process.cwd()
 
 /** Dangerous command patterns that are blocked by default */
 const BLOCKED_PATTERNS = [
-  /^rm\s+-rf\s+\/\s*$/,        // rm -rf /
-  /^rm\s+-rf\s+~\s*$/,         // rm -rf ~
-  /^sudo\s+rm/,                // sudo rm
+  /rm\s+(-[a-z]*f[a-z]*\s+)?(-[a-z]*r[a-z]*\s+)?\//i,  // rm -rf / (any flag order)
+  /rm\s+(-[a-z]*f[a-z]*\s+)?(-[a-z]*r[a-z]*\s+)?~/i,   // rm -rf ~ (any flag order)
+  /rm\s+--recursive\s+--force/i,   // rm --recursive --force
+  /rm\s+--force\s+--recursive/i,   // rm --force --recursive
+  /sudo\s+rm/,                // sudo rm
   /^mkfs/,                     // format filesystem
-  /^dd\s+if=/,                 // raw disk write
-  /^:(){ :\|:& };:/,           // fork bomb
+  /dd\s+if=/,                  // raw disk write
+  /:\(\)\{.*:\|:.*\};/,        // fork bomb (escaped metacharacters)
   />\s*\/dev\/sd[a-z]/,        // write to raw disk
   /^shutdown/,                 // shutdown
   /^reboot/,                   // reboot
   /^halt/,                     // halt
+]
+
+/** Check for command substitution that could hide dangerous commands */
+const SUBSTITUTION_PATTERNS = [
+  /\$\(.*(?:rm|mkfs|dd|shutdown|reboot|halt)\s/i,  // $(rm ...)
+  /`.*(?:rm|mkfs|dd|shutdown|reboot|halt)\s/i,     // `rm ...`
 ]
 
 function isCommandSafe(command: string): { safe: boolean; reason?: string } {
@@ -28,7 +36,13 @@ function isCommandSafe(command: string): { safe: boolean; reason?: string } {
 
   for (const pattern of BLOCKED_PATTERNS) {
     if (pattern.test(trimmed)) {
-      return { safe: false, reason: `Blocked: matches dangerous pattern ${pattern}` }
+      return { safe: false, reason: `Blocked: matches dangerous pattern` }
+    }
+  }
+
+  for (const pattern of SUBSTITUTION_PATTERNS) {
+    if (pattern.test(trimmed)) {
+      return { safe: false, reason: `Blocked: command substitution contains dangerous command` }
     }
   }
 

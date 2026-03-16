@@ -191,8 +191,8 @@ export async function withErrorCorrection(
 
 // ── Multi-provider fast model call ──────────────────────────────────
 async function callFastModel(config: any, prompt: string): Promise<string> {
-  const provider = config.provider || 'anthropic'
-  const key = config.apiKey || config.key
+  const provider = config.byok_provider || config.provider || 'anthropic'
+  const key = config.byok_key || config.apiKey || config.key
 
   if (provider === 'anthropic' || provider === 'claude') {
     const res = await fetch('https://api.anthropic.com/v1/messages', {

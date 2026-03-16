@@ -22,7 +22,8 @@ function tryExec(cmd: string, cwd?: string, timeout = 60_000): { stdout: string;
   } catch (err: unknown) {
     const e = err as { stdout?: string; stderr?: string; message?: string }
     // Many linters/test runners exit non-zero on failures — that's expected
-    return { stdout: e.stdout || e.stderr || e.message || 'Command failed', error: false }
+    // But we still mark it as an error so callers know the command didn't succeed cleanly
+    return { stdout: e.stdout || e.stderr || e.message || 'Command failed', error: true }
   }
 }
 
