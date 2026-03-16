@@ -21,6 +21,7 @@ import {
   type ByokProvider,
 } from './auth.js'
 import { getExtendedStats } from './learning.js'
+import { createRequire } from 'node:module'
 
 // ── Types ──
 
@@ -39,9 +40,10 @@ export interface DoctorReport {
   overall: CheckStatus
 }
 
-// ── Version constant (kept in sync with cli.ts) ──
+// ── Version (read dynamically from package.json) ──
 
-const INSTALLED_VERSION = '2.12.0'
+const __require = createRequire(import.meta.url)
+const INSTALLED_VERSION = (__require('../package.json') as { version: string }).version
 
 // ── Helpers ──
 

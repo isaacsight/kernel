@@ -748,7 +748,7 @@ export async function setupOllama(model?: string): Promise<boolean> {
   config.byok_provider = 'ollama'
   config.byok_key = 'local'
   if (model) {
-    PROVIDERS.ollama.defaultModel = model
+    config.default_model = model
   }
   saveConfig(config)
   return true

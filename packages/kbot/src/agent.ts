@@ -60,9 +60,10 @@ const MAX_RESPONSE_BODY = 10 * 1024 * 1024  // 10MB
 async function safeReadBody(res: Response, maxBytes: number = MAX_RESPONSE_BODY): Promise<string> {
   // If Content-Length is available and too big, reject immediately
   const cl = res.headers.get('content-length')
-  if (cl && parseInt(cl, 10) > maxBytes) {
+  const clSize = cl ? parseInt(cl, 10) : NaN
+  if (!isNaN(clSize) && clSize > maxBytes) {
     await res.body?.cancel()
-    throw new Error(`Response too large (${Math.round(parseInt(cl, 10) / 1024 / 1024)}MB). Max: ${Math.round(maxBytes / 1024 / 1024)}MB.`)
+    throw new Error(`Response too large (${Math.round(clSize / 1024 / 1024)}MB). Max: ${Math.round(maxBytes / 1024 / 1024)}MB.`)
   }
 
   const reader = res.body?.getReader()
@@ -532,8 +533,17 @@ async function callProviderStreaming(
 function isCasualMessage(message: string): boolean {
   const lower = message.toLowerCase().trim()
 
-  // Very short messages are usually conversational
-  if (lower.length < 20 && !/\b(fix|create|build|run|deploy|install|delete|remove|write|edit|read|find|search|open|show|list|git|npm|pip|cargo)\b/.test(lower)) {
+  // Messages containing "you" likely refer to kbot itself — route through agent pipeline
+  // so kbot can answer questions about its own capabilities (e.g., "do you work", "can you code")
+  const refersToKbot = /\byou\b/.test(lower)
+
+  // Pure greetings — always casual even if short
+  if (/^(hey|hi|hello|yo|sup|what's up|whats up|howdy|hola|gm|gn|good morning|good night|good evening|good afternoon)$/i.test(lower)) {
+    return true
+  }
+
+  // Very short messages are usually conversational, but not if they refer to kbot
+  if (lower.length < 20 && !refersToKbot && !/\b(fix|create|build|run|deploy|install|delete|remove|write|edit|read|find|search|open|show|list|git|npm|pip|cargo)\b/.test(lower)) {
     return true
   }
 
@@ -542,7 +552,6 @@ function isCasualMessage(message: string): boolean {
     /^(hey|hi|hello|yo|sup|what's up|whats up|howdy|hola)\b/,
     /^(how are you|how's it going|what's good|how do you do)\b/,
     /^(thanks|thank you|thx|ty|cool|nice|great|awesome|perfect|ok|okay|sure|got it|understood)\b/,
-    /^(do you|can you|are you|what are you|who are you|what is|what's your)\b/,
     /^(tell me about|explain|what do you think|how does|why does|why is|what if)\b/,
     /^(good morning|good night|good evening|good afternoon|gm|gn)\b/,
     /^(bye|goodbye|see you|later|peace|quit|exit)\b/,
@@ -551,14 +560,14 @@ function isCasualMessage(message: string): boolean {
     /\?$/, // Questions are usually conversational unless they contain action words
   ]
 
-  // If it matches a casual pattern AND doesn't contain action words, it's casual
+  // If it matches a casual pattern AND doesn't contain action words AND doesn't refer to kbot, it's casual
   const isCasualPattern = casualPatterns.some(p => p.test(lower))
   const hasActionWords = /\b(fix|create|build|run|deploy|install|delete|remove|write|edit|make|generate|scaffold|refactor|update|add|implement|set up|configure|debug|test)\b/.test(lower)
 
-  if (isCasualPattern && !hasActionWords) return true
+  if (isCasualPattern && !hasActionWords && !refersToKbot) return true
 
-  // Questions that end with ? and don't have action words
-  if (lower.endsWith('?') && !hasActionWords && lower.length < 100) return true
+  // Questions that end with ? and don't have action words and don't refer to kbot
+  if (lower.endsWith('?') && !hasActionWords && !refersToKbot && lower.length < 100) return true
 
   return false
 }

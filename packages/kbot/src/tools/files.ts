@@ -4,10 +4,19 @@
 
 import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
-import { dirname, basename } from 'node:path'
+import { dirname, basename, resolve } from 'node:path'
+import { homedir } from 'node:os'
 import chalk from 'chalk'
 import { registerTool } from './index.js'
 import { getPermissionMode } from '../permissions.js'
+
+/** Resolve a file path: expand ~ and make absolute relative to cwd */
+function resolvePath(p: string): string {
+  if (p.startsWith('~/') || p === '~') {
+    return resolve(homedir(), p.slice(2) || '.')
+  }
+  return resolve(p)
+}
 
 /** Show a colored diff preview to stderr and return true if user approves */
 async function showDiffPreview(path: string, oldContent: string, newContent: string): Promise<boolean> {
@@ -92,8 +101,8 @@ export function registerFileTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const path = String(args.path)
-      if (!existsSync(path)) return `Error: File not found: ${path}`
+      const path = resolvePath(String(args.path))
+      if (!existsSync(path)) return `Error: File not found: ${path} (cwd: ${process.cwd()})`
 
       const stat = statSync(path)
       if (stat.isDirectory()) return `Error: ${path} is a directory, not a file`
@@ -118,7 +127,7 @@ export function registerFileTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const path = String(args.path)
+      const path = resolvePath(String(args.path))
       const content = String(args.content)
       const existing = existsSync(path) ? readFileSync(path, 'utf-8') : ''
 
@@ -142,8 +151,8 @@ export function registerFileTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const path = String(args.path)
-      if (!existsSync(path)) return `Error: File not found: ${path}`
+      const path = resolvePath(String(args.path))
+      if (!existsSync(path)) return `Error: File not found: ${path} (cwd: ${process.cwd()})`
 
       const content = readFileSync(path, 'utf-8')
       const old_string = String(args.old_string)
@@ -174,7 +183,7 @@ export function registerFileTools(): void {
     tier: 'free',
     async execute(args) {
       const pattern = String(args.pattern)
-      const cwd = args.path ? String(args.path) : process.cwd()
+      const cwd = args.path ? resolvePath(String(args.path)) : process.cwd()
       // Sanitize pattern: only allow safe glob characters (prevent shell injection)
       // Note: {} are valid glob syntax (e.g., *.{ts,tsx}), so we allow them
       if (/[;&|`$()!\\]/.test(pattern)) {
@@ -213,7 +222,7 @@ export function registerFileTools(): void {
     tier: 'free',
     async execute(args) {
       const pattern = String(args.pattern)
-      const searchPath = args.path ? String(args.path) : '.'
+      const searchPath = args.path ? resolvePath(String(args.path)) : '.'
       // Validate type flag: only allow alphanumeric file type names (prevent flag injection)
       const fileType = args.type ? String(args.type).replace(/[^a-zA-Z0-9]/g, '') : ''
       const typeFlag = fileType ? `--type ${fileType}` : ''
@@ -245,14 +254,27 @@ export function registerFileTools(): void {
       const files = args.files as Array<{ path: string; content: string }>
       if (!Array.isArray(files) || files.length === 0) return 'Error: files must be a non-empty array of {path, content}'
       const results: string[] = []
+      const skipped: string[] = []
       for (const f of files) {
-        const path = String(f.path)
+        const path = resolvePath(String(f.path))
         const content = String(f.content)
+        const existing = existsSync(path) ? readFileSync(path, 'utf-8') : ''
+
+        // Diff preview in normal/strict mode
+        const approved = await showDiffPreview(path, existing, content)
+        if (!approved) {
+          skipped.push(`  ${path} (skipped — denied by user)`)
+          continue
+        }
+
         mkdirSync(dirname(path), { recursive: true })
         writeFileSync(path, content)
         results.push(`  ${path} (${content.length} bytes)`)
       }
-      return `Written ${files.length} files:\n${results.join('\n')}`
+      const parts: string[] = []
+      if (results.length > 0) parts.push(`Written ${results.length} files:\n${results.join('\n')}`)
+      if (skipped.length > 0) parts.push(`Skipped ${skipped.length} files:\n${skipped.join('\n')}`)
+      return parts.join('\n') || 'No files written'
     },
   })
 
@@ -264,7 +286,7 @@ export function registerFileTools(): void {
     },
     tier: 'free',
     async execute(args) {
-      const dir = args.path ? String(args.path) : '.'
+      const dir = args.path ? resolvePath(String(args.path)) : '.'
       try {
         const result = execSync(`ls -la "${dir}" 2>/dev/null | head -50`, {
           encoding: 'utf-8', timeout: 5000,

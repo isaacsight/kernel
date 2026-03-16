@@ -81,6 +81,14 @@ async function main(): Promise<void> {
     .action(() => { /* default action — handled below */ })
 
   // Sub-commands
+  program
+    .command('version')
+    .description('Show K:BOT version')
+    .action(() => {
+      console.log(`K:BOT v${VERSION}`)
+      process.exit(0)
+    })
+
   const ideCmd = program
     .command('ide')
     .description('Start IDE protocol server (MCP, ACP)')

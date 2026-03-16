@@ -138,7 +138,8 @@ export async function streamAnthropicResponse(
 
       if (isRetryableError(res.status) && attempt < MAX_STREAM_RETRIES) {
         const retryAfter = res.headers.get('retry-after')
-        const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : RETRY_DELAYS[attempt]
+        const parsed = retryAfter ? parseInt(retryAfter, 10) : NaN
+        const delay = !isNaN(parsed) ? parsed * 1000 : RETRY_DELAYS[attempt]
         await retrySleep(delay, attempt + 1)
         continue
       }
@@ -211,7 +212,7 @@ export async function streamAnthropicResponse(
             }
           } else if (type === 'content') {
             // Content is pipeable — goes to stdout
-            if (state.content.length === text.length) {
+            if (state.content.length === 0) {
               process.stdout.write('\n')
             }
             process.stdout.write(text)
@@ -291,7 +292,8 @@ export async function streamOpenAIResponse(
 
       if (isRetryableError(res.status) && attempt < MAX_STREAM_RETRIES) {
         const retryAfter = res.headers.get('retry-after')
-        const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : RETRY_DELAYS[attempt]
+        const parsed = retryAfter ? parseInt(retryAfter, 10) : NaN
+        const delay = !isNaN(parsed) ? parsed * 1000 : RETRY_DELAYS[attempt]
         await retrySleep(delay, attempt + 1)
         continue
       }
@@ -384,13 +386,11 @@ export async function streamOpenAIResponse(
           const tcs = delta.tool_calls as Array<Record<string, unknown>>
           for (const tc of tcs) {
             const idx = tc.index as number
-            if (!state.toolCalls[idx]) {
-              state.toolCalls[idx] = {
-                id: String(tc.id || ''),
-                name: '',
-                partialJson: '',
-              }
+            // Ensure no sparse array — fill gaps with empty entries
+            while (state.toolCalls.length <= idx) {
+              state.toolCalls.push({ id: '', name: '', partialJson: '' })
             }
+            if (tc.id) state.toolCalls[idx].id = String(tc.id)
             const fn = tc.function as Record<string, string> | undefined
             if (fn?.name) state.toolCalls[idx].name = fn.name
             if (fn?.arguments) state.toolCalls[idx].partialJson += fn.arguments

@@ -36,9 +36,11 @@ const DESTRUCTIVE_PATTERNS: Array<{ pattern: RegExp; reason: string }> = [
   { pattern: /DROP\s+TABLE/i, reason: 'Drops a database table' },
   { pattern: /TRUNCATE/i, reason: 'Truncates a database table' },
   { pattern: /DELETE\s+FROM/i, reason: 'Deletes database rows' },
-  // Catch piped/chained destructive commands
-  { pattern: /[|;]\s*rm\s+-rf/i, reason: 'Piped recursive delete' },
-  { pattern: /[|;]\s*git\s+push/i, reason: 'Piped git push' },
+  // Catch piped/chained destructive commands (|, ;, &&)
+  { pattern: /[|;&]\s*rm\s+-rf/i, reason: 'Chained recursive delete' },
+  { pattern: /[|;&]\s*git\s+push/i, reason: 'Chained git push' },
+  { pattern: /[|;&]\s*git\s+reset\s+--hard/i, reason: 'Chained hard reset' },
+  { pattern: /[|;&]\s*docker\s+rm\s+-f/i, reason: 'Chained Docker container removal' },
 ]
 
 /** Set the permission mode */
