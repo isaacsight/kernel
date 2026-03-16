@@ -176,7 +176,8 @@ export function registerFileTools(): void {
       const pattern = String(args.pattern)
       const cwd = args.path ? String(args.path) : process.cwd()
       // Sanitize pattern: only allow safe glob characters (prevent shell injection)
-      if (/[;&|`$(){}!\\]/.test(pattern)) {
+      // Note: {} are valid glob syntax (e.g., *.{ts,tsx}), so we allow them
+      if (/[;&|`$()!\\]/.test(pattern)) {
         return 'Error: Pattern contains unsafe characters'
       }
       try {

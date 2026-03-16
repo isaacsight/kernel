@@ -71,10 +71,14 @@ export function registerGitTools(): void {
       const files = Array.isArray(args.files) ? args.files.map(String) : []
 
       if (files.length > 0) {
-        git(`add ${files.join(' ')}`)
+        // Quote each filename to prevent shell injection
+        const quoted = files.map(f => `'${String(f).replace(/'/g, "'\\''")}'`).join(' ')
+        git(`add -- ${quoted}`)
       }
 
-      return git(`commit -m "${message.replace(/"/g, '\\"')}"`)
+      // Use -- to prevent message from being interpreted as flags
+      const safeMsg = message.replace(/'/g, "'\\''")
+      return git(`commit -m '${safeMsg}'`)
     },
   })
 

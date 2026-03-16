@@ -95,7 +95,17 @@ export function getToolDefinitionsForApi(tier: string): Array<{
     const properties: Record<string, unknown> = {}
     const required: string[] = []
     for (const [key, param] of Object.entries(t.parameters)) {
-      properties[key] = { type: param.type, description: param.description }
+      const prop: Record<string, unknown> = { type: param.type, description: param.description }
+      // OpenAI requires 'items' for array types
+      if (param.type === 'array') {
+        prop.items = (param as Record<string, unknown>).items || { type: 'string' }
+      }
+      // OpenAI requires 'properties' for object types
+      if (param.type === 'object') {
+        prop.properties = (param as Record<string, unknown>).properties || {}
+        prop.additionalProperties = true
+      }
+      properties[key] = prop
       if (param.required) required.push(key)
     }
     return {

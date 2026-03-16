@@ -454,12 +454,13 @@ export function isByokEnabled(): boolean {
 
 /** Get the active BYOK provider */
 export function getByokProvider(): ByokProvider {
-  // If config explicitly sets a local provider, use it (don't let env vars override)
+  // If config explicitly sets a provider (via kbot auth), always respect it
   const config = loadConfig()
-  if (config?.byok_provider && isLocalProvider(config.byok_provider) && config?.byok_enabled) {
+  if (config?.byok_provider && config?.byok_enabled) {
     return config.byok_provider
   }
 
+  // Fall back to env var detection
   for (const { env, provider } of ENV_KEYS) {
     if (process.env[env]) return provider
   }
@@ -468,12 +469,16 @@ export function getByokProvider(): ByokProvider {
 
 /** Get the BYOK API key */
 export function getByokKey(): string | null {
-  // Keyless providers (Ollama) don't need real API keys
   const config = loadConfig()
+  // Keyless providers (Ollama) don't need real API keys
   if (config?.byok_provider && isKeylessProvider(config.byok_provider)) return 'local'
-  // K:BOT Local needs its gateway token
-  if (config?.byok_provider === 'kbot-local' && config?.byok_key) return config.byok_key
 
+  // If config has an explicit provider + key (set via kbot auth), use the config key
+  if (config?.byok_provider && config?.byok_enabled && config?.byok_key) {
+    return config.byok_key
+  }
+
+  // Fall back to env var detection
   for (const { env } of ENV_KEYS) {
     const val = process.env[env]
     if (val) return val

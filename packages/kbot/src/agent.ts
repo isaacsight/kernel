@@ -717,7 +717,7 @@ export async function runAgent(
   // Smart tool filtering:
   // 1. Casual messages → no tools (just chat)
   // 2. Local small models → core tools only (10 instead of 60+, prevents confusion)
-  // 3. Everything else → full tool set
+  // 3. Everything else → full tool set (capped at provider limit)
   let tools: typeof allTools
   if (casual) {
     tools = [] // No tools for casual conversation
@@ -725,6 +725,15 @@ export async function runAgent(
     tools = allTools.filter(t => CORE_TOOLS.has(t.name))
   } else {
     tools = allTools
+  }
+
+  // OpenAI-compatible APIs cap at 128 tools per request
+  const providerConfig = getProvider(getByokProvider())
+  if (providerConfig.apiStyle === 'openai' && tools.length > 128) {
+    // Prioritize core tools, then fill remaining slots
+    const core = tools.filter(t => CORE_TOOLS.has(t.name))
+    const rest = tools.filter(t => !CORE_TOOLS.has(t.name))
+    tools = [...core, ...rest].slice(0, 128)
   }
 
   // Step 2: Build context (cached — only rebuilt when inputs change)
@@ -1184,8 +1193,13 @@ export async function runAndPrint(
 
     // Model not found
     if (errMsg.includes('model') && (errMsg.includes('not found') || errMsg.includes('does not exist'))) {
-      printError('That model isn\'t installed yet.')
-      printInfo('Download it: ollama pull <model-name>')
+      const currentProvider = getByokProvider()
+      printError('That model isn\'t available.')
+      if (isLocalProvider(currentProvider)) {
+        printInfo('Download it: ollama pull <model-name>')
+      } else {
+        printInfo(`Check available models for ${getProvider(currentProvider).name}: kbot auth`)
+      }
       return
     }
 
@@ -1196,8 +1210,10 @@ export async function runAndPrint(
     }
 
     // Auth errors
-    if (errMsg.includes('401') || errMsg.includes('403') || errMsg.includes('invalid') && errMsg.includes('key')) {
-      printError('API key issue. Your key may be expired or invalid.')
+    if (errMsg.includes('401') || errMsg.includes('403') || errMsg.includes('invalid') && errMsg.includes('key')
+        || errMsg.includes('invalid x-api-key') || errMsg.includes('Incorrect API key')) {
+      const currentProvider = getByokProvider()
+      printError(`API key issue for ${getProvider(currentProvider).name}. Your key may be expired or invalid.`)
       printInfo('Update it: kbot auth')
       return
     }
