@@ -7,6 +7,7 @@ import chalk from 'chalk'
 import { registerAgentVisuals } from './ui.js'
 import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
+import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
 
 export interface MatrixAgent {
   id: string
@@ -365,6 +366,11 @@ export function activateMimic(profileId: string): MatrixAgent | null {
 // Registered on startup so `kbot --agent hacker` works out of the box.
 
 const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string; prompt: string }> = {
+  // ── Specialist Agents (17) ──
+  ...Object.fromEntries(
+    Object.entries(SPECIALISTS).map(([id, def]) => [id, { name: def.name, icon: def.icon, color: def.color, prompt: def.prompt }])
+  ),
+  // ── Preset Agents (5) ──
   hacker: {
     name: 'Hacker',
     icon: '⚡',
@@ -418,29 +424,63 @@ export function registerBuiltinAgents(): void {
 
 /** Format built-in agents for display */
 export function formatBuiltinAgentList(): string {
-  const builtins = Object.entries(BUILTIN_AGENTS).map(([id, def]) => {
-    const color = chalk.hex(def.color)
-    return `  ${color(def.icon)} ${color(def.name)} ${chalk.dim(`(${id})`)} — ${chalk.dim(PRESETS[id]?.prompt.slice(0, 80) + '...')}`
-  })
-  const customs = listAgents().filter(a => !BUILTIN_AGENTS[a.id as keyof typeof BUILTIN_AGENTS])
-  const customLines = customs.map(a => {
-    const color = chalk.hex(a.color)
-    return `  ${color(a.icon)} ${color(a.name)} ${chalk.dim(`(${a.id})`)} — ${chalk.dim(a.systemPrompt.slice(0, 80) + '...')}`
-  })
-  let out = chalk.bold('Built-in Agents:\n') + builtins.join('\n')
-  if (customLines.length > 0) {
-    out += '\n\n' + chalk.bold('Custom Agents (this session):\n') + customLines.join('\n')
+  const specialistIds = Object.keys(SPECIALISTS)
+  const presetAgentIds = ['hacker', 'operator', 'dreamer', 'creative', 'developer']
+
+  // Core specialists
+  const coreIds = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
+  const extendedIds = ['aesthete', 'guardian', 'curator', 'strategist']
+  const domainIds = specialistIds.filter(id => !coreIds.includes(id) && !extendedIds.includes(id))
+
+  const formatEntry = (id: string, def: { name: string; icon: string; color: string; prompt: string }) => {
+    const c = chalk.hex(def.color)
+    return `  ${c(def.icon)} ${c(def.name)} ${chalk.dim(`(${id})`)} — ${chalk.dim(def.prompt.slice(0, 80) + '...')}`
   }
-  // Also show presets
-  const presetIds = Object.keys(PRESETS).filter(id => !BUILTIN_AGENTS[id as keyof typeof BUILTIN_AGENTS])
-  if (presetIds.length > 0) {
-    const presetLines = presetIds.map(id => {
+
+  const sections: string[] = []
+
+  // Core specialists
+  sections.push(chalk.bold('Core Specialists:'))
+  sections.push(...coreIds.map(id => formatEntry(id, BUILTIN_AGENTS[id])))
+
+  // Extended specialists
+  sections.push('')
+  sections.push(chalk.bold('Extended Specialists:'))
+  sections.push(...extendedIds.map(id => formatEntry(id, BUILTIN_AGENTS[id])))
+
+  // Domain specialists
+  sections.push('')
+  sections.push(chalk.bold('Domain Specialists:'))
+  sections.push(...domainIds.map(id => formatEntry(id, BUILTIN_AGENTS[id])))
+
+  // Preset agents
+  sections.push('')
+  sections.push(chalk.bold('Preset Agents:'))
+  sections.push(...presetAgentIds.map(id => formatEntry(id, BUILTIN_AGENTS[id])))
+
+  // Custom agents (session-created)
+  const customs = listAgents().filter(a => !BUILTIN_AGENTS[a.id])
+  if (customs.length > 0) {
+    sections.push('')
+    sections.push(chalk.bold('Custom Agents (this session):'))
+    sections.push(...customs.map(a => {
+      const c = chalk.hex(a.color)
+      return `  ${c(a.icon)} ${c(a.name)} ${chalk.dim(`(${a.id})`)} — ${chalk.dim(a.systemPrompt.slice(0, 80) + '...')}`
+    }))
+  }
+
+  // Template presets (not already in builtin)
+  const templateIds = Object.keys(PRESETS).filter(id => !BUILTIN_AGENTS[id])
+  if (templateIds.length > 0) {
+    sections.push('')
+    sections.push(chalk.bold('Templates (spawn with: /matrix create <id>):'))
+    sections.push(...templateIds.map(id => {
       const p = PRESETS[id]
       return `  ${chalk.dim('◇')} ${p.name} ${chalk.dim(`(${id})`)} — ${chalk.dim(p.prompt.slice(0, 80) + '...')}`
-    })
-    out += '\n\n' + chalk.bold('Presets (spawn with: /matrix create <id>):\n') + presetLines.join('\n')
+    }))
   }
-  return out
+
+  return sections.join('\n')
 }
 
 /** Format a single built-in agent detail */
