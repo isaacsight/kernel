@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "2.22.3",
+  "version": "2.23.0",
   "description": "Universal AI agent for your terminal. 22 specialist agents, 223 tools, 20 providers. Embedded llama.cpp engine — runs GGUF models directly, no Ollama needed. Audit any repo, share conversations, contribute to open source. CSV/data tools, VFX, research, containers. Self-evolving, learns your patterns.",
   "type": "module",
   "repository": {

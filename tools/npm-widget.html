@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kbot downloads</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: rgba(18, 18, 22, 0.92);
+    color: #e8e4d9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-app-region: drag;
+    user-select: none;
+    backdrop-filter: blur(20px);
+  }
+  .widget {
+    width: 320px;
+    padding: 24px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(30, 30, 38, 0.95), rgba(22, 22, 28, 0.98));
+    border: 1px solid rgba(107, 91, 149, 0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(107, 91, 149, 0.1);
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6B5B95;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .big-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-family: 'EB Garamond', 'Georgia', serif;
+    letter-spacing: -1px;
+  }
+  .big-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e8e4d9;
+    font-family: 'EB Garamond', 'Georgia', serif;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+  }
+  .sparkline-container {
+    height: 50px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .sparkline {
+    width: 100%;
+    height: 100%;
+  }
+  .sparkline-label {
+    font-size: 9px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .delta {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-family: 'Courier New', monospace;
+  }
+  .delta.up { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .delta.down { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+  .delta.flat { background: rgba(136, 136, 136, 0.15); color: #888; }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .version {
+    font-size: 10px;
+    color: #6B5B95;
+    font-weight: 600;
+  }
+  .updated {
+    font-size: 9px;
+    color: #444;
+  }
+  .error { color: #ef4444; font-size: 11px; text-align: center; padding: 20px 0; }
+  .loading { color: #666; font-size: 11px; text-align: center; padding: 20px 0; }
+</style>
+</head>
+<body>
+<div class="widget">
+  <div class="header">
+    <h1>@kernel.chat/kbot</h1>
+    <div class="live-dot" title="Auto-refreshes every 60s"></div>
+  </div>
+  <div id="content">
+    <div class="loading">fetching downloads...</div>
+  </div>
+</div>
+
+<script>
+const PKG = '@kernel.chat/kbot';
+const API = 'https://api.npmjs.org/downloads';
+let lastWeekTotal = null;
+
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
+function buildSparkline(data) {
+  const values = data.map(d => d.downloads);
+  const max = Math.max(...values, 1);
+  const w = 272, h = 50;
+  const step = w / (values.length - 1 || 1);
+
+  const points = values.map((v, i) => ({
+    x: i * step,
+    y: h - (v / max) * (h - 4) - 2
+  }));
+
+  // Smooth curve
+  let path = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    const cx = (points[i-1].x + points[i].x) / 2;
+    path += ` C ${cx} ${points[i-1].y}, ${cx} ${points[i].y}, ${points[i].x} ${points[i].y}`;
+  }
+
+  // Fill area
+  const fillPath = path + ` L ${points[points.length-1].x} ${h} L ${points[0].x} ${h} Z`;
+
+  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(107,91,149,0.3)"/>
+        <stop offset="100%" stop-color="rgba(107,91,149,0)"/>
+      </linearGradient>
+    </defs>
+    <path d="${fillPath}" fill="url(#fill)"/>
+    <path d="${path}" fill="none" stroke="#6B5B95" stroke-width="2" stroke-linecap="round"/>
+    ${points.map((p, i) => i === points.length - 1
+      ? `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#6B5B95" stroke="#fff" stroke-width="1.5"/>`
+      : ''
+    ).join('')}
+  </svg>`;
+}
+
+async function update() {
+  try {
+    const [daily, weekly, monthly, range] = await Promise.all([
+      fetchJSON(`${API}/point/last-day/${PKG}`),
+      fetchJSON(`${API}/point/last-week/${PKG}`),
+      fetchJSON(`${API}/point/last-month/${PKG}`),
+      fetchJSON(`${API}/range/last-month/${PKG}`),
+    ]);
+
+    // Delta calculation
+    const prevWeek = lastWeekTotal;
+    lastWeekTotal = weekly.downloads;
+    let deltaHtml = '';
+    if (prevWeek !== null) {
+      const diff = weekly.downloads - prevWeek;
+      if (diff > 0) deltaHtml = `<span class="delta up">+${diff}</span>`;
+      else if (diff < 0) deltaHtml = `<span class="delta down">${diff}</span>`;
+      else deltaHtml = `<span class="delta flat">=</span>`;
+    }
+
+    // Get last 14 days for sparkline
+    const days = (range.downloads || []).slice(-14);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    document.getElementById('content').innerHTML = `
+      <div class="big-number">${formatNum(weekly.downloads)}${deltaHtml}</div>
+      <div class="big-label">downloads this week</div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-value">${formatNum(daily.downloads)}</div>
+          <div class="stat-label">Today</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">${formatNum(weekly.downloads)}</div>
+          <div class="stat-label">Week</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">${formatNum(monthly.downloads)}</div>
+          <div class="stat-label">Month</div>
+        </div>
+      </div>
+
+      <div class="sparkline-label">Last 14 days</div>
+      <div class="sparkline-container">
+        ${buildSparkline(days)}
+      </div>
+
+      <div class="footer">
+        <span class="version">v2.22.3</span>
+        <span class="updated">Updated ${timeStr}</span>
+      </div>
+    `;
+  } catch (e) {
+    document.getElementById('content').innerHTML = `
+      <div class="error">Failed to fetch: ${e.message}<br>Retrying in 60s...</div>
+    `;
+  }
+}
+
+// Initial load + refresh every 60s
+update();
+setInterval(update, 60000);
+</script>
+</body>
+</html>
