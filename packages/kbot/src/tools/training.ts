@@ -14,7 +14,7 @@
 //   train_cost      — Estimate training cost, time, and VRAM
 
 import { execSync, spawn } from 'node:child_process'
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, unlinkSync, chmodSync } from 'node:fs'
 import { resolve, join, basename, extname, dirname } from 'node:path'
 import { homedir, cpus } from 'node:os'
 import { registerTool } from './index.js'
@@ -59,6 +59,55 @@ interface ValidationIssue {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
+/** Shell-escape a string for safe interpolation into shell commands */
+function esc(s: string): string {
+  // Single-quote wrapping with internal single-quote escaping
+  return `'${s.replace(/'/g, "'\\''")}'`
+}
+
+/** Validate a string is safe for use as a model name/identifier (no shell metacharacters) */
+function validateIdentifier(value: string, label: string): void {
+  if (/[;&|`$(){}[\]!#~<>"\n\r\\]/.test(value)) {
+    throw new Error(`${label} contains unsafe characters. Only alphanumeric, hyphens, underscores, dots, colons, and slashes are allowed.`)
+  }
+}
+
+/** Validate a path doesn't escape the allowed directories */
+function validatePath(p: string, label: string): void {
+  const resolved = resolve(p)
+  const home = homedir()
+  const cwd = process.cwd()
+  // Allow paths under home directory, cwd, or /tmp
+  if (!resolved.startsWith(home) && !resolved.startsWith(cwd) && !resolved.startsWith('/tmp')) {
+    throw new Error(`${label} path must be under your home directory, current directory, or /tmp. Got: ${resolved}`)
+  }
+}
+
+/** Execute a command with argument array (no shell interpolation) */
+function execSafe(cmd: string, args: string[], opts?: { timeout?: number; cwd?: string; env?: Record<string, string> }): string {
+  return execSync([cmd, ...args].map(a => esc(a)).join(' '), {
+    encoding: 'utf-8',
+    timeout: opts?.timeout ?? 60_000,
+    maxBuffer: 50 * 1024 * 1024,
+    cwd: opts?.cwd ?? process.cwd(),
+    env: opts?.env ?? (process.env as Record<string, string>),
+    shell: '/bin/sh',
+    stdio: ['pipe', 'pipe', 'pipe'],
+  }).trim()
+}
+
+function execSafeResult(cmd: string, args: string[], opts?: { timeout?: number; cwd?: string; env?: Record<string, string> }): { ok: boolean; output: string } {
+  try {
+    const output = execSafe(cmd, args, opts)
+    return { ok: true, output }
+  } catch (err: unknown) {
+    const e = err as { stderr?: string; stdout?: string; message?: string }
+    const output = [e.stdout, e.stderr].filter(Boolean).join('\n').trim()
+    return { ok: false, output: output || e.message || 'Command failed' }
+  }
+}
+
+/** Legacy shell function — ONLY for hardcoded commands with no user input */
 function shell(cmd: string, opts?: { timeout?: number; cwd?: string; env?: Record<string, string> }): string {
   return execSync(cmd, {
     encoding: 'utf-8',
@@ -82,12 +131,19 @@ function shellSafe(cmd: string, opts?: { timeout?: number; cwd?: string; env?: R
 }
 
 function isCommandAvailable(cmd: string): boolean {
+  // Only hardcoded command names — never user input
+  if (!/^[a-zA-Z0-9_.-]+$/.test(cmd)) return false
   try {
-    execSync(`which ${cmd}`, { encoding: 'utf-8', timeout: 5_000, stdio: ['pipe', 'pipe', 'pipe'] })
+    execSync(`which ${esc(cmd)}`, { encoding: 'utf-8', timeout: 5_000, stdio: ['pipe', 'pipe', 'pipe'] })
     return true
   } catch {
     return false
   }
+}
+
+/** Escape a string for safe embedding in a Python string literal (double-quoted) */
+function pyEsc(s: string): string {
+  return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
 }
 
 function estimateTokens(text: string): number {
@@ -936,6 +992,10 @@ export function registerTrainingTools(): void {
           return `Error: Dataset not found: ${datasetPath}`
         }
 
+        // Input validation
+        validatePath(datasetPath, 'Dataset')
+        validateIdentifier(baseModel, 'Base model')
+
         const validBackends: Backend[] = ['openai', 'together', 'mistral', 'mlx', 'unsloth', 'llama-cpp']
         if (!validBackends.includes(backend)) {
           return `Error: Invalid backend "${backend}". Supported: ${validBackends.join(', ')}`
@@ -1160,29 +1220,28 @@ export function registerTrainingTools(): void {
           const adapterPath = join(outputDir, 'adapters')
           mkdirSync(adapterPath, { recursive: true })
 
-          const cmd = [
-            'python3 -m mlx_lm.lora',
-            `--model ${baseModel}`,
-            `--data ${datasetPath}`,
+          const cmdArgs = [
+            '-m', 'mlx_lm.lora',
+            '--model', baseModel,
+            '--data', datasetPath,
             '--train',
-            `--iters ${iters}`,
-            `--batch-size ${batchSize}`,
-            `--lora-layers ${loraRank}`,
-            `--adapter-path ${adapterPath}`,
-          ].join(' ')
+            '--iters', String(iters),
+            '--batch-size', String(batchSize),
+            '--lora-layers', String(loraRank),
+            '--adapter-path', adapterPath,
+          ]
 
           // Write the command to a script file for background execution
           const scriptPath = join(outputDir, 'train.sh')
           const logPath = join(outputDir, 'train.log')
+          const escapedCmd = ['python3', ...cmdArgs].map(a => esc(a)).join(' ')
           writeFileSync(scriptPath, [
             '#!/bin/bash',
-            `echo "Training started at $(date)" > ${logPath}`,
-            `echo "Command: ${cmd}" >> ${logPath}`,
-            `${cmd} 2>&1 | tee -a ${logPath}`,
-            `echo "Training finished at $(date)" >> ${logPath}`,
-          ].join('\n'), 'utf-8')
-
-          shell(`chmod +x ${scriptPath}`)
+            `echo "Training started at $(date)" > ${esc(logPath)}`,
+            `echo "Command: ${escapedCmd}" >> ${esc(logPath)}`,
+            `${escapedCmd} 2>&1 | tee -a ${esc(logPath)}`,
+            `echo "Training finished at $(date)" >> ${esc(logPath)}`,
+          ].join('\n'), { encoding: 'utf-8', mode: 0o700 })
 
           // Launch in background
           const child = spawn('bash', [scriptPath], {
@@ -1234,9 +1293,9 @@ from transformers import TrainingArguments
 from datasets import load_dataset
 
 # Configuration
-BASE_MODEL = "${baseModel}"
-DATASET_PATH = "${datasetPath}"
-OUTPUT_DIR = "${outputDir}"
+BASE_MODEL = "${pyEsc(baseModel)}"
+DATASET_PATH = "${pyEsc(datasetPath)}"
+OUTPUT_DIR = "${pyEsc(outputDir)}"
 EPOCHS = ${epochs}
 BATCH_SIZE = ${batchSize}
 LEARNING_RATE = ${learningRate}
@@ -1329,11 +1388,10 @@ print("Done!")
           const launchScript = join(outputDir, 'train.sh')
           writeFileSync(launchScript, [
             '#!/bin/bash',
-            `echo "Training started at $(date)" > ${logPath}`,
-            `python3 ${scriptPath} 2>&1 | tee -a ${logPath}`,
-            `echo "Training finished at $(date)" >> ${logPath}`,
-          ].join('\n'), 'utf-8')
-          shell(`chmod +x ${launchScript}`)
+            `echo "Training started at $(date)" > ${esc(logPath)}`,
+            `python3 ${esc(scriptPath)} 2>&1 | tee -a ${esc(logPath)}`,
+            `echo "Training finished at $(date)" >> ${esc(logPath)}`,
+          ].join('\n'), { encoding: 'utf-8', mode: 0o700 })
 
           const child = spawn('bash', [launchScript], {
             detached: true,
@@ -1379,27 +1437,27 @@ print("Done!")
           const loraOutPath = join(outputDir, 'lora-adapter.bin')
           const logPath = join(outputDir, 'train.log')
 
-          const cmd = [
+          const cmdArgs = [
             'llama-finetune',
-            `--model-base ${baseModel}`,
-            `--lora-out ${loraOutPath}`,
-            `--train-data ${datasetPath}`,
-            `--threads ${threads}`,
-            `--epochs ${epochs}`,
-            `--batch ${batchSize}`,
-            `--lora-r ${loraRank}`,
-            `--lora-alpha ${loraAlpha}`,
-          ].join(' ')
+            '--model-base', baseModel,
+            '--lora-out', loraOutPath,
+            '--train-data', datasetPath,
+            '--threads', String(threads),
+            '--epochs', String(epochs),
+            '--batch', String(batchSize),
+            '--lora-r', String(loraRank),
+            '--lora-alpha', String(loraAlpha),
+          ]
 
           const scriptPath = join(outputDir, 'train.sh')
+          const escapedLlamaCmd = cmdArgs.map(a => esc(a)).join(' ')
           writeFileSync(scriptPath, [
             '#!/bin/bash',
-            `echo "Training started at $(date)" > ${logPath}`,
-            `echo "Command: ${cmd}" >> ${logPath}`,
-            `${cmd} 2>&1 | tee -a ${logPath}`,
-            `echo "Training finished at $(date)" >> ${logPath}`,
-          ].join('\n'), 'utf-8')
-          shell(`chmod +x ${scriptPath}`)
+            `echo "Training started at $(date)" > ${esc(logPath)}`,
+            `echo "Command: ${escapedLlamaCmd}" >> ${esc(logPath)}`,
+            `${escapedLlamaCmd} 2>&1 | tee -a ${esc(logPath)}`,
+            `echo "Training finished at $(date)" >> ${esc(logPath)}`,
+          ].join('\n'), { encoding: 'utf-8', mode: 0o700 })
 
           const child = spawn('bash', [scriptPath], {
             detached: true,
@@ -1779,14 +1837,14 @@ print("Done!")
               const prompt = tc.system
                 ? `System: ${tc.system}\n\nUser: ${tc.prompt}\n\nAssistant:`
                 : `User: ${tc.prompt}\n\nAssistant:`
-              const result = shellSafe(`ollama run ${model} ${JSON.stringify(prompt)}`, { timeout: 60_000 })
+              const result = execSafeResult('ollama', ['run', model, prompt], { timeout: 60_000 })
               actual = result.ok ? result.output : ''
             } else if (backend === 'llama-cpp') {
               if (!isCommandAvailable('llama-cli')) {
                 return 'Error: llama-cli is not installed. Build from https://github.com/ggerganov/llama.cpp'
               }
               const prompt = tc.prompt
-              const result = shellSafe(`llama-cli -m ${model} -p ${JSON.stringify(prompt)} -n 512 --temp 0.1`, { timeout: 120_000 })
+              const result = execSafeResult('llama-cli', ['-m', model, '-p', prompt, '-n', '512', '--temp', '0.1'], { timeout: 120_000 })
               actual = result.ok ? result.output : ''
             } else if (backend === 'openai' || backend === 'together' || backend === 'mistral') {
               const apiKey = getApiKey(backend as CloudBackend, args.api_key ? String(args.api_key) : undefined)
@@ -1950,8 +2008,7 @@ print("Done!")
           // Try MLX merge first (Apple Silicon)
           const hasMlx = shellSafe('python3 -c "import mlx_lm"')
           if (hasMlx.ok) {
-            const cmd = `python3 -m mlx_lm.fuse --model ${baseModel} --adapter-path ${modelPath} --save-path ${outputPath}`
-            const result = shellSafe(cmd, { timeout: 300_000 })
+            const result = execSafeResult('python3', ['-m', 'mlx_lm.fuse', '--model', baseModel, '--adapter-path', modelPath, '--save-path', outputPath], { timeout: 300_000 })
 
             if (result.ok) {
               return [
@@ -1973,28 +2030,28 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-print("Loading base model: ${baseModel}")
-model = AutoModelForCausalLM.from_pretrained("${baseModel}", torch_dtype=torch.float16, device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained("${baseModel}")
+print("Loading base model: ${pyEsc(baseModel)}")
+model = AutoModelForCausalLM.from_pretrained("${pyEsc(baseModel)}", torch_dtype=torch.float16, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("${pyEsc(baseModel)}")
 
-print("Loading LoRA adapter: ${modelPath}")
-model = PeftModel.from_pretrained(model, "${modelPath}")
+print("Loading LoRA adapter: ${pyEsc(modelPath)}")
+model = PeftModel.from_pretrained(model, "${pyEsc(modelPath)}")
 
 print("Merging LoRA weights into base model...")
 model = model.merge_and_unload()
 
-print("Saving merged model to: ${outputPath}")
-model.save_pretrained("${outputPath}")
-tokenizer.save_pretrained("${outputPath}")
+print("Saving merged model to: ${pyEsc(outputPath)}")
+model.save_pretrained("${pyEsc(outputPath)}")
+tokenizer.save_pretrained("${pyEsc(outputPath)}")
 print("Done!")
 `
           const scriptPath = join(dirname(modelPath), '_merge_lora.py')
-          writeFileSync(scriptPath, mergeScript, 'utf-8')
+          writeFileSync(scriptPath, mergeScript, { encoding: 'utf-8', mode: 0o700 })
 
-          const result = shellSafe(`python3 ${scriptPath}`, { timeout: 600_000 })
+          const result = execSafeResult('python3', [scriptPath], { timeout: 600_000 })
 
           // Clean up script
-          try { execSync(`rm -f ${scriptPath}`, { stdio: 'pipe' }) } catch { /* ignore */ }
+          try { unlinkSync(scriptPath) } catch { /* ignore */ }
 
           if (!result.ok) {
             return `Error merging LoRA:\n${result.output}\n\nEnsure transformers and peft are installed: pip install transformers peft torch`
@@ -2016,13 +2073,12 @@ print("Done!")
             : resolve(dirname(modelPath), `${basename(modelPath)}.${quantType}.gguf`)
 
           // Try llama.cpp's convert script
-          const convertScript = shellSafe('which convert_hf_to_gguf.py || which convert-hf-to-gguf.py')
-          let convertCmd: string
-
-          if (convertScript.ok && convertScript.output) {
-            convertCmd = `python3 ${convertScript.output} ${modelPath} --outfile ${outputPath} --outtype ${quantType}`
+          // Find conversion script
+          let convertScriptPath = ''
+          const whichResult = shellSafe('which convert_hf_to_gguf.py || which convert-hf-to-gguf.py')
+          if (whichResult.ok && whichResult.output) {
+            convertScriptPath = whichResult.output
           } else {
-            // Try finding it in common locations
             const commonPaths = [
               join(homedir(), 'llama.cpp/convert_hf_to_gguf.py'),
               join(homedir(), 'llama.cpp/convert-hf-to-gguf.py'),
@@ -2040,13 +2096,13 @@ print("Done!")
                 '  pip install -r requirements.txt',
                 '',
                 'Then run:',
-                `  python3 convert_hf_to_gguf.py ${modelPath} --outfile ${outputPath} --outtype ${quantType}`,
+                `  python3 convert_hf_to_gguf.py <model_path> --outfile <output> --outtype ${quantType}`,
               ].join('\n')
             }
-            convertCmd = `python3 ${found} ${modelPath} --outfile ${outputPath} --outtype ${quantType}`
+            convertScriptPath = found
           }
 
-          const result = shellSafe(convertCmd, { timeout: 600_000 })
+          const result = execSafeResult('python3', [convertScriptPath, modelPath, '--outfile', outputPath, '--outtype', quantType], { timeout: 600_000 })
           if (!result.ok) {
             return `Error converting to GGUF:\n${result.output}`
           }
@@ -2079,7 +2135,7 @@ print("Done!")
             ? resolve(String(args.output))
             : modelPath.replace(/\.gguf$/, '') + `.${quantType}.gguf`
 
-          const result = shellSafe(`llama-quantize ${modelPath} ${outputPath} ${quantType}`, { timeout: 600_000 })
+          const result = execSafeResult('llama-quantize', [modelPath, outputPath, quantType], { timeout: 600_000 })
           if (!result.ok) {
             return `Error quantizing model:\n${result.output}`
           }
@@ -2159,7 +2215,15 @@ print("Done!")
 
           // Determine if model is GGUF file or directory
           const isGguf = modelPath.endsWith('.gguf')
-          const fromLine = isGguf ? `FROM ${modelPath}` : `FROM ${modelPath}`
+          // Validate name for Ollama (alphanumeric, hyphens, underscores, colons)
+          if (!/^[a-zA-Z0-9][a-zA-Z0-9_:.-]*$/.test(name)) {
+            return 'Error: Ollama model name must be alphanumeric (hyphens, underscores, colons, dots allowed).'
+          }
+
+          const fromLine = `FROM ${modelPath}`
+
+          // Escape description for Ollama Modelfile (prevent """ breakout)
+          const safeDescription = description.replace(/"""/g, '').replace(/\\/g, '\\\\')
 
           // Create a Modelfile
           const modelfileContent = [
@@ -2169,14 +2233,14 @@ print("Done!")
             `PARAMETER top_p 0.9`,
             `PARAMETER top_k 40`,
             '',
-            `SYSTEM """${description}"""`,
+            `SYSTEM """${safeDescription}"""`,
           ].join('\n')
 
           const modelfilePath = join(dirname(modelPath), 'Modelfile')
           writeFileSync(modelfilePath, modelfileContent, 'utf-8')
 
           // Create the Ollama model
-          const result = shellSafe(`ollama create ${name} -f ${modelfilePath}`, { timeout: 300_000 })
+          const result = execSafeResult('ollama', ['create', name, '-f', modelfilePath], { timeout: 300_000 })
 
           if (!result.ok) {
             return `Error creating Ollama model:\n${result.output}\n\nModelfile written to: ${modelfilePath}`
@@ -2210,13 +2274,13 @@ print("Done!")
           // Check if HF_TOKEN is available
           const hasToken = process.env.HF_TOKEN || process.env.HUGGING_FACE_HUB_TOKEN
           if (!hasToken) {
-            const loginCheck = shellSafe('huggingface-cli whoami')
+            const loginCheck = execSafeResult('huggingface-cli', ['whoami'])
             if (!loginCheck.ok) {
               return 'Error: Not authenticated with HuggingFace. Run: huggingface-cli login\nOr set HF_TOKEN environment variable.'
             }
           }
 
-          const result = shellSafe(`huggingface-cli upload ${name} ${modelPath}`, { timeout: 600_000 })
+          const result = execSafeResult('huggingface-cli', ['upload', name, modelPath], { timeout: 600_000 })
 
           if (!result.ok) {
             return `Error uploading to HuggingFace:\n${result.output}`
@@ -2243,14 +2307,18 @@ print("Done!")
           // Copy model file(s)
           const stat = statSync(modelPath)
           if (stat.isFile()) {
-            const result = shellSafe(`cp ${modelPath} ${destPath}`, { timeout: 120_000 })
+            const result = execSafeResult('cp', [modelPath, destPath], { timeout: 120_000 })
             if (!result.ok) {
               return `Error copying model: ${result.output}`
             }
           } else if (stat.isDirectory()) {
+            // Validate name for path safety
+            if (/[\/\\]/.test(name) || name.includes('..')) {
+              return 'Error: Model name must not contain path separators or ".."'
+            }
             const destDir = join(modelsDir, name)
             mkdirSync(destDir, { recursive: true })
-            const result = shellSafe(`cp -r ${modelPath}/* ${destDir}/`, { timeout: 300_000 })
+            const result = execSafeResult('cp', ['-r', modelPath + '/.', destDir + '/'], { timeout: 300_000 })
             if (!result.ok) {
               return `Error copying model directory: ${result.output}`
             }
