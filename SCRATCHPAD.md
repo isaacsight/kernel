@@ -148,13 +148,13 @@
 - **Edge function deploys**: ALWAYS use `--no-verify-jwt` flag.
 
 ## K:BOT Current State
-- **npm version**: 2.21.0 (`@kernel.chat/kbot`)
-- **Agents**: 22 built-in (17 specialists + 5 presets)
-- **Tools**: 223
+- **npm version**: 2.23.2 (`@kernel.chat/kbot`)
+- **Agents**: 22 built-in (17 specialists + 5 presets) + 6 templates
+- **Tools**: 233
 - **Providers**: 20
-- **Keywords**: 85 (npm discoverability)
-- **Downloads**: ~1,594/month, 855/week (accelerating)
-- **Docker**: `isaacsight/kbot:2.19.0` on Docker Hub
+- **Keywords**: 106 (npm discoverability)
+- **Downloads**: ~3,424/month, 2,663/week (accelerating)
+- **Docker**: `isaacsight/kbot:2.22.1` on Docker Hub
 - **Discord**: Guild 1472796320015192178, 20 channels, 6 roles, webhooks live
 - **Discord Invite**: https://discord.gg/pYJn3hBqnz
 - **GitHub Topics**: 20 (at max)
