@@ -52,7 +52,7 @@ Enter
 Sleep 1s
 
 # ── Outro ──
-Type "# 22 agents. 223 tools. 20 providers. Runs offline."
+Type "# 23 agents. 223 tools. 20 providers. Runs offline."
 Enter
 Type "# npm i -g @kernel.chat/kbot"
 Enter

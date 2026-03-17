@@ -47,7 +47,7 @@ const STEPS: TutorialStep[] = [
   {
     title: 'Meet the specialists',
     body: [
-      'kbot has 22 specialist agents. Each one is an expert in a',
+      'kbot has 23 specialist agents. Each one is an expert in a',
       'different area. You don\'t need to pick one — kbot routes your',
       'message to the right specialist automatically.',
       '',

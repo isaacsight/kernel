@@ -18,7 +18,7 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**22 specialist agents. 223 tools. 20 providers. Runs offline. MIT licensed.**
+**23 specialist agents. 223 tools. 20 providers. Runs offline. MIT licensed.**
 
 ---
 
@@ -29,7 +29,7 @@ Most AI coding tools lock you into one provider and forget everything between se
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Extracts what works from every conversation. Gets faster and smarter over time.
-- **22 specialist agents** — Say "fix the auth bug" and it picks the coder. Say "research JWT tokens" and it picks the researcher. Auto-routed.
+- **23 specialist agents** — Say "fix the auth bug" and it picks the coder. Say "research JWT tokens" and it picks the researcher. Auto-routed.
 - **Self-evaluating** — Every response scored on quality. Low score? Auto-retries with feedback.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
 

@@ -42,8 +42,8 @@ interface AcpCapabilities {
 
 const AGENT_IDENTITY = {
   name: 'K:BOT',
-  version: '2.22.1',
-  description: 'Open-source terminal AI agent — 22 specialist agents, 223 tools, 20 providers, local-first',
+  version: '2.26.0',
+  description: 'Open-source terminal AI agent — 23 specialist agents, 223 tools, 20 providers, local-first',
   capabilities: ['chat', 'codeAction', 'diagnostics', 'tools'] as const,
 }
 
