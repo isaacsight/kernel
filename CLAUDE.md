@@ -177,6 +177,7 @@ Web companion uses `.env`:
 | Hacker | Red team — exploit attempts, auth bypass |
 | DevOps | Deploy pipeline, health checks |
 | Product | UX evaluation, mobile-first testing |
+| Thinking Partner | Strategic analysis, honest critique, synthesis |
 
 ### Slash Commands
 
