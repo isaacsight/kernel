@@ -779,9 +779,16 @@ async function callProvider(
   } catch (err) {
     recordFailure(provider, err instanceof Error ? err : new Error(String(err)))
 
+    const errMsg = err instanceof Error ? err.message : String(err)
+
+    // Model doesn't support tools — retry without tools, let inline parser handle it
+    if (tools && tools.length > 0 && (errMsg.includes('does not support tools') || errMsg.includes('does not support function') || errMsg.includes('tools is not supported'))) {
+      printWarn(`${model} doesn't support tool calling — falling back to inline tool parsing...`)
+      return callProvider(provider, apiKey, model, systemContext, messages, undefined, options)
+    }
+
     // Auto-retry with fallback model for local providers
     if (isLocalProvider(provider) && model !== p.fastModel) {
-      const errMsg = err instanceof Error ? err.message : String(err)
       // Only retry on model-specific errors, not connection errors
       if (errMsg.includes('not found') || errMsg.includes('does not exist') || errMsg.includes('model')) {
         printWarn(`Model ${model} unavailable, falling back to ${p.fastModel}...`)
