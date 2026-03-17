@@ -7,6 +7,7 @@ import chalk from 'chalk'
 import { registerAgentVisuals } from './ui.js'
 import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
+import { THINKING_PARTNER_PRESET, THINKING_PARTNER_BUILTIN } from './agents/thinking-partner.js'
 import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
 
 export interface MatrixAgent {
@@ -150,6 +151,10 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
   'developer': {
     name: DEVELOPER_PRESET.name,
     prompt: DEVELOPER_PRESET.prompt,
+  },
+  'thinking-partner': {
+    name: THINKING_PARTNER_PRESET.name,
+    prompt: THINKING_PARTNER_PRESET.prompt,
   },
 }
 
@@ -401,6 +406,12 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     color: DEVELOPER_BUILTIN.color,
     prompt: DEVELOPER_BUILTIN.prompt,
   },
+  'thinking-partner': {
+    name: THINKING_PARTNER_BUILTIN.name,
+    icon: THINKING_PARTNER_BUILTIN.icon,
+    color: THINKING_PARTNER_BUILTIN.color,
+    prompt: THINKING_PARTNER_BUILTIN.prompt,
+  },
 }
 
 /** Register built-in agents so they're always available via --agent flag */
@@ -425,7 +436,7 @@ export function registerBuiltinAgents(): void {
 /** Format built-in agents for display */
 export function formatBuiltinAgentList(): string {
   const specialistIds = Object.keys(SPECIALISTS)
-  const presetAgentIds = ['hacker', 'operator', 'dreamer', 'creative', 'developer']
+  const presetAgentIds = ['hacker', 'operator', 'dreamer', 'creative', 'developer', 'thinking-partner']
 
   // Core specialists
   const coreIds = ['kernel', 'researcher', 'coder', 'writer', 'analyst']

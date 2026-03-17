@@ -204,6 +204,7 @@ export function getAgents(): Array<{ id: string; name: string; description: stri
     { id: 'strategist', name: 'Strategist', description: 'Strategic planning specialist' },
     { id: 'creative', name: 'Creative', description: 'Generative art, creative coding & procedural generation specialist' },
     { id: 'developer', name: 'Developer', description: 'K:BOT self-development specialist — builds and improves kbot itself' },
+    { id: 'thinking-partner', name: 'Thinking Partner', description: 'Strategic thinking partner — investigates, synthesizes, and challenges' },
   ]
 }
 

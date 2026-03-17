@@ -1630,7 +1630,7 @@ async function handleSlashCommand(
         printSuccess(`Agent set to: ${args[0]}`)
       } else {
         printInfo(`Current agent: ${opts.agent || 'auto'}`)
-        printInfo('Built-in: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, creative, developer')
+        printInfo('Built-in: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, creative, developer, thinking-partner')
         const matrixIds = getMatrixAgentIds()
         if (matrixIds.length > 0) {
           printInfo(`Matrix: ${matrixIds.join(', ')}`)

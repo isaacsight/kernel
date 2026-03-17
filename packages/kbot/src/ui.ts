@@ -43,6 +43,7 @@ const AGENT_COLORS: Record<string, (text: string) => string> = {
   strategist: chalk.hex('#DAA520'),
   creative: chalk.hex('#E879F9'),
   developer: chalk.hex('#38BDF8'),
+  'thinking-partner': chalk.hex('#9FBF7F'),
   local: DIM,
 }
 
