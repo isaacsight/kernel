@@ -812,6 +812,17 @@ async function main(): Promise<void> {
         byokActive = true
         localActive = true
         printSuccess('Auto-configured kbot local gateway. Ready — $0 cost!')
+      } else {
+        // Priority 3: Embedded llama.cpp — always available, no external service needed
+        try {
+          setupEmbedded()
+          byokActive = true
+          localActive = true
+          printSuccess('Using embedded AI engine. Ready — $0 cost, fully private!')
+          printInfo('For better quality: install Ollama (https://ollama.com) or run kbot auth')
+        } catch {
+          // Embedded not available — fall through to guided setup
+        }
       }
     }
 
@@ -1220,16 +1231,24 @@ async function guidedSetup(): Promise<{ local: boolean } | null> {
       }
     }
 
-    // Ollama not running or not installed
-    console.log(chalk.bold('  To run AI locally, you need Ollama (free, 1 minute install):'))
+    // Ollama not running or not installed — fall back to embedded llama.cpp
+    printInfo('No Ollama found. Setting up embedded AI engine (no install needed)...')
     console.log()
-    console.log(`  ${chalk.bold('Step 1:')} Download Ollama from ${chalk.underline('https://ollama.com')}`)
-    console.log(`  ${chalk.bold('Step 2:')} Open the Ollama app (it runs in the background)`)
-    console.log(`  ${chalk.bold('Step 3:')} Run: ${chalk.cyan('kbot')} again — it will auto-detect Ollama`)
-    console.log()
-    printInfo('Ollama is like having ChatGPT on your computer — free, private, no account needed.')
-    console.log()
-    return null
+    try {
+      setupEmbedded()
+      printSuccess('Embedded AI engine ready. You\'re good to go — $0, fully private!')
+      printInfo('For better quality, install Ollama: https://ollama.com')
+      return { local: true }
+    } catch {
+      // Embedded also failed — give Ollama instructions as last resort
+      console.log(chalk.bold('  To run AI locally, install Ollama (free, 1 minute):'))
+      console.log()
+      console.log(`  ${chalk.bold('Step 1:')} Download Ollama from ${chalk.underline('https://ollama.com')}`)
+      console.log(`  ${chalk.bold('Step 2:')} Open the Ollama app (it runs in the background)`)
+      console.log(`  ${chalk.bold('Step 3:')} Run: ${chalk.cyan('kbot')} again — it will auto-detect Ollama`)
+      console.log()
+      return null
+    }
   }
 
   if (choice === '2' || choice === 'cloud' || choice === 'api') {

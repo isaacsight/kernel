@@ -828,11 +828,20 @@ export async function runAgent(
   // UIAdapter: defaults to TerminalUIAdapter for CLI, can be overridden for SDK use
   const ui = options.ui ?? new TerminalUIAdapter()
 
-  const apiKey = getByokKey()
-  const byokProvider = getByokProvider()
-  const isLocal = byokProvider ? isLocalProvider(byokProvider) : false
+  let apiKey = getByokKey()
+  let byokProvider = getByokProvider()
+  let isLocal = byokProvider ? isLocalProvider(byokProvider) : false
   if (!apiKey && !isLocal) {
-    throw new Error('No LLM API key configured. Run `kbot byok` to set up, or `kbot local` for local models.')
+    // Last-resort fallback: try embedded engine before erroring
+    try {
+      const { setupEmbedded } = await import('./auth.js')
+      setupEmbedded()
+      apiKey = getByokKey()
+      byokProvider = getByokProvider()
+      isLocal = true
+    } catch {
+      throw new Error('No LLM API key configured. Run `kbot auth` to set up, or `kbot local` for local models.')
+    }
   }
 
   // Step 0a: Warm Ollama model cache if using local provider
