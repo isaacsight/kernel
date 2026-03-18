@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "2.25.0",
+  "version": "2.26.0",
   "description": "Universal AI agent for your terminal. 22 specialist agents, 246 tools, 20 providers. Embedded llama.cpp engine — runs GGUF models directly, no Ollama needed. Fine-tune models with LoRA/QLoRA (local or cloud). Deploy to Vercel/Netlify/Fly.io, database tools, MCP marketplace, team mode, pair programming, plugin SDK, session recording. Self-evolving, learns your patterns.",
   "type": "module",
   "repository": {
