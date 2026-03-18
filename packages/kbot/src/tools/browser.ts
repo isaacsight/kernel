@@ -12,7 +12,7 @@ async function getPage(): Promise<any> {
   if (pageInstance) return pageInstance
 
   try {
-    const { chromium } = await import('playwright')
+    const { chromium } = await import('playwright' as string)
     browserInstance = await chromium.launch({ headless: true })
     const context = await browserInstance.newContext({
       viewport: { width: 1280, height: 720 },

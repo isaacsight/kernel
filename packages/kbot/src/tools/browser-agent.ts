@@ -53,7 +53,7 @@ async function ensureBrowser(): Promise<any> {
   // Try playwright, then playwright-core
   let chromium: any
   try {
-    const pw = await import('playwright')
+    const pw = await import('playwright' as string)
     chromium = pw.chromium
   } catch {
     try {
