@@ -1,4 +1,4 @@
-// K:BOT Interactive Tutorial — Step-by-step walkthrough for new users
+// kbot Interactive Tutorial — Step-by-step walkthrough for new users
 //
 // Triggered by /tutorial in the REPL. Walks through 6 steps covering
 // the key features of kbot: asking questions, specialists, tools,
@@ -117,7 +117,7 @@ const STEPS: TutorialStep[] = [
       `  ${CYAN('$ kbot local llama3')}    Use a specific model`,
       `  ${CYAN('/ollama')}                Switch to local in a conversation`,
       '',
-      `  ${chalk.bold('K:BOT Local')} ${DIM('(built-in)')}`,
+      `  ${chalk.bold('kbot local')} ${DIM('(built-in)')}`,
       `  ${CYAN('$ kbot kbot-local')}      Use the built-in local engine`,
       '',
       'Local models are free and private. They\'re great for simple',
@@ -192,7 +192,7 @@ export async function runTutorial(
   rl: ReturnType<typeof createInterface>,
 ): Promise<void> {
   status()
-  status(`  ${ACCENT('K:BOT Tutorial')}`)
+  status(`  ${ACCENT('kbot Tutorial')}`)
   status(`  ${DIM('A quick tour of what kbot can do. Takes about 3 minutes.')}`)
   status()
   status(`  ${DIM('Press Enter to go to the next step.')}`)

@@ -1,4 +1,4 @@
-// K:BOT Embeddings — Semantic Similarity via Ollama
+// kbot Embeddings — Semantic Similarity via Ollama
 //
 // Based on research showing embeddings-based matching outperforms
 // keyword Jaccard similarity for solution retrieval and pattern matching.

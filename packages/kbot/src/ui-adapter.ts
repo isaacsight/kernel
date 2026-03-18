@@ -1,7 +1,7 @@
-// K:BOT UIAdapter — Decouples agent output from terminal
+// kbot UIAdapter — Decouples agent output from terminal
 // CLI creates TerminalUIAdapter, SDK creates SilentAdapter or custom
 //
-// This abstraction allows K:BOT to be used as a library without any
+// This abstraction allows kbot to be used as a library without any
 // terminal dependencies leaking into consuming applications.
 
 import {

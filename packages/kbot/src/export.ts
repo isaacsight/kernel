@@ -15,7 +15,7 @@ export function exportToMarkdown(sessionId: string): string {
   const created = new Date(session.created).toLocaleString()
 
   const lines: string[] = [
-    `# K:BOT Session: ${session.name}`,
+    `# kbot Session: ${session.name}`,
     `> Created: ${created} | Turns: ${session.turnCount} | Agent: ${agentLabel}`,
     '',
   ]
@@ -30,7 +30,7 @@ export function exportToMarkdown(sessionId: string): string {
     if (turn.role === 'user') {
       lines.push('## User', '', turn.content, '', '---', '')
     } else {
-      lines.push('## K:BOT', '', turn.content, '', '---', '')
+      lines.push('## kbot', '', turn.content, '', '---', '')
     }
   }
 
@@ -69,7 +69,7 @@ export function exportToHTML(sessionId: string): string {
   const turnsHTML = session.history
     .map((turn) => {
       const roleClass = turn.role === 'user' ? 'msg-user' : 'msg-assistant'
-      const roleLabel = turn.role === 'user' ? 'User' : 'K:BOT'
+      const roleLabel = turn.role === 'user' ? 'User' : 'kbot'
       const contentHTML = formatContentHTML(turn.content)
       return `
       <div class="message ${roleClass}">
@@ -84,7 +84,7 @@ export function exportToHTML(sessionId: string): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>K:BOT Session: ${escapedName}</title>
+<title>kbot Session: ${escapedName}</title>
 <style>
   *, *::before, *::after {
     box-sizing: border-box;
@@ -222,7 +222,7 @@ export function exportToHTML(sessionId: string): string {
 <body>
 <div class="container">
   <div class="header">
-    <h1>K:BOT Session: ${escapedName}</h1>
+    <h1>kbot Session: ${escapedName}</h1>
     <div class="meta">
       <span>Created: ${escapeHTML(created)}</span>
       <span>Turns: ${session.turnCount}</span>
@@ -236,7 +236,7 @@ export function exportToHTML(sessionId: string): string {
   </div>
 
   <div class="footer">
-    Exported from K:BOT by kernel.chat group
+    Exported from kbot by kernel.chat group
   </div>
 </div>
 </body>

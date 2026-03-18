@@ -1,4 +1,4 @@
-# K:BOT Terminal Demo — recorded with VHS (https://github.com/charmbracelet/vhs)
+# kbot Terminal Demo — recorded with VHS (https://github.com/charmbracelet/vhs)
 #
 # Install: brew install vhs
 # Record:  cd packages/kbot && vhs demo.tape

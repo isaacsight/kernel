@@ -1,4 +1,4 @@
-// K:BOT Temporal Reasoning — Regret, Anticipation, and Identity
+// kbot Temporal Reasoning — Regret, Anticipation, and Identity
 //
 // Three systems that give the agent a sense of time:
 //
@@ -692,7 +692,7 @@ export function getPersonalitySummary(): string {
     : ''
 
   return (
-    `K:BOT identity (${age} days old, ${identity.totalSessions} sessions, ` +
+    `kbot identity (${age} days old, ${identity.totalSessions} sessions, ` +
     `${identity.totalMessages} messages). Communication style: ${verbosityDesc}. ` +
     `Risk profile: ${cautionDesc}. Problem-solving: ${creativityDesc} with ` +
     `${autonomyDesc} tendencies.${toolNote}${milestoneNote}`

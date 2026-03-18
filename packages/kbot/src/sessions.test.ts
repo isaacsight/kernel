@@ -1,4 +1,4 @@
-// Tests for K:BOT Sessions — formatSessionList
+// Tests for kbot Sessions — formatSessionList
 import { describe, it, expect } from 'vitest'
 import { formatSessionList, type Session } from './sessions.js'
 

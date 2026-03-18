@@ -1,4 +1,4 @@
-// K:BOT Prompt Cache — Reduce redundant system prompt tokens
+// kbot Prompt Cache — Reduce redundant system prompt tokens
 //
 // System prompts are large and mostly static. By hashing the stable
 // portions and caching them, we can use Anthropic's prompt caching

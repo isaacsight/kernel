@@ -1,4 +1,4 @@
-// K:BOT Team Mode — Coordinated multi-instance collaboration over local TCP
+// kbot Team Mode — Coordinated multi-instance collaboration over local TCP
 //
 // Usage:
 //   kbot team start                    # Start server + join as coordinator

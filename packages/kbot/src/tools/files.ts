@@ -1,4 +1,4 @@
-// K:BOT File Tools — Read, write, edit, glob, grep
+// kbot File Tools — Read, write, edit, glob, grep
 // All operations are local — zero API calls.
 // Supports diff-before-apply in normal/strict modes.
 

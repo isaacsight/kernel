@@ -1,4 +1,4 @@
-// K:BOT Deploy Tools — One-command deployment to Vercel, Netlify, Cloudflare, Fly.io, Railway
+// kbot Deploy Tools — One-command deployment to Vercel, Netlify, Cloudflare, Fly.io, Railway
 //
 // Auto-detects the target platform from project config files and deploys.
 // Also provides status, logs, rollback, and env management.

@@ -1,7 +1,7 @@
-// K:BOT Autonomous Planner — Plan-then-Execute for complex tasks
+// kbot Autonomous Planner — Plan-then-Execute for complex tasks
 //
 // This is the core missing piece vs Claude Code. When given a complex task,
-// K:BOT should:
+// kbot should:
 //   1. EXPLORE — read files, understand the codebase
 //   2. PLAN — decompose into steps, identify files to change
 //   3. CONFIRM — show the plan to the user for approval

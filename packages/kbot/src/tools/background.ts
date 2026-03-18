@@ -1,4 +1,4 @@
-// K:BOT Background Tasks — Run long commands asynchronously
+// kbot Background Tasks — Run long commands asynchronously
 //
 // Mirrors Claude Code's run_in_background + TaskOutput pattern.
 // Start a command, continue working, check output later.

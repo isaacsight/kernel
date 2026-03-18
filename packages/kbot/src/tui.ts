@@ -1,4 +1,4 @@
-// K:BOT TUI — Rich Terminal Interface
+// kbot TUI — Rich Terminal Interface
 //
 // Panels, progress bars, split views, sparklines, dashboard.
 // Uses raw ANSI escape codes — no extra dependencies beyond chalk.

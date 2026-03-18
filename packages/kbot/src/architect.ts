@@ -1,4 +1,4 @@
-// K:BOT Architect Mode — Dual-Agent Plan-Review-Implement Loop
+// kbot Architect Mode — Dual-Agent Plan-Review-Implement Loop
 //
 // Splits complex tasks between two roles:
 //   Architect: plans, reviews, approves/rejects

@@ -1,4 +1,4 @@
-// K:BOT Handoff System — Inter-agent routing and context transfer
+// kbot Handoff System — Inter-agent routing and context transfer
 //
 // When a specialist agent detects that a query falls outside its domain,
 // it can hand off to a more appropriate specialist. The handoff system:

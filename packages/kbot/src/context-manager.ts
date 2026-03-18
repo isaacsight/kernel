@@ -1,4 +1,4 @@
-// K:BOT Context Manager — RLM-style context delegation
+// kbot Context Manager — RLM-style context delegation
 //
 // Based on Recursive Language Models (Prime Intellect, Dec 2025):
 // Instead of stuffing everything into one context window, the agent

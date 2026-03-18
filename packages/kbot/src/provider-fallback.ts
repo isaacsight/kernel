@@ -1,4 +1,4 @@
-// K:BOT Provider Fallback — Multi-level retry, failover, and load balancing
+// kbot Provider Fallback — Multi-level retry, failover, and load balancing
 //
 // Inspired by LiteLLM's fallback strategy. Three levels of resilience:
 //   1. Retry — exponential backoff on same provider (1s, 2s, 4s)

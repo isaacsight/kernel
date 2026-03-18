@@ -1,4 +1,4 @@
-// K:BOT Self-Evaluation Loop — Ragas-inspired response quality assessment
+// kbot Self-Evaluation Loop — Ragas-inspired response quality assessment
 //
 // Evaluates agent responses on two axes (inspired by Ragas framework):
 //   1. FAITHFULNESS — does the response stay true to the provided context?

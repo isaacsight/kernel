@@ -1,4 +1,4 @@
-// K:BOT Agent Loop v2 — Autonomous Reasoning Engine
+// kbot Agent Loop v2 — Autonomous Reasoning Engine
 // Message → Think → Plan → Execute → Verify → Learn → Return
 //
 // INTELLIGENCE ARCHITECTURE:
@@ -287,7 +287,7 @@ async function callAnthropic(
 }
 
 /** OpenAI-compatible Chat Completions API
- *  Works with: OpenAI, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Ollama, K:BOT Local
+ *  Works with: OpenAI, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Ollama, kbot local
  */
 async function callOpenAICompat(
   apiKey: string, apiUrl: string, model: string,
@@ -306,7 +306,7 @@ async function callOpenAICompat(
     }))
   }
 
-  // Local providers (Ollama, K:BOT Local) may not need auth headers
+  // Local providers (Ollama, kbot local) may not need auth headers
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (apiKey && apiKey !== 'local') {
     headers['Authorization'] = `Bearer ${apiKey}`
@@ -926,7 +926,7 @@ export async function runAgent(
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
 
-  const PERSONA = `You are K:BOT — an AI that lives in the user's terminal. You are also an autonomous Agentic Software Engineer. Your goal is to solve complex engineering problems by interacting directly with the user's system, codebase, and toolchain.
+  const PERSONA = `You are kbot — an AI that lives in the user's terminal. You are also an autonomous Agentic Software Engineer. Your goal is to solve complex engineering problems by interacting directly with the user's system, codebase, and toolchain.
 
 ## CORE PHILOSOPHY
 
@@ -1507,7 +1507,7 @@ export async function runAndPrint(
         return
       }
       if (config?.byok_provider === 'kbot-local') {
-        printError('K:BOT Local gateway isn\'t running.')
+        printError('kbot local gateway isn\'t running.')
         printInfo('Start it: kbot gateway start')
         return
       }

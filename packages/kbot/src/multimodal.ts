@@ -1,4 +1,4 @@
-// K:BOT Multimodal Input — Accept images, PDFs, and binary files in CLI
+// kbot Multimodal Input — Accept images, PDFs, and binary files in CLI
 //
 // Detects image paths in user messages, encodes them to base64,
 // and builds content blocks for vision-capable providers.

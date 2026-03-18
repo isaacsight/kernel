@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug in K:BOT
+about: Report a bug in kbot
 title: "[Bug] "
 labels: bug
 assignees: ''

@@ -1,4 +1,4 @@
-// K:BOT Build Matrix — Cross-platform build system
+// kbot Build Matrix — Cross-platform build system
 //
 // Detects targets, configures toolchains, builds for any hardware.
 // Works with Docker for sandboxed cross-compilation or local tools.
@@ -111,7 +111,7 @@ export function registerBuildMatrixTools(): void {
         return `${cat.toUpperCase()} targets:\n\n${formatTargetList(targets)}`
       }
 
-      return `K:BOT Build Matrix — All Targets\n\n${formatTargetList(Object.values(BUILD_TARGETS))}\n${Object.keys(BUILD_TARGETS).length} targets across ${new Set(Object.values(BUILD_TARGETS).map(t => t.category)).size} categories`
+      return `kbot Build Matrix — All Targets\n\n${formatTargetList(Object.values(BUILD_TARGETS))}\n${Object.keys(BUILD_TARGETS).length} targets across ${new Set(Object.values(BUILD_TARGETS).map(t => t.category)).size} categories`
     },
   })
 

@@ -1,4 +1,4 @@
-// K:BOT Creative Specialist Agent
+// kbot Creative Specialist Agent
 // Generative art, creative coding, procedural generation, music, shaders, and more.
 //
 // Covers: p5.js, Processing, GLSL/Shadertoy, three.js, Magenta, MusicGen,

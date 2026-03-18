@@ -1,4 +1,4 @@
-// K:BOT Cloud Sync — Persist learning data across machines via kbot-engine
+// kbot Cloud Sync — Persist learning data across machines via kbot-engine
 //
 // Syncs patterns, solutions, profile, and knowledge to the cloud.
 // Pull on startup (if cloud has newer data), push after learning.

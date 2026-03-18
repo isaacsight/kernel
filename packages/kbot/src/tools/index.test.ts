@@ -1,4 +1,4 @@
-// K:BOT Tool Registry Tests
+// kbot Tool Registry Tests
 import { describe, it, expect } from 'vitest'
 import {
   registerTool, getTool, getAllTools, getToolsForTier,

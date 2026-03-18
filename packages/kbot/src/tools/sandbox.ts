@@ -1,4 +1,4 @@
-// K:BOT Sandbox Execution — Run untrusted code in isolated Docker containers
+// kbot Sandbox Execution — Run untrusted code in isolated Docker containers
 //
 // Supports multiple languages. Auto-creates and cleans up containers.
 // Falls back to local execution with warnings if Docker isn't available.

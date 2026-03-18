@@ -1,4 +1,4 @@
-// K:BOT Changelog Generator — Auto-generate release notes from git history
+// kbot Changelog Generator — Auto-generate release notes from git history
 //
 // Usage:
 //   import { generateChangelog, formatChangelogTerminal } from './changelog.js'

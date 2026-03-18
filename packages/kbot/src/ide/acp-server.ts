@@ -1,4 +1,4 @@
-// K:BOT ACP Server — Agent Client Protocol for JetBrains IDEs
+// kbot ACP Server — Agent Client Protocol for JetBrains IDEs
 //
 // JSON-RPC over stdio, similar to MCP but with agent-specific semantics.
 // ACP defines conversations, capabilities, and agent identity.
@@ -41,7 +41,7 @@ interface AcpCapabilities {
 }
 
 const AGENT_IDENTITY = {
-  name: 'K:BOT',
+  name: 'kbot',
   version: '2.22.1',
   description: 'Open-source terminal AI agent — 22 specialist agents, 223 tools, 20 providers, local-first',
   capabilities: ['chat', 'codeAction', 'diagnostics', 'tools'] as const,
@@ -356,7 +356,7 @@ export async function startAcpServer(config: BridgeConfig = {}): Promise<void> {
     }
   }
 
-  process.stderr.write('K:BOT ACP server started\n')
+  process.stderr.write('kbot ACP server started\n')
 
   // Keep process alive
   await new Promise<void>(() => {})

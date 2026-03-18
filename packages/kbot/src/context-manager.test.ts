@@ -1,4 +1,4 @@
-// Tests for K:BOT Context Manager
+// Tests for kbot Context Manager
 import { describe, it, expect } from 'vitest'
 import {
   estimateTokens,

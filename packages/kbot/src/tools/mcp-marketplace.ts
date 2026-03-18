@@ -1,4 +1,4 @@
-// K:BOT MCP Marketplace — Discover, install, and manage MCP servers
+// kbot MCP Marketplace — Discover, install, and manage MCP servers
 //
 // Lets users browse an MCP server registry, install servers (npm or git),
 // and manage their ~/.kbot/mcp-config.json configuration.

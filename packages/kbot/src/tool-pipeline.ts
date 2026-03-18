@@ -1,4 +1,4 @@
-// K:BOT Tool Execution Middleware Pipeline
+// kbot Tool Execution Middleware Pipeline
 // Composable Express/Koa-style middleware stack for tool execution.
 // Each middleware calls next() to continue the chain.
 //

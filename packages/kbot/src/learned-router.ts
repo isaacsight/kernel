@@ -1,4 +1,4 @@
-// K:BOT Learned Router — MasRouter-style Cascaded Routing
+// kbot Learned Router — MasRouter-style Cascaded Routing
 //
 // Based on MasRouter (ACL 2025): instead of calling an LLM to classify
 // intent every time, learn from actual routing outcomes and cascade

@@ -1,6 +1,6 @@
-// K:BOT Permission System — Confirmation before destructive operations
+// kbot Permission System — Confirmation before destructive operations
 //
-// Like Claude Code's permission modes. K:BOT asks before:
+// Like Claude Code's permission modes. kbot asks before:
 //   - git push, git reset --hard, git checkout -- files
 //   - rm -rf (non-trivial deletes)
 //   - Docker operations that affect running containers

@@ -1,4 +1,4 @@
-// K:BOT LSP Client — Full Language Server Protocol integration
+// kbot LSP Client — Full Language Server Protocol integration
 //
 // Persistent LSP client connections for language intelligence:
 //   - Go-to-definition, find-references, hover, completions

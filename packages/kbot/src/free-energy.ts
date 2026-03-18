@@ -1,4 +1,4 @@
-// K:BOT Free Energy Principle — Active Inference Engine
+// kbot Free Energy Principle — Active Inference Engine
 //
 // Based on Karl Friston's Free Energy Principle (2006-2024):
 // All adaptive systems minimize variational free energy — the difference

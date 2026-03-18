@@ -1,4 +1,4 @@
-// K:BOT MCP Server — Model Context Protocol for IDE integration
+// kbot MCP Server — Model Context Protocol for IDE integration
 //
 // Stdio JSON-RPC server implementing MCP specification.
 // Exposes kbot's tools, agent loop, and resources to any MCP-compatible IDE.
@@ -70,11 +70,11 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       tools: [
         {
           name: 'kbot_chat',
-          description: 'Send a message to K:BOT and get an agent response. Supports 22 specialist agents with automatic routing.',
+          description: 'Send a message to kbot and get an agent response. Supports 22 specialist agents with automatic routing.',
           inputSchema: {
             type: 'object' as const,
             properties: {
-              message: { type: 'string', description: 'The message to send to K:BOT' },
+              message: { type: 'string', description: 'The message to send to kbot' },
               agent: { type: 'string', description: 'Force a specific agent (kernel, researcher, coder, writer, analyst, etc.). Defaults to auto-routing.' },
             },
             required: ['message'],
@@ -153,7 +153,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
         },
         {
           name: 'kbot_status',
-          description: 'Get K:BOT status including agent info, learning stats, and session count.',
+          description: 'Get kbot status including agent info, learning stats, and session count.',
           inputSchema: {
             type: 'object' as const,
             properties: {},
@@ -161,7 +161,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
         },
         {
           name: 'kbot_agent',
-          description: 'Switch the active K:BOT agent or list available agents.',
+          description: 'Switch the active kbot agent or list available agents.',
           inputSchema: {
             type: 'object' as const,
             properties: {
@@ -171,7 +171,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
         },
         {
           name: 'kbot_remember',
-          description: 'Teach K:BOT a fact that persists across sessions.',
+          description: 'Teach kbot a fact that persists across sessions.',
           inputSchema: {
             type: 'object' as const,
             properties: {
@@ -436,13 +436,13 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
         {
           uri: 'kbot://memory',
           name: 'Persistent Memory',
-          description: 'K:BOT persistent memory — learned facts, patterns, and user preferences',
+          description: 'kbot persistent memory — learned facts, patterns, and user preferences',
           mimeType: 'text/plain',
         },
         {
           uri: 'kbot://agents',
           name: 'Available Agents',
-          description: 'List of all available K:BOT specialist agents',
+          description: 'List of all available kbot specialist agents',
           mimeType: 'application/json',
         },
         {
@@ -538,5 +538,5 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
   await server.connect(transport)
 
   // Log to stderr (stdout is for JSON-RPC)
-  process.stderr.write('K:BOT MCP server started\n')
+  process.stderr.write('kbot MCP server started\n')
 }

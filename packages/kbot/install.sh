@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install K:BOT — Kernel's terminal AI agent
+# Install kbot — Kernel's terminal AI agent
 # Usage: curl -fsSL https://kernel.chat/install.sh | bash
 #
 # This script:
@@ -19,7 +19,7 @@ RESET="\033[0m"
 
 echo ""
 echo -e "${PURPLE}${BOLD}┌─────────────────────────────────────┐${RESET}"
-echo -e "${PURPLE}${BOLD}│  K:BOT — Kernel Terminal Agent      │${RESET}"
+echo -e "${PURPLE}${BOLD}│  kbot — Kernel Terminal Agent        │${RESET}"
 echo -e "${PURPLE}${BOLD}│  17 agents. Multi-model. Your CLI.  │${RESET}"
 echo -e "${PURPLE}${BOLD}└─────────────────────────────────────┘${RESET}"
 echo ""
@@ -55,7 +55,7 @@ mkdir -p "$HOME/.kbot/memory"
 mkdir -p "$HOME/.kbot/history"
 
 echo ""
-echo -e "${GREEN}${BOLD}✓ K:BOT installed successfully!${RESET}"
+echo -e "${GREEN}${BOLD}✓ kbot installed successfully!${RESET}"
 echo ""
 
 # Check if already configured

@@ -1,4 +1,4 @@
-// K:BOT A2A (Agent-to-Agent) Protocol Support
+// kbot A2A (Agent-to-Agent) Protocol Support
 //
 // Implements Google's Agent2Agent protocol for agent interoperability:
 // - Agent Card: JSON descriptor of kbot's capabilities
@@ -181,7 +181,7 @@ const EXTRA_SKILLS: AgentSkill[] = [
   {
     id: 'developer',
     name: 'Developer',
-    description: 'K:BOT self-improvement specialist — builds and extends kbot itself',
+    description: 'kbot self-improvement specialist — builds and extends kbot itself',
     tags: ['kbot', 'self-improvement', 'typescript', 'tooling'],
   },
 ]

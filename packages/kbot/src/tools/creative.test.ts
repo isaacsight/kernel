@@ -1,4 +1,4 @@
-// K:BOT Creative Tools Tests
+// kbot Creative Tools Tests
 import { describe, it, expect, afterEach } from 'vitest'
 import { existsSync, readFileSync, rmSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'

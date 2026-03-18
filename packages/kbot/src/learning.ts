@@ -1,4 +1,4 @@
-// K:BOT Recursive Language Learning Engine
+// kbot Recursive Language Learning Engine
 //
 // GOAL: Reduce token and message usage over time by learning from interactions.
 //

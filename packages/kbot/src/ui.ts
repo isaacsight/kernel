@@ -1,4 +1,4 @@
-// K:BOT Terminal UI — Modern 2026 CLI design
+// kbot Terminal UI — Modern 2026 CLI design
 // Follows: clig.dev guidelines, Claude Code patterns, gh CLI conventions.
 // Supports NO_COLOR, TTY detection. An 8th grader can read every message.
 //
@@ -130,12 +130,12 @@ function particleGridArt(): string {
 export function banner(version?: string): string {
   const v = version ? chalk.dim(` v${version}`) : ''
   const grid = particleGridArt()
-  // If truecolor supported, use gradient for the K:BOT banner text
+  // If truecolor supported, use gradient for the kbot banner text
   // Gradient from accent violet (#A78BFA) to cyan (#67E8F9)
   const caps = getTerminalCaps()
   const bannerText = caps.truecolor
-    ? gradient('K:BOT', [167, 139, 250], [103, 232, 249])
-    : ACCENT('K:BOT')
+    ? gradient('kbot', [167, 139, 250], [103, 232, 249])
+    : ACCENT('kbot')
   const title = `  ${bannerText}${v}`
   return `\n${grid}\n${title}\n`
 }
@@ -148,8 +148,8 @@ export function bannerAuth(): string {
   const grid = particleGridArt()
   const caps = getTerminalCaps()
   const bannerText = caps.truecolor
-    ? gradient('K:BOT', [167, 139, 250], [103, 232, 249])
-    : ACCENT('K:BOT')
+    ? gradient('kbot', [167, 139, 250], [103, 232, 249])
+    : ACCENT('kbot')
   return `\n${grid}\n  ${bannerText} ${DIM('setup')}\n`
 }
 
@@ -275,7 +275,7 @@ export function divider(): void {
 export function printHelp(): void {
   const lines = [
     '',
-    `  ${chalk.bold('Just type what you need.')} K:BOT figures out the rest.`,
+    `  ${chalk.bold('Just type what you need.')} kbot figures out the rest.`,
     '',
     `  ${chalk.bold('Examples')}`,
     `  ${DIM('─'.repeat(50))}`,

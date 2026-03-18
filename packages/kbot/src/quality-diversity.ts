@@ -1,4 +1,4 @@
-// K:BOT MAP-Elites Quality-Diversity Engine
+// kbot MAP-Elites Quality-Diversity Engine
 //
 // Implements the MAP-Elites algorithm adapted for an AI agent's learning engine.
 // Maintains an archive of high-quality solutions indexed by behavioral descriptors,

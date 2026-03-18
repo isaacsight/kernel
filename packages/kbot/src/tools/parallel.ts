@@ -1,4 +1,4 @@
-// K:BOT Parallel Tool Execution
+// kbot Parallel Tool Execution
 //
 // Runs multiple tools concurrently via Promise.all.
 // Claude Code's biggest speed advantage — multiple independent

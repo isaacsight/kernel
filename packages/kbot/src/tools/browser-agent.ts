@@ -1,4 +1,4 @@
-// K:BOT Browser Agent — Autonomous browser agent mode
+// kbot Browser Agent — Autonomous browser agent mode
 // The model sees the page, decides actions, and executes them in a loop.
 // Requires: npx playwright install (run once)
 //

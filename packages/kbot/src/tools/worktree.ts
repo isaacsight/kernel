@@ -1,4 +1,4 @@
-// K:BOT Worktree — Git worktree isolation for safe experimentation
+// kbot Worktree — Git worktree isolation for safe experimentation
 //
 // Like Claude Code's EnterWorktree. Creates an isolated copy of the repo
 // so the agent can experiment without affecting the main working tree.
@@ -216,15 +216,15 @@ export function registerWorktreeTools(): void {
 
   registerTool({
     name: 'worktree_list',
-    description: 'List all K:BOT worktrees and git worktrees.',
+    description: 'List all kbot worktrees and git worktrees.',
     parameters: {},
     tier: 'free',
     async execute() {
       const lines: string[] = []
 
-      // K:BOT managed worktrees
+      // kbot managed worktrees
       if (worktrees.size > 0) {
-        lines.push('K:BOT worktrees:')
+        lines.push('kbot worktrees:')
         for (const [id, wt] of worktrees) {
           const exists = existsSync(wt.path) ? '✓' : '✗'
           lines.push(`  ${exists} #${id}  ${wt.branch.padEnd(30)} ${wt.path}`)

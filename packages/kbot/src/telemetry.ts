@@ -1,4 +1,4 @@
-// K:BOT Telemetry — Structured JSON event logging, local-only
+// kbot Telemetry — Structured JSON event logging, local-only
 //
 // Writes telemetry events to ~/.kbot/telemetry/ as NDJSON files (one per day).
 // No external reporting — all data stays on the user's machine.

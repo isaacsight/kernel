@@ -1,4 +1,4 @@
-// K:BOT Contribute Tools — Find issues, generate fixes, open PRs
+// kbot Contribute Tools — Find issues, generate fixes, open PRs
 //
 // Makes kbot a visible participant in open source.
 // Every PR has kbot branding. Every contribution is a billboard.
@@ -155,7 +155,7 @@ export function registerContributeTools(): void {
 
       const commitMsg = String(args.commit_message || args.title)
       const fixesLine = args.issue ? `\n\nFixes #${args.issue}` : ''
-      const prBody = String(args.body) + fixesLine + '\n\n---\n*This contribution was prepared with [K:BOT](https://www.npmjs.com/package/@kernel.chat/kbot) — the open-source terminal AI agent*'
+      const prBody = String(args.body) + fixesLine + '\n\n---\n*This contribution was prepared with [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — the open-source terminal AI agent*'
 
       try {
         // Fork, commit, push, create PR

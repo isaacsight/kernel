@@ -1,4 +1,4 @@
-// K:BOT Memory Tools — Active memory management (Letta/MemGPT-inspired)
+// kbot Memory Tools — Active memory management (Letta/MemGPT-inspired)
 //
 // Gives agents the ability to self-edit their persistent memory:
 //   - Save facts, preferences, patterns, and solutions

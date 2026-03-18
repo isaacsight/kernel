@@ -1,4 +1,4 @@
-// K:BOT GitHub Tools — Access all public GitHub knowledge
+// kbot GitHub Tools — Access all public GitHub knowledge
 // Search repos, read code, browse issues, pull documentation.
 // No auth required for public repos.
 

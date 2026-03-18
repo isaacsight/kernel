@@ -1,4 +1,4 @@
-// K:BOT IDE Matrix — Protocol adapters for universal IDE integration
+// kbot IDE Matrix — Protocol adapters for universal IDE integration
 //
 // Three protocols, every major IDE:
 //   MCP  → VS Code, Cursor, Windsurf, Zed, Neovim

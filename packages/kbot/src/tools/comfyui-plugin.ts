@@ -1,4 +1,4 @@
-// K:BOT ComfyUI Plugin — Local AI image generation via ComfyUI
+// kbot ComfyUI Plugin — Local AI image generation via ComfyUI
 // Connects to a locally-running ComfyUI instance at http://127.0.0.1:8188
 // for txt2img, img2img, model listing, and queue management.
 

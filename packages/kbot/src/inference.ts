@@ -1,4 +1,4 @@
-// K:BOT Embedded Inference Engine
+// kbot Embedded Inference Engine
 // Runs GGUF models directly via node-llama-cpp — no Ollama, no external service needed.
 // GPU-accelerated on Mac (Metal), Linux (CUDA/Vulkan), Windows (CUDA/Vulkan).
 //

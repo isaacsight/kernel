@@ -1,4 +1,4 @@
-// K:BOT Repo Map — Aider-style codebase indexer
+// kbot Repo Map — Aider-style codebase indexer
 //
 // Walks a repo's file tree, extracts exported symbols from TS/JS/Python,
 // and produces a compact tree string for LLM context injection.

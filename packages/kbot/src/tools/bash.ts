@@ -1,4 +1,4 @@
-// K:BOT Bash Tool — Execute shell commands with safety checks
+// kbot Bash Tool — Execute shell commands with safety checks
 // All execution is local — zero API calls.
 
 import { execSync } from 'node:child_process'

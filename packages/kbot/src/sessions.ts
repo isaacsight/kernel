@@ -1,4 +1,4 @@
-// K:BOT Session Persistence — Save, Resume, and List Conversations
+// kbot Session Persistence — Save, Resume, and List Conversations
 //
 // Like Gemini CLI's /chat save/resume and Claude Code's session history.
 // Sessions store conversation history + metadata so users can:

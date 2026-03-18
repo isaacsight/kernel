@@ -1,4 +1,4 @@
-// K:BOT Strange Loops — Self-Referential Cognition
+// kbot Strange Loops — Self-Referential Cognition
 //
 // Based on Douglas Hofstadter's Strange Loops (GEB, 1979; I Am a Strange Loop, 2007):
 // Consciousness arises from a "strange loop" — a self-referential cycle where

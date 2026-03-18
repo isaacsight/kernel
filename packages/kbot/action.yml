@@ -1,5 +1,5 @@
-name: 'K:BOT AI Agent'
-description: 'Run K:BOT in CI/CD pipelines for code review, generation, analysis, and more.'
+name: 'kbot AI Agent'
+description: 'Run kbot in CI/CD pipelines for code review, generation, analysis, and more.'
 author: 'kernel.chat group'
 
 branding:
@@ -28,7 +28,7 @@ inputs:
     required: false
     default: '20'
   kbot-version:
-    description: 'K:BOT version to install (npm version spec)'
+    description: 'kbot version to install (npm version spec)'
     required: false
     default: 'latest'
 
@@ -45,11 +45,11 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: Install K:BOT
+    - name: Install kbot
       shell: bash
       run: npm install -g "@kernel.chat/kbot@${{ inputs.kbot-version }}"
 
-    - name: Run K:BOT
+    - name: Run kbot
       id: run-kbot
       shell: bash
       env:

@@ -1,4 +1,4 @@
-// K:BOT MCP-Native Plugin System
+// kbot MCP-Native Plugin System
 //
 // Plugins are MCP servers — discovered, started, and consumed natively.
 // Two discovery methods:

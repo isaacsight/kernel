@@ -1,4 +1,4 @@
-// K:BOT LSP Tools — Language intelligence for the agent
+// kbot LSP Tools — Language intelligence for the agent
 //
 // Exposes LSP capabilities as kbot tools so the agent can:
 //   - Navigate code (go-to-definition, find-references)

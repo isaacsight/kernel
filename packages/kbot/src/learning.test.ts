@@ -1,4 +1,4 @@
-// K:BOT Learning Engine Tests
+// kbot Learning Engine Tests
 import { describe, it, expect } from 'vitest'
 import {
   extractKeywords,

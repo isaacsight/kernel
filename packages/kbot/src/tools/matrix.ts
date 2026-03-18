@@ -1,4 +1,4 @@
-// K:BOT Matrix Tools — Agent creation and invocation from within conversations
+// kbot Matrix Tools — Agent creation and invocation from within conversations
 // The AI can spawn specialist agents on-the-fly to delegate sub-tasks.
 
 import { registerTool } from './index.js'

@@ -1,4 +1,4 @@
-// K:BOT Task Ledger — Dual-ledger orchestration for autonomous planning
+// kbot Task Ledger — Dual-ledger orchestration for autonomous planning
 //
 // Implements the Magentic-One / AutoGen dual-ledger pattern:
 //   1. TASK LEDGER — Accumulated facts, hypotheses, and the current plan

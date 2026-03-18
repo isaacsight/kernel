@@ -1,4 +1,4 @@
-// K:BOT Streaming with Thinking — Show reasoning steps during generation
+// kbot Streaming with Thinking — Show reasoning steps during generation
 //
 // Two modes:
 //   1. Extended thinking (Claude) — shows <thinking> blocks in dim text

@@ -1,4 +1,4 @@
-// K:BOT Magenta.js Music Plugin
+// kbot Magenta.js Music Plugin
 //
 // Connect to a locally-running Magenta.js server for AI music generation.
 // Since @magenta/music is browser-only, this plugin wraps a lightweight

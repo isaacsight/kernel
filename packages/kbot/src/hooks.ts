@@ -1,4 +1,4 @@
-// K:BOT Hooks — Pre/post tool execution hooks
+// kbot Hooks — Pre/post tool execution hooks
 //
 // Users can define hooks in .kbot/hooks/ that run before or after tools.
 // Like Claude Code's hooks system.

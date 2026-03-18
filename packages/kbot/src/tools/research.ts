@@ -1,4 +1,4 @@
-// K:BOT Research & Academic Tools — Scientific code directories
+// kbot Research & Academic Tools — Scientific code directories
 // Bridges kbot to PyPI, CRAN, Cargo, arXiv, Semantic Scholar,
 // Papers With Code, HuggingFace, DOI, and dataset registries.
 

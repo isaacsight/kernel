@@ -1,6 +1,6 @@
-# Contributing to K:BOT
+# Contributing to kbot
 
-Thanks for your interest in contributing to K:BOT.
+Thanks for your interest in contributing to kbot.
 
 ## Quick Start
 

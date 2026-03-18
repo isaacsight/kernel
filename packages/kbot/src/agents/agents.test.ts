@@ -1,4 +1,4 @@
-// K:BOT Agent Definition Tests — Creative & Developer
+// kbot Agent Definition Tests — Creative & Developer
 import { describe, it, expect } from 'vitest'
 
 import {
@@ -70,7 +70,7 @@ describe('Creative Agent', () => {
 describe('Developer Agent', () => {
   it('has valid preset structure', () => {
     expect(DEVELOPER_PRESET.name).toBe('Developer')
-    expect(DEVELOPER_PRESET.prompt).toContain('K:BOT Developer agent')
+    expect(DEVELOPER_PRESET.prompt).toContain('kbot Developer agent')
     expect(DEVELOPER_PRESET.prompt.length).toBeGreaterThan(500)
   })
 

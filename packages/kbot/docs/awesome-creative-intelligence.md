@@ -199,7 +199,7 @@ Creative intelligence sits at the intersection of computation, art, and artifici
 
 - **[GameMasterAI](https://github.com/rogerchang1108/GameMasterAI)** — An AI-powered game master that generates dynamic narratives, encounters, and world events for tabletop and digital RPGs using language model reasoning. `Python`
 
-- **[K:BOT](https://kernel.chat)** — An open-source terminal AI agent with 37 specialist agents including creative, writing, design, and analysis capabilities. Features autonomous planning, learning from interactions, and multi-provider AI support. `TypeScript` [GitHub](https://github.com/isaacsight/kernel)
+- **[kbot](https://kernel.chat)** — An open-source terminal AI agent with 37 specialist agents including creative, writing, design, and analysis capabilities. Features autonomous planning, learning from interactions, and multi-provider AI support. `TypeScript` [GitHub](https://github.com/isaacsight/kernel)
 
 ## Scientific Creative AI
 

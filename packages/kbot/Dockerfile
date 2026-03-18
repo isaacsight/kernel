@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 LABEL maintainer="kernel.chat group"
-LABEL description="K:BOT — Universal AI agent for your terminal. 11 specialist agents, 214 tools, 20 providers."
+LABEL description="kbot — Universal AI agent for your terminal. 11 specialist agents, 214 tools, 20 providers."
 LABEL org.opencontainers.image.source="https://github.com/isaacsight/kernel"
 LABEL org.opencontainers.image.license="MIT"
 

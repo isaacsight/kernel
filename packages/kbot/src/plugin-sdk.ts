@@ -1,4 +1,4 @@
-// K:BOT Plugin SDK — One-file plugin authoring for kbot
+// kbot Plugin SDK — One-file plugin authoring for kbot
 //
 // Extends the existing plugins.ts drop-in system with a full SDK:
 //   - Structured plugin interface (tools, hooks, commands, lifecycle)

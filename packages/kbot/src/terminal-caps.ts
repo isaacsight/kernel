@@ -1,4 +1,4 @@
-// K:BOT Terminal Capability Detection — zero dependencies
+// kbot Terminal Capability Detection — zero dependencies
 //
 // Detects what the current terminal supports and provides feature flags.
 // Enables progressive enhancement: Braille sparklines, inline images

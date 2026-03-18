@@ -1,4 +1,4 @@
-// K:BOT Tool Registry v2
+// kbot Tool Registry v2
 // Tools are executed locally — only AI reasoning goes through the API.
 // This saves tokens, messages, and latency.
 //
@@ -288,6 +288,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './research.js',        registerFn: 'registerResearchTools' },
   { path: './containers.js',      registerFn: 'registerContainerTools' },
   { path: './vfx.js',             registerFn: 'registerVfxTools' },
+  { path: './gamedev.js',          registerFn: 'registerGamedevTools' },
   { path: './audit.js',           registerFn: 'registerAuditTools' },
   { path: './documents.js',       registerFn: 'registerDocumentTools' },
   { path: './contribute.js',      registerFn: 'registerContributeTools' },

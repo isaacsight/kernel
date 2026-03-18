@@ -1,4 +1,4 @@
-// K:BOT Graph Memory — Knowledge graph for entity-relationship reasoning
+// kbot Graph Memory — Knowledge graph for entity-relationship reasoning
 //
 // Extends flat memory (memory.ts, memory-tools.ts) with a graph structure:
 // entities connected by typed relationships so the agent can reason about

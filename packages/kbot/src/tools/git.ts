@@ -1,4 +1,4 @@
-// K:BOT Git Tools — Git operations executed locally
+// kbot Git Tools — Git operations executed locally
 // Zero API calls. All operations happen on the local repo.
 
 import { execSync } from 'node:child_process'

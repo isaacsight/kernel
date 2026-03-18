@@ -1,4 +1,4 @@
-// K:BOT Memory — Persistent local memory across sessions
+// kbot Memory — Persistent local memory across sessions
 // Stored in ~/.kbot/memory/context.md
 // Keeps track of accumulated knowledge about the user's projects
 
@@ -45,7 +45,7 @@ export function appendMemory(entry: string): void {
 /** Clear all memory */
 export function clearMemory(): void {
   ensureMemoryDir()
-  writeFileSync(CONTEXT_FILE, '# K:BOT Memory\n\nPersistent knowledge across sessions.\n')
+  writeFileSync(CONTEXT_FILE, '# kbot Memory\n\nPersistent knowledge across sessions.\n')
 }
 
 /** Get memory for inclusion in system prompt */

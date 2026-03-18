@@ -1,4 +1,4 @@
-// K:BOT Pair Programming Mode — Proactive file watcher + AI copilot
+// kbot Pair Programming Mode — Proactive file watcher + AI copilot
 //
 // Watches the current directory for file changes and provides real-time
 // suggestions: type errors, lint issues, missing tests, security flags,
@@ -944,7 +944,7 @@ export async function startPairMode(options: PairOptions = {}): Promise<void> {
 
   // Print banner
   process.stderr.write('\n')
-  process.stderr.write(`  ${ACCENT('K:BOT')} ${chalk.bold('pair')} ${DIM('— watching for changes')}\n`)
+  process.stderr.write(`  ${ACCENT('kbot')} ${chalk.bold('pair')} ${DIM('— watching for changes')}\n`)
   process.stderr.write(`  ${DIM('Path:')}      ${watchPath}\n`)
 
   const enabledChecks = Object.entries(config.checks)
@@ -1157,7 +1157,7 @@ export function registerPairCommand(program: Command): void {
       // --config: show current config and exit
       if (opts?.config) {
         const config = loadPairConfig()
-        process.stderr.write(`\n  ${ACCENT('K:BOT')} ${chalk.bold('pair')} ${DIM('config')}\n`)
+        process.stderr.write(`\n  ${ACCENT('kbot')} ${chalk.bold('pair')} ${DIM('config')}\n`)
         process.stderr.write(`  ${DIM('Path:')} ${PAIR_CONFIG_PATH}\n\n`)
         process.stderr.write(`  ${JSON.stringify(config, null, 2).split('\n').join('\n  ')}\n\n`)
         return

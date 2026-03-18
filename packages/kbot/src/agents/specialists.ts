@@ -1,4 +1,4 @@
-// K:BOT Specialist Agents
+// kbot Specialist Agents
 // These are the core and extended specialist agents that power kbot's
 // agent routing system. Each has a focused system prompt and visual identity.
 //

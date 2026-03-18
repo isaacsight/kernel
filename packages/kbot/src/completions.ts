@@ -1,4 +1,4 @@
-// K:BOT Shell Completions — bash, zsh, fish tab-completion scripts
+// kbot Shell Completions — bash, zsh, fish tab-completion scripts
 //
 // Usage:
 //   $ kbot completions bash >> ~/.bashrc
@@ -268,7 +268,7 @@ _kbot() {
     'byok:Bring Your Own Key'
     'local:Use local AI models'
     'ollama:Alias for local'
-    'kbot-local:Use K:BOT Local gateway'
+    'kbot-local:Use kbot Local gateway'
     'serve:Start HTTP server'
     'ide:Start IDE protocol server'
     'agents:List available agents'
@@ -370,7 +370,7 @@ _kbot() {
         kbot-local)
           _arguments \\
             '--token[Gateway auth token]:token:' \\
-            '--off[Disable K:BOT Local]'
+            '--off[Disable kbot Local]'
           ;;
         watch)
           _arguments \\
@@ -407,7 +407,7 @@ function generateFish(): string {
     byok: 'Bring Your Own Key',
     local: 'Use local AI models',
     ollama: 'Alias for local',
-    'kbot-local': 'Use K:BOT Local gateway',
+    'kbot-local': 'Use kbot Local gateway',
     serve: 'Start HTTP server',
     ide: 'Start IDE protocol server',
     agents: 'List available agents',

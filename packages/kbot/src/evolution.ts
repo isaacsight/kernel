@@ -1,4 +1,4 @@
-// K:BOT Self-Evolution Loop — Automated Source Code Improvement
+// kbot Self-Evolution Loop — Automated Source Code Improvement
 //
 // CONCEPT: kbot identifies its own weaknesses, proposes code changes,
 // validates them (typecheck + tests), scores the improvement, and
@@ -360,7 +360,7 @@ export async function proposeImprovement(weakness: Weakness): Promise<Proposal |
 }
 
 function buildProposalPrompt(weakness: Weakness, file: string, source: string): string {
-  return `You are improving the source code of K:BOT, an open-source terminal AI agent.
+  return `You are improving the source code of kbot, an open-source terminal AI agent.
 
 WEAKNESS DETECTED:
 - Area: ${weakness.area}
@@ -734,7 +734,7 @@ export function formatEvolutionStatus(): string {
   const stats = getEvolutionStats()
   const lines: string[] = []
 
-  lines.push('=== K:BOT Evolution Engine ===')
+  lines.push('=== kbot Evolution Engine ===')
   lines.push('')
   lines.push(`Cycles run:     ${stats.totalCycles}`)
   lines.push(`Applied:        ${stats.totalApplied}`)
@@ -770,7 +770,7 @@ export function formatEvolutionStatus(): string {
 /** Format diagnosis output for terminal display */
 export function formatDiagnosis(weaknesses: Weakness[]): string {
   if (weaknesses.length === 0) {
-    return 'No weaknesses detected. K:BOT is performing well.'
+    return 'No weaknesses detected. kbot is performing well.'
   }
 
   const lines = [`Found ${weaknesses.length} weakness${weaknesses.length > 1 ? 'es' : ''}:`, '']

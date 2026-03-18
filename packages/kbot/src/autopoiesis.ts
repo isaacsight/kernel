@@ -1,4 +1,4 @@
-// K:BOT Autopoiesis — Self-Maintaining System
+// kbot Autopoiesis — Self-Maintaining System
 //
 // Based on Maturana & Varela's Autopoiesis theory (1972):
 // Living systems are "self-making" — they continuously produce and

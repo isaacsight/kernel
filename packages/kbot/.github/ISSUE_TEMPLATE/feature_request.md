@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest a new feature for K:BOT
+about: Suggest a new feature for kbot
 title: "[Feature] "
 labels: enhancement
 assignees: ''

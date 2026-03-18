@@ -1,4 +1,4 @@
-// K:BOT Computer Use Tool — Screenshot, click, type on the desktop
+// kbot Computer Use Tool — Screenshot, click, type on the desktop
 // Requires explicit opt-in via --computer-use flag.
 // Uses native OS commands (screencapture on macOS, etc.)
 

@@ -1,5 +1,5 @@
-// K:BOT Programmatic SDK
-// Clean public API for using K:BOT as a library.
+// kbot Programmatic SDK
+// Clean public API for using kbot as a library.
 //
 // Usage:
 //   import { agent, tools } from '@kernel.chat/kbot'

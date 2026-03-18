@@ -1,4 +1,4 @@
-// K:BOT Integrated Information — Consciousness Metric (Φ)
+// kbot Integrated Information — Consciousness Metric (Φ)
 //
 // Based on Giulio Tononi's Integrated Information Theory (IIT, 2004-2024):
 // Consciousness corresponds to integrated information (Φ) — the degree

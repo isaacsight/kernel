@@ -19,7 +19,7 @@ metadata:
         global: true
 ---
 
-# K:BOT
+# kbot
 
 Open-source terminal AI agent by kernel.chat group. Bring your own key, pick your model, run locally.
 
@@ -49,7 +49,7 @@ kbot local
 
 - **11 specialist agents** (5 built-in + 6 presets) with intent-based routing (kernel, researcher, coder, writer, analyst, and more)
 - **214 built-in tools** (file ops, bash, git, GitHub, web search, browser automation, Docker sandbox, E2B cloud sandbox, LSP intelligence, linting, testing, sub-agents)
-- **19 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, SambaNova, Cerebras, OpenRouter, Ollama, LM Studio, Jan, K:BOT Local)
+- **19 AI providers** (Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek, Groq, Together, Fireworks, Perplexity, Cohere, NVIDIA, SambaNova, Cerebras, OpenRouter, Ollama, LM Studio, Jan, kbot Local)
 - **Learning engine** that adapts to your coding patterns, solutions, and preferences
 - **Graph memory** — knowledge graph with entity extraction and relationship reasoning
 - **Architect mode** — dual-agent plan-review-implement loop for complex refactors
@@ -60,7 +60,7 @@ kbot local
 - **MCP-native plugins** — extend kbot with MCP server plugins
 - **LSP integration** — go-to-definition, find-references, hover, rename via language servers
 - **HTTP server mode** for REST API access to all tools
-- **Local-first** with Ollama, LM Studio, Jan, and K:BOT Local support ($0 cost)
+- **Local-first** with Ollama, LM Studio, Jan, and kbot Local support ($0 cost)
 - **Mimic profiles** to adopt coding styles (claude-code, cursor, copilot, etc.)
 - **Persistent memory** across sessions
 - **Autonomous planning** with Magentic-One-style task ledger
@@ -74,7 +74,7 @@ kbot local
 
 ## MCP Integration
 
-Add K:BOT as an MCP server in your IDE:
+Add kbot as an MCP server in your IDE:
 
 ```json
 {

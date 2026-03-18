@@ -1,4 +1,4 @@
-// K:BOT Agent Collaboration Protocol
+// kbot Agent Collaboration Protocol
 //
 // Four interlocking systems for multi-agent collaboration:
 //   1. Handoff Protocol — structured agent-to-agent transitions

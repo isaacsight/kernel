@@ -1,4 +1,4 @@
-// K:BOT Guardrails System — Safety checks on inputs, outputs, and tool calls
+// kbot Guardrails System — Safety checks on inputs, outputs, and tool calls
 //
 // Three layers of protection:
 //   1. Input guardrails  — validate user messages before the agent processes them

@@ -1,4 +1,4 @@
-// K:BOT Subagent System — Spawn specialist agents as parallel workers
+// kbot Subagent System — Spawn specialist agents as parallel workers
 //
 // Like Claude Code's Agent tool. Each subagent:
 //   - Gets its own conversation context
@@ -212,15 +212,15 @@ export function registerSubagentTools(): void {
     },
   })
 
-  // ── K:BOT Local Delegation ──
-  // Delegate tasks to the local K:BOT Local gateway as a parallel AI worker.
-  // K:BOT Local runs in its own sandboxed user space with local models.
+  // ── kbot Local Delegation ──
+  // Delegate tasks to the local kbot Local gateway as a parallel AI worker.
+  // kbot Local runs in its own sandboxed user space with local models.
 
   registerTool({
     name: 'kbot_local_delegate',
-    description: 'Delegate a task to K:BOT Local, a local AI assistant running in an isolated user space with its own models. Use this for parallel work — K:BOT Local can research, code, or analyze while you handle other parts. Returns K:BOT Local\'s response. Costs $0 (uses local models).',
+    description: 'Delegate a task to kbot Local, a local AI assistant running in an isolated user space with its own models. Use this for parallel work — kbot Local can research, code, or analyze while you handle other parts. Returns kbot Local\'s response. Costs $0 (uses local models).',
     parameters: {
-      prompt: { type: 'string', description: 'Task for K:BOT Local to perform', required: true },
+      prompt: { type: 'string', description: 'Task for kbot Local to perform', required: true },
       model: { type: 'string', description: 'Model to use (default: kbot-local:main). Options: qwen2.5-coder:7b, llama3.1:8b, mistral:7b, deepseek-coder-v2:16b, phi4:14b, gemma3:12b, nemotron-mini, nemotron-3-nano, codellama:13b, starcoder2:7b, codegemma:7b' },
     },
     tier: 'free',
@@ -248,33 +248,33 @@ export function registerSubagentTools(): void {
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }))
-          return `K:BOT Local error: ${err.error?.message || res.status}. Is the gateway running? Start with: kbot gateway start`
+          return `kbot Local error: ${err.error?.message || res.status}. Is the gateway running? Start with: kbot gateway start`
         }
 
         const data = await res.json()
-        const content = data.choices?.[0]?.message?.content || 'No response from K:BOT Local'
+        const content = data.choices?.[0]?.message?.content || 'No response from kbot Local'
         const usage = data.usage || {}
-        return `[K:BOT Local · ${data.model || model} · ${(usage.prompt_tokens || 0) + (usage.completion_tokens || 0)} tokens · $0]\n\n${content}`
+        return `[kbot Local · ${data.model || model} · ${(usage.prompt_tokens || 0) + (usage.completion_tokens || 0)} tokens · $0]\n\n${content}`
       } catch (err) {
         if (err instanceof Error && err.name === 'TimeoutError') {
-          return 'K:BOT Local timed out after 120s. The task may be too complex for the current model.'
+          return 'kbot Local timed out after 120s. The task may be too complex for the current model.'
         }
-        return `K:BOT Local connection failed: ${err instanceof Error ? err.message : String(err)}. Start gateway with: kbot gateway start`
+        return `kbot Local connection failed: ${err instanceof Error ? err.message : String(err)}. Start gateway with: kbot gateway start`
       }
     },
   })
 
   registerTool({
     name: 'kbot_local_status',
-    description: 'Check if K:BOT Local gateway is running and what models are available.',
+    description: 'Check if kbot Local gateway is running and what models are available.',
     parameters: {},
     tier: 'free',
     async execute() {
       try {
         const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(3000) })
-        if (!res.ok) return 'K:BOT Local gateway: not responding'
+        if (!res.ok) return 'kbot Local gateway: not responding'
         const health = await res.json().catch(() => ({}))
-        const lines = ['K:BOT Local gateway: running']
+        const lines = ['kbot Local gateway: running']
         if (health.version) lines.push(`  Version: ${health.version}`)
         if (health.uptime) lines.push(`  Uptime: ${health.uptime}`)
 
@@ -290,7 +290,7 @@ export function registerSubagentTools(): void {
 
         return lines.join('\n')
       } catch {
-        return 'K:BOT Local gateway: offline. Start with: kbot gateway start'
+        return 'kbot Local gateway: offline. Start with: kbot gateway start'
       }
     },
   })

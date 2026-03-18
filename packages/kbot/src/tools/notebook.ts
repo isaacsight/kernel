@@ -1,4 +1,4 @@
-// K:BOT Notebook Editing — Jupyter .ipynb cell manipulation
+// kbot Notebook Editing — Jupyter .ipynb cell manipulation
 //
 // Read, edit, insert, and delete cells in Jupyter notebooks.
 // Handles the JSON structure so the AI doesn't have to manage

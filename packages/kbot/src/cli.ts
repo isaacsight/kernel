@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// K:BOT CLI — Terminal entry point
+// kbot CLI — Terminal entry point
 //
 // Usage:
 //   $ kbot                        # Interactive REPL
@@ -58,7 +58,7 @@ async function main(): Promise<void> {
 
   program
     .name('kbot')
-    .description('K:BOT — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
+    .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
     .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 22)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
@@ -83,9 +83,9 @@ async function main(): Promise<void> {
   // Sub-commands
   program
     .command('version')
-    .description('Show K:BOT version')
+    .description('Show kbot version')
     .action(() => {
-      console.log(`K:BOT v${VERSION}`)
+      console.log(`kbot v${VERSION}`)
       process.exit(0)
     })
 
@@ -116,7 +116,7 @@ async function main(): Promise<void> {
       const { initBridge, getStatus } = await import('./ide/bridge.js')
       await initBridge()
       const status = getStatus()
-      printInfo('K:BOT IDE Bridge Status')
+      printInfo('kbot IDE Bridge Status')
       printInfo(`  Version:      ${status.version}`)
       printInfo(`  Agent:        ${status.agent}`)
       printInfo(`  Tier:         ${status.tier}`)
@@ -384,7 +384,7 @@ async function main(): Promise<void> {
     .action(async () => {
       const { runDoctor, formatDoctorReport } = await import('./doctor.js')
       process.stderr.write('\n')
-      printInfo('K:BOT Doctor — Checking your setup...')
+      printInfo('kbot Doctor — Checking your setup...')
       const report = await runDoctor()
       process.stderr.write(formatDoctorReport(report))
     })
@@ -461,20 +461,20 @@ async function main(): Promise<void> {
 
   program
     .command('kbot-local')
-    .description('Use K:BOT Local gateway as AI provider')
+    .description('Use kbot local gateway as AI provider')
     .option('--token <token>', 'Gateway auth token')
-    .option('--off', 'Disable K:BOT Local mode')
+    .option('--off', 'Disable kbot local mode')
     .action(async (opts: { token?: string; off?: boolean }) => {
       if (opts.off) {
         disableByok()
-        printSuccess('K:BOT Local disabled. Provider disabled.')
+        printSuccess('kbot local disabled. Provider disabled.')
         return
       }
       const ok = await setupKbotLocal(opts.token)
       if (ok) {
-        printSuccess('K:BOT Local enabled! Connected to local gateway at 127.0.0.1:18789.')
+        printSuccess('kbot local enabled! Connected to local gateway at 127.0.0.1:18789.')
       } else {
-        printError('Cannot connect to K:BOT Local gateway. Start it first.')
+        printError('Cannot connect to kbot local gateway. Start it first.')
       }
     })
 
@@ -597,7 +597,7 @@ async function main(): Promise<void> {
           printInfo('Sharing audit report...')
           try {
             const { createGist } = await import('./share.js')
-            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `K:BOT Audit: ${repo}`, true)
+            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo}`, true)
             if (url?.startsWith('http')) printSuccess(`Shared! ${url}`)
           } catch { printInfo('Could not create Gist. Install GitHub CLI: brew install gh') }
         }
@@ -779,7 +779,7 @@ async function main(): Promise<void> {
           const ok = await setupJan()
           return ok ? { provider: 'jan' as const } : null
         })(),
-        // Check K:BOT Local
+        // Check kbot local
         (async () => {
           try {
             const res = await fetch('http://127.0.0.1:18789/health', { signal: AbortSignal.timeout(1500) })
@@ -790,7 +790,7 @@ async function main(): Promise<void> {
         })(),
       ])
 
-      // Prefer Ollama > LM Studio > Jan > K:BOT Local
+      // Prefer Ollama > LM Studio > Jan > kbot local
       const ollamaOk = ollamaResult.status === 'fulfilled' && ollamaResult.value
       const lmstudioOk = lmstudioResult.status === 'fulfilled' && lmstudioResult.value
       const janOk = janResult.status === 'fulfilled' && janResult.value
@@ -811,7 +811,7 @@ async function main(): Promise<void> {
       } else if (kbotLocalOk) {
         byokActive = true
         localActive = true
-        printSuccess('Auto-configured K:BOT Local gateway. Ready — $0 cost!')
+        printSuccess('Auto-configured kbot local gateway. Ready — $0 cost!')
       }
     }
 
@@ -1166,7 +1166,7 @@ async function byokFlow(): Promise<void> {
 async function guidedSetup(): Promise<{ local: boolean } | null> {
   console.log(banner(VERSION))
   console.log()
-  console.log(chalk.bold('  Hey! I\'m K:BOT — your AI assistant for the terminal.'))
+  console.log(chalk.bold('  Hey! I\'m kbot — your AI assistant for the terminal.'))
   console.log()
   console.log(chalk.dim('  I can write code, answer questions, search the web, manage git,'))
   console.log(chalk.dim('  and a lot more. First, I need an AI brain. Pick one:'))
@@ -1234,7 +1234,7 @@ async function guidedSetup(): Promise<{ local: boolean } | null> {
 
   if (choice === '2' || choice === 'cloud' || choice === 'api') {
     console.log()
-    console.log(chalk.dim('  Paste your API key below. K:BOT will auto-detect which service it\'s from.'))
+    console.log(chalk.dim('  Paste your API key below. kbot will auto-detect which service it\'s from.'))
     console.log()
     console.log(chalk.dim('  Where to get a key:'))
     console.log(chalk.dim('    OpenAI:    https://platform.openai.com/api-keys'))
@@ -1391,7 +1391,7 @@ async function startRepl(
       const models = await warmOllamaModelCache()
       printInfo(`Ollama · ${models.length} models · free`)
     } else if (provider === 'kbot-local') {
-      printInfo('K:BOT Local · local · free')
+      printInfo('kbot local · local · free')
     }
   } else if (byokActive) {
     const config = loadConfig()
@@ -2284,14 +2284,14 @@ async function handleSlashCommand(
     case 'kbot-local': {
       if (args[0] === 'off') {
         disableByok()
-        printSuccess('K:BOT Local disabled.')
+        printSuccess('kbot local disabled.')
         break
       }
       const ok = await setupKbotLocal(args[0])
       if (ok) {
-        printSuccess('K:BOT Local gateway connected at 127.0.0.1:18789')
+        printSuccess('kbot local gateway connected at 127.0.0.1:18789')
       } else {
-        printError('Cannot connect to K:BOT Local gateway.')
+        printError('Cannot connect to kbot local gateway.')
       }
       break
     }

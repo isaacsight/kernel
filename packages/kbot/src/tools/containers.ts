@@ -1,4 +1,4 @@
-// K:BOT Container & Infrastructure Tools — Docker, Terraform, Cloud CLI
+// kbot Container & Infrastructure Tools — Docker, Terraform, Cloud CLI
 // Bridges kbot to container orchestration and cloud infrastructure.
 
 import { registerTool } from './index.js'

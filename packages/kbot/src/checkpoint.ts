@@ -1,4 +1,4 @@
-// K:BOT Checkpoint System — Serialize agent state after every tool execution
+// kbot Checkpoint System — Serialize agent state after every tool execution
 //
 // If a session crashes mid-execution, the checkpoint allows resuming from
 // the last successful tool call instead of starting over. Persists to

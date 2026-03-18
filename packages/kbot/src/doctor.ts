@@ -1,4 +1,4 @@
-// K:BOT Doctor — Comprehensive diagnostic tool
+// kbot Doctor — Comprehensive diagnostic tool
 // Checks the user's kbot setup: Node.js, npm, API keys, providers,
 // local runtimes, git, disk usage, learning data, shell.
 //
@@ -242,17 +242,17 @@ async function checkLocalRuntimes(): Promise<CheckResult> {
     if (res.ok) runtimes.push('Jan')
   } catch { /* not running */ }
 
-  // K:BOT Local (default port 18789)
+  // kbot local (default port 18789)
   try {
     const kbotLocalHost = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789'
     const res = await fetch(`${kbotLocalHost}/health`, { signal: AbortSignal.timeout(2000) })
-    if (res.ok) runtimes.push('K:BOT Local')
+    if (res.ok) runtimes.push('kbot local')
   } catch { /* not running */ }
 
   if (runtimes.length > 0) {
     return { name: 'Local runtimes', status: 'pass', message: runtimes.join(', ') }
   }
-  return { name: 'Local runtimes', status: 'warn', message: 'none detected (Ollama, LM Studio, Jan, K:BOT Local)' }
+  return { name: 'Local runtimes', status: 'warn', message: 'none detected (Ollama, LM Studio, Jan, kbot local)' }
 }
 
 function checkGit(): CheckResult {
@@ -407,7 +407,7 @@ export function formatDoctorReport(report: DoctorReport): string {
   const lines: string[] = []
 
   lines.push('')
-  lines.push(`  ${ACCENT('K:BOT Doctor')}`)
+  lines.push(`  ${ACCENT('kbot Doctor')}`)
   lines.push(`  ${DIM('─'.repeat(50))}`)
   lines.push('')
 

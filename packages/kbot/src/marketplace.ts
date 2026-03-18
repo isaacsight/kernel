@@ -943,7 +943,7 @@ export function formatInstalledAgentsList(agents: InstalledMarketplaceAgent[]): 
 export function registerMarketplaceTools(): void {
   registerTool({
     name: 'marketplace_search',
-    description: 'Search the K:BOT agent marketplace for community-built agents. Search by name, description, tags, or author. Returns a list of available agents with their descriptions, ratings, and install commands.',
+    description: 'Search the kbot agent marketplace for community-built agents. Search by name, description, tags, or author. Returns a list of available agents with their descriptions, ratings, and install commands.',
     parameters: {
       query: { type: 'string', description: 'Search query — matches agent name, description, tags, and author. Leave empty to list all.', required: true },
     },
@@ -972,7 +972,7 @@ export function registerMarketplaceTools(): void {
 
   registerTool({
     name: 'marketplace_install',
-    description: 'Install an agent from the K:BOT marketplace into the local matrix. The agent becomes immediately available for use in the current session and persists across sessions.',
+    description: 'Install an agent from the kbot marketplace into the local matrix. The agent becomes immediately available for use in the current session and persists across sessions.',
     parameters: {
       agent_id: { type: 'string', description: 'The marketplace agent ID to install (e.g., "code-reviewer", "debugger")', required: true },
     },

@@ -1,4 +1,4 @@
-// K:BOT Serve — HTTP server that exposes all tools over REST
+// kbot Serve — HTTP server that exposes all tools over REST
 //
 // Usage:
 //   kbot serve                    # Start on default port 7437
@@ -203,7 +203,7 @@ export async function startServe(options: ServeOptions): Promise<void> {
   })
 
   server.listen(options.port, () => {
-    printSuccess(`K:BOT serve running on http://localhost:${options.port}`)
+    printSuccess(`kbot serve running on http://localhost:${options.port}`)
     printInfo(`  GET  /health       — Health check`)
     printInfo(`  GET  /tools        — List ${tools.length} tools`)
     printInfo(`  POST /execute      — Execute a tool`)
@@ -220,7 +220,7 @@ export async function startServe(options: ServeOptions): Promise<void> {
 
   // Graceful shutdown
   const shutdown = () => {
-    printInfo('\nShutting down K:BOT serve...')
+    printInfo('\nShutting down kbot serve...')
     server.close()
     process.exit(0)
   }

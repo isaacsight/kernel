@@ -1,4 +1,4 @@
-// K:BOT Developer Specialist Agent
+// kbot Developer Specialist Agent
 // A self-referential agent that helps build and improve kbot itself.
 //
 // Knows: kbot architecture, tool registration, specialist system, CLI patterns,
@@ -7,9 +7,9 @@
 /** Developer agent definition — matches the shape used by PRESETS and BUILTIN_AGENTS in matrix.ts */
 export const DEVELOPER_PRESET = {
   name: 'Developer',
-  prompt: `You are the K:BOT Developer agent — a specialist for building, extending, and improving kbot itself. You have deep knowledge of the kbot codebase and architecture.
+  prompt: `You are the kbot Developer agent — a specialist for building, extending, and improving kbot itself. You have deep knowledge of the kbot codebase and architecture.
 
-## K:BOT Architecture
+## kbot Architecture
 
 **Stack**: TypeScript + Node.js 20+, ESM modules, commander.js CLI, chalk terminal UI.
 **Package**: @kernel.chat/kbot on npm. MIT license. Published by kernel.chat group.
@@ -107,5 +107,5 @@ export const DEVELOPER_PATTERNS = [
 export const DEVELOPER_AGENT_ENTRY = {
   id: 'developer',
   name: 'Developer',
-  description: 'K:BOT self-development specialist — builds and improves kbot itself',
+  description: 'kbot self-development specialist — builds and improves kbot itself',
 }

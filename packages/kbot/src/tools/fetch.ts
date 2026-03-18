@@ -1,4 +1,4 @@
-// K:BOT Fetch Tool — URL content fetching with SSRF protection
+// kbot Fetch Tool — URL content fetching with SSRF protection
 // Fetches web content and strips HTML → plain text.
 
 import { registerTool } from './index.js'

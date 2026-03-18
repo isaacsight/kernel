@@ -1,4 +1,4 @@
-// K:BOT Quality Tools — Linting, Testing, Dependency Auditing
+// kbot Quality Tools — Linting, Testing, Dependency Auditing
 //
 // These tools fill the biggest gap vs competitors (Aider, OpenCode, Claude Code).
 // All run locally, parse structured output, and return actionable results.

@@ -1,6 +1,6 @@
-// K:BOT Local AI Tools
+// kbot Local AI Tools
 //
-// Integrates K:BOT Local's AI capabilities as kbot tools.
+// Integrates kbot Local's AI capabilities as kbot tools.
 // These run entirely on the user's machine — no cloud API needed.
 //
 // ENHANCEMENTS (v2.3):
@@ -17,7 +17,7 @@ let _gatewayOnline: boolean | null = null  // null = unknown
 let _lastHealthCheck = 0
 const HEALTH_CHECK_INTERVAL = 60_000 // 60 seconds
 
-/** Check if K:BOT Local gateway is reachable (cached) */
+/** Check if kbot Local gateway is reachable (cached) */
 async function isGatewayOnline(): Promise<boolean> {
   const now = Date.now()
   if (_gatewayOnline !== null && (now - _lastHealthCheck) < HEALTH_CHECK_INTERVAL) {
@@ -36,7 +36,7 @@ async function isGatewayOnline(): Promise<boolean> {
   return _gatewayOnline
 }
 
-/** Call a K:BOT Local endpoint with graceful degradation */
+/** Call a kbot Local endpoint with graceful degradation */
 async function callKbotLocal(
   endpoint: string,
   payload: Record<string, unknown>,
@@ -45,7 +45,7 @@ async function callKbotLocal(
   // Quick health check — skip if gateway known to be offline
   const online = await isGatewayOnline()
   if (!online) {
-    return `K:BOT Local gateway is offline. Start it with: kbot gateway start\nOr set KBOT_LOCAL_URL env var if running on a different port.`
+    return `kbot Local gateway is offline. Start it with: kbot gateway start\nOr set KBOT_LOCAL_URL env var if running on a different port.`
   }
 
   try {
@@ -58,19 +58,19 @@ async function callKbotLocal(
 
     if (!res.ok) {
       const err = await res.text().catch(() => `HTTP ${res.status}`)
-      return `Error: K:BOT Local ${endpoint} failed — ${err}`
+      return `Error: kbot Local ${endpoint} failed — ${err}`
     }
 
     const data = await res.json()
     return data.result || data.output || data.text || JSON.stringify(data, null, 2)
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') {
-      return `Error: K:BOT Local ${endpoint} timed out after ${timeout / 1000}s`
+      return `Error: kbot Local ${endpoint} timed out after ${timeout / 1000}s`
     }
     // Mark gateway as offline for next check
     _gatewayOnline = false
     _lastHealthCheck = Date.now()
-    return `Error: K:BOT Local gateway not reachable at ${KBOT_LOCAL_BASE}. Start it with: kbot gateway start`
+    return `Error: kbot Local gateway not reachable at ${KBOT_LOCAL_BASE}. Start it with: kbot gateway start`
   }
 }
 

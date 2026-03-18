@@ -1,4 +1,4 @@
-// K:BOT Search & Research Tools — Web knowledge expansion
+// kbot Search & Research Tools — Web knowledge expansion
 // These tools connect kbot to the internet for real-time knowledge.
 
 import { registerTool } from './index.js'

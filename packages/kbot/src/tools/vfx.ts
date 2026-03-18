@@ -1,4 +1,4 @@
-// K:BOT VFX & Creative Production Tools — Houdini-inspired
+// kbot VFX & Creative Production Tools — Houdini-inspired
 // Procedural generation, video processing, image manipulation,
 // 3D rendering, shader generation, and creative coding.
 

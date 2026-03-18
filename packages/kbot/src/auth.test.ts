@@ -1,4 +1,4 @@
-// K:BOT Auth Tests
+// kbot Auth Tests
 import { describe, it, expect } from 'vitest'
 import {
   detectProvider,

@@ -1,6 +1,6 @@
-// K:BOT MCP Client — Connect to and consume external MCP servers
+// kbot MCP Client — Connect to and consume external MCP servers
 //
-// Lets K:BOT use tools from any MCP server: databases, APIs, Supabase,
+// Lets kbot use tools from any MCP server: databases, APIs, Supabase,
 // filesystem servers, custom tools, etc.
 //
 // Flow:

@@ -1,4 +1,4 @@
-// K:BOT Context — Codebase awareness for smarter responses
+// kbot Context — Codebase awareness for smarter responses
 // Gathers local project context to send with API requests.
 // This reduces token waste: the agent knows your project structure upfront.
 //

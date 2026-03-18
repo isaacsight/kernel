@@ -1,4 +1,4 @@
-// K:BOT Advanced Reasoning Engine — Abductive, Counterfactual, Meta-Planning
+// kbot Advanced Reasoning Engine — Abductive, Counterfactual, Meta-Planning
 //
 // Three reasoning systems that operate without LLM calls:
 //

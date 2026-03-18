@@ -1,11 +1,11 @@
-// K:BOT Auth — API key management and configuration
+// kbot Auth — API key management and configuration
 // Stores config in ~/.kbot/config.json
 //
 // BYOK (Bring Your Own Key) — open-source, local-first.
 // 20 providers: Anthropic, OpenAI, Google, Mistral, xAI, DeepSeek,
 //   Groq, Together AI, Fireworks, Perplexity, Cohere, NVIDIA NIM,
 //   SambaNova, Cerebras, OpenRouter,
-//   Ollama (local), LM Studio (local), Jan (local), K:BOT Local (local),
+//   Ollama (local), LM Studio (local), Jan (local), kbot local (local),
 //   Embedded llama.cpp (local)
 
 import { homedir } from 'node:os'
@@ -44,7 +44,7 @@ export type ByokProvider =
   | 'lmstudio'     // LM Studio (local GUI + server)
   | 'jan'          // Jan (local, open-source AI)
   | 'ollama'       // Ollama (local open-weight models)
-  | 'kbot-local'   // K:BOT Local gateway (local AI assistant)
+  | 'kbot-local'   // kbot local gateway (local AI assistant)
   | 'embedded'     // Embedded llama.cpp (no external service needed)
 
 export interface ProviderConfig {
@@ -273,7 +273,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     ],
   },
   'kbot-local': {
-    name: 'K:BOT Local',
+    name: 'kbot local',
     apiUrl: `${KBOT_LOCAL_HOST}/v1/chat/completions`,
     apiStyle: 'openai',
     defaultModel: 'kbot-local:main',
@@ -837,7 +837,7 @@ export async function setupJan(): Promise<boolean> {
   return true
 }
 
-/** Detect any running local AI runtime (Ollama, LM Studio, Jan, K:BOT Local) */
+/** Detect any running local AI runtime (Ollama, LM Studio, Jan, kbot local) */
 export async function detectLocalRuntime(): Promise<ByokProvider | null> {
   const checks = await Promise.allSettled([
     isOllamaRunning().then(ok => ok ? 'ollama' as const : null),
@@ -854,7 +854,7 @@ export async function detectLocalRuntime(): Promise<ByokProvider | null> {
   return null
 }
 
-/** Set up K:BOT Local as the active provider */
+/** Set up kbot local as the active provider */
 export async function setupKbotLocal(token?: string): Promise<boolean> {
   try {
     const res = await fetch(`${KBOT_LOCAL_HOST}/health`, { signal: AbortSignal.timeout(3000) })

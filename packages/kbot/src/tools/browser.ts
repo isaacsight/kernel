@@ -1,4 +1,4 @@
-// K:BOT Browser Tool — Playwright-based web browsing
+// kbot Browser Tool — Playwright-based web browsing
 // Requires: npx playwright install (run once)
 // Available to all users
 
@@ -16,7 +16,7 @@ async function getPage(): Promise<any> {
     browserInstance = await chromium.launch({ headless: true })
     const context = await browserInstance.newContext({
       viewport: { width: 1280, height: 720 },
-      userAgent: 'K:BOT/1.0 (Kernel Terminal Agent)',
+      userAgent: 'kbot/1.0 (Kernel Terminal Agent)',
     })
     pageInstance = await context.newPage()
     return pageInstance

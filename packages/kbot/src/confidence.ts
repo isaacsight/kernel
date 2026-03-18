@@ -1,4 +1,4 @@
-// K:BOT Confidence Engine — Self-Awareness for Agent Actions
+// kbot Confidence Engine — Self-Awareness for Agent Actions
 //
 // Three systems:
 // 1. CONFIDENCE CALIBRATION — Express uncertainty about responses/actions
@@ -751,7 +751,7 @@ export function recordActualEffort(task: string, actualToolCalls: number, actual
 // ══════════════════════════════════════════════════════════════════
 
 /**
- * Register confidence engine tools with the K:BOT tool registry.
+ * Register confidence engine tools with the kbot tool registry.
  */
 export function registerConfidenceTools(): void {
   registerTool({

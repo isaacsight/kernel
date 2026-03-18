@@ -1,4 +1,4 @@
-// K:BOT IDE Bridge — Shared core for all IDE protocol adapters
+// kbot IDE Bridge — Shared core for all IDE protocol adapters
 //
 // Wraps kbot's tool registry, agent loop, learning engine, and memory
 // into a unified API that MCP, ACP, and LSP adapters consume.
@@ -206,7 +206,7 @@ export function getAgents(): Array<{ id: string; name: string; description: stri
     { id: 'curator', name: 'Curator', description: 'Knowledge curation specialist' },
     { id: 'strategist', name: 'Strategist', description: 'Strategic planning specialist' },
     { id: 'creative', name: 'Creative', description: 'Generative art, creative coding & procedural generation specialist' },
-    { id: 'developer', name: 'Developer', description: 'K:BOT self-development specialist — builds and improves kbot itself' },
+    { id: 'developer', name: 'Developer', description: 'kbot self-development specialist — builds and improves kbot itself' },
   ]
 }
 

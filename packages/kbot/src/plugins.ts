@@ -1,4 +1,4 @@
-// K:BOT Plugin System — Drop-in tool extensions
+// kbot Plugin System — Drop-in tool extensions
 //
 // Users place .ts/.js files in ~/.kbot/plugins/ and they auto-register as tools.
 // Each plugin exports a default PluginDefinition or an array of them.
@@ -181,7 +181,7 @@ export function scaffoldPlugin(name: string): string {
     return `Plugin already exists: ${filePath}`
   }
 
-  const content = `// K:BOT Plugin: ${name}
+  const content = `// kbot Plugin: ${name}
 // This file is auto-loaded when kbot starts.
 
 export default {

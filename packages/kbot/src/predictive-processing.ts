@@ -1,4 +1,4 @@
-// K:BOT Predictive Processing — Anticipatory Cognition Engine
+// kbot Predictive Processing — Anticipatory Cognition Engine
 //
 // Based on the Predictive Processing framework (Clark, 2013; Hohwy, 2013):
 // The brain is fundamentally a prediction machine. It constantly generates

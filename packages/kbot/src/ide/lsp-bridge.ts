@@ -1,4 +1,4 @@
-// K:BOT LSP Diagnostics Bridge
+// kbot LSP Diagnostics Bridge
 //
 // Spawns language-specific LSP servers and collects diagnostics
 // after kbot edits a file. Enables auto-correction loop:

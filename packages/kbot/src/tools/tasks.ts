@@ -1,4 +1,4 @@
-// K:BOT Task/TODO Tracking — Structured progress tracking during complex work
+// kbot Task/TODO Tracking — Structured progress tracking during complex work
 //
 // Mirrors Claude Code's TaskCreate/TaskUpdate/TaskList/TaskGet pattern.
 // Tasks persist in memory during the session. The AI uses these to:

@@ -1,5 +1,5 @@
 <p align="center">
-  <strong>K:BOT</strong><br>
+  <strong>kbot</strong><br>
   <em>Terminal AI agent framework that learns your patterns.</em>
 </p>
 
@@ -21,13 +21,13 @@ npm install -g @kernel.chat/kbot
 
 ## What's New in v3.0.0
 
-K:BOT is now a **framework**, not just a CLI. Seven architectural changes:
+kbot is now a **framework**, not just a CLI. Seven architectural changes:
 
 | Feature | What it means |
 |---------|---------------|
 | **Checkpointing** | Sessions survive crashes. Resume from the last tool call, not the beginning. |
 | **Bayesian Routing** | Agents earn skill ratings via Bradley-Terry model. Routing gets smarter with every interaction. |
-| **Programmatic SDK** | `import { agent, tools } from '@kernel.chat/kbot'` — use K:BOT as a library in your own apps. |
+| **Programmatic SDK** | `import { agent, tools } from '@kernel.chat/kbot'` — use kbot as a library in your own apps. |
 | **Middleware Pipeline** | Composable Express-style middleware for tool execution. Plugins can hook into every tool call. |
 | **Terminal Enhancement** | Braille sparklines, truecolor gradients, Kitty/iTerm2 inline images, synchronized output. |
 | **Lazy Loading** | Core tools load in ~200ms. 41 other modules load in background. Instant one-shot commands. |
@@ -44,7 +44,7 @@ Most AI coding tools lock you into one provider and forget everything between se
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
 - **22 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
-- **Use as a library** — Clean SDK with typed exports. Build your own tools on top of K:BOT.
+- **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
 
 ## Install
@@ -79,7 +79,7 @@ kbot local
 kbot -p "generate a user roles migration" > migration.sql
 ```
 
-## SDK — Use K:BOT as a Library
+## SDK — Use kbot as a Library
 
 ```typescript
 import { agent, tools, providers } from '@kernel.chat/kbot'
@@ -193,7 +193,7 @@ Built-in middleware: `permissionMiddleware`, `hookMiddleware`, `timeoutMiddlewar
 | xAI (Grok) | $3.00/M in | Cloud |
 | Perplexity | $3.00/M in | Cloud |
 | OpenRouter | varies | Cloud |
-| K:BOT Local | **Free** | Yes |
+| kbot local | **Free** | Yes |
 
 All auto-detected via environment variables. Or run `kbot auth` for interactive setup.
 

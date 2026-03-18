@@ -1,4 +1,4 @@
-// K:BOT Terminal Recording — Capture sessions as SVG, GIF, or Asciicast
+// kbot Terminal Recording — Capture sessions as SVG, GIF, or Asciicast
 //
 // Records terminal sessions with full timing data for animated playback.
 // Output formats:
@@ -278,7 +278,7 @@ export function startRecording(options: RecordOptions = {}): {
   const cols = options.cols || process.stdout.columns || 80
   const rows = options.rows || process.stdout.rows || 24
   const shell = options.shell || process.env.SHELL || '/bin/bash'
-  const title = options.title || `K:BOT Recording ${id}`
+  const title = options.title || `kbot Recording ${id}`
 
   const scriptFile = join(RECORDINGS_DIR, `${id}.script`)
   const timingFile = join(RECORDINGS_DIR, `${id}.timing`)
@@ -466,7 +466,7 @@ function buildRecordingFromScript(state: RecordingState): Recording | null {
 
   return {
     id: state.id,
-    title: state.title || `K:BOT Recording ${state.id}`,
+    title: state.title || `kbot Recording ${state.id}`,
     startedAt: state.startedAt,
     duration,
     cols: state.cols,
@@ -564,7 +564,7 @@ export function toSVG(recording: Recording, options: SVGOptions = {}): string {
   const chrome = options.chrome !== false
   const speed = options.speed || 1
   const loop = options.loop !== false
-  const title = options.title || recording.title || 'K:BOT Terminal'
+  const title = options.title || recording.title || 'kbot Terminal'
 
   const charWidth = fontSize * 0.6
   const lineHeight = fontSize * 1.4
@@ -1014,7 +1014,7 @@ export function toAsciicast(recording: Recording): string {
     width: recording.cols || 80,
     height: recording.rows || 24,
     timestamp: Math.floor(new Date(recording.startedAt).getTime() / 1000),
-    title: recording.title || 'K:BOT Terminal Recording',
+    title: recording.title || 'kbot Terminal Recording',
     env: {
       SHELL: recording.env.shell,
       TERM: recording.env.term,
@@ -1058,7 +1058,7 @@ export function createRecording(
 
   return {
     id,
-    title: options.title || `K:BOT Recording ${id}`,
+    title: options.title || `kbot Recording ${id}`,
     startedAt: new Date().toISOString(),
     duration,
     cols,

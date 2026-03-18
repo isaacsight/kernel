@@ -1,4 +1,4 @@
-// K:BOT Agent Creation Matrix
+// kbot Agent Creation Matrix
 // Create, manage, and invoke custom specialist agents on-the-fly.
 // Agents are local session constructs — they override the system prompt
 // and can be invoked by the AI via tool calls or by the user via /matrix.
@@ -156,7 +156,7 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
 // ══ MIMIC MATRIX ══════════════════════════════════════════
 // Create agents that mimic the style, workflow, and conventions of
 // specific tools, frameworks, teams, and coding philosophies.
-// This is kbot's intelligence layer that K:BOT Local doesn't have.
+// This is kbot's intelligence layer that kbot Local doesn't have.
 
 export interface MimicProfile {
   id: string

@@ -1,4 +1,4 @@
-// Tests for K:BOT Streaming — createStreamState and formatThinkingSummary
+// Tests for kbot Streaming — createStreamState and formatThinkingSummary
 import { describe, it, expect } from 'vitest'
 import { createStreamState, formatThinkingSummary } from './streaming.js'
 

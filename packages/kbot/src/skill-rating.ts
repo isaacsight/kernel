@@ -1,4 +1,4 @@
-// K:BOT Bayesian Skill Rating — OpenSkill-style Agent Routing
+// kbot Bayesian Skill Rating — OpenSkill-style Agent Routing
 //
 // Each agent maintains a {mu, sigma} rating per task category.
 // mu = estimated skill level, sigma = uncertainty.

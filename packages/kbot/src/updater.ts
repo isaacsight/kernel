@@ -1,4 +1,4 @@
-// K:BOT Auto-Updater — silent automatic updates
+// kbot Auto-Updater — silent automatic updates
 //
 // On every startup:
 // 1. Check npm for newer version (non-blocking, cached 4h)

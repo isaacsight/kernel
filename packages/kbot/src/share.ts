@@ -1,4 +1,4 @@
-// K:BOT Share — Share conversations as GitHub Gists for organic discovery
+// kbot Share — Share conversations as GitHub Gists for organic discovery
 //
 // Creates branded, shareable Gists from saved sessions or the current
 // conversation. Each share links back to kbot, turning every user into
@@ -27,12 +27,12 @@ export function formatShareMarkdown(
   const date = meta?.created
     ? new Date(meta.created).toLocaleDateString()
     : new Date().toLocaleDateString()
-  const name = meta?.name || 'K:BOT Conversation'
+  const name = meta?.name || 'kbot conversation'
 
   const lines: string[] = [
     `# ${name}`,
     '',
-    `> Generated with [K:BOT](${KBOT_URL}) — 22 specialist agents, 223 tools, 20 AI providers`,
+    `> Generated with [kbot](${KBOT_URL}) — 22 specialist agents, 223 tools, 20 AI providers`,
     `> Agent: \`${agent}\` | Date: ${date}`,
     '',
     '---',
@@ -43,7 +43,7 @@ export function formatShareMarkdown(
     if (turn.role === 'user') {
       lines.push(`### You`, '', turn.content, '')
     } else {
-      lines.push(`### K:BOT`, '', turn.content, '')
+      lines.push(`### kbot`, '', turn.content, '')
     }
     lines.push('---', '')
   }
@@ -52,7 +52,7 @@ export function formatShareMarkdown(
     '',
     '---',
     '',
-    `*Shared from [K:BOT](${KBOT_URL}) — the open-source terminal AI agent by [kernel.chat](https://kernel.chat)*`,
+    `*Shared from [kbot](${KBOT_URL}) — the open-source terminal AI agent by [kernel.chat](https://kernel.chat)*`,
     `*Install: \`npm install -g @kernel.chat/kbot\` | [GitHub](${REPO_URL})*`,
   )
 
@@ -169,7 +169,7 @@ export async function shareConversation(
   }
 
   const markdown = formatShareMarkdown(turns, meta)
-  const title = meta.name || 'K:BOT Conversation'
+  const title = meta.name || 'kbot conversation'
   const filename = `kbot-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}.md`
 
   // Try GitHub Gist first
@@ -178,7 +178,7 @@ export async function shareConversation(
       const url = createGist(
         markdown,
         filename,
-        `${title} — shared from K:BOT`,
+        `${title} — shared from kbot`,
         options.public !== false,
       )
       if (url && url.startsWith('http')) {

@@ -1,4 +1,4 @@
-// K:BOT E2B Cloud Sandbox — Run code in E2B cloud-hosted sandboxes
+// kbot E2B Cloud Sandbox — Run code in E2B cloud-hosted sandboxes
 //
 // E2B (e2b.dev) provides secure, ephemeral cloud sandboxes via API.
 // Alternative to local Docker sandboxes for users without Docker installed

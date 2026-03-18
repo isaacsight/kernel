@@ -1,4 +1,4 @@
-// K:BOT Workflow Graph System — Composable multi-step agent pipelines
+// kbot Workflow Graph System — Composable multi-step agent pipelines
 //
 // Builds on top of the existing planner and agent loop to provide:
 //   1. Declarative DAG-based workflows (nodes + edges)

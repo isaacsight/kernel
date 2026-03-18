@@ -1,6 +1,6 @@
-// K:BOT Build Targets — Platform definitions, detection, and toolchain configs
+// kbot Build Targets — Platform definitions, detection, and toolchain configs
 //
-// Every hardware target K:BOT can build for.
+// Every hardware target kbot can build for.
 // Each target defines: required tools, Docker image (for sandbox),
 // build commands, and how to detect if the current project supports it.
 

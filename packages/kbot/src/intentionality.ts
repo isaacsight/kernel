@@ -1,4 +1,4 @@
-// K:BOT Intentionality System — Intrinsic Quality Drives, Outcome Preferences, and Motivation
+// kbot Intentionality System — Intrinsic Quality Drives, Outcome Preferences, and Motivation
 //
 // This is genuinely novel. No other CLI agent has internal preferences about its own work,
 // the ability to articulate what it wants from an outcome, or intrinsic motivation that

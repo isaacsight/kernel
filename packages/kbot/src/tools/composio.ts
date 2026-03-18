@@ -1,4 +1,4 @@
-// K:BOT Composio Integration — 1000+ authenticated tool integrations
+// kbot Composio Integration — 1000+ authenticated tool integrations
 //
 // Composio provides pre-built auth flows for Gmail, Slack, Notion, Jira,
 // GitHub, Salesforce, HubSpot, and hundreds more. This module bridges
