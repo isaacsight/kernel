@@ -4,194 +4,57 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-16)
+## Current Session (2026-03-18)
 
 ### Accomplished This Session
 
-#### K:BOT v2.24.0 — 7 New Modules (Deploy, Database, MCP Marketplace, Pair, Team, Record, Plugin SDK)
-- **Deploy tools** (5): deploy, deploy_status, deploy_logs, deploy_rollback, deploy_env — auto-detects Vercel/Netlify/Cloudflare Workers & Pages/Fly.io/Railway from config files
-- **MCP Marketplace** (5): mcp_search, mcp_install, mcp_uninstall, mcp_list, mcp_update — fetches from official registry, 20 bundled servers, 24hr cache at ~/.kbot/mcp-registry.json
-- **Database tools** (8): db_query, db_schema, db_migrate, db_seed, prisma_introspect, prisma_generate, prisma_migrate, db_diagram — Postgres/MySQL/SQLite via CLI, Mermaid ER diagrams, fake data seeding
-- **Pair mode**: File watcher with 6 analysis checks (types, lint, tests, imports, security, style), auto-fix for safe ops, AI integration via runAgent()
-- **Team mode**: TCP server on localhost:7439, NDJSON protocol, 9 tools, auto-reconnect with exponential backoff, role-based task routing
-- **Record**: Terminal session recording as animated SVG (4 themes), GIF (via ImageMagick/ffmpeg), asciicast (asciinema v2). Virtual terminal screen buffer.
-- **Plugin SDK**: KBotPlugin interface with tools/hooks/commands/lifecycle, 6 management tools, scaffolds ~/.kbot/plugins/<name>/, npm publishing support
-- **238 tools** (was 233), **~151 npm keywords** (was 106)
-- **Published**: v2.24.0 to npm, GitHub pushed
-- **Commit**: `fc33e8a6` feat: deploy tools, database tools, MCP marketplace, pair mode, team mode, record, plugin SDK (v2.24.0)
+#### kbot v3.2.0–v3.3.0 Shipped
+- **v3.2.0**: Zero-config first run — embedded llama.cpp fallback, no API key wall
+- **v3.2.1**: Embedded messaging ("lightweight model"), update nudge, 126 new tests, catch fix
+- **v3.3.0**: 4 social tools (social_post, social_thread, social_status, social_setup) — 266 tools total
+- All 3 versions published to npm, pushed to GitHub
 
-#### K:BOT v2.23.0–v2.23.2 — A2A, Browser Agent, Composio, Marketplace, Workflows, Guardrails, Handoffs
-- **A2A protocol**: Agent Card at /.well-known/agent.json, task server + client for LangGraph/CrewAI/Dify interop
-- **Browser agent**: Playwright-based web automation, page analysis, form filling, screenshot capture
-- **Composio integration**: 1000+ tool integrations with pre-built auth
-- **GitHub-backed marketplace**: PR-based publishing, version controlled agent/tool packages
-- **Workflow engine**: DAG execution with Kahn's algorithm, parallel nodes, condition branches, Mermaid export
-- **Guardrails**: Input/output/tool validation — 15 secret patterns, 10 destructive patterns, 4 PII patterns
-- **Handoffs**: Inter-agent delegation with 8 rules, max depth 3, cycle detection
-- **Ollama graceful tool fallback**: When model rejects tool schemas, retry without tools — inline parser handles text tool invocations
-- **233 tools**, 106 npm keywords
-- **Published**: v2.23.0–v2.23.2 to npm
+#### Bootstrap Agent + Team (8 new agents)
+- Bootstrap, Sync, Pulse, Demo, Outreach, Onboarding, Ship, kbot Social
+- Bootstrap ran 3x — fixed 7 stale surfaces (ROADMAP, READMEs, CONTRIBUTING, GitHub desc, meta tags, Dockerfile, SEO)
 
-### Previous Session (2026-03-15)
+#### Discord Channel Agents
+- `tools/discord-agents.ts` — 11 agents, 10+ posts sent to Discord channels
+- Content banks: 30 tips, 11 tutorials, 10 workflows, tool/agent/provider spotlights
 
-#### K:BOT v2.17.3 — Smart CLI Onboarding & Bug Fixes
-- **Smart onboarding**: `detectProjectSuggestions()` auto-detects project type (Node/Rust/Python/Go/Docker) and shows contextual example prompts on first run
-- **Extended tips**: Sessions 2-5 rotate tips about BYOK, specialists, sessions, learning, and embedded mode
-- **BYOK visibility**: Shows `kbot auth` hint when user has BYOK configured but no local model
-- **Dynamic version**: Replaced hardcoded VERSION with `createRequire` reading package.json at runtime
-- **Model selection fix**: `isModelAvailable()` now requires exact tag match (was prefix-matching, caused gemma3:27b→gemma3:12b bug)
-- **install.sh tracked**: Added `.gitignore` exception for `packages/kbot/install.sh`
-- **Security audit**: Full platform scan — PASS (0 P0, 0 P1, 2 P2)
-- **Usage analysis**: Deep dive into 8 active users — identified CLI onboarding friction (58% "what can you do" queries)
-- **Published**: v2.17.3 to npm, Docker `isaacsight/kbot:2.17.3` pushed, GitHub up to date
+#### Session-Start Hook Enhanced
+- Bootstrap Pulse auto-runs on terminal open
+- Shows vitals: version, tool count, downloads, stars, stale surface warnings
 
-#### K:BOT v2.18.0 — Share Feature + R&D
-- **`kbot share`** — new command + `/share` slash command. Creates branded GitHub Gists from conversations
-- **Gist branding** — every shared conversation links back to `@kernel.chat/kbot` npm + GitHub repo
-- **Fallback chain** — GitHub Gist (if `gh` CLI available) → clipboard copy → stdout
-- **Help updated** — `/share` added to printHelp menu
-- **R&D analysis** — identified top 5 expansion categories by download impact:
-  1. Document & Data Tools (CSV/Excel/PDF) — +800-1,500/week
-  2. Deploy Tools (Vercel/Netlify/CF) — +500-1,000/week
-  3. Database Tools (Prisma/SQL) — +500-800/week
-  4. SEO & Content Tools — +300-500/week
-  5. Email & Communication Tools — +400-600/week
-- **Published**: v2.18.0 to npm, Docker pushed, GitHub pushed
-
-#### K:BOT v2.19.0 — Open Source Expansion (Audit, Docs, Contribute)
-- **`kbot audit <repo>`** — full 6-category scored audit of any GitHub repo (security, docs, quality, community, devops, health) with grade A-F
-- **`kbot audit --share`** — auto-creates branded Gist of audit report
-- **Document tools**: csv_read, csv_query, csv_write, data_transform, generate_report, generate_invoice
-- **Contribute tools**: find_issues, prepare_contribution, submit_contribution, find_quick_wins
-- **`kbot contribute`** — search for good-first-issue across all of GitHub
-- **`kbot contribute <repo>`** — scan repo for quick-win opportunities
-- **85 npm keywords** — added csv, spreadsheet, document, audit, contribute, open-source, etc.
-- **228 tools** (was 216)
-- **Published**: v2.19.0 to npm, Docker building, GitHub pushed
-
-#### K:BOT v2.16.0 — VFX & Creative Production Tools
-- **8 new Houdini-inspired tools**: vex_generate, shader_generate, ffmpeg_process, imagemagick, blender_run, texture_generate, color_palette, audio_visualize
-- **VEX code generation**: 8 procedural effect templates (noise, curl_noise, scatter, wave, fractal, vortex, erosion, growth)
-- **GLSL shaders**: 7 fragment shaders (water, fire, plasma, raymarching, bloom, film_grain, dissolve)
-- **FFmpeg**: 11 video operations (encode, extract_frames, gif, timelapse, stabilize, grayscale, reverse, speed, trim, audio_extract, thumbnail)
-- **ImageMagick**: 13 image operations with v7/v6 fallback
-- **Blender**: Background-mode Python script execution for 3D generation
-- **Procedural textures**: Pure Python texture generator (perlin, marble, wood, brick, hexagon, voronoi, checkerboard)
-- **Color palettes**: HSL color harmony (complementary, analogous, triadic, split_complementary, tetradic, monochromatic)
-- **Audio visualization**: FFmpeg showcqt, waveform, spectrum, vectorscope video generation
-- **62 → 72 npm keywords**: added vfx, shader, glsl, houdini, ffmpeg, imagemagick, blender, procedural, creative-coding, audio-visualization
-- **Published**: v2.16.0 to npm, Docker `isaacsight/kbot:2.16.0` pushed
-- **README**: updated What's New section for v2.16.0
-
-#### Previous Session (2026-03-14) — Billing Hardening & npm Categories
-- 28 research + container tools (v2.15.0–2.15.2)
-- 62 npm keywords covering all homepage categories
-- Obsidian vault synced
-
-#### Billing Hardening — Overage Removed Entirely
-- **Overage bypass vulnerability fixed** — removed `skipAtomicDaily`, `webOverageEnabled`, `webSpendingCeilingHit` from claude-proxy
-- **All users hard-capped** — Free at 10/month, Pro at 200/month, no exceptions
-- **Atomic enforcement** — ALL users go through `check_and_increment_message` RPC (race-condition safe)
-- **Migration 084** — disabled `overage_enabled` on all existing DB subscriptions
-- **Frontend cleanup** — removed OveragePrompt component, localStorage bypass (`kernel_overage_accepted`), dead overage rendering in EnginePage
-- **Stripe webhook fixes** — `cancel_at_period_end` no longer immediately downgrades, `invoice.payment_failed` handler added, `invoice.paid` renewal handler
-- **Settings panel** — dynamic plan display with upgrade/manage buttons
-- **Full billing audit** — backend, config, webhook, frontend all PASS
-- **Claude-proxy deployed** — clean enforcement live in production
-- **Obsidian vault updated** — Status and Billing docs brought current
-
-#### Open Source Governance & SEO Expansion
-- **CODE_OF_CONDUCT.md** — Contributor Covenant v2.1, conduct@kernel.chat reporting
-- **SECURITY.md** — Vulnerability disclosure policy, scope definition, hall of fame
-- **GOVERNANCE.md** — Roles (Creator/Maintainer/Contributor/Community), decision-making process, release process
-- **CONTRIBUTING.md** — Expanded with 228 tools, quick start guide, tool/specialist creation guides, conventional commits
-- **ROADMAP.md** — v2.19.0 current, v2.20.0 next (community/CLI/integrations), v3.0 future (mobile/platform/intelligence)
-- **CITATION.cff** — Academic citation metadata for Zenodo/DOI discoverability
-- **GitHub Issue Templates** — bug_report.md, feature_request.md, config.yml with Discord/docs links
-- **PR Template** — Checklist with build/test/typecheck gates
-- **20 GitHub topics** — ai-agent, cli, terminal, llm, mcp, local-ai, self-evolving-ai, etc. (at GitHub's 20-topic max)
-- **GitHub Discussions enabled** — community Q&A unlocked
-
-#### Discord Community — "K:BOT Community" Server
-- **Server scaffolded** — Guild ID: 1472796320015192178
-- **6 categories**: Announcements, Community, Development, AI & Models, Resources, Meta
-- **20 channels created**: announcements, releases, roadmap, general, introductions, showcase, help, contributors, feature-requests, bug-reports, github-feed, providers, local-models, agents, tools, tutorials, tips-and-tricks, links, bot-commands, feedback
-- **6 roles**: Creator (Gold), Maintainer (Purple), Contributor (Green), Pro User (Blue), Community (Gray), Bot (Blurple)
-- **GitHub webhook live** — pushes, PRs, issues, releases, stars → #github-feed
-- **npm releases webhook** — #releases channel ready for publish notifications
-- **Welcome messages posted** — #general (welcome embed), #announcements (v2.19.0 release), #help (getting started guide), #showcase (intro)
-- **Server description set**
-- **Discord agent** — `.claude/agents/discord.md` with full management protocol
-- **Setup script** — `tools/discord-setup.ts` for automated channel/role/webhook creation
-- **Discord notification workflow** — `.github/workflows/discord-notify.yml` (release/issue/PR → Discord)
-- **Invite**: https://discord.gg/pYJn3hBqnz
-
-#### Commits This Session
-- `f071942b` — feat: governance files, Discord infrastructure, and GitHub templates
-- `294b979c` — feat: audit, document, and contribute tools — open source expansion (v2.19.0)
-- `0e9ef92c` — feat: kbot share — share conversations as GitHub Gists (v2.18.0)
-- `ee3f08a7` — feat: smart CLI onboarding with project auto-detection (v2.17.3)
-- `8c354364` — fix: Ollama model selection matched wrong size variants
-- `4a3d20c6` — fix: add kbot install.sh to repo
-- `c5735791` — fix: update Dockerfile provider count to 20
-- `8088515e` — fix: read version dynamically from package.json
-- `d50fafbd` — feat: v2.17.0 — embedded llama.cpp inference engine
-- `868b0bc5` — feat: v2.16.0 — 8 VFX & creative production tools
-- Earlier billing commits (c056054f, 5309984d, 9dc8136b, e2daca62, ddadd459)
-
-### Previous Session (2026-03-13)
-
-#### K:BOT v2.13.1 Published
-- **6 new feature modules**: test runner, watch mode, voice mode, export, plugin marketplace, rate limiter
-- **Streaming hardening**: retry with exponential backoff (1s/2s/4s) for 429/5xx errors
-- **Smarter context management**: priority scoring preserves high-value turns during compaction
-- **80 tests across 6 files** (vitest)
-- **Rebrand**: "Antigravity Group" → "kernel.chat group" across entire codebase
-- **Rename**: `kbot ollama` → `kbot local` (with backwards-compatible alias)
-- **Published**: v2.13.1 to npm, pushed to GitHub
-- **5 core modules**: repo map, provider fallback, self-eval, memory tools, task ledger
-- **37 specialist agents**, i18n for 24 languages
+#### Other
+- Hero GIF recorded (97KB), VHS tape files for 3 demos
+- Launch posts drafted (HN, Twitter, Reddit, dev.to, awesome lists)
+- `robots.txt` + `sitemap.xml` created for SEO
+- Social daemon + launchd plist for autonomous daily posting
+- 10 commits this session
 
 ### Pending
-- **Launch posts** — drafts ready in `tools/launch-drafts.md`, update to reflect `kbot local` naming
-- **iOS Capacitor sync** — need CocoaPods then `npx cap sync ios`
-- **Frontend cleanup** — remove dead overage CSS from index.css, update Terms & Privacy pages
-- **awesome-openclaw-skills PR** — blocked until skill gains traction on ClawHub
-- **Discord invite link** — add to README, npm package, kernel.chat website, kbot CLI help
-- **Discord bot launch** — run `npx tsx tools/discord-bot.ts` as persistent process
-- **Label 20+ issues as good-first-issue** — populate for contributors
-- **GitHub Release v2.19.0** — create formal release for Zenodo DOI
-- **Record terminal demo** — VHS/asciinema GIF for README
-- **Awesome list submissions** — awesome-cli-apps, awesome-ai-tools, awesome-node, etc.
-- **MCP registry submissions** — modelcontextprotocol.io, mcp.so
+- **Hero GIF in README** — recorded but not added to READMEs yet
+- **README tool count** — source has 284 tools, README says 262 (pulse flagged)
+- **Social media accounts** — @kbot_ai (X), Bluesky, Mastodon not yet created
+- **Launch posts** — all drafted, not posted (need Isaac approval for HN/Reddit)
+- **Docker Hub** — stuck at v2.22.1, needs Docker Desktop to push
+- **Obsidian sync** — not done this session, needs update
+- **iOS Capacitor sync** — still pending
+- **Frontend cleanup** — dead overage CSS, Terms & Privacy pages
+
+## kbot Current State
+- **npm version**: 3.3.0
+- **Tools**: 266 (284 in source, 266 published)
+- **Tests**: 261 across 15 test files
+- **Agents**: 22 built-in + 8 bootstrap/meta agents
+- **Providers**: 20
+- **Downloads**: ~1,195/day, 3,671/week
+- **Stars**: 1
+- **Discord**: 20 channels, 11 channel agents, webhooks live
+- **Docker**: stale at v2.22.1
 
 ## Key Decisions
-- **Repo identity**: K:BOT is the primary product. kernel.chat web app is the "companion."
-- **Billing**: 2-tier only. Free (10/month), Pro ($15/month, 200/month). NO overage. Hard cap.
-- **Profit margin**: ~$11/Pro user/month (~73%). Most users won't hit 200, so real-world ~80%+.
-- **8th-grade copy**: All user-facing text written simply, no jargon.
-- **Zero Tailwind**: All vanilla CSS with `ka-` prefix.
-- **Edge function deploys**: ALWAYS use `--no-verify-jwt` flag.
-
-## K:BOT Current State
-- **npm version**: 2.24.0 (`@kernel.chat/kbot`)
-- **Agents**: 22 built-in (17 specialists + 5 presets) + 6 templates
-- **Tools**: 238
-- **Providers**: 20
-- **Keywords**: ~151 (npm discoverability)
-- **Downloads**: 1,418/day, 2,663/week, 3,424/month (accelerating — 1,418/day sustained since Mar 15)
-- **Docker**: `isaacsight/kbot:2.22.1` on Docker Hub
-- **Discord**: Guild 1472796320015192178, 20 channels, 6 roles, webhooks live
-- **Discord Invite**: https://discord.gg/pYJn3hBqnz
-- **GitHub Topics**: 20 (at max)
-- **New modules (v2.24.0)**: deploy tools, MCP marketplace, database tools, pair mode, team mode, record, plugin SDK
-- **New modules (v2.23.x)**: A2A protocol, browser agent, Composio, marketplace, workflows, guardrails, handoffs
-- **Reality core**: error correction, entropy context, emergent swarms, Gödel limits, simulation — all always-on
-- **Research tools**: arXiv, Semantic Scholar, Papers With Code, HuggingFace, PyPI, CRAN, Cargo, NASA, DOI
-- **Container tools**: Docker build/run/ps/logs/compose, API testing, data queries, math, LaTeX, Terraform
-- **VFX tools**: Houdini VEX, GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures, color palettes, audio viz
-- **Database tools**: Postgres/MySQL/SQLite queries, Prisma introspection, ER diagrams, seed data
-- **Deploy tools**: Vercel, Netlify, Cloudflare Workers/Pages, Fly.io, Railway
-
-## Test Accounts
-- See `.env` or password manager for test credentials (removed from tracked files)
+- **No more features** — 266 tools is surplus. Focus on distribution, not tool count.
+- **Bootstrap principle** — fix one thing per run, measure before/after, compound over sessions.
+- **kbot posts as itself** — social tools built in, daemon ready, accounts need creation.
