@@ -15,13 +15,13 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**22 specialist agents. 246 tools. 20 providers. Programmatic SDK. Runs offline. MIT licensed.**
+**22 specialist agents. 262 tools. 20 providers. Programmatic SDK. Runs offline. MIT licensed.**
 
 ---
 
-## What's New in v3.0.0
+## What's New in v3.1
 
-kbot is now a **framework**, not just a CLI. Seven architectural changes:
+kbot is now a **framework**, not just a CLI. Latest additions:
 
 | Feature | What it means |
 |---------|---------------|
@@ -32,6 +32,8 @@ kbot is now a **framework**, not just a CLI. Seven architectural changes:
 | **Terminal Enhancement** | Braille sparklines, truecolor gradients, Kitty/iTerm2 inline images, synchronized output. |
 | **Lazy Loading** | Core tools load in ~200ms. 41 other modules load in background. Instant one-shot commands. |
 | **Structured Streaming** | Typed event protocol — `ResponseStream` with async iterator, SSE endpoint, MCP integration. |
+| **Game Dev Tools** | 16 tools for 8 engines: Godot, Unity, Unreal, Bevy, Phaser, Three.js, PlayCanvas, Defold. |
+| **Security Hardening** | 0 P0/P1 issues. Path traversal guards, code injection sanitization, 87 game dev tests. |
 
 ---
 
@@ -100,7 +102,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 246 tools
+// List all 262 tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -129,7 +131,7 @@ kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
 ```
 
-## 246 Tools
+## 262 Tools
 
 | Category | Examples |
 |----------|---------|
@@ -143,6 +145,7 @@ kbot --agent coder "refactor this into smaller functions"
 | **Database** | Postgres, MySQL, SQLite queries, Prisma, ER diagrams |
 | **Containers** | Docker build/run/compose, Terraform |
 | **VFX** | GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures |
+| **Game Dev** | scaffold, config, shaders, meshes, physics, particles, levels, tilemaps, navmesh, audio, netcode |
 | **IDE** | MCP server, ACP server, LSP bridge |
 | **Meta** | subagents, worktrees, planner, memory, sessions, checkpoints |
 

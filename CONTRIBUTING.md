@@ -1,6 +1,6 @@
-# Contributing to K:BOT
+# Contributing to kbot
 
-Thanks for your interest in contributing to K:BOT! Every contribution helps make terminal AI better for everyone.
+Thanks for your interest in contributing to kbot! Every contribution helps make terminal AI better for everyone.
 
 ## Quick Start
 
@@ -49,7 +49,7 @@ packages/kbot/src/
 ├── learning.ts      # Learning engine
 ├── matrix.ts        # Custom agent creation + mimic profiles
 ├── planner.ts       # Autonomous plan-execute mode
-├── tools/           # 228 built-in tools
+├── tools/           # 262 built-in tools
 │   ├── files.ts     # File read/write/glob/grep
 │   ├── bash.ts      # Shell execution
 │   ├── git.ts       # Git operations
@@ -59,6 +59,10 @@ packages/kbot/src/
 │   ├── research.ts  # arXiv, PyPI, HuggingFace, etc.
 │   ├── containers.ts# Docker, Terraform, etc.
 │   ├── creative.ts  # VFX, shaders, procedural
+│   ├── gamedev.ts   # 16 game dev tools (8 engines)
+│   ├── deploy.ts    # Vercel, Netlify, Cloudflare, Fly.io, Railway
+│   ├── database.ts  # Postgres, MySQL, SQLite, Prisma
+│   ├── mcp-marketplace.ts # MCP server discovery & install
 │   └── ...          # Many more
 └── ide/             # IDE integrations (MCP, ACP, LSP)
 ```
@@ -148,5 +152,5 @@ By contributing, you agree that your contributions will be licensed under the [M
 ## Questions?
 
 - Open a [GitHub Discussion](https://github.com/isaacsight/kernel/discussions)
-- Join our [Discord](https://discord.gg/kernel-chat) *(coming soon)*
+- Join our [Discord](https://discord.gg/pYJn3hBqnz)
 - Email: hello@kernel.chat
