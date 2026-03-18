@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Universal AI agent framework for your terminal. 22 specialist agents, 246 tools, 20 providers. Programmatic SDK, Bayesian skill routing, checkpointing & resume, middleware pipeline, structured streaming, lazy tool loading, progressive terminal enhancement. Embedded llama.cpp engine, LoRA/QLoRA fine-tuning, deploy tools, MCP marketplace, team mode, plugin SDK. Self-evolving, learns your patterns.",
   "type": "module",
   "repository": {
