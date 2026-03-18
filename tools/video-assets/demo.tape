@@ -1,31 +1,36 @@
-# kbot Hero Demo — 15 second terminal recording
+# kbot Hero Demo — Terminal recording for README
 # Run: vhs tools/video-assets/demo.tape
 
 Output tools/video-assets/demo.gif
 
 Set Shell "zsh"
 Set Theme "Catppuccin Mocha"
-Set FontSize 18
-Set Width 900
-Set Height 500
-Set Padding 20
-Set TypingSpeed 50ms
-Set PlaybackSpeed 1
+Set FontSize 16
+Set Width 880
+Set Height 520
+Set Padding 24
+Set TypingSpeed 40ms
+Set PlaybackSpeed 1.5
 
-# Install
-Type "npm i -g @kernel.chat/kbot"
-Sleep 500ms
+# Title moment — show the install command
+Type "# install: npm i -g @kernel.chat/kbot"
 Enter
-Sleep 3s
+Sleep 800ms
 
-# First command — no setup needed
-Type `kbot "what can you do?"`
-Sleep 500ms
+# Quick health check — shows capabilities at a glance
+Type "kbot doctor"
+Sleep 300ms
+Enter
+Sleep 4s
+
+# Real AI query — kbot responds via local model
+Type `kbot "what is kbot?"`
+Sleep 300ms
 Enter
 Sleep 8s
 
-# Show agent routing
-Type `kbot --agent coder "write a fizzbuzz in rust"`
-Sleep 500ms
+# Agent routing — show specialist selection
+Type `kbot --agent coder -q "write fizzbuzz in python"`
+Sleep 300ms
 Enter
-Sleep 6s
+Sleep 10s
