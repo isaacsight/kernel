@@ -32,6 +32,9 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 - [x] `kbot team` — multi-agent TCP collaboration
 - [x] `kbot record` — terminal session recording (SVG, GIF, asciicast)
 - [x] Plugin SDK — extend kbot with custom tools and hooks
+- [x] Zero-config first run — embedded llama.cpp, no API key required (v3.2.0)
+- [x] Social tools — kbot posts as itself on X, LinkedIn, Bluesky, Mastodon (v3.3.0)
+- [x] 284 tools — all free, all open source (v3.3.1)
 
 ### Community & Ecosystem
 - [x] Discord server (20 channels, 6 roles, webhooks)
@@ -49,10 +52,10 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 - [x] AES-256-CBC encrypted API keys at rest
 - [x] Destructive command blocking, tool execution timeouts
 
-## Next: v3.2.0 (Q2 2026)
+## Next: v3.4.0 (Q2 2026)
 
 ### Bootstrap & Self-Improvement
-- [ ] Bootstrap agent — recursive self-improvement loop measurement
+- [x] Bootstrap agent — recursive self-improvement loop measurement
 - [ ] `kbot metrics` — track development velocity, tool growth, loop efficiency
 - [ ] Self-testing — kbot validates its own tools on every build
 - [ ] Learning engine v2 — faster pattern extraction, cross-session optimization

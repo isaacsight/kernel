@@ -23,19 +23,17 @@ npm install -g @kernel.chat/kbot
 
 ---
 
-## What's New in v3.1
-
-kbot is now a **framework**, not just a CLI. Latest additions:
+## What's New in v3.3
 
 | Feature | What it means |
 |---------|---------------|
-| **Checkpointing** | Sessions survive crashes. Resume from the last tool call, not the beginning. |
-| **Bayesian Routing** | Agents earn skill ratings via Bradley-Terry model. Routing gets smarter with every interaction. |
-| **Programmatic SDK** | `import { agent, tools } from '@kernel.chat/kbot'` — use kbot as a library in your own apps. |
-| **Middleware Pipeline** | Composable Express-style middleware for tool execution. Plugins can hook into every tool call. |
-| **Terminal Enhancement** | Braille sparklines, truecolor gradients, Kitty/iTerm2 inline images, synchronized output. |
-| **Lazy Loading** | Core tools load in ~200ms. 41 other modules load in background. Instant one-shot commands. |
-| **Structured Streaming** | Typed event protocol — `ResponseStream` with async iterator, SSE endpoint, MCP integration. |
+| **Zero-Config First Run** | No API key needed. Embedded llama.cpp runs on first `kbot "hello"`. |
+| **Social Tools** | kbot posts as itself — `social_post`, `social_thread`, `social_status`, `social_setup`. |
+| **284 Tools** | +22 tools since v3.1: social, training, quality, VFX, research, and more. |
+| **Programmatic SDK** | `import { agent, tools } from '@kernel.chat/kbot'` — use kbot as a library. |
+| **Bayesian Routing** | Agents earn skill ratings via Bradley-Terry model. Gets smarter with every interaction. |
+| **Checkpointing** | Sessions survive crashes. Resume from the last tool call. |
+| **Middleware Pipeline** | Composable Express-style middleware for tool execution. |
 | **Game Dev Tools** | 16 tools for 8 engines: Godot, Unity, Unreal, Bevy, Phaser, Three.js, PlayCanvas, Defold. |
 | **Security Hardening** | 0 P0/P1 issues. Path traversal guards, code injection sanitization, 87 game dev tests. |
 
