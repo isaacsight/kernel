@@ -4,7 +4,7 @@
 
 import { registerTool } from './index.js'
 import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
-import { dirname, join, basename, extname } from 'node:path'
+import { dirname, join, basename, extname, resolve, relative, isAbsolute } from 'node:path'
 import { execFile } from 'node:child_process'
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -71,11 +71,30 @@ function seededRng(seed: number): () => number {
   }
 }
 
+function safePath(userPath: string): string {
+  const resolved = resolve(process.cwd(), userPath)
+  const rel = relative(process.cwd(), resolved)
+  if (rel.startsWith('..') || isAbsolute(rel)) {
+    throw new Error(`Path must be within the working directory: ${userPath}`)
+  }
+  return resolved
+}
+
 // ── Registration ─────────────────────────────────────────────────────
 
 export function registerGamedevTools(): void {
 
   const htmlSafe = (s: string) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c] ?? c))
+
+  /** Escape a string for safe interpolation into generated source code */
+  function codeSafe(s: string, lang: 'js' | 'rust' | 'gdscript' | 'csharp' | 'lua' | 'toml' | 'ini' = 'js'): string {
+    if (lang === 'rust' || lang === 'toml') return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+    if (lang === 'gdscript' || lang === 'csharp') return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')
+    if (lang === 'lua') return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')
+    if (lang === 'ini') return s.replace(/[=\n\r]/g, '_')
+    // js default
+    return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/\n/g, '\\n')
+  }
 
   // ── Tool 1: scaffold_game ──────────────────────────────────────────
 
@@ -84,10 +103,10 @@ export function registerGamedevTools(): void {
     godot(name, tpl) {
       const is3d = tpl === '3d'
       const mainScene = is3d
-        ? `[gd_scene load_steps=2 format=3]\n\n[node name="${name}" type="Node3D"]\n\n[node name="Camera3D" type="Camera3D" parent="."]\ntransform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,5)\n\n[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]\n`
-        : `[gd_scene load_steps=2 format=3]\n\n[node name="${name}" type="Node2D"]\n`
+        ? `[gd_scene load_steps=2 format=3]\n\n[node name="${codeSafe(name, 'ini')}" type="Node3D"]\n\n[node name="Camera3D" type="Camera3D" parent="."]\ntransform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,5)\n\n[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]\n`
+        : `[gd_scene load_steps=2 format=3]\n\n[node name="${codeSafe(name, 'ini')}" type="Node2D"]\n`
       return [
-        ['project.godot', `[application]\nconfig/name="${name}"\nrun/main_scene="res://main.tscn"\nconfig/features=PackedStringArray("4.3")\n\n[rendering]\nrenderer/rendering_method="${is3d ? 'forward_plus' : 'gl_compatibility'}"\n`],
+        ['project.godot', `[application]\nconfig/name="${codeSafe(name, 'ini')}"\nrun/main_scene="res://main.tscn"\nconfig/features=PackedStringArray("4.3")\n\n[rendering]\nrenderer/rendering_method="${is3d ? 'forward_plus' : 'gl_compatibility'}"\n`],
         ['main.tscn', mainScene],
         ['.gitignore', '.godot/\n*.import\nexport_presets.cfg\n'],
       ]
@@ -96,7 +115,7 @@ export function registerGamedevTools(): void {
       const is3d = tpl === '3d'
       return [
         ['Assets/.gitkeep', ''],
-        ['Assets/Scripts/GameManager.cs', `using UnityEngine;\n\nnamespace ${name.replace(/[^a-zA-Z0-9]/g, '')}\n{\n    public class GameManager : MonoBehaviour\n    {\n        void Start() { Debug.Log("${name} started"); }\n        void Update() { }\n    }\n}\n`],
+        ['Assets/Scripts/GameManager.cs', `using UnityEngine;\n\nnamespace ${name.replace(/[^a-zA-Z0-9]/g, '')}\n{\n    public class GameManager : MonoBehaviour\n    {\n        void Start() { Debug.Log("${codeSafe(name, 'csharp')} started"); }\n        void Update() { }\n    }\n}\n`],
         ['ProjectSettings/ProjectSettings.asset', `%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!129 &1\nPlayerSettings:\n  productName: ${name}\n  defaultScreenWidth: 1920\n  defaultScreenHeight: 1080\n`],
         ['.gitignore', '[Ll]ibrary/\n[Tt]emp/\n[Oo]bj/\n[Bb]uild/\n*.csproj\n*.sln\n*.pidb\n*.userprefs\n'],
       ]
@@ -128,7 +147,7 @@ export function registerGamedevTools(): void {
         ['package.json', JSON.stringify({ name: name.toLowerCase().replace(/[^a-z0-9-]/g, '-'), version: '0.1.0', private: true, scripts: { dev: 'vite', build: 'vite build' }, dependencies: { phaser: '^3.80.0' }, devDependencies: { vite: '^5.0.0', typescript: '^5.4.0' } }, null, 2)],
         ['index.html', `<!DOCTYPE html>\n<html><head><title>${htmlSafe(name)}</title></head>\n<body><script type="module" src="/src/main.ts"></script></body></html>\n`],
         ['src/main.ts', `import Phaser from 'phaser'\nimport { MainScene } from './scenes/MainScene'\n\nnew Phaser.Game({\n  type: Phaser.AUTO,\n  width: 800,\n  height: 600,\n  physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 300 }, debug: false } },\n  scene: [MainScene],\n})\n`],
-        ['src/scenes/MainScene.ts', `import Phaser from 'phaser'\n\nexport class MainScene extends Phaser.Scene {\n  constructor() { super('MainScene') }\n  preload() { }\n  create() {\n    this.add.text(400, 300, '${name}', { fontSize: '32px', color: '#fff' }).setOrigin(0.5)\n  }\n}\n`],
+        ['src/scenes/MainScene.ts', `import Phaser from 'phaser'\n\nexport class MainScene extends Phaser.Scene {\n  constructor() { super('MainScene') }\n  preload() { }\n  create() {\n    this.add.text(400, 300, '${codeSafe(name, 'js')}', { fontSize: '32px', color: '#fff' }).setOrigin(0.5)\n  }\n}\n`],
         ['tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2020', module: 'ESNext', moduleResolution: 'bundler', strict: true, esModuleInterop: true }, include: ['src'] }, null, 2)],
         ['.gitignore', 'node_modules/\ndist/\n'],
       ]
@@ -155,10 +174,10 @@ export function registerGamedevTools(): void {
     defold(name, tpl) {
       const is3d = tpl === '3d'
       return [
-        ['game.project', `[project]\ntitle = ${name}\n\n[display]\nwidth = 960\nheight = 640\n\n[bootstrap]\nmain_collection = /main/main.collectionc\n\n[physics]\ntype = ${is3d ? '3D' : '2D'}\n`],
+        ['game.project', `[project]\ntitle = ${codeSafe(name, 'ini')}\n\n[display]\nwidth = 960\nheight = 640\n\n[bootstrap]\nmain_collection = /main/main.collectionc\n\n[physics]\ntype = ${is3d ? '3D' : '2D'}\n`],
         ['main/main.collection', `name: "main"\ninstances {\n  id: "go"\n  prototype: "/main/game.go"\n  position { x: 0.0 y: 0.0 z: 0.0 }\n}\n`],
         ['main/game.go', `components {\n  id: "script"\n  component: "/main/game.script"\n}\n`],
-        ['main/game.script', `function init(self)\n    msg.post(".", "acquire_input_focus")\n    print("${name} started")\nend\n\nfunction update(self, dt)\nend\n\nfunction on_input(self, action_id, action)\nend\n`],
+        ['main/game.script', `function init(self)\n    msg.post(".", "acquire_input_focus")\n    print("${codeSafe(name, 'lua')} started")\nend\n\nfunction update(self, dt)\nend\n\nfunction on_input(self, action_id, action)\nend\n`],
         ['.gitignore', 'build/\n.internal/\n'],
       ]
     },
@@ -178,7 +197,7 @@ export function registerGamedevTools(): void {
       const engine = String(args.engine).toLowerCase()
       const name = String(args.name)
       const template = String(args.template || 'blank').toLowerCase()
-      const outputDir = String(args.output_dir || `./${name}`)
+      const outputDir = safePath(String(args.output_dir || `./${name}`))
 
       if (!scaffoldFiles[engine]) {
         return `Error: Unknown engine "${engine}". Supported: ${Object.keys(scaffoldFiles).join(', ')}`
@@ -210,10 +229,10 @@ export function registerGamedevTools(): void {
     godot: {
       project: (s) => {
         const lines = ['[application]']
-        if (s.name) lines.push(`config/name="${s.name}"`)
-        if (s.main_scene) lines.push(`run/main_scene="${s.main_scene}"`)
+        if (s.name) lines.push(`config/name="${codeSafe(String(s.name), 'ini')}"`)
+        if (s.main_scene) lines.push(`run/main_scene="${codeSafe(String(s.main_scene), 'ini')}"`)
         lines.push('', '[rendering]')
-        lines.push(`renderer/rendering_method="${s.renderer || 'forward_plus'}"`)
+        lines.push(`renderer/rendering_method="${codeSafe(String(s.renderer || 'forward_plus'), 'ini')}"`)
         if (s.vsync !== undefined) lines.push(`[display]\nwindow/vsync/vsync_mode=${s.vsync ? 1 : 0}`)
         if (s.width) lines.push(`window/size/viewport_width=${s.width}`)
         if (s.height) lines.push(`window/size/viewport_height=${s.height}`)
@@ -238,12 +257,13 @@ export function registerGamedevTools(): void {
       },
       rendering: (s) => {
         const lines = ['[rendering]']
-        if (s.renderer) lines.push(`renderer/rendering_method="${s.renderer}"`)
+        if (s.renderer) lines.push(`renderer/rendering_method="${codeSafe(String(s.renderer), 'ini')}"`)
+
         if (s.msaa) lines.push(`anti_aliasing/quality/msaa_${s.msaa_type || '3d'}=${s.msaa}`)
         if (s.shadows !== undefined) lines.push(`lights_and_shadows/directional_shadow/size=${s.shadow_size || 4096}`)
         return lines.join('\n') + '\n'
       },
-      build: (s) => `[export]\nplatform="${s.platform || 'linux'}"\narch="${s.arch || 'x86_64'}"\n`,
+      build: (s) => `[export]\nplatform="${codeSafe(String(s.platform || 'linux'), 'ini')}"\narch="${codeSafe(String(s.arch || 'x86_64'), 'ini')}"\n`,
       audio: (s) => {
         const lines = ['[audio]']
         if (s.bus_count) lines.push(`buses/default_bus_count=${s.bus_count}`)
@@ -269,7 +289,7 @@ export function registerGamedevTools(): void {
     bevy: {
       project: (s) => {
         const name = String(s.name || 'game').toLowerCase().replace(/[^a-z0-9-]/g, '-')
-        return `[package]\nname = "${name}"\nversion = "${s.version || '0.1.0'}"\nedition = "2021"\n\n[dependencies]\nbevy = { version = "0.15", features = [${(s.features as string[] || []).map((f: string) => `"${f}"`).join(', ')}] }\n\n[profile.dev]\nopt-level = 1\n[profile.dev.package."*"]\nopt-level = 3\n`
+        return `[package]\nname = "${name}"\nversion = "${codeSafe(String(s.version || '0.1.0'), 'toml')}"\nedition = "2021"\n\n[dependencies]\nbevy = { version = "0.15", features = [${(s.features as string[] || []).map((f: string) => `"${codeSafe(f, 'toml')}"`).join(', ')}] }\n\n[profile.dev]\nopt-level = 1\n[profile.dev.package."*"]\nopt-level = 3\n`
       },
       build: (s) => `# .cargo/config.toml\n[target.x86_64-unknown-linux-gnu]\nlinker = "clang"\nrustflags = ["-C", "link-arg=-fuse-ld=lld"]\n\n[target.x86_64-pc-windows-msvc]\nrustflags = ["-C", "link-arg=/DEBUG:NONE"]\n`,
       rendering: (s) => `// Rendering plugin configuration\nuse bevy::prelude::*;\n\npub fn rendering_plugin(app: &mut App) {\n    app.insert_resource(Msaa::Sample${s.msaa || 4})\n       .insert_resource(ClearColor(Color::srgb(${s.clear_r ?? 0.1}, ${s.clear_g ?? 0.1}, ${s.clear_b ?? 0.15})));\n}\n`,
@@ -281,7 +301,7 @@ export function registerGamedevTools(): void {
       project: (s) => JSON.stringify({ name: String(s.name || 'game').toLowerCase().replace(/[^a-z0-9-]/g, '-'), version: s.version || '0.1.0', private: true, scripts: { dev: 'vite', build: 'vite build' }, dependencies: { phaser: s.phaser_version || '^3.80.0' }, devDependencies: { vite: '^5.0.0', typescript: '^5.4.0' } }, null, 2),
       physics: (s) => `// Phaser physics config\nexport const physicsConfig: Phaser.Types.Physics.ArcadePhysicsConfig = {\n  gravity: { x: ${s.gravity_x ?? 0}, y: ${s.gravity_y ?? 300} },\n  debug: ${s.debug ?? false},\n}\n`,
       rendering: (s) => `// Phaser rendering config\nexport const renderConfig: Partial<Phaser.Types.Core.GameConfig> = {\n  type: Phaser.${s.renderer === 'canvas' ? 'CANVAS' : s.renderer === 'webgl' ? 'WEBGL' : 'AUTO'},\n  antialias: ${s.antialias ?? true},\n  pixelArt: ${s.pixel_art ?? false},\n  roundPixels: ${s.round_pixels ?? false},\n}\n`,
-      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${s.base || './'}',\n  build: { target: '${s.target || 'es2020'}', outDir: '${s.outDir || 'dist'}' },\n})\n`,
+      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${codeSafe(String(s.base || './'), 'js')}',\n  build: { target: '${codeSafe(String(s.target || 'es2020'), 'js')}', outDir: '${codeSafe(String(s.outDir || 'dist'), 'js')}' },\n})\n`,
       input: (s) => `// Input key mapping\nexport const KEYS = ${JSON.stringify(s, null, 2)} as const\n`,
       audio: (s) => `// Audio config\nexport const audioConfig = {\n  disableWebAudio: ${s.disable_web_audio ?? false},\n  noAudio: ${s.no_audio ?? false},\n}\n`,
     },
@@ -289,7 +309,7 @@ export function registerGamedevTools(): void {
       project: (s) => JSON.stringify({ name: String(s.name || 'game').toLowerCase().replace(/[^a-z0-9-]/g, '-'), version: s.version || '0.1.0', private: true, scripts: { dev: 'vite', build: 'vite build' }, dependencies: { three: s.three_version || '^0.170.0' }, devDependencies: { '@types/three': s.three_version || '^0.170.0', vite: '^5.0.0', typescript: '^5.4.0' } }, null, 2),
       rendering: (s) => `// Three.js renderer config\nimport * as THREE from 'three'\n\nexport function createRenderer(canvas?: HTMLCanvasElement) {\n  const renderer = new THREE.WebGLRenderer({ canvas, antialias: ${s.antialias ?? true}, alpha: ${s.alpha ?? false} })\n  renderer.shadowMap.enabled = ${s.shadows ?? true}\n  renderer.shadowMap.type = THREE.${s.shadow_type || 'PCFSoftShadowMap'}\n  renderer.toneMapping = THREE.${s.tone_mapping || 'ACESFilmicToneMapping'}\n  renderer.toneMappingExposure = ${s.exposure ?? 1.0}\n  return renderer\n}\n`,
       physics: (s) => `// Physics config (rapier/cannon)\nexport const physicsConfig = {\n  gravity: { x: ${s.gravity_x ?? 0}, y: ${s.gravity_y ?? -9.81}, z: ${s.gravity_z ?? 0} },\n  timestep: ${s.timestep ?? 1 / 60},\n}\n`,
-      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${s.base || './'}',\n  build: { target: '${s.target || 'es2020'}', outDir: '${s.outDir || 'dist'}' },\n})\n`,
+      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${codeSafe(String(s.base || './'), 'js')}',\n  build: { target: '${codeSafe(String(s.target || 'es2020'), 'js')}', outDir: '${codeSafe(String(s.outDir || 'dist'), 'js')}' },\n})\n`,
       input: (s) => `// Input mapping\nexport const INPUT_MAP = ${JSON.stringify(s, null, 2)} as const\n`,
       audio: (s) => `// Three.js audio config\nimport * as THREE from 'three'\n\nexport function createAudioListener(camera: THREE.Camera) {\n  const listener = new THREE.AudioListener()\n  camera.add(listener)\n  return listener\n}\n`,
     },
@@ -302,7 +322,7 @@ export function registerGamedevTools(): void {
       input: (s) => {
         const lines = ['[/Script/Engine.InputSettings]']
         for (const [name, key] of Object.entries(s)) {
-          lines.push(`+ActionMappings=(ActionName="${name}",bShift=False,bCtrl=False,bAlt=False,bCmd=False,Key=${key})`)
+          lines.push(`+ActionMappings=(ActionName="${codeSafe(String(name), 'ini')}",bShift=False,bCtrl=False,bAlt=False,bCmd=False,Key=${key})`)
         }
         return lines.join('\n') + '\n'
       },
@@ -314,12 +334,12 @@ export function registerGamedevTools(): void {
       project: (s) => JSON.stringify({ name: s.name || 'game', version: s.version || '0.1.0', scripts: { dev: 'vite', build: 'vite build' }, dependencies: { playcanvas: s.pc_version || '^2.1.0' } }, null, 2),
       rendering: (s) => `// PlayCanvas rendering config\nexport const renderSettings = {\n  antialias: ${s.antialias ?? true},\n  shadows: ${s.shadows ?? true},\n  gammaCorrection: pc.GAMMA_SRGB,\n  toneMapping: pc.TONEMAP_ACES,\n}\n`,
       physics: (s) => `// PlayCanvas physics (ammo.js)\nexport const physicsConfig = {\n  gravity: [${s.gravity_x ?? 0}, ${s.gravity_y ?? -9.81}, ${s.gravity_z ?? 0}],\n  fixedTimeStep: ${s.timestep ?? 1 / 60},\n}\n`,
-      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${s.base || './'}',\n  build: { target: 'es2020', outDir: '${s.outDir || 'dist'}' },\n})\n`,
+      build: (s) => `// vite.config.ts\nimport { defineConfig } from 'vite'\nexport default defineConfig({\n  base: '${codeSafe(String(s.base || './'), 'js')}',\n  build: { target: 'es2020', outDir: '${codeSafe(String(s.outDir || 'dist'), 'js')}' },\n})\n`,
       input: (s) => `// Input config\nexport const INPUT_MAP = ${JSON.stringify(s, null, 2)} as const\n`,
-      audio: (s) => `// Audio config\nexport const audioConfig = { volume: ${s.volume ?? 1}, distanceModel: '${s.distance_model || 'inverse'}' }\n`,
+      audio: (s) => `// Audio config\nexport const audioConfig = { volume: ${s.volume ?? 1}, distanceModel: '${codeSafe(String(s.distance_model || 'inverse'), 'js')}' }\n`,
     },
     defold: {
-      project: (s) => `[project]\ntitle = ${s.name || 'Game'}\n\n[display]\nwidth = ${s.width || 960}\nheight = ${s.height || 640}\n\n[bootstrap]\nmain_collection = ${s.main_collection || '/main/main.collectionc'}\n`,
+      project: (s) => `[project]\ntitle = ${codeSafe(String(s.name || 'Game'), 'ini')}\n\n[display]\nwidth = ${s.width || 960}\nheight = ${s.height || 640}\n\n[bootstrap]\nmain_collection = ${codeSafe(String(s.main_collection || '/main/main.collectionc'), 'ini')}\n`,
       physics: (s) => `[physics]\ntype = ${s.physics_type || '2D'}\ngravity_y = ${s.gravity ?? -10}\nscale = ${s.scale ?? 0.02}\n`,
       rendering: (s) => `[graphics]\ndefault_texture_min_filter = ${s.min_filter || 'linear'}\ndefault_texture_mag_filter = ${s.mag_filter || 'linear'}\nmax_draw_calls = ${s.max_draw_calls || 1024}\n`,
       build: (s) => `[native_extension]\napp_manifest = ${s.manifest || ''}\n`,
@@ -451,8 +471,10 @@ export function registerGamedevTools(): void {
       const target = String(args.target || 'desktop').toLowerCase()
 
       // If source looks like a file path, try to read it
+      const shaderExts = ['.glsl', '.hlsl', '.wgsl', '.metal', '.frag', '.vert', '.comp', '.geom', '.tesc', '.tese', '.gdshader', '.shader', '.cg', '.fx']
       if (source.length < 300 && !source.includes('\n') && existsSync(source)) {
         const ext = extname(source).toLowerCase()
+        if (!shaderExts.includes(ext)) return `Error: shader_debug only reads shader files (${shaderExts.join(', ')}). Got: ${ext || 'no extension'}`
         source = readFileSync(source, 'utf-8')
         if (!args.language) {
           const extMap: Record<string, string> = { '.glsl': 'glsl', '.vert': 'glsl', '.frag': 'glsl', '.hlsl': 'hlsl', '.wgsl': 'wgsl', '.shader': 'hlsl', '.cg': 'hlsl' }
@@ -927,7 +949,7 @@ void fragment() {
     async execute(args) {
       const materialType = String(args.material_type).toLowerCase()
       const engine = String(args.engine).toLowerCase()
-      const outputPath = args.output_path ? String(args.output_path) : null
+      const outputPath = args.output_path ? safePath(String(args.output_path)) : null
       let params: Record<string, unknown> = {}
       if (args.params) {
         try { params = JSON.parse(String(args.params)) } catch { return 'Error: params must be valid JSON' }
@@ -1308,7 +1330,7 @@ void fragment() {
     tier: 'free',
     async execute(args) {
       const shape = String(args.shape).toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       let params: Record<string, unknown> = {}
       if (args.params) {
         try { params = JSON.parse(String(args.params)) } catch { return 'Error: params must be valid JSON' }
@@ -1347,8 +1369,8 @@ void fragment() {
     timeout: 120_000,
     async execute(args) {
       const inputDir = String(args.input_dir)
-      const outputImage = String(args.output_image)
-      const outputData = String(args.output_data)
+      const outputImage = safePath(String(args.output_image))
+      const outputData = safePath(String(args.output_data))
       const algorithm = String(args.algorithm || 'maxrects') as 'shelf' | 'maxrects' | 'grid'
       const maxSize = typeof args.max_size === 'number' ? args.max_size : 2048
       const padding = typeof args.padding === 'number' ? args.padding : 2
@@ -1682,7 +1704,7 @@ void fragment() {
       const engine = String(args.engine || 'rapier').toLowerCase()
       let params: any = {}
       try { params = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
 
       const validTypes = ['rigidbody', 'softbody', 'ragdoll', 'vehicle', 'cloth', 'joints']
       const validEngines = ['godot', 'unity', 'unreal', 'bevy', 'cannon', 'rapier', 'matter']
@@ -2973,7 +2995,7 @@ const JOINT_CONFIG = ${JSON.stringify({
     async execute(args) {
       const effect = String(args.effect).toLowerCase()
       const engine = String(args.engine || 'three').toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       let overrides: any = {}
       try { overrides = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
 
@@ -3692,7 +3714,7 @@ ${effect === 'fire' || effect === 'smoke' ? `    // Grow over lifetime
       const width = Math.min(typeof args.width === 'number' ? args.width : 40, 1000)
       const height = Math.min(typeof args.height === 'number' ? args.height : 30, 1000)
       const seedVal = typeof args.seed === 'number' ? args.seed : Date.now()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       const format = String(args.format || 'json') as 'json' | 'tiled' | 'ascii'
       let params: any = {}
       try { params = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
@@ -4280,7 +4302,7 @@ ${effect === 'fire' || effect === 'smoke' ? `    // Grow over lifetime
     async execute(args) {
       const tilesetType = String(args.tileset_type).toLowerCase()
       const terrain = String(args.terrain).toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       const format = String(args.format || 'json') as 'godot' | 'tiled' | 'json'
 
       const validTypes = ['blob_47', 'wang_16', 'simple_4']
@@ -4645,7 +4667,7 @@ tile_${i}/terrain_peering/left = ${cardW ? 0 : -1}`
     async execute(args) {
       const engine = String(args.engine || 'recast').toLowerCase()
       const agentType = String(args.agent_type || 'humanoid').toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       let overrides: any = {}
       try { overrides = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
 
@@ -5783,9 +5805,12 @@ export class NavigationSystem {
     async execute(args) {
       const system = String(args.system).toLowerCase()
       const engine = String(args.engine || 'web').toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       let params: any = {}
       try { params = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
+
+      const validEngines = ['godot', 'unity', 'unreal', 'web', 'bevy']
+      if (!validEngines.includes(engine)) return `Error: engine must be one of: ${validEngines.join(', ')}`
 
       const validSystems = ['spatial', 'music_layers', 'sound_bank', 'howler', 'web_audio']
       if (!validSystems.includes(system)) {
@@ -7239,9 +7264,15 @@ export class AudioEngine {
       const architecture = String(args.architecture).toLowerCase()
       const transport = String(args.transport || 'websocket').toLowerCase()
       const framework = String(args.framework || 'raw').toLowerCase()
-      const outputDir = String(args.output_dir)
+      const outputDir = safePath(String(args.output_dir))
       let features: string[] = ['lobby', 'state_sync']
       try { features = args.features ? JSON.parse(String(args.features)) : ['lobby', 'state_sync'] } catch { return 'Error: features must be valid JSON' }
+
+      const validTransports = ['websocket', 'webrtc']
+      if (!validTransports.includes(transport)) return `Error: transport must be one of: ${validTransports.join(', ')}`
+
+      const validFrameworks = ['colyseus', 'socket_io', 'geckos', 'nakama', 'raw']
+      if (!validFrameworks.includes(framework)) return `Error: framework must be one of: ${validFrameworks.join(', ')}`
 
       const validArch = ['client_server', 'peer_to_peer', 'relay']
       if (!validArch.includes(architecture)) {
@@ -8657,7 +8688,7 @@ ${hasReconnect ? '    if (this.reconnectTimer) clearTimeout(this.reconnectTimer)
     async execute(args) {
       const engine = String(args.engine || 'web').toLowerCase()
       const platforms = String(args.platforms).split(',').map(p => p.trim().toLowerCase())
-      const outputDir = String(args.output_dir)
+      const outputDir = safePath(String(args.output_dir))
       const ci = String(args.ci || 'github_actions').toLowerCase()
 
       const validPlatforms = ['steam', 'itch', 'web', 'ios', 'android']
@@ -9171,7 +9202,7 @@ export default defineConfig({
     async execute(args) {
       const testType = String(args.test_type).toLowerCase()
       const engine = String(args.engine || 'web').toLowerCase()
-      const outputPath = String(args.output_path)
+      const outputPath = safePath(String(args.output_path))
       let params: any = {}
       try { params = args.params ? JSON.parse(String(args.params)) : {} } catch { return 'Error: params must be valid JSON' }
 
@@ -10478,7 +10509,7 @@ export class PerformanceBudget {
       const framework = String(args.framework).toLowerCase()
       let entities: Array<{ name: string; components: string[] }> = []
       try { entities = JSON.parse(String(args.entities)) } catch { return 'Error: entities must be valid JSON' }
-      const outputDir = String(args.output_dir)
+      const outputDir = safePath(String(args.output_dir))
       let systems: Array<{ name: string; queries: string[]; description?: string }> = []
       try { systems = args.systems ? JSON.parse(String(args.systems)) : [] } catch { return 'Error: systems must be valid JSON' }
 
