@@ -1,6 +1,6 @@
 <p align="center">
   <strong>K:BOT</strong><br>
-  <em>Terminal AI agent that learns your patterns.</em>
+  <em>Terminal AI agent framework that learns your patterns.</em>
 </p>
 
 <p align="center">
@@ -11,14 +11,27 @@
   <a href="https://discord.gg/pYJn3hBqnz"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
 </p>
 
-<!-- TODO: Replace with actual demo GIF after recording -->
-<!-- <p align="center"><img src="https://raw.githubusercontent.com/isaacsight/kernel/main/packages/kbot/demo.gif" alt="kbot demo" width="600"></p> -->
-
 ```bash
 npm install -g @kernel.chat/kbot
 ```
 
-**22 specialist agents. 223 tools. 20 providers. Runs offline. MIT licensed.**
+**22 specialist agents. 246 tools. 20 providers. Programmatic SDK. Runs offline. MIT licensed.**
+
+---
+
+## What's New in v3.0.0
+
+K:BOT is now a **framework**, not just a CLI. Seven architectural changes:
+
+| Feature | What it means |
+|---------|---------------|
+| **Checkpointing** | Sessions survive crashes. Resume from the last tool call, not the beginning. |
+| **Bayesian Routing** | Agents earn skill ratings via Bradley-Terry model. Routing gets smarter with every interaction. |
+| **Programmatic SDK** | `import { agent, tools } from '@kernel.chat/kbot'` — use K:BOT as a library in your own apps. |
+| **Middleware Pipeline** | Composable Express-style middleware for tool execution. Plugins can hook into every tool call. |
+| **Terminal Enhancement** | Braille sparklines, truecolor gradients, Kitty/iTerm2 inline images, synchronized output. |
+| **Lazy Loading** | Core tools load in ~200ms. 41 other modules load in background. Instant one-shot commands. |
+| **Structured Streaming** | Typed event protocol — `ResponseStream` with async iterator, SSE endpoint, MCP integration. |
 
 ---
 
@@ -28,9 +41,10 @@ Most AI coding tools lock you into one provider and forget everything between se
 
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
-- **Learns your patterns** — Extracts what works from every conversation. Gets faster and smarter over time.
-- **22 specialist agents** — Say "fix the auth bug" and it picks the coder. Say "research JWT tokens" and it picks the researcher. Auto-routed.
-- **Self-evaluating** — Every response scored on quality. Low score? Auto-retries with feedback.
+- **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
+- **22 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
+- **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
+- **Use as a library** — Clean SDK with typed exports. Build your own tools on top of K:BOT.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
 
 ## Install
@@ -65,9 +79,42 @@ kbot local
 kbot -p "generate a user roles migration" > migration.sql
 ```
 
+## SDK — Use K:BOT as a Library
+
+```typescript
+import { agent, tools, providers } from '@kernel.chat/kbot'
+
+// Run the agent programmatically
+const result = await agent.run("fix the auth bug", { agent: 'coder' })
+console.log(result.content)    // AI response
+console.log(result.toolCalls)  // tools it used
+console.log(result.usage)      // token counts
+
+// Stream responses
+for await (const event of agent.stream("explain this code")) {
+  if (event.type === 'content_delta') process.stdout.write(event.text)
+  if (event.type === 'tool_call_start') console.log(`Using: ${event.name}`)
+}
+
+// Execute tools directly
+const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
+console.log(files.result)
+
+// List all 246 tools
+console.log(tools.list().map(t => t.name))
+```
+
+### SDK Exports
+
+```typescript
+import { agent, tools, providers } from '@kernel.chat/kbot'           // Main SDK
+import { SilentUIAdapter, CallbackUIAdapter } from '@kernel.chat/kbot' // UI adapters
+import { ResponseStream } from '@kernel.chat/kbot'                     // Streaming
+```
+
 ## Specialists
 
-Auto-routed by intent, or pick one with `kbot --agent <name>`:
+Auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 
 | | Agents |
 |---|---|
@@ -82,7 +129,7 @@ kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
 ```
 
-## 223 Tools
+## 246 Tools
 
 | Category | Examples |
 |----------|---------|
@@ -92,10 +139,36 @@ kbot --agent coder "refactor this into smaller functions"
 | **Web** | search, fetch, browser automation |
 | **Research** | arXiv, Semantic Scholar, HuggingFace, NASA, DOI |
 | **Data** | CSV read/query/write, transforms, reports, invoices |
+| **Deploy** | Vercel, Netlify, Cloudflare Workers/Pages, Fly.io, Railway |
+| **Database** | Postgres, MySQL, SQLite queries, Prisma, ER diagrams |
 | **Containers** | Docker build/run/compose, Terraform |
 | **VFX** | GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures |
 | **IDE** | MCP server, ACP server, LSP bridge |
-| **Meta** | subagents, worktrees, planner, memory, sessions |
+| **Meta** | subagents, worktrees, planner, memory, sessions, checkpoints |
+
+## Middleware Pipeline
+
+Extend tool execution with composable middleware:
+
+```typescript
+import { ToolPipeline, executionMiddleware } from '@kernel.chat/kbot/tools'
+
+const pipeline = new ToolPipeline()
+
+// Add custom logging middleware
+pipeline.use(async (ctx, next) => {
+  console.log(`Calling ${ctx.toolName}...`)
+  await next()
+  console.log(`${ctx.toolName} took ${ctx.durationMs}ms`)
+})
+
+// Add the actual execution
+pipeline.use(executionMiddleware(myExecutor))
+
+await pipeline.execute({ toolName: 'bash', toolArgs: { command: 'ls' }, toolCallId: '1', metadata: {}, aborted: false })
+```
+
+Built-in middleware: `permissionMiddleware`, `hookMiddleware`, `timeoutMiddleware`, `metricsMiddleware`, `truncationMiddleware`, `telemetryMiddleware`.
 
 ## 20 Providers
 
@@ -139,6 +212,33 @@ kbot local --embedded
 # GPU-accelerated: Metal (Mac), CUDA (Linux/Windows), Vulkan
 ```
 
+## Structured Streaming
+
+Stream typed events to any consumer:
+
+```typescript
+import { ResponseStream } from '@kernel.chat/kbot'
+
+const stream = new ResponseStream()
+
+// Subscribe to events
+stream.on((event) => {
+  switch (event.type) {
+    case 'content_delta': process.stdout.write(event.text); break
+    case 'tool_call_start': console.log(`Tool: ${event.name}`); break
+    case 'tool_result': console.log(`Result: ${event.result}`); break
+    case 'usage': console.log(`Tokens: ${event.inputTokens} in, ${event.outputTokens} out`); break
+  }
+})
+
+// Or use as async iterator
+for await (const event of stream) {
+  // handle each event
+}
+```
+
+**HTTP SSE**: `POST /stream` when running `kbot serve` — standard Server-Sent Events.
+
 ## IDE Integration
 
 ```json
@@ -161,9 +261,9 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes file ops
 | `kbot "prompt"` | One-shot execution |
 | `kbot auth` | Configure API key |
 | `kbot local` | Use local AI (Ollama, embedded, LM Studio, Jan) |
+| `kbot serve` | Start HTTP REST + SSE streaming server |
 | `kbot audit <repo>` | Security + quality audit of any GitHub repo |
 | `kbot contribute <repo>` | Find good-first-issues and quick wins |
-| `kbot serve` | Start HTTP REST server |
 | `kbot ide mcp` | Start MCP server for IDEs |
 | `kbot doctor` | 10-point health check |
 | `/agent <name>` | Switch specialist |
@@ -196,8 +296,10 @@ These aren't metaphors. They're TypeScript modules with paper citations in the h
 - API keys encrypted at rest (AES-256-CBC)
 - Destructive operations require confirmation
 - Shell commands sandboxed with blocklist
-- Tool execution timeout (5 min)
+- Tool execution timeout (5 min) with middleware pipeline
 - Config files restricted to owner (chmod 600)
+- Session checkpoints stored locally (~/.kbot/checkpoints/)
+- Telemetry is local-only — never sent externally
 
 ## Contributing
 
