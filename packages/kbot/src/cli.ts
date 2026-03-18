@@ -392,6 +392,38 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('bootstrap')
+    .description('Measure the gap between what your project IS and what the world SEES')
+    .option('--json', 'Output as JSON')
+    .option('--markdown', 'Output as shareable Markdown')
+    .option('--share', 'Share the report as a GitHub Gist')
+    .action(async (opts: { json?: boolean; markdown?: boolean; share?: boolean }) => {
+      const { runBootstrap, formatBootstrapReport, formatBootstrapMarkdown } = await import('./bootstrap.js')
+      process.stderr.write('\n')
+      printInfo('kbot Bootstrap — Measuring your project\'s visibility...')
+      try {
+        const report = await runBootstrap()
+        if (opts.json) {
+          console.log(JSON.stringify(report, null, 2))
+        } else if (opts.markdown) {
+          console.log(formatBootstrapMarkdown(report))
+        } else {
+          process.stderr.write(formatBootstrapReport(report))
+        }
+        if (opts.share) {
+          try {
+            const { createGist } = await import('./share.js')
+            const md = formatBootstrapMarkdown(report)
+            const url = createGist(md, `kbot-bootstrap-${report.project}.md`, `kbot Bootstrap: ${report.project}`, true)
+            if (url?.startsWith('http')) printSuccess(`Shared! ${url}`)
+          } catch { printInfo('Could not create Gist. Install GitHub CLI: brew install gh') }
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+      }
+    })
+
+  program
     .command('pull')
     .description('Download recommended Ollama models for local AI')
     .option('--model <model>', 'Pull a specific model')
