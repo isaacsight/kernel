@@ -80,7 +80,7 @@ export function checkForUpdate(currentVersion: string): string | null {
       if (!cache.updatePending) {
         silentAutoUpdate(cache.latestVersion)
       }
-      return null // Don't bother user — it's installing silently
+      return `v${cache.latestVersion} available — installing in background`
     }
     return null
   }

@@ -284,7 +284,7 @@ function getPostgresSchema(conn: DbConnection, tableFilter?: string): ColumnInfo
 function getMysqlSchema(conn: DbConnection, tableFilter?: string): ColumnInfo[] {
   // Extract database name from URL
   let dbName = ''
-  try { dbName = new URL(conn.url).pathname.slice(1) } catch {}
+  try { dbName = new URL(conn.url).pathname.slice(1) } catch { dbName = '' }
   const tableClause = tableFilter ? `AND c.TABLE_NAME = '${tableFilter}'` : ''
   const sql = `
     SELECT

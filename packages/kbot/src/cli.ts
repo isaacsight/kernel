@@ -256,6 +256,7 @@ async function main(): Promise<void> {
       // Configure embedded provider
       setupEmbedded()
       printSuccess(`Embedded engine enabled! ${models.length} model${models.length === 1 ? '' : 's'} ready. $0 cost. No external service needed.`)
+      printInfo('Using lightweight local model. For better quality, try Ollama with a larger model.')
       for (const m of models) printInfo(`  • ${m.name} (${m.size})`)
       return
     }
@@ -278,6 +279,7 @@ async function main(): Promise<void> {
       if (embAvailable && embModels.length > 0) {
         setupEmbedded()
         printSuccess(`No Ollama found — using embedded engine. ${embModels.length} model${embModels.length === 1 ? '' : 's'} ready.`)
+        printInfo('Using lightweight local model. For better quality, try Ollama with a larger model.')
         return
       }
       printError('No local runtime found. Install Ollama: https://ollama.com')
@@ -819,7 +821,7 @@ async function main(): Promise<void> {
           byokActive = true
           localActive = true
           printSuccess('Using embedded AI engine. Ready — $0 cost, fully private!')
-          printInfo('For better quality: install Ollama (https://ollama.com) or run kbot auth')
+          printInfo('Lightweight model — for better quality: install Ollama (https://ollama.com) or run kbot auth')
         } catch {
           // Embedded not available — fall through to guided setup
         }
@@ -1237,7 +1239,7 @@ async function guidedSetup(): Promise<{ local: boolean } | null> {
     try {
       setupEmbedded()
       printSuccess('Embedded AI engine ready. You\'re good to go — $0, fully private!')
-      printInfo('For better quality, install Ollama: https://ollama.com')
+      printInfo('Lightweight model — for better quality: install Ollama (https://ollama.com) or run kbot auth')
       return { local: true }
     } catch {
       // Embedded also failed — give Ollama instructions as last resort
