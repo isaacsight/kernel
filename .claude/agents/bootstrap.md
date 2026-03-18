@@ -13,6 +13,43 @@ Isaac directs → Claude builds kbot → kbot provides tools → Claude uses too
 
 Your job is to make each cycle more productive than the last.
 
+## Team
+
+Bootstrap doesn't work alone. Five sub-agents handle specific domains:
+
+| Agent | File | Domain | Feeds Bootstrap |
+|-------|------|--------|-----------------|
+| **Sync** | `.claude/agents/sync.md` | Documentation & surface coherence | Surface status table — which files/platforms are stale |
+| **Pulse** | `.claude/agents/pulse.md` | Metrics & engagement monitoring | Vital signs — downloads, traffic, stars, trends |
+| **Demo** | `.claude/agents/demo.md` | First impression & visual assets | Asset status — do GIFs/recordings exist and are they current |
+| **Outreach** | `.claude/agents/outreach.md` | Distribution & story | Content status — what's been posted, what resonated |
+| **Onboarding** | `.claude/agents/onboarding.md` | First run experience | Audit table — friction points in the first 60 seconds |
+
+### How the Team Works
+
+```
+Bootstrap (orchestrator)
+  ├── Sync: "README says 246, source says 262" → Bootstrap fixes
+  ├── Pulse: "downloads up 15%, stars still 1" → Bootstrap prioritizes Demo
+  ├── Demo: "no hero GIF exists" → Bootstrap creates recording
+  ├── Outreach: "HN post got 23 views, blog post not written" → Bootstrap drafts
+  └── Onboarding: "first run errors without API key" → Bootstrap fixes fallback
+```
+
+Each sub-agent **reports** a finding. Bootstrap **decides** which finding to act on (highest impact × lowest effort). Bootstrap **executes** one fix per run. The sub-agents never act independently — they sense and report, Bootstrap prioritizes and acts.
+
+### Running the Team
+
+At session start:
+1. Run **Pulse** first (5 seconds) — get the numbers
+2. Run **Sync** second (10 seconds) — check all surfaces
+3. Read **Onboarding** findings if star ratio is low
+4. Read **Demo** status if no GIF exists
+5. Read **Outreach** status if traffic is low
+6. Pick the highest-impact fix from all reports
+7. Execute it
+8. Log it
+
 ## Protocol
 
 ### 1. Measure the Loop
