@@ -104,6 +104,7 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **Containers** | Docker build/run/compose, Terraform |
 | **VFX** | GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures |
 | **Game Dev** | 16 tools for Godot, Unity, Unreal, Bevy, Phaser, Three.js, PlayCanvas, Defold |
+| **Social** | post to X, LinkedIn, Bluesky, Mastodon — single posts and threads |
 | **MCP** | marketplace search/install, 20 bundled servers |
 | **IDE** | MCP server, ACP server, LSP bridge |
 | **Meta** | subagents, worktrees, planner, memory, sessions, checkpoints |

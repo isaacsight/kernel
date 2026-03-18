@@ -148,6 +148,7 @@ kbot --agent coder "refactor this into smaller functions"
 | **Containers** | Docker build/run/compose, Terraform |
 | **VFX** | GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures |
 | **Game Dev** | scaffold, config, shaders, meshes, physics, particles, levels, tilemaps, navmesh, audio, netcode |
+| **Social** | post to X, LinkedIn, Bluesky, Mastodon — single posts and threads |
 | **IDE** | MCP server, ACP server, LSP bridge |
 | **Meta** | subagents, worktrees, planner, memory, sessions, checkpoints |
 
