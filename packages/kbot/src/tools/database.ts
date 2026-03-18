@@ -458,7 +458,7 @@ export function registerDatabaseTools(): void {
       connection_string: { type: 'string', description: 'Database connection string (e.g., postgres://user:pass@host/db). If omitted, reads from DATABASE_URL env.' },
       timeout: { type: 'number', description: 'Query timeout in ms (default: 30000)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 60_000,
     async execute(args) {
       try {
@@ -521,7 +521,7 @@ export function registerDatabaseTools(): void {
       dry_run: { type: 'boolean', description: 'If true, only show the SQL without executing or writing (default: false)' },
       migrations_dir: { type: 'string', description: 'Custom migrations directory path (default: auto-detect ./supabase/migrations/ or ./migrations/)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 60_000,
     async execute(args) {
       try {
@@ -584,7 +584,7 @@ export function registerDatabaseTools(): void {
       connection_string: { type: 'string', description: 'Database connection string. If omitted, reads from DATABASE_URL env.' },
       execute: { type: 'boolean', description: 'If true, execute the INSERT statements against the database (default: false — just returns SQL)' },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       try {
         const tableName = String(args.table)
@@ -649,7 +649,7 @@ export function registerDatabaseTools(): void {
       path: { type: 'string', description: 'Project directory containing package.json (default: cwd)', },
       connection_string: { type: 'string', description: 'Database URL to introspect. If omitted, uses DATABASE_URL from .env or env.' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 60_000,
     async execute(args) {
       try {
@@ -681,7 +681,7 @@ export function registerDatabaseTools(): void {
     parameters: {
       path: { type: 'string', description: 'Project directory containing package.json (default: cwd)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 60_000,
     async execute(args) {
       try {
@@ -716,7 +716,7 @@ export function registerDatabaseTools(): void {
       connection_string: { type: 'string', description: 'Database URL. If omitted, uses DATABASE_URL from .env or env.' },
       create_only: { type: 'boolean', description: 'If true, create migration files without applying (default: false)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       try {

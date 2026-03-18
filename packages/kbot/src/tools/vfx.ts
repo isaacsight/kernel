@@ -293,7 +293,7 @@ foreach (int nb; nbs) {
       output: { type: 'string', description: 'Output file path for renders' },
       blend_file: { type: 'string', description: 'Optional .blend file to open first' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 300_000,
     async execute(args) {
       const script = String(args.script)
@@ -810,7 +810,7 @@ void main() {
       size: { type: 'string', description: 'Video size (default: 1920x1080)' },
       duration: { type: 'string', description: 'Duration in seconds (default: full audio)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 300_000,
     async execute(args) {
       const input = String(args.input)

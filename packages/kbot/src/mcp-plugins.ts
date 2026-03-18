@@ -623,7 +623,7 @@ export function registerMcpPluginTools(): void {
         required: false,
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const pluginId = String(args.plugin_id)
       const toolName = String(args.tool)

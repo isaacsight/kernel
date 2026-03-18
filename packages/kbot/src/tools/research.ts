@@ -95,7 +95,7 @@ export function registerResearchTools(): void {
       code: { type: 'string', description: 'Python code to execute (inline or file path)', required: true },
       packages: { type: 'string', description: 'Comma-separated pip packages to install first' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       const code = String(args.code)

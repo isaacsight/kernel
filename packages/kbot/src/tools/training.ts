@@ -529,7 +529,7 @@ export function registerTrainingTools(): void {
         description: 'System prompt to prepend to each example (optional)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 300_000,
     async execute(args) {
       try {
@@ -669,7 +669,7 @@ export function registerTrainingTools(): void {
         description: 'Dataset format: jsonl, alpaca, sharegpt (default: jsonl)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       try {
@@ -975,7 +975,7 @@ export function registerTrainingTools(): void {
         description: 'API key for cloud backends (optional — reads from env or ~/.kbot/config.json)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 600_000,
     async execute(args) {
       try {
@@ -1515,7 +1515,7 @@ print("Done!")
         description: 'API key for cloud backends (optional)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 30_000,
     async execute(args) {
       try {
@@ -1746,7 +1746,7 @@ print("Done!")
         description: 'API key for cloud backends (optional)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 600_000,
     async execute(args) {
       try {
@@ -1979,7 +1979,7 @@ print("Done!")
         description: 'Quantization type for to_gguf and quantize: q4_K_M, q5_K_M, q8_0, f16 (default: q4_K_M)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 600_000,
     async execute(args) {
       try {
@@ -2191,7 +2191,7 @@ print("Done!")
         description: 'Model description (optional)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 600_000,
     async execute(args) {
       try {

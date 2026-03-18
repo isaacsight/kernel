@@ -198,7 +198,7 @@ export function registerE2bTools(): void {
         description: `Sandbox timeout in seconds (default: ${DEFAULT_TIMEOUT_S}, max: 3600)`,
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const language = String(args.language).toLowerCase()
       const timeoutS = Math.min(
@@ -279,7 +279,7 @@ export function registerE2bTools(): void {
         description: 'Execution timeout in seconds (default: 60)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000, // 2 min tool-level timeout for long executions
     async execute(args) {
       const shortId = String(args.sandbox_id)
@@ -368,7 +368,7 @@ export function registerE2bTools(): void {
         required: true,
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const shortId = String(args.sandbox_id)
       const filePath = String(args.path)
@@ -422,7 +422,7 @@ export function registerE2bTools(): void {
         required: true,
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const shortId = String(args.sandbox_id)
       const filePath = String(args.path)
@@ -490,7 +490,7 @@ export function registerE2bTools(): void {
         required: true,
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const shortId = String(args.sandbox_id)
 

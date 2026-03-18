@@ -678,7 +678,7 @@ export function registerWorkflowTools(): void {
         description: 'Template variables as key-value pairs',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const workflow = createWorkflow(String(args.name), String(args.description))
 
@@ -730,7 +730,7 @@ export function registerWorkflowTools(): void {
         description: 'Runtime variables to override workflow defaults',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const workflow = await loadWorkflow(String(args.id))
       const variables = args.variables
@@ -760,7 +760,7 @@ export function registerWorkflowTools(): void {
     name: 'workflow_list',
     description: 'List all saved workflows with their names, descriptions, and last updated timestamps.',
     parameters: {},
-    tier: 'pro',
+    tier: 'free',
     async execute() {
       const workflows = await listWorkflows()
       if (workflows.length === 0) return 'No workflows saved.'

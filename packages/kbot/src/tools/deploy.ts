@@ -368,7 +368,7 @@ export function registerDeployTools(): void {
         description: 'Deploy to production (default: true). Set false for preview/draft deploy.',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 600_000,
     async execute(args) {
       const cwd = resolveCwd(args.path)
@@ -627,7 +627,7 @@ export function registerDeployTools(): void {
         description: 'Specific deployment ID/URL to rollback to (optional — defaults to previous)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 300_000,
     async execute(args) {
       const cwd = resolveCwd(args.path)
@@ -780,7 +780,7 @@ export function registerDeployTools(): void {
         description: 'Target environment: production, preview, development (default: production)',
       },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const cwd = resolveCwd(args.path)
       const action = String(args.action || 'list').toLowerCase()

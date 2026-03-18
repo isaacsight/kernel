@@ -40,7 +40,7 @@ export function registerContainerTools(): void {
       tag: { type: 'string', description: 'Image tag (e.g., myapp:latest)', required: true },
       file: { type: 'string', description: 'Dockerfile name (default: Dockerfile)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 300_000,
     async execute(args) {
       const path = String(args.path)
@@ -64,7 +64,7 @@ export function registerContainerTools(): void {
       env: { type: 'string', description: 'Environment variables (KEY=VALUE, comma-separated)' },
       detach: { type: 'boolean', description: 'Run in background (default: false)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       const image = String(args.image)
@@ -111,7 +111,7 @@ export function registerContainerTools(): void {
     parameters: {
       container: { type: 'string', description: 'Container ID or name', required: true },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       try {
         return await shell('docker', ['stop', String(args.container)])
@@ -142,7 +142,7 @@ export function registerContainerTools(): void {
       path: { type: 'string', description: 'Path to docker-compose.yml directory', required: true },
       detach: { type: 'boolean', description: 'Run in background (default: true)' },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       const flags = ['compose', '-f', `${String(args.path)}/docker-compose.yml`, 'up']
@@ -161,7 +161,7 @@ export function registerContainerTools(): void {
     parameters: {
       path: { type: 'string', description: 'Path to docker-compose.yml directory', required: true },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       try {
         return await shell('docker', ['compose', '-f', `${String(args.path)}/docker-compose.yml`, 'down'])
@@ -227,7 +227,7 @@ export function registerContainerTools(): void {
       file: { type: 'string', description: 'Path to data file (CSV, JSON, TSV)', required: true },
       query: { type: 'string', description: 'Query: "select columns where condition sort by field limit N"', required: true },
     },
-    tier: 'pro',
+    tier: 'free',
     async execute(args) {
       const filePath = String(args.file)
       const query = String(args.query)
@@ -342,7 +342,7 @@ except Exception as e:
     parameters: {
       path: { type: 'string', description: 'Path to Terraform project directory', required: true },
     },
-    tier: 'pro',
+    tier: 'free',
     timeout: 120_000,
     async execute(args) {
       try {
