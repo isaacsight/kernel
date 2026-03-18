@@ -1,14 +1,69 @@
 name: Discord Notifications
 
 on:
+  push:
+    branches: [main]
   release:
     types: [published]
   issues:
     types: [opened]
   pull_request:
-    types: [opened, merged]
+    types: [opened, closed]
+  deployment_status:
 
 jobs:
+  notify-push:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+        run: |
+          COMMIT_COUNT=$(echo '${{ toJson(github.event.commits) }}' | jq length)
+          COMMIT_MSG=$(echo '${{ github.event.head_commit.message }}' | head -1 | sed 's/"/\\"/g')
+          COMPARE_URL="${{ github.event.compare }}"
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"⚡ ${COMMIT_COUNT} new commit(s) pushed to main\",
+                \"description\": \"**Latest:** ${COMMIT_MSG}\",
+                \"url\": \"${COMPARE_URL}\",
+                \"color\": 3066993,
+                \"fields\": [
+                  {\"name\": \"Pushed by\", \"value\": \"${{ github.event.pusher.name }}\", \"inline\": true},
+                  {\"name\": \"Branch\", \"value\": \"\`main\`\", \"inline\": true},
+                  {\"name\": \"Compare\", \"value\": \"[View changes](${COMPARE_URL})\", \"inline\": true}
+                ],
+                \"footer\": {\"text\": \"kernel.chat\"},
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+              }]
+            }"
+
+  notify-deploy:
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_RELEASES_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"✅ Deployment successful\",
+                \"description\": \"**Environment:** ${{ github.event.deployment_status.environment }}\",
+                \"url\": \"${{ github.event.deployment_status.target_url }}\",
+                \"color\": 3066993,
+                \"fields\": [
+                  {\"name\": \"Status\", \"value\": \"Live\", \"inline\": true},
+                  {\"name\": \"Deployed by\", \"value\": \"${{ github.event.deployment.creator.login }}\", \"inline\": true}
+                ],
+                \"footer\": {\"text\": \"kernel.chat\"},
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+              }]
+            }"
+
   notify-release:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
@@ -28,7 +83,8 @@ jobs:
                   {\"name\": \"Install\", \"value\": \"\`npm install -g @kernel.chat/kbot\`\", \"inline\": true},
                   {\"name\": \"Changelog\", \"value\": \"[View on GitHub](${{ github.event.release.html_url }})\", \"inline\": true}
                 ],
-                \"footer\": {\"text\": \"K:BOT by kernel.chat\"}
+                \"footer\": {\"text\": \"K:BOT by kernel.chat\"},
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
               }]
             }"
 
@@ -49,7 +105,8 @@ jobs:
                 \"fields\": [
                   {\"name\": \"Author\", \"value\": \"${{ github.event.issue.user.login }}\", \"inline\": true},
                   {\"name\": \"Labels\", \"value\": \"${{ join(github.event.issue.labels.*.name, ', ') }}\", \"inline\": true}
-                ]
+                ],
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
               }]
             }"
 
@@ -61,15 +118,29 @@ jobs:
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
         run: |
+          if [ "${{ github.event.action }}" = "closed" ] && [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            STATUS="merged"
+            EMOJI="🟣"
+            COLOR=5025616
+          elif [ "${{ github.event.action }}" = "closed" ]; then
+            STATUS="closed"
+            EMOJI="🔴"
+            COLOR=15158332
+          else
+            STATUS="opened"
+            EMOJI="🟢"
+            COLOR=3066993
+          fi
           curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
             -d "{
               \"embeds\": [{
-                \"title\": \"🔀 PR: ${{ github.event.pull_request.title }}\",
+                \"title\": \"${EMOJI} PR ${STATUS}: ${{ github.event.pull_request.title }}\",
                 \"url\": \"${{ github.event.pull_request.html_url }}\",
-                \"color\": 5025616,
+                \"color\": ${COLOR},
                 \"fields\": [
                   {\"name\": \"Author\", \"value\": \"${{ github.event.pull_request.user.login }}\", \"inline\": true},
-                  {\"name\": \"Status\", \"value\": \"${{ github.event.action }}\", \"inline\": true}
-                ]
+                  {\"name\": \"Status\", \"value\": \"${STATUS}\", \"inline\": true}
+                ],
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
               }]
             }"
