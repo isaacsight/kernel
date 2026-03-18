@@ -140,9 +140,9 @@ export function TermsPage() {
       <h2>10. Free Tier Limits</h2>
 
       <p>
-        Free accounts are limited to 30 messages per month across web and CLI. This
-        limit resets at the start of each billing cycle. Paid plans (Pro and Max) include higher quotas
-        with per-message overage billing after the quota is exceeded.
+        Free accounts are limited to 10 messages per month across web and CLI. This
+        limit is a hard cap and resets at the start of each billing cycle. The paid Pro plan
+        includes a higher quota of 200 messages per month, also hard-capped with no overage billing.
       </p>
 
       <h2>11. Kernel API</h2>
@@ -157,54 +157,30 @@ export function TermsPage() {
       <h3>Plans and Pricing</h3>
 
       <p>
-        Kernel is available at three tiers. Your subscription covers both the web app (kernel.chat),
+        Kernel is available at two tiers. Your subscription covers both the web app (kernel.chat),
         K:BOT CLI, and the API with a single shared message pool:
       </p>
 
       <ul>
-        <li><strong>Free:</strong> 30 messages per month (hard cap, no overage)</li>
-        <li><strong>Pro ($39/month):</strong> 1,000 messages per month, then $0.05 per additional message</li>
-        <li><strong>Max ($249/month):</strong> 6,000 messages per month, then $0.04 per additional message</li>
+        <li><strong>Free:</strong> 10 messages per month (hard cap, no overage)</li>
+        <li><strong>Pro ($15/month):</strong> 200 messages per month (hard cap, no overage)</li>
       </ul>
-
-      <h3>Overage Billing</h3>
-
-      <p>
-        Overage billing applies to both the web chat and the API/CLI for paid plans. When you exceed
-        your included monthly message quota, additional messages are billed at a per-message rate:
-        Pro plans at $0.05 per message, Max plans at $0.04 per message. These charges are
-        metered and reported to Stripe, and will appear on your next invoice as a separate line item.
-      </p>
-
-      <p>
-        On the web, you will be prompted to confirm before overage charges begin. Free-tier users
-        are hard-capped and will not incur overage charges.
-      </p>
-
-      <h3>Spending Ceilings</h3>
-
-      <p>
-        You may set an optional monthly spending ceiling on your API key to limit overage charges.
-        When the ceiling is reached, further API requests will be rejected (403) until the next
-        billing window. This ceiling only applies to overage charges, not to your base subscription
-        fee. If no ceiling is set, overage charges are unlimited.
-      </p>
 
       <h3>Usage Metering</h3>
 
       <p>
         API usage is tracked per key, including message counts, token consumption, and per-agent
-        breakdowns. Usage data is available via the <code>/usage</code> endpoint. Metered usage
-        is reported to Stripe periodically (approximately every four hours) for billing purposes.
+        breakdowns. Usage data is available via the <code>/usage</code> endpoint.
         Monthly quotas reset on a rolling 30-day window from the date of key creation.
+        Both tiers are hard-capped &mdash; when your monthly quota is exhausted, further requests
+        will be rejected (403) until the next billing window.
       </p>
 
       <h3>Usage Alerts</h3>
 
       <p>
-        We send in-app notifications when you reach 80% and 100% of your base monthly quota.
-        These alerts are informational &mdash; paid-tier API keys will continue to function past
-        the base quota (with overage billing) unless a spending ceiling is hit.
+        We send in-app notifications when you reach 80% and 100% of your monthly quota.
+        Once the quota is exhausted, API requests will be rejected until the next billing window.
       </p>
 
       <h3>API Key Responsibility</h3>

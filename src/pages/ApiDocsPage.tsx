@@ -140,7 +140,7 @@ kbot                    # interactive REPL`}</pre>
       {/* ── POST /swarm ── */}
       <section className="ka-docs-section">
         <h2>POST /swarm</h2>
-        <p>Multi-agent collaboration. Multiple agents contribute in parallel, then a synthesis model combines their perspectives. Requires Max tier or higher.</p>
+        <p>Multi-agent collaboration. Multiple agents contribute in parallel, then a synthesis model combines their perspectives. Requires Pro tier.</p>
 
         <h3>Request</h3>
         <pre className="ka-docs-code">{`{
@@ -210,12 +210,12 @@ kbot                    # interactive REPL`}</pre>
         <h2>GET /usage</h2>
         <p>Get monthly usage statistics for your API key, including per-agent breakdown.</p>
         <pre className="ka-docs-code">{`{
-  "tier": "max",
-  "monthly_messages": { "count": 1247, "limit": 6000 },
+  "tier": "pro",
+  "monthly_messages": { "count": 87, "limit": 200 },
   "monthly_window_start": "2026-03-01T00:00:00Z",
   "per_agent": {
-    "coder": { "messages": 523, "input_tokens": 125000, "output_tokens": 890000, "cost_usd": 13.72 },
-    "researcher": { "messages": 312, "input_tokens": 98000, "output_tokens": 450000, "cost_usd": 7.04 }
+    "coder": { "messages": 43, "input_tokens": 12500, "output_tokens": 89000, "cost_usd": 1.37 },
+    "researcher": { "messages": 31, "input_tokens": 9800, "output_tokens": 45000, "cost_usd": 0.70 }
   }
 }`}</pre>
       </section>
@@ -239,7 +239,7 @@ kbot                    # interactive REPL`}</pre>
             <tr>
               <td>Free</td>
               <td>$0</td>
-              <td>50</td>
+              <td>10</td>
               <td>Core 5</td>
               <td>No</td>
               <td>Files, Git</td>
@@ -247,30 +247,12 @@ kbot                    # interactive REPL`}</pre>
             </tr>
             <tr>
               <td>Pro</td>
-              <td>$39/mo</td>
-              <td>1,500</td>
-              <td>Core 5</td>
-              <td>No</td>
-              <td>+ Bash, Search</td>
-              <td>30/min</td>
-            </tr>
-            <tr>
-              <td>Max</td>
-              <td>$249/mo</td>
-              <td>6,000</td>
+              <td>$15/mo</td>
+              <td>200</td>
               <td>All 17</td>
               <td>Yes</td>
-              <td>+ Browser</td>
-              <td>120/min</td>
-            </tr>
-            <tr>
-              <td>Enterprise</td>
-              <td>Custom</td>
-              <td>Unlimited</td>
-              <td>All + custom prompts</td>
-              <td>Yes</td>
-              <td>+ Computer Use</td>
-              <td>180/min</td>
+              <td>All tools</td>
+              <td>30/min</td>
             </tr>
           </tbody>
         </table>
@@ -286,8 +268,7 @@ kbot                    # interactive REPL`}</pre>
           <tbody>
             <tr><td>401</td><td>Invalid API key</td><td>Key is missing, malformed, or revoked</td></tr>
             <tr><td>403</td><td>Monthly limit exceeded</td><td>Monthly message quota exhausted</td></tr>
-            <tr><td>403</td><td>Enterprise required</td><td>Feature requires Enterprise tier</td></tr>
-            <tr><td>403</td><td>Swarm requires Max</td><td>/swarm endpoint requires Max tier</td></tr>
+            <tr><td>403</td><td>Pro required</td><td>Feature requires Pro tier</td></tr>
             <tr><td>429</td><td>Rate limited</td><td>Per-minute rate limit exceeded. Check Retry-After header.</td></tr>
             <tr><td>400</td><td>Invalid request</td><td>Missing required fields or invalid agent ID</td></tr>
             <tr><td>502</td><td>Upstream error</td><td>AI provider returned an error</td></tr>
