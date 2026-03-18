@@ -38,6 +38,7 @@ import {
   setAgent,
   type BridgeConfig,
 } from './bridge.js'
+import { ResponseStream, type ResponseStreamEvent } from '../streaming.js'
 import { formatDiagnostics } from './lsp-bridge.js'
 
 /**
@@ -240,14 +241,42 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
         case 'kbot_chat': {
           const message = (args as { message: string; agent?: string }).message
           const agent = (args as { agent?: string }).agent
-          const response = await chat(message, { agent })
+
+          // Collect structured stream events for richer MCP responses
+          const stream = new ResponseStream()
+          const events: ResponseStreamEvent[] = []
+          stream.on((event) => events.push(event))
+
+          const response = await chat(message, { agent, responseStream: stream })
+
+          // Build MCP content blocks from collected events
+          const contentBlocks: Array<{ type: 'text'; text: string }> = []
+
+          // Include thinking if present
+          const thinkingText = events
+            .filter(e => e.type === 'thinking_delta')
+            .map(e => (e as { type: 'thinking_delta'; text: string }).text)
+            .join('')
+          if (thinkingText) {
+            contentBlocks.push({ type: 'text' as const, text: `<thinking>\n${thinkingText}\n</thinking>` })
+          }
+
+          // Include tool results if any
+          const toolResults = events.filter(e => e.type === 'tool_result') as Array<{
+            type: 'tool_result'; id: string; name: string; result: string; error?: string
+          }>
+          for (const tr of toolResults) {
+            contentBlocks.push({
+              type: 'text' as const,
+              text: `[Tool: ${tr.name}] ${tr.error ? `Error: ${tr.error}` : tr.result}`,
+            })
+          }
+
+          // Main content
+          contentBlocks.push({ type: 'text' as const, text: response.content })
+
           return {
-            content: [
-              {
-                type: 'text' as const,
-                text: response.content,
-              },
-            ],
+            content: contentBlocks,
             isError: false,
           }
         }

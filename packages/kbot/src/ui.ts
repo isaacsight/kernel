@@ -8,6 +8,16 @@
 
 import chalk from 'chalk'
 import ora, { type Ora } from 'ora'
+import { detectTerminalCapabilities, gradient, withSyncOutput, type TerminalCapabilities } from './terminal-caps.js'
+
+// ── Terminal capability detection (cached) ──
+let _caps: TerminalCapabilities | null = null
+export function getTerminalCaps(): TerminalCapabilities {
+  if (!_caps) _caps = detectTerminalCapabilities()
+  return _caps
+}
+
+export { detectTerminalCapabilities, withSyncOutput } from './terminal-caps.js'
 
 // ── NO_COLOR support (clig.dev / no-color.org standard) ──
 const useColor = !process.env.NO_COLOR && process.stdout.isTTY !== false
@@ -120,7 +130,13 @@ function particleGridArt(): string {
 export function banner(version?: string): string {
   const v = version ? chalk.dim(` v${version}`) : ''
   const grid = particleGridArt()
-  const title = `  ${ACCENT('K:BOT')}${v}`
+  // If truecolor supported, use gradient for the K:BOT banner text
+  // Gradient from accent violet (#A78BFA) to cyan (#67E8F9)
+  const caps = getTerminalCaps()
+  const bannerText = caps.truecolor
+    ? gradient('K:BOT', [167, 139, 250], [103, 232, 249])
+    : ACCENT('K:BOT')
+  const title = `  ${bannerText}${v}`
   return `\n${grid}\n${title}\n`
 }
 
@@ -130,7 +146,11 @@ export function bannerCompact(): string {
 
 export function bannerAuth(): string {
   const grid = particleGridArt()
-  return `\n${grid}\n  ${ACCENT('K:BOT')} ${DIM('setup')}\n`
+  const caps = getTerminalCaps()
+  const bannerText = caps.truecolor
+    ? gradient('K:BOT', [167, 139, 250], [103, 232, 249])
+    : ACCENT('K:BOT')
+  return `\n${grid}\n  ${bannerText} ${DIM('setup')}\n`
 }
 
 export function matrixConnect(tier: string, agentCount: number): string {

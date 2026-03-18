@@ -12,6 +12,7 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, writeFile, mkdirSync } from 'node:fs'
+import { getSkillRatingSystem } from './skill-rating.js'
 
 const LEARN_DIR = join(homedir(), '.kbot', 'memory')
 const PATTERNS_FILE = join(LEARN_DIR, 'patterns.json')
@@ -85,6 +86,14 @@ export function flushPendingWrites(): void {
         dirtyFiles.delete(path)
       }
     }
+  } catch { /* best-effort */ }
+
+  // Flush Bayesian skill ratings (separate persistence)
+  try {
+    const skillRating = getSkillRatingSystem()
+    // save() is async but we need sync flush on exit — use the sync fallback
+    // The SkillRatingSystem.save() uses writeFileSync internally, so this is safe
+    skillRating.save().catch(() => { /* best-effort */ })
   } catch { /* best-effort */ }
 }
 
@@ -367,6 +376,10 @@ export function updateProfile(opts: {
   agent?: string
   taskType?: string
   techTerms?: string[]
+  /** Original user message — used for Bayesian skill rating categorization */
+  message?: string
+  /** Whether the interaction was successful (for skill rating) */
+  success?: boolean
 }): void {
   if (opts.tokens) {
     profile.totalMessages++
@@ -379,6 +392,15 @@ export function updateProfile(opts: {
   }
   if (opts.agent && opts.agent !== 'local') {
     profile.preferredAgents[opts.agent] = (profile.preferredAgents[opts.agent] || 0) + 1
+
+    // Update Bayesian skill ratings — record win for successful interactions
+    if (opts.message) {
+      const skillRating = getSkillRatingSystem()
+      const category = skillRating.categorizeMessage(opts.message)
+      const outcome = opts.success === false ? 'loss' : 'win'
+      skillRating.recordOutcome(opts.agent, category, outcome)
+      skillRating.save().catch(() => { /* non-critical */ })
+    }
   }
   if (opts.taskType) {
     profile.taskPatterns[opts.taskType] = (profile.taskPatterns[opts.taskType] || 0) + 1

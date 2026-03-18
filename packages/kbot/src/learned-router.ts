@@ -4,18 +4,20 @@
 // intent every time, learn from actual routing outcomes and cascade
 // through increasingly expensive classifiers:
 //
-//   1. Exact intent match (free, instant)
-//   2. Keyword voting (free, instant)
-//   3. Category fallback (free, instant)
-//   4. LLM classifier (expensive, last resort)
+//   1.   Exact intent match (free, instant)
+//   1.5  Bayesian skill rating — OpenSkill mu/sigma per agent per category
+//   2.   Keyword voting (free, instant)
+//   3.   Category fallback (free, instant)
+//   4.   LLM classifier (expensive, last resort)
 //
-// Over time, steps 1-3 handle 90%+ of messages without any API call.
+// Over time, steps 1-2 handle 90%+ of messages without any API call.
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { CREATIVE_KEYWORDS, CREATIVE_PATTERNS } from './agents/creative.js'
 import { DEVELOPER_KEYWORDS, DEVELOPER_PATTERNS } from './agents/developer.js'
+import { getSkillRatingSystem } from './skill-rating.js'
 
 const ROUTER_DIR = join(homedir(), '.kbot', 'memory')
 const HISTORY_FILE = join(ROUTER_DIR, 'routing-history.json')
@@ -29,8 +31,8 @@ export interface RoutingRecord {
   keywords: string[]
   /** Which agent was selected */
   agent: string
-  /** How the route was determined: 'learned' | 'keyword' | 'category' | 'llm' */
-  method: 'learned' | 'keyword' | 'category' | 'llm'
+  /** How the route was determined: 'learned' | 'bayesian' | 'keyword' | 'category' | 'llm' */
+  method: 'learned' | 'bayesian' | 'keyword' | 'category' | 'llm'
   /** Was the routing successful (user didn't override) */
   success: boolean
   /** Times this exact route has been used */
@@ -46,7 +48,7 @@ export interface RouteResult {
   /** Confidence 0-1 */
   confidence: number
   /** Which cascade level resolved it */
-  method: 'learned' | 'keyword' | 'category' | 'llm'
+  method: 'learned' | 'bayesian' | 'keyword' | 'category' | 'llm'
   /** Was this a cache hit (no LLM needed) */
   cached: boolean
 }
@@ -148,10 +150,11 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp; agent: string; confidence: num
 /**
  * Cascaded route — try each level in order, return first confident match.
  *
- * Level 1: Exact intent lookup (from history)
- * Level 2: Keyword voting (weighted by history frequency)
- * Level 3: Category pattern matching
- * Level 4: Returns null — caller should use LLM
+ * Level 1:   Exact intent lookup (from history)
+ * Level 1.5: Bayesian skill rating (OpenSkill mu/sigma)
+ * Level 2:   Keyword voting (weighted by history frequency)
+ * Level 3:   Category pattern matching
+ * Level 4:   Returns null — caller should use LLM
  */
 export function learnedRoute(message: string): RouteResult | null {
   loadHistory()
@@ -166,6 +169,20 @@ export function learnedRoute(message: string): RouteResult | null {
       agent: exactMatch.agent,
       confidence: Math.min(0.95, 0.7 + (exactMatch.count * 0.05)),
       method: 'learned',
+      cached: true,
+    }
+  }
+
+  // ── Level 1.5: Bayesian skill rating ──
+  // Uses OpenSkill-style probabilistic ratings learned from routing outcomes.
+  // Only activates once enough data has been collected (confidence > 0.4).
+  const skillRating = getSkillRatingSystem()
+  const skillResult = skillRating.getAgentForTask(message)
+  if (skillResult && skillResult.confidence > 0.4) {
+    return {
+      agent: skillResult.agent,
+      confidence: Math.min(0.9, skillResult.confidence),
+      method: 'bayesian',
       cached: true,
     }
   }
@@ -298,6 +315,7 @@ function updateKeywordMaps(keywords: string[], agent: string): void {
 export function getRoutingStats(): {
   totalRoutes: number
   learnedHits: number
+  bayesianHits: number
   keywordHits: number
   categoryHits: number
   llmFallbacks: number
@@ -306,16 +324,18 @@ export function getRoutingStats(): {
   loadHistory()
 
   const learned = history.filter(h => h.method === 'learned').length
+  const bayesian = history.filter(h => h.method === 'bayesian').length
   const keyword = history.filter(h => h.method === 'keyword').length
   const category = history.filter(h => h.method === 'category').length
   const llm = history.filter(h => h.method === 'llm').length
   const total = history.length
-  const cached = learned + keyword + category
+  const cached = learned + bayesian + keyword + category
   const rate = total > 0 ? Math.round((cached / total) * 100) : 0
 
   return {
     totalRoutes: total,
     learnedHits: learned,
+    bayesianHits: bayesian,
     keywordHits: keyword,
     categoryHits: category,
     llmFallbacks: llm,
@@ -327,6 +347,16 @@ export function getRoutingStats(): {
 export function overrideRoute(message: string, correctAgent: string): void {
   const intent = normalizeIntent(message)
   const existing = history.find(h => h.intent === intent)
+
+  // Update Bayesian skill ratings: previous agent loses, correct agent wins
+  const skillRating = getSkillRatingSystem()
+  const category = skillRating.categorizeMessage(message)
+  if (existing && existing.agent !== correctAgent) {
+    skillRating.recordOutcome(existing.agent, category, 'loss')
+  }
+  skillRating.recordOutcome(correctAgent, category, 'win')
+  skillRating.save().catch(() => { /* non-critical */ })
+
   if (existing) {
     existing.agent = correctAgent
     existing.success = true

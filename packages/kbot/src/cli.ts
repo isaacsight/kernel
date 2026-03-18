@@ -14,9 +14,9 @@ import { existsSync } from 'node:fs'
 import { join, basename } from 'node:path'
 import { Command } from 'commander'
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
-import { runAndPrint, runAgent, type AgentOptions } from './agent.js'
+import { runAndPrint, runAgent, runAgentFromCheckpoint, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
-import { registerAllTools } from './tools/index.js'
+import { registerCoreTools, startLazyToolRegistration, ensureLazyToolsLoaded } from './tools/index.js'
 import { clearHistory, clearMemory, compactHistory, restoreHistory } from './memory.js'
 import {
   saveSession, loadSession, listSessions, deleteSession,
@@ -868,9 +868,10 @@ async function main(): Promise<void> {
   // Register built-in agents (hacker, operator, dreamer) so --agent flag works
   registerBuiltinAgents()
 
-  // Parallel startup: register tools, gather context, check updates, and cloud sync
+  // Parallel startup: register core tools (fast), gather context, check updates, cloud sync
+  const toolOpts = { computerUse: opts.computerUse }
   const [, context, , syncMsg] = await Promise.all([
-    registerAllTools({ computerUse: opts.computerUse }),
+    registerCoreTools(toolOpts),
     Promise.resolve(gatherContext()),
     // Non-blocking update check — fire and forget
     Promise.resolve().then(() => {
@@ -883,6 +884,20 @@ async function main(): Promise<void> {
     syncOnStartup().catch(() => null),
   ])
   if (syncMsg) printInfo(syncMsg)
+
+  // Determine if we're in one-shot or REPL mode
+  const isOneShot = promptArgs.length > 0 &&
+    !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor'].includes(promptArgs[0])
+  const isStdinOnly = !process.stdin.isTTY && promptArgs.length === 0
+
+  if (isOneShot || isStdinOnly || opts.pipe) {
+    // One-shot / pipe mode: start lazy tools in background (non-blocking).
+    // The agent loop will await them via ensureLazyToolsLoaded() if needed.
+    startLazyToolRegistration(toolOpts).catch(() => {})
+  } else {
+    // REPL mode: wait for all tools before first prompt
+    await ensureLazyToolsLoaded(toolOpts)
+  }
 
   const config = loadConfig()
   const tier = 'free'
@@ -901,6 +916,44 @@ async function main(): Promise<void> {
   if (opts.selfEval) {
     const { setSelfEvalEnabled } = await import('./self-eval.js')
     setSelfEvalEnabled(true)
+  }
+
+  // ── Checkpoint recovery: detect and offer to resume crashed sessions ──
+  if (!opts.pipe && !opts.json) {
+    try {
+      const { CheckpointManager } = await import('./checkpoint.js')
+      const cpManager = new CheckpointManager()
+      const incomplete = await cpManager.listIncomplete()
+      if (incomplete.length > 0) {
+        const latest = incomplete[0]
+        const age = Date.now() - latest.timestamp
+        if (age < 24 * 60 * 60 * 1000) { // less than 24 hours old
+          const ageMinutes = Math.round(age / 60_000)
+          const ageStr = ageMinutes < 60
+            ? `${ageMinutes}m ago`
+            : `${Math.round(ageMinutes / 60)}h ago`
+          printInfo(`Found interrupted session (${ageStr}, ${latest.toolCallCount} tool calls, iteration ${latest.iteration})`)
+
+          // Auto-resume in non-interactive mode, prompt in interactive
+          if (process.stdin.isTTY) {
+            const rl = createInterface({ input: process.stdin, output: process.stdout })
+            const answer = await new Promise<string>(resolve => {
+              rl.question('  Resume? (y/N) ', resolve)
+            })
+            rl.close()
+            if (answer.toLowerCase().startsWith('y')) {
+              const response = await runAgentFromCheckpoint(latest, agentOpts)
+              printInfo(`Resumed session completed (${response.toolCalls} tool calls)`)
+              return
+            }
+          }
+        }
+      }
+      // Cleanup old checkpoints in the background (non-blocking)
+      cpManager.cleanup().catch(() => {})
+    } catch {
+      // Checkpoint recovery is non-critical — don't block startup
+    }
   }
 
   // Pipe mode: echo "prompt" | kbot -p  OR  kbot -p "prompt"

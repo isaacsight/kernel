@@ -10,12 +10,15 @@
 //   GET  /tools           — List all registered tools (schemas only)
 //   POST /tools/:name     — Execute a tool by name
 //   POST /execute         — Execute a tool { name, args }
+//   POST /stream          — SSE streaming agent execution
 //   GET  /metrics         — Tool execution metrics
 
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
 import { registerAllTools, getAllTools, executeTool, getToolDefinitionsForApi, getToolMetrics } from './tools/index.js'
 import { printInfo, printSuccess, printError } from './ui.js'
+import { ResponseStream } from './streaming.js'
+import { runAgent } from './agent.js'
 
 const __require = createRequire(import.meta.url)
 const VERSION = (__require('../package.json') as { version: string }).version
@@ -103,6 +106,47 @@ export async function startServe(options: ServeOptions): Promise<void> {
         return
       }
 
+      // POST /stream — SSE streaming agent execution
+      if (path === '/stream' && req.method === 'POST') {
+        const body = JSON.parse(await readBody(req))
+        const { message, agent, model, thinking } = body as {
+          message?: string; agent?: string; model?: string; thinking?: boolean
+        }
+
+        if (!message) {
+          json(res, 400, { error: 'Missing "message" field' })
+          return
+        }
+
+        cors(res)
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        })
+
+        const stream = new ResponseStream()
+        stream.on(ResponseStream.createSSEListener(res))
+
+        try {
+          await runAgent(message, {
+            responseStream: stream,
+            stream: true,
+            agent,
+            model,
+            thinking,
+          })
+        } catch (err) {
+          stream.emit({
+            type: 'error',
+            message: err instanceof Error ? err.message : String(err),
+          })
+        }
+
+        res.end()
+        return
+      }
+
       // POST /execute — execute a tool
       if (path === '/execute' && req.method === 'POST') {
         const body = JSON.parse(await readBody(req))
@@ -163,6 +207,7 @@ export async function startServe(options: ServeOptions): Promise<void> {
     printInfo(`  GET  /health       — Health check`)
     printInfo(`  GET  /tools        — List ${tools.length} tools`)
     printInfo(`  POST /execute      — Execute a tool`)
+    printInfo(`  POST /stream       — SSE streaming agent`)
     printInfo(`  POST /tools/:name  — Execute by name`)
     printInfo(`  GET  /metrics      — Execution metrics`)
     if (options.token) {

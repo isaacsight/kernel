@@ -4,6 +4,7 @@
 // Uses raw ANSI escape codes — no extra dependencies beyond chalk.
 
 import chalk from 'chalk'
+import { detectTerminalCapabilities, withSyncOutput } from './terminal-caps.js'
 
 const AMETHYST = chalk.hex('#6B5B95')
 const AMETHYST_DIM = chalk.hex('#9688BF')
@@ -262,32 +263,104 @@ export function renderDashboard(state: DashboardState): string {
   const rightLines = toolPanel.split('\n')
   const maxLines = Math.max(leftLines.length, rightLines.length)
 
-  const combined: string[] = ['']
-  for (let i = 0; i < maxLines; i++) {
-    const l = leftLines[i] || ' '.repeat(halfWidth)
-    const r = rightLines[i] || ' '.repeat(halfWidth)
-    combined.push(`  ${l} ${r}`)
-  }
-  combined.push('')
-  combined.push(`  ${subPanel}`)
-  combined.push('')
+  let result = ''
 
-  return combined.join('\n')
+  // Use synchronized output to prevent flicker during dashboard render
+  withSyncOutput(() => {
+    const combined: string[] = ['']
+    for (let i = 0; i < maxLines; i++) {
+      const l = leftLines[i] || ' '.repeat(halfWidth)
+      const r = rightLines[i] || ' '.repeat(halfWidth)
+      combined.push(`  ${l} ${r}`)
+    }
+    combined.push('')
+    combined.push(`  ${subPanel}`)
+    combined.push('')
+    result = combined.join('\n')
+  })
+
+  return result
 }
 
 // ── Sparkline ──
+
+// Braille sparkline — 2x4 grid per character gives 4x vertical resolution
+// Braille block: U+2800 base, bits map to dots:
+// Dot positions: 0,1,2 left column (top to bottom), 3,4,5 right column, 6=bottom-left, 7=bottom-right
+
+export function brailleSparkline(data: number[], width?: number): string {
+  if (data.length === 0) return '';
+
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+
+  // Normalize to 0-3 (4 rows per braille character)
+  const normalized = data.map(v => Math.round(((v - min) / range) * 3));
+
+  // Each braille char represents 2 data points side by side, 4 rows tall
+  const targetWidth = width ?? Math.min(Math.floor(data.length / 2), 40);
+
+  // Resample data to fit width (2 points per character)
+  const pointsNeeded = targetWidth * 2;
+  const resampled: number[] = [];
+  for (let i = 0; i < pointsNeeded; i++) {
+    const srcIdx = Math.floor((i / pointsNeeded) * data.length);
+    resampled.push(normalized[Math.min(srcIdx, normalized.length - 1)]);
+  }
+
+  let result = '';
+  for (let i = 0; i < resampled.length; i += 2) {
+    const left = resampled[i];
+    const right = resampled[i + 1] ?? 0;
+
+    // Braille dot mapping for vertical bar chart
+    // Left column: bits 0,1,2,6 (top to bottom: 0,1,2,6)
+    // Right column: bits 3,4,5,7 (top to bottom: 3,4,5,7)
+    let code = 0x2800;
+
+    // Left column dots (from bottom up based on value)
+    const leftDots = [6, 2, 1, 0]; // bottom to top
+    for (let d = 0; d <= left && d < leftDots.length; d++) {
+      code |= (1 << leftDots[d]);
+    }
+
+    // Right column dots
+    const rightDots = [7, 5, 4, 3];
+    for (let d = 0; d <= right && d < rightDots.length; d++) {
+      code |= (1 << rightDots[d]);
+    }
+
+    result += String.fromCharCode(code);
+  }
+
+  return result;
+}
 
 export function sparkline(data: number[], opts: {
   color?: (text: string) => string
   label?: string
 } = {}): string {
   const color = opts.color || AMETHYST
-  const blocks = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
 
   if (data.length === 0) return chalk.dim('(no data)')
 
   const min = Math.min(...data)
   const max = Math.max(...data)
+
+  // Use Braille sparkline when terminal supports it (higher resolution)
+  const caps = detectTerminalCapabilities()
+  if (caps.braille) {
+    const braille = brailleSparkline(data)
+    const parts: string[] = []
+    if (opts.label) parts.push(chalk.dim(opts.label))
+    parts.push(color(braille))
+    parts.push(chalk.dim(`${min}–${max}`))
+    return parts.join(' ')
+  }
+
+  // Fall back to block character sparkline
+  const blocks = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
   const range = max - min || 1
 
   const chars = data.map(v => {

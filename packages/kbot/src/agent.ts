@@ -19,9 +19,15 @@ import {
   executeTool,
   getTool,
   getToolDefinitionsForApi,
+  ensureLazyToolsLoaded,
   type ToolCall,
   type ToolResult,
 } from './tools/index.js'
+import {
+  ToolPipeline,
+  createDefaultPipeline,
+  type ToolContext,
+} from './tool-pipeline.js'
 import { formatContextForPrompt, type ProjectContext } from './context.js'
 import { getMatrixSystemPrompt, listAgents, createAgent, type MatrixAgent } from './matrix.js'
 import {
@@ -36,8 +42,10 @@ import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
 import { saveEmbeddingCache } from './embeddings.js'
 import { createSpinner, printToolCall, printToolResult, printResponse, printError, printInfo, printWarn } from './ui.js'
+import type { UIAdapter } from './ui-adapter.js'
+import { TerminalUIAdapter } from './ui-adapter.js'
 import { parseMultimodalMessage, toAnthropicContent, toOpenAIContent, toGeminiParts, type ParsedMessage } from './multimodal.js'
-import { streamAnthropicResponse, streamOpenAIResponse, type StreamState } from './streaming.js'
+import { streamAnthropicResponse, streamOpenAIResponse, ResponseStream, type StreamState } from './streaming.js'
 import { checkPermission } from './permissions.js'
 import { runPreToolHook, runPostToolHook } from './hooks.js'
 import { getRepoMapForContext } from './repo-map.js'
@@ -46,6 +54,8 @@ import { isSelfEvalEnabled, evaluateResponse } from './self-eval.js'
 import { withErrorCorrection } from './error-correction.js'
 import { EntropyScorer } from './entropy-context.js'
 import { LoopDetector } from './godel-limits.js'
+import { CheckpointManager, newSessionId, type Checkpoint } from './checkpoint.js'
+import { TelemetryEmitter } from './telemetry.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -116,6 +126,12 @@ export interface AgentOptions {
   multimodal?: ParsedMessage
   /** Skip planner re-entry (prevents infinite loop when planner calls runAgent) */
   skipPlanner?: boolean
+  /** UIAdapter for decoupled output (SDK use). Defaults to TerminalUIAdapter. */
+  ui?: UIAdapter
+  /** Custom tool execution pipeline (overrides default permission/hook/metrics chain) */
+  pipeline?: ToolPipeline
+  /** ResponseStream for structured event streaming (SDK/MCP/HTTP consumers) */
+  responseStream?: ResponseStream
 }
 
 
@@ -610,7 +626,7 @@ async function callProviderStreaming(
   provider: ByokProvider, apiKey: string, model: string,
   systemContext: string, messages: ProviderMessage[],
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { thinking?: boolean; thinkingBudget?: number },
+  options?: { thinking?: boolean; thinkingBudget?: number; responseStream?: ResponseStream },
 ): Promise<ProviderResult> {
   const p = getProvider(provider)
 
@@ -621,13 +637,14 @@ async function callProviderStreaming(
       apiKey, p.apiUrl, model, systemContext,
       messages.map(m => ({ role: m.role, content: m.content as unknown })),
       tools,
-      { thinking: options?.thinking, thinkingBudget: options?.thinkingBudget },
+      { thinking: options?.thinking, thinkingBudget: options?.thinkingBudget, responseStream: options?.responseStream },
     )
   } else {
     state = await streamOpenAIResponse(
       apiKey, p.apiUrl, model, systemContext,
       messages.map(m => ({ role: m.role, content: m.content })),
       tools,
+      { responseStream: options?.responseStream },
     )
   }
 
@@ -808,6 +825,9 @@ export async function runAgent(
   message: string,
   options: AgentOptions = {},
 ): Promise<AgentResponse> {
+  // UIAdapter: defaults to TerminalUIAdapter for CLI, can be overridden for SDK use
+  const ui = options.ui ?? new TerminalUIAdapter()
+
   const apiKey = getByokKey()
   const byokProvider = getByokProvider()
   const isLocal = byokProvider ? isLocalProvider(byokProvider) : false
@@ -823,7 +843,7 @@ export async function runAgent(
   // Step 0: Parse multimodal content (images in message)
   const parsed = options.multimodal || parseMultimodalMessage(message)
   if (parsed.isMultimodal) {
-    printInfo(`(${parsed.imageCount} image${parsed.imageCount > 1 ? 's' : ''} attached)`)
+    ui.onInfo(`(${parsed.imageCount} image${parsed.imageCount > 1 ? 's' : ''} attached)`)
   }
 
   // Step 1: Local-first (skip if multimodal — needs AI to interpret)
@@ -832,14 +852,14 @@ export async function runAgent(
     if (localResult !== null) {
       addTurn({ role: 'user', content: message })
       addTurn({ role: 'assistant', content: localResult })
-      printInfo('(handled locally — 0 tokens used)')
+      ui.onInfo('(handled locally — 0 tokens used)')
       return { content: localResult, agent: 'local', model: 'none', toolCalls: 0 }
     }
   }
 
   // Step 1.5: Complexity detection — auto-plan complex tasks
   if (isComplexTask(message) && !message.startsWith('/plan') && !options.skipPlanner) {
-    printInfo('Complex task detected. Using autonomous planner...')
+    ui.onInfo('Complex task detected. Using autonomous planner...')
     try {
       const { autonomousExecute, formatPlanSummary } = await import('./planner.js')
       const plan = await autonomousExecute(message, {
@@ -857,7 +877,7 @@ export async function runAgent(
       }
     } catch {
       // Planner failed — fall through to regular agent loop
-      printWarn('Planner failed, falling back to direct execution...')
+      ui.onWarning('Planner failed, falling back to direct execution...')
     }
   }
 
@@ -870,6 +890,11 @@ export async function runAgent(
   }
 
   const tier = options.tier || 'free'
+
+  // Ensure lazy tools are loaded before building the tool list for the API.
+  // In one-shot mode, lazy tools may still be loading in background — await them here.
+  await ensureLazyToolsLoaded()
+
   const allTools = getToolDefinitionsForApi(tier)
   const casual = isCasualMessage(message)
 
@@ -995,6 +1020,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const originalMessage = message
   let cumulativeCostUsd = 0
 
+  // ── Checkpointing & Telemetry ──
+  const sessionId = newSessionId()
+  const checkpointManager = new CheckpointManager()
+  const telemetry = new TelemetryEmitter(sessionId)
+
+  telemetry.emit('session_start', {
+    agent: options.agent || 'kernel',
+    model: options.model || 'auto',
+    message: originalMessage.slice(0, 200),
+  })
+
   // ── Gödel limits: detect undecidable loops and hand off to human ──
   const loopDetector = new LoopDetector({
     maxToolRepeats: 5,
@@ -1006,6 +1042,24 @@ Always quote file paths that contain spaces. Never reference internal system nam
   // ── Entropy scorer: information-theoretic context management ──
   const entropyScorer = new EntropyScorer()
 
+  // ── Tool execution pipeline ──
+  const pipeline = options.pipeline ?? createDefaultPipeline({
+    checkPermission,
+    runPreHook: (name, args) => {
+      const h = runPreToolHook(name, args, options.agent || 'kernel')
+      return { blocked: h.blocked ?? false, blockReason: h.blockReason }
+    },
+    runPostHook: (name, args, result) => { runPostToolHook(name, args, result, options.agent || 'kernel') },
+    executeTool: async (name, args) => {
+      const r = await executeTool({ id: name, name, arguments: args })
+      return { result: r.result, error: r.error ? r.result : undefined }
+    },
+    recordMetrics: (name, duration, error) => {
+      telemetry.emit('tool_call_end', { tool: name, duration_ms: duration, error })
+    },
+    emit: (event, data) => telemetry.emit(event as any, data),
+  })
+
   // Loop messages track the full conversation within a multi-tool execution.
   // This includes assistant responses (with tool-use reasoning) and tool results,
   // so the AI maintains context across tool iterations.
@@ -1014,7 +1068,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   for (let i = 0; i < MAX_TOOL_LOOPS; i++) {
     // Cost ceiling — stop burning money on runaway loops
     if (cumulativeCostUsd > MAX_COST_CEILING) {
-      printWarn(`Cost ceiling reached ($${cumulativeCostUsd.toFixed(2)} > $${MAX_COST_CEILING}). Stopping tool loop.`)
+      ui.onWarning(`Cost ceiling reached ($${cumulativeCostUsd.toFixed(2)} > $${MAX_COST_CEILING}). Stopping tool loop.`)
       break
     }
 
@@ -1026,21 +1080,20 @@ Always quote file paths that contain spaces. Never reference internal system nam
           ? `Loop detected (${decidability.pattern}): ${decidability.evidence}`
           : decidability.evidence
         if (decidability.recommendation === 'handoff') {
-          printWarn(`${msg}\nHanding off to you — I need your input to continue.`)
+          ui.onWarning(`${msg}\nHanding off to you — I need your input to continue.`)
           break
         } else if (decidability.recommendation === 'decompose') {
-          printWarn(`${msg}\nBreaking this into smaller steps...`)
+          ui.onWarning(`${msg}\nBreaking this into smaller steps...`)
           break
         } else if (decidability.recommendation === 'simplify') {
-          printInfo(`${msg} Trying a different approach...`)
+          ui.onInfo(`${msg} Trying a different approach...`)
           loopMessages.push({ role: 'user', content: `Your approach isn't working. Try a completely different strategy. ${decidability.evidence}` })
         }
       }
     }
     // Don't use spinner when streaming (conflicts with stdout)
     const useSpinner = !options.stream
-    const spinner = useSpinner ? createSpinner(i === 0 ? 'Thinking...' : `Running tools (${toolCallCount})...`) : null
-    spinner?.start()
+    const spinnerHandle = useSpinner ? ui.onSpinnerStart(i === 0 ? 'Thinking...' : `Running tools (${toolCallCount})...`) : null
 
     try {
       // ── BYOK: Call provider directly with tool-use support ──
@@ -1084,7 +1137,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
         content: t.content,
       }))
 
-      spinner?.stop()
+      spinnerHandle?.stop()
 
       // Use streaming if requested and provider supports it
       // Disable streaming for local models when tools are active — local models
@@ -1095,19 +1148,41 @@ Always quote file paths that contain spaces. Never reference internal system nam
         && p.apiStyle !== 'cohere'
         && !(isLocal && byokTools.length > 0) // Don't stream local + tools (inline tool parsing needs full response)
 
-      const result = canStream
-        ? await callProviderStreaming(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
-            thinking: options.thinking,
-            thinkingBudget: options.thinkingBudget,
-          })
-        : await callProvider(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
-            multimodal: i === 0 ? parsed : undefined,
-            thinking: options.thinking,
-            thinkingBudget: options.thinkingBudget,
-          })
+      // ── Telemetry: API call ──
+      const apiCallStartMs = Date.now()
+      telemetry.emit('api_call', { provider, model, iteration: i, streaming: !!canStream })
+
+      let result: ProviderResult
+      try {
+        result = canStream
+          ? await callProviderStreaming(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
+              thinking: options.thinking,
+              thinkingBudget: options.thinkingBudget,
+              responseStream: options.responseStream,
+            })
+          : await callProvider(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
+              multimodal: i === 0 ? parsed : undefined,
+              thinking: options.thinking,
+              thinkingBudget: options.thinkingBudget,
+            })
+      } catch (apiErr) {
+        telemetry.emit('api_error', {
+          provider, model, iteration: i,
+          error: apiErr instanceof Error ? apiErr.message : String(apiErr),
+        }, Date.now() - apiCallStartMs)
+        throw apiErr
+      }
 
       const iterationCost = estimateCost(provider, result.usage.input_tokens, result.usage.output_tokens)
       cumulativeCostUsd += iterationCost
+
+      telemetry.emit('cost_update', {
+        iteration: i,
+        iterationCost,
+        cumulativeCostUsd,
+        inputTokens: result.usage.input_tokens,
+        outputTokens: result.usage.output_tokens,
+      }, Date.now() - apiCallStartMs)
 
       // ── Feed Gödel detector with cost/token data ──
       loopDetector.recordCost(iterationCost)
@@ -1160,7 +1235,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
               const correctionPrompt = applyCorrection(
                 originalMessage, content, classification.errorType, classification.evidence,
               )
-              printWarn(`Error correction: ${classification.errorType} (${(classification.confidence * 100).toFixed(0)}%) — retrying with fix...`)
+              ui.onWarning(`Error correction: ${classification.errorType} (${(classification.confidence * 100).toFixed(0)}%) — retrying with fix...`)
               loopMessages.push({ role: 'assistant', content })
               loopMessages.push({ role: 'user', content: correctionPrompt })
               continue
@@ -1173,7 +1248,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
           try {
             const evalResult = await evaluateResponse(originalMessage, content)
             if (evalResult.shouldRetry && evalResult.feedback) {
-              printWarn(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
+              ui.onWarning(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
               loopMessages.push({ role: 'assistant', content })
               loopMessages.push({ role: 'user', content: `Your previous response scored low on quality. Feedback: ${evalResult.feedback}\n\nPlease try again with a better response.` })
               continue
@@ -1204,13 +1279,15 @@ Always quote file paths that contain spaces. Never reference internal system nam
               cacheSolution(originalMessage, content.slice(0, 2000))
             }
 
-            // Update user profile
+            // Update user profile + Bayesian skill ratings
             updateProfile({
               tokens: totalTokens,
               tokensSaved: findPattern(originalMessage)?.avgTokensSaved || 0,
               agent: lastResponse.agent || 'kernel',
               taskType: classifyTask(originalMessage),
               techTerms: extractKeywords(originalMessage),
+              message: originalMessage,
+              success: true,
             })
 
             // Record routing decision for learned router
@@ -1264,6 +1341,15 @@ Always quote file paths that contain spaces. Never reference internal system nam
           } catch { /* learning failures are non-critical */ }
         })
 
+        // ── Checkpoint & Telemetry: session completed successfully ──
+        checkpointManager.markCompleted(sessionId).catch(() => {})
+        telemetry.emit('session_end', {
+          status: 'completed',
+          toolCallCount,
+          cumulativeCostUsd,
+        })
+        telemetry.destroy().catch(() => {})
+
         return {
           content,
           agent: lastResponse.agent || 'kernel',
@@ -1281,27 +1367,41 @@ Always quote file paths that contain spaces. Never reference internal system nam
       for (const call of toolCalls) {
         toolCallCount++
         toolSequenceLog.push(call.name)
-        printToolCall(call.name, call.arguments || {})
+        ui.onToolCallStart(call.name, call.arguments || {})
 
-        // Permission check — confirm destructive operations
-        const permitted = await checkPermission(call.name, call.arguments || {})
-        if (!permitted) {
-          results.push({ tool_call_id: call.id, result: 'Denied by user — operation skipped.', error: true })
-          printToolResult('Denied by user', true)
-          continue
+        // Execute through the middleware pipeline
+        const ctx: ToolContext = {
+          toolName: call.name,
+          toolArgs: call.arguments || {},
+          toolCallId: call.id,
+          metadata: {},
+          aborted: false,
         }
 
-        // Pre-tool hook
-        const preHook = runPreToolHook(call.name, call.arguments || {}, options.agent || 'kernel')
-        if (preHook.blocked) {
-          results.push({ tool_call_id: call.id, result: `Blocked by hook: ${preHook.blockReason}`, error: true })
-          printToolResult(`Blocked by hook: ${preHook.blockReason}`, true)
-          continue
-        }
+        await pipeline.execute(ctx)
 
-        const result = await executeTool(call)
+        // Build ToolResult from pipeline context
+        const result: ToolResult = {
+          tool_call_id: call.id,
+          result: ctx.error
+            ? (ctx.aborted ? (ctx.abortReason || ctx.error) : `Tool error: ${ctx.error}`)
+            : (ctx.result || ''),
+          error: !!ctx.error || ctx.aborted,
+          duration_ms: ctx.durationMs,
+        }
         results.push(result)
-        printToolResult(result.result, result.error)
+        ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
+
+        // ── Structured stream: tool result event ──
+        if (options.responseStream) {
+          options.responseStream.emit({
+            type: 'tool_result',
+            id: call.id,
+            name: call.name,
+            result: result.result,
+            error: result.error ? result.result : undefined,
+          })
+        }
 
         // ── Feed Gödel detector with tool call data ──
         loopDetector.recordToolCall(
@@ -1309,9 +1409,6 @@ Always quote file paths that contain spaces. Never reference internal system nam
           JSON.stringify(call.arguments || {}),
           result.result.slice(0, 500),
         )
-
-        // Post-tool hook
-        runPostToolHook(call.name, call.arguments || {}, result.result, options.agent || 'kernel')
       }
 
       // ── Maintain conversation context across tool iterations ──
@@ -1328,11 +1425,45 @@ Always quote file paths that contain spaces. Never reference internal system nam
         return `${r.tool_call_id} (${toolCalls.find(tc => tc.id === r.tool_call_id)?.name || 'unknown'}): ${status}${compressed}`
       }).join('\n\n')
       loopMessages.push({ role: 'user', content: `Tool results:\n${toolResultSummary}` })
+
+      // ── Checkpoint: save agent state after tool execution ──
+      checkpointManager.save({
+        id: crypto.randomUUID(),
+        sessionId,
+        timestamp: Date.now(),
+        iteration: i,
+        messages: [...loopMessages],
+        toolSequenceLog: [...toolSequenceLog],
+        toolCallCount,
+        cumulativeCostUsd,
+        agentId: options.agent || 'kernel',
+        model: lastResponse?.model || 'unknown',
+        systemPrompt: systemContext,
+        status: 'in_progress',
+      }).then(() => {
+        telemetry.emit('checkpoint_save', { iteration: i, toolCallCount })
+      }).catch(() => {
+        // Checkpoint save is non-blocking and non-critical
+      })
+
     } catch (err) {
-      spinner?.stop()
+      spinnerHandle?.stop()
+      // ── Telemetry: session failure ──
+      telemetry.emit('session_end', { status: 'failed', error: String(err), toolCallCount })
+      telemetry.destroy().catch(() => {})
       throw err
     }
   }
+
+  // ── Checkpoint & Telemetry: session ended (loop exhausted or early break) ──
+  checkpointManager.markCompleted(sessionId).catch(() => {})
+  telemetry.emit('session_end', {
+    status: 'completed',
+    toolCallCount,
+    cumulativeCostUsd,
+    reason: 'loop_exhausted',
+  })
+  telemetry.destroy().catch(() => {})
 
   const content = lastResponse?.content || 'Reached maximum tool iterations.'
   return {
@@ -1415,4 +1546,46 @@ export async function runAndPrint(
     printError(errMsg)
     process.exit(1)
   }
+}
+
+
+/**
+ * Resume an agent session from a checkpoint.
+ * Restores conversation messages and state, then continues execution.
+ */
+export async function runAgentFromCheckpoint(
+  checkpoint: Checkpoint,
+  options: AgentOptions = {},
+): Promise<AgentResponse> {
+  const telemetryInstance = new TelemetryEmitter(checkpoint.sessionId)
+  telemetryInstance.emit('checkpoint_resume', {
+    checkpointId: checkpoint.id,
+    iteration: checkpoint.iteration,
+    toolCallCount: checkpoint.toolCallCount,
+    cumulativeCostUsd: checkpoint.cumulativeCostUsd,
+  })
+
+  printInfo(`Resuming from checkpoint (iteration ${checkpoint.iteration}, ${checkpoint.toolCallCount} tool calls, $${checkpoint.cumulativeCostUsd.toFixed(4)})`)
+
+  // Restore conversation history from checkpoint messages
+  const { restoreHistory } = await import('./memory.js')
+  const turns = checkpoint.messages.map((m: any) => ({
+    role: m.role as 'user' | 'assistant',
+    content: m.content,
+  }))
+  restoreHistory(turns)
+
+  // Extract the original user message from the first user message in checkpoint
+  const firstUserMsg = checkpoint.messages.find((m: any) => m.role === 'user')
+  const message = firstUserMsg?.content || 'continue'
+
+  // Re-run the agent with the restored context
+  const response = await runAgent(message, {
+    ...options,
+    agent: checkpoint.agentId || options.agent,
+    skipPlanner: true, // Don't re-plan, just continue execution
+  })
+
+  await telemetryInstance.destroy()
+  return response
 }

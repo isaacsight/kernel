@@ -95,7 +95,7 @@ export async function streamAnthropicResponse(
   system: string,
   messages: Array<{ role: string; content: unknown }>,
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { thinking?: boolean; thinkingBudget?: number },
+  options?: { thinking?: boolean; thinkingBudget?: number; responseStream?: ResponseStream },
 ): Promise<StreamState> {
   const body: Record<string, unknown> = {
     model,
@@ -197,6 +197,7 @@ export async function streamAnthropicResponse(
             if (!state.thinkingDisplayed) {
               process.stderr.write(`\n  ${chalk.dim('thinking…')}\n`)
               state.thinkingDisplayed = true
+              options?.responseStream?.emit({ type: 'thinking_start' })
             }
             // Thinking is status — goes to stderr
             const thinkingLines = text.split('\n')
@@ -206,18 +207,52 @@ export async function streamAnthropicResponse(
                 thinkingLineCount++
               }
             }
+            options?.responseStream?.emit({ type: 'thinking_delta', text })
           } else if (type === 'thinking_done') {
             if (state.thinkingDisplayed) {
               process.stderr.write(`  ${chalk.dim(`(${thinkingLineCount} lines)`)}\n\n`)
             }
+            options?.responseStream?.emit({ type: 'thinking_end' })
           } else if (type === 'content') {
             // Content is pipeable — goes to stdout
             if (state.content.length === 0) {
               process.stdout.write('\n')
             }
             process.stdout.write(text)
+            options?.responseStream?.emit({ type: 'content_delta', text })
+          } else if (type === 'tool_use') {
+            // Tool call events are emitted via processStreamEvent
           }
         })
+
+        // Emit tool_call structured events for Anthropic SSE
+        if (event.type === 'content_block_start' && event.content_block?.type === 'tool_use') {
+          options?.responseStream?.emit({
+            type: 'tool_call_start',
+            id: event.content_block.id || '',
+            name: event.content_block.name || '',
+          })
+        }
+        if (event.type === 'content_block_delta' && event.delta?.type === 'input_json_delta' && event.delta.partial_json) {
+          const lastTool = state.toolCalls[state.toolCalls.length - 1]
+          if (lastTool) {
+            options?.responseStream?.emit({
+              type: 'tool_call_delta',
+              id: lastTool.id,
+              json: event.delta.partial_json,
+            })
+          }
+        }
+        if (event.type === 'content_block_stop' && !state.isThinking && state.toolCalls.length > 0) {
+          const lastTool = state.toolCalls[state.toolCalls.length - 1]
+          if (lastTool?.name) {
+            options?.responseStream?.emit({
+              type: 'tool_call_end',
+              id: lastTool.id,
+              name: lastTool.name,
+            })
+          }
+        }
 
         // Guard against OOM from unbounded content/thinking accumulation
         if (state.content.length + state.thinking.length > MAX_STREAM_CONTENT) {
@@ -235,6 +270,23 @@ export async function streamAnthropicResponse(
   // Final newline after streamed content
   if (state.content) {
     process.stdout.write('\n')
+    options?.responseStream?.emit({ type: 'content_end' })
+  }
+
+  // Emit usage and done events on the structured stream
+  if (options?.responseStream) {
+    if (state.usage.input_tokens || state.usage.output_tokens) {
+      options.responseStream.emit({
+        type: 'usage',
+        inputTokens: state.usage.input_tokens,
+        outputTokens: state.usage.output_tokens,
+      })
+    }
+    options.responseStream.emit({
+      type: 'done',
+      content: state.content,
+      thinking: state.thinking || undefined,
+    })
   }
 
   return state
@@ -251,6 +303,7 @@ export async function streamOpenAIResponse(
   system: string,
   messages: Array<{ role: string; content: string }>,
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
+  options?: { responseStream?: ResponseStream },
 ): Promise<StreamState> {
   const apiMessages: Array<{ role: string; content: string }> = []
   if (system) apiMessages.push({ role: 'system', content: system })
@@ -371,10 +424,12 @@ export async function streamOpenAIResponse(
           }
           state.content += text
           process.stdout.write(text)
+          options?.responseStream?.emit({ type: 'content_delta', text })
 
           // Guard against OOM from unbounded content accumulation
           if (state.content.length > MAX_STREAM_CONTENT) {
             process.stderr.write('\n  [Response truncated — exceeded 5MB]\n')
+            options?.responseStream?.emit({ type: 'error', message: 'Response truncated — exceeded 5MB' })
             streamCancelled = true
             await reader.cancel()
             return state
@@ -390,15 +445,39 @@ export async function streamOpenAIResponse(
             while (state.toolCalls.length <= idx) {
               state.toolCalls.push({ id: '', name: '', partialJson: '' })
             }
+            const prevId = state.toolCalls[idx].id
             if (tc.id) state.toolCalls[idx].id = String(tc.id)
             const fn = tc.function as Record<string, string> | undefined
-            if (fn?.name) state.toolCalls[idx].name = fn.name
-            if (fn?.arguments) state.toolCalls[idx].partialJson += fn.arguments
+            if (fn?.name) {
+              state.toolCalls[idx].name = fn.name
+              // Emit tool_call_start when we first learn the name
+              options?.responseStream?.emit({
+                type: 'tool_call_start',
+                id: state.toolCalls[idx].id || String(tc.id) || '',
+                name: fn.name,
+              })
+            }
+            if (fn?.arguments) {
+              state.toolCalls[idx].partialJson += fn.arguments
+              options?.responseStream?.emit({
+                type: 'tool_call_delta',
+                id: state.toolCalls[idx].id,
+                json: fn.arguments,
+              })
+            }
           }
         }
 
         if (choice.finish_reason) {
           state.stopReason = String(choice.finish_reason)
+          // Emit tool_call_end for any tool calls that were accumulated
+          if (choice.finish_reason === 'tool_calls' || choice.finish_reason === 'function_call') {
+            for (const tc of state.toolCalls) {
+              if (tc.name) {
+                options?.responseStream?.emit({ type: 'tool_call_end', id: tc.id, name: tc.name })
+              }
+            }
+          }
         }
 
         // Capture usage from the final stream chunk (OpenAI includes it)
@@ -408,6 +487,11 @@ export async function streamOpenAIResponse(
             input_tokens: chunkUsage.prompt_tokens || chunkUsage.input_tokens || 0,
             output_tokens: chunkUsage.completion_tokens || chunkUsage.output_tokens || 0,
           }
+          options?.responseStream?.emit({
+            type: 'usage',
+            inputTokens: state.usage.input_tokens,
+            outputTokens: state.usage.output_tokens,
+          })
         }
       }
     }
@@ -417,10 +501,19 @@ export async function streamOpenAIResponse(
 
   if (state.content) {
     process.stdout.write('\n')
+    options?.responseStream?.emit({ type: 'content_end' })
   }
 
   // Usage is captured from the final stream chunk (some providers include it)
   // If not available from stream, it stays at 0 — the non-streaming path handles this correctly
+
+  // Emit done event on the structured stream
+  if (options?.responseStream) {
+    options.responseStream.emit({
+      type: 'done',
+      content: state.content,
+    })
+  }
 
   return state
 }
@@ -484,6 +577,149 @@ function processStreamEvent(
     case 'message_stop':
       // Final event
       break
+  }
+}
+
+// ── Structured Response Streaming Protocol ──
+// Typed event stream for SDK, MCP, HTTP, and pipe consumers.
+// This is an ADDITION — existing streaming functions continue to work as before.
+
+export type ResponseStreamEvent =
+  | { type: 'thinking_start' }
+  | { type: 'thinking_delta'; text: string }
+  | { type: 'thinking_end' }
+  | { type: 'content_delta'; text: string }
+  | { type: 'content_end' }
+  | { type: 'tool_call_start'; id: string; name: string }
+  | { type: 'tool_call_delta'; id: string; json: string }
+  | { type: 'tool_call_end'; id: string; name: string }
+  | { type: 'tool_result'; id: string; name: string; result: string; error?: string }
+  | { type: 'usage'; inputTokens: number; outputTokens: number }
+  | { type: 'error'; message: string; code?: string }
+  | { type: 'done'; content: string; thinking?: string }
+
+export type ResponseStreamListener = (event: ResponseStreamEvent) => void
+
+export class ResponseStream {
+  private listeners: ResponseStreamListener[] = []
+  private _content: string = ''
+  private _thinking: string = ''
+  private _toolCalls: Map<string, { name: string; json: string }> = new Map()
+  private _usage: { inputTokens: number; outputTokens: number } = { inputTokens: 0, outputTokens: 0 }
+  private _done: boolean = false
+
+  /** Subscribe to events. Returns an unsubscribe function. */
+  on(listener: ResponseStreamListener): () => void {
+    this.listeners.push(listener)
+    return () => {
+      const idx = this.listeners.indexOf(listener)
+      if (idx !== -1) this.listeners.splice(idx, 1)
+    }
+  }
+
+  /** Emit an event to all listeners, tracking accumulated state. */
+  emit(event: ResponseStreamEvent): void {
+    // Track state
+    switch (event.type) {
+      case 'content_delta':
+        this._content += event.text
+        break
+      case 'thinking_delta':
+        this._thinking += event.text
+        break
+      case 'tool_call_start':
+        this._toolCalls.set(event.id, { name: event.name, json: '' })
+        break
+      case 'tool_call_delta': {
+        const tc = this._toolCalls.get(event.id)
+        if (tc) tc.json += event.json
+        break
+      }
+      case 'usage':
+        this._usage = { inputTokens: event.inputTokens, outputTokens: event.outputTokens }
+        break
+      case 'done':
+        this._done = true
+        break
+    }
+
+    for (const listener of this.listeners) {
+      try {
+        listener(event)
+      } catch {
+        // Don't let listener errors break the stream
+      }
+    }
+  }
+
+  // Getters for accumulated state
+  get content(): string { return this._content }
+  get thinking(): string { return this._thinking }
+  get usage() { return this._usage }
+  get isDone(): boolean { return this._done }
+
+  /** Async iterator for SDK consumers: `for await (const event of stream) { ... }` */
+  async *[Symbol.asyncIterator](): AsyncGenerator<ResponseStreamEvent> {
+    const queue: ResponseStreamEvent[] = []
+    let resolve: (() => void) | null = null
+    let done = false
+
+    const unsub = this.on((event) => {
+      queue.push(event)
+      if (event.type === 'done' || event.type === 'error') done = true
+      resolve?.()
+    })
+
+    try {
+      while (true) {
+        while (queue.length > 0) {
+          const event = queue.shift()!
+          yield event
+          if (event.type === 'done' || event.type === 'error') return
+        }
+        if (done) return
+        await new Promise<void>(r => { resolve = r })
+        resolve = null
+      }
+    } finally {
+      unsub()
+    }
+  }
+
+  /** Create terminal listener (writes to stdout/stderr like current behavior) */
+  static createTerminalListener(): ResponseStreamListener {
+    return (event) => {
+      switch (event.type) {
+        case 'thinking_start':
+          process.stderr.write('\x1b[2m\x1b[3m') // dim italic
+          break
+        case 'thinking_delta':
+          process.stderr.write(event.text)
+          break
+        case 'thinking_end':
+          process.stderr.write('\x1b[0m\n') // reset
+          break
+        case 'content_delta':
+          process.stdout.write(event.text)
+          break
+        case 'content_end':
+          process.stdout.write('\n')
+          break
+        case 'error':
+          process.stderr.write(`\x1b[31m\u2717 ${event.message}\x1b[0m\n`)
+          break
+      }
+    }
+  }
+
+  /** Create SSE listener (for HTTP serve mode) */
+  static createSSEListener(res: { write: (data: string) => void }): ResponseStreamListener {
+    return (event) => {
+      res.write(`data: ${JSON.stringify(event)}\n\n`)
+      if (event.type === 'done' || event.type === 'error') {
+        res.write('data: [DONE]\n\n')
+      }
+    }
   }
 }
 

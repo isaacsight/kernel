@@ -10,7 +10,9 @@
 //   kbot "compare these" img1.png img2.png
 
 import { readFileSync, existsSync, statSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import { extname, resolve } from 'node:path'
+import { detectTerminalCapabilities } from './terminal-caps.js'
 
 /** MIME types for supported image formats */
 const IMAGE_MIMES: Record<string, string> = {
@@ -247,4 +249,53 @@ export function toGeminiParts(parsed: ParsedMessage): Array<Record<string, unkno
       },
     }
   })
+}
+
+// ── Inline Image Rendering ──
+// Render images directly in terminals that support it (Kitty, iTerm2).
+// Returns null if the terminal has no inline image support.
+
+/**
+ * Render an image inline in the terminal if the terminal supports it.
+ * Supports Kitty graphics protocol and iTerm2 inline images.
+ * Returns the escape sequence string, or null if unsupported.
+ */
+export async function renderImageInTerminal(imagePath: string): Promise<string | null> {
+  const caps = detectTerminalCapabilities()
+
+  if (!caps.kittyGraphics && !caps.iterm2Images && !caps.sixel) {
+    return null // Terminal doesn't support inline images
+  }
+
+  const absPath = resolve(imagePath)
+  if (!existsSync(absPath)) return null
+
+  const data = await readFile(absPath)
+  const base64 = data.toString('base64')
+
+  if (caps.kittyGraphics) {
+    // Kitty graphics protocol
+    // \x1b_Ga=T,f=100,<more params>;<base64 data>\x1b\\
+    // Chunk the base64 data (4096 bytes per chunk)
+    const chunks: string[] = []
+    for (let i = 0; i < base64.length; i += 4096) {
+      const chunk = base64.slice(i, i + 4096)
+      const isLast = i + 4096 >= base64.length
+      if (chunks.length === 0) {
+        chunks.push(`\x1b_Ga=T,f=100,m=${isLast ? 0 : 1};${chunk}\x1b\\`)
+      } else {
+        chunks.push(`\x1b_Gm=${isLast ? 0 : 1};${chunk}\x1b\\`)
+      }
+    }
+    return chunks.join('')
+  }
+
+  if (caps.iterm2Images) {
+    // iTerm2 inline image protocol
+    const params = `size=${data.length};inline=1`
+    return `\x1b]1337;File=${params}:${base64}\x07`
+  }
+
+  // Sixel would require pixel-to-sixel conversion — skip for now
+  return null
 }

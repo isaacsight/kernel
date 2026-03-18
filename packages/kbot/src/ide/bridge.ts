@@ -4,6 +4,7 @@
 // into a unified API that MCP, ACP, and LSP adapters consume.
 
 import { runAgent, type AgentOptions, type AgentResponse } from '../agent.js'
+import type { ResponseStream } from '../streaming.js'
 import { gatherContext, formatContextForPrompt, type ProjectContext } from '../context.js'
 import { registerAllTools, executeTool, getAllTools, getToolDefinitionsForApi, type ToolCall, type ToolResult } from '../tools/index.js'
 import { buildFullLearningContext, getExtendedStats, learnFact, selfTrain } from '../learning.js'
@@ -42,6 +43,7 @@ export interface ChatOptions {
   agent?: string
   model?: string
   stream?: boolean
+  responseStream?: ResponseStream
 }
 
 let initialized = false
@@ -79,6 +81,7 @@ export async function chat(message: string, opts: ChatOptions = {}): Promise<Age
     stream: opts.stream,
     context: projectContext || undefined,
     tier: bridgeConfig.tier || 'free',
+    responseStream: opts.responseStream,
   }
   return runAgent(message, agentOpts)
 }

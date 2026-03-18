@@ -323,6 +323,35 @@ export class TaskLedger {
     }
     return ledger
   }
+
+  /**
+   * Save ledger state to a JSON file for checkpoint persistence.
+   * Uses atomic write (write to .tmp, then rename) to prevent corruption.
+   */
+  async saveLedger(path: string): Promise<void> {
+    const { writeFile, rename } = await import('node:fs/promises')
+    const tmpPath = path + '.tmp'
+    await writeFile(tmpPath, this.toJSON(), 'utf-8')
+    await rename(tmpPath, path)
+  }
+
+  /**
+   * Load ledger state from a JSON file.
+   * Restores facts, guesses, plan, and progress from a previously saved checkpoint.
+   */
+  async loadLedger(path: string): Promise<void> {
+    const { readFile } = await import('node:fs/promises')
+    try {
+      const json = await readFile(path, 'utf-8')
+      const data = JSON.parse(json)
+      this.facts = Array.isArray(data.facts) ? data.facts : []
+      this.guesses = Array.isArray(data.guesses) ? data.guesses : []
+      this.plan = Array.isArray(data.plan) ? data.plan : []
+      this.progress = Array.isArray(data.progress) ? data.progress : []
+    } catch {
+      // If file doesn't exist or is invalid, keep current state
+    }
+  }
 }
 
 // ── Helpers ──
