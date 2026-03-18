@@ -49,7 +49,7 @@ packages/kbot/src/
 ├── learning.ts      # Learning engine
 ├── matrix.ts        # Custom agent creation + mimic profiles
 ├── planner.ts       # Autonomous plan-execute mode
-├── tools/           # 262 built-in tools
+├── tools/           # 284 built-in tools
 │   ├── files.ts     # File read/write/glob/grep
 │   ├── bash.ts      # Shell execution
 │   ├── git.ts       # Git operations

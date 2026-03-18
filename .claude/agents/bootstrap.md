@@ -29,7 +29,7 @@ Bootstrap doesn't work alone. Five sub-agents handle specific domains:
 
 ```
 Bootstrap (orchestrator)
-  ├── Sync: "README says 246, source says 262" → Bootstrap fixes
+  ├── Sync: "README says 262, source says 284" → Bootstrap fixes
   ├── Pulse: "downloads up 15%, stars still 1" → Bootstrap prioritizes Demo
   ├── Demo: "no hero GIF exists" → Bootstrap creates recording
   ├── Outreach: "HN post got 23 views, blog post not written" → Bootstrap drafts

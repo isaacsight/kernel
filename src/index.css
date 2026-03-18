@@ -20258,22 +20258,6 @@ h4 {
     color: var(--rubin-primary, #6B5B95);
 }
 
-.ka-pricing-overage-note {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    line-height: 1.6;
-    color: var(--rubin-slate);
-    opacity: 0.6;
-    margin-top: 20px;
-    padding: 16px;
-    background: rgba(107, 91, 149, 0.04);
-    border-radius: var(--radius-sm, 6px);
-}
-
-.ka-pricing-overage-note strong {
-    opacity: 1;
-    color: var(--rubin-slate);
-}
 
 /* FAQ */
 .ka-pricing-faq-grid {
@@ -20340,9 +20324,6 @@ h4 {
     background: rgba(107, 91, 149, 0.06);
 }
 
-[data-theme="dark"] .ka-pricing-overage-note {
-    background: rgba(107, 91, 149, 0.08);
-}
 
 .ka-legal-page {
     max-width: 680px;

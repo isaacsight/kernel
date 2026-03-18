@@ -4,7 +4,7 @@
 
 This roadmap reflects the current direction of kbot. Priorities may shift based on community feedback.
 
-## Current: v3.1.3 (March 2026)
+## Current: v3.3.0 (March 2026)
 
 ### Core Architecture (v3.0)
 - [x] Checkpointing — save and resume long-running agent sessions
@@ -15,7 +15,7 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 - [x] Structured streaming — typed events for SDK consumers
 
 ### Tools & Capabilities
-- [x] 262 tools — all free, all open source
+- [x] 284 tools — all free, all open source
 - [x] 22 agents (17 specialists + 5 presets)
 - [x] 20 AI providers (cloud + 4 local options)
 - [x] Game dev tools (16): scaffold, config, shaders, meshes, physics, particles, levels, tilemaps, navmesh, audio, netcode, builds, tests, ECS — 8 engines supported

@@ -3,7 +3,7 @@
 ## Hacker News — Show HN
 
 ### Title
-Show HN: kbot – Terminal AI agent that learns your coding patterns (262 tools, runs offline)
+Show HN: kbot – Terminal AI agent that learns your coding patterns (284 tools, runs offline)
 
 ### Text
 ```
@@ -17,7 +17,7 @@ What makes it different:
 - Zero-config first run: `npm i -g @kernel.chat/kbot && kbot "hello"` — works instantly,
   no API key needed (embedded llama.cpp)
 - 20 AI providers: Claude, GPT, Gemini, DeepSeek, Groq, Ollama, and 14 more. Switch with one command.
-- 262 tools: files, git, web search, deploy (Vercel/Netlify/CF), database (Postgres/MySQL),
+- 284 tools: files, git, web search, deploy (Vercel/Netlify/CF), database (Postgres/MySQL),
   game dev (8 engines), research (arXiv/Semantic Scholar), VFX, and more
 - Learning engine: Bayesian skill ratings + pattern extraction. Gets faster over time.
 - SDK: `import { agent, tools } from '@kernel.chat/kbot'` — use it as a library
@@ -47,7 +47,7 @@ I built a terminal AI agent that learns how you code.
 
 Not "remembers your chat." Actually extracts patterns and gets faster.
 
-262 tools. 20 providers. Runs offline. MIT licensed.
+284 tools. 20 providers. Runs offline. MIT licensed.
 
 npm i -g @kernel.chat/kbot
 
@@ -86,7 +86,7 @@ Claude Code writes kbot's source code while using kbot as an MCP tool in the sam
 
 The tools built in session N become the tools used in session N+1.
 
-60 versions later: 262 tools, learning engine, SDK, game dev tools.
+60 versions later: 284 tools, learning engine, SDK, game dev tools.
 
 **Tweet 6:**
 Try it:
@@ -102,7 +102,7 @@ Discord: discord.gg/pYJn3hBqnz
 ## Reddit Posts
 
 ### r/commandline
-**Title:** kbot — terminal AI agent with 262 tools, 20 providers, runs offline
+**Title:** kbot — terminal AI agent with 284 tools, 20 providers, runs offline
 **Body:** [Same as HN text, shorter]
 
 ### r/programming
@@ -146,7 +146,7 @@ I use Claude Code to write kbot's source code. But kbot runs as an MCP server
 inside Claude Code, providing tools back to the session that's building it.
 
 The tools I built in session 1 help me build faster in session 2. The tools from
-session 2 help me build faster in session 3. Sixty versions later, there are 262 tools
+session 2 help me build faster in session 3. Sixty versions later, there are 284 tools
 and a learning engine that's accumulated 73 solutions from watching itself get built.
 
 ## What kbot actually is

@@ -136,7 +136,7 @@ function myToolCount(): number {
       count += (content.match(/registerTool\(\{/g) || []).length
     }
     return count
-  } catch { return 262 }
+  } catch { return 284 }
 }
 
 // ─── Register Tools ─────────────────────────────────────────

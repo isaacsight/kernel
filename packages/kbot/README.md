@@ -4,6 +4,10 @@
 </p>
 
 <p align="center">
+  <img src="../../tools/video-assets/demo.gif" alt="kbot demo" width="700">
+</p>
+
+<p align="center">
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/v/@kernel.chat/kbot?color=6B5B95&label=npm" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/dw/@kernel.chat/kbot?color=6B5B95" alt="npm downloads"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
@@ -15,7 +19,7 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**22 specialist agents. 262 tools. 20 providers. Programmatic SDK. Runs offline. MIT licensed.**
+**22 specialist agents. 284 tools. 20 providers. Programmatic SDK. Runs offline. MIT licensed.**
 
 ---
 
@@ -102,7 +106,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 262 tools
+// List all 284 tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -131,7 +135,7 @@ kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
 ```
 
-## 262 Tools
+## 284 Tools
 
 | Category | Examples |
 |----------|---------|
