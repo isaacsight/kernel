@@ -302,6 +302,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: '../team.js',           registerFn: 'registerTeamTools' },
   { path: '../plugin-sdk.js',     registerFn: 'registerPluginSDKTools' },
   { path: './training.js',        registerFn: 'registerTrainingTools' },
+  { path: './social.js',          registerFn: 'registerSocialTools' },
 ]
 
 /** Track whether lazy tools have been registered */
