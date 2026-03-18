@@ -4,9 +4,35 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-15)
+## Current Session (2026-03-16)
 
 ### Accomplished This Session
+
+#### K:BOT v2.24.0 — 7 New Modules (Deploy, Database, MCP Marketplace, Pair, Team, Record, Plugin SDK)
+- **Deploy tools** (5): deploy, deploy_status, deploy_logs, deploy_rollback, deploy_env — auto-detects Vercel/Netlify/Cloudflare Workers & Pages/Fly.io/Railway from config files
+- **MCP Marketplace** (5): mcp_search, mcp_install, mcp_uninstall, mcp_list, mcp_update — fetches from official registry, 20 bundled servers, 24hr cache at ~/.kbot/mcp-registry.json
+- **Database tools** (8): db_query, db_schema, db_migrate, db_seed, prisma_introspect, prisma_generate, prisma_migrate, db_diagram — Postgres/MySQL/SQLite via CLI, Mermaid ER diagrams, fake data seeding
+- **Pair mode**: File watcher with 6 analysis checks (types, lint, tests, imports, security, style), auto-fix for safe ops, AI integration via runAgent()
+- **Team mode**: TCP server on localhost:7439, NDJSON protocol, 9 tools, auto-reconnect with exponential backoff, role-based task routing
+- **Record**: Terminal session recording as animated SVG (4 themes), GIF (via ImageMagick/ffmpeg), asciicast (asciinema v2). Virtual terminal screen buffer.
+- **Plugin SDK**: KBotPlugin interface with tools/hooks/commands/lifecycle, 6 management tools, scaffolds ~/.kbot/plugins/<name>/, npm publishing support
+- **238 tools** (was 233), **~151 npm keywords** (was 106)
+- **Published**: v2.24.0 to npm, GitHub pushed
+- **Commit**: `fc33e8a6` feat: deploy tools, database tools, MCP marketplace, pair mode, team mode, record, plugin SDK (v2.24.0)
+
+#### K:BOT v2.23.0–v2.23.2 — A2A, Browser Agent, Composio, Marketplace, Workflows, Guardrails, Handoffs
+- **A2A protocol**: Agent Card at /.well-known/agent.json, task server + client for LangGraph/CrewAI/Dify interop
+- **Browser agent**: Playwright-based web automation, page analysis, form filling, screenshot capture
+- **Composio integration**: 1000+ tool integrations with pre-built auth
+- **GitHub-backed marketplace**: PR-based publishing, version controlled agent/tool packages
+- **Workflow engine**: DAG execution with Kahn's algorithm, parallel nodes, condition branches, Mermaid export
+- **Guardrails**: Input/output/tool validation — 15 secret patterns, 10 destructive patterns, 4 PII patterns
+- **Handoffs**: Inter-agent delegation with 8 rules, max depth 3, cycle detection
+- **Ollama graceful tool fallback**: When model rejects tool schemas, retry without tools — inline parser handles text tool invocations
+- **233 tools**, 106 npm keywords
+- **Published**: v2.23.0–v2.23.2 to npm
+
+### Previous Session (2026-03-15)
 
 #### K:BOT v2.17.3 — Smart CLI Onboarding & Bug Fixes
 - **Smart onboarding**: `detectProjectSuggestions()` auto-detects project type (Node/Rust/Python/Go/Docker) and shows contextual example prompts on first run
@@ -148,20 +174,24 @@
 - **Edge function deploys**: ALWAYS use `--no-verify-jwt` flag.
 
 ## K:BOT Current State
-- **npm version**: 2.23.2 (`@kernel.chat/kbot`)
+- **npm version**: 2.24.0 (`@kernel.chat/kbot`)
 - **Agents**: 22 built-in (17 specialists + 5 presets) + 6 templates
-- **Tools**: 233
+- **Tools**: 238
 - **Providers**: 20
-- **Keywords**: 106 (npm discoverability)
-- **Downloads**: ~3,424/month, 2,663/week (accelerating)
+- **Keywords**: ~151 (npm discoverability)
+- **Downloads**: 1,418/day, 2,663/week, 3,424/month (accelerating — 1,418/day sustained since Mar 15)
 - **Docker**: `isaacsight/kbot:2.22.1` on Docker Hub
 - **Discord**: Guild 1472796320015192178, 20 channels, 6 roles, webhooks live
 - **Discord Invite**: https://discord.gg/pYJn3hBqnz
 - **GitHub Topics**: 20 (at max)
+- **New modules (v2.24.0)**: deploy tools, MCP marketplace, database tools, pair mode, team mode, record, plugin SDK
+- **New modules (v2.23.x)**: A2A protocol, browser agent, Composio, marketplace, workflows, guardrails, handoffs
 - **Reality core**: error correction, entropy context, emergent swarms, Gödel limits, simulation — all always-on
 - **Research tools**: arXiv, Semantic Scholar, Papers With Code, HuggingFace, PyPI, CRAN, Cargo, NASA, DOI
 - **Container tools**: Docker build/run/ps/logs/compose, API testing, data queries, math, LaTeX, Terraform
 - **VFX tools**: Houdini VEX, GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures, color palettes, audio viz
+- **Database tools**: Postgres/MySQL/SQLite queries, Prisma introspection, ER diagrams, seed data
+- **Deploy tools**: Vercel, Netlify, Cloudflare Workers/Pages, Fly.io, Railway
 
 ## Test Accounts
 - See `.env` or password manager for test credentials (removed from tracked files)
