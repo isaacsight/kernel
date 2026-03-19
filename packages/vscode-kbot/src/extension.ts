@@ -206,7 +206,7 @@ async function runKbot(prompt: string, agent?: string) {
       outputChannel.append(data.toString())
     })
 
-    proc.on('close', (code) => {
+    proc.on('close', (code: number | null) => {
       statusBarItem.text = '$(hubot) kbot'
       if (code === 0 && output.trim()) {
         // Show result as information message with "Copy" action
@@ -227,7 +227,7 @@ async function runKbot(prompt: string, agent?: string) {
       resolve()
     })
 
-    proc.on('error', (err) => {
+    proc.on('error', (err: NodeJS.ErrnoException) => {
       statusBarItem.text = '$(hubot) kbot'
       if (err.message.includes('ENOENT')) {
         vscode.window.showErrorMessage(

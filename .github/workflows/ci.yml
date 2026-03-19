@@ -36,9 +36,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: packages/kbot/package-lock.json
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - run: npx vitest run
 
@@ -54,5 +52,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
+      - run: npm install --include=dev
       - run: npx tsc -p .
