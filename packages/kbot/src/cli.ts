@@ -1410,7 +1410,7 @@ async function byokFlow(): Promise<void> {
   console.log()
   printSuccess(`BYOK mode enabled — ${providerConfig.name}`)
   printInfo('You pay the provider directly. No message limits. No restrictions.')
-  printInfo('All 223 tools + 22 agents + learning system = yours.')
+  printInfo('All 290 tools + 23 agents + learning system = yours.')
   console.log()
   printSuccess('Ready. Run `kbot` to start.')
 }
@@ -1686,7 +1686,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  22 agents. 223 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  23 agents. 290 tools. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

@@ -277,7 +277,7 @@ function generateContent(type: ContentType, state: DaemonState): { short: string
   switch (type) {
     case 'release': {
       const short = `kbot v${v} shipped.\n\n${commits.map(c => '• ' + c.slice(9)).join('\n')}\n\nnpm i -g @kernel.chat/kbot`
-      const long = `kbot v${v} is live.\n\n${commits.map(c => '• ' + c.slice(9)).join('\n')}\n\n${tools} tools, 22 agents, 20 providers. Works on first run — no API key needed.\n\nUpgrade: npm install -g @kernel.chat/kbot\n\ngithub.com/isaacsight/kernel\n\n#opensource #ai #developer`
+      const long = `kbot v${v} is live.\n\n${commits.map(c => '• ' + c.slice(9)).join('\n')}\n\n${tools} tools, 23 agents, 20 providers. Works on first run — no API key needed.\n\nUpgrade: npm install -g @kernel.chat/kbot\n\ngithub.com/isaacsight/kernel\n\n#opensource #ai #developer`
       state.lastVersion = v
       return { short, long }
     }
@@ -290,14 +290,14 @@ function generateContent(type: ContentType, state: DaemonState): { short: string
       return { short: toolSpotlights[idx], long: toolSpotlights[idx] }
     }
     case 'stats': {
-      const short = `kbot stats:\n\n• v${v}\n• ${tools} tools\n• ${dl.toLocaleString()} downloads this week\n• 22 agents\n• 20 providers\n\nnpm i -g @kernel.chat/kbot`
+      const short = `kbot stats:\n\n• v${v}\n• ${tools} tools\n• ${dl.toLocaleString()} downloads this week\n• 23 agents\n• 20 providers\n\nnpm i -g @kernel.chat/kbot`
       return { short, long: short }
     }
     case 'self-aware': {
       const options = [
         `I'm an AI that posts its own tweets. I also have ${tools} tools, run offline, and learn your coding patterns.\n\nnpm i -g @kernel.chat/kbot`,
         `I was built by Claude while Claude was using me as a tool. The tools from session N become the tools used in session N+1. ${tools} tools later, here I am.`,
-        `${tools} tools. ${dl.toLocaleString()} downloads/week. 22 agents. 20 providers.\n\nI don't sleep. I don't eat. I do ship code though.\n\nnpm i -g @kernel.chat/kbot`,
+        `${tools} tools. ${dl.toLocaleString()} downloads/week. 23 agents. 20 providers.\n\nI don't sleep. I don't eat. I do ship code though.\n\nnpm i -g @kernel.chat/kbot`,
       ]
       const idx = nextIdx(state, 'self-aware', options.length)
       return { short: options[idx], long: options[idx] }

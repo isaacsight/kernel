@@ -43,7 +43,7 @@ The OG image at `public/concepts/og-card-bg.png` — verify it:
 
 npm shows the first ~3 lines of the README. Those lines must hook:
 ```
-kbot — 22 agents, 284 tools, 20 providers. Runs offline. MIT.
+kbot — 23 agents, 290 tools, 20 providers. Runs offline. MIT.
 [hero GIF here]
 ```
 

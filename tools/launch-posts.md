@@ -127,7 +127,7 @@ Other things that make it different:
 - Fallback chains: URL fails → web search. Command not found → npx. Auto-recovery.
 - Cost-aware routing: "hi" uses the cheap model. Complex tasks use the full one.
 - Autopoietic health: `kbot vitals` shows live system viability.
-- 289 tools, 22 agents, 20 providers, runs offline.
+- 290 tools, 23 agents, 20 providers, runs offline.
 
 npm i -g @kernel.chat/kbot
 kbot "hello"
@@ -384,7 +384,7 @@ No API key needed. Works offline. Gets smarter over time.
 
 ## Key Message
 
-**Old story**: "284 tools, 20 providers, runs offline."
+**Old story**: "290 tools, 20 providers, runs offline."
 **New story**: "The only AI agent that builds its own tools."
 
 One sentence. forge_tool is the demo. The registry is the moat. Autopoiesis is the science.

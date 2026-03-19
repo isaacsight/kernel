@@ -20,7 +20,7 @@ RESET="\033[0m"
 echo ""
 echo -e "${PURPLE}${BOLD}┌─────────────────────────────────────┐${RESET}"
 echo -e "${PURPLE}${BOLD}│  kbot — Terminal AI Agent Framework │${RESET}"
-echo -e "${PURPLE}${BOLD}│  22 agents. 262 tools. 20 providers.│${RESET}"
+echo -e "${PURPLE}${BOLD}│  23 agents. 290 tools. 20 providers.│${RESET}"
 echo -e "${PURPLE}${BOLD}└─────────────────────────────────────┘${RESET}"
 echo ""
 

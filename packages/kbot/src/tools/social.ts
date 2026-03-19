@@ -136,7 +136,7 @@ function myToolCount(): number {
       count += (content.match(/registerTool\(\{/g) || []).length
     }
     return count
-  } catch { return 284 }
+  } catch { return 290 }
 }
 
 // ─── Register Tools ─────────────────────────────────────────
@@ -164,7 +164,7 @@ export function registerSocialTools() {
       if (!text) {
         // kbot writes about itself
         const templates = [
-          `kbot v${version} — ${tools} tools, 22 agents, 20 providers.\n\nWorks on first run. No API key.\n\nnpm i -g @kernel.chat/kbot`,
+          `kbot v${version} — ${tools} tools, 23 agents, 20 providers.\n\nWorks on first run. No API key.\n\nnpm i -g @kernel.chat/kbot`,
           `I have ${tools} tools and I learn your coding patterns.\n\nNot "remember your chat." Actually extract patterns and get faster.\n\nnpm i -g @kernel.chat/kbot`,
           `Zero-config AI:\n\nnpm i -g @kernel.chat/kbot\nkbot "hello"\n\nThat's it. No API key. No setup. I figure it out.`,
           `20 AI providers. Zero lock-in.\n\nClaude today. GPT tomorrow. Ollama on the airplane.\n\nnpm i -g @kernel.chat/kbot`,

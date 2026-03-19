@@ -1,6 +1,6 @@
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 22 agents, 284 tools, 20 providers, local-first.
+  Open-source terminal AI agent. 23 agents, 290 tools, 20 providers, local-first.
 </p>
 
 <p align="center">
@@ -26,8 +26,8 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, SambaNova, Cerebras, OpenRouter, and more. Switch with one command.
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
-- **22 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, and 18 more).
-- **284 tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, MCP, and more.
+- **23 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, and 19 more).
+- **290 tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, MCP, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
@@ -36,8 +36,8 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 | | kbot | Claude Code | Aider | OpenCode |
 |---|---|---|---|---|
 | AI providers | 20 | 1 | 6 | 75+ |
-| Specialist agents | 22 | 0 | 0 | 0 |
-| Built-in tools | 284 | ~15 | ~10 | ~10 |
+| Specialist agents | 23 | 0 | 0 | 0 |
+| Built-in tools | 290 | ~15 | ~10 | ~10 |
 | Learning engine | Yes | No | No | No |
 | Offline mode | Embedded + Ollama | No | Ollama | Ollama |
 | SDK | Yes | No | No | No |
@@ -89,7 +89,7 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **Presets** | claude-code, cursor, copilot, creative, developer |
 
-## 284 Tools
+## 290 Tools
 
 | Category | Examples |
 |----------|---------|
@@ -160,7 +160,7 @@ graph TD
     D -->|Multi-step| F[Autonomous Planner]
     E --> G[Provider API + Tool Loop]
     F --> G
-    G --> H{284 Tools}
+    G --> H{290 Tools}
     H --> I[File ops, bash, git, GitHub, search, deploy, DB, game dev...]
     G --> J[Learning Engine]
     J --> K[Patterns + Solutions + User Profile]
