@@ -1,0 +1,134 @@
+{
+  "name": "kbot",
+  "displayName": "kbot — AI Agent",
+  "description": "Open-source terminal AI agent with 23 specialists, 290 tools, 20 providers. Runs offline.",
+  "version": "0.1.0",
+  "publisher": "kernel-chat",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isaacsight/kernel"
+  },
+  "homepage": "https://kernel.chat",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "agent",
+    "kbot",
+    "coding assistant",
+    "mcp",
+    "copilot",
+    "ollama",
+    "local ai",
+    "multi-provider"
+  ],
+  "pricing": "Free",
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "kbot.startChat",
+        "title": "kbot: Start Chat"
+      },
+      {
+        "command": "kbot.explainSelection",
+        "title": "kbot: Explain Selection"
+      },
+      {
+        "command": "kbot.reviewSelection",
+        "title": "kbot: Review Selection"
+      },
+      {
+        "command": "kbot.fixError",
+        "title": "kbot: Fix Error"
+      },
+      {
+        "command": "kbot.generateTests",
+        "title": "kbot: Generate Tests"
+      },
+      {
+        "command": "kbot.askAgent",
+        "title": "kbot: Ask Agent..."
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "kbot.explainSelection",
+          "when": "editorHasSelection",
+          "group": "kbot@1"
+        },
+        {
+          "command": "kbot.reviewSelection",
+          "when": "editorHasSelection",
+          "group": "kbot@2"
+        },
+        {
+          "command": "kbot.generateTests",
+          "when": "editorHasSelection",
+          "group": "kbot@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "kbot",
+      "properties": {
+        "kbot.binaryPath": {
+          "type": "string",
+          "default": "kbot",
+          "description": "Path to the kbot binary. Defaults to 'kbot' (uses PATH)."
+        },
+        "kbot.defaultAgent": {
+          "type": "string",
+          "default": "kernel",
+          "description": "Default specialist agent to use.",
+          "enum": [
+            "kernel",
+            "coder",
+            "researcher",
+            "writer",
+            "analyst",
+            "guardian",
+            "aesthete",
+            "curator",
+            "strategist",
+            "infrastructure",
+            "quant",
+            "investigator",
+            "oracle",
+            "chronist",
+            "sage",
+            "communicator",
+            "adapter"
+          ]
+        },
+        "kbot.enableMcpServer": {
+          "type": "boolean",
+          "default": true,
+          "description": "Register kbot's MCP server for use with VS Code chat."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.93.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.5.0"
+  }
+}
