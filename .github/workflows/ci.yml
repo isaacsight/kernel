@@ -28,17 +28,19 @@ jobs:
   kbot:
     name: kbot — Build & Test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/kbot
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --include=dev
-      - run: npm run build
-      - run: npx vitest run
+      - name: Install root deps (vitest lives here)
+        run: npm install --include=dev
+      - name: Install kbot deps
+        run: cd packages/kbot && npm install --include=dev
+      - name: Build kbot
+        run: cd packages/kbot && npm run build
+      - name: Test kbot
+        run: cd packages/kbot && npx vitest run
 
   # ── VS Code extension ──
   vscode:
