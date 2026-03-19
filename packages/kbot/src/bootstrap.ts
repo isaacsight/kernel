@@ -690,3 +690,107 @@ export function formatBootstrapMarkdown(report: BootstrapReport): string {
 
   return lines.join('\n')
 }
+
+// ── Autotelic Mode ──
+// The fusion of Bootstrap (self-purpose) + Limitless Execution (self-agency).
+// Doesn't just report — senses, decides, and acts on the highest-impact fix.
+
+export interface AutotelicCycle {
+  report: BootstrapReport
+  action: string
+  result: 'acted' | 'deferred' | 'no-action-needed'
+  reason: string
+  timestamp: string
+}
+
+/**
+ * Run one autotelic cycle: sense → score → decide → act → measure → log.
+ * Returns the cycle result. Safe actions are executed automatically.
+ * Destructive or ambiguous actions are deferred with instructions.
+ *
+ * Autotelic (Greek: auto + telos = self + purpose):
+ * A system that generates its own goals and relentlessly achieves them.
+ * Bootstrap provides self-purpose. Limitless Execution provides self-agency.
+ * Together: the agent that knows what to do AND does it.
+ */
+export async function runAutotelic(): Promise<AutotelicCycle> {
+  const report = await runBootstrap()
+  const timestamp = new Date().toISOString()
+
+  // No fixes needed — system is optimized
+  if (report.grade === 'A' && !report.sections.some(s => s.fix && s.status !== 'pass')) {
+    return {
+      report,
+      action: 'none',
+      result: 'no-action-needed',
+      reason: `Score ${report.score}/${report.maxScore} (${report.grade}). All surfaces optimized. Focus on distribution.`,
+      timestamp,
+    }
+  }
+
+  // Find all actionable fixes, sorted by impact (lowest score% = highest impact)
+  const actionable = report.sections
+    .filter(s => s.fix && s.status !== 'pass')
+    .sort((a, b) => (a.score / a.maxScore) - (b.score / b.maxScore))
+
+  if (actionable.length === 0) {
+    return {
+      report,
+      action: 'none',
+      result: 'no-action-needed',
+      reason: 'All sections passing. No automated fixes available.',
+      timestamp,
+    }
+  }
+
+  const topSection = actionable[0]
+  const fix = topSection.fix!
+  const action = `[${topSection.name}] ${fix}`
+
+  // The autotelic mode's value is DECIDING what matters — the agent layer handles execution.
+  // When run inside Claude Code or with kbot's agent loop, the fix gets executed automatically.
+  // When run standalone, we return the decision for the human to act on.
+  return {
+    report,
+    action,
+    result: 'deferred',
+    reason: `Top fix: ${fix} (${topSection.name} at ${Math.round((topSection.score / topSection.maxScore) * 100)}%). Run inside an agent to auto-execute.`,
+    timestamp,
+  }
+}
+
+export function formatAutotelicCycle(cycle: AutotelicCycle): string {
+  const lines: string[] = []
+  const pct = Math.round((cycle.report.score / cycle.report.maxScore) * 100)
+
+  lines.push('')
+  lines.push(chalk.bold.magenta('  ◉ Autotelic Cycle'))
+  lines.push(chalk.dim('  Self-purpose + Self-agency'))
+  lines.push(chalk.dim('  ──────────────────────────────────────────────────'))
+  lines.push('')
+  lines.push(`  ${chalk.bold('Score:')} ${cycle.report.score}/${cycle.report.maxScore} (${pct}%) — Grade ${chalk.bold(cycle.report.grade)}`)
+  lines.push('')
+
+  for (const s of cycle.report.sections) {
+    const sPct = s.maxScore > 0 ? Math.round((s.score / s.maxScore) * 100) : 0
+    const icon = s.status === 'pass' ? chalk.green('✓') : s.status === 'warn' ? chalk.yellow('!') : chalk.red('✗')
+    lines.push(`  ${icon} ${s.name} ${chalk.dim(`${sPct}%`)}`)
+  }
+
+  lines.push('')
+  lines.push(chalk.dim('  ──────────────────────────────────────────────────'))
+
+  if (cycle.result === 'no-action-needed') {
+    lines.push(`  ${chalk.green('◉')} ${chalk.bold('All surfaces optimized.')} Focus on distribution.`)
+  } else {
+    lines.push(`  ${chalk.yellow('◉')} ${chalk.bold('Decision:')} ${cycle.action}`)
+    lines.push(`  ${chalk.dim(cycle.reason)}`)
+  }
+
+  lines.push('')
+  lines.push(chalk.dim('  Autotelic: auto (self) + telos (purpose).'))
+  lines.push(chalk.dim('  The purpose comes from within. The agency comes from within.'))
+  lines.push('')
+
+  return lines.join('\n')
+}

@@ -566,7 +566,7 @@ async function main(): Promise<void> {
     })
 
   program
-    .command('audit')
+    .command('immune')
     .description('Self-audit — kbot\'s immune system scans its own code for bugs, security holes, and bad decisions')
     .option('--file <path>', 'Audit a specific file instead of the full scan')
     .option('--security', 'Focus on security (blocklist bypasses, injection vectors)')
@@ -628,6 +628,29 @@ async function main(): Promise<void> {
         }
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err))
+      }
+    })
+
+  program
+    .command('autotelic')
+    .description('Self-purpose + self-agency: sense the highest-impact fix and decide what to do')
+    .option('--json', 'Output as JSON')
+    .option('--loop <count>', 'Run N cycles (default: 1)', '1')
+    .action(async (opts: { json?: boolean; loop?: string }) => {
+      const { runAutotelic, formatAutotelicCycle } = await import('./bootstrap.js')
+      const loops = Math.min(parseInt(opts.loop || '1', 10) || 1, 10)
+      for (let i = 0; i < loops; i++) {
+        if (loops > 1) printInfo(`Autotelic cycle ${i + 1}/${loops}`)
+        try {
+          const cycle = await runAutotelic()
+          if (opts.json) {
+            console.log(JSON.stringify(cycle, null, 2))
+          } else {
+            process.stderr.write(formatAutotelicCycle(cycle))
+          }
+        } catch (err) {
+          printError(err instanceof Error ? err.message : String(err))
+        }
       }
     })
 
