@@ -1,4 +1,4 @@
-// kbot Autopoiesis — Self-Maintaining System
+// kbot Autopoiesis — Self-Maintaining, Self-Creating System
 //
 // Based on Maturana & Varela's Autopoiesis theory (1972):
 // Living systems are "self-making" — they continuously produce and
@@ -8,6 +8,14 @@
 // For kbot: the agent monitors its own health, detects degradation,
 // self-heals broken components, and maintains its operational boundary.
 // kbot doesn't just run — it actively maintains its ability to run.
+//
+// LIMITLESS EXECUTION INTEGRATION (v3.4.0):
+//   Self-healing now uses the full Limitless Execution stack:
+//   - Self-Extension: forge replacement tools when components fail
+//   - Tool Discovery: search MCP servers for missing capabilities
+//   - Fallback Chains: integrated with tool-pipeline DEFAULT_FALLBACK_RULES
+//   - Cost Regulation: adjust model routing based on system health
+//   - Specialist Routing: escalate to the right agent for complex repairs
 //
 // References:
 //   - Maturana, H.R. & Varela, F.J. (1980). Autopoiesis and Cognition.
@@ -132,13 +140,16 @@ export class AutopoieticSystem {
 
   /**
    * Attempt self-healing for a degraded or failed component.
-   * Returns the adaptive response taken.
+   * Uses the full Limitless Execution stack:
+   *   1. Static fallback (existing component)
+   *   2. Tool discovery (search for MCP replacement)
+   *   3. Self-extension (forge a replacement tool)
    */
   selfHeal(componentId: string): AdaptiveResponse | null {
     const comp = this.components.get(componentId)
     if (!comp || comp.status === 'healthy') return null
 
-    // If compensable, activate fallback
+    // Level 1: Static fallback — activate a known alternative
     if (comp.compensable && comp.fallback) {
       const fallback = this.components.get(comp.fallback)
       if (fallback && fallback.status !== 'failed') {
@@ -154,9 +165,28 @@ export class AutopoieticSystem {
       }
     }
 
-    // If not compensable, report inability to self-heal
+    // Level 2: Tool discovery — flag for MCP search
+    // (Actual MCP search is async; we record the intent for the agent loop to act on)
+    if (comp.type === 'tool' || comp.type === 'connection') {
+      this.pendingDiscoveries.push({
+        componentId,
+        capability: comp.name,
+        reason: `${comp.name} failed ${comp.failureCount} times, no static fallback available`,
+      })
+      const response: AdaptiveResponse = {
+        action: `Queued MCP discovery for: ${comp.name} (no static fallback)`,
+        component: componentId,
+        success: true,
+        newStatus: 'degraded',
+      }
+      comp.status = 'degraded'
+      this.healingLog.push(response)
+      return response
+    }
+
+    // Level 3: Record inability — will be surfaced to agent for forge_tool consideration
     const response: AdaptiveResponse = {
-      action: `Cannot self-heal: ${comp.name} has no viable fallback`,
+      action: `Cannot self-heal: ${comp.name} — escalate to agent for forge_tool`,
       component: componentId,
       success: false,
       newStatus: comp.status,
@@ -165,25 +195,125 @@ export class AutopoieticSystem {
     return response
   }
 
+  // ── Limitless Execution: Self-Extension ──
+
+  /** Pending tool discoveries (consumed by the agent loop) */
+  private pendingDiscoveries: Array<{ componentId: string; capability: string; reason: string }> = []
+
+  /** Consume pending discovery requests (called by agent loop) */
+  consumeDiscoveries(): Array<{ componentId: string; capability: string; reason: string }> {
+    const discoveries = [...this.pendingDiscoveries]
+    this.pendingDiscoveries = []
+    return discoveries
+  }
+
+  /**
+   * Register a forged tool as a new component.
+   * Called after forge_tool successfully creates a runtime tool.
+   * This is autopoiesis: the system creates a new part of itself.
+   */
+  registerForgedComponent(toolName: string, description: string): void {
+    this.registerComponent({
+      id: `forged:${toolName}`,
+      name: `Forged: ${description}`,
+      type: 'tool',
+      criticality: 0.3, // forged tools start at low criticality
+      compensable: true, // can be re-forged if lost
+    })
+    this.reportHealth(`forged:${toolName}`, true)
+
+    this.healingLog.push({
+      action: `Self-extended: forged new tool "${toolName}" — ${description}`,
+      component: `forged:${toolName}`,
+      success: true,
+      newStatus: 'healthy',
+    })
+  }
+
+  // ── Limitless Execution: Cost Regulation ──
+
+  /**
+   * Recommend model speed based on system health.
+   * When the system is degraded, conserve resources by using fast/cheap models.
+   * When healthy, use the default (more capable) model.
+   */
+  recommendModelSpeed(): 'fast' | 'default' {
+    const viability = this.computeViability()
+
+    // Below 60% viability: conserve resources, use fast model
+    if (viability < 0.6) return 'fast'
+
+    // Count failed providers — if most are down, conserve what's left
+    const providers = [...this.components.values()].filter(c => c.type === 'provider')
+    const failedProviders = providers.filter(c => c.status === 'failed').length
+    if (failedProviders >= providers.length - 1) return 'fast'
+
+    return 'default'
+  }
+
+  // ── Limitless Execution: Structural Coupling ──
+
+  /**
+   * Process tool result and update component health.
+   * This is the structural coupling point — the system observes its own
+   * operations and updates its self-model accordingly.
+   */
+  observeToolResult(toolName: string, success: boolean, errorMessage?: string): void {
+    // Map tool names to component IDs
+    const toolToComponent: Record<string, string> = {
+      read_file: 'filesystem', write_file: 'filesystem', edit_file: 'filesystem',
+      glob: 'filesystem', grep: 'filesystem', list_directory: 'filesystem',
+      bash: 'bash',
+      git_status: 'git', git_diff: 'git', git_commit: 'git', git_log: 'git',
+      web_search: 'internet', url_fetch: 'internet',
+      mcp_search: 'mcp-servers', mcp_connect: 'mcp-servers', mcp_call: 'mcp-servers',
+    }
+
+    const componentId = toolToComponent[toolName]
+    if (componentId) {
+      this.reportHealth(componentId, success)
+    }
+
+    // Check if a forged tool is reporting
+    const forgedId = `forged:${toolName}`
+    if (this.components.has(forgedId)) {
+      this.reportHealth(forgedId, success)
+    }
+
+    // If a tool failed, check if the system needs intervention
+    if (!success && componentId) {
+      const comp = this.components.get(componentId)
+      if (comp && comp.status === 'failed') {
+        this.selfHeal(componentId)
+      }
+    }
+  }
+
   /**
    * Compute overall system viability.
    * Weighted average of component health, weighted by criticality.
+   * Only includes components that have been checked (ignores unknown/unchecked).
    */
   computeViability(): number {
     let weightedHealth = 0
     let totalWeight = 0
 
     for (const comp of this.components.values()) {
+      // Skip components that have never been checked — they shouldn't drag viability down.
+      // An unchecked cloud provider when using Ollama shouldn't penalize the system.
+      if (comp.status === 'unknown' && comp.lastChecked === 0) continue
+
       const healthScore =
         comp.status === 'healthy' ? 1.0 :
         comp.status === 'degraded' ? 0.5 :
-        comp.status === 'failed' ? 0.0 : 0.3 // unknown
+        comp.status === 'failed' ? 0.0 : 0.5 // unknown but checked = neutral
 
       weightedHealth += healthScore * comp.criticality
       totalWeight += comp.criticality
     }
 
-    return totalWeight > 0 ? weightedHealth / totalWeight : 0
+    // If nothing has been checked yet, assume viable (don't block startup)
+    return totalWeight > 0 ? weightedHealth / totalWeight : 0.8
   }
 
   /**
@@ -236,8 +366,14 @@ export class AutopoieticSystem {
 
   /**
    * Should the agent continue operating, or signal for help?
+   * Only blocks when components have actually been checked and found failing —
+   * never blocks on startup before any checks have run.
    */
   shouldContinue(): { continue: boolean; reason?: string } {
+    // Don't block if nothing has been checked yet (startup state)
+    const checkedComponents = [...this.components.values()].filter(c => c.lastChecked > 0)
+    if (checkedComponents.length === 0) return { continue: true }
+
     const viability = this.computeViability()
 
     if (viability < this.viabilityThreshold) {

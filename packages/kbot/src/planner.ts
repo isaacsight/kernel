@@ -17,6 +17,9 @@ import { gatherContext, formatContextForPrompt } from './context.js'
 import { addTurn } from './memory.js'
 import { createSpinner, printInfo, printSuccess, printError, printWarn } from './ui.js'
 import { TaskLedger, type StepResult } from './task-ledger.js'
+import { learnedRoute } from './learned-router.js'
+import { classifyTask } from './learning.js'
+import { listAgents } from './matrix.js'
 import chalk from 'chalk'
 
 const AMETHYST = chalk.hex('#6B5B95')
@@ -28,6 +31,8 @@ export interface PlanStep {
   description: string
   tool?: string
   args?: Record<string, unknown>
+  /** Specialist agent to route this step to (e.g. 'coder', 'researcher') */
+  agent?: string
   /** Files this step reads */
   reads?: string[]
   /** Files this step modifies */
@@ -62,6 +67,7 @@ Given the user's task and project context, produce a plan with this exact JSON s
       "description": "Human-readable description of this step",
       "tool": "tool_name",
       "args": { "key": "value" },
+      "agent": "coder",
       "reads": ["file1.ts"],
       "writes": ["file2.ts"],
       "dependsOn": []
@@ -72,14 +78,62 @@ Given the user's task and project context, produce a plan with this exact JSON s
 
 Available tools: read_file, write_file, edit_file, multi_file_write, bash, glob, grep, git_status, git_diff, git_commit, git_push, web_search, research, url_fetch, parallel_execute, sandbox_run, build_run, notebook_edit
 
+Available agents (assign the best agent for each step):
+- kernel: general tasks, conversation
+- coder: programming, code generation, debugging, refactoring
+- researcher: research, fact-finding, documentation lookup
+- writer: content creation, documentation, copy
+- analyst: strategy, evaluation, comparison
+- guardian: security review, vulnerability scanning
+- infrastructure: DevOps, CI/CD, deployment
+- quant: data analysis, quantitative tasks
+- investigator: deep research, root cause analysis
+
 Rules:
 - Start with read_file/glob/grep steps to understand the codebase BEFORE making changes
 - Group independent operations that can run in parallel
+- Assign the most appropriate agent to each step based on the step's nature
 - Always verify changes with a type-check or test step at the end
 - For file edits, use edit_file with old_string/new_string (not full rewrites unless creating new files)
 - Include error recovery — if a step might fail, note what to do
 - Keep plans concise — 5-20 steps for most tasks
 - Output ONLY valid JSON, no markdown wrapping`
+
+/**
+ * Route a plan step to the best specialist agent.
+ * Priority: LLM assignment (from plan) → learned router → task classification → fallback to coder.
+ */
+function routeStepToAgent(step: PlanStep): string {
+  // 1. If the LLM explicitly assigned an agent in the plan, use it
+  if (step.agent) {
+    // Validate against known agents
+    const known = listAgents().map(a => a.id)
+    const builtIn = ['kernel', 'coder', 'researcher', 'writer', 'analyst', 'aesthete', 'guardian', 'curator', 'strategist', 'infrastructure', 'quant', 'investigator', 'oracle', 'chronist', 'sage', 'communicator', 'adapter']
+    if (known.includes(step.agent) || builtIn.includes(step.agent)) {
+      return step.agent
+    }
+  }
+
+  // 2. Try the learned router (based on historical routing patterns)
+  const learned = learnedRoute(step.description)
+  if (learned) return learned.agent
+
+  // 3. Fall back to task classification
+  const taskType = classifyTask(step.description)
+  const taskToAgent: Record<string, string> = {
+    debug: 'coder',
+    build: 'coder',
+    refactor: 'coder',
+    test: 'coder',
+    research: 'researcher',
+    search: 'researcher',
+    explain: 'writer',
+    deploy: 'infrastructure',
+    security: 'guardian',
+    analyze: 'analyst',
+  }
+  return taskToAgent[taskType] || 'coder'
+}
 
 /**
  * Generate a plan for a complex task.
@@ -113,7 +167,29 @@ Output your plan as JSON:`
 
   try {
     // Extract JSON from response (might be wrapped in markdown)
-    const jsonMatch = response.content.match(/\{[\s\S]*\}/)
+    // Extract JSON: try greedy first, fall back to progressively shorter matches
+    let jsonMatch: RegExpMatchArray | null = null
+    const fullMatch = response.content.match(/\{[\s\S]*\}/)
+    if (fullMatch) {
+      // Try parsing the greedy match first; if it fails, trim from the end
+      try {
+        JSON.parse(fullMatch[0])
+        jsonMatch = fullMatch
+      } catch {
+        // Find the last valid JSON by trying shorter substrings
+        const str = fullMatch[0]
+        for (let i = str.length - 1; i > 0; i--) {
+          if (str[i] === '}') {
+            try {
+              JSON.parse(str.slice(0, i + 1))
+              jsonMatch = [str.slice(0, i + 1)] as unknown as RegExpMatchArray
+              break
+            } catch { /* try shorter */ }
+          }
+        }
+        if (!jsonMatch) jsonMatch = fullMatch // fallback to original
+      }
+    }
     if (!jsonMatch) throw new Error('No JSON found in plan response')
     planData = JSON.parse(jsonMatch[0])
   } catch {
@@ -160,7 +236,8 @@ export function displayPlan(plan: Plan): void {
       ? chalk.dim(` (after #${step.dependsOn.join(', #')})`)
       : ''
     const tool = step.tool ? chalk.cyan(` [${step.tool}]`) : ''
-    console.log(`  ${chalk.dim(`${step.id}.`)} ${step.description}${tool}${deps}`)
+    const agent = step.agent ? chalk.magenta(` @${step.agent}`) : ''
+    console.log(`  ${chalk.dim(`${step.id}.`)} ${step.description}${tool}${agent}${deps}`)
 
     if (step.writes && step.writes.length > 0) {
       console.log(`     ${chalk.dim('writes:')} ${step.writes.join(', ')}`)
@@ -243,9 +320,11 @@ export async function executePlan(
           step.status = result.error ? 'failed' : 'done'
           if (result.error) step.error = result.result
         } else {
+          // Route step to the best specialist agent
+          const stepAgent = routeStepToAgent(step)
           const response = await runAgent(
             `You are executing step ${step.id} of a plan. The step is: "${step.description}"\n\nExecute this step now using your tools. Be precise and verify your work.`,
-            { ...agentOpts, skipPlanner: true },
+            { ...agentOpts, agent: stepAgent, skipPlanner: true },
           )
           step.result = response.content
           step.status = 'done'

@@ -9,12 +9,25 @@ function esc(s: string): string {
   return `'${s.replace(/'/g, "'\\''")}'`
 }
 
+/** Get the git repo root directory (cached) */
+let _repoRoot: string | null = null
+function getRepoRoot(): string {
+  if (_repoRoot) return _repoRoot
+  try {
+    _repoRoot = execSync('git rev-parse --show-toplevel', { encoding: 'utf-8', timeout: 5_000 }).trim()
+    return _repoRoot
+  } catch {
+    return process.cwd()
+  }
+}
+
 function git(command: string, timeout = 30_000): string {
   try {
     return execSync(`git ${command}`, {
       encoding: 'utf-8',
       timeout,
       maxBuffer: 5 * 1024 * 1024,
+      cwd: getRepoRoot(),
     }).trim()
   } catch (err: unknown) {
     const e = err as { stderr?: string; message?: string }

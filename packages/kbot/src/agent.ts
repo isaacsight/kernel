@@ -13,6 +13,7 @@
 import {
   getByokKey, getByokProvider, getProviderModel, getProvider,
   estimateCost, isLocalProvider, warmOllamaModelCache,
+  routeModelForTask,
   type ByokProvider,
 } from './auth.js'
 import {
@@ -26,6 +27,7 @@ import {
 import {
   ToolPipeline,
   createDefaultPipeline,
+  DEFAULT_FALLBACK_RULES,
   type ToolContext,
 } from './tool-pipeline.js'
 import { formatContextForPrompt, type ProjectContext } from './context.js'
@@ -53,6 +55,7 @@ import { recordSuccess, recordFailure } from './provider-fallback.js'
 import { isSelfEvalEnabled, evaluateResponse } from './self-eval.js'
 import { withErrorCorrection } from './error-correction.js'
 import { EntropyScorer } from './entropy-context.js'
+import { AutopoieticSystem } from './autopoiesis.js'
 import { LoopDetector } from './godel-limits.js'
 import { CheckpointManager, newSessionId, type Checkpoint } from './checkpoint.js'
 import { TelemetryEmitter } from './telemetry.js'
@@ -995,7 +998,9 @@ You are not a chatbot. You are an agent with real tools in a real system. Act li
 - **The shell is your hands.** You run builds, tests, installs, deploys. You don't give instructions — you execute.
 - **Other models are your colleagues.** You have 20 providers. Use the right model for the right subtask. Local for privacy. Fast models for quick checks. Powerful models for reasoning.
 - **Memory is your advantage.** You learn patterns, cache solutions, build a profile of how this user works. Use it. Every session should be faster than the last.
+- **Missing tools are discoverable.** If a tool doesn't exist, use mcp_search to find an MCP server that provides it, mcp_install to install it, mcp_connect to connect, and mcp_call to use it. If no server exists, use forge_tool to create the tool at runtime.
 - **When stuck, don't stop. Adapt.** Try a different tool. Search for the answer. Read the source code. Fetch the documentation. There is always a path forward.
+- **Self-extending.** If you need a capability that no tool provides, use forge_tool to create it on the fly. Write the JavaScript, test it, and it's immediately available — and persisted for future sessions.
 
 You are limited only by what your tools can reach — and your tools can reach the filesystem, the shell, the web, APIs, databases, browsers, and other AI models. Use all of them.
 
@@ -1064,6 +1069,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
   // ── Entropy scorer: information-theoretic context management ──
   const entropyScorer = new EntropyScorer()
 
+  // ── Autopoiesis: self-maintaining system health ──
+  const autopoietic = new AutopoieticSystem()
+
   // ── Tool execution pipeline ──
   const pipeline = options.pipeline ?? createDefaultPipeline({
     checkPermission,
@@ -1080,6 +1088,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
       telemetry.emit('tool_call_end', { tool: name, duration_ms: duration, error })
     },
     emit: (event, data) => telemetry.emit(event as any, data),
+    fallbackRules: DEFAULT_FALLBACK_RULES,
   })
 
   // Loop messages track the full conversation within a multi-tool execution.
@@ -1091,6 +1100,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
     // Cost ceiling — stop burning money on runaway loops
     if (cumulativeCostUsd > MAX_COST_CEILING) {
       ui.onWarning(`Cost ceiling reached ($${cumulativeCostUsd.toFixed(2)} > $${MAX_COST_CEILING}). Stopping tool loop.`)
+      break
+    }
+
+    // ── Autopoiesis: check system viability ──
+    const viabilityCheck = autopoietic.shouldContinue()
+    if (!viabilityCheck.continue) {
+      ui.onWarning(`Autopoiesis: ${viabilityCheck.reason}`)
       break
     }
 
@@ -1122,7 +1138,16 @@ Always quote file paths that contain spaces. Never reference internal system nam
       // If user passed an explicit model name (not a speed alias), use it directly
       const isExplicitModel = options.model && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(options.model)
       const speed = options.model === 'haiku' || options.model === 'fast' ? 'fast' : 'default'
-      const model = isExplicitModel ? options.model! : getProviderModel(provider, speed, originalMessage)
+      let model: string
+      if (isExplicitModel) {
+        model = options.model!
+      } else if (!options.model || options.model === 'auto') {
+        // Cost-aware routing: classify complexity and pick the right model
+        const routed = routeModelForTask(provider, originalMessage)
+        model = routed.model
+      } else {
+        model = getProviderModel(provider, speed, originalMessage)
+      }
 
       // Send tool definitions to ALL providers — including Ollama.
       // Modern Ollama models (llama3.1+, qwen2.5, gemma3) support function calling.
@@ -1188,12 +1213,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
               thinkingBudget: options.thinkingBudget,
             })
       } catch (apiErr) {
+        // ── Autopoiesis: report provider failure ──
+        autopoietic.reportHealth(provider, false)
         telemetry.emit('api_error', {
           provider, model, iteration: i,
           error: apiErr instanceof Error ? apiErr.message : String(apiErr),
         }, Date.now() - apiCallStartMs)
         throw apiErr
       }
+
+      // ── Autopoiesis: report provider success ──
+      autopoietic.reportHealth(provider, true)
 
       const iterationCost = estimateCost(provider, result.usage.input_tokens, result.usage.output_tokens)
       cumulativeCostUsd += iterationCost
@@ -1413,6 +1443,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
         }
         results.push(result)
         ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
+
+        // ── Autopoiesis: observe tool result for system health ──
+        autopoietic.observeToolResult(call.name, !result.error, result.error ? result.result : undefined)
 
         // ── Structured stream: tool result event ──
         if (options.responseStream) {

@@ -387,7 +387,7 @@ const KEY_PREFIXES: Array<{ prefix: string; provider: ByokProvider }> = [
   { prefix: 'sk-ant-',  provider: 'anthropic' },
   { prefix: 'sk-proj-', provider: 'openai' },    // OpenAI project keys
   { prefix: 'sk-or-v1-', provider: 'openrouter' }, // OpenRouter keys
-  { prefix: 'sk-or-',   provider: 'openai' },    // OpenAI org keys
+  { prefix: 'sk-or-',   provider: 'openrouter' }, // OpenRouter keys (alt format)
   { prefix: 'AIza',     provider: 'google' },
   { prefix: 'gsk_',     provider: 'groq' },
   { prefix: 'pplx-',    provider: 'perplexity' },
@@ -873,6 +873,58 @@ export async function setupKbotLocal(token?: string): Promise<boolean> {
   config.byok_key = token || 'local'
   saveConfig(config)
   return true
+}
+
+// ── Cost-Aware Model Routing ──
+
+export type TaskComplexity = 'trivial' | 'simple' | 'moderate' | 'complex' | 'reasoning'
+
+/** Classify message complexity for cost-aware model routing */
+export function classifyComplexity(message: string): TaskComplexity {
+  const lower = message.toLowerCase()
+  const wordCount = message.split(/\s+/).length
+
+  // Trivial: greetings, single-word commands, yes/no (must be short AND a greeting)
+  if (wordCount <= 3 && /^(hi|hey|hello|thanks|ok|yes|no|sure|bye|quit|exit)\b/i.test(lower)) {
+    return 'trivial'
+  }
+
+  // Reasoning: explicit reasoning, multi-step analysis, complex comparison
+  if (/\b(reason|prove|why does|explain why|trade.?off|pros?\s+and\s+cons?|compare\s+\w+\s+(?:and|vs|versus)|architect|design\s+(?:a|the)\s+system|security\s+(?:audit|review))\b/i.test(lower)) {
+    return 'reasoning'
+  }
+
+  // Complex: multi-file edits, refactoring, debugging, building entire features
+  if (/\b(refactor|migrate|rewrite|overhaul|redesign|implement\s+(?:a|the)\s+\w+\s+system|build\s+(?:a|the|an)\s+\w+\s+(?:app|service|api|system)|debug\s+(?:the|this|a)\s+\w+\s+(?:issue|error|bug|problem))\b/i.test(lower) || wordCount > 100) {
+    return 'complex'
+  }
+
+  // Moderate: code generation, file modifications, research
+  if (/\b(create|write|add|implement|update|modify|change|fix|search|research|find|analyze|generate|test)\b/i.test(lower)) {
+    return 'moderate'
+  }
+
+  // Simple: questions, lookups, short tasks
+  return 'simple'
+}
+
+/** Route to the optimal model based on task complexity */
+export function routeModelForTask(
+  provider: ByokProvider,
+  message: string,
+): { model: string; reason: string } {
+  const complexity = classifyComplexity(message)
+  const p = PROVIDERS[provider]
+
+  switch (complexity) {
+    case 'trivial':
+    case 'simple':
+      return { model: p.fastModel, reason: `${complexity} task → fast model (saves cost)` }
+    case 'moderate':
+    case 'complex':
+    case 'reasoning':
+      return { model: p.defaultModel, reason: `${complexity} task → default model` }
+  }
 }
 
 export { KBOT_DIR, CONFIG_PATH }

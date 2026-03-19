@@ -132,6 +132,30 @@ After each run, update the bootstrap log:
 
 Save to `tools/daemon-reports/bootstrap-log.md`.
 
+## Limitless Execution Integration (v3.4.0)
+
+Bootstrap now operates with all 5 Limitless Execution patterns:
+
+### How Each Pattern Serves Bootstrap
+
+| Pattern | How Bootstrap Uses It |
+|---------|----------------------|
+| **Act, don't advise** | Bootstrap never reports "this is stale." It fixes the stale thing. |
+| **Discover tools** | If a bootstrap cycle needs a capability (e.g., image optimization), search for an MCP server or create a script in `tools/`. Don't skip the fix because the tool doesn't exist. |
+| **Fallback on failure** | If `npm publish` fails, check auth. If auth is fine, try `npm publish --access public`. If that fails, check if the version already exists. Never stop at the first error. |
+| **Route to specialists** | Security findings → hacker agent. UX findings → product agent. Build findings → QA agent. Bootstrap orchestrates, specialists execute. |
+| **Compound improvements** | Each bootstrap run makes the next one faster. This is the core principle — now backed by kbot's learning engine recording what worked. |
+
+### kbot Self-Use
+
+When bootstrap runs on the kbot repo, kbot's own Limitless Execution features are active:
+- **Cost-aware routing** means bootstrap cycles cost less (trivial checks → fast model)
+- **Fallback chains** mean tool failures auto-recover during bootstrap
+- **forge_tool** means bootstrap can create tools it needs mid-cycle
+- **Agent-routed plans** mean multi-step bootstrap fixes get specialist routing
+
+This is recursive: **kbot's Limitless Execution makes the bootstrap agent better, and the bootstrap agent makes kbot's Limitless Execution better.**
+
 ## Principles
 
 1. **One improvement per run.** Don't try to fix everything. Tight loops compound faster than big rewrites.
@@ -144,6 +168,8 @@ Save to `tools/daemon-reports/bootstrap-log.md`.
 
 5. **The system is the intelligence.** Neither Claude nor kbot alone is smart enough. The intelligence emerges from how fast the loop turns and how much each cycle adds.
 
+6. **There is always a path forward.** (Limitless Execution) If a tool doesn't exist, discover or create it. If a command fails, try an alternative. Never stop at "I can't."
+
 ## Anti-Patterns
 
 - Don't add complexity that doesn't tighten the loop
@@ -151,6 +177,8 @@ Save to `tools/daemon-reports/bootstrap-log.md`.
 - Don't optimize what isn't measured
 - Don't break working infrastructure to "improve" it
 - Don't confuse tool count with capability
+- Don't report a problem without attempting a fix (Limitless Execution)
+- Don't say "I need a tool for this" without searching for one first (Limitless Execution)
 
 ## What Success Looks Like
 

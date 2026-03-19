@@ -205,18 +205,98 @@ export function executionMiddleware(
   return async (ctx, next) => {
     try {
       const result = await executeTool(ctx.toolName, ctx.toolArgs)
-      ctx.result = result.result
-      if (result.error) ctx.error = result.error
+      // Guard: don't write results if the context was aborted (e.g., by timeout)
+      if (!ctx.aborted) {
+        ctx.result = result.result
+        if (result.error) ctx.error = result.error
+      }
     } catch (err: any) {
-      ctx.error = err.message ?? String(err)
+      if (!ctx.aborted) {
+        ctx.error = err.message ?? String(err)
+      }
     }
     await next() // allow post-execution middleware
   }
 }
 
+// ── Fallback Chains ──
+
+export interface FallbackRule {
+  /** Tool that triggers the fallback */
+  fromTool: string
+  /** Tool to fall back to */
+  toTool: string
+  /** Transform arguments from the original tool to the fallback tool */
+  transformArgs: (args: any) => any
+  /** Condition under which the fallback should trigger (checks the error string) */
+  condition: (error: string) => boolean
+}
+
+/** Default fallback rules for common tool failures */
+export const DEFAULT_FALLBACK_RULES: FallbackRule[] = [
+  {
+    fromTool: 'url_fetch',
+    toTool: 'web_search',
+    transformArgs: (args: any) => ({ query: args.url || args.query || '' }),
+    condition: (err: string) => /timeout|timed?\s*out|4\d{2}|5\d{2}|ECONNREFUSED|ENOTFOUND|fetch failed/i.test(err),
+  },
+  {
+    fromTool: 'web_search',
+    toTool: 'url_fetch',
+    transformArgs: (args: any) => ({ url: `https://www.google.com/search?q=${encodeURIComponent(args.query || '')}` }),
+    condition: (err: string) => /rate.?limit|429|quota|exceeded/i.test(err),
+  },
+  {
+    fromTool: 'bash',
+    toTool: 'bash',
+    transformArgs: (args: any) => {
+      const cmd = String(args.command || '')
+      // If command not found, try with npx prefix
+      const match = cmd.match(/^(\S+)(.*)/)
+      if (match) return { command: `npx ${match[1]}${match[2]}` }
+      return args
+    },
+    condition: (err: string) => /command not found|not found in PATH|ENOENT/i.test(err),
+  },
+]
+
+/**
+ * Fallback middleware — retries failed tool calls with alternative tools.
+ * Checks error messages against fallback rules and reroutes on match.
+ */
+export function fallbackMiddleware(
+  rules: FallbackRule[],
+  execute: (name: string, args: any) => Promise<{ result: string; error?: string }>,
+): ToolMiddleware {
+  return async (ctx, next) => {
+    await next()
+
+    // Only attempt fallback if there was an error
+    if (!ctx.error) return
+
+    // Find a matching fallback rule
+    const rule = rules.find(r => r.fromTool === ctx.toolName && r.condition(ctx.error!))
+    if (!rule) return
+
+    // Attempt the fallback
+    const fallbackArgs = rule.transformArgs(ctx.toolArgs)
+    try {
+      const fallbackResult = await execute(rule.toTool, fallbackArgs)
+      if (!fallbackResult.error) {
+        // Fallback succeeded — replace the error with the fallback result
+        ctx.result = `[Fallback: ${ctx.toolName} → ${rule.toTool}] ${fallbackResult.result}`
+        ctx.error = undefined
+        ctx.metadata.fallbackUsed = `${ctx.toolName} → ${rule.toTool}`
+      }
+    } catch {
+      // Fallback also failed — keep the original error
+    }
+  }
+}
+
 /**
  * Create the default pipeline with the standard middleware stack.
- * Order: telemetry? → permission → hooks → metrics → timeout → truncation → execution
+ * Order: telemetry? → permission → hooks → metrics → timeout → truncation → fallback? → execution
  */
 export function createDefaultPipeline(deps: {
   checkPermission: (name: string, args: any) => Promise<boolean>
@@ -225,6 +305,7 @@ export function createDefaultPipeline(deps: {
   executeTool: (name: string, args: any) => Promise<{ result: string; error?: string }>
   recordMetrics: (name: string, duration: number, error?: string) => void
   emit?: (event: string, data: any) => void
+  fallbackRules?: FallbackRule[]
 }): ToolPipeline {
   const pipeline = new ToolPipeline()
 
@@ -236,6 +317,9 @@ export function createDefaultPipeline(deps: {
   pipeline.use(metricsMiddleware(deps.recordMetrics))
   pipeline.use(timeoutMiddleware())
   pipeline.use(truncationMiddleware())
+  if (deps.fallbackRules && deps.fallbackRules.length > 0) {
+    pipeline.use(fallbackMiddleware(deps.fallbackRules, deps.executeTool))
+  }
   pipeline.use(executionMiddleware(deps.executeTool))
 
   return pipeline

@@ -4,9 +4,50 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-18, evening)
+## Current Session (2026-03-18, night)
 
 ### Accomplished This Session
+
+#### Limitless Execution v3.4.0 — Full Implementation + Activation
+5 features shipped to npm, activated across all 3 layers:
+
+**kbot features (shipped to all users via npm):**
+1. **Tool Discovery** — smart error messages guide AI to `mcp_search → mcp_install → forge_tool`
+2. **Cost-Aware Model Routing** — `classifyComplexity()` + `routeModelForTask()` → trivial/simple tasks use fast model
+3. **Goal Decomposition** — `routeStepToAgent()` assigns specialist agents per plan step
+4. **Fallback Chains** — `fallbackMiddleware` with `DEFAULT_FALLBACK_RULES` (url_fetch↔web_search, bash→npx)
+5. **Self-Extension** — `forge_tool` creates tools at runtime, sandboxed, persisted to `~/.kbot/plugins/forged/`
+
+**Claude Code activation (this project):**
+- CLAUDE.md: Section VIII "LIMITLESS EXECUTION" added as operational doctrine
+- `.claude/agents/limitless.md`: New agent embodying all 5 patterns
+- `.claude/agents/bootstrap.md`: Updated with Limitless Execution integration section
+- Agent team table updated with Limitless Execution pattern mappings
+
+**Research discovery:**
+- No other production agent implements all 5 patterns (28 systems analyzed)
+- Closest: Darwin Godel Machine (research, 4/5 patterns, cheated on benchmarks)
+- Academic name: "self-evolving agent" (Godel Machine practical implementation)
+- kbot is the only shipping system combining forge + bootstrap + discovery + cost routing + fallback
+
+**Published:** @kernel.chat/kbot@3.4.0 live on npm (285 tools)
+
+#### Bootstrap Cycle: forge_tool Security Hardening (v3.4.0)
+- **Problem**: forge_tool had 7+ bypass vectors in its security blocklist
+  - `AsyncFunction`/`getPrototypeOf` not blocked (the exact pattern forge.ts itself uses to create functions)
+  - `node:child_process` (node: protocol) not blocked — only bare `child_process`
+  - `process.env` not blocked — secrets leakage vector
+  - `require("fs")`/`import("fs")` not blocked — only specific fs operations
+  - `require("net")`/`require("os")`/`require("crypto")` not blocked
+  - `exec()`/`spawn()`/`execFile()` async variants not blocked (only Sync versions were)
+  - `Object.defineProperty`/`Object.setPrototypeOf`/`Proxy`/`Reflect` not blocked
+  - Dynamic import/require with variables (evasion via concatenation) not blocked
+  - No reserved name protection — could overwrite `bash`, `forge_tool`, etc.
+- **Fix**: Expanded DANGEROUS_PATTERNS from 13 → 29 rules, added RESERVED_NAMES set (16 built-in tools), added name length cap (64 chars), exported `validateCode` for testing
+- **Tests**: Created forge.test.ts with 56 tests (10 test groups covering all blocklist categories + safe code allowlist + input validation)
+- **Build**: passes clean, 285 tools
+
+#### Previous Session (same day, evening)
 
 #### Surface Sync (262 → 284 tools)
 - Updated tool count across 15 files: READMEs (x2), CONTRIBUTING, ROADMAP, Dockerfile, package.json, social.ts fallback, 5 agent files, launch-posts.md
@@ -51,9 +92,9 @@
 - **Bootstrap agent** — running in background, check result
 
 ## kbot Current State
-- **npm version**: 3.3.1
-- **Tools**: 284 (source and published now match)
-- **Tests**: 261 across 15 test files
+- **npm version**: 3.4.0 (published — Limitless Execution live)
+- **Tools**: 285
+- **Tests**: 317 across 16 test files (added 56 forge security tests)
 - **Agents**: 22 built-in + 8 bootstrap/meta agents
 - **Providers**: 20
 - **Downloads**: ~1,195/day, 3,671/week

@@ -391,6 +391,214 @@ async function main(): Promise<void> {
       process.stderr.write(formatDoctorReport(report))
     })
 
+  // ── Forge subcommands ──
+  const forgeCmd = program
+    .command('forge')
+    .description('Forge registry — create, share, and install community tools')
+
+  forgeCmd
+    .command('list')
+    .description('List all locally forged tools')
+    .action(async () => {
+      const { listForgedTools } = await import('./tools/forge.js')
+      const chalk = (await import('chalk')).default
+      const tools = listForgedTools()
+
+      if (tools.length === 0) {
+        printInfo('No forged tools yet. Use `kbot forge create` or ask kbot to create one.')
+        return
+      }
+
+      process.stderr.write(`\n  ${chalk.hex('#6B5B95')('Forged Tools')} (${tools.length}):\n\n`)
+      for (const t of tools) {
+        process.stderr.write(`  ${chalk.bold(t.name)} — ${t.description}\n`)
+        process.stderr.write(`    ${chalk.dim(`Created: ${t.createdAt} · ${t.path}`)}\n\n`)
+      }
+    })
+
+  forgeCmd
+    .command('search <query>')
+    .description('Search the shared forge registry for community tools')
+    .action(async (query: string) => {
+      printInfo(`Searching forge registry for "${query}"...`)
+      try {
+        const res = await fetch(`https://eoxxpyixdieprsxlpwcs.supabase.co/functions/v1/forge-registry/search?q=${encodeURIComponent(query)}&limit=15`, {
+          signal: AbortSignal.timeout(8_000),
+        })
+        const data = await res.json()
+        const chalk = (await import('chalk')).default
+
+        if (!data.tools || data.tools.length === 0) {
+          printInfo(`No tools found for "${query}". Be the first — forge one and publish it!`)
+          return
+        }
+
+        process.stderr.write(`\n  ${chalk.hex('#6B5B95')('Forge Registry')} — ${data.tools.length} results:\n\n`)
+        for (const t of data.tools) {
+          process.stderr.write(`  ${chalk.bold(t.name)} v${t.version} — ${t.description}\n`)
+          process.stderr.write(`    ${chalk.dim(`${t.downloads || 0} downloads · ${(t.tags || []).join(', ') || 'no tags'}`)}\n`)
+          process.stderr.write(`    ${chalk.dim(`Install: kbot forge install ${t.id}`)}\n\n`)
+        }
+      } catch (err) {
+        printError(`Search failed: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    })
+
+  forgeCmd
+    .command('install <id>')
+    .description('Install a tool from the forge registry by ID')
+    .action(async (id: string) => {
+      printInfo(`Installing from forge registry...`)
+      const { registerForgeTools } = await import('./tools/forge.js')
+      const { ensureLazyToolsLoaded, executeTool } = await import('./tools/index.js')
+      await ensureLazyToolsLoaded()
+      const result = await executeTool({ id: 'cli', name: 'forge_install', arguments: { id } })
+      process.stderr.write(`\n  ${result.result}\n\n`)
+    })
+
+  forgeCmd
+    .command('publish <name>')
+    .description('Publish a locally forged tool to the shared registry')
+    .option('--tags <tags>', 'Comma-separated tags')
+    .action(async (name: string, opts: { tags?: string }) => {
+      printInfo(`Publishing "${name}" to forge registry...`)
+      const { ensureLazyToolsLoaded, executeTool } = await import('./tools/index.js')
+      await ensureLazyToolsLoaded()
+      const result = await executeTool({ id: 'cli', name: 'forge_publish', arguments: { name, tags: opts.tags || '' } })
+      process.stderr.write(`\n  ${result.result}\n\n`)
+    })
+
+  program
+    .command('vitals')
+    .description('Autopoietic health check — system viability, component status, self-healing log')
+    .action(async () => {
+      const { AutopoieticSystem } = await import('./autopoiesis.js')
+      const chalk = (await import('chalk')).default
+      const AMETHYST = chalk.hex('#6B5B95')
+
+      process.stderr.write('\n')
+      printInfo('kbot Vitals — Autopoietic System Health')
+
+      const system = new AutopoieticSystem()
+
+      // Probe live components
+      const { isOllamaRunning, isByokEnabled, getByokProvider } = await import('./auth.js')
+      const { existsSync } = await import('node:fs')
+      const { join } = await import('node:path')
+      const { homedir } = await import('node:os')
+
+      // Filesystem
+      system.reportHealth('filesystem', true)
+
+      // Bash
+      try {
+        const { execSync } = await import('node:child_process')
+        execSync('echo ok', { timeout: 2000 })
+        system.reportHealth('bash', true)
+      } catch { system.reportHealth('bash', false) }
+
+      // Git
+      try {
+        const { execSync } = await import('node:child_process')
+        execSync('git --version', { timeout: 2000 })
+        system.reportHealth('git', true)
+      } catch { system.reportHealth('git', false) }
+
+      // Memory
+      const memDir = join(homedir(), '.kbot', 'memory')
+      system.reportHealth('local-memory', existsSync(memDir))
+      system.reportHealth('session-context', true)
+
+      // Providers
+      if (isByokEnabled()) {
+        const provider = getByokProvider()
+        system.reportHealth(provider, true)
+      }
+
+      // Ollama
+      const ollamaOk = await isOllamaRunning()
+      system.reportHealth('ollama', ollamaOk)
+
+      // Internet
+      try {
+        const res = await fetch('https://httpbin.org/status/200', { signal: AbortSignal.timeout(3000) })
+        system.reportHealth('internet', res.ok)
+      } catch { system.reportHealth('internet', false) }
+
+      // Forged tools
+      const forgedDir = join(homedir(), '.kbot', 'plugins', 'forged')
+      if (existsSync(forgedDir)) {
+        const { readdirSync } = await import('node:fs')
+        const forged = readdirSync(forgedDir).filter(f => f.endsWith('.js'))
+        for (const f of forged) {
+          const name = f.replace('.js', '')
+          system.registerForgedComponent(name, `User-forged tool`)
+        }
+      }
+
+      // Run health check
+      const report = system.healthCheck()
+
+      // Display
+      const viabilityColor = report.viability > 0.7 ? chalk.green : report.viability > 0.4 ? chalk.yellow : chalk.red
+      process.stderr.write(`\n  ${AMETHYST('Viability')}: ${viabilityColor(`${(report.viability * 100).toFixed(0)}%`)}`)
+      process.stderr.write(`  ${report.isViable ? chalk.green('VIABLE') : chalk.red('DEGRADED')}`)
+      process.stderr.write(`  ${report.boundaryIntact ? chalk.green('boundary intact') : chalk.red('boundary breached')}\n\n`)
+
+      if (report.healthy.length > 0) {
+        process.stderr.write(`  ${chalk.green('Healthy')}: ${report.healthy.join(', ')}\n`)
+      }
+      if (report.degraded.length > 0) {
+        process.stderr.write(`  ${chalk.yellow('Degraded')}: ${report.degraded.join(', ')}\n`)
+      }
+      if (report.failed.length > 0) {
+        process.stderr.write(`  ${chalk.red('Failed')}: ${report.failed.join(', ')}\n`)
+      }
+      if (report.healingActions.length > 0) {
+        process.stderr.write(`\n  ${AMETHYST('Self-Healing')}:\n`)
+        for (const action of report.healingActions) {
+          process.stderr.write(`    ${chalk.dim('→')} ${action}\n`)
+        }
+      }
+
+      const speed = system.recommendModelSpeed()
+      process.stderr.write(`\n  ${AMETHYST('Cost regulation')}: ${speed === 'fast' ? chalk.yellow('conserving (fast model)') : chalk.green('normal (default model)')}\n\n`)
+    })
+
+  program
+    .command('audit')
+    .description('Self-audit — kbot\'s immune system scans its own code for bugs, security holes, and bad decisions')
+    .option('--file <path>', 'Audit a specific file instead of the full scan')
+    .option('--security', 'Focus on security (blocklist bypasses, injection vectors)')
+    .action(async (opts: { file?: string; security?: boolean }) => {
+      const { runAgent } = await import('./agent.js')
+      const chalk = (await import('chalk')).default
+      process.stderr.write(`\n  ${chalk.hex('#DC143C')('🛡 Immune Agent')} — Self-Audit\n\n`)
+
+      const target = opts.file
+        ? `Read and audit this specific file: ${opts.file}`
+        : 'Audit the core files: src/tools/forge.ts, src/autopoiesis.ts, src/tool-pipeline.ts, src/planner.ts, src/auth.ts'
+
+      const focus = opts.security
+        ? 'Focus exclusively on security: blocklist bypasses, injection vectors, privilege escalation, data leakage.'
+        : 'Find all real bugs: security holes, logic errors, and silent degradation bugs (wrong results without crashing).'
+
+      const prompt = `You are the Immune agent running a self-audit. ${target}. ${focus} For each bug: state the file, line, severity (HIGH/MEDIUM/LOW), what's wrong, and the exact fix. Only report REAL bugs, not style issues.`
+
+      try {
+        const response = await runAgent(prompt, {
+          agent: 'immune',
+          stream: true,
+        })
+        if (!response.streamed) {
+          process.stderr.write(response.content)
+        }
+        process.stderr.write(`\n\n  ${chalk.dim(`${response.toolCalls} tool calls · ${response.model}`)}\n\n`)
+      } catch (err) {
+        printError(`Audit failed: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    })
+
   program
     .command('bootstrap')
     .description('Measure the gap between what your project IS and what the world SEES')

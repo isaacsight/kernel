@@ -21,9 +21,12 @@ export {
   truncationMiddleware,
   telemetryMiddleware,
   executionMiddleware,
+  fallbackMiddleware,
+  DEFAULT_FALLBACK_RULES,
   type ToolMiddleware,
   type ToolContext,
   type NextFunction,
+  type FallbackRule,
 } from '../tool-pipeline.js'
 
 import { ToolPipeline, executionMiddleware, type ToolMiddleware } from '../tool-pipeline.js'
@@ -179,7 +182,15 @@ export function getToolMetrics(toolName?: string): ToolMetrics[] {
 export async function executeTool(call: ToolCall): Promise<ToolResult> {
   const tool = registry.get(call.name)
   if (!tool) {
-    return { tool_call_id: call.id, result: `Unknown tool: ${call.name}`, error: true, duration_ms: 0 }
+    // Smart error: guide the AI toward discovering and installing the tool via MCP
+    const suggestion = `Unknown tool: ${call.name}. ` +
+      `This tool is not currently registered, but you can discover and install it:\n` +
+      `1. Use mcp_search to find an MCP server that provides "${call.name}"\n` +
+      `2. Use mcp_install to install the server\n` +
+      `3. Use mcp_connect to connect to the server\n` +
+      `4. Use mcp_call to invoke the tool through the connected server\n` +
+      `If no MCP server exists, consider using forge_tool to create it at runtime.`
+    return { tool_call_id: call.id, result: suggestion, error: true, duration_ms: 0 }
   }
 
   const timeout = tool.timeout ?? DEFAULT_TIMEOUT
@@ -303,6 +314,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: '../plugin-sdk.js',     registerFn: 'registerPluginSDKTools' },
   { path: './training.js',        registerFn: 'registerTrainingTools' },
   { path: './social.js',          registerFn: 'registerSocialTools' },
+  { path: './forge.js',           registerFn: 'registerForgeTools' },
 ]
 
 /** Track whether lazy tools have been registered */
