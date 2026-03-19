@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Web companion (kernel.chat) ──
+  web:
+    name: Web — Type-check & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
+
+  # ── kbot CLI ──
+  kbot:
+    name: kbot — Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/kbot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/kbot/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npx vitest run
+
+  # ── VS Code extension ──
+  vscode:
+    name: VS Code Extension — Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/vscode-kbot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npx tsc -p .
