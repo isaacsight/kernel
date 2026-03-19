@@ -93,21 +93,30 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 
 | Category | Examples |
 |----------|---------|
-| **Files & Code** | read, write, glob, grep, lint, test |
+| **Files & Code** | read, write, glob, grep, lint, format, type-check |
 | **Shell** | bash, parallel execute, background tasks |
 | **Git & GitHub** | commit, diff, PR, issues, code search |
-| **Web** | search, fetch, browser automation |
+| **Web** | search, fetch, browser automation, browser agent |
 | **Research** | arXiv, Semantic Scholar, HuggingFace, NASA, DOI |
 | **Data** | CSV read/query/write, transforms, reports, invoices |
+| **Quality** | lint (ESLint/Biome/Clippy), test (Vitest/Jest/pytest), deps audit, formatting |
 | **Deploy** | Vercel, Netlify, Cloudflare Workers/Pages, Fly.io, Railway |
-| **Database** | Postgres, MySQL, SQLite queries, Prisma, ER diagrams |
+| **Database** | Postgres, MySQL, SQLite queries, Prisma, ER diagrams, seed data |
 | **Containers** | Docker build/run/compose, Terraform |
+| **Creative** | p5.js generative art, GLSL shaders, SVG patterns, design variants |
 | **VFX** | GLSL shaders, FFmpeg, ImageMagick, Blender, procedural textures |
 | **Game Dev** | 16 tools for Godot, Unity, Unreal, Bevy, Phaser, Three.js, PlayCanvas, Defold |
+| **Training** | dataset prep, fine-tuning, evaluation, model export |
 | **Social** | post to X, LinkedIn, Bluesky, Mastodon — single posts and threads |
+| **Sandbox** | Docker sandboxes, E2B cloud sandboxes, isolated code execution |
+| **Notebooks** | Jupyter read/edit/insert/delete cells |
+| **Build Matrix** | cross-platform builds — mobile, desktop, WASM, embedded, server |
+| **LSP** | goto definition, find references, hover, rename, diagnostics |
+| **Memory** | persistent memory save/search/update across sessions |
 | **MCP** | marketplace search/install, 20 bundled servers |
 | **IDE** | MCP server, ACP server, LSP bridge |
-| **Meta** | subagents, worktrees, planner, memory, sessions, checkpoints |
+| **Forge** | create tools at runtime, publish to registry, install from registry |
+| **Meta** | subagents, worktrees, planner, sessions, checkpoints, self-eval |
 
 ## 20 Providers
 
@@ -199,8 +208,26 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim.
 | `kbot pair` | File watcher with auto-analysis |
 | `kbot team` | Multi-agent TCP collaboration |
 | `kbot record` | Terminal session recording (SVG, GIF, asciicast) |
+| `kbot voice` | Text-to-speech output mode |
+| `kbot watch` | Real-time file analysis on change |
+| `kbot bootstrap` | Outer-loop project optimizer (visibility scoring) |
+| `kbot plugins` | Search, install, update community plugins |
+| `kbot models` | List, pull, remove, catalog local models |
+| `kbot changelog` | Generate changelog from git history |
+| `kbot completions` | Shell completions (bash, zsh, fish) |
+| `kbot cloud` | Sync learning data to kernel.chat |
 | `kbot ide mcp` | Start MCP server for IDEs |
 | `kbot doctor` | 10-point health check |
+
+### Power-User Flags
+
+```bash
+kbot --architect "design the auth system"    # Architecture mode — plan before code
+kbot --thinking "solve this hard problem"    # Extended reasoning with thinking budget
+kbot --self-eval "write a parser"            # Self-evaluation loop — scores and retries
+kbot --computer-use "fill out this form"     # Computer use — controls mouse and keyboard
+kbot -p "query" > output.txt                 # Pipe mode — clean output for scripting
+```
 
 ## Security
 
