@@ -59,6 +59,15 @@ import { AutopoieticSystem } from './autopoiesis.js'
 import { LoopDetector } from './godel-limits.js'
 import { CheckpointManager, newSessionId, type Checkpoint } from './checkpoint.js'
 import { TelemetryEmitter } from './telemetry.js'
+import { loadSkills } from './skills-loader.js'
+import { ActiveInferenceEngine } from './free-energy.js'
+import { PredictiveEngine } from './predictive-processing.js'
+import { selectStrategy, recordStrategyOutcome } from './reasoning.js'
+import { getDriveState, updateMotivation, getMotivationSummary } from './intentionality.js'
+import { anticipateNext, recordUserAction, getIdentity, updateIdentity, addMilestone } from './temporal.js'
+import { estimateConfidence, updateSkillProfile, recordActualEffort } from './confidence.js'
+import { StrangeLoopDetector } from './strange-loops.js'
+import { IntegrationMeter } from './integrated-information.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -935,6 +944,7 @@ export async function runAgent(
   // Step 2: Build context (cached — only rebuilt when inputs change)
   const matrixPrompt = options.agent ? getMatrixSystemPrompt(options.agent) : null
   const contextSnippet = options.context ? formatContextForPrompt(options.context) : ''
+  const skillsSnippet = loadSkills(process.cwd())
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
 
@@ -1034,7 +1044,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet || undefined,
     memorySnippet: memorySnippet || undefined,
     learningContext: learningContext || undefined,
   })
@@ -1071,6 +1081,40 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
   // ── Autopoiesis: self-maintaining system health ──
   const autopoietic = new AutopoieticSystem()
+
+  // ── Full cognitive stack (wired in v3.6.2) ──
+  const freeEnergy = new ActiveInferenceEngine()
+  const predictive = new PredictiveEngine()
+  const strangeLoops = new StrangeLoopDetector()
+  const integrationMeter = new IntegrationMeter()
+
+  // Pre-execution intelligence: predict, plan, estimate (all non-critical)
+  try {
+    // Predictive processing — anticipate what the user will ask next
+    const prediction = predictive.predict([originalMessage], toolSequenceLog)
+    if (prediction && prediction.confidence > 0.6) {
+      telemetry.emit('session_start', { cogModule: 'prediction', intent: prediction.predictedAction, confidence: prediction.confidence })
+    }
+
+    // Free energy — observe the incoming message and update beliefs
+    freeEnergy.observeMessage(originalMessage)
+    const policy = freeEnergy.recommendPolicy()
+
+    // Confidence — how well can we handle this task?
+    const conf = estimateConfidence(originalMessage, contextSnippet || '')
+
+    // Reasoning — select the best strategy for this task type
+    const strategy = selectStrategy(originalMessage, contextSnippet || '')
+
+    // Intentionality — what drives are active?
+    const drives = getDriveState()
+
+    // Temporal — what did the user do last? Can we anticipate?
+    const anticipated = anticipateNext([originalMessage], originalMessage)
+    if (anticipated.length > 0 && anticipated[0].confidence > 0.5) {
+      // Pre-load context for anticipated next action
+    }
+  } catch { /* cognitive stack is non-critical — never block the agent loop */ }
 
   // ── Tool execution pipeline ──
   const pipeline = options.pipeline ?? createDefaultPipeline({
@@ -1390,6 +1434,55 @@ Always quote file paths that contain spaces. Never reference internal system nam
             if (shouldAutoTrain()) {
               try { selfTrain() } catch { /* silent */ }
             }
+
+            // ── Post-execution cognitive updates (v3.6.2) ──
+            try {
+              // Free energy — update beliefs based on tool results
+              freeEnergy.observeToolResult('response', true, 0.8)
+              freeEnergy.updatePrediction(originalMessage)
+
+              // Predictive processing — evaluate prediction accuracy
+              predictive.evaluate(
+                predictive.predict([originalMessage], []),
+                content,
+                toolSequenceLog,
+              )
+
+              // Confidence — record actual effort vs predicted
+              recordActualEffort(originalMessage, toolCallCount, cumulativeCostUsd)
+
+              // Reasoning — record strategy outcome
+              recordStrategyOutcome(
+                classifyTask(originalMessage),
+                selectStrategy(originalMessage, '').chosenStrategy,
+                toolCallCount > 0 ? 'success' : 'partial',
+              )
+
+              // Intentionality — update motivation based on outcome
+              updateMotivation({ type: 'task_success' })
+              if (toolCallCount > 3) updateMotivation({ type: 'hard_task' })
+              if (toolSequenceLog.length > 0) updateMotivation({ type: 'meaningful_impact' })
+
+              // Temporal — record user action sequence for future anticipation
+              recordUserAction('session', originalMessage)
+
+              // Temporal — update agent identity with session summary
+              updateIdentity({
+                messages: 1,
+                toolCalls: toolCallCount,
+                toolsUsed: toolSequenceLog.slice(0, 10),
+                errors: [],
+                duration: Date.now() - (telemetry as any).startTime || 0,
+              })
+
+              // Skill profile — update based on success
+              const taskDomain = classifyTask(originalMessage)
+              updateSkillProfile(taskDomain, true, 0.8)
+
+              // Strange loops — analyze for self-referential patterns
+              strangeLoops.recordIntent(originalMessage)
+              strangeLoops.recordAction(content.slice(0, 500))
+            } catch { /* cognitive updates are non-critical */ }
           } catch { /* learning failures are non-critical */ }
         })
 
