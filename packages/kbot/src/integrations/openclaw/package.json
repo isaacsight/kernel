@@ -7,6 +7,11 @@
   "openclaw": {
     "extensions": ["./plugin.ts"]
   },
+  "files": [
+    "plugin.ts",
+    "SKILL.md",
+    "openclaw.plugin.json"
+  ],
   "keywords": [
     "openclaw",
     "openclaw-plugin",
