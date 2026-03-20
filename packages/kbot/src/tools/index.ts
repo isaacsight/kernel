@@ -256,7 +256,25 @@ export function createToolPipeline(options?: { middleware?: ToolMiddleware[] }):
 // Core tools (~10 tools from 5 modules) load at startup for instant use.
 // Lazy tools (~236 tools from 41 modules) load on first use or in background.
 // This cuts startup time from ~1-2s to ~200ms for one-shot commands.
+//
+// Lite mode (Replit / --lite): skips heavy modules (Docker, browser, local
+// models, GPU tools) to stay within cloud IDE resource limits.
 // ---------------------------------------------------------------------------
+
+import { isReplit, LITE_SKIP_MODULES } from '../replit.js'
+
+/** Whether lite mode is active (auto-detected on Replit, or set via --lite) */
+let liteMode = false
+
+/** Enable lite mode (called from CLI when --lite is passed or Replit detected) */
+export function setLiteMode(enabled: boolean): void {
+  liteMode = enabled
+}
+
+/** Check if lite mode is active */
+export function isLiteMode(): boolean {
+  return liteMode
+}
 
 /** Core tool modules — always loaded at startup (~200ms, covers 80%+ of one-shot use) */
 const CORE_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
@@ -357,7 +375,13 @@ export async function registerCoreTools(opts?: { computerUse?: boolean }): Promi
  */
 export async function registerLazyTools(opts?: { computerUse?: boolean }): Promise<number> {
   if (lazyToolsRegistered) return 0
-  const counts = await Promise.all(LAZY_MODULE_IMPORTS.map(importAndRegister))
+
+  // In lite mode, filter out heavy modules (Docker, browser, local models, GPU)
+  const modules = (liteMode || isReplit())
+    ? LAZY_MODULE_IMPORTS.filter(m => !LITE_SKIP_MODULES.has(m.path))
+    : LAZY_MODULE_IMPORTS
+
+  const counts = await Promise.all(modules.map(importAndRegister))
   const total = counts.reduce((sum, n) => sum + n, 0)
 
   // Computer use tools — opt-in only via --computer-use flag

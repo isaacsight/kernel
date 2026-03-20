@@ -1,0 +1,15 @@
+{
+  "name": "kbot-agent-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI Agent API powered by kbot — 290 tools, 23 agents, 20 providers",
+  "scripts": {
+    "start": "tsx index.ts",
+    "dev": "tsx watch index.ts",
+    "cli": "npx @kernel.chat/kbot"
+  },
+  "dependencies": {
+    "@kernel.chat/kbot": "^3.11.0",
+    "tsx": "^4.19.0"
+  }
+}

@@ -1,0 +1,16 @@
+run = "npm start"
+entrypoint = "index.ts"
+modules = ["nodejs-20:v8-20230920-bd784b9"]
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+PATH = "/home/runner/$REPL_SLUG/node_modules/.bin:$PATH"
+
+[deployment]
+run = ["sh", "-c", "npm start"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80

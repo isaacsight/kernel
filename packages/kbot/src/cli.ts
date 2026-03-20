@@ -16,7 +16,7 @@ import { Command } from 'commander'
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, runAgentFromCheckpoint, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
-import { registerCoreTools, startLazyToolRegistration, ensureLazyToolsLoaded } from './tools/index.js'
+import { registerCoreTools, startLazyToolRegistration, ensureLazyToolsLoaded, setLiteMode } from './tools/index.js'
 import { clearHistory, clearMemory, compactHistory, restoreHistory } from './memory.js'
 import {
   saveSession, loadSession, listSessions, deleteSession,
@@ -77,6 +77,7 @@ async function main(): Promise<void> {
     .option('--plan', 'Plan mode — read-only exploration, no changes')
     .option('--architect', 'Architect mode — plan-review-implement with dual agents')
     .option('--tree', 'Tree planning mode — LATS branching search instead of linear plans')
+    .option('--lite', 'Lightweight mode — skip heavy tools (auto-enabled on Replit)')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
     .argument('[prompt...]', 'One-shot prompt')
@@ -1906,6 +1907,23 @@ async function main(): Promise<void> {
 
   // Register built-in agents (hacker, operator, dreamer) so --agent flag works
   registerBuiltinAgents()
+
+  // ── Replit / lite mode detection ──
+  {
+    const { isReplit, detectReplit, printReplitWelcome } = await import('./replit.js')
+    const { setLiteMode } = await import('./tools/index.js')
+
+    if (opts.lite || isReplit()) {
+      setLiteMode(true)
+      if (isReplit() && !opts.quiet && !opts.pipe) {
+        const env = detectReplit()
+        printInfo(printReplitWelcome())
+        if (env.publicUrl) {
+          printInfo(`  Public URL: ${env.publicUrl}`)
+        }
+      }
+    }
+  }
 
   // Parallel startup: register core tools (fast), gather context, check updates, cloud sync
   const toolOpts = { computerUse: opts.computerUse }
