@@ -38,6 +38,7 @@ import {
   printError,
   printSuccess,
   printInfo,
+  printWarn,
   printResponse,
   printHelp,
   printGoodbye,
@@ -638,8 +639,10 @@ async function main(): Promise<void> {
     .option('--disable', 'Opt out of collective learning')
     .option('--status', 'Show collective learning status')
     .option('--pull', 'Pull latest collective patterns')
-    .action(async (opts: { enable?: boolean; disable?: boolean; status?: boolean; pull?: boolean }) => {
-      const { setOptIn, getCollectiveStats, pullCollectiveHints, pullCollectivePatterns, getOptInState } = await import('./collective.js')
+    .option('--diagnose', 'Run end-to-end health check on collective connectivity')
+    .option('--insights', 'Show what the collective knows (hints table + top patterns)')
+    .action(async (opts: { enable?: boolean; disable?: boolean; status?: boolean; pull?: boolean; diagnose?: boolean; insights?: boolean }) => {
+      const { setOptIn, getCollectiveStats, pullCollectiveHints, pullCollectivePatterns, getOptInState, sendSignal, getSignalQueueSize } = await import('./collective.js')
 
       if (opts.enable) {
         setOptIn(true)
@@ -659,6 +662,155 @@ async function main(): Promise<void> {
         printInfo('Pulling collective intelligence...')
         const [hints, patterns] = await Promise.all([pullCollectiveHints(), pullCollectivePatterns()])
         printSuccess(`Pulled ${hints.length} routing hints and ${patterns.length} patterns from the collective.`)
+        return
+      }
+
+      if (opts.diagnose) {
+        console.log()
+        printInfo('Collective Health Check')
+        printInfo('─'.repeat(40))
+
+        // 1. Opt-in status
+        const state = getOptInState()
+        if (state.enabled) {
+          printSuccess(`Opt-in: enabled (since ${state.opted_in_at || 'unknown'})`)
+        } else {
+          printWarn('Opt-in: disabled — enable with `kbot collective --enable`')
+        }
+
+        // 2. Test signal
+        printInfo('Sending test signal...')
+        // Temporarily need opt-in for sendSignal to work
+        const wasEnabled = state.enabled
+        if (!wasEnabled) setOptIn(true)
+        const testSignal = {
+          message_hash: 'test',
+          message_category: 'diagnostic',
+          message_length: 4,
+          routed_agent: 'kernel',
+          classifier_confidence: 1.0,
+          was_rerouted: false,
+          response_quality: 1.0,
+          tool_sequence: ['diagnostic_ping'],
+          strategy: 'health_check',
+          source: 'kbot' as const,
+        }
+        const signalOk = await sendSignal(testSignal)
+        if (!wasEnabled) setOptIn(false) // Restore original state
+        if (signalOk) {
+          printSuccess('Signal send: OK — endpoint accepted the test signal')
+        } else {
+          printError('Signal send: FAILED — endpoint unreachable or rejected the signal')
+        }
+
+        // 3. Pull hints
+        printInfo('Pulling routing hints...')
+        try {
+          const hints = await pullCollectiveHints()
+          if (hints.length > 0) {
+            printSuccess(`Hints pull: OK — ${hints.length} routing hints available`)
+          } else {
+            printWarn('Hints pull: empty — no routing hints available yet')
+          }
+        } catch {
+          printError('Hints pull: FAILED — could not retrieve hints')
+        }
+
+        // 4. Pull patterns
+        printInfo('Pulling collective patterns...')
+        try {
+          const patterns = await pullCollectivePatterns()
+          if (patterns.length > 0) {
+            printSuccess(`Patterns pull: OK — ${patterns.length} patterns available`)
+          } else {
+            printWarn('Patterns pull: empty — no patterns available yet')
+          }
+        } catch {
+          printError('Patterns pull: FAILED — could not retrieve patterns')
+        }
+
+        // 5. Signal queue status
+        const queueSize = getSignalQueueSize()
+        if (queueSize === 0) {
+          printSuccess('Signal queue: empty (all signals flushed)')
+        } else {
+          printInfo(`Signal queue: ${queueSize} signal(s) pending flush`)
+        }
+
+        // Summary
+        console.log()
+        printInfo(`Total signals sent: ${state.total_signals_sent}`)
+        printInfo(`Last signal: ${state.last_signal_at || 'never'}`)
+        console.log()
+        return
+      }
+
+      if (opts.insights) {
+        console.log()
+        printInfo('Collective Intelligence Insights')
+        printInfo('═'.repeat(50))
+
+        // Pull fresh data
+        const [hints, patterns] = await Promise.all([pullCollectiveHints(), pullCollectivePatterns()])
+
+        // Routing hints table
+        console.log()
+        printInfo('Routing Hints')
+        printInfo('─'.repeat(50))
+        if (hints.length === 0) {
+          printWarn('No routing hints available yet. The collective needs more signals.')
+        } else {
+          // Table header
+          const catW = 18, agentW = 14, confW = 12, sampW = 8
+          console.log(
+            chalk.bold('  ' +
+              'Category'.padEnd(catW) +
+              'Best Agent'.padEnd(agentW) +
+              'Confidence'.padEnd(confW) +
+              'Samples'.padEnd(sampW)
+            )
+          )
+          console.log('  ' + '─'.repeat(catW + agentW + confW + sampW))
+          for (const h of hints) {
+            const conf = (h.confidence * 100).toFixed(0) + '%'
+            console.log(
+              '  ' +
+              h.category.padEnd(catW) +
+              h.best_agent.padEnd(agentW) +
+              conf.padEnd(confW) +
+              String(h.sample_count).padEnd(sampW)
+            )
+          }
+        }
+
+        // Top tool-sequence patterns
+        console.log()
+        printInfo('Top Tool Sequences')
+        printInfo('─'.repeat(50))
+        const toolPatterns = patterns
+          .filter(p => p.type === 'tool_sequence')
+          .sort((a, b) => b.confidence - a.confidence || b.sample_count - a.sample_count)
+          .slice(0, 10)
+
+        if (toolPatterns.length === 0) {
+          printWarn('No tool-sequence patterns available yet.')
+        } else {
+          for (let i = 0; i < toolPatterns.length; i++) {
+            const p = toolPatterns[i]
+            const pat = p.pattern as Record<string, unknown>
+            const tools = Array.isArray(pat.tools) ? (pat.tools as string[]).join(' → ') : 'unknown'
+            const category = typeof pat.category === 'string' ? pat.category : 'general'
+            const conf = (p.confidence * 100).toFixed(0) + '%'
+            console.log(
+              chalk.dim(`  ${String(i + 1).padStart(2)}.`) +
+              ` [${category}] ` +
+              chalk.cyan(tools) +
+              chalk.dim(` (${conf}, ${p.sample_count} samples)`)
+            )
+          }
+        }
+
+        console.log()
         return
       }
 
@@ -1771,6 +1923,17 @@ async function startRepl(
     }
     console.log(chalk.dim('  └─────────────────────────────────────────────────┘'))
     console.log()
+
+    // First-run collective learning nudge
+    try {
+      const { isCollectiveEnabled } = await import('./collective.js')
+      if (!isCollectiveEnabled()) {
+        printInfo('Join 4,000+ developers making kbot smarter for everyone:')
+        printInfo('  kbot collective --enable')
+        printInfo('  (anonymized — never shares code, files, or identity)')
+        console.log()
+      }
+    } catch { /* collective module not available — skip silently */ }
   } else if (sessionCount <= 5) {
     // Sessions 2-5: rotate useful tips they might not know
     const tips = [

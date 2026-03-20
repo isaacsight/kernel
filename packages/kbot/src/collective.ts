@@ -293,6 +293,11 @@ export function getCollectiveToolSequence(category: string): string[] | null {
   return null
 }
 
+/** Get the current signal queue size (pending signals not yet flushed) */
+export function getSignalQueueSize(): number {
+  return signalQueue.length
+}
+
 /** Format collective stats for display */
 export function getCollectiveStats(): string {
   const state = getOptInState()

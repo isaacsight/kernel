@@ -903,17 +903,23 @@ export async function runAgent(
     }
   }
 
+  // Capture whether the user explicitly set --agent (before routing overwrites it)
+  const userExplicitAgent = !!options.agent
+  let routeConfidence = userExplicitAgent ? 1.0 : 0
+
   // Step 1.7: Learned routing — try cached route, then collective wisdom
   if (!options.agent) {
     const route = learnedRoute(message)
     if (route && route.confidence >= 0.6) {
       options.agent = route.agent
+      routeConfidence = route.confidence
     } else if (isCollectiveEnabled()) {
       // Fall back to collective intelligence — what worked for all kbot users?
       const taskType = classifyTask(message)
       const collective = getCollectiveRecommendation(taskType)
       if (collective && collective.confidence >= 0.7) {
         options.agent = collective.agent
+        routeConfidence = collective.confidence
       }
     }
   }
@@ -1064,6 +1070,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const toolSequenceLog: string[] = []
   const originalMessage = message
   let cumulativeCostUsd = 0
+  let selfEvalScore: number | undefined
 
   // ── Checkpointing & Telemetry ──
   const sessionId = newSessionId()
@@ -1351,6 +1358,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
         if (isSelfEvalEnabled() && content.length > 50) {
           try {
             const evalResult = await evaluateResponse(originalMessage, content)
+            selfEvalScore = evalResult.overall
             if (evalResult.shouldRetry && evalResult.feedback) {
               ui.onWarning(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
               loopMessages.push({ role: 'assistant', content })
@@ -1405,9 +1413,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
                 message_category: classifyTask(originalMessage),
                 message_length: originalMessage.length,
                 routed_agent: lastResponse.agent || 'kernel',
-                classifier_confidence: 0.8,
-                was_rerouted: false,
-                response_quality: lastResponse.usage?.evalScore ?? 0.7,
+                classifier_confidence: routeConfidence,
+                was_rerouted: userExplicitAgent,
+                response_quality: selfEvalScore ?? 0.7,
                 tool_sequence: toolSequenceLog,
                 strategy: selectStrategy(originalMessage, '').chosenStrategy,
                 source: 'kbot',
@@ -1441,7 +1449,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
               try {
                 initArchive()
                 // Use self-eval overall score (default 0.7 if not evaluated)
-                const evalScore = lastResponse.usage?.evalScore ?? 0.7
+                const evalScore = selfEvalScore ?? 0.7
                 const successRate = toolCallCount > 0 ? 1.0 : 0.8
                 learnFromOutcome(
                   originalMessage,
