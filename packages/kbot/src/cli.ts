@@ -76,6 +76,7 @@ async function main(): Promise<void> {
     .option('--self-eval', 'Enable self-evaluation loop (score and retry low-quality responses)')
     .option('--plan', 'Plan mode — read-only exploration, no changes')
     .option('--architect', 'Architect mode — plan-review-implement with dual agents')
+    .option('--tree', 'Tree planning mode — LATS branching search instead of linear plans')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
     .argument('[prompt...]', 'One-shot prompt')
@@ -1095,6 +1096,261 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('apps [tool]')
+    .description('MCP Apps — list app-capable tools, or run one and render its HTML output')
+    .option('--render', 'Run the tool and render its MCP App output in the browser')
+    .option('--inline', 'Return inline HTML instead of opening browser')
+    .option('--args <json>', 'JSON arguments for the tool (use with --render)')
+    .action(async (tool?: string, opts?: { render?: boolean; inline?: boolean; args?: string }) => {
+      const { registerMcpAppTools, listAppCapableTools, getAppConfig, renderMcpApp, extractMcpAppFromText } = await import('./mcp-apps.js')
+      const { ensureLazyToolsLoaded, executeTool: execTool } = await import('./tools/index.js')
+
+      // Ensure tools are loaded (including MCP App tools)
+      await ensureLazyToolsLoaded()
+
+      if (!tool) {
+        // List all app-capable tools
+        const appTools = listAppCapableTools()
+
+        if (appTools.length === 0) {
+          printInfo('No MCP App-capable tools registered.')
+          return
+        }
+
+        process.stderr.write(`\n  ${chalk.hex('#6B5B95')('MCP App Tools')} (${appTools.length}):\n\n`)
+        for (const t of appTools) {
+          process.stderr.write(`  ${chalk.bold(t.name)} — ${t.description}\n`)
+        }
+        process.stderr.write(`\n  ${chalk.dim('Run a tool:')} kbot apps --render <tool> --args \'{"key":"value"}\'\n`)
+        process.stderr.write(`  ${chalk.dim('Config:')} ~/.kbot/config.json → mcpApps.renderMode (browser|inline|disabled)\n\n`)
+        return
+      }
+
+      if (opts?.render) {
+        // Parse args
+        let toolArgs: Record<string, unknown> = {}
+        if (opts.args) {
+          try {
+            toolArgs = JSON.parse(opts.args)
+          } catch {
+            printError('Invalid JSON for --args. Example: --args \'{"type":"bar","labels":["A","B"],"datasets":[{"data":[1,2]}]}\'')
+            return
+          }
+        }
+
+        // Execute the tool
+        printInfo(`Running ${tool}...`)
+        const result = await execTool({
+          id: `apps_${Date.now()}`,
+          name: tool,
+          arguments: toolArgs,
+        })
+
+        if (result.error) {
+          printError(`Tool error: ${result.result}`)
+          return
+        }
+
+        // Try to extract MCP App from result
+        const appResult = extractMcpAppFromText(result.result)
+        if (!appResult) {
+          printWarn(`Tool "${tool}" did not return MCP App content. Text output:`)
+          console.log(result.result)
+          return
+        }
+
+        // Render the app
+        const config = getAppConfig()
+        if (opts.inline) {
+          config.renderMode = 'inline'
+        }
+        const rendered = await renderMcpApp(appResult, config)
+
+        printSuccess(`MCP App: ${appResult.title ?? tool}`)
+        if (rendered.path) {
+          printInfo(`Opened in browser: ${rendered.path}`)
+        }
+        if (rendered.rendered && opts.inline) {
+          console.log(rendered.rendered)
+        }
+        console.log(rendered.text)
+      } else {
+        // Show info about the specific tool
+        const appTools = listAppCapableTools()
+        const match = appTools.find(t => t.name === tool)
+        if (match) {
+          printInfo(`${match.name} — ${match.description}`)
+          printInfo(`\nRun with: kbot apps --render ${match.name} --args '{...}'`)
+        } else {
+          printError(`Tool "${tool}" is not registered as MCP App-capable.`)
+          printInfo('Run `kbot apps` to see available tools.')
+        }
+      }
+    })
+
+  // ── A2A (Agent-to-Agent) subcommands ──
+  const a2aCmd = program
+    .command('a2a')
+    .description('Agent-to-Agent protocol — discover agents, send tasks, collaborate')
+
+  a2aCmd
+    .command('card')
+    .description('Print this kbot instance\'s Agent Card JSON')
+    .option('--url <url>', 'Override the endpoint URL in the card')
+    .action(async (opts: { url?: string }) => {
+      const { generateAgentCard } = await import('./a2a-client.js')
+      const card = generateAgentCard(opts.url)
+      console.log(JSON.stringify(card, null, 2))
+    })
+
+  a2aCmd
+    .command('discover <url>')
+    .description('Discover a remote A2A agent at the given URL')
+    .action(async (url: string) => {
+      const { discoverAgent } = await import('./a2a-client.js')
+      printInfo(`Discovering agent at ${url}...`)
+      const card = await discoverAgent(url)
+      if (!card) {
+        printError(`No A2A agent found at ${url}`)
+        printInfo('Make sure the agent serves /.well-known/agent.json')
+        process.exit(1)
+      }
+      printSuccess(`Discovered: ${card.name} (v${card.version})`)
+      printInfo(`  ${card.description}`)
+      printInfo(`  Skills: ${card.skills.length}`)
+      for (const skill of card.skills) {
+        printInfo(`    • ${skill.name} — ${skill.description}`)
+      }
+      printInfo(`  Streaming: ${card.capabilities.streaming}`)
+      printInfo(`  Agent saved to local registry.`)
+    })
+
+  a2aCmd
+    .command('send <url> <prompt...>')
+    .description('Send a task to a remote A2A agent')
+    .option('--agent <agent>', 'Hint which specialist should handle the task')
+    .option('--token <token>', 'Auth token for the remote agent')
+    .option('--async', 'Submit asynchronously (don\'t wait for completion)')
+    .action(async (url: string, promptParts: string[], opts: { agent?: string; token?: string; async?: boolean }) => {
+      const { sendTask } = await import('./a2a-client.js')
+      const prompt = promptParts.join(' ')
+      const sync = !opts.async
+
+      printInfo(`Sending task to ${url}${sync ? ' (waiting for result)' : ' (async)'}...`)
+
+      try {
+        const result = await sendTask(url, prompt, {
+          agent: opts.agent,
+          token: opts.token,
+          sync,
+        })
+
+        if (result.status === 'completed' && result.text) {
+          printSuccess(`Task ${result.id} completed`)
+          console.log()
+          console.log(result.text)
+        } else if (result.status === 'submitted') {
+          printInfo(`Task submitted: ${result.id}`)
+          printInfo(`Check status: kbot a2a status ${url} ${result.id}`)
+        } else {
+          printWarn(`Task ${result.id} — status: ${result.status}`)
+          if (result.text) console.log(result.text)
+        }
+      } catch (err) {
+        printError(`Task failed: ${err instanceof Error ? err.message : String(err)}`)
+        process.exit(1)
+      }
+    })
+
+  a2aCmd
+    .command('status <url> <taskId>')
+    .description('Check the status of a task on a remote agent')
+    .option('--token <token>', 'Auth token for the remote agent')
+    .action(async (url: string, taskId: string, opts: { token?: string }) => {
+      const { getTaskStatus } = await import('./a2a-client.js')
+      try {
+        const result = await getTaskStatus(url, taskId, { token: opts.token })
+        printInfo(`Task ${result.id}: ${result.status}`)
+        if (result.message) printInfo(`  Message: ${result.message}`)
+        if (result.text) {
+          console.log()
+          console.log(result.text)
+        }
+      } catch (err) {
+        printError(`Status check failed: ${err instanceof Error ? err.message : String(err)}`)
+        process.exit(1)
+      }
+    })
+
+  a2aCmd
+    .command('cancel <url> <taskId>')
+    .description('Cancel a running task on a remote agent')
+    .option('--token <token>', 'Auth token for the remote agent')
+    .action(async (url: string, taskId: string, opts: { token?: string }) => {
+      const { cancelTask } = await import('./a2a-client.js')
+      try {
+        const canceled = await cancelTask(url, taskId, { token: opts.token })
+        if (canceled) {
+          printSuccess(`Task ${taskId} canceled.`)
+        } else {
+          printWarn(`Task ${taskId} is already in a terminal state (completed or failed).`)
+        }
+      } catch (err) {
+        printError(`Cancel failed: ${err instanceof Error ? err.message : String(err)}`)
+        process.exit(1)
+      }
+    })
+
+  a2aCmd
+    .command('agents')
+    .description('List all discovered remote agents in the local registry')
+    .action(async () => {
+      const { listRemoteAgents, removeRemoteAgent } = await import('./a2a-client.js')
+      const agents = listRemoteAgents()
+      if (agents.length === 0) {
+        printInfo('No remote agents discovered yet.')
+        printInfo('Discover one: kbot a2a discover <url>')
+        return
+      }
+      printInfo(`${agents.length} discovered agent${agents.length === 1 ? '' : 's'}:`)
+      for (const agent of agents) {
+        printInfo(`  • ${agent.card.name} (v${agent.card.version})`)
+        printInfo(`    URL: ${agent.url}`)
+        printInfo(`    Skills: ${agent.card.skills.length}`)
+        printInfo(`    Discovered: ${agent.discoveredAt}`)
+        if (agent.lastContactedAt) {
+          printInfo(`    Last contact: ${agent.lastContactedAt}`)
+        }
+      }
+    })
+
+  a2aCmd
+    .command('history')
+    .description('Show local task history (tasks sent to remote agents)')
+    .option('--clear', 'Clear the task history')
+    .action(async (opts: { clear?: boolean }) => {
+      const { getTaskHistory, clearTaskHistory } = await import('./a2a-client.js')
+      if (opts.clear) {
+        clearTaskHistory()
+        printSuccess('Task history cleared.')
+        return
+      }
+      const history = getTaskHistory()
+      if (history.length === 0) {
+        printInfo('No task history yet.')
+        return
+      }
+      printInfo(`${history.length} task${history.length === 1 ? '' : 's'} in history:`)
+      for (const entry of history.slice(-20).reverse()) {
+        const status = entry.status === 'completed' ? chalk.green(entry.status)
+          : entry.status === 'failed' ? chalk.red(entry.status)
+          : chalk.yellow(entry.status)
+        printInfo(`  ${entry.id.slice(0, 8)}  ${status}  ${entry.agentUrl}`)
+        printInfo(`    ${chalk.dim(entry.prompt.slice(0, 80))}`)
+      }
+    })
+
+  program
     .command('kbot-local')
     .description('Use kbot local gateway as AI provider')
     .option('--token <token>', 'Gateway auth token')
@@ -1508,7 +1764,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1834,6 +2090,12 @@ async function main(): Promise<void> {
     if (opts.architect) {
       const { runArchitectMode } = await import('./architect.js')
       await runArchitectMode(message, agentOpts)
+      return
+    }
+    // Tree planning mode: LATS branching search
+    if (opts.tree) {
+      const { executeTreePlan } = await import('./tree-planner.js')
+      await executeTreePlan(message, agentOpts)
       return
     }
     agentOpts.stream = true // Force streaming for faster one-shot

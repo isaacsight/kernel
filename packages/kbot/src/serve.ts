@@ -16,9 +16,11 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
 import { registerAllTools, getAllTools, executeTool, getToolDefinitionsForApi, getToolMetrics } from './tools/index.js'
+import { extractMcpAppFromText, renderMcpApp, listAppCapableTools } from './mcp-apps.js'
 import { printInfo, printSuccess, printError } from './ui.js'
 import { ResponseStream } from './streaming.js'
 import { runAgent } from './agent.js'
+import { mountA2ARoutes } from './a2a.js'
 
 const __require = createRequire(import.meta.url)
 const VERSION = (__require('../package.json') as { version: string }).version
@@ -147,6 +149,13 @@ export async function startServe(options: ServeOptions): Promise<void> {
         return
       }
 
+      // GET /apps — list MCP App-capable tools
+      if (path === '/apps' && req.method === 'GET') {
+        const appTools = listAppCapableTools()
+        json(res, 200, { tools: appTools, count: appTools.length })
+        return
+      }
+
       // POST /execute — execute a tool
       if (path === '/execute' && req.method === 'POST') {
         const body = JSON.parse(await readBody(req))
@@ -162,6 +171,23 @@ export async function startServe(options: ServeOptions): Promise<void> {
           name,
           arguments: args || {},
         })
+
+        // Check for MCP App content in the result
+        const appResult = !result.error ? extractMcpAppFromText(result.result) : null
+        if (appResult) {
+          const rendered = await renderMcpApp(appResult, { renderMode: 'inline', maxHtmlSize: 1_048_576, sandbox: true })
+          json(res, 200, {
+            result: rendered.text,
+            html: rendered.rendered,
+            title: appResult.title,
+            width: appResult.width,
+            height: appResult.height,
+            mcp_app: true,
+            error: false,
+            duration_ms: result.duration_ms,
+          })
+          return
+        }
 
         json(res, result.error ? 500 : 200, {
           result: result.result,
@@ -187,6 +213,23 @@ export async function startServe(options: ServeOptions): Promise<void> {
           arguments: args,
         })
 
+        // Check for MCP App content in the result
+        const toolAppResult = !result.error ? extractMcpAppFromText(result.result) : null
+        if (toolAppResult) {
+          const rendered = await renderMcpApp(toolAppResult, { renderMode: 'inline', maxHtmlSize: 1_048_576, sandbox: true })
+          json(res, 200, {
+            result: rendered.text,
+            html: rendered.rendered,
+            title: toolAppResult.title,
+            width: toolAppResult.width,
+            height: toolAppResult.height,
+            mcp_app: true,
+            error: false,
+            duration_ms: result.duration_ms,
+          })
+          return
+        }
+
         json(res, result.error ? 500 : 200, {
           result: result.result,
           error: result.error || false,
@@ -202,14 +245,25 @@ export async function startServe(options: ServeOptions): Promise<void> {
     }
   })
 
+  // Mount A2A protocol routes (Agent Card + task endpoints)
+  mountA2ARoutes(server, {
+    port: options.port,
+    endpointUrl: `http://localhost:${options.port}`,
+    token: options.token,
+  })
+
   server.listen(options.port, () => {
     printSuccess(`kbot serve running on http://localhost:${options.port}`)
-    printInfo(`  GET  /health       — Health check`)
-    printInfo(`  GET  /tools        — List ${tools.length} tools`)
-    printInfo(`  POST /execute      — Execute a tool`)
-    printInfo(`  POST /stream       — SSE streaming agent`)
-    printInfo(`  POST /tools/:name  — Execute by name`)
-    printInfo(`  GET  /metrics      — Execution metrics`)
+    printInfo(`  GET  /health                — Health check`)
+    printInfo(`  GET  /tools                 — List ${tools.length} tools`)
+    printInfo(`  POST /execute               — Execute a tool`)
+    printInfo(`  POST /stream                — SSE streaming agent`)
+    printInfo(`  POST /tools/:name           — Execute by name`)
+    printInfo(`  GET  /metrics               — Execution metrics`)
+    printInfo(`  GET  /apps                  — List MCP App-capable tools`)
+    printInfo(`  GET  /.well-known/agent.json — A2A Agent Card`)
+    printInfo(`  POST /a2a/tasks             — A2A submit task`)
+    printInfo(`  GET  /a2a/tasks/:id         — A2A task status`)
     if (options.token) {
       printInfo(`  Auth: Bearer token required`)
     }

@@ -219,6 +219,38 @@ export function executionMiddleware(
   }
 }
 
+/**
+ * MCP Apps detection middleware.
+ * Runs after tool execution and checks if the result contains MCP App HTML.
+ * If detected, parses the McpAppResult and attaches it to ctx.metadata.mcpApp.
+ * The rendering is handled separately by the caller (CLI or serve mode).
+ */
+export function mcpAppsMiddleware(): ToolMiddleware {
+  return async (ctx, next) => {
+    await next()
+
+    // Only process successful results
+    if (!ctx.result || ctx.error) return
+
+    // Try to detect MCP App content in the result
+    if (ctx.result.startsWith('{') && ctx.result.includes('"html"')) {
+      try {
+        const parsed = JSON.parse(ctx.result)
+        if (typeof parsed === 'object' && parsed !== null &&
+            typeof parsed.text === 'string' && typeof parsed.html === 'string' && parsed.html.length > 0) {
+          // Store the full app result in metadata for the caller to handle
+          ctx.metadata.mcpApp = parsed
+          // Replace the tool result text with just the text summary
+          // so the AI sees the text, but the UI can render the HTML
+          ctx.result = parsed.text
+        }
+      } catch {
+        // Not valid JSON — leave result as-is
+      }
+    }
+  }
+}
+
 // ── Fallback Chains ──
 
 export interface FallbackRule {
@@ -321,6 +353,7 @@ export function createDefaultPipeline(deps: {
     pipeline.use(fallbackMiddleware(deps.fallbackRules, deps.executeTool))
   }
   pipeline.use(executionMiddleware(deps.executeTool))
+  pipeline.use(mcpAppsMiddleware())
 
   return pipeline
 }

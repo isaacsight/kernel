@@ -72,6 +72,7 @@ import { StrangeLoopDetector } from './strange-loops.js'
 import { IntegrationMeter } from './integrated-information.js'
 import { generateReflections, getRelevantReflections, formatReflectionsForPrompt, isUserRejection } from './reflection.js'
 import { getSynthesisContext } from './memory-synthesis.js'
+import { recordTrace, shouldEvolve, evolvePrompt, getPromptAmendment, updateMutationScore } from './prompt-evolution.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -1119,6 +1120,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const provider = byokProvider || 'anthropic'
   let { text: systemContext } = buildCacheablePrompt(promptSections, provider)
 
+  // Prompt evolution: inject evolved instructions for this agent (GEPA)
+  const activeAgent = options.agent || 'kernel'
+  const promptAmendment = getPromptAmendment(activeAgent)
+  if (promptAmendment) {
+    systemContext += promptAmendment
+  }
+
   // Plan mode: append read-only instruction to system prompt
   if (options.plan) {
     systemContext += '\n\n## PLAN MODE\n\nYou are in PLAN MODE. You can read, search, and analyze — but you CANNOT write files, execute commands, or make changes. Your job is to understand the problem and propose a plan. Output a numbered list of steps.'
@@ -1538,6 +1546,32 @@ Always quote file paths that contain spaces. Never reference internal system nam
             if (shouldAutoTrain()) {
               try { selfTrain() } catch { /* silent */ }
             }
+
+            // ── Prompt Evolution (GEPA): record trace and evolve if threshold met ──
+            try {
+              const traceAgent = lastResponse.agent || 'kernel'
+              recordTrace({
+                agent: traceAgent,
+                taskType: classifyTask(originalMessage),
+                toolsUsed: [...toolSequenceLog],
+                evalScore: selfEvalScore ?? 0.7,
+                success: true,
+                messageLength: content.length,
+                timestamp: new Date().toISOString(),
+              })
+
+              // Check if we should evolve this agent's prompt
+              if (shouldEvolve(traceAgent)) {
+                const mutation = evolvePrompt(traceAgent)
+                if (mutation) {
+                  // Log evolution event (non-blocking, info-level)
+                  process.stderr.write(`\n  \x1b[2m[prompt-evolution] ${traceAgent} evolved: ${mutation.reason}\x1b[0m\n`)
+                }
+              }
+
+              // Update scoreAfter for recent mutations (needs 10+ post-mutation traces)
+              updateMutationScore(traceAgent)
+            } catch { /* prompt evolution is non-critical */ }
 
             // ── Post-execution cognitive updates (v3.6.2) ──
             try {

@@ -22,6 +22,7 @@ export {
   telemetryMiddleware,
   executionMiddleware,
   fallbackMiddleware,
+  mcpAppsMiddleware,
   DEFAULT_FALLBACK_RULES,
   type ToolMiddleware,
   type ToolContext,
@@ -29,7 +30,7 @@ export {
   type FallbackRule,
 } from '../tool-pipeline.js'
 
-import { ToolPipeline, executionMiddleware, type ToolMiddleware } from '../tool-pipeline.js'
+import { ToolPipeline, executionMiddleware, mcpAppsMiddleware, type ToolMiddleware } from '../tool-pipeline.js'
 
 export interface ToolDefinition {
   name: string
@@ -315,6 +316,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './training.js',        registerFn: 'registerTrainingTools' },
   { path: './social.js',          registerFn: 'registerSocialTools' },
   { path: './forge.js',           registerFn: 'registerForgeTools' },
+  { path: '../mcp-apps.js',       registerFn: 'registerMcpAppTools' },
 ]
 
 /** Track whether lazy tools have been registered */
