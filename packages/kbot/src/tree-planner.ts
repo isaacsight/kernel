@@ -674,44 +674,35 @@ export function backpropagate(tree: PlanTree, leafId: string, reward: number): v
  * Returns the path with the highest average value from root to leaf.
  */
 export function getBestPlan(tree: PlanTree): Array<{ action: string; toolHint: string; value: number }> {
-  // Find all leaf nodes (nodes with no children)
-  const leaves: string[] = []
-  for (const [id, node] of Object.entries(tree.nodes)) {
-    if (node.children.length === 0 && id !== tree.root) {
-      leaves.push(id)
-    }
+  // Use the same path as selectBestPath (UCB1) for consistency.
+  // This prevents the bug where getBestPlan and selectBestPath return
+  // different paths, causing backpropagation to update wrong nodes.
+  const bestPathIds = tree.bestPath.length > 1 ? tree.bestPath : selectBestPath(tree)
+
+  if (bestPathIds.length <= 1) return [] // Only root, no plan steps
+
+  // Convert path IDs to plan steps (skip root)
+  const steps: Array<{ action: string; toolHint: string; value: number }> = []
+  for (let i = 1; i < bestPathIds.length; i++) {
+    const node: PlanNode | undefined = tree.nodes[bestPathIds[i]]
+    if (!node) break
+    steps.push({
+      action: node.action,
+      toolHint: node.toolHint,
+      value: node.value,
+    })
   }
 
-  if (leaves.length === 0) return []
+  // REMOVED: old code that independently computed best path via average value.
+  // That created inconsistency with selectBestPath's UCB1 selection.
 
-  // For each leaf, trace back to root and compute average value
-  let bestLeaf = ''
-  let bestAvgValue = -Infinity
+  return steps
+}
 
-  for (const leafId of leaves) {
-    let totalValue = 0
-    let count = 0
-    let currentId: string | null = leafId
-
-    while (currentId && currentId !== tree.root) {
-      const node: PlanNode | undefined = tree.nodes[currentId]
-      if (!node) break
-      totalValue += node.value
-      count++
-      currentId = node.parentId
-    }
-
-    const avgValue = count > 0 ? totalValue / count : 0
-    if (avgValue > bestAvgValue) {
-      bestAvgValue = avgValue
-      bestLeaf = leafId
-    }
-  }
-
-  if (!bestLeaf) return []
-
-  // Trace from leaf to root to build the path
+// Keep backward compatibility — old code traced leaf to root
+function _unused_getBestPlanLegacy(tree: PlanTree): Array<{ action: string; toolHint: string; value: number }> {
   const reversePath: Array<{ action: string; toolHint: string; value: number }> = []
+  const bestLeaf = ''
   let currentId: string | null = bestLeaf
 
   while (currentId && currentId !== tree.root) {

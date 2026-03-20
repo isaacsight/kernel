@@ -372,14 +372,36 @@ export function updateMutationScore(agent: string): void {
   // Need at least 10 post-mutation traces to evaluate
   if (postTraces.length < 10) return
 
-  const avgScoreAfter = postTraces.reduce((sum, t) => sum + t.evalScore, 0) / postTraces.length
-  latestMutation.scoreAfter = Math.round(avgScoreAfter * 1000) / 1000
+  // Use eval scores if available, otherwise fall back to success rate.
+  // This fixes the issue where auto-rollback was a no-op when self-eval
+  // is disabled (default), since evalScore defaults to 0.7 for everyone.
+  const allScoresDefault = postTraces.every(t => Math.abs(t.evalScore - 0.7) < 0.01)
+
+  let scoreAfter: number
+  if (allScoresDefault) {
+    // Self-eval is likely disabled — use success rate as the signal instead
+    scoreAfter = postTraces.filter(t => t.success).length / postTraces.length
+  } else {
+    // Real eval scores available — use them
+    scoreAfter = postTraces.reduce((sum, t) => sum + t.evalScore, 0) / postTraces.length
+  }
+
+  latestMutation.scoreAfter = Math.round(scoreAfter * 1000) / 1000
+
+  // If scoreBefore was also default 0.7, recalculate it the same way
+  if (allScoresDefault && Math.abs(latestMutation.scoreBefore - 0.7) < 0.01) {
+    const preTraces = state.traces.filter(t =>
+      t.agent === agent && new Date(t.timestamp).getTime() <= mutationTime
+    ).slice(-20) // last 20 pre-mutation traces
+    if (preTraces.length >= 5) {
+      latestMutation.scoreBefore = preTraces.filter(t => t.success).length / preTraces.length
+    }
+  }
 
   persist()
 
-  // Auto-rollback if mutation made things worse
-  if (latestMutation.scoreAfter < latestMutation.scoreBefore * 0.9) {
-    // Score dropped by more than 10% — rollback
+  // Auto-rollback if mutation made things worse (>10% drop)
+  if (latestMutation.scoreBefore > 0 && latestMutation.scoreAfter < latestMutation.scoreBefore * 0.9) {
     rollbackMutation(agent)
   }
 }

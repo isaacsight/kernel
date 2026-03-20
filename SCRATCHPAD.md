@@ -4,106 +4,99 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-18, night)
+## Current Session (2026-03-19)
 
-### Accomplished This Session
+### Accomplished — Largest session ever
 
-#### Limitless Execution v3.4.0 — Full Implementation + Activation
-5 features shipped to npm, activated across all 3 layers:
+#### v3.6.0 → v3.11.0 in one session (12 npm versions, 20+ commits)
 
-**kbot features (shipped to all users via npm):**
-1. **Tool Discovery** — smart error messages guide AI to `mcp_search → mcp_install → forge_tool`
-2. **Cost-Aware Model Routing** — `classifyComplexity()` + `routeModelForTask()` → trivial/simple tasks use fast model
-3. **Goal Decomposition** — `routeStepToAgent()` assigns specialist agents per plan step
-4. **Fallback Chains** — `fallbackMiddleware` with `DEFAULT_FALLBACK_RULES` (url_fetch↔web_search, bash→npx)
-5. **Self-Extension** — `forge_tool` creates tools at runtime, sandboxed, persisted to `~/.kbot/plugins/forged/`
+**New Concepts:**
+- **Autotelic Agent** — auto (self) + telos (purpose). Fusion of Bootstrap + Limitless Execution
+- **Collective Learning** — anonymized cross-user intelligence (the hive mind / network effect)
+- **Federated Stigmergic Learning** — the academic name for what kbot does (research paper written)
 
-**Claude Code activation (this project):**
-- CLAUDE.md: Section VIII "LIMITLESS EXECUTION" added as operational doctrine
-- `.claude/agents/limitless.md`: New agent embodying all 5 patterns
-- `.claude/agents/bootstrap.md`: Updated with Limitless Execution integration section
-- Agent team table updated with Limitless Execution pattern mappings
+**8 Research Breakthroughs Built:**
+1. **Voyager Skill Library** — auto-distills successful tool chains into reusable skills
+2. **MAR Multi-Persona Reflection** — 5 specialists critique failures, judge synthesizes
+3. **Spec-Driven Development** — `kbot spec` generates formal requirements (EARS notation)
+4. **Three-Tier Memory Synthesis** — observations → reflections → identity (Stanford Generative Agents)
+5. **LATS Tree Search Planning** — Monte Carlo Tree Search for branching plans
+6. **GEPA Prompt Self-Optimization** — specialist prompts evolve from execution traces (ICLR 2026)
+7. **A2A v0.3 Protocol** — agent-to-agent interop, Agent Cards, task lifecycle
+8. **MCP Apps** — interactive HTML/JS UI in conversations (Chart.js, tables, diffs, Mermaid)
 
-**Research discovery:**
-- No other production agent implements all 5 patterns (28 systems analyzed)
-- Closest: Darwin Godel Machine (research, 4/5 patterns, cheated on benchmarks)
-- Academic name: "self-evolving agent" (Godel Machine practical implementation)
-- kbot is the only shipping system combining forge + bootstrap + discovery + cost routing + fallback
+**Major Features Built:**
+- `kbot status` — unified Kernel dashboard (version, tools, learning, collective, npm, GitHub, bootstrap)
+- `kbot automate` — event-driven automations (file watch, schedule, git hooks, webhooks)
+- `kbot --plan` — read-only exploration mode (20 read-only tools only)
+- `kbot --tree` — LATS tree search planning instead of linear
+- `kbot collective` — opt-in collective learning (--enable, --diagnose, --insights)
+- `kbot autotelic` — self-purpose + self-agency cycle
+- `kbot spec` — spec-driven development
+- `kbot a2a` — Agent-to-Agent protocol (card, discover, send, status, cancel, agents, history)
+- `kbot apps` — MCP Apps tool listing and rendering
+- `kbot immune` — self-audit (renamed from duplicate `audit`)
+- Full cognitive stack: 11/11 modules wired into agent loop
+- Skills auto-discovery (~/.kbot/skills/ and .kbot/skills/)
+- VS Code extension (packages/vscode-kbot/, .vsix packaged)
+- CI pipeline (GitHub Actions: web + kbot + vscode, all green)
+- Branch protection enabled
+- First-run collective prompt for new users
 
-**Published:** @kernel.chat/kbot@3.4.0 live on npm (285 tools)
+**Infrastructure:**
+- GitHub releases: 7 (was 0)
+- Description rewritten: leads with "kbot" + install command
+- Topics: 20 high-traffic terms
+- Discord invite: fixed (permanent, never expires)
+- Docker Hub: v3.7.1 (was v2.22.1)
+- Edge function: kbot-engine deployed with /collective endpoint
+- Migration 086: collective learning schema fixes applied
+- kernel.chat: redesigned as kbot landing page (chat removed)
+- HN post: drafted at tools/hn-post.md
+- Research paper: docs/federated-stigmergic-learning.md
+- 4 new agent definitions: autotelic.md, collective.md, plus existing
 
-#### Bootstrap Cycle: forge_tool Security Hardening (v3.4.0)
-- **Problem**: forge_tool had 7+ bypass vectors in its security blocklist
-  - `AsyncFunction`/`getPrototypeOf` not blocked (the exact pattern forge.ts itself uses to create functions)
-  - `node:child_process` (node: protocol) not blocked — only bare `child_process`
-  - `process.env` not blocked — secrets leakage vector
-  - `require("fs")`/`import("fs")` not blocked — only specific fs operations
-  - `require("net")`/`require("os")`/`require("crypto")` not blocked
-  - `exec()`/`spawn()`/`execFile()` async variants not blocked (only Sync versions were)
-  - `Object.defineProperty`/`Object.setPrototypeOf`/`Proxy`/`Reflect` not blocked
-  - Dynamic import/require with variables (evasion via concatenation) not blocked
-  - No reserved name protection — could overwrite `bash`, `forge_tool`, etc.
-- **Fix**: Expanded DANGEROUS_PATTERNS from 13 → 29 rules, added RESERVED_NAMES set (16 built-in tools), added name length cap (64 chars), exported `validateCode` for testing
-- **Tests**: Created forge.test.ts with 56 tests (10 test groups covering all blocklist categories + safe code allowlist + input validation)
-- **Build**: passes clean, 285 tools
-
-#### Previous Session (same day, evening)
-
-#### Surface Sync (262 → 284 tools)
-- Updated tool count across 15 files: READMEs (x2), CONTRIBUTING, ROADMAP, Dockerfile, package.json, social.ts fallback, 5 agent files, launch-posts.md
-- ROADMAP bumped from v3.1.3 to v3.3.0
-- Zero stale `262` references remain in key files
-
-#### Hero GIF Re-recorded
-- VHS recording: 459 frames, 1.3MB (was 97KB empty placeholder)
-- Shows: `kbot doctor` → AI query via Ollama → agent-routed code generation
-- Embedded in both README.md and packages/kbot/README.md
-
-#### Frontend Cleanup
-- Removed 3 dead `.ka-pricing-overage-note` CSS rules from index.css
-- Terms & Privacy pages are legitimate legal content — kept
-
-#### Billing Discrepancy Fixed
-- TermsPage.tsx: Fixed from $39/mo Pro + $249/mo Max to actual $15/mo Pro, 10 msgs Free
-- ApiDocsPage.tsx: Fixed tier table, removed Max/Enterprise tiers, aligned with planLimits.ts
-
-#### Obsidian Vault Synced
-- 5 files audited, Discord.md fixed (tool/agent/provider spotlight counts)
-- Verdict: SYNCED
-
-#### Published
-- kbot v3.3.1 published to npm (284 tools, updated description)
-- 4 commits pushed to GitHub
-
-#### Previous Session (same day, earlier)
-- kbot v3.2.0–v3.3.0 shipped (3 versions)
-- 8 bootstrap/meta agents created
-- Discord channel agents (11 agents, 10+ posts)
-- Session-start hook with Bootstrap Pulse
-- Launch posts drafted (HN, X, Reddit, dev.to, awesome lists)
-- Social daemon + launchd plist
-- robots.txt + sitemap.xml
+**Audit Fixes:**
+- 7 critical collective learning issues fixed (schema types, RPC params, column names, upsert, return shapes, exit flush, rate limiting)
+- Pre-existing test failure fixed (tier gating test bug)
+- gamedev.test.ts excluded from vitest (uses node:test)
+- Signal quality: real values flowing (classifier_confidence, was_rerouted, response_quality)
+- All 317/317 tests passing
+- CI fully green
 
 ### Pending
-- **Social media accounts** — @kbot_ai (X), Bluesky, Mastodon not yet created (needs Isaac)
-- **Launch posts** — all drafted with 284 tools, hero GIF ready. Need Isaac's go for HN/Reddit
-- **Docker Hub** — Docker daemon not running, can't push (still at v2.22.1)
-- **iOS Capacitor sync** — still pending
-- **Bootstrap agent** — running in background, check result
+- **HN post** — drafted, ready to fire. Best timing: Tue-Thu 8-10am ET. Needs Isaac to post.
+- **Social accounts** — @kbot_ai (X), Bluesky, Mastodon not created
+- **Social preview image** — OG card is blank white, needs real design
+- **VS Code Marketplace** — publisher account costs money, offering via GitHub + npm instead
+- **Docker Hub v3.11.0** — Docker is running, can push
+- **Tool count update** — package.json still says 290 tools, actual may be higher with new MCP App tools
+- **Distribution** — autotelic says 32%. Launch posts are THE bottleneck.
 
 ## kbot Current State
-- **npm version**: 3.4.0 (published — Limitless Execution live)
-- **Tools**: 285
-- **Tests**: 317 across 16 test files (added 56 forge security tests)
-- **Agents**: 22 built-in + 8 bootstrap/meta agents
+- **npm version**: 3.11.0
+- **New modules this session**: skill-library, reflection, spec, memory-synthesis, tree-planner, prompt-evolution, a2a-client, mcp-apps, collective, automations, skills-loader
+- **Cognitive modules**: 11/11 active
+- **Tests**: 317/317 passing
+- **Agents**: 23 built-in + autotelic + collective specialist
+- **Claude Code agents**: 30 (.md files in .claude/agents/)
 - **Providers**: 20
-- **Downloads**: ~1,195/day, 3,671/week
+- **Downloads**: ~3,671/week (~1,195/day)
 - **Stars**: 1
-- **Discord**: 20 channels, 11 channel agents, webhooks live
-- **Docker**: stale at v2.22.1
+- **GitHub releases**: 7
+- **CI**: Green (3 jobs: web, kbot, vscode)
+- **Branch protection**: Enabled
+- **Discord**: Working (permanent invite: discord.gg/kdMauM9abG)
+- **Docker Hub**: v3.7.1 (needs update to v3.11.0)
+
+## Key Concepts
+- **Autotelic** — self-purpose + self-agency. The ultimate agent.
+- **Collective Learning** — network effect. More users → better patterns → smarter kbot.
+- **Federated Stigmergic Learning** — academic name for collective learning (research paper written)
+- **The 0.001%** — kbot is the first AI that gets smarter every time anyone uses it.
 
 ## Key Decisions
-- **No more features** — 284 tools is surplus. Focus on distribution, not tool count.
-- **Bootstrap principle** — fix one thing per run, measure before/after, compound over sessions.
-- **kbot posts as itself** — social tools built in, daemon ready, accounts need creation.
-- **Billing aligned** — Free: 10 msgs/mo, Pro: $15/mo 200 msgs. No Max tier. No overage.
+- **kernel.chat is now a kbot landing page** — chat app removed from homepage
+- **VS Code extension via GitHub only** — marketplace costs money
+- **Distribution is THE bottleneck** — 32% score, everything else is built
+- **Network effect is the moat** — features can be copied, collective intelligence can't
