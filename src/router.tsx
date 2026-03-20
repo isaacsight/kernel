@@ -6,6 +6,7 @@ import { KernelLoading } from './components/KernelLoading'
 import { lazyRetry } from './utils/lazyRetry'
 
 // Lazy-load ALL pages — lazyRetry reloads once on stale-cache 404
+const LandingPage = lazyRetry(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })))
 const EnginePage = lazyRetry(() => import('./pages/EnginePage').then(m => ({ default: m.EnginePage })))
 const AdminPage = lazyRetry(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
 const SharedConversationPage = lazyRetry(() => import('./pages/SharedConversationPage').then(m => ({ default: m.SharedConversationPage })))
@@ -57,6 +58,11 @@ export const router = createHashRouter([
     errorElement: <RootErrorPage />,
     children: [
       { index: true, element: withErrorBoundary(
+        <Suspense fallback={<KernelLoading />}>
+          <LandingPage />
+        </Suspense>
+      ) },
+      { path: 'chat', element: withErrorBoundary(
         <Suspense fallback={<KernelLoading />}>
           <EnginePage />
         </Suspense>

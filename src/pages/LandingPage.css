@@ -1,0 +1,347 @@
+/* kbot Landing Page */
+
+.ka-landing {
+  min-height: 100vh;
+  background: #0d0d0d;
+  color: #e8e6e3;
+  font-family: 'EB Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.ka-landing-hero {
+  text-align: center;
+  padding: 120px 24px 80px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.ka-landing-badge {
+  display: inline-block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6B5B95;
+  border: 1px solid #6B5B9540;
+  border-radius: 20px;
+  padding: 4px 16px;
+  margin-bottom: 32px;
+}
+
+.ka-landing-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(48px, 10vw, 80px);
+  font-weight: 700;
+  color: #FAF9F6;
+  margin: 0 0 16px;
+  letter-spacing: -2px;
+}
+
+.ka-landing-subtitle {
+  font-size: clamp(20px, 4vw, 28px);
+  color: #FAF9F6;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.ka-landing-tagline {
+  font-size: 16px;
+  color: #888;
+  margin: 0 0 40px;
+  line-height: 1.6;
+}
+
+/* Install command */
+.ka-landing-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin: 0 auto 32px;
+}
+
+.ka-landing-install:hover {
+  border-color: #6B5B95;
+}
+
+.ka-landing-install code {
+  font-family: 'Courier Prime', monospace;
+  font-size: 15px;
+  color: #28c840;
+}
+
+.ka-landing-copy {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+  border-left: 1px solid #333;
+  padding-left: 16px;
+}
+
+/* CTAs */
+.ka-landing-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ka-landing-cta {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  padding: 10px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: #6B5B95;
+  color: #FAF9F6;
+  border: 1px solid #6B5B95;
+}
+
+.ka-landing-cta:hover {
+  background: #7d6da8;
+}
+
+.ka-landing-cta--secondary {
+  background: transparent;
+  color: #999;
+  border-color: #333;
+}
+
+.ka-landing-cta--secondary:hover {
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+/* Sections */
+.ka-landing-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.ka-landing-h2 {
+  font-family: 'Courier Prime', monospace;
+  font-size: 28px;
+  color: #FAF9F6;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.ka-landing-body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #aaa;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* Feature grid */
+.ka-landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.ka-landing-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+
+.ka-landing-card:hover {
+  border-color: #6B5B9560;
+}
+
+.ka-landing-card-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+  color: #FAF9F6;
+  margin: 0 0 8px;
+}
+
+.ka-landing-card-desc {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Terminal mockup */
+.ka-landing-terminal {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.ka-landing-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #252525;
+  border-bottom: 1px solid #333;
+}
+
+.ka-landing-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ka-landing-terminal-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+  margin-left: 8px;
+}
+
+.ka-landing-terminal-body {
+  padding: 16px 20px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ka-landing-line {
+  color: #e8e6e3;
+}
+
+.ka-landing-prompt {
+  color: #6B5B95;
+  margin-right: 8px;
+}
+
+.ka-landing-agent {
+  color: #6B5B95;
+}
+
+.ka-landing-dim {
+  color: #555;
+}
+
+/* Agent tags */
+.ka-landing-agents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ka-landing-agent-tag {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  padding: 4px 14px;
+  border: 1px solid #333;
+  border-radius: 16px;
+  color: #aaa;
+  transition: all 0.2s;
+}
+
+.ka-landing-agent-tag:hover {
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+/* Comparison table */
+.ka-landing-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ka-landing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+}
+
+.ka-landing-table th {
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid #333;
+  color: #666;
+  font-weight: 400;
+}
+
+.ka-landing-table th:nth-child(2) {
+  color: #6B5B95;
+  font-weight: 700;
+}
+
+.ka-landing-table td {
+  padding: 8px 16px;
+  border-bottom: 1px solid #1a1a1a;
+  color: #888;
+}
+
+.ka-landing-table td:first-child {
+  color: #aaa;
+}
+
+.ka-landing-table td:nth-child(2) {
+  color: #28c840;
+}
+
+/* Footer */
+.ka-landing-footer {
+  text-align: center;
+  padding: 40px 24px 60px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.ka-landing-footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ka-landing-footer-links a {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ka-landing-footer-links a:hover {
+  color: #6B5B95;
+}
+
+.ka-landing-copyright {
+  font-size: 13px;
+  color: #444;
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .ka-landing-hero {
+    padding: 80px 20px 60px;
+  }
+  .ka-landing-section {
+    padding: 40px 20px;
+  }
+  .ka-landing-install {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ka-landing-copy {
+    border-left: none;
+    padding-left: 0;
+  }
+}
