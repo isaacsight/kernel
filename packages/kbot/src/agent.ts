@@ -145,6 +145,8 @@ export interface AgentOptions {
   pipeline?: ToolPipeline
   /** ResponseStream for structured event streaming (SDK/MCP/HTTP consumers) */
   responseStream?: ResponseStream
+  /** Plan mode — read-only exploration, no writes or command execution */
+  plan?: boolean
 }
 
 
@@ -752,6 +754,15 @@ const CORE_TOOLS = new Set([
   'grep', 'web_search',
 ])
 
+/** Read-only tools allowed in plan mode — no writes, no command execution */
+const PLAN_MODE_TOOLS = new Set([
+  'read_file', 'glob', 'grep', 'git_status', 'git_log', 'git_diff',
+  'web_search', 'research', 'url_fetch',
+  'github_search', 'github_repo_info', 'github_read_file',
+  'list_directory', 'memory_search', 'db_schema',
+  'lsp_hover', 'lsp_diagnostics', 'lsp_symbols', 'lsp_find_references', 'lsp_goto_definition',
+])
+
 /** Detect if a message describes a complex multi-step task */
 function isComplexTask(message: string): boolean {
   const lower = message.toLowerCase()
@@ -955,6 +966,12 @@ export async function runAgent(
     tools = [...core, ...rest].slice(0, 128)
   }
 
+  // Plan mode: restrict to read-only tools only
+  if (options.plan) {
+    tools = tools.filter(t => PLAN_MODE_TOOLS.has(t.name))
+    ui.onInfo('Plan mode — read-only exploration. No writes or command execution.')
+  }
+
   // Step 2: Build context (cached — only rebuilt when inputs change)
   const matrixPrompt = options.agent ? getMatrixSystemPrompt(options.agent) : null
   const contextSnippet = options.context ? formatContextForPrompt(options.context) : ''
@@ -1063,7 +1080,12 @@ Always quote file paths that contain spaces. Never reference internal system nam
     learningContext: learningContext || undefined,
   })
   const provider = byokProvider || 'anthropic'
-  const { text: systemContext } = buildCacheablePrompt(promptSections, provider)
+  let { text: systemContext } = buildCacheablePrompt(promptSections, provider)
+
+  // Plan mode: append read-only instruction to system prompt
+  if (options.plan) {
+    systemContext += '\n\n## PLAN MODE\n\nYou are in PLAN MODE. You can read, search, and analyze — but you CANNOT write files, execute commands, or make changes. Your job is to understand the problem and propose a plan. Output a numbered list of steps.'
+  }
 
   let toolCallCount = 0
   let lastResponse: any = null

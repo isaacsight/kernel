@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.8.2",
+  "version": "3.9.0",
   "description": "The only AI agent that builds its own tools. Self-evolving terminal AI: 290 tools, 23 agents, 20 providers. Runtime tool forging via forge_tool, Forge Registry for community tools, autopoietic health monitoring, immune self-audit agent. Cost-aware model routing, fallback chains, Bayesian skill routing. Embedded llama.cpp, MCP server, programmatic SDK. MIT.",
   "type": "module",
   "repository": {

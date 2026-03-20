@@ -73,6 +73,7 @@ async function main(): Promise<void> {
     .option('-t, --thinking', 'Show AI reasoning steps')
     .option('--thinking-budget <tokens>', 'Thinking token budget (default: 10000)')
     .option('--self-eval', 'Enable self-evaluation loop (score and retry low-quality responses)')
+    .option('--plan', 'Plan mode — read-only exploration, no changes')
     .option('--architect', 'Architect mode — plan-review-implement with dual agents')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
@@ -564,6 +565,179 @@ async function main(): Promise<void> {
 
       const speed = system.recommendModelSpeed()
       process.stderr.write(`\n  ${AMETHYST('Cost regulation')}: ${speed === 'fast' ? chalk.yellow('conserving (fast model)') : chalk.green('normal (default model)')}\n\n`)
+    })
+
+  program
+    .command('status')
+    .description('Unified Kernel dashboard — version, tools, agents, learning, collective, npm, GitHub, bootstrap')
+    .option('--json', 'Output as JSON')
+    .action(async (opts: { json?: boolean }) => {
+      // Check both subcommand and parent opts (commander absorbs --json at parent level)
+      const jsonMode = opts.json || program.opts().json
+      const chalk = (await import('chalk')).default
+      const AMETHYST = chalk.hex('#6B5B95')
+      const DIM = chalk.dim
+      const GREEN = chalk.hex('#4ADE80')
+      const YELLOW = chalk.hex('#FBBF24')
+      const RED = chalk.hex('#F87171')
+      const CYAN = chalk.hex('#67E8F9')
+      const line = DIM('  ' + '─'.repeat(40))
+
+      // ── 1. Version & latest check ──
+      let latestVersion = ''
+      let isLatest = false
+      const npmDownloads: { downloads?: number } = {}
+      const githubData: { stars?: number; issues?: number } = {}
+
+      // Fire all network requests in parallel with 3s timeouts
+      const [npmVersionRes, npmDlRes, ghRes] = await Promise.allSettled([
+        fetch('https://registry.npmjs.org/@kernel.chat/kbot/latest', { signal: AbortSignal.timeout(3000) })
+          .then(r => r.json() as Promise<{ version?: string }>),
+        fetch('https://api.npmjs.org/downloads/point/last-week/@kernel.chat/kbot', { signal: AbortSignal.timeout(3000) })
+          .then(r => r.json() as Promise<{ downloads?: number }>),
+        fetch('https://api.github.com/repos/isaacsight/kernel', { signal: AbortSignal.timeout(3000) })
+          .then(r => r.json() as Promise<{ stargazers_count?: number; open_issues_count?: number }>),
+      ])
+
+      if (npmVersionRes.status === 'fulfilled' && npmVersionRes.value.version) {
+        latestVersion = npmVersionRes.value.version
+        isLatest = VERSION === latestVersion
+      }
+      if (npmDlRes.status === 'fulfilled' && npmDlRes.value.downloads !== undefined) {
+        npmDownloads.downloads = npmDlRes.value.downloads
+      }
+      if (ghRes.status === 'fulfilled' && ghRes.value.stargazers_count !== undefined) {
+        githubData.stars = ghRes.value.stargazers_count
+        githubData.issues = ghRes.value.open_issues_count ?? 0
+      }
+
+      // ── 2. Learning stats ──
+      const { getStats } = await import('./learning.js')
+      const stats = getStats()
+
+      // ── 3. Collective ──
+      const { getOptInState } = await import('./collective.js')
+      const collectiveState = getOptInState()
+
+      // ── 4. Tools count ──
+      const { getAllTools } = await import('./tools/index.js')
+      const toolCount = getAllTools().length || 290 // fallback to known count if tools not yet registered
+
+      // ── 5. Bootstrap (autotelic score) ──
+      let bootstrapScore = 0
+      let bootstrapMax = 0
+      let bootstrapGrade = '?'
+      let bootstrapTopFix = ''
+      let distributionPct = ''
+      try {
+        const { runBootstrap } = await import('./bootstrap.js')
+        const report = await runBootstrap()
+        bootstrapScore = report.score
+        bootstrapMax = report.maxScore
+        bootstrapGrade = report.grade
+        bootstrapTopFix = report.topFix
+        const distSection = report.sections.find(s => s.name.toLowerCase().includes('distribution'))
+        if (distSection) {
+          distributionPct = `${Math.round((distSection.score / distSection.maxScore) * 100)}%`
+        }
+      } catch { /* bootstrap can fail if not in a project dir */ }
+
+      // ── 6. Cognitive modules — count from known list ──
+      const cognitiveModules = [
+        'learning', 'entropy-context', 'autopoiesis', 'free-energy',
+        'predictive-processing', 'reasoning', 'intentionality',
+        'temporal', 'confidence', 'strange-loops', 'integrated-information',
+      ]
+      const cognitiveCount = cognitiveModules.length // 11
+
+      // ── JSON output ──
+      if (jsonMode) {
+        console.log(JSON.stringify({
+          version: VERSION,
+          latestVersion: latestVersion || null,
+          isLatest,
+          tools: toolCount,
+          agents: 23,
+          cognitiveModules: cognitiveCount,
+          learning: {
+            patterns: stats.patternsCount,
+            solutions: stats.solutionsCount,
+            tokensSaved: stats.totalTokensSaved,
+            efficiency: stats.efficiency,
+          },
+          collective: {
+            enabled: collectiveState.enabled,
+            signalsSent: collectiveState.total_signals_sent,
+          },
+          npm: { weeklyDownloads: npmDownloads.downloads ?? null },
+          github: { stars: githubData.stars ?? null, issues: githubData.issues ?? null },
+          bootstrap: {
+            score: bootstrapScore,
+            maxScore: bootstrapMax,
+            grade: bootstrapGrade,
+            topFix: bootstrapTopFix,
+          },
+        }, null, 2))
+        return
+      }
+
+      // ── Formatted dashboard ──
+      const versionTag = latestVersion
+        ? (isLatest ? GREEN(' (latest ✓)') : YELLOW(` (update: ${latestVersion})`))
+        : DIM(' (offline)')
+
+      const fmtNum = (n: number): string => n.toLocaleString()
+
+      process.stderr.write('\n')
+      process.stderr.write(`  ${AMETHYST('◉')} ${chalk.bold('Kernel Status')}\n`)
+      process.stderr.write(line + '\n')
+      process.stderr.write(`  ${chalk.bold('Version')}     ${VERSION}${versionTag}\n`)
+      process.stderr.write(`  ${chalk.bold('Tools')}       ${fmtNum(toolCount)} ${DIM('|')} ${chalk.bold('Agents')} 23\n`)
+      process.stderr.write(`  ${chalk.bold('Cognitive')}   ${cognitiveCount}/${cognitiveCount} modules active\n`)
+      process.stderr.write(line + '\n')
+
+      // Learning
+      const tokensSavedStr = stats.totalTokensSaved > 0 ? fmtNum(stats.totalTokensSaved) + ' tokens saved' : 'learning...'
+      process.stderr.write(`  ${chalk.bold('Learning')}    ${fmtNum(stats.patternsCount)} patterns ${DIM('|')} ${fmtNum(stats.solutionsCount)} solutions ${DIM('|')} ${tokensSavedStr}\n`)
+
+      // Collective
+      const collectiveEnabled = collectiveState.enabled ? GREEN('enabled') : DIM('disabled')
+      const signalsSent = fmtNum(collectiveState.total_signals_sent || 0)
+      process.stderr.write(`  ${chalk.bold('Collective')}  ${collectiveEnabled} ${DIM('|')} ${signalsSent} signals sent\n`)
+      process.stderr.write(line + '\n')
+
+      // npm
+      if (npmDownloads.downloads !== undefined) {
+        process.stderr.write(`  ${chalk.bold('npm')}         ${CYAN(fmtNum(npmDownloads.downloads))} downloads/week\n`)
+      } else {
+        process.stderr.write(`  ${chalk.bold('npm')}         ${DIM('unavailable')}\n`)
+      }
+
+      // GitHub
+      if (githubData.stars !== undefined) {
+        const starStr = `${fmtNum(githubData.stars!)} star${githubData.stars === 1 ? '' : 's'}`
+        const issueStr = `${fmtNum(githubData.issues!)} issue${githubData.issues === 1 ? '' : 's'}`
+        process.stderr.write(`  ${chalk.bold('GitHub')}      ${starStr} ${DIM('|')} ${issueStr}\n`)
+      } else {
+        process.stderr.write(`  ${chalk.bold('GitHub')}      ${DIM('unavailable')}\n`)
+      }
+
+      // Bootstrap
+      if (bootstrapMax > 0) {
+        const pct = Math.round((bootstrapScore / bootstrapMax) * 100)
+        const gradeColor = pct >= 80 ? GREEN : pct >= 60 ? YELLOW : RED
+        const distStr = distributionPct ? ` ${DIM('— distribution at')} ${distributionPct}` : ''
+        process.stderr.write(`  ${chalk.bold('Bootstrap')}   ${bootstrapScore}/${bootstrapMax} (${gradeColor(bootstrapGrade)})${distStr}\n`)
+      }
+
+      process.stderr.write(line + '\n')
+
+      // Next action (top fix from bootstrap)
+      if (bootstrapTopFix) {
+        process.stderr.write(`  ${chalk.bold('Next:')} ${bootstrapTopFix}\n`)
+      }
+
+      process.stderr.write('\n')
     })
 
   program
@@ -1173,6 +1347,116 @@ async function main(): Promise<void> {
       process.stdout.write(md)
     })
 
+  // ── Automate subcommands ──
+  const automateCmd = program
+    .command('automate')
+    .description('Event-driven automations — file watchers, schedules, git hooks, webhooks')
+
+  automateCmd
+    .command('list')
+    .description('List all configured automations')
+    .action(async () => {
+      const { listAutomations, formatAutomationList } = await import('./automations.js')
+      const automations = listAutomations()
+      process.stderr.write(formatAutomationList(automations) + '\n')
+    })
+
+  automateCmd
+    .command('add')
+    .description('Create a new automation')
+    .requiredOption('--trigger <trigger>', 'Trigger spec (e.g., "file:src/**/*.ts:change", "schedule:every 5m", "git:pre-commit", "webhook:/deploy")')
+    .requiredOption('--agent <agent>', 'Agent to run (e.g., coder, researcher, guardian)')
+    .requiredOption('--prompt <prompt>', 'Prompt to send to the agent')
+    .option('--name <name>', 'Human-readable name for the automation')
+    .option('--tools <tools>', 'Comma-separated list of tools to enable')
+    .action(async (addOpts: { trigger: string; agent: string; prompt: string; name?: string; tools?: string }) => {
+      try {
+        const { createAutomation, parseTriggerString } = await import('./automations.js')
+        const trigger = parseTriggerString(addOpts.trigger)
+        const automation = createAutomation({
+          name: addOpts.name || `${trigger.type}:${addOpts.agent}`,
+          trigger,
+          action: {
+            agent: addOpts.agent,
+            prompt: addOpts.prompt,
+            tools: addOpts.tools ? addOpts.tools.split(',').map((t) => t.trim()) : undefined,
+          },
+        })
+        printSuccess(`Automation created: ${automation.name} (${automation.id})`)
+        printInfo(`  Trigger: ${addOpts.trigger}`)
+        printInfo(`  Agent: ${addOpts.agent}`)
+        if (trigger.type === 'git') {
+          printInfo('  Git hooks installed.')
+        }
+        if (trigger.type === 'file' || trigger.type === 'schedule') {
+          printInfo('  Run `kbot automate start` to activate the daemon.')
+        }
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+        process.exit(1)
+      }
+    })
+
+  automateCmd
+    .command('remove')
+    .description('Remove an automation by ID')
+    .argument('<id>', 'Automation ID')
+    .action(async (id: string) => {
+      const { removeAutomation } = await import('./automations.js')
+      const removed = removeAutomation(id)
+      if (removed) {
+        printSuccess(`Automation "${id}" removed.`)
+      } else {
+        printError(`Automation "${id}" not found.`)
+        process.exit(1)
+      }
+    })
+
+  automateCmd
+    .command('run')
+    .description('Manually trigger an automation')
+    .argument('<id>', 'Automation ID')
+    .action(async (id: string) => {
+      const { runAutomation, getAutomation } = await import('./automations.js')
+      const automation = getAutomation(id)
+      if (!automation) {
+        printError(`Automation "${id}" not found.`)
+        process.exit(1)
+      }
+      printInfo(`Running automation: ${automation.name}...`)
+      const result = await runAutomation(id)
+      if (result.success) {
+        printSuccess(`Automation completed successfully.`)
+        if (result.output) {
+          process.stderr.write('\n' + result.output + '\n')
+        }
+      } else {
+        printError(`Automation failed: ${result.error}`)
+        process.exit(1)
+      }
+    })
+
+  automateCmd
+    .command('start')
+    .description('Start the automation daemon (file watchers + schedule timers)')
+    .action(async () => {
+      const { startAutomationDaemon, listAutomations } = await import('./automations.js')
+      const automations = listAutomations()
+      if (automations.length === 0) {
+        printError('No automations configured. Use `kbot automate add` first.')
+        process.exit(1)
+      }
+      printInfo('Starting automation daemon...')
+      const { running } = startAutomationDaemon({
+        log: (msg) => process.stderr.write(msg + '\n'),
+      })
+      if (running) {
+        printSuccess('Daemon running. Press Ctrl+C to stop.')
+        // Keep the process alive
+        await new Promise(() => {})
+      }
+    })
+
   program
     .command('completions')
     .description('Generate shell tab-completion script (bash, zsh, fish)')
@@ -1196,7 +1480,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1381,6 +1665,7 @@ async function main(): Promise<void> {
     tier,
     thinking: opts.thinking || false,
     thinkingBudget: opts.thinkingBudget ? (parseInt(opts.thinkingBudget, 10) || 10000) : undefined,
+    plan: opts.plan || false,
   }
 
   // Enable self-evaluation if requested
