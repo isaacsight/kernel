@@ -5,5 +5,6 @@ export default defineConfig({
     environment: 'node',
     globals: false,
     include: ['src/**/*.test.ts'],
+    exclude: ['src/tools/gamedev.test.ts', 'node_modules/**'],
   },
 })

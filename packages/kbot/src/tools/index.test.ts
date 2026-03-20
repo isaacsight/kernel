@@ -42,7 +42,7 @@ describe('Tool Registry', () => {
 describe('Tier Gating', () => {
   it('free tier only gets free tools', () => {
     registerTool(makeTool({ name: 'tier_free', tier: 'free' }))
-    registerTool(makeTool({ name: 'tier_pro', tier: 'free' }))
+    registerTool(makeTool({ name: 'tier_pro', tier: 'pro' }))
     registerTool(makeTool({ name: 'tier_enterprise', tier: 'enterprise' }))
 
     const freeNames = getToolsForTier('free').map(t => t.name)
