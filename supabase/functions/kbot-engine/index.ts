@@ -409,48 +409,77 @@ async function handleCollective(req: Request): Promise<Response> {
   const body = await req.json().catch(() => ({}))
   const action = body.action || ''
 
+  // Rate limit: max 60 signals per minute per IP
+  const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (action === 'signal') {
+    const key = `collective:${clientIP}`
+    const { count } = await svc.from('routing_signals')
+      .select('id', { count: 'exact', head: true })
+      .eq('message_hash', key)
+      .gte('created_at', new Date(Date.now() - 60_000).toISOString())
+    if (count && count > 60) {
+      return new Response(JSON.stringify({ error: 'Rate limited' }), {
+        status: 429, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+  }
+
+  // Input validation
+  const sanitize = (s: unknown, max = 100) => String(s || '').slice(0, max)
+  const sanitizeNum = (n: unknown, min = 0, max = 1) => Math.min(Math.max(Number(n) || 0, min), max)
+
   switch (action) {
     case 'signal': {
-      // Ingest an anonymized routing signal
+      const hash = sanitize(body.message_hash, 64)
+      const category = sanitize(body.message_category, 50)
+      const agent = sanitize(body.routed_agent, 50)
+      const tools = Array.isArray(body.tool_sequence)
+        ? body.tool_sequence.map((t: unknown) => sanitize(t, 50)).slice(0, 20)
+        : []
+      const strategy = sanitize(body.strategy, 50)
+      const confidence = sanitizeNum(body.classifier_confidence)
+      const quality = sanitizeNum(body.response_quality)
+      const length = Math.min(Math.max(Number(body.message_length) || 0, 0), 100000)
+
+      // Insert via RPC (matches migration 086 parameter names)
       const { error } = await svc.rpc('log_routing_signal', {
-        p_message_hash: body.message_hash || '',
-        p_message_category: body.message_category || 'general',
-        p_message_length: body.message_length || 0,
-        p_routed_agent: body.routed_agent || 'kernel',
-        p_classifier_confidence: body.classifier_confidence || 0,
+        p_message_hash: hash,
+        p_message_category: category,
+        p_message_length: length,
+        p_routed_agent: agent,
+        p_classifier_confidence: confidence,
+        p_was_rerouted: Boolean(body.was_rerouted),
+        p_response_quality: quality,
+        p_tool_sequence: tools,
+        p_strategy: strategy,
         p_source: 'kbot',
       })
+
       if (error) {
         // Fallback: insert directly
         await svc.from('routing_signals').insert({
-          message_hash: body.message_hash || '',
-          message_category: body.message_category || 'general',
-          message_length: body.message_length || 0,
-          routed_agent: body.routed_agent || 'kernel',
-          classifier_confidence: body.classifier_confidence || 0,
-          was_rerouted: body.was_rerouted || false,
-          response_quality: body.response_quality || 0.5,
+          message_hash: hash,
+          message_category: category,
+          message_length: length,
+          routed_agent: agent,
+          classifier_confidence: confidence,
+          was_rerouted: Boolean(body.was_rerouted),
+          response_quality: quality,
+          tool_sequence: tools,
+          strategy,
           source: 'kbot',
-        })
+        }).catch(() => {})
       }
 
-      // Also store tool_sequence and strategy in collective_knowledge if useful
-      if (body.tool_sequence?.length > 0 && body.response_quality > 0.6) {
-        await svc.from('collective_knowledge').upsert({
-          type: 'tool_sequence',
-          pattern: {
-            category: body.message_category,
-            tools: body.tool_sequence,
-            agent: body.routed_agent,
-            strategy: body.strategy,
-          },
-          confidence: body.response_quality,
+      // Store tool_sequence in collective_knowledge if quality is high
+      if (tools.length > 0 && quality > 0.6) {
+        await svc.from('collective_knowledge').insert({
+          pattern_type: 'tool_sequence',
+          pattern: { category, tools, agent, strategy },
+          confidence: quality,
           sample_count: 1,
           last_updated: new Date().toISOString(),
-        }, {
-          onConflict: 'type',
-          ignoreDuplicates: true,
-        }).then(() => {}).catch(() => {})
+        }).catch(() => {})
       }
 
       return new Response(JSON.stringify({ ok: true }), {
@@ -459,7 +488,6 @@ async function handleCollective(req: Request): Promise<Response> {
     }
 
     case 'hints': {
-      // Return proven routing hints (patterns with high confidence + sample count)
       const { data } = await svc.rpc('get_routing_hints')
       return new Response(JSON.stringify({ hints: data || [] }), {
         status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
@@ -467,10 +495,9 @@ async function handleCollective(req: Request): Promise<Response> {
     }
 
     case 'patterns': {
-      // Return collective patterns (tool sequences, strategies)
       const { data } = await svc.from('collective_knowledge')
-        .select('type, pattern, confidence, sample_count, last_updated')
-        .gte('confidence', 0.7)
+        .select('pattern_type, pattern, confidence, sample_count, last_updated')
+        .gte('confidence', 0.6)
         .gte('sample_count', 10)
         .order('confidence', { ascending: false })
         .limit(100)

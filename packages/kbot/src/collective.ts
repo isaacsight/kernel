@@ -160,7 +160,7 @@ export async function sendSignal(signal: RoutingSignal): Promise<boolean> {
 
 const signalQueue: RoutingSignal[] = []
 let flushTimer: NodeJS.Timeout | null = null
-const FLUSH_INTERVAL_MS = 60_000 // Batch signals every 60 seconds
+const FLUSH_INTERVAL_MS = 10_000 // Batch signals every 10 seconds
 
 /** Queue a signal for batch sending */
 export function queueSignal(signal: RoutingSignal): void {
@@ -172,6 +172,10 @@ export function queueSignal(signal: RoutingSignal): void {
       flushSignals()
       flushTimer = null
     }, FLUSH_INTERVAL_MS)
+    // Don't keep the process alive just for signal flushing
+    if (flushTimer && typeof flushTimer === 'object' && 'unref' in flushTimer) {
+      (flushTimer as NodeJS.Timeout).unref()
+    }
   }
 }
 
@@ -180,9 +184,16 @@ export async function flushSignals(): Promise<void> {
   if (signalQueue.length === 0) return
   const batch = signalQueue.splice(0, signalQueue.length)
 
-  // Send each signal (could batch in a single request in the future)
-  await Promise.allSettled(batch.map(s => sendSignal(s)))
+  // Send each signal sequentially to avoid race condition on opt-in.json
+  for (const s of batch) {
+    await sendSignal(s).catch(() => {})
+  }
 }
+
+// Register exit handlers to flush signals
+process.on('beforeExit', () => { flushSignals().catch(() => {}) })
+process.on('SIGINT', () => { flushSignals().catch(() => {}); process.exit(0) })
+process.on('SIGTERM', () => { flushSignals().catch(() => {}); process.exit(0) })
 
 // ── Pulling Collective Intelligence ──
 
