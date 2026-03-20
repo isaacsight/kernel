@@ -8,6 +8,7 @@ import { registerAgentVisuals } from './ui.js'
 import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
 import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
+import { REPLIT_AGENT } from './agents/replit.js'
 
 export interface MatrixAgent {
   id: string
@@ -400,6 +401,12 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     icon: DEVELOPER_BUILTIN.icon,
     color: DEVELOPER_BUILTIN.color,
     prompt: DEVELOPER_BUILTIN.prompt,
+  },
+  replit: {
+    name: REPLIT_AGENT.name,
+    icon: REPLIT_AGENT.icon,
+    color: REPLIT_AGENT.color,
+    prompt: REPLIT_AGENT.prompt,
   },
 }
 
