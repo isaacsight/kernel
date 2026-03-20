@@ -38,11 +38,12 @@ import {
   learnFromExchange, learnFact, updateProjectMemory,
   shouldAutoTrain, selfTrain,
 } from './learning.js'
-import { getMemoryPrompt, addTurn, getPreviousMessages } from './memory.js'
+import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory } from './memory.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
 import { saveEmbeddingCache } from './embeddings.js'
+import { distillSkill, retrieveSkills, formatSkillsForPrompt as formatSkillLibraryForPrompt, flushSkillLibrary } from './skill-library.js'
 import { createSpinner, printToolCall, printToolResult, printResponse, printError, printInfo, printWarn } from './ui.js'
 import type { UIAdapter } from './ui-adapter.js'
 import { TerminalUIAdapter } from './ui-adapter.js'
@@ -69,6 +70,8 @@ import { anticipateNext, recordUserAction, getIdentity, updateIdentity, addMiles
 import { estimateConfidence, updateSkillProfile, recordActualEffort } from './confidence.js'
 import { StrangeLoopDetector } from './strange-loops.js'
 import { IntegrationMeter } from './integrated-information.js'
+import { generateReflections, getRelevantReflections, formatReflectionsForPrompt, isUserRejection } from './reflection.js'
+import { getSynthesisContext } from './memory-synthesis.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -890,6 +893,19 @@ export async function runAgent(
     }
   }
 
+  // Step 1.4: MAR user rejection detection — if user says "no/wrong/that's not right",
+  // generate reflections from the previous response
+  if (isUserRejection(message)) {
+    try {
+      const history = getHistory()
+      const lastAssistant = [...history].reverse().find(t => t.role === 'assistant')
+      const lastUser = [...history].reverse().find(t => t.role === 'user')
+      if (lastAssistant && lastUser) {
+        generateReflections(lastUser.content, lastAssistant.content, 'user_rejection')
+      }
+    } catch { /* reflection on rejection is non-critical */ }
+  }
+
   // Step 1.5: Complexity detection — auto-plan complex tasks
   if (isComplexTask(message) && !message.startsWith('/plan') && !options.skipPlanner) {
     ui.onInfo('Complex task detected. Using autonomous planner...')
@@ -978,6 +994,18 @@ export async function runAgent(
   const skillsSnippet = loadSkills(process.cwd())
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
+  const synthesisSnippet = getSynthesisContext(8) // Three-tier memory: reflection layer insights
+
+  // Skill library: retrieve proven tool-chain skills for similar tasks
+  let skillLibrarySnippet = ''
+  if (!casual) {
+    try {
+      const matchedSkills = await retrieveSkills(message, 3)
+      if (matchedSkills.length > 0) {
+        skillLibrarySnippet = formatSkillLibraryForPrompt(matchedSkills)
+      }
+    } catch { /* skill retrieval is non-critical */ }
+  }
 
   const PERSONA = `You are kbot — an AI that lives in the user's terminal. You are also an autonomous Agentic Software Engineer. Your goal is to solve complex engineering problems by interacting directly with the user's system, codebase, and toolchain.
 
@@ -1071,13 +1099,22 @@ Always quote file paths that contain spaces. Never reference internal system nam
     } catch { /* graph memory is non-critical */ }
   }
 
+  // Inject MAR reflections — lessons from past failures for similar tasks
+  let reflectionSnippet = ''
+  if (!casual) {
+    try {
+      const relevantReflections = getRelevantReflections(message, 3)
+      reflectionSnippet = formatReflectionsForPrompt(relevantReflections)
+    } catch { /* reflections are non-critical */ }
+  }
+
   // Prompt caching — split into stable (cacheable) and dynamic sections
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet || undefined,
-    memorySnippet: memorySnippet || undefined,
-    learningContext: learningContext || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
+    memorySnippet: (memorySnippet || '') + reflectionSnippet || undefined,
+    learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '')) || undefined,
   })
   const provider = byokProvider || 'anthropic'
   let { text: systemContext } = buildCacheablePrompt(promptSections, provider)
@@ -1090,6 +1127,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   let toolCallCount = 0
   let lastResponse: any = null
   const toolSequenceLog: string[] = []
+  const toolSequenceWithArgs: Array<{ name: string; args: Record<string, unknown> }> = []
   const originalMessage = message
   let cumulativeCostUsd = 0
   let selfEvalScore: number | undefined
@@ -1369,6 +1407,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
                 originalMessage, content, classification.errorType, classification.evidence,
               )
               ui.onWarning(`Error correction: ${classification.errorType} (${(classification.confidence * 100).toFixed(0)}%) — retrying with fix...`)
+              // MAR: generate multi-agent reflections on the error
+              try { generateReflections(originalMessage, content, 'error_correction') } catch { /* non-critical */ }
               loopMessages.push({ role: 'assistant', content })
               loopMessages.push({ role: 'user', content: correctionPrompt })
               continue
@@ -1383,6 +1423,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
             selfEvalScore = evalResult.overall
             if (evalResult.shouldRetry && evalResult.feedback) {
               ui.onWarning(`Self-eval: low score (${evalResult.overall.toFixed(2)}), retrying...`)
+              // MAR: generate multi-agent reflections on the low-quality response
+              try { generateReflections(originalMessage, content, 'low_score') } catch { /* non-critical */ }
               loopMessages.push({ role: 'assistant', content })
               loopMessages.push({ role: 'user', content: `Your previous response scored low on quality. Feedback: ${evalResult.feedback}\n\nPlease try again with a better response.` })
               continue
@@ -1447,6 +1489,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
             // Deep learning — extract knowledge, detect corrections, update project memory
             learnFromExchange(originalMessage, content, toolSequenceLog, process.cwd())
 
+            // Skill library — distill successful multi-tool chains into reusable skills
+            if (toolSequenceWithArgs.length >= 2) {
+              try {
+                distillSkill(originalMessage, toolSequenceWithArgs, true)
+              } catch { /* skill distillation is non-critical */ }
+            }
+
             // Graph memory — extract entities and relationships (async, non-blocking)
             import('./graph-memory.js').then(({ extractEntities, autoConnect, save: saveGraph }) => {
               try {
@@ -1463,8 +1512,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
               })
             }
 
-            // Save embedding cache
+            // Save embedding cache + skill library
             try { saveEmbeddingCache() } catch { /* non-critical */ }
+            try { flushSkillLibrary() } catch { /* non-critical */ }
 
             // MAP-Elites quality-diversity archive update
             import('./quality-diversity.js').then(({ initArchive, learnFromOutcome }) => {
@@ -1566,6 +1616,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
       for (const call of toolCalls) {
         toolCallCount++
         toolSequenceLog.push(call.name)
+        toolSequenceWithArgs.push({ name: call.name, args: call.arguments || {} })
         ui.onToolCallStart(call.name, call.arguments || {})
 
         // Execute through the middleware pipeline

@@ -29,6 +29,7 @@ import {
   registerBuiltinAgents, formatBuiltinAgentList, formatBuiltinAgentDetail,
 } from './matrix.js'
 import { getExtendedStats, incrementSessions, learnFact, selfTrain, shouldAutoTrain, getTrainingLog, flushPendingWrites } from './learning.js'
+import { maybeSynthesize, getSynthesisStats } from './memory-synthesis.js'
 import {
   banner,
   bannerCompact,
@@ -1458,6 +1459,33 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('spec <description>')
+    .description('Generate a formal specification with requirements + acceptance criteria before coding')
+    .option('--implement', 'Generate spec then pass to coder agent for implementation')
+    .option('--agent <name>', 'Override the default architect agent', 'architect')
+    .option('--output <path>', 'Custom output path for the spec file')
+    .action(async (description: string, specOpts: { implement?: boolean; agent?: string; output?: string }) => {
+      const { generateSpec } = await import('./spec.js')
+      const parentOpts = program.opts()
+      try {
+        await generateSpec(description, {
+          agent: specOpts.agent,
+          output: specOpts.output,
+          implement: specOpts.implement,
+          agentOpts: {
+            model: parentOpts.model,
+            stream: parentOpts.stream ?? true,
+            thinking: parentOpts.thinking || false,
+            thinkingBudget: parentOpts.thinkingBudget ? (parseInt(parentOpts.thinkingBudget, 10) || 10000) : undefined,
+          },
+        })
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+        process.exit(1)
+      }
+    })
+
+  program
     .command('completions')
     .description('Generate shell tab-completion script (bash, zsh, fish)')
     .argument('<shell>', 'Shell type: bash, zsh, or fish')
@@ -1480,7 +1508,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
@@ -1642,7 +1670,7 @@ async function main(): Promise<void> {
 
   // Determine if we're in one-shot or REPL mode
   const isOneShot = promptArgs.length > 0 &&
-    !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor'].includes(promptArgs[0])
+    !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor', 'spec'].includes(promptArgs[0])
   const isStdinOnly = !process.stdin.isTTY && promptArgs.length === 0
 
   if (isOneShot || isStdinOnly || opts.pipe) {
@@ -1782,7 +1810,7 @@ async function main(): Promise<void> {
   }
 
   // One-shot mode: kbot "fix the bug" — always stream for speed
-  if (promptArgs.length > 0 && !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor'].includes(promptArgs[0])) {
+  if (promptArgs.length > 0 && !['byok', 'auth', 'ide', 'ollama', 'kbot-local', 'pull', 'doctor', 'spec'].includes(promptArgs[0])) {
     if (!opts.pipe) console.log(bannerCompact())
     let message = promptArgs.join(' ')
     // If stdin was piped in, prepend it as context
@@ -2165,13 +2193,25 @@ async function startRepl(
 
   const sessionCount = incrementSessions()
 
+  // Three-tier memory: run synthesis on every 10th session (or first time with enough data)
+  if (sessionCount % 10 === 0 || sessionCount === 1) {
+    try {
+      const insightCount = maybeSynthesize()
+      if (insightCount > 0) {
+        printInfo(`Memory synthesis: ${insightCount} insights generated`)
+      }
+    } catch { /* synthesis is non-critical */ }
+  }
+
   // Return-visit greeting — show kbot's growth
   if (sessionCount > 1) {
     const stats = getExtendedStats()
+    const synthStats = getSynthesisStats()
     const parts: string[] = []
     if (stats.patternsCount > 0) parts.push(`${stats.patternsCount} patterns learned`)
     if (stats.solutionsCount > 0) parts.push(`${stats.solutionsCount} solutions cached`)
     if (stats.knowledgeCount > 0) parts.push(`${stats.knowledgeCount} facts remembered`)
+    if (synthStats.insightCount > 0) parts.push(`${synthStats.insightCount} insights synthesized`)
     if (parts.length > 0) {
       printInfo(`Session ${stats.sessions} · ${parts.join(' · ')}`)
     }
