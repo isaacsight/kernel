@@ -1,0 +1,28 @@
+{
+  "name": "@kernel.chat/kbot-openclaw",
+  "version": "1.0.0",
+  "description": "kbot cognitive engine plugin for OpenClaw — adds learning, collective intelligence, and 290 AI tools",
+  "type": "module",
+  "main": "./plugin.ts",
+  "openclaw": {
+    "extensions": ["./plugin.ts"]
+  },
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "kbot",
+    "ai-agent",
+    "cognitive-engine",
+    "learning",
+    "collective-intelligence"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/kbot/src/integrations/openclaw"
+  },
+  "peerDependencies": {
+    "@kernel.chat/kbot": ">=3.12.0"
+  }
+}
