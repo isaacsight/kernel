@@ -313,7 +313,7 @@ export function printHelp(): void {
     '',
     `  ${chalk.bold('Community')}`,
     `  ${DIM('─'.repeat(50))}`,
-    `  ${CYAN('https://discord.gg/pYJn3hBqnz')}  ${DIM('Discord')}`,
+    `  ${CYAN('https://discord.gg/kdMauM9abG')}  ${DIM('Discord')}`,
     `  ${CYAN('https://kernel.chat')}             ${DIM('Web companion')}`,
     `  ${CYAN('https://github.com/isaacsight/kernel')} ${DIM('GitHub')}`,
     '',

@@ -104,7 +104,7 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 1. **Vote on issues** — thumbs-up (👍) issues you care about
 2. **Open a discussion** — propose features in GitHub Discussions
 3. **Contribute** — PRs that align with the roadmap get priority review
-4. **Join Discord** — https://discord.gg/pYJn3hBqnz
+4. **Join Discord** — https://discord.gg/kdMauM9abG
 
 ## Principles
 

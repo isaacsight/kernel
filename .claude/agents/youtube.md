@@ -216,7 +216,7 @@ After rendering, generate ready-to-post copy for:
 ## Links (always include)
 - npm: https://www.npmjs.com/package/@kernel.chat/kbot
 - GitHub: https://github.com/isaacsight/kernel
-- Discord: https://discord.gg/pYJn3hBqnz
+- Discord: https://discord.gg/kdMauM9abG
 - Web: https://kernel.chat
 
 ## Style Guide

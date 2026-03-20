@@ -181,4 +181,4 @@ The report will tell you exactly what to fix, in priority order, with a single t
 
 ---
 
-*kbot is open source. MIT licensed. [GitHub](https://github.com/isaacsight/kernel) | [npm](https://npmjs.com/package/@kernel.chat/kbot) | [Discord](https://discord.gg/pYJn3hBqnz)*
+*kbot is open source. MIT licensed. [GitHub](https://github.com/isaacsight/kernel) | [npm](https://npmjs.com/package/@kernel.chat/kbot) | [Discord](https://discord.gg/kdMauM9abG)*

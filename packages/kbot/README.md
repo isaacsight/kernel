@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/dw/@kernel.chat/kbot?color=6B5B95" alt="npm downloads"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
   <a href="https://github.com/isaacsight/kernel"><img src="https://img.shields.io/github/stars/isaacsight/kernel?color=6B5B95&style=flat" alt="GitHub stars"></a>
-  <a href="https://discord.gg/pYJn3hBqnz"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://discord.gg/kdMauM9abG"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
 </p>
 
 ```bash
@@ -379,7 +379,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and 
 - [kernel.chat](https://kernel.chat) — Web companion
 - [npm](https://www.npmjs.com/package/@kernel.chat/kbot)
 - [Docker Hub](https://hub.docker.com/r/isaacsight/kbot)
-- [Discord](https://discord.gg/pYJn3hBqnz)
+- [Discord](https://discord.gg/kdMauM9abG)
 - [Issues](https://github.com/isaacsight/kernel/issues)
 
 ## License

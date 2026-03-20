@@ -58,7 +58,7 @@ export function LandingPage() {
           <a href="https://www.npmjs.com/package/@kernel.chat/kbot" className="ka-landing-cta ka-landing-cta--secondary" target="_blank" rel="noopener">
             npm
           </a>
-          <a href="https://discord.gg/pYJn3hBqnz" className="ka-landing-cta ka-landing-cta--secondary" target="_blank" rel="noopener">
+          <a href="https://discord.gg/kdMauM9abG" className="ka-landing-cta ka-landing-cta--secondary" target="_blank" rel="noopener">
             Discord
           </a>
         </div>
@@ -192,7 +192,7 @@ export function LandingPage() {
         <div className="ka-landing-footer-links">
           <a href="https://github.com/isaacsight/kernel" target="_blank" rel="noopener">GitHub</a>
           <a href="https://www.npmjs.com/package/@kernel.chat/kbot" target="_blank" rel="noopener">npm</a>
-          <a href="https://discord.gg/pYJn3hBqnz" target="_blank" rel="noopener">Discord</a>
+          <a href="https://discord.gg/kdMauM9abG" target="_blank" rel="noopener">Discord</a>
           <a href="#/privacy">Privacy</a>
           <a href="#/terms">Terms</a>
         </div>

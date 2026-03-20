@@ -330,7 +330,7 @@ Not terminal-only.
 GitHub: github.com/isaacsight/kernel
 npm: npmjs.com/package/@kernel.chat/kbot
 Web: kernel.chat
-Discord: discord.gg/pYJn3hBqnz
+Discord: discord.gg/kdMauM9abG
 
 Try it: npx @kernel.chat/kbot
 ```

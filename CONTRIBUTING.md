@@ -152,5 +152,5 @@ By contributing, you agree that your contributions will be licensed under the [M
 ## Questions?
 
 - Open a [GitHub Discussion](https://github.com/isaacsight/kernel/discussions)
-- Join our [Discord](https://discord.gg/pYJn3hBqnz)
+- Join our [Discord](https://discord.gg/kdMauM9abG)
 - Email: hello@kernel.chat

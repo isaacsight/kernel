@@ -13,7 +13,7 @@
   <a href="https://www.npmjs.com/package/@kernel.chat/kbot"><img src="https://img.shields.io/npm/dw/@kernel.chat/kbot?color=6B5B95" alt="npm downloads"></a>
   <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
   <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
-  <a href="https://discord.gg/pYJn3hBqnz"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://discord.gg/kdMauM9abG"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
 </p>
 
 ```bash
@@ -257,7 +257,7 @@ kbot has a web companion at [kernel.chat](https://kernel.chat) — same agents, 
 
 - **Web**: [kernel.chat](https://kernel.chat)
 - **npm**: [@kernel.chat/kbot](https://www.npmjs.com/package/@kernel.chat/kbot)
-- **Discord**: [discord.gg/pYJn3hBqnz](https://discord.gg/pYJn3hBqnz)
+- **Discord**: [discord.gg/kdMauM9abG](https://discord.gg/kdMauM9abG)
 - **GitHub**: [isaacsight/kernel](https://github.com/isaacsight/kernel)
 - **Issues**: [Report a bug](https://github.com/isaacsight/kernel/issues)
 

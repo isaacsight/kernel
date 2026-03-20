@@ -33,7 +33,7 @@ npm i -g @kernel.chat/kbot && kbot "hello"
 
 npm: https://npmjs.com/package/@kernel.chat/kbot
 GitHub: https://github.com/isaacsight/kernel
-Discord: https://discord.gg/pYJn3hBqnz
+Discord: https://discord.gg/kdMauM9abG
 ```
 
 ### Best time to post
@@ -351,7 +351,7 @@ No API key needed. Works offline. Gets smarter over time.
 
 - GitHub: https://github.com/isaacsight/kernel
 - npm: https://npmjs.com/package/@kernel.chat/kbot
-- Discord: https://discord.gg/pYJn3hBqnz
+- Discord: https://discord.gg/kdMauM9abG
 ```
 
 ---

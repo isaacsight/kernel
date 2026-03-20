@@ -43,4 +43,4 @@ npm install -g @kernel.chat/kbot
 - [kbot on npm](https://www.npmjs.com/package/@kernel.chat/kbot)
 - [GitHub](https://github.com/isaacsight/kernel)
 - [kernel.chat](https://kernel.chat)
-- [Discord](https://discord.gg/pYJn3hBqnz)
+- [Discord](https://discord.gg/kdMauM9abG)

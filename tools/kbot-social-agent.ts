@@ -214,7 +214,7 @@ const THREAD_TEMPLATES = [
       `kbot has 22 specialist agents that auto-route based on your prompt:\n\n"fix the auth bug" → Coder\n"research JWT tokens" → Researcher\n"review this PR" → Guardian\n"draft a changelog" → Writer\n\nBayesian skill ratings. Smarter with every interaction.`,
       `20 providers, zero lock-in:\n\nFree: Embedded, Ollama, LM Studio, Jan\nCheap: DeepSeek ($0.27/M), Cerebras ($0.60/M)\nPremium: Claude, GPT, Gemini\n\nSwitch with one command.`,
       `The weird part: kbot was built by itself.\n\nClaude Code writes kbot's source while using kbot as an MCP tool in the same session.\n\nThe tools from session N become the tools used in session N+1.\n\n60 versions later: ${tools} tools, learning engine, SDK.`,
-      `Zero config. Just install and go.\n\nnpm i -g @kernel.chat/kbot\nkbot "hello"\n\nNo API key. No setup. Embedded AI. $0.\n\nGitHub: github.com/isaacsight/kernel\nDiscord: discord.gg/pYJn3hBqnz`,
+      `Zero config. Just install and go.\n\nnpm i -g @kernel.chat/kbot\nkbot "hello"\n\nNo API key. No setup. Embedded AI. $0.\n\nGitHub: github.com/isaacsight/kernel\nDiscord: discord.gg/kdMauM9abG`,
     ]
   },
 ]
