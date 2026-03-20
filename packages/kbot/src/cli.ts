@@ -632,6 +632,49 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('collective')
+    .description('Collective learning — join 4,000+ kbot users sharing anonymized intelligence')
+    .option('--enable', 'Opt in to collective learning')
+    .option('--disable', 'Opt out of collective learning')
+    .option('--status', 'Show collective learning status')
+    .option('--pull', 'Pull latest collective patterns')
+    .action(async (opts: { enable?: boolean; disable?: boolean; status?: boolean; pull?: boolean }) => {
+      const { setOptIn, getCollectiveStats, pullCollectiveHints, pullCollectivePatterns, getOptInState } = await import('./collective.js')
+
+      if (opts.enable) {
+        setOptIn(true)
+        printSuccess('Collective learning enabled!')
+        printInfo('kbot will share anonymized routing signals (never code, never files, never identity).')
+        printInfo('Run `kbot collective --status` to see stats.')
+        return
+      }
+
+      if (opts.disable) {
+        setOptIn(false)
+        printSuccess('Collective learning disabled. Your data stays local.')
+        return
+      }
+
+      if (opts.pull) {
+        printInfo('Pulling collective intelligence...')
+        const [hints, patterns] = await Promise.all([pullCollectiveHints(), pullCollectivePatterns()])
+        printSuccess(`Pulled ${hints.length} routing hints and ${patterns.length} patterns from the collective.`)
+        return
+      }
+
+      // Default: show status
+      console.log()
+      console.log(getCollectiveStats())
+      console.log()
+      const state = getOptInState()
+      if (!state.enabled) {
+        printInfo('Enable with: kbot collective --enable')
+        printInfo('What gets shared: task categories, agent choices, tool names, success rates.')
+        printInfo('What never leaves your machine: code, files, paths, keys, identity.')
+      }
+    })
+
+  program
     .command('autotelic')
     .description('Self-purpose + self-agency: sense the highest-impact fix and decide what to do')
     .option('--json', 'Output as JSON')

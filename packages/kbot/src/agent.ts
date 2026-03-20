@@ -60,6 +60,7 @@ import { LoopDetector } from './godel-limits.js'
 import { CheckpointManager, newSessionId, type Checkpoint } from './checkpoint.js'
 import { TelemetryEmitter } from './telemetry.js'
 import { loadSkills } from './skills-loader.js'
+import { queueSignal, getCollectiveRecommendation, isCollectiveEnabled } from './collective.js'
 import { ActiveInferenceEngine } from './free-energy.js'
 import { PredictiveEngine } from './predictive-processing.js'
 import { selectStrategy, recordStrategyOutcome } from './reasoning.js'
@@ -902,11 +903,18 @@ export async function runAgent(
     }
   }
 
-  // Step 1.7: Learned routing — try cached route before defaulting
+  // Step 1.7: Learned routing — try cached route, then collective wisdom
   if (!options.agent) {
     const route = learnedRoute(message)
     if (route && route.confidence >= 0.6) {
       options.agent = route.agent
+    } else if (isCollectiveEnabled()) {
+      // Fall back to collective intelligence — what worked for all kbot users?
+      const taskType = classifyTask(message)
+      const collective = getCollectiveRecommendation(taskType)
+      if (collective && collective.confidence >= 0.7) {
+        options.agent = collective.agent
+      }
     }
   }
 
@@ -1389,6 +1397,22 @@ Always quote file paths that contain spaces. Never reference internal system nam
             // Record routing decision for learned router
             const routeMethod = learnedRoute(originalMessage)?.method || 'llm'
             recordRoute(originalMessage, lastResponse.agent || 'kernel', routeMethod, true)
+
+            // Collective learning — send anonymized signal to the hive mind
+            try {
+              queueSignal({
+                message_hash: originalMessage,
+                message_category: classifyTask(originalMessage),
+                message_length: originalMessage.length,
+                routed_agent: lastResponse.agent || 'kernel',
+                classifier_confidence: 0.8,
+                was_rerouted: false,
+                response_quality: lastResponse.usage?.evalScore ?? 0.7,
+                tool_sequence: toolSequenceLog,
+                strategy: selectStrategy(originalMessage, '').chosenStrategy,
+                source: 'kbot',
+              })
+            } catch { /* collective is non-critical */ }
 
             // Deep learning — extract knowledge, detect corrections, update project memory
             learnFromExchange(originalMessage, content, toolSequenceLog, process.cwd())

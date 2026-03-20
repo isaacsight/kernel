@@ -392,6 +392,101 @@ function handleModels(): Response {
   })
 }
 
+// ── Collective Learning (no auth required — anonymized signals) ──
+
+async function handleCollective(req: Request): Promise<Response> {
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'POST only' }), {
+      status: 405, headers: { 'Content-Type': 'application/json', ...CORS },
+    })
+  }
+
+  const svc = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  )
+
+  const body = await req.json().catch(() => ({}))
+  const action = body.action || ''
+
+  switch (action) {
+    case 'signal': {
+      // Ingest an anonymized routing signal
+      const { error } = await svc.rpc('log_routing_signal', {
+        p_message_hash: body.message_hash || '',
+        p_message_category: body.message_category || 'general',
+        p_message_length: body.message_length || 0,
+        p_routed_agent: body.routed_agent || 'kernel',
+        p_classifier_confidence: body.classifier_confidence || 0,
+        p_source: 'kbot',
+      })
+      if (error) {
+        // Fallback: insert directly
+        await svc.from('routing_signals').insert({
+          message_hash: body.message_hash || '',
+          message_category: body.message_category || 'general',
+          message_length: body.message_length || 0,
+          routed_agent: body.routed_agent || 'kernel',
+          classifier_confidence: body.classifier_confidence || 0,
+          was_rerouted: body.was_rerouted || false,
+          response_quality: body.response_quality || 0.5,
+          source: 'kbot',
+        })
+      }
+
+      // Also store tool_sequence and strategy in collective_knowledge if useful
+      if (body.tool_sequence?.length > 0 && body.response_quality > 0.6) {
+        await svc.from('collective_knowledge').upsert({
+          type: 'tool_sequence',
+          pattern: {
+            category: body.message_category,
+            tools: body.tool_sequence,
+            agent: body.routed_agent,
+            strategy: body.strategy,
+          },
+          confidence: body.response_quality,
+          sample_count: 1,
+          last_updated: new Date().toISOString(),
+        }, {
+          onConflict: 'type',
+          ignoreDuplicates: true,
+        }).then(() => {}).catch(() => {})
+      }
+
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    case 'hints': {
+      // Return proven routing hints (patterns with high confidence + sample count)
+      const { data } = await svc.rpc('get_routing_hints')
+      return new Response(JSON.stringify({ hints: data || [] }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    case 'patterns': {
+      // Return collective patterns (tool sequences, strategies)
+      const { data } = await svc.from('collective_knowledge')
+        .select('type, pattern, confidence, sample_count, last_updated')
+        .gte('confidence', 0.7)
+        .gte('sample_count', 10)
+        .order('confidence', { ascending: false })
+        .limit(100)
+      return new Response(JSON.stringify({ patterns: data || [] }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    default:
+      return new Response(JSON.stringify({
+        error: 'Unknown action',
+        actions: ['signal', 'hints', 'patterns'],
+      }), { status: 400, headers: { 'Content-Type': 'application/json', ...CORS } })
+  }
+}
+
 // ── Main handler ──
 
 serve(async (req: Request) => {
@@ -403,6 +498,7 @@ serve(async (req: Request) => {
   // Public endpoints (no auth)
   if (path === 'health') return handleHealth()
   if (path === 'models') return handleModels()
+  if (path === 'collective') return await handleCollective(req)
 
   // Authenticated endpoints
   const authResult = await authenticate(req)
