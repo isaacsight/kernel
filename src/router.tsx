@@ -62,11 +62,6 @@ export const router = createHashRouter([
           <LandingPage />
         </Suspense>
       ) },
-      { path: 'chat', element: withErrorBoundary(
-        <Suspense fallback={<KernelLoading />}>
-          <EnginePage />
-        </Suspense>
-      ) },
       { path: 'admin', element: withErrorBoundary(<LazyAdmin />) },
       { path: 'briefing/:id', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
