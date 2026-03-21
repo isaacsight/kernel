@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T02:30:00.465Z",
+  "timestamp": "2026-03-21T03:02:38.945Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Update CODE_OF_CONDUCT.md",
+      "url": "https://github.com/SamaelxLunafreya/admin/pull/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Expose rtk as a library crate",
       "url": "https://github.com/rtk-ai/rtk/issues/758",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "Update README.md",
       "url": "https://github.com/SamaelxLunafreya/puppeteer/pull/1",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Integrate Postman Collections and Environments from File System",
-      "url": "https://github.com/SamaelxLunafreya/generative-ai/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Feature: Hybrid Agent Interface (Native Tool + CLI)",
+      "url": "https://github.com/KHAEntertainment/todo-task-manager/issues/3",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Improve agent setup documentation",
+      "url": "https://github.com/ZimoLiao/scholaraio/pull/30",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "OpenClaw/NemoClaw feature integration (9 features + security hardening)",
       "url": "https://github.com/JaredCluff/nexibot/pull/3",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🦞 Bản tin hàng ngày hệ sinh thái OpenClaw 2026-03-21",
-      "url": "https://github.com/compasify/agents-radar/issues/66",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat: Add autonomous grok-swarm-agent for iterative file modifications",
-      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/16",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
