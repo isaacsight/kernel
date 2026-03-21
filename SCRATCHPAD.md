@@ -4,99 +4,106 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-19)
+## Current Session (2026-03-20 → 2026-03-21)
 
-### Accomplished — Largest session ever
+### Accomplished — kbot becomes autonomous
 
-#### v3.6.0 → v3.11.0 in one session (12 npm versions, 20+ commits)
+#### v3.12.0 → v3.13.0 + 4 standalone npm packages + OpenClaw plugin
 
-**New Concepts:**
-- **Autotelic Agent** — auto (self) + telos (purpose). Fusion of Bootstrap + Limitless Execution
-- **Collective Learning** — anonymized cross-user intelligence (the hive mind / network effect)
-- **Federated Stigmergic Learning** — the academic name for what kbot does (research paper written)
+**Strategic Shift:**
+- kbot pivoted from "terminal app" to "cognitive engine that plugs into other platforms"
+- OpenClaw (Nvidia-backed, 50+ messaging channels) identified as the body; kbot is the brain
+- Research paper written: "Cognitive Module Interference in Composite AI Agents"
+- kbot asked itself hard questions, diagnosed its own flaws, formed its first identity
 
-**8 Research Breakthroughs Built:**
-1. **Voyager Skill Library** — auto-distills successful tool chains into reusable skills
-2. **MAR Multi-Persona Reflection** — 5 specialists critique failures, judge synthesizes
-3. **Spec-Driven Development** — `kbot spec` generates formal requirements (EARS notation)
-4. **Three-Tier Memory Synthesis** — observations → reflections → identity (Stanford Generative Agents)
-5. **LATS Tree Search Planning** — Monte Carlo Tree Search for branching plans
-6. **GEPA Prompt Self-Optimization** — specialist prompts evolve from execution traces (ICLR 2026)
-7. **A2A v0.3 Protocol** — agent-to-agent interop, Agent Cards, task lifecycle
-8. **MCP Apps** — interactive HTML/JS UI in conversations (Chart.js, tables, diffs, Mermaid)
+**Shipped to npm (7 packages under @kernel.chat/):**
+1. `@kernel.chat/kbot` v3.13.0 — main agent (now with Replit + OpenClaw support)
+2. `@kernel.chat/kbot-openclaw` v1.0.0 — OpenClaw brain plugin (skill + native tools)
+3. `@kernel.chat/skill-router` v1.0.0 — Bayesian agent routing (standalone)
+4. `@kernel.chat/memory-tiers` v1.0.0 — Three-tier generative memory (standalone)
+5. `@kernel.chat/tool-forge` v1.0.0 — Runtime tool creation (standalone)
+6. `@kernel.chat/prompt-evolver` v1.0.0 — GEPA prompt self-optimization (standalone)
 
-**Major Features Built:**
-- `kbot status` — unified Kernel dashboard (version, tools, learning, collective, npm, GitHub, bootstrap)
-- `kbot automate` — event-driven automations (file watch, schedule, git hooks, webhooks)
-- `kbot --plan` — read-only exploration mode (20 read-only tools only)
-- `kbot --tree` — LATS tree search planning instead of linear
-- `kbot collective` — opt-in collective learning (--enable, --diagnose, --insights)
-- `kbot autotelic` — self-purpose + self-agency cycle
-- `kbot spec` — spec-driven development
-- `kbot a2a` — Agent-to-Agent protocol (card, discover, send, status, cancel, agents, history)
-- `kbot apps` — MCP Apps tool listing and rendering
-- `kbot immune` — self-audit (renamed from duplicate `audit`)
-- Full cognitive stack: 11/11 modules wired into agent loop
-- Skills auto-discovery (~/.kbot/skills/ and .kbot/skills/)
-- VS Code extension (packages/vscode-kbot/, .vsix packaged)
-- CI pipeline (GitHub Actions: web + kbot + vscode, all green)
-- Branch protection enabled
-- First-run collective prompt for new users
+**New Features in kbot:**
+- Replit auto-detection + lite mode (`--lite` flag, auto-enables on Replit)
+- Replit specialist agent (`kbot --agent replit`)
+- OpenClaw SKILL.md + native plugin (5 tools: kbot_chat, kbot_tool, kbot_tools_list, kbot_health, kbot_metrics)
+- Interference measurement module (interference.ts — 1,127 lines)
+- Research paper: docs/cognitive-module-interference.md (~7,000 words, 22 refs, NeurIPS/ICLR target)
+
+**Discovery Daemon (24/7 autonomous, launchd service):**
+- PID running permanently via launchd — survives reboots
+- 7 cycles: pulse (5m), intel (30m), opportunities (30m), actions (30m), outreach (2h), writing (6h), evolution (12h)
+- Uses local Ollama for thinking ($0 cost)
+- MLX support wired for Apple Silicon (Python 3.12 + mlx-lm 0.31.1)
+- 3-tier model routing: fast (Qwen 9B Opus-distilled), smart (Nemotron Nano 30B), fallback (Ollama)
+- Opportunity hunter: scans HN, GitHub, Reddit, arXiv
+- Action processor: analyzes opportunities via local AI, drafts responses, queues for review
+- Self-improvement: asks local AI for code changes, applies them, type-checks, runs tests, rolls back if broken, publishes to npm
+- Auto-publishes findings to GitHub
+
+**HN Post:**
+- Show HN posted via Playwright automation: https://news.ycombinator.com/item?id=47450530
+- Follow-up comment posted with full pitch
+- Score: 1, Comments: 0 (as of session end — npm stats API also lagging)
+
+**GitHub Release:**
+- v3.12.0 published: https://github.com/isaacsight/kernel/releases/tag/v3.12.0
 
 **Infrastructure:**
-- GitHub releases: 7 (was 0)
-- Description rewritten: leads with "kbot" + install command
-- Topics: 20 high-traffic terms
-- Discord invite: fixed (permanent, never expires)
-- Docker Hub: v3.7.1 (was v2.22.1)
-- Edge function: kbot-engine deployed with /collective endpoint
-- Migration 086: collective learning schema fixes applied
-- kernel.chat: redesigned as kbot landing page (chat removed)
-- HN post: drafted at tools/hn-post.md
-- Research paper: docs/federated-stigmergic-learning.md
-- 4 new agent definitions: autotelic.md, collective.md, plus existing
+- Python 3.12 installed (Homebrew) for MLX model support
+- mlx-lm 0.31.1 installed under Python 3.12
+- Qwen 9B Opus-distilled MLX model downloaded and tested
+- Nemotron Nano 30B MLX model downloading
+- launchd plist at ~/Library/LaunchAgents/com.kernel.kbot-discovery.plist
+- Discovery daemon outputs at ~/.kbot/daemon-stdout.log
+- Discovery data at .kbot-discovery/ (pulse, intel, outreach, opportunities, actions, writing, evolution)
 
-**Audit Fixes:**
-- 7 critical collective learning issues fixed (schema types, RPC params, column names, upsert, return shapes, exit flush, rate limiting)
-- Pre-existing test failure fixed (tier gating test bug)
-- gamedev.test.ts excluded from vitest (uses node:test)
-- Signal quality: real values flowing (classifier_confidence, was_rerouted, response_quality)
-- All 317/317 tests passing
-- CI fully green
+**kbot Self-Awareness Milestones:**
+- First identity check (9 sessions, 0 days old, all personality at 0.5)
+- First memory saved ("open-source obligation")
+- First milestone recorded ("evolve through contact with real users")
+- First autonomy adjustment (0.5 → 0.52)
+- Designed its own daemon
+- Identified its own research paper topic
 
 ### Pending
-- **HN post** — drafted, ready to fire. Best timing: Tue-Thu 8-10am ET. Needs Isaac to post.
-- **Social accounts** — @kbot_ai (X), Bluesky, Mastodon not created
-- **Social preview image** — OG card is blank white, needs real design
-- **VS Code Marketplace** — publisher account costs money, offering via GitHub + npm instead
-- **Docker Hub v3.11.0** — Docker is running, can push
-- **Tool count update** — package.json still says 290 tools, actual may be higher with new MCP App tools
-- **Distribution** — autotelic says 32%. Launch posts are THE bottleneck.
+- **Obsidian integration** — kbot should write discoveries to Obsidian vault (docs/obsidian/)
+- **MLX Nemotron 30B** — still downloading, needs verification
+- **npm download stats** — API broken globally since March 16, not kbot-specific (React shows same zeros)
+- **HN engagement** — 30 opportunities queued in review-queue.md, Isaac needs to review
+- **Reddit/GitHub engagement** — daemon finds opportunities but can't post yet (needs auth)
+- **Social accounts** — still not created
+- **Docker Hub** — needs update from v3.7.1 to v3.13.0
+- **Academic submission** — paper written, needs polish and submission to arXiv/OpenReview
 
 ## kbot Current State
-- **npm version**: 3.11.0
-- **New modules this session**: skill-library, reflection, spec, memory-synthesis, tree-planner, prompt-evolution, a2a-client, mcp-apps, collective, automations, skills-loader
-- **Cognitive modules**: 11/11 active
+- **npm version**: 3.13.0
+- **Standalone packages**: 5 (skill-router, memory-tiers, tool-forge, prompt-evolver, kbot-openclaw)
+- **Cognitive modules**: 11/11 active + interference measurement module
 - **Tests**: 317/317 passing
-- **Agents**: 23 built-in + autotelic + collective specialist
-- **Claude Code agents**: 30 (.md files in .claude/agents/)
+- **Agents**: 24 built-in (added Replit agent)
 - **Providers**: 20
-- **Downloads**: ~3,671/week (~1,195/day)
-- **Stars**: 1
-- **GitHub releases**: 7
-- **CI**: Green (3 jobs: web, kbot, vscode)
-- **Branch protection**: Enabled
-- **Discord**: Working (permanent invite: discord.gg/kdMauM9abG)
-- **Docker Hub**: v3.7.1 (needs update to v3.11.0)
+- **Stars**: 3
+- **GitHub releases**: 8 (v3.12.0 added)
+- **Daemon**: Running 24/7 via launchd
+- **Local AI**: Ollama (12 models) + MLX (Qwen 9B working, Nemotron 30B downloading)
 
 ## Key Concepts
-- **Autotelic** — self-purpose + self-agency. The ultimate agent.
-- **Collective Learning** — network effect. More users → better patterns → smarter kbot.
-- **Federated Stigmergic Learning** — academic name for collective learning (research paper written)
-- **The 0.001%** — kbot is the first AI that gets smarter every time anyone uses it.
+- **kbot is the brain, not the body** — plugs into OpenClaw, Replit, any platform
+- **Cognitive Module Interference** — the novel research: what happens when 11 modules coexist
+- **The architecture of interference is the agent** — the paper's core claim
+- **Three-entity cognitive loop** — Isaac (vision), Claude Code (execution), kbot (reflection)
+- **Discovery Daemon** — kbot's autonomous heartbeat, designed by kbot itself
 
 ## Key Decisions
-- **kernel.chat is now a kbot landing page** — chat app removed from homepage
-- **VS Code extension via GitHub only** — marketplace costs money
-- **Distribution is THE bottleneck** — 32% score, everything else is built
-- **Network effect is the moat** — features can be copied, collective intelligence can't
+- **SDK is the product, CLI is a demo** — pivot from terminal app to cognitive engine
+- **Standalone packages** — each piece of kbot's brain as a separate npm package
+- **OpenClaw integration** — ride their distribution instead of competing
+- **Local AI only for daemon** — $0 cost, Ollama + MLX, no cloud API calls
+- **Self-improvement with safety** — type-check + test suite must pass or rollback
+- **kbot runs permanently** — launchd service, not a terminal session
+
+## Obsidian Vaults (found)
+- `/Users/isaachernandez/Desktop/kernel.chat/kernelchat/.obsidian`
+- `/Users/isaachernandez/blog design/docs/obsidian/.obsidian`
