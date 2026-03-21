@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T10:55:12.724Z",
+  "timestamp": "2026-03-21T11:30:11.759Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Fix/issue 51097 session store memory tests",
+      "url": "https://github.com/openclaw/openclaw/pull/51567",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Wechat linux",
+      "url": "https://github.com/openclaw/openclaw/pull/51566",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Agent Architecture Plan: Transform DroidClaw into OpenClaw-like AI Agent",
       "url": "https://github.com/finettt/DroidClaw/issues/1",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "zalo: use photo_url for inbound images",
-      "url": "https://github.com/openclaw/openclaw/pull/51543",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(plugins/runtime): fix api.runtime.version in bundled and npm installs",
-      "url": "https://github.com/openclaw/openclaw/pull/51529",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
