@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T05:17:47.167Z",
+  "timestamp": "2026-03-21T05:52:46.781Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Ask HN: Is vibe coding a new mandatory job requirement?",
+      "url": "https://news.ycombinator.com/item?id=47464333",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "I'm OK being left behind, thanks",
       "url": "https://news.ycombinator.com/item?id=47461684",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,13 +87,6 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "I'm OK being left behind, thanks",
-      "url": "https://news.ycombinator.com/item?id=47455235",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
       "title": "Update CODE_OF_CONDUCT.md",
       "url": "https://github.com/SamaelxLunafreya/admin/pull/1",
@@ -95,15 +95,15 @@
     },
     {
       "source": "github-issue",
-      "title": "Expose rtk as a library crate",
-      "url": "https://github.com/rtk-ai/rtk/issues/758",
+      "title": "[Auto-QA] Potential console error patterns detected",
+      "url": "https://github.com/kubestellar/console/issues/3063",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Update README.md",
-      "url": "https://github.com/SamaelxLunafreya/puppeteer/pull/1",
+      "title": "Expose rtk as a library crate",
+      "url": "https://github.com/rtk-ai/rtk/issues/758",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Fix(gui): Prevent UI freeze in Peak Picking task during ring extraction",
+      "url": "https://github.com/silx-kit/pyFAI/pull/2824",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "feat(clawbot): snapshot + rollback + approval button for write operations",
       "url": "https://github.com/JK42JJ/insighta/issues/304",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "fix/feat: address open issues #14, #12, #11, #16",
       "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/17",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Feature: Hybrid Agent Interface (Native Tool + CLI)",
-      "url": "https://github.com/KHAEntertainment/todo-task-manager/issues/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -200,15 +200,15 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Experimental AI agent breaks out of test environment, Mines crypto without permission",
-      "url": "https://reddit.com/r/artificial/comments/1ryo8er/experimental_ai_agent_breaks_out_of_test/",
+      "title": "Meta is having trouble with rogue AI agents",
+      "url": "https://reddit.com/r/artificial/comments/1ryg65v/meta_is_having_trouble_with_rogue_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "Meta is having trouble with rogue AI agents",
-      "url": "https://reddit.com/r/artificial/comments/1ryg65v/meta_is_having_trouble_with_rogue_ai_agents/",
+      "title": "We built a free digest that translates AI security research papers into plain language -- first issue covers cross-stack attacks on compound AI systems and LLMs automating their own adversarial attacks",
+      "url": "https://reddit.com/r/artificial/comments/1rycyzn/we_built_a_free_digest_that_translates_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
