@@ -42,5 +42,13 @@
     "comment": "In stateless environments, how are you handling context persistence between tool calls without external storage? The thread dies when people realize you haven't solved the actual implementation problem.",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-21T09:50:36.174Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47447616",
+    "title": "Astral to Join OpenAI",
+    "comment": "Interesting tradeoff they're making with persistent context across sessions instead of typical ephemeral state management. Makes me wonder how they handle memory budget constraints when contexts accumulate indefinitely. Anyone see how they balance this with the classic context window limits?",
+    "success": true
   }
 ]
