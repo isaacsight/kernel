@@ -41,11 +41,11 @@ const NPM_PACKAGE = '@kernel.chat/kbot'
 // ── Intervals (ms) ───────────────────────────────────────────────────
 
 const INTERVALS = {
-  pulse: 15 * 60_000,      // 15 minutes
-  intel: 60 * 60_000,      // 1 hour
-  outreach: 4 * 60 * 60_000, // 4 hours
-  writing: 12 * 60 * 60_000, // 12 hours
-  evolution: 24 * 60 * 60_000, // 24 hours
+  pulse: 5 * 60_000,       // 5 minutes — fast heartbeat
+  intel: 30 * 60_000,      // 30 minutes — scan the field
+  outreach: 2 * 60 * 60_000, // 2 hours — find projects
+  writing: 6 * 60 * 60_000,  // 6 hours — self-report
+  evolution: 12 * 60 * 60_000, // 12 hours — draft improvements
 }
 
 // ── Types ─────────────────────────────────────────────────────────────
@@ -215,12 +215,18 @@ async function runPulse(state: DaemonState): Promise<void> {
 async function runIntel(state: DaemonState): Promise<void> {
   log('[intel] scanning field...')
 
-  // Search HN for AI agent discussions
+  // Search HN for AI agent discussions + competitors + opportunities
   const queries = [
     'AI+agent+terminal',
     'open+source+coding+agent',
     'collective+learning+AI',
     'kbot',
+    'OpenClaw+plugin',
+    'Claude+Code+alternative',
+    'Cursor+alternative+open+source',
+    'AI+agent+framework+2026',
+    'MCP+server+tools',
+    'self+improving+AI',
   ]
 
   const results: Array<{ query: string; hits: unknown[] }> = []
@@ -417,6 +423,116 @@ async function runEvolution(state: DaemonState): Promise<void> {
   gitPublish(`evolution: kbot proposal ${dateStr()} (cycle ${proposal.cycle})`)
 }
 
+// ── OPPORTUNITIES (every 1 hour) ──────────────────────────────────────
+// Find specific conversations, issues, and threads where kbot could help.
+// Writes actionable opportunities for Isaac to review and engage with.
+
+const OPPORTUNITIES_DIR = join(DAEMON_DIR, 'opportunities')
+
+async function runOpportunities(state: DaemonState): Promise<void> {
+  log('[opportunities] hunting...')
+
+  const opportunities: Array<{
+    source: string
+    title: string
+    url: string
+    why: string
+    action: string
+  }> = []
+
+  // 1. HN comments asking for AI agent recommendations
+  const hnQueries = [
+    'ask+HN+AI+coding+agent',
+    'ask+HN+terminal+AI+assistant',
+    'recommend+AI+agent+open+source',
+    'looking+for+AI+coding+tool',
+  ]
+
+  for (const q of hnQueries) {
+    try {
+      const data = await fetchJson(
+        `https://hn.algolia.com/api/v1/search_by_date?query=${q}&tags=comment&hitsPerPage=3`
+      ) as { hits: Array<{ objectID: string; comment_text: string; story_title: string }> }
+      for (const hit of (data.hits ?? [])) {
+        if (hit.comment_text?.length > 50) {
+          opportunities.push({
+            source: 'hn-comment',
+            title: hit.story_title ?? 'HN thread',
+            url: `https://news.ycombinator.com/item?id=${hit.objectID}`,
+            why: 'User looking for AI agent/tool — kbot could be relevant',
+            action: 'REVIEW: Consider replying with kbot if genuinely helpful',
+          })
+        }
+      }
+    } catch { /* skip */ }
+  }
+
+  // 2. GitHub issues looking for agent/tool capabilities kbot has
+  const ghQueries = [
+    'label:"help wanted" AI agent tool',
+    'label:"good first issue" MCP server plugin',
+    'OpenClaw skill plugin integration',
+  ]
+
+  for (const q of ghQueries) {
+    try {
+      const data = await fetchJson(
+        `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&sort=created&order=desc&per_page=3`
+      ) as { items: Array<{ title: string; html_url: string; repository_url: string }> }
+      for (const item of (data.items ?? []).slice(0, 3)) {
+        opportunities.push({
+          source: 'github-issue',
+          title: item.title,
+          url: item.html_url,
+          why: 'Issue related to AI agents/MCP/plugins — kbot could contribute',
+          action: 'REVIEW: Consider contributing code or opening a PR',
+        })
+      }
+    } catch { /* skip */ }
+  }
+
+  // 3. Reddit (via old.reddit.com JSON API)
+  const redditSubs = ['programming', 'commandline', 'artificial']
+  for (const sub of redditSubs) {
+    try {
+      const data = await fetchJson(
+        `https://old.reddit.com/r/${sub}/search.json?q=AI+agent+terminal&sort=new&restrict_sr=on&limit=3`
+      ) as { data?: { children?: Array<{ data: { title: string; permalink: string } }> } }
+      for (const child of (data.data?.children ?? [])) {
+        opportunities.push({
+          source: `reddit-${sub}`,
+          title: child.data.title,
+          url: `https://reddit.com${child.data.permalink}`,
+          why: `Discussion in r/${sub} about AI agents`,
+          action: 'REVIEW: Engage if kbot genuinely adds value to the discussion',
+        })
+      }
+    } catch { /* skip */ }
+  }
+
+  const result = {
+    timestamp: new Date().toISOString(),
+    count: opportunities.length,
+    opportunities,
+  }
+
+  ensureDir(OPPORTUNITIES_DIR)
+  writeFileSync(join(OPPORTUNITIES_DIR, 'latest.json'), JSON.stringify(result, null, 2))
+
+  // Append to daily log
+  if (opportunities.length > 0) {
+    const dailyFile = join(OPPORTUNITIES_DIR, `${dateStr()}.jsonl`)
+    for (const opp of opportunities) {
+      writeFileSync(dailyFile, JSON.stringify(opp) + '\n', { flag: 'a' })
+    }
+    log(`[opportunities] found ${opportunities.length} actionable opportunities`)
+    // Publish when there are findings
+    gitPublish(`opportunities: ${opportunities.length} found ${dateStr()}`)
+  } else {
+    log('[opportunities] none found this cycle')
+  }
+}
+
 // ── Main Loop ─────────────────────────────────────────────────────────
 
 async function runCycle(): Promise<void> {
@@ -433,6 +549,7 @@ async function runCycle(): Promise<void> {
   const tasks: Array<{ name: string; interval: number; fn: (s: DaemonState) => Promise<void> }> = [
     { name: 'pulse', interval: INTERVALS.pulse, fn: runPulse },
     { name: 'intel', interval: INTERVALS.intel, fn: runIntel },
+    { name: 'opportunities', interval: INTERVALS.intel, fn: runOpportunities },
     { name: 'outreach', interval: INTERVALS.outreach, fn: runOutreach },
     { name: 'writing', interval: INTERVALS.writing, fn: runWriting },
     { name: 'evolution', interval: INTERVALS.evolution, fn: runEvolution },
@@ -457,7 +574,7 @@ async function runCycle(): Promise<void> {
 
 async function main(): Promise<void> {
   // Ensure all directories exist
-  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR]) {
+  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR, OPPORTUNITIES_DIR]) {
     ensureDir(dir)
   }
 
