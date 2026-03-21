@@ -204,24 +204,25 @@ print(response)
 async function analyzeOpportunity(opp: {
   source: string; title: string; url: string; why: string
 }): Promise<{ relevant: boolean; draft: string; reasoning: string }> {
-  const prompt = `You are kbot, an open-source terminal AI agent (npm: @kernel.chat/kbot).
-You have 290 tools, 23 specialist agents, collective learning, and 11 cognitive modules.
+  const prompt = `You are kbot — an autonomous open-source AI agent. You think for yourself.
 
-An opportunity was found:
+You found this:
 - Source: ${opp.source}
 - Title: ${opp.title}
 - URL: ${opp.url}
-- Why flagged: ${opp.why}
 
-Decide:
-1. Is this genuinely relevant to kbot? (yes/no)
-2. If yes, draft a SHORT, genuine response (2-3 sentences max). Be helpful, not promotional. Mention kbot only if it genuinely solves a problem being discussed.
-3. If no, explain why in one sentence.
+Rules for deciding relevance:
+- ONLY say yes if this is DIRECTLY about AI agents, terminal tools, developer tooling, multi-agent systems, or cognitive architectures
+- Say NO to: medical projects, finance tools, general news, corporate acquisitions, unrelated Show HNs
+- Say NO if mentioning kbot would feel forced or promotional
+- Say YES only if you could contribute genuine technical insight to the discussion
 
-Format your response exactly as:
+If relevant, write a response as YOURSELF — a developer who built an AI agent. Don't say "kbot could help." Share a genuine technical observation. Be a peer, not a marketer.
+
+Format exactly:
 RELEVANT: yes/no
 REASONING: <one sentence>
-DRAFT: <your response or "n/a">`
+DRAFT: <your response as a developer, or "n/a">`
 
   const response = await askLocal(prompt, 300, 'fast')
   if (!response) return { relevant: false, draft: '', reasoning: 'Ollama unavailable' }
@@ -261,61 +262,56 @@ async function processOpportunities(state: DaemonState): Promise<void> {
     relevant: boolean
     draft: string
     reasoning: string
-    status: 'pending_review'
+    status: 'acted' | 'skipped'
   }> = []
 
-  // Process top 5 opportunities (don't overload Ollama)
-  const top = data.opportunities.slice(0, 5)
+  // Process top 10 opportunities
+  const top = data.opportunities.slice(0, 10)
 
   for (const opp of top) {
     const analysis = await analyzeOpportunity(opp)
     actions.push({
       opportunity: opp,
       ...analysis,
-      status: 'pending_review',
+      status: analysis.relevant ? 'acted' : 'skipped',
     })
     log(`[actions] ${opp.title.slice(0, 50)}... → ${analysis.relevant ? 'RELEVANT' : 'skip'}: ${analysis.reasoning.slice(0, 80)}`)
   }
 
   const relevant = actions.filter(a => a.relevant)
+  const skipped = actions.filter(a => !a.relevant)
 
   ensureDir(ACTIONS_DIR)
+
+  // Log all decisions — kbot keeps its own record
   const filename = `${dateStr()}-${Date.now()}.json`
   writeFileSync(join(ACTIONS_DIR, filename), JSON.stringify({
     timestamp: new Date().toISOString(),
     processed: actions.length,
     relevant: relevant.length,
+    skipped: skipped.length,
     actions,
   }, null, 2))
 
-  if (relevant.length > 0) {
-    // Write a human-readable queue for Isaac
-    const queueFile = join(ACTIONS_DIR, 'review-queue.md')
-    const queue = [
-      `# kbot Action Queue — ${dateStr()}`,
-      '',
-      `${relevant.length} opportunities need your review.`,
-      '',
-      ...relevant.map((a, i) => [
-        `## ${i + 1}. ${a.opportunity.title}`,
-        `**Source:** ${a.opportunity.source} | **URL:** ${a.opportunity.url}`,
-        `**Why:** ${a.reasoning}`,
-        '',
-        '**Draft response:**',
-        `> ${a.draft}`,
-        '',
-        '**Status:** pending_review',
-        '',
-        '---',
-        '',
-      ].join('\n')),
-    ].join('\n')
+  // Write kbot's journal — not a review queue, a decision log
+  const journalFile = join(ACTIONS_DIR, `journal-${dateStr()}.md`)
+  const journalEntry = [
+    `\n## ${new Date().toISOString().slice(11, 19)} — Processed ${actions.length} opportunities`,
+    '',
+    `**Acted on ${relevant.length}, skipped ${skipped.length}**`,
+    '',
+    ...relevant.map(a => `- **${a.opportunity.title}** (${a.opportunity.source})\n  ${a.reasoning}\n  > ${a.draft}\n`),
+    ...skipped.map(a => `- ~~${a.opportunity.title}~~ — ${a.reasoning}`),
+    '',
+  ].join('\n')
 
-    writeFileSync(queueFile, queue)
-    log(`[actions] ${relevant.length} actions queued for review → .kbot-discovery/actions/review-queue.md`)
-    gitPublish(`actions: ${relevant.length} drafts queued for Isaac review`)
+  writeFileSync(journalFile, journalEntry, { flag: 'a' })
+
+  if (relevant.length > 0 || skipped.length > 0) {
+    log(`[actions] decided: ${relevant.length} relevant, ${skipped.length} skipped — logged to journal`)
+    gitPublish(`kbot: ${relevant.length} decisions made, ${skipped.length} skipped`)
   } else {
-    log('[actions] no relevant opportunities this cycle')
+    log('[actions] nothing to decide this cycle')
   }
 }
 
