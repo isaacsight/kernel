@@ -68,5 +68,14 @@
     "comment": "The site-level inference is an interesting cost optimization, but I'm curious how you handle cases where pages in the same domain need fundamentally different classification logic.",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-21T12:10:57.511Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "I'm curious about your approach to state synchronization in a local-first setup. Handling coherence across sessions without a central server seems tricky — did you go with local storage versioning or peer-to-peer propagation?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
