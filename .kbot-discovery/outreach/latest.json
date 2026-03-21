@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T02:10:25.321Z",
+  "timestamp": "2026-03-21T04:12:44.526Z",
   "projects": [
     {
       "name": "vm0-ai/vm0",
@@ -8,21 +8,21 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "tony1223/better-agent-terminal",
-      "url": "https://github.com/tony1223/better-agent-terminal",
-      "stars": 167,
-      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
+      "name": "n1byn1kt/apitap",
+      "url": "https://github.com/n1byn1kt/apitap",
+      "stars": 77,
+      "description": "The MCP server that turns any website into an API — no docs, no SDK, no browser. npm: @apitap/core"
     },
     {
-      "name": "olasunkanmi-SE/codebuddy",
-      "url": "https://github.com/olasunkanmi-SE/codebuddy",
-      "stars": 110,
-      "description": "An Autonomous AI Software Engineer"
+      "name": "cablate/mcp-google-map",
+      "url": "https://github.com/cablate/mcp-google-map",
+      "stars": 228,
+      "description": "A powerful Model Context Protocol (MCP) server providing comprehensive Google Maps API integration with LLM processing capabilities."
     },
     {
       "name": "open-compress/claw-compactor",
       "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 1738,
+      "stars": 1743,
       "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
@@ -38,6 +38,12 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
+      "name": "unblocklabs-ai/openclaw-skill-usage-audit",
+      "url": "https://github.com/unblocklabs-ai/openclaw-skill-usage-audit",
+      "stars": 1,
+      "description": "OpenClaw plugin: automatic skill & tool usage audit telemetry with SQLite, execution context capture, and self-improving skill lifecycle"
+    },
+    {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
@@ -48,12 +54,6 @@
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
-    },
-    {
-      "name": "jcriecken/OpenClawBrain",
-      "url": "https://github.com/jcriecken/OpenClawBrain",
-      "stars": 0,
-      "description": "Central knowledge base for the OpenClaw Jarvis AI agent instance — architecture, skills, personas, cron, plugins, and maintenance."
     }
   ],
   "latestPaper": {
