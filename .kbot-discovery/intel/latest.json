@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T14:00:11.091Z",
+  "timestamp": "2026-03-21T20:35:31.257Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -253,6 +253,59 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "pangon"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "I built an <em>open</em>-<em>source</em> repo template that brings structure to AI-assisted software development, starting from the pre-<em>coding</em> phases: objectives, user stories, requirements, architecture decisions.<p>It's designed around Claude Code but the ideas are tool-agnostic. I've been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I've been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI <em>coding</em> <em>agents</em> are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-<em>coding</em> phases, and organizes the output so that <em>agents</em> can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside <em>source</em> code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude/skills/SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they're loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the <em>agent</em> can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI <em>agents</em> don't mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I've found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven't found a good way to integrate Figma MCP for importing existing UI/UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/pangon/ai-sdlc-scaffold/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_pangon",
+            "story_47466513",
+            "show_hn"
+          ],
+          "author": "pangon",
+          "children": [
+            47468879,
+            47469570,
+            47470756,
+            47469015
+          ],
+          "created_at": "2026-03-21T12:43:09Z",
+          "created_at_i": 1774096989,
+          "num_comments": 5,
+          "objectID": "47466513",
+          "points": 17,
+          "story_id": 47466513,
+          "story_text": "I built an open-source repo template that brings structure to AI-assisted software development, starting from the pre-coding phases: objectives, user stories, requirements, architecture decisions.<p>It&#x27;s designed around Claude Code but the ideas are tool-agnostic. I&#x27;ve been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I&#x27;ve been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI coding agents are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-coding phases, and organizes the output so that agents can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside source code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude&#x2F;skills&#x2F;SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they&#x27;re loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the agent can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI agents don&#x27;t mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I&#x27;ve found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven&#x27;t found a good way to integrate Figma MCP for importing existing UI&#x2F;UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!",
+          "title": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development",
+          "updated_at": "2026-03-21T20:07:44Z",
+          "url": "https://github.com/pangon/ai-sdlc-scaffold/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "dongjiewu"
             },
             "story_text": {
@@ -333,117 +386,137 @@
           "children": [
             47462013,
             47463880,
+            47470866,
             47466438,
             47461304,
             47460841,
             47461565,
+            47467255,
             47461834,
-            47466591,
             47461578,
-            47465756,
             47461462,
+            47470145,
             47462787,
-            47461042,
-            47466572,
-            47465527,
             47464570,
-            47463429,
-            47462955,
-            47465518,
+            47461042,
+            47466591,
+            47468933,
             47462243,
-            47465717,
-            47465692,
+            47465518,
+            47469135,
+            47463429,
+            47465756,
+            47462955,
             47463249,
+            47465527,
+            47467413,
             47461326,
-            47466153,
-            47466389,
-            47462016,
+            47467709,
+            47467434,
             47461008,
-            47464579,
+            47462016,
+            47465717,
             47461613,
-            47465661,
+            47465692,
+            47464579,
             47463916,
-            47465643,
-            47466111,
+            47466572,
+            47462299,
+            47467602,
+            47465661,
             47463768,
             47461348,
+            47466111,
+            47466153,
             47461500,
-            47466620,
-            47463524,
-            47463007,
-            47461707,
-            47462299,
-            47463198,
-            47461334,
-            47463470,
-            47462400,
-            47461781,
-            47463743,
-            47461846,
-            47463753,
+            47465643,
             47461597,
-            47461314,
+            47463524,
+            47466389,
+            47463007,
+            47461334,
+            47463198,
+            47462400,
+            47463470,
+            47461781,
+            47461846,
             47465066,
-            47463814,
+            47463743,
+            47467769,
+            47461314,
+            47468464,
+            47463753,
+            47461707,
             47461212,
+            47467961,
             47461262,
             47462465,
+            47466620,
             47461679,
             47462066,
-            47464952,
             47461996,
-            47464766,
-            47463483,
             47461475,
             47461340,
-            47464077,
             47461422,
             47461944,
             47460967,
             47461499,
             47460886,
+            47464077,
+            47464952,
+            47464766,
             47464053,
+            47463814,
             47463497,
-            47463835,
+            47463483,
+            47468579,
             47461213,
+            47463835,
             47462900,
             47462424,
-            47466635,
-            47466428,
-            47466504,
+            47470142,
+            47469511,
+            47469181,
+            47467291,
             47465098,
             47463897,
             47462908,
+            47466428,
             47463399,
+            47466635,
             47461888,
-            47464604,
-            47465404,
+            47466504,
+            47468599,
+            47463979,
             47461947,
+            47464604,
             47462583,
             47462289,
-            47463979,
             47461217,
-            47464486,
+            47467299,
+            47465404,
             47462442,
-            47463509,
+            47464486,
             47462612,
+            47463509,
             47463915,
             47463913,
             47461418,
             47461851,
             47464715,
+            47470230,
             47461554,
             47462117,
             47462890
           ],
           "created_at": "2026-03-20T21:03:52Z",
           "created_at_i": 1774040632,
-          "num_comments": 449,
+          "num_comments": 570,
           "objectID": "47460525",
-          "points": 951,
+          "points": 1162,
           "story_id": 47460525,
           "title": "OpenCode – Open source AI coding agent",
-          "updated_at": "2026-03-21T13:59:57Z",
+          "updated_at": "2026-03-21T20:34:59Z",
           "url": "https://opencode.ai/"
         },
         {
@@ -538,58 +611,6 @@
           "title": "Show HN: I built an AI agent that does marketing for my apps",
           "updated_at": "2026-03-20T08:56:08Z",
           "url": "https://asaagent.xyz"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "bimamoglu"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "coding",
-                "agent"
-              ],
-              "value": "I kept running into the same issue with <em>coding</em> <em>agents</em>.<p>A test run fails, you get a huge wall of output, and most of the effort goes into figuring out what actually went wrong.<p>In many cases, the failures are not independent. It’s the same issue repeated across many tests.<p>In one case:\n128 failures → 2 root causes<p>I built a small CLI that groups repeated failures into shared root causes before passing the result to the model.<p>It’s mainly built for <em>coding</em> <em>agents</em>, but works on raw CLI output as well.<p>On my backend tests, this reduced debugging time and token usage quite a bit."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "open",
-                "source"
-              ],
-              "value": "Show HN: <em>Open</em>-<em>source</em> CLI that turns 128 test failures into 2 root causes"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/bilalimamoglu/sift"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_bimamoglu",
-            "story_47443693",
-            "show_hn"
-          ],
-          "author": "bimamoglu",
-          "children": [
-            47444207
-          ],
-          "created_at": "2026-03-19T18:24:18Z",
-          "created_at_i": 1773944658,
-          "num_comments": 1,
-          "objectID": "47443693",
-          "points": 2,
-          "story_id": 47443693,
-          "story_text": "I kept running into the same issue with coding agents.<p>A test run fails, you get a huge wall of output, and most of the effort goes into figuring out what actually went wrong.<p>In many cases, the failures are not independent. It’s the same issue repeated across many tests.<p>In one case:\n128 failures → 2 root causes<p>I built a small CLI that groups repeated failures into shared root causes before passing the result to the model.<p>It’s mainly built for coding agents, but works on raw CLI output as well.<p>On my backend tests, this reduced debugging time and token usage quite a bit.",
-          "title": "Show HN: Open-source CLI that turns 128 test failures into 2 root causes",
-          "updated_at": "2026-03-19T19:01:32Z",
-          "url": "https://github.com/bilalimamoglu/sift"
         }
       ]
     },
@@ -644,56 +665,6 @@
           "story_text": "From the abstract:\n&quot;We study how generative AI, and in particular agentic AI, shapes human learning incentives and the long-run evolution of society’s information ecosystem... Learning exhibits economies of scope: costly human effort jointly produces a private signal about their own context and a “thin” public signal that accumulates into the community’s stock of general knowledge, generating a learning externality.... The model highlights a sharp dynamic tension: while agentic AI can improve contemporaneous decision quality, it can also erode learning incentives that sustain long-run collective knowledge. &quot;",
           "title": "AI, Human Cognition and Knowledge Collapse – Daren Acemoglu",
           "updated_at": "2026-03-16T08:30:36Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "desmonding"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://moji.pcding.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_desmonding",
-            "story_47269562",
-            "show_hn"
-          ],
-          "author": "desmonding",
-          "children": [
-            47274551,
-            47271615
-          ],
-          "created_at": "2026-03-06T01:18:48Z",
-          "created_at_i": 1772759928,
-          "num_comments": 4,
-          "objectID": "47269562",
-          "points": 12,
-          "story_id": 47269562,
-          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
-          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
-          "updated_at": "2026-03-15T19:14:50Z",
-          "url": "https://moji.pcding.com"
         },
         {
           "_highlightResult": {
@@ -802,7 +773,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "atomicrobokid"
+              "value": "wingscape"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -812,36 +783,79 @@
                 "learning",
                 "ai"
               ],
-              "value": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren't looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a <em>collection</em> of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn't just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router/Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective <em>AI</em> grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the <em>AI</em> feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https://dayleet.com\" rel=\"nofollow\">https://dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https://dayleet.com/signup?invite=SHOWHN26\" rel=\"nofollow\">https://dayleet.com/signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the <em>AI</em> grading. Does it actually help you think through the problem, or does it feel like a gimmick? I'm building this to help myself get better at algorithmic thinking this year as <em>AI</em> can do more of the heavy lifting with code, so I'm interested in any feedback that makes it a better <em>learning</em> tool.<p>I'll be around to chat!"
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic"
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://dayleet.com/"
+              "value": "https://github.com/Wingscape/urban-pipeline"
             }
           },
           "_tags": [
             "story",
-            "author_atomicrobokid",
-            "story_46491112",
+            "author_wingscape",
+            "story_44550988",
             "show_hn"
           ],
-          "author": "atomicrobokid",
-          "created_at": "2026-01-04T19:08:37Z",
-          "created_at_i": 1767553717,
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
           "num_comments": 0,
-          "objectID": "46491112",
-          "points": 2,
-          "story_id": 46491112,
-          "story_text": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren&#x27;t looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a collection of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn&#x27;t just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router&#x2F;Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective AI grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the AI feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https:&#x2F;&#x2F;dayleet.com\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the AI grading. Does it actually help you think through the problem, or does it feel like a gimmick? I&#x27;m building this to help myself get better at algorithmic thinking this year as AI can do more of the heavy lifting with code, so I&#x27;m interested in any feedback that makes it a better learning tool.<p>I&#x27;ll be around to chat!",
-          "title": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic",
-          "updated_at": "2026-03-05T23:19:29Z",
-          "url": "https://dayleet.com/"
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
@@ -853,7 +867,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "multidude"
+              "value": "appstorelottery"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -861,87 +875,56 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "&quot;I divide my officers into four classes; the clever, the lazy, the industrious, and the stupid. Each officer possesses at least two of these qualities. \nThose who are clever and industrious are fitted for the highest staff appointments. Use can be made of those who are stupid and lazy. \nThe man who is clever and lazy however is for the very highest command; he has the temperament and nerves to deal with all situations. \nBut whoever is stupid and industrious is a menace and must be removed immediately!”\n― Kurt von Hammerstein-Equord<p>At first i was thrilled at the incredible speed of my new coding partner. Chatting with the agent felt like talknig to a real person, which blinded \nme a bit and made me forget many rational rules of software development. A few refactorings and many learnings later i find resonance in HN where people \ncritizize which at the beginning i was so enthusiastic about.<p>I have this incredibly industrious partner, blazingly fast but mindless and oblivious.\nAm i the guy Hammerstein told us to avoid, or is it my Agent(or worse, is it the combination of us <em>bot</em>h)?<p>Imagine an industrious and stupid one with an AI Agent."
+              "value": "Classic Video Poker (CVP) is a lightweight, browser-based retro video poker game which originally hit the front page of HN on Oct 4, 2023: <a href=\"https://news.ycombinator.com/item?id=37763098\">https://news.ycombinator.com/item?id=37763098</a><p>I've finally managed to release version 2. The delay was mostly due to fear of upsetting the user base with breaking changes.<p>Version 2 includes:<p>- Frictionless accounts: added registration so you can save progress but no personal info or email.<p>- Deep play stats: Track lifetime RTP (Return to player), max win/loss streaks, winning hand counts and more.<p>- Leaderboards &amp; Cash out: Cash out wins above the free play level, feeding into leaderboards for bank balance, RTP% (after 50 hands of play), and leaderboards that reward grinders<p>- Mobile stability - I've completely rewritten the communications routines <em>bot</em>h on server/client side. Mobile can be flaky, so the client handles silent auto-retries in the background without interrupting gameplay.<p>- Updated UI: New crisp graphics for playing cards<p>Obligatory tech stack info: serverside PHP / MySQL &amp; client is coded in Godot 3.5.<p>I'd love to hear your feedback &amp; I hope you all enjoy the new version!<p>Play it here: <a href=\"https://www.classicvideopoker.com/classicvideopokerv2/\" rel=\"nofollow\">https://www.classicvideopoker.com/classicvideopokerv2/</a>"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Are AI Agents like von Hammerstein's industrious and stupid?"
+              "value": "Show HN: Classic Video Poker v2"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.classicvideopoker.com/classicvideopokerv2/"
             }
           },
           "_tags": [
             "story",
-            "author_multidude",
-            "story_47466679",
-            "ask_hn"
+            "author_appstorelottery",
+            "story_47470194",
+            "show_hn"
           ],
-          "author": "multidude",
+          "author": "appstorelottery",
           "children": [
-            47466767,
-            47466727
+            47470934,
+            47470834,
+            47470294
           ],
-          "created_at": "2026-03-21T13:07:58Z",
-          "created_at_i": 1774098478,
-          "num_comments": 3,
-          "objectID": "47466679",
-          "points": 3,
-          "story_id": 47466679,
-          "story_text": "&quot;I divide my officers into four classes; the clever, the lazy, the industrious, and the stupid. Each officer possesses at least two of these qualities. \nThose who are clever and industrious are fitted for the highest staff appointments. Use can be made of those who are stupid and lazy. \nThe man who is clever and lazy however is for the very highest command; he has the temperament and nerves to deal with all situations. \nBut whoever is stupid and industrious is a menace and must be removed immediately!”\n― Kurt von Hammerstein-Equord<p>At first i was thrilled at the incredible speed of my new coding partner. Chatting with the agent felt like talknig to a real person, which blinded \nme a bit and made me forget many rational rules of software development. A few refactorings and many learnings later i find resonance in HN where people \ncritizize which at the beginning i was so enthusiastic about.<p>I have this incredibly industrious partner, blazingly fast but mindless and oblivious.\nAm i the guy Hammerstein told us to avoid, or is it my Agent(or worse, is it the combination of us both)?<p>Imagine an industrious and stupid one with an AI Agent.",
-          "title": "Are AI Agents like von Hammerstein's industrious and stupid?",
-          "updated_at": "2026-03-21T13:35:43Z"
+          "created_at": "2026-03-21T19:06:51Z",
+          "created_at_i": 1774120011,
+          "num_comments": 2,
+          "objectID": "47470194",
+          "points": 2,
+          "story_id": 47470194,
+          "story_text": "Classic Video Poker (CVP) is a lightweight, browser-based retro video poker game which originally hit the front page of HN on Oct 4, 2023: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37763098\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37763098</a><p>I&#x27;ve finally managed to release version 2. The delay was mostly due to fear of upsetting the user base with breaking changes.<p>Version 2 includes:<p>- Frictionless accounts: added registration so you can save progress but no personal info or email.<p>- Deep play stats: Track lifetime RTP (Return to player), max win&#x2F;loss streaks, winning hand counts and more.<p>- Leaderboards &amp; Cash out: Cash out wins above the free play level, feeding into leaderboards for bank balance, RTP% (after 50 hands of play), and leaderboards that reward grinders<p>- Mobile stability - I&#x27;ve completely rewritten the communications routines both on server&#x2F;client side. Mobile can be flaky, so the client handles silent auto-retries in the background without interrupting gameplay.<p>- Updated UI: New crisp graphics for playing cards<p>Obligatory tech stack info: serverside PHP &#x2F; MySQL &amp; client is coded in Godot 3.5.<p>I&#x27;d love to hear your feedback &amp; I hope you all enjoy the new version!<p>Play it here: <a href=\"https:&#x2F;&#x2F;www.classicvideopoker.com&#x2F;classicvideopokerv2&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.classicvideopoker.com&#x2F;classicvideopokerv2&#x2F;</a>",
+          "title": "Show HN: Classic Video Poker v2",
+          "updated_at": "2026-03-21T20:31:14Z",
+          "url": "https://www.classicvideopoker.com/classicvideopokerv2/"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "mrprincerawat"
+              "value": "dabinat"
             },
-            "story_text": {
+            "title": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Folks who have used <em>bot</em>h, what's your perspective??"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "OpenCode vs. Anthropic"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mrprincerawat",
-            "story_47466199",
-            "ask_hn"
-          ],
-          "author": "mrprincerawat",
-          "children": [
-            47466271
-          ],
-          "created_at": "2026-03-21T11:52:33Z",
-          "created_at_i": 1774093953,
-          "num_comments": 1,
-          "objectID": "47466199",
-          "points": 1,
-          "story_id": 47466199,
-          "story_text": "Folks who have used both, what&#x27;s your perspective??",
-          "title": "OpenCode vs. Anthropic",
-          "updated_at": "2026-03-21T12:04:27Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "menglingao"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Running an AI Agent on a 448KB RAM Microcontroller (Zephyr)"
+              "value": "Authorities disrupt largest IoT DDoS <em>bot</em>nets"
             },
             "url": {
               "fullyHighlighted": false,
@@ -949,34 +932,35 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://github.com/LingaoM/<em>zbot</em>"
+              "value": "https://www.justice.gov/usao-ak/pr/authorities-disrupt-worlds-largest-iot-ddos-<em>bot</em>nets-responsible-record-breaking-attacks"
             }
           },
           "_tags": [
             "story",
-            "author_menglingao",
-            "story_47465487"
+            "author_dabinat",
+            "story_47470076"
           ],
-          "author": "menglingao",
+          "author": "dabinat",
           "children": [
-            47465488
+            47470256,
+            47470150
           ],
-          "created_at": "2026-03-21T09:27:06Z",
-          "created_at_i": 1774085226,
-          "num_comments": 0,
-          "objectID": "47465487",
-          "points": 1,
-          "story_id": 47465487,
-          "title": "Running an AI Agent on a 448KB RAM Microcontroller (Zephyr)",
-          "updated_at": "2026-03-21T09:31:12Z",
-          "url": "https://github.com/LingaoM/zbot"
+          "created_at": "2026-03-21T18:55:38Z",
+          "created_at_i": 1774119338,
+          "num_comments": 2,
+          "objectID": "47470076",
+          "points": 3,
+          "story_id": 47470076,
+          "title": "Authorities disrupt largest IoT DDoS botnets",
+          "updated_at": "2026-03-21T19:13:44Z",
+          "url": "https://www.justice.gov/usao-ak/pr/authorities-disrupt-worlds-largest-iot-ddos-botnets-responsible-record-breaking-attacks"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "maiconburn"
+              "value": "Ricky_Tsou"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -984,73 +968,113 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Is anyone else seeing 503s from clarity.ms right now? I'm setting up Clarity on a new site using the official @microsoft/clarity npm package (v1.0.2). The request to https://www.clarity.ms/tag/{projectId} returns 503 consistently. Tested with different project IDs and <em>bot</em>h with and without the ?ref=npm param. Looks like a global outage. Anyone else experiencing this?"
+              "value": "When AI capabilities are bundled into apps, your model quality is tied to the app's business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don't use APIs. That's a developer-only path.<p>So the remaining option is to build within the LLM's native environment. But current LLM interfaces don't support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. <em>Bot</em>h sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I've built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https://youtu.be/HkmWpmfX46o<p>demos: https://github.com/Ricky610329/mup#demos<p>GitHub: https://github.com/Ricky610329/mup"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Microsoft Clarity returning 503 on all tag requests?"
+              "value": "Your model quality is tied to a business model"
             }
           },
           "_tags": [
             "story",
-            "author_maiconburn",
-            "story_47464843",
+            "author_Ricky_Tsou",
+            "story_47469932",
             "ask_hn"
           ],
-          "author": "maiconburn",
-          "created_at": "2026-03-21T07:34:04Z",
-          "created_at_i": 1774078444,
+          "author": "Ricky_Tsou",
+          "created_at": "2026-03-21T18:40:40Z",
+          "created_at_i": 1774118440,
           "num_comments": 0,
-          "objectID": "47464843",
+          "objectID": "47469932",
           "points": 1,
-          "story_id": 47464843,
-          "story_text": "Is anyone else seeing 503s from clarity.ms right now? I&#x27;m setting up Clarity on a new site using the official @microsoft&#x2F;clarity npm package (v1.0.2). The request to https:&#x2F;&#x2F;www.clarity.ms&#x2F;tag&#x2F;{projectId} returns 503 consistently. Tested with different project IDs and both with and without the ?ref=npm param. Looks like a global outage. Anyone else experiencing this?",
-          "title": "Microsoft Clarity returning 503 on all tag requests?",
-          "updated_at": "2026-03-21T07:36:12Z"
+          "story_id": 47469932,
+          "story_text": "When AI capabilities are bundled into apps, your model quality is tied to the app&#x27;s business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don&#x27;t use APIs. That&#x27;s a developer-only path.<p>So the remaining option is to build within the LLM&#x27;s native environment. But current LLM interfaces don&#x27;t support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I&#x27;ve built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https:&#x2F;&#x2F;youtu.be&#x2F;HkmWpmfX46o<p>demos: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup#demos<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup",
+          "title": "Your model quality is tied to a business model",
+          "updated_at": "2026-03-21T18:50:58Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "amanhij"
+              "value": "thunderbong"
             },
-            "story_text": {
+            "title": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I'm a Claude code and codex maxi, use <em>bot</em>h on the highest plan on my terminal and the web interface for heavy research and sometimes design. Now the whole moat of apps like cursor is multi agent orchestration if I understand correctly? And no cursor new coding model is not a moat there is no way on earth that they can compete with anthr/openai. For me I just launch claude code and tell it to run codex as one of it's sub-agents and split the work with sub-agents like half opus's and half 5.4's. What are y'all thoughts? I think any wrapper and orchestrator layer is going to 0"
+              "value": "US, Germany, Canada disrupt <em>bot</em>nets that infected devices"
             },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Why do we need apps like cursor?"
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.reuters.com/business/media-telecom/us-says-it-disrupted-<em>bot</em>nets-that-infected-over-3-million-devices-worldwide-2026-03-20/"
             }
           },
           "_tags": [
             "story",
-            "author_amanhij",
-            "story_47464045",
-            "ask_hn"
+            "author_thunderbong",
+            "story_47469057"
           ],
-          "author": "amanhij",
+          "author": "thunderbong",
+          "created_at": "2026-03-21T17:22:17Z",
+          "created_at_i": 1774113737,
+          "num_comments": 0,
+          "objectID": "47469057",
+          "points": 5,
+          "story_id": 47469057,
+          "title": "US, Germany, Canada disrupt botnets that infected devices",
+          "updated_at": "2026-03-21T19:04:13Z",
+          "url": "https://www.reuters.com/business/media-telecom/us-says-it-disrupted-botnets-that-infected-over-3-million-devices-worldwide-2026-03-20/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "paulpauper"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "David <em>Bot</em>stein, Gene-Mapping Pioneer, Dies at 83"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.nytimes.com/2026/03/20/science/david-<em>bot</em>stein-dead.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_paulpauper",
+            "story_47468734"
+          ],
+          "author": "paulpauper",
           "children": [
-            47464068,
-            47464265,
-            47464157
+            47469065
           ],
-          "created_at": "2026-03-21T04:42:51Z",
-          "created_at_i": 1774068171,
-          "num_comments": 3,
-          "objectID": "47464045",
-          "points": 2,
-          "story_id": 47464045,
-          "story_text": "I&#x27;m a Claude code and codex maxi, use both on the highest plan on my terminal and the web interface for heavy research and sometimes design. Now the whole moat of apps like cursor is multi agent orchestration if I understand correctly? And no cursor new coding model is not a moat there is no way on earth that they can compete with anthr&#x2F;openai. For me I just launch claude code and tell it to run codex as one of it&#x27;s sub-agents and split the work with sub-agents like half opus&#x27;s and half 5.4&#x27;s. What are y&#x27;all thoughts? I think any wrapper and orchestrator layer is going to 0",
-          "title": "Why do we need apps like cursor?",
-          "updated_at": "2026-03-21T05:44:56Z"
+          "created_at": "2026-03-21T16:51:14Z",
+          "created_at_i": 1774111874,
+          "num_comments": 1,
+          "objectID": "47468734",
+          "points": 3,
+          "story_id": 47468734,
+          "title": "David Botstein, Gene-Mapping Pioneer, Dies at 83",
+          "updated_at": "2026-03-21T18:52:44Z",
+          "url": "https://www.nytimes.com/2026/03/20/science/david-botstein-dead.html"
         }
       ]
     },
@@ -1815,6 +1839,7 @@
           ],
           "author": "algis-hn",
           "children": [
+            47468226,
             47434826
           ],
           "created_at": "2026-03-18T16:56:41Z",
@@ -1824,7 +1849,7 @@
           "points": 2,
           "story_id": 47428188,
           "title": "The OWASP MCP Top: A Security Framework for AI Agent Tool Integration",
-          "updated_at": "2026-03-19T04:42:33Z",
+          "updated_at": "2026-03-21T16:03:43Z",
           "url": "https://mcpblog.dev/blog/2026-03-15-owasp-mcp-top-10"
         },
         {
@@ -2048,6 +2073,138 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "unmodeledtyler"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I'm Tyler - the solo operator of Quanta Intellect based in Portland, Oregon. I recently participated in Nous Research's Hermes Agent Hackathon, which is where this project was born.<p>I've used agents extensively in my workflows for the better part of the last year - the biggest pain point was always the browser. Every <em>tool</em> out there assumes a human operator with automation bolted on. I wanted to flip that - make the agent the primary driver and give the human a supervisory role.<p>Enter: Vessel Browser - an Electron-based browser with 40+ <em>MCP</em>-native <em>tools</em>, persistent sessions that survive restarts, semantic page context (agents get structured meaning, not raw HTML), and a supervisor sidepanel where you can watch and control exactly what the agent is doing.<p>It works as an <em>MCP</em> <em>server</em> with any compatible harness, or use the built-in assistant with integrated chat and BYOK to 8+ providers including custom OAI compatible endpoints.<p>Install with: npm i @quanta-intellect/vessel-browser"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Vessel Browser – An open-source browser built for AI agents, not humans"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://quantaintellect.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_unmodeledtyler",
+            "story_47470156",
+            "show_hn"
+          ],
+          "author": "unmodeledtyler",
+          "children": [
+            47470937
+          ],
+          "created_at": "2026-03-21T19:02:57Z",
+          "created_at_i": 1774119777,
+          "num_comments": 1,
+          "objectID": "47470156",
+          "points": 2,
+          "story_id": 47470156,
+          "story_text": "I&#x27;m Tyler - the solo operator of Quanta Intellect based in Portland, Oregon. I recently participated in Nous Research&#x27;s Hermes Agent Hackathon, which is where this project was born.<p>I&#x27;ve used agents extensively in my workflows for the better part of the last year - the biggest pain point was always the browser. Every tool out there assumes a human operator with automation bolted on. I wanted to flip that - make the agent the primary driver and give the human a supervisory role.<p>Enter: Vessel Browser - an Electron-based browser with 40+ MCP-native tools, persistent sessions that survive restarts, semantic page context (agents get structured meaning, not raw HTML), and a supervisor sidepanel where you can watch and control exactly what the agent is doing.<p>It works as an MCP server with any compatible harness, or use the built-in assistant with integrated chat and BYOK to 8+ providers including custom OAI compatible endpoints.<p>Install with: npm i @quanta-intellect&#x2F;vessel-browser",
+          "title": "Show HN: Vessel Browser – An open-source browser built for AI agents, not humans",
+          "updated_at": "2026-03-21T20:27:58Z",
+          "url": "https://quantaintellect.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ricky_Tsou"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "When AI capabilities are bundled into apps, your model quality is tied to the app's business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don't use APIs. That's a developer-only path.<p>So the remaining option is to build within the LLM's native environment. But current LLM interfaces don't support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an <em>MCP</em> <em>server</em> — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I've built 20+ example MUPs: a full music production <em>toolk</em>it (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https://youtu.be/HkmWpmfX46o<p>demos: https://github.com/Ricky610329/mup#demos<p>GitHub: https://github.com/Ricky610329/mup"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Your model quality is tied to a business model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Ricky_Tsou",
+            "story_47469932",
+            "ask_hn"
+          ],
+          "author": "Ricky_Tsou",
+          "created_at": "2026-03-21T18:40:40Z",
+          "created_at_i": 1774118440,
+          "num_comments": 0,
+          "objectID": "47469932",
+          "points": 1,
+          "story_id": 47469932,
+          "story_text": "When AI capabilities are bundled into apps, your model quality is tied to the app&#x27;s business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don&#x27;t use APIs. That&#x27;s a developer-only path.<p>So the remaining option is to build within the LLM&#x27;s native environment. But current LLM interfaces don&#x27;t support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I&#x27;ve built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https:&#x2F;&#x2F;youtu.be&#x2F;HkmWpmfX46o<p>demos: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup#demos<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup",
+          "title": "Your model quality is tied to a business model",
+          "updated_at": "2026-03-21T18:50:58Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "neilbb"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Claude Code ships with Bash, Read, Write, Edit, Glob, Grep, WebFetch, Task, Plan. For a single agent on a single task, they're fine. Once you're running a multi-agent system, the defaults break fast.<p>The problems we hit:<p>1) No cross-repo exploration. Want an agent to read another project's code? You need to manually configure permissions. There's no &quot;go explore this OSS repo and answer my question.&quot;<p>2) Summarized web fetching. WebFetch is actually a subagent that summarizes a single page into a haiku-length response. Can't trace links or browse related pages. Fetches fresh every time — no caching.<p>3) Text-level editing. Edit has fuzzy matching, which helps — but it's still raw text. When tree-sitter can give you an AST with named symbols, why make the model reproduce strings to target a function?<p>4) Ephemeral tasks and plans. Tasks don't persist outside the session. Plans vanish when context resets. Neither supports multi-round review or structured editing.<p>5) Flat delegation. The Agent <em>tool</em> can't nest — an agent spawned by Agent can't spawn its own sub-agents. One level of delegation, period. A review leader can't spawn specialized sub-reviewers.<p>6) No isolation. Bash runs on your host. No sandboxing, no filesystem allowlists. You either yolo it or do annoying permission work.<p>What we built instead:<p>- ttal ask: multi-mode research (--url caches pages locally with 1-day TTL and follows links, --repo auto-clones OSS repos, --project spawns read-only sandboxed agents in the right directory). Runs on logos, a pure-bash agent loop — works with any LLM provider, so you can use cheaper models for exploration.<p>- organon (src/url/search): tree-sitter AST editing. See a symbol tree, pick a 2-char ID, pipe new code via heredoc. No text matching. Same pattern for web pages (url) and web search (search).<p>- taskwarrior integration: tasks persist externally with dependencies and pipeline stages. Multiple agents across sessions reference the same tasks.<p>- flicknote for plans: persistent, tree-based structure with section IDs. Reviewers target specific sections surgically. Multi-round plan review with 5 specialized subagents (gaps, code, tests, security, docs).<p>- tmux spawn: each worker gets its own tmux session. No Agent nesting limit. Orchestrator can spawn workers that spawn reviewers that spawn sub-reviewers.<p>- temenos: OS-native sandbox (seatbelt on macOS, bwrap on Linux). Filesystem allowlists, read-only or write access per agent. <em>MCP</em> <em>server</em> mode under active development.<p>ttal, organon, temenos, and logos are open source: https://github.com/tta-lab<p>Full post: https://dev.flicknote.app/notes/1aa741e9-9f32-41e9-8e26-c8b1fdc6d04f"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "tools"
+              ],
+              "value": "We Replaced Every <em>Tool</em> Claude Code Ships With"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_neilbb",
+            "story_47468649",
+            "ask_hn"
+          ],
+          "author": "neilbb",
+          "created_at": "2026-03-21T16:44:03Z",
+          "created_at_i": 1774111443,
+          "num_comments": 0,
+          "objectID": "47468649",
+          "points": 3,
+          "story_id": 47468649,
+          "story_text": "Claude Code ships with Bash, Read, Write, Edit, Glob, Grep, WebFetch, Task, Plan. For a single agent on a single task, they&#x27;re fine. Once you&#x27;re running a multi-agent system, the defaults break fast.<p>The problems we hit:<p>1) No cross-repo exploration. Want an agent to read another project&#x27;s code? You need to manually configure permissions. There&#x27;s no &quot;go explore this OSS repo and answer my question.&quot;<p>2) Summarized web fetching. WebFetch is actually a subagent that summarizes a single page into a haiku-length response. Can&#x27;t trace links or browse related pages. Fetches fresh every time — no caching.<p>3) Text-level editing. Edit has fuzzy matching, which helps — but it&#x27;s still raw text. When tree-sitter can give you an AST with named symbols, why make the model reproduce strings to target a function?<p>4) Ephemeral tasks and plans. Tasks don&#x27;t persist outside the session. Plans vanish when context resets. Neither supports multi-round review or structured editing.<p>5) Flat delegation. The Agent tool can&#x27;t nest — an agent spawned by Agent can&#x27;t spawn its own sub-agents. One level of delegation, period. A review leader can&#x27;t spawn specialized sub-reviewers.<p>6) No isolation. Bash runs on your host. No sandboxing, no filesystem allowlists. You either yolo it or do annoying permission work.<p>What we built instead:<p>- ttal ask: multi-mode research (--url caches pages locally with 1-day TTL and follows links, --repo auto-clones OSS repos, --project spawns read-only sandboxed agents in the right directory). Runs on logos, a pure-bash agent loop — works with any LLM provider, so you can use cheaper models for exploration.<p>- organon (src&#x2F;url&#x2F;search): tree-sitter AST editing. See a symbol tree, pick a 2-char ID, pipe new code via heredoc. No text matching. Same pattern for web pages (url) and web search (search).<p>- taskwarrior integration: tasks persist externally with dependencies and pipeline stages. Multiple agents across sessions reference the same tasks.<p>- flicknote for plans: persistent, tree-based structure with section IDs. Reviewers target specific sections surgically. Multi-round plan review with 5 specialized subagents (gaps, code, tests, security, docs).<p>- tmux spawn: each worker gets its own tmux session. No Agent nesting limit. Orchestrator can spawn workers that spawn reviewers that spawn sub-reviewers.<p>- temenos: OS-native sandbox (seatbelt on macOS, bwrap on Linux). Filesystem allowlists, read-only or write access per agent. MCP server mode under active development.<p>ttal, organon, temenos, and logos are open source: https:&#x2F;&#x2F;github.com&#x2F;tta-lab<p>Full post: https:&#x2F;&#x2F;dev.flicknote.app&#x2F;notes&#x2F;1aa741e9-9f32-41e9-8e26-c8b1fdc6d04f",
+          "title": "We Replaced Every Tool Claude Code Ships With",
+          "updated_at": "2026-03-21T18:41:29Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "redgridtactical"
             },
             "story_text": {
@@ -2092,13 +2249,13 @@
           ],
           "created_at": "2026-03-20T22:25:51Z",
           "created_at_i": 1774045551,
-          "num_comments": 16,
+          "num_comments": 20,
           "objectID": "47461529",
-          "points": 47,
+          "points": 49,
           "story_id": 47461529,
           "story_text": "I go on a lot of backcountry trips where I barely get cell service. If my group splits, nobody knows knows where anyone is until you regroup at camp or at your destination. You can buy Garmin radios or try to set up an ATAK, but ATAK is Android-only and assumes you have a TAK Server running somewhere to make use of all of the functionality. Cool tools themselves, but expensive to set up correctly. I just wanted two iPhones to share their location directly over Bluetooth when cell coverage was lacking.<p>Red Grid Link does that. Start a session, and anyone nearby running the app shows up on your offline map. When they walk out of range their marker stays as a &quot;ghost&quot; that slowly fades.<p>The hard part was making sync reliable over BLE. The connections drop all the time. Someone turns a corner, walks behind a vehicle, whatever. I built a CRDT sync layer (LWW Register + G-Counter) so there&#x27;s never merge conflicts. Each update is just under 200 bytes (from what I have tested so far). When a user&#x2F;teammate disappears the app does exponential backoff from 2 to 30 seconds before giving up and marking them as a ghost.<p>Everything is encrypted (AES-256-GCM, ECDH P-256 key exchange per peer pair). Sessions can require a PIN or QR code to join. It also offers offline topo maps with MGRS grid coordinates, same system as in my other app, Red Grid MGRS.<p>The app is free, and I&#x27;m looking for some honest feedback from other real-world users. Let me know if you have any questions!",
           "title": "Show HN: Red Grid Link – peer-to-peer team tracking over Bluetooth, no servers",
-          "updated_at": "2026-03-21T13:26:13Z",
+          "updated_at": "2026-03-21T20:23:44Z",
           "url": "https://github.com/RedGridTactical/RedGridLink"
         },
         {
@@ -2137,156 +2294,67 @@
           ],
           "author": "MaxGfeller",
           "children": [
+            47470420,
             47460599
           ],
           "created_at": "2026-03-20T20:12:12Z",
           "created_at_i": 1774037532,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47459997",
           "points": 3,
           "story_id": 47459997,
           "story_text": "I built this because I kept trying to use Claude Agent SDK, Codex, and OpenCode programmatically, and they were too &quot;heavy&quot; and uncustomizable for that. I wanted a TypeScript library I could import into my own app and build agents on top of.\nOpenHarness is built on Vercel&#x27;s AI SDK 5, so it works with any model the SDK supports. The main things it gives you: loading agent instructions from AGENTS.md files, MCP server connections for tools, subagents (agents delegating to child agents), agent skills, tool approval prompts, and auto-compaction for long conversations.\nThere&#x27;s a CLI example and a Next.js chat interface in the repo if you want to try it out.\nStill early -- feedback on the API and what&#x27;s missing would be useful.",
           "title": "Show HN: OpenHarness – Open-source TypeScript SDK for building AI agents",
-          "updated_at": "2026-03-20T21:11:41Z",
+          "updated_at": "2026-03-21T19:30:14Z",
           "url": "https://github.com/MaxGfeller/open-harness"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dclavijo"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Show HN: Reverse Engineering <em>Tools</em> <em>MCP</em> <em>Server</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "https://github.com/daedalus/<em>mcp</em>_reverse_engineering"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dclavijo",
-            "story_47459708",
-            "show_hn"
-          ],
-          "author": "dclavijo",
-          "created_at": "2026-03-20T19:52:11Z",
-          "created_at_i": 1774036331,
-          "num_comments": 0,
-          "objectID": "47459708",
-          "points": 1,
-          "story_id": 47459708,
-          "title": "Show HN: Reverse Engineering Tools MCP Server",
-          "updated_at": "2026-03-20T19:53:12Z",
-          "url": "https://github.com/daedalus/mcp_reverse_engineering"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "danielmeppiel"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I work at Microsoft/GitHub and built APM because I was managing agent configs — prompts, instructions, <em>MCP</em> <em>servers</em> — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (Agent Package Manager) is an open-source CLI that installs and manages AI agent dependencies (plugins, skills, rules, hooks, <em>mcp</em>, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https://news.ycombinator.com/item?id=47421969\">https://news.ycombinator.com/item?id=47421969</a>). Here's the full story.<p>1 minute video: <a href=\"https://github.com/microsoft/apm/releases/download/v0.8.2/apm-showcase.mp4\" rel=\"nofollow\">https://github.com/microsoft/apm/releases/download/v0.8.2/ap...</a><p>How it works:<p>apm install — resolves any Agent Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared <em>MCP</em> <em>server</em>? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full agent setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other agent config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. Agent instructions have direct access to your codebase and terminal. Scanning what goes into them matters.<p>Why this won't come from plugin vendors: each <em>tool</em> governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across <em>tools</em>, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https://microsoft.github.io/apm\" rel=\"nofollow\">https://microsoft.github.io/apm</a>\nRepo: <a href=\"https://github.com/microsoft/apm\" rel=\"nofollow\">https://github.com/microsoft/apm</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Agent Package Manager (APM) for Agent Configuration"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/microsoft/apm"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_danielmeppiel",
-            "story_47454448",
-            "show_hn"
-          ],
-          "author": "danielmeppiel",
-          "created_at": "2026-03-20T13:49:13Z",
-          "created_at_i": 1774014553,
-          "num_comments": 0,
-          "objectID": "47454448",
-          "points": 1,
-          "story_id": 47454448,
-          "story_text": "I work at Microsoft&#x2F;GitHub and built APM because I was managing agent configs — prompts, instructions, MCP servers — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (Agent Package Manager) is an open-source CLI that installs and manages AI agent dependencies (plugins, skills, rules, hooks, mcp, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969</a>). Here&#x27;s the full story.<p>1 minute video: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;apm-showcase.mp4\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;ap...</a><p>How it works:<p>apm install — resolves any Agent Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared MCP server? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full agent setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other agent config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. Agent instructions have direct access to your codebase and terminal. Scanning what goes into them matters.<p>Why this won&#x27;t come from plugin vendors: each tool governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across tools, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm</a>\nRepo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm</a>",
-          "title": "Show HN: Agent Package Manager (APM) for Agent Configuration",
-          "updated_at": "2026-03-20T13:51:42Z",
-          "url": "https://github.com/microsoft/apm"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "David-Brug-Ai"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I've been experimenting with AI <em>tools</em>, sometimes hours a day for the last 18 months, and recently shipped three open source packages that sit between AI agents and the <em>tools</em> they call.<p>I had a Raspberry Pi 5 from a summer project that became my first OpenClaw install. Once it was running I turned to the problem, what watches the agent while you're not watching?<p>The idea for UNWIND came from Apple's Time Machine. If something goes wrong, you should be able to see what happened and roll it back. CRAFT, the tamper-evident audit chain, came from a separate cryptographic project I'd been working on for months before. Combining the two with a deterministic enforcement pipeline was the design I wanted to build.<p>UNWIND works as an <em>MCP</em> stdio proxy. It wraps any <em>MCP</em> <em>server</em>, intercepts every tool call on the way through, and the agent never knows it's there. If you're using Claude Desktop, Cursor, Windsurf, or VS Code Copilot with <em>MCP</em> servers, that's the primary integration path and the one that works most reliably right now. OpenClaw support exists but has unresolved adapter issues, so the <em>MCP</em> stdio path is the one to use today.<p>Claude Codehandled planning. Codex on the Pi was the builder. I chose Codex because OpenAI lets Pro users OAuth into OpenClaw with no API costs. I gave Codex a soul.md (the instruction file OpenClaw agents use) that defined its role as a security analyst: evidence first, flag unknowns, never assume, and for every finding produce a structured assessment of what happened, why it matters...With that framing it consistently found 5 or 6 real structural issues in every plan Claude Code produced.<p>UNWIND is a deterministic security proxy that sits between the agent and every tool call. 15 checks run on every call. No LLM in the enforcement path, just rules and pattern matching. Every action logged in a tamper-evident hash chain. File changes snapshotted for rollback.<p>Three packages, all on PyPI right now:<p>*craft-auth* : Tamper-evident command authentication. Zero dependencies, pure Python stdlib, 1,605 lines. Try it in 10 seconds: `pip install craft-auth &amp;&amp; craft-auth demo`. The output speaks for itself.<p>*ghostmode* : Dry-run proxy for <em>MCP</em> servers. See what your agent would do without letting it do anything. Writes intercepted, reads pass through, nothing changes. `pip install ghostmode &amp;&amp; ghostmode -- npx @modelcontextprotocol/<em>server</em>-filesystem ~/Documents` (needs Node.js for the upstream <em>MCP</em> <em>server</em>, Ghost Mode itself is pure Python).<p>*unwind-<em>mcp</em>* : The full enforcement engine. `pip install unwind-<em>mcp</em> &amp;&amp; unwind serve -- npx @modelcontextprotocol/<em>server</em>-filesystem ~/Documents` then point Claude Desktop or Cursor at it. Every tool call shows ALLOW/BLOCK decisions in the terminal. Dashboard at localhost:9001 with `unwind dashboard` (start the sidecar first with `unwind sidecar serve`).<p>after install,Codex was immediately flagged TAINTED by its own dashboard. It had been fetching web pages during setup, then tried to execute a command. The security stack it helped build caught it on its first live action.<p>Rough edges.<p>Requires Python 3.10+. Mac ships with 3.9.6 and the import will crash. Homebrew Python 3.11+ works fine. Windows is untested. Pure Python and cross-platform in principle but nobody has verified it.<p>The taint system works correctly but is too aggressive for unattended use. Normal agent workflow, triggers taint immediately, which blocks execution until a human approves. When you're sitting there, this is fine. When the agent is running on its own, it's effectively frozen. The tension between &quot;external content could carry prompt injection&quot; and &quot;the agent's normal job involves external content&quot; is a genuine design problem I haven't solved cleanly.<p>First real human testers welcome.<p>UNWIND and Ghost Mode are AGPL-3.0. craft-auth is standalone with zero AGPL dependencies and can be licensed separately.<p>github.com/unwind-<em>mcp</em>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Unwind – I built a security proxy for AI agents on a Raspberry Pi"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_David-Brug-Ai",
-            "story_47450668",
-            "show_hn"
-          ],
-          "author": "David-Brug-Ai",
-          "children": [
-            47450808
-          ],
-          "created_at": "2026-03-20T04:56:47Z",
-          "created_at_i": 1773982607,
-          "num_comments": 0,
-          "objectID": "47450668",
-          "points": 3,
-          "story_id": 47450668,
-          "story_text": "I&#x27;ve been experimenting with AI tools, sometimes hours a day for the last 18 months, and recently shipped three open source packages that sit between AI agents and the tools they call.<p>I had a Raspberry Pi 5 from a summer project that became my first OpenClaw install. Once it was running I turned to the problem, what watches the agent while you&#x27;re not watching?<p>The idea for UNWIND came from Apple&#x27;s Time Machine. If something goes wrong, you should be able to see what happened and roll it back. CRAFT, the tamper-evident audit chain, came from a separate cryptographic project I&#x27;d been working on for months before. Combining the two with a deterministic enforcement pipeline was the design I wanted to build.<p>UNWIND works as an MCP stdio proxy. It wraps any MCP server, intercepts every tool call on the way through, and the agent never knows it&#x27;s there. If you&#x27;re using Claude Desktop, Cursor, Windsurf, or VS Code Copilot with MCP servers, that&#x27;s the primary integration path and the one that works most reliably right now. OpenClaw support exists but has unresolved adapter issues, so the MCP stdio path is the one to use today.<p>Claude Codehandled planning. Codex on the Pi was the builder. I chose Codex because OpenAI lets Pro users OAuth into OpenClaw with no API costs. I gave Codex a soul.md (the instruction file OpenClaw agents use) that defined its role as a security analyst: evidence first, flag unknowns, never assume, and for every finding produce a structured assessment of what happened, why it matters...With that framing it consistently found 5 or 6 real structural issues in every plan Claude Code produced.<p>UNWIND is a deterministic security proxy that sits between the agent and every tool call. 15 checks run on every call. No LLM in the enforcement path, just rules and pattern matching. Every action logged in a tamper-evident hash chain. File changes snapshotted for rollback.<p>Three packages, all on PyPI right now:<p>*craft-auth* : Tamper-evident command authentication. Zero dependencies, pure Python stdlib, 1,605 lines. Try it in 10 seconds: `pip install craft-auth &amp;&amp; craft-auth demo`. The output speaks for itself.<p>*ghostmode* : Dry-run proxy for MCP servers. See what your agent would do without letting it do anything. Writes intercepted, reads pass through, nothing changes. `pip install ghostmode &amp;&amp; ghostmode -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` (needs Node.js for the upstream MCP server, Ghost Mode itself is pure Python).<p>*unwind-mcp* : The full enforcement engine. `pip install unwind-mcp &amp;&amp; unwind serve -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` then point Claude Desktop or Cursor at it. Every tool call shows ALLOW&#x2F;BLOCK decisions in the terminal. Dashboard at localhost:9001 with `unwind dashboard` (start the sidecar first with `unwind sidecar serve`).<p>after install,Codex was immediately flagged TAINTED by its own dashboard. It had been fetching web pages during setup, then tried to execute a command. The security stack it helped build caught it on its first live action.<p>Rough edges.<p>Requires Python 3.10+. Mac ships with 3.9.6 and the import will crash. Homebrew Python 3.11+ works fine. Windows is untested. Pure Python and cross-platform in principle but nobody has verified it.<p>The taint system works correctly but is too aggressive for unattended use. Normal agent workflow, triggers taint immediately, which blocks execution until a human approves. When you&#x27;re sitting there, this is fine. When the agent is running on its own, it&#x27;s effectively frozen. The tension between &quot;external content could carry prompt injection&quot; and &quot;the agent&#x27;s normal job involves external content&quot; is a genuine design problem I haven&#x27;t solved cleanly.<p>First real human testers welcome.<p>UNWIND and Ghost Mode are AGPL-3.0. craft-auth is standalone with zero AGPL dependencies and can be licensed separately.<p>github.com&#x2F;unwind-mcp",
-          "title": "Show HN: Unwind – I built a security proxy for AI agents on a Raspberry Pi",
-          "updated_at": "2026-03-20T12:44:08Z"
         }
       ]
     },
     {
       "query": "self+improving+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "samurai48"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Autoskill – <em>self</em>-<em>improving</em> skills for <em>AI</em> agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Samurai412/autoskill"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_samurai48",
+            "story_47467265"
+          ],
+          "author": "samurai48",
+          "children": [
+            47467266
+          ],
+          "created_at": "2026-03-21T14:20:07Z",
+          "created_at_i": 1774102807,
+          "num_comments": 1,
+          "objectID": "47467265",
+          "points": 2,
+          "story_id": 47467265,
+          "title": "Autoskill – self-improving skills for AI agents",
+          "updated_at": "2026-03-21T20:35:14Z",
+          "url": "https://github.com/Samurai412/autoskill"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2457,45 +2525,6 @@
           "title": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes",
           "updated_at": "2026-03-18T00:55:28Z",
           "url": "https://www.makeportals.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "razodactyl"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "<em>Self</em>-<em>improving</em> <em>AI</em> (Karpathy pt2)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_razodactyl",
-            "story_47320238"
-          ],
-          "author": "razodactyl",
-          "created_at": "2026-03-10T07:53:48Z",
-          "created_at_i": 1773129228,
-          "num_comments": 0,
-          "objectID": "47320238",
-          "points": 2,
-          "story_id": 47320238,
-          "title": "Self-improving AI (Karpathy pt2)",
-          "updated_at": "2026-03-10T11:38:28Z",
-          "url": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
         }
       ]
     }
