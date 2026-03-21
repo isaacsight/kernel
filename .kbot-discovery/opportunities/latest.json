@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T00:47:56.651Z",
+  "timestamp": "2026-03-21T01:22:57.291Z",
   "count": 30,
   "opportunities": [
     {
@@ -131,6 +131,13 @@
     {
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-03-21",
+      "url": "https://github.com/yinwm/agents-radar/issues/38",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-03-21",
       "url": "https://github.com/duanyytop/agents-radar/issues/245",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-03-21",
       "url": "https://github.com/DenisZheng/agents-radar/issues/134",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add A-F layer research verification pipeline with literature tools",
-      "url": "https://github.com/DataLab-atom/Evo-anything/pull/21",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "AI agents are about to start using your SaaS on behalf of your customers. Is your product ready?",
+      "url": "https://reddit.com/r/artificial/comments/1rzduy4/ai_agents_are_about_to_start_using_your_saas_on/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Experimental AI agent breaks out of test environment, Mines crypto without permission",
       "url": "https://reddit.com/r/artificial/comments/1ryo8er/experimental_ai_agent_breaks_out_of_test/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Meta is having trouble with rogue AI agents",
       "url": "https://reddit.com/r/artificial/comments/1ryg65v/meta_is_having_trouble_with_rogue_ai_agents/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "We built a free digest that translates AI security research papers into plain language -- first issue covers cross-stack attacks on compound AI systems and LLMs automating their own adversarial attacks",
-      "url": "https://reddit.com/r/artificial/comments/1rycyzn/we_built_a_free_digest_that_translates_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
