@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T10:20:14.758Z",
+  "timestamp": "2026-03-21T12:25:10.453Z",
   "projects": [
     {
       "name": "vm0-ai/vm0",
@@ -8,33 +8,33 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 19566,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+      "name": "olasunkanmi-SE/codebuddy",
+      "url": "https://github.com/olasunkanmi-SE/codebuddy",
+      "stars": 110,
+      "description": "An Autonomous AI Software Engineer"
     },
     {
-      "name": "MiniMax-AI/OpenRoom",
-      "url": "https://github.com/MiniMax-AI/OpenRoom",
-      "stars": 550,
-      "description": "A browser-based desktop where AI Agent operates every app through natural language."
+      "name": "CopilotKit/CopilotKit",
+      "url": "https://github.com/CopilotKit/CopilotKit",
+      "stars": 29628,
+      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
     },
     {
       "name": "ReScienceLab/opc-skills",
       "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 607,
+      "stars": 608,
       "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10185,
+      "stars": 10190,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "open-compress/claw-compactor",
       "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 1760,
+      "stars": 1764,
       "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
