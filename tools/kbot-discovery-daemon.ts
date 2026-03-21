@@ -526,7 +526,10 @@ ${JSON.stringify((outreach as { latestPaper?: unknown }).latestPaper ?? {}, null
 // ── EVOLUTION (every 24 hours) ────────────────────────────────────────
 
 async function runEvolution(state: DaemonState): Promise<void> {
-  log('[evolution] analyzing for improvements...')
+  log('[evolution] analyzing for self-improvement...')
+
+  const KBOT_SRC = join(PROJECT_ROOT, 'packages', 'kbot', 'src')
+  const pkgPath = join(PROJECT_ROOT, 'packages', 'kbot', 'package.json')
 
   // Read all pulse data from today
   const pulseFile = join(PULSE_DIR, `${dateStr()}.jsonl`)
@@ -542,6 +545,121 @@ async function runEvolution(state: DaemonState): Promise<void> {
     ? (pulses[pulses.length - 1]?.github?.stars ?? 0) - (pulses[0]?.github?.stars ?? 0)
     : 0
 
+  // ── Step 1: Ask local AI what to improve ──
+  log('[evolution] asking local AI for improvement ideas...')
+
+  // Read recent intel and opportunities to inform evolution
+  let intelSummary = ''
+  try {
+    const intel = JSON.parse(readFileSync(join(INTEL_DIR, 'latest.json'), 'utf8'))
+    intelSummary = `Field intel: ${intel.totalHits ?? 0} results. `
+  } catch { /* skip */ }
+
+  let oppSummary = ''
+  try {
+    const opps = JSON.parse(readFileSync(join(OPPORTUNITIES_DIR, 'latest.json'), 'utf8'))
+    oppSummary = `Opportunities: ${opps.count ?? 0} found. `
+  } catch { /* skip */ }
+
+  const improvementPrompt = `You are kbot, an open-source AI agent (npm: @kernel.chat/kbot).
+Current state: ${state.knownStars} GitHub stars, HN score ${state.hnScore}, ${state.hnComments} comments.
+${intelSummary}${oppSummary}
+Trend: ${starsDelta > 0 ? '+' + starsDelta + ' stars today' : 'no new stars'}.
+Evolution cycle: ${state.stats.totalEvolution + 1}
+
+Based on this, suggest ONE specific, small improvement to make to kbot's codebase.
+It must be:
+- A small change (< 50 lines)
+- To an existing file in packages/kbot/src/
+- Something that improves user experience, fixes a rough edge, or adds a small helpful feature
+- NOT a refactor, NOT a big feature, NOT documentation
+
+Examples of good improvements:
+- Better error message when API key is missing
+- Add a new category keyword to the skill router
+- Improve the welcome banner with current stats
+- Add a helpful tip shown after first successful command
+
+Respond in this exact format:
+FILE: <filename relative to packages/kbot/src/>
+DESCRIPTION: <one sentence>
+BEFORE: <the exact code to replace — copy from the file>
+AFTER: <the replacement code>
+
+If you can't think of a good improvement, respond with: SKIP`
+
+  const improvement = await askLocal(improvementPrompt, 600)
+
+  let applied = false
+  let improvementDescription = ''
+
+  if (improvement && !improvement.includes('SKIP')) {
+    // Parse the improvement
+    const fileMatch = improvement.match(/FILE:\s*(.+)/i)
+    const descMatch = improvement.match(/DESCRIPTION:\s*(.+)/i)
+    const beforeMatch = improvement.match(/BEFORE:\s*([\s\S]*?)(?=AFTER:)/i)
+    const afterMatch = improvement.match(/AFTER:\s*([\s\S]*?)$/i)
+
+    if (fileMatch && descMatch && beforeMatch && afterMatch) {
+      const targetFile = join(KBOT_SRC, fileMatch[1].trim())
+      improvementDescription = descMatch[1].trim()
+
+      try {
+        if (existsSync(targetFile)) {
+          const content = readFileSync(targetFile, 'utf8')
+          const before = beforeMatch[1].trim()
+          const after = afterMatch[1].trim()
+
+          // Safety checks
+          if (before.length > 10 && after.length > 10 && content.includes(before) && before !== after) {
+            const newContent = content.replace(before, after)
+            writeFileSync(targetFile, newContent)
+            log(`[evolution] applied improvement: ${improvementDescription}`)
+            applied = true
+          } else {
+            log(`[evolution] improvement didn't match file content — skipping`)
+          }
+        }
+      } catch (err) {
+        log(`[evolution] failed to apply improvement: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    }
+  } else {
+    log('[evolution] local AI suggested no improvement this cycle')
+  }
+
+  // ── Step 2: Run tests to verify ──
+  if (applied) {
+    log('[evolution] verifying improvement with type-check...')
+    try {
+      execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npx tsc --noEmit`, { stdio: 'pipe', timeout: 60000 })
+      log('[evolution] type-check passed')
+    } catch {
+      // Rollback — type-check failed
+      log('[evolution] type-check FAILED — rolling back improvement')
+      try {
+        execSync(`cd "${PROJECT_ROOT}" && git checkout -- packages/kbot/src/`, { stdio: 'pipe' })
+      } catch { /* best effort */ }
+      applied = false
+    }
+  }
+
+  if (applied) {
+    log('[evolution] running tests...')
+    try {
+      execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npx vitest run`, { stdio: 'pipe', timeout: 120000 })
+      log('[evolution] tests passed')
+    } catch {
+      // Rollback — tests failed
+      log('[evolution] tests FAILED — rolling back improvement')
+      try {
+        execSync(`cd "${PROJECT_ROOT}" && git checkout -- packages/kbot/src/`, { stdio: 'pipe' })
+      } catch { /* best effort */ }
+      applied = false
+    }
+  }
+
+  // ── Step 3: Write proposal ──
   const proposal = {
     timestamp: new Date().toISOString(),
     cycle: state.stats.totalEvolution + 1,
@@ -551,17 +669,9 @@ async function runEvolution(state: DaemonState): Promise<void> {
       hnScore: state.hnScore,
       hnComments: state.hnComments,
     },
-    promptEvolution: {
-      candidate: '(to be generated by kbot agent in future versions)',
-      rationale: '(based on usage patterns)',
-      status: 'DRAFT — awaiting Isaac review',
-    },
-    toolProposal: {
-      name: '(to be identified from field intelligence gaps)',
-      description: '(what it does)',
-      rationale: '(what users asked for that kbot could not do)',
-      status: 'DRAFT — awaiting Isaac review',
-    },
+    improvement: applied
+      ? { description: improvementDescription, status: 'APPLIED — passed type-check + tests' }
+      : { description: improvementDescription || 'none proposed', status: 'NOT APPLIED' },
   }
 
   state.stats.totalEvolution++
@@ -570,25 +680,20 @@ async function runEvolution(state: DaemonState): Promise<void> {
   writeFileSync(join(EVOLUTION_DIR, 'proposals', filename), JSON.stringify(proposal, null, 2))
   log(`[evolution] proposal written: ${filename}`)
 
-  // Self-publish evolution proposals
-  gitPublish(`evolution: kbot proposal ${dateStr()} (cycle ${proposal.cycle})`)
+  gitPublish(`evolution: kbot proposal ${dateStr()} (cycle ${proposal.cycle})${applied ? ' — improvement applied' : ''}`)
 
-  // ── Auto-publish to npm on evolution cycles ──
-  // Bumps patch version and publishes. kbot keeps itself current.
+  // ── Step 4: Bump version, build, publish to npm ──
   try {
-    const pkgPath = join(PROJECT_ROOT, 'packages', 'kbot', 'package.json')
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
     const [major, minor, patch] = pkg.version.split('.').map(Number)
     const newVersion = `${major}.${minor}.${patch + 1}`
     pkg.version = newVersion
     writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
-    // Build and publish
     execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm run build`, { stdio: 'pipe', timeout: 60000 })
     execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public`, { stdio: 'pipe', timeout: 60000 })
 
-    // Commit version bump
-    execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/package.json && git commit -m "chore: auto-publish kbot v${newVersion}"`, { stdio: 'pipe' })
+    execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/ && git commit -m "feat(auto): kbot v${newVersion}${applied ? ' — ' + improvementDescription : ''}"`, { stdio: 'pipe' })
     execSync(`cd "${PROJECT_ROOT}" && git push origin main`, { stdio: 'pipe' })
 
     log(`[evolution] published @kernel.chat/kbot@${newVersion} to npm`)
