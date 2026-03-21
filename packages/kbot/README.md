@@ -23,24 +23,28 @@ npm install -g @kernel.chat/kbot
 
 ---
 
-## What's New in v3.6
+## What's New in v3.13
 
 | Feature | What it means |
 |---------|---------------|
-| **Forge Tool** | `forge_tool` — kbot creates new tools at runtime when it doesn't have one. No restart, no recompile. |
-| **Forge Registry** | Publish, search, and install community-created tools. Collective autopoiesis. |
-| **Autopoietic Health** | `kbot vitals` — self-monitoring system health: memory, token budgets, tool success rates. |
-| **Immune Agent** | Self-auditing agent that detects drift, regressions, and anomalies across sessions. |
-| **Cost-Aware Routing** | Automatically picks the cheapest model that can handle the task. Saves 60-90% on API costs. |
-| **Fallback Chains** | If a provider fails, kbot cascades to the next one. Zero downtime, zero manual intervention. |
-| **290 Tools** | +6 tools since v3.3: forge, vitals, immune, cost routing, fallback chains, and more. |
-| **23 Agents** | Expanded specialist roster with immune and forge agents. |
+| **Self-Improving** | kbot modifies its own code, tests it, and publishes new versions to npm — autonomously. |
+| **Discovery Daemon** | 24/7 background service — scans HN, GitHub, Reddit, arXiv. Thinks locally via MLX/Ollama ($0). |
+| **OpenClaw Plugin** | kbot is the cognitive engine inside OpenClaw — 50+ messaging channels (WhatsApp, Discord, Telegram). |
+| **Replit Integration** | Auto-detects Replit, activates lite mode. `--lite` flag for cloud IDEs. |
+| **Cognitive Interference** | 11 cognitive modules measured for constructive/destructive interference. Research paper included. |
+| **Standalone Packages** | Brain extracted as independent npm packages: `@kernel.chat/skill-router`, `memory-tiers`, `tool-forge`, `prompt-evolver`. |
+| **MLX on Apple Silicon** | Claude Opus-distilled models run natively. Local brain for the daemon. |
+| **LATS Tree Planning** | Monte Carlo Tree Search for branching plans instead of linear. |
+| **Prompt Evolution** | GEPA-style self-optimizing prompts — evolve from execution traces, auto-rollback bad mutations. |
+| **Collective Learning** | Opt-in anonymized signals. More users → smarter routing for everyone. |
+| **A2A Protocol** | Agent-to-Agent discovery and task delegation. |
+| **11 Cognitive Modules** | Based on peer-reviewed papers. Not metaphors — TypeScript implementations. |
 
 ---
 
 ## Why kbot?
 
-Other AI coding tools are static — fixed tool sets, single providers, no memory. kbot is the first AI agent that **evolves itself**:
+Other AI agents are static — fixed tools, single providers, no memory, no learning. kbot is the first AI agent that **evolves itself**:
 
 - **Forges its own tools** — When kbot encounters a task it can't handle, it creates a new tool on the spot via `forge_tool`. The tool persists, gets tested, and can be shared via the Forge Registry.
 - **Self-evolving** — Autopoietic health monitoring (`kbot vitals`) tracks tool success rates, token budgets, and memory pressure. The immune agent self-audits for drift and regressions.
@@ -342,7 +346,7 @@ kbot -p "query" > output.txt                 # Pipe mode — clean output for sc
 
 ## Under the Hood
 
-kbot's agent loop runs 10 always-on cognition modules based on peer-reviewed research:
+kbot's agent loop runs 11 always-on cognition modules based on peer-reviewed research:
 
 | Module | Paper | What it does |
 |--------|-------|-------------|
@@ -356,8 +360,21 @@ kbot's agent loop runs 10 always-on cognition modules based on peer-reviewed res
 | Godel Limits | Godel/UBC | Stuck-loop detection |
 | Simulation | Wolpert, 2008 | Change impact prediction |
 | Emergent Swarm | Project Sid, 2024 | Dynamic role discovery |
+| Cognitive Interference | Hernandez, 2026 | Measures constructive/destructive interference between modules |
 
-These aren't metaphors. They're TypeScript modules with paper citations in the headers. See `packages/kbot/src/`.
+These aren't metaphors. They're TypeScript modules with paper citations in the headers. The interference between modules — not the modules themselves — is where intelligent behavior emerges. See the [research paper](../../docs/cognitive-module-interference.md).
+
+## Standalone Packages
+
+Use kbot's brain without the full agent:
+
+| Package | What it does |
+|---------|-------------|
+| [`@kernel.chat/skill-router`](https://www.npmjs.com/package/@kernel.chat/skill-router) | Bayesian agent routing — TrueSkill-style, zero LLM calls |
+| [`@kernel.chat/memory-tiers`](https://www.npmjs.com/package/@kernel.chat/memory-tiers) | Three-tier memory: observations → reflections → identity |
+| [`@kernel.chat/tool-forge`](https://www.npmjs.com/package/@kernel.chat/tool-forge) | Runtime tool creation from structured definitions |
+| [`@kernel.chat/prompt-evolver`](https://www.npmjs.com/package/@kernel.chat/prompt-evolver) | GEPA-style prompt self-optimization from execution traces |
+| [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) | OpenClaw plugin — kbot as brain for 50+ messaging channels |
 
 ## Security
 
