@@ -572,6 +572,29 @@ async function runEvolution(state: DaemonState): Promise<void> {
 
   // Self-publish evolution proposals
   gitPublish(`evolution: kbot proposal ${dateStr()} (cycle ${proposal.cycle})`)
+
+  // ── Auto-publish to npm on evolution cycles ──
+  // Bumps patch version and publishes. kbot keeps itself current.
+  try {
+    const pkgPath = join(PROJECT_ROOT, 'packages', 'kbot', 'package.json')
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    const [major, minor, patch] = pkg.version.split('.').map(Number)
+    const newVersion = `${major}.${minor}.${patch + 1}`
+    pkg.version = newVersion
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
+
+    // Build and publish
+    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm run build`, { stdio: 'pipe', timeout: 60000 })
+    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public`, { stdio: 'pipe', timeout: 60000 })
+
+    // Commit version bump
+    execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/package.json && git commit -m "chore: auto-publish kbot v${newVersion}"`, { stdio: 'pipe' })
+    execSync(`cd "${PROJECT_ROOT}" && git push origin main`, { stdio: 'pipe' })
+
+    log(`[evolution] published @kernel.chat/kbot@${newVersion} to npm`)
+  } catch (err) {
+    log(`[evolution] npm publish failed: ${err instanceof Error ? err.message : String(err)}`)
+  }
 }
 
 // ── OPPORTUNITIES (every 1 hour) ──────────────────────────────────────
