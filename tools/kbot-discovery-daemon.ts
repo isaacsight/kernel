@@ -139,13 +139,44 @@ function dateStr(): string {
 // ── Local AI (Ollama — $0 cost) ───────────────────────────────────────
 
 const OLLAMA_URL = 'http://localhost:11434'
-const OLLAMA_MODEL = 'kernel:latest' // Gemma3 12B — local, free
+const OLLAMA_MODEL = 'kernel:latest' // Gemma3 12B — fallback
+
+// MLX models (Apple Silicon optimized — faster than Ollama)
+const MLX_MODELS = {
+  fast: join(homedir(), '.kbot', 'models', 'qwen-9b-opus'),      // Qwen 9B Opus-distilled — fast
+  smart: join(homedir(), '.kbot', 'models', 'nemotron-nano-30b'), // Nemotron Nano 30B — best quality
+}
 
 /**
- * Ask the local Ollama model a question. Zero API cost.
- * Falls back to empty string if Ollama is down.
+ * Ask a local model a question. Zero API cost.
+ * Tries MLX first (Apple Silicon optimized), falls back to Ollama.
+ * tier: 'fast' = Qwen 9B, 'smart' = Nemotron 30B, 'default' = Ollama
  */
-async function askLocal(prompt: string, maxTokens = 500): Promise<string> {
+async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' | 'default' = 'default'): Promise<string> {
+  // Try MLX first if model exists
+  if (tier !== 'default') {
+    const modelPath = tier === 'fast' ? MLX_MODELS.fast : MLX_MODELS.smart
+    if (existsSync(modelPath)) {
+      try {
+        const result = execSync(
+          `python3 -m mlx_lm.generate --model "${modelPath}" --max-tokens ${maxTokens} --temp 0.7 --prompt "${prompt.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`,
+          { encoding: 'utf-8', timeout: 120000, stdio: ['pipe', 'pipe', 'pipe'] }
+        )
+        // mlx_lm outputs the prompt + generation, extract just the generation
+        const output = result.trim()
+        // Find where the prompt ends and generation begins
+        const promptEnd = output.lastIndexOf(prompt.slice(-50))
+        if (promptEnd >= 0) {
+          return output.slice(promptEnd + prompt.slice(-50).length).trim()
+        }
+        return output
+      } catch {
+        log(`[ai] MLX ${tier} failed, falling back to Ollama`)
+      }
+    }
+  }
+
+  // Fallback to Ollama
   try {
     const res = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: 'POST',
@@ -161,7 +192,7 @@ async function askLocal(prompt: string, maxTokens = 500): Promise<string> {
     const data = await res.json() as { response?: string }
     return data.response?.trim() ?? ''
   } catch {
-    return '' // Ollama not running — skip AI analysis
+    return '' // No local AI available — skip
   }
 }
 
@@ -191,7 +222,7 @@ RELEVANT: yes/no
 REASONING: <one sentence>
 DRAFT: <your response or "n/a">`
 
-  const response = await askLocal(prompt, 300)
+  const response = await askLocal(prompt, 300, 'fast')
   if (!response) return { relevant: false, draft: '', reasoning: 'Ollama unavailable' }
 
   const relevantMatch = response.match(/RELEVANT:\s*(yes|no)/i)
@@ -588,7 +619,7 @@ AFTER: <the replacement code>
 
 If you can't think of a good improvement, respond with: SKIP`
 
-  const improvement = await askLocal(improvementPrompt, 600)
+  const improvement = await askLocal(improvementPrompt, 600, 'smart')
 
   let applied = false
   let improvementDescription = ''
