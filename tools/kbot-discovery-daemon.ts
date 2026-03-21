@@ -141,12 +141,10 @@ function dateStr(): string {
 const OLLAMA_URL = 'http://localhost:11434'
 const OLLAMA_MODEL = 'kernel:latest' // Gemma3 12B — fallback
 
-// MLX models (Apple Silicon optimized — faster than Ollama)
-// Uses HuggingFace paths — mlx_lm downloads and caches automatically
-const MLX_MODELS = {
-  fast: 'jackrong/mlx-qwen3.5-9b-claude-4.6-opus-reasoning-distilled-4bit',   // Qwen 9B Opus-distilled
-  smart: 'lmstudio-community/nvidia-nemotron-3-nano-30b-a3b-mlx-4bit',        // Nemotron Nano 30B
-}
+// MLX server (Apple Silicon optimized — OpenAI-compatible API)
+// Run: python3.12 -m mlx_lm server --model <model> --port 8899
+const MLX_SERVER_URL = 'http://localhost:8899'
+const MLX_MODEL = 'jackrong/mlx-qwen3.5-9b-claude-4.6-opus-reasoning-distilled-4bit'
 
 /**
  * Ask a local model a question. Zero API cost.
@@ -154,26 +152,35 @@ const MLX_MODELS = {
  * tier: 'fast' = Qwen 9B, 'smart' = Nemotron 30B, 'default' = Ollama
  */
 async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' | 'default' = 'default'): Promise<string> {
-  // Try MLX first (Apple Silicon optimized)
+  // Try MLX server first (Apple Silicon optimized, OpenAI-compatible API)
   if (tier !== 'default') {
-    const modelId = tier === 'fast' ? MLX_MODELS.fast : MLX_MODELS.smart
     try {
-      // Write prompt to temp file to avoid shell escaping issues
-      const tmpPrompt = join(DAEMON_DIR, '.tmp-prompt.txt')
-      writeFileSync(tmpPrompt, prompt)
-      const result = execSync(
-        `/opt/homebrew/bin/python3.12 -c "
-from mlx_lm import load, generate
-model, tokenizer = load('${modelId}')
-prompt = open('${tmpPrompt}').read()
-response = generate(model, tokenizer, prompt=prompt, max_tokens=${maxTokens}, temp=0.7, verbose=False)
-print(response)
-"`,
-        { encoding: 'utf-8', timeout: 180000, stdio: ['pipe', 'pipe', 'pipe'] }
-      )
-      return result.trim()
-    } catch (err) {
-      log(`[ai] MLX ${tier} failed: ${err instanceof Error ? err.message.slice(0, 100) : ''}, falling back to Ollama`)
+      const res = await fetch(`${MLX_SERVER_URL}/v1/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: MLX_MODEL,
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: maxTokens * 3, // reasoning models need extra tokens for thinking
+          temperature: 0.7,
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json() as {
+          choices?: Array<{
+            message?: { content?: string; reasoning?: string }
+          }>
+        }
+        // Reasoning models put thinking in 'reasoning', answer in 'content'
+        const msg = data.choices?.[0]?.message
+        const content = msg?.content?.trim() || msg?.reasoning?.trim()
+        if (content) {
+          log(`[ai] MLX responded (${content.length} chars)`)
+          return content
+        }
+      }
+    } catch {
+      // MLX server not running — fall back to Ollama
     }
   }
 
