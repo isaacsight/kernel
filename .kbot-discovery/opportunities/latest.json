@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T09:10:11.734Z",
+  "timestamp": "2026-03-21T09:45:12.587Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(plugins/runtime): fix api.runtime.version in bundled and npm installs",
+      "url": "https://github.com/openclaw/openclaw/pull/51529",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "feat(matrix): add subagent hooks for ACP room-binding",
+      "url": "https://github.com/openclaw/openclaw/pull/51523",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "🌐 Global Tech Briefing - 2026-03-21",
       "url": "https://github.com/AtomChen0425/Global_Trends/issues/33",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore: bump version to 1.3.0 and add npm publish workflow",
-      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/24",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(InputBar): Improve voice recording UX - draft preservation and mixed typing",
-      "url": "https://github.com/daggerhashimoto/openclaw-nerve/pull/131",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "dynq, a (hand-written) jq query tool for DynamoDB",
+      "url": "https://reddit.com/r/commandline/comments/1rzn1ma/dynq_a_handwritten_jq_query_tool_for_dynamodb/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Vote America Only U.S. Political Candidate data via curl and SSH",
       "url": "https://reddit.com/r/commandline/comments/1rz7gci/vote_america_only_us_political_candidate_data_via/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "Made a CLI-first daemon in Rust that you can also reach through Telegram, Discord, Slack, Email, or Matrix. Local by default.",
       "url": "https://reddit.com/r/commandline/comments/1ryqmes/made_a_clifirst_daemon_in_rust_that_you_can_also/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "HiveCommand — open-source terminal dashboard for Claude Code and with RuFlo hive-mind orchestration, session persistence, and voice control",
-      "url": "https://reddit.com/r/commandline/comments/1rviobz/hivecommand_opensource_terminal_dashboard_for/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
