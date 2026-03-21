@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T06:57:19.585Z",
+  "timestamp": "2026-03-21T07:29:09.547Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Parallel Perl – Autoparallelizing interpreter with JIT",
+      "url": "https://news.ycombinator.com/item?id=47464781",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Ask HN: Is vibe coding a new mandatory job requirement?",
       "url": "https://news.ycombinator.com/item?id=47464333",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -76,13 +83,6 @@
       "source": "hn-comment",
       "title": "I'm OK being left behind, thanks",
       "url": "https://news.ycombinator.com/item?id=47461684",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "I'm OK being left behind, thanks",
-      "url": "https://news.ycombinator.com/item?id=47456239",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "chore: bump version to 1.3.0 and add npm publish workflow",
+      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/24",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "feat(InputBar): Improve voice recording UX - draft preservation and mixed typing",
       "url": "https://github.com/daggerhashimoto/openclaw-nerve/pull/131",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Fix(gui): Prevent UI freeze in Peak Picking task during ring extraction",
       "url": "https://github.com/silx-kit/pyFAI/pull/2824",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(clawbot): snapshot + rollback + approval button for write operations",
-      "url": "https://github.com/JK42JJ/insighta/issues/304",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
