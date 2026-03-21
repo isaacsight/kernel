@@ -1,23 +1,29 @@
 {
-  "timestamp": "2026-03-21T00:07:30.821Z",
+  "timestamp": "2026-03-21T02:10:25.321Z",
   "projects": [
     {
-      "name": "daggerhashimoto/openclaw-nerve",
-      "url": "https://github.com/daggerhashimoto/openclaw-nerve",
-      "stars": 207,
-      "description": "Real-time web cockpit for OpenClaw: voice conversations, agent automated kanban board, workspace/file control, sub-agent sessions, inline charts, and usage visibility."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1054,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1015,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
+      "name": "tony1223/better-agent-terminal",
+      "url": "https://github.com/tony1223/better-agent-terminal",
+      "stars": 167,
+      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
     },
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29612,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "olasunkanmi-SE/codebuddy",
+      "url": "https://github.com/olasunkanmi-SE/codebuddy",
+      "stars": 110,
+      "description": "An Autonomous AI Software Engineer"
+    },
+    {
+      "name": "open-compress/claw-compactor",
+      "url": "https://github.com/open-compress/claw-compactor",
+      "stars": 1738,
+      "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
       "name": "ArcadeAI/arcade-mcp",
@@ -32,28 +38,22 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1432,
-      "description": "The LLM Anti-Framework"
-    },
-    {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "jcriecken/OpenClawDocs",
-      "url": "https://github.com/jcriecken/OpenClawDocs",
-      "stars": 0,
-      "description": "Operations manual for the OpenClaw Jarvis AI agent instance - architecture, skills, personas, cron, plugins, and maintenance."
-    },
-    {
       "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "jcriecken/OpenClawBrain",
+      "url": "https://github.com/jcriecken/OpenClawBrain",
+      "stars": 0,
+      "description": "Central knowledge base for the OpenClaw Jarvis AI agent instance — architecture, skills, personas, cron, plugins, and maintenance."
     }
   ],
   "latestPaper": {

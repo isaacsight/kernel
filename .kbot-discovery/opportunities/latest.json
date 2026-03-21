@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T01:54:47.376Z",
+  "timestamp": "2026-03-21T02:30:00.465Z",
   "count": 30,
   "opportunities": [
     {
@@ -102,8 +102,8 @@
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] UI flicker patterns detected",
-      "url": "https://github.com/kubestellar/console/issues/3049",
+      "title": "Integrate Postman Collections and Environments from File System",
+      "url": "https://github.com/SamaelxLunafreya/generative-ai/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat(search): cache-friendly recall via memory_version and GET /version endpoint (#817)",
-      "url": "https://github.com/chethanuk/OpenViking/pull/8",
+      "title": "OpenClaw/NemoClaw feature integration (9 features + security hardening)",
+      "url": "https://github.com/JaredCluff/nexibot/pull/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-03-21",
-      "url": "https://github.com/yinwm/agents-radar/issues/38",
+      "title": "🦞 Bản tin hàng ngày hệ sinh thái OpenClaw 2026-03-21",
+      "url": "https://github.com/compasify/agents-radar/issues/66",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-03-21",
-      "url": "https://github.com/duanyytop/agents-radar/issues/245",
+      "title": "feat: Add autonomous grok-swarm-agent for iterative file modifications",
+      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/16",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
