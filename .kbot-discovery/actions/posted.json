@@ -103,5 +103,14 @@
     "comment": "The site-level context approach actually helps with token budget since you don't re-explain domain norms on every page. Have you considered how this handles dynamic content that changes between page visits? Curious if you're caching the site context or just passing it as a system prompt each time?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-21T14:31:04.909Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "Curious about the local-first architecture - does the inference actually run on-device, or does it sync with a remote service in the background? Also, how does it handle ephemeral state when you're working across multiple sessions?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]

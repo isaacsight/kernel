@@ -1,6 +1,12 @@
 {
-  "timestamp": "2026-03-21T12:25:10.453Z",
+  "timestamp": "2026-03-21T14:25:15.817Z",
   "projects": [
+    {
+      "name": "skalesapp/skales",
+      "url": "https://github.com/skalesapp/skales",
+      "stars": 462,
+      "description": "Free AI Desktop Agent for Windows, macOS & Linux - Automate email, calendar, browser, code generation. 13+ AI providers, Ollama, Telegram remote control. No Docker, no terminal. 🦎"
+    },
     {
       "name": "vm0-ai/vm0",
       "url": "https://github.com/vm0-ai/vm0",
@@ -8,16 +14,10 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "olasunkanmi-SE/codebuddy",
-      "url": "https://github.com/olasunkanmi-SE/codebuddy",
-      "stars": 110,
-      "description": "An Autonomous AI Software Engineer"
-    },
-    {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29628,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "OpenCoworkAI/open-cowork",
+      "url": "https://github.com/OpenCoworkAI/open-cowork",
+      "stars": 683,
+      "description": "Open Cowork - Opensource Claude Cowork for Windows & macOS."
     },
     {
       "name": "ReScienceLab/opc-skills",
@@ -28,13 +28,13 @@
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10190,
+      "stars": 10199,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "open-compress/claw-compactor",
       "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 1764,
+      "stars": 1766,
       "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
