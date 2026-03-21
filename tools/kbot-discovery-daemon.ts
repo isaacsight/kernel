@@ -162,7 +162,7 @@ async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' 
       const tmpPrompt = join(DAEMON_DIR, '.tmp-prompt.txt')
       writeFileSync(tmpPrompt, prompt)
       const result = execSync(
-        `python3 -c "
+        `python3.12 -c "
 from mlx_lm import load, generate
 model, tokenizer = load('${modelId}')
 prompt = open('${tmpPrompt}').read()
