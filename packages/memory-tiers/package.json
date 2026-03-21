@@ -1,0 +1,32 @@
+{
+  "name": "@kernel.chat/memory-tiers",
+  "version": "1.0.0",
+  "description": "Three-tier generative memory for AI agents: observations → reflections → identity. Based on Stanford's Generative Agents paper. Zero LLM calls.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": ["dist"],
+  "keywords": [
+    "ai-agent", "memory", "generative-agents", "three-tier",
+    "observations", "reflections", "identity", "llm", "kbot"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/memory-tiers"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0"
+  }
+}

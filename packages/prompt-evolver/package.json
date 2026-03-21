@@ -1,0 +1,19 @@
+{
+  "name": "@kernel.chat/prompt-evolver",
+  "version": "1.0.0",
+  "description": "GEPA-style prompt self-optimization for AI agents. Prompts evolve from execution traces — auto-mutate, measure, rollback bad changes. Zero LLM calls.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "scripts": { "build": "tsc" },
+  "files": ["dist"],
+  "keywords": ["ai-agent", "prompt-evolution", "gepa", "self-optimization", "llm", "kbot"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/prompt-evolver"
+  },
+  "devDependencies": { "typescript": "^5.9.0", "@types/node": "^22.0.0" }
+}

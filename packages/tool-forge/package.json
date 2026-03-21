@@ -1,0 +1,27 @@
+{
+  "name": "@kernel.chat/tool-forge",
+  "version": "1.0.0",
+  "description": "Runtime tool creation for AI agents. Define new tools from natural language descriptions at runtime — no restart needed. The agent builds its own tools.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": { "build": "tsc" },
+  "files": ["dist"],
+  "keywords": ["ai-agent", "tool-creation", "runtime", "forge", "dynamic-tools", "llm", "kbot"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/tool-forge"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0"
+  }
+}
