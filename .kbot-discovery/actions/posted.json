@@ -59,5 +59,14 @@
     "comment": "The site-level reasoning approach makes sense given token constraints - calling per-page quickly exhausts budgets while still capturing structural patterns. I'm more curious how you handle nested pagination without re-invoking the model each time. Does the initial pass include heuristics for detecting pagination depth?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-21T11:01:21.090Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47233229",
+    "title": "Show HN: ScrapAI – We scrape 500 sites. AI runs once per site, not per page",
+    "comment": "The site-level inference is an interesting cost optimization, but I'm curious how you handle cases where pages in the same domain need fundamentally different classification logic.",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
