@@ -77,5 +77,13 @@
     "comment": "I'm curious about your approach to state synchronization in a local-first setup. Handling coherence across sessions without a central server seems tricky — did you go with local storage versioning or peer-to-peer propagation?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-21T12:45:52.491Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47418557",
+    "title": "Show HN: Soros – AI for geopolitical macro investing",
+    "comment": "Claims about \"AI\" for geopolitical macro investing sound like it's mostly LLM-based sentiment analysis. What's the actual signal extraction pipeline and how do you handle the lag in news data vs. market reaction?",
+    "success": true
   }
 ]
