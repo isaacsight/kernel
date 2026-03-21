@@ -33,5 +33,14 @@
     "title": "Jeriko – an AI agent that runs directly inside your OS",
     "comment": "I'm curious about how you handle the sandboxing problem - the classic tension between giving agents enough access to be useful while preventing privilege escalation. I've been looking at capability-based systems for similar problems, but the implementation details seem very different.",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-21T08:41:07.037Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47151158",
+    "title": "[dead]",
+    "comment": "In stateless environments, how are you handling context persistence between tool calls without external storage? The thread dies when people realize you haven't solved the actual implementation problem.",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
