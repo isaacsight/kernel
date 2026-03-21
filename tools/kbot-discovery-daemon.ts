@@ -142,9 +142,10 @@ const OLLAMA_URL = 'http://localhost:11434'
 const OLLAMA_MODEL = 'kernel:latest' // Gemma3 12B — fallback
 
 // MLX models (Apple Silicon optimized — faster than Ollama)
+// Uses HuggingFace paths — mlx_lm downloads and caches automatically
 const MLX_MODELS = {
-  fast: join(homedir(), '.kbot', 'models', 'qwen-9b-opus'),      // Qwen 9B Opus-distilled — fast
-  smart: join(homedir(), '.kbot', 'models', 'nemotron-nano-30b'), // Nemotron Nano 30B — best quality
+  fast: 'jackrong/mlx-qwen3.5-9b-claude-4.6-opus-reasoning-distilled-4bit',   // Qwen 9B Opus-distilled
+  smart: 'lmstudio-community/nvidia-nemotron-3-nano-30b-a3b-mlx-4bit',        // Nemotron Nano 30B
 }
 
 /**
@@ -153,26 +154,26 @@ const MLX_MODELS = {
  * tier: 'fast' = Qwen 9B, 'smart' = Nemotron 30B, 'default' = Ollama
  */
 async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' | 'default' = 'default'): Promise<string> {
-  // Try MLX first if model exists
+  // Try MLX first (Apple Silicon optimized)
   if (tier !== 'default') {
-    const modelPath = tier === 'fast' ? MLX_MODELS.fast : MLX_MODELS.smart
-    if (existsSync(modelPath)) {
-      try {
-        const result = execSync(
-          `python3 -m mlx_lm.generate --model "${modelPath}" --max-tokens ${maxTokens} --temp 0.7 --prompt "${prompt.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`,
-          { encoding: 'utf-8', timeout: 120000, stdio: ['pipe', 'pipe', 'pipe'] }
-        )
-        // mlx_lm outputs the prompt + generation, extract just the generation
-        const output = result.trim()
-        // Find where the prompt ends and generation begins
-        const promptEnd = output.lastIndexOf(prompt.slice(-50))
-        if (promptEnd >= 0) {
-          return output.slice(promptEnd + prompt.slice(-50).length).trim()
-        }
-        return output
-      } catch {
-        log(`[ai] MLX ${tier} failed, falling back to Ollama`)
-      }
+    const modelId = tier === 'fast' ? MLX_MODELS.fast : MLX_MODELS.smart
+    try {
+      // Write prompt to temp file to avoid shell escaping issues
+      const tmpPrompt = join(DAEMON_DIR, '.tmp-prompt.txt')
+      writeFileSync(tmpPrompt, prompt)
+      const result = execSync(
+        `python3 -c "
+from mlx_lm import load, generate
+model, tokenizer = load('${modelId}')
+prompt = open('${tmpPrompt}').read()
+response = generate(model, tokenizer, prompt=prompt, max_tokens=${maxTokens}, temp=0.7, verbose=False)
+print(response)
+"`,
+        { encoding: 'utf-8', timeout: 180000, stdio: ['pipe', 'pipe', 'pipe'] }
+      )
+      return result.trim()
+    } catch (err) {
+      log(`[ai] MLX ${tier} failed: ${err instanceof Error ? err.message.slice(0, 100) : ''}, falling back to Ollama`)
     }
   }
 
