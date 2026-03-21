@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T13:50:12.058Z",
+  "timestamp": "2026-03-21T14:25:12.870Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "[Feature]: Built-in persistent memory system with compaction tree",
-      "url": "https://github.com/openclaw/openclaw/issues/51612",
+      "title": "fix(release): link Go CLI and API client versions",
+      "url": "https://github.com/getlarge/themoltnet/pull/465",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Revert startup-memory regression from web search compat change",
-      "url": "https://github.com/openclaw/openclaw/pull/51599",
+      "title": "feat(api): diary tag discovery endpoint",
+      "url": "https://github.com/getlarge/themoltnet/pull/464",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Release v0.3.0 — Paradigm Shift (3 phases)",
-      "url": "https://github.com/prompt-armor/prompt-armor/pull/12",
+      "title": "feat: add custom pack preview/create across REST, MCP, and generated clients",
+      "url": "https://github.com/getlarge/themoltnet/pull/463",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
