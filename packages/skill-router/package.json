@@ -1,0 +1,42 @@
+{
+  "name": "@kernel.chat/skill-router",
+  "version": "1.0.0",
+  "description": "Bayesian skill-rating router for AI agents. Routes tasks to the best specialist using TrueSkill-style ratings that improve with every interaction. Zero LLM calls.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test src/*.test.ts"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "ai-agent",
+    "routing",
+    "bayesian",
+    "skill-rating",
+    "trueskill",
+    "multi-agent",
+    "llm",
+    "kbot"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/skill-router"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0"
+  }
+}
