@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T00:07:29.291Z",
+  "timestamp": "2026-03-21T00:37:53.023Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -277,61 +277,64 @@
           "author": "rbanffy",
           "children": [
             47462013,
+            47462787,
             47461304,
             47461578,
             47460841,
             47461834,
-            47462243,
             47461565,
+            47462243,
             47461042,
-            47462400,
             47461613,
-            47462299,
-            47462465,
             47461462,
-            47462016,
+            47462299,
+            47462400,
+            47461326,
             47461851,
+            47462016,
             47461008,
             47461707,
-            47461326,
-            47461781,
-            47461846,
+            47462465,
             47461334,
+            47461846,
             47461500,
+            47461348,
+            47461597,
             47461314,
             47462066,
             47461996,
-            47461348,
-            47461597,
-            47461944,
-            47461679,
+            47460967,
             47461262,
-            47462117,
+            47461679,
+            47461944,
             47461475,
             47461340,
-            47462424,
-            47460967,
+            47461781,
             47460886,
-            47461499,
             47461422,
+            47461499,
+            47462424,
             47461213,
-            47462442,
+            47462583,
             47461888,
             47462289,
+            47462442,
             47461947,
+            47462612,
             47461217,
             47461418,
             47461554,
+            47462117,
             47461212
           ],
           "created_at": "2026-03-20T21:03:52Z",
           "created_at_i": 1774040632,
-          "num_comments": 148,
+          "num_comments": 166,
           "objectID": "47460525",
-          "points": 309,
+          "points": 348,
           "story_id": 47460525,
           "title": "OpenCode – The open source AI coding agent",
-          "updated_at": "2026-03-21T00:07:10Z",
+          "updated_at": "2026-03-21T00:37:40Z",
           "url": "https://opencode.ai/"
         },
         {
@@ -570,8 +573,8 @@
             47452856,
             47455650,
             47454342,
-            47449326,
             47443199,
+            47449326,
             47446988,
             47449021,
             47445013,
@@ -591,7 +594,7 @@
           "story_id": 47441546,
           "story_text": "Kitten TTS (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;KittenML&#x2F;KittenTTS\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;KittenML&#x2F;KittenTTS</a>) is an open-source series of tiny and expressive text-to-speech models for on-device applications. We had a thread last year here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44807868\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44807868</a>.<p>Today we&#x27;re releasing three new models with 80M, 40M and 14M parameters.<p>The largest model (80M) has the highest quality. The 14M variant reaches new SOTA in expressivity among similar sized models, despite being &lt;25MB in size. This release is a major upgrade from the previous one and supports English text-to-speech applications in eight voices: four male and four female.<p>Here&#x27;s a short demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=ge3u5qblqZA\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=ge3u5qblqZA</a>.<p>Most models are quantized to int8 + fp16, and they use ONNX for runtime. Our models are designed to run anywhere eg. raspberry pi, low-end smartphones, wearables, browsers etc. No GPU required! This release aims to bridge the gap between on-device and cloud models for tts applications. Multi-lingual model release is coming soon.<p>On-device AI is bottlenecked by one thing: a lack of tiny models that actually perform. Our goal is to open-source more models to run production-ready voice agents and apps entirely on-device.<p>We would love your feedback!",
           "title": "Show HN: Three new Kitten TTS models – smallest less than 25MB",
-          "updated_at": "2026-03-21T00:06:27Z",
+          "updated_at": "2026-03-21T00:13:26Z",
           "url": "https://github.com/KittenML/KittenTTS"
         }
       ]
@@ -708,6 +711,54 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "vassilbek"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "learning"
+              ],
+              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vassilbek",
+            "story_47062912",
+            "show_hn"
+          ],
+          "author": "vassilbek",
+          "created_at": "2026-02-18T16:40:11Z",
+          "created_at_i": 1771432811,
+          "num_comments": 0,
+          "objectID": "47062912",
+          "points": 1,
+          "story_id": 47062912,
+          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
+          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
+          "updated_at": "2026-03-05T23:35:10Z",
+          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "abrandes"
             },
             "story_text": {
@@ -795,49 +846,6 @@
           "title": "Show HN: Urban Pipeline for Citywide Insights",
           "updated_at": "2025-07-13T22:27:35Z",
           "url": "https://github.com/Wingscape/urban-pipeline"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cyberneticc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
-          ],
-          "author": "cyberneticc",
-          "children": [
-            43019203
-          ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
-          "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
@@ -1051,7 +1059,1450 @@
           "url": "https://github.com/BartlomiejLewandowski/looseleaf"
         }
       ]
+    },
+    {
+      "query": "OpenClaw+plugin",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jay17"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Memori Launched an <em>OpenClaw</em> <em>Plugin</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "https://memorilabs.ai/docs/memori-cloud/<em>openclaw</em>/quickstart"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jay17",
+            "story_47447868"
+          ],
+          "author": "jay17",
+          "children": [
+            47447869
+          ],
+          "created_at": "2026-03-19T23:22:36Z",
+          "created_at_i": 1773962556,
+          "num_comments": 0,
+          "objectID": "47447868",
+          "points": 2,
+          "story_id": 47447868,
+          "title": "Memori Launched an OpenClaw Plugin",
+          "updated_at": "2026-03-20T02:52:38Z",
+          "url": "https://memorilabs.ai/docs/memori-cloud/openclaw/quickstart"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "benslockedin"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Claude Code forgets everything when you close the terminal. I spent 7 months figuring out what the minimum structure is to fix that.<p>Five files per project:\n  - key.md — what this is, who's involved\n  - now.md — where it's at right now\n  - log.md — what happened, decisions with rationale\n  - tasks.md — what needs doing\n  - insights.md — stuff that doesn't change<p>Save at session end, load at session start. 12 hooks enforce the structure, log entries are immutable, deletions are blocked, context re-injects when the window fills up. The model can't talk its way out of the guardrails.<p>Also works with <em>OpenClaw</em> (separate <em>plugin</em>, same files - in alpha). Your Mac Mini captures all day, Claude Code does focused work, both read the same project context.<p>claude <em>plugin</em> install alive@alivecomputer<p>MIT licensed, local files, no account.<p>https://github.com/alivecomputer/alive-claude"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Alive – Five Markdown files that give Claude Code a persistent memory"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_benslockedin",
+            "story_47415599",
+            "ask_hn"
+          ],
+          "author": "benslockedin",
+          "children": [
+            47415645
+          ],
+          "created_at": "2026-03-17T17:20:09Z",
+          "created_at_i": 1773768009,
+          "num_comments": 1,
+          "objectID": "47415599",
+          "points": 2,
+          "story_id": 47415599,
+          "story_text": "Claude Code forgets everything when you close the terminal. I spent 7 months figuring out what the minimum structure is to fix that.<p>Five files per project:\n  - key.md — what this is, who&#x27;s involved\n  - now.md — where it&#x27;s at right now\n  - log.md — what happened, decisions with rationale\n  - tasks.md — what needs doing\n  - insights.md — stuff that doesn&#x27;t change<p>Save at session end, load at session start. 12 hooks enforce the structure, log entries are immutable, deletions are blocked, context re-injects when the window fills up. The model can&#x27;t talk its way out of the guardrails.<p>Also works with OpenClaw (separate plugin, same files - in alpha). Your Mac Mini captures all day, Claude Code does focused work, both read the same project context.<p>claude plugin install alive@alivecomputer<p>MIT licensed, local files, no account.<p>https:&#x2F;&#x2F;github.com&#x2F;alivecomputer&#x2F;alive-claude",
+          "title": "Alive – Five Markdown files that give Claude Code a persistent memory",
+          "updated_at": "2026-03-17T17:51:26Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "doppp"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "NemoClaw: Nvidia <em>plugin</em> for secure installation of <em>OpenClaw</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/NVIDIA/NemoClaw"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_doppp",
+            "story_47410841"
+          ],
+          "author": "doppp",
+          "created_at": "2026-03-17T10:35:48Z",
+          "created_at_i": 1773743748,
+          "num_comments": 0,
+          "objectID": "47410841",
+          "points": 4,
+          "story_id": 47410841,
+          "title": "NemoClaw: Nvidia plugin for secure installation of OpenClaw",
+          "updated_at": "2026-03-18T03:01:59Z",
+          "url": "https://github.com/NVIDIA/NemoClaw"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "amavashev"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "<em>OpenClaw</em> agents can loop, pick expensive models, and burn budget before \nanyone notices. This <em>plugin</em> stops that.<p>Install:<p><pre><code>    <em>openclaw</em> plugins install @runcycles/<em>openclaw</em>-budget-guard\n</code></pre>\nAdd one config block with your tenant and optional model fallbacks \n(e.g. claude-opus → claude-sonnet when budget is low). The <em>plugin</em> \nhandles the rest: balance checks before model selection, reservations \nbefore tool calls, commits after, and cleanup at session end.<p>Built on the Cycles protocol — reserve budget before execution, commit \nactual spend after, release the remainder.<p><em>Plugin</em>: <a href=\"https://github.com/runcycles/cycles-openclaw-budget-guard\" rel=\"nofollow\">https://github.com/runcycles/cycles-<em>openclaw</em>-budget-guard</a><p>npm: <a href=\"https://www.npmjs.com/package/@runcycles/openclaw-budget-guard\" rel=\"nofollow\">https://www.npmjs.com/package/@runcycles/<em>openclaw</em>-budget-gua...</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Show HN: <em>OpenClaw</em> <em>plugin</em> – hard budget limits for agent tool calls"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "https://github.com/runcycles/cycles-<em>openclaw</em>-budget-guard"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_amavashev",
+            "story_47388702",
+            "show_hn"
+          ],
+          "author": "amavashev",
+          "children": [
+            47388709
+          ],
+          "created_at": "2026-03-15T16:03:15Z",
+          "created_at_i": 1773590595,
+          "num_comments": 1,
+          "objectID": "47388702",
+          "points": 1,
+          "story_id": 47388702,
+          "story_text": "OpenClaw agents can loop, pick expensive models, and burn budget before \nanyone notices. This plugin stops that.<p>Install:<p><pre><code>    openclaw plugins install @runcycles&#x2F;openclaw-budget-guard\n</code></pre>\nAdd one config block with your tenant and optional model fallbacks \n(e.g. claude-opus → claude-sonnet when budget is low). The plugin \nhandles the rest: balance checks before model selection, reservations \nbefore tool calls, commits after, and cleanup at session end.<p>Built on the Cycles protocol — reserve budget before execution, commit \nactual spend after, release the remainder.<p>Plugin: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;runcycles&#x2F;cycles-openclaw-budget-guard\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;runcycles&#x2F;cycles-openclaw-budget-guard</a><p>npm: <a href=\"https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@runcycles&#x2F;openclaw-budget-guard\" rel=\"nofollow\">https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@runcycles&#x2F;openclaw-budget-gua...</a>",
+          "title": "Show HN: OpenClaw plugin – hard budget limits for agent tool calls",
+          "updated_at": "2026-03-15T16:06:03Z",
+          "url": "https://github.com/runcycles/cycles-openclaw-budget-guard"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "d36ugger"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Built Cloak to let humans and <em>OpenClaw</em> agents send and receive secrets without leaking them into chat history.<p>It creates self-destructing secret links for API keys, tokens, passwords, and other credentials. Browser mode is zero-knowledge, and there’s also an API/CLI/<em>OpenClaw</em> <em>plugin</em> for agent workflows.<p>Repo: <a href=\"https://github.com/opsyhq/cloak\" rel=\"nofollow\">https://github.com/opsyhq/cloak</a>\nLive: <a href=\"https://cloak.opsy.sh\" rel=\"nofollow\">https://cloak.opsy.sh</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "Show HN: Cloak – send and receive secrets from <em>OpenClaw</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://cloak.opsy.sh"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_d36ugger",
+            "story_47381065",
+            "show_hn"
+          ],
+          "author": "d36ugger",
+          "created_at": "2026-03-14T20:54:42Z",
+          "created_at_i": 1773521682,
+          "num_comments": 0,
+          "objectID": "47381065",
+          "points": 3,
+          "story_id": 47381065,
+          "story_text": "Built Cloak to let humans and OpenClaw agents send and receive secrets without leaking them into chat history.<p>It creates self-destructing secret links for API keys, tokens, passwords, and other credentials. Browser mode is zero-knowledge, and there’s also an API&#x2F;CLI&#x2F;OpenClaw plugin for agent workflows.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;opsyhq&#x2F;cloak\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;opsyhq&#x2F;cloak</a>\nLive: <a href=\"https:&#x2F;&#x2F;cloak.opsy.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;cloak.opsy.sh</a>",
+          "title": "Show HN: Cloak – send and receive secrets from OpenClaw",
+          "updated_at": "2026-03-14T22:38:14Z",
+          "url": "https://cloak.opsy.sh"
+        }
+      ]
+    },
+    {
+      "query": "Claude+Code+alternative",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jaredezz"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Show HN: <em>Claude</em> <em>Code</em> Channels Headless via Discord (OpenClaw <em>Alternative</em>)"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "https://jaredezz.tech/posts/<em>claude</em>-<em>code</em>-channels-discord-openclaw-<em>alternative</em>/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jaredezz",
+            "story_47453943",
+            "show_hn"
+          ],
+          "author": "jaredezz",
+          "created_at": "2026-03-20T13:01:59Z",
+          "created_at_i": 1774011719,
+          "num_comments": 0,
+          "objectID": "47453943",
+          "points": 1,
+          "story_id": 47453943,
+          "title": "Show HN: Claude Code Channels Headless via Discord (OpenClaw Alternative)",
+          "updated_at": "2026-03-20T13:04:39Z",
+          "url": "https://jaredezz.tech/posts/claude-code-channels-discord-openclaw-alternative/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "clmnt"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "We've been building out CLI extensions for the Hugging Face hub, and hf-agents is a fun one to share.<p>It uses llmfit under the hood to profile your hardware and automatically select the best-fit model and quantization — no manual GGUF hunting. It then launches a Pi Agent on top of it. One command, local, fully open.<p>If you've been using <em>Claude</em> <em>Code</em> or Codex CLI and want something that runs entirely on your own hardware/models, this is a nice lightweight <em>alternative</em> to try.<p>Happy to answer questions — and curious what hardware setups people are running this on."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: HF-agents, CLI extension to find the best model/quant for your hardware"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/huggingface/hf-agents"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_clmnt",
+            "story_47430624",
+            "show_hn"
+          ],
+          "author": "clmnt",
+          "created_at": "2026-03-18T19:54:19Z",
+          "created_at_i": 1773863659,
+          "num_comments": 0,
+          "objectID": "47430624",
+          "points": 2,
+          "story_id": 47430624,
+          "story_text": "We&#x27;ve been building out CLI extensions for the Hugging Face hub, and hf-agents is a fun one to share.<p>It uses llmfit under the hood to profile your hardware and automatically select the best-fit model and quantization — no manual GGUF hunting. It then launches a Pi Agent on top of it. One command, local, fully open.<p>If you&#x27;ve been using Claude Code or Codex CLI and want something that runs entirely on your own hardware&#x2F;models, this is a nice lightweight alternative to try.<p>Happy to answer questions — and curious what hardware setups people are running this on.",
+          "title": "Show HN: HF-agents, CLI extension to find the best model/quant for your hardware",
+          "updated_at": "2026-03-19T02:37:18Z",
+          "url": "https://github.com/huggingface/hf-agents"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "justswim"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Hi HN, I'm excited to release the weights and full inference stack of an AI model that I've been working on for the past few weeks. Lens is a font recognition model that takes an image and returns the closest matching open-source font that it finds in the image.<p>Recognizing the closest font from an image of text accurately has always been a challenge. Even SOTA vision LLMs can detect basic characteristics like if a font is a serif or a sans-serif, but when it comes to the actual font file that has the most similar styles, vision LLMs will often be quite off for the design and style of a chosen font file.<p>Popular font identification solutions on the internet today also have a two major shortcomings:<p>1. Most of them work based off identifying particular characters and don’t look at an overall word or image, so they require a manual character segmenting step. \n2. Most online tools identify fonts from on a proprietary dataset of commercial fonts in order to monetize. However, this makes it difficult when building applications because often times the recognized fonts can’t be used or downloaded easily.<p>To solve this, I trained the Lens model on a large collection of open-source fonts (mostly Google Fonts, but also a few other open source / freely available fonts). The Lens model is also trained on a large collection of images, each which contain a variety of font styles and weights. As far as I can tell, Lens is the most accurate model right now that maps images to fonts in a single step.<p>I came up with the idea to create this model when I was playing around more with vibe coding tools like <em>Claude</em> <em>Code</em> and Codex. I noticed that when I would ask AI to implement a screenshot exactly, one of the main issues was always the fonts that the AI would choose. They would never match the screenshot exactly, and then swapping out the fonts for a usable <em>alternative</em> was always a pain for me personally.<p>Under the hood this is a classification model built on top of the Resnet 18 architecture. It is trained on over 1000+ fonts and 1.5m+ images.<p>The entire inference stack and model weights are available on Github: <a href=\"https://github.com/mixfont/lens\" rel=\"nofollow\">https://github.com/mixfont/lens</a>.\nI also created a playground for the model on my website where it can be demo’d for free: <a href=\"https://www.mixfont.com/models/lens\" rel=\"nofollow\">https://www.mixfont.com/models/lens</a><p>Blog post on the training process coming soon! Would love to hear what you all think and some potential applications of a model like this. Happy to answer other questions in the meantime - thank you for checking it out!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Lens – Open-weight AI model to identify fonts from images"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_justswim",
+            "story_47405761",
+            "show_hn"
+          ],
+          "author": "justswim",
+          "children": [
+            47414681,
+            47410150
+          ],
+          "created_at": "2026-03-16T22:19:08Z",
+          "created_at_i": 1773699548,
+          "num_comments": 3,
+          "objectID": "47405761",
+          "points": 3,
+          "story_id": 47405761,
+          "story_text": "Hi HN, I&#x27;m excited to release the weights and full inference stack of an AI model that I&#x27;ve been working on for the past few weeks. Lens is a font recognition model that takes an image and returns the closest matching open-source font that it finds in the image.<p>Recognizing the closest font from an image of text accurately has always been a challenge. Even SOTA vision LLMs can detect basic characteristics like if a font is a serif or a sans-serif, but when it comes to the actual font file that has the most similar styles, vision LLMs will often be quite off for the design and style of a chosen font file.<p>Popular font identification solutions on the internet today also have a two major shortcomings:<p>1. Most of them work based off identifying particular characters and don’t look at an overall word or image, so they require a manual character segmenting step. \n2. Most online tools identify fonts from on a proprietary dataset of commercial fonts in order to monetize. However, this makes it difficult when building applications because often times the recognized fonts can’t be used or downloaded easily.<p>To solve this, I trained the Lens model on a large collection of open-source fonts (mostly Google Fonts, but also a few other open source &#x2F; freely available fonts). The Lens model is also trained on a large collection of images, each which contain a variety of font styles and weights. As far as I can tell, Lens is the most accurate model right now that maps images to fonts in a single step.<p>I came up with the idea to create this model when I was playing around more with vibe coding tools like Claude Code and Codex. I noticed that when I would ask AI to implement a screenshot exactly, one of the main issues was always the fonts that the AI would choose. They would never match the screenshot exactly, and then swapping out the fonts for a usable alternative was always a pain for me personally.<p>Under the hood this is a classification model built on top of the Resnet 18 architecture. It is trained on over 1000+ fonts and 1.5m+ images.<p>The entire inference stack and model weights are available on Github: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mixfont&#x2F;lens\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mixfont&#x2F;lens</a>.\nI also created a playground for the model on my website where it can be demo’d for free: <a href=\"https:&#x2F;&#x2F;www.mixfont.com&#x2F;models&#x2F;lens\" rel=\"nofollow\">https:&#x2F;&#x2F;www.mixfont.com&#x2F;models&#x2F;lens</a><p>Blog post on the training process coming soon! Would love to hear what you all think and some potential applications of a model like this. Happy to answer other questions in the meantime - thank you for checking it out!",
+          "title": "Show HN: Lens – Open-weight AI model to identify fonts from images",
+          "updated_at": "2026-03-17T20:00:43Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "axotopia"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "I run a building design consultancy for homeowners and architects, not a SaaS firm. Honestly, I'm not going to claim we were trying to build some fantastic ‘anti-fragile <em>alternative</em>’ for the future… I just got tired of paying Wix $40 a month for a brochure no one read. The portfolio was static, the inquiries were generic, and every time a potential client asked about setback variances, I'd lose hours explaining the same thing. So last December, I told my wife I was killing the website. She thought I’d lost it. Maybe I had.<p>The stack? It’s messy. We started on Netlify because it was cheap. Hit that stupid 10-second serverless timeout after a week when I started customizing the bot. The bot would just… freeze. Had to implement a clunky polling loop that felt like a band-aid. Eventually split the agent into 3 pieces just to keep it responsive:<p>The Brain (Edge) figures out what you want, shoots a JSON signal to the browser.\nThe Hands (Browser) runs the actual tool—like pulling a <em>code</em> reference—via a separate serverless function.\nThe Voice (Edge) feeds the result back to talk.<p>It works, but it’s not elegant. It’s duct tape. Last time I coded was over 30 yrs ago. AI helped a lot, but it feels like 3 steps forward, 2 steps back when it starts obsessing about one area and wrecks what was done 5 refactors ago.<p>DeepSeek-R1 is the reasoning engine. We tried Gemini and a bunch of others initially. They were either too chatty or horribly bone dry. DeepSeek stays on script. Interestingly, I discovered a couple of weeks ago that a traditional architect—probably not liking me putting a dent in his ‘protected’ professional business—tried to pick a fight with the bot. Wanted to prove it couldn’t handle “professional nuance.” DeepSeek shut him down without breaking a sweat. Log is public if you want to see it.<p>Fallback is MiniMax M2.5. Triggers on rate limits. Sometimes it feels a bit slower, but it hasn’t failed yet.<p>Voice input via Web Speech API. That was a mistake. Transcription hallucinations are a nightmare. “Setback” becomes “set back” becomes “backset.” We added a dual-path validation layer. Speech-to-text gets audited before the reasoning models even see it. Still not perfect.<p>Liability is the real killer. In our world, if the AI hallucinates a building <em>code</em> <em>clause</em>, we’re done. Insurance won’t touch us. We’ve gone through four architectural versions. Started with 30k lines of spaghetti. Now it’s decoupled, but still fragile. We publish the crash logs publicly because hiding them feels dishonest. Also, it keeps us honest.<p>The hardest part wasn’t the infrastructure, the intent engineering was. Making an LLM sound like a seasoned principal when talking to a first-time homeowner, then pivot instantly to defend our biz model against an angry architect who wants to punch holes… that took 2 whole months.<p>Speed was killing us. So I came up with this hack—I call it ‘Eager RAG’ because it’s basically guessing what you’ll ask to see if we have something similar already in the database of controlled responses to cut response time. It burns through tokens like crazy, but man, it makes the thing feel much more instant. We also ripped out the persistent databases. Turns out 19 out of 20 visitors never come back, so why bother? Feels wasteful until you realize you’re not building for the 5% that return.<p>It’s not flawless. No server-side job queue yet. If a client drops mid-query, the result vanishes. But it lets me operate without junior staff. That’s the point.<p>The terminal is live at <a href=\"https://axoworks.com\" rel=\"nofollow\">https://axoworks.com</a>. Mic optional. No signup. Try to break it. Ask a complex zoning question. See if it over-promises.<p>Logs:<p>Architect vs. DeepSeek: <a href=\"https://logs.axoworks.com/chat-architect-vs-concierge-v147.html\" rel=\"nofollow\">https://logs.axoworks.com/chat-architect-vs-concierge-v147.h...</a><p>System Audit: <a href=\"https://logs.axoworks.com/audit-2026-02-19-v148.html\" rel=\"nofollow\">https://logs.axoworks.com/audit-2026-02-19-v148.html</a><p>I’ll be in the comments. Thanks. Kee"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Dumped Wix, my AEC consultancy's storefront is now an AI Edge"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://axoworks.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_axotopia",
+            "story_47387398",
+            "show_hn"
+          ],
+          "author": "axotopia",
+          "created_at": "2026-03-15T13:53:52Z",
+          "created_at_i": 1773582832,
+          "num_comments": 0,
+          "objectID": "47387398",
+          "points": 1,
+          "story_id": 47387398,
+          "story_text": "I run a building design consultancy for homeowners and architects, not a SaaS firm. Honestly, I&#x27;m not going to claim we were trying to build some fantastic ‘anti-fragile alternative’ for the future… I just got tired of paying Wix $40 a month for a brochure no one read. The portfolio was static, the inquiries were generic, and every time a potential client asked about setback variances, I&#x27;d lose hours explaining the same thing. So last December, I told my wife I was killing the website. She thought I’d lost it. Maybe I had.<p>The stack? It’s messy. We started on Netlify because it was cheap. Hit that stupid 10-second serverless timeout after a week when I started customizing the bot. The bot would just… freeze. Had to implement a clunky polling loop that felt like a band-aid. Eventually split the agent into 3 pieces just to keep it responsive:<p>The Brain (Edge) figures out what you want, shoots a JSON signal to the browser.\nThe Hands (Browser) runs the actual tool—like pulling a code reference—via a separate serverless function.\nThe Voice (Edge) feeds the result back to talk.<p>It works, but it’s not elegant. It’s duct tape. Last time I coded was over 30 yrs ago. AI helped a lot, but it feels like 3 steps forward, 2 steps back when it starts obsessing about one area and wrecks what was done 5 refactors ago.<p>DeepSeek-R1 is the reasoning engine. We tried Gemini and a bunch of others initially. They were either too chatty or horribly bone dry. DeepSeek stays on script. Interestingly, I discovered a couple of weeks ago that a traditional architect—probably not liking me putting a dent in his ‘protected’ professional business—tried to pick a fight with the bot. Wanted to prove it couldn’t handle “professional nuance.” DeepSeek shut him down without breaking a sweat. Log is public if you want to see it.<p>Fallback is MiniMax M2.5. Triggers on rate limits. Sometimes it feels a bit slower, but it hasn’t failed yet.<p>Voice input via Web Speech API. That was a mistake. Transcription hallucinations are a nightmare. “Setback” becomes “set back” becomes “backset.” We added a dual-path validation layer. Speech-to-text gets audited before the reasoning models even see it. Still not perfect.<p>Liability is the real killer. In our world, if the AI hallucinates a building code clause, we’re done. Insurance won’t touch us. We’ve gone through four architectural versions. Started with 30k lines of spaghetti. Now it’s decoupled, but still fragile. We publish the crash logs publicly because hiding them feels dishonest. Also, it keeps us honest.<p>The hardest part wasn’t the infrastructure, the intent engineering was. Making an LLM sound like a seasoned principal when talking to a first-time homeowner, then pivot instantly to defend our biz model against an angry architect who wants to punch holes… that took 2 whole months.<p>Speed was killing us. So I came up with this hack—I call it ‘Eager RAG’ because it’s basically guessing what you’ll ask to see if we have something similar already in the database of controlled responses to cut response time. It burns through tokens like crazy, but man, it makes the thing feel much more instant. We also ripped out the persistent databases. Turns out 19 out of 20 visitors never come back, so why bother? Feels wasteful until you realize you’re not building for the 5% that return.<p>It’s not flawless. No server-side job queue yet. If a client drops mid-query, the result vanishes. But it lets me operate without junior staff. That’s the point.<p>The terminal is live at <a href=\"https:&#x2F;&#x2F;axoworks.com\" rel=\"nofollow\">https:&#x2F;&#x2F;axoworks.com</a>. Mic optional. No signup. Try to break it. Ask a complex zoning question. See if it over-promises.<p>Logs:<p>Architect vs. DeepSeek: <a href=\"https:&#x2F;&#x2F;logs.axoworks.com&#x2F;chat-architect-vs-concierge-v147.html\" rel=\"nofollow\">https:&#x2F;&#x2F;logs.axoworks.com&#x2F;chat-architect-vs-concierge-v147.h...</a><p>System Audit: <a href=\"https:&#x2F;&#x2F;logs.axoworks.com&#x2F;audit-2026-02-19-v148.html\" rel=\"nofollow\">https:&#x2F;&#x2F;logs.axoworks.com&#x2F;audit-2026-02-19-v148.html</a><p>I’ll be in the comments. Thanks. Kee",
+          "title": "Show HN: Dumped Wix, my AEC consultancy's storefront is now an AI Edge",
+          "updated_at": "2026-03-15T14:55:17Z",
+          "url": "https://axoworks.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "hhossain"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "I built LLM OneStop <em>Code</em>—an AI coding agent for VS <em>Code</em> that works like <em>Claude</em> <em>Code</em> or Cursor, but with one key difference: pure pay-as-you-go pricing. No monthly subscription required.<p>The problem with existing tools:\n- Cursor: $20/month for Pro (even if you barely use it)\n- GitHub Copilot: $10/month minimum\n- <em>Claude</em> <em>Code</em>: Rate-limited by API usage tier + monthly caps<p>LLM OneStop <em>Code</em> charges only for what you use—billed in credits at cost + 5%. If you <em>code</em> 2 hours this month and 40 the next, you pay proportionally. No quota walls, no &quot;upgrade to continue&quot; prompts.<p>What it does:\n- Multi-model AI agent (<em>Claude</em>, GPT-5, Gemini, etc.)\n- Chat-based coding assistance in VS <em>Code</em>\n- *Import and continue your existing <em>Claude</em> <em>Code</em> or Cursor sessions*—when you hit your hourly rate limit or quota, just import the conversation and keep working without losing context\n- Stateless by design (no <em>code</em> stored on servers)\n- Free plan available to try everything (100 credits/month)<p>Also running LLM OneStop as a unified API gateway—<em>alternative</em> to OpenRouter with accurate multi-modal cost tracking. If you prefer BYO API keys, we have a Connect plan available.<p>The thesis: developers want AI coding tools that scale with usage, not fixed subscriptions. You shouldn't pay $240/year if you only <em>code</em> on weekends. And when you hit a quota wall mid-debugging session, you shouldn't have to start over or wait until tomorrow.<p>Would love to hear from folks who've felt locked into coding tool subscriptions or hit quota limits mid-session.<p>Marketplace: <a href=\"https://marketplace.visualstudio.com/items?itemName=LLMOneStop.llmonestop\" rel=\"nofollow\">https://marketplace.visualstudio.com/items?itemName=LLMOneSt...</a>\nDocs: <a href=\"https://www.llmonestop.com/blog/guides/llm-onestop-vscode-extension-ai-coding-assistant\" rel=\"nofollow\">https://www.llmonestop.com/blog/guides/llm-onestop-vscode-ex...</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "code"
+              ],
+              "value": "Show HN: AI coding agent for VS <em>Code</em> with pay-as-you-go pricing- no subscription"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.llmonestop.com/#pricing"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_hhossain",
+            "story_47381413",
+            "show_hn"
+          ],
+          "author": "hhossain",
+          "created_at": "2026-03-14T21:30:09Z",
+          "created_at_i": 1773523809,
+          "num_comments": 0,
+          "objectID": "47381413",
+          "points": 2,
+          "story_id": 47381413,
+          "story_text": "I built LLM OneStop Code—an AI coding agent for VS Code that works like Claude Code or Cursor, but with one key difference: pure pay-as-you-go pricing. No monthly subscription required.<p>The problem with existing tools:\n- Cursor: $20&#x2F;month for Pro (even if you barely use it)\n- GitHub Copilot: $10&#x2F;month minimum\n- Claude Code: Rate-limited by API usage tier + monthly caps<p>LLM OneStop Code charges only for what you use—billed in credits at cost + 5%. If you code 2 hours this month and 40 the next, you pay proportionally. No quota walls, no &quot;upgrade to continue&quot; prompts.<p>What it does:\n- Multi-model AI agent (Claude, GPT-5, Gemini, etc.)\n- Chat-based coding assistance in VS Code\n- *Import and continue your existing Claude Code or Cursor sessions*—when you hit your hourly rate limit or quota, just import the conversation and keep working without losing context\n- Stateless by design (no code stored on servers)\n- Free plan available to try everything (100 credits&#x2F;month)<p>Also running LLM OneStop as a unified API gateway—alternative to OpenRouter with accurate multi-modal cost tracking. If you prefer BYO API keys, we have a Connect plan available.<p>The thesis: developers want AI coding tools that scale with usage, not fixed subscriptions. You shouldn&#x27;t pay $240&#x2F;year if you only code on weekends. And when you hit a quota wall mid-debugging session, you shouldn&#x27;t have to start over or wait until tomorrow.<p>Would love to hear from folks who&#x27;ve felt locked into coding tool subscriptions or hit quota limits mid-session.<p>Marketplace: <a href=\"https:&#x2F;&#x2F;marketplace.visualstudio.com&#x2F;items?itemName=LLMOneStop.llmonestop\" rel=\"nofollow\">https:&#x2F;&#x2F;marketplace.visualstudio.com&#x2F;items?itemName=LLMOneSt...</a>\nDocs: <a href=\"https:&#x2F;&#x2F;www.llmonestop.com&#x2F;blog&#x2F;guides&#x2F;llm-onestop-vscode-extension-ai-coding-assistant\" rel=\"nofollow\">https:&#x2F;&#x2F;www.llmonestop.com&#x2F;blog&#x2F;guides&#x2F;llm-onestop-vscode-ex...</a>",
+          "title": "Show HN: AI coding agent for VS Code with pay-as-you-go pricing- no subscription",
+          "updated_at": "2026-03-14T22:05:31Z",
+          "url": "https://www.llmonestop.com/#pricing"
+        }
+      ]
+    },
+    {
+      "query": "Cursor+alternative+open+source",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "eddelgado"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "cursor",
+                "alternative",
+                "open",
+                "source"
+              ],
+              "value": "We launched Kodus – Agent Readiness today.<p>It’s an <em>open</em> <em>source</em> CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, <em>Cursor</em>, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, <em>open</em> <em>source</em> <em>alternative</em>.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https://github.com/kodustech/agent-readiness\" rel=\"nofollow\">https://github.com/kodustech/agent-readiness</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "alternative",
+                "open",
+                "source"
+              ],
+              "value": "Show HN: <em>Open</em>-<em>source</em> <em>alternative</em> to Factory.ai's Agent Readiness"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/kodustech/agent-readiness"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_eddelgado",
+            "story_47378675",
+            "show_hn"
+          ],
+          "author": "eddelgado",
+          "created_at": "2026-03-14T17:01:51Z",
+          "created_at_i": 1773507711,
+          "num_comments": 0,
+          "objectID": "47378675",
+          "points": 2,
+          "story_id": 47378675,
+          "story_text": "We launched Kodus – Agent Readiness today.<p>It’s an open source CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, Cursor, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, open source alternative.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness</a>",
+          "title": "Show HN: Open-source alternative to Factory.ai's Agent Readiness",
+          "updated_at": "2026-03-14T17:06:59Z",
+          "url": "https://github.com/kodustech/agent-readiness"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "psrth"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "cursor",
+                "alternative",
+                "open",
+                "source"
+              ],
+              "value": "Mori is an <em>open</em>-<em>source</em> database proxy that lets you run your application locally against real production data without risking writes to production. It connects to your production database, clones the schema locally, and intercepts queries:\n- Reads come from production\n- Writes / migrations / deletes are executed only in a local shadow database\n- Results are merged in real time so your app thinks the changes happened in production<p>So you (and your AI agents) can safely test your code in a verifiable environment (real production data) locally before you're ready to push.<p>Links:\n- Demo -&gt; <a href=\"https://moridb.sh/demo\" rel=\"nofollow\">https://moridb.sh/demo</a>\n- Repository -&gt; <a href=\"https://github.com/psrth/mori\" rel=\"nofollow\">https://github.com/psrth/mori</a>\n- Docs -&gt; <a href=\"https://moridb.sh/docs\" rel=\"nofollow\">https://moridb.sh/docs</a><p>Motivation: \nMost people ask Santa for a bicycle; every year, I've been asking for the ability to test in prod. The existing <em>alternatives</em> (branching, snapshots, seed dbs, staging dbs, good old pg_dump) are one or more of: (a) out of sync, (b) expensive to run (time and cost), (c) cloud / managed provider only. But as AI agents continue to write more code, our local testing frameworks need to keep up. Writing code shouldn't be artificially bottlenecked or a literal leap of faith.<p>Implementation:\nThe docs have a lot more information, but a summary:\n- Support for PSQL/MySQL/SQLite + 6 more engines, each with custom AST-level query classification and rewriting\n- In-flight cross-DB merging of prod data with local modifications\n- Collision-free PK generation and support for foreign keys\n- Full transaction support including CTEs, nested transactions, and savepoints\n- MCP support: plug-and-play into Claude Code, <em>Cursor</em>, or wherever you get your tokens\n- Exhaustive E2E test suite per engine<p>Safety:\nI want to specifically call out the core design principle — that production should never be writable through Mori. This is enforced through four independent layers:<p>1. Query classification — every statement is parsed and classified as read or write before routing\n2. Routing rules — writes are deterministically routed to the local shadow database, never forwarded\n3. Shadow execution enforcement — even if classification is bypassed, the execution layer rejects any write targeting the production connection\n4. Raw byte inspection — finally, outbound bytes on the production socket are inspected to ensure no write operation ever reaches prod<p>If any layer fails to classify a query, Mori refuses the statement entirely rather than risking a pass-through.<p>Note:\nWhile I've validated (and extensively tested against our production database) all of the supported queries, there may (and will) be edge cases that I haven't discovered yet. If you hit an edge case, please <em>open</em> an issue - expanding the current coverage is my top priority!<p>If you want to see if this repo is a good fit for your workflow, you can checkout \n&gt; <a href=\"https://www.moridb.sh/docs/resources/compatibility\" rel=\"nofollow\">https://www.moridb.sh/docs/resources/compatibility</a>.<p>Or, in the true spirit of this project, just go for it :) \n&gt; curl -fsSL <a href=\"https://moridb.sh/install.sh\" rel=\"nofollow\">https://moridb.sh/install.sh</a> | sh"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Mori – Test against production data, without ever touching production"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/psrth/mori"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_psrth",
+            "story_47351412",
+            "show_hn"
+          ],
+          "author": "psrth",
+          "created_at": "2026-03-12T14:51:05Z",
+          "created_at_i": 1773327065,
+          "num_comments": 0,
+          "objectID": "47351412",
+          "points": 1,
+          "story_id": 47351412,
+          "story_text": "Mori is an open-source database proxy that lets you run your application locally against real production data without risking writes to production. It connects to your production database, clones the schema locally, and intercepts queries:\n- Reads come from production\n- Writes &#x2F; migrations &#x2F; deletes are executed only in a local shadow database\n- Results are merged in real time so your app thinks the changes happened in production<p>So you (and your AI agents) can safely test your code in a verifiable environment (real production data) locally before you&#x27;re ready to push.<p>Links:\n- Demo -&gt; <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;demo\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;demo</a>\n- Repository -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;psrth&#x2F;mori\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;psrth&#x2F;mori</a>\n- Docs -&gt; <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;docs\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;docs</a><p>Motivation: \nMost people ask Santa for a bicycle; every year, I&#x27;ve been asking for the ability to test in prod. The existing alternatives (branching, snapshots, seed dbs, staging dbs, good old pg_dump) are one or more of: (a) out of sync, (b) expensive to run (time and cost), (c) cloud &#x2F; managed provider only. But as AI agents continue to write more code, our local testing frameworks need to keep up. Writing code shouldn&#x27;t be artificially bottlenecked or a literal leap of faith.<p>Implementation:\nThe docs have a lot more information, but a summary:\n- Support for PSQL&#x2F;MySQL&#x2F;SQLite + 6 more engines, each with custom AST-level query classification and rewriting\n- In-flight cross-DB merging of prod data with local modifications\n- Collision-free PK generation and support for foreign keys\n- Full transaction support including CTEs, nested transactions, and savepoints\n- MCP support: plug-and-play into Claude Code, Cursor, or wherever you get your tokens\n- Exhaustive E2E test suite per engine<p>Safety:\nI want to specifically call out the core design principle — that production should never be writable through Mori. This is enforced through four independent layers:<p>1. Query classification — every statement is parsed and classified as read or write before routing\n2. Routing rules — writes are deterministically routed to the local shadow database, never forwarded\n3. Shadow execution enforcement — even if classification is bypassed, the execution layer rejects any write targeting the production connection\n4. Raw byte inspection — finally, outbound bytes on the production socket are inspected to ensure no write operation ever reaches prod<p>If any layer fails to classify a query, Mori refuses the statement entirely rather than risking a pass-through.<p>Note:\nWhile I&#x27;ve validated (and extensively tested against our production database) all of the supported queries, there may (and will) be edge cases that I haven&#x27;t discovered yet. If you hit an edge case, please open an issue - expanding the current coverage is my top priority!<p>If you want to see if this repo is a good fit for your workflow, you can checkout \n&gt; <a href=\"https:&#x2F;&#x2F;www.moridb.sh&#x2F;docs&#x2F;resources&#x2F;compatibility\" rel=\"nofollow\">https:&#x2F;&#x2F;www.moridb.sh&#x2F;docs&#x2F;resources&#x2F;compatibility</a>.<p>Or, in the true spirit of this project, just go for it :) \n&gt; curl -fsSL <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;install.sh</a> | sh",
+          "title": "Show HN: Mori – Test against production data, without ever touching production",
+          "updated_at": "2026-03-12T14:55:22Z",
+          "url": "https://github.com/psrth/mori"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "nilofer99"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "cursor",
+                "alternative"
+              ],
+              "value": "Hi, Fellow researcher from Yale, I was frustrated with Overleaf and google docs not able to write and collaborate on documents the way I wanted to. I write my research in Latex but since <em>Cursor</em> came out, I thought this has to change, I'm wasting too much time and having mental fog all the time, kinda going through writer's block and hence I decided to create this latex writing assistant for myself but now used by a ton of researchers, I wanted your feedback, what you like, what you don't like, <em>alternatives</em> you've seen, what you would like to have, nice to have, you'd definitely pay to have, etc. This would genuinely help researchers write papers faster and save more time to do actual research. Would love your thoughts"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source"
+              ],
+              "value": "Show HN: Vibe code your scientific papers with an assistant I built(<em>open</em> <em>source</em>)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://trybibby.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_nilofer99",
+            "story_47214315",
+            "show_hn"
+          ],
+          "author": "nilofer99",
+          "children": [
+            47214383
+          ],
+          "created_at": "2026-03-02T05:51:34Z",
+          "created_at_i": 1772430694,
+          "num_comments": 1,
+          "objectID": "47214315",
+          "points": 1,
+          "story_id": 47214315,
+          "story_text": "Hi, Fellow researcher from Yale, I was frustrated with Overleaf and google docs not able to write and collaborate on documents the way I wanted to. I write my research in Latex but since Cursor came out, I thought this has to change, I&#x27;m wasting too much time and having mental fog all the time, kinda going through writer&#x27;s block and hence I decided to create this latex writing assistant for myself but now used by a ton of researchers, I wanted your feedback, what you like, what you don&#x27;t like, alternatives you&#x27;ve seen, what you would like to have, nice to have, you&#x27;d definitely pay to have, etc. This would genuinely help researchers write papers faster and save more time to do actual research. Would love your thoughts",
+          "title": "Show HN: Vibe code your scientific papers with an assistant I built(open source)",
+          "updated_at": "2026-03-05T23:39:30Z",
+          "url": "https://trybibby.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "poweroutlet2"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "cursor",
+                "alternative",
+                "open",
+                "source"
+              ],
+              "value": "Repo link: <a href=\"https://github.com/poweroutlet2/openground\" rel=\"nofollow\">https://github.com/poweroutlet2/openground</a><p>tldr: openground is a tool that lets you give controlled access to documentation to AI agents. Everything happens on-device. Think of it as a local <em>alternative</em> to Context7.<p>I've been working on openground, an <em>opensource</em> and completely on-device tool that let's you give controlled documentation access to your coding agents. Solutions like Context7 provide a <em>source</em> of truth for docs, but their closed-<em>source</em> data ingestion and querying pose security/privacy risks. openground aims to give users full control over what content is available to their agents and how it is ingested. Find your library's documentation <em>source</em> (git repo, sitemap, or local), add it to openground via the CLI, and openground will use a local embedding model and vector db (lancedb) to store your docs. You can then use the CLI to install the MCP server to your agent to allow the agent to query the docs via hybrid BM25 full-text and vector search.<p>Using fastapi docs as an example, it's as simple as:<p>uv tool install openground\nopenground add fastapi --<em>source</em> <a href=\"https://github.com/tiangolo/fastapi.git\" rel=\"nofollow\">https://github.com/tiangolo/fastapi.git</a> --docs-path docs/\nopenground install-mcp --opencode # or --claude-code or --<em>cursor</em><p>And the agent will have access to locally query the fastapi docs when needed.<p>Features that I've implemented so far:\n- docs indexing from git repo, sitemap.xml, or local directories\n- index specific docs for specific library versions for git sources\n- efficient updating of existing docs so your machine is not embedding the same content every time you update<p>This is still an early version, so expect breaking changes. Upcoming features I am working on:\n- daemon style command that updates docs on a schedule\n- project specific access control from the MCP server\n- docs &quot;registry&quot; to allow pushing and pulling of documentation embeddings to and from S3\n- lighter-weight package\n- better docs<p>Suggestions and PRs welcome! I'll also be around for any discussion."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source"
+              ],
+              "value": "Show HN: Openground – <em>open-source</em>, on-device documentation indexing for agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/poweroutlet2/openground"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_poweroutlet2",
+            "story_46876090",
+            "show_hn"
+          ],
+          "author": "poweroutlet2",
+          "created_at": "2026-02-03T19:36:04Z",
+          "created_at_i": 1770147364,
+          "num_comments": 0,
+          "objectID": "46876090",
+          "points": 1,
+          "story_id": 46876090,
+          "story_text": "Repo link: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;poweroutlet2&#x2F;openground\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;poweroutlet2&#x2F;openground</a><p>tldr: openground is a tool that lets you give controlled access to documentation to AI agents. Everything happens on-device. Think of it as a local alternative to Context7.<p>I&#x27;ve been working on openground, an opensource and completely on-device tool that let&#x27;s you give controlled documentation access to your coding agents. Solutions like Context7 provide a source of truth for docs, but their closed-source data ingestion and querying pose security&#x2F;privacy risks. openground aims to give users full control over what content is available to their agents and how it is ingested. Find your library&#x27;s documentation source (git repo, sitemap, or local), add it to openground via the CLI, and openground will use a local embedding model and vector db (lancedb) to store your docs. You can then use the CLI to install the MCP server to your agent to allow the agent to query the docs via hybrid BM25 full-text and vector search.<p>Using fastapi docs as an example, it&#x27;s as simple as:<p>uv tool install openground\nopenground add fastapi --source <a href=\"https:&#x2F;&#x2F;github.com&#x2F;tiangolo&#x2F;fastapi.git\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tiangolo&#x2F;fastapi.git</a> --docs-path docs&#x2F;\nopenground install-mcp --opencode # or --claude-code or --cursor<p>And the agent will have access to locally query the fastapi docs when needed.<p>Features that I&#x27;ve implemented so far:\n- docs indexing from git repo, sitemap.xml, or local directories\n- index specific docs for specific library versions for git sources\n- efficient updating of existing docs so your machine is not embedding the same content every time you update<p>This is still an early version, so expect breaking changes. Upcoming features I am working on:\n- daemon style command that updates docs on a schedule\n- project specific access control from the MCP server\n- docs &quot;registry&quot; to allow pushing and pulling of documentation embeddings to and from S3\n- lighter-weight package\n- better docs<p>Suggestions and PRs welcome! I&#x27;ll also be around for any discussion.",
+          "title": "Show HN: Openground – open-source, on-device documentation indexing for agents",
+          "updated_at": "2026-03-05T23:30:36Z",
+          "url": "https://github.com/poweroutlet2/openground"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "poweroutlet2"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "cursor",
+                "open",
+                "source"
+              ],
+              "value": "Hi HN!<p>tldr: openground is a tool that lets you give controlled access to documentation to AI agents. Everything happens on-device.<p>I'm sharing openground, an <em>opensource</em> and completely on-device RAG tool that let's you give controlled documentation access to your coding agents. Solutions like Context7 MCP provide a likely <em>source</em> of truth for docs, but their closed-<em>source</em> ingestion and querying pose security/privacy risks. openground aims to give users full control over what content is available to agents and how it is ingested. Find a documentation <em>source</em> (git repo or sitemap), add it to openground via the CLI, and openground will use a local embedding model and vector db (lancedb) to store your docs. You can then use the CLI to install the MCP server to your agent to allow the agent to query the docs via hybrid BM25 full-text and vector search.<p>Here's an example of giving Claude code access to a specific version of FastAPI docs:<p>uv tool install openground\nopenground add fastapi --<em>source</em> <a href=\"https://github.com/fastapi/fastapi/tree/master/docs/en\" rel=\"nofollow\">https://github.com/fastapi/fastapi/tree/master/docs/en</a> --version 0.126.0\nopenground install-mcp --claude-code // or --<em>cursor</em> or --opencode<p>This is still an early release, but I've implemented several useful features so far:<p>- docs ingestion from git repos (only .md and other text files, no code) or sitemap.xml\n- specific version ingestion for git sources\n- easy `install-mcp --&lt;agent-name&gt;` command for popular agents like opencode, claude code, and <em>cursor</em>\n- efficient(ish) updating of docs that have already been saved<p>This is still an early version, so expect breaking changes. Things I am working on:<p>- command that keeps docs updated on a schedule\n- project specific access control from the MCP server\n- docs &quot;registry&quot; to allow pushing and pulling of documentation embeddings to and from S3\n- lighter-weight package\n- better docs<p>Suggestions and PRs welcome! I'll also be around for discussion."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "alternative",
+                "open",
+                "source"
+              ],
+              "value": "Show HN: Openground, and on-device and <em>open source</em> <em>alternative</em> to Context7"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/poweroutlet2/openground"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_poweroutlet2",
+            "story_46839350",
+            "show_hn"
+          ],
+          "author": "poweroutlet2",
+          "created_at": "2026-01-31T18:40:04Z",
+          "created_at_i": 1769884804,
+          "num_comments": 0,
+          "objectID": "46839350",
+          "points": 1,
+          "story_id": 46839350,
+          "story_text": "Hi HN!<p>tldr: openground is a tool that lets you give controlled access to documentation to AI agents. Everything happens on-device.<p>I&#x27;m sharing openground, an opensource and completely on-device RAG tool that let&#x27;s you give controlled documentation access to your coding agents. Solutions like Context7 MCP provide a likely source of truth for docs, but their closed-source ingestion and querying pose security&#x2F;privacy risks. openground aims to give users full control over what content is available to agents and how it is ingested. Find a documentation source (git repo or sitemap), add it to openground via the CLI, and openground will use a local embedding model and vector db (lancedb) to store your docs. You can then use the CLI to install the MCP server to your agent to allow the agent to query the docs via hybrid BM25 full-text and vector search.<p>Here&#x27;s an example of giving Claude code access to a specific version of FastAPI docs:<p>uv tool install openground\nopenground add fastapi --source <a href=\"https:&#x2F;&#x2F;github.com&#x2F;fastapi&#x2F;fastapi&#x2F;tree&#x2F;master&#x2F;docs&#x2F;en\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;fastapi&#x2F;fastapi&#x2F;tree&#x2F;master&#x2F;docs&#x2F;en</a> --version 0.126.0\nopenground install-mcp --claude-code &#x2F;&#x2F; or --cursor or --opencode<p>This is still an early release, but I&#x27;ve implemented several useful features so far:<p>- docs ingestion from git repos (only .md and other text files, no code) or sitemap.xml\n- specific version ingestion for git sources\n- easy `install-mcp --&lt;agent-name&gt;` command for popular agents like opencode, claude code, and cursor\n- efficient(ish) updating of docs that have already been saved<p>This is still an early version, so expect breaking changes. Things I am working on:<p>- command that keeps docs updated on a schedule\n- project specific access control from the MCP server\n- docs &quot;registry&quot; to allow pushing and pulling of documentation embeddings to and from S3\n- lighter-weight package\n- better docs<p>Suggestions and PRs welcome! I&#x27;ll also be around for discussion.",
+          "title": "Show HN: Openground, and on-device and open source alternative to Context7",
+          "updated_at": "2026-03-05T23:28:07Z",
+          "url": "https://github.com/poweroutlet2/openground"
+        }
+      ]
+    },
+    {
+      "query": "AI+agent+framework+2026",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "algis-hn"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework"
+              ],
+              "value": "The OWASP MCP Top: A Security <em>Framework</em> for <em>AI</em> <em>Agent</em> Tool Integration"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "2026"
+              ],
+              "value": "https://mcpblog.dev/blog/<em>2026</em>-03-15-owasp-mcp-top-10"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_algis-hn",
+            "story_47428188"
+          ],
+          "author": "algis-hn",
+          "children": [
+            47434826
+          ],
+          "created_at": "2026-03-18T16:56:41Z",
+          "created_at_i": 1773853001,
+          "num_comments": 0,
+          "objectID": "47428188",
+          "points": 2,
+          "story_id": 47428188,
+          "title": "The OWASP MCP Top: A Security Framework for AI Agent Tool Integration",
+          "updated_at": "2026-03-19T04:42:33Z",
+          "url": "https://mcpblog.dev/blog/2026-03-15-owasp-mcp-top-10"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "t_peersky"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "Most <em>AI</em> <em>agent</em> <em>frameworks</em> give you automation. None give you control.<p>NSED v0.5.1 ships the human-in-the-loop control plane we've been building toward: operators can pause <em>agents</em> mid-deliberation, review and edit buffered responses before they're committed downstream, patch live config without restart, and auto-flag underperformers by score divergence.<p>The operator UI ships as zero-dependency vanilla JS — no npm graph, nothing a compromised package registry can inject into a control plane that has authority over live <em>agent</em> responses.<p>For regulated deployments: EU <em>AI</em> Act Art. 14, MAS AIRM, and FINRA <em>2026</em> all require demonstrable human oversight. This is the architecture that satisfies it — and you can audit the implementation directly from the source repo."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Show HN: NSED v0.5.1: Don't Trust Your <em>Agents</em>. Verify Them"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://blog.peeramid.xyz/nsed-v0-5-0/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_t_peersky",
+            "story_47404043",
+            "show_hn"
+          ],
+          "author": "t_peersky",
+          "created_at": "2026-03-16T19:58:54Z",
+          "created_at_i": 1773691134,
+          "num_comments": 0,
+          "objectID": "47404043",
+          "points": 2,
+          "story_id": 47404043,
+          "story_text": "Most AI agent frameworks give you automation. None give you control.<p>NSED v0.5.1 ships the human-in-the-loop control plane we&#x27;ve been building toward: operators can pause agents mid-deliberation, review and edit buffered responses before they&#x27;re committed downstream, patch live config without restart, and auto-flag underperformers by score divergence.<p>The operator UI ships as zero-dependency vanilla JS — no npm graph, nothing a compromised package registry can inject into a control plane that has authority over live agent responses.<p>For regulated deployments: EU AI Act Art. 14, MAS AIRM, and FINRA 2026 all require demonstrable human oversight. This is the architecture that satisfies it — and you can audit the implementation directly from the source repo.",
+          "title": "Show HN: NSED v0.5.1: Don't Trust Your Agents. Verify Them",
+          "updated_at": "2026-03-16T20:03:44Z",
+          "url": "https://blog.peeramid.xyz/nsed-v0-5-0/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "curiouscake"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "I built OpenLegion because every <em>AI</em> <em>agent</em> <em>framework</em> I tried had the same problems in production: API keys sitting in config files inside the <em>agent</em>'s environment, no way to set hard spend limits, and LLM-as-CEO task routing that's non-deterministic and unauditable.<p>The short version of what I built:<p>Security: Every <em>agent</em> runs in its own Docker container or microVM. A vault proxy sits between agents and every LLM call — the <em>agent</em> sends a request, the proxy injects the credential at the network layer, the <em>agent</em> gets back a response. Keys never exist inside the container. Six independent security layers on by default, including per-<em>agent</em> ACL matrices and Unicode sanitization to block invisible-character prompt injection.<p>Cost control: Per-<em>agent</em> daily and monthly budgets with a hard cutoff enforced at the vault proxy. The <em>agent</em> physically cannot make an LLM call that exceeds its budget. Zero markup on LLM usage — you pay your provider directly at their rates. 100+ providers via LiteLLM with configurable failover chains.<p>Orchestration: Deterministic YAML DAG workflows. No LLM deciding what runs next. Four patterns: sequential, parallel, supervisor, hierarchical. Every execution path is predictable and auditable.<p>The rest: Camoufox stealth browser (C++-level anti-detection, CAPTCHA solving), persistent per-<em>agent</em> vector+BM25 memory with temporal decay, MCP tool support, real-time fleet dashboard, Telegram/Discord/Slack/WhatsApp channels, cron + webhook triggering, agents can write and hot-reload their own Python skills at runtime.<p>The engine is ~30,000 lines of Python with 2,100+ tests. Self-hosted runs on one machine — no Redis, no Kubernetes, just Python 3.10+, Docker, and an API key. Three commands to start.<p>For context: the dominant <em>framework</em> in this space is OpenClaw (200K+ stars). CVE-<em>2026</em>-25253 was reported in February — critical RCE, 42,000 exposed instances with no authentication, 341 malicious skills confirmed stealing user data. I'm not trying to replace it, but that's why I think this gap exists.<p>We launched in February <em>2026</em>. Zero CVEs. BSL 1.1 license — source-available, not open source, and I want to be clear about that. Managed hosting starts at $19/month with a 7-day free trial. Self-hosted is free.<p>Happy to get specific about the security model or architecture — genuinely curious where people think the threat model breaks down.<p><a href=\"https://openlegion.ai\" rel=\"nofollow\">https://openlegion.<em>ai</em></a> | <a href=\"https://docs.openlegion.ai\" rel=\"nofollow\">https://docs.openlegion.<em>ai</em></a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "Show HN: OpenLegion – <em>AI</em> <em>agent</em> fleet with container isolation and vault proxy"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://www.openlegion.<em>ai</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_curiouscake",
+            "story_47390443",
+            "show_hn"
+          ],
+          "author": "curiouscake",
+          "created_at": "2026-03-15T18:41:37Z",
+          "created_at_i": 1773600097,
+          "num_comments": 0,
+          "objectID": "47390443",
+          "points": 2,
+          "story_id": 47390443,
+          "story_text": "I built OpenLegion because every AI agent framework I tried had the same problems in production: API keys sitting in config files inside the agent&#x27;s environment, no way to set hard spend limits, and LLM-as-CEO task routing that&#x27;s non-deterministic and unauditable.<p>The short version of what I built:<p>Security: Every agent runs in its own Docker container or microVM. A vault proxy sits between agents and every LLM call — the agent sends a request, the proxy injects the credential at the network layer, the agent gets back a response. Keys never exist inside the container. Six independent security layers on by default, including per-agent ACL matrices and Unicode sanitization to block invisible-character prompt injection.<p>Cost control: Per-agent daily and monthly budgets with a hard cutoff enforced at the vault proxy. The agent physically cannot make an LLM call that exceeds its budget. Zero markup on LLM usage — you pay your provider directly at their rates. 100+ providers via LiteLLM with configurable failover chains.<p>Orchestration: Deterministic YAML DAG workflows. No LLM deciding what runs next. Four patterns: sequential, parallel, supervisor, hierarchical. Every execution path is predictable and auditable.<p>The rest: Camoufox stealth browser (C++-level anti-detection, CAPTCHA solving), persistent per-agent vector+BM25 memory with temporal decay, MCP tool support, real-time fleet dashboard, Telegram&#x2F;Discord&#x2F;Slack&#x2F;WhatsApp channels, cron + webhook triggering, agents can write and hot-reload their own Python skills at runtime.<p>The engine is ~30,000 lines of Python with 2,100+ tests. Self-hosted runs on one machine — no Redis, no Kubernetes, just Python 3.10+, Docker, and an API key. Three commands to start.<p>For context: the dominant framework in this space is OpenClaw (200K+ stars). CVE-2026-25253 was reported in February — critical RCE, 42,000 exposed instances with no authentication, 341 malicious skills confirmed stealing user data. I&#x27;m not trying to replace it, but that&#x27;s why I think this gap exists.<p>We launched in February 2026. Zero CVEs. BSL 1.1 license — source-available, not open source, and I want to be clear about that. Managed hosting starts at $19&#x2F;month with a 7-day free trial. Self-hosted is free.<p>Happy to get specific about the security model or architecture — genuinely curious where people think the threat model breaks down.<p><a href=\"https:&#x2F;&#x2F;openlegion.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;openlegion.ai</a> | <a href=\"https:&#x2F;&#x2F;docs.openlegion.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.openlegion.ai</a>",
+          "title": "Show HN: OpenLegion – AI agent fleet with container isolation and vault proxy",
+          "updated_at": "2026-03-15T19:16:37Z",
+          "url": "https://www.openlegion.ai"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "AgastyaTodi"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "I've been talking to founders building <em>AI</em> <em>agents</em> across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their <em>agents</em> \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source <em>framework</em> that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the <em>agent</em>'s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-<em>agent</em>: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: <em>agent</em>-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December <em>202</em>5 spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for <em>framework</em>-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI <em>Agents</em> SDK, MCP servers.<p>I ran it live with a local Ollama <em>agent</em> (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https://github.com/Agastya910/agentarmor\" rel=\"nofollow\">https://github.com/Agastya910/agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \n<em>agents</em> and hit security issues I haven't thought of.<p>TAGS: security, python, llm, <em>ai</em>, <em>agents</em>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework"
+              ],
+              "value": "Show HN: AgentArmor – open-source 8-layer security <em>framework</em> for <em>AI</em> <em>agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Agastya910/agentarmor"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_AgastyaTodi",
+            "story_47374958",
+            "show_hn"
+          ],
+          "author": "AgastyaTodi",
+          "children": [
+            47375819,
+            47387429,
+            47376691,
+            47375140,
+            47380117,
+            47395481
+          ],
+          "created_at": "2026-03-14T09:44:36Z",
+          "created_at_i": 1773481476,
+          "num_comments": 6,
+          "objectID": "47374958",
+          "points": 10,
+          "story_id": 47374958,
+          "story_text": "I&#x27;ve been talking to founders building AI agents across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their agents \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source framework that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the agent&#x27;s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-agent: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: agent-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December 2025 spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for framework-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI Agents SDK, MCP servers.<p>I ran it live with a local Ollama agent (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Agastya910&#x2F;agentarmor\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Agastya910&#x2F;agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \nagents and hit security issues I haven&#x27;t thought of.<p>TAGS: security, python, llm, ai, agents",
+          "title": "Show HN: AgentArmor – open-source 8-layer security framework for AI agents",
+          "updated_at": "2026-03-19T22:14:06Z",
+          "url": "https://github.com/Agastya910/agentarmor"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mohitbadi"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "Like everyone else in <em>202</em>5 who thought “just slap a vector DB on it” would create a coherent long-term <em>agent</em>, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\n<em>Agent</em> (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user's personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy <em>agent</em>? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an <em>agent</em>’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates / superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User's favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn't trying to replace vector search or be the next <em>agent</em> <em>framework</em>. It's just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps://github.com/mohitkumarrajbadi/memx<p>(And yes, the capsicum thing is real. The <em>agent</em> still argues about it.)"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "MemX – my <em>AI</em> <em>agent</em> remembers I hate capsicum on pizza"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mohitbadi",
+            "story_47374335",
+            "ask_hn"
+          ],
+          "author": "mohitbadi",
+          "children": [
+            47374530
+          ],
+          "created_at": "2026-03-14T07:54:36Z",
+          "created_at_i": 1773474876,
+          "num_comments": 1,
+          "objectID": "47374335",
+          "points": 1,
+          "story_id": 47374335,
+          "story_text": "Like everyone else in 2025 who thought “just slap a vector DB on it” would create a coherent long-term agent, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\nAgent (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user&#x27;s personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy agent? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an agent’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates &#x2F; superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User&#x27;s favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn&#x27;t trying to replace vector search or be the next agent framework. It&#x27;s just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps:&#x2F;&#x2F;github.com&#x2F;mohitkumarrajbadi&#x2F;memx<p>(And yes, the capsicum thing is real. The agent still argues about it.)",
+          "title": "MemX – my AI agent remembers I hate capsicum on pizza",
+          "updated_at": "2026-03-14T08:31:12Z"
+        }
+      ]
+    },
+    {
+      "query": "MCP+server+tools",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "redgridtactical"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I go on a lot of backcountry trips where I barely get cell service. If my group splits, nobody knows knows where anyone is until you regroup at camp or at your destination. You can buy Garmin radios or try to set up an ATAK, but ATAK is Android-only and assumes you have a TAK <em>Server</em> running somewhere to make use of all of the functionality. Cool <em>tools</em> themselves, but expensive to set up correctly. I just wanted two iPhones to share their location directly over Bluetooth when cell coverage was lacking.<p>Red Grid Link does that. Start a session, and anyone nearby running the app shows up on your offline <em>map</em>. When they walk out of range their marker stays as a &quot;ghost&quot; that slowly fades.<p>The hard part was making sync reliable over BLE. The connections drop all the time. Someone turns a corner, walks behind a vehicle, whatever. I built a CRDT sync layer (LWW Register + G-Counter) so there's never merge conflicts. Each update is just under 200 bytes (from what I have tested so far). When a user/teammate disappears the app does exponential backoff from 2 to 30 seconds before giving up and marking them as a ghost.<p>Everything is encrypted (AES-256-GCM, ECDH P-256 key exchange per peer pair). Sessions can require a PIN or QR code to join. It also offers offline topo maps with MGRS grid coordinates, same system as in my other app, Red Grid MGRS.<p>The app is free, and I'm looking for some honest feedback from other real-world users. Let me know if you have any questions!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "server"
+              ],
+              "value": "Show HN: Red Grid Link – peer-to-peer team tracking over Bluetooth, no <em>servers</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/RedGridTactical/RedGridLink"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_redgridtactical",
+            "story_47461529",
+            "show_hn",
+            "front_page"
+          ],
+          "author": "redgridtactical",
+          "children": [
+            47462384,
+            47462613,
+            47462334,
+            47462366
+          ],
+          "created_at": "2026-03-20T22:25:51Z",
+          "created_at_i": 1774045551,
+          "num_comments": 8,
+          "objectID": "47461529",
+          "points": 11,
+          "story_id": 47461529,
+          "story_text": "I go on a lot of backcountry trips where I barely get cell service. If my group splits, nobody knows knows where anyone is until you regroup at camp or at your destination. You can buy Garmin radios or try to set up an ATAK, but ATAK is Android-only and assumes you have a TAK Server running somewhere to make use of all of the functionality. Cool tools themselves, but expensive to set up correctly. I just wanted two iPhones to share their location directly over Bluetooth when cell coverage was lacking.<p>Red Grid Link does that. Start a session, and anyone nearby running the app shows up on your offline map. When they walk out of range their marker stays as a &quot;ghost&quot; that slowly fades.<p>The hard part was making sync reliable over BLE. The connections drop all the time. Someone turns a corner, walks behind a vehicle, whatever. I built a CRDT sync layer (LWW Register + G-Counter) so there&#x27;s never merge conflicts. Each update is just under 200 bytes (from what I have tested so far). When a user&#x2F;teammate disappears the app does exponential backoff from 2 to 30 seconds before giving up and marking them as a ghost.<p>Everything is encrypted (AES-256-GCM, ECDH P-256 key exchange per peer pair). Sessions can require a PIN or QR code to join. It also offers offline topo maps with MGRS grid coordinates, same system as in my other app, Red Grid MGRS.<p>The app is free, and I&#x27;m looking for some honest feedback from other real-world users. Let me know if you have any questions!",
+          "title": "Show HN: Red Grid Link – peer-to-peer team tracking over Bluetooth, no servers",
+          "updated_at": "2026-03-21T00:36:40Z",
+          "url": "https://github.com/RedGridTactical/RedGridLink"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "MaxGfeller"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I built this because I kept trying to use Claude Agent SDK, Codex, and OpenCode programmatically, and they were too &quot;heavy&quot; and uncustomizable for that. I wanted a TypeScript library I could import into my own app and build agents on top of.\nOpenHarness is built on Vercel's AI SDK 5, so it works with any model the SDK supports. The main things it gives you: loading agent instructions from AGENTS.md files, <em>MCP</em> <em>server</em> connections for <em>tools</em>, subagents (agents delegating to child agents), agent skills, tool approval prompts, and auto-compaction for long conversations.\nThere's a CLI example and a Next.js chat interface in the repo if you want to try it out.\nStill early -- feedback on the API and what's missing would be useful."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: OpenHarness – Open-source TypeScript SDK for building AI agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/MaxGfeller/open-harness"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_MaxGfeller",
+            "story_47459997",
+            "show_hn"
+          ],
+          "author": "MaxGfeller",
+          "children": [
+            47460599
+          ],
+          "created_at": "2026-03-20T20:12:12Z",
+          "created_at_i": 1774037532,
+          "num_comments": 0,
+          "objectID": "47459997",
+          "points": 3,
+          "story_id": 47459997,
+          "story_text": "I built this because I kept trying to use Claude Agent SDK, Codex, and OpenCode programmatically, and they were too &quot;heavy&quot; and uncustomizable for that. I wanted a TypeScript library I could import into my own app and build agents on top of.\nOpenHarness is built on Vercel&#x27;s AI SDK 5, so it works with any model the SDK supports. The main things it gives you: loading agent instructions from AGENTS.md files, MCP server connections for tools, subagents (agents delegating to child agents), agent skills, tool approval prompts, and auto-compaction for long conversations.\nThere&#x27;s a CLI example and a Next.js chat interface in the repo if you want to try it out.\nStill early -- feedback on the API and what&#x27;s missing would be useful.",
+          "title": "Show HN: OpenHarness – Open-source TypeScript SDK for building AI agents",
+          "updated_at": "2026-03-20T21:11:41Z",
+          "url": "https://github.com/MaxGfeller/open-harness"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dclavijo"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Show HN: Reverse Engineering <em>Tools</em> <em>MCP</em> <em>Server</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "https://github.com/daedalus/<em>mcp</em>_reverse_engineering"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dclavijo",
+            "story_47459708",
+            "show_hn"
+          ],
+          "author": "dclavijo",
+          "created_at": "2026-03-20T19:52:11Z",
+          "created_at_i": 1774036331,
+          "num_comments": 0,
+          "objectID": "47459708",
+          "points": 1,
+          "story_id": 47459708,
+          "title": "Show HN: Reverse Engineering Tools MCP Server",
+          "updated_at": "2026-03-20T19:53:12Z",
+          "url": "https://github.com/daedalus/mcp_reverse_engineering"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "danielmeppiel"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I work at Microsoft/GitHub and built APM because I was managing agent configs — prompts, instructions, <em>MCP</em> <em>servers</em> — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (Agent Package Manager) is an open-source CLI that installs and manages AI agent dependencies (plugins, skills, rules, hooks, <em>mcp</em>, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https://news.ycombinator.com/item?id=47421969\">https://news.ycombinator.com/item?id=47421969</a>). Here's the full story.<p>1 minute video: <a href=\"https://github.com/microsoft/apm/releases/download/v0.8.2/apm-showcase.mp4\" rel=\"nofollow\">https://github.com/microsoft/apm/releases/download/v0.8.2/ap...</a><p>How it works:<p>apm install — resolves any Agent Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared <em>MCP</em> <em>server</em>? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full agent setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other agent config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. Agent instructions have direct access to your codebase and terminal. Scanning what goes into them matters.<p>Why this won't come from plugin vendors: each <em>tool</em> governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across <em>tools</em>, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https://microsoft.github.io/apm\" rel=\"nofollow\">https://microsoft.github.io/apm</a>\nRepo: <a href=\"https://github.com/microsoft/apm\" rel=\"nofollow\">https://github.com/microsoft/apm</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Agent Package Manager (APM) for Agent Configuration"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/microsoft/apm"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_danielmeppiel",
+            "story_47454448",
+            "show_hn"
+          ],
+          "author": "danielmeppiel",
+          "created_at": "2026-03-20T13:49:13Z",
+          "created_at_i": 1774014553,
+          "num_comments": 0,
+          "objectID": "47454448",
+          "points": 1,
+          "story_id": 47454448,
+          "story_text": "I work at Microsoft&#x2F;GitHub and built APM because I was managing agent configs — prompts, instructions, MCP servers — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (Agent Package Manager) is an open-source CLI that installs and manages AI agent dependencies (plugins, skills, rules, hooks, mcp, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969</a>). Here&#x27;s the full story.<p>1 minute video: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;apm-showcase.mp4\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;ap...</a><p>How it works:<p>apm install — resolves any Agent Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared MCP server? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full agent setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other agent config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. Agent instructions have direct access to your codebase and terminal. Scanning what goes into them matters.<p>Why this won&#x27;t come from plugin vendors: each tool governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across tools, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm</a>\nRepo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm</a>",
+          "title": "Show HN: Agent Package Manager (APM) for Agent Configuration",
+          "updated_at": "2026-03-20T13:51:42Z",
+          "url": "https://github.com/microsoft/apm"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "David-Brug-Ai"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I've been experimenting with AI <em>tools</em>, sometimes hours a day for the last 18 months, and recently shipped three open source packages that sit between AI agents and the <em>tools</em> they call.<p>I had a Raspberry Pi 5 from a summer project that became my first OpenClaw install. Once it was running I turned to the problem, what watches the agent while you're not watching?<p>The idea for UNWIND came from Apple's Time Machine. If something goes wrong, you should be able to see what happened and roll it back. CRAFT, the tamper-evident audit chain, came from a separate cryptographic project I'd been working on for months before. Combining the two with a deterministic enforcement pipeline was the design I wanted to build.<p>UNWIND works as an <em>MCP</em> stdio proxy. It wraps any <em>MCP</em> <em>server</em>, intercepts every tool call on the way through, and the agent never knows it's there. If you're using Claude Desktop, Cursor, Windsurf, or VS Code Copilot with <em>MCP</em> servers, that's the primary integration path and the one that works most reliably right now. OpenClaw support exists but has unresolved adapter issues, so the <em>MCP</em> stdio path is the one to use today.<p>Claude Codehandled planning. Codex on the Pi was the builder. I chose Codex because OpenAI lets Pro users OAuth into OpenClaw with no API costs. I gave Codex a soul.md (the instruction file OpenClaw agents use) that defined its role as a security analyst: evidence first, flag unknowns, never assume, and for every finding produce a structured assessment of what happened, why it matters...With that framing it consistently found 5 or 6 real structural issues in every plan Claude Code produced.<p>UNWIND is a deterministic security proxy that sits between the agent and every tool call. 15 checks run on every call. No LLM in the enforcement path, just rules and pattern matching. Every action logged in a tamper-evident hash chain. File changes snapshotted for rollback.<p>Three packages, all on PyPI right now:<p>*craft-auth* : Tamper-evident command authentication. Zero dependencies, pure Python stdlib, 1,605 lines. Try it in 10 seconds: `pip install craft-auth &amp;&amp; craft-auth demo`. The output speaks for itself.<p>*ghostmode* : Dry-run proxy for <em>MCP</em> servers. See what your agent would do without letting it do anything. Writes intercepted, reads pass through, nothing changes. `pip install ghostmode &amp;&amp; ghostmode -- npx @modelcontextprotocol/<em>server</em>-filesystem ~/Documents` (needs Node.js for the upstream <em>MCP</em> <em>server</em>, Ghost Mode itself is pure Python).<p>*unwind-<em>mcp</em>* : The full enforcement engine. `pip install unwind-<em>mcp</em> &amp;&amp; unwind serve -- npx @modelcontextprotocol/<em>server</em>-filesystem ~/Documents` then point Claude Desktop or Cursor at it. Every tool call shows ALLOW/BLOCK decisions in the terminal. Dashboard at localhost:9001 with `unwind dashboard` (start the sidecar first with `unwind sidecar serve`).<p>after install,Codex was immediately flagged TAINTED by its own dashboard. It had been fetching web pages during setup, then tried to execute a command. The security stack it helped build caught it on its first live action.<p>Rough edges.<p>Requires Python 3.10+. Mac ships with 3.9.6 and the import will crash. Homebrew Python 3.11+ works fine. Windows is untested. Pure Python and cross-platform in principle but nobody has verified it.<p>The taint system works correctly but is too aggressive for unattended use. Normal agent workflow, triggers taint immediately, which blocks execution until a human approves. When you're sitting there, this is fine. When the agent is running on its own, it's effectively frozen. The tension between &quot;external content could carry prompt injection&quot; and &quot;the agent's normal job involves external content&quot; is a genuine design problem I haven't solved cleanly.<p>First real human testers welcome.<p>UNWIND and Ghost Mode are AGPL-3.0. craft-auth is standalone with zero AGPL dependencies and can be licensed separately.<p>github.com/unwind-<em>mcp</em>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Unwind – I built a security proxy for AI agents on a Raspberry Pi"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_David-Brug-Ai",
+            "story_47450668",
+            "show_hn"
+          ],
+          "author": "David-Brug-Ai",
+          "children": [
+            47450808
+          ],
+          "created_at": "2026-03-20T04:56:47Z",
+          "created_at_i": 1773982607,
+          "num_comments": 0,
+          "objectID": "47450668",
+          "points": 3,
+          "story_id": 47450668,
+          "story_text": "I&#x27;ve been experimenting with AI tools, sometimes hours a day for the last 18 months, and recently shipped three open source packages that sit between AI agents and the tools they call.<p>I had a Raspberry Pi 5 from a summer project that became my first OpenClaw install. Once it was running I turned to the problem, what watches the agent while you&#x27;re not watching?<p>The idea for UNWIND came from Apple&#x27;s Time Machine. If something goes wrong, you should be able to see what happened and roll it back. CRAFT, the tamper-evident audit chain, came from a separate cryptographic project I&#x27;d been working on for months before. Combining the two with a deterministic enforcement pipeline was the design I wanted to build.<p>UNWIND works as an MCP stdio proxy. It wraps any MCP server, intercepts every tool call on the way through, and the agent never knows it&#x27;s there. If you&#x27;re using Claude Desktop, Cursor, Windsurf, or VS Code Copilot with MCP servers, that&#x27;s the primary integration path and the one that works most reliably right now. OpenClaw support exists but has unresolved adapter issues, so the MCP stdio path is the one to use today.<p>Claude Codehandled planning. Codex on the Pi was the builder. I chose Codex because OpenAI lets Pro users OAuth into OpenClaw with no API costs. I gave Codex a soul.md (the instruction file OpenClaw agents use) that defined its role as a security analyst: evidence first, flag unknowns, never assume, and for every finding produce a structured assessment of what happened, why it matters...With that framing it consistently found 5 or 6 real structural issues in every plan Claude Code produced.<p>UNWIND is a deterministic security proxy that sits between the agent and every tool call. 15 checks run on every call. No LLM in the enforcement path, just rules and pattern matching. Every action logged in a tamper-evident hash chain. File changes snapshotted for rollback.<p>Three packages, all on PyPI right now:<p>*craft-auth* : Tamper-evident command authentication. Zero dependencies, pure Python stdlib, 1,605 lines. Try it in 10 seconds: `pip install craft-auth &amp;&amp; craft-auth demo`. The output speaks for itself.<p>*ghostmode* : Dry-run proxy for MCP servers. See what your agent would do without letting it do anything. Writes intercepted, reads pass through, nothing changes. `pip install ghostmode &amp;&amp; ghostmode -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` (needs Node.js for the upstream MCP server, Ghost Mode itself is pure Python).<p>*unwind-mcp* : The full enforcement engine. `pip install unwind-mcp &amp;&amp; unwind serve -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` then point Claude Desktop or Cursor at it. Every tool call shows ALLOW&#x2F;BLOCK decisions in the terminal. Dashboard at localhost:9001 with `unwind dashboard` (start the sidecar first with `unwind sidecar serve`).<p>after install,Codex was immediately flagged TAINTED by its own dashboard. It had been fetching web pages during setup, then tried to execute a command. The security stack it helped build caught it on its first live action.<p>Rough edges.<p>Requires Python 3.10+. Mac ships with 3.9.6 and the import will crash. Homebrew Python 3.11+ works fine. Windows is untested. Pure Python and cross-platform in principle but nobody has verified it.<p>The taint system works correctly but is too aggressive for unattended use. Normal agent workflow, triggers taint immediately, which blocks execution until a human approves. When you&#x27;re sitting there, this is fine. When the agent is running on its own, it&#x27;s effectively frozen. The tension between &quot;external content could carry prompt injection&quot; and &quot;the agent&#x27;s normal job involves external content&quot; is a genuine design problem I haven&#x27;t solved cleanly.<p>First real human testers welcome.<p>UNWIND and Ghost Mode are AGPL-3.0. craft-auth is standalone with zero AGPL dependencies and can be licensed separately.<p>github.com&#x2F;unwind-mcp",
+          "title": "Show HN: Unwind – I built a security proxy for AI agents on a Raspberry Pi",
+          "updated_at": "2026-03-20T12:44:08Z"
+        }
+      ]
+    },
+    {
+      "query": "self+improving+AI",
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "kirillostrovsky"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "MCP solves connectivity between agents and tools. It doesn't solve accountability.<p>When an <em>AI</em> agent calls execute_wire_transfer today, there's no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don't cut it when real money or infrastructure is on the line.<p>I've been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a <em>self</em>-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What's different from existing MCP security tools:\nScopeGate, <em>ai</em>-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on <em>proving</em> what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble/ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry's hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing /accept, /executed, /dispute/:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai/a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai/a2a-core/proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai/a2a-core/ledger&quot;;<p>// Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n// result._a2a contains Intent + Acceptance + Execution envelopes\n// All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https://github.com/kirbas/trustagent-a2a-protocol\nnpm: https://www.npmjs.com/package/@trustagentai/a2a-core\nProtocol spec (v0.4): https://trustagentai.net/trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal/insurance use cases"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kirillostrovsky",
+            "story_47421489",
+            "ask_hn"
+          ],
+          "author": "kirillostrovsky",
+          "children": [
+            47427947,
+            47434251
+          ],
+          "created_at": "2026-03-18T04:04:52Z",
+          "created_at_i": 1773806692,
+          "num_comments": 0,
+          "objectID": "47421489",
+          "points": 6,
+          "story_id": 47421489,
+          "story_text": "MCP solves connectivity between agents and tools. It doesn&#x27;t solve accountability.<p>When an AI agent calls execute_wire_transfer today, there&#x27;s no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don&#x27;t cut it when real money or infrastructure is on the line.<p>I&#x27;ve been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a self-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What&#x27;s different from existing MCP security tools:\nScopeGate, ai-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on proving what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble&#x2F;ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry&#x27;s hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing &#x2F;accept, &#x2F;executed, &#x2F;dispute&#x2F;:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai&#x2F;a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai&#x2F;a2a-core&#x2F;proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai&#x2F;a2a-core&#x2F;ledger&quot;;<p>&#x2F;&#x2F; Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n&#x2F;&#x2F; result._a2a contains Intent + Acceptance + Execution envelopes\n&#x2F;&#x2F; All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https:&#x2F;&#x2F;github.com&#x2F;kirbas&#x2F;trustagent-a2a-protocol\nnpm: https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@trustagentai&#x2F;a2a-core\nProtocol spec (v0.4): https:&#x2F;&#x2F;trustagentai.net&#x2F;trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal&#x2F;insurance use cases",
+          "title": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)",
+          "updated_at": "2026-03-20T23:57:10Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sebg"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Atlas – <em>Self</em>-<em>improving</em> <em>AI</em> trading agents using Karpathy-style autoresearch"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/chrisworsey55/atlas-gic"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_sebg",
+            "story_47356891"
+          ],
+          "author": "sebg",
+          "created_at": "2026-03-12T20:49:57Z",
+          "created_at_i": 1773348597,
+          "num_comments": 0,
+          "objectID": "47356891",
+          "points": 2,
+          "story_id": 47356891,
+          "title": "Atlas – Self-improving AI trading agents using Karpathy-style autoresearch",
+          "updated_at": "2026-03-12T21:36:08Z",
+          "url": "https://github.com/chrisworsey55/atlas-gic"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "danebalia"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Hermes Agent: The <em>self</em>-<em>improving</em> <em>AI</em> agent"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/NousResearch/hermes-agent"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_danebalia",
+            "story_47341909"
+          ],
+          "author": "danebalia",
+          "children": [
+            47341910
+          ],
+          "created_at": "2026-03-11T21:09:43Z",
+          "created_at_i": 1773263383,
+          "num_comments": 1,
+          "objectID": "47341909",
+          "points": 3,
+          "story_id": 47341909,
+          "title": "Hermes Agent: The self-improving AI agent",
+          "updated_at": "2026-03-12T01:37:34Z",
+          "url": "https://github.com/NousResearch/hermes-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "zach4123"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Hey HN, I'm Zach, founder of Portal.\nPortal lets you share a live sandbox browser session as a link.<p>Try it here: <a href=\"https://www.makeportals.com/try\" rel=\"nofollow\">https://www.makeportals.com/try</a><p>Instead of asking someone to sign up, install software, or book a demo for user research, onboarding, or sales, you send a link and they interact with the real product in a sandboxed browser environment, then you get session replays.<p>Each viewer gets a fresh remote browser instance that starts from a defined state (URL, cookies, extensions, local files, etc). Sessions are isolated and expire automatically.<p>The sessions have configurable guardrails: - disabling buttons - restricting URLs - API rate limits - Time limits<p>In Watch Mode, an <em>AI</em> Agent with contextual awareness clicks through a demo and explains the product. In Play Mode, users explore a guardrailed session while the <em>AI</em> answers questions.<p>Portal came from trying to get feedback on a chrome extension I’d built to help people with disabilities control gmail with voice. People were cautious to download it &amp; I kept wishing I could send a browser session with the extension already installed to try safely &amp; an <em>AI</em> to explain async.<p>Portal grew out of that idea: share an exact browser state where your product works without requiring installs or already logged into demo accounts.<p>Some early uses: - Getting user feedback on local projects in Claude Code with a temporary links/rate limits - Helping onboard to high friction/integration products like extension/add-ons or code reviewers - Replacing inbound product demos in sales for SMBs by embedding on landing pages or sending to prospects with the <em>AI</em> agent <em>self</em>-serve created - Ending live presentations with a QR code open to a live product environment - PMs sharing prototype links for feedback in slack<p>Docs: <a href=\"https://www.makeportals.com/docs/mcp\" rel=\"nofollow\">https://www.makeportals.com/docs/mcp</a>\nTry in Claude Code: claude mcp add --transport http portal <a href=\"https://mcp-portal-sogv.onrender.com/mcp\" rel=\"nofollow\">https://mcp-portal-sogv.onrender.com/mcp</a>\nOpenClaw: <a href=\"https://clawhub.ai/Zach213/portal\" rel=\"nofollow\">https://clawhub.<em>ai</em>/Zach213/portal</a><p>Curious about the browser sessions you’d want to share w/ an <em>AI</em> guide- we’re <em>improving</em> latency of interaction every week &amp; think stateful URLs/shareable product states are the future. Love any feedback as we're early!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.makeportals.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_zach4123",
+            "story_47340686",
+            "show_hn"
+          ],
+          "author": "zach4123",
+          "created_at": "2026-03-11T20:07:44Z",
+          "created_at_i": 1773259664,
+          "num_comments": 0,
+          "objectID": "47340686",
+          "points": 5,
+          "story_id": 47340686,
+          "story_text": "Hey HN, I&#x27;m Zach, founder of Portal.\nPortal lets you share a live sandbox browser session as a link.<p>Try it here: <a href=\"https:&#x2F;&#x2F;www.makeportals.com&#x2F;try\" rel=\"nofollow\">https:&#x2F;&#x2F;www.makeportals.com&#x2F;try</a><p>Instead of asking someone to sign up, install software, or book a demo for user research, onboarding, or sales, you send a link and they interact with the real product in a sandboxed browser environment, then you get session replays.<p>Each viewer gets a fresh remote browser instance that starts from a defined state (URL, cookies, extensions, local files, etc). Sessions are isolated and expire automatically.<p>The sessions have configurable guardrails: - disabling buttons - restricting URLs - API rate limits - Time limits<p>In Watch Mode, an AI Agent with contextual awareness clicks through a demo and explains the product. In Play Mode, users explore a guardrailed session while the AI answers questions.<p>Portal came from trying to get feedback on a chrome extension I’d built to help people with disabilities control gmail with voice. People were cautious to download it &amp; I kept wishing I could send a browser session with the extension already installed to try safely &amp; an AI to explain async.<p>Portal grew out of that idea: share an exact browser state where your product works without requiring installs or already logged into demo accounts.<p>Some early uses: - Getting user feedback on local projects in Claude Code with a temporary links&#x2F;rate limits - Helping onboard to high friction&#x2F;integration products like extension&#x2F;add-ons or code reviewers - Replacing inbound product demos in sales for SMBs by embedding on landing pages or sending to prospects with the AI agent self-serve created - Ending live presentations with a QR code open to a live product environment - PMs sharing prototype links for feedback in slack<p>Docs: <a href=\"https:&#x2F;&#x2F;www.makeportals.com&#x2F;docs&#x2F;mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;www.makeportals.com&#x2F;docs&#x2F;mcp</a>\nTry in Claude Code: claude mcp add --transport http portal <a href=\"https:&#x2F;&#x2F;mcp-portal-sogv.onrender.com&#x2F;mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;mcp-portal-sogv.onrender.com&#x2F;mcp</a>\nOpenClaw: <a href=\"https:&#x2F;&#x2F;clawhub.ai&#x2F;Zach213&#x2F;portal\" rel=\"nofollow\">https:&#x2F;&#x2F;clawhub.ai&#x2F;Zach213&#x2F;portal</a><p>Curious about the browser sessions you’d want to share w&#x2F; an AI guide- we’re improving latency of interaction every week &amp; think stateful URLs&#x2F;shareable product states are the future. Love any feedback as we&#x27;re early!",
+          "title": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes",
+          "updated_at": "2026-03-18T00:55:28Z",
+          "url": "https://www.makeportals.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "razodactyl"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "<em>Self</em>-<em>improving</em> <em>AI</em> (Karpathy pt2)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_razodactyl",
+            "story_47320238"
+          ],
+          "author": "razodactyl",
+          "created_at": "2026-03-10T07:53:48Z",
+          "created_at_i": 1773129228,
+          "num_comments": 0,
+          "objectID": "47320238",
+          "points": 2,
+          "story_id": 47320238,
+          "title": "Self-improving AI (Karpathy pt2)",
+          "updated_at": "2026-03-10T11:38:28Z",
+          "url": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
+        }
+      ]
     }
   ],
-  "totalHits": 20
+  "totalHits": 50
 }
