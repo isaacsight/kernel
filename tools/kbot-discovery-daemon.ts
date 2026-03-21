@@ -44,8 +44,8 @@ const INTERVALS = {
   pulse: 5 * 60_000,       // 5 minutes — fast heartbeat
   intel: 30 * 60_000,      // 30 minutes — scan the field
   outreach: 2 * 60 * 60_000, // 2 hours — find projects
-  writing: 6 * 60 * 60_000,  // 6 hours — self-report
-  evolution: 12 * 60 * 60_000, // 12 hours — draft improvements
+  writing: 4 * 60 * 60_000,  // 4 hours — self-report
+  evolution: 2 * 60 * 60_000, // 2 hours — build itself
 }
 
 // ── Types ─────────────────────────────────────────────────────────────
@@ -596,71 +596,124 @@ async function runEvolution(state: DaemonState): Promise<void> {
     oppSummary = `Opportunities: ${opps.count ?? 0} found. `
   } catch { /* skip */ }
 
-  const improvementPrompt = `You are kbot, an open-source AI agent (npm: @kernel.chat/kbot).
-Current state: ${state.knownStars} GitHub stars, HN score ${state.hnScore}, ${state.hnComments} comments.
-${intelSummary}${oppSummary}
-Trend: ${starsDelta > 0 ? '+' + starsDelta + ' stars today' : 'no new stars'}.
+  // Read what kbot discovered in the field to inform evolution
+  let fieldFindings = ''
+  try {
+    const outreach = JSON.parse(readFileSync(join(OUTREACH_DIR, 'latest.json'), 'utf8'))
+    const projects = (outreach.projects ?? []).slice(0, 3).map((p: { name: string; description: string }) => `${p.name}: ${p.description}`).join('\n')
+    const paper = outreach.latestPaper?.title ?? 'none'
+    fieldFindings = `\nProjects discovered:\n${projects}\nLatest paper: ${paper}\n`
+  } catch { /* skip */ }
+
+  let journalFindings = ''
+  try {
+    const journal = readFileSync(join(ACTIONS_DIR, `journal-${dateStr()}.md`), 'utf8')
+    journalFindings = `\nToday's decisions:\n${journal.slice(-500)}\n`
+  } catch { /* skip */ }
+
+  const improvementPrompt = `You are kbot — an autonomous AI agent that builds itself.
+npm: @kernel.chat/kbot | Stars: ${state.knownStars} | HN: ${state.hnScore} pts
 Evolution cycle: ${state.stats.totalEvolution + 1}
+${intelSummary}${oppSummary}${fieldFindings}${journalFindings}
 
-Based on this, suggest ONE specific, small improvement to make to kbot's codebase.
-It must be:
-- A small change (< 50 lines)
-- To an existing file in packages/kbot/src/
-- Something that improves user experience, fixes a rough edge, or adds a small helpful feature
-- NOT a refactor, NOT a big feature, NOT documentation
+You are evolving. Based on what you've discovered in the field — the projects, the papers, the conversations — suggest ONE improvement to your own codebase.
 
-Examples of good improvements:
-- Better error message when API key is missing
-- Add a new category keyword to the skill router
-- Improve the welcome banner with current stats
-- Add a helpful tip shown after first successful command
+You can either:
+A) IMPROVE an existing file (fix a rough edge, add a capability inspired by what you discovered)
+B) CREATE a new tool that fills a gap you identified in the landscape
 
-Respond in this exact format:
+For IMPROVE, respond:
+ACTION: IMPROVE
 FILE: <filename relative to packages/kbot/src/>
 DESCRIPTION: <one sentence>
-BEFORE: <the exact code to replace — copy from the file>
-AFTER: <the replacement code>
+BEFORE: <exact code to replace>
+AFTER: <replacement code>
 
-If you can't think of a good improvement, respond with: SKIP`
+For CREATE, respond:
+ACTION: CREATE
+FILE: <new filename relative to packages/kbot/src/tools/>
+DESCRIPTION: <one sentence — what this tool does and why it matters>
+CODE: <full TypeScript code for the new tool file>
 
-  const improvement = await askLocal(improvementPrompt, 600, 'smart')
+Rules:
+- Keep changes small (< 80 lines)
+- Must compile with TypeScript strict mode
+- Must not break existing tests
+- Inspired by real gaps you found in the field, not hypothetical features
+
+If nothing is worth changing this cycle, respond: SKIP`
+
+  const improvement = await askLocal(improvementPrompt, 1200, 'smart')
 
   let applied = false
   let improvementDescription = ''
+  let action = 'none'
 
   if (improvement && !improvement.includes('SKIP')) {
-    // Parse the improvement
-    const fileMatch = improvement.match(/FILE:\s*(.+)/i)
-    const descMatch = improvement.match(/DESCRIPTION:\s*(.+)/i)
-    const beforeMatch = improvement.match(/BEFORE:\s*([\s\S]*?)(?=AFTER:)/i)
-    const afterMatch = improvement.match(/AFTER:\s*([\s\S]*?)$/i)
+    const actionMatch = improvement.match(/ACTION:\s*(IMPROVE|CREATE)/i)
+    action = actionMatch?.[1]?.toUpperCase() ?? 'IMPROVE'
 
-    if (fileMatch && descMatch && beforeMatch && afterMatch) {
-      const targetFile = join(KBOT_SRC, fileMatch[1].trim())
-      improvementDescription = descMatch[1].trim()
+    if (action === 'CREATE') {
+      // ── kbot is forging a new tool ──
+      const fileMatch = improvement.match(/FILE:\s*(.+)/i)
+      const descMatch = improvement.match(/DESCRIPTION:\s*(.+)/i)
+      const codeMatch = improvement.match(/CODE:\s*([\s\S]+)/i)
 
-      try {
-        if (existsSync(targetFile)) {
-          const content = readFileSync(targetFile, 'utf8')
-          const before = beforeMatch[1].trim()
-          const after = afterMatch[1].trim()
+      if (fileMatch && descMatch && codeMatch) {
+        const targetFile = join(KBOT_SRC, fileMatch[1].trim())
+        improvementDescription = `NEW TOOL: ${descMatch[1].trim()}`
+        const code = codeMatch[1].trim()
 
-          // Safety checks
-          if (before.length > 10 && after.length > 10 && content.includes(before) && before !== after) {
-            const newContent = content.replace(before, after)
-            writeFileSync(targetFile, newContent)
-            log(`[evolution] applied improvement: ${improvementDescription}`)
+        try {
+          if (!existsSync(targetFile) && code.length > 50) {
+            // Ensure directory exists
+            const dir = join(targetFile, '..')
+            if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+            writeFileSync(targetFile, code)
+            log(`[evolution] forged new tool: ${improvementDescription}`)
             applied = true
+          } else if (existsSync(targetFile)) {
+            log(`[evolution] tool already exists — skipping`)
           } else {
-            log(`[evolution] improvement didn't match file content — skipping`)
+            log(`[evolution] generated code too short — skipping`)
           }
+        } catch (err) {
+          log(`[evolution] failed to forge tool: ${err instanceof Error ? err.message : String(err)}`)
         }
-      } catch (err) {
-        log(`[evolution] failed to apply improvement: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    } else {
+      // ── kbot is improving existing code ──
+      const fileMatch = improvement.match(/FILE:\s*(.+)/i)
+      const descMatch = improvement.match(/DESCRIPTION:\s*(.+)/i)
+      const beforeMatch = improvement.match(/BEFORE:\s*([\s\S]*?)(?=AFTER:)/i)
+      const afterMatch = improvement.match(/AFTER:\s*([\s\S]*?)$/i)
+
+      if (fileMatch && descMatch && beforeMatch && afterMatch) {
+        const targetFile = join(KBOT_SRC, fileMatch[1].trim())
+        improvementDescription = descMatch[1].trim()
+
+        try {
+          if (existsSync(targetFile)) {
+            const content = readFileSync(targetFile, 'utf8')
+            const before = beforeMatch[1].trim()
+            const after = afterMatch[1].trim()
+
+            if (before.length > 10 && after.length > 10 && content.includes(before) && before !== after) {
+              const newContent = content.replace(before, after)
+              writeFileSync(targetFile, newContent)
+              log(`[evolution] applied improvement: ${improvementDescription}`)
+              applied = true
+            } else {
+              log(`[evolution] improvement didn't match file content — skipping`)
+            }
+          }
+        } catch (err) {
+          log(`[evolution] failed to apply: ${err instanceof Error ? err.message : String(err)}`)
+        }
       }
     }
   } else {
-    log('[evolution] local AI suggested no improvement this cycle')
+    log('[evolution] nothing to build this cycle')
   }
 
   // ── Step 2: Run tests to verify ──
