@@ -50,5 +50,14 @@
     "title": "Astral to Join OpenAI",
     "comment": "Interesting tradeoff they're making with persistent context across sessions instead of typical ephemeral state management. Makes me wonder how they handle memory budget constraints when contexts accumulate indefinitely. Anyone see how they balance this with the classic context window limits?",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-21T10:26:33.077Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47233229",
+    "title": "Show HN: ScrapAI – We scrape 500 sites. AI runs once per site, not per page",
+    "comment": "The site-level reasoning approach makes sense given token constraints - calling per-page quickly exhausts budgets while still capturing structural patterns. I'm more curious how you handle nested pagination without re-invoking the model each time. Does the initial pass include heuristics for detecting pagination depth?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
