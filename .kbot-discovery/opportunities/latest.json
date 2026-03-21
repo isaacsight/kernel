@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T04:42:46.589Z",
+  "timestamp": "2026-03-21T05:17:47.167Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "feat(clawbot): snapshot + rollback + approval button for write operations",
+      "url": "https://github.com/JK42JJ/insighta/issues/304",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix/feat: address open issues #14, #12, #11, #16",
+      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/17",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Feature: Hybrid Agent Interface (Native Tool + CLI)",
       "url": "https://github.com/KHAEntertainment/todo-task-manager/issues/3",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Improve agent setup documentation",
-      "url": "https://github.com/ZimoLiao/scholaraio/pull/30",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "OpenClaw/NemoClaw feature integration (9 features + security hardening)",
-      "url": "https://github.com/JaredCluff/nexibot/pull/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
