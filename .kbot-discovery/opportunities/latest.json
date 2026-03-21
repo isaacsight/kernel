@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T12:40:11.923Z",
+  "timestamp": "2026-03-21T13:15:12.169Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "[Feature]: Built-in persistent memory system with compaction tree",
+      "url": "https://github.com/openclaw/openclaw/issues/51612",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Revert startup-memory regression from web search compat change",
       "url": "https://github.com/openclaw/openclaw/pull/51599",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Release v0.3.0 — Paradigm Shift (3 phases)",
       "url": "https://github.com/prompt-armor/prompt-armor/pull/12",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(extensions): align MIMO_API_KEY for Xiaomi extensions across plugin, usage, tests and docs",
-      "url": "https://github.com/openclaw/openclaw/pull/51582",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
