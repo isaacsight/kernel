@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T04:12:44.526Z",
+  "timestamp": "2026-03-21T06:14:28.661Z",
   "projects": [
     {
       "name": "vm0-ai/vm0",
@@ -8,10 +8,10 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "n1byn1kt/apitap",
-      "url": "https://github.com/n1byn1kt/apitap",
-      "stars": 77,
-      "description": "The MCP server that turns any website into an API — no docs, no SDK, no browser. npm: @apitap/core"
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 3226,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
       "name": "cablate/mcp-google-map",
@@ -22,7 +22,7 @@
     {
       "name": "open-compress/claw-compactor",
       "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 1743,
+      "stars": 1749,
       "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
@@ -38,12 +38,6 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "unblocklabs-ai/openclaw-skill-usage-audit",
-      "url": "https://github.com/unblocklabs-ai/openclaw-skill-usage-audit",
-      "stars": 1,
-      "description": "OpenClaw plugin: automatic skill & tool usage audit telemetry with SQLite, execution context capture, and self-improving skill lifecycle"
-    },
-    {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
@@ -54,6 +48,12 @@
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "unblocklabs-ai/openclaw-skill-usage-audit",
+      "url": "https://github.com/unblocklabs-ai/openclaw-skill-usage-audit",
+      "stars": 1,
+      "description": "OpenClaw plugin: automatic skill & tool usage audit telemetry with SQLite, execution context capture, and self-improving skill lifecycle"
     }
   ],
   "latestPaper": {
