@@ -136,6 +136,157 @@ function dateStr(): string {
   return new Date().toISOString().split('T')[0]
 }
 
+// ── Local AI (Ollama — $0 cost) ───────────────────────────────────────
+
+const OLLAMA_URL = 'http://localhost:11434'
+const OLLAMA_MODEL = 'kernel:latest' // Gemma3 12B — local, free
+
+/**
+ * Ask the local Ollama model a question. Zero API cost.
+ * Falls back to empty string if Ollama is down.
+ */
+async function askLocal(prompt: string, maxTokens = 500): Promise<string> {
+  try {
+    const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        prompt,
+        stream: false,
+        options: { num_predict: maxTokens, temperature: 0.7 },
+      }),
+    })
+    if (!res.ok) return ''
+    const data = await res.json() as { response?: string }
+    return data.response?.trim() ?? ''
+  } catch {
+    return '' // Ollama not running — skip AI analysis
+  }
+}
+
+/**
+ * Have kbot analyze an opportunity and draft a response.
+ * Uses local Ollama — zero cost.
+ */
+async function analyzeOpportunity(opp: {
+  source: string; title: string; url: string; why: string
+}): Promise<{ relevant: boolean; draft: string; reasoning: string }> {
+  const prompt = `You are kbot, an open-source terminal AI agent (npm: @kernel.chat/kbot).
+You have 290 tools, 23 specialist agents, collective learning, and 11 cognitive modules.
+
+An opportunity was found:
+- Source: ${opp.source}
+- Title: ${opp.title}
+- URL: ${opp.url}
+- Why flagged: ${opp.why}
+
+Decide:
+1. Is this genuinely relevant to kbot? (yes/no)
+2. If yes, draft a SHORT, genuine response (2-3 sentences max). Be helpful, not promotional. Mention kbot only if it genuinely solves a problem being discussed.
+3. If no, explain why in one sentence.
+
+Format your response exactly as:
+RELEVANT: yes/no
+REASONING: <one sentence>
+DRAFT: <your response or "n/a">`
+
+  const response = await askLocal(prompt, 300)
+  if (!response) return { relevant: false, draft: '', reasoning: 'Ollama unavailable' }
+
+  const relevantMatch = response.match(/RELEVANT:\s*(yes|no)/i)
+  const reasoningMatch = response.match(/REASONING:\s*(.+)/i)
+  const draftMatch = response.match(/DRAFT:\s*([\s\S]+)/i)
+
+  return {
+    relevant: relevantMatch?.[1]?.toLowerCase() === 'yes',
+    draft: draftMatch?.[1]?.trim() ?? '',
+    reasoning: reasoningMatch?.[1]?.trim() ?? '',
+  }
+}
+
+const ACTIONS_DIR = join(DAEMON_DIR, 'actions')
+
+/**
+ * Process opportunities through local AI and queue actions for Isaac's review.
+ * Runs after opportunity hunting. Zero API cost — all Ollama.
+ */
+async function processOpportunities(state: DaemonState): Promise<void> {
+  log('[actions] processing opportunities through local AI...')
+
+  const oppsFile = join(OPPORTUNITIES_DIR, 'latest.json')
+  if (!existsSync(oppsFile)) {
+    log('[actions] no opportunities to process')
+    return
+  }
+
+  const data = JSON.parse(readFileSync(oppsFile, 'utf8')) as {
+    opportunities: Array<{ source: string; title: string; url: string; why: string }>
+  }
+
+  const actions: Array<{
+    opportunity: typeof data.opportunities[0]
+    relevant: boolean
+    draft: string
+    reasoning: string
+    status: 'pending_review'
+  }> = []
+
+  // Process top 5 opportunities (don't overload Ollama)
+  const top = data.opportunities.slice(0, 5)
+
+  for (const opp of top) {
+    const analysis = await analyzeOpportunity(opp)
+    actions.push({
+      opportunity: opp,
+      ...analysis,
+      status: 'pending_review',
+    })
+    log(`[actions] ${opp.title.slice(0, 50)}... → ${analysis.relevant ? 'RELEVANT' : 'skip'}: ${analysis.reasoning.slice(0, 80)}`)
+  }
+
+  const relevant = actions.filter(a => a.relevant)
+
+  ensureDir(ACTIONS_DIR)
+  const filename = `${dateStr()}-${Date.now()}.json`
+  writeFileSync(join(ACTIONS_DIR, filename), JSON.stringify({
+    timestamp: new Date().toISOString(),
+    processed: actions.length,
+    relevant: relevant.length,
+    actions,
+  }, null, 2))
+
+  if (relevant.length > 0) {
+    // Write a human-readable queue for Isaac
+    const queueFile = join(ACTIONS_DIR, 'review-queue.md')
+    const queue = [
+      `# kbot Action Queue — ${dateStr()}`,
+      '',
+      `${relevant.length} opportunities need your review.`,
+      '',
+      ...relevant.map((a, i) => [
+        `## ${i + 1}. ${a.opportunity.title}`,
+        `**Source:** ${a.opportunity.source} | **URL:** ${a.opportunity.url}`,
+        `**Why:** ${a.reasoning}`,
+        '',
+        '**Draft response:**',
+        `> ${a.draft}`,
+        '',
+        '**Status:** pending_review',
+        '',
+        '---',
+        '',
+      ].join('\n')),
+    ].join('\n')
+
+    writeFileSync(queueFile, queue)
+    log(`[actions] ${relevant.length} actions queued for review → .kbot-discovery/actions/review-queue.md`)
+    gitPublish(`actions: ${relevant.length} drafts queued for Isaac review`)
+  } else {
+    log('[actions] no relevant opportunities this cycle')
+  }
+}
+
 function gitPublish(message: string): void {
   try {
     execSync(`cd "${PROJECT_ROOT}" && git add .kbot-discovery/ && git commit -m "${message}" --allow-empty`, { stdio: 'pipe' })
@@ -550,6 +701,7 @@ async function runCycle(): Promise<void> {
     { name: 'pulse', interval: INTERVALS.pulse, fn: runPulse },
     { name: 'intel', interval: INTERVALS.intel, fn: runIntel },
     { name: 'opportunities', interval: INTERVALS.intel, fn: runOpportunities },
+    { name: 'actions', interval: INTERVALS.intel, fn: processOpportunities },
     { name: 'outreach', interval: INTERVALS.outreach, fn: runOutreach },
     { name: 'writing', interval: INTERVALS.writing, fn: runWriting },
     { name: 'evolution', interval: INTERVALS.evolution, fn: runEvolution },
@@ -574,7 +726,7 @@ async function runCycle(): Promise<void> {
 
 async function main(): Promise<void> {
   // Ensure all directories exist
-  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR, OPPORTUNITIES_DIR]) {
+  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR, OPPORTUNITIES_DIR, ACTIONS_DIR]) {
     ensureDir(dir)
   }
 
