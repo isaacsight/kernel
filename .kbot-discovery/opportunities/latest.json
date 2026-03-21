@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-21T06:24:31.249Z",
+  "timestamp": "2026-03-21T06:57:19.585Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "feat(InputBar): Improve voice recording UX - draft preservation and mixed typing",
+      "url": "https://github.com/daggerhashimoto/openclaw-nerve/pull/131",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Fix(gui): Prevent UI freeze in Peak Picking task during ring extraction",
       "url": "https://github.com/silx-kit/pyFAI/pull/2824",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "feat(clawbot): snapshot + rollback + approval button for write operations",
       "url": "https://github.com/JK42JJ/insighta/issues/304",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix/feat: address open issues #14, #12, #11, #16",
-      "url": "https://github.com/KHAEntertainment/grok-multiagent-plugin/pull/17",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
