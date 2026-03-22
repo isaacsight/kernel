@@ -1,29 +1,35 @@
 {
-  "timestamp": "2026-03-22T02:35:29.496Z",
+  "timestamp": "2026-03-22T14:50:29.124Z",
   "projects": [
     {
-      "name": "n1byn1kt/apitap",
-      "url": "https://github.com/n1byn1kt/apitap",
-      "stars": 77,
-      "description": "The MCP server that turns any website into an API — no docs, no SDK, no browser. npm: @apitap/core"
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 4166,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
-      "name": "olasunkanmi-SE/codebuddy",
-      "url": "https://github.com/olasunkanmi-SE/codebuddy",
-      "stars": 110,
-      "description": "An Autonomous AI Software Engineer"
+      "name": "nexu-io/nexu",
+      "url": "https://github.com/nexu-io/nexu",
+      "stars": 294,
+      "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, local-first, chat from your phone 24/7."
     },
     {
-      "name": "CherryHQ/cherry-studio",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "stars": 42007,
-      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+      "name": "xvirobotics/metabot",
+      "url": "https://github.com/xvirobotics/metabot",
+      "stars": 372,
+      "description": "Infrastructure for building a supervised, self-improving agent organization. Run Claude Code from Feishu & Telegram with shared memory, agent factory, task scheduling, and an agent communication bus."
     },
     {
       "name": "taylorwilsdon/google_workspace_mcp",
       "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 1872,
+      "stars": 1878,
       "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+    },
+    {
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 103,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
       "name": "ReScienceLab/opc-skills",
@@ -32,28 +38,22 @@
       "description": "Agent Skills for Solopreneurs"
     },
     {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10240,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+      "name": "samber/cc-skills-golang",
+      "url": "https://github.com/samber/cc-skills-golang",
+      "stars": 12,
+      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
+    },
+    {
+      "name": "samber/cc-skills",
+      "url": "https://github.com/samber/cc-skills",
+      "stars": 4,
+      "description": "🧑‍🎨 A collection of agentic skills that works"
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
-    },
-    {
-      "name": "samber/cc-skills",
-      "url": "https://github.com/samber/cc-skills",
-      "stars": 1,
-      "description": "🧑‍🎨 A collection of agentic skills that works"
     }
   ],
   "latestPaper": {

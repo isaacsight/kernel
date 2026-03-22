@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T09:05:34.901Z",
+  "timestamp": "2026-03-22T15:20:33.805Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "If AI brings 90% productivity gains, do you fire devs or build better products?",
+      "url": "https://news.ycombinator.com/item?id=47477877",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Ask HN:35,0 CS background, built real apps with AI, need suggestion",
+      "url": "https://news.ycombinator.com/item?id=47477180",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
       "url": "https://news.ycombinator.com/item?id=47474654",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Some things just take time",
-      "url": "https://news.ycombinator.com/item?id=47471325",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Ask HN: Is vibe coding a new mandatory job requirement?",
-      "url": "https://news.ycombinator.com/item?id=47464333",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
-      "title": "[Auto-QA] Large components missing lazy loading",
-      "url": "https://github.com/kubestellar/console/issues/3127",
+      "title": "Fix unauthorized access to Claude Code sessions",
+      "url": "https://github.com/kubestellar/console/issues/3159",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Color consistency issues across components",
-      "url": "https://github.com/kubestellar/console/issues/3124",
+      "title": "MCP Bridge Silently Swallows LLM Tool Execution Errors",
+      "url": "https://github.com/kubestellar/console/issues/3148",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Hardcoded colors instead of design tokens",
-      "url": "https://github.com/kubestellar/console/issues/3123",
+      "title": "Frontend LocalStorage Cross-Session Data Leakage",
+      "url": "https://github.com/kubestellar/console/issues/3147",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,44 +130,51 @@
     },
     {
       "source": "github-issue",
-      "title": "feat: v0.6.0 — Runner Management Tools & RRStack Scheduling",
-      "url": "https://github.com/karmaniverous/jeeves-runner/pull/35",
+      "title": "Add simplified Chinese analysis report of AI CLI integration mechanisms",
+      "url": "https://github.com/x22x22/CLI-Anything/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[SUBMISSION] boxie-openclaw",
-      "url": "https://github.com/ProSkillsMD/proskills/issues/2475",
+      "title": "Add OpenClaw-native Timeline plugin (2.0.0-draft): runtime tools, hooks, storage, docs and tests",
+      "url": "https://github.com/tower1229/Her/pull/21",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "为TIS构建mcp server及skill实现与openclaw整合",
-      "url": "https://github.com/datavane/tis/issues/493",
+      "title": "Introduce OpenClaw Timeline Plugin v2: plugin skeleton, deterministic runtime, tools, hooks, docs, and tests",
+      "url": "https://github.com/tower1229/Her/pull/20",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "We audited authorization in 30 AI agent frameworks — 93% rely on unscoped API keys",
-      "url": "https://reddit.com/r/programming/comments/1s0etu5/we_audited_authorization_in_30_ai_agent/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "*help*Can Anyone please tell me how to create Plugins for Horizon Desk.",
-      "url": "https://reddit.com/r/programming/comments/1s0d95s/helpcan_anyone_please_tell_me_how_to_create/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
       "title": "AMD GAIA 0.16 introduces C++17 agent framework for building AI PC agents in pure C++",
       "url": "https://reddit.com/r/programming/comments/1rncnnk/amd_gaia_016_introduces_c17_agent_framework_for/",
       "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
+      "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
+      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
+      "title": "dar: du with TUI &amp; treemap visual",
+      "url": "https://reddit.com/r/commandline/comments/1s0hcir/dar_du_with_tui_treemap_visual/",
+      "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "Vote America Only U.S. Political Candidate data via curl and SSH",
       "url": "https://reddit.com/r/commandline/comments/1rz7gci/vote_america_only_us_political_candidate_data_via/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "Made a CLI-first daemon in Rust that you can also reach through Telegram, Discord, Slack, Email, or Matrix. Local by default.",
-      "url": "https://reddit.com/r/commandline/comments/1ryqmes/made_a_clifirst_daemon_in_rust_that_you_can_also/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
