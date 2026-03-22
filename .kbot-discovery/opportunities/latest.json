@@ -1,14 +1,7 @@
 {
-  "timestamp": "2026-03-21T20:35:34.820Z",
+  "timestamp": "2026-03-22T02:50:33.916Z",
   "count": 30,
   "opportunities": [
-    {
-      "source": "hn-comment",
-      "title": "The Nexus: Open-Source Local AI Workspace (LangGraph/Next.js)",
-      "url": "https://news.ycombinator.com/item?id=47467684",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
     {
       "source": "hn-comment",
       "title": "Show HN: An open-source safety net for home hemodialysis",
@@ -18,8 +11,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Astral to Join OpenAI",
-      "url": "https://news.ycombinator.com/item?id=47447616",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Fdbck – programmable feedback for your apps",
+      "url": "https://news.ycombinator.com/item?id=47415106",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,13 +67,6 @@
     },
     {
       "source": "hn-comment",
-      "title": "Parallel Perl – Autoparallelizing interpreter with JIT",
-      "url": "https://news.ycombinator.com/item?id=47464781",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
       "title": "Ask HN: Is vibe coding a new mandatory job requirement?",
       "url": "https://news.ycombinator.com/item?id=47464333",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -82,28 +75,35 @@
     {
       "source": "hn-comment",
       "title": "I'm OK being left behind, thanks",
-      "url": "https://news.ycombinator.com/item?id=47461684",
+      "url": "https://news.ycombinator.com/item?id=47455235",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "I built a clip-on muscle sensor so personal trainers can show clients progress",
+      "url": "https://news.ycombinator.com/item?id=47448934",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
+      "title": "[Auto-QA] Color consistency issues across components",
+      "url": "https://github.com/kubestellar/console/issues/3124",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Auto-QA] Hardcoded colors instead of design tokens",
+      "url": "https://github.com/kubestellar/console/issues/3123",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Add multi-cloud deployment support and .NET SDK for Agentic AI",
       "url": "https://github.com/hoangsonww/Agentic-AI-Pipeline/pull/27",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add a demo video or animated GIF showing Clawterm in action",
-      "url": "https://github.com/clawterm/clawterm/issues/207",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat: 制定自动寻路坐标系标准协议",
-      "url": "https://github.com/MaaEnd/MaaEnd/issues/1514",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "[SUBMISSION] edamame_openclaw",
-      "url": "https://github.com/ProSkillsMD/proskills/issues/2422",
+      "title": "Triage Sweep Report — 2026-03-22",
+      "url": "https://github.com/abhigyanpatwari/GitNexus/issues/422",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(slack): add per-channel replyToMode config override",
-      "url": "https://github.com/openclaw/openclaw/pull/51848",
+      "title": "Fix configure cache ownership for plugin resolvers",
+      "url": "https://github.com/openclaw/openclaw/pull/52018",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(webhooks): allow BlueBubbles in hook mapping channels",
-      "url": "https://github.com/openclaw/openclaw/pull/51847",
+      "title": "🦞 Bản tin hàng ngày hệ sinh thái OpenClaw 2026-03-22",
+      "url": "https://github.com/compasify/agents-radar/issues/71",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

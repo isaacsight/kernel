@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-03-21T14:25:15.817Z",
+  "timestamp": "2026-03-22T02:35:29.496Z",
   "projects": [
     {
-      "name": "skalesapp/skales",
-      "url": "https://github.com/skalesapp/skales",
-      "stars": 462,
-      "description": "Free AI Desktop Agent for Windows, macOS & Linux - Automate email, calendar, browser, code generation. 13+ AI providers, Ollama, Telegram remote control. No Docker, no terminal. 🦎"
+      "name": "n1byn1kt/apitap",
+      "url": "https://github.com/n1byn1kt/apitap",
+      "stars": 77,
+      "description": "The MCP server that turns any website into an API — no docs, no SDK, no browser. npm: @apitap/core"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1054,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "olasunkanmi-SE/codebuddy",
+      "url": "https://github.com/olasunkanmi-SE/codebuddy",
+      "stars": 110,
+      "description": "An Autonomous AI Software Engineer"
     },
     {
-      "name": "OpenCoworkAI/open-cowork",
-      "url": "https://github.com/OpenCoworkAI/open-cowork",
-      "stars": 683,
-      "description": "Open Cowork - Opensource Claude Cowork for Windows & macOS."
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 42007,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
+    {
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 1872,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
       "name": "ReScienceLab/opc-skills",
       "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 608,
+      "stars": 609,
       "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10199,
+      "stars": 10240,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
-    },
-    {
-      "name": "open-compress/claw-compactor",
-      "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 1766,
-      "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
@@ -50,10 +50,10 @@
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     },
     {
-      "name": "philipbankier/awesome-agent-skills",
-      "url": "https://github.com/philipbankier/awesome-agent-skills",
+      "name": "samber/cc-skills",
+      "url": "https://github.com/samber/cc-skills",
       "stars": 1,
-      "description": "A curated directory of skills, tools, and plugins for AI coding agents — across every platform. MCP servers, Agent Skills, Cursor rules, and more."
+      "description": "🧑‍🎨 A collection of agentic skills that works"
     }
   ],
   "latestPaper": {

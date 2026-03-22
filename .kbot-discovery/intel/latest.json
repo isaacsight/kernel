@@ -1,9 +1,49 @@
 {
-  "timestamp": "2026-03-21T20:35:31.257Z",
+  "timestamp": "2026-03-22T02:50:30.476Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "vercantez"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Pi and Ghostty Running on Cloudflare Workers"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vercantez",
+            "story_47472261",
+            "show_hn"
+          ],
+          "author": "vercantez",
+          "created_at": "2026-03-21T22:39:15Z",
+          "created_at_i": 1774132755,
+          "num_comments": 0,
+          "objectID": "47472261",
+          "points": 3,
+          "story_id": 47472261,
+          "title": "Show HN: Pi and Ghostty Running on Cloudflare Workers",
+          "updated_at": "2026-03-22T00:39:00Z",
+          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -199,55 +239,67 @@
           "story_text": "I&#x27;ve been experimenting with AI tools, sometimes hours a day for the last 18 months, and recently shipped three open source packages that sit between AI agents and the tools they call.<p>I had a Raspberry Pi 5 from a summer project that became my first OpenClaw install. Once it was running I turned to the problem, what watches the agent while you&#x27;re not watching?<p>The idea for UNWIND came from Apple&#x27;s Time Machine. If something goes wrong, you should be able to see what happened and roll it back. CRAFT, the tamper-evident audit chain, came from a separate cryptographic project I&#x27;d been working on for months before. Combining the two with a deterministic enforcement pipeline was the design I wanted to build.<p>UNWIND works as an MCP stdio proxy. It wraps any MCP server, intercepts every tool call on the way through, and the agent never knows it&#x27;s there. If you&#x27;re using Claude Desktop, Cursor, Windsurf, or VS Code Copilot with MCP servers, that&#x27;s the primary integration path and the one that works most reliably right now. OpenClaw support exists but has unresolved adapter issues, so the MCP stdio path is the one to use today.<p>Claude Codehandled planning. Codex on the Pi was the builder. I chose Codex because OpenAI lets Pro users OAuth into OpenClaw with no API costs. I gave Codex a soul.md (the instruction file OpenClaw agents use) that defined its role as a security analyst: evidence first, flag unknowns, never assume, and for every finding produce a structured assessment of what happened, why it matters...With that framing it consistently found 5 or 6 real structural issues in every plan Claude Code produced.<p>UNWIND is a deterministic security proxy that sits between the agent and every tool call. 15 checks run on every call. No LLM in the enforcement path, just rules and pattern matching. Every action logged in a tamper-evident hash chain. File changes snapshotted for rollback.<p>Three packages, all on PyPI right now:<p>*craft-auth* : Tamper-evident command authentication. Zero dependencies, pure Python stdlib, 1,605 lines. Try it in 10 seconds: `pip install craft-auth &amp;&amp; craft-auth demo`. The output speaks for itself.<p>*ghostmode* : Dry-run proxy for MCP servers. See what your agent would do without letting it do anything. Writes intercepted, reads pass through, nothing changes. `pip install ghostmode &amp;&amp; ghostmode -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` (needs Node.js for the upstream MCP server, Ghost Mode itself is pure Python).<p>*unwind-mcp* : The full enforcement engine. `pip install unwind-mcp &amp;&amp; unwind serve -- npx @modelcontextprotocol&#x2F;server-filesystem ~&#x2F;Documents` then point Claude Desktop or Cursor at it. Every tool call shows ALLOW&#x2F;BLOCK decisions in the terminal. Dashboard at localhost:9001 with `unwind dashboard` (start the sidecar first with `unwind sidecar serve`).<p>after install,Codex was immediately flagged TAINTED by its own dashboard. It had been fetching web pages during setup, then tried to execute a command. The security stack it helped build caught it on its first live action.<p>Rough edges.<p>Requires Python 3.10+. Mac ships with 3.9.6 and the import will crash. Homebrew Python 3.11+ works fine. Windows is untested. Pure Python and cross-platform in principle but nobody has verified it.<p>The taint system works correctly but is too aggressive for unattended use. Normal agent workflow, triggers taint immediately, which blocks execution until a human approves. When you&#x27;re sitting there, this is fine. When the agent is running on its own, it&#x27;s effectively frozen. The tension between &quot;external content could carry prompt injection&quot; and &quot;the agent&#x27;s normal job involves external content&quot; is a genuine design problem I haven&#x27;t solved cleanly.<p>First real human testers welcome.<p>UNWIND and Ghost Mode are AGPL-3.0. craft-auth is standalone with zero AGPL dependencies and can be licensed separately.<p>github.com&#x2F;unwind-mcp",
           "title": "Show HN: Unwind – I built a security proxy for AI agents on a Raspberry Pi",
           "updated_at": "2026-03-20T12:44:08Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "isaacsight"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Show HN: Kbot – <em>terminal</em> <em>AI</em> <em>agent</em> that learns from every user who uses it"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/isaacsight/kernel"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_isaacsight",
-            "story_47450530",
-            "show_hn"
-          ],
-          "author": "isaacsight",
-          "children": [
-            47450537
-          ],
-          "created_at": "2026-03-20T04:34:01Z",
-          "created_at_i": 1773981241,
-          "num_comments": 0,
-          "objectID": "47450530",
-          "points": 1,
-          "story_id": 47450530,
-          "title": "Show HN: Kbot – terminal AI agent that learns from every user who uses it",
-          "updated_at": "2026-03-20T04:36:54Z",
-          "url": "https://github.com/isaacsight/kernel"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "yoloshii"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "So I've been building ClawMem, an <em>open</em>-<em>source</em> context engine that gives AI <em>coding</em> agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI <em>agent</em> and your voice/chat <em>agent</em> build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https://github.com/tobi/qmd\" rel=\"nofollow\">https://github.com/tobi/qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https://github.com/sgx-labs/statelessagent\" rel=\"nofollow\">https://github.com/sgx-labs/statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https://arxiv.org/abs/2501.13956\" rel=\"nofollow\">https://arxiv.org/abs/2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https://arxiv.org/abs/2510.02178\" rel=\"nofollow\">https://arxiv.org/abs/2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https://github.com/Gentleman-Programming/engram\" rel=\"nofollow\">https://github.com/Gentleman-Programming/engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD's original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy's distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they're designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There's also a cloud embedding option if you're tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the <em>agent</em> to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I'm a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I'd genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for <em>agent</em> memory, and is the quality difference worth the VRAM? (2) For those running multiple <em>agent</em> interfaces (CLI + voice/chat), how are you handling shared memory today?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source",
+                "agent"
+              ],
+              "value": "Show HN: ClawMem – <em>Open</em>-<em>source</em> <em>agent</em> memory with SOTA local GPU retrieval"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/yoloshii/ClawMem"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_yoloshii",
+            "story_47472965",
+            "show_hn"
+          ],
+          "author": "yoloshii",
+          "children": [
+            47473295
+          ],
+          "created_at": "2026-03-22T00:13:15Z",
+          "created_at_i": 1774138395,
+          "num_comments": 0,
+          "objectID": "47472965",
+          "points": 3,
+          "story_id": 47472965,
+          "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
+          "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
+          "updated_at": "2026-03-22T01:05:00Z",
+          "url": "https://github.com/yoloshii/ClawMem"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -285,6 +337,7 @@
           ],
           "author": "pangon",
           "children": [
+            47473166,
             47468879,
             47469570,
             47470756,
@@ -292,13 +345,13 @@
           ],
           "created_at": "2026-03-21T12:43:09Z",
           "created_at_i": 1774096989,
-          "num_comments": 5,
+          "num_comments": 6,
           "objectID": "47466513",
-          "points": 17,
+          "points": 20,
           "story_id": 47466513,
           "story_text": "I built an open-source repo template that brings structure to AI-assisted software development, starting from the pre-coding phases: objectives, user stories, requirements, architecture decisions.<p>It&#x27;s designed around Claude Code but the ideas are tool-agnostic. I&#x27;ve been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I&#x27;ve been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI coding agents are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-coding phases, and organizes the output so that agents can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside source code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude&#x2F;skills&#x2F;SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they&#x27;re loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the agent can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI agents don&#x27;t mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I&#x27;ve found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven&#x27;t found a good way to integrate Figma MCP for importing existing UI&#x2F;UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!",
           "title": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development",
-          "updated_at": "2026-03-21T20:07:44Z",
+          "updated_at": "2026-03-22T02:46:15Z",
           "url": "https://github.com/pangon/ai-sdlc-scaffold/"
         },
         {
@@ -379,88 +432,92 @@
           "_tags": [
             "story",
             "author_rbanffy",
-            "story_47460525",
-            "front_page"
+            "story_47460525"
           ],
           "author": "rbanffy",
           "children": [
             47462013,
             47463880,
-            47470866,
-            47466438,
             47461304,
+            47466438,
+            47473886,
             47460841,
             47461565,
-            47467255,
             47461834,
+            47467255,
+            47473786,
             47461578,
             47461462,
-            47470145,
             47462787,
-            47464570,
-            47461042,
-            47466591,
-            47468933,
-            47462243,
             47465518,
-            47469135,
+            47461042,
+            47464570,
+            47462243,
             47463429,
-            47465756,
             47462955,
             47463249,
-            47465527,
-            47467413,
+            47470866,
+            47466591,
+            47465756,
             47461326,
-            47467709,
-            47467434,
+            47465527,
             47461008,
             47462016,
-            47465717,
+            47468933,
+            47470145,
             47461613,
-            47465692,
+            47469135,
+            47467413,
+            47465717,
+            47467709,
+            47467434,
+            47473531,
             47464579,
             47463916,
-            47466572,
+            47465692,
             47462299,
-            47467602,
-            47465661,
-            47463768,
+            47472715,
             47461348,
-            47466111,
-            47466153,
+            47466572,
             47461500,
-            47465643,
+            47463768,
+            47465661,
+            47466111,
             47461597,
+            47466153,
+            47465643,
             47463524,
-            47466389,
             47463007,
+            47467602,
             47461334,
             47463198,
+            47466389,
             47462400,
             47463470,
             47461781,
+            47471254,
             47461846,
-            47465066,
-            47463743,
-            47467769,
             47461314,
             47468464,
-            47463753,
+            47465066,
             47461707,
-            47461212,
-            47467961,
+            47463753,
+            47461422,
             47461262,
+            47467769,
             47462465,
-            47466620,
             47461679,
             47462066,
             47461996,
             47461475,
+            47463743,
             47461340,
-            47461422,
-            47461944,
             47460967,
+            47466620,
+            47461944,
             47461499,
+            47467961,
+            47463483,
             47460886,
             47464077,
             47464952,
@@ -468,37 +525,39 @@
             47464053,
             47463814,
             47463497,
-            47463483,
-            47468579,
             47461213,
             47463835,
+            47468579,
             47462900,
             47462424,
-            47470142,
+            47471942,
             47469511,
+            47473085,
+            47470142,
             47469181,
             47467291,
             47465098,
-            47463897,
             47462908,
-            47466428,
-            47463399,
-            47466635,
+            47463897,
             47461888,
-            47466504,
-            47468599,
+            47463399,
+            47466428,
             47463979,
+            47466635,
             47461947,
+            47466504,
+            47462442,
             47464604,
             47462583,
             47462289,
             47461217,
-            47467299,
+            47468599,
             47465404,
-            47462442,
+            47467299,
             47464486,
             47462612,
             47463509,
+            47471236,
             47463915,
             47463913,
             47461418,
@@ -507,16 +566,17 @@
             47470230,
             47461554,
             47462117,
-            47462890
+            47462890,
+            47461212
           ],
           "created_at": "2026-03-20T21:03:52Z",
           "created_at_i": 1774040632,
-          "num_comments": 570,
+          "num_comments": 593,
           "objectID": "47460525",
-          "points": 1162,
+          "points": 1199,
           "story_id": 47460525,
           "title": "OpenCode – Open source AI coding agent",
-          "updated_at": "2026-03-21T20:34:59Z",
+          "updated_at": "2026-03-22T02:47:45Z",
           "url": "https://opencode.ai/"
         },
         {
@@ -561,56 +621,6 @@
           "title": "OctoAlly – open-source local-first terminal dashboard for AI coding agents",
           "updated_at": "2026-03-20T19:26:55Z",
           "url": "https://github.com/ai-genius-automations/octoally"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "akhrail1996"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I make iOS apps, been doing it for about five years now. Apple Search Ads ended up being my main paid channel - no creatives needed, just keywords and bids, feels closer to engineering than marketing. Also the only channel left where you get actual deterministic attribution, everything else is probabilistic mess. Anyway the work itself is mind-numbing. Bid adjustments, keyword mining, cross-negatives, checking what actually converts vs what just burns budget. You know the type of work where you're doing it and wondering what you're doing with your life.<p>At some point the idea to automate it felt pretty obvious. I wanted Claude Opus specifically because quality matters here - these are real money decisions. But running it twice a day at 50-80 tool calls per session, API bill would be brutal. Using Claude Code sub through OAuth turned out to be a great hack for this. Honestly cool that Anthropic lets you use it this way.<p><em>Agent</em> pulls data from three places: Apple Search Ads API, App Store Connect, and a lightweight SDK installed in the apps. Strategy side I took an <em>open</em> <em>source</em> ASA playbook, split it into phases, and mixed in what I learned from my own campaigns. <em>Agent</em> picks the right playbook depending on where app is at and keeps memory between runs.<p>Apple's APIs are a pain to work with and this is where vibe <em>coding</em> really bites you. <em>Agent</em> sort of figures them out but not fully - gets 90% right so you trust it. Then some edge case hits, like the reporting endpoint that puts your only report slot on a 31 day cooldown if you request it wrong, and now you're both fumbling. Either you spend a bunch of sessions on trial and error together or you go into the trenches and read the docs &amp; code yourself. Which, let's be honest, those muscles have atrophied a bit at this point.<p>Still - genuinely great time to be building stuff solo. All this business grind that used to feel like a completely different job is just becoming engineering problems. Write a spec, let <em>agent</em> handle it, enjoy the building part. That's the dream honestly."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Show HN: I built an AI <em>agent</em> that does marketing for my apps"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://asaagent.xyz"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_akhrail1996",
-            "story_47451559",
-            "show_hn"
-          ],
-          "author": "akhrail1996",
-          "created_at": "2026-03-20T07:27:57Z",
-          "created_at_i": 1773991677,
-          "num_comments": 0,
-          "objectID": "47451559",
-          "points": 2,
-          "story_id": 47451559,
-          "story_text": "I make iOS apps, been doing it for about five years now. Apple Search Ads ended up being my main paid channel - no creatives needed, just keywords and bids, feels closer to engineering than marketing. Also the only channel left where you get actual deterministic attribution, everything else is probabilistic mess. Anyway the work itself is mind-numbing. Bid adjustments, keyword mining, cross-negatives, checking what actually converts vs what just burns budget. You know the type of work where you&#x27;re doing it and wondering what you&#x27;re doing with your life.<p>At some point the idea to automate it felt pretty obvious. I wanted Claude Opus specifically because quality matters here - these are real money decisions. But running it twice a day at 50-80 tool calls per session, API bill would be brutal. Using Claude Code sub through OAuth turned out to be a great hack for this. Honestly cool that Anthropic lets you use it this way.<p>Agent pulls data from three places: Apple Search Ads API, App Store Connect, and a lightweight SDK installed in the apps. Strategy side I took an open source ASA playbook, split it into phases, and mixed in what I learned from my own campaigns. Agent picks the right playbook depending on where app is at and keeps memory between runs.<p>Apple&#x27;s APIs are a pain to work with and this is where vibe coding really bites you. Agent sort of figures them out but not fully - gets 90% right so you trust it. Then some edge case hits, like the reporting endpoint that puts your only report slot on a 31 day cooldown if you request it wrong, and now you&#x27;re both fumbling. Either you spend a bunch of sessions on trial and error together or you go into the trenches and read the docs &amp; code yourself. Which, let&#x27;s be honest, those muscles have atrophied a bit at this point.<p>Still - genuinely great time to be building stuff solo. All this business grind that used to feel like a completely different job is just becoming engineering problems. Write a spec, let agent handle it, enjoy the building part. That&#x27;s the dream honestly.",
-          "title": "Show HN: I built an AI agent that does marketing for my apps",
-          "updated_at": "2026-03-20T08:56:08Z",
-          "url": "https://asaagent.xyz"
         }
       ]
     },
@@ -665,6 +675,56 @@
           "story_text": "From the abstract:\n&quot;We study how generative AI, and in particular agentic AI, shapes human learning incentives and the long-run evolution of society’s information ecosystem... Learning exhibits economies of scope: costly human effort jointly produces a private signal about their own context and a “thin” public signal that accumulates into the community’s stock of general knowledge, generating a learning externality.... The model highlights a sharp dynamic tension: while agentic AI can improve contemporaneous decision quality, it can also erode learning incentives that sustain long-run collective knowledge. &quot;",
           "title": "AI, Human Cognition and Knowledge Collapse – Daren Acemoglu",
           "updated_at": "2026-03-16T08:30:36Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "desmonding"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://moji.pcding.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_desmonding",
+            "story_47269562",
+            "show_hn"
+          ],
+          "author": "desmonding",
+          "children": [
+            47274551,
+            47271615
+          ],
+          "created_at": "2026-03-06T01:18:48Z",
+          "created_at_i": 1772759928,
+          "num_comments": 4,
+          "objectID": "47269562",
+          "points": 12,
+          "story_id": 47269562,
+          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
+          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
+          "updated_at": "2026-03-15T19:14:50Z",
+          "url": "https://moji.pcding.com"
         },
         {
           "_highlightResult": {
@@ -726,6 +786,54 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "vassilbek"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "learning"
+              ],
+              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vassilbek",
+            "story_47062912",
+            "show_hn"
+          ],
+          "author": "vassilbek",
+          "created_at": "2026-02-18T16:40:11Z",
+          "created_at_i": 1771432811,
+          "num_comments": 0,
+          "objectID": "47062912",
+          "points": 1,
+          "story_id": 47062912,
+          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
+          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
+          "updated_at": "2026-03-05T23:35:10Z",
+          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "abrandes"
             },
             "story_text": {
@@ -767,101 +875,143 @@
           "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
           "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
           "updated_at": "2026-03-05T23:28:59Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "wingscape"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Urban Pipeline for Citywide Insights"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Wingscape/urban-pipeline"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_wingscape",
-            "story_44550988",
-            "show_hn"
-          ],
-          "author": "wingscape",
-          "created_at": "2025-07-13T15:11:34Z",
-          "created_at_i": 1752419494,
-          "num_comments": 0,
-          "objectID": "44550988",
-          "points": 3,
-          "story_id": 44550988,
-          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
-          "title": "Show HN: Urban Pipeline for Citywide Insights",
-          "updated_at": "2025-07-13T22:27:35Z",
-          "url": "https://github.com/Wingscape/urban-pipeline"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cyberneticc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
-          ],
-          "author": "cyberneticc",
-          "children": [
-            43019203
-          ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
-          "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mroche"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Google Summer of Code 2026 Is Here: Contribute to <em>Kot</em>lin"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://blog.jetbrains.com/<em>kot</em>lin/2026/03/gsoc-2026-contribute-to-<em>kot</em>lin/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mroche",
+            "story_47473056"
+          ],
+          "author": "mroche",
+          "created_at": "2026-03-22T00:25:29Z",
+          "created_at_i": 1774139129,
+          "num_comments": 0,
+          "objectID": "47473056",
+          "points": 3,
+          "story_id": 47473056,
+          "title": "Google Summer of Code 2026 Is Here: Contribute to Kotlin",
+          "updated_at": "2026-03-22T00:48:29Z",
+          "url": "https://blog.jetbrains.com/kotlin/2026/03/gsoc-2026-contribute-to-kotlin/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "yoloshii"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "So I've been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and <em>bot</em>h can share the same SQLite vault, so your CLI agent and your voice/chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https://github.com/tobi/qmd\" rel=\"nofollow\">https://github.com/tobi/qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https://github.com/sgx-labs/statelessagent\" rel=\"nofollow\">https://github.com/sgx-labs/statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https://arxiv.org/abs/2501.13956\" rel=\"nofollow\">https://arxiv.org/abs/2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https://arxiv.org/abs/2510.02178\" rel=\"nofollow\">https://arxiv.org/abs/2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https://github.com/Gentleman-Programming/engram\" rel=\"nofollow\">https://github.com/Gentleman-Programming/engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD's original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy's distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they're designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run <em>bot</em>h, but retrieval quality is noticeably better than the default stack. There's also a cloud embedding option if you're tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I'm a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I'd genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice/chat), how are you handling shared memory today?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/yoloshii/ClawMem"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_yoloshii",
+            "story_47472965",
+            "show_hn"
+          ],
+          "author": "yoloshii",
+          "children": [
+            47473295
+          ],
+          "created_at": "2026-03-22T00:13:15Z",
+          "created_at_i": 1774138395,
+          "num_comments": 0,
+          "objectID": "47472965",
+          "points": 3,
+          "story_id": 47472965,
+          "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
+          "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
+          "updated_at": "2026-03-22T01:05:00Z",
+          "url": "https://github.com/yoloshii/ClawMem"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "zdw"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "How to Attract AI <em>Bot</em>s to Your Open Source Project"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://nesbitt.io/2026/03/21/how-to-attract-ai-<em>bot</em>s-to-your-open-source-project.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_zdw",
+            "story_47471271"
+          ],
+          "author": "zdw",
+          "children": [
+            47472591,
+            47471285
+          ],
+          "created_at": "2026-03-21T20:58:01Z",
+          "created_at_i": 1774126681,
+          "num_comments": 0,
+          "objectID": "47471271",
+          "points": 2,
+          "story_id": 47471271,
+          "title": "How to Attract AI Bots to Your Open Source Project",
+          "updated_at": "2026-03-21T23:22:44Z",
+          "url": "https://nesbitt.io/2026/03/21/how-to-attract-ai-bots-to-your-open-source-project.html"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -896,19 +1046,20 @@
           ],
           "author": "appstorelottery",
           "children": [
-            47470934,
+            47472640,
             47470834,
+            47470934,
             47470294
           ],
           "created_at": "2026-03-21T19:06:51Z",
           "created_at_i": 1774120011,
-          "num_comments": 2,
+          "num_comments": 9,
           "objectID": "47470194",
-          "points": 2,
+          "points": 4,
           "story_id": 47470194,
           "story_text": "Classic Video Poker (CVP) is a lightweight, browser-based retro video poker game which originally hit the front page of HN on Oct 4, 2023: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37763098\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37763098</a><p>I&#x27;ve finally managed to release version 2. The delay was mostly due to fear of upsetting the user base with breaking changes.<p>Version 2 includes:<p>- Frictionless accounts: added registration so you can save progress but no personal info or email.<p>- Deep play stats: Track lifetime RTP (Return to player), max win&#x2F;loss streaks, winning hand counts and more.<p>- Leaderboards &amp; Cash out: Cash out wins above the free play level, feeding into leaderboards for bank balance, RTP% (after 50 hands of play), and leaderboards that reward grinders<p>- Mobile stability - I&#x27;ve completely rewritten the communications routines both on server&#x2F;client side. Mobile can be flaky, so the client handles silent auto-retries in the background without interrupting gameplay.<p>- Updated UI: New crisp graphics for playing cards<p>Obligatory tech stack info: serverside PHP &#x2F; MySQL &amp; client is coded in Godot 3.5.<p>I&#x27;d love to hear your feedback &amp; I hope you all enjoy the new version!<p>Play it here: <a href=\"https:&#x2F;&#x2F;www.classicvideopoker.com&#x2F;classicvideopokerv2&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.classicvideopoker.com&#x2F;classicvideopokerv2&#x2F;</a>",
           "title": "Show HN: Classic Video Poker v2",
-          "updated_at": "2026-03-21T20:31:14Z",
+          "updated_at": "2026-03-22T01:32:59Z",
           "url": "https://www.classicvideopoker.com/classicvideopokerv2/"
         },
         {
@@ -949,138 +1100,65 @@
           "created_at_i": 1774119338,
           "num_comments": 2,
           "objectID": "47470076",
-          "points": 3,
+          "points": 4,
           "story_id": 47470076,
           "title": "Authorities disrupt largest IoT DDoS botnets",
-          "updated_at": "2026-03-21T19:13:44Z",
+          "updated_at": "2026-03-21T21:20:01Z",
           "url": "https://www.justice.gov/usao-ak/pr/authorities-disrupt-worlds-largest-iot-ddos-botnets-responsible-record-breaking-attacks"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ricky_Tsou"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "When AI capabilities are bundled into apps, your model quality is tied to the app's business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don't use APIs. That's a developer-only path.<p>So the remaining option is to build within the LLM's native environment. But current LLM interfaces don't support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. <em>Bot</em>h sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I've built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https://youtu.be/HkmWpmfX46o<p>demos: https://github.com/Ricky610329/mup#demos<p>GitHub: https://github.com/Ricky610329/mup"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Your model quality is tied to a business model"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Ricky_Tsou",
-            "story_47469932",
-            "ask_hn"
-          ],
-          "author": "Ricky_Tsou",
-          "created_at": "2026-03-21T18:40:40Z",
-          "created_at_i": 1774118440,
-          "num_comments": 0,
-          "objectID": "47469932",
-          "points": 1,
-          "story_id": 47469932,
-          "story_text": "When AI capabilities are bundled into apps, your model quality is tied to the app&#x27;s business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don&#x27;t use APIs. That&#x27;s a developer-only path.<p>So the remaining option is to build within the LLM&#x27;s native environment. But current LLM interfaces don&#x27;t support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I&#x27;ve built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https:&#x2F;&#x2F;youtu.be&#x2F;HkmWpmfX46o<p>demos: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup#demos<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup",
-          "title": "Your model quality is tied to a business model",
-          "updated_at": "2026-03-21T18:50:58Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "thunderbong"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "US, Germany, Canada disrupt <em>bot</em>nets that infected devices"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.reuters.com/business/media-telecom/us-says-it-disrupted-<em>bot</em>nets-that-infected-over-3-million-devices-worldwide-2026-03-20/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_thunderbong",
-            "story_47469057"
-          ],
-          "author": "thunderbong",
-          "created_at": "2026-03-21T17:22:17Z",
-          "created_at_i": 1774113737,
-          "num_comments": 0,
-          "objectID": "47469057",
-          "points": 5,
-          "story_id": 47469057,
-          "title": "US, Germany, Canada disrupt botnets that infected devices",
-          "updated_at": "2026-03-21T19:04:13Z",
-          "url": "https://www.reuters.com/business/media-telecom/us-says-it-disrupted-botnets-that-infected-over-3-million-devices-worldwide-2026-03-20/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "paulpauper"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "David <em>Bot</em>stein, Gene-Mapping Pioneer, Dies at 83"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.nytimes.com/2026/03/20/science/david-<em>bot</em>stein-dead.html"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_paulpauper",
-            "story_47468734"
-          ],
-          "author": "paulpauper",
-          "children": [
-            47469065
-          ],
-          "created_at": "2026-03-21T16:51:14Z",
-          "created_at_i": 1774111874,
-          "num_comments": 1,
-          "objectID": "47468734",
-          "points": 3,
-          "story_id": 47468734,
-          "title": "David Botstein, Gene-Mapping Pioneer, Dies at 83",
-          "updated_at": "2026-03-21T18:52:44Z",
-          "url": "https://www.nytimes.com/2026/03/20/science/david-botstein-dead.html"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "yoloshii"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "So I've been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and <em>OpenClaw</em> (ContextEngine <em>plugin</em> + REST API), and both can share the same SQLite vault, so your CLI agent and your voice/chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https://github.com/tobi/qmd\" rel=\"nofollow\">https://github.com/tobi/qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https://github.com/sgx-labs/statelessagent\" rel=\"nofollow\">https://github.com/sgx-labs/statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https://arxiv.org/abs/2501.13956\" rel=\"nofollow\">https://arxiv.org/abs/2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https://arxiv.org/abs/2510.02178\" rel=\"nofollow\">https://arxiv.org/abs/2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https://github.com/Gentleman-Programming/engram\" rel=\"nofollow\">https://github.com/Gentleman-Programming/engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD's original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy's distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they're designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There's also a cloud embedding option if you're tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For <em>OpenClaw</em>, it registers as a ContextEngine <em>plugin</em> with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I'm a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I'd genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice/chat), how are you handling shared memory today?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/yoloshii/ClawMem"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_yoloshii",
+            "story_47472965",
+            "show_hn"
+          ],
+          "author": "yoloshii",
+          "children": [
+            47473295
+          ],
+          "created_at": "2026-03-22T00:13:15Z",
+          "created_at_i": 1774138395,
+          "num_comments": 0,
+          "objectID": "47472965",
+          "points": 3,
+          "story_id": 47472965,
+          "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
+          "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
+          "updated_at": "2026-03-22T01:05:00Z",
+          "url": "https://github.com/yoloshii/ClawMem"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1259,54 +1337,6 @@
           "title": "Show HN: OpenClaw plugin – hard budget limits for agent tool calls",
           "updated_at": "2026-03-15T16:06:03Z",
           "url": "https://github.com/runcycles/cycles-openclaw-budget-guard"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "d36ugger"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "Built Cloak to let humans and <em>OpenClaw</em> agents send and receive secrets without leaking them into chat history.<p>It creates self-destructing secret links for API keys, tokens, passwords, and other credentials. Browser mode is zero-knowledge, and there’s also an API/CLI/<em>OpenClaw</em> <em>plugin</em> for agent workflows.<p>Repo: <a href=\"https://github.com/opsyhq/cloak\" rel=\"nofollow\">https://github.com/opsyhq/cloak</a>\nLive: <a href=\"https://cloak.opsy.sh\" rel=\"nofollow\">https://cloak.opsy.sh</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "openclaw"
-              ],
-              "value": "Show HN: Cloak – send and receive secrets from <em>OpenClaw</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://cloak.opsy.sh"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_d36ugger",
-            "story_47381065",
-            "show_hn"
-          ],
-          "author": "d36ugger",
-          "created_at": "2026-03-14T20:54:42Z",
-          "created_at_i": 1773521682,
-          "num_comments": 0,
-          "objectID": "47381065",
-          "points": 3,
-          "story_id": 47381065,
-          "story_text": "Built Cloak to let humans and OpenClaw agents send and receive secrets without leaking them into chat history.<p>It creates self-destructing secret links for API keys, tokens, passwords, and other credentials. Browser mode is zero-knowledge, and there’s also an API&#x2F;CLI&#x2F;OpenClaw plugin for agent workflows.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;opsyhq&#x2F;cloak\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;opsyhq&#x2F;cloak</a>\nLive: <a href=\"https:&#x2F;&#x2F;cloak.opsy.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;cloak.opsy.sh</a>",
-          "title": "Show HN: Cloak – send and receive secrets from OpenClaw",
-          "updated_at": "2026-03-14T22:38:14Z",
-          "url": "https://cloak.opsy.sh"
         }
       ]
     },
@@ -2073,6 +2103,101 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "yoloshii"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "So I've been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + <em>MCP</em>) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice/chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https://github.com/tobi/qmd\" rel=\"nofollow\">https://github.com/tobi/qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https://github.com/sgx-labs/statelessagent\" rel=\"nofollow\">https://github.com/sgx-labs/statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https://arxiv.org/abs/2501.13956\" rel=\"nofollow\">https://arxiv.org/abs/2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https://arxiv.org/abs/2510.02178\" rel=\"nofollow\">https://arxiv.org/abs/2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https://github.com/Gentleman-Programming/engram\" rel=\"nofollow\">https://github.com/Gentleman-Programming/engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD's original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-<em>server</em> on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy's distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they're designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There's also a cloud embedding option if you're tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 <em>MCP</em> <em>tools</em> for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API <em>tools</em> for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I'm a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I'd genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice/chat), how are you handling shared memory today?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/yoloshii/ClawMem"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_yoloshii",
+            "story_47472965",
+            "show_hn"
+          ],
+          "author": "yoloshii",
+          "children": [
+            47473295
+          ],
+          "created_at": "2026-03-22T00:13:15Z",
+          "created_at_i": 1774138395,
+          "num_comments": 0,
+          "objectID": "47472965",
+          "points": 3,
+          "story_id": 47472965,
+          "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
+          "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
+          "updated_at": "2026-03-22T01:05:00Z",
+          "url": "https://github.com/yoloshii/ClawMem"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "borski"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 <em>MCP</em> <em>servers</em> (real-time <em>tools</em> the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 <em>MCP</em> <em>servers</em> need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they'll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https://github.com/borski/travel-hacking-toolkit\" rel=\"nofollow\">https://github.com/borski/travel-hacking-toolkit</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/borski/travel-hacking-toolkit"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_borski",
+            "story_47471573",
+            "show_hn"
+          ],
+          "author": "borski",
+          "created_at": "2026-03-21T21:25:03Z",
+          "created_at_i": 1774128303,
+          "num_comments": 0,
+          "objectID": "47471573",
+          "points": 3,
+          "story_id": 47471573,
+          "story_text": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 MCP servers (real-time tools the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 MCP servers need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they&#x27;ll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit</a>",
+          "title": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI",
+          "updated_at": "2026-03-22T00:31:59Z",
+          "url": "https://github.com/borski/travel-hacking-toolkit"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "unmodeledtyler"
             },
             "story_text": {
@@ -2104,58 +2229,19 @@
           ],
           "author": "unmodeledtyler",
           "children": [
-            47470937
+            47470937,
+            47471295
           ],
           "created_at": "2026-03-21T19:02:57Z",
           "created_at_i": 1774119777,
-          "num_comments": 1,
+          "num_comments": 4,
           "objectID": "47470156",
-          "points": 2,
+          "points": 4,
           "story_id": 47470156,
           "story_text": "I&#x27;m Tyler - the solo operator of Quanta Intellect based in Portland, Oregon. I recently participated in Nous Research&#x27;s Hermes Agent Hackathon, which is where this project was born.<p>I&#x27;ve used agents extensively in my workflows for the better part of the last year - the biggest pain point was always the browser. Every tool out there assumes a human operator with automation bolted on. I wanted to flip that - make the agent the primary driver and give the human a supervisory role.<p>Enter: Vessel Browser - an Electron-based browser with 40+ MCP-native tools, persistent sessions that survive restarts, semantic page context (agents get structured meaning, not raw HTML), and a supervisor sidepanel where you can watch and control exactly what the agent is doing.<p>It works as an MCP server with any compatible harness, or use the built-in assistant with integrated chat and BYOK to 8+ providers including custom OAI compatible endpoints.<p>Install with: npm i @quanta-intellect&#x2F;vessel-browser",
           "title": "Show HN: Vessel Browser – An open-source browser built for AI agents, not humans",
-          "updated_at": "2026-03-21T20:27:58Z",
+          "updated_at": "2026-03-21T22:28:44Z",
           "url": "https://quantaintellect.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ricky_Tsou"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "When AI capabilities are bundled into apps, your model quality is tied to the app's business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don't use APIs. That's a developer-only path.<p>So the remaining option is to build within the LLM's native environment. But current LLM interfaces don't support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an <em>MCP</em> <em>server</em> — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I've built 20+ example MUPs: a full music production <em>toolk</em>it (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https://youtu.be/HkmWpmfX46o<p>demos: https://github.com/Ricky610329/mup#demos<p>GitHub: https://github.com/Ricky610329/mup"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Your model quality is tied to a business model"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Ricky_Tsou",
-            "story_47469932",
-            "ask_hn"
-          ],
-          "author": "Ricky_Tsou",
-          "created_at": "2026-03-21T18:40:40Z",
-          "created_at_i": 1774118440,
-          "num_comments": 0,
-          "objectID": "47469932",
-          "points": 1,
-          "story_id": 47469932,
-          "story_text": "When AI capabilities are bundled into apps, your model quality is tied to the app&#x27;s business model. Users who use the service too much or too little get a bad deal — and subscription pricing is nearly impossible to get right.<p>The obvious fix is to decouple services from model providers — let users bring their own API keys. But most people don&#x27;t use APIs. That&#x27;s a developer-only path.<p>So the remaining option is to build within the LLM&#x27;s native environment. But current LLM interfaces don&#x27;t support structured, persistent UI interaction. What they offer today (artifacts, canvas, etc.) are one-shot renders — display-only, no state, no function calls back and forth. Essentially toys.<p>MUP (Model UI Protocol) is my attempt to solve this. A MUP is a single HTML file that bundles a visual interface with callable functions. The user clicks buttons; the LLM calls functions. Both sides operate on the same state in real time. Multiple MUPs can run simultaneously, and the LLM orchestrates data between them.<p>It runs as an MCP server — plug it into Claude Code or Claude Desktop, and the MUP panels appear in a browser grid alongside your chat. No build step, no framework. Write an HTML file with a manifest, and it works.<p>I&#x27;ve built 20+ example MUPs: a full music production toolkit (7 instruments + mixer + arranger), pixel art editor, chess, kanban, presentation builder, camera, and more.<p>demo: https:&#x2F;&#x2F;youtu.be&#x2F;HkmWpmfX46o<p>demos: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup#demos<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;Ricky610329&#x2F;mup",
-          "title": "Your model quality is tied to a business model",
-          "updated_at": "2026-03-21T18:50:58Z"
         },
         {
           "_highlightResult": {
@@ -2249,64 +2335,14 @@
           ],
           "created_at": "2026-03-20T22:25:51Z",
           "created_at_i": 1774045551,
-          "num_comments": 20,
+          "num_comments": 23,
           "objectID": "47461529",
           "points": 49,
           "story_id": 47461529,
           "story_text": "I go on a lot of backcountry trips where I barely get cell service. If my group splits, nobody knows knows where anyone is until you regroup at camp or at your destination. You can buy Garmin radios or try to set up an ATAK, but ATAK is Android-only and assumes you have a TAK Server running somewhere to make use of all of the functionality. Cool tools themselves, but expensive to set up correctly. I just wanted two iPhones to share their location directly over Bluetooth when cell coverage was lacking.<p>Red Grid Link does that. Start a session, and anyone nearby running the app shows up on your offline map. When they walk out of range their marker stays as a &quot;ghost&quot; that slowly fades.<p>The hard part was making sync reliable over BLE. The connections drop all the time. Someone turns a corner, walks behind a vehicle, whatever. I built a CRDT sync layer (LWW Register + G-Counter) so there&#x27;s never merge conflicts. Each update is just under 200 bytes (from what I have tested so far). When a user&#x2F;teammate disappears the app does exponential backoff from 2 to 30 seconds before giving up and marking them as a ghost.<p>Everything is encrypted (AES-256-GCM, ECDH P-256 key exchange per peer pair). Sessions can require a PIN or QR code to join. It also offers offline topo maps with MGRS grid coordinates, same system as in my other app, Red Grid MGRS.<p>The app is free, and I&#x27;m looking for some honest feedback from other real-world users. Let me know if you have any questions!",
           "title": "Show HN: Red Grid Link – peer-to-peer team tracking over Bluetooth, no servers",
-          "updated_at": "2026-03-21T20:23:44Z",
+          "updated_at": "2026-03-22T01:01:14Z",
           "url": "https://github.com/RedGridTactical/RedGridLink"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "MaxGfeller"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I built this because I kept trying to use Claude Agent SDK, Codex, and OpenCode programmatically, and they were too &quot;heavy&quot; and uncustomizable for that. I wanted a TypeScript library I could import into my own app and build agents on top of.\nOpenHarness is built on Vercel's AI SDK 5, so it works with any model the SDK supports. The main things it gives you: loading agent instructions from AGENTS.md files, <em>MCP</em> <em>server</em> connections for <em>tools</em>, subagents (agents delegating to child agents), agent skills, tool approval prompts, and auto-compaction for long conversations.\nThere's a CLI example and a Next.js chat interface in the repo if you want to try it out.\nStill early -- feedback on the API and what's missing would be useful."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: OpenHarness – Open-source TypeScript SDK for building AI agents"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/MaxGfeller/open-harness"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_MaxGfeller",
-            "story_47459997",
-            "show_hn"
-          ],
-          "author": "MaxGfeller",
-          "children": [
-            47470420,
-            47460599
-          ],
-          "created_at": "2026-03-20T20:12:12Z",
-          "created_at_i": 1774037532,
-          "num_comments": 1,
-          "objectID": "47459997",
-          "points": 3,
-          "story_id": 47459997,
-          "story_text": "I built this because I kept trying to use Claude Agent SDK, Codex, and OpenCode programmatically, and they were too &quot;heavy&quot; and uncustomizable for that. I wanted a TypeScript library I could import into my own app and build agents on top of.\nOpenHarness is built on Vercel&#x27;s AI SDK 5, so it works with any model the SDK supports. The main things it gives you: loading agent instructions from AGENTS.md files, MCP server connections for tools, subagents (agents delegating to child agents), agent skills, tool approval prompts, and auto-compaction for long conversations.\nThere&#x27;s a CLI example and a Next.js chat interface in the repo if you want to try it out.\nStill early -- feedback on the API and what&#x27;s missing would be useful.",
-          "title": "Show HN: OpenHarness – Open-source TypeScript SDK for building AI agents",
-          "updated_at": "2026-03-21T19:30:14Z",
-          "url": "https://github.com/MaxGfeller/open-harness"
         }
       ]
     },
@@ -2347,57 +2383,13 @@
           ],
           "created_at": "2026-03-21T14:20:07Z",
           "created_at_i": 1774102807,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47467265",
           "points": 2,
           "story_id": 47467265,
           "title": "Autoskill – self-improving skills for AI agents",
-          "updated_at": "2026-03-21T20:35:14Z",
+          "updated_at": "2026-03-21T20:36:45Z",
           "url": "https://github.com/Samurai412/autoskill"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kirillostrovsky"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "MCP solves connectivity between agents and tools. It doesn't solve accountability.<p>When an <em>AI</em> agent calls execute_wire_transfer today, there's no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don't cut it when real money or infrastructure is on the line.<p>I've been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a <em>self</em>-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What's different from existing MCP security tools:\nScopeGate, <em>ai</em>-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on <em>proving</em> what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble/ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry's hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing /accept, /executed, /dispute/:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai/a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai/a2a-core/proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai/a2a-core/ledger&quot;;<p>// Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n// result._a2a contains Intent + Acceptance + Execution envelopes\n// All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https://github.com/kirbas/trustagent-a2a-protocol\nnpm: https://www.npmjs.com/package/@trustagentai/a2a-core\nProtocol spec (v0.4): https://trustagentai.net/trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal/insurance use cases"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kirillostrovsky",
-            "story_47421489",
-            "ask_hn"
-          ],
-          "author": "kirillostrovsky",
-          "children": [
-            47427947,
-            47434251
-          ],
-          "created_at": "2026-03-18T04:04:52Z",
-          "created_at_i": 1773806692,
-          "num_comments": 0,
-          "objectID": "47421489",
-          "points": 6,
-          "story_id": 47421489,
-          "story_text": "MCP solves connectivity between agents and tools. It doesn&#x27;t solve accountability.<p>When an AI agent calls execute_wire_transfer today, there&#x27;s no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don&#x27;t cut it when real money or infrastructure is on the line.<p>I&#x27;ve been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a self-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What&#x27;s different from existing MCP security tools:\nScopeGate, ai-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on proving what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble&#x2F;ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry&#x27;s hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing &#x2F;accept, &#x2F;executed, &#x2F;dispute&#x2F;:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai&#x2F;a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai&#x2F;a2a-core&#x2F;proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai&#x2F;a2a-core&#x2F;ledger&quot;;<p>&#x2F;&#x2F; Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n&#x2F;&#x2F; result._a2a contains Intent + Acceptance + Execution envelopes\n&#x2F;&#x2F; All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https:&#x2F;&#x2F;github.com&#x2F;kirbas&#x2F;trustagent-a2a-protocol\nnpm: https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@trustagentai&#x2F;a2a-core\nProtocol spec (v0.4): https:&#x2F;&#x2F;trustagentai.net&#x2F;trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal&#x2F;insurance use cases",
-          "title": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)",
-          "updated_at": "2026-03-20T23:57:10Z"
         },
         {
           "_highlightResult": {
@@ -2525,6 +2517,45 @@
           "title": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes",
           "updated_at": "2026-03-18T00:55:28Z",
           "url": "https://www.makeportals.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "razodactyl"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "<em>Self</em>-<em>improving</em> <em>AI</em> (Karpathy pt2)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_razodactyl",
+            "story_47320238"
+          ],
+          "author": "razodactyl",
+          "created_at": "2026-03-10T07:53:48Z",
+          "created_at_i": 1773129228,
+          "num_comments": 0,
+          "objectID": "47320238",
+          "points": 2,
+          "story_id": 47320238,
+          "title": "Self-improving AI (Karpathy pt2)",
+          "updated_at": "2026-03-10T11:38:28Z",
+          "url": "https://xcancel.com/karpathy/status/2031135152349524125?s=20"
         }
       ]
     }
