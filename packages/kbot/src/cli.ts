@@ -62,7 +62,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 22)')
+    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 25)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -383,6 +383,45 @@ async function main(): Promise<void> {
       printInfo('')
       printInfo('Download: kbot models pull <name>')
       printInfo('Or use any HuggingFace GGUF: kbot models pull hf:user/repo:file.gguf')
+    })
+
+  program
+    .command('init')
+    .description('Set up kbot for this project — detects stack, creates tools, writes config (60 seconds)')
+    .option('--force', 'Overwrite existing .kbot.json')
+    .action(async (opts: { force?: boolean }) => {
+      const { existsSync } = await import('node:fs')
+      const { join } = await import('node:path')
+      const { initProject, formatInitReport } = await import('./init.js')
+      const chalk = (await import('chalk')).default
+      const AMETHYST = chalk.hex('#6B5B95')
+      const root = process.cwd()
+
+      // Check for existing config
+      if (!opts.force && existsSync(join(root, '.kbot.json'))) {
+        printWarn('This project already has a .kbot.json. Use --force to overwrite.')
+        return
+      }
+
+      process.stderr.write('\n')
+      process.stderr.write(`  ${AMETHYST('◉')} ${chalk.bold('kbot init')} — scanning project...\n\n`)
+
+      const config = await initProject(root)
+
+      process.stderr.write(formatInitReport(config) + '\n')
+      process.stderr.write('\n')
+      process.stderr.write(`  ${chalk.green('✓')} Config written to ${chalk.dim('.kbot.json')}\n`)
+      if (config.forgedTools.length > 0) {
+        process.stderr.write(`  ${chalk.green('✓')} ${config.forgedTools.length} tools forged: ${chalk.dim(config.forgedTools.join(', '))}\n`)
+      }
+      process.stderr.write('\n')
+      process.stderr.write(`  ${chalk.bold('Try now:')}\n`)
+      process.stderr.write(`    ${chalk.cyan('kbot')} "explain this project"\n`)
+      process.stderr.write(`    ${chalk.cyan('kbot')} "find the top bug"\n`)
+      if (config.commands.test) {
+        process.stderr.write(`    ${chalk.cyan('kbot')} "run the tests and fix any failures"\n`)
+      }
+      process.stderr.write('\n')
     })
 
   program
@@ -717,7 +756,7 @@ async function main(): Promise<void> {
           latestVersion: latestVersion || null,
           isLatest,
           tools: toolCount,
-          agents: 23,
+          agents: 25,
           cognitiveModules: cognitiveCount,
           learning: {
             patterns: stats.patternsCount,
@@ -752,7 +791,7 @@ async function main(): Promise<void> {
       process.stderr.write(`  ${AMETHYST('◉')} ${chalk.bold('Kernel Status')}\n`)
       process.stderr.write(line + '\n')
       process.stderr.write(`  ${chalk.bold('Version')}     ${VERSION}${versionTag}\n`)
-      process.stderr.write(`  ${chalk.bold('Tools')}       ${fmtNum(toolCount)} ${DIM('|')} ${chalk.bold('Agents')} 23\n`)
+      process.stderr.write(`  ${chalk.bold('Tools')}       ${fmtNum(toolCount)} ${DIM('|')} ${chalk.bold('Agents')} 25\n`)
       process.stderr.write(`  ${chalk.bold('Cognitive')}   ${cognitiveCount}/${cognitiveCount} modules active\n`)
       process.stderr.write(line + '\n')
 
@@ -1483,6 +1522,207 @@ async function main(): Promise<void> {
       }
     })
 
+  // ── Email Agent ──
+  const emailAgentCmd = program
+    .command('email-agent')
+    .description('Autonomous email companion agent — responds to emails via local AI ($0 cost)')
+
+  emailAgentCmd
+    .command('start')
+    .description('Start the email agent — polls for new emails and responds via Ollama')
+    .option('--model <model>', 'Ollama model to use', 'qwen2.5-coder:32b')
+    .option('--interval <ms>', 'Poll interval in milliseconds', '15000')
+    .option('--users <emails>', 'Comma-separated email addresses to monitor (omit for open mode — all inbound)')
+    .option('--open', 'Open mode — respond to ALL inbound emails (no whitelist)')
+    .action(async (opts: { model?: string; interval?: string; users?: string; open?: boolean }) => {
+      const { startEmailAgent } = await import('./email-agent.js')
+      const { existsSync, readFileSync } = await import('node:fs')
+      const { join } = await import('node:path')
+
+      // Load env
+      let supabaseUrl = '', supabaseKey = '', resendKey = ''
+      const envPaths = [join(process.cwd(), '.env'), join(process.env.HOME || '', '.kbot', '.env')]
+      for (const envPath of envPaths) {
+        if (existsSync(envPath)) {
+          const env = readFileSync(envPath, 'utf8')
+          const get = (k: string) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim() ?? ''
+          supabaseUrl = supabaseUrl || get('VITE_SUPABASE_URL')
+          supabaseKey = supabaseKey || get('SUPABASE_SERVICE_KEY')
+          resendKey = resendKey || get('RESEND_API_KEY')
+        }
+      }
+
+      if (!supabaseUrl || !supabaseKey) {
+        printError('Missing VITE_SUPABASE_URL or SUPABASE_SERVICE_KEY in .env')
+        return
+      }
+      if (!resendKey) {
+        printError('Missing RESEND_API_KEY in .env — needed to send reply emails')
+        return
+      }
+
+      const agentUsers = opts.users?.split(',').map(e => e.trim()) || []
+      if (agentUsers.length === 0 && !opts.open) {
+        printError('No users specified. Use --users email1,email2 or --open for all inbound.')
+        return
+      }
+
+      const chalk = (await import('chalk')).default
+      const mode = agentUsers.length === 0 ? 'OPEN (all inbound)' : `${agentUsers.length} users`
+      console.log()
+      console.log(chalk.hex('#6B5B95')('  ◉ Kernel Email Agent'))
+      console.log(chalk.dim(`  Model: ${opts.model || 'qwen2.5-coder:32b'}`))
+      console.log(chalk.dim(`  Mode: ${mode}`))
+      console.log(chalk.dim(`  Poll interval: ${Number(opts.interval || 15000) / 1000}s`))
+      console.log()
+
+      await startEmailAgent({
+        supabaseUrl,
+        supabaseKey,
+        resendKey,
+        ollamaUrl: 'http://localhost:11434',
+        ollamaModel: opts.model || 'qwen2.5-coder:32b',
+        pollInterval: Number(opts.interval || 15000),
+        agentUsers,
+      })
+
+      // Keep process alive
+      await new Promise(() => {})
+    })
+
+  emailAgentCmd
+    .command('status')
+    .description('Show email agent status')
+    .action(async () => {
+      const { getEmailAgentState } = await import('./email-agent.js')
+      const state = getEmailAgentState()
+      if (state.running) {
+        printSuccess(`Email agent is running`)
+        printInfo(`  Processed: ${state.processedCount} emails`)
+        printInfo(`  Last check: ${state.lastCheck || 'never'}`)
+        if (state.errors.length > 0) {
+          printWarn(`  Recent errors: ${state.errors.length}`)
+          for (const err of state.errors.slice(-3)) {
+            printError(`    ${err}`)
+          }
+        }
+      } else {
+        printInfo('Email agent is not running. Start with: kbot email-agent start --open')
+      }
+    })
+
+  // ── iMessage Agent ──
+  const imessageCmd = program
+    .command('imessage-agent')
+    .description('Free iMessage/SMS agent via macOS Messages.app ($0 cost, unlimited)')
+
+  imessageCmd
+    .command('start')
+    .description('Start monitoring iMessage — responds via local Ollama')
+    .option('--model <model>', 'Ollama model to use', 'qwen2.5-coder:32b')
+    .option('--interval <ms>', 'Poll interval in milliseconds', '10000')
+    .option('--numbers <nums>', 'Comma-separated phone numbers to monitor (e.g., +17145551234)')
+    .action(async (opts: { model?: string; interval?: string; numbers?: string }) => {
+      const { platform } = await import('node:os')
+      if (platform() !== 'darwin') {
+        printError('iMessage agent is only available on macOS')
+        return
+      }
+
+      const numbers = opts.numbers?.split(',').map(n => n.trim()) || []
+      if (numbers.length === 0) {
+        printError('No phone numbers specified. Use --numbers +17145551234,+12135559876')
+        return
+      }
+
+      // Optional Supabase for logging
+      let supabaseUrl = '', supabaseKey = ''
+      const { existsSync, readFileSync } = await import('node:fs')
+      const { join } = await import('node:path')
+      const envPaths = [join(process.cwd(), '.env'), join(process.env.HOME || '', '.kbot', '.env')]
+      for (const envPath of envPaths) {
+        if (existsSync(envPath)) {
+          const env = readFileSync(envPath, 'utf8')
+          const get = (k: string) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim() ?? ''
+          supabaseUrl = supabaseUrl || get('VITE_SUPABASE_URL')
+          supabaseKey = supabaseKey || get('SUPABASE_SERVICE_KEY')
+        }
+      }
+
+      const chalk = (await import('chalk')).default
+      console.log()
+      console.log(chalk.hex('#6B5B95')('  ◉ Kernel iMessage Agent'))
+      console.log(chalk.dim(`  Model: ${opts.model || 'qwen2.5-coder:32b'}`))
+      console.log(chalk.dim(`  Monitoring: ${numbers.join(', ')}`))
+      console.log(chalk.dim(`  Poll interval: ${Number(opts.interval || 10000) / 1000}s`))
+      if (supabaseUrl) console.log(chalk.dim('  Logging to Supabase: yes'))
+      console.log()
+
+      const { startIMessageAgent } = await import('./imessage-agent.js')
+      await startIMessageAgent({
+        ollamaUrl: 'http://localhost:11434',
+        ollamaModel: opts.model || 'qwen2.5-coder:32b',
+        pollInterval: Number(opts.interval || 10000),
+        numbers,
+        supabaseUrl: supabaseUrl || undefined,
+        supabaseKey: supabaseKey || undefined,
+      })
+
+      // Keep process alive
+      await new Promise(() => {})
+    })
+
+  imessageCmd
+    .command('status')
+    .description('Show iMessage agent status')
+    .action(async () => {
+      const { getIMessageAgentState } = await import('./imessage-agent.js')
+      const state = getIMessageAgentState()
+      if (state.running) {
+        printSuccess('iMessage agent is running')
+        printInfo(`  Messages processed: ${state.messagesProcessed}`)
+        printInfo(`  Last check: ${state.lastCheck || 'never'}`)
+        if (state.errors.length > 0) {
+          printWarn(`  Recent errors: ${state.errors.length}`)
+        }
+      } else {
+        printInfo('iMessage agent is not running. Start with: kbot imessage-agent start --numbers +1234567890')
+      }
+    })
+
+  // ── Consultation ──
+  program
+    .command('consultation')
+    .description('Consultation engine — domain guardrails, intake, client management')
+    .option('--check <message>', 'Check if a message hits domain guardrails')
+    .option('--intake', 'Generate the intake questionnaire')
+    .action(async (opts: { check?: string; intake?: boolean }) => {
+      const { checkDomainGuardrails, getIntakeMessage } = await import('./consultation.js')
+
+      if (opts.check) {
+        const result = checkDomainGuardrails(opts.check)
+        if (result.blocked) {
+          printWarn(`Blocked — ${result.domain} domain`)
+          printInfo(result.message || '')
+          if (result.suggestedTopic) printInfo(`Suggested redirect: ${result.suggestedTopic}`)
+        } else {
+          printSuccess('Message passes domain guardrails')
+        }
+        return
+      }
+
+      if (opts.intake) {
+        console.log(getIntakeMessage())
+        return
+      }
+
+      // Default: show help
+      printInfo('Kernel Consultation Engine')
+      printInfo('')
+      printInfo('  kbot consultation --check "message"   Check domain guardrails')
+      printInfo('  kbot consultation --intake             Generate intake questions')
+    })
+
   program
     .command('export <session>')
     .description('Export a saved session to markdown, JSON, or HTML')
@@ -1531,23 +1771,44 @@ async function main(): Promise<void> {
 
   program
     .command('audit <repo>')
-    .description('Full audit of any GitHub repository — security, quality, docs, DevOps')
-    .option('--share', 'Share the audit report as a GitHub Gist')
-    .action(async (repo: string, auditOpts: { share?: boolean }) => {
+    .description('Full audit of any GitHub repository — security, quality, docs, DevOps. Generates shareable report with badge.')
+    .option('--share', 'Auto-share the report as a public GitHub Gist')
+    .option('--json', 'Output raw JSON')
+    .option('--badge', 'Print only the badge markdown (for adding to READMEs)')
+    .action(async (repo: string, auditOpts: { share?: boolean; json?: boolean; badge?: boolean }) => {
       const { auditRepo, formatAuditReport } = await import('./tools/audit.js')
       printInfo(`Auditing ${repo}...`)
       try {
         const result = await auditRepo(repo)
+
+        if (auditOpts.json) {
+          console.log(JSON.stringify(result, null, 2))
+          return
+        }
+
+        if (auditOpts.badge) {
+          const pct = Math.round((result.score / result.maxScore) * 100)
+          const badgeColor = pct >= 80 ? 'brightgreen' : pct >= 60 ? 'yellow' : 'red'
+          console.log(`[![kbot audit: ${result.grade}](https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor})](https://www.npmjs.com/package/@kernel.chat/kbot)`)
+          return
+        }
+
         const report = formatAuditReport(result)
         console.log(report)
+
+        // Auto-share as gist
         if (auditOpts.share) {
-          const { shareConversation } = await import('./share.js')
-          // Save as a pseudo-conversation for sharing
           printInfo('Sharing audit report...')
           try {
             const { createGist } = await import('./share.js')
-            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo}`, true)
-            if (url?.startsWith('http')) printSuccess(`Shared! ${url}`)
+            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo} — Grade ${result.grade}`, true)
+            if (url?.startsWith('http')) {
+              printSuccess(`Shared! ${url}`)
+              printInfo(`Badge for ${repo}'s README:`)
+              const pct = Math.round((result.score / result.maxScore) * 100)
+              const badgeColor = pct >= 80 ? 'brightgreen' : pct >= 60 ? 'yellow' : 'red'
+              printInfo(`  [![kbot audit: ${result.grade}](https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor})](${url})`)
+            }
           } catch { printInfo('Could not create Gist. Install GitHub CLI: brew install gh') }
         }
       } catch (err) {

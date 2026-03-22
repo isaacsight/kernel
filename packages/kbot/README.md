@@ -19,26 +19,22 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Self-evolving terminal AI agent. 290 tools. 23 agents. 20 providers. Forges new tools at runtime. MIT licensed.**
+**Multi-channel AI agent. 290+ tools. 25 agents. 20 providers. Forges new tools at runtime. $0 local AI. MIT licensed.**
 
 ---
 
-## What's New in v3.13
+## What's New in v3.17
 
 | Feature | What it means |
 |---------|---------------|
-| **Self-Improving** | kbot modifies its own code, tests it, and publishes new versions to npm — autonomously. |
-| **Discovery Daemon** | 24/7 background service — scans HN, GitHub, Reddit, arXiv. Thinks locally via MLX/Ollama ($0). |
-| **OpenClaw Plugin** | kbot is the cognitive engine inside OpenClaw — 50+ messaging channels (WhatsApp, Discord, Telegram). |
-| **Replit Integration** | Auto-detects Replit, activates lite mode. `--lite` flag for cloud IDEs. |
-| **Cognitive Interference** | 11 cognitive modules measured for constructive/destructive interference. Research paper included. |
-| **Standalone Packages** | Brain extracted as independent npm packages: `@kernel.chat/skill-router`, `memory-tiers`, `tool-forge`, `prompt-evolver`. |
-| **MLX on Apple Silicon** | Claude Opus-distilled models run natively. Local brain for the daemon. |
-| **LATS Tree Planning** | Monte Carlo Tree Search for branching plans instead of linear. |
-| **Prompt Evolution** | GEPA-style self-optimizing prompts — evolve from execution traces, auto-rollback bad mutations. |
-| **Collective Learning** | Opt-in anonymized signals. More users → smarter routing for everyone. |
-| **A2A Protocol** | Agent-to-Agent discovery and task delegation. |
-| **11 Cognitive Modules** | Based on peer-reviewed papers. Not metaphors — TypeScript implementations. |
+| **`kbot init`** | 60-second project onboarding — detects stack, forges project-specific tools, writes config. First impression is now magic. |
+| **Email Agent** | `kbot email-agent start --open` — autonomous email companion via local Ollama. $0 cost. Anyone emails, gets a response. |
+| **iMessage Agent** | `kbot imessage-agent start` — free SMS/iMessage agent on macOS via Messages.app. Unlimited, $0. |
+| **Audit Badges** | `kbot audit owner/repo --share` — generates shields.io badge + shareable Gist. Badge links back to kbot. |
+| **Consultation Engine** | Domain guardrails (legal/medical/financial/tax), client intake, Stripe integration, thread management. |
+| **Gamedev Agent** | `kbot --agent gamedev` — game feel, combat design, Phaser 3, procedural generation specialist. |
+| **Playtester Agent** | `kbot --agent playtester` — brutally honest game tester. Benchmarks against Hades/Dead Cells. |
+| **Open Email** | No whitelist. All inbound emails to support@kernel.chat get a free AI companion response. |
 
 ---
 
@@ -53,7 +49,7 @@ Other AI agents are static — fixed tools, single providers, no memory, no lear
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
-- **23 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
+- **25 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
 - **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
@@ -136,7 +132,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 290 tools
+// List all 290+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -158,7 +154,7 @@ Auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 | **Extended** | aesthete, guardian, curator, strategist |
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **System** | immune, forge |
-| **Presets** | claude-code, cursor, copilot, creative, developer |
+| **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester |
 
 ```bash
 kbot --agent researcher "what papers cite Friston's Free Energy Principle?"
@@ -166,7 +162,7 @@ kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
 ```
 
-## 290 Tools
+## 290+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -308,23 +304,22 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes file ops
 |---------|-------------|
 | `kbot` | Interactive REPL |
 | `kbot "prompt"` | One-shot execution |
+| `kbot init` | **60-second project onboarding** — detects stack, forges tools, writes config |
 | `kbot auth` | Configure API key |
 | `kbot local` | Use local AI (Ollama, embedded, LM Studio, Jan) |
+| `kbot email-agent start --open` | **Email companion** — responds to all inbound via local AI ($0) |
+| `kbot imessage-agent start` | **iMessage agent** — free SMS/iMessage on macOS |
+| `kbot audit <repo>` | Security + quality audit with shareable badge |
+| `kbot consultation` | Consultation engine — guardrails, intake, client management |
 | `kbot vitals` | Autopoietic health check — memory, tools, token budgets |
+| `kbot synthesis` | What kbot knows — memory, patterns, insights |
 | `kbot serve` | Start HTTP REST + SSE streaming server |
-| `kbot audit <repo>` | Security + quality audit of any GitHub repo |
 | `kbot contribute <repo>` | Find good-first-issues and quick wins |
-| `kbot pair` | File watcher with auto-analysis |
-| `kbot team` | Multi-agent TCP collaboration |
-| `kbot record` | Terminal session recording (SVG, GIF, asciicast) |
 | `kbot voice` | Text-to-speech output mode |
 | `kbot watch` | Real-time file analysis on change |
 | `kbot bootstrap` | Outer-loop project optimizer (visibility scoring) |
 | `kbot plugins` | Search, install, update community plugins |
 | `kbot models` | List, pull, remove, catalog local models |
-| `kbot changelog` | Generate changelog from git history |
-| `kbot completions` | Shell completions (bash, zsh, fish) |
-| `kbot cloud` | Sync learning data to kernel.chat |
 | `kbot forge search <q>` | Search the Forge Registry for community tools |
 | `kbot ide mcp` | Start MCP server for IDEs |
 | `kbot doctor` | 10-point health check |

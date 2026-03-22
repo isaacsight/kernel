@@ -290,14 +290,35 @@ function formatAuditReport(result: AuditResult): string {
     lines.push('')
   }
 
+  // Badge
+  const badgeColor = pct >= 80 ? 'brightgreen' : pct >= 60 ? 'yellow' : 'red'
+  const badgeUrl = `https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor}`
   lines.push(
     '---',
     '',
-    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 23 specialist agents, 290 tools, 20 AI providers*`,
-    `*Install: \`npm install -g @kernel.chat/kbot\` | [GitHub](https://github.com/isaacsight/kernel)*`,
+    '### Add this badge to your README',
+    '',
+    '```markdown',
+    `[![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`,
+    '```',
+    '',
+    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 25 specialist agents, 290+ tools, 20 AI providers*`,
+    `*Install: \`npm install -g @kernel.chat/kbot\` | Audit any repo: \`kbot audit owner/repo\`*`,
   )
 
   return lines.join('\n')
+}
+
+/** Generate a compact one-line summary for social sharing */
+function formatAuditSummary(result: AuditResult): string {
+  const pct = Math.round((result.score / result.maxScore) * 100)
+  const fails = result.sections.filter(s => s.status === 'fail').map(s => s.name)
+  const warns = result.sections.filter(s => s.status === 'warn').map(s => s.name)
+  let summary = `${result.repo}: Grade ${result.grade} (${pct}%)`
+  if (fails.length > 0) summary += ` — Critical: ${fails.join(', ')}`
+  else if (warns.length > 0) summary += ` — Needs work: ${warns.join(', ')}`
+  else summary += ' — Clean bill of health'
+  return summary
 }
 
 export function registerAuditTools(): void {

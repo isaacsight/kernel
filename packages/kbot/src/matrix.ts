@@ -9,6 +9,8 @@ import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
 import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
 import { REPLIT_AGENT } from './agents/replit.js'
+import { GAMEDEV_SYSTEM_PROMPT, GAMEDEV_PERSONALITY } from './agents/gamedev.js'
+import { PLAYTESTER_SYSTEM_PROMPT, PLAYTESTER_PERSONALITY } from './agents/playtester.js'
 
 export interface MatrixAgent {
   id: string
@@ -408,6 +410,18 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     color: REPLIT_AGENT.color,
     prompt: REPLIT_AGENT.prompt,
   },
+  gamedev: {
+    name: GAMEDEV_PERSONALITY.name,
+    icon: '🎮',
+    color: '#FF6B6B',
+    prompt: GAMEDEV_SYSTEM_PROMPT,
+  },
+  playtester: {
+    name: PLAYTESTER_PERSONALITY.name,
+    icon: '🎯',
+    color: '#FF4500',
+    prompt: PLAYTESTER_SYSTEM_PROMPT,
+  },
 }
 
 /** Register built-in agents so they're always available via --agent flag */
@@ -432,7 +446,7 @@ export function registerBuiltinAgents(): void {
 /** Format built-in agents for display */
 export function formatBuiltinAgentList(): string {
   const specialistIds = Object.keys(SPECIALISTS)
-  const presetAgentIds = ['hacker', 'operator', 'dreamer', 'creative', 'developer']
+  const presetAgentIds = ['hacker', 'operator', 'dreamer', 'creative', 'developer', 'gamedev', 'playtester']
 
   // Core specialists
   const coreIds = ['kernel', 'researcher', 'coder', 'writer', 'analyst']
