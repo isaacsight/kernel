@@ -1,17 +1,17 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-03-22T08:35:28.389Z",
-    "intel": "2026-03-22T02:50:30.490Z",
+    "pulse": "2026-03-22T12:05:28.223Z",
+    "intel": "2026-03-22T09:05:31.350Z",
     "outreach": "2026-03-22T02:35:29.499Z",
     "writing": "2026-03-21T12:11:40.506Z",
     "evolution": "2026-03-21T14:11:02.999Z",
-    "opportunities": "2026-03-22T02:50:35.174Z",
-    "actions": "2026-03-22T02:51:43.886Z"
+    "opportunities": "2026-03-22T09:05:36.160Z",
+    "actions": "2026-03-22T09:06:45.666Z"
   },
   "stats": {
-    "totalRuns": 251,
-    "totalPulses": 132,
-    "totalIntel": 29,
+    "totalRuns": 264,
+    "totalPulses": 139,
+    "totalIntel": 30,
     "totalOutreach": 9,
     "totalWriting": 4,
     "totalEvolution": 7,
