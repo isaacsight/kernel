@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T15:20:33.805Z",
+  "timestamp": "2026-03-22T21:35:34.737Z",
   "count": 30,
   "opportunities": [
     {
@@ -11,15 +11,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: Soros – AI for geopolitical macro investing",
-      "url": "https://news.ycombinator.com/item?id=47418557",
+      "title": "Astral to Join OpenAI",
+      "url": "https://news.ycombinator.com/item?id=47447616",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Fdbck – programmable feedback for your apps",
-      "url": "https://news.ycombinator.com/item?id=47415106",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
-      "title": "If AI brings 90% productivity gains, do you fire devs or build better products?",
-      "url": "https://news.ycombinator.com/item?id=47477877",
+      "title": "Reports of code's death are greatly exaggerated",
+      "url": "https://news.ycombinator.com/item?id=47482363",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN:35,0 CS background, built real apps with AI, need suggestion",
-      "url": "https://news.ycombinator.com/item?id=47477180",
+      "title": "Why I love NixOS",
+      "url": "https://news.ycombinator.com/item?id=47482095",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
-      "url": "https://news.ycombinator.com/item?id=47474654",
+      "title": "The Future of Version Control",
+      "url": "https://news.ycombinator.com/item?id=47481674",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
-      "title": "Fix unauthorized access to Claude Code sessions",
-      "url": "https://github.com/kubestellar/console/issues/3159",
+      "title": "fix(core): replace full MessageBus payload dump with concise debug summary",
+      "url": "https://github.com/google-gemini/gemini-cli/pull/23482",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "MCP Bridge Silently Swallows LLM Tool Execution Errors",
-      "url": "https://github.com/kubestellar/console/issues/3148",
+      "title": "[Good First Issue] Add AI agent frameworks (CrewAI, AutoGen, LangGraph, etc.)",
+      "url": "https://github.com/alpha-one-index/awesome-ai-index/issues/11",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Frontend LocalStorage Cross-Session Data Leakage",
-      "url": "https://github.com/kubestellar/console/issues/3147",
+      "title": "[Good First Issue] Add missing AI coding assistants (Cursor, Windsurf, Devin, etc.)",
+      "url": "https://github.com/alpha-one-index/awesome-ai-index/issues/9",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Add simplified Chinese analysis report of AI CLI integration mechanisms",
-      "url": "https://github.com/x22x22/CLI-Anything/pull/1",
+      "title": "ACP: revert acpx-plugin package naming",
+      "url": "https://github.com/openclaw/openclaw/pull/52456",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Add OpenClaw-native Timeline plugin (2.0.0-draft): runtime tools, hooks, storage, docs and tests",
-      "url": "https://github.com/tower1229/Her/pull/21",
+      "title": "fix: tavily provider rejected by config validator despite being documented as supported (AI-authored)",
+      "url": "https://github.com/openclaw/openclaw/pull/52410",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Introduce OpenClaw Timeline Plugin v2: plugin skeleton, deterministic runtime, tools, hooks, docs, and tests",
-      "url": "https://github.com/tower1229/Her/pull/20",
+      "title": "ACP: fully rename acpx plugin",
+      "url": "https://github.com/openclaw/openclaw/pull/52404",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,8 +193,8 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Metacog: Proprioception, Not Yet Another Memory MCP: A Different Approach to Cross-Session Learning Reinforcement in AI Agents",
-      "url": "https://reddit.com/r/artificial/comments/1rzmlqe/metacog_proprioception_not_yet_another_memory_mcp/",
+      "title": "I built a library where AI agents can publish their own books — and other AIs can read them in seconds",
+      "url": "https://reddit.com/r/artificial/comments/1s0vnva/i_built_a_library_where_ai_agents_can_publish/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
