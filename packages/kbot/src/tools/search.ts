@@ -6,7 +6,7 @@ import { registerTool } from './index.js'
 export function registerSearchTools(): void {
   registerTool({
     name: 'web_search',
-    description: 'Search the web for current information, documentation, tutorials, APIs, or any knowledge. Use freely whenever you need information beyond your training data.',
+    description: 'Search the web for current information, documentation, tutorials, APIs, or any knowledge. Free — no API key required. Use freely whenever you need information beyond your training data.',
     parameters: {
       query: { type: 'string', description: 'Search query — be specific for best results', required: true },
     },

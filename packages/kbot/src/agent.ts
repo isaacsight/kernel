@@ -48,7 +48,7 @@ import { createSpinner, printToolCall, printToolResult, printResponse, printErro
 import type { UIAdapter } from './ui-adapter.js'
 import { TerminalUIAdapter } from './ui-adapter.js'
 import { parseMultimodalMessage, toAnthropicContent, toOpenAIContent, toGeminiParts, type ParsedMessage } from './multimodal.js'
-import { streamAnthropicResponse, streamOpenAIResponse, ResponseStream, type StreamState } from './streaming.js'
+import { streamAnthropicResponse, streamOpenAIResponse, stripThinkTags, ResponseStream, type StreamState } from './streaming.js'
 import { checkPermission } from './permissions.js'
 import { runPreToolHook, runPostToolHook } from './hooks.js'
 import { getRepoMapForContext } from './repo-map.js'
@@ -346,7 +346,7 @@ async function callOpenAICompat(
 
   const data = JSON.parse(await safeReadBody(res))
   const choice = data.choices?.[0] || {}
-  let content = choice.message?.content || ''
+  let content = stripThinkTags(choice.message?.content || '')
   const u = data.usage || {}
 
   const result: ProviderResult = {
@@ -668,7 +668,7 @@ async function callProviderStreaming(
   }
 
   const result: ProviderResult = {
-    content: state.content,
+    content: stripThinkTags(state.content),
     thinking: state.thinking || undefined,
     model: state.model || model,
     usage: state.usage,
@@ -1139,6 +1139,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const originalMessage = message
   let cumulativeCostUsd = 0
   let selfEvalScore: number | undefined
+  let qualityGateRetried = false
 
   // ── Checkpointing & Telemetry ──
   const sessionId = newSessionId()
@@ -1422,6 +1423,24 @@ Always quote file paths that contain spaces. Never reference internal system nam
               continue
             }
           } catch { /* error correction is non-critical */ }
+        }
+
+        // ── Response quality gate: catch obvious garbage before LLM eval (self-eval only) ──
+        if (isSelfEvalEnabled() && !qualityGateRetried) {
+          const trimmed = content.trim()
+          const isGarbage =
+            trimmed.length === 0 ||
+            (trimmed.length < 10 && !/^(yes|no|done|ok|sure|true|false|n\/a|\d+)\.?$/i.test(trimmed)) ||
+            /^\s*\{"error":/i.test(trimmed) ||
+            /^\s*(Error:|Traceback \(most recent|    at )/m.test(trimmed)
+
+          if (isGarbage) {
+            qualityGateRetried = true
+            ui.onWarning('Quality gate: response looks like garbage, retrying once...')
+            loopMessages.push({ role: 'assistant', content })
+            loopMessages.push({ role: 'user', content: 'Your previous response was low quality. Please try again with a clear, helpful answer.' })
+            continue
+          }
         }
 
         // Self-evaluation — optional additional quality gate

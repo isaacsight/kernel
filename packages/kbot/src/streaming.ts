@@ -15,6 +15,17 @@ const THINKING_COLOR = chalk.dim.italic
 /** Max accumulated content size during streaming (5MB) to prevent OOM */
 const MAX_STREAM_CONTENT = 5 * 1024 * 1024
 
+/**
+ * Strip `<think>...</think>` blocks from model output.
+ * Reasoning models (DeepSeek R1, Qwen with thinking) emit these tags.
+ */
+export function stripThinkTags(text: string): string {
+  return text
+    .replace(/<think>[\s\S]*?<\/think>/g, '')
+    .replace(/<think>[\s\S]*$/g, '')  // unclosed <think> at end
+    .replace(/<\/?think>/g, '')
+}
+
 /** Max retries for transient streaming failures */
 const MAX_STREAM_RETRIES = 3
 

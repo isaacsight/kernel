@@ -137,7 +137,8 @@ export function banner(version?: string): string {
     ? gradient('kbot', [167, 139, 250], [103, 232, 249])
     : ACCENT('kbot')
   const title = `  ${bannerText}${v}`
-  return `\n${grid}\n${title}\n`
+  const features = DIM('  Web search: free • 22 agents • 60+ tools • bring your own key')
+  return `\n${grid}\n${title}\n${features}\n`
 }
 
 export function bannerCompact(): string {

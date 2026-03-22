@@ -396,6 +396,63 @@ async function main(): Promise<void> {
       process.stderr.write(formatDoctorReport(report))
     })
 
+  program
+    .command('synthesis')
+    .description('Show what kbot knows — memory, learning data, patterns, and insights')
+    .action(async () => {
+      const { synthesizeMemory, getInsights, getSynthesisStats } = await import('./memory-synthesis.js')
+      const { getExtendedStats } = await import('./learning.js')
+      const chalk = (await import('chalk')).default
+
+      process.stderr.write('\n')
+
+      // Run synthesis
+      const synthesis = synthesizeMemory()
+      const stats = getSynthesisStats()
+      const learning = getExtendedStats()
+      const insights = getInsights(undefined, 10)
+
+      console.log(chalk.bold('═══════════════════════════════════════════════════'))
+      console.log(chalk.bold(' KBOT SYNTHESIS'))
+      console.log(chalk.bold('═══════════════════════════════════════════════════'))
+
+      console.log('\n' + chalk.bold('## Learning Data'))
+      console.log(`  Patterns:    ${learning.patternsCount}`)
+      console.log(`  Solutions:   ${learning.solutionsCount}`)
+      console.log(`  Knowledge:   ${learning.knowledgeCount}`)
+      console.log(`  Projects:    ${learning.projectsCount}`)
+
+      console.log('\n' + chalk.bold('## Synthesis'))
+      console.log(`  Last run:    ${stats.lastSynthesized ?? 'never'}`)
+      console.log(`  Insights:    ${stats.insightCount}`)
+      console.log(`  Observations: ${synthesis.observationCount ?? 0}`)
+
+      if (insights.length > 0) {
+        console.log('\n' + chalk.bold('## Top Insights'))
+        for (const insight of insights.slice(0, 8)) {
+          const conf = Math.round((insight.confidence ?? 0.5) * 100)
+          console.log(`  [${conf}%] ${insight.category ?? 'general'}: ${insight.text}`)
+        }
+      }
+
+      // Discovery data if available
+      const { existsSync, readFileSync } = await import('fs')
+      const { join } = await import('path')
+      const discoveryState = join(process.cwd(), '.kbot-discovery', 'state.json')
+      if (existsSync(discoveryState)) {
+        try {
+          const state = JSON.parse(readFileSync(discoveryState, 'utf8'))
+          console.log('\n' + chalk.bold('## Discovery Daemon'))
+          console.log(`  Stars:       ${state.knownStars ?? '?'}`)
+          console.log(`  Downloads:   ${state.knownDownloads ?? '?'}`)
+          console.log(`  Total runs:  ${state.stats?.totalRuns ?? 0}`)
+          console.log(`  Evolution:   ${state.stats?.evolutionSuccesses ?? 0} success / ${state.stats?.evolutionFailures ?? 0} fail`)
+        } catch {}
+      }
+
+      console.log('\n' + chalk.bold('═══════════════════════════════════════════════════'))
+    })
+
   // ── Forge subcommands ──
   const forgeCmd = program
     .command('forge')

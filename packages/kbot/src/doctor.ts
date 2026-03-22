@@ -226,7 +226,26 @@ async function checkLocalRuntimes(): Promise<CheckResult> {
 
   // Ollama (default port 11434)
   const ollamaUp = await isOllamaRunning()
-  if (ollamaUp) runtimes.push('Ollama')
+  if (ollamaUp) {
+    let modelInfo = ''
+    try {
+      const res = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(3000) })
+      if (res.ok) {
+        const data = await res.json() as { models?: Array<{ name: string; size: number }> }
+        const models = data.models ?? []
+        modelInfo = models.length > 0
+          ? ` (${models.length} models: ${models.slice(0, 5).map(m => m.name.split(':')[0]).join(', ')}${models.length > 5 ? '...' : ''})`
+          : ' (no models pulled)'
+      }
+    } catch {}
+    runtimes.push(`Ollama${modelInfo}`)
+  }
+
+  // MLX server (Apple Silicon, port 8899)
+  try {
+    const res = await fetch('http://localhost:8899/v1/models', { signal: AbortSignal.timeout(2000) })
+    if (res.ok) runtimes.push('MLX')
+  } catch { /* not running */ }
 
   // LM Studio (default port 1234)
   try {
