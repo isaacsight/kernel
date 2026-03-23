@@ -1,99 +1,54 @@
 ---
 tags: [kernel, status]
-updated: "2026-03-11"
+updated: "2026-03-22"
 ---
 
-# Current Status — March 11, 2026
+# Current Status — March 22, 2026
 
 ## What's Live
 
+### kbot (CLI Agent) — v3.20.0
+- **290+ tools**, 25 specialist agents, 20 AI providers
+- **`kbot init`** — 60-second project onboarding
+- **Email agent** — open to all, $0 via Ollama
+- **iMessage agent** — free SMS/iMessage on macOS
+- **Observer** — learns from Claude Code + all LLMs
+- **Seed knowledge** — 14 patterns + 17 facts on first install
+- **Audit badges** — shareable reports with shields.io
+- **11 cognitive modules**, forge system, SDK, MCP server
+- **Docker** — `isaacsight/kbot:3.17.2`
+- **npm** — 3,060 downloads/week, 3 stars
+
 ### kernel.chat (Web App)
-- Full PWA with 20 specialist agents
-- **Agent picker** in input bar — force-route to any of 10 featured agents
-- **Free only — 10 messages per day**, no paid tiers
-- Memory system with warmth tracking + knowledge graph
-- Convergence (6 facet lenses)
-- Voice I/O (Web Speech API + browser TTS)
-- Conversation sharing + ChatGPT/Claude/Gemini import
-- **Unified Files panel** (images, videos, any file type, folders)
-- **AI file access** — stored files injected into system prompt
-- Dark mode (warm brown undertones)
-- i18n (24 languages)
-- Admin dashboard with conversation viewer, storage monitoring, client scoring, Stripe invoicing
-- **Admin agent** — command-driven admin operations via MCP server
-- **Atomic rate limiting** — prevents free-tier users from exceeding daily limit
-- E2E test suite (28 Playwright tests)
+- PWA with 17 agents, free 20 msg/day, Pro unlimited
+- Memory, convergence, i18n (24 languages), dark mode
+- ChatGPT/Claude/Gemini import, admin dashboard
 
-## Just Completed (March 11)
+### Discovery Daemon (24/7)
+- 333+ runs, 30 opportunities/day
+- Scans HN, GitHub, Reddit, arXiv
+- Evolution engine (local Ollama, $0)
 
-1. **Agent picker UI** — dropdown in input bar, 10 featured agents, bypasses Groq classifier when selected
-2. **`kbot agents` command** — lists all built-in agents + presets with detail view
-3. **Forced agent routing** — `forcedAgentId` override in useChatEngine skips classification at confidence 1.0
-4. **Hacker sub-agent** (`.claude/agents/hacker.md`) — red team specialist with research-backed anti-hallucination protocol
-   - 4-phase protocol: Recon → Exploit → Analyze → Report
-   - Provenance tags (`[TOOL]`, `[INFERENCE]`, `[ASSUMPTION]`) on every finding
-   - Self-verification step, tool-first reasoning, closed-world tool list
-5. **Rate limit fix** — client-side guard was using lifetime `message_count` instead of `daily_message_count`
-6. **Ollama models** — llava:13b downloading (phi4, gemma3, deepseek-r1, qwen2.5-coder already pulled)
+### Email Agent (Live)
+- support@kernel.chat — open to all
+- Local Ollama Qwen 32B ($0)
+- Persistent per-user memory
 
-## March 10 — 3 New Agents
+## Key Metrics
 
-1. **Hacker agent** (⚡ `#00FF41`) — Offensive security, CTFs, exploit chains, red teaming, bug bounties
-2. **Operator agent** (⬡ `#FF6B35`) — Full task delegation, autonomous plan-execute-verify loops
-3. **Dreamer agent** (☾ `#7B68EE`) — Dream interpretation, worldbuilding, vision engineering
-4. **All 3 wired into**: AgentRouter (keywords + Groq classifier), ParticleGrid palettes, SwarmOrchestrator pool
-5. **K:BOT integration** — Built-in agents (`kbot --agent hacker/operator/dreamer`), Matrix presets, auto-registered on startup
-6. **Agent count**: 17 → 20 specialists
-
-## March 8 Evening — K:BOT v2.3
-
-1. **K:BOT v2.3.1 published to npm** — `npm install -g @kernel.chat/kbot` now works
-2. **Guided first-run setup** — Auto-detects Ollama/env vars, or 2-option wizard (local vs cloud). No AI knowledge needed.
-3. **stderr/stdout separation** — Status → stderr, content → stdout. Pipe-composable (`cat file | kbot "explain"`)
-4. **Stdin piping** — `cat error.log | kbot "explain"`, `echo "question" | kbot`
-5. **`--json` flag** — Structured JSON output for scripting
-6. **`--quiet` / `-q` flag** — Suppress all status output
-7. **`--yes` / `-y` flag** — Skip all confirmations (wired into permission system)
-8. **Diff-before-apply** — File tools show colored diffs in `--safe`/`--strict` mode
-9. **`--computer-use` wired** — Actually registers screenshot/mouse/keyboard tools now
-10. **Context-aware prompt** — Shows current directory: `packages/kbot ❯`
-11. **Smart tool filtering** — Casual messages: 0 tools. Local models: 10 core. Cloud: 60+.
-12. **Streaming thinking → stderr** — Thinking blocks don't pollute piped content
-13. **Bug fixes** — Double-printing, tool context loss, local model confusion, streaming JSON parse crashes, REPL stuck on error, NaN thinking budget
-
-## Earlier March 8 Session
-
-1. **Client scoring with pricing** — Admin dashboard parses score notes into full pricing breakdowns (market, relevance, R&D, web multipliers, tier, tax, Stripe fees)
-2. **Stripe invoicing** — "Invoice via Stripe" button creates real Stripe invoices with proper line items, tax, 30-day terms
-3. **Admin file sends** — Upload files from admin's computer directly into any user's Inbox folder
-4. **Atomic rate limit fix** — `check_and_increment_message` RPC with `FOR UPDATE` row lock prevents race condition (was allowing 13/10 messages)
-5. **Pricing includes Stripe costs** — CA sales tax (8.75%) + Stripe processing fee (2.9% + $0.30) built into scoring formula
-6. **Admin agent** — Command-driven agent with MCP server (7 tools: stats, users, scores, file send, invoice, subscriptions, moderation)
-7. **Edge functions deployed** — `admin-send-file`, `admin-invoice`, updated `claude-proxy`
-8. **Migration 078** applied — `check_and_increment_message` atomic RPC
-
-## Previous Session (March 7)
-
-1. Free-only conversion — removed all paid tiers
-2. 10 messages/day flat limit
-3. Unified Files panel with folders
-4. AI file access via system prompt
-5. Admin conversation viewer + storage monitoring
-6. No file size limits
-7. Migration 076 — user files tables
-
-## Architecture Summary
-
-| Surface | Status |
-|---------|--------|
-| Web (kernel.chat) | Live, free-only |
-| K:BOT CLI | **Live on npm** — `@kernel.chat/kbot` v2.3.1 |
-| REST API | Code exists, not exposed to users |
-| Billing (Stripe) | Client invoicing active, subscription UI removed |
-| Admin Agent | MCP server with 7 tools, command-driven |
+| Metric | Value |
+|--------|-------|
+| npm version | 3.20.0 |
+| Downloads/week | 3,060 |
+| Stars | 3 |
+| Source files | 151 |
+| Lines of code | 83,622 |
+| Versions published | 64 |
+| Days since birth | 18 |
 
 ## Pending
 
-- [ ] Test file uploads end-to-end with various file types
-- [ ] Capacitor native shells (iOS/Android) — requires Xcode/Android Studio
-- [ ] Monitor Supabase storage usage (free tier: 1GB, Pro: 100GB)
+- [ ] Get 10 real email users
+- [ ] Post on HN opportunities (Jeriko, OpenCode)
+- [ ] Mac Studio M4 Max 128GB decision
+- [ ] SYNTH game sprites
